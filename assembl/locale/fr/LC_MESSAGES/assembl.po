@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-10-10 16:46+0200\n"
+"POT-Creation-Date: 2014-10-14 16:16+0200\n"
 "PO-Revision-Date: 2014-10-06 09:12-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: French "
@@ -31,9 +31,8 @@ msgstr "${val} ne peut être sérialisé: ${err}"
 msgid "${val} is not a string: ${err}"
 msgstr "${val} n'est pas une chaîne: ${err}"
 
-#: assembl/static/js/models/idea.js:39 assembl/static/js/views/ideaPanel.js:203
+#: assembl/static/js/models/idea.js:39 assembl/static/js/views/ideaPanel.js:245
 #, fuzzy
-#| msgid "Delete idea"
 msgid "New idea"
 msgstr "Supprimer l'idée"
 
@@ -43,7 +42,6 @@ msgstr ""
 
 #: assembl/static/js/models/idea.js:77
 #, fuzzy
-#| msgid "A description of this idea"
 msgid "Add a description of this idea"
 msgstr "Une description de cette idée"
 
@@ -53,7 +51,6 @@ msgstr ""
 
 #: assembl/static/js/models/idea.js:100
 #, fuzzy
-#| msgid "Expression in next synthesis:"
 msgid "Add and expression for the next synthesis"
 msgstr "Expression dans la prochaine synthèse:"
 
@@ -63,29 +60,25 @@ msgstr ""
 
 #: assembl/static/js/models/segment.js:99
 #, fuzzy
-#| msgid "You must be logged in to add a comment."
 msgid "You must be logged in to create segments"
 msgstr "Vous devez être connecté pour commenter."
 
 #: assembl/static/js/models/synthesis.js:32
 #, fuzzy
-#| msgid "Add a role"
 msgid "Add a title"
 msgstr "Ajouter un rôle"
 
 #: assembl/static/js/models/synthesis.js:33
 #, fuzzy
-#| msgid "Introduction"
 msgid "Add an introduction"
 msgstr "Introduction"
 
 #: assembl/static/js/models/synthesis.js:34
 #, fuzzy
-#| msgid "Conclusion"
 msgid "Add a conclusion"
 msgstr "Conclusion"
 
-#: assembl/static/js/models/user.js:149
+#: assembl/static/js/models/user.js:148
 msgid "Unknown user"
 msgstr ""
 
@@ -99,7 +92,6 @@ msgstr ""
 
 #: assembl/static/js/modules/context.js:122
 #, fuzzy
-#| msgid "Other messages"
 msgid "Complete messages"
 msgstr "Autres messages"
 
@@ -109,7 +101,6 @@ msgstr ""
 
 #: assembl/static/js/modules/context.js:815
 #, fuzzy
-#| msgid "Load more messages"
 msgid "ajax error message:"
 msgstr "Charger plus de messages"
 
@@ -190,7 +181,6 @@ msgstr "Statistiques"
 
 #: assembl/static/js/views/contextPage.js:907
 #, fuzzy
-#| msgid "Other messages"
 msgid "messages"
 msgstr "Autres messages"
 
@@ -219,84 +209,80 @@ msgstr ""
 msgid "Debate"
 msgstr "Débat"
 
-#: assembl/static/js/views/ideaPanel.js:70
+#: assembl/static/js/views/ideaPanel.js:73
 #: assembl/static/js/views/messageListPostQuery.js:94
 #, fuzzy
-#| msgid "Add idea"
 msgid "Idea"
 msgstr "Ajouter une idée"
 
-#: assembl/static/js/views/ideaPanel.js:73
+#: assembl/static/js/views/ideaPanel.js:76
 #, fuzzy
-#| msgid "Please select an idea in the table of ideas"
 msgid ""
 "Detailled information about the currently selected idea in the Table of "
 "ideas"
 msgstr "Veuillez choisir une idée dans la table des idées"
 
-#: assembl/static/js/views/ideaPanel.js:81
+#: assembl/static/js/views/ideaPanel.js:84
 msgid "This idea has no sub-ideas"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:84
+#: assembl/static/js/views/ideaPanel.js:87
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/views/ideaPanel.js:99
+#: assembl/static/js/views/ideaPanel.js:102
 msgid "No extract was harvested"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:102
+#: assembl/static/js/views/ideaPanel.js:105
 msgid "No important nugget was harvested"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:107
+#: assembl/static/js/views/ideaPanel.js:110
 #, python-format
 msgid "%d extract was harvested"
 msgid_plural "%d extracts were harvested"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/views/ideaPanel.js:110
+#: assembl/static/js/views/ideaPanel.js:113
 #, python-format
 msgid "%d important nugget was harvested"
 msgid_plural "%d important nuggets were harvested"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/views/ideaPanel.js:202
+#: assembl/static/js/views/ideaPanel.js:244
 #, fuzzy
-#| msgid "The name of this idea in the table of ideas"
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr "Nom de cette idée dans la table des idées"
 
-#: assembl/static/js/views/ideaPanel.js:232
+#: assembl/static/js/views/ideaPanel.js:262
 #, fuzzy
-#| msgid "Vote on this idea"
 msgid "Comment on this idea here..."
 msgstr "Voter sur cette idée"
 
-#: assembl/static/js/views/ideaPanel.js:233
+#: assembl/static/js/views/ideaPanel.js:263
 msgid "Send your comment"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:235
+#: assembl/static/js/views/ideaPanel.js:265
 #: assembl/static/js/views/messageList.js:908
 msgid "You need to type a comment first..."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:374
+#: assembl/static/js/views/ideaPanel.js:396
 msgid "You cannot delete an idea while it has sub-ideas."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:379
+#: assembl/static/js/views/ideaPanel.js:401
 msgid "You cannot delete an idea associated to extracts."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:383
+#: assembl/static/js/views/ideaPanel.js:405
 msgid "Confirm that you want to delete this idea."
 msgstr ""
 
@@ -304,15 +290,14 @@ msgstr ""
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:564
+#: assembl/static/js/views/ideaPanel.js:558
 #: assembl/templates/views/contextPage.tmpl:18
 #: assembl/templates/views/ideaPanel.tmpl:26
 msgid "See more"
 msgstr "Voir plus"
 
-#: assembl/static/js/views/ideaPanel.js:565
+#: assembl/static/js/views/ideaPanel.js:559
 #, fuzzy
-#| msgid "Read less"
 msgid "See less"
 msgstr "Lire moins"
 
@@ -328,7 +313,6 @@ msgstr ""
 
 #: assembl/static/js/views/messageList.js:205
 #, fuzzy
-#| msgid "Conversation"
 msgid "Conversations"
 msgstr "Conversations"
 
@@ -347,19 +331,16 @@ msgstr ""
 
 #: assembl/static/js/views/messageList.js:227
 #, fuzzy
-#| msgid "Unread messages"
 msgid "New Messages"
 msgstr "Messages non-lus"
 
 #: assembl/static/js/views/messageList.js:668
 #, fuzzy
-#| msgid "Unread messages"
 msgid "No messages"
 msgstr "Messages non-lus"
 
 #: assembl/static/js/views/messageList.js:905
 #, fuzzy
-#| msgid "View all posts in this discussion"
 msgid "Start a new topic in this discussion"
 msgstr "Tous les messages"
 
@@ -397,13 +378,11 @@ msgstr "Tout replier"
 
 #: assembl/static/js/views/messageList.js:1299
 #, fuzzy
-#| msgid "Clipboard"
 msgid "Send to clipboard"
 msgstr "Presse-papier"
 
 #: assembl/static/js/views/messageListPostQuery.js:28
 #, fuzzy, python-format
-#| msgid "Discussion "
 msgid "Discuss idea %s"
 msgid_plural "Discuss ideas: %s"
 msgstr[0] "Discussion "
@@ -464,7 +443,6 @@ msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:125
 #, fuzzy
-#| msgid "Number of syntheses in the discussion"
 msgid "Publish a synthesis of the discussion"
 msgstr "Nombre de synthèses dans la discussion"
 
@@ -478,7 +456,6 @@ msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:136
 #, fuzzy
-#| msgid "Unread messages"
 msgid "Only include unread messages."
 msgstr "Messages non-lus"
 
@@ -500,7 +477,6 @@ msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:535
 #, fuzzy
-#| msgid "View all posts in this discussion"
 msgid "There are no messages in the discussion."
 msgstr "Tous les messages"
 
@@ -516,7 +492,6 @@ msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:547
 #, fuzzy, python-format
-#| msgid "Load more messages"
 msgid "Found %d messages %s:"
 msgstr "Charger plus de messages"
 
@@ -537,7 +512,6 @@ msgstr ""
 
 #: assembl/static/js/views/messageListPostQuery.js:587
 #, fuzzy
-#| msgid "Add filter"
 msgid "Clear filters"
 msgstr "Ajouter un filtre"
 
@@ -561,7 +535,6 @@ msgstr "Envoyer"
 
 #: assembl/static/js/views/messageSend.js:45
 #, fuzzy
-#| msgid "New topic subject:"
 msgid "Subject:"
 msgstr "Titre du nouveau message"
 
@@ -575,7 +548,6 @@ msgstr ""
 
 #: assembl/static/js/views/messageSend.js:105
 #, fuzzy
-#| msgid "Loading..."
 msgid "Sending..."
 msgstr "Chargement..."
 
@@ -592,7 +564,6 @@ msgstr "Presse-papier"
 
 #: assembl/static/js/views/segmentList.js:282
 #, fuzzy
-#| msgid "Reply"
 msgid "empty"
 msgstr "Répondre"
 
@@ -616,7 +587,6 @@ msgstr ""
 
 #: assembl/static/js/views/groups/panelWrapper.js:104
 #, fuzzy
-#| msgid "Lock panel"
 msgid "Unlock panel"
 msgstr "Verrouiller le panneau"
 
@@ -627,7 +597,6 @@ msgstr "Verrouiller le panneau"
 
 #: assembl/static/js/views/groups/panelWrapper.js:169
 #, fuzzy
-#| msgid "Please select an idea in the table of ideas"
 msgid "Please select an idea in the table of ideas to open the idea panel."
 msgstr "Veuillez choisir une idée dans la table des idées"
 
@@ -1196,6 +1165,14 @@ msgstr "Description de l'idée"
 msgid "A description of this idea"
 msgstr "Une description de cette idée"
 
+#: assembl/templates/views/ideaPanel.tmpl:38
+msgid "contributors"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:45
+msgid "anonymous"
+msgstr ""
+
 #: assembl/templates/views/ideaPanel.tmpl:69
 msgid "Expressions of this idea in segments of posts or on the web"
 msgstr "Expressions de cette idée dans des extraits de messages ou de pages Web"
@@ -1670,332 +1647,332 @@ msgstr "Nous n'avons pas de discussion sous le code=%s"
 #~ msgstr ""
 
 #~ msgid "New idea"
-#~ msgstr "Attrapé dans %d extraits"
+#~ msgstr ""
 
 #~ msgid "The root idea will not be in the synthesis"
-#~ msgstr "Ajouter une idée"
+#~ msgstr "Attrapé dans %d extraits"
 
 #~ msgid "Add a description of this idea"
-#~ msgstr "L'idée-racine ne fera pas partie de la synthèse"
+#~ msgstr "Ajouter une idée"
 
 #~ msgid "The root idea will never be in the synthesis"
-#~ msgstr "Ajouter une description de cette idée"
+#~ msgstr "L'idée-racine ne fera pas partie de la synthèse"
 
 #~ msgid "Add and expression for the next synthesis"
-#~ msgstr "L'idée-racine ne fera jamais partie de la synthèse"
+#~ msgstr "Ajouter une description de cette idée"
 
 #~ msgid "All posts"
-#~ msgstr "Spécifier l'expression dans la prochaine synthèse"
+#~ msgstr "L'idée-racine ne fera jamais partie de la synthèse"
 
 #~ msgid "You must be logged in to create segments"
-#~ msgstr "Tous les messages"
+#~ msgstr "Spécifier l'expression dans la prochaine synthèse"
 
 #~ msgid "Add a title"
-#~ msgstr "Vous devez être connecté pour créer des extraits"
+#~ msgstr "Tous les messages"
 
 #~ msgid "Add an introduction"
-#~ msgstr "Ajouter un titre"
+#~ msgstr "Vous devez être connecté pour créer des extraits"
 
 #~ msgid "Add a conclusion"
-#~ msgstr "Ajouter une introduction"
+#~ msgstr "Ajouter un titre"
 
 #~ msgid "Unknown user"
-#~ msgstr "Ajouter une conclusion"
+#~ msgstr "Ajouter une introduction"
 
 #~ msgid "Message titles"
-#~ msgstr "Utilisateur non-identifié"
+#~ msgstr "Ajouter une conclusion"
 
 #~ msgid "Message previews"
-#~ msgstr "Titres seulement"
+#~ msgstr "Utilisateur non-identifié"
 
 #~ msgid "Complete messages"
-#~ msgstr "Aperçus"
+#~ msgstr "Titres seulement"
 
 #~ msgid "Extract"
-#~ msgstr "Messages complets"
+#~ msgstr "Aperçus"
 
 #~ msgid "ajax error message:"
-#~ msgstr "Extrait"
+#~ msgstr "Messages complets"
 
 #~ msgid "last week"
-#~ msgstr "message d'erreur ajax:"
+#~ msgstr "Extrait"
 
 #~ msgid "last 2 weeks"
-#~ msgstr "la semaine dernière"
+#~ msgstr "message d'erreur ajax:"
 
 #~ msgid "last month"
-#~ msgstr "les 2 dernières semaines"
+#~ msgstr "la semaine dernière"
 
 #~ msgid "last 3 months"
-#~ msgstr "le mois dernier"
+#~ msgstr "les 2 dernières semaines"
 
 #~ msgid "last 6 months"
-#~ msgstr "les 3 derniers mois"
+#~ msgstr "le mois dernier"
 
 #~ msgid "last year"
-#~ msgstr "les 6 derniers mois"
+#~ msgstr "les 3 derniers mois"
 
 #~ msgid "%d participants have contributed in the %s"
-#~ msgstr "l'année dernière"
+#~ msgstr "les 6 derniers mois"
 
 #~ msgid "%d new participants started contributing in the %s"
-#~ msgstr "%d participants ont contribué pendant %s"
+#~ msgstr "l'année dernière"
 
 #~ msgid "%d active participants had contributed before %s"
-#~ msgstr "%d nouveaux participants ont contribué pendant %s"
+#~ msgstr "%d participants ont contribué pendant %s"
 
 #~ msgid "%d participants' last contribution was prior to %s"
-#~ msgstr "%d contributeurs actifs avaient participé avant %s"
+#~ msgstr "%d nouveaux participants ont contribué pendant %s"
 
 #~ msgid "%d participants have contributed since the beginning of the debate"
-#~ msgstr "%d participants ont contribué pour la dernière fois avant %s"
+#~ msgstr "%d contributeurs actifs avaient participé avant %s"
 
 #~ msgid "Contributors active recently"
-#~ msgstr "%d participants ont contribué depuis le début du débat"
+#~ msgstr "%d participants ont contribué pour la dernière fois avant %s"
 
 #~ msgid "Contributors inactive recently"
-#~ msgstr "Participants actifs récemment"
+#~ msgstr "%d participants ont contribué depuis le début du débat"
 
 #~ msgid "Evolution of the total number of messages"
-#~ msgstr "Participants non actifs récemment"
+#~ msgstr "Participants actifs récemment"
 
 #~ msgid "Evolution of the number of messages posted"
-#~ msgstr "Évolution du nombre total de messages"
+#~ msgstr "Participants non actifs récemment"
 
 #~ msgid "messages"
-#~ msgstr "Évolution du nombre de messages postés"
+#~ msgstr "Évolution du nombre total de messages"
 
 #~ msgid "messages, posted by"
-#~ msgstr "messages"
+#~ msgstr "Évolution du nombre de messages postés"
 
 #~ msgid "Type your response here..."
-#~ msgstr "messages, postés par"
+#~ msgstr "messages"
 
 #~ msgid "Send your reply"
-#~ msgstr "Écrivez votre réponse ici..."
+#~ msgstr "messages, postés par"
 
 #~ msgid "You did not type a response yet..."
-#~ msgstr "Envoyez votre réponse"
+#~ msgstr "Écrivez votre réponse ici..."
 
 #~ msgid "Idea"
-#~ msgstr "Vous n'avez pas encore écrit de réponse"
+#~ msgstr "Envoyez votre réponse"
 
 #~ msgid ""
-#~ msgstr ""
+#~ msgstr "Vous n'avez pas encore écrit de réponse"
 
 #~ msgid "This idea has no sub-ideas"
 #~ msgstr ""
 
 #~ msgid "This idea has %d sub-idea"
-#~ msgstr "Cette idée n'a aucune sous-idée"
+#~ msgstr ""
 
 #~ msgid "This idea has %d sub-ideas"
-#~ msgstr "Cette idée a %d sous-idée"
+#~ msgstr "Cette idée n'a aucune sous-idée"
 
 #~ msgid "No extract was harvested"
-#~ msgstr "Cette idée a %d sous-idées"
+#~ msgstr "Cette idée a %d sous-idée"
 
 #~ msgid "No important nugget was harvested"
-#~ msgstr "Aucun extrait n'a été attrapé"
+#~ msgstr "Cette idée a %d sous-idées"
 
 #~ msgid "%d extract was harvested"
-#~ msgstr "Aucune pépite importante n'a été attrapée"
+#~ msgstr "Aucun extrait n'a été attrapé"
 
 #~ msgid "%d extracts were harvested"
-#~ msgstr "%d extrait a été attrapé"
+#~ msgstr "Aucune pépite importante n'a été attrapée"
 
 #~ msgid "%d important nugget was harvested"
-#~ msgstr "%d extraits ont été attrapés"
+#~ msgstr "%d extrait a été attrapé"
 
 #~ msgid "%d important nuggets were harvested"
-#~ msgstr "%d pépite importante a été attrapée"
+#~ msgstr "%d extraits ont été attrapés"
 
 #~ msgid "Short expression (only a few words) of the idea in the table of ideas."
-#~ msgstr "%d pépites importantes ont été attrapées"
+#~ msgstr "%d pépite importante a été attrapée"
 
 #~ msgid "Comment on this idea here..."
-#~ msgstr "Expression brève (quelques mots) de l'idée dans la table des idées"
+#~ msgstr "%d pépites importantes ont été attrapées"
 
 #~ msgid "Send your comment"
-#~ msgstr "Commentez cette idée ici..."
+#~ msgstr "Expression brève (quelques mots) de l'idée dans la table des idées"
 
 #~ msgid "You need to type a comment first..."
-#~ msgstr "Envoyez votre commentaire"
+#~ msgstr "Commentez cette idée ici..."
 
 #~ msgid "You cannot delete an idea while it has sub-ideas."
-#~ msgstr "Vous devez d'abord écrire un commentaire..."
+#~ msgstr "Envoyez votre commentaire"
 
 #~ msgid "You cannot delete an idea associated to extracts."
-#~ msgstr "Vous ne pouvez pas effacer une idée ayant des sous-idées."
+#~ msgstr "Vous devez d'abord écrire un commentaire..."
 
 #~ msgid "Confirm that you want to delete this idea."
-#~ msgstr "Vous ne pouvez pas effacer une idée associée à des extraits."
+#~ msgstr "Vous ne pouvez pas effacer une idée ayant des sous-idées."
 
 #~ msgid "Confirm that you want to send all extracts back to the clipboard."
-#~ msgstr "Confirmez que vous souhaitez supprimer cette idée."
+#~ msgstr "Vous ne pouvez pas effacer une idée associée à des extraits."
 
 #~ msgid "You can drag the segment above directly to the table of ideas"
-#~ msgstr ""
+#~ msgstr "Confirmez que vous souhaitez supprimer cette idée."
 
 #~ msgid "Conversations"
 #~ msgstr ""
 
 #~ msgid "Threaded"
-#~ msgstr "Conversations"
+#~ msgstr ""
 
 #~ msgid "Chronological"
-#~ msgstr "Enfilades"
+#~ msgstr "Conversations"
 
 #~ msgid "Reverse-Chronological"
-#~ msgstr "Chronologique"
+#~ msgstr "Enfilades"
 
 #~ msgid "New Messages"
-#~ msgstr "Chronologique-inverse"
+#~ msgstr "Chronologique"
 
 #~ msgid "No messages"
-#~ msgstr "Nouveaux Messages"
+#~ msgstr "Chronologique-inverse"
 
 #~ msgid "Start a new topic in this discussion"
-#~ msgstr "Pas de messages"
+#~ msgstr "Nouveaux Messages"
 
 #~ msgid "Subject"
-#~ msgstr "Lancez un nouveau sujet de discussion"
+#~ msgstr "Pas de messages"
 
 #~ msgid "Add a subject above and start a new topic here"
-#~ msgstr "Sujet"
+#~ msgstr "Lancez un nouveau sujet de discussion"
 
 #~ msgid "You need to set a subject to add a new topic..."
-#~ msgstr "Lancez un nouvau sujet ici, en donnant le titre ci-dessus"
+#~ msgstr "Sujet"
 
 #~ msgid "All %s"
-#~ msgstr "Vous devez ajouter un titre pour lancer un sujet de discussion..."
+#~ msgstr "Lancez un nouvau sujet ici, en donnant le titre ci-dessus"
 
 #~ msgid "Unread %s"
-#~ msgstr "Tous %s"
+#~ msgstr "Vous devez ajouter un titre pour lancer un sujet de discussion..."
 
 #~ msgid "Send to clipboard"
-#~ msgstr "Non-lus %s"
+#~ msgstr "Tous %s"
 
 #~ msgid "Discuss idea %s"
-#~ msgstr "Ajouter au presse-papier"
+#~ msgstr "Non-lus %s"
 
 #~ msgid "Discuss ideas: %s"
-#~ msgstr "En lien avec l'idée %s"
+#~ msgstr "Ajouter au presse-papier"
 
 #~ msgid " AND "
-#~ msgstr "En lien avec les idées : %s"
+#~ msgstr "En lien avec l'idée %s"
 
 #~ msgid "Are in the conversation that follows post %s"
-#~ msgstr " ET "
+#~ msgstr "En lien avec les idées : %s"
 
 #~ msgid "Are in the conversation that follows posts: %s"
-#~ msgstr "Sont dans la conversation qui suit le message %s"
+#~ msgstr " ET "
 
 #~ msgid "%s %s"
-#~ msgstr "Sont dans la conversation qui suit les messages %s"
+#~ msgstr "Sont dans la conversation qui suit le message %s"
 
 #~ msgid "You've already read"
-#~ msgstr "%s %s"
+#~ msgstr "Sont dans la conversation qui suit les messages %s"
 
 #~ msgid "Posts with specific ids"
-#~ msgstr "Vous avez déjà lu"
+#~ msgstr "%s %s"
 
 #~ msgid "Only include posts that are in a range of specific ids"
-#~ msgstr "Messages avec des identifiants spécifiques"
+#~ msgstr "Vous avez déjà lu"
 
 #~ msgid "Post thread"
-#~ msgstr ""
+#~ msgstr "Messages avec des identifiants spécifiques"
 
 #~ msgid "Only include messages that are in the specified post reply thread."
-#~ msgstr "Enfilade du message"
-
-#~ msgid "Are orphan (not relevent to any idea so far)"
 #~ msgstr ""
 
+#~ msgid "Are orphan (not relevent to any idea so far)"
+#~ msgstr "Enfilade du message"
+
 #~ msgid "Only include messages that are not found in any idea."
-#~ msgstr "Sont orphelins (ne sont encore liés à aucune idée)"
+#~ msgstr ""
 
 #~ msgid "Publish a synthesis of the discussion"
-#~ msgstr "N'inclure que des messages qui ne se trouvent liés à aucune idée"
+#~ msgstr "Sont orphelins (ne sont encore liés à aucune idée)"
 
 #~ msgid "Only include messages that publish a synthesis of a discussion."
-#~ msgstr "Publier une synthèse de la discussion"
+#~ msgstr "N'inclure que des messages qui ne se trouvent liés à aucune idée"
 
 #~ msgid "not read yet"
-#~ msgstr "N'inclure que des messages qui publient une synthèse de la discussion"
+#~ msgstr "Publier une synthèse de la discussion"
 
 #~ msgid "Only include unread messages."
-#~ msgstr "pas encore lus"
+#~ msgstr "N'inclure que des messages qui publient une synthèse de la discussion"
 
 #~ msgid "Threaded view"
-#~ msgstr "N'inclure que des messages non-lus"
+#~ msgstr "pas encore lus"
 
 #~ msgid "Activity feed (reverse chronological)"
-#~ msgstr "Vue en enfilade"
+#~ msgstr "N'inclure que des messages non-lus"
 
 #~ msgid "No query has been executed yet"
-#~ msgstr "Fil d'activité (ordre chronologique inverse)"
+#~ msgstr "Vue en enfilade"
 
 #~ msgid "Found no message in the discussion that:"
-#~ msgstr "Aucune requête n'a été formulée"
+#~ msgstr "Fil d'activité (ordre chronologique inverse)"
 
 #~ msgid "There are no messages in the discussion."
-#~ msgstr "Aucun message trouvé dans la discussion tel que:"
+#~ msgstr "Aucune requête n'a été formulée"
 
 #~ msgid "(%d unread)"
-#~ msgstr "Il n'y a aucun message dans la discussion."
+#~ msgstr "Aucun message trouvé dans la discussion tel que:"
 
 #~ msgid "Found %d messages %s that:"
-#~ msgstr "(%d non-lus)"
+#~ msgstr "Il n'y a aucun message dans la discussion."
 
 #~ msgid "Found %d messages %s:"
-#~ msgstr "Trouvé %d messages %s tels que:"
+#~ msgstr "(%d non-lus)"
 
 #~ msgid "%s"
-#~ msgstr "Trouvé %d messages %s:"
+#~ msgstr "Trouvé %d messages %s tels que:"
 
 #~ msgid "NOT %s"
-#~ msgstr "%s"
+#~ msgstr "Trouvé %d messages %s:"
 
 #~ msgid "%s for values %s"
-#~ msgstr "PAS %s"
+#~ msgstr "%s"
 
 #~ msgid "Clear filters"
-#~ msgstr "%s pour les valeurs %s"
+#~ msgstr "PAS %s"
 
 #~ msgid "Type your message here..."
-#~ msgstr "Enlever tous les filtres"
+#~ msgstr "%s pour les valeurs %s"
 
 #~ msgid "Subject:"
-#~ msgstr "Écrivez votre message ici..."
+#~ msgstr "Enlever tous les filtres"
 
 #~ msgid "You need to set a subject before you can send your message..."
-#~ msgstr "Sujet:"
+#~ msgstr "Écrivez votre message ici..."
 
 #~ msgid "You need to type a message before you can send your message..."
-#~ msgstr "Vous devez lui donner un titre avant d'envoyer le message..."
+#~ msgstr "Sujet:"
 
 #~ msgid "Sending..."
-#~ msgstr "Vous devez écrire le message avant de l'envoyer..."
+#~ msgstr "Vous devez lui donner un titre avant d'envoyer le message..."
 
 #~ msgid "Message posted!"
-#~ msgstr "Envoi en cours..."
+#~ msgstr "Vous devez écrire le message avant de l'envoyer..."
 
 #~ msgid "empty"
-#~ msgstr "Commentaire envoyé!"
+#~ msgstr "Envoi en cours..."
 
 #~ msgid "Are you sure you want to empty your entire clipboard?"
-#~ msgstr "vide"
+#~ msgstr "Commentaire envoyé!"
 
 #~ msgid "Do you want to publish the synthesis?"
-#~ msgstr "Êtes-vous certain de vouloir vider tout votre presse-papier?"
+#~ msgstr "vide"
 
 #~ msgid "Synthesis published!"
-#~ msgstr "Voulez-vous publier la synthèse?"
+#~ msgstr "Êtes-vous certain de vouloir vider tout votre presse-papier?"
 
 #~ msgid "Unlock panel"
-#~ msgstr "Synthèse publiée!"
+#~ msgstr "Voulez-vous publier la synthèse?"
 
 #~ msgid "No synthesis of the discussion has been published yet"
-#~ msgstr "Déverrouiller le panneau"
+#~ msgstr "Synthèse publiée!"
 

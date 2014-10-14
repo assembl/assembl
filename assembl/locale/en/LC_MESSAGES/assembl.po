@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-10-10 16:46+0200\n"
+"POT-Creation-Date: 2014-10-14 16:16+0200\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "${val} is not a string: ${err}"
 msgstr ""
 
-#: assembl/static/js/models/idea.js:39 assembl/static/js/views/ideaPanel.js:203
+#: assembl/static/js/models/idea.js:39 assembl/static/js/views/ideaPanel.js:245
 msgid "New idea"
 msgstr ""
 
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Add a conclusion"
 msgstr ""
 
-#: assembl/static/js/models/user.js:149
+#: assembl/static/js/models/user.js:148
 msgid "Unknown user"
 msgstr ""
 
@@ -193,76 +193,76 @@ msgstr ""
 msgid "Debate"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:70
+#: assembl/static/js/views/ideaPanel.js:73
 #: assembl/static/js/views/messageListPostQuery.js:94
 msgid "Idea"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:73
+#: assembl/static/js/views/ideaPanel.js:76
 msgid ""
 "Detailled information about the currently selected idea in the Table of "
 "ideas"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:81
+#: assembl/static/js/views/ideaPanel.js:84
 msgid "This idea has no sub-ideas"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:84
+#: assembl/static/js/views/ideaPanel.js:87
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/views/ideaPanel.js:99
+#: assembl/static/js/views/ideaPanel.js:102
 msgid "No extract was harvested"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:102
+#: assembl/static/js/views/ideaPanel.js:105
 msgid "No important nugget was harvested"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:107
+#: assembl/static/js/views/ideaPanel.js:110
 #, python-format
 msgid "%d extract was harvested"
 msgid_plural "%d extracts were harvested"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/views/ideaPanel.js:110
+#: assembl/static/js/views/ideaPanel.js:113
 #, python-format
 msgid "%d important nugget was harvested"
 msgid_plural "%d important nuggets were harvested"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/views/ideaPanel.js:202
+#: assembl/static/js/views/ideaPanel.js:244
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:232
+#: assembl/static/js/views/ideaPanel.js:262
 msgid "Comment on this idea here..."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:233
+#: assembl/static/js/views/ideaPanel.js:263
 msgid "Send your comment"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:235
+#: assembl/static/js/views/ideaPanel.js:265
 #: assembl/static/js/views/messageList.js:908
 msgid "You need to type a comment first..."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:374
+#: assembl/static/js/views/ideaPanel.js:396
 msgid "You cannot delete an idea while it has sub-ideas."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:379
+#: assembl/static/js/views/ideaPanel.js:401
 msgid "You cannot delete an idea associated to extracts."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:383
+#: assembl/static/js/views/ideaPanel.js:405
 msgid "Confirm that you want to delete this idea."
 msgstr ""
 
@@ -270,13 +270,13 @@ msgstr ""
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:564
+#: assembl/static/js/views/ideaPanel.js:558
 #: assembl/templates/views/contextPage.tmpl:18
 #: assembl/templates/views/ideaPanel.tmpl:26
 msgid "See more"
 msgstr ""
 
-#: assembl/static/js/views/ideaPanel.js:565
+#: assembl/static/js/views/ideaPanel.js:559
 msgid "See less"
 msgstr ""
 
@@ -1094,6 +1094,14 @@ msgstr ""
 #: assembl/templates/views/ideaPanel.tmpl:15
 #: assembl/templates/views/ideaPanel.tmpl:20
 msgid "A description of this idea"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:38
+msgid "contributors"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:45
+msgid "anonymous"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:69
