@@ -66,19 +66,19 @@
 
     <fieldset id="ideaPanel-section-segments" class="panel-section">
       <% if(Ctx.userCanChangeUi()){ %>
-        <div class="plxs pts ideaPanel-section-segments-legend plxs pts" data-toggle="tooltip" title="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
+        <div class="ideaPanel-section-segments-legend pvs" data-toggle="tooltip" title="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
            <i class="icon-diamond"></i><span class="legend"><% print(getExtractsLabel()) %></span>
         </div>
       <% } else { %>
-      <div class="ideaPanel-section-segments-legend plxs pts" data-toggle="tooltip" title="">
+      <div class="ideaPanel-section-segments-legend pvs" data-toggle="tooltip" title="">
           <i class="icon-diamond"></i><span class="legend">{{ gettext('highlights for') }}</span>
       </div>
       <% } %>
 
       <div class="postitlist"></div>
       <% if (canAddExtracts) { %>
-      <div>
-          <p class="mlxs">{{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}</p>
+      <div class="mbs">
+          <p>{{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}</p>
       </div>
       <% } %>
     </fieldset>
@@ -86,11 +86,11 @@
     <fieldset id="ideaPanel-section-actions" class="panel-section">
         <% if (canDelete) { %>
         <div class="fr">
-            <a class="btn btn-default btn-sm js_ideaPanel-deleteBtn" data-toggle="tooltip" title="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
+            <a href="#" class="js_ideaPanel-deleteBtn" data-toggle="tooltip" title="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
         </div>
         <% }
         if (canEditExtracts) { %>
-        <a class="btn btn-default btn-sm js_ideaPanel-clearBtn" data-toggle="tooltip" title="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
+        <a href="#" class="js_ideaPanel-clearBtn" data-toggle="tooltip" title="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
         <% } %>
     </fieldset>
 
@@ -98,7 +98,7 @@
     <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE){ %>
       <% if ( canCreateWidgets ) {
           var url = "/widget/vote/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
-          print(" <a class='plxs' href=\""+url+"\" target=\"_blank\">{{gettext('Create a vote widget on this idea')}}</a>");
+          print(" <a href=\""+url+"\" target=\"_blank\" class='dispb mls mts'>{{gettext('Create a vote widget on this idea')}}</a>");
 
       } %>
     <% } %>
@@ -106,15 +106,15 @@
     {# List votable widgets of this idea #}
     <% _.each(votable_widgets, function(votable_widget, i){
         var url = votable_widget.widget_url+encodeURIComponent("?target="+idea.getId());
-        print("<a class='plxs' href=\""+url+"\" target=\"_blank\">{{gettext('Vote on this idea')}}</a>");
+        print("<a href=\""+url+"\" target=\"_blank\">{{gettext('Vote on this idea')}}</a>");
         if ( canCreateWidgets ) {
             var configure_url = "/widget/vote/?admin=1#/admin/configure_instance?widget_uri="+votable_widget.widget_uri+"&target="+idea.getId();
-            print(" <a href=\""+configure_url+"\" target=\"_blank\">{{gettext('Configure this widget')}}</a>");
+            print(" <a href=\""+configure_url+"\" target=\"_blank\" class='dispb mls mts'>{{gettext('Configure this widget')}}</a>");
         }
      }); %>
 
     <% } else { %>
-        <div>
+        <div class="mls mts">
             <p>{{ gettext('Please select an idea in the table of ideas') }}</p>
         </div>
     <% } %>
