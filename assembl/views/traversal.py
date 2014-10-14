@@ -115,7 +115,10 @@ class ClassContext(object):
         self._class = cls
 
     def __getitem__(self, key):
-        instance = self._class.get_instance(int(key))
+        try:
+            instance = self._class.get_instance(int(key))
+        except ValueError:
+            raise KeyError()
         if not instance:
             raise KeyError()
         return InstanceContext(self, instance)
