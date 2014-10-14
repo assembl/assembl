@@ -193,7 +193,7 @@ def test_widget_user_state(
     assert result.json == state
 
 
-def test_widget_basic_interaction(
+def test_creativity_session_widget(
         discussion, test_app, subidea_1, subidea_1_1,
         participant1_user, test_session):
     # Post the initial configuration
@@ -384,6 +384,61 @@ def test_widget_basic_interaction(
     assert notification['num_participants'] == 2  # participant and admin
     assert notification['num_ideas'] == 2
 
+
+def test_inspiration_widget(
+        discussion, test_app, subidea_1, subidea_1_1,
+        participant1_user, test_session):
+    # Post the initial configuration
+    format = lambda x: x.strftime('%Y-%m-%dT%H:%M:%S')
+    new_widget_loc = test_app.post(
+        '/data/Discussion/%d/widgets' % (discussion.id,), {
+            'type': 'InspirationWidget',
+            'settings': json.dumps({
+                'idea': 'local:Idea/%d' % (subidea_1.id)
+            })
+        })
+    assert new_widget_loc.status_code == 201
+    # Get the widget from the db
+    Idea.db.flush()
+    new_widget = Widget.get_instance(new_widget_loc.location)
+    assert new_widget
+    assert new_widget.base_idea == subidea_1
+    widget_id = new_widget.id
+    # There should be a link
+    widget_link = Idea.db.query(BaseIdeaWidgetLink).filter_by(
+        idea_id=subidea_1.id, widget_id=widget_id).all()
+    assert widget_link
+    assert len(widget_link) == 1
+    # Get the widget from the api
+    widget_rep = test_app.get(
+        local_to_absolute(new_widget.uri()),
+        headers={"Accept": "application/json"}
+    )
+    assert widget_rep.status_code == 200
+    widget_rep = widget_rep.json
+    print widget_rep
+    assert 'messages_url' in widget_rep
+    assert 'ideas_url' in widget_rep
+    assert 'user' in widget_rep
+    # Get the list of new ideas
+    # should be empty, despite the idea having a non-widget child
+    idea_endpoint = local_to_absolute(widget_rep['ideas_url'])
+    idea_hiding_endpoint = local_to_absolute(widget_rep['ideas_hiding_url'])
+    test = test_app.get(idea_endpoint)
+    assert test.status_code == 200
+    assert test.json == []
+
+    Idea.db.flush()
+    assert new_widget.base_idea == subidea_1
+    ancestor_widgets = test_app.get(
+        '/data/Discussion/%d/ideas/%d/ancestor_inspiration_widgets/' % (
+            discussion.id, subidea_1_1.id))
+    assert ancestor_widgets.status_code == 200
+    ancestor_widgets_rep = ancestor_widgets.json
+    assert new_widget_loc.location in ancestor_widgets_rep
+    # TODO. ajouter la collection descendant_ideas. Comment déduire cet URL du widget????
+    # test_app.post('/data/Discussion/%d/widgets/%d/descendant_ideas/%d/children' % (
+    #     discussion.id, widget_id, subidea_1_1.id))
 
 def test_voting_widget(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,

@@ -595,7 +595,13 @@ JOIN post AS family_posts ON (
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
                     ctx, kwargs):
-                pass
+                if isinstance(instance, Content):
+                    assocs.append(
+                        IdeaContentWidgetLink(
+                            content=instance, widget=parent_instance,
+                            creator_id=instance.creator_id,
+                            **self.filter_kwargs(
+                                IdeaContentWidgetLink, kwargs)))
 
             def contains(self, parent_instance, instance):
                 ancestors = aliased(Idea)
