@@ -356,8 +356,8 @@ JOIN post AS family_posts ON (
         from .idea_content_link import Extract
         # Get extracts related to the idea
         extracts = self.db.query(Extract).join(
-            Idea).filter(Idea.id == self.id).filter(
-            Extract.extract_source.of_type(Post)).options(
+            Extract.extract_source.of_type(Post)).filter(
+            Extract.idea_id == self.id).options(
             joinedload(Extract.extract_source)).all()
         extracts_by_author = defaultdict(list)
         for e in extracts:
