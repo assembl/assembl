@@ -216,30 +216,29 @@
 .groupBody .groupPanel .panelContents {
   position: absolute;
   width: 100%;
-  /*height: 100%;*/
-  height: calc(100vh - 38px); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+  @include calc(height, "100vh - 40px"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
 
 .groupBody.editable .groupPanel .panelContents {
-  height: calc(100vh - 60px); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+  @include calc(height, "100vh - 61px"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
 
 .groupBody .groupPanel header ~ .panelContents {
-  height: calc(100% - 34px) !important; /* retain the height of the header */
+  @include calc(height, "100vh - 34px"); /* retain the height of the header */
 }
 
 /* CSS hack to target specificly IE >= 10 (see browserhacks.com). IE uses wrong 100% value in previous rule */
 _:-ms-input-placeholder, :root .groupBody .groupPanel header ~ .panelContents {
-  height: calc(100vh - 76px) !important;
+  @include calc(height, "100vh - 76px");
 }
 
 .groupBody.editable .groupPanel header ~ .panelContents {
-  height: calc(100% - 34px) !important; /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+  @include calc(height, "100vh - 34px"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
 
 .panelContents > div {
   /* probably not the best solution */
-  height: 100%;
+  height: 100vh;
 }
 
 #groupsContainer {
@@ -256,9 +255,6 @@ _:-ms-input-placeholder, :root .groupBody .groupPanel header ~ .panelContents {
   bottom: 1px;
   left: 0;
   box-sizing: border-box;
-  //overflow-y: auto;
-  //overflow-x: hidden;
-  //overflow: hidden;
   overflow: auto;
   &:hover {
     //overflow: auto;

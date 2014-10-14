@@ -240,3 +240,8 @@
   @include transform(rotate(#{$deg}deg));
 }
 
+@mixin calc($property, $expression) {
+  #{$property}: -webkit-calc(#{$expression}) !important;
+  #{$property}: -moz-calc(#{$expression}) !important;
+  #{$property}: calc(#{$expression}) !important;
+}

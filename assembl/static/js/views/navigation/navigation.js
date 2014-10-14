@@ -80,7 +80,7 @@ define(function (require) {
         },
         setSideBarHeight: function () {
             this.initVar();
-            this.$('div.second-level').css('height', this._accordionContentHeight);
+            this.ui.level.css('height', this._accordionContentHeight);
         },
         loadView: function (view) {
             // clear aspects of current state
@@ -131,25 +131,25 @@ define(function (require) {
         initVar: function () {
             // check wether DOM elements are already rendered
             var that = this;
+
+            var _header = $('#header').height(),
+                _window = $(window).height(),
+                _li = 40 * 3,
+                _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader").first().hasClass('editable') ? 25 : 3 ),
+                _sideBarHeight = (_window - _header) - _headerGroup;
+
             if (this.$el && this.$el.parent() && this.$el.parent().height()) {
-                var number_of_li = this.$('.side-menu > li').length;
-                var total_li_height = 38 * number_of_li;
 
-                var container_height = this.$el.parent().height();
-
-                this._accordionContentHeight = container_height - total_li_height - 10;
+                this._accordionContentHeight = _sideBarHeight - _li;
             }
             else { // fallback: set an initial estimation
-                var _header = $('#header').height(),
-                    _window = $(window).height(),
-                    _li = 38 * 3,
-                    _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader.editable").first() ? 25 : 3 );
-                _sideBarHeight = (_window - _header) - _headerGroup;
-                this._accordionContentHeight = (_sideBarHeight - _li) - 15;
+
+                this._accordionContentHeight = _sideBarHeight - _li - 15;
+
                 if (++this._accordionHeightTries < 10) // prevent infinite loop
                 {
                     setTimeout(function () {
-                        that.setSideBarHeight()
+                        that.setSideBarHeight();
                     }, 500);
                 }
             }
