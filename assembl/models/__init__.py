@@ -159,6 +159,7 @@ from .notification import (
     NotificationSubscription,
     NotificationSubscriptionFollowSyntheses,
     NotificationSubscriptionFollowAllMessages,
+    NotificationSubscriptionFollowOwnMessageDirectReplies,
     Notification,
     NotificationCreationOrigin,
     NotificationStatus

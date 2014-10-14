@@ -217,6 +217,9 @@ def post_source(request, discussion, test_session):
 
 @pytest.fixture(scope="function")
 def root_post_1(request, participant1_user, discussion, test_session):
+    """
+    From participant1_user
+    """
     from assembl.models import Post
     p = Post(
         discussion=discussion, creator=participant1_user,
@@ -247,6 +250,9 @@ def synthesis_post_1(request, participant1_user, discussion, test_session, synth
 @pytest.fixture(scope="function")
 def reply_post_1(request, participant2_user, discussion,
                  root_post_1, test_session):
+    """
+    From participant2_user, in reply to root_post_1
+    """
     from assembl.models import Post
     p = Post(
         discussion=discussion, creator=participant2_user,
@@ -263,11 +269,14 @@ def reply_post_1(request, participant2_user, discussion,
 
 
 @pytest.fixture(scope="function")
-def reply_post_2(request, participant2_user, discussion,
+def reply_post_2(request, participant1_user, discussion,
                  reply_post_1, test_session):
+    """
+    From participant1_user, in reply to reply_post_1
+    """
     from assembl.models import Post
     p = Post(
-        discussion=discussion, creator=participant2_user,
+        discussion=discussion, creator=participant1_user,
         subject=u"re2: root post", body=u"post body",
         type="post", message_id="msg3")
     test_session.add(p)
@@ -283,6 +292,9 @@ def reply_post_2(request, participant2_user, discussion,
 @pytest.fixture(scope="function")
 def reply_post_3(request, participant2_user, discussion,
                  root_post_1, test_session):
+    """
+    From participant2_user, in reply to reply_post_2
+    """
     from assembl.models import Post
     p = Post(
         discussion=discussion, creator=participant2_user,

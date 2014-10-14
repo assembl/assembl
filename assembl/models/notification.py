@@ -25,31 +25,31 @@ from abc import abstractmethod
 
 class NotificationSubscriptionClasses(DeclEnum):
     #System notifications (can't unsubscribe)
-    #EMAIL_BOUNCED = "EMAIL_BOUNCED", "Mandatory"
-    #EMAIL_VALIDATE = "", "Mandatory"
-    #RECOVER_ACCOUNT = "", ""
-    #RECOVER_PASSWORD = "", ""
-    #PARTICIPATED_FOR_FIRST_TIME_WELCOME = "", "Mandatory"
-    #SUBSCRIPTION_WELCOME = "", "Mandatory"
+    EMAIL_BOUNCED = "EMAIL_BOUNCED", "Mandatory"
+    EMAIL_VALIDATE = "EMAIL_VALIDATE", "Mandatory"
+    RECOVER_ACCOUNT = "RECOVER_ACCOUNT", ""
+    RECOVER_PASSWORD = "RECOVER_PASSWORD", ""
+    PARTICIPATED_FOR_FIRST_TIME_WELCOME = "PARTICIPATED_FOR_FIRST_TIME_WELCOME", "Mandatory"
+    SUBSCRIPTION_WELCOME = "SUBSCRIPTION_WELCOME", "Mandatory"
     
     # Core notification (unsubscribe strongly discuraged)
     FOLLOW_SYNTHESES = "FOLLOW_SYNTHESES", ""
-    FOLLOW_OWN_MESSAGES_REPLIES = "FOLLOW_OWN_MESSAGES_REPLIES", "Mandatory?"
+    FOLLOW_OWN_MESSAGES_DIRECT_REPLIES = "FOLLOW_OWN_MESSAGES_DIRECT_REPLIES", "Mandatory?"
     # Note:  indirect replies are FOLLOW_THREAD_DISCUSSION
-    #SESSIONS_STARTING = "SESSIONS_STARTING", ""
+    SESSIONS_STARTING = "SESSIONS_STARTING", ""
     #Follow phase changes?
-    #FOLLOW_IDEA_FAMILY_DISCUSSION = "FOLLOW_IDEA_FAMILY_DISCUSSION", ""
-    #FOLLOW_IDEA_FAMILY_MEMBERSHIP_CHANGES = "FOLLOW_IDEA_FAMILY_MEMBERSHIP_CHANGES", ""
-    #FOLLOW_IDEA_FAMILY_SUB_IDEA_SUGGESTIONS = "FOLLOW_IDEA_FAMILY_SUB_IDEA_SUGGESTIONS", ""
-    #FOLLOW_IDEA_CANNONICAL_EXPRESSIONS_CHANGED = "FOLLOW_IDEA_CANNONICAL_EXPRESSIONS_CHANGED", "Title or description changed"
-    #FOLLOW_OWN_MESSAGES_NUGGETS = "FOLLOW_OWN_MESSAGES_NUGGETS", ""
+    FOLLOW_IDEA_FAMILY_DISCUSSION = "FOLLOW_IDEA_FAMILY_DISCUSSION", ""
+    FOLLOW_IDEA_FAMILY_MEMBERSHIP_CHANGES = "FOLLOW_IDEA_FAMILY_MEMBERSHIP_CHANGES", ""
+    FOLLOW_IDEA_FAMILY_SUB_IDEA_SUGGESTIONS = "FOLLOW_IDEA_FAMILY_SUB_IDEA_SUGGESTIONS", ""
+    FOLLOW_IDEA_CANNONICAL_EXPRESSIONS_CHANGED = "FOLLOW_IDEA_CANNONICAL_EXPRESSIONS_CHANGED", "Title or description changed"
+    FOLLOW_OWN_MESSAGES_NUGGETS = "FOLLOW_OWN_MESSAGES_NUGGETS", ""
     FOLLOW_ALL_MESSAGES = "FOLLOW_ALL_MESSAGES", "NOT the same as following root idea"
-    #FOLLOW_ALL_THREAD_NEWLY_PARTICIPATED_IN = "FOLLOW_ALL_THREAD_NEWLY_PARTICIPATED_IN", "Pseudo-notification, that will create new FOLLOW_THREAD_DISCUSSION notifications (so one can unsubscribe)"
+    FOLLOW_ALL_THREAD_NEWLY_PARTICIPATED_IN = "FOLLOW_ALL_THREAD_NEWLY_PARTICIPATED_IN", "Pseudo-notification, that will create new FOLLOW_THREAD_DISCUSSION notifications (so one can unsubscribe)"
     FOLLOW_THREAD_DISCUSSION = "FOLLOW_THREAD_DISCUSSION", ""
-    #FOLLOW_USER_POSTS = "FOLLOW_USER_POSTS", ""
+    FOLLOW_USER_POSTS = "FOLLOW_USER_POSTS", ""
     
     #System error notifications
-    #SYSTEM_ERRORS = "", ""
+    SYSTEM_ERRORS = "SYSTEM_ERRORS", ""
 
 class NotificationCreationOrigin(DeclEnum):
     USER_REQUEST = "USER_REQUESTED", "A direct user action created the notification subscription"
@@ -221,6 +221,32 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscription):
         
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_ALL_MESSAGES,
+        'with_polymorphic': '*'
+    }
+    
+class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscription):
+    priority = 1
+    unsubscribe_allowed = True
+    
+    def wouldCreateNotification(self, discussion_id, verb, object):
+        return ( (verb == CrudVerbs.CREATE) 
+                 & isinstance(object, Post)
+                 & (object.parent.creator == self.user)
+                 )
+    
+    def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
+        assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
+        notification = Notification(
+            event_source_type = NotificationEventSourceType.MESSAGE_POSTED,
+            event_source_object_id = objectInstance.id,
+            first_matching_subscription = self,
+            push_method = NotificationPushMethodType.EMAIL,
+            #push_address = TODO
+            )
+        self.db.add(notification)
+        
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_OWN_MESSAGES_DIRECT_REPLIES,
         'with_polymorphic': '*'
     }
     
