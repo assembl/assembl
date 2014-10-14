@@ -20,7 +20,7 @@ widgetServices.factory('localConfig', function ($http) {
 widgetServices.factory('configService', function ($q, $http, utils) {
     return {
         data: {},
-        getWidget: function (url) {
+        populateFromUrl: function (url, fieldname) {
             var defer = $q.defer(),
                 data = this.data;
 
@@ -29,12 +29,17 @@ widgetServices.factory('configService', function ($q, $http, utils) {
             var urlRoot = utils.urlApi(url);
 
             $http.get(urlRoot).success(function (response) {
-                data.widget = response;
+                if ( fieldname )
+                    data[fieldname] = response;
+                else
+                    data = response;
                 defer.resolve(data);
             }).error(function (data, status) {
-
-                if (status === 401) utils.notification();
-
+                console.log("error while accessing URL: ", data, status);
+                if (status === 401)
+                {
+                    utils.notification();
+                }
                 defer.reject({message: 'error to get widget information'});
             });
 
@@ -127,9 +132,12 @@ widgetServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$log'
 
     function onYoutubeReady(event) {
         $log.info('YouTube Player is ready');
-        youtube.player.cueVideoById(upcoming[0].id);
-        youtube.videoId = upcoming[0].id;
-        youtube.videoTitle = upcoming[0].title;
+        if ( upcoming && upcoming[0] )
+        {
+            youtube.player.cueVideoById(upcoming[0].id);
+            youtube.videoId = upcoming[0].id;
+            youtube.videoTitle = upcoming[0].title;
+        }
     }
 
     function onYoutubeStateChange(event) {

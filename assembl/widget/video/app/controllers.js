@@ -8,8 +8,18 @@ videosApp.controller('videosCtl',
 
             $scope.init = function () {
 
-                var Widget = configService.data.widget;
-                $scope.widget = Widget;
+                console.log("configService: ", configService);
+                console.log("configService.data: ", configService.data);
+
+                $scope.config = {};
+                $scope.config.widget = configService.data.widget;
+                $scope.config.idea = configService.data.idea;
+                console.log("$scope.config: ", $scope.config);
+                if ( !$scope.config.widget && !$scope.config.idea )
+                {
+                    console.log("Error: no config or idea given.");
+                }
+                
 
 
                 // set default model fields
@@ -49,14 +59,19 @@ videosApp.controller('videosCtl',
 
                 // get inspiration keywords from the idea URL given in the configuration JSON
 
-                $scope.idea_api_url = utils.urlApi($scope.widget.settings.idea) + '?view=creativity_widget';
+                if ( $scope.config.idea ) // or we could use $routeParams.idea
+                    $scope.idea_api_url = utils.urlApi($scope.config.idea['@id']);
+                else
+                    $scope.idea_api_url = utils.urlApi($scope.config.widget.settings.idea);
+                $scope.idea_api_url += '?view=creativity_widget';
                 console.log("idea_api_url: " + $scope.idea_api_url);
                 $scope.discussion_api_url = 'discussion api url';
 
                 var
                     Idea = $resource($scope.idea_api_url),
                     Discussion = null,
-                    discussionId = $scope.widget.discussion.split('/')[1];
+                    discussionId = ( $scope.config.idea ) ? $scope.config.idea.discussion : $scope.config.widget.discussion;
+                discussionId = discussionId.split('/')[1];
 
                 $scope.idea = Idea.get({}, function () { // this function is executed once the AJAX request is received and the variable is assigned
                     console.log("idea:");
@@ -81,11 +96,6 @@ videosApp.controller('videosCtl',
                     $scope.search();
 
                 });
-
-
-                // get config file URL given as parameter of the current URL
-
-                $scope.configFile = $routeParams.config;
 
 
                 // data mock
@@ -309,7 +319,7 @@ videosApp.controller('videosCtl',
                 };
                 $http({
                     method: 'POST',
-                    url: utils.urlApi($scope.widget.ideas_url),
+                    url: utils.urlApi($scope.config.widget.ideas_url),
                     data: $.param(message),
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function (data, status, headers, config) {
@@ -387,7 +397,7 @@ videosApp.controller('videosCtl',
                     // user_state_url accepts only GET and PUT actions, and accepts only headers: {'Content-Type': 'application/json'}
                     $http({
                         method: 'PUT',
-                        url: utils.urlApi($scope.widget.user_state_url),
+                        url: utils.urlApi($scope.config.widget.user_state_url),
                         data: initial_data,
                         async: true,
                         headers: {'Content-Type': 'application/json'}
@@ -403,7 +413,7 @@ videosApp.controller('videosCtl',
 
                 $http({
                     method: 'GET',
-                    url: utils.urlApi($scope.widget.user_state_url),
+                    url: utils.urlApi($scope.config.widget.user_state_url),
                     //data: obj,
                     async: true,
                     headers: {'Content-Type': 'application/json'}

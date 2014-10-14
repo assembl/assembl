@@ -47,7 +47,7 @@ describe('creativityApp', function () {
 
     describe('rating controller : ', function () {
 
-        expect(angular.isFunction(configService.getWidget())).toBe(true);
+        expect(angular.isFunction(configService.populateFromUrl())).toBe(true);
 
         it('Should return data', function () {
 
