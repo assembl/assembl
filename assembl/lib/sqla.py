@@ -34,6 +34,7 @@ from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
 from ..semantic.namespaces import QUADNAMES
 from ..auth import *
+from .decl_enums import EnumSymbol
 
 atexit_engines = []
 
@@ -447,6 +448,8 @@ class BaseOps(object):
                 elif isinstance(v, (
                         str, unicode, int, long, float, bool, types.NoneType)):
                     return v
+                elif isinstance(v, EnumSymbol):
+                    return v.name
                 elif isinstance(v, datetime):
                     return v.isoformat()
                 elif isinstance(v, dict):
@@ -488,9 +491,7 @@ class BaseOps(object):
                 known.add(prop_name)
                 val = getattr(self, prop_name)
                 if val is not None:
-                    if type(val) == datetime:
-                        val = val.isoformat()
-                    result[name] = val
+                    result[name] = translate_to_json(val)
                 continue
             elif prop_name in properties:
                 known.add(prop_name)
