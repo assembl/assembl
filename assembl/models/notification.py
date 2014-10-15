@@ -74,8 +74,7 @@ class NotificationSubscription(DiscussionBoundBase):
         index=True)
     discussion_id = Column(
         Integer,
-        ForeignKey(
-                   'discussion.id',
+        ForeignKey('discussion.id',
                    ondelete='CASCADE',
                    onupdate='CASCADE'),
         nullable=False,
@@ -98,7 +97,7 @@ class NotificationSubscription(DiscussionBoundBase):
             'notification_subscription.id',
             ondelete='CASCADE',
             onupdate='CASCADE'),
-            nullable = True)
+        nullable = True)
     children_subscriptions = relationship(
         "NotificationSubscription",
         foreign_keys=[parent_subscription_id],
@@ -176,6 +175,83 @@ class NotificationSubscription(DiscussionBoundBase):
 @event.listens_for(NotificationSubscription.status, 'set', propagate=True)
 def update_last_status_change_date(target, value, oldvalue, initiator):
     target.last_status_change_date = datetime.utcnow()
+
+
+class NotificationSubscriptionOnPost(NotificationSubscription):
+
+    __tablename__ = "notification_subscription_on_post"
+    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_post',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
+    }
+
+    id = Column(Integer, ForeignKey(
+        NotificationSubscription.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    post_id = Column(
+        Integer, ForeignKey("post.id",
+            ondelete='CASCADE', onupdate='CASCADE'))
+
+
+
+class NotificationSubscriptionOnIdea(NotificationSubscription):
+
+    __tablename__ = "notification_subscription_on_idea"
+    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_idea',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
+    }
+
+    id = Column(Integer, ForeignKey(
+        NotificationSubscription.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    idea_id = Column(
+        Integer, ForeignKey("idea.id",
+            ondelete='CASCADE', onupdate='CASCADE'))
+
+
+class NotificationSubscriptionOnExtract(NotificationSubscription):
+
+    __tablename__ = "notification_subscription_on_extract"
+    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_extract',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
+    }
+
+    id = Column(Integer, ForeignKey(
+        NotificationSubscription.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    extract_id = Column(
+        Integer, ForeignKey("extract.id",
+            ondelete='CASCADE', onupdate='CASCADE'))
+
+
+class NotificationSubscriptionOnUserAccount(NotificationSubscription):
+
+    __tablename__ = "notification_subscription_on_useraccount"
+    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_useraccount',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
+    }
+
+    id = Column(Integer, ForeignKey(
+        NotificationSubscription.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    user_id = Column(
+        Integer, ForeignKey("user.id",
+            ondelete='CASCADE', onupdate='CASCADE'))
 
 
 class CrudVerbs():
