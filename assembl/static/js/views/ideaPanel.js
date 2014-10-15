@@ -565,13 +565,13 @@ define(function (require) {
             var definition = this.model.get('definition').length,
                 body = this.$('.ideaPanel-definition').text(),
                 seeMore = this.$('.seeMore'),
-                showChar = 400;
+                showChar = 300;
 
             if (definition > showChar) {
 
                 var content = body.substr(0, showChar),
                     hiddenContent = body.substr(showChar, definition - showChar),
-                    html = content + '...<span class="morecontent hidden">' + hiddenContent + '</span>';
+                    html = content + '<span class="morecontent hidden">' + hiddenContent + '</span>';
 
                 this.$('.ideaPanel-definition').html(html);
 
