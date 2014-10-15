@@ -1,0 +1,11 @@
+{
+    "comment":"Comment",
+    "acomment":"Comment",
+    "send":"Send",
+    "reply":"Reply",
+    "comments":"See the {{nb}} comments",
+    "vote":"Vote",
+    "title":"title",
+    "cancel":"Cancel",
+    "validVote":"Valid your votes"
+}

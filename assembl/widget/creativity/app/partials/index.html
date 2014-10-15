@@ -1,0 +1,25 @@
+<!--
+In Firefox 29, when we make changes to this page and refresh, the old version is displayed in the browser.
+We have to clear the cache or force refresh of the exact URL of this template page in order to show it correctly.
+-->
+
+<div id="index" ng-controller="indexCtl" ng-init="init()">
+    <h1>Vote</h1>
+
+    <p>
+        You will be voting as "{{ user.name }}".
+    </p>
+
+    <!-- we disable text selection in this div, to avoid ugly effects when the mouse interacts with the d3 graph -->
+    <div 
+     id="d3_container"
+     style='-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;' 
+     unselectable='on'
+     onselectstart='return false;' 
+     onmousedown='return false;'>
+    </div>
+
+    <button id="vote_submit" ng-click="submitVote()">Submit your vote</button>
+    <div id="vote_submit_result_holder"></div>
+
+</div>
