@@ -143,6 +143,9 @@ class NotificationSubscription(DiscussionBoundBase):
     def get_discussion_id(self):
         return self.discussion_id
 
+    def class_description(self):
+        return self.type.description
+
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         return cls.discussion_id == discussion_id
