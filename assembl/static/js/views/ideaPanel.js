@@ -48,7 +48,6 @@ define(function (require) {
                 that.showSegment(segment);
             });
 
-
         },
         modelEvents: {
             'change': 'render'
@@ -187,24 +186,13 @@ define(function (require) {
 
                 this.displayEditableFields();
 
-                this.defaultRenderIdeaDefinition();
+                this.onTruncate();
+
+                if (this.editing) {
+                    this.renderCKEditor();
+                }
             }
 
-        },
-
-        defaultRenderIdeaDefinition: function () {
-            var def = this.model.get('definition').length;
-
-            if (this.editing) {
-                this.renderCKEditor();
-            }
-
-            if (def < 400) {
-                this.$('.ideaPanel-seeMore').hide();
-            } else {
-                this.$('.ideaPanel-definition').css('height', 95);
-                this.$('.ideaPanel-seeMore').show();
-            }
         },
 
         getExtractslist: function () {
@@ -555,21 +543,42 @@ define(function (require) {
             e.preventDefault();
 
             var elm = $(e.target),
-                readMore = '<a href="#" class="seeMore js_seeMore">' + i18n.gettext('See more') + '<i class="icon-arrowdown"></i></a>',
-                readLess = '<a href="#" class="seeLess js_seeLess">' + i18n.gettext('See less') + '<i class="icon-arrowup"></i></a>',
-                btnContent = this.$('.ideaPanel-seeMore'),
-                definition = this.$('.ideaPanel-definition');
+                seeMore = this.$('.seeMore'),
+                seeLess = this.$('.seeLess'),
+                hideContent = this.$('.morecontent');
 
             if (elm.hasClass('seeMore')) {
-                btnContent.html(readLess);
-                definition.css('height', 'auto');
+                hideContent.removeClass('hidden');
+                seeMore.addClass('hidden');
+                seeLess.removeClass('hidden');
             }
 
             if (elm.hasClass('seeLess')) {
-                btnContent.html(readMore);
-                definition.css('height', 95);
+                hideContent.addClass('hidden');
+                seeMore.removeClass('hidden');
+                seeLess.addClass('hidden');
             }
         },
+
+        onTruncate: function () {
+
+            var definition = this.model.get('definition').length,
+                body = this.$('.ideaPanel-definition').text(),
+                seeMore = this.$('.seeMore'),
+                showChar = 400;
+
+            if (definition > showChar) {
+
+                var content = body.substr(0, showChar),
+                    hiddenContent = body.substr(showChar, definition - showChar),
+                    html = content + '...<span class="morecontent hidden">' + hiddenContent + '</span>';
+
+                this.$('.ideaPanel-definition').html(html);
+
+                seeMore.removeClass('hidden');
+            }
+        },
+
 
         editDefinition: function () {
             if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
