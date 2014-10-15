@@ -125,10 +125,6 @@ class NotificationSubscription(DiscussionBoundBase):
         backref=backref('notification_subscriptions', order_by=creation_date)
     )
 
-    followed_object_id = Column(
-        Integer,
-        nullable = True,
-        doc = "Which object type is followed depends on the subscription class")
     #allowed_transports Ex: email_bounce cannot be bounced by the same email.  For now we'll special case in code
     priority = 1 #An integer, if more than one subsciption match for one event, only the one with the lowest integer can create a notification
     unsubscribe_allowed = False
@@ -144,6 +140,9 @@ class NotificationSubscription(DiscussionBoundBase):
 
     def class_description(self):
         return self.type.description
+
+    def followed_object(self):
+        return self.discussion
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
@@ -195,6 +194,10 @@ class NotificationSubscriptionOnPost(NotificationSubscription):
         Integer, ForeignKey("post.id",
             ondelete='CASCADE', onupdate='CASCADE'))
 
+    post = relationship("Post")
+
+    def followed_object(self):
+        return self.discussion
 
 
 class NotificationSubscriptionOnIdea(NotificationSubscription):
@@ -215,6 +218,11 @@ class NotificationSubscriptionOnIdea(NotificationSubscription):
         Integer, ForeignKey("idea.id",
             ondelete='CASCADE', onupdate='CASCADE'))
 
+    idea = relationship("Idea")
+
+    def followed_object(self):
+        return self.idea
+
 
 class NotificationSubscriptionOnExtract(NotificationSubscription):
 
@@ -234,6 +242,11 @@ class NotificationSubscriptionOnExtract(NotificationSubscription):
         Integer, ForeignKey("extract.id",
             ondelete='CASCADE', onupdate='CASCADE'))
 
+    extract = relationship("Extract")
+
+    def followed_object(self):
+        return self.extract
+
 
 class NotificationSubscriptionOnUserAccount(NotificationSubscription):
 
@@ -252,6 +265,11 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscription):
     user_id = Column(
         Integer, ForeignKey("user.id",
             ondelete='CASCADE', onupdate='CASCADE'))
+
+    user = relationship("User")
+
+    def followed_object(self):
+        return self.user
 
 
 class CrudVerbs():

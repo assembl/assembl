@@ -157,6 +157,10 @@ from .widgets import (
 
 from .notification import (
     NotificationSubscription,
+    NotificationSubscriptionOnPost,
+    NotificationSubscriptionOnIdea,
+    NotificationSubscriptionOnExtract,
+    NotificationSubscriptionOnUserAccount,
     NotificationSubscriptionFollowSyntheses,
     NotificationSubscriptionFollowAllMessages,
     NotificationSubscriptionFollowOwnMessageDirectReplies,
