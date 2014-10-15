@@ -99,8 +99,10 @@ class NotificationSubscription(DiscussionBoundBase):
             ondelete='CASCADE',
             onupdate='CASCADE'),
             nullable = True)
-    parent_subscription = relationship(
-        'NotificationSubscription'
+    children_subscriptions = relationship(
+        "NotificationSubscription",
+        foreign_keys=[parent_subscription_id],
+        backref=backref('parent_subscription', remote_side=[id]),
     )
     status = Column(
         NotificationStatus.db_type(),
