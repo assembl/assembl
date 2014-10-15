@@ -45,11 +45,10 @@ from pyramid.response import Response
 from pyld import jsonld
 
 from ..traversal import InstanceContext, CollectionContext, ClassContext
-from assembl.auth import P_READ, P_SYSADMIN, Everyone
+from assembl.auth import P_READ, P_SYSADMIN, R_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase
-
 
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
@@ -270,7 +269,11 @@ def class_add(request):
     ctx = request.context
     args = request.params
     typename = args.get('type', None)
-    cls = ctx.get_class(typename)
+    if typename:
+        cls = ctx.get_class(typename)
+    else:
+        cls = request.context._class
+        typename = cls.external_typename()
     user_id = authenticated_userid(request)
     # In this case, no discussion context, so only sysadmin.
     if R_SYSADMIN not in get_roles(user_id):

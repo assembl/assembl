@@ -155,11 +155,11 @@ class ClassContext(object):
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_class(typename)
-        with self.parent_instance.db().no_autoflush:
+        with cls.db().no_autoflush:
             if json is None:
                 mapper = sqlainspect(cls)
                 if 'user_id' in mapper.c:
-                    kwargs[user_id] = user_id
+                    kwargs['user_id'] = user_id
                 try:
                     return [cls(**dict(process_args(kwargs, cls)))]
                 except Exception as e:
