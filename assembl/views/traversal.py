@@ -351,6 +351,9 @@ class CollectionContext(object):
         with cls.db.no_autoflush:
             if json is None:
                 try:
+                    mapper = sqlainspect(cls)
+                    if 'user_id' in mapper.c:
+                        kwargs['user_id'] = user_id
                     inst = cls(**dict(process_args(kwargs, cls)))
                     assocs = [inst]
                 except Exception as e:
