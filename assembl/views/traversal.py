@@ -11,6 +11,7 @@ from abc import ABCMeta, abstractmethod
 
 from assembl.auth import P_READ, R_SYSADMIN
 from assembl.lib.sqla import *
+from assembl.lib.decl_enums import DeclEnumType
 
 
 class DictContext(object):
@@ -87,7 +88,9 @@ def process_args(args, cls):
     for key, value in args.iteritems():
         column = mapper.c.get(key)
         if column is not None:
-            if column.type.python_type == int:
+            if isinstance(column.type, DeclEnumType):
+                yield (key, column.type.enum.from_string(value))
+            elif column.type.python_type == int:
                 yield (key, int(value))
             elif column.type.python_type == float:
                 yield (key, float(value))
