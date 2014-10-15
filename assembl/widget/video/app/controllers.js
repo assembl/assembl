@@ -1,8 +1,8 @@
 "use strict";
 
 videosApp.controller('videosCtl',
-    ['$scope', '$http', '$routeParams', '$log', '$resource', 'localConfig', 'JukeTubeVideosService', 'DiscussionService', 'sendIdeaService', 'configService', 'utils',
-        function ($scope, $http, $routeParams, $log, $resource, localConfig, JukeTubeVideosService, DiscussionService, sendIdeaService, configService, utils) {
+    ['$scope', '$q', '$http', '$routeParams', '$log', '$resource', 'localConfig', 'JukeTubeVideosService', 'DiscussionService', 'sendIdeaService', 'configService', 'utils',
+        function ($scope, $q, $http, $routeParams, $log, $resource, localConfig, JukeTubeVideosService, DiscussionService, sendIdeaService, configService, utils) {
 
             // intialization code (constructor)
 
@@ -19,6 +19,15 @@ videosApp.controller('videosCtl',
                 {
                     console.log("Error: no config or idea given.");
                 }
+
+
+                // local config json
+
+                $scope.localConfigPromise = localConfig.fetch();
+                $scope.localConfigPromise.success(function (data) {
+                    console.log("localConfig received");
+                    $scope.localConfig = data;
+                });
                 
 
 
@@ -95,13 +104,6 @@ videosApp.controller('videosCtl',
                     setFirstKeywordsAsQuery();
                     $scope.search();
 
-                });
-
-
-                // data mock
-
-                localConfig.fetch().success(function (data) {
-                    $scope.globalVideoConfig = data;
                 });
 
                 /*
@@ -228,22 +230,24 @@ videosApp.controller('videosCtl',
             };
 
             $scope.search = function (pageToken) {
-                var q = $('#query').val();
-                var params = {
-                    key: 'AIzaSyC8lCVIHWdtBwnTtKzKl4dy8k5C_raqyK4', // quentin
-                    type: 'video',
-                    maxResults: '10',
-                    part: 'id,snippet',
-                    fields: 'items/id,items/snippet/publishedAt,items/snippet/title,items/snippet/description,items/snippet/thumbnails/default,items/snippet/channelTitle,nextPageToken,prevPageToken,pageInfo',
-                    q: q
-                };
-                if (pageToken)
-                    params.pageToken = pageToken;
+                console.log("search()");
+                $q.when($scope.localConfigPromise).then(function(){
+                    console.log("$scope.localConfigPromise is ready");
+                    var q = $('#query').val();
+                    var params = {
+                        key: $scope.localConfig.youtube_api_key,
+                        type: 'video',
+                        maxResults: '10',
+                        part: 'id,snippet',
+                        fields: 'items/id,items/snippet/publishedAt,items/snippet/title,items/snippet/description,items/snippet/thumbnails/default,items/snippet/channelTitle,nextPageToken,prevPageToken,pageInfo',
+                        q: q
+                    };
+                    if (pageToken)
+                        params.pageToken = pageToken;
 
-                $http.get('https://www.googleapis.com/youtube/v3/search', {
-                    params: params
-                })
-                    .success(function (data) {
+                    $http.get('https://www.googleapis.com/youtube/v3/search', {
+                        params: params
+                    }).success(function (data) {
                         JukeTubeVideosService.processResults(data);
                         $scope.results = JukeTubeVideosService.getResults();
                         $scope.pageInfo = JukeTubeVideosService.getPageInfo();
@@ -252,6 +256,8 @@ videosApp.controller('videosCtl',
                     .error(function () {
                         $log.info('Search error');
                     });
+                });
+                
             };
 
             $scope.sendIdea = function () {
