@@ -31,7 +31,7 @@ class NotificationSubscriptionClasses(DeclEnum):
     RECOVER_PASSWORD = "RECOVER_PASSWORD", ""
     PARTICIPATED_FOR_FIRST_TIME_WELCOME = "PARTICIPATED_FOR_FIRST_TIME_WELCOME", "Mandatory"
     SUBSCRIPTION_WELCOME = "SUBSCRIPTION_WELCOME", "Mandatory"
-    
+
     # Core notification (unsubscribe strongly discuraged)
     FOLLOW_SYNTHESES = "FOLLOW_SYNTHESES", ""
     FOLLOW_OWN_MESSAGES_DIRECT_REPLIES = "FOLLOW_OWN_MESSAGES_DIRECT_REPLIES", "Mandatory?"
@@ -47,7 +47,7 @@ class NotificationSubscriptionClasses(DeclEnum):
     FOLLOW_ALL_THREAD_NEWLY_PARTICIPATED_IN = "FOLLOW_ALL_THREAD_NEWLY_PARTICIPATED_IN", "Pseudo-notification, that will create new FOLLOW_THREAD_DISCUSSION notifications (so one can unsubscribe)"
     FOLLOW_THREAD_DISCUSSION = "FOLLOW_THREAD_DISCUSSION", ""
     FOLLOW_USER_POSTS = "FOLLOW_USER_POSTS", ""
-    
+
     #System error notifications
     SYSTEM_ERRORS = "SYSTEM_ERRORS", ""
 
@@ -55,7 +55,7 @@ class NotificationCreationOrigin(DeclEnum):
     USER_REQUEST = "USER_REQUESTED", "A direct user action created the notification subscription"
     DISCUSSION_DEFAULT = "DISCUSSION_DEFAULT", "The notification subscription was created by the default discussion configuration"
     PARENT_NOTIFICATION = "PARENT_NOTIFICATION", "The notification subscription was created by another subscription (such as following all message threads a user participated in"
-    
+
 class NotificationStatus(DeclEnum):
     ACTIVE = "ACTIVE", "Normal status, subscription will create notifications"
     UNSUBSCRIBED = "UNSUBSCRIBED", "The user explicitely unsubscribed from this notification"
@@ -133,13 +133,13 @@ class NotificationSubscription(DiscussionBoundBase):
     #allowed_transports Ex: email_bounce cannot be bounced by the same email.  For now we'll special case in code
     priority = 1 #An integer, if more than one subsciption match for one event, only the one with the lowest integer can create a notification
     unsubscribe_allowed = False
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_notification_subscription',
         'polymorphic_on': 'type',
         'with_polymorphic': '*'
     }
-    
+
     def get_discussion_id(self):
         return self.discussion_id
 
@@ -150,15 +150,15 @@ class NotificationSubscription(DiscussionBoundBase):
     @abstractmethod
     def wouldCreateNotification(self, discussion_id, verb, object):
         return False
-        
+
     @classmethod
     def findApplicableInstances(cls, discussion_id, verb, object):
         """
         Returns all subscriptions that would fire on the object, and verb given
-        
-        This naive implementation instanciates every ACTIVE subscription for every user, 
-        and calls "would fire" for each.  It is expected that most subclasses will 
-        override this with a more optimal implementation 
+
+        This naive implementation instanciates every ACTIVE subscription for every user,
+        and calls "would fire" for each.  It is expected that most subclasses will
+        override this with a more optimal implementation
         """
         applicable_subscriptions = []
         subscriptions = cls.db.query(cls).filter(cls.status==NotificationStatus.ACTIVE);
@@ -169,7 +169,7 @@ class NotificationSubscription(DiscussionBoundBase):
     @abstractmethod
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         pass
-    
+
 @event.listens_for(NotificationSubscription.status, 'set', propagate=True)
 def update_last_status_change_date(target, value, oldvalue, initiator):
     target.last_status_change_date = datetime.utcnow()
@@ -183,10 +183,10 @@ class CrudVerbs():
 class NotificationSubscriptionFollowSyntheses(NotificationSubscription):
     priority = 1
     unsubscribe_allowed = True
-    
+
     def wouldCreateNotification(self, discussion_id, verb, object):
         return (verb == CrudVerbs.CREATE) & isinstance(object, SynthesisPost)
-    
+
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         notification = Notification(
@@ -197,19 +197,19 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscription):
             #push_address = TODO
             )
         self.db.add(notification)
-        
+
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_SYNTHESES,
         'with_polymorphic': '*'
     }
-    
+
 class NotificationSubscriptionFollowAllMessages(NotificationSubscription):
     priority = 1
     unsubscribe_allowed = True
-    
+
     def wouldCreateNotification(self, discussion_id, verb, object):
         return (verb == CrudVerbs.CREATE) & isinstance(object, Post)
-    
+
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         notification = Notification(
@@ -220,22 +220,22 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscription):
             #push_address = TODO
             )
         self.db.add(notification)
-        
+
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_ALL_MESSAGES,
         'with_polymorphic': '*'
     }
-    
+
 class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscription):
     priority = 1
     unsubscribe_allowed = True
-    
+
     def wouldCreateNotification(self, discussion_id, verb, object):
-        return ( (verb == CrudVerbs.CREATE) 
+        return ( (verb == CrudVerbs.CREATE)
                  & isinstance(object, Post)
                  & (object.parent.creator == self.user)
                  )
-    
+
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         notification = Notification(
@@ -246,12 +246,12 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
             #push_address = TODO
             )
         self.db.add(notification)
-        
+
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_OWN_MESSAGES_DIRECT_REPLIES,
         'with_polymorphic': '*'
     }
-    
+
 class ModelEventWatcherNotificationSubscriptionDispatcher(object):
     interface.implements(IModelEventWatcher)
 
@@ -303,7 +303,7 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
 
     def processAccountModified(self, id):
         print "processAccountModified", id
-        
+
 class NotificationEventSourceType(DeclEnum):
     """
     The type of event that caused the notification to be created
@@ -363,7 +363,7 @@ class Notification(Base):
             ),
         nullable=False, #Maybe should be true, not sure-benoitg
         doc="An annonymous pointer to the database object that originated the event")
-    
+
     first_matching_subscription = relationship(
         NotificationSubscription,
         backref=backref('notifications')
