@@ -11,7 +11,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from assembl.models import Discussion
 from assembl.auth import P_READ, P_ADD_EXTRACT
 from assembl.auth.util import user_has_permission
-from .. import get_template_views, get_default_context as base_default_context
+from .. import get_default_context as base_default_context
 
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
@@ -29,7 +29,7 @@ def get_default_context(request):
         discussion = Discussion.db.query(Discussion).filter(Discussion.slug==slug).one()
     except NoResultFound:
         raise HTTPNotFound(_("No discussion found for slug=%s") % slug)
-    return dict(base, templates=get_template_views(), discussion=discussion)
+    return dict(base, discussion=discussion)
 
 
 def get_styleguide_components():

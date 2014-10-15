@@ -43,6 +43,8 @@ def get_default_context(request):
     return dict(default_context,
         request=request,
         user=user,
+        templates= get_template_views(),
+        discussion={},  # Templates won't load without a discussion object
         user_profile_edit_url=user_profile_edit_url,
         locale=localizer.locale_name,
         locales=config.get('available_languages').split(),
