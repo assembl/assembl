@@ -16,11 +16,11 @@ import transaction
 
 
 from assembl.lib import config
-from assembl.models.notification import *
 
 def upgrade(pyramid_env):
     schema = config.get('db_schema')+"."+config.get('db_user')
     with context.begin_transaction():
+        from assembl.models.notification import *
         op.create_table('notification_subscription',
             sa.Column('id',
                       sa.Integer,
