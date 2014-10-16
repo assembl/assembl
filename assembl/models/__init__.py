@@ -148,6 +148,7 @@ from .widgets import (
     IdeaWidgetLink,
     InspirationWidget,
     MultiCriterionVotingWidget,
+    PostWithMetadata,
     VotableIdeaWidgetLink,
     VotedIdeaWidgetLink,
     VotingCriterionWidgetLink,

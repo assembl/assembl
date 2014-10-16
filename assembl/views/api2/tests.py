@@ -437,9 +437,12 @@ def test_inspiration_widget(
     ancestor_widgets_rep = ancestor_widgets.json
     assert new_widget_loc.location in ancestor_widgets_rep
     # TODO. ajouter la collection descendant_ideas. Comment déduire cet URL du widget????
-    test_app.post('/data/Discussion/%d/widgets/%d/base_idea_descendants/%d/children' % (
+    test_app.post('/data/Discussion/%d/widgets/%d/base_idea_descendants/%d/linkedposts' % (
         discussion.id, widget_id, subidea_1_1.id), {
-        "type": "Idea", "short_title": "This is a new idea"})
+            "type": "PostWithMetadata", "message_id": 0,
+            "body": "body", "creator_id": participant1_user.id,
+            "metadata_json": '{"inspiration_url": "https://www.youtube.com/watch?v=7E2FUSYO374"}'})
+
 
 def test_voting_widget(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,
