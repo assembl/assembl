@@ -3,7 +3,8 @@ from datetime import datetime
 
 from sqlalchemy import (
     Column, Integer, ForeignKey, Text, String, DateTime, inspect)
-from sqlalchemy.orm import relationship, backref, aliased, join
+from sqlalchemy.sql import text, column
+from sqlalchemy.orm import (relationship, backref, aliased, join)
 from sqlalchemy.ext.associationproxy import association_proxy
 import simplejson as json
 import uuid
@@ -216,21 +217,65 @@ class BaseIdeaWidget(Widget):
 
     @classmethod
     def extra_collections(cls):
-        class BaseIdeaCollection(CollectionDefinition):
-            def __init__(self):
-                super(BaseIdeaCollection, self).__init__(
-                    cls, cls.base_idea)
+        return {'base_idea': BaseIdeaCollection(),
+                'base_idea_descendants': BaseIdeaDescendantsCollection() }
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
-                widget = self.owner_alias
-                idea = last_alias
-                return query.join(
-                    BaseIdeaWidgetLink,
-                    idea.id == BaseIdeaWidgetLink.idea_id).join(
-                        widget).filter(widget.id == parent_instance.id).filter(
-                            widget.idea_links.of_type(BaseIdeaWidgetLink))
 
-        return {'base_idea': BaseIdeaCollection()}
+class BaseIdeaCollection(CollectionDefinition):
+    def __init__(self):
+        super(BaseIdeaCollection, self).__init__(
+            BaseIdeaWidget, BaseIdeaWidget.base_idea)
+
+    def decorate_query(self, query, last_alias, parent_instance, ctx):
+        widget = self.owner_alias
+        idea = last_alias
+        return query.join(
+            BaseIdeaWidgetLink,
+            idea.id == BaseIdeaWidgetLink.idea_id).join(
+                widget).filter(widget.id == parent_instance.id).filter(
+                    widget.idea_links.of_type(BaseIdeaWidgetLink))
+
+class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
+    descendants = text("""SELECT id from (SELECT target_id as id FROM (
+                SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
+                    target_id, source_id FROM idea_idea_link WHERE is_tombstone=0
+                ) il
+            WHERE il.source_id = :base_idea_id
+            UNION SELECT :base_idea_id as id) recid"""
+    ).columns(column('id'))
+
+    def __init__(self):
+        super(BaseIdeaDescendantsCollection, self).__init__(
+            BaseIdeaWidget, Idea)
+
+    def decorate_query(self, query, last_alias, parent_instance, ctx):
+        widget = self.owner_alias
+        descendant = last_alias
+        base_idea = aliased(Idea, name="base_idea")
+        # using base_idea_id() is cheating, but a proper join fails.
+        descendants_subq = self.descendants.bindparams(
+            base_idea_id=parent_instance.base_idea_id()).alias()
+        query = query.filter(
+            descendant.id.in_(descendants_subq)).join(
+            widget, widget.id == parent_instance.id)
+        return query
+
+    def contains(self, parent_instance, instance):
+        widget = self.owner_alias
+        descendant = aliased(Idea, name="descendant")
+        base_idea = aliased(Idea, name="base_idea")
+        # using base_idea_id() is cheating, but a proper join fails.
+        descendants_subq = self.descendants.bindparams(
+            base_idea_id=parent_instance.base_idea_id()).alias()
+        query = Widget.db.query(descendant).filter(
+            descendant.id.in_(descendants_subq)).join(
+            widget, widget.id == parent_instance.id)
+        return query.count() > 0
+
+    def decorate_instance(
+            self, instance, parent_instance, assocs, user_id,
+            ctx, kwargs):
+        pass
 
 
 class IdeaCreatingWidget(BaseIdeaWidget):
@@ -297,22 +342,12 @@ class IdeaCreatingWidget(BaseIdeaWidget):
 
     @classmethod
     def extra_collections(cls):
-        class BaseIdeaCollection(CollectionDefinition):
+        class BaseIdeaCollectionC(BaseIdeaCollection):
             hide_proposed_ideas = False
 
-            def __init__(self):
-                super(BaseIdeaCollection, self).__init__(
-                    cls, cls.base_idea)
-
             def decorate_query(self, query, last_alias, parent_instance, ctx):
-                widget = self.owner_alias
-                idea = last_alias
-                base_idea_link = aliased(BaseIdeaWidgetLink)
-                query = query.join(
-                    base_idea_link,
-                    idea.id == base_idea_link.idea_id).filter(
-                        widget.idea_links.of_type(BaseIdeaWidgetLink))
-
+                query = super(BaseIdeaCollectionC, self).decorate_query(
+                    query, last_alias, parent_instance, ctx)
                 children_ctx = ctx.find_collection(
                     'ChildIdeaCollectionDefinition')
                 if children_ctx:
@@ -321,9 +356,6 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                         gen_idea_link,
                         (gen_idea_link.idea_id ==
                             children_ctx.collection_class_alias.id))
-                query = query.join(widget).filter(
-                    widget.id == parent_instance.id)
-
                 return query
 
             def decorate_instance(
@@ -352,11 +384,55 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                             **self.filter_kwargs(
                                 GeneratedIdeaWidgetLink, kwargs)))
 
-        class BaseIdeaHidingCollection(BaseIdeaCollection):
+        class BaseIdeaHidingCollection(BaseIdeaCollectionC):
             hide_proposed_ideas = True
 
-        return {'base_idea': BaseIdeaCollection(),
-                'base_idea_hiding': BaseIdeaHidingCollection()}
+        class BaseIdeaDescendantsCollectionC(BaseIdeaDescendantsCollection):
+            hide_proposed_ideas = False
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                query = super(BaseIdeaDescendantsCollectionC, self).decorate_query(
+                    query, last_alias, parent_instance, ctx)
+                children_ctx = ctx.find_collection(
+                    'ChildIdeaCollectionDefinition')
+                if children_ctx:
+                    gen_idea_link = aliased(GeneratedIdeaWidgetLink)
+                    query = query.join(
+                        gen_idea_link,
+                        (gen_idea_link.idea_id ==
+                            children_ctx.collection_class_alias.id))
+                return query
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
+                super(BaseIdeaCollection, self).decorate_instance(
+                    instance, parent_instance, assocs, user_id, ctx, kwargs)
+                for inst in assocs[:]:
+                    if isinstance(inst, Idea):
+                        inst.hidden = True
+                        post = IdeaProposalPost(
+                            proposes_idea=inst, creator_id=user_id,
+                            discussion_id=inst.discussion_id,
+                            message_id=uuid.uuid1().urn,
+                            hidden=self.hide_proposed_ideas,
+                            body="", subject=inst.short_title,
+                            **self.filter_kwargs(
+                                IdeaProposalPost, kwargs))
+                        assocs.append(post)
+                        assocs.append(IdeaContentWidgetLink(
+                            content=post, idea=inst.parents[0],
+                            creator_id=user_id,
+                            **self.filter_kwargs(
+                                IdeaContentWidgetLink, kwargs)))
+                        assocs.append(GeneratedIdeaWidgetLink(
+                            idea=inst,
+                            **self.filter_kwargs(
+                                GeneratedIdeaWidgetLink, kwargs)))
+
+        return dict(BaseIdeaWidget.extra_collections(),
+            base_idea=BaseIdeaCollectionC(),
+            base_idea_hiding=BaseIdeaHidingCollection(),
+            base_idea_descendants=BaseIdeaDescendantsCollectionC())
 
     # @property
     # def generated_ideas(self):
