@@ -86,6 +86,7 @@ from .post import (
     IdeaProposalPost,
     ImportedPost,
     Post,
+    PostWithMetadata,
     SynthesisPost,
 )
 from .mail import (
@@ -148,7 +149,6 @@ from .widgets import (
     IdeaWidgetLink,
     InspirationWidget,
     MultiCriterionVotingWidget,
-    PostWithMetadata,
     VotableIdeaWidgetLink,
     VotedIdeaWidgetLink,
     VotingCriterionWidgetLink,

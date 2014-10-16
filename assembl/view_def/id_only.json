@@ -23,8 +23,11 @@
     "AssemblPost": {
         "@extends": "Post"
     },
+    "PostWithMetadata": {
+        "@extends": "AssemblPost",
+    },
     "IdeaProposalPost": {
-        "@extends": "AssemblPost"
+        "@extends": "PostWithMetadata",
     },
     "SynthesisPost": {
         "@extends": "AssemblPost",

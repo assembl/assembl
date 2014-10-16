@@ -16,7 +16,7 @@ from .discussion import Discussion
 from .idea import (Idea, IdeaLink)
 from .idea_content_link import IdeaContentWidgetLink
 from .generic import Content
-from .post import Post, IdeaProposalPost, AssemblPost
+from .post import Post, IdeaProposalPost
 from ..auth import P_ADD_POST, P_ADMIN_DISC, Everyone, CrudPermissions
 from .auth import User
 from ..views.traversal import (
@@ -449,35 +449,6 @@ class InspirationWidget(IdeaCreatingWidget):
     def get_ui_endpoint_base(cls):
         # TODO: Make this configurable.
         return "/widget/creativity/"
-
-
-class PostWithMetadata(AssemblPost):
-    """
-    A Post that comes from an inspiration widget
-    """
-    __tablename__ = "post_with_metadata"
-
-    id = Column(Integer, ForeignKey(
-        'assembl_post.id',
-        ondelete='CASCADE',
-        onupdate='CASCADE'
-    ), primary_key=True)
-
-    metadata_raw = Column(Text)
-
-    @property
-    def metadata_json(self):
-        if self.metadata_raw:
-            return json.loads(self.metadata_raw)
-        return {}
-
-    @metadata_json.setter
-    def metadata_json(self, val):
-        self.metadata_raw = json.dumps(val)
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'post_with_metadata',
-    }
 
 
 class CreativitySessionWidget(IdeaCreatingWidget):

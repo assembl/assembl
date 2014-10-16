@@ -2,6 +2,7 @@ from datetime import datetime
 from abc import ABCMeta, abstractmethod
 
 from bs4 import BeautifulSoup
+import simplejson as json
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql import func
 from sqlalchemy import (
@@ -13,6 +14,7 @@ from sqlalchemy import (
     ForeignKey,
     Unicode,
     UnicodeText,
+    Text,
     or_,
     event,
 )
@@ -287,14 +289,44 @@ class SynthesisPost(AssemblPost):
     def get_body_mime_type(self):
         return "text/html"
 
-class IdeaProposalPost(AssemblPost):
+
+class PostWithMetadata(AssemblPost):
+    """
+    A Post that comes from an inspiration widget
+    """
+    __tablename__ = "post_with_metadata"
+
+    id = Column(Integer, ForeignKey(
+        AssemblPost.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    metadata_raw = Column(Text)
+
+    @property
+    def metadata_json(self):
+        if self.metadata_raw:
+            return json.loads(self.metadata_raw)
+        return {}
+
+    @metadata_json.setter
+    def metadata_json(self, val):
+        self.metadata_raw = json.dumps(val)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'post_with_metadata',
+    }
+
+
+class IdeaProposalPost(PostWithMetadata):
     """
     A Post that proposes an Idea.
     """
     __tablename__ = "idea_proposal_post"
 
     id = Column(Integer, ForeignKey(
-        'assembl_post.id',
+        PostWithMetadata.id,
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
