@@ -441,7 +441,7 @@ def test_inspiration_widget(
         discussion.id, widget_id, subidea_1_1.id), {
             "type": "PostWithMetadata", "message_id": 0,
             "body": "body", "creator_id": participant1_user.id,
-            "metadata_json": '{"inspiration_url": "https://www.youtube.com/watch?v=7E2FUSYO374"}'})
+            "metadata_raw": '{"inspiration_url": "https://www.youtube.com/watch?v=7E2FUSYO374"}'})
 
 
 def test_voting_widget(
