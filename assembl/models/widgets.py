@@ -405,7 +405,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id, ctx, kwargs):
-                super(BaseIdeaCollection, self).decorate_instance(
+                super(BaseIdeaDescendantsCollectionC, self).decorate_instance(
                     instance, parent_instance, assocs, user_id, ctx, kwargs)
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
