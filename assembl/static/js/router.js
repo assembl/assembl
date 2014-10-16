@@ -8,14 +8,18 @@ define(function (require) {
 
         controller: RouteManager,
         appRoutes: {
-            ":slug/": "home",
-            ":slug/idea/:id": "idea",
-            ":slug/idea/:slug/:id": "ideaSlug",
-            ":slug/message/:id": "message",
-            ":slug/message/:slug/:id": "messageSlug",
-            "admin/discussion/edit/:id": 'adminDiscussion'
+            ":discussion/": "home",
+            ":discussion/idea/:id": "idea",
+            ":discussion/idea/:slug/:id": "ideaSlug",
+            ":discussion/message/:id": "message",
+            ":discussion/message/:slug/:id": "messageSlug",
+            ":discussion/account": "editProfile",
+            //"admin/discussion/edit/:id":"editDiscussion",
+            //"user/:type/:user":"editProfile"
         }
     });
 
     return Router;
 });
+
+

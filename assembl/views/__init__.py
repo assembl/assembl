@@ -19,7 +19,6 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templa
 
 def backbone_include(config):
     config.add_route('home', '/')
-    config.add_route('home_context', '/context')
     config.add_route('home_idea', '/idea/{idea_id}')
     config.add_route('home_idea_slug', '/idea/{idea_slug}/{idea_id}')
     config.add_route('home_message', '/message/{message_id}')
@@ -29,6 +28,8 @@ def backbone_include(config):
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
     config.add_route('graph_view', '/graph')
+
+    config.add_route('account', '/account')
 
 
 def get_default_context(request):

@@ -7,7 +7,8 @@ define(['marionette'], function (Marionette) {
             headerRegions: '#header',
             notificationRegion: '#notification',
             groupContainer: '#groupContainer',
-            adminContainer: '#adminContainer'
+            adminContainer: '#adminContainer',
+            accountContainer: '#accountContainer'
         })
     });
 

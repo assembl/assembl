@@ -8,12 +8,12 @@ define(function (require) {
         User = require('models/user'),
         storage = require('objects/storage'),
         navBar = require('views/navBar'),
-    //contextPage = require('views/contextPage'),
         GroupContainer = require('views/groups/groupContainer'),
         CollectionManager = require('modules/collectionManager'),
         viewsFactory = require('objects/viewsFactory'),
         Notification = require('views/notification'),
-        adminView = require('views/admin/adminDiscussion');
+        adminView = require('views/admin/adminDiscussion'),
+        profileView = require('views/admin/profile');
 
     var routeManager = Marionette.Controller.extend({
 
@@ -57,7 +57,6 @@ define(function (require) {
 
         message: function (id) {
             //TODO: add new behavior to show messageList Panel
-            //Ctx.openPanel(assembl.messageList);
             Assembl.vent.trigger('messageList:showMessageById', id);
         },
 
@@ -65,10 +64,21 @@ define(function (require) {
             return this.message(slug + '/' + id);
         },
 
-        adminDiscussion: function () {
+        editDiscussion: function () {
             var admin = new adminView();
             Assembl.adminContainer.show(admin);
         },
+
+        editProfile: function () {
+            Assembl.headerRegions.show(new navBar());
+
+            var profile = new profileView();
+            Assembl.accountContainer.show(profile);
+        },
+
+        /**
+         * Extended methods use in router
+         * */
 
         loadCurrentUser: function () {
             if (Ctx.getCurrentUserId()) {

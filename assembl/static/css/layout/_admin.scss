@@ -2,3 +2,35 @@
   max-width: 80%;
   margin: 4em auto 0 auto;
 }
+
+/* user profile */
+
+.profile-sidebar {
+  //border-right:1px solid $gray3;
+  position: fixed;
+  top: 36px;
+  z-index: 1000;
+  min-height: 100%;
+
+  .sidebar-nav {
+    .active {
+      border-left: 6px solid $gray4;
+    }
+    li {
+      border-left: 6px solid transparent;
+    }
+  }
+}
+
+.profile {
+  .form-profile {
+    //rgb(78, 87, 100)
+  }
+  .profile-container {
+    margin: 2% 0 0 20%;
+    .profile-edit {
+
+    }
+  }
+}
+

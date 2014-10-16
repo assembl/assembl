@@ -32,6 +32,10 @@ define(function (require) {
         },
 
         onRender: function () {
+            this.getPartners();
+        },
+
+        getPartners: function () {
             var that = this,
                 collectionManager = new CollectionManager();
             //need a solution to pass data to the template after complete promise

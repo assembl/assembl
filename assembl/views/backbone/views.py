@@ -77,10 +77,6 @@ def idea_view(request):
 def idea_slug_view(request):
     return home_view(request)
 
-@view_config(route_name='home_context', request_method='GET', http_cache=60)
-def context_view(request):
-    return home_view(request)
-
 @view_config(route_name='home_message', request_method='GET', http_cache=60)
 def message_view(request):
     return home_view(request)
@@ -92,7 +88,6 @@ def message_slug_view(request):
 @view_config(route_name='toc', request_method='GET', http_cache=60)
 def toc_view(request):
     return render_to_response('../../templates/backbone/index.pt', {}, request=request)
-
 
 @view_config(renderer='json', route_name='nodetest', request_method='GET', http_cache=60)
 def dummy_node_data(request):
@@ -120,3 +115,7 @@ def graph_view(request):
     context = get_default_context(request)
     return render_to_response(os.path.join(TEMPLATE_PATH, 'infovis.jinja2'), context, request=request)
 
+@view_config(route_name='account', request_method='GET', http_cache=60)
+def account(request):
+    context = get_default_context(request)
+    return render_to_response('../../templates/account.jinja2', context, request=request)

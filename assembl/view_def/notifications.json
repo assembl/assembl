@@ -6,5 +6,23 @@
         "@type": "&external_typename",
         "@view": "@view",
         "_default": false
+    },
+    "NotificationSubscription": {
+        "discussion": true,
+        "creation_date": true,
+        "creation_origin": true,
+        "parent_subscription": true,
+        "status": true,
+        "last_status_change_date": true,
+        "user": true
+    },
+    "NotificationSubscriptionFollowSyntheses": {
+        "@extends": "NotificationSubscription"
+    },
+    "NotificationSubscriptionFollowAllMessages": {
+        "@extends": "NotificationSubscription"
+    },
+    "NotificationSubscriptionFollowOwnMessageDirectReplies": {
+        "@extends": "NotificationSubscription"
     }
 }
