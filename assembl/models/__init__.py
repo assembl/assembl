@@ -65,6 +65,7 @@ from .auth import (
     Role,
     User,
     UserRole,
+    UserTemplate,
     Username,
 )
 from .action import (

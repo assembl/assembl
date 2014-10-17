@@ -23,6 +23,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref, deferred
 from sqlalchemy import inspect
 from sqlalchemy.types import Text
+from sqlalchemy.schema import Index
 from sqlalchemy.orm.attributes import NO_VALUE
 from pyramid.security import Everyone, Authenticated
 from virtuoso.vmapping import IriClass
@@ -128,11 +129,10 @@ class AgentProfile(Base):
     def avatar_url(self, size=32, app_url=None, email=None):
         default = config.get('avatar.default_image_url') or \
             (app_url and app_url+'/static/img/icon/user.png')
-        
+
         offline_mode = config.get('offline_mode')
         if offline_mode == "true":
             return default
-        
 
         for acc in self.identity_accounts:
             url = acc.avatar_url(size)
@@ -657,6 +657,41 @@ def create_default_permissions(session, discussion):
     add_perm(P_SEND_SYNTHESIS, [R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_ADMIN_DISC, [R_ADMINISTRATOR])
     add_perm(P_SYSADMIN, [R_ADMINISTRATOR])
+
+
+class UserTemplate(DiscussionBoundBase, User):
+    "A fake user with default permissions and Subscriptions."
+    __tablename__ = "user_template"
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'user_template'
+    }
+
+    id = Column(
+        Integer,
+        ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
+        primary_key=True
+    )
+
+    discussion_id = Column(Integer, ForeignKey(
+        "discussion.id", ondelete='CASCADE', onupdate='CASCADE'))
+    discussion = relationship("Discussion", backref="user_templates")
+
+    role_id = Column(Integer, ForeignKey(
+        Role.id, ondelete='CASCADE', onupdate='CASCADE'))
+    for_role = relationship(Role)
+
+    # Create an index for (discussion, role)?
+
+    def get_discussion_id(self):
+        return self.discussion_id
+
+    @classmethod
+    def get_discussion_condition(cls, discussion_id):
+        return cls.discussion_id == discussion_id
+
+
+Index("user_template", "discussion_id", "role_id")
 
 
 class PartnerOrganization(DiscussionBoundBase):
