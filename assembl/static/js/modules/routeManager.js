@@ -31,17 +31,18 @@ define(function (require) {
             this.loadCurrentUser();
         },
 
-        /**
-         * Load the default view
-         * */
+        defaults: function () {
+            Backbone.history.navigate('', true);
+        },
+
         home: function () { // a.k.a. "index", "discussion root"
 
             this.isNewUser();
-
             this.restoreViews();
         },
 
         idea: function (id) {
+
             collectionManager.getAllIdeasCollectionPromise().done(
                 function (allIdeasCollection) {
                     var idea = allIdeasCollection.get(id);
@@ -69,11 +70,15 @@ define(function (require) {
             Assembl.adminContainer.show(admin);
         },
 
-        editProfile: function () {
+        profile: function () {
             Assembl.headerRegions.show(new navBar());
-
             var profile = new profileView();
-            Assembl.accountContainer.show(profile);
+            Assembl.groupContainer.show(profile);
+        },
+
+        notifications: function () {
+            Assembl.headerRegions.show(new navBar());
+            console.log('notification');
         },
 
         /**

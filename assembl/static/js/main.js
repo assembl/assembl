@@ -4,10 +4,9 @@ require(["modules/assembl", "modules/context", "jquery", "router", "utils/socket
     function (Assembl, Ctx, $, Router, Socket) {
         'use strict';
 
-        Assembl.start();
-
-        // The router
         var router = new Router();
+
+        Assembl.start();
 
         // The socket
         var socket = new Socket();
@@ -18,8 +17,9 @@ require(["modules/assembl", "modules/context", "jquery", "router", "utils/socket
             $('#onlinedot').removeClass('is-online');
         });
 
-        // Let the game begins...
-        Backbone.history.start({hashChange: false, root: "/"});
+        if (Backbone.history) {
+            Backbone.history.start();
+        }
 
         //Probably not the right way, but I don't know how to make the Ctx accessible
         //to the header
