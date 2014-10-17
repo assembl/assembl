@@ -34,8 +34,10 @@ def getmtime(path):
     else:
         return int(run("/usr/bin/stat -c '%Y' "+path))
 
+
 def listdir(path):
     return run("ls "+path).split()
+
 
 @task
 def database_start():
@@ -44,15 +46,17 @@ def database_start():
     """
     execute(supervisor_process_start, 'virtuoso')
 
+
 @task
 def supervisor_restart():
     with hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl shutdown")
     #Another supervisor,upstart, etc may be watching it, give it a little while
-    sleep(2); 
+    sleep(2);
     #If supervisor is already started, this will do nothing
     execute(supervisor_process_start, 'virtuoso')
-        
+
+
 def supervisor_process_start(process_name):
     """
     Starts a supervisord process, and waits till it started to return
@@ -76,7 +80,7 @@ def supervisor_process_start(process_name):
     for try_num in range(20):
         with hide('running', 'stdout'):
             status_cmd_result = venvcmd("supervisorctl status %s" % process_name)
-        
+
         match = status_regex.match(status_cmd_result)
         if match:
             status = match.group(1)
@@ -158,21 +162,24 @@ def venvcmd(cmd, shell=True, user=None, pty=False):
     with cd(env.projectpath):
         return run('source %(venvpath)s/bin/activate && ' % env + cmd, shell=shell, pty=pty)
 
+
 def venv_prefix():
     return 'source %(venvpath)s/bin/activate' % env
+
 
 def get_db_dump_name():
     return 'assembl-virtuoso-backup.bp'
 
+
 def remote_db_path():
     return join(env.projectpath, get_db_dump_name())
+
 
 def printenv():
     """
     Print shell env
     """
     venvcmd('env')
-
 
 
 ## Virtualenv
@@ -185,7 +192,7 @@ def build_virtualenv():
     require('venvpath', provided_by=('commonenv'))
     run('virtualenv --no-site-packages --distribute %(venvpath)s' % env)
     run('rm /tmp/distribute* || echo "ok"') # clean after myself
-    
+
 
 @task
 def update_requirements(force=False):
@@ -194,12 +201,13 @@ def update_requirements(force=False):
     """
     print(cyan('Updating requirements using PIP'))
     venvcmd('pip install -U "pip>=1.5.1" --download-cache ~/.pip/cache')
-    
+
     if force:
         cmd = "%(venvpath)s/bin/pip install -I -r %(projectpath)s/requirements.txt --download-cache ~/.pip/cache" % env
     else:
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt --download-cache ~/.pip/cache" % env
     run("yes w | %s" % cmd)
+
 
 @task
 def app_db_update():
@@ -210,6 +218,7 @@ def app_db_update():
     print(cyan('Migrating database'))
     venvcmd('alembic -c %s upgrade head' % (env.ini_file))
 
+
 def app_db_install():
     """
     Install db the first time and fake migrations
@@ -217,6 +226,7 @@ def app_db_install():
     execute(database_create)
     print(cyan('Installing database'))
     venvcmd('assembl-db-manage %s bootstrap' % (env.ini_file))
+
 
 @task
 def make_messages():
@@ -228,6 +238,7 @@ def make_messages():
     cmd = "python setup.py update_catalog"
     venvcmd(cmd)
 
+
 @task
 def compile_messages():
     """
@@ -236,6 +247,7 @@ def compile_messages():
     cmd = "python setup.py compile_catalog"
     venvcmd(cmd)
     venvcmd("python assembl/scripts/po2json.py")
+
 
 @task
 def compile_stylesheets():
@@ -299,6 +311,7 @@ def bootstrap():
     execute(clone_repository)
     execute(bootstrap_from_checkout)
 
+
 @task
 def bootstrap_from_checkout():
     """
@@ -326,10 +339,9 @@ def clone_repository():
     # Clone
     run("git clone --branch {0} {1} {2}".format(env.gitbranch,
                                                 env.gitrepo,
-                                                env.projectpath)
-    )
-    
-            
+                                                env.projectpath))
+
+
 def updatemaincode():
     """
     Update code and/or switch branch
@@ -341,10 +353,12 @@ def updatemaincode():
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
         run('git submodule update --init')
 
+
 def app_setup():
      venvcmd('pip install -U "pip>=1.5.1" --download-cache ~/.pip/cache')
      venvcmd('pip install -e ./')
      venvcmd('assembl-ini-files %s' % (env.ini_file))
+
 
 @task
 def app_fullupdate():
@@ -354,7 +368,8 @@ def app_fullupdate():
     """
     execute(updatemaincode)
     execute(app_compile)
-    
+
+
 @task
 def app_update():
     """
@@ -365,18 +380,20 @@ def app_update():
     execute(updatemaincode)
     execute(app_compile_noupdate)
 
+
 @task
 def app_update_dependencies():
     execute(update_requirements, force=False)
     execute(update_compass)
     execute(update_bower)
     execute(bower_install)
-    
+
+
 @task
 def app_compile():
     """
-    Full Update: This is what you normally run after a git pull. 
-    Doesn't touch git state, but updates requirements, rebuilds all 
+    Full Update: This is what you normally run after a git pull.
+    Doesn't touch git state, but updates requirements, rebuilds all
     generated files annd restarts whatever needs restarting.
     You need internet connectivity.  If you are on a plane, use
     app_compile_noupdate instead.
@@ -407,6 +424,7 @@ def app_compile_nodbupdate():
     execute(compile_messages)
     execute(minify_javascript_maybe)
 
+
 ## Webserver
 def configure_webservers():
     """
@@ -426,6 +444,7 @@ def configure_webservers():
 
     # Fix log dir
     execute(check_or_install_logdir)
+
 
 @task
 def webservers_reload():
@@ -450,6 +469,7 @@ def webservers_reload():
         elif env.mac:
             sudo('killall -HUP nginx')
 
+
 def webservers_stop():
     """
     Stop all webservers
@@ -464,9 +484,10 @@ def webservers_stop():
     if env.uses_ngnix:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            sudo('/etc/init.d/nginx stop')    
+            sudo('/etc/init.d/nginx stop')
         elif env.mac:
             sudo('killall nginx')
+
 
 def webservers_start():
     """
@@ -482,11 +503,11 @@ def webservers_start():
     if env.uses_ngnix:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            sudo('/etc/init.d/nginx start')    
+            sudo('/etc/init.d/nginx start')
         elif env.mac and exists('/usr/local/nginx/sbin/nginx'):
             sudo('/usr/local/nginx/sbin/nginx')
 
-    
+
 def check_or_install_logdir():
     """
     Make sure the log directory exists and has right mode and ownership
@@ -503,8 +524,9 @@ def create_database_user():
     # FIXME: pg_hba has to be changed by hand (see doc)
     # FIXME: Password has to be set by hand (see doc)
     sudo('createuser %s -D -R -S' % env.projectname, user='postgres')
-    
-## Server packages    
+
+
+## Server packages
 def install_basetools():
     """
     Install required base tools
@@ -519,10 +541,12 @@ def install_basetools():
         sudo('apt-get install -y git')
         #sudo('apt-get install -y gettext')
 
+
 @task
 def install_bower():
     with cd(env.projectpath):
         run('npm install bower po2json requirejs')
+
 
 @task
 def update_bower():
@@ -556,6 +580,7 @@ def bower_install():
     bower_cmd('install', 'assembl/widget/vote')
     bower_cmd('install', 'assembl/widget/creativity')
 
+
 @task
 def install_builddeps():
     """
@@ -584,6 +609,7 @@ def install_builddeps():
         sudo('apt-get install -y redis-server memcached unixodbc-dev')
     execute(update_python_package_builddeps)
 
+
 @task
 def update_python_package_builddeps():
     print(cyan('Installing/Updating python package native binary dependencies'))
@@ -593,6 +619,7 @@ def update_python_package_builddeps():
         pass
     else:
         sudo('apt-get install -y libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev phantomjs')
+
 
 @task
 def configure_rbenv():
@@ -613,6 +640,7 @@ def configure_rbenv():
         run('gem install bundler')
         run('rbenv rehash')
 
+
 def install_ruby_build():
     version_regex = re.compile('^ruby-build\s*(\S*)')
     install = False
@@ -622,7 +650,7 @@ def install_ruby_build():
     if not run_output.failed:
         match = version_regex.match(run_output)
         version = float(match.group(1))
-        
+
         if version < env.ruby_build_min_version:
             print(red("ruby-build %s is too old (%s is required), reinstalling..." % (version, env.ruby_build_min_version)))
             install = True
@@ -631,7 +659,7 @@ def install_ruby_build():
     else:
         print(red("ruby-build is not installed, installing..."))
         install = True
-        
+
     if install:
         # Install ruby-build:
         run('rm -rf /tmp/ruby-build')
@@ -639,6 +667,7 @@ def install_ruby_build():
             run('git clone https://github.com/sstephenson/ruby-build.git')
         with cd('/tmp/ruby-build'):
             sudo('./install.sh')
+
 
 @task
 def install_rbenv():
@@ -658,24 +687,27 @@ def install_rbenv():
         run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
         run('source ~/.bash_profile')
         # The above will work fine on a shell (such as on the server accessed using
-        # ssh for a developement machine running a GUI, you may need to run the 
+        # ssh for a developement machine running a GUI, you may need to run the
         # following from a shell (with your local user):
         #    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile;
         #    echo 'eval "$(rbenv init -)"' >> ~/.profile;
         #    source ~/.profile;
-        
+
         run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .profile')
         run('echo \'eval "$(rbenv init -)"\' >> .profile')
         run('source ~/.profile')
 
+
 @task
 def install_compass():
     """
-    (Re)Install compass, deleting current version 
+    (Re)Install compass, deleting current version
     """
     with cd(env.projectpath):
         run('rm -rf vendor/bundle')
         execute(update_compass)
+
+
 @task
 def update_compass():
     """
@@ -709,6 +741,7 @@ def start_edit_fontello_fonts():
         import webbrowser
         webbrowser.open('http://fontello.com/'+fid)
 
+
 @task
 def compile_fontello_fonts():
     from zipfile import ZipFile
@@ -738,13 +771,16 @@ def compile_fontello_fonts():
                     with open(join(font_dir, fname), 'wb') as ffile:
                         ffile.write(fdata.read())
 
+
 def database_create():
     """
     """
     execute(database_start)
 
+
 def virtuoso_db_directory():
     return join(env.projectpath, 'var/db')
+
 
 @task
 def database_dump():
@@ -791,6 +827,7 @@ def database_download():
     execute(database_dump)
     get(remote_db_path(), destination)
 
+
 @task
 def database_upload():
     """
@@ -798,6 +835,7 @@ def database_upload():
     """
     if(env.wsginame != 'dev.wsgi'):
         put(get_db_dump_name(), remote_db_path())
+
 
 @task
 def database_restore():
@@ -831,7 +869,7 @@ def database_restore():
         run("%s +configfile %s +restore-backup %s" % (
             get_virtuoso_exec(), join(virtuoso_db_directory(), 'virtuoso.ini'),
         restore_dump_prefix))
-        
+
     #clean up
     with cd(virtuoso_db_directory()):
         run('rm  %s' % (join(virtuoso_db_directory(),restore_dump_name)))
@@ -864,9 +902,11 @@ def get_virtuoso_root():
         return normpath(join(env.projectpath, vroot))
     return vroot
 
+
 def get_virtuoso_exec():
     virtuoso_exec = os.path.join(get_virtuoso_root(), 'bin', 'virtuoso-t')
     return virtuoso_exec
+
 
 def get_virtuoso_src():
     config = get_config()
@@ -888,12 +928,12 @@ def commonenv(projectpath, venvpath=None):
     env.is_production_env = False
     if venvpath:
         env.venvpath = venvpath
-    else: 
+    else:
         env.venvpath = join(projectpath,"venv")
-        
+
     env.db_user = 'assembl'
     env.db_name = 'assembl'
-    #It is recommended you keep localhost even if you have access to 
+    #It is recommended you keep localhost even if you have access to
     # unix domain sockets, it's more portable across different pg_hba configurations.
     env.db_host = 'localhost'
     env.dbdumps_dir = join(projectpath, '%s_dumps' % env.projectname)
@@ -909,19 +949,19 @@ def commonenv(projectpath, venvpath=None):
     env.mac = False
 
     #Minimal dependencies versions
-    
-    #Note to maintainers:  If you upgrade ruby, make sure you check that the 
+
+    #Note to maintainers:  If you upgrade ruby, make sure you check that the
     # ruby_build version below supports it...
     env.ruby_version = "2.0.0-p481"
     env.ruby_build_min_version = 20130628
 
-# Specific environments 
+# Specific environments
 
 
 @task
 def devenv(projectpath=None):
     """
-    [ENVIRONMENT] Developpement (must be run from the project path: 
+    [ENVIRONMENT] Developpement (must be run from the project path:
     the one where the fabfile is)
     """
     if not projectpath:
@@ -945,7 +985,8 @@ def devenv(projectpath=None):
     env.hosts = ['localhost']
     env.gitbranch = "develop"
 
-@task    
+
+@task
 def caravan_stagenv():
     """
     [ENVIRONMENT] Staging
@@ -957,7 +998,7 @@ def caravan_stagenv():
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['assembl.caravan.coop']
-    
+
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_global_supervisor = True
@@ -978,12 +1019,13 @@ def coeus_stagenv():
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
-    
+
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = "master"
-    
+
+
 @task
 def coeus_stagenv2():
     """
@@ -998,13 +1040,14 @@ def coeus_stagenv2():
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
-    
+
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = "develop"
 
-@task    
+
+@task
 def inm_prodenv():
     """
     [ENVIRONMENT] INM
@@ -1018,14 +1061,14 @@ def inm_prodenv():
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['coeus.ca']
-    
+
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = "master"
 
 
-@task    
+@task
 def ovh_prodenv():
     """
     [ENVIRONMENT] OVH Server
@@ -1039,11 +1082,12 @@ def ovh_prodenv():
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
     env.hosts = ['ns239264.ip-192-99-37.net']
-    
+
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = "develop"
+
 
 @task
 def flushmemcache():
@@ -1054,6 +1098,7 @@ def flushmemcache():
         print(cyan('Resetting all data in memcached :'))
         wait_str = "" if env.mac else "-q 2"
         run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
+
 
 @task
 def ensure_virtuoso_not_running():
@@ -1069,11 +1114,13 @@ def ensure_virtuoso_not_running():
         return
     execute(supervisor_process_stop, 'virtuoso')
 
+
 @task
 def virtuoso_reconstruct_save_db():
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
         run('%s +backup-dump +foreground' % (get_virtuoso_exec()))
+
 
 @task
 def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
@@ -1088,6 +1135,7 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
     with cd(virtuoso_db_directory()):
         run('rm virtuoso_backup.db')
 
+
 @task
 def virtuoso_reconstruct_db():
     execute(virtuoso_reconstruct_save_db)
@@ -1100,6 +1148,7 @@ def virtuoso_install_if_absent():
     if ls_cmd.failed:
         print(red("Virtuso not installed, installing."))
         execute(virtuoso_source_install)
+
 
 @task
 def virtuoso_source_install():
@@ -1125,9 +1174,9 @@ def virtuoso_source_install():
         #if exists(join(virtuoso_src, 'config.status')):
         #    run('./config.status --recheck')
         #else:
-        
+
         run('./configure --with-readline --prefix '+virtuoso_root)
-        
+
         run('make -j4')
         need_sudo = False
         if not exists(virtuoso_root):
