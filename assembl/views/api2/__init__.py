@@ -263,9 +263,10 @@ def instance_del(request):
 def show_collections(request):
     return request.context.get_collection_names()
 
+
 @view_config(name="classes", context=Api2Context, renderer='json',
              request_method="GET", permission=P_READ)
-def show_collections(request):
+def show_class_names(request):
     return request.context.all_class_names()
 
 
