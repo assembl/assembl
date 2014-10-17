@@ -26,7 +26,7 @@ def get_object(request):
     cls = getattr(assembl.models, classname, None)
     if not cls:
         raise HTTPNotFound("Class '%s' not found." % classname)
-    obj = cls.get(id=id)
+    obj = cls.get(id)
     if not obj:
         raise HTTPNotFound("Id %s of class '%s' not found." % (id, classname))
     if not get_view_def(view):

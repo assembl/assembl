@@ -878,7 +878,7 @@ class IdeaLink(DiscussionBoundBase):
         if inspect(self).attrs.source.loaded_value != NO_VALUE:
             return self.source.get_discussion_id()
         else:
-            return Idea.get(id=self.source_id).get_discussion_id()
+            return Idea.get(self.source_id).get_discussion_id()
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP):
         connection = connection or self.db().connection()

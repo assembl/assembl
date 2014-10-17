@@ -19,7 +19,7 @@ synthesis = Service(name='ExplicitSubgraphs',
 @syntheses.get(permission=P_READ)
 def get_syntheses(request):
     discussion_id = request.matchdict['discussion_id']
-    discussion = Discussion.get(id=int(discussion_id))
+    discussion = Discussion.get(int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
     syntheses = discussion.get_all_syntheses()

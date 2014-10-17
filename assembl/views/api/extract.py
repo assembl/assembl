@@ -85,7 +85,7 @@ def _get_extracts_real(discussion, view_def=None, ids=None):
 @extracts.get(permission=P_READ)
 def get_extracts(request):
     discussion_id = int(request.matchdict['discussion_id'])
-    discussion = Discussion.get(id=int(discussion_id))
+    discussion = Discussion.get(int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
     view_def = request.GET.get('view')
@@ -282,7 +282,7 @@ def do_search_extracts(request):
 
     if not uri:
         return HTTPClientError("Please specify a search uri")
-    content = Webpage.get(url=uri)
+    content = Webpage.get_by(url=uri)
     if content:
         extracts = Extract.db.query(Extract).filter_by(content=content).all()
         if view_def:

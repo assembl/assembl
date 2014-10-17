@@ -52,7 +52,7 @@ def get_posts(request):
     """
     localizer = request.localizer
     discussion_id = int(request.matchdict['discussion_id'])
-    discussion = Discussion.get(id=int(discussion_id))
+    discussion = Discussion.get(int(discussion_id))
     if not discussion:
         raise HTTPNotFound(localizer.translate(
             _("No discussion found with id=%s")) % discussion_id)
@@ -131,7 +131,7 @@ def get_posts(request):
         #posts = posts.join(related, PostClass.id==related.c.post_id)
         posts = posts.filter(PostClass.id.in_(related))
     if root_post_id:
-        root_post = Post.get(id=root_post_id)
+        root_post = Post.get(root_post_id)
                 
         posts = posts.filter(
             (Post.ancestry.like(

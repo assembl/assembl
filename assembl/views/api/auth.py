@@ -98,7 +98,7 @@ def get_permissions_for_role(request):
     discussion = session.query(Discussion).get(discussion_id)
     if not discussion:
         raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
-    role = Role.get(name=role_name)
+    role = Role.get_by(name=role_name)
     if not role:
         raise HTTPNotFound("Role %s does not exist" % (role_name,))
     return discussion.get_permissions_by_role().get(role_name, [])
@@ -112,7 +112,7 @@ def put_permissions_for_role(request):
     discussion = session.query(Discussion).get(discussion_id)
     if not discussion:
         raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
-    role = Role.get(name=role_name)
+    role = Role.get_by(name=role_name)
     if not role:
         raise HTTPNotFound("Role %s does not exist" % (role_name,))
     try:

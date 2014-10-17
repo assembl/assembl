@@ -27,7 +27,7 @@ def widget_view(request):
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
     json = ctx._instance.generic_json(view)
-    user = User.get(id=user_id)
+    user = User.get(user_id)
     #json['discussion'] = ...
     json['user'] = user.generic_json(view_def_name=view)
     json['user_permissions'] = get_permissions(
@@ -196,7 +196,7 @@ def voting_widget_view(request):
         or ctx.get_default_view() or 'default'
     widget = ctx._instance
     json = widget.generic_json(view)
-    user = User.get(id=user_id)
+    user = User.get(user_id)
     #json['discussion'] = ...
     json['user'] = user.generic_json(view_def_name=view)
     json['user_permissions'] = get_permissions(

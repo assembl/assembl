@@ -487,7 +487,7 @@ def velruse_login_complete_view(request):
 def confirm_emailid_sent(request):
     # TODO: How to make this not become a spambot?
     id = int(request.matchdict.get('email_account_id'))
-    email = EmailAccount.get(id=id)
+    email = EmailAccount.get(id)
     if not email:
         raise HTTPNotFound()
     if email.verified:
@@ -647,7 +647,7 @@ def password_change_sent(request):
     if not request.params.get('sent', False):
         profile_id = int(request.matchdict.get('profile_id'))
         send_change_password_email(
-            request, AgentProfile.get(id=profile_id),
+            request, AgentProfile.get(profile_id),
             request.params.get('email', None))
     return dict(
         get_default_context(request),
@@ -679,7 +679,7 @@ def do_password_change(request):
                     sent=True, error=localizer.translate(_(
                         "This token is expired. "
                         "Do you want us to send another?")))))
-    user = User.get(id=user_id)
+    user = User.get(user_id)
     headers = remember(request, user_id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     user.last_login = datetime.now()
@@ -695,7 +695,7 @@ def finish_password_change(request):
     logged_in = authenticated_userid(request)
     if not logged_in:
         raise HTTPUnauthorized()
-    user = User.get(id=logged_in)
+    user = User.get(logged_in)
     localizer = request.localizer
     error = None
     p1, p2 = (request.params.get('password1', '').strip(),

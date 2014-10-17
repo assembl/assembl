@@ -358,7 +358,7 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
             for d in list(subclasses):
                 subclasses.extend(get_subclasses(d))
             return subclasses
-        objectInstance = objectClass.get(id=objectId)
+        objectInstance = objectClass.get(objectId)
         assert objectInstance
         #We need the discussion id
         assert isinstance(objectInstance, DiscussionBoundBase)

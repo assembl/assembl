@@ -11,7 +11,7 @@ def import_mails(mbox_id, only_new=True):
     from ..models import IMAPMailbox
     # in case of previous issues
     IMAPMailbox.db.rollback()
-    mailbox = IMAPMailbox.get(id=mbox_id)
+    mailbox = IMAPMailbox.get(mbox_id)
     assert mailbox != None
     IMAPMailbox.do_import_content(mailbox, only_new)
 

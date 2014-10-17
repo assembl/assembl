@@ -18,7 +18,7 @@ def discussion_list_view(request):
     user_id = authenticated_userid(request) or Everyone
     user = None
     if user_id != Everyone:
-        user = User.get(id=user_id)
+        user = User.get(user_id)
     roles = get_roles(user_id)
     context = get_default_context(request)
     context['discussions'] = []

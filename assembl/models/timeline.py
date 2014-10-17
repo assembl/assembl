@@ -98,7 +98,7 @@ class TimelineEvent(DiscussionBoundBase):
         if previous_event_id != self.previous_event_id:
             # TODO: Detect and avoid cycles
             if previous_event_id is not None:
-                existing = self.__class__.get(previous_event_id=previous_event_id)
+                existing = self.__class__.get_by(previous_event_id=previous_event_id)
                 if existing:
                     existing.previous_event = self
             if inspect(self).persistent:

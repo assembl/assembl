@@ -58,7 +58,7 @@ class AppRoot(DictContext):
 class DiscussionsContext(object):
     def __getitem__(self, key):
         from assembl.models import Discussion
-        discussion = Discussion.get(id=int(key))
+        discussion = Discussion.get(int(key))
         if not discussion:
             raise KeyError()
         return discussion
@@ -224,7 +224,7 @@ class InstanceContext(object):
             discussion_id = self._instance.get_discussion_id()
             if discussion_id:
                 from assembl.models import Discussion
-                return Discussion.get(id=discussion_id).__acl__
+                return Discussion.get(discussion_id).__acl__
         return self.__parent__.__acl__
 
     def __getitem__(self, key):

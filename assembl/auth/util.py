@@ -13,7 +13,7 @@ from ..models.auth import (
 def get_user(request):
     logged_in = authenticated_userid(request)
     if logged_in:
-        return User.get(id=logged_in)
+        return User.get(logged_in)
 
 
 def get_roles(user_id, discussion_id=None):

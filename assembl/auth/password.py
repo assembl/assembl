@@ -63,7 +63,7 @@ def password_token(user):
 
 def verify_email_token(token):
     id, hash = token.split('f', 1)
-    email = EmailAccount.get(id=int(id))
+    email = EmailAccount.get(int(id))
     if email and verify_password(
         str(email.id) + email.email + config.get(
             'security.email_token_salt'), hash, True):
@@ -73,7 +73,7 @@ def verify_email_token(token):
 def verify_password_change_token(token, duration):
     id, hash = token.split('e', 1)
     id = int(id)
-    user = User.get(id=id)
+    user = User.get(id)
     if not user:
         return False, None
     age = datetime.now() - user.last_login

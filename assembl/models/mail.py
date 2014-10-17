@@ -736,7 +736,7 @@ class IMAPMailbox(AbstractMailbox):
             mailbox_obj.last_imported_email_uid = \
                 email_ids[len(email_ids)-1]
             transaction.commit()
-            mailbox_obj = AbstractMailbox.get(id=mailbox_obj.id)
+            mailbox_obj = AbstractMailbox.get(mailbox_obj.id)
 
         if len(email_ids):
             new_emails = [import_email(mbox, email_id) for email_id in email_ids]
@@ -903,7 +903,7 @@ class MaildirMailbox(AbstractFilesystemMailbox):
                 raise Exception(error)
             session.add(email_object)
             transaction.commit()
-            abstract_mbox = AbstractMailbox.get(id=abstract_mbox.id)
+            abstract_mbox = AbstractMailbox.get(abstract_mbox.id)
        
         if len(mails):
             [import_email(abstract_mbox, message_data) for message_data in mails]

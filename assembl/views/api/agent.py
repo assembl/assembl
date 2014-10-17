@@ -36,7 +36,7 @@ def _get_agents_real(discussion, view_def=None, include_email=False):
 @agents.get(permission=P_READ)
 def get_agents(request, discussion_only=False):
     discussion_id = int(request.matchdict['discussion_id'])
-    discussion = Discussion.get(id=int(discussion_id))
+    discussion = Discussion.get(int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
     view_def = request.GET.get('view')

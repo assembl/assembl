@@ -169,7 +169,7 @@ def instance_put_json(request):
         required = instance.crud_permissions
         if required.update not in permissions:
             if required.update_owned not in permissions or\
-                    User.get(id=user_id) not in context._instance.get_owners():
+                    User.get(user_id) not in context._instance.get_owners():
                 raise HTTPUnauthorized()
     try:
         return instance.update_json(request.json_body, user_id)
@@ -194,7 +194,7 @@ def instance_put(request):
         required = instance.crud_permissions
         if required.update not in permissions:
             if required.update_owned not in permissions or\
-                    User.get(id=user_id) not in context._instance.get_owners():
+                    User.get(user_id) not in context._instance.get_owners():
                 raise HTTPUnauthorized()
     mapper = inspect(instance.__class__)
     cols = {c.key: c for c in mapper.columns if not c.foreign_keys}
@@ -252,7 +252,7 @@ def instance_del(request):
         required = instance.crud_permissions
         if required.delete not in permissions:
             if required.delete_owned not in permissions or\
-                    User.get(id=user_id) not in context._instance.get_owners():
+                    User.get(user_id) not in context._instance.get_owners():
                 raise HTTPUnauthorized()
     instance.db.delete(instance)
     return HTTPOk()

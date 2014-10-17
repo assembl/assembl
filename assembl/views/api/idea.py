@@ -117,7 +117,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
 def get_ideas(request):
     user_id = authenticated_userid(request)
     discussion_id = request.matchdict['discussion_id']
-    discussion = Discussion.get(id=int(discussion_id))
+    discussion = Discussion.get(int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
     view_def = request.GET.get('view')
@@ -141,7 +141,7 @@ def save_idea(request):
         raise HTTPNotFound("No such idea: %s" % (idea_id))
     if isinstance(idea, RootIdea):
         raise HTTPBadRequest("Cannot edit root idea.")
-    discussion = Discussion.get(id=int(discussion_id))
+    discussion = Discussion.get(int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
     if(idea.discussion_id != discussion.id):

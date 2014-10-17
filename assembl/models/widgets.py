@@ -775,7 +775,7 @@ class IdeaWidgetLink(DiscussionBoundBase):
         if self.idea:
             return self.idea.get_discussion_id()
         elif self.idea_id:
-            return Idea.get(id=self.idea_id).get_discussion_id()
+            return Idea.get(self.idea_id).get_discussion_id()
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):

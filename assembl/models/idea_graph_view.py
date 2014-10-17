@@ -88,7 +88,7 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
         if self.sub_graph:
             return self.sub_graph.get_discussion_id()
         else:
-            return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
+            return IdeaGraphView.get(self.sub_graph_id).get_discussion_id()
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
@@ -126,7 +126,7 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
         if self.sub_graph:
             return self.sub_graph.get_discussion_id()
         else:
-            return IdeaGraphView.get(id=self.sub_graph_id).get_discussion_id()
+            return IdeaGraphView.get(self.sub_graph_id).get_discussion_id()
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):

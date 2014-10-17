@@ -172,7 +172,7 @@ class Post(Content):
         ]
 
         ancestors = [
-            Post.get(id=ancestor_id) \
+            Post.get(ancestor_id) \
             for ancestor_id \
             in ancestor_ids
         ]

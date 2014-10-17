@@ -172,7 +172,7 @@ def assign_ob(ob, r, subob):
 
 
 def clone_discussion(from_session, discussion_id, to_session=None, new_slug=None):
-    discussion = Discussion.get(id=discussion_id)
+    discussion = Discussion.get(discussion_id)
     prefetch(from_session, discussion_id)
     changes = defaultdict(dict)
     if to_session is None:

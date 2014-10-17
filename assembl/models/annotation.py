@@ -23,13 +23,13 @@ class Webpage(Content):
 
     @classmethod
     def get_instance(cls, uri):
-        page = cls.get(url=uri)
+        page = cls.get_by(url=uri)
         if page:
             return page
         return Content.get_instance(uri)
 
     @classmethod
     def get_database_id(cls, identifier):
-        page = cls.get(url=identifier)
+        page = cls.get_by(url=identifier)
         if page:
             return page.id
