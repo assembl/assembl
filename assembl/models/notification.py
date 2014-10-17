@@ -266,8 +266,7 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscription):
         Integer, ForeignKey("user.id",
             ondelete='CASCADE', onupdate='CASCADE'))
 
-    on_user = relationship(
-        "User", 'NotificationSubscriptionOnUserAccount.on_user_id == user.id')
+    on_user = relationship("User", foreign_keys=[on_user_id])
 
     def followed_object(self):
         return self.user
