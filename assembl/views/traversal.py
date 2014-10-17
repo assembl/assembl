@@ -145,10 +145,16 @@ class ClassContext(object):
 
     def create_query(self, id_only=True):
         cls = self._class
+        self.class_alias = alias = aliased(cls)
         if id_only:
-            return cls.db().query(cls.id)
+            query = cls.db().query(alias.id)
         else:
-            return cls.db().query(cls)
+            query = cls.db().query(alias)
+        # TODO: Make this optional. We need tombstones for synthesis history.
+        # cond = cls.base_condition(alias)
+        # if cond is not None:
+        #     query = query.filter(cond)
+        return query
 
     def get_class(self, typename=None):
         if typename is not None:
@@ -342,6 +348,10 @@ class CollectionContext(object):
         self.collection_class_alias = last_alias
         query = self.collection.decorate_query(
             query, last_alias, self.parent_instance, ctx)
+        # TODO: Make this optional. We need tombstones for synthesis history.
+        # cond = self.collection_class.base_condition(last_alias)
+        # if cond is not None:
+        #     query = query.filter(cond)
         return self.__parent__.decorate_query(query, self.collection.owner_alias, ctx)
 
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):

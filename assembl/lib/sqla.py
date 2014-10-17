@@ -270,7 +270,7 @@ class BaseOps(object):
         return cls._iri_class
 
     @classmethod
-    def base_condition(cls):
+    def base_condition(cls, alias=None):
         return None
 
     @classmethod

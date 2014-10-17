@@ -23,7 +23,7 @@ from sqlalchemy import (
 from virtuoso.vmapping import IriClass
 
 from ..nlp.wordcounter import WordCounter
-from . import DiscussionBoundBase
+from . import DiscussionBoundBase, Tombstonable
 from .discussion import Discussion
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
@@ -76,7 +76,7 @@ class WordCountVisitor(IdeaVisitor):
         return self.counter.best(num)
 
 
-class Idea(DiscussionBoundBase):
+class Idea(DiscussionBoundBase, Tombstonable):
     """
     A core concept taken from the associated discussion
     """
@@ -94,7 +94,6 @@ class Idea(DiscussionBoundBase):
         UnicodeText,
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
     hidden = Column(Boolean, server_default='0')
-    is_tombstone = Column(Boolean, server_default='0')
 
     id = Column(
         Integer, primary_key=True,
@@ -405,10 +404,6 @@ JOIN post AS family_posts ON (
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         return cls.discussion_id == discussion_id
-
-    @classmethod
-    def base_condition(cls):
-        return cls.is_tombstone == False
 
     def get_num_children(self):
         return len(self.children)
@@ -810,7 +805,7 @@ class Criterion(Idea):
     }
 
 
-class IdeaLink(DiscussionBoundBase):
+class IdeaLink(DiscussionBoundBase, Tombstonable):
     """
     A generic link between two ideas
 
@@ -850,7 +845,6 @@ class IdeaLink(DiscussionBoundBase):
     order = Column(
         Float, nullable=False, default=0.0,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.link_order)})
-    is_tombstone = Column(Boolean, nullable=False, default=False, index=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea:InclusionRelation',
@@ -891,10 +885,6 @@ class IdeaLink(DiscussionBoundBase):
     def get_discussion_condition(cls, discussion_id):
         return (cls.source_id == Idea.id) \
             & (Idea.discussion_id == discussion_id)
-
-    @classmethod
-    def base_condition(cls):
-        return cls.is_tombstone == False
 
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA)

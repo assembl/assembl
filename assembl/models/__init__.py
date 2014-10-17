@@ -1,4 +1,6 @@
 from abc import abstractmethod, ABCMeta
+
+from sqlalchemy import (Column, Boolean)
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
 from ..lib.abc import abstractclassmethod
@@ -37,6 +39,16 @@ class DiscussionBoundBase(Base):
 
     def tombstone(self):
         return DiscussionBoundTombstone(self)
+
+
+class Tombstonable(object):
+    # Marker class for objects with the tombstone flag
+    is_tombstone = Column(Boolean, server_default='0', default=False)
+
+    @classmethod
+    def base_condition(cls, alias=None):
+        cls = alias or cls
+        return cls.is_tombstone == False
 
 
 class DiscussionBoundTombstone(Tombstone):

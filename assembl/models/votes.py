@@ -5,7 +5,7 @@ from sqlalchemy import (
     Column, Integer, ForeignKey, Boolean, String, Float, DateTime, and_)
 from sqlalchemy.orm import relationship
 
-from . import (Base, DiscussionBoundBase)
+from . import (Base, DiscussionBoundBase, Tombstonable)
 from .idea import Idea
 from .auth import User
 from .widgets import MultiCriterionVotingWidget
@@ -13,7 +13,7 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
 
 
-class AbstractIdeaVote(DiscussionBoundBase):
+class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     __tablename__ = "idea_vote"
 
     id = Column(Integer, primary_key=True,
@@ -54,8 +54,6 @@ class AbstractIdeaVote(DiscussionBoundBase):
     vote_date = Column(DateTime, default=datetime.utcnow,
                        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
-    is_tombstone = Column(Boolean, server_default='0')
-
     voter_id = Column(
         Integer,
         ForeignKey(User.id, ondelete="CASCADE", onupdate="CASCADE"),
@@ -82,10 +80,6 @@ class AbstractIdeaVote(DiscussionBoundBase):
     def get_discussion_condition(cls, discussion_id):
         return (cls.idea_id == Idea.id) & \
             (Idea.discussion_id == discussion_id)
-
-    @classmethod
-    def base_condition(cls):
-        return cls.is_tombstone == False
 
     @classmethod
     def external_typename(cls):
