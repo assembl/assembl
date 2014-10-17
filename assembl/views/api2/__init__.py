@@ -44,7 +44,7 @@ from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyld import jsonld
 
-from ..traversal import InstanceContext, CollectionContext, ClassContext
+from ..traversal import InstanceContext, CollectionContext, ClassContext, Api2Context
 from assembl.auth import P_READ, P_SYSADMIN, R_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
@@ -262,6 +262,11 @@ def instance_del(request):
              request_method="GET", permission=P_READ)
 def show_collections(request):
     return request.context.get_collection_names()
+
+@view_config(name="classes", context=Api2Context, renderer='json',
+             request_method="GET", permission=P_READ)
+def show_collections(request):
+    return request.context.all_class_names()
 
 
 @view_config(context=ClassContext, request_method='POST', header=FORM_HEADER)

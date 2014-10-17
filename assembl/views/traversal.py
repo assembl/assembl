@@ -82,6 +82,9 @@ class Api2Context(object):
             self._class_cache[cls] = ClassContext(self, cls)
         return self._class_cache[cls]
 
+    def all_class_names(self):
+        return [k for k in Base._decl_class_registry.iterkeys() if k[0] != '_']
+
 
 def process_args(args, cls):
     mapper = sqlainspect(cls)
