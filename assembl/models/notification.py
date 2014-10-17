@@ -262,11 +262,12 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscription):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    user_id = Column(
+    on_user_id = Column(
         Integer, ForeignKey("user.id",
             ondelete='CASCADE', onupdate='CASCADE'))
 
-    user = relationship("User")
+    on_user = relationship(
+        "User", 'NotificationSubscriptionOnUserAccount.on_user_id == user.id')
 
     def followed_object(self):
         return self.user
