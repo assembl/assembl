@@ -21,6 +21,11 @@
         "preferred_email": false,
         "verified": true
     },
+    "UserTemplate": {
+        "@extends": "User",
+        "discussion": true,
+        "for_role": true,
+    },
     "EmailAccount": false,
     "IdentityProviderAccount": false,
     "IdentityProvider": {

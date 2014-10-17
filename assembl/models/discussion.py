@@ -21,7 +21,8 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     P_READ, R_SYSADMIN, P_ADMIN_DISC, Authenticated, Everyone)
 from .auth import (
-    DiscussionPermission, Role, Permission, User, UserRole, LocalUserRole)
+    DiscussionPermission, Role, Permission, User, UserRole, LocalUserRole,
+    UserTemplate)
 from .action import ViewPost
 from ..semantic.namespaces import (CATALYST, ASSEMBL, DCTERMS)
 
@@ -248,6 +249,27 @@ class Discussion(DiscussionBoundBase):
         for widget in self.widgets:
             for n in widget.has_notification():
                 yield n
+
+    def get_user_template(self, role_name):
+        template = self.db.query(UserTemplate).join(
+            Role).filter(Role.name == role_name).join(
+            Discussion).filter(Discussion.id == self.id).first()
+        if not template:
+            from .notification import (
+                NotificationCreationOrigin, NotificationSubscriptionFollowSyntheses)
+            role = self.db.query(Role).filter_by(name=role_name).one()
+            template = UserTemplate(for_role=role, discussion=self)
+            self.db.add(template)
+            # TODO: Add defaults from a config
+            subscr = NotificationSubscriptionFollowSyntheses(
+                user=template, discussion=self,
+                creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT)
+            self.db.add(subscr)
+            self.db.flush()
+        return template
+
+    def get_participant_template(self):
+        return self.get_user_template('r:participant')
 
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):

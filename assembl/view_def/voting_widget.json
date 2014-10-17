@@ -26,6 +26,11 @@
         "real_name": "&real_name",
         "permissions": "&get_all_permissions"
     },
+    "UserTemplate": {
+        "@extends": "User",
+        "discussion": true,
+        "for_role": ":",
+    },
     "EmailAccount": false,
     "IdentityProviderAccount": false,
     "IdentityProvider": {

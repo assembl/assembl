@@ -26,6 +26,12 @@
         "real_name": "&real_name",
         "permissions": "&get_all_permissions"
     },
+    "UserTemplate": {
+        "@extends": "User",
+        "discussion": true,
+        "for_role": ":",
+        "notification_subscriptions": ":"
+    },
     "EmailAccount": false,
     "IdentityProviderAccount": false,
     "IdentityProvider": {
@@ -126,6 +132,7 @@
         "instigator": true,
         "introduction": true,
         "introductionDetails": true,
+        "participant_template": "&get_participant_template:",
         "sources": [":partial"]
     },
     "Idea": {
@@ -315,5 +322,24 @@
     "DiscussionMilestone": {
         "@extends": "TimelineEvent",
         "start": true
+    },
+    "NotificationSubscription": {
+        "discussion": true,
+        "creation_date": true,
+        "creation_origin": true,
+        "parent_subscription": true,
+        "status": true,
+        "last_status_change_date": true,
+        "followed_object": "&followed_object",
+        "user": true
+    },
+    "NotificationSubscriptionFollowSyntheses": {
+        "@extends": "NotificationSubscription"
+    },
+    "NotificationSubscriptionFollowAllMessages": {
+        "@extends": "NotificationSubscription"
+    },
+    "NotificationSubscriptionFollowOwnMessageDirectReplies": {
+        "@extends": "NotificationSubscription"
     }
 }
