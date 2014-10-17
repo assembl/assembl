@@ -272,9 +272,10 @@ def minify_javascript_maybe():
     config = get_config()
     try:
         minify = config.get('app:main', 'minified_js')
+        print minify
         if minify == 'debug':
             execute(minify_javascript_debug)
-        elif minify:
+        elif minify and minify != 'false':
             execute(minify_javascript)
     except NoOptionError:
         pass
