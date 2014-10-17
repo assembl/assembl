@@ -17,10 +17,6 @@ require(["modules/assembl", "modules/context", "jquery", "router", "utils/socket
             $('#onlinedot').removeClass('is-online');
         });
 
-        if (Backbone.history) {
-            Backbone.history.start();
-        }
-
         //Probably not the right way, but I don't know how to make the Ctx accessible
         //to the header
         window.Ctx = Ctx;

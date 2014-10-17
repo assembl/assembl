@@ -12,5 +12,15 @@ define(['marionette'], function (Marionette) {
         })
     });
 
+    App.on('start', function () {
+        if (Backbone.history) {
+            Backbone.history.start({
+                pushState: true,
+                hashChange: true,
+                root: '/'
+            });
+        }
+    });
+
     return App;
 });

@@ -32,18 +32,28 @@ define(function (require) {
         },
 
         defaults: function () {
-            Backbone.history.navigate('', true);
+            //Backbone.history.navigate(Ctx.getDiscussionSlug()+'/', true);
         },
 
         home: function () { // a.k.a. "index", "discussion root"
-
             this.isNewUser();
             this.restoreViews();
         },
 
-        idea: function (id) {
+        edition: function () {
+            var admin = new adminView();
+            Assembl.groupContainer.show(admin);
+        },
 
-            collectionManager.getAllIdeasCollectionPromise().done(
+        profile: function () {
+            Assembl.headerRegions.show(new navBar());
+            var profile = new profileView();
+            Assembl.groupContainer.show(profile);
+        },
+
+        /*idea: function (id) {
+
+         collectionManager.getAllIdeasCollectionPromise().done(
                 function (allIdeasCollection) {
                     var idea = allIdeasCollection.get(id);
                     if (idea) {
@@ -63,18 +73,7 @@ define(function (require) {
 
         messageSlug: function (slug, id) {
             return this.message(slug + '/' + id);
-        },
-
-        editDiscussion: function () {
-            var admin = new adminView();
-            Assembl.adminContainer.show(admin);
-        },
-
-        profile: function () {
-            Assembl.headerRegions.show(new navBar());
-            var profile = new profileView();
-            Assembl.groupContainer.show(profile);
-        },
+         },*/
 
         notifications: function () {
             Assembl.headerRegions.show(new navBar());

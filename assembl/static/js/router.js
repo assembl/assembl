@@ -10,13 +10,17 @@ define(function (require) {
 
         controller: RouteManager,
         appRoutes: {
-            "": "home",
-            "idea/:id": "idea",
-            "idea/:discussion/:id": "ideaSlug",
-            "message/:id": "message",
-            "message/:discussion/:id": "messageSlug",
-            "account": "profile",
-            "account/notifications": "notifications",
+            ":discussion_slug/": "home",
+            ":discussion_slug/edition": "edition",
+            ":discussion_slug/account": "profile",
+            ":discussion_slug/account/notifications": "notifications",
+
+            //"idea/:id": "idea",
+            //"idea/:discussion/:id": "ideaSlug",
+            //"message/:id": "message",
+            //"message/:discussion/:id": "messageSlug",
+            //"account": "profile",
+            //"account/notifications": "notifications",
             //"admin/discussion/edit/:id":"editDiscussion",
             //"user/:type/:user":"editProfile"
             "*actions": "defaults"
