@@ -177,9 +177,7 @@ class BaseOps(object):
     def get(cls, id):
         """Return the record by id.
         """
-        # TODO: This fails tests, we need to check why.
-        #return _session_maker.query(cls).get(id)
-        return _session_maker.query(cls).filter_by(id=id).first()
+        return _session_maker.query(cls).get(id)
 
     @classmethod
     def find(cls, **criteria):

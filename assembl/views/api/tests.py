@@ -78,6 +78,7 @@ def test_extracts(
     modified_extract_data["idIdea"] = subidea_1_1.uri()
     res = test_app.put(url, json.dumps(modified_extract_data))
     assert res.status_code == 200
+    Extract.db.flush()
     res = test_app.get(url)
     assert res.status_code == 200
     extract_json = json.loads(res.body)
@@ -250,15 +251,12 @@ def test_api_get_posts_from_idea(
     
     def check_number_of_posts(idea, expected_num, fail_msg):
         #Check from idea API
+        idea.db.flush()
         res = test_app.get(base_idea_url + "/" + str(idea.id))
         assert res.status_code == 200
         res_data = json.loads(res.body)
         assert res_data['num_posts'] == expected_num, "idea API returned %d but %s" % (res_data['num_posts'],fail_msg)
 
-        #Check from post api
-        #idea.db.merge(idea)
-        idea.db.flush()
-        #idea.db.expunge_all()
         url = base_post_url + "?" + urlencode({"root_idea_id": idea.uri()})
         res = test_app.get(url)
         assert res.status_code == 200
