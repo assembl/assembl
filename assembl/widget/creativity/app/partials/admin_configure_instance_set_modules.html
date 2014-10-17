@@ -21,12 +21,13 @@
         <h2>Select modules</h2>
         <div>
             <p>
-                Please select the creativity modules which will be listed to the user and which he will be able to select and use. You can select multiple modules with CTRL-click.
+                Please select the creativity modules which will be listed to the user and which he will be able to select and use.
             </p>
             <form id="widget_set_modules" method="POST">
                 <input type="checkbox" name="modules" value="card" ng-model="widget.settings.active_modules.card"> Card widget
                 <br/>
                 <input type="checkbox" name="modules" value="video" ng-model="widget.settings.active_modules.video"> Video widget
+                <br/>
                 <br/>
                 <input type="submit" value="Validate these modules" />
                 <span id="widget_select_modules_result"></span>
