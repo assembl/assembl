@@ -24,7 +24,7 @@
     "UserTemplate": {
         "@extends": "User",
         "discussion": true,
-        "for_role": true,
+        "for_role": true
     },
     "EmailAccount": false,
     "IdentityProviderAccount": false,

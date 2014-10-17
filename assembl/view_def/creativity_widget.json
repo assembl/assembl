@@ -29,7 +29,7 @@
     "UserTemplate": {
         "@extends": "User",
         "discussion": true,
-        "for_role": ":",
+        "for_role": ":"
     },
     "EmailAccount": false,
     "IdentityProviderAccount": false,
