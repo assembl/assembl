@@ -11,6 +11,7 @@ define(function (require) {
         Synthesis = require('models/synthesis'),
         PartnerOrg = require('models/partner_organization'),
         User = require('models/user'),
+        Notifications = require('models/notifications'),
         $ = require('jquery'),
         Storage = require('objects/storage'),
         Types = require('utils/types'),
@@ -94,6 +95,13 @@ define(function (require) {
         _allPartnerOrganizationCollection: undefined,
 
         _allPartnerOrganizationCollectionPromise: undefined,
+
+        /**
+         *
+         * */
+
+        _allNotificationCollection: undefined,
+        _allNotificationCollectionPromise: undefined,
 
 
         initialize: function (options) {
@@ -429,6 +437,26 @@ define(function (require) {
             else {
                 this._allPartnerOrganizationCollectionPromise.done(function () {
                     deferred.resolve(that._allPartnerOrganizationCollection);
+                });
+            }
+            return deferred.promise();
+        },
+
+        getAllNotificationsCollectionPromise: function () {
+            var that = this,
+                deferred = $.Deferred();
+
+            if (this._allNotificationCollectionPromise === undefined) {
+                this._allNotificationCollection = new Notifications.Collection();
+                this._allNotificationCollection.collectionManager = this;
+                this._allNotificationCollectionPromise = this._allNotificationCollection.fetch();
+                this._allNotificationCollectionPromise.done(function () {
+                    deferred.resolve(that._allNotificationCollection);
+                });
+            }
+            else {
+                this._allNotificationCollectionPromise.done(function () {
+                    deferred.resolve(that._allNotificationCollection);
                 });
             }
             return deferred.promise();

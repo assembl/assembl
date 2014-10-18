@@ -1,28 +1,25 @@
-define(function () {
+define(['models/base', 'modules/context'], function (Base, Ctx) {
     'use strict';
 
-    var Base = require('models/base'),
-        Ctx = require('modules/context');
-
-
     var notificationModel = Base.Model.extend({
-
+        url: Ctx.getApiV2DiscussionUrl("notificationSubscriptions"),
         defaults: {
-            discussion: true,
-            creation_date: true,
-            creation_origin: true,
-            parent_subscription: true,
-            status: true,
-            last_status_change_date: true,
-            user: true
+            '@id': null,
+            '@type': null,
+            status: null,
+            followed_object: null,
+            parent_subscription: null,
+            discussion: null,
+            last_status_change_date: null,
+            creation_date: null,
+            creation_origin: null,
+            user: null
         }
 
     });
 
     var notificationCollection = Base.Collection.extend({
-
-        url: Ctx.getApiV2DiscussionUrl("notificationSubscriptions"),
-
+        url: Ctx.getApiV2DiscussionUrl("notificationSubscriptions") + '/?view=extended',
         model: notificationModel
     });
 

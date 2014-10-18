@@ -4,7 +4,6 @@ define(function (require) {
     var Marionette = require('marionette'),
         Assembl = require('modules/assembl'),
         Ctx = require('modules/context'),
-        collectionManager = require('modules/collectionManager'),
         User = require('models/user'),
         storage = require('objects/storage'),
         navBar = require('views/navBar'),
@@ -157,12 +156,6 @@ define(function (require) {
                 window.localStorage.setItem('lastCurrentUser', this.user.get('@id'));
             }
 
-        },
-
-        resetView: function () {
-            var contentLayout = new ContentLayout();
-            contentLayout.close();
-            Assembl.contentContainer.show(contentLayout);
         }
 
     });
