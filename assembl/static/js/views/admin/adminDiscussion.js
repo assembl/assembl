@@ -11,9 +11,15 @@ define(function (require) {
         template: '#tmpl-adminDiscussion',
         className: 'adminContent',
         initialize: function () {
-            if (!this.collection) {
-                this.collection = new Backbone.Collection();
-            }
+            var that = this,
+                collectionManager = new CollectionManager();
+
+            this.collection = new Backbone.Collection();
+
+            $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
+                function (allPartnerOrganization) {
+                    that.collection.add(allPartnerOrganization.models)
+                });
         },
 
         collectionEvents: {
@@ -29,22 +35,6 @@ define(function (require) {
                 partners: this.collection.models,
                 ctx: Ctx
             }
-        },
-
-        onRender: function () {
-            this.getPartners();
-        },
-
-        getPartners: function () {
-            var that = this,
-                collectionManager = new CollectionManager();
-            //need a solution to pass data to the template after complete promise
-            $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
-                function (allPartnerOrganizationCollection) {
-                    allPartnerOrganizationCollection.forEach(function (model) {
-                        that.collection.add(model)
-                    });
-                });
         },
 
         addPartner: function (e) {

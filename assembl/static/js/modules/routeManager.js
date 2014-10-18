@@ -10,7 +10,6 @@ define(function (require) {
         GroupContainer = require('views/groups/groupContainer'),
         CollectionManager = require('modules/collectionManager'),
         viewsFactory = require('objects/viewsFactory'),
-        Notification = require('views/notification'),
         adminView = require('views/admin/adminDiscussion');
 
     var routeManager = Marionette.Controller.extend({
@@ -18,8 +17,7 @@ define(function (require) {
         initialize: function () {
             window.assembl = {};
 
-            var collectionManager = new CollectionManager(),
-                that = this;
+            this.collectionManager = new CollectionManager();
 
             this.user = null;
 
@@ -107,7 +105,7 @@ define(function (require) {
             /**
              * Render the current group of views
              * */
-            var groupSpecsP = collectionManager().getGroupSpecsCollectionPromise(viewsFactory);
+            var groupSpecsP = this.collectionManager.getGroupSpecsCollectionPromise(viewsFactory);
 
             groupSpecsP.done(function (groupSpecs) {
                 var group = new GroupContainer({

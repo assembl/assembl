@@ -103,6 +103,10 @@ def profile_view(request):
 def notifications_view(request):
     return account_view(request)
 
+@view_config(route_name='defaults', request_method='GET', http_cache=60)
+def defaults_view(request):
+    return home_view(request)
+
 @view_config(renderer='json', route_name='nodetest', request_method='GET', http_cache=60)
 def dummy_node_data(request):
     f = open(FIXTURE)

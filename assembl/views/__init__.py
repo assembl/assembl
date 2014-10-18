@@ -29,6 +29,9 @@ def backbone_include(config):
     config.add_route('test', '/test')
     config.add_route('graph_view', '/graph')
 
+    config.add_route('defaults', '/*actions')
+
+
 def get_default_context(request):
     from ..auth.util import get_user
     localizer = request.localizer
