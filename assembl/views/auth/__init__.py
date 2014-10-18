@@ -8,7 +8,7 @@ def includeme(config):
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
     # type in u(sername), id, email, {velruse-id-type}
-    config.add_route('profile', '/user/{type}/{identifier}')
+    config.add_route('profile_user', '/user/{type}/{identifier}')
     config.add_route('avatar', '/user/{type}/{identifier}/avatar/{size:\d+}')
     config.add_route('register', '/register')
     config.add_route('user_confirm_email', '/users/email_confirm/{ticket}')

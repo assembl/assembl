@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{% block title %}Assembl{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale = 1,user-scalable=no,maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Imagination for people">
 
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
     <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
     <link type="text/css" rel="stylesheet" href="/static/css/themes/{{theme}}/theme.css" />
 
     {% block extra_css %}{% endblock extra_css %}
-    {% include 'includes/feature_detection.jinja2' %}
 </head>
 <body class="preload">
     <div id="wrapper">
-        <header id="header">{#{% include 'header.jinja2' %}#}{# include with marionette region #}</header>
+        <header id="header">{# include with marionette region #}</header>
         <div id="notification"></div>
-        <main id="main">
-            {% block content %}{% endblock %}
-        </main>
+        <main id="main"> {% block content %}{% endblock %} </main>
     </div>
+
     <div id="templates">
         {% for template in templates %}
             {% set template_path = 'views/' + template + '.tmpl' %}
@@ -31,18 +31,10 @@
     </div>
 
     {% include 'includes/javascript.jinja2' %}
-    <script type="text/javascript">var start_application = false;</script>
-    {% block extra_js %}{% endblock %}
-    {% block main_js %}
-        {% if minified_js == 'true' or minified_js == 'debug' %}
-            <script data-main="{{ STATIC_URL }}/js/build/dist/infrastructure.js" src="{{ STATIC_URL }}/js/build/dist/bower/requirejs/require.js"></script>
-            <script src="{{ STATIC_URL }}/js/build/dist/main.js"></script>
-        {% else %}
-            <script data-main="{{ STATIC_URL }}/js/main.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
-        {% endif %}
-    {% endblock main_js %}
-    {% include 'includes/updatebrowser.jinja2' %}
 
+    {% block extra_js %}{% endblock %}
+    {% block main_js %}{% endblock %}
+
+    <div class="popin-container"></div>
 </body>
-<div class="popin-container"></div>
 </html>

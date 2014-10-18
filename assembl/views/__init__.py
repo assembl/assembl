@@ -21,9 +21,9 @@ def backbone_include(config):
     config.add_route('home', '/')
     config.add_route('edition', '/edition')
     config.add_route('account', '/account')
+    config.add_route('profile', '/account/profile')
     config.add_route('notifications', '/account/notifications')
 
-    config.add_route('toc', '/toc')
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
@@ -35,7 +35,7 @@ def get_default_context(request):
     _ = TranslationStringFactory('assembl')
     user=get_user(request)
     if user and user.username:
-        user_profile_edit_url = request.route_url('profile',type='u',identifier=user.username.username)
+        user_profile_edit_url = request.route_url('profile_user',type='u',identifier=user.username.username)
     else:
         user_profile_edit_url = None
     return dict(default_context,

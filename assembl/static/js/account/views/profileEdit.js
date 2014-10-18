@@ -1,7 +1,5 @@
-define(function (require) {
+define(['marionette'], function (Marionette) {
     'use strict';
-
-    var Marionette = require('marionette');
 
     var profileEdit = Marionette.ItemView.extend({
         template: '#tmpl-profile-edit',

@@ -12,8 +12,7 @@ define(function (require) {
         CollectionManager = require('modules/collectionManager'),
         viewsFactory = require('objects/viewsFactory'),
         Notification = require('views/notification'),
-        adminView = require('views/admin/adminDiscussion'),
-        profileView = require('views/admin/profile');
+        adminView = require('views/admin/adminDiscussion');
 
     var routeManager = Marionette.Controller.extend({
 
@@ -31,10 +30,6 @@ define(function (require) {
             this.loadCurrentUser();
         },
 
-        defaults: function () {
-            //Backbone.history.navigate(Ctx.getDiscussionSlug()+'/', true);
-        },
-
         home: function () { // a.k.a. "index", "discussion root"
             this.isNewUser();
             this.restoreViews();
@@ -45,40 +40,51 @@ define(function (require) {
             Assembl.groupContainer.show(admin);
         },
 
-        profile: function () {
-            Assembl.headerRegions.show(new navBar());
-            var profile = new profileView();
-            Assembl.groupContainer.show(profile);
-        },
+        /*profile: function () {
+         this.selectMenu('profile');
+
+         //Assembl.headerRegions.show(new navBar());
+         var profile = new profileView();
+
+         var content = new contentLayout();
+
+         Assembl.contentContainer.show(content);
+
+         content.region1.show(profile);
+
+         },*/
 
         /*idea: function (id) {
 
          collectionManager.getAllIdeasCollectionPromise().done(
-                function (allIdeasCollection) {
-                    var idea = allIdeasCollection.get(id);
-                    if (idea) {
-                        Ctx.setCurrentIdea(idea);
-                    }
-                });
-        },
+         function (allIdeasCollection) {
+         var idea = allIdeasCollection.get(id);
+         if (idea) {
+         Ctx.setCurrentIdea(idea);
+         }
+         });
+         },
 
-        ideaSlug: function (slug, id) {
-            return this.idea(slug + '/' + id);
-        },
+         ideaSlug: function (slug, id) {
+         return this.idea(slug + '/' + id);
+         },
 
-        message: function (id) {
-            //TODO: add new behavior to show messageList Panel
-            Assembl.vent.trigger('messageList:showMessageById', id);
-        },
+         message: function (id) {
+         //TODO: add new behavior to show messageList Panel
+         Assembl.vent.trigger('messageList:showMessageById', id);
+         },
 
-        messageSlug: function (slug, id) {
-            return this.message(slug + '/' + id);
+         messageSlug: function (slug, id) {
+         return this.message(slug + '/' + id);
          },*/
 
-        notifications: function () {
-            Assembl.headerRegions.show(new navBar());
-            console.log('notification');
-        },
+        /*notifications: function () {
+         this.selectMenu('notifications');
+         //Assembl.headerRegions.show(new navBar());
+
+         var notifications = new notificationsView();
+         Assembl.groupContainer.show(notifications);
+         },*/
 
         /**
          * Extended methods use in router
@@ -151,6 +157,12 @@ define(function (require) {
                 window.localStorage.setItem('lastCurrentUser', this.user.get('@id'));
             }
 
+        },
+
+        resetView: function () {
+            var contentLayout = new ContentLayout();
+            contentLayout.close();
+            Assembl.contentContainer.show(contentLayout);
         }
 
     });

@@ -111,7 +111,7 @@ def get_profile(request):
     return profile
 
 
-@view_config(route_name='profile')
+@view_config(route_name='profile_user')
 def assembl_profile(request):
     session = AgentProfile.db
     localizer = request.localizer

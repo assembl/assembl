@@ -1,20 +1,24 @@
 <script>
-{% if cache_bust == "true" %}
-var urlArgs = "bust=" + (new Date()).getTime();
-{% else %}
-var urlArgs = null;
-{% endif %}
-var assembl_locale = '{{locale}}';
+  {% if cache_bust == "true" %}
+  var urlArgs = "bust=" + (new Date()).getTime();
+  {% else %}
+  var urlArgs = null;
+  {% endif %}
+  var assembl_locale = '{{locale}}';
 </script>
+
 <script src="{{ STATIC_URL }}/js/require_config.js"></script>
 
 <script type="text/json" id="translations">{{ translations|safe }}</script>
+
 <script>
-var script = document.getElementById("translations"),
-    json;
-try {
-    json = JSON.parse(script.textContent);
-} catch(e){
-    throw new Error("Invalid json");
-}
+  var script = document.getElementById("translations"),
+      json;
+  try {
+      json = JSON.parse(script.textContent);
+  } catch(e){
+      throw new Error("Invalid json");
+  }
 </script>
+
+<script type="text/javascript">var start_application = false;</script>
