@@ -1,5 +1,5 @@
-define(['marionette', 'account/app', 'account/views/profile', 'account/views/notifications', 'modules/collectionManager'],
-    function (Marionette, App, profileView, notificationsView, CollectionManager) {
+define(['marionette', 'account/app', 'account/views/profile', 'account/views/notifications'],
+    function (Marionette, App, profileView, notificationsView) {
         'use strict';
 
         var Router = Marionette.AppRouter.extend({
