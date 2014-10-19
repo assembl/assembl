@@ -1,10 +1,7 @@
-<h2 class="h2">Notifications</h2>
-
-<% notifications %>
+<h2 class="h2">Discucssion Notifications</h2>
 <form class="core-form form-horizontal">
   <fieldset>
-
-    <% _.each(notifications, function(notification, index, list){ %>
+    <% _.each(DiscussionPush, function(notification, index, list){ %>
 
       <div class="control-group mts">
         <label for="optionsCheckbox" class="control-label"></label>
@@ -17,6 +14,24 @@
       </div>
 
     <% }) %>
+  </fieldset>
+</form>
 
+<h2 class="h2">User Notifications</h2>
+<form class="core-form form-horizontal">
+  <fieldset>
+    <% _.each(UserPush, function(notification, index, list){ %>
+
+      <div class="control-group mts">
+        <label for="optionsCheckbox" class="control-label"></label>
+        <div class="controls">
+          <label class="checkbox">
+            <input type="checkbox" class="enableOption" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="optionsCheckbox">
+            <%= notification.get('@type') %>
+          </label>
+        </div>
+      </div>
+
+    <% }) %>
   </fieldset>
 </form>

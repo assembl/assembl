@@ -1,7 +1,7 @@
 define(['models/base', 'modules/context'], function (Base, Ctx) {
     'use strict';
 
-    var notificationModel = Base.Model.extend({
+    var notificationsDiscussionModel = Base.Model.extend({
         url: Ctx.getApiV2DiscussionUrl("notificationSubscriptions"),
         defaults: {
             '@id': null,
@@ -18,14 +18,14 @@ define(['models/base', 'modules/context'], function (Base, Ctx) {
 
     });
 
-    var notificationCollection = Base.Collection.extend({
+    var notificationsDiscussionCollection = Base.Collection.extend({
         url: Ctx.getApiV2DiscussionUrl("notificationSubscriptions") + '/?view=extended',
-        model: notificationModel
+        model: notificationsDiscussionModel
     });
 
     return {
-        Model: notificationModel,
-        Collection: notificationCollection
+        Model: notificationsDiscussionModel,
+        Collection: notificationsDiscussionCollection
     };
 
 });

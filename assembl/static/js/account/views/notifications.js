@@ -1,4 +1,5 @@
-define(['marionette', 'jquery', 'modules/collectionManager'], function (Marionette, $, CollectionManager) {
+define(['marionette', 'jquery', 'underscore', 'modules/collectionManager'],
+    function (Marionette, $, _, CollectionManager) {
     'use strict';
 
     var Notifications = Marionette.LayoutView.extend({
@@ -10,9 +11,14 @@ define(['marionette', 'jquery', 'modules/collectionManager'], function (Marionet
 
             this.collection = new Backbone.Collection();
 
-            $.when(collectionManager.getAllNotificationsCollectionPromise()).then(
-                function (AllNotifications) {
-                    that.collection.add(AllNotifications.models);
+            $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then(
+                function (NotificationsDiscussion) {
+                    that.collection.add(NotificationsDiscussion.models);
+                });
+
+            $.when(collectionManager.getNotificationsUserCollectionPromise()).then(
+                function (NotificationsUser) {
+                    that.collection.add(NotificationsUser.models);
                 });
         },
 
@@ -25,8 +31,18 @@ define(['marionette', 'jquery', 'modules/collectionManager'], function (Marionet
         },
 
         serializeData: function () {
+
+            var discussionPush = _.filter(this.collection.models, function (m) {
+                return m.get('creation_origin') === 'DISCUSSION_DEFAULT';
+            });
+
+            var userPush = _.filter(this.collection.models, function (m) {
+                return m.get('creation_origin') === 'USER_REQUEST';
+            });
+
             return {
-                notifications: this.collection.models
+                DiscussionPush: discussionPush,
+                UserPush: userPush
             }
         },
 

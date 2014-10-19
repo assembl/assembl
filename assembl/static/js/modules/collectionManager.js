@@ -11,7 +11,8 @@ define(function (require) {
         Synthesis = require('models/synthesis'),
         PartnerOrg = require('models/partner_organization'),
         User = require('models/user'),
-        Notifications = require('models/notifications'),
+        DiscussionPush = require('models/discussion_push'),
+        UserPush = require('models/user_push'),
         $ = require('jquery'),
         Storage = require('objects/storage'),
         Types = require('utils/types'),
@@ -99,14 +100,15 @@ define(function (require) {
         /**
          *
          * */
+        _allNotificationsDiscussionCollection: undefined,
+        _allNotificationsDiscussionCollectionPromise: undefined,
 
-        _allNotificationCollection: undefined,
-        _allNotificationCollectionPromise: undefined,
 
-
-        initialize: function (options) {
-
-        },
+        /**
+         *
+         * */
+        _allNotificationsUserCollection: undefined,
+        _allNotificationsUserCollectionPromise: undefined,
 
 
         /**
@@ -442,21 +444,41 @@ define(function (require) {
             return deferred.promise();
         },
 
-        getAllNotificationsCollectionPromise: function () {
+        getNotificationsDiscussionCollectionPromise: function () {
             var that = this,
                 deferred = $.Deferred();
 
-            if (this._allNotificationCollectionPromise === undefined) {
-                this._allNotificationCollection = new Notifications.Collection();
-                this._allNotificationCollection.collectionManager = this;
-                this._allNotificationCollectionPromise = this._allNotificationCollection.fetch();
-                this._allNotificationCollectionPromise.done(function () {
-                    deferred.resolve(that._allNotificationCollection);
+            if (this._allNotificationsDiscussionCollectionPromise === undefined) {
+                this._allNotificationsDiscussionCollection = new DiscussionPush.Collection();
+                this._allNotificationsDiscussionCollection.collectionManager = this;
+                this._allNotificationsDiscussionCollectionPromise = this._allNotificationsDiscussionCollection.fetch();
+                this._allNotificationsDiscussionCollectionPromise.done(function () {
+                    deferred.resolve(that._allNotificationsDiscussionCollection);
                 });
             }
             else {
-                this._allNotificationCollectionPromise.done(function () {
-                    deferred.resolve(that._allNotificationCollection);
+                this._allNotificationsDiscussionCollectionPromise.done(function () {
+                    deferred.resolve(that._allNotificationsDiscussionCollection);
+                });
+            }
+            return deferred.promise();
+        },
+
+        getNotificationsUserCollectionPromise: function () {
+            var that = this,
+                deferred = $.Deferred();
+
+            if (this._allNotificationsUserCollectionPromise === undefined) {
+                this._allNotificationsUserCollection = new UserPush.Collection();
+                this._allNotificationsUserCollection.collectionManager = this;
+                this._allNotificationsUserCollectionPromise = this._allNotificationsUserCollection.fetch();
+                this._allNotificationsUserCollectionPromise.done(function () {
+                    deferred.resolve(that._allNotificationsUserCollection);
+                });
+            }
+            else {
+                this._allNotificationsUserCollectionPromise.done(function () {
+                    deferred.resolve(that._allNotificationsUserCollection);
                 });
             }
             return deferred.promise();
