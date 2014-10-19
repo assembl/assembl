@@ -1,75 +1,22 @@
 <h2 class="h2">Notifications</h2>
 
-<% _.each(notifications, function(notification, index, list){ %>
-
-  <%= notification.get('status') %>
-
-<% }) %>
-
-
 <% notifications %>
 <form class="core-form form-horizontal">
   <fieldset>
 
-    <div class="control-group mts">
-      <label for="optionsCheckbox" class="control-label"></label>
-      <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" class="enableOption" value="SubscriptionFollowAllMessages" id="optionsCheckbox">
-          {{ gettext('SubscriptionFollowAllMessages') }}
-        </label>
-      </div>
-    </div>
+    <% _.each(notifications, function(notification, index, list){ %>
 
-    <div class="control-group mts">
-      <label for="optionsCheckbox" class="control-label"></label>
-      <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" class="enableOption" value="SubscriptionFollowSyntheses" id="optionsCheckbox">
-          {{ gettext('SubscriptionFollowSyntheses') }}
-        </label>
+      <div class="control-group mts">
+        <label for="optionsCheckbox" class="control-label"></label>
+        <div class="controls">
+          <label class="checkbox">
+            <input type="checkbox" class="enableOption" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="optionsCheckbox">
+            <%= notification.get('@type') %>
+          </label>
+        </div>
       </div>
-    </div>
 
-    <div class="control-group mts">
-      <label for="optionsCheckbox" class="control-label"></label>
-      <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" class="enableOption" value="SubscriptionOnPost" id="optionsCheckbox">
-          {{ gettext('SubscriptionOnPost') }}
-        </label>
-      </div>
-    </div>
-
-    <div class="control-group mts">
-      <label for="optionsCheckbox" class="control-label"></label>
-      <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" class="enableOption" value="SubscriptionOnExtract" id="optionsCheckbox">
-          {{ gettext('SubscriptionOnExtract') }}
-        </label>
-      </div>
-    </div>
-
-    <div class="control-group mts">
-      <label for="optionsCheckbox" class="control-label"></label>
-      <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" class="enableOption" value="SubscriptionOnUserAccount" id="optionsCheckbox">
-          {{ gettext('SubscriptionOnUserAccount') }}
-        </label>
-      </div>
-    </div>
-
-    <div class="control-group mts">
-      <label for="optionsCheckbox" class="control-label"></label>
-      <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" class="enableOption" value="SubscriptionFollowOwnMessageDirectReplies" id="optionsCheckbox">
-          {{ gettext('SubscriptionFollowOwnMessageDirectReplies') }}
-        </label>
-      </div>
-    </div>
+    <% }) %>
 
   </fieldset>
 </form>
