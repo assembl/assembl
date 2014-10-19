@@ -23,5 +23,10 @@
 
 #content-container {
   margin-left: 20%;
+  .user-notifications {
+    h2 {
+      border-bottom: 1px solid $gray3;
+    }
+  }
 }
 
