@@ -103,10 +103,6 @@ def profile_view(request):
 def notifications_view(request):
     return account_view(request)
 
-@view_config(route_name='defaults', request_method='GET', http_cache=60)
-def defaults_view(request):
-    return home_view(request)
-
 @view_config(renderer='json', route_name='nodetest', request_method='GET', http_cache=60)
 def dummy_node_data(request):
     f = open(FIXTURE)
@@ -130,3 +126,8 @@ def frontend_test_view(request):
 def graph_view(request):
     context = get_default_context(request)
     return render_to_response(os.path.join(TEMPLATE_PATH, 'infovis.jinja2'), context, request=request)
+
+@view_config(context=HTTPNotFound, renderer='assembl:templates/includes/404.jinja2')
+def not_found(self, request):
+    request.response.status = 404
+    return {}
