@@ -123,10 +123,10 @@ def collection_add(request, args):
     else:
         typename = ctx.collection_class.external_typename()
     permissions = get_permissions(
-        user_id, ctx.parent_instance.get_discussion_id())
+        user_id, ctx.get_discussion_id())
     if P_SYSADMIN not in permissions:
         cls = ctx.get_collection_class(typename)
-        if cls.crud_permissions.read not in permissions:
+        if cls.crud_permissions.create not in permissions:
             raise HTTPUnauthorized()
     session = User.db
     old_autoflush = session.autoflush
@@ -163,7 +163,7 @@ def instance_put_json(request):
     ctx = request.context
     user_id = authenticated_userid(request)
     permissions = get_permissions(
-        user_id, ctx.parent_instance.get_discussion_id())
+        user_id, ctx.get_discussion_id())
     instance = context._instance
     if P_SYSADMIN not in permissions:
         required = instance.crud_permissions
@@ -183,11 +183,11 @@ def instance_put(request):
     context = request.context
     discussion_id = None
     if isinstance(context._instance, DiscussionBoundBase):
-        discussion_id = context._instance.get_discussion_id()
+        discussion_id = context.get_discussion_id()
     else:
         parent = getattr(context.__parent__, 'parent_instance', None)
         if parent and isinstance(parent, DiscussionBoundBase):
-            discussion_id = context.parent_instance.get_discussion_id()
+            discussion_id = context.get_discussion_id()
     permissions = get_permissions(user_id, discussion_id)
     instance = context._instance
     if P_SYSADMIN not in permissions:
@@ -247,7 +247,7 @@ def instance_del(request):
     user_id = authenticated_userid(request)
     instance = ctx._instance
     permissions = get_permissions(
-        user_id, instance.get_discussion_id())
+        user_id, ctx.get_discussion_id())
     if P_SYSADMIN not in permissions:
         required = instance.crud_permissions
         if required.delete not in permissions:
@@ -306,10 +306,10 @@ def collection_add_json(request):
     user_id = authenticated_userid(request)
     typename = request.json_body.get('@type', ctx.collection_class.external_typename())
     permissions = get_permissions(
-        user_id, ctx.parent_instance.get_discussion_id())
+        user_id, ctx.get_discussion_id())
     if P_SYSADMIN not in permissions:
         cls = ctx.get_collection_class(typename)
-        if cls.crud_permissions.read not in permissions:
+        if cls.crud_permissions.create not in permissions:
             raise HTTPUnauthorized()
     try:
         instances = ctx.create_object(typename, request.json_body, user_id)
@@ -350,10 +350,10 @@ def votes_collection_add_json(request):
     user_id = authenticated_userid(request)
     typename = request.json_body.get('@type', ctx.collection_class.external_typename())
     permissions = get_permissions(
-        user_id, ctx.parent_instance.get_discussion_id())
+        user_id, ctx.get_discussion_id())
     if P_SYSADMIN not in permissions:
         cls = ctx.get_collection_class(typename)
-        if cls.crud_permissions.read not in permissions:
+        if cls.crud_permissions.create not in permissions:
             raise HTTPUnauthorized()
     json = request.json_body
     json['voter_id'] = user_id
@@ -382,10 +382,10 @@ def votes_collection_add(request):
     else:
         typename = ctx.collection_class.external_typename()
     permissions = get_permissions(
-        user_id, ctx.parent_instance.get_discussion_id())
+        user_id, ctx.get_discussion_id())
     if P_SYSADMIN not in permissions:
         cls = ctx.get_collection_class(typename)
-        if cls.crud_permissions.read not in permissions:
+        if cls.crud_permissions.create not in permissions:
             raise HTTPUnauthorized()
     args['voter_id'] = user_id
     try:

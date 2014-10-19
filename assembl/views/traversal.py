@@ -180,6 +180,9 @@ class ClassContext(object):
     def find_collection(self, collection_class_name):
         return None
 
+    def get_discussion_id(self):
+        return None
+
 
 class ClassContextPredicate(object):
     def __init__(self, val, config):
@@ -266,6 +269,12 @@ class InstanceContext(object):
 
     def find_collection(self, collection_class_name):
         return self.__parent__.find_collection(collection_class_name)
+
+    def get_discussion_id(self):
+        from assembl.models import DiscussionBoundBase
+        if isinstance(self._instance, DiscussionBoundBase):
+            return self._instance.get_discussion_id()
+        return self.__parent__.get_discussion_id()
 
 
 class InstanceContextPredicate(object):
@@ -386,6 +395,9 @@ class CollectionContext(object):
         if self.collection.name() == collection_class_name:
             return self
         return self.__parent__.find_collection(collection_class_name)
+
+    def get_discussion_id(self):
+        return self.__parent__.get_discussion_id()
 
 
 class NamedCollectionContextPredicate(object):
