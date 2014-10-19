@@ -174,7 +174,7 @@ def assembl_profile(request):
             session.add(email)
         if redirect:
             return HTTPFound(location=request.route_url(
-                'profile', type='u', identifier=username))
+                'profile_user', type='u', identifier=username))
         profile = session.query(User).get(user_id)
     unverified_emails = [
         (ea, session.query(EmailAccount).filter_by(
@@ -519,7 +519,7 @@ def user_confirm_email(request):
         raise HTTPUnauthorized(localizer.translate(_("Wrong email token.")))
     if email.verified:
         raise HTTPFound(location=request.route_url(
-            'profile', type='id', identifier=email.profile_id))
+            'profile_user', type='id', identifier=email.profile_id))
     else:
         # maybe another profile already verified that email
         other_email_account = session.query(EmailAccount).filter_by(
@@ -546,10 +546,10 @@ def user_confirm_email(request):
             userid = user.id
         if username:
             return HTTPFound(location=request.route_url(
-                'profile', type='u', identifier=username))
+                'profile_user', type='u', identifier=username))
         elif userid:
             return HTTPFound(location=request.route_url(
-                'profile', type='id', identifier=userid))
+                'profile_user', type='id', identifier=userid))
         else:
             # we confirmed a profile without a user? Now what?
             raise HTTPServerError()

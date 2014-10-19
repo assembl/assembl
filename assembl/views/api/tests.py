@@ -188,7 +188,7 @@ def test_next_synthesis_idea_management(discussion, test_app, test_session,
     assert len(res_data['ideas']) == 2, 'Idea wasn\'t added to the synthesis'
 
 
-def test_api_register(test_app, discussion):
+def test_api_register(discussion, test_app):
     test_app.app.registry.settings['assembl.validate_registration_emails']='true'
     with mock.patch('repoze.sendmail.mailer.SMTPMailer.smtp') as mock_mail:
         mailer = mock_mail.return_value
