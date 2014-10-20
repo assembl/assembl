@@ -38,7 +38,10 @@ def widget_view(request):
     target_id = request.GET.get('target', None)
     if target_id:
         idea = Idea.get_instance(target_id)
-        json['target'] = idea.generic_json(view_def_name=view)
+        if idea:
+            json['target'] = idea.generic_json(view_def_name=view)
+        else:
+            return HTTPNotFound("No idea "+target_id)
     return json
 
 
