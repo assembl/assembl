@@ -1,5 +1,5 @@
-define(['marionette', 'account/app', 'account/views/profile', 'account/views/notifications'],
-    function (Marionette, App, profileView, notificationsView) {
+define(['marionette', 'modules/context', 'account/app', 'account/views/profile', 'account/views/notifications'],
+    function (Marionette, Ctx, App, profileView, notificationsView) {
         'use strict';
 
         var Router = Marionette.AppRouter.extend({
@@ -22,12 +22,20 @@ define(['marionette', 'account/app', 'account/views/profile', 'account/views/not
             profile: function () {
                 this.selectMenu('profile');
 
+                if (!Ctx.getCurrentUserId()) {
+                    return;
+                }
+
                 var profile = new profileView();
                 App.contentContainer.show(profile);
             },
 
             notifications: function () {
                 this.selectMenu('notifications');
+
+                if (!Ctx.getCurrentUserId()) {
+                    return;
+                }
 
                 var notifications = new notificationsView();
                 App.contentContainer.show(notifications);

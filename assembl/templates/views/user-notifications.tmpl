@@ -1,13 +1,14 @@
 <h2 class="h2">Discucssion Notifications</h2>
+<% if(DiscussionNotifications.length) { %>
 <form class="core-form form-horizontal">
   <fieldset>
-    <% _.each(DiscussionPush, function(notification, index, list){ %>
+    <% _.each(DiscussionNotifications, function(notification, index, list){ %>
 
       <div class="control-group mts">
         <label for="optionsCheckbox" class="control-label"></label>
         <div class="controls">
           <label class="checkbox">
-            <input type="checkbox" class="js_enableNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="optionsCheckbox">
+            <input type="checkbox" class="js_discussionNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="optionsCheckbox">
             <%= notification.get('@type') %>
           </label>
         </div>
@@ -16,17 +17,19 @@
     <% }) %>
   </fieldset>
 </form>
+<% } %>
 
 <h2 class="h2">User Notifications</h2>
+<% if(UserNotifications.length) { %>
 <form class="core-form form-horizontal">
   <fieldset>
-    <% _.each(UserPush, function(notification, index, list){ %>
+    <% _.each(UserNotifications, function(notification, index, list){ %>
 
       <div class="control-group mts">
         <label for="optionsCheckbox" class="control-label"></label>
         <div class="controls">
           <label class="checkbox">
-            <input type="checkbox" class="js_enableNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="optionsCheckbox">
+            <input type="checkbox" class="js_userNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="optionsCheckbox">
             <%= notification.get('@type') %>
           </label>
         </div>
@@ -35,3 +38,4 @@
     <% }) %>
   </fieldset>
 </form>
+<% } %>

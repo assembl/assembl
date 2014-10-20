@@ -13,17 +13,19 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
 
             $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then(
                 function (NotificationsDiscussion) {
-                    that.collection.add(NotificationsDiscussion.models);
+                    //that.collection.add(NotificationsDiscussion.models);
                 });
 
             $.when(collectionManager.getNotificationsUserCollectionPromise()).then(
                 function (NotificationsUser) {
                     that.collection.add(NotificationsUser.models);
                 });
+
         },
 
         events: {
-            'click .js_enableNotification': 'notifications'
+            //'click .js_discussionNotification': 'discussionNotification',
+            'click .js_userNotification': 'userNotification'
         },
 
         collectionEvents: {
@@ -31,32 +33,35 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
         },
 
         serializeData: function () {
+            /**
+             * Need to be separate in two distinct collection
+             * */
+            /*var discussionNotifications = _.filter(this.collection.models, function (m) {
+             return m.get('creation_origin') === 'DISCUSSION_DEFAULT';
+             });*/
 
-            var discussionPush = _.filter(this.collection.models, function (m) {
-                return m.get('creation_origin') === 'DISCUSSION_DEFAULT';
-            });
-
-            var userPush = _.filter(this.collection.models, function (m) {
+            var userNotifications = _.filter(this.collection.models, function (m) {
                 return m.get('creation_origin') === 'USER_REQUEST';
             });
 
             return {
-                DiscussionPush: discussionPush,
-                UserPush: userPush
+                DiscussionNotifications: [],
+                UserNotifications: userNotifications
             }
         },
 
-        notifications: function (e) {
-            var elm = $(e.target);
+        userNotification: function (e) {
+            var elm = $(e.target),
+                status = 'UNSUBSCRIBED';
 
-            var SubscriptionFollowAllMessages,
-                SubscriptionFollowSyntheses,
-                SubscriptionOnPost,
-                SubscriptionOnExtract,
-                SubscriptionOnUserAccount,
-                SubscriptionFollowOwnMessageDirectReplies;
-
-            console.log(elm.val(), elm.is(':checked'));
+            /**
+             * SubscriptionFollowAllMessages
+             * SubscriptionFollowSyntheses
+             * SubscriptionOnPost
+             * SubscriptionOnExtract
+             * SubscriptionOnUserAccount
+             * SubscriptionFollowOwnMessageDirectReplies
+             * */
 
             /**
              * valid url to enable notification discussion
@@ -67,21 +72,50 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
              *
              * */
 
-            return;
+            if (elm.is(':checked')) {
+                status = 'ACTIVE';
+            }
+
             $.ajax({
                 url: '/data/User/' + Ctx.getCurrentUserId() + '/notification_subscriptions',
-                type: 'PUT',
+                type: 'POST',
                 data: {
                     type: elm.val(),
                     creation_origin: 'USER_REQUESTED',
-                    status: 'UNACTIVE'
+                    status: status
+                },
+                success: function (jqXHR, textStatus) {
+                    console.log(textStatus)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus)
+                    console.log(errorThrown)
+                }
+            });
+
+        },
+
+        discussionNotification: function (e) {
+            var elm = $(e.target),
+                status = 'UNSUBSCRIBED';
+
+            if (elm.is(':checked')) {
+                status = 'ACTIVE';
+            }
+
+            $.ajax({
+                url: '/data/Discussion/' + Ctx.getDiscussionId() + '/notificationSubscriptions',
+                type: 'POST',
+                data: {
+                    type: elm.val(),
+                    creation_origin: 'DISCUSSION_DEFAULT',
+                    status: status
                 },
                 success: function () {
                 },
                 error: function () {
                 }
             });
-
         }
 
     });
