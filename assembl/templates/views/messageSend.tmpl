@@ -24,6 +24,6 @@
     </div>
 <% } else { %>
     <div class="warning-box-for-message-post">
-        <p>{{gettext('You must be logged in to add a comment.')}} <a href="/login?next_view={{request.current_route_path()}}" class="btn btn-bright btn-sm">{{gettext('Click here to log in')}}</a></p>
+        <p>{{gettext('you do not have permission to post')}}</p>
     </div>
 <% } %>
