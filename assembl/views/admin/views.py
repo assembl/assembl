@@ -307,7 +307,7 @@ def general_permissions(request):
         return (user_id, role) in user_roles_as_set
 
     context = dict(
-        get_default_context(request, False),
+        get_default_context(request),
         roles=role_names,
         permissions=permission_names,
         users=users,

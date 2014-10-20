@@ -242,7 +242,7 @@ define(function (require) {
                 'canEdit': canEditNextSynthesis,
                 'showPlaceholderOnEditIfEmpty': true
             });
-            this.longTitleField.renderTo(this.$('#ideaPanel-longtitle'));
+            this.longTitleField.renderTo(this.$('.ideaPanel-longtitle'));
 
             this.commentView = new MessageSendView({
                 'allow_setting_subject': false,
