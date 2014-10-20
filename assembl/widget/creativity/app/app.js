@@ -117,6 +117,7 @@ angular.element(document).ready(function (){
 
     var configFileDefault = "/data/Widget/19";
     var configFile = decodeURIComponent(getUrlVariableValue("config"));
+    console.log("configFile: ", configFile);
     if ( !configFile || !( /^http(s)?:\/\/.*/.test(configFile) ) )
         configFile = configFileDefault;
 

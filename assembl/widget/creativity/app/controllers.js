@@ -444,6 +444,44 @@ creativityApp.controller('indexCtl',
       $scope.settings = configService.settings;
       console.log("settings 0:");
       console.log($scope.settings);
+
+      $scope.config = $routeParams.config;
+      $scope.target = $routeParams.target;
+
+      if ( !$scope.target )
+      {
+        console.log("Error: please provide a 'target' parameter");
+      }
+
+      $scope.active_modules = {};
+
+      console.log("$scope.settings.active_modules: ", $scope.settings.active_modules);
+      if ( $scope.settings.active_modules )
+      {
+        if ( $scope.settings.active_modules.video && $scope.settings.active_modules.video == "true" )
+        {
+          $scope.active_modules.video.name = "Vidéos";
+          $scope.active_modules.video.url = "/widget/video/#/?target=" + $scope.target;
+          if ( $scope.config )
+            $scope.active_modules.video.url += "&config=" + $scope.config;
+        }
+          
+        if ( $scope.settings.active_modules.card && $scope.settings.active_modules.card == "true" )
+        {
+          $scope.active_modules.card.name = "Cartes";
+          // TODO: verify URL format
+          $scope.active_modules.card.url = "/widget/card/#/?target=" + $scope.target;
+          if ( $scope.config )
+            $scope.active_modules.card.url += "&config=" + $scope.config;
+        }
+      }
+
+
+      
+
+
+
+
     };
 
 }]);
