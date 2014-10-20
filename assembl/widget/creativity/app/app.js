@@ -99,6 +99,24 @@ angular.element(document).ready(function (){
     // get the "target" URL parameter
     // this parameter is meant to contain the identifier of the item about which the user is voting
     var target = getUrlVariableValue("target");
+    var config = getUrlVariableValue("config");
+
+    var configFileDefault = "/data/Widget/19";
+    var configFile = decodeURIComponent(config);
+    console.log("configFile: ", configFile);
+    if
+    (
+      !configFile
+      ||
+      (
+        !( /^http(s)?:\/\/.*/.test(configFile) )
+        && !( /^\/.*/.test(configFile) )
+      )
+    )
+    {
+      alert("Please provide a valid URL in the 'config' parameter");
+      configFile = configFileDefault;
+    }
     
 
     var successCallback = function(configData){
@@ -111,15 +129,15 @@ angular.element(document).ready(function (){
             {
                 configServiceProvider.config({"target": target});
             }
+            console.log("config value:", config);
+            if ( config != null || !configServiceProvider.config )
+            {
+                console.log("configuring");
+                configServiceProvider.config({"config": config});
+            }
         }]);
         startAngularApplication();
     };
-
-    var configFileDefault = "/data/Widget/19";
-    var configFile = decodeURIComponent(getUrlVariableValue("config"));
-    console.log("configFile: ", configFile);
-    if ( !configFile || !( /^http(s)?:\/\/.*/.test(configFile) ) )
-        configFile = configFileDefault;
 
     // TODO: implement an error callback, in case the config URL given is invalid or there is a network error
     var errorCallback = function(jqXHR, textStatus, errorThrown){
@@ -144,8 +162,8 @@ angular.element(document).ready(function (){
 
     // if the "target" URL parameter is set, pass it along when calling the widget configuration file
     var data = {};
-    if ( target )
-      data.target = target;
+    /*if ( target )
+      data.target = target;*/
     $.get(configFile, data, successCallback).fail(errorCallback);
 });
 

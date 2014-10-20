@@ -76,6 +76,8 @@ videosApp.controller('videosCtl',
                 console.log("idea_api_url: " + $scope.idea_api_url);
                 $scope.discussion_api_url = 'discussion api url';
 
+                console.log("$scope.config.idea: ", $scope.config.idea);
+                console.log("$scope.config.widget: ", $scope.config.widget);
                 var
                     Idea = $resource($scope.idea_api_url),
                     Discussion = null,

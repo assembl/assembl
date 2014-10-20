@@ -445,8 +445,9 @@ creativityApp.controller('indexCtl',
       console.log("settings 0:");
       console.log($scope.settings);
 
-      $scope.config = $routeParams.config;
-      $scope.target = $routeParams.target;
+      $scope.config = configService.config; //$routeParams.config;
+      console.log("$scope.config: ", $scope.config);
+      $scope.target = configService.target; //$routeParams.target;
 
       if ( !$scope.target )
       {
@@ -458,16 +459,31 @@ creativityApp.controller('indexCtl',
       console.log("$scope.settings.active_modules: ", $scope.settings.active_modules);
       if ( $scope.settings.active_modules )
       {
-        if ( $scope.settings.active_modules.video && $scope.settings.active_modules.video == "true" )
+        if ( $scope.settings.active_modules.video && $scope.settings.active_modules.video == true )
         {
+          $scope.active_modules.video = {};
           $scope.active_modules.video.name = "Vidéos";
+
+          /*
           $scope.active_modules.video.url = "/widget/video/#/?target=" + $scope.target;
           if ( $scope.config )
             $scope.active_modules.video.url += "&config=" + $scope.config;
+          // gives: http://localhost:6543/widget/video/#/?target=http%3A%2F%2Flocalhost%3A6543%2Fdata%2FIdea%2F3&config=http%3A%2F%2Flocalhost%3A6543%2Fdata%2FWidget%2F43
+          */
+         
+          $scope.active_modules.video.url = "/widget/video/";
+          if ( $scope.config )
+            $scope.active_modules.video.url += "?config=" + $scope.config;
+          if ( $scope.target )
+            $scope.active_modules.video.url += "#/?idea=" + $scope.target;
+          if ( !/%3F/.test($scope.target) ) // TODO: better test (test that the urlencoded view param is not present)
+            $scope.active_modules.video.url += encodeURIComponent("?view=creativity_widget");
+          // gives: http://localhost:6543/widget/video/?config=http%3A%2F%2Flocalhost%3A6543%2Fdata%2FWidget%2F43#/?idea=http%3A%2F%2Flocalhost%3A6543%2Fdata%2FIdea%2F3%3Fview%3Dcreativity_widget
         }
           
-        if ( $scope.settings.active_modules.card && $scope.settings.active_modules.card == "true" )
+        if ( $scope.settings.active_modules.card && $scope.settings.active_modules.card == true )
         {
+          $scope.active_modules.card = {};
           $scope.active_modules.card.name = "Cartes";
           // TODO: verify URL format
           $scope.active_modules.card.url = "/widget/card/#/?target=" + $scope.target;
@@ -475,8 +491,14 @@ creativityApp.controller('indexCtl',
             $scope.active_modules.card.url += "&config=" + $scope.config;
         }
       }
+      console.log("$scope.active_modules: ", $scope.active_modules);
 
-
+      // if there is only one active module, redirect to it directly (instead of showing a selection on 1 element)
+      var keys = Object.keys($scope.active_modules);
+      if ( keys.length == 1 )
+      {
+        window.location.replace($scope.active_modules[keys[0]].url);
+      }
       
 
 

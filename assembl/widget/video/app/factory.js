@@ -14,10 +14,17 @@ videosApp.factory('utils', function ($translate, $rootScope, $timeout, $window) 
     fn.urlApi = function (url) {
         if (!url) return;
 
-        var
-            api = url.toString();
-        api = api.split(':')[1],
+        var api = url.toString();
+
+        if ( /^local:.*/.test(url) )
+        {
+            api = api.split(':')[1],
             api = '/data/' + api;
+        }
+        //else if ( /^http(s)?:\/\/.*/.test(url) )
+        //{
+        //    return api;
+        //}
 
         return api;
     }
