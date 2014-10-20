@@ -11,11 +11,6 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
 
             this.collection = new Backbone.Collection();
 
-            $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then(
-                function (NotificationsDiscussion) {
-                    //that.collection.add(NotificationsDiscussion.models);
-                });
-
             $.when(collectionManager.getNotificationsUserCollectionPromise()).then(
                 function (NotificationsUser) {
                     that.collection.add(NotificationsUser.models);
@@ -24,7 +19,6 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
         },
 
         events: {
-            //'click .js_discussionNotification': 'discussionNotification',
             'click .js_userNotification': 'userNotification'
         },
 
@@ -33,19 +27,12 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
         },
 
         serializeData: function () {
-            /**
-             * Need to be separate in two distinct collection
-             * */
-            /*var discussionNotifications = _.filter(this.collection.models, function (m) {
-             return m.get('creation_origin') === 'DISCUSSION_DEFAULT';
-             });*/
 
             var userNotifications = _.filter(this.collection.models, function (m) {
                 return m.get('creation_origin') === 'USER_REQUEST';
             });
 
             return {
-                DiscussionNotifications: [],
                 UserNotifications: userNotifications
             }
         },
@@ -93,11 +80,11 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
                 }
             });
 
-        },
+        }
 
-        discussionNotification: function (e) {
-            var elm = $(e.target),
-                status = 'UNSUBSCRIBED';
+        /*discussionNotification: function (e) {
+         var elm = $(e.target),
+         status = 'UNSUBSCRIBED';
 
             if (elm.is(':checked')) {
                 status = 'ACTIVE';
@@ -116,7 +103,7 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
                 error: function () {
                 }
             });
-        }
+         }*/
 
     });
 
