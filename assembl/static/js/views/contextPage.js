@@ -39,6 +39,8 @@ define(function (require) {
                 currentUser = Ctx.getCurrentUser(),
                 canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
 
+            this.collection = new Backbone.Collection();
+
             $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
                 // we implement here get() and save() methods (needed by CKEditor), so we mock a model instance
                 // TODO: find a better solution, for example create and use a real Discussion model instead?
@@ -104,7 +106,7 @@ define(function (require) {
         serializeData: function () {
             return {
                 contextPage: this.model,
-                partners: this.collection,
+                partners: this.collection.models,
                 ctx: Ctx
             }
         },
@@ -135,12 +137,9 @@ define(function (require) {
             var collectionManager = new CollectionManager(),
                 that = this;
 
-            $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()
-            ).then(function (Organization) {
-
-                    if (!that.collection) {
-                        that.collection = Organization.models;
-                    }
+            $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).
+                then(function (Organization) {
+                    that.collection.add(Organization.models);
                 });
 
         },
