@@ -39,8 +39,9 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
 
             userNotification: function (e) {
                 var elm = $(e.target),
-                    status = 'UNSUBSCRIBED',
                     idResource = elm.attr('id').split('/')[1];
+
+                var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
 
                 /**
                  * SubscriptionFollowAllMessages
@@ -60,10 +61,7 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
                  *
                  * */
 
-                if (elm.is(':checked')) {
-                    status = 'ACTIVE';
-                }
-
+                return;
                 $.ajax({
                     url: '/data/User/' + Ctx.getCurrentUserId() + '/notification_subscriptions/' + idResource,
                     type: 'PUT',

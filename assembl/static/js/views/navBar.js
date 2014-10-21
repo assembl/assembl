@@ -24,6 +24,17 @@ define(function (require) {
             }
         },
 
+        templateHelpers: function () {
+            return {
+                urlNotifications: function () {
+                    return '/' + Ctx.getDiscussionSlug() + '/account/notifications';
+                },
+                urlLogOut: function () {
+                    return '/logout?next_view=/' + Ctx.getDiscussionSlug() + '/';
+                }
+            }
+        },
+
         setLocale: function (e) {
             var lang = $(e.target).attr('data-locale');
             Ctx.setLocale(lang);
