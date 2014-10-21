@@ -2,6 +2,16 @@
 
 var widgetServices = angular.module('creativityServices', ['ngResource']);
 
+widgetServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
+    this.resourceToUrl = function (str) {
+        var start = "local:";
+        if (str && str.indexOf(start) == 0) {
+            str = "/data/" + str.slice(start.length);
+        }
+        return str;
+    };
+}]);
+
 widgetServices.factory('localConfig', function ($http) {
 
     var api_rest = 'config/local.json';
@@ -29,7 +39,7 @@ widgetServices.factory('cardGameService', function ($http) {
 /**
  * Resolve configuration before access to a controller
  * */
-widgetServices.factory('configService', function ($q, $http, utils) {
+widgetServices.factory('configService', function ($q, $http, utils, AssemblToolsService) {
     return {
         data: {},
         getWidget: function (url) {
@@ -38,7 +48,8 @@ widgetServices.factory('configService', function ($q, $http, utils) {
 
             if (!url) defer.reject({message: 'invalid url configuration'});
 
-            var urlRoot = utils.urlApi(url);
+            //var urlRoot = utils.urlApi(url);
+            var urlRoot = AssemblToolsService.resourceToUrl(url);
 
             $http.get(urlRoot).success(function (response) {
                 data.widget = response;

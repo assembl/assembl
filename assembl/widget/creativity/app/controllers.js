@@ -451,13 +451,6 @@ creativityApp.controller('indexCtl',
                         $scope.active_modules.video = {};
                         $scope.active_modules.video.name = "Vidéos";
 
-                        /*
-                         $scope.active_modules.video.url = "/widget/video/#/?target=" + $scope.target;
-                         if ( $scope.config )
-                         $scope.active_modules.video.url += "&config=" + $scope.config;
-                         // gives: http://localhost:6543/widget/video/#/?target=http%3A%2F%2Flocalhost%3A6543%2Fdata%2FIdea%2F3&config=http%3A%2F%2Flocalhost%3A6543%2Fdata%2FWidget%2F43
-                         */
-
                         $scope.active_modules.video.url = "/widget/video/";
                         if ($scope.config)
                             $scope.active_modules.video.url += "?config=" + $scope.config;
@@ -472,9 +465,14 @@ creativityApp.controller('indexCtl',
                         $scope.active_modules.card = {};
                         $scope.active_modules.card.name = "Cartes";
                         // TODO: verify URL format
-                        $scope.active_modules.card.url = "/widget/card/#/?target=" + $scope.target;
+                        
+                        $scope.active_modules.card.url = "/widget/card/#/?";
                         if ($scope.config)
-                            $scope.active_modules.card.url += "&config=" + $scope.config;
+                            $scope.active_modules.card.url += "&config=" + AssemblToolsService.resourceToUrl($scope.config);
+                        if ($scope.target)
+                            $scope.active_modules.card.url += "&idea=" + $scope.target;
+                        if (!/%3F/.test($scope.target)) // TODO: better test (test that the urlencoded view param is not present)
+                            $scope.active_modules.card.url += encodeURIComponent("?view=creativity_widget");
                     }
                 }
                 console.log("$scope.active_modules: ", $scope.active_modules);
