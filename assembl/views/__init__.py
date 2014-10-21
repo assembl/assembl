@@ -20,6 +20,8 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templa
 def backbone_include(config):
     config.add_route('home', '/')
     config.add_route('edition', '/edition')
+    config.add_route('partners', '/partners')
+    config.add_route('slug_notifications', '/notifications')
     config.add_route('account', '/account')
     config.add_route('profile', '/account/profile')
     config.add_route('notifications', '/account/notifications')

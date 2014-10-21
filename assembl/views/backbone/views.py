@@ -73,6 +73,14 @@ def home_view(request):
 def edition_view(request):
     return home_view(request)
 
+@view_config(route_name='partners', request_method='GET', http_cache=60)
+def partners_view(request):
+    return home_view(request)
+
+@view_config(route_name='slug_notifications', request_method='GET', http_cache=60)
+def slug_notifications_view(request):
+    return home_view(request)
+
 @view_config(route_name='account', request_method='GET', http_cache=60)
 def account_view(request):
     user_id = authenticated_userid(request) or Everyone

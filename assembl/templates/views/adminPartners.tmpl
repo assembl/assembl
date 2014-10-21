@@ -1,0 +1,90 @@
+<aside class="profile-sidebar gu gu-1of5">
+    <h1 class="logo tac pas h1"></h1>
+    <nav class="sidebar-nav">
+        <ul class="man pan adminMenu">
+          <li>
+            <a href="#edition" class="btn btn-default btn-sm menu">{{ gettext('edit discussion') }}</a>
+          </li>
+          <li>
+            <a href="#notifications" class="btn btn-default btn-sm menu">{{ gettext('edit notifications') }}</a>
+          </li>
+          <li class="active">
+            <a href="#partners" class="btn btn-default btn-sm menu">{{ gettext('edit partners') }}</a>
+          </li>
+        </ul>
+
+        <a href="/{{ discussion.slug }}/" class="btn btn-cancel btn-sm mtxl">{{ gettext('back to discussion') }}</a>
+    </nav>
+</aside>
+<div id="partners-container">
+<h2 class="h2">Partners - {{discussion.topic}}</h2>
+  <table class="table table-text table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Home Page</th>
+        <th>Logo</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% _.each(partners, function(partner){ %>
+      <tr>
+        <td><%= partner.get('name') %></td>
+        <td><%= partner.get('description') %></td>
+        <td><%= partner.get('homepage') %></td>
+        <td><img src="<%= partner.get('logo')%>" width="100"></td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table>
+  <div>
+      <form class="core-form form-horizontal" method="post" action=".">
+        <fieldset>
+
+          <div class="control-group">
+            <label for="name" class="control-label">Name of partner</label>
+            <div class="controls">
+              <input type="text" class="partner-name" name="name" required>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="description" class="control-label">Description</label>
+            <div class="controls">
+              <input type="text" class="partner-description" name="description" required>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="homepage" class="control-label">Home page</label>
+            <div class="controls">
+              <input type="text" class="partner-homepage" name="homepage" required>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="logo" class="control-label">Url logo</label>
+            <div class="controls">
+              <input type="text" class="partner-name" name="logo" required>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="is_initiator" class="control-label">is initiator</label>
+            <div class="controls">
+              <input type="checkbox" class="partner-initiator" name="is_initiator"  required>
+            </div>
+          </div>
+
+
+          <div class="form-actions ptm">
+            <button class="btn btn-secondary js_add-partner" type="submit">Add partner</button>
+          </div>
+
+        </fieldset>
+      </form>
+
+  </div>
+</div>
+

@@ -21,9 +21,14 @@
   }
 }
 
-#content-container {
+#content-container,
+#partners-container,
+#admin-container {
   margin-left: 20%;
-  .user-notifications {
+  .user-notifications,
+  .admin-partners,
+  .admin-content,
+  .admin-notifications {
     h2 {
       border-bottom: 1px solid $gray3;
     }

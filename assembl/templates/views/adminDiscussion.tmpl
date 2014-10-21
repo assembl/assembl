@@ -1,6 +1,24 @@
-<div class="discussion-edit">
-  <h3>{% trans %}Edit discussion {% endtrans %} "{{discussion.topic}}"</h3>
+<aside class="profile-sidebar gu gu-1of5">
+    <h1 class="logo tac pas h1"></h1>
+    <nav class="sidebar-nav">
+        <ul class="man pan adminMenu">
+          <li class="active">
+            <a href="#edition" class="btn btn-default btn-sm menu">{{ gettext('edit discussion') }}</a>
+          </li>
+          <li>
+            <a href="#notifications" class="btn btn-default btn-sm menu">{{ gettext('edit notifications') }}</a>
+          </li>
+          <li>
+            <a href="#partners" class="btn btn-default btn-sm menu">{{ gettext('edit partners') }}</a>
+          </li>
+        </ul>
 
+        <a href="/{{ discussion.slug }}/" class="btn btn-cancel btn-sm mtxl">{{ gettext('back to discussion') }}</a>
+    </nav>
+</aside>
+<div id="admin-container">
+<h2 class="h2">Edition - {{discussion.topic}}</h2>
+<div class="discussion-edit">
   {% if admin_discussion_permissions_url %}
     <p class="mbl">
       <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
@@ -40,38 +58,7 @@
     </fieldset>
   </form>
 </div>
-
-<div class="partners-edit">
-<h3>Partners</h3>
-  <table class="table table-text table-hover">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Home Page</th>
-        <th>Logo</th>
-      </tr>
-    </thead>
-    <tbody>
-    <% _.each(partners, function(partner){ %>
-      <tr>
-        <td><%= partner.get('name') %></td>
-        <td><%= partner.get('description') %></td>
-        <td><%= partner.get('homepage') %></td>
-        <td><img src="<%= partner.get('logo')%>" width="100"></td>
-      </tr>
-    <% }) %>
-    </tbody>
-  </table>
-  <div>
-    <form class="core-form form-inline" method="post" action=".">
-      <input type="text" class="partner-name" placeholder="Name of partner" name="name" required>
-      <input type="text" class="partner-description" placeholder="Description" name="description" required>
-      <input type="text" class="partner-homepage" placeholder="Home page" name="homepage" required>
-      <input type="text" class="partner-name" placeholder="Url logo" name="logo" required>
-      <input type="checkbox" class="partner-initiator" name="is_initiator"  required>
-      <button type="submit" class="btn btn-primary btn-sm js_add-partner">Add partner</button>
-    </form>
-  </div>
 </div>
+
+
 

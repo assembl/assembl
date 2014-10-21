@@ -1,11 +1,11 @@
-'use strict';
-
 define(['marionette', 'jquery', 'modules/collectionManager', 'modules/context'],
     function (Marionette, $, CollectionManager, Ctx) {
+        'use strict';
 
-        var adminDiscussion = Marionette.LayoutView.extend({
-            template: '#tmpl-adminDiscussion',
-            className: 'admin-content',
+
+        var adminPartners = Marionette.LayoutView.extend({
+            template: '#tmpl-adminPartners',
+            className: 'admin-partners prs',
             initialize: function () {
                 var that = this,
                     collectionManager = new CollectionManager();
@@ -39,6 +39,9 @@ define(['marionette', 'jquery', 'modules/collectionManager', 'modules/context'],
                 var dataPartner = $(e.target).parent('form').serialize(),
                     urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/';
 
+                console.log(dataPartner)
+
+                return;
                 $.ajax({
                     url: urlPartner,
                     type: "post",
@@ -50,7 +53,8 @@ define(['marionette', 'jquery', 'modules/collectionManager', 'modules/context'],
                 });
             }
 
+
         });
 
-        return adminDiscussion;
+        return adminPartners;
     });
