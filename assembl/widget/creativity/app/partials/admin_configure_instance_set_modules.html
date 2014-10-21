@@ -1,0 +1,43 @@
+<div id="admin" ng-controller="adminConfigureInstanceSetModulesCtl" ng-init="init()">
+
+    <h1>Configure a creativity widget instance</h1>
+
+    <p>
+        Currently selected widget is <a href="{{ widget_endpoint }}">{{ widget_uri }}</a>.
+
+        <span ng-if="target != null">
+            The URL to access selection menu associated to this widget (on one of its associated ideas) is <a
+                href="?config={{ widget_uri }}&target={{ target }}" target="_blank">here</a>.
+        </span>
+    </p>
+
+    <div id="step_get_data" ng-show="current_step == 1">
+        <p>
+            Getting data from server about the widget instance "<strong>{{ widget_uri }}</strong>"...
+        </p>
+    </div>
+
+    <div id="step_select_modules" ng-show="current_step == 2">
+        <h2>Select modules</h2>
+
+        <div>
+            <p>
+                Please select the creativity modules which will be listed to the user and which he will be able to
+                select and use.
+            </p>
+
+            <form id="widget_set_modules" method="POST">
+                <input type="checkbox" name="modules" value="card" ng-model="widget.settings.active_modules.card"> Card
+                widget
+                <br/>
+                <input type="checkbox" name="modules" value="video" ng-model="widget.settings.active_modules.video">
+                Video widget
+                <br/>
+                <br/>
+                <input type="submit" value="Validate these modules"/>
+                <span id="widget_select_modules_result"></span>
+            </form>
+        </div>
+    </div>
+
+</div>

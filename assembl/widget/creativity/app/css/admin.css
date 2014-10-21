@@ -1,0 +1,18 @@
+.item {
+    border: 1px solid #000;
+    margin: 6px 0 6px 10px;
+}
+
+.item .item-title {
+    background: #eee;
+    padding: 5px;
+    border-bottom: 1px solid #000;
+}
+
+.item .item-content {
+    padding: 4px 10px;
+}
+
+#step_criteria_groups_and_appearance span.with-title {
+    border-bottom: 1px dotted #666;
+}

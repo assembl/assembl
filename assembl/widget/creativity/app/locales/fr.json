@@ -1,0 +1,11 @@
+{
+    comment: "Commentez",
+    acomment: "Commentaire",
+    send: "Envoyez",
+    reply: "Repondre",
+    comments: "Voir les {{nb}} commentaires",
+    vote: "Votez",
+    title: "titre",
+    cancel: "Annuler",
+    validVote: "Validez vos votes"
+}

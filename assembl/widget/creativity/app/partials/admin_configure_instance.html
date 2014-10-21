@@ -1,0 +1,21 @@
+<div id="admin" ng-controller="adminConfigureInstanceCtl" ng-init="init()">
+
+    <h1>Configure a creativity widget instance</h1>
+
+    <p>
+        Currently selected widget is <a href="{{ widget_endpoint }}">{{ widget_uri }}</a>.
+
+        <span ng-if="target != null">
+            The URL to access selection menu associated to this widget (on one of its associated ideas) is <a
+                href="?config={{ widget_uri }}&target={{ target }}" target="_blank">here</a>.
+        </span>
+    </p>
+
+    <ul>
+        <li>
+            <a href="#/admin/configure_instance_set_modules?widget_uri={{ widget_uri }}&target={{ target }}">Define
+                which creativity modules are enabled</a>
+        </li>
+    </ul>
+
+</div>
