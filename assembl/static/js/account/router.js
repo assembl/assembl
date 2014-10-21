@@ -6,8 +6,8 @@ define(['marionette', 'modules/context', 'account/app', 'account/views/profile',
 
             routes: {
                 "profile": "profile",
-                "notifications": "notifications",
-                "*action": "defaults"
+                "notifications": "UserNotifications",
+                "*actions": "defaults"
             },
 
             selectMenu: function (menu) {
@@ -30,7 +30,7 @@ define(['marionette', 'modules/context', 'account/app', 'account/views/profile',
                 App.contentContainer.show(profile);
             },
 
-            notifications: function () {
+            UserNotifications: function () {
                 this.selectMenu('notifications');
 
                 if (!Ctx.getCurrentUserId()) {

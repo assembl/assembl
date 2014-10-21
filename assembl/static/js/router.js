@@ -32,7 +32,7 @@ define(function (require) {
             "": "home",
             "edition": "edition",
             "partners": "partners",
-            "notifications": "notifications",
+            "notifications": "SlugNotifications",
 
             //"idea/:id": "idea",
             //"idea/:discussion/:id": "ideaSlug",
@@ -64,7 +64,7 @@ define(function (require) {
             Assembl.groupContainer.show(partners);
         },
 
-        notifications: function () {
+        SlugNotifications: function () {
             var notifications = new adminNotifications();
             Assembl.groupContainer.show(notifications);
         },
@@ -151,7 +151,7 @@ define(function (require) {
                         return aGroupSpec.getNavigationPanelSpec();
                     });
                     if (navigableGroupSpec) {
-                        window.setTimeout(function () {
+                        setTimeout(function () {
                             var groupContent = group.children.findByModel(navigableGroupSpec);
                             groupContent.resetContextState();
                         });

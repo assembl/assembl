@@ -39,7 +39,6 @@ define(['marionette', 'jquery', 'modules/collectionManager', 'modules/context'],
                 var dataPartner = $(e.target).parent('form').serialize(),
                     urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/';
 
-                return;
                 $.ajax({
                     url: urlPartner,
                     type: "post",
