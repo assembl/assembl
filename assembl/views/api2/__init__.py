@@ -49,6 +49,7 @@ from assembl.auth import P_READ, P_SYSADMIN, R_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase
+from assembl.lib.decl_enums import DeclEnumType
 
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
@@ -213,19 +214,25 @@ def instance_put(request):
     # type checking
     columns = {c.key: c for c in mapper.columns}
     for key, value in params.items():
-        if key in relns and isinstance(value, str):
+        if key in relns and isinstance(value, (str, unicode)):
             val_inst = relns[key].class_.get_instance(value)
             if not val_inst:
                 raise HTTPBadRequest("Unknown instance: "+value)
             params[key] = val_inst
+        elif key in columns and isinstance(columns[key].type, DeclEnumType) \
+                and isinstance(value, (str, unicode)):
+            val_det = columns[key].type.enum.from_string(value)
+            if not val_det:
+                raise HTTPBadRequest("Cannot interpret " + value)
+            params[key] = val_det
         elif key in columns and columns[key].type.python_type == datetime.datetime \
-                and isinstance(value, str):
+                and isinstance(value, (str, unicode)):
             val_dt = datetime.datetime.strpstr(value)
             if not val_dt:
                 raise HTTPBadRequest("Cannot interpret " + value)
             params[key] = val_dt
         elif key in columns and columns[key].type.python_type == int \
-                and isinstance(value, str):
+                and isinstance(value, (str, unicode)):
             try:
                 params[key] = int(value)
             except ValueError as err:
