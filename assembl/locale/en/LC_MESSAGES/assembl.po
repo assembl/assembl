@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-10-18 19:54+0200\n"
+"POT-Creation-Date: 2014-10-20 17:25+0200\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -94,82 +94,82 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:365
+#: assembl/static/js/views/contextPage.js:364
 msgid "last week"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:368
+#: assembl/static/js/views/contextPage.js:367
 msgid "last 2 weeks"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:371
+#: assembl/static/js/views/contextPage.js:370
 msgid "last month"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:374
+#: assembl/static/js/views/contextPage.js:373
 msgid "last 3 months"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:377
+#: assembl/static/js/views/contextPage.js:376
 msgid "last 6 months"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:380
+#: assembl/static/js/views/contextPage.js:379
 msgid "last year"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:532
+#: assembl/static/js/views/contextPage.js:531
 #, python-format
 msgid "%d participants have contributed in the %s"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:538
+#: assembl/static/js/views/contextPage.js:537
 #, python-format
 msgid "%d new participants started contributing in the %s"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:545
+#: assembl/static/js/views/contextPage.js:544
 #, python-format
 msgid "%d active participants had contributed before %s"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:554
+#: assembl/static/js/views/contextPage.js:553
 #, python-format
 msgid "%d participants' last contribution was prior to %s"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:566
+#: assembl/static/js/views/contextPage.js:565
 #, python-format
 msgid "%d participants have contributed since the beginning of the debate"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:575
+#: assembl/static/js/views/contextPage.js:574
 msgid "Contributors active recently"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:579
+#: assembl/static/js/views/contextPage.js:578
 msgid "Contributors inactive recently"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:597
+#: assembl/static/js/views/contextPage.js:596
 msgid "Evolution of the total number of messages"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:597
+#: assembl/static/js/views/contextPage.js:596
 msgid "Evolution of the number of messages posted"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:598
+#: assembl/static/js/views/contextPage.js:597
 #: assembl/templates/views/contextPage.tmpl:57
 msgid "Statistics"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:907
+#: assembl/static/js/views/contextPage.js:906
 msgid "messages"
 msgstr ""
 
-#: assembl/static/js/views/contextPage.js:1130
-#: assembl/static/js/views/contextPage.js:1142
+#: assembl/static/js/views/contextPage.js:1129
+#: assembl/static/js/views/contextPage.js:1141
 msgid "messages, posted by"
 msgstr ""
 
@@ -1225,11 +1225,7 @@ msgid "New topic subject:"
 msgstr ""
 
 #: assembl/templates/views/messageSend.tmpl:27
-msgid "You must be logged in to add a comment."
-msgstr ""
-
-#: assembl/templates/views/messageSend.tmpl:27
-msgid "Click here to log in"
+msgid "you do not have permission to post"
 msgstr ""
 
 #: assembl/templates/views/navBar.tmpl:4
@@ -1382,30 +1378,6 @@ msgstr ""
 
 #: assembl/templates/views/synthesisPanel.tmpl:22
 msgid "Publish"
-msgstr ""
-
-#: assembl/templates/views/user-notifications.tmpl:11
-msgid "SubscriptionFollowAllMessages"
-msgstr ""
-
-#: assembl/templates/views/user-notifications.tmpl:21
-msgid "SubscriptionFollowSyntheses"
-msgstr ""
-
-#: assembl/templates/views/user-notifications.tmpl:31
-msgid "SubscriptionOnPost"
-msgstr ""
-
-#: assembl/templates/views/user-notifications.tmpl:41
-msgid "SubscriptionOnExtract"
-msgstr ""
-
-#: assembl/templates/views/user-notifications.tmpl:51
-msgid "SubscriptionOnUserAccount"
-msgstr ""
-
-#: assembl/templates/views/user-notifications.tmpl:61
-msgid "SubscriptionFollowOwnMessageDirectReplies"
 msgstr ""
 
 #: assembl/views/api/post.py:58 assembl/views/api/post.py:331
@@ -1911,5 +1883,29 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Connect other accounts to Assembl"
+#~ msgstr ""
+
+#~ msgid "You must be logged in to add a comment."
+#~ msgstr ""
+
+#~ msgid "Click here to log in"
+#~ msgstr ""
+
+#~ msgid "SubscriptionFollowAllMessages"
+#~ msgstr ""
+
+#~ msgid "SubscriptionFollowSyntheses"
+#~ msgstr ""
+
+#~ msgid "SubscriptionOnPost"
+#~ msgstr ""
+
+#~ msgid "SubscriptionOnExtract"
+#~ msgstr ""
+
+#~ msgid "SubscriptionOnUserAccount"
+#~ msgstr ""
+
+#~ msgid "SubscriptionFollowOwnMessageDirectReplies"
 #~ msgstr ""
 
