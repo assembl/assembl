@@ -51,13 +51,8 @@
   }
 }
 
-#ideaPanel-shorttitle > * {
-  color: $white;
-}
-
 .ideaPanel-longtitle {
   .panel-editablearea > * {
-    color: $white;
     font-weight: 300;
   }
 }
@@ -72,6 +67,10 @@
     @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
     border: 1px solid #cccccc;
   }
+}
+
+.add-description {
+  cursor: pointer;
 }
 
 .ideaPanel-section-contributors {
