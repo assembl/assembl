@@ -89,6 +89,8 @@ define(function (require) {
                 data.longTitle = ' - ' + data.longTitle.substr(0, 50);
             }
 
+            data.Ctx = Ctx;
+
             data.shortTitle = this.model.getShortTitleDisplayText();
             this.$el.html(this.template(data));
             Ctx.initTooltips(this.$el);
