@@ -44,6 +44,8 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
                 var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
 
                 /**
+                 * Default notifications for user
+                 *
                  * SubscriptionFollowAllMessages
                  * SubscriptionFollowSyntheses
                  * SubscriptionOnPost
@@ -52,32 +54,25 @@ define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modu
                  * SubscriptionFollowOwnMessageDirectReplies
                  * */
 
-                /**
-                 * valid url to enable notification discussion
-                 * curl -X POST http://localhost:6543/data/Discussion/1/notificationSubscriptions -d "Content-Type=application/x-www-form-urlencoded" -d "type=NotificationSubscriptionFollowOwnMessageDirectReplies" -d "creation_origin=USER_REQUESTED"
-                 *
-                 * url to enable notification user
-                 * curl -X PUT http://localhost:6543/data/User/432/notification_subscriptions -d "Content-Type=application/x-www-form-urlencoded" -d "type=NotificationSubscriptionFollowAllMessages" -d "creation_origin=USER_REQUESTED" -d "status=UNACTIVE"
-                 *
-                 * */
+                if (status && idResource) {
 
-                return;
-                $.ajax({
-                    url: '/data/User/' + Ctx.getCurrentUserId() + '/notification_subscriptions/' + idResource,
-                    type: 'PUT',
-                    data: {
-                        type: elm.val(),
-                        creation_origin: 'USER_REQUESTED',
-                        status: status
-                    },
-                    success: function (jqXHR, textStatus) {
-                        console.log(textStatus)
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus)
-                        console.log(errorThrown)
-                    }
-                });
+                    $.ajax({
+                        url: '/data/User/' + Ctx.getCurrentUserId() + '/notification_subscriptions/' + idResource,
+                        type: 'PUT',
+                        data: {
+                            creation_origin: 'USER_REQUESTED',
+                            status: status
+                        },
+                        success: function (jqXHR, textStatus) {
+                            console.log(textStatus)
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus)
+                            console.log(errorThrown)
+                        }
+                    });
+
+                }
 
             }
 
