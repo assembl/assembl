@@ -82,6 +82,15 @@ angular.element(document).ready(function () {
         angular.bootstrap('#creativityApp', ['creativityApp']);
     }
 
+    // TODO: find a way to have only one such function somewhere instead of one here and one in services.js
+    function resourceToUrl (str) {
+        var start = "local:";
+        if (str && str.indexOf(start) == 0) {
+            str = "/data/" + str.slice(start.length);
+        }
+        return str;
+    };
+
 
     // TODO: better way to access the admin panel
     // if the user is trying to access the admin panel, skip the loading of the configuration file and start the Angular application directly
@@ -102,6 +111,9 @@ angular.element(document).ready(function () {
     var configFileDefault = "/data/Widget/19";
     var configFile = decodeURIComponent(config);
     console.log("configFile: ", configFile);
+
+    configFile = resourceToUrl(configFile);
+
     if
         (
         !configFile

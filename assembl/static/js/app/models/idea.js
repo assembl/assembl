@@ -376,13 +376,21 @@ define(function (require) {
             }
         },
 
-        getVotableOnWhichWidgets: function () {
-            var widget_data = this.get('widget_data');
+        getWidgets: function(){
+            return this.get('widget_data');
+        },
+
+        getWidgetsOfType: function(type){
+            var widget_data = this.getWidgets();
             var widgets = _.filter(widget_data, function (o) {
-                return o["@type"] == "votable";
+                return o["@type"] == type;
             });
             return widgets;
-        }
+        },
+
+        getVotableOnWhichWidgets: function () {
+            return this.getWidgetsOfType("votable");
+        },
 
     });
 

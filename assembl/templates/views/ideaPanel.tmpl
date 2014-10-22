@@ -103,9 +103,11 @@
     {# Instanciate a widget from this idea #}
     <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE){ %>
       <% if ( canCreateWidgets ) {
-          var url = "/widget/vote/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
-          print(" <a href=\""+url+"\" target=\"_blank\" class='dispb mls mts'>{{gettext('Create a vote widget on this idea')}}</a>");
+          var create_vote_widget_url = "/widget/vote/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
+          print(" <a href=\""+create_vote_widget_url+"\" target=\"_blank\" class='dispb mls mts'>{{gettext('Create a vote widget on this idea')}}</a>");
 
+          var create_creativity_widget_url = "/widget/creativity/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
+          print(" <a href=\""+create_creativity_widget_url+"\" target=\"_blank\" class='dispb mls mts'>{{gettext('Create a creativity widget on this idea')}}</a>");
       } %>
     <% } %>
 
