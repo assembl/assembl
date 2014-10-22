@@ -1,4 +1,4 @@
-define(['marionette'], function (Marionette) {
+define(['marionette', 'jquery'], function (Marionette, $) {
 
     var App = new Marionette.Application();
 

@@ -1,44 +1,15 @@
-define(['marionette', 'modules/context', 'account/app', 'account/views/profile', 'account/views/notifications'],
-    function (Marionette, Ctx, App, profileView, notificationsView) {
+define(function (require) {
         'use strict';
 
-        var Router = Marionette.AppRouter.extend({
+    var Marionette = require('marionette'),
+        routeManager = require('account/routeManager');
 
-            routes: {
+    var Router = Marionette.AppRouter.extend({
+        controller: routeManager,
+        appRoutes: {
                 "profile": "profile",
-                "notifications": "UserNotifications",
+            "notifications": "notifications",
                 "*actions": "defaults"
-            },
-
-            selectMenu: function (menu) {
-                $('.adminMenu a').parent().removeClass('active');
-                $('.adminMenu a[href="#' + menu + '"]').parent().addClass('active');
-            },
-
-            defaults: function () {
-                Backbone.history.navigate('profile', true);
-            },
-
-            profile: function () {
-                this.selectMenu('profile');
-
-                if (!Ctx.getCurrentUserId()) {
-                    return;
-                }
-
-                var profile = new profileView();
-                App.contentContainer.show(profile);
-            },
-
-            UserNotifications: function () {
-                this.selectMenu('notifications');
-
-                if (!Ctx.getCurrentUserId()) {
-                    return;
-                }
-
-                var notifications = new notificationsView();
-                App.contentContainer.show(notifications);
             }
 
         });

@@ -28,7 +28,7 @@ var requirejs_config = {
         'jit': 'bower/jit/Jit/jit',
         'jed': 'bower/jed/jed',
         'backboneModal': 'lib/backbone-modal/backbone.modal',
-        'marionette': 'bower/marionette/lib/backbone.marionette.min',
+        'marionette': 'bower/marionette/lib/backbone.marionette',
         'd3': 'bower/d3/d3.min',
         'bootstrap': 'lib/bootstrap',
         'swal': 'bower/sweetalert/lib/sweet-alert.min'
