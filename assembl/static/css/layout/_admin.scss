@@ -25,12 +25,27 @@
 #partners-container,
 #admin-container {
   margin-left: 20%;
+  h2 {
+    border-bottom: 1px solid $gray3;
+  }
   .user-notifications,
   .admin-partners,
   .admin-content,
   .admin-notifications {
     h2 {
       border-bottom: 1px solid $gray3;
+    }
+  }
+}
+
+table {
+  &.admin {
+    border: none;
+
+    thead {
+      th {
+        border-bottom: none;
+      }
     }
   }
 }

@@ -16,9 +16,9 @@
         <a href="/{{ discussion.slug }}/" class="btn btn-cancel btn-sm mtxl">{{ gettext('back to discussion') }}</a>
     </nav>
 </aside>
-<div id="admin-container">
+<div id="admin-container" class="prs">
 <h2 class="h2">Edition - {{discussion.topic}}</h2>
-<div class="discussion-edit">
+<div class="mtxl">
   {% if admin_discussion_permissions_url %}
     <p class="mbl">
       <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>

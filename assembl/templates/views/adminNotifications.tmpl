@@ -16,7 +16,7 @@
         <a href="/{{ discussion.slug }}/" class="btn btn-cancel btn-sm mtxl">{{ gettext('back to discussion') }}</a>
     </nav>
 </aside>
-<div id="admin-container">
+<div id="admin-container" class="prs">
 <h2 class="h2">Notifications - {{discussion.topic}}</h2>
 <% if(DiscussionNotifications.length) { %>
 <form class="core-form form-horizontal">
@@ -38,8 +38,9 @@
 </form>
 <% } else { %>
 
-<h4 class="h4">{{ gettext('no notifications') }}</h4>
-
+<div class="mtxl">
+  <h4 class="h4">{{ gettext('no notifications') }}</h4>
+</div>
 <% } %>
 
 </div>
