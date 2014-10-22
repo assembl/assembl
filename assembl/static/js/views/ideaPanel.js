@@ -53,8 +53,8 @@ define(function (require) {
             'change': 'render'
         },
         events: {
-            'dragstart .box': 'onDragStart',
-            'dragend .box': "onDragEnd",
+            'dragstart .bx': 'onDragStart',
+            'dragend .bx': "onDragEnd",
             'dragover': 'onDragOver',
             'dragleave': 'onDragLeave',
             'drop': 'onDrop',
