@@ -48,8 +48,8 @@ var requirejs_config = {
             deps: ['jquery'],
             exports: 'jQuery'
         },
-        'modules/context': {
-            deps: ['annotator', 'ckeditor', 'utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
+        'app/modules/context': {
+            deps: ['annotator', 'ckeditor', 'app/utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
             exports: 'context'
         },
         'utils/i18n': {
