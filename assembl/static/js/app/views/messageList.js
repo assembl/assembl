@@ -7,14 +7,14 @@ define(function (require) {
         _ = require('underscore'),
         $ = require('jquery'),
         Assembl = require('app/app'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         Message = require('app/models/message'),
         i18n = require('app/utils/i18n'),
         PostQuery = require('app/views/messageListPostQuery'),
         Permissions = require('app/utils/permissions'),
         MessageSendView = require('app/views/messageSend'),
         AssemblPanel = require('app/views/assemblPanel'),
-        CollectionManager = require('app/modules/collectionManager');
+        CollectionManager = require('common/collectionManager');
 
     /**
      * Constants

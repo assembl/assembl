@@ -6,7 +6,7 @@ define(function (require) {
         _ = require('underscore'),
         $ = require('jquery'),
         Assembl = require('app/app'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         Synthesis = require('app/models/synthesis'),
         Idea = require('app/models/idea'),
         Permissions = require('app/utils/permissions'),
@@ -16,7 +16,7 @@ define(function (require) {
         i18n = require('app/utils/i18n'),
         EditableField = require('app/views/editableField'),
         CKEditorField = require('app/views/ckeditorField'),
-        CollectionManager = require('app/modules/collectionManager');
+        CollectionManager = require('common/collectionManager');
 
 
     var SynthesisPanel = AssemblPanel.extend({

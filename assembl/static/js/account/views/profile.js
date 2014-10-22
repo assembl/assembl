@@ -1,5 +1,4 @@
-define(['marionette'],
-    function (Marionette) {
+define(['marionette'], function (Marionette) {
     'use strict';
 
     var userProfile = Marionette.LayoutView.extend({
@@ -9,7 +8,6 @@ define(['marionette'],
 
         },
         initialize: function () {
-
 
 
         },

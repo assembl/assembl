@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-        ctx = require('app/modules/context'),
+        ctx = require('common/context'),
         panelSpec = require('app/models/panelSpec'),
         AssemblPanel = require('app/views/assemblPanel'),
         PanelWrapper = require('app/views/groups/panelWrapper');

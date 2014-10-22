@@ -3,7 +3,7 @@ define(function (require) {
 
     var Base = require('app/models/base'),
         Assembl = require('app/app'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         $ = require('jquery'),
         _ = require('underscore');
 

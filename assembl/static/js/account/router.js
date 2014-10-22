@@ -1,5 +1,5 @@
 define(function (require) {
-        'use strict';
+    'use strict';
 
     var Marionette = require('marionette'),
         routeManager = require('account/routeManager');
@@ -7,12 +7,12 @@ define(function (require) {
     var Router = Marionette.AppRouter.extend({
         controller: routeManager,
         appRoutes: {
-                "profile": "profile",
+            "profile": "profile",
             "notifications": "notifications",
-                "*actions": "defaults"
-            }
+            "*actions": "defaults"
+        }
 
-        });
-
-        return Router;
     });
+
+    return Router;
+});

@@ -2,7 +2,7 @@ define(function (require) {
     'use strict';
 
     var Assembl = require('app/app'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         IdeaView = require('app/views/idea');
 
     var OrphanMessagesInIdeaListView = IdeaView.extend({

@@ -2,7 +2,7 @@ define(function (require) {
     'use strict';
 
     var Backbone = require('backbone'),
-        Ctx = require('app/modules/context');
+        Ctx = require('common/context');
 
     var EditableField = Backbone.View.extend({
 

@@ -6,12 +6,12 @@ define(function (require) {
         $ = require('jquery'),
         BackboneSubset = require('BackboneSubset'),
         Assembl = require('app/app'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         Segment = require('app/models/segment'),
         Types = require('app/utils/types'),
         i18n = require('app/utils/i18n'),
         Permissions = require('app/utils/permissions'),
-        CollectionManager = require('app/modules/collectionManager'),
+        CollectionManager = require('common/collectionManager'),
         AssemblPanel = require('app/views/assemblPanel');
 
     var SegmentView = Marionette.ItemView.extend({

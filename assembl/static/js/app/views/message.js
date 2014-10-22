@@ -5,13 +5,14 @@ define(function (require) {
         _ = require('underscore'),
         ckeditor = require('ckeditor'),
         Assembl = require('app/app'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         i18n = require('app/utils/i18n'),
         Permissions = require('app/utils/permissions'),
         MessageSendView = require('app/views/messageSend'),
         User = require('app/models/user'),
-        CollectionManager = require('app/modules/collectionManager'),
-        $ = require('jquery');
+        CollectionManager = require('common/collectionManager'),
+        $ = require('jquery'),
+        dot = require('jquery.dotdotdot');
 
     var MIN_TEXT_TO_TOOLTIP = 5,
         TOOLTIP_TEXT_LENGTH = 10;

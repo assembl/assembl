@@ -3,7 +3,7 @@ define(function (require) {
 
     var Base = require('app/models/base'),
         _ = require('underscore'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         i18n = require('app/utils/i18n'),
         Types = require('app/utils/types'),
         Permissions = require('app/utils/permissions');

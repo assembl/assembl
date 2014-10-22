@@ -3,7 +3,7 @@ define(function (require) {
 
     var Backbone = require('backbone'),
         Assembl = require('app/app'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         i18n = require('app/utils/i18n'),
         EditableField = require('app/views/editableField'),
         CKEditorField = require('app/views/ckeditorField'),
@@ -11,7 +11,7 @@ define(function (require) {
         MessageSendView = require('app/views/messageSend'),
         Notification = require('app/views/notification'),
         SegmentList = require('app/views/segmentList'),
-        CollectionManager = require('app/modules/collectionManager'),
+        CollectionManager = require('common/collectionManager'),
         AssemblPanel = require('app/views/assemblPanel'),
         Marionette = require('marionette'),
         $ = require('jquery'),

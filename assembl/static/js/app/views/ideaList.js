@@ -9,13 +9,13 @@ define(function (require) {
         ideaSiblingChainVisitor = require('app/views/visitors/ideaSiblingChainVisitor'),
         Backbone = require('backbone'),
         Assembl = require('app/app'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         Idea = require('app/models/idea'),
         IdeaView = require('app/views/idea'),
         AssemblPanel = require('app/views/assemblPanel'),
         ideaGraphLoader = require('app/views/ideaGraph'),
         _ = require('underscore'),
-        CollectionManager = require('app/modules/collectionManager'),
+        CollectionManager = require('common/collectionManager'),
         i18n = require('app/utils/i18n');
 
     var FEATURED = 'featured',

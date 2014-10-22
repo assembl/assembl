@@ -2,11 +2,11 @@ define(function (require) {
     'use strict';
 
     var ckeditor = require('ckeditor'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         MessageView = require('app/views/message'),
         Synthesis = require('app/models/synthesis'),
         SynthesisPanel = require('app/views/synthesisPanel'),
-        CollectionManager = require('app/modules/collectionManager');
+        CollectionManager = require('common/collectionManager');
 
     /**
      * @class views.MessageView

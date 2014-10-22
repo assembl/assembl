@@ -1,4 +1,4 @@
-define(['jquery', 'app/models/base', 'app/modules/context'], function ($, Base, Ctx) {
+define(['jquery', 'app/models/base', 'common/context'], function ($, Base, Ctx) {
     'use strict';
 
     var root = 'User/' + Ctx.getCurrentUserId() + '/notification_subscriptions';

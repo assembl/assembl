@@ -2,7 +2,7 @@ define(function (require) {
     'use strict';
 
     var Base = require('app/models/base'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         i18n = require('app/utils/i18n');
 
     /**

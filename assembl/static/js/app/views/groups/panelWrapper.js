@@ -2,7 +2,7 @@ define(function (require) {
 
     var Marionette = require('marionette'),
         panelClassByTypeName = require('app/objects/viewsFactory'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         AssemblPanel = require('app/views/assemblPanel'),
         i18n = require('app/utils/i18n'),
         panelSpec = require('app/models/panelSpec');

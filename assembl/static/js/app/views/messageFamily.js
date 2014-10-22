@@ -5,7 +5,7 @@ define(function (require) {
         _ = require('underscore'),
         ckeditor = require('ckeditor'),
         Assembl = require('app/app'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         Types = require('app/utils/types'),
         MessageView = require('app/views/message'),
         SynthesisMessageView = require('app/views/synthesisMessage'),

@@ -1,4 +1,4 @@
-define(['marionette', 'app/modules/collectionManager'],
+define(['marionette', 'common/collectionManager'],
     function (Marionette, CollectionManager) {
         'use strict';
 

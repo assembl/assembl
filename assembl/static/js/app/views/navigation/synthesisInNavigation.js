@@ -1,9 +1,9 @@
 define(function (require) {
 
     var AssemblPanel = require('app/views/assemblPanel'),
-        CollectionManager = require('app/modules/collectionManager'),
+        CollectionManager = require('common/collectionManager'),
         Types = require('app/utils/types'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         _ = require('underscore'),
         i18n = require('app/utils/i18n');
 

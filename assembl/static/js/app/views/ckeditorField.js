@@ -3,7 +3,7 @@ define(function (require) {
 
     var Backbone = require('backbone'),
         _ = require('underscore'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         ckeditor = require('ckeditor-sharedspace');
 
 

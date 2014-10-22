@@ -1,9 +1,9 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         GroupSpec = require('app/models/groupSpec'),
-        CollectionManager = require('app/modules/collectionManager'),
+        CollectionManager = require('common/collectionManager'),
         viewsFactory = require('app/objects/viewsFactory'),
         $ = require('jquery'),
         _ = require('underscore');

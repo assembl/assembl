@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var Ctx = require('app/modules/context'),
+    var Ctx = require('common/context'),
         i18n = require('app/utils/i18n');
 
     /**
@@ -12,7 +12,7 @@ define(function (require) {
      * be done inside this class, to ease unit testing and code clarity.
      */
     var PostQuery = function () {
-        var CollectionManager = require('app/modules/collectionManager'),
+        var CollectionManager = require('common/collectionManager'),
             collectionManager = new CollectionManager();
         this._returnHtmlDescriptionPostInContextOfIdea = function (filterDef, queryObjects) {
             var retval = '',

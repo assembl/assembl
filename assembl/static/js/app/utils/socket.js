@@ -1,4 +1,4 @@
-define(["app/app", 'app/modules/context', 'underscore', 'sockjs', 'app/modules/collectionManager'],
+define(["app/app", 'common/context', 'underscore', 'sockjs', 'common/collectionManager'],
     function (Assembl, Ctx, _, SockJS, CollectionManager) {
         'use strict';
         /**

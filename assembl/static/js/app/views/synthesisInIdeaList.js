@@ -1,7 +1,7 @@
 define(function (require) {
     'use strict';
 
-    var Ctx = require('app/modules/context'),
+    var Ctx = require('common/context'),
         Assembl = require('app/app'),
         IdeaView = require('app/views/idea');
 

@@ -7,7 +7,7 @@ define(function (require) {
         HomePanel = require('app/views/navigation/home'),
         SynthesisInNavigationPanel = require('app/views/navigation/synthesisInNavigation'),
         AssemblPanel = require('app/views/assemblPanel'),
-        ctx = require('app/modules/context'),
+        ctx = require('common/context'),
         Permissions = require('app/utils/permissions'),
         $ = require('jquery');
 

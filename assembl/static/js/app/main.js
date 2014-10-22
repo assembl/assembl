@@ -1,6 +1,6 @@
 requirejs.config(requirejs_config);
 
-require(["app/app", "app/modules/context", "jquery", "app/router", "app/utils/socket"],
+require(["app/app", "common/context", "jquery", "app/router", "app/utils/socket"],
     function (Assembl, Ctx, $, Router, Socket) {
         'use strict';
 

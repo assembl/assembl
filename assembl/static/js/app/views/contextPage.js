@@ -2,8 +2,8 @@ define(function (require) {
 
     var Marionette = require('marionette'),
         Assembl = require('app/app'),
-        Ctx = require('app/modules/context'),
-        CollectionManager = require('app/modules/collectionManager'),
+        Ctx = require('common/context'),
+        CollectionManager = require('common/collectionManager'),
         $ = require('jquery'),
         _ = require('underscore'),
         d3 = require('d3'),

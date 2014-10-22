@@ -5,7 +5,7 @@ define(function (require) {
         Assembl = require('app/app'),
         _ = require('underscore'),
         $ = require('jquery'),
-        Ctx = require('app/modules/context'),
+        Ctx = require('common/context'),
         Permissions = require('app/utils/permissions'),
         i18n = require('app/utils/i18n');
 

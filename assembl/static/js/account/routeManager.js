@@ -2,7 +2,7 @@ define(function (require) {
 
     var Marionette = require('marionette'),
         App = require('account/app'),
-        Ctx = require('modules/context'),
+        Ctx = require('common/context'),
         profileView = require('account/views/profile'),
         notificationsView = require('account/views/notifications');
 

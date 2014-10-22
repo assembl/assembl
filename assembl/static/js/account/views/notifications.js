@@ -1,4 +1,4 @@
-define(['marionette', 'jquery', 'underscore', 'modules/collectionManager', 'modules/context'],
+define(['marionette', 'jquery', 'underscore', 'common/collectionManager', 'common/context'],
     function (Marionette, $, _, CollectionManager, Ctx) {
         'use strict';
 

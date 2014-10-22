@@ -1,6 +1,6 @@
 'use strict';
 
-define(['marionette', 'jquery', 'app/modules/collectionManager', 'app/modules/context'],
+define(['marionette', 'jquery', 'common/collectionManager', 'common/context'],
     function (Marionette, $, CollectionManager, Ctx) {
 
         var adminDiscussion = Marionette.LayoutView.extend({
