@@ -171,22 +171,24 @@
   }
 }
 
-.loginbox.request_password_change {
-  padding-bottom: 10px;
+.loginbox {
+  &.request_password_change {
+    padding-bottom: 10px;
 
-  input {
-    margin: 8px 0;
-    width: 100%;
-  }
+    input {
+      margin: 8px 0;
+      width: 100%;
+    }
 
-  .error {
-    margin: 20px;
-    color: red;
-    text-align: center;
-  }
+    .error {
+      margin: 20px;
+      color: red;
+      text-align: center;
+    }
 
-  form {
-    width: 250px;
-    margin-top: 20px;
+    form {
+      width: 250px;
+      margin-top: 20px;
+    }
   }
 }

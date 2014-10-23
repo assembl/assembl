@@ -683,7 +683,9 @@ def do_password_change(request):
     headers = remember(request, user_id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     user.last_login = datetime.now()
-    return dict(get_default_context(request))
+    return dict(
+        get_default_context(request),
+        title=localizer.translate(_('Change your password')))
 
 
 @view_config(
