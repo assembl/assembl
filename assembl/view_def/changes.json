@@ -14,11 +14,11 @@
         "preferred_email": false
     },
     "User": {
+        "@extends": "AgentProfile",
         "creation_date": true,
         "last_login": true,
         "login_failures": false,
         "password": false,
-        "preferred_email": false,
         "verified": true
     },
     "UserTemplate": {
@@ -39,24 +39,23 @@
         "creation_date": true
     },
     "PostSource": {
-        "discussion_id": "discussion",
-        "name": true,
-        "creation_date": true,
+        "@extends": "ContentSource",
         "last_import": true
     },
+    "AbstractMailbox": {
+        "@extends": "PostSource"
+    },
     "AnnotatorSource": {
-        "discussion_id": "discussion",
-        "name": true,
-        "creation_date": true
+        "@extends": "ContentSource"
     },
     "Content": {
-        "discussion": true,
         "date": "creation_date",
+        "hidden": true,
+        "discussion": true,
         "import_date": false
     },
     "Post": {
-        "discussion": true,
-        "date": "creation_date",
+        "@extends": "Content",
         "message_id": false,
         "ancestry": false,
         "parentId": "parent",
@@ -65,49 +64,38 @@
         "body": true
     },
     "AssemblPost": {
-        "date": "creation_date",
-        "message_id": false,
-        "discussion": true,
-        "ancestry": false,
-        "parentId": "parent",
-        "idCreator": "creator",
-        "subject": true,
-        "body": true
+        "@extends": "Post"
+    },
+    "PostWithMetadata": {
+        "@extends": "AssemblPost",
+        "metadata_json": false
+    },
+    "IdeaProposalPost": {
+        "@extends": "PostWithMetadata",
+        "proposes_idea": true
     },
     "SynthesisPost": {
-        "date": "creation_date",
-        "message_id": false,
-        "discussion": true,
-        "ancestry": false,
-        "parentId": "parent",
-        "idCreator": "creator",
-        "subject": true,
-        "body": true
+        "@extends": "AssemblPost",
+        "publishes_synthesis": true
     },
     "ImportedPost": {
-        "date": "creation_date",
-        "message_id": false,
-        "discussion": true,
-        "ancestry": false,
-        "parentId": "parent",
-        "idCreator": "creator",
-        "subject": true,
-        "body": true,
-        "import_date": false,
+        "@extends": "Post",
         "source": true
     },
+    "Email": {
+        "@extends": "ImportedPost",
+        "recipients": true,
+        "sender": true,
+        "full_message": false,
+        "in_reply_to": false
+    },
     "Webpage": {
-        "discussion": true,
-        "date": "creation_date",
-        "import_date": false,
+        "@extends": "Content",
         "last_modified_date": true,
         "url": true
     },
     "IMAPMailbox": {
-        "discussion_id": "discussion",
-        "name": true,
-        "creation_date": true,
-        "last_import": true,
+        "@extends": "AbstractMailbox",
         "folder": true,
         "host": true,
         "port": true,
@@ -119,32 +107,11 @@
         "subject_mangling_replacement": false
     },
     "MailingList": {
-        "discussion_id": "discussion",
-        "name": true,
-        "creation_date": true,
-        "last_import": true,
-        "folder": true,
-        "host": true,
-        "port": true,
-        "username": false,
-        "use_ssl": true,
-        "password": false,
-        "last_imported_email_uid": false,
-        "subject_mangling_regex": false,
-        "subject_mangling_replacement": false,
+        "@extends": "IMAPMailbox",
         "post_email_address": true
     },
     "Email": {
-        "date": "creation_date",
-        "message_id": false,
-        "discussion": true,
-        "ancestry": false,
-        "parentId": "parent",
-        "idCreator": "creator",
-        "subject": true,
-        "body": true,
-        "import_date": false,
-        "source": true,
+        "@extends": "ImportedPost",
         "recipients": true,
         "sender": true,
         "full_message": false,
@@ -170,20 +137,23 @@
         "num_read_posts": true
     },
     "RootIdea": {
+        "@extends": "Idea",
         "root": "'true",
-        "longTitle": "long_title",
-        "shortTitle": "short_title",
-        "definition": true,
-        "creationDate": "creation_date",
-        "order": "&get_order_from_first_parent",
-        "discussion": false,
-        "parents": true,
-        "inNextSynthesis": "&is_in_next_synthesis",
-        "numChildIdea": "&get_num_children",
-        "num_posts": true,
-        "num_read_posts": true,
+        "parentId": false,
         "num_orphan_posts": true,
         "num_synthesis_posts": true
+    },
+    "Criterion": {
+        "@extends": "Idea"
+    },
+    "Issue": {
+        "@extends": "Idea"
+    },
+    "Argument": {
+        "@extends": "Idea"
+    },
+    "Proposal": {
+        "@extends": "Idea"
     },
     "IdeaLink": {
         "target": true,
@@ -195,16 +165,13 @@
         "discussion": false
     },
     "ExplicitSubGraphView": {
-        "creation_date": true,
-        "discussion": false
+        "@extends": "IdeaGraphView"
     },
     "TableOfContents": {
-        "creation_date": true,
-        "discussion": false
+        "@extends": "IdeaGraphView"
     },
     "Synthesis": {
-        "creation_date": true,
-        "discussion": false,
+        "@extends": "ExplicitSubGraphView",
         "subject": true,
         "introduction": true,
         "conclusion": true,
@@ -219,28 +186,16 @@
         "creator": true
     },
     "IdeaContentPositiveLink": {
-        "idea": true,
-        "content": true,
-        "creation_date": true,
-        "creator": true
+        "@extends": "IdeaContentLink"
     },
     "IdeaRelatedPostLink": {
-        "idea": true,
-        "content": true,
-        "creation_date": true,
-        "creator": true
+        "@extends": "IdeaContentPositiveLink"
     },
     "IdeaContentNegativeLink": {
-        "idea": true,
-        "content": true,
-        "creation_date": true,
-        "creator": true
+        "@extends": "IdeaContentLink"
     },
     "IdeaThreadContextBreakLink": {
-        "idea": true,
-        "content": true,
-        "creation_date": true,
-        "creator": true
+        "@extends": "IdeaContentNegativeLink"
     },
     "Extract": {
         "idIdea": "idea",

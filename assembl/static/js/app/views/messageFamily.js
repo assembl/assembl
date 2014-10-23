@@ -76,6 +76,8 @@ define(function (require) {
             switch (messageType) {
                 case Types.ASSEMBL_POST:
                 case Types.EMAIL:
+                case Types.POST_WITH_METADATA:
+                case Types.IDEA_PROPOSAL_POST:
                     messageViewClass = MessageView;
                     break;
 

@@ -142,6 +142,7 @@ define(function (require) {
                 case Types.IMPORTED_POST:
                 case Types.EMAIL:
                 case Types.IDEA_PROPOSAL_POST:
+                case Types.POST_WITH_METADATA:
                     return this.getAllMessageStructureCollectionPromise();
 
                 case Types.USER:

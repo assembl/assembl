@@ -693,7 +693,7 @@ define(function (require) {
 
                 default:
                     // This will treat:
-                    // ['Email', 'Post', 'AssemblPost', 'SynthesisPost', 'ImportedPost']
+                    // ['Email', 'Post', 'AssemblPost', 'SynthesisPost', 'ImportedPost', 'PostWithMetadata', 'IdeaProposalPost']
 
                     var selector = this.format('[data-annotation-id="{0}"]', segment.id);
 

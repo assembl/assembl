@@ -166,7 +166,6 @@
         "@extends": "Idea",
         "root": "'true",
         "extracts": [":partial"],
-        "parents": true,
         "parentId": false,
         "num_orphan_posts": true,
         "num_synthesis_posts": true
