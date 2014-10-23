@@ -1581,6 +1581,10 @@ define(function (require) {
             var messageOffset;
             if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
                 (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
+                if (this.visitorViewData[messageId] != null) {
+                    // TODO: Re-thread messages
+                    return -1;
+                }
                 messageOffset = this.visitorViewData[messageId].traversal_order;
             } else {
                 messageOffset = this.DEPRECATEDmessageIdsToDisplay.indexOf(messageId);
