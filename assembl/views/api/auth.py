@@ -73,7 +73,7 @@ user_has_permission = Service(
 
 
 users_with_permission = Service(
-    name='user_has_permission',
+    name='users_with_permission',
     path=API_DISCUSSION_PREFIX + '/permissions/{permission}/u/',
     description="Which users have a specific permission",
     renderer='json'
