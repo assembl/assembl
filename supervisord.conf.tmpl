@@ -80,3 +80,10 @@ directory = %(metrics_code_dir)s
 command=%(metrics_cl)s -l %(metrics_code_dir)s/metrics-startup.lisp
 autostart = %(has_metrics_server)s
 autorestart = %(has_metrics_server)s
+
+[program:metrics_py]
+directory = %(metrics_code_dir)s
+command= %(metrics_code_dir)s/startup.py
+autostart = %(has_metrics_server)s
+autorestart = %(has_metrics_server)s
+
