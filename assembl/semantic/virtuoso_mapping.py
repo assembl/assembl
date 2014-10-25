@@ -181,8 +181,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
 
     def _extract_column_info(self, sqla_cls, subject_pattern):
         rdf_class = sqla_cls.__dict__.get('rdf_class', None)
-        rdf_section = sqla_cls.__dict__.get(
-            'rdf_section', DISCUSSION_DATA_SECTION)
+        rdf_section = getattr(sqla_cls, 'rdf_section', DISCUSSION_DATA_SECTION)
         if rdf_class:
             yield QuadMapPatternS(
                 subject_pattern, RDF.type, rdf_class, self.graph,
@@ -212,8 +211,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         return condition
 
     def qmp_with_defaults(self, qmp, subject_pattern, sqla_cls, column=None):
-        rdf_section = sqla_cls.__dict__.get(
-            'rdf_section', DISCUSSION_DATA_SECTION)
+        rdf_section = getattr(sqla_cls, 'rdf_section', DISCUSSION_DATA_SECTION)
         name = None
         if column is not None:
             name = self.make_column_name(sqla_cls, column)
@@ -326,7 +324,7 @@ class AssemblQuadStorageManager(object):
         for s in (DISCUSSION_DATA_SECTION, ):  # DISCUSSION_HISTORY_SECTION
             self.populate_storage(qs, s, self.discussion_graph_name(id, s),
                                   self.discussion_graph_iri(id, s), id)
-        from ..models import Extract, IdeaContentLink, TextFragmentIdentifier
+        from ..models import Extract, Idea, TextFragmentIdentifier
         # Option 1: explicit graphs.
         # Fails because the extract.id in the condition is not part of
         # the compile, so we do not get explicit conditions.
@@ -366,11 +364,11 @@ class AssemblQuadStorageManager(object):
             TextFragmentIdentifier.iri_class().apply(
                 TextFragmentIdentifier.id),
             CATALYST.expressesIdea,
-            IdeaContentLink.iri_class().apply(Extract.idea_id),
+            Idea.iri_class().apply(Extract.idea_id),
             graph_name=extract_graph_name,
             name=getattr(QUADNAMES, "catalyst_expressesIdea_d%d_iri" % (id,)),
             condition=((TextFragmentIdentifier.extract_id == Extract.id)
-                       & (Extract.idea_id != None)),
+                       & (Extract.idea_id != None) & (Extract.discussion_id == id)),
             section=EXTRACT_SECTION)
         gqm.add_patterns((qmp,))
         defn = qs.full_declaration_clause()

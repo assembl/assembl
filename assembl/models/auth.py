@@ -201,8 +201,8 @@ class EmailAccount(AbstractAgentAccount):
         'abstract_agent_account.id',
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
-    email = Column(String(100), nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, SIOC.email)})
+    email = Column(String(100), nullable=False, index=True)
+        # info={'rdf': QuadMapPatternS(None, SIOC.email)} private
     verified = Column(Boolean(), default=False)
     preferred = Column(Boolean(), default=False)
     active = Column(Boolean(), default=True)

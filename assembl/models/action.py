@@ -57,8 +57,10 @@ class Action(DiscussionBoundBase):
     verb = 'did something to'
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return None
+    def special_quad_patterns(cls, alias_manager):
+        return [QuadMapPatternS(None,
+            RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Action.type),
+            name=QUADNAMES.class_Action_class)]
 
     def __repr__(self):
 
@@ -79,7 +81,7 @@ class ActionOnPost(Action):
     __tablename__ = 'action_on_post'
     id = Column(
         Integer,
-        ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
+        ForeignKey(Action.id, ondelete="CASCADE", onupdate='CASCADE'),
         primary_key=True
     )
 
@@ -104,12 +106,12 @@ class ActionOnPost(Action):
     def special_quad_patterns(cls, alias_manager):
         return [QuadMapPatternS(None,
             RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Action.type),
-            name=QUADNAMES.class_Action_class)]
+            name=QUADNAMES.class_ActionOnPost_class)]
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         from .generic import Content
-        return (cls.post_id == Content.id) & (Content.discussion_id == discussion_id)
+        return (cls.id == Action.id) & (cls.post_id == Content.id) & (Content.discussion_id == discussion_id)
 
 class ViewPost(ActionOnPost):
     """
