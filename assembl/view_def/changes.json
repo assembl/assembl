@@ -110,13 +110,6 @@
         "@extends": "IMAPMailbox",
         "post_email_address": true
     },
-    "Email": {
-        "@extends": "ImportedPost",
-        "recipients": true,
-        "sender": true,
-        "full_message": false,
-        "in_reply_to": false
-    },
     "Discussion": {
         "creation_date": true,
         "slug": true,
