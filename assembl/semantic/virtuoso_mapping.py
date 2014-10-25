@@ -318,7 +318,7 @@ class AssemblQuadStorageManager(object):
         return self.create_storage(session, self.main_quad_storage, [
             (MAIN_SECTION, self.main_graph, self.main_graph_iri, None)])
 
-    def create_discussion_storage(self, session, discussion):
+    def create_discussion_storage(self, session, discussion, execute=True):
         id = discussion.id
         qs = self.prepare_storage(self.discussion_storage_name(id))
         for s in (DISCUSSION_DATA_SECTION, ):  # DISCUSSION_HISTORY_SECTION
@@ -374,7 +374,9 @@ class AssemblQuadStorageManager(object):
         defn = qs.full_declaration_clause()
         # After all these efforts, sparql seems to reject binding arguments!
         print defn.compile(session.bind)
-        result = list(session.execute(defn))
+        result = None
+        if execute:
+            result = list(session.execute(defn))
         # defn2 = qs.alter_clause_add_graph(gqm)
         # result.extend(session.execute(str(defn2.compile(session.bind))))
         return qs, defn, result
@@ -434,6 +436,10 @@ def db_dump(session, discussion_id):
             l = l.rstrip('.')
             l += ' ' + g.n3(nsm)
             quads += l + ' .\n'
+    return quads
+
+
+def quads_to_jsonld(quads):
     from pyld import jsonld
     context = json.load(open(join(dirname(__file__), 'ontology',
                                   'context.jsonld')))
