@@ -151,7 +151,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         self.section = section
         self.discussion_id = discussion_id
 
-    def extract_subject_pattern(self, cls):
+    def get_subject_pattern(self, cls):
         iri_qmp = None
         try:
             iri_qmp = cls.iri_class()
@@ -160,7 +160,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         if iri_qmp:
             return iri_qmp.apply(cls.id)
         return super(AssemblClassPatternExtractor, self
-                     ).extract_subject_pattern(cls)
+                     ).get_subject_pattern(cls)
 
     def class_pattern_name(self, cls):
         clsname = cls.external_typename()
