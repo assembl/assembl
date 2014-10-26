@@ -235,6 +235,15 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
             gen = ifilter(lambda q: q.section == self.section, gen)
         return list(gen)
 
+    def extract_info(self, sqla_cls, subject_pattern=None):
+        from ..models import DiscussionBoundBase
+        if (self.discussion_id and issubclass(sqla_cls, DiscussionBoundBase)
+                and getattr(sqla_cls.get_discussion_condition,
+                            '__isabstractmethod__', None)):
+            return ()
+        return super(AssemblClassPatternExtractor, self).extract_info(
+            sqla_cls, subject_pattern)
+
 
 # QUESTION: 1 storage per discussion? I would say yes.
 class AssemblQuadStorageManager(object):
