@@ -9,7 +9,7 @@ Jinja2==2.7.3
 Mako==1.0.0
 MarkupSafe==0.23
 PasteDeploy==1.5.2
-PyJWT==0.2.3
+PyJWT==0.3.0
 PyLD==0.6.1
 PyStemmer==1.3.0
 Pygments==1.6
@@ -66,11 +66,11 @@ pyramid-jinja2==2.3.3
 pyramid-mailer==0.13
 pyramid-mako==1.0.2
 pyramid-tm==0.7
-pytest==2.6.3
+pytest==2.6.4
 pytest-cov==1.8.0
 pytest-localserver==0.3.3
 pytest-mock==0.4.0
-pytest-splinter==1.1.1
+pytest-splinter==1.2.4
 python-memcached==1.53
 python-openid==2.2.5
 pytz==2014.7
@@ -82,8 +82,8 @@ repoze.lru==0.6
 repoze.sendmail==4.2
 requests==2.4.3
 requests-oauthlib==0.4.2
-selenium==2.43.0
-simplejson==3.6.4
+selenium==2.44.0
+simplejson==3.6.5
 six==1.8.0
 -e git+https://github.com/mrjoes/sockjs-tornado.git@master#egg=sockjs_tornado
 sockjsproxy==0.7.1
