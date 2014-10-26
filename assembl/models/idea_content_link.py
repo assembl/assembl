@@ -31,7 +31,7 @@ from ..auth import (
     P_EDIT_EXTRACT, P_ADD_IDEA, P_ADD_EXTRACT,
     P_EDIT_MY_EXTRACT)
 from ..semantic.namespaces import (
-    CATALYST, ASSEMBL, DCTERMS, OA, QUADNAMES)
+    CATALYST, ASSEMBL, DCTERMS, OA, QUADNAMES, RDF)
 
 
 class IdeaContentLink(DiscussionBoundBase):
@@ -184,6 +184,12 @@ class Extract(IdeaContentPositiveLink):
     """
     __tablename__ = 'extract'
     rdf_class = CATALYST.Excerpt
+    # Extract ID represents both the oa:Annotation and the oa:SpecificResource
+    # TODO: This iri is not yet dereferencable.
+    specific_resource_iri = PatternIriClass(
+        QUADNAMES.oa_specific_resource_iri,
+        'http://%{WSHostName}U/data/SpecificResource/%d', None,
+        ('id', Integer, False))
 
     id = Column(Integer, ForeignKey(
             'idea_content_positive_link.id',
@@ -197,7 +203,12 @@ class Extract(IdeaContentPositiveLink):
         None,
         ('id', Integer, False))
 
+    # TODO: body was misused to contain the extract fragment content,
+    # which should belong in the TextFragmentIdentifier,
+    # whereas it was meant to be a comment on the extract
+    # if used from the Web annotator. I'll have to migrate it.
     body = Column(UnicodeText, nullable=False)
+    # info= {'rdf': QuadMapPatternS(None, OA.hasBody)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
@@ -229,7 +240,24 @@ class Extract(IdeaContentPositiveLink):
                 ASSEMBL.postExtractRelatedToIdea,
                 Idea.iri_class().apply(cls.idea_id),
                 name=QUADNAMES.assembl_postExtractRelatedToIdea,
-                condition=cls.idea_id != None)
+                condition=cls.idea_id != None),
+            QuadMapPatternS(
+                None, OA.hasTarget, cls.specific_resource_iri.apply(cls.id),
+                name=QUADNAMES.oa_hasTarget),
+            QuadMapPatternS(
+                cls.specific_resource_iri.apply(cls.id), RDF.type, OA.SpecificResource,
+                name=QUADNAMES.oa_SpecificResource_type),
+            QuadMapPatternS(
+                cls.specific_resource_iri.apply(cls.id), OA.hasSource,
+                Content.iri_class().apply(cls.content_id),
+                name=QUADNAMES.oa_hasSource),
+            # TODO: Paths
+            # QuadMapPatternS(
+            #     AgentProfile.iri_class().apply((cls.content_id, Post.creator_id)),
+            #     DCTERMS.contributor,
+            #     Idea.iri_class().apply(cls.idea_id),
+            #     name=QUADNAMES.assembl_idea_contributor,
+            #     condition=cls.idea_id != None),
             ]
 
 
@@ -391,7 +419,7 @@ class IdeaThreadContextBreakLink(IdeaContentNegativeLink):
 
 class TextFragmentIdentifier(DiscussionBoundBase):
     __tablename__ = 'text_fragment_identifier'
-    rdf_class = CATALYST.ExcerptTarget
+    rdf_class = OA.FragmentSelector
 
     id = Column(Integer, primary_key=True,
                 info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
@@ -409,14 +437,15 @@ class TextFragmentIdentifier(DiscussionBoundBase):
         return [
             QuadMapPatternS(
                 Extract.iri_class().apply(cls.extract_id),
-                OA.hasTarget,
+                OA.hasSelector,
                 cls.iri_class().apply(cls.id),
-                name=QUADNAMES.oa_hasTarget,
+                name=QUADNAMES.oa_hasSelector,
                 condition=cls.extract_id != None),
-            # TODO: Paths!
-            # QuadMapPatternS(OA.hasSource,
-            #     Extract.iri_class().apply((cls.extract_id, Extract.content_id)),
-            #     name=QUADNAMES.catalyst_expressesIdea),
+            QuadMapPatternS(
+                None, DCTERMS.conformsTo,
+                URIRef("http://tools.ietf.org/rfc/rfc3023")),  # XPointer
+            # TODO: add rdf:value for the XPointer. May have to construct within Virtuoso.
+            # Optional: Add a OA.exact with the Extract.body. (WHY is the body in the extract?)
             ]
 
     xpath_re = re.compile(
