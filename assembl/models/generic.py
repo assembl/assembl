@@ -43,7 +43,7 @@ class ContentSource(DiscussionBoundBase):
     ))
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [
             QuadMapPatternS(
                 Discussion.iri_class().apply(cls.discussion_id),

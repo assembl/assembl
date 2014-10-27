@@ -57,7 +57,7 @@ class Action(DiscussionBoundBase):
     verb = 'did something to'
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [QuadMapPatternS(None,
             RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Action.type),
             name=QUADNAMES.class_Action_class)]
@@ -103,7 +103,7 @@ class ActionOnPost(Action):
         return self.post.get_discussion_id()
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [QuadMapPatternS(None,
             RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Action.type),
             name=QUADNAMES.class_ActionOnPost_class)]

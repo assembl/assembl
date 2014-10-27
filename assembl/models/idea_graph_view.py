@@ -97,7 +97,7 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
             (IdeaGraphView.discussion_id == discussion_id)
 
     # @classmethod
-    # def special_quad_patterns(cls, alias_manager):
+    # def special_quad_patterns(cls, alias_manager, discussion_id):
     #     return [QuadMapPatternS(
     #         Idea.iri_class().apply(cls.source_id),
     #         IDEA.includes,

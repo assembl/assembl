@@ -139,7 +139,7 @@ class IdeaContentPositiveLink(IdeaContentLink):
     ), primary_key=True)
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [QuadMapPatternS(
             Content.iri_class().apply(cls.content_id),
             ASSEMBL.postLinkedToIdea,
@@ -165,7 +165,7 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
     ), primary_key=True)
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [QuadMapPatternS(
             Content.iri_class().apply(cls.content_id),
             ASSEMBL.postRelatedToIdea,
@@ -228,7 +228,7 @@ class Extract(IdeaContentPositiveLink):
         return getattr(QUADNAMES, 'extract_%d_iri' % self.id)
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [
             QuadMapPatternS(
                 None, OA.hasBody,
@@ -433,7 +433,7 @@ class TextFragmentIdentifier(DiscussionBoundBase):
         'text_fragment_identifiers', cascade="all, delete-orphan"))
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [
             QuadMapPatternS(
                 Extract.specific_resource_iri.apply(cls.extract_id),

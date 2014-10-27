@@ -127,7 +127,7 @@ class Idea(DiscussionBoundBase, Tombstonable):
     }
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [QuadMapPatternS(
             None, RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Idea.sqla_type),
             name=QUADNAMES.class_Idea_class)]
@@ -826,8 +826,7 @@ class IdeaLink(DiscussionBoundBase, Tombstonable):
         info={'rdf': QuadMapPatternS(None, IDEA.target_idea)})
     target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, IDEA.source_idea)})
+        nullable=False, index=True)
     source = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
@@ -853,12 +852,20 @@ class IdeaLink(DiscussionBoundBase, Tombstonable):
     }
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
-        return [QuadMapPatternS(
-            Idea.iri_class().apply(cls.source_id),
-            IDEA.includes,
-            Idea.iri_class().apply(cls.target_id),
-            name=QUADNAMES.idea_inclusion_reln)]
+    def special_quad_patterns(cls, alias_manager, discussion_id):
+        return [
+            QuadMapPatternS(
+                Idea.iri_class().apply(cls.source_id),
+                IDEA.includes,
+                Idea.iri_class().apply(cls.target_id),
+                name=QUADNAMES.idea_inclusion_reln),
+            QuadMapPatternS(
+                None, IDEA.source_idea,
+                Idea.iri_class().apply(cls.target_id),
+                condition=((cls.target_id == Idea.id)
+                & (Idea.discussion_id == discussion_id)),
+                exclude_base_condition=True)
+        ]
 
     def copy(self):
         retval = self.__class__(source_id=self.source_id,

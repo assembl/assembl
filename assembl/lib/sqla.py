@@ -274,7 +274,7 @@ class BaseOps(object):
         return None
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         # Note: If defined somewhere, override in subclasses to avoid inheritance.
         return []
 

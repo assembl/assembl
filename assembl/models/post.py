@@ -63,7 +63,7 @@ class Post(Content):
     )
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         # Don't we need a recursive alias for this? It seems not.
         return [
             QuadMapPatternS(

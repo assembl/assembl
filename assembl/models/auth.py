@@ -510,7 +510,7 @@ class Username(Base):
         return str(self.user_id)
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [QuadMapPatternS(User.iri_class().apply(Username.user_id),
             SIOC.name, Username.username,
             name=QUADNAMES.class_User_username, section=USER_SECTION)]
@@ -549,7 +549,7 @@ class UserRole(Base):
     role = relationship(Role, lazy="joined")
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [
         QuadMapPatternS(User.iri_class().apply(UserRole.user_id),
             SIOC.has_function, Role.iri_class().apply(UserRole.role_id),
@@ -586,7 +586,7 @@ class LocalUserRole(DiscussionBoundBase):
         return cls.id == discussion_id
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager):
+    def special_quad_patterns(cls, alias_manager, discussion_id):
         return [QuadMapPatternS(User.iri_class().apply(LocalUserRole.user_id),
             SIOC.has_function, Role.iri_class().apply(LocalUserRole.role_id),
             name=QUADNAMES.class_LocalUserRole)]

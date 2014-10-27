@@ -125,16 +125,21 @@ def load_ontologies(session, reload=None):
 class QuadMapPatternS(QuadMapPattern):
     def __init__(
             self, subject=None, predicate=None, obj=None, graph_name=None,
-            name=None, condition=None, nsm=None, section=None):
+            name=None, condition=None, nsm=None, section=None,
+            exclude_base_condition=False):
         super(QuadMapPatternS, self).__init__(
             subject, predicate, obj, graph_name, name, condition, nsm)
         self.section = section
+        self.exclude_base_condition = exclude_base_condition
 
     def clone_with_defaults(self, subject=None, obj=None, graph_name=None,
-                            name=None, condition=None, section=None):
+                            name=None, condition=None, section=None,
+                            exclude_base_condition=False):
         qmp = super(QuadMapPatternS, self).clone_with_defaults(
             subject, obj, graph_name, name, condition)
         qmp.section = self.section or section
+        qmp.exclude_base_condition = (
+            self.exclude_base_condition or exclude_base_condition)
         return qmp
 
 
@@ -192,7 +197,8 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
             yield p
         if 'special_quad_patterns' in sqla_cls.__dict__:
             # Only direct definition
-            for qmp in sqla_cls.special_quad_patterns(self.alias_manager):
+            for qmp in sqla_cls.special_quad_patterns(
+                    self.alias_manager, self.discussion_id):
                 qmp = self.qmp_with_defaults(qmp, subject_pattern, sqla_cls)
                 if qmp.graph_name == self.graph.name:
                     qmp.resolve(sqla_cls)
@@ -219,9 +225,10 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
                 column = self.column_as_reference(column)
         qmp = qmp.clone_with_defaults(
             subject_pattern, column, self.graph.name, name, None, rdf_section)
-        condition = self.get_base_condition(sqla_cls)
-        if condition is not None:
-            qmp.and_condition(condition)
+        if not qmp.exclude_base_condition:
+            condition = self.get_base_condition(sqla_cls)
+            if condition is not None:
+                qmp.and_condition(condition)
         d_id = self.discussion_id
         if (d_id and qmp.name is not None
                 and "_d%d_" % (d_id,) not in qmp.name):
