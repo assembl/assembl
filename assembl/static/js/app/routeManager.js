@@ -11,7 +11,9 @@ define(function (require) {
         viewsFactory = require('app/objects/viewsFactory'),
         adminDiscussion = require('app/views/admin/adminDiscussion'),
         adminNotifications = require('app/views/admin/adminNotifications'),
-        adminPartners = require('app/views/admin/adminPartners');
+        adminPartners = require('app/views/admin/adminPartners'),
+        userNotifications = require('app/views/user/notifications'),
+        userProfile = require('app/views/user/profile');
 
     var routeManager = Marionette.Controller.extend({
 
@@ -52,52 +54,15 @@ define(function (require) {
             Assembl.groupContainer.show(notifications);
         },
 
+        userNotifications: function () {
+            var user = new userNotifications();
+            Assembl.groupContainer.show(user);
+        },
 
-        /*profile: function () {
-         this.selectMenu('profile');
-
-         //Assembl.headerRegions.show(new navBar());
-         var profile = new profileView();
-
-         var content = new contentLayout();
-
-         Assembl.contentContainer.show(content);
-
-         content.region1.show(profile);
-
-         },*/
-
-        /*idea: function (id) {
-
-         collectionManager.getAllIdeasCollectionPromise().done(
-         function (allIdeasCollection) {
-         var idea = allIdeasCollection.get(id);
-         if (idea) {
-         Ctx.setCurrentIdea(idea);
-         }
-         });
-         },
-
-         ideaSlug: function (slug, id) {
-         return this.idea(slug + '/' + id);
-         },
-
-         message: function (id) {
-         //TODO: add new behavior to show messageList Panel
-         Assembl.vent.trigger('messageList:showMessageById', id);
-         },
-
-         messageSlug: function (slug, id) {
-         return this.message(slug + '/' + id);
-         },*/
-
-        /*notifications: function () {
-         this.selectMenu('notifications');
-         //Assembl.headerRegions.show(new navBar());
-
-         var notifications = new notificationsView();
-         Assembl.groupContainer.show(notifications);
-         },*/
+        profile: function () {
+            var profile = new userProfile();
+            Assembl.groupContainer.show(profile);
+        },
 
         loadCurrentUser: function () {
             if (Ctx.getCurrentUserId()) {

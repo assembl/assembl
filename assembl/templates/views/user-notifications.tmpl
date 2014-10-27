@@ -1,24 +1,41 @@
-<h2 class="h2">User Notifications</h2>
-<% if(UserNotifications.length) { %>
-<form class="core-form form-horizontal">
-  <fieldset>
-    <% _.each(UserNotifications, function(notification, index, list){ %>
+<aside class="profile-sidebar gu gu-1of5">
+    <h1 class="logo tac pas h1"></h1>
+    <nav class="sidebar-nav">
+        <ul class="man pan adminMenu">
+          <li>
+            <a href="#account/profile" class="btn btn-default btn-sm menu">{{ gettext('edit profile') }}</a>
+          </li>
+          <li class="active">
+            <a href="#account/notifications" class="btn btn-default btn-sm menu">{{ gettext('edit notification') }}</a>
+          </li>
+        </ul>
 
-      <div class="control-group mts">
-        <label for="<%= notification.get('@id') %>" class="control-label"></label>
-        <div class="controls">
-          <label class="checkbox">
-            <input type="checkbox" class="js_userNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= notification.get('@id') %>">
-            <%= notification.get('@type') %>
-          </label>
+        <a href="/{{ discussion.slug }}/" class="btn btn-cancel btn-sm mtxl">{{ gettext('back to discussion') }}</a>
+    </nav>
+</aside>
+<div id="content-container">
+  <h2 class="h2">User Notifications</h2>
+  <% if(UserNotifications.length) { %>
+  <form class="core-form form-horizontal">
+    <fieldset>
+      <% _.each(UserNotifications, function(notification, index, list){ %>
+
+        <div class="control-group mts">
+          <label for="<%= notification.get('@id') %>" class="control-label"></label>
+          <div class="controls">
+            <label class="checkbox">
+              <input type="checkbox" class="js_userNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= notification.get('@id') %>">
+              <%= notification.get('@type') %>
+            </label>
+          </div>
         </div>
-      </div>
 
-    <% }) %>
-  </fieldset>
-</form>
-<% } else { %>
+      <% }) %>
+    </fieldset>
+  </form>
+  <% } else { %>
 
-<h4 class="h4">{{ gettext('no notifications') }}</h4>
+  <h4 class="h4">{{ gettext('no notifications') }}</h4>
 
-<% } %>
+  <% } %>
+</div>

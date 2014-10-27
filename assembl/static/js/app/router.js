@@ -11,15 +11,8 @@ define(function (require) {
             "edition": "edition",
             "partners": "partners",
             "notifications": "notifications",
-
-            //"idea/:id": "idea",
-            //"idea/:discussion/:id": "ideaSlug",
-            //"message/:id": "message",
-            //"message/:discussion/:id": "messageSlug",
-            //"account": "profile",
-            //"account/notifications": "notifications",
-            //"admin/discussion/edit/:id":"editDiscussion",
-            //"user/:type/:user":"editProfile"
+            "account/notifications": "userNotifications",
+            "account/profile": "profile",
             "*actions": "defaults"
         }
 

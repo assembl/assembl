@@ -1,54 +1,70 @@
-<h2 class="h2">Profile</h2>
+<aside class="profile-sidebar gu gu-1of5">
+    <h1 class="logo tac pas h1"></h1>
+    <nav class="sidebar-nav">
+        <ul class="man pan adminMenu">
+          <li class="active">
+            <a href="#account/profile" class="btn btn-default btn-sm menu">{{ gettext('edit profile') }}</a>
+          </li>
+          <li>
+            <a href="#account/notifications" class="btn btn-default btn-sm menu">{{ gettext('edit notification') }}</a>
+          </li>
+        </ul>
 
-<div class="form-profile">
-    <form class="core-form form-horizontal" method="POST">
-      <fieldset>
-        <div class="control-group">
-          <label for="username" class="control-label">{{ gettext('Username') }}</label>
-          <div class="controls">
-              <input class="input-xlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" />
+        <a href="/{{ discussion.slug }}/" class="btn btn-cancel btn-sm mtxl">{{ gettext('back to discussion') }}</a>
+    </nav>
+</aside>
+<div id="content-container">
+  <h2 class="h2">Profile</h2>
+  <div class="form-profile">
+      <form class="core-form form-horizontal" method="POST">
+        <fieldset>
+          <div class="control-group">
+            <label for="username" class="control-label">{{ gettext('Username') }}</label>
+            <div class="controls">
+                <input class="input-xlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" />
+            </div>
           </div>
-        </div>
 
-        <div class="control-group">
-          <label for="name" class="control-label">{{ gettext('Name') }}</label>
-          <div class="controls">
-              <input class="input-xlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" />
+          <div class="control-group">
+            <label for="name" class="control-label">{{ gettext('Name') }}</label>
+            <div class="controls">
+                <input class="input-xlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" />
+            </div>
           </div>
-        </div>
 
-        <div class="control-group">
-          <label for="password1" class="control-label">{{ gettext('Change password') }}</label>
-          <div class="controls">
-            <input class="input-xlarge" type="password" name="password1" placeholder="{{ gettext('New Password') }}" />
+          <div class="control-group">
+            <label for="password1" class="control-label">{{ gettext('Change password') }}</label>
+            <div class="controls">
+              <input class="input-xlarge" type="password" name="password1" placeholder="{{ gettext('New Password') }}" />
+            </div>
           </div>
-        </div>
 
-        <div class="control-group">
-          <label for="password2" class="control-label">{{ gettext('Repeat password') }}</label>
-          <div class="controls">
-            <input class="input-xlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
+          <div class="control-group">
+            <label for="password2" class="control-label">{{ gettext('Repeat password') }}</label>
+            <div class="controls">
+              <input class="input-xlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
+            </div>
           </div>
-        </div>
 
-        <div class="control-group">
-          <label for="#" class="control-label">{{ gettext('Emails') }}</label>
-          <div class="controls">
-            <input class="input-xlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
+          <div class="control-group">
+            <label for="#" class="control-label">{{ gettext('Emails') }}</label>
+            <div class="controls">
+              <input class="input-xlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
 
+            </div>
           </div>
-        </div>
 
-        <div class="control-group">
-          <label for="add_email" class="control-label">{{ gettext('Add an email account') }}</label>
-          <div class="controls">
-             <input class="input-xlarge" type="email" name="add_email" placeholder="{{ gettext('Email') }}" />
+          <div class="control-group">
+            <label for="add_email" class="control-label">{{ gettext('Add an email account') }}</label>
+            <div class="controls">
+               <input class="input-xlarge" type="email" name="add_email" placeholder="{{ gettext('Email') }}" />
+            </div>
           </div>
-        </div>
 
-        <div class="form-actions ptm">
-          <button class="btn btn-secondary" type="submit">{{ gettext('Save') }}</button>
-        </div>
-      </fieldset>
-    </form>
+          <div class="form-actions ptm">
+            <button class="btn btn-secondary" type="submit">{{ gettext('Save') }}</button>
+          </div>
+        </fieldset>
+      </form>
+  </div>
 </div>

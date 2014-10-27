@@ -81,35 +81,13 @@ def partners_view(request):
 def slug_notifications_view(request):
     return home_view(request)
 
-@view_config(route_name='account', request_method='GET', http_cache=60)
-def account_view(request):
-    user_id = authenticated_userid(request) or Everyone
-    context = get_default_context(request)
-    canRead = user_has_permission(context["discussion"].id, user_id, P_READ)
-    if not canRead and user_id == Everyone:
-        #User isn't logged-in and discussion isn't public, redirect to login page
-        login_url = request.route_url('login',_query={'next_view':request.current_route_path()})
-        return HTTPSeeOther(login_url)
-    elif not canRead:
-        #User is logged-in but doesn't have access to the discussion
-        return HTTPUnauthorized()
-
-    canAddExtract = user_has_permission(context["discussion"].id, user_id, P_ADD_EXTRACT)
-    context['canAddExtract'] = canAddExtract
-    context['canDisplayTabs'] = True
-    response = render_to_response('../../templates/account.jinja2', context, request=request)
-    # Prevent caching the home, especially for proper login/logout
-    response.cache_control.max_age = 0
-    response.cache_control.prevent_auto = True
-    return response
-
 @view_config(route_name='profile', request_method='GET', http_cache=60)
 def profile_view(request):
-    return account_view(request)
+    return home_view(request)
 
-@view_config(route_name='notifications', request_method='GET', http_cache=60)
+@view_config(route_name='user_notifications', request_method='GET', http_cache=60)
 def notifications_view(request):
-    return account_view(request)
+    return home_view(request)
 
 @view_config(renderer='json', route_name='nodetest', request_method='GET', http_cache=60)
 def dummy_node_data(request):
