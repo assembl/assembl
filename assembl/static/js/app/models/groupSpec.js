@@ -1,8 +1,5 @@
-define(function (require) {
+define(['app/models/base', 'app/models/panelSpec'], function (Base, panelSpec) {
     'use strict';
-
-    var Base = require('app/models/base'),
-        panelSpec = require('app/models/panelSpec');
 
     var GroupSpecModel = Base.Model.extend({
         parse: function (model) {

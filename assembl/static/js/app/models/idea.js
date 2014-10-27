@@ -1,17 +1,6 @@
-define(function (require) {
-    'use strict';
-
-    var Base = require('app/models/base'),
-        _ = require('underscore'),
-        Ctx = require('common/context'),
-        i18n = require('app/utils/i18n'),
-        Types = require('app/utils/types'),
-        Permissions = require('app/utils/permissions');
-
-    /**
-     * @class IdeaModel
-     */
-    var IdeaModel = Base.Model.extend({
+define(['underscore', 'app/models/base', 'common/context', 'app/utils/i18n', 'app/utils/types', 'app/utils/permissions'],
+    function (_, Base, Ctx, i18n, Types, Permissions) {
+        'use strict';
 
         /**
          * @init

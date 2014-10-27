@@ -1,63 +1,60 @@
-define(function (require) {
-    'use strict';
-
-    var Base = require('app/models/base'),
-        Ctx = require('common/context'),
-        i18n = require('app/utils/i18n');
-
-    /**
-     * @class SynthesisModel
-     */
-    var SynthesisModel = Base.Model.extend({
+define(['app/models/base', 'common/context', 'app/utils/i18n'],
+    function (Base, Ctx, i18n) {
+        'use strict';
 
         /**
-         * @init
+         * @class SynthesisModel
          */
-        initialize: function () {
-            //What was this?  Benoitg - 2014-05-13
-            //this.on('change', this.onAttrChange, this);
-        },
+        var SynthesisModel = Base.Model.extend({
 
+            /**
+             * @init
+             */
+            initialize: function () {
+                //What was this?  Benoitg - 2014-05-13
+                //this.on('change', this.onAttrChange, this);
+            },
+
+            /**
+             * The urlRoot endpoint
+             * @type {String}
+             */
+            urlRoot: Ctx.getApiUrl('explicit_subgraphs/synthesis'),
+
+            /**
+             * Default values
+             * @type {Object}
+             */
+            defaults: {
+                subject: i18n.gettext('Add a title'),
+                introduction: i18n.gettext('Add an introduction'),
+                conclusion: i18n.gettext('Add a conclusion'),
+                ideas: [],
+                published_in_post: null
+            }
+
+
+        });
         /**
-         * The urlRoot endpoint
-         * @type {String}
+         * @class IdeaColleciton
          */
-        urlRoot: Ctx.getApiUrl('explicit_subgraphs/synthesis'),
+        var SynthesisCollection = Base.Collection.extend({
+            /**
+             * Url
+             * @type {String}
+             */
+            url: Ctx.getApiUrl("explicit_subgraphs/synthesis"),
 
-        /**
-         * Default values
-         * @type {Object}
-         */
-        defaults: {
-            subject: i18n.gettext('Add a title'),
-            introduction: i18n.gettext('Add an introduction'),
-            conclusion: i18n.gettext('Add a conclusion'),
-            ideas: [],
-            published_in_post: null
-        }
+            /**
+             * The model
+             * @type {SynthesisModel}
+             */
+            model: SynthesisModel
+        });
 
+        return {
+            Model: SynthesisModel,
+            Collection: SynthesisCollection
+        };
 
     });
-    /**
-     * @class IdeaColleciton
-     */
-    var SynthesisCollection = Base.Collection.extend({
-        /**
-         * Url
-         * @type {String}
-         */
-        url: Ctx.getApiUrl("explicit_subgraphs/synthesis"),
-
-        /**
-         * The model
-         * @type {SynthesisModel}
-         */
-        model: SynthesisModel
-    });
-
-    return {
-        Model: SynthesisModel,
-        Collection: SynthesisCollection
-    };
-
-});

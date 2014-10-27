@@ -1,7 +1,5 @@
-define(function (require) {
+define(['app/models/base'], function (Base) {
     'use strict';
-
-    var Base = require('app/models/base');
 
     var PanelSpecModel = Base.Model.extend({
         defaults: {

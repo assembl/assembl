@@ -1,55 +1,51 @@
-define(function (require) {
-    'use strict';
-
-    var Base = require('app/models/base'),
-        Ctx = require('common/context'),
-        $ = require('jquery'),
-        i18n = require('app/utils/i18n');
-
-    /**
-     * @class PartnerOrganizationModel
-     */
-    var PartnerOrganizationModel = Base.Model.extend({
+define(['jquery', 'app/models/base', 'app/utils/i18n', 'common/context'],
+    function ($, Base, i18n, Ctx) {
+        'use strict';
 
         /**
-         * @type {String}
+         * @class PartnerOrganizationModel
          */
-        url: Ctx.getApiV2DiscussionUrl('partner_organizations/?view=default'),
+        var PartnerOrganizationModel = Base.Model.extend({
+
+            /**
+             * @type {String}
+             */
+            url: Ctx.getApiV2DiscussionUrl('partner_organizations/?view=default'),
+
+            /**
+             * Defaults
+             * @type {Object}
+             */
+            defaults: {
+                id: null,
+                name: '',
+                description: '',
+                homepage: '',
+                logo: '',
+                is_initiator: false
+            }
+        });
+
 
         /**
-         * Defaults
-         * @type {Object}
+         * @class PartnerOrganizationCollection
          */
-        defaults: {
-            id: null,
-            name: '',
-            description: '',
-            homepage: '',
-            logo: '',
-            is_initiator: false
-        }
+        var PartnerOrganizationCollection = Base.Collection.extend({
+            /**
+             * @type {String}
+             */
+            url: Ctx.getApiV2DiscussionUrl('partner_organizations/?view=default'),
+
+            /**
+             * The model
+             * @type {PartnerOrganizationModel}
+             */
+            model: PartnerOrganizationModel
+        });
+
+        return {
+            Model: PartnerOrganizationModel,
+            Collection: PartnerOrganizationCollection
+        };
+
     });
-
-
-    /**
-     * @class PartnerOrganizationCollection
-     */
-    var PartnerOrganizationCollection = Base.Collection.extend({
-        /**
-         * @type {String}
-         */
-        url: Ctx.getApiV2DiscussionUrl('partner_organizations/?view=default'),
-
-        /**
-         * The model
-         * @type {PartnerOrganizationModel}
-         */
-        model: PartnerOrganizationModel
-    });
-
-    return {
-        Model: PartnerOrganizationModel,
-        Collection: PartnerOrganizationCollection
-    };
-
-});
