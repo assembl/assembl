@@ -20,7 +20,7 @@
             <div class="ideaPanel-definition js_edit-definition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
               <%= idea.get('definition') %>
             </div>
-            <% }else{ %>
+            <% } else if (canEdit) { %>
             <div class="add-description js_edit-definition">
                 <i class="icon-add"></i> {{ gettext('Add a description') }}
             </div>
