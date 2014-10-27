@@ -81,8 +81,9 @@ class Post(Content):
     subject = Column(Unicode(), nullable=True,
         info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
     # TODO: check HTML or text? SIOC.content should be text.
-    body = Column(UnicodeText, nullable=False,
-        info= {'rdf': QuadMapPatternS(None, SIOC.content)})
+    # Do not give it for now, privacy reasons
+    body = Column(UnicodeText, nullable=False)
+    #    info= {'rdf': QuadMapPatternS(None, SIOC.content)})
 
     __mapper_args__ = {
         'polymorphic_identity': 'post',

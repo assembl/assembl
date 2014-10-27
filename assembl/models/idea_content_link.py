@@ -436,7 +436,7 @@ class TextFragmentIdentifier(DiscussionBoundBase):
     def special_quad_patterns(cls, alias_manager):
         return [
             QuadMapPatternS(
-                Extract.iri_class().apply(cls.extract_id),
+                Extract.specific_resource_iri.apply(cls.extract_id),
                 OA.hasSelector,
                 cls.iri_class().apply(cls.id),
                 name=QUADNAMES.oa_hasSelector,

@@ -370,14 +370,12 @@ class AssemblQuadStorageManager(object):
             getattr(QUADNAMES, "catalyst_ExtractGraph_d%d_iri" % (id,)),
             'exclusive')
         qmp = QuadMapPatternS(
-            TextFragmentIdentifier.iri_class().apply(
-                TextFragmentIdentifier.id),
+            Extract.specific_resource_iri.apply(Extract.id),
             CATALYST.expressesIdea,
             Idea.iri_class().apply(Extract.idea_id),
             graph_name=extract_graph_name,
             name=getattr(QUADNAMES, "catalyst_expressesIdea_d%d_iri" % (id,)),
-            condition=((TextFragmentIdentifier.extract_id == Extract.id)
-                       & (Extract.idea_id != None) & (Extract.discussion_id == id)),
+            condition=((Extract.idea_id != None) & (Extract.discussion_id == id)),
             section=EXTRACT_SECTION)
         gqm.add_patterns((qmp,))
         defn = qs.full_declaration_clause()
