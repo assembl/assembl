@@ -269,6 +269,29 @@ class Discussion(DiscussionBoundBase):
     def get_participant_template(self):
         return self.get_user_template('r:participant')
 
+    @classmethod
+    def extra_collections(cls):
+        from assembl.views.traversal import AbstractCollectionDefinition
+        from .notification import NotificationSubscription
+        class AllUsersCollection(AbstractCollectionDefinition):
+            def __init__(self, cls):
+                super(AllUsersCollection, self).__init__(cls, User)
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                # No real outerjoin in sqlalchemy. Use a dummy condition.
+                return query.outerjoin(self.owner_alias, self.owner_alias.id != None)
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
+                if isinstance(instance, NotificationSubscription):
+                    NotificationSubscription.discussion_id = parent_instance.id
+
+            def contains(self, parent_instance, instance):
+                return True
+
+        return {'all_users': AllUsersCollection(cls)}
+
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
     """

@@ -497,6 +497,56 @@ class User(AgentProfile):
         #r['email'] = use_email or self.get_preferred_email()
         return ser
 
+    @classmethod
+    def extra_collections(cls):
+        from assembl.views.traversal import CollectionDefinition
+        from .notification import NotificationSubscription
+        from .discussion import Discussion
+        class NotificationSubscriptionCollection(CollectionDefinition):
+            def __init__(self, cls):
+                super(NotificationSubscriptionCollection, self).__init__(
+                    cls, User.notification_subscriptions)
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+
+                query = super(
+                    NotificationSubscriptionCollection, self).decorate_query(
+                    query, last_alias, parent_instance, ctx)
+                discussion = ctx.get_instance_of_class(Discussion)
+                if discussion is not None:
+                    # Materialize active subscriptions... TODO: Make this batch,
+                    # also dematerialize
+                    ctx.parent_instance.get_notification_subscriptions(discussion.id)
+                    query = query.filter(last_alias.discussion_id == discussion.id)
+                return query
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
+                super(NotificationSubscriptionCollection,
+                      self).decorate_instance(instance, parent_instance, assocs, user_id,
+                    ctx, kwargs)
+
+            def contains(self, parent_instance, instance):
+                if not super(NotificationSubscriptionCollection, self).contains(
+                        parent_instance, instance):
+                    return False
+                # Don't I need the context to get the discussion? Rats!
+                return True
+
+        return {'notification_subscriptions': NotificationSubscriptionCollection(cls)}
+
+    def get_notification_subscriptions_for_current_discussion(self):
+        "CAN ONLY BE CALLED FROM API V2"
+        from pyramid.threadlocal import get_current_request
+        from .discussion import Discussion
+        r = get_current_request()
+        assert r
+        discussion = r.ctx.get_instance_of_class(Discussion)
+        if discussion is None:
+            return []
+        return self.get_notification_subscriptions(discussion.id)
+
     def get_notification_subscriptions(self, discussion_id):
         """the notification subscriptions for this user and discussion.
         Includes materialized subscriptions from the template."""
@@ -521,14 +571,19 @@ class User(AgentProfile):
                 continue
             for subscription in template.get_notification_subscriptions():
                 subscribed[subscription.__class__] |= subscription.status == NotificationStatus.ACTIVE
-        defaults = [
-            cls(
+        defaults = []
+        for cls in missing:
+            active = subscribed[cls]
+            sub = cls(
                 discussion_id=discussion_id,
                 user_id=self.id,
                 creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
-                status=NotificationStatus.ACTIVE if subscribed[cls] else NotificationStatus.INACTIVE_DFT)
-            for cls in missing
-        ]
+                status=NotificationStatus.ACTIVE if active else NotificationStatus.INACTIVE_DFT)
+            defaults.append(sub)
+            if active:
+                # materialize
+                self.db.add(sub)
+        self.db.flush()
         return chain(my_subscriptions, defaults)
 
 
@@ -738,8 +793,8 @@ class UserTemplate(DiscussionBoundBase, User):
         return get_concrete_subclasses_recursive(NotificationSubscriptionGlobal)
 
     def get_notification_subscriptions(self):
-        """the notification subscriptions for this user and discussion.
-        Includes materialized subscriptions from the template."""
+        """the notification subscriptions for this template.
+        Materializes applicable subscriptions.."""
         from .notification import (
             NotificationSubscription, NotificationStatus, NotificationCreationOrigin)
         my_subscriptions = self.db.query(NotificationSubscription).filter_by(

@@ -24,13 +24,14 @@
         "verified": true,
         "name": "&display_name",
         "real_name": "&real_name",
-        "permissions": "&get_all_permissions"
+        "permissions": "&get_all_permissions",
+        "notification_subscriptions": "&get_notification_subscriptions_for_current_discussion:"
     },
     "UserTemplate": {
         "@extends": "User",
         "discussion": true,
         "for_role": ":",
-        "notification_subscriptions": ":"
+        "notification_subscriptions": "&get_notification_subscriptions:"
     },
     "EmailAccount": false,
     "IdentityProviderAccount": false,
