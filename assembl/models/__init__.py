@@ -171,6 +171,7 @@ from .widgets import (
 
 from .notification import (
     NotificationSubscription,
+    NotificationSubscriptionGlobal,
     NotificationSubscriptionOnPost,
     NotificationSubscriptionOnIdea,
     NotificationSubscriptionOnExtract,

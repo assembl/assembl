@@ -660,7 +660,7 @@ def create_default_permissions(session, discussion):
 
 
 class UserTemplate(DiscussionBoundBase, User):
-    "A fake user with default permissions and Subscriptions."
+    "A fake user with default permissions and Notification Subscriptions."
     __tablename__ = "user_template"
 
     __mapper_args__ = {
@@ -689,6 +689,18 @@ class UserTemplate(DiscussionBoundBase, User):
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         return cls.discussion_id == discussion_id
+    
+    @classmethod
+    def get_applicable_notification_subscriptions_classes(cls):
+        """
+        The classes of notifications subscriptions that make sense to put in 
+        a template user.
+        
+        Right now, that is all concrete classes that are global to the discussion.
+        """
+        from ..lib.utils import get_concrete_subclasses_recursive
+        from ..models import NotificationSubscriptionGlobal
+        return get_concrete_subclasses_recursive(NotificationSubscriptionGlobal)
 
 
 Index("user_template", "discussion_id", "role_id")

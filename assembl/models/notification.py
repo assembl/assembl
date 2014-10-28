@@ -176,7 +176,7 @@ def update_last_status_change_date(target, value, oldvalue, initiator):
     target.last_status_change_date = datetime.utcnow()
 
 
-class NotificationSubscriptionOnDiscussion(NotificationSubscription):
+class NotificationSubscriptionGlobal(NotificationSubscription):
     __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_discussion',
         'polymorphic_on': 'type',
         'with_polymorphic': '*'
@@ -295,7 +295,7 @@ class CrudVerbs():
     UPDATE = "UPDATE"
     DELETE = "DELETE"
 
-class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionOnDiscussion):
+class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
     priority = 1
     unsubscribe_allowed = True
 
@@ -318,7 +318,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionOnDiscussi
         'with_polymorphic': '*'
     }
 
-class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionOnDiscussion):
+class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
     priority = 1
     unsubscribe_allowed = True
 
@@ -341,7 +341,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionOnDiscus
         'with_polymorphic': '*'
     }
 
-class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscriptionOnDiscussion):
+class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscriptionGlobal):
     priority = 1
     unsubscribe_allowed = True
 
@@ -371,26 +371,13 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
     interface.implements(IModelEventWatcher)
 
     def processEvent(self, verb, objectClass, objectId):
-        def get_subclasses(c):
-            subclasses = c.__subclasses__()
-            for d in list(subclasses):
-                subclasses.extend(get_subclasses(d))
-            return subclasses
-        def get_concrete_subclasses(c):
-            import inspect
-            concreteSubclasses = []
-            subclasses = get_subclasses(c)
-            for d in subclasses:
-                if not inspect.isabstract(d):
-                    concreteSubclasses.append(d)
-            return concreteSubclasses
-        
+        from ..lib.utils import get_concrete_subclasses_recursive
         objectInstance = objectClass.get(objectId)
         assert objectInstance
         #We need the discussion id
         assert isinstance(objectInstance, DiscussionBoundBase)
         applicableInstancesByUser = defaultdict(list)
-        subscriptionClasses = get_concrete_subclasses(NotificationSubscription)
+        subscriptionClasses = get_concrete_subclasses_recursive(NotificationSubscription)
         for subscriptionClass in subscriptionClasses:
             applicableInstances = subscriptionClass.findApplicableInstances(objectInstance.get_discussion_id(), CrudVerbs.CREATE, objectInstance)
             for subscription in applicableInstances:

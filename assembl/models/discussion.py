@@ -255,6 +255,8 @@ class Discussion(DiscussionBoundBase):
             Role).filter(Role.name == role_name).join(
             Discussion).filter(Discussion.id == self.id).first()
         if not template:
+            # There is a template user per discussion.  If it doesn't exist yey
+            # create it.
             from .notification import (
                 NotificationCreationOrigin, NotificationSubscriptionFollowSyntheses)
             role = self.db.query(Role).filter_by(name=role_name).one()
