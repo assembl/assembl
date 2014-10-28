@@ -560,7 +560,7 @@ class MultiCriterionVotingWidget(Widget):
 
     @property
     def votables_url(self):
-        return 'local:Discussion/%d/widgets/%d/votable_ideas' % (
+        return 'local:Discussion/%d/widgets/%d/targets/' % (
             self.discussion_id, self.id)
 
     def get_user_votes_url(self, idea_id):
