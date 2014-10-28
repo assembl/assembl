@@ -176,7 +176,15 @@ voteApp.controller('adminConfigureInstanceSetVotableIdeasCtl',
 
   $scope.updateOnceWidgetIsReceived = function(){
     $scope.discussion_uri = $scope.widget.discussion;
+
+    // FIXME: does not work => works on GET, but error 404 on PUT
     $scope.votable_ideas_url = $scope.widget.votables_url;
+    // does not work either
+    //$scope.votable_ideas_url = $scope.widget_endpoint + "/votable_ideas";
+    
+
+    console.log("$scope.widget.votable_ideas_url: ", $scope.widget.votable_ideas_url);
+    console.log("$scope.widget: ", $scope.widget);
     $scope.votable_ideas_endpoint = AssemblToolsService.resourceToUrl($scope.votable_ideas_url);
     $scope.votable_ideas = $scope.widget.votable_ideas; // should we transform this data? we do not get the shortTitles
     console.log("$scope.votable_ideas:");
@@ -200,6 +208,7 @@ voteApp.controller('adminConfigureInstanceSetVotableIdeasCtl',
   };
 
   $scope.associateVotableIdeas = function(ideas, result_holder){
+    console.log("associateVotableIdeas()");
     var post_data = ideas; // maybe we should send only an array of @id fields instead of the whole ideas
     var endpoint = $scope.votable_ideas_endpoint;
     VoteWidgetService.putJson(endpoint, post_data, result_holder);

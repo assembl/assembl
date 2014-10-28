@@ -126,6 +126,7 @@ define(function (require) {
         serializeData: function () {
             var subIdeas = {},
                 votable_widgets = [],
+                inspiration_widgets = [],
                 currentUser = Ctx.getCurrentUser(),
                 canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
                 canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
@@ -133,8 +134,22 @@ define(function (require) {
 
             if (this.model) {
                 subIdeas = this.model.getChildren();
-                votable_widgets = this.model.getVotableOnWhichWidgets(),
-                    contributors = this.model.get('contributors');
+                votable_widgets = this.model.getVotableOnWhichWidgets();
+                //inspiration_widgets = this.model.getInspirationWidgets();
+                inspiration_widgets = this.model.getVotableOnWhichWidgets();
+                /*
+                inspiration_widgets = [
+                    {
+                        "messages_url": "local:Discussion/1/widgets/43/base_idea/-/widgetposts", "user_states_url": "local:Widget/43/user_states", "ideas_hiding_url": "local:Discussion/1/widgets/43/base_idea_hiding/-/children", "widget_settings_url": "local:Widget/43/settings", "user_state_url": "local:Widget/43/user_state", "widget_state_url": "local:Widget/43/state", "discussion": "local:Discussion/1", "settings": {"votable_root_id": "local:Idea/3", "active_modules": {"video": true, "card": true}}, "confirm_ideas_url": null, "state": {}, "ideas_url": "local:Discussion/1/widgets/43/base_idea/-/children", "confirm_messages_url": null,
+                        "@id": "local:Widget/43", "@type": "InspirationWidget", "@view": "creativity_widget"
+                    },
+                    {
+                        "messages_url": "local:Discussion/1/widgets/52/base_idea/-/widgetposts", "user_states_url": "local:Widget/52/user_states", "ideas_hiding_url": "local:Discussion/1/widgets/52/base_idea_hiding/-/children", "widget_settings_url": "local:Widget/52/settings", "user_state_url": "local:Widget/52/user_state", "widget_state_url": "local:Widget/52/state", "discussion": "local:Discussion/1", "settings": {"votable_root_id": "local:Idea/4", "active_modules": {"video": true}}, "confirm_ideas_url": null, "state": {}, "ideas_url": "local:Discussion/1/widgets/52/base_idea/-/children", "confirm_messages_url": null,
+                        "@id": "local:Widget/52", "@type": "InspirationWidget", "@view": "creativity_widget"
+                    }
+                ];
+                */
+                contributors = this.model.get('contributors');
             }
 
             return {
@@ -142,6 +157,7 @@ define(function (require) {
                 contributors: contributors,
                 subIdeas: subIdeas,
                 votable_widgets: votable_widgets,
+                inspiration_widgets: inspiration_widgets,
                 canEdit: canEdit,
                 i18n: i18n,
                 getExtractsLabel: this.getExtractsLabel,

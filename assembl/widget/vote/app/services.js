@@ -192,10 +192,16 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
         console.log(status);
         console.log("headers:");
         console.log(headers);
-    }).error(function(status, headers){
+    }).error(function(data, status, headers, config){
         console.log("error");
         if ( result_holder )
           result_holder.text("Error");
+        console.log("data:");
+        console.log(data);
+        console.log("status:");
+        console.log(status);
+        console.log("headers:");
+        console.log(headers);
     });
   };
 

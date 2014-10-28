@@ -25,6 +25,10 @@ creativityApp.config(['$routeProvider', function ($routeProvider) {
             templateUrl: 'app/partials/admin_configure_instance_set_modules.html',
             controller: 'adminConfigureInstanceSetModulesCtl'
         }).
+        when('/admin/configure_instance_set_associated_ideas', {
+            templateUrl: 'app/partials/admin_configure_instance_set_associated_ideas.html',
+            controller: 'adminConfigureInstanceSetAssociatedIdeasCtl'
+        }).
         otherwise({
             redirectTo: '/'
         });

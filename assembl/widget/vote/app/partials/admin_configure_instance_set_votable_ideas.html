@@ -1,0 +1,40 @@
+
+<div id="admin" ng-controller="adminConfigureInstanceSetVotableIdeasCtl" ng-init="init()">
+
+    <h1>Configure a vote widget instance</h1>
+
+    <p>
+        Currently selected widget is <a href="{{ widget_endpoint }}">{{ widget_uri }}</a>.
+
+        <span ng-if="target != null">
+            The URL to vote on this widget (on one of its votable ideas) is <a href="?config={{ widget_uri }}&target={{ target }}" target="_blank">here</a>.
+        </span>
+    </p>
+
+    <div id="step_get_data" ng-show="current_step == 1">
+        <p>
+            Getting data from server about the widget instance "<strong>{{ widget_uri }}</strong>"...
+        </p>
+    </div>
+
+    <div id="step_select_criteria" ng-show="current_step == 2">
+        <h2>Select votable ideas</h2>
+        <div ng-show="current_step == 2 && current_substep == 1">
+            <p>
+                Loading ideas...
+            </p>
+        </div>
+        <div ng-show="current_step == 2 && current_substep == 2">
+            <p>
+                Please select the ideas on which the user will be able to vote. You can select multiple ideas with CTRL-click.
+            </p>
+            <form id="widget_set_votable_ideas" method="POST">
+                <select multiple size="20" ng-model="votable_ideas" ng-options="item as item.shortTitle for item in ideas track by item['@id']"></select>
+                <br/>
+                <input type="submit" value="Validate these ideas" />
+                <span id="widget_select_votable_ideas_result"></span>
+            </form>
+        </div>
+    </div>
+
+</div>

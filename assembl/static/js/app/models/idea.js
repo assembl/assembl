@@ -377,6 +377,7 @@ define(function (require) {
         },
 
         getWidgets: function(){
+            console.log("idea widgets: ", this.get('widget_data') );
             return this.get('widget_data');
         },
 
@@ -390,6 +391,10 @@ define(function (require) {
 
         getVotableOnWhichWidgets: function () {
             return this.getWidgetsOfType("votable");
+        },
+
+        getInspirationWidgets: function () {
+            return this.getWidgetsOfType("inspiration");
         },
 
     });
