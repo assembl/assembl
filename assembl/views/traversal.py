@@ -183,6 +183,9 @@ class ClassContext(object):
     def get_discussion_id(self):
         return None
 
+    def get_instance_of_class(self, cls):
+        return None
+
 
 class ClassContextPredicate(object):
     def __init__(self, val, config):
@@ -275,6 +278,11 @@ class InstanceContext(object):
         if isinstance(self._instance, DiscussionBoundBase):
             return self._instance.get_discussion_id()
         return self.__parent__.get_discussion_id()
+
+    def get_instance_of_class(self, cls):
+        if isinstance(self._instance, cls):
+            return self._instance
+        return self.__parent__.get_instance_of_class(cls)
 
 
 class InstanceContextPredicate(object):
@@ -398,6 +406,9 @@ class CollectionContext(object):
 
     def get_discussion_id(self):
         return self.__parent__.get_discussion_id()
+
+    def get_instance_of_class(self, cls):
+        return self.__parent__.get_instance_of_class(cls)
 
 
 class NamedCollectionContextPredicate(object):
