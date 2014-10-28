@@ -125,7 +125,7 @@
      {# List inspiration widgets of this idea #}
     <% _.each(inspiration_widgets, function(inspiration_widget, i){
         var url = inspiration_widget.widget_url+encodeURIComponent("?target="+idea.getId());
-        print("<a href=\""+url+"\" target=\"_blank\">{{gettext('Inspire me!')}}</a>");
+        print("<a href=\""+url+"\" target=\"_blank\" class=\"js_inspireMe\">{{gettext('Inspire me!')}}</a>");
         if ( canCreateWidgets ) {
             var configure_url = "/widget/creativity/?admin=1#/admin/configure_instance?widget_uri="+inspiration_widget.widget_uri+"&target="+idea.getId();
             print(" <a href=\""+configure_url+"\" target=\"_blank\" class='dispb mls mts'>{{gettext('Configure this inspiration widget')}}</a>");

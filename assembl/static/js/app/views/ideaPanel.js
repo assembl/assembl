@@ -65,7 +65,8 @@ define(function (require) {
             //'click #session-modal': "createWidgetSession", need to have another selector in the dom
             'click .js_seeMore': 'seeMoreOrLess',
             'click .js_seeLess': 'seeMoreOrLess',
-            'click .js_edit-definition': 'editDefinition'
+            'click .js_edit-definition': 'editDefinition',
+            'click .js_inspireMe': 'openInspireMeModal'
         },
 
         getTitle: function () {
@@ -209,6 +210,37 @@ define(function (require) {
                 }
             }
 
+        },
+
+        openInspireMeModal: function () {
+
+            var data = {
+                iframe_url: "http://localhost:6543/widget/creativity/?config=local:Widget/52&target=local:Idea/4"
+            };
+
+            var Modal = Backbone.Modal.extend({
+                //template: _.template($('#tmpl-widgetCreativity').html()),
+                template:  Ctx.loadTemplate('widgetCreativity'),
+                //template: Ctx.loadTemplate('widgetCreativity')(data),
+                className: 'group-modal',
+                cancelEl: '.close, .btn-cancel',
+                events: {
+                    'click .js_selectItem': 'selectItem',
+                },
+                selectItem: function (e) {
+                    var elm = $(e.currentTarget),
+                        item = elm.parent().attr('data-view');
+                },
+                serializeData: function () {
+                    return data;
+                },
+            });
+
+            var modalView = new Modal();
+            $('.popin-container').html(modalView.render().el);
+            //$('.popin-container').html(modalView.render(data).el);
+
+            return false;
         },
 
         getExtractslist: function () {
