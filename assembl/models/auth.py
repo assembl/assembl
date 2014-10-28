@@ -542,7 +542,7 @@ class User(AgentProfile):
         from .discussion import Discussion
         r = get_current_request()
         assert r
-        discussion = r.ctx.get_instance_of_class(Discussion)
+        discussion = r.context.get_instance_of_class(Discussion)
         if discussion is None:
             return []
         return self.get_notification_subscriptions(discussion.id)
