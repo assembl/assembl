@@ -176,7 +176,25 @@ def update_last_status_change_date(target, value, oldvalue, initiator):
     target.last_status_change_date = datetime.utcnow()
 
 
-class NotificationSubscriptionOnPost(NotificationSubscription):
+class NotificationSubscriptionOnDiscussion(NotificationSubscription):
+    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_discussion',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
+    }
+     
+    def followed_object(self):
+        pass
+    
+class NotificationSubscriptionOnObject(NotificationSubscription):
+    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_object',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
+    }
+
+    def followed_object(self):
+        pass
+
+class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
 
     __tablename__ = "notification_subscription_on_post"
     __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_post',
@@ -197,10 +215,10 @@ class NotificationSubscriptionOnPost(NotificationSubscription):
     post = relationship("Post")
 
     def followed_object(self):
-        return self.discussion
+        return self.post
 
 
-class NotificationSubscriptionOnIdea(NotificationSubscription):
+class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     __tablename__ = "notification_subscription_on_idea"
     __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_idea',
@@ -224,7 +242,7 @@ class NotificationSubscriptionOnIdea(NotificationSubscription):
         return self.idea
 
 
-class NotificationSubscriptionOnExtract(NotificationSubscription):
+class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
 
     __tablename__ = "notification_subscription_on_extract"
     __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_extract',
@@ -248,7 +266,7 @@ class NotificationSubscriptionOnExtract(NotificationSubscription):
         return self.extract
 
 
-class NotificationSubscriptionOnUserAccount(NotificationSubscription):
+class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     __tablename__ = "notification_subscription_on_useraccount"
     __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_useraccount',
@@ -277,7 +295,7 @@ class CrudVerbs():
     UPDATE = "UPDATE"
     DELETE = "DELETE"
 
-class NotificationSubscriptionFollowSyntheses(NotificationSubscription):
+class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionOnDiscussion):
     priority = 1
     unsubscribe_allowed = True
 
@@ -300,7 +318,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscription):
         'with_polymorphic': '*'
     }
 
-class NotificationSubscriptionFollowAllMessages(NotificationSubscription):
+class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionOnDiscussion):
     priority = 1
     unsubscribe_allowed = True
 
@@ -323,7 +341,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscription):
         'with_polymorphic': '*'
     }
 
-class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscription):
+class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscriptionOnDiscussion):
     priority = 1
     unsubscribe_allowed = True
 
@@ -358,12 +376,21 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
             for d in list(subclasses):
                 subclasses.extend(get_subclasses(d))
             return subclasses
+        def get_concrete_subclasses(c):
+            import inspect
+            concreteSubclasses = []
+            subclasses = get_subclasses(c)
+            for d in subclasses:
+                if not inspect.isabstract(d):
+                    concreteSubclasses.append(d)
+            return concreteSubclasses
+        
         objectInstance = objectClass.get(objectId)
         assert objectInstance
         #We need the discussion id
         assert isinstance(objectInstance, DiscussionBoundBase)
         applicableInstancesByUser = defaultdict(list)
-        subscriptionClasses = get_subclasses(NotificationSubscription)
+        subscriptionClasses = get_concrete_subclasses(NotificationSubscription)
         for subscriptionClass in subscriptionClasses:
             applicableInstances = subscriptionClass.findApplicableInstances(objectInstance.get_discussion_id(), CrudVerbs.CREATE, objectInstance)
             for subscription in applicableInstances:
