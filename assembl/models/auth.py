@@ -4,6 +4,7 @@ import urllib
 import hashlib
 import chroma
 import simplejson as json
+from collections import defaultdict
 
 from sqlalchemy import (
     Boolean,
@@ -496,6 +497,40 @@ class User(AgentProfile):
         #r['email'] = use_email or self.get_preferred_email()
         return ser
 
+    def get_notification_subscriptions(self, discussion_id):
+        """the notification subscriptions for this user and discussion.
+        Includes materialized subscriptions from the template."""
+        from .notification import (
+            NotificationSubscription, NotificationStatus, NotificationCreationOrigin)
+        from .discussion import Discussion
+        from ..auth.util import get_roles
+        my_subscriptions = self.db.query(NotificationSubscription).filter_by(
+            discussion_id=discussion_id, user_id=self.id).all()
+        my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
+        needed_classes = UserTemplate.get_applicable_notification_subscriptions_classes()
+        missing = set(needed_classes) - my_subscriptions_classes
+        if not missing:
+            return my_subscriptions
+        discussion = Discussion.get(discussion_id)
+        assert discussion
+        my_roles = get_roles(self.id, discussion_id)
+        subscribed = defaultdict(bool)
+        for role in my_roles:
+            template = discussion.get_user_template(role)
+            if template is None:
+                continue
+            for subscription in template.get_notification_subscriptions():
+                subscribed[subscription.__class__] |= subscription.status == NotificationStatus.ACTIVE
+        defaults = [
+            cls(
+                discussion_id=discussion_id,
+                user_id=self.id,
+                creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                status=NotificationStatus.ACTIVE if subscribed[cls] else NotificationStatus.INACTIVE_DFT)
+            for cls in missing
+        ]
+        return chain(my_subscriptions, defaults)
+
 
 class Username(Base):
     "Optional usernames for users"
@@ -689,7 +724,7 @@ class UserTemplate(DiscussionBoundBase, User):
     @classmethod
     def get_discussion_condition(cls, discussion_id):
         return cls.discussion_id == discussion_id
-    
+
     @classmethod
     def get_applicable_notification_subscriptions_classes(cls):
         """
@@ -701,6 +736,33 @@ class UserTemplate(DiscussionBoundBase, User):
         from ..lib.utils import get_concrete_subclasses_recursive
         from ..models import NotificationSubscriptionGlobal
         return get_concrete_subclasses_recursive(NotificationSubscriptionGlobal)
+
+    def get_notification_subscriptions(self):
+        """the notification subscriptions for this user and discussion.
+        Includes materialized subscriptions from the template."""
+        from .notification import (
+            NotificationSubscription, NotificationStatus, NotificationCreationOrigin)
+        my_subscriptions = self.db.query(NotificationSubscription).filter_by(
+            discussion_id=self.discussion_id, user_id=self.id).all()
+        my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
+        needed_classes = self.get_applicable_notification_subscriptions_classes()
+        missing = set(needed_classes) - my_subscriptions_classes
+        if not missing:
+            return my_subscriptions
+        # TODO: Fill from config.
+        subscribed = defaultdict(bool)
+        defaults = [
+            cls(
+                discussion_id=self.discussion_id,
+                user_id=self.id,
+                creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                status=NotificationStatus.ACTIVE if subscribed[cls] else NotificationStatus.INACTIVE_DFT)
+            for cls in missing
+        ]
+        for d in defaults:
+            self.db.add(d)
+        self.db.flush()
+        return chain(my_subscriptions, defaults)
 
 
 Index("user_template", "discussion_id", "role_id")

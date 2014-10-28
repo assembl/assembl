@@ -262,10 +262,7 @@ class Discussion(DiscussionBoundBase):
             role = self.db.query(Role).filter_by(name=role_name).one()
             template = UserTemplate(for_role=role, discussion=self)
             self.db.add(template)
-            # TODO: Add defaults from a config
-            subscr = NotificationSubscriptionFollowSyntheses(
-                user=template, discussion=self,
-                creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT)
+            template.get_notification_subscriptions()
             self.db.add(subscr)
             self.db.flush()
         return template

@@ -59,6 +59,7 @@ class NotificationCreationOrigin(DeclEnum):
 class NotificationStatus(DeclEnum):
     ACTIVE = "ACTIVE", "Normal status, subscription will create notifications"
     UNSUBSCRIBED = "UNSUBSCRIBED", "The user explicitely unsubscribed from this notification"
+    INACTIVE_DFT = "INACTIVE_DFT", "This subscription is defined in the template, but not subscribed by default."
 
 class NotificationSubscription(DiscussionBoundBase):
     """
@@ -181,10 +182,11 @@ class NotificationSubscriptionGlobal(NotificationSubscription):
         'polymorphic_on': 'type',
         'with_polymorphic': '*'
     }
-     
+
     def followed_object(self):
         pass
-    
+
+
 class NotificationSubscriptionOnObject(NotificationSubscription):
     __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_object',
         'polymorphic_on': 'type',
