@@ -212,25 +212,28 @@ define(function (require) {
 
         },
 
-        openInspireMeModal: function () {
-
+        openInspireMeModal: function (evt) {
+            console.log("openInspireMeModal()");
+            console.log("evt: ", evt);
+            var target_url = $(evt.currentTarget).attr("href");
+            if ( !target_url )
+                target_url = "/widget/creativity/?config=local:Widget/52&target=local:Idea/4";
             var data = {
-                iframe_url: "http://localhost:6543/widget/creativity/?config=local:Widget/52&target=local:Idea/4"
+                iframe_url: target_url
             };
 
             var Modal = Backbone.Modal.extend({
                 //template: _.template($('#tmpl-widgetCreativity').html()),
                 template:  Ctx.loadTemplate('widgetCreativity'),
-                //template: Ctx.loadTemplate('widgetCreativity')(data),
                 className: 'group-modal',
                 cancelEl: '.close, .btn-cancel',
                 events: {
-                    'click .js_selectItem': 'selectItem',
+                    //'click .js_selectItem': 'selectItem'
                 },
-                selectItem: function (e) {
+                /*selectItem: function (e) {
                     var elm = $(e.currentTarget),
                         item = elm.parent().attr('data-view');
-                },
+                },*/
                 serializeData: function () {
                     return data;
                 },
@@ -238,9 +241,8 @@ define(function (require) {
 
             var modalView = new Modal();
             $('.popin-container').html(modalView.render().el);
-            //$('.popin-container').html(modalView.render(data).el);
 
-            return false;
+            return false; // so that we cancel the normal behaviour of the clicked link (aka making browser go to "target" attribute of the "a" tag)
         },
 
         getExtractslist: function () {
