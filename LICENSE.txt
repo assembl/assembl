@@ -1,4 +1,7 @@
-Copyright 2014 Imagination For People and Caravan
+Copyright 2013-2014 Clouds Collective of skills Inc.
+Copyright 2014 Imagination for People
+Copyright 2012-2014 Caravan Web Worker Cooperative Inc.
+Copyright 2012-2013 Technologies Coeus Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
