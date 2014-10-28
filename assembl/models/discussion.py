@@ -263,7 +263,6 @@ class Discussion(DiscussionBoundBase):
             template = UserTemplate(for_role=role, discussion=self)
             self.db.add(template)
             template.get_notification_subscriptions()
-            self.db.add(subscr)
             self.db.flush()
         return template
 
