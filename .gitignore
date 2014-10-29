@@ -63,6 +63,7 @@ Gemfile.lock
 # node
 node_modules/
 assembl/static/js/bower/
+assembl/widget/creativity/bower_components/
 
 # Vagrant
 .bash_profile
