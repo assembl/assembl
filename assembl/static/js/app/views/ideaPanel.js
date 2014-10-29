@@ -14,6 +14,8 @@ define(function (require) {
         CollectionManager = require('common/collectionManager'),
         AssemblPanel = require('views/assemblPanel'),
         Marionette = require('backbone.marionette'),
+        backboneModal = require('backbone.modal'),
+        marionetteModdal = require('backbone.marionette.modals'),
         $ = require('jquery'),
         _ = require('underscore');
 
@@ -254,29 +256,19 @@ define(function (require) {
             var target_url = (evt && evt.currentTarget) ? $(evt.currentTarget).attr("href") : null;
             if ( !target_url )
                 target_url = "/widget/creativity/?config=local:Widget/52&target=local:Idea/4";
-            var data = {
-                iframe_url: target_url
-            };
+
+            var model = new Backbone.Model();
+            model.set("iframe_url", target_url);
 
             var Modal = Backbone.Modal.extend({
                 //template: _.template($('#tmpl-widgetCreativity').html()),
                 template: Ctx.loadTemplate('widgetCreativity'),
-                className: 'group-modal',
-                cancelEl: '.close, .btn-cancel',
-                events: {
-                    //'click .js_selectItem': 'selectItem'
-                },
-                /*selectItem: function (e) {
-                 var elm = $(e.currentTarget),
-                 item = elm.parent().attr('data-view');
-                 },*/
-                serializeData: function () {
-                    return data;
-                },
+                className: 'group-modal popin-wrapper',
+                cancelEl: '.close',
+                model: model
             });
 
-            var modalView = new Modal();
-            $('.popin-container').html(modalView.render().el);
+            Assembl.slider.show(new Modal());
 
             return false; // so that we cancel the normal behaviour of the clicked link (aka making browser go to "target" attribute of the "a" tag)
         },
