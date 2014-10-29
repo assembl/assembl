@@ -6,6 +6,9 @@ define(['backbone.marionette', 'common/collectionManager'],
         var adminNotifications = Marionette.LayoutView.extend({
             template: '#tmpl-adminNotifications',
             className: 'admin-notifications',
+            ui: {
+              subscribeCheckbox: ".js_adminNotification"
+            },
             collectionEvents: {
               "reset": "render" // equivalent to view.listenTo(view.collection, "reset", view.render, view)
             },
@@ -22,7 +25,7 @@ define(['backbone.marionette', 'common/collectionManager'],
             },
 
             events: {
-                'click .js_discussionNotification': 'discussionNotification'
+                'click @ui.subscribeCheckbox': 'discussionNotification'
             },
 
             serializeData: function () {

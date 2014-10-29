@@ -34,7 +34,7 @@
                   <label for="<%= notification.get('@id') %>" class="control-label"></label>
                   <div class="controls">
                     <label class="checkbox">
-                      <input type="checkbox" class="js_userNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= notification.get('@id') %>">
+                      <input type="checkbox" class="js_adminNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= notification.get('@id') %>">
                       <%= notification.get('@type') %>
                     </label>
                   </div>
