@@ -2,7 +2,7 @@ define(['jquery', 'models/base', 'common/context'],
     function ($, Base, Ctx) {
         'use strict';
 
-        var root = 'User/' + Ctx.getCurrentUserId() + '/notification_subscriptions';
+        var root = 'Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/notification_subscriptions';
 
         var notificationsUserModel = Base.Model.extend({
             url: Ctx.getApiV2Url(root) + '/?view=extended',
