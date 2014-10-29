@@ -13,7 +13,7 @@ define(function (require) {
         SegmentList = require('views/segmentList'),
         CollectionManager = require('common/collectionManager'),
         AssemblPanel = require('views/assemblPanel'),
-        Marionette = require('marionette'),
+        Marionette = require('backbone.marionette'),
         $ = require('jquery'),
         _ = require('underscore');
 
@@ -139,17 +139,17 @@ define(function (require) {
                 //inspiration_widgets = this.model.getInspirationWidgets();
                 inspiration_widgets = this.model.getVotableOnWhichWidgets();
                 /*
-                inspiration_widgets = [
-                    {
-                        "messages_url": "local:Discussion/1/widgets/43/base_idea/-/widgetposts", "user_states_url": "local:Widget/43/user_states", "ideas_hiding_url": "local:Discussion/1/widgets/43/base_idea_hiding/-/children", "widget_settings_url": "local:Widget/43/settings", "user_state_url": "local:Widget/43/user_state", "widget_state_url": "local:Widget/43/state", "discussion": "local:Discussion/1", "settings": {"votable_root_id": "local:Idea/3", "active_modules": {"video": true, "card": true}}, "confirm_ideas_url": null, "state": {}, "ideas_url": "local:Discussion/1/widgets/43/base_idea/-/children", "confirm_messages_url": null,
-                        "@id": "local:Widget/43", "@type": "InspirationWidget", "@view": "creativity_widget"
-                    },
-                    {
-                        "messages_url": "local:Discussion/1/widgets/52/base_idea/-/widgetposts", "user_states_url": "local:Widget/52/user_states", "ideas_hiding_url": "local:Discussion/1/widgets/52/base_idea_hiding/-/children", "widget_settings_url": "local:Widget/52/settings", "user_state_url": "local:Widget/52/user_state", "widget_state_url": "local:Widget/52/state", "discussion": "local:Discussion/1", "settings": {"votable_root_id": "local:Idea/4", "active_modules": {"video": true}}, "confirm_ideas_url": null, "state": {}, "ideas_url": "local:Discussion/1/widgets/52/base_idea/-/children", "confirm_messages_url": null,
-                        "@id": "local:Widget/52", "@type": "InspirationWidget", "@view": "creativity_widget"
-                    }
-                ];
-                */
+                 inspiration_widgets = [
+                 {
+                 "messages_url": "local:Discussion/1/widgets/43/base_idea/-/widgetposts", "user_states_url": "local:Widget/43/user_states", "ideas_hiding_url": "local:Discussion/1/widgets/43/base_idea_hiding/-/children", "widget_settings_url": "local:Widget/43/settings", "user_state_url": "local:Widget/43/user_state", "widget_state_url": "local:Widget/43/state", "discussion": "local:Discussion/1", "settings": {"votable_root_id": "local:Idea/3", "active_modules": {"video": true, "card": true}}, "confirm_ideas_url": null, "state": {}, "ideas_url": "local:Discussion/1/widgets/43/base_idea/-/children", "confirm_messages_url": null,
+                 "@id": "local:Widget/43", "@type": "InspirationWidget", "@view": "creativity_widget"
+                 },
+                 {
+                 "messages_url": "local:Discussion/1/widgets/52/base_idea/-/widgetposts", "user_states_url": "local:Widget/52/user_states", "ideas_hiding_url": "local:Discussion/1/widgets/52/base_idea_hiding/-/children", "widget_settings_url": "local:Widget/52/settings", "user_state_url": "local:Widget/52/user_state", "widget_state_url": "local:Widget/52/state", "discussion": "local:Discussion/1", "settings": {"votable_root_id": "local:Idea/4", "active_modules": {"video": true}}, "confirm_ideas_url": null, "state": {}, "ideas_url": "local:Discussion/1/widgets/52/base_idea/-/children", "confirm_messages_url": null,
+                 "@id": "local:Widget/52", "@type": "InspirationWidget", "@view": "creativity_widget"
+                 }
+                 ];
+                 */
                 contributors = this.model.get('contributors');
             }
 
@@ -216,7 +216,7 @@ define(function (require) {
             console.log("openInspireMeModal()");
             console.log("evt: ", evt);
             var target_url = $(evt.currentTarget).attr("href");
-            if ( !target_url )
+            if (!target_url)
                 target_url = "/widget/creativity/?config=local:Widget/52&target=local:Idea/4";
             var data = {
                 iframe_url: target_url
@@ -224,16 +224,16 @@ define(function (require) {
 
             var Modal = Backbone.Modal.extend({
                 //template: _.template($('#tmpl-widgetCreativity').html()),
-                template:  Ctx.loadTemplate('widgetCreativity'),
+                template: Ctx.loadTemplate('widgetCreativity'),
                 className: 'group-modal',
                 cancelEl: '.close, .btn-cancel',
                 events: {
                     //'click .js_selectItem': 'selectItem'
                 },
                 /*selectItem: function (e) {
-                    var elm = $(e.currentTarget),
-                        item = elm.parent().attr('data-view');
-                },*/
+                 var elm = $(e.currentTarget),
+                 item = elm.parent().attr('data-view');
+                 },*/
                 serializeData: function () {
                     return data;
                 },

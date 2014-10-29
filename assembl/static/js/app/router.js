@@ -1,4 +1,4 @@
-define(['marionette', 'routeManager'],
+define(['backbone.marionette', 'routeManager'],
     function (Marionette, routeManager) {
         'use strict';
 

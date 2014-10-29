@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Assembl = require('app'),
-        Marionette = require('marionette'),
+        Marionette = require('backbone.marionette'),
         IdeaList = require('views/ideaList'),
         sidebarNotification = require('views/navigation/notification'),
         HomePanel = require('views/navigation/home'),

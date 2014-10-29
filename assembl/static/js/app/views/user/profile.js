@@ -1,4 +1,4 @@
-define(['marionette'], function (Marionette) {
+define(['backbone.marionette'], function (Marionette) {
     'use strict';
 
     var userProfile = Marionette.LayoutView.extend({

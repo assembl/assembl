@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var Marionette = require('marionette'),
+    var Marionette = require('backbone.marionette'),
         Assembl = require('app'),
         GroupContent = require('views/groups/groupContent'),
         AssemblPanel = require('views/assemblPanel'),

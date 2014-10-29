@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var Marionette = require('marionette'),
+    var Marionette = require('backbone.marionette'),
         Assembl = require('app'),
         Ctx = require('common/context'),
         CollectionManager = require('common/collectionManager'),
@@ -11,7 +11,9 @@ define(function (require) {
         Moment = require('moment'),
         Permissions = require('utils/permissions'),
         AssemblPanel = require('views/assemblPanel'),
-        CKEditorField = require('views/ckeditorField');
+        CKEditorField = require('views/ckeditorField'),
+        backboneModal = require('backbone.modal'),
+        marionetteModdal = require('backbone.marionette.modals');
 
     var contextPage = Marionette.LayoutView.extend({
         template: '#tmpl-contextPage',
@@ -151,13 +153,12 @@ define(function (require) {
 
                 var Modal = Backbone.Modal.extend({
                     template: _.template($('#tmpl-homeIntroductionDetail').html()),
-                    className: 'group-modal',
+                    className: 'group-modal popin-wrapper',
                     model: model,
                     cancelEl: '.close'
                 });
 
-                var modalView = new Modal();
-                $('.popin-container').html(modalView.render().el);
+                Assembl.slider.show(new Modal())
             });
         },
 

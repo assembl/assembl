@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var Marionette = require('marionette'),
+    var Marionette = require('backbone.marionette'),
         ctx = require('common/context'),
         panelSpec = require('models/panelSpec'),
         AssemblPanel = require('views/assemblPanel'),

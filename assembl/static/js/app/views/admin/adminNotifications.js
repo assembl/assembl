@@ -1,4 +1,4 @@
-define(['marionette', 'common/collectionManager'],
+define(['backbone.marionette', 'common/collectionManager'],
     function (Marionette, CollectionManager) {
         'use strict';
 

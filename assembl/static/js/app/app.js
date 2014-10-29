@@ -1,4 +1,4 @@
-define(['marionette', 'jquery'], function (Marionette, $) {
+define(['backbone.marionette', 'jquery'], function (Marionette, $) {
 
     var App = new Marionette.Application();
 
@@ -7,7 +7,8 @@ define(['marionette', 'jquery'], function (Marionette, $) {
             headerRegions: '#header',
             notificationRegion: '#notification',
             groupContainer: '#groupContainer',
-            contentContainer: '#content-container'
+            contentContainer: '#content-container',
+            slider: '#slider'
         })
     });
 

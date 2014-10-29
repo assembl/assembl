@@ -9,8 +9,9 @@ var requirejs_config = {
         'backbone': '../bower/backbone/backbone',
         'BackboneSubset': '../bower/Backbone.Subset/backbone.subset',
         'underscore': '../bower/underscore/underscore',
-        'backbone.modal': '../lib/backbone-modal/backbone.modal',
-        'marionette': '../bower/marionette/lib/backbone.marionette',
+        'backbone.marionette.modals': '../bower/backbone-modal/backbone.marionette.modals',
+        'backbone.modal': '../bower/backbone-modal/backbone.modal',
+        'backbone.marionette': '../bower/marionette/lib/backbone.marionette',
 
         'annotator': '../lib/annotator/annotator-full.min',
 
@@ -91,10 +92,6 @@ var requirejs_config = {
         'annotator': {
             deps: ['jquery'],
             exports: 'Annotator'
-        },
-        'backbone.modal': {
-            deps: ['backbone'],
-            exports: 'backboneModal'
         },
         'BackboneSubset': {
             deps: ['backbone'],

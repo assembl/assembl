@@ -1,7 +1,7 @@
 define(function (require) {
 
-    var Marionette = require('marionette'),
-        backboneModal = require('backboneModal'),
+    var Marionette = require('backbone.marionette'),
+        backboneModal = require('backbone.modal'),
         $ = require('jquery');
 
     var Notification = Marionette.LayoutView.extend({

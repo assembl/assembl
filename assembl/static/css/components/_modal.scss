@@ -21,7 +21,7 @@
   -webkit-transition: background-color 0.3s;
 }
 
-.popin {
+.popin, .bbm-modal {
   margin: auto;
   width: auto;
   max-width: 90%;
@@ -93,60 +93,6 @@
 }
 
 // END of new modal
-
-.bbm-views {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.bbm-modal {
-  background: white;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6), 0 1px 2px rgba(0, 0, 0, 0.9);
-  @include border-radius(5px);
-}
-
-/* BLOCKS */
-.popin-header,
-.bbm-modal__bottombar {
-  padding: 0 0 0 10px;
-}
-
-.bbm-modal__tab {
-  display: inline-block;
-  padding: 15px 10px;
-}
-
-.bbm-modal__tab a {
-  font-size: 16px;
-  font-weight: bold;
-  color: #999999;
-}
-
-.bbm-modal__tab a:hover, .bbm-modal__tab a.active {
-  color: #222222;
-}
-
-.bbm-modal__title {
-  padding: 10px 0;
-  margin: 0;
-  font-weight: normal;
-  font-size: 22px;
-  line-height: 1em;
-  color: $white;
-  float: left;
-}
-
-/* MODULES */
-.bbm-group {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-.bbm-button.inactive {
-  opacity: 0.5;
-  pointer-events: none;
-}
 
 /* ANIMATIONS */
 /* Open modal */
@@ -283,7 +229,7 @@
   }
 }
 
-.popin-open {
+.popin-open, .bbm-modal--open {
   -webkit-animation-duration: 0.3s;
   -webkit-animation-name: popin-open;
   -webkit-animation-timing-function: linear;

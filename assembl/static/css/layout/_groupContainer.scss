@@ -86,7 +86,8 @@
     vertical-align: top;
     .panelContentsWhenMinimized {
       display: none;
-      span { /* the icon */
+      span {
+        /* the icon */
         font-size: 25px;
         position: absolute;
         width: 40px;
@@ -258,7 +259,7 @@
 }
 
 .group-modal {
-  .popin {
+  .popin, .bbm-modal {
     max-width: 500px;
   }
 }

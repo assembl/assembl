@@ -18,7 +18,7 @@
         'backbone': '../bower/backbone/backbone',
         'BackboneSubset': '../bower/Backbone.Subset/backbone.subset',
         'underscore': '../bower/underscore/underscore',
-        'backbone.modal': '../lib/backbone-modal/backbone.modal',
+        'backbone.modal': '../bower/backbone-modal/backbone.marionette.modals',
         'marionette': '../bower/marionette/lib/backbone.marionette',
 
         'annotator': '../lib/annotator/annotator-full.min',

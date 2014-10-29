@@ -1,12 +1,5 @@
-define(function (require) {
-
-    var Marionette = require('marionette'),
-        Ctx = require('common/context'),
-        GroupSpec = require('models/groupSpec'),
-        CollectionManager = require('common/collectionManager'),
-        viewsFactory = require('objects/viewsFactory'),
-        $ = require('jquery'),
-        _ = require('underscore');
+define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'objects/viewsFactory', 'backbone.modal', 'backbone.marionette.modals'],
+    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, viewsFactory) {
 
     var navBar = Marionette.LayoutView.extend({
         template: '#tmpl-navBar',
@@ -51,8 +44,11 @@ define(function (require) {
 
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-create-group').html()),
-                className: 'group-modal',
+                className: 'group-modal popin-wrapper',
                 cancelEl: '.close, .btn-cancel',
+                initialize: function () {
+                    this.$('.bbm-modal').addClass('popin');
+                },
                 events: {
                     'click .js_selectItem': 'selectItem',
                     'click .js_createGroup': 'createGroup'
@@ -147,7 +143,10 @@ define(function (require) {
             });
 
             var modalView = new Modal();
-            $('.popin-container').html(modalView.render().el);
+
+            Assembl.slider.show(modalView)
+
+            //$('#slider').html(modalView.render().el);
         }
 
     });

@@ -3,6 +3,7 @@
 define(function (require) {
 
     var Assembl = require('app'),
+        Marionette = require('backbone.marionette'),
         Message = require('models/message'),
         groupSpec = require('models/groupSpec'),
         Idea = require('models/idea'),
