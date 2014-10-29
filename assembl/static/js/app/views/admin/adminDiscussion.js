@@ -5,7 +5,7 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
 
         var adminDiscussion = Marionette.LayoutView.extend({
             template: '#tmpl-adminDiscussion',
-            className: 'admin-content',
+            className: 'admin-notifications',
             initialize: function () {
                 var that = this,
                     collectionManager = new CollectionManager();

@@ -1,64 +1,71 @@
-<aside class="profile-sidebar gu gu-1of5">
-    <h1 class="logo tac pas h1"></h1>
+<div class="gr">
+  <div class="gu gu-1of5">
     <nav class="sidebar-nav">
         <ul class="man pan adminMenu">
           <li class="active">
-            <a href="#edition" class="btn btn-default btn-sm menu">{{ gettext('edit discussion') }}</a>
+            <a href="#edition" class="menu">{{ gettext('edit discussion') }}</a>
           </li>
           <li>
-            <a href="#notifications" class="btn btn-default btn-sm menu">{{ gettext('edit notifications') }}</a>
+            <a href="#notifications" class="menu">{{ gettext('edit notifications') }}</a>
           </li>
           <li>
-            <a href="#partners" class="btn btn-default btn-sm menu">{{ gettext('edit partners') }}</a>
+            <a href="#partners" class="menu">{{ gettext('edit partners') }}</a>
+          </li>
+          <li class="mtxl">
+            <a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a>
           </li>
         </ul>
-
-        <a href="/{{ discussion.slug }}/" class="btn btn-cancel btn-sm mtxl">{{ gettext('back to discussion') }}</a>
     </nav>
-</aside>
-<div id="admin-container" class="prs">
-<h2 class="h2">Edition - {{discussion.topic}}</h2>
-<div class="mtxl">
-  {% if admin_discussion_permissions_url %}
-    <p class="mbl">
-      <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
-    </p>
-  {% endif %}
+  </div>
+  <div class="gu gu-3of4 admin-section">
 
-  <form class="core-form form-horizontal" method="post" action="#">
-    <fieldset>
+    <div class="admin-title">
+      <h3 class="h3">Edition - {{discussion.topic}}</h3>
+    </div>
+    <div id="content-container" class="content-container">
+      <div class="gr">
+        <div class="gu gu-1of2">
+           {% if admin_discussion_permissions_url %}
+               <p class="mbl">
+                 <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
+               </p>
+             {% endif %}
 
-      <div class="control-group">
-        <label for="topic" class="control-label">Topic</label>
-        <div class="controls">
-          <input type="text" id="topic" name="topic" class="input-xlarge" {% if discussion.topic %}value="{{ discussion.topic }}"{% endif %} />
+             <form class="core-form form-horizontal" method="post" action="#">
+               <fieldset>
+
+                 <div class="control-group">
+                   <label for="topic" class="control-label">Topic</label>
+                   <div class="controls">
+                     <input type="text" id="topic" name="topic" class="input-xlarge" {% if discussion.topic %}value="{{ discussion.topic }}"{% endif %} />
+                   </div>
+                 </div>
+
+                 <div class="control-group">
+                   <label for="slug" class="control-label">Slug</label>
+                   <div class="controls">
+                     <input type="text" id="slug" name="slug" class="input-xlarge" {% if discussion.slug %}value="{{ discussion.slug }}"{% endif %} />
+                   </div>
+                 </div>
+
+                 <div class="control-group">
+                   <label for="objectives" class="control-label">Objectives</label>
+                   <div class="controls">
+                     <textarea rows="3" id="objectives" name="objectives" class="input-xlarge">
+                       {% if discussion.objectives %}{{ discussion.objectives }}{% endif %}
+                     </textarea>
+                   </div>
+                 </div>
+
+                 <div class="form-actions ptm">
+                   <button class="btn btn-secondary" type="submit">Save changes</button>
+                 </div>
+
+               </fieldset>
+             </form>
         </div>
       </div>
-
-      <div class="control-group">
-        <label for="slug" class="control-label">Slug</label>
-        <div class="controls">
-          <input type="text" id="slug" name="slug" class="input-xlarge" {% if discussion.slug %}value="{{ discussion.slug }}"{% endif %} />
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label for="objectives" class="control-label">Objectives</label>
-        <div class="controls">
-          <textarea rows="3" id="objectives" name="objectives" class="input-xlarge">
-            {% if discussion.objectives %}{{ discussion.objectives }}{% endif %}
-          </textarea>
-        </div>
-      </div>
-
-      <div class="form-actions ptm">
-        <button class="btn btn-secondary" type="submit">Save changes</button>
-      </div>
-
-    </fieldset>
-  </form>
+    </div>
+  </div>
 </div>
-</div>
-
-
 

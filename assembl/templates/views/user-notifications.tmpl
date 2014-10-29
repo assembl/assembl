@@ -3,10 +3,10 @@
     <nav class="sidebar-nav">
         <ul class="man pan adminMenu">
           <li>
-            <a href="#users/edit" class="menu">{{ gettext('edit profile') }}</a>
+            <a href="#users/edit" class="menu">{{ gettext('profile') }}</a>
           </li>
           <li class="active">
-            <a href="#users/notifications" class="menu">{{ gettext('edit notification') }}</a>
+            <a href="#users/notifications" class="menu">{{ gettext('notifications') }}</a>
           </li>
           <li class="mtxl">
             <a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a>
@@ -44,13 +44,13 @@
             </fieldset>
           </form>
           <% } else { %>
-
-          <h4 class="h4">{{ gettext('no notifications') }}</h4>
-
+            <h4 class="h4">{{ gettext('no notifications') }}</h4>
           <% } %>
         </div>
       </div>
     </div>
-
+    <div class="content-container">
+        <h5>{{ gettext('Notifications push') }}</h5>
+    </div>
   </div>
 </div>

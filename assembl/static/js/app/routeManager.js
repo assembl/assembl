@@ -40,16 +40,22 @@ define(function (require) {
         },
 
         edition: function () {
+            Assembl.headerRegions.show(new navBar());
+
             var edition = new adminDiscussion();
             Assembl.groupContainer.show(edition);
         },
 
         partners: function () {
+            Assembl.headerRegions.show(new navBar());
+
             var partners = new adminPartners();
             Assembl.groupContainer.show(partners);
         },
 
         notifications: function () {
+            Assembl.headerRegions.show(new navBar());
+
             var notifications = new adminNotifications();
             Assembl.groupContainer.show(notifications);
         },
