@@ -284,13 +284,13 @@ def minify_javascript_maybe():
 @task
 def minify_javascript():
     with cd(join(env.projectpath, 'assembl', 'static', 'js')):
-        run('../../../node_modules/requirejs/bin/r.js -o build/build.js')
+        run('node r.js -o build.js')
 
 
 @task
 def minify_javascript_debug():
     with cd(join(env.projectpath, 'assembl', 'static', 'js')):
-        run('../../../node_modules/requirejs/bin/r.js -o build/build_with_map.js')
+        run('node r.js -o build_with_map.js')
 
 
 def tests():

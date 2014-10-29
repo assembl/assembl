@@ -10,16 +10,18 @@
     fileExclusionRegExp: /^(r|build)\.js$/,
     optimizeCss: 'standard',
     removeCombined: false,
+    wrapShim: true,
     paths: {
         'jquery': "../bower/jquery/jquery",
         'jquery-highlight': '../lib/jquery-highlight/jquery.highlight',
         'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
 
         'backbone': '../bower/backbone/backbone',
-        'BackboneSubset': '../bower/Backbone.Subset/backbone.subset',
+        'backbone.subset': '../bower/Backbone.Subset/backbone.subset',
         'underscore': '../bower/underscore/underscore',
-        'backbone.modal': '../bower/backbone-modal/backbone.marionette.modals',
-        'marionette': '../bower/marionette/lib/backbone.marionette',
+        'backbone.marionette.modals': '../bower/backbone-modal/backbone.marionette.modals',
+        'backbone.modal': '../bower/backbone-modal/backbone.modal',
+        'backbone.marionette': '../bower/marionette/lib/backbone.marionette',
 
         'annotator': '../lib/annotator/annotator-full.min',
 
@@ -105,13 +107,8 @@
             deps: ['jquery'],
             exports: 'Annotator'
         },
-        'backbone-modal': {
-            deps: ['backbone'],
-            exports: 'backboneModal'
-        },
-        'BackboneSubset': {
-            deps: ['backbone'],
-            exports: 'BackboneSubset'
+        'backbone.subset': {
+            deps: ['backbone']
         },
         'bootstrap': {
             deps: ['jquery']

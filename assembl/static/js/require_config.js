@@ -7,7 +7,7 @@ var requirejs_config = {
         'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
 
         'backbone': '../bower/backbone/backbone',
-        'BackboneSubset': '../bower/Backbone.Subset/backbone.subset',
+        'backbone.subset': '../bower/Backbone.Subset/backbone.subset',
         'underscore': '../bower/underscore/underscore',
         'backbone.marionette.modals': '../bower/backbone-modal/backbone.marionette.modals',
         'backbone.modal': '../bower/backbone-modal/backbone.modal',
@@ -93,9 +93,8 @@ var requirejs_config = {
             deps: ['jquery'],
             exports: 'Annotator'
         },
-        'BackboneSubset': {
-            deps: ['backbone'],
-            exports: 'BackboneSubset'
+        'backbone.subset': {
+            deps: ['backbone']
         },
         'bootstrap': {
             deps: ['jquery']
