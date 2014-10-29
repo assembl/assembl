@@ -9,8 +9,8 @@ define(['backbone.marionette', 'routeManager'],
                 "edition": "edition",
                 "partners": "partners",
                 "notifications": "notifications",
-                "account/notifications": "userNotifications",
-                "account/profile": "profile",
+                "users/notifications": "userNotifications",
+                "users/edit": "profile",
                 "*actions": "defaults"
             }
 

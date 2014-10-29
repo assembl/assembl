@@ -1,41 +1,56 @@
-<aside class="profile-sidebar gu gu-1of5">
-    <h1 class="logo tac pas h1"></h1>
+<div class="gr">
+  <div class="gu gu-1of5">
     <nav class="sidebar-nav">
         <ul class="man pan adminMenu">
           <li>
-            <a href="#account/profile" class="btn btn-default btn-sm menu">{{ gettext('edit profile') }}</a>
+            <a href="#users/edit" class="menu">{{ gettext('edit profile') }}</a>
           </li>
           <li class="active">
-            <a href="#account/notifications" class="btn btn-default btn-sm menu">{{ gettext('edit notification') }}</a>
+            <a href="#users/notifications" class="menu">{{ gettext('edit notification') }}</a>
+          </li>
+          <li class="mtxl">
+            <a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a>
           </li>
         </ul>
-
-        <a href="/{{ discussion.slug }}/" class="btn btn-cancel btn-sm mtxl">{{ gettext('back to discussion') }}</a>
     </nav>
-</aside>
-<div id="content-container">
-  <h2 class="h2">User Notifications</h2>
-  <% if(UserNotifications.length) { %>
-  <form class="core-form form-horizontal">
-    <fieldset>
-      <% _.each(UserNotifications, function(notification, index, list){ %>
+  </div>
+  <div class="gu gu-3of4 admin-section">
 
-        <div class="control-group mts">
-          <label for="<%= notification.get('@id') %>" class="control-label"></label>
-          <div class="controls">
-            <label class="checkbox">
-              <input type="checkbox" class="js_userNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= notification.get('@id') %>">
-              <%= notification.get('@type') %>
-            </label>
-          </div>
+    <div class="admin-title">
+      <h3 class="h3">Notifications</h3>
+    </div>
+    <div id="content-container" class="content-container">
+      <div class="gr">
+        <div class="gu gu-1of4">
+          <h5>{{ gettext('inform me when :') }}</h5>
         </div>
+        <div class="gu gu-1of2">
+          <% if(UserNotifications.length) { %>
+          <form class="core-form">
+            <fieldset>
+              <% _.each(UserNotifications, function(notification, index, list){ %>
 
-      <% }) %>
-    </fieldset>
-  </form>
-  <% } else { %>
+                <div class="control-group">
+                  <label for="<%= notification.get('@id') %>" class="control-label"></label>
+                  <div class="controls">
+                    <label class="checkbox">
+                      <input type="checkbox" class="js_userNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= notification.get('@id') %>">
+                      <%= notification.get('@type') %>
+                    </label>
+                  </div>
+                </div>
 
-  <h4 class="h4">{{ gettext('no notifications') }}</h4>
+              <% }) %>
+            </fieldset>
+          </form>
+          <% } else { %>
 
-  <% } %>
+          <h4 class="h4">{{ gettext('no notifications') }}</h4>
+
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>

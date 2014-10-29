@@ -55,11 +55,15 @@ define(function (require) {
         },
 
         userNotifications: function () {
+            Assembl.headerRegions.show(new navBar());
+
             var user = new userNotifications();
             Assembl.groupContainer.show(user);
         },
 
         profile: function () {
+            Assembl.headerRegions.show(new navBar());
+
             var profile = new userProfile();
             Assembl.groupContainer.show(profile);
         },

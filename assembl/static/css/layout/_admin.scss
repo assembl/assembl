@@ -4,40 +4,6 @@
 }
 
 /* user profile */
-
-.profile-sidebar {
-  position: fixed;
-  top: 36px;
-  z-index: 1000;
-  min-height: 100%;
-
-  .sidebar-nav {
-    li {
-      border-left: 6px solid transparent;
-      &.active {
-        border-left: 6px solid $gray4;
-      }
-    }
-  }
-}
-
-#content-container,
-#partners-container,
-#admin-container {
-  margin-left: 20%;
-  h2 {
-    border-bottom: 1px solid $gray3;
-  }
-  .user-notifications,
-  .admin-partners,
-  .admin-content,
-  .admin-notifications {
-    h2 {
-      border-bottom: 1px solid $gray3;
-    }
-  }
-}
-
 table {
   &.admin {
     border: none;
@@ -50,3 +16,48 @@ table {
   }
 }
 
+.admin-notifications,
+.admin-profile {
+  width: 85%;
+  margin: 30px auto 0 auto;
+
+  .sidebar-nav {
+    ul > li {
+      list-style: none;
+    }
+  }
+
+  .adminMenu {
+    .menu {
+      display: block;
+      padding: 6px 0;
+      font-size: 14px;
+      color: #82888a;
+    }
+    .active {
+      .menu {
+        text-decoration: none;
+        color: #565a5c;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .admin-title {
+    color: #565a5c;
+    font-size: 16px;
+    border-bottom: 1px solid #dce0e0;
+    padding: $spacingS;
+  }
+
+  .content-container {
+    @include box-sizing(border-box);
+    padding: $spacingS;
+  }
+
+  .admin-section {
+    border: 1px solid #dce0e0;
+    background-color: $white;
+    min-height: 400px;
+  }
+}

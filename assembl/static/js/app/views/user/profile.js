@@ -3,7 +3,7 @@ define(['backbone.marionette'], function (Marionette) {
 
     var userProfile = Marionette.LayoutView.extend({
         template: '#tmpl-profile',
-        className: 'profile',
+        className: 'admin-profile',
         regions: {
 
         },

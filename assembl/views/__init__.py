@@ -23,8 +23,8 @@ def backbone_include(config):
     config.add_route('partners', '/partners')
     config.add_route('slug_notifications', '/notifications')
 
-    config.add_route('profile', '/account/profile')
-    config.add_route('user_notifications', '/account/notifications')
+    config.add_route('profile', '/users/edit')
+    config.add_route('user_notifications', '/users/notifications')
 
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')

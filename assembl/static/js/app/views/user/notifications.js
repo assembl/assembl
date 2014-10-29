@@ -4,7 +4,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
         var Notifications = Marionette.LayoutView.extend({
             template: '#tmpl-user-notifications',
-            className: 'user-notifications prs',
+            className: 'admin-notifications',
             initialize: function () {
                 var collectionManager = new CollectionManager(),
                     that = this;
