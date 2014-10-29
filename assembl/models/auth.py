@@ -551,7 +551,7 @@ class User(AgentProfile):
         """the notification subscriptions for this user and discussion.
         Includes materialized subscriptions from the template."""
         from .notification import (
-            NotificationSubscription, NotificationStatus, NotificationCreationOrigin)
+            NotificationSubscription, NotificationSubscriptionStatus, NotificationCreationOrigin)
         from .discussion import Discussion
         from ..auth.util import get_roles
         my_subscriptions = self.db.query(NotificationSubscription).filter_by(
@@ -570,7 +570,7 @@ class User(AgentProfile):
             if template is None:
                 continue
             for subscription in template.get_notification_subscriptions():
-                subscribed[subscription.__class__] |= subscription.status == NotificationStatus.ACTIVE
+                subscribed[subscription.__class__] |= subscription.status == NotificationSubscriptionStatus.ACTIVE
         defaults = []
         for cls in missing:
             active = subscribed[cls]
@@ -578,7 +578,7 @@ class User(AgentProfile):
                 discussion_id=discussion_id,
                 user_id=self.id,
                 creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
-                status=NotificationStatus.ACTIVE if active else NotificationStatus.INACTIVE_DFT)
+                status=NotificationSubscriptionStatus.ACTIVE if active else NotificationSubscriptionStatus.INACTIVE_DFT)
             defaults.append(sub)
             if active:
                 # materialize
@@ -796,7 +796,7 @@ class UserTemplate(DiscussionBoundBase, User):
         """the notification subscriptions for this template.
         Materializes applicable subscriptions.."""
         from .notification import (
-            NotificationSubscription, NotificationStatus, NotificationCreationOrigin)
+            NotificationSubscription, NotificationSubscriptionStatus, NotificationCreationOrigin)
         my_subscriptions = self.db.query(NotificationSubscription).filter_by(
             discussion_id=self.discussion_id, user_id=self.id).all()
         my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
@@ -811,7 +811,7 @@ class UserTemplate(DiscussionBoundBase, User):
                 discussion_id=self.discussion_id,
                 user_id=self.id,
                 creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
-                status=NotificationStatus.ACTIVE if subscribed[cls] else NotificationStatus.INACTIVE_DFT)
+                status=NotificationSubscriptionStatus.ACTIVE if subscribed[cls] else NotificationSubscriptionStatus.INACTIVE_DFT)
             for cls in missing
         ]
         for d in defaults:

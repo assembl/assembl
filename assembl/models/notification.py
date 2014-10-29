@@ -56,7 +56,7 @@ class NotificationCreationOrigin(DeclEnum):
     DISCUSSION_DEFAULT = "DISCUSSION_DEFAULT", "The notification subscription was created by the default discussion configuration"
     PARENT_NOTIFICATION = "PARENT_NOTIFICATION", "The notification subscription was created by another subscription (such as following all message threads a user participated in"
 
-class NotificationStatus(DeclEnum):
+class NotificationSubscriptionStatus(DeclEnum):
     ACTIVE = "ACTIVE", "Normal status, subscription will create notifications"
     UNSUBSCRIBED = "UNSUBSCRIBED", "The user explicitely unsubscribed from this notification"
     INACTIVE_DFT = "INACTIVE_DFT", "This subscription is defined in the template, but not subscribed by default."
@@ -105,10 +105,10 @@ class NotificationSubscription(DiscussionBoundBase):
         backref=backref('parent_subscription', remote_side=[id]),
     )
     status = Column(
-        NotificationStatus.db_type(),
+        NotificationSubscriptionStatus.db_type(),
         nullable = False,
         index = True,
-        default = NotificationStatus.ACTIVE)
+        default = NotificationSubscriptionStatus.ACTIVE)
     last_status_change_date = Column(
         DateTime,
         nullable = False,
@@ -163,7 +163,7 @@ class NotificationSubscription(DiscussionBoundBase):
         override this with a more optimal implementation
         """
         applicable_subscriptions = []
-        subscriptions = cls.db.query(cls).filter(cls.status==NotificationStatus.ACTIVE);
+        subscriptions = cls.db.query(cls).filter(cls.status==NotificationSubscriptionStatus.ACTIVE);
         for subscription in subscriptions:
             if(subscription.wouldCreateNotification(object.get_discussion_id(), verb, object)):
                 applicable_subscriptions.append(subscription)

@@ -181,7 +181,7 @@ from .notification import (
     NotificationSubscriptionFollowOwnMessageDirectReplies,
     Notification,
     NotificationCreationOrigin,
-    NotificationStatus
+    NotificationSubscriptionStatus
     )
 
 declare_history_mappers()

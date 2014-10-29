@@ -13,7 +13,7 @@ from assembl.models import (
     NotificationSubscriptionFollowAllMessages,
     NotificationSubscriptionFollowOwnMessageDirectReplies,
     NotificationCreationOrigin,
-    NotificationStatus
+    NotificationSubscriptionStatus
 )
 from sqlalchemy import func
 from .notification import ModelEventWatcherNotificationSubscriptionDispatcher
@@ -49,12 +49,12 @@ def test_notification_follow_synthesis(test_session,
     notification_count = test_session.query(Notification).count() 
     assert notification_count == initial_notification_count, "The post wasn't a synthesis and shouldn't have been caught"
     initial_last_status_change_date = subscription.last_status_change_date
-    subscription.status = NotificationStatus.UNSUBSCRIBED
+    subscription.status = NotificationSubscriptionStatus.UNSUBSCRIBED
     assert subscription.last_status_change_date > initial_last_status_change_date, "The last status change date should have auto-updated"
     dispatcher.processPostCreated(synthesis_post_1.id)
     notification_count = test_session.query(Notification).count() 
     assert notification_count == initial_notification_count, "The synthesis shouldn't have created a notification, because the subscription is unsubscribed"
-    subscription.status = NotificationStatus.ACTIVE
+    subscription.status = NotificationSubscriptionStatus.ACTIVE
     dispatcher.processPostCreated(synthesis_post_1.id)
     notification_count = test_session.query(Notification).count() 
     assert notification_count == initial_notification_count + 1, "The synthesis post should have matched and created a notification"
