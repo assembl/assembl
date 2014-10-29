@@ -18,7 +18,6 @@ define(['jquery', 'models/base', 'common/context'],
                 creation_origin: null,
                 user: null
             }
-
         });
 
         var notificationsUserCollection = Base.Collection.extend({

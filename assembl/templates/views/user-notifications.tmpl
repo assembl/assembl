@@ -22,20 +22,19 @@
     <div id="content-container" class="content-container">
       <div class="gr">
         <div class="gu gu-1of4">
-          <h5>{{ gettext('inform me when :') }}</h5>
+          <h4>{{ gettext('Currently you will be informed when :') }}</h4>
         </div>
         <div class="gu gu-1of2">
-          <% if(UserNotifications.length) { %>
           <form class="core-form">
             <fieldset>
-              <% _.each(UserNotifications, function(notification, index, list){ %>
+              <% _.each(UserNotifications, function(subscription, index, list){ %>
 
                 <div class="control-group">
-                  <label for="<%= notification.get('@id') %>" class="control-label"></label>
+                  <label for="<%= subscription.get('@id') %>" class="control-label"></label>
                   <div class="controls">
                     <label class="checkbox">
-                      <input type="checkbox" class="js_userNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= notification.get('@id') %>">
-                      <%= notification.get('@type') %>
+                      <input type="checkbox" class="js_userNotification" value="<%= subscription.get('@type') %>" <%= subscription.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= subscription.get('@id') %>">
+                      <%= subscription.get('@type') %>
                     </label>
                   </div>
                 </div>
@@ -43,14 +42,26 @@
               <% }) %>
             </fieldset>
           </form>
-          <% } else { %>
-            <h4 class="h4">{{ gettext('no notifications') }}</h4>
-          <% } %>
+          <form class="core-form">
+            <fieldset>
+            YES, the rest of the list is incorrect, waiting for proper API point
+              <% _.each(addableGlobalSubscriptions, function(subscription, index, list){ %>
+
+                <div class="control-group">
+                  <label for="<%= subscription.get('@id') %>" class="control-label"></label>
+                  <div class="controls">
+                    <label class="checkbox">
+                      <input type="checkbox" class="js_userNewNotification" value="<%= subscription.get('@type') %>" <%= subscription.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= subscription.get('@id') %>">
+                      <%= subscription.get('@type') %>
+                    </label>
+                  </div>
+                </div>
+
+              <% }) %>
+            </fieldset>
+          </form>
         </div>
       </div>
-    </div>
-    <div class="content-container">
-        <h5>{{ gettext('Notifications push') }}</h5>
     </div>
   </div>
 </div>

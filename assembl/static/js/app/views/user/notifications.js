@@ -5,38 +5,66 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
         var Notifications = Marionette.LayoutView.extend({
             template: '#tmpl-user-notifications',
             className: 'admin-notifications',
+            ui: {
+              currentSubscribeCheckbox: ".js_userNotification",
+              newSubscribeCheckbox: ".js_userNewNotification",
+            },
             initialize: function () {
                 var collectionManager = new CollectionManager(),
                     that = this;
 
                 this.collection = new Backbone.Collection();
-
-                $.when(collectionManager.getNotificationsUserCollectionPromise()).then(
-                    function (NotificationsUser) {
-                        that.collection.reset(NotificationsUser.models);
+                this.notificationTemplates = new Backbone.Collection();
+                $.when(collectionManager.getNotificationsUserCollectionPromise(), collectionManager.getNotificationsDiscussionCollectionPromise()).then(
+                    function (NotificationsUser, notificationTemplates) {
+                        that.collection = NotificationsUser;
+                        that.notificationTemplates = notificationTemplates;
+                        that.render();
                     });
 
             },
-
             events: {
-                'click .js_userNotification': 'userNotification'
+                'click @ui.currentSubscribeCheckbox': 'userNotification',
+                'click @ui.newSubscribeCheckbox': 'userNewSubscription',
             },
 
             collectionEvents: {
-                'reset': 'render'
+                'add': 'render'
             },
 
             serializeData: function () {
-
-                var userNotifications = _.filter(this.collection.models, function (m) {
+                
+                /*No need to filter in this case
+                 * var userNotifications = _.filter(this.collection.models, function (m) {
                     return m.get('creation_origin') === 'USER_REQUEST';
                 });
-
+                */
+                var that = this,
+                    addableGlobalSubscriptions = []
+                this.notificationTemplates.each(function(template) {
+                  var alreadyPresent = that.collection.find(function(subscription) {
+                    if (subscription.get('@type') === template.get('@type')){
+                      return true;
+                    }
+                    else {
+                      return false
+                    }
+                  });
+                  if(alreadyPresent === undefined) {
+                    addableGlobalSubscriptions.push(template)
+                  }
+                })
+                console.log(addableGlobalSubscriptions);
                 return {
-                    UserNotifications: userNotifications
+                    UserNotifications: this.collection.models,
+                    addableGlobalSubscriptions: addableGlobalSubscriptions
                 }
             },
 
+            userNewSubscription : function (e) {
+              console.log("WRITEME:  POST to proper api point")
+            },
+            
             userNotification: function (e) {
                 var elm = $(e.target),
                     idResource = elm.attr('id').split('/')[1];
