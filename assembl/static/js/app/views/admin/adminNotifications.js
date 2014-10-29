@@ -6,15 +6,18 @@ define(['backbone.marionette', 'common/collectionManager'],
         var adminNotifications = Marionette.LayoutView.extend({
             template: '#tmpl-adminNotifications',
             className: 'admin-notifications',
+            collectionEvents: {
+              "reset": "render" // equivalent to view.listenTo(view.collection, "reset", view.render, view)
+            },
             initialize: function () {
                 var collectionManager = new CollectionManager(),
                     that = this;
 
                 this.collection = new Backbone.Collection();
-
+                
                 $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then(
                     function (NotificationsDiscussion) {
-                        that.collection.add(NotificationsDiscussion.models);
+                        that.collection.reset(NotificationsDiscussion.models);
                     });
             },
 

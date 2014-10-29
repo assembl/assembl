@@ -13,7 +13,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                 $.when(collectionManager.getNotificationsUserCollectionPromise()).then(
                     function (NotificationsUser) {
-                        that.collection.add(NotificationsUser.models);
+                        that.collection.reset(NotificationsUser.models);
                     });
 
             },
@@ -23,7 +23,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
             },
 
             collectionEvents: {
-                'add': 'render'
+                'reset': 'render'
             },
 
             serializeData: function () {
