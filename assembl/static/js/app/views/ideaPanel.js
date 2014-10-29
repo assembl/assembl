@@ -127,7 +127,6 @@ define(function (require) {
         serializeData: function () {
             var subIdeas = {},
                 votable_widgets = [],
-                inspiration_widgets = [],
                 currentUser = Ctx.getCurrentUser(),
                 canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
                 canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
@@ -136,20 +135,6 @@ define(function (require) {
             if (this.model) {
                 subIdeas = this.model.getChildren();
                 votable_widgets = this.model.getVotableOnWhichWidgets();
-                //inspiration_widgets = this.model.getInspirationWidgets();
-                inspiration_widgets = this.model.getVotableOnWhichWidgets();
-                /*
-                 inspiration_widgets = [
-                 {
-                 "messages_url": "local:Discussion/1/widgets/43/base_idea/-/widgetposts", "user_states_url": "local:Widget/43/user_states", "ideas_hiding_url": "local:Discussion/1/widgets/43/base_idea_hiding/-/children", "widget_settings_url": "local:Widget/43/settings", "user_state_url": "local:Widget/43/user_state", "widget_state_url": "local:Widget/43/state", "discussion": "local:Discussion/1", "settings": {"votable_root_id": "local:Idea/3", "active_modules": {"video": true, "card": true}}, "confirm_ideas_url": null, "state": {}, "ideas_url": "local:Discussion/1/widgets/43/base_idea/-/children", "confirm_messages_url": null,
-                 "@id": "local:Widget/43", "@type": "InspirationWidget", "@view": "creativity_widget"
-                 },
-                 {
-                 "messages_url": "local:Discussion/1/widgets/52/base_idea/-/widgetposts", "user_states_url": "local:Widget/52/user_states", "ideas_hiding_url": "local:Discussion/1/widgets/52/base_idea_hiding/-/children", "widget_settings_url": "local:Widget/52/settings", "user_state_url": "local:Widget/52/user_state", "widget_state_url": "local:Widget/52/state", "discussion": "local:Discussion/1", "settings": {"votable_root_id": "local:Idea/4", "active_modules": {"video": true}}, "confirm_ideas_url": null, "state": {}, "ideas_url": "local:Discussion/1/widgets/52/base_idea/-/children", "confirm_messages_url": null,
-                 "@id": "local:Widget/52", "@type": "InspirationWidget", "@view": "creativity_widget"
-                 }
-                 ];
-                 */
                 contributors = this.model.get('contributors');
             }
 
@@ -158,7 +143,6 @@ define(function (require) {
                 contributors: contributors,
                 subIdeas: subIdeas,
                 votable_widgets: votable_widgets,
-                inspiration_widgets: inspiration_widgets,
                 canEdit: canEdit,
                 i18n: i18n,
                 getExtractsLabel: this.getExtractsLabel,
@@ -175,12 +159,64 @@ define(function (require) {
         },
 
         onBeforeRender: function () {
+            /*
+            FIXME: This method is sometimes called several times after the selection of an idea in the table of ideas. So maybe this code should go somewhere else (it should be called only once after each idea selection)
+            */
             if (this.model) {
                 /**
                  * We need more information about the initial model -> add contributors
                  * */
                 this.model.fetch({ data: $.param({ view: 'contributors'}) });
+
+
+                this.populateAssociatedWidgetData();
             }
+        },
+
+        populateAssociatedWidgetData: function(){
+            if (this.model) {
+                // Get inspiration widgets associated to this idea, via "ancestor_inspiration_widgets"
+                // And compute a link to create an inspiration widget
+                
+                var that = this;
+                var inspiration_widgets_url = Ctx.getApiV2DiscussionUrl("ideas/" + Ctx.extractId(this.model.getId()) + "/ancestor_inspiration_widgets");
+                var inspiration_widgets = null;
+                var inspiration_widget_url = null;
+                var inspiration_widget_configure_url = null;
+                var inspiration_widget_create_url = null;
+                $.getJSON(inspiration_widgets_url, function (data) {
+                    console.log("ancestor_inspiration_widgets data: ", data);
+
+                    if ( data
+                        && data instanceof Array
+                        && data.length > 0
+                    )
+                    {
+                        inspiration_widgets = data;
+                        that.model.set("inspiration_widgets", inspiration_widgets);
+                        var inspiration_widget_uri = inspiration_widgets[inspiration_widgets.length - 1]; // for example: "local:Widget/52"
+                        console.log("inspiration_widget_uri: ", inspiration_widget_uri);
+                        
+                        inspiration_widget_url = "/widget/creativity/?config="
+                            + Ctx.getUrlFromUri(inspiration_widget_uri)
+                            + "&target="
+                            + that.model.getId(); // example: "http://localhost:6543/widget/creativity/?config=/data/Widget/43&target=local:Idea/3#/"
+                        console.log("inspiration_widget_url: ", inspiration_widget_url);
+                        that.model.set("inspiration_widget_url", inspiration_widget_url);
+
+                        inspiration_widget_configure_url = "/widget/creativity/?admin=1#/admin/configure_instance?widget_uri="
+                            + Ctx.getUrlFromUri(inspiration_widget_uri)
+                            + "&target="
+                            + that.model.getId(); // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
+                        that.model.set("inspiration_widget_configure_url", inspiration_widget_configure_url);
+                    }
+                });
+
+                inspiration_widget_create_url = "/widget/creativity/?admin=1#/admin/create_from_idea?idea="
+                    + encodeURIComponent( that.model.getId() + "?view=creativity_widget" ); // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
+                that.model.set("inspiration_widget_create_url", inspiration_widget_create_url);
+            }
+
         },
 
         onRender: function () {
@@ -215,8 +251,8 @@ define(function (require) {
         openInspireMeModal: function (evt) {
             console.log("openInspireMeModal()");
             console.log("evt: ", evt);
-            var target_url = $(evt.currentTarget).attr("href");
-            if (!target_url)
+            var target_url = (evt && evt.currentTarget) ? $(evt.currentTarget).attr("href") : null;
+            if ( !target_url )
                 target_url = "/widget/creativity/?config=local:Widget/52&target=local:Idea/4";
             var data = {
                 iframe_url: target_url

@@ -246,7 +246,7 @@ creativityApp.controller('adminCreateFromIdeaCtl',
                     $scope.createWidgetInstance(
                         $("#widget_create_without_settings_api_endpoint").val(),
                         $("#widget_create_without_settings_type").val(),
-                        { 'votable_root_id': $("#widget_create_without_settings_idea").val() }, //null,
+                        { 'idea': $("#widget_create_without_settings_idea").val() }, //null,
                         $("#widget_create_without_settings_result")
                     );
                 });

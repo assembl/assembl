@@ -251,6 +251,15 @@ define(function (require) {
             });
         },
 
+        getUrlFromUri: function (str) {
+            var start = "local:";
+            if ( str.indexOf(start) == 0 )
+            {
+              str = "/data/" + str.slice(start.length);
+            }
+            return str;
+        },
+
         /**
          * Formats the url to the current api url
          * @param  {string} url
