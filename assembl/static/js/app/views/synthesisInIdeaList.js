@@ -2,8 +2,8 @@ define(function (require) {
     'use strict';
 
     var Ctx = require('common/context'),
-        Assembl = require('app/app'),
-        IdeaView = require('app/views/idea');
+        Assembl = require('app'),
+        IdeaView = require('views/idea');
 
     var SynthesisIdeaView = IdeaView.extend({
         /**

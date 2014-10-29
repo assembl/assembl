@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-        groupSpec = require('app/models/groupSpec'),
+        groupSpec = require('models/groupSpec'),
         Ctx = require('common/context');
 
     var storage = Marionette.Object.extend({

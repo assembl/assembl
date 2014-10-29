@@ -1,4 +1,4 @@
-define(['underscore', 'app/models/base'], function (_, Base) {
+define(['underscore', 'models/base'], function (_, Base) {
     'use strict';
 
     /**

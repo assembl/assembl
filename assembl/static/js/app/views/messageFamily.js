@@ -4,12 +4,12 @@ define(function (require) {
     var Backbone = require('backbone'),
         _ = require('underscore'),
         ckeditor = require('ckeditor'),
-        Assembl = require('app/app'),
+        Assembl = require('app'),
         Ctx = require('common/context'),
-        Types = require('app/utils/types'),
-        MessageView = require('app/views/message'),
-        SynthesisMessageView = require('app/views/synthesisMessage'),
-        i18n = require('app/utils/i18n');
+        Types = require('utils/types'),
+        MessageView = require('views/message'),
+        SynthesisMessageView = require('views/synthesisMessage'),
+        i18n = require('utils/i18n');
 
     /**
      * @class views.MessageFamilyView

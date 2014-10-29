@@ -1,21 +1,21 @@
 define(function (require) {
     'use strict';
 
-    var objectTreeRenderVisitor = require('app/views/visitors/objectTreeRenderVisitor'),
+    var objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
         Backbone = require('backbone'),
         _ = require('underscore'),
         $ = require('jquery'),
-        Assembl = require('app/app'),
+        Assembl = require('app'),
         Ctx = require('common/context'),
-        Synthesis = require('app/models/synthesis'),
-        Idea = require('app/models/idea'),
-        Permissions = require('app/utils/permissions'),
-        IdeaFamilyView = require('app/views/ideaFamily'),
-        IdeaInSynthesisView = require('app/views/ideaInSynthesis'),
-        AssemblPanel = require('app/views/assemblPanel'),
-        i18n = require('app/utils/i18n'),
-        EditableField = require('app/views/editableField'),
-        CKEditorField = require('app/views/ckeditorField'),
+        Synthesis = require('models/synthesis'),
+        Idea = require('models/idea'),
+        Permissions = require('utils/permissions'),
+        IdeaFamilyView = require('views/ideaFamily'),
+        IdeaInSynthesisView = require('views/ideaInSynthesis'),
+        AssemblPanel = require('views/assemblPanel'),
+        i18n = require('utils/i18n'),
+        EditableField = require('views/editableField'),
+        CKEditorField = require('views/ckeditorField'),
         CollectionManager = require('common/collectionManager');
 
 

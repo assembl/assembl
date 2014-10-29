@@ -1,9 +1,9 @@
 define(function (require) {
     'use strict';
 
-    var Assembl = require('app/app'),
+    var Assembl = require('app'),
         Ctx = require('common/context'),
-        IdeaView = require('app/views/idea');
+        IdeaView = require('views/idea');
 
     var OrphanMessagesInIdeaListView = IdeaView.extend({
         /**

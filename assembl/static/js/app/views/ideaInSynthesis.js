@@ -3,12 +3,12 @@ define(function (require) {
 
     var Backbone = require('backbone'),
         _ = require('underscore'),
-        Assembl = require('app/app'),
+        Assembl = require('app'),
         Ctx = require('common/context'),
-        i18n = require('app/utils/i18n'),
-        Permissions = require('app/utils/permissions'),
-        CKEditorField = require('app/views/ckeditorField'),
-        MessageSendView = require('app/views/messageSend'),
+        i18n = require('utils/i18n'),
+        Permissions = require('utils/permissions'),
+        CKEditorField = require('views/ckeditorField'),
+        MessageSendView = require('views/messageSend'),
         CollectionManager = require('common/collectionManager');
 
     var IdeaInSynthesisView = Backbone.View.extend({

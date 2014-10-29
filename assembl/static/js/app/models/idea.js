@@ -1,4 +1,4 @@
-define(['underscore', 'app/models/base', 'common/context', 'app/utils/i18n', 'app/utils/types', 'app/utils/permissions'],
+define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/types', 'utils/permissions'],
     function (_, Base, Ctx, i18n, Types, Permissions) {
         'use strict';
 

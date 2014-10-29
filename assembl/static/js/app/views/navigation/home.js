@@ -1,7 +1,7 @@
 define(function (require) {
 
-    var Assembl = require('app/app'),
-        AssemblPanel = require('app/views/assemblPanel');
+    var Assembl = require('app'),
+        AssemblPanel = require('views/assemblPanel');
 
     var HomePanel = AssemblPanel.extend({
         template: '#tmpl-home',

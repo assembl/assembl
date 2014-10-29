@@ -101,30 +101,20 @@
             deps: ['backbone'],
             exports: 'BackboneSubset'
         },
-        'modal': {
-            deps: ['backbone'],
-            exports: 'Modal'
-        },
         'bootstrap': {
             deps: ['jquery']
         }
     },
-    baseUrl: "..",
+    baseUrl: "../",
     removeCombined: false,
     optimize: "uglify",
     findNestedDependencies: true,
-    dir: 'dist',
+    dir: '../dist',
     generateSourceMaps: false,
     preserveLicenseComments: true,
     modules: [
         {
-            name: "infrastructure"
-        },
-        {
-            name: "main",
-            exclude: [
-                "infrastructure"
-            ]
+            name: "main"
         }
     ]
 })

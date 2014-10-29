@@ -1,14 +1,14 @@
 define(function (require) {
 
-    var Assembl = require('app/app'),
+    var Assembl = require('app'),
         Marionette = require('marionette'),
-        IdeaList = require('app/views/ideaList'),
-        sidebarNotification = require('app/views/navigation/notification'),
-        HomePanel = require('app/views/navigation/home'),
-        SynthesisInNavigationPanel = require('app/views/navigation/synthesisInNavigation'),
-        AssemblPanel = require('app/views/assemblPanel'),
+        IdeaList = require('views/ideaList'),
+        sidebarNotification = require('views/navigation/notification'),
+        HomePanel = require('views/navigation/home'),
+        SynthesisInNavigationPanel = require('views/navigation/synthesisInNavigation'),
+        AssemblPanel = require('views/assemblPanel'),
         ctx = require('common/context'),
-        Permissions = require('app/utils/permissions'),
+        Permissions = require('utils/permissions'),
         $ = require('jquery');
 
     var NavigationView = AssemblPanel.extend({

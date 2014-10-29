@@ -1,4 +1,4 @@
-define(['app/models/base', 'common/context'], function (Base, Ctx) {
+define(['models/base', 'common/context'], function (Base, Ctx) {
     'use strict';
 
     var notificationsDiscussionModel = Base.Model.extend({

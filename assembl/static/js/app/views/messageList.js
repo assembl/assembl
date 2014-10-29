@@ -2,18 +2,18 @@ define(function (require) {
     'use strict';
 
     var Backbone = require('backbone'),
-        objectTreeRenderVisitor = require('app/views/visitors/objectTreeRenderVisitor'),
-        MessageFamilyView = require('app/views/messageFamily'),
+        objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
+        MessageFamilyView = require('views/messageFamily'),
         _ = require('underscore'),
         $ = require('jquery'),
-        Assembl = require('app/app'),
+        Assembl = require('app'),
         Ctx = require('common/context'),
-        Message = require('app/models/message'),
-        i18n = require('app/utils/i18n'),
-        PostQuery = require('app/views/messageListPostQuery'),
-        Permissions = require('app/utils/permissions'),
-        MessageSendView = require('app/views/messageSend'),
-        AssemblPanel = require('app/views/assemblPanel'),
+        Message = require('models/message'),
+        i18n = require('utils/i18n'),
+        PostQuery = require('views/messageListPostQuery'),
+        Permissions = require('utils/permissions'),
+        MessageSendView = require('views/messageSend'),
+        AssemblPanel = require('views/assemblPanel'),
         CollectionManager = require('common/collectionManager');
 
     /**

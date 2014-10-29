@@ -1,24 +1,24 @@
-define(['jasmine', 'jquery', '../common/context'], function (jasmine, $, ctx) {
+define(['jasmine', 'jquery', '../app/common/context'], function (jasmine, $, ctx) {
 
-	// Fixtures
-	var txt = '<script id="tmpl-test" type="text/x-tmpl">test something</script>'
-	$('body').append(txt);
+    // Fixtures
+    var txt = '<script id="tmpl-test" type="text/x-tmpl">test something</script>'
+    $('body').append(txt);
 
-	return describe('app main module', function(){
+    return describe('app main module', function () {
 
-		it('must exist', function(){
-			expect(ctx).not.toBeUndefined();
-		});
+        it('must exist', function () {
+            expect(ctx).not.toBeUndefined();
+        });
 
-		it('must load a template by id', function(){
+        it('must load a template by id', function () {
 
-			var tmpl = ctx.loadTemplate('test');
+            var tmpl = ctx.loadTemplate('test');
 
-			expect(typeof tmpl).toBe('function');
-			expect(tmpl()).toBe('test something');
-		});
+            expect(typeof tmpl).toBe('function');
+            expect(tmpl()).toBe('test something');
+        });
 
 
-	});
+    });
 
 });

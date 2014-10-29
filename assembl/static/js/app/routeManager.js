@@ -1,19 +1,19 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-        Assembl = require('app/app'),
+        Assembl = require('app'),
         Ctx = require('common/context'),
-        User = require('app/models/user'),
-        storage = require('app/objects/storage'),
-        navBar = require('app/views/navBar'),
-        GroupContainer = require('app/views/groups/groupContainer'),
+        User = require('models/user'),
+        storage = require('objects/storage'),
+        navBar = require('views/navBar'),
+        GroupContainer = require('views/groups/groupContainer'),
         CollectionManager = require('common/collectionManager'),
-        viewsFactory = require('app/objects/viewsFactory'),
-        adminDiscussion = require('app/views/admin/adminDiscussion'),
-        adminNotifications = require('app/views/admin/adminNotifications'),
-        adminPartners = require('app/views/admin/adminPartners'),
-        userNotifications = require('app/views/user/notifications'),
-        userProfile = require('app/views/user/profile');
+        viewsFactory = require('objects/viewsFactory'),
+        adminDiscussion = require('views/admin/adminDiscussion'),
+        adminNotifications = require('views/admin/adminNotifications'),
+        adminPartners = require('views/admin/adminPartners'),
+        userNotifications = require('views/user/notifications'),
+        userProfile = require('views/user/profile');
 
     var routeManager = Marionette.Controller.extend({
 

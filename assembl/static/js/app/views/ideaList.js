@@ -1,22 +1,22 @@
 define(function (require) {
     'use strict';
 
-    var AllMessagesInIdeaListView = require('app/views/allMessagesInIdeaList'),
-        OrphanMessagesInIdeaListView = require('app/views/orphanMessagesInIdeaList'),
-        SynthesisInIdeaListView = require('app/views/synthesisInIdeaList'),
-        Permissions = require('app/utils/permissions'),
-        objectTreeRenderVisitor = require('app/views/visitors/objectTreeRenderVisitor'),
-        ideaSiblingChainVisitor = require('app/views/visitors/ideaSiblingChainVisitor'),
+    var AllMessagesInIdeaListView = require('views/allMessagesInIdeaList'),
+        OrphanMessagesInIdeaListView = require('views/orphanMessagesInIdeaList'),
+        SynthesisInIdeaListView = require('views/synthesisInIdeaList'),
+        Permissions = require('utils/permissions'),
+        objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
+        ideaSiblingChainVisitor = require('views/visitors/ideaSiblingChainVisitor'),
         Backbone = require('backbone'),
-        Assembl = require('app/app'),
+        Assembl = require('app'),
         Ctx = require('common/context'),
-        Idea = require('app/models/idea'),
-        IdeaView = require('app/views/idea'),
-        AssemblPanel = require('app/views/assemblPanel'),
-        ideaGraphLoader = require('app/views/ideaGraph'),
+        Idea = require('models/idea'),
+        IdeaView = require('views/idea'),
+        AssemblPanel = require('views/assemblPanel'),
+        ideaGraphLoader = require('views/ideaGraph'),
         _ = require('underscore'),
         CollectionManager = require('common/collectionManager'),
-        i18n = require('app/utils/i18n');
+        i18n = require('utils/i18n');
 
     var FEATURED = 'featured',
         IN_SYNTHESIS = 'inNextSynthesis';

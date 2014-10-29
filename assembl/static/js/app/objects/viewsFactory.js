@@ -1,17 +1,17 @@
 define(function (require) {
     'use strict';
 
-    var AssemblPanel = require('app/views/assemblPanel'),
+    var AssemblPanel = require('views/assemblPanel'),
         _ = require('underscore'),
-        HomeNavPanel = require('app/views/navigation/home'),  // homeNavPanel
-        HomePanel = require('app/views/contextPage'),  // homePanel
-        IdeaList = require('app/views/ideaList'),  // ideaList
-        IdeaPanel = require('app/views/ideaPanel'),  // ideaPanel
-        MessageList = require('app/views/messageList'),  // messageList
-        NavigationView = require('app/views/navigation/navigation'),  // navSidebar
-        SegmentList = require('app/views/segmentList').SegmentListPanel,  // clipboard
-        SynthesisNavPanel = require('app/views/navigation/synthesisInNavigation'),  // synthesisNavPanel
-        SynthesisPanel = require('app/views/synthesisPanel');  // synthesisPanel
+        HomeNavPanel = require('views/navigation/home'),  // homeNavPanel
+        HomePanel = require('views/contextPage'),  // homePanel
+        IdeaList = require('views/ideaList'),  // ideaList
+        IdeaPanel = require('views/ideaPanel'),  // ideaPanel
+        MessageList = require('views/messageList'),  // messageList
+        NavigationView = require('views/navigation/navigation'),  // navSidebar
+        SegmentList = require('views/segmentList').SegmentListPanel,  // clipboard
+        SynthesisNavPanel = require('views/navigation/synthesisInNavigation'),  // synthesisNavPanel
+        SynthesisPanel = require('views/synthesisPanel');  // synthesisPanel
 
     // Design note: This requires our panels to have a panelType variable.
     // I deliberately gave it the same values as panelClass, so we have less to remember.

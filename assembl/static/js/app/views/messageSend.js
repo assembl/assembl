@@ -2,12 +2,12 @@ define(function (require) {
     'use strict';
 
     var Backbone = require('backbone'),
-        Assembl = require('app/app'),
+        Assembl = require('app'),
         _ = require('underscore'),
         $ = require('jquery'),
         Ctx = require('common/context'),
-        Permissions = require('app/utils/permissions'),
-        i18n = require('app/utils/i18n');
+        Permissions = require('utils/permissions'),
+        i18n = require('utils/i18n');
 
     var MessageSendView = Backbone.View.extend({
         /**

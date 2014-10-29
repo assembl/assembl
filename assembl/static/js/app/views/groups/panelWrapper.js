@@ -1,11 +1,11 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-        panelClassByTypeName = require('app/objects/viewsFactory'),
+        panelClassByTypeName = require('objects/viewsFactory'),
         Ctx = require('common/context'),
-        AssemblPanel = require('app/views/assemblPanel'),
-        i18n = require('app/utils/i18n'),
-        panelSpec = require('app/models/panelSpec');
+        AssemblPanel = require('views/assemblPanel'),
+        i18n = require('utils/i18n'),
+        panelSpec = require('models/panelSpec');
 
     /**
      * A wrapper for a panel, used anywhere in a panelGroup

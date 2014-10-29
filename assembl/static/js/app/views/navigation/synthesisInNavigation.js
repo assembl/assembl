@@ -1,11 +1,11 @@
 define(function (require) {
 
-    var AssemblPanel = require('app/views/assemblPanel'),
+    var AssemblPanel = require('views/assemblPanel'),
         CollectionManager = require('common/collectionManager'),
-        Types = require('app/utils/types'),
+        Types = require('utils/types'),
         Ctx = require('common/context'),
         _ = require('underscore'),
-        i18n = require('app/utils/i18n');
+        i18n = require('utils/i18n');
 
     var SynthesisInNavigationPanel = AssemblPanel.extend({
         template: '#tmpl-synthesisInNavigationPanel',

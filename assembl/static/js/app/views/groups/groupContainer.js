@@ -1,10 +1,10 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-        Assembl = require('app/app'),
-        GroupContent = require('app/views/groups/groupContent'),
-        AssemblPanel = require('app/views/assemblPanel'),
-        Notification = require('app/views/notification');
+        Assembl = require('app'),
+        GroupContent = require('views/groups/groupContent'),
+        AssemblPanel = require('views/assemblPanel'),
+        Notification = require('views/notification');
     /**
      * Manages all the groups in the interface
      */
@@ -142,7 +142,7 @@ define(function (require) {
             this.children.each(function (child) {
                 child.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, skip_animation);
             });
-        },
+        }
 
     });
 

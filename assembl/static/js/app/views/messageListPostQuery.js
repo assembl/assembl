@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Ctx = require('common/context'),
-        i18n = require('app/utils/i18n');
+        i18n = require('utils/i18n');
 
     /**
      * @class PostQuery

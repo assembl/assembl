@@ -3,9 +3,9 @@ define(function (require) {
 
     var ckeditor = require('ckeditor'),
         Ctx = require('common/context'),
-        MessageView = require('app/views/message'),
-        Synthesis = require('app/models/synthesis'),
-        SynthesisPanel = require('app/views/synthesisPanel'),
+        MessageView = require('views/message'),
+        Synthesis = require('models/synthesis'),
+        SynthesisPanel = require('views/synthesisPanel'),
         CollectionManager = require('common/collectionManager');
 
     /**

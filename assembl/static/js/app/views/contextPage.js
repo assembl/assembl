@@ -1,17 +1,17 @@
 define(function (require) {
 
     var Marionette = require('marionette'),
-        Assembl = require('app/app'),
+        Assembl = require('app'),
         Ctx = require('common/context'),
         CollectionManager = require('common/collectionManager'),
         $ = require('jquery'),
         _ = require('underscore'),
         d3 = require('d3'),
-        i18n = require('app/utils/i18n'),
+        i18n = require('utils/i18n'),
         Moment = require('moment'),
-        Permissions = require('app/utils/permissions'),
-        AssemblPanel = require('app/views/assemblPanel'),
-        CKEditorField = require('app/views/ckeditorField');
+        Permissions = require('utils/permissions'),
+        AssemblPanel = require('views/assemblPanel'),
+        CKEditorField = require('views/ckeditorField');
 
     var contextPage = Marionette.LayoutView.extend({
         template: '#tmpl-contextPage',

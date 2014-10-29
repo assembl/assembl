@@ -1,37 +1,34 @@
 var requirejs_config = {
-    baseUrl: "/static/js/",
     urlArgs: urlArgs,
     waitSeconds: 20,
     paths: {
-        'jquery': "bower/jquery/jquery",
-        'tipsy': 'bower/tipsy/src/javascripts/jquery.tipsy',
-        'jquery-highlight': 'lib/jquery-highlight/jquery.highlight',
-        'jquery.dotdotdot': 'bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
+        'jquery': "../bower/jquery/jquery",
+        'jquery-highlight': '../lib/jquery-highlight/jquery.highlight',
+        'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
 
-        'backbone': 'bower/backbone/backbone',
-        'BackboneSubset': 'bower/Backbone.Subset/backbone.subset',
-        'underscore': 'bower/underscore/underscore',
+        'backbone': '../bower/backbone/backbone',
+        'BackboneSubset': '../bower/Backbone.Subset/backbone.subset',
+        'underscore': '../bower/underscore/underscore',
+        'backbone.modal': '../lib/backbone-modal/backbone.modal',
+        'marionette': '../bower/marionette/lib/backbone.marionette',
 
-        'annotator': 'lib/annotator/annotator-full.min',
+        'annotator': '../lib/annotator/annotator-full.min',
 
-        'jasmine': 'bower/jasmine/lib/jasmine-core/jasmine',
-        'jasmine-html': 'bower/jasmine/lib/jasmine-core/jasmine-html',
-        'jasmine-boot': 'bower/jasmine/lib/jasmine-core/boot',
+        'jasmine': '../bower/jasmine/lib/jasmine-core/jasmine',
+        'jasmine-html': '../bower/jasmine/lib/jasmine-core/jasmine-html',
+        'jasmine-boot': '../bower/jasmine/lib/jasmine-core/boot',
 
-        'ckeditor': 'bower/ckeditor/ckeditor',
-        'ckeditor-sharedspace': 'lib/ckeditor-sharedcontainer/plugin',
+        'ckeditor': '../bower/ckeditor/ckeditor',
+        'ckeditor-sharedspace': '../lib/ckeditor-sharedcontainer/plugin',
 
-        'moment': 'bower/momentjs/min/moment-with-locales.min',
-        'zeroclipboard': 'bower/zeroclipboard/ZeroClipboard',
-        'sockjs': 'bower/sockjs/sockjs',
-        'cytoscape': 'bower/cytoscape/dist/cytoscape',
-        'jit': 'bower/jit/Jit/jit',
-        'jed': 'bower/jed/jed',
-        'backboneModal': 'lib/backbone-modal/backbone.modal',
-        'marionette': 'bower/marionette/lib/backbone.marionette',
-        'd3': 'bower/d3/d3.min',
-        'bootstrap': 'lib/bootstrap',
-        'swal': 'bower/sweetalert/lib/sweet-alert.min'
+        'moment': '../bower/momentjs/min/moment-with-locales.min',
+        'zeroclipboard': '../bower/zeroclipboard/ZeroClipboard',
+        'sockjs': '../bower/sockjs/sockjs',
+        'cytoscape': '../bower/cytoscape/dist/cytoscape',
+        'jit': '../bower/jit/Jit/jit',
+        'jed': '../bower/jed/jed',
+        'd3': '../bower/d3/d3.min',
+        'bootstrap': '../lib/bootstrap'
     },
     shim: {
         'underscore': {
@@ -49,7 +46,7 @@ var requirejs_config = {
             exports: 'jQuery'
         },
         'common/context': {
-            deps: ['annotator', 'ckeditor', 'app/utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
+            deps: ['annotator', 'ckeditor', 'utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
             exports: 'context'
         },
         'utils/i18n': {
@@ -77,9 +74,6 @@ var requirejs_config = {
             deps: ['ckeditor'],
             exports: 'CKEDITOR'
         },
-        'tipsy': {
-            deps: ['jquery']
-        },
         'zeroclipboard': {
             exports: 'ZeroClipboard'
         },
@@ -92,29 +86,21 @@ var requirejs_config = {
             exports: 'cytoscape'
         },
         'jit': {
-            deps: [],
             exports: '$jit'
         },
         'annotator': {
             deps: ['jquery'],
             exports: 'Annotator'
         },
-        'backboneModal': {
+        'backbone.modal': {
             deps: ['backbone'],
-            exports: 'BackboneModal'
+            exports: 'backboneModal'
         },
         'BackboneSubset': {
             deps: ['backbone'],
             exports: 'BackboneSubset'
         },
-        'modal': {
-            deps: ['backbone'],
-            exports: 'Modal'
-        },
         'bootstrap': {
-            deps: ['jquery']
-        },
-        'swal': {
             deps: ['jquery']
         }
     }

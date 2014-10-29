@@ -2,11 +2,11 @@
 
 define(function (require) {
 
-    var Assembl = require('app/app'),
+    var Assembl = require('../app'),
         $ = require('jquery'),
-        Permissions = require('app/utils/permissions'),
+        Permissions = require('../utils/permissions'),
         Moment = require('moment'),
-        i18n = require('app/utils/i18n'),
+        i18n = require('../utils/i18n'),
         Zeroclipboard = require('zeroclipboard'),
         bootstrap = require('bootstrap');
 

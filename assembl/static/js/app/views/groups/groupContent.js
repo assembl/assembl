@@ -2,9 +2,9 @@ define(function (require) {
 
     var Marionette = require('marionette'),
         ctx = require('common/context'),
-        panelSpec = require('app/models/panelSpec'),
-        AssemblPanel = require('app/views/assemblPanel'),
-        PanelWrapper = require('app/views/groups/panelWrapper');
+        panelSpec = require('models/panelSpec'),
+        AssemblPanel = require('views/assemblPanel'),
+        PanelWrapper = require('views/groups/panelWrapper');
 
     /** Reprents the content of an entire group */
     var groupContent = Marionette.CompositeView.extend({

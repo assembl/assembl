@@ -2,21 +2,21 @@
 
 define(function (require) {
 
-    var Assembl = require('app/app'),
-        Message = require('app/models/message'),
-        groupSpec = require('app/models/groupSpec'),
-        Idea = require('app/models/idea'),
-        IdeaLink = require('app/models/ideaLink'),
-        Segment = require('app/models/segment'),
-        Synthesis = require('app/models/synthesis'),
-        PartnerOrg = require('app/models/partner_organization'),
-        User = require('app/models/user'),
-        DiscussionPush = require('app/models/discussion_push'),
-        UserPush = require('app/models/user_push'),
+    var Assembl = require('app'),
+        Message = require('models/message'),
+        groupSpec = require('models/groupSpec'),
+        Idea = require('models/idea'),
+        IdeaLink = require('models/ideaLink'),
+        Segment = require('models/segment'),
+        Synthesis = require('models/synthesis'),
+        PartnerOrg = require('models/partner_organization'),
+        User = require('models/user'),
+        DiscussionPush = require('models/discussion_push'),
+        UserPush = require('models/user_push'),
         $ = require('jquery'),
-        Storage = require('app/objects/storage'),
-        Types = require('app/utils/types'),
-        i18n = require('app/utils/i18n');
+        Storage = require('objects/storage'),
+        Types = require('utils/types'),
+        i18n = require('utils/i18n');
 
     /**
      * @class CollectionManager
@@ -229,7 +229,7 @@ define(function (require) {
                     //workers and look into them before creating a new request.
                     this.collectionManager._waitingWorker = undefined;
                     allMessageStructureCollectionPromise.done(function (allMessageStructureCollection) {
-                        var PostQuery = require('app/views/messageListPostQuery'),
+                        var PostQuery = require('views/messageListPostQuery'),
                             postQuery = new PostQuery(),
                             ids = [],
                             viewDef = 'default';

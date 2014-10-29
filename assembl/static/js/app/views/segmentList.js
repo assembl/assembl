@@ -5,14 +5,14 @@ define(function (require) {
         _ = require('underscore'),
         $ = require('jquery'),
         BackboneSubset = require('BackboneSubset'),
-        Assembl = require('app/app'),
+        Assembl = require('app'),
         Ctx = require('common/context'),
-        Segment = require('app/models/segment'),
-        Types = require('app/utils/types'),
-        i18n = require('app/utils/i18n'),
-        Permissions = require('app/utils/permissions'),
+        Segment = require('models/segment'),
+        Types = require('utils/types'),
+        i18n = require('utils/i18n'),
+        Permissions = require('utils/permissions'),
         CollectionManager = require('common/collectionManager'),
-        AssemblPanel = require('app/views/assemblPanel');
+        AssemblPanel = require('views/assemblPanel');
 
     var SegmentView = Marionette.ItemView.extend({
         template: '#tmpl-segment',

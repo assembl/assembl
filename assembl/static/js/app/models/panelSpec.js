@@ -1,4 +1,4 @@
-define(['app/models/base'], function (Base) {
+define(['models/base'], function (Base) {
     'use strict';
 
     var PanelSpecModel = Base.Model.extend({

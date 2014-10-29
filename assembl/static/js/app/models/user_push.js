@@ -1,4 +1,4 @@
-define(['jquery', 'app/models/base', 'common/context'],
+define(['jquery', 'models/base', 'common/context'],
     function ($, Base, Ctx) {
         'use strict';
 
