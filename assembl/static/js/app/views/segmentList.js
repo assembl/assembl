@@ -4,7 +4,7 @@ define(function (require) {
     var Backbone = require('backbone'),
         _ = require('underscore'),
         $ = require('jquery'),
-        BackboneSubset = require('BackboneSubset'),
+        BackboneSubset = require('backbone.subset'),
         Assembl = require('app'),
         Ctx = require('common/context'),
         Segment = require('models/segment'),

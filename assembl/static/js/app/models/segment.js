@@ -1,5 +1,5 @@
 define(['underscore', 'models/base', 'common/context', 'models/user', 'models/message', 'utils/types', 'annotator'],
-    function (_, Base, Ctx, User, Message, Types, Annotator) {
+    function (_, Base, Ctx, User, Message, Types) {
         'use strict';
 
         /**
