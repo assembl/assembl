@@ -24,17 +24,17 @@
     </div>
     <div id="content-container" class="content-container">
 
-    <div class="gr">
+    <div class="gr mbxl">
       <% _.each(partners, function(partner){ %>
-      <div class="gu gu-1of6">
-        <div class="rc rcss">
-          <a class="img-left avatar" href="#"><img src="<%= partner.get('logo')%>" width="60"></a>
-          <div class="bd">
-            <p><%= partner.get('name') %></p>
-            <p><%= partner.get('description') %></p>
-            <p><%= partner.get('homepage') %></p>
-          </div>
+      <div class="gu gu-1of5">
+
+        <div class="bx mll">
+          <div class="tac mbl"><img src="<%= partner.get('logo')%>" width="100"></div>
+          <span class="mbs dispb"><%= partner.get('name') %></span>
+          <span class="mbs dispb"><%= partner.get('description') %></span>
+          <a class="dispb" href="<%= partner.get('homepage') %>">{{ gettext('link') }}</a>
         </div>
+
       </div>
       <% }) %>
     </div>
