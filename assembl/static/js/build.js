@@ -4,7 +4,8 @@
     dir: './dist',
     modules: [
         {
-            name: 'main'
+            name: 'main',
+            include: ['requireLib']
         }
     ],
     fileExclusionRegExp: /^(r|build)\.js$/,
@@ -12,6 +13,8 @@
     removeCombined: false,
     wrapShim: true,
     paths: {
+        'requireLib': '../bower/requirejs/require',
+
         'jquery': "../bower/jquery/jquery",
         'jquery-highlight': '../lib/jquery-highlight/jquery.highlight',
         'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',

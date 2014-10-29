@@ -31,7 +31,7 @@
 
 {% block main_js %}
     {% if minified_js == 'true' or minified_js == 'debug' %}
-        <script data-main="{{ STATIC_URL }}/js/dist/app/main.js" src="{{ STATIC_URL }}/js/dist/bower/requirejs/require.js"></script>
+        <script src="{{ STATIC_URL }}/js/dist/app/main.js"></script>
     {% else %}
         <script data-main="{{ STATIC_URL }}/js/app/main.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
     {% endif %}
