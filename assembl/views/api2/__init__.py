@@ -48,7 +48,7 @@ from ..traversal import InstanceContext, CollectionContext, ClassContext, Api2Co
 from assembl.auth import P_READ, P_SYSADMIN, R_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
-from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase
+from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase, NotificationSubscription
 from assembl.lib.decl_enums import DeclEnumType
 
 FIXTURE_DIR = os.path.join(
@@ -382,6 +382,35 @@ def votes_collection_add_json(request):
             db.add(instance)
         db.flush()
         raise HTTPCreated(first.uri_generic(first.id))
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             header=JSON_HEADER, #permission=P_ADD_VOTE?,
+             ctx_collection_class=NotificationSubscription)
+def notif_collection_add_json(request):
+    ctx = request.context
+    typename = ctx.collection_class.external_typename()
+    user_id = authenticated_userid(request)
+    typename = request.json_body.get('@type', ctx.collection_class.external_typename())
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    if P_SYSADMIN not in permissions:
+        cls = ctx.get_collection_class(typename)
+        if cls.crud_permissions.create not in permissions:
+            raise HTTPUnauthorized()
+    json = request.json_body
+    try:
+        instances = ctx.create_object(typename, json, user_id)
+    except Exception as e:
+        raise HTTPBadRequest(e)
+    if instances:
+        first = instances[0]
+        db = first.db()
+        for instance in instances:
+            db.add(instance)
+        db.flush()
+        raise HTTPCreated(first.uri_generic(first.id))
+
 
 @view_config(context=CollectionContext, request_method='POST',
              header=FORM_HEADER, ctx_collection_class=AbstractIdeaVote)

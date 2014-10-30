@@ -381,21 +381,20 @@ class CollectionContext(object):
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
         with cls.db.no_autoflush:
-            if json is None:
-                try:
+            try:
+                if json is None:
                     mapper = sqlainspect(cls)
                     for prop in ('creator_id', 'user_id'):
                         if prop in mapper.c and prop not in kwargs:
                             kwargs[prop] = user_id
                             break
                     inst = cls(**dict(process_args(kwargs, cls)))
-                    assocs = [inst]
-                except Exception as e:
-                    print_exc()
-                    raise e
-            else:
-                assocs = cls.from_json(json, user_id)
-                inst = assocs[0]
+                else:
+                    inst = cls.from_json(json, user_id)
+            except Exception as e:
+                print_exc()
+                raise e
+            assocs = [inst]
             self.decorate_instance(inst, assocs, user_id, self, kwargs)
         return assocs
 

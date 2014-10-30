@@ -177,15 +177,31 @@ class NotificationSubscription(DiscussionBoundBase):
         pass
 
     def update_json(self, json, user_id=Everyone):
-        if user_id != self.user_id:
-            from ..auth.util import user_has_permission
-            if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
-                raise HTTPUnauthorized()
-        # For now, do not allow changing user or discussion, it's way too complicated.
-        if 'user_id' in json and json['user_id'] != self.user_id:
-            raise HTTPBadRequest()
-        if 'discussion_id' in json and json['discussion_id'] != self.discussion_id:
-            raise HTTPBadRequest()
+        from ..auth.util import user_has_permission
+        if self.user_id:
+            if user_id != self.user_id:
+                if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
+                    raise HTTPUnauthorized()
+            # For now, do not allow changing user, it's way too complicated.
+            if 'user' in json and User.get_database_id(json['user']) != self.user_id:
+                raise HTTPBadRequest()
+        else:
+            json_user_id = json.get('user', None)
+            if json_user_id is None:
+                json_user_id = user_id
+            else:
+                json_user_id = User.get_database_id(json_user_id)
+                if json_user_id != user_id and not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
+                    raise HTTPUnauthorized()
+            self.user_id = json_user_id
+        if self.discussion_id:
+            if 'discussion_id' in json and Discussion.get_database_id(json['discussion_id']) != self.discussion_id:
+                raise HTTPBadRequest()
+        else:
+            discussion_id = json.get('discussion', None)
+            if discussion_id is None:
+                raise HTTPBadRequest()
+            self.discussion_id = Discussion.get_database_id(discussion_id)
         new_type = json.get('@type', self.type)
         if self.external_typename() != new_type:
             polymap = inspect(self.__class__).polymorphic_identity
@@ -194,11 +210,17 @@ class NotificationSubscription(DiscussionBoundBase):
             new_type = polymap[new_type].class_
             new_instance = self.change_class(new_type)
             return new_instance.update_json(json)
-        self.creation_origin = getattr(json, 'creation_origin', self.creation_origin)
-        self.parent_subscription_id = getattr(json, 'parent_subscription_id', self.parent_subscription_id)
-        if getattr(json, 'status', self.status) != self.status:
-            self.status = json['status']
-            self.last_status_change_date = datetime.now()
+        creation_origin = json.get('creation_origin', None)
+        if creation_origin is not None:
+            self.creation_origin = NotificationCreationOrigin.from_string(creation_origin)
+        if json.get('parent_subscription', None) is not None:
+            self.parent_subscription_id = self.get_database_id(json['parent_subscription'])
+        status = json.get('status', None)
+        if status:
+            status = NotificationSubscriptionStatus.from_string(status)
+            if status != self.status:
+                self.status = status
+                self.last_status_change_date = datetime.now()
         return self
 
 
@@ -252,7 +274,7 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
     def update_json(self, json, user_id=Everyone):
         updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
         if updated == self:
-            self.post_id = getattr(json, 'post_id', self.post_id)
+            self.post_id = json.get('post_id', self.post_id)
         return updated
 
 
@@ -282,7 +304,7 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
     def update_json(self, json, user_id=Everyone):
         updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
         if updated == self:
-            self.idea_id = getattr(json, 'idea_id', self.idea_id)
+            self.idea_id = json.get('idea_id', self.idea_id)
         return updated
 
 
@@ -312,7 +334,7 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
     def update_json(self, json, user_id=Everyone):
         updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
         if updated == self:
-            self.extract_id = getattr(json, 'extract_id', self.extract_id)
+            self.extract_id = json.get('extract_id', self.extract_id)
         return updated
 
 
@@ -342,7 +364,7 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
     def update_json(self, json, user_id=Everyone):
         updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
         if updated == self:
-            self.on_user_id = getattr(json, 'on_user_id', self.on_user_id)
+            self.on_user_id = json.get('on_user_id', self.on_user_id)
         return updated
 
 
