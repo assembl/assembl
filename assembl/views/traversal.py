@@ -167,10 +167,10 @@ class ClassContext(object):
         with cls.db().no_autoflush:
             if json is None:
                 mapper = sqlainspect(cls)
-                if 'user_id' in mapper.c:
-                    kwargs['user_id'] = user_id
-                elif 'creator_id' in mapper.c:
-                    kwargs['creator_id'] = user_id
+                for prop in ('creator_id', 'user_id'):
+                    if prop in mapper.c and prop not in kwargs:
+                        kwargs[prop] = user_id
+                        break
                 try:
                     return [cls(**dict(process_args(kwargs, cls)))]
                 except Exception as e:
@@ -384,10 +384,10 @@ class CollectionContext(object):
             if json is None:
                 try:
                     mapper = sqlainspect(cls)
-                    if 'user_id' in mapper.c:
-                        kwargs['user_id'] = user_id
-                    elif 'creator_id' in mapper.c:
-                        kwargs['creator_id'] = user_id
+                    for prop in ('creator_id', 'user_id'):
+                        if prop in mapper.c and prop not in kwargs:
+                            kwargs[prop] = user_id
+                            break
                     inst = cls(**dict(process_args(kwargs, cls)))
                     assocs = [inst]
                 except Exception as e:
