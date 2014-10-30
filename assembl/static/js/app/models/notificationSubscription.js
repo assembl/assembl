@@ -24,14 +24,14 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
          */
         setUrlToUserSubscription: function() {
           var root = 'Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/notification_subscriptions';
-          this.url = Ctx.getApiV2Url(root) + '/?view=extended';
+          this.url = Ctx.getApiV2Url(root);
         },
         
         /**
          * Set the collection url for global discussion template subscription
          */
         setUrlToDiscussionTemplateSubscriptions: function() {
-          this.url = Ctx.getApiV2DiscussionUrl("user_templates/-/notification_subscriptions") + '/?view=extended';
+          this.url = Ctx.getApiV2DiscussionUrl("user_templates/-/notification_subscriptions");
         }
     });
 

@@ -1,5 +1,5 @@
-define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager', 'common/context'],
-    function (Marionette, $, _, CollectionManager, Ctx) {
+define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager', 'common/context', 'models/notificationSubscription'],
+    function (Marionette, $, _, CollectionManager, Ctx, NotificationSubscription) {
         'use strict';
 
         var Notifications = Marionette.LayoutView.extend({
@@ -62,12 +62,21 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
             },
 
             userNewSubscription : function (e) {
-              console.log("WRITEME:  POST to proper api point")
+              var elm = $(e.target);
+
+              var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
+              var notificationSubscriptionTemplateModel = this.notificationTemplates.get(elm.attr('id'));
+              var notificationSubscriptionModel = new NotificationSubscription.Model(
+                  {creation_origin: "USER_REQUEST",
+                   status: status,
+                   '@type': notificationSubscriptionTemplateModel.get('@type')
+                  });
+              this.collection.add(notificationSubscriptionModel);
+              notificationSubscriptionModel.save()
             },
             
             userNotification: function (e) {
-                var elm = $(e.target),
-                    idResource = elm.attr('id').split('/')[1];
+                var elm = $(e.target);
 
                 var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
 
@@ -76,32 +85,12 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                  *
                  * SubscriptionFollowAllMessages
                  * SubscriptionFollowSyntheses
-                 * SubscriptionOnPost
-                 * SubscriptionOnExtract
-                 * SubscriptionOnUserAccount
                  * SubscriptionFollowOwnMessageDirectReplies
                  * */
-
-                if (status && idResource) {
-
-                    $.ajax({
-                        url: '/data/User/' + Ctx.getCurrentUserId() + '/notification_subscriptions/' + idResource,
-                        type: 'PUT',
-                        data: {
-                            creation_origin: 'USER_REQUESTED',
-                            status: status
-                        },
-                        success: function (jqXHR, textStatus) {
-                            console.log(textStatus)
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(textStatus)
-                            console.log(errorThrown)
-                        }
-                    });
-
-                }
-
+                
+                var notificationSubscriptionModel = this.collection.get(elm.attr('id'));
+                notificationSubscriptionModel.set("status", status);
+                notificationSubscriptionModel.save();
             }
 
         });

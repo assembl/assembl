@@ -10,7 +10,8 @@ define(['backbone.marionette', 'common/collectionManager'],
               subscribeCheckbox: ".js_adminNotification"
             },
             collectionEvents: {
-              "reset": "render" // equivalent to view.listenTo(view.collection, "reset", view.render, view)
+              "reset": "render", // equivalent to view.listenTo(view.collection, "reset", view.render, view)
+              "sync": "render"
             },
             initialize: function () {
                 var collectionManager = new CollectionManager(),
@@ -39,23 +40,13 @@ define(['backbone.marionette', 'common/collectionManager'],
             },
 
             discussionNotification: function (e) {
-                var elm = $(e.target),
-                    idResource = elm.attr('id').split('/')[1];
+                var elm = $(e.target);
 
                 var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
-
-                $.ajax({
-                    url: '/data/Discussion/' + Ctx.getDiscussionId() + '/notificationSubscriptions/' + idResource,
-                    type: 'PUT',
-                    data: {
-                        creation_origin: 'DISCUSSION_DEFAULT',
-                        status: status
-                    },
-                    success: function () {
-                    },
-                    error: function () {
-                    }
-                });
+                
+                var notificationSubscriptionModel = this.collection.get(elm.attr('id'));
+                notificationSubscriptionModel.set("status", status);
+                notificationSubscriptionModel.save();
             }
 
 
