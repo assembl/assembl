@@ -21,12 +21,15 @@ define(function (require) {
             "change:hidden": "setHidden"
         },
         ui: {
-            title: ".panel-header-title"
+            title: ".panel-header-title",
+            lockPanel: '.js_lockPanel',
+            minimizePanel: '.js_minimizePanel',
+            closePanel: '.js_panel-closeButton'
         },
         events: {
-            'click .panel-header-close': 'closePanel',
-            'click .js_lockPanel': 'toggleLock',
-            'click .js_minimizePanel': 'toggleMinimize'
+            'click @ui.closePanel': 'closePanel',
+            'click @ui.lockPanel': 'toggleLock',
+            'click @ui.minimizePanel': 'toggleMinimize'
         },
 
         _unlockCallbackQueue: {},

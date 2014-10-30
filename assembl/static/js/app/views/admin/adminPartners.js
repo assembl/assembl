@@ -6,6 +6,9 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
         var adminPartners = Marionette.LayoutView.extend({
             template: '#tmpl-adminPartners',
             className: 'admin-notifications',
+            ui: {
+                partners: '.js_add-partner'
+            },
             initialize: function () {
                 var that = this,
                     collectionManager = new CollectionManager();
@@ -23,7 +26,7 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
             },
 
             events: {
-                'click .js_add-partner': 'addPartner'
+                'click @ui.partners': 'addPartner'
             },
 
             serializeData: function () {

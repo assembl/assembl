@@ -27,12 +27,14 @@ define(function (require) {
             synthesis: '.synthesis',
             notification: '.navNotification'
         },
-        events: {
-            'click .js_navigation': 'toggleMenuByEvent',
-            'click .js_addIdeaFromIdeaList': 'addIdeaFromIdeaList'
-        },
         ui: {
+            navigation: '.js_navigation',
+            ideaFromIdealist: '.js_addIdeaFromIdeaList',
             level: 'div.second-level'
+        },
+        events: {
+            'click @ui.navigation': 'toggleMenuByEvent',
+            'click @ui.ideaFromIdealist': 'addIdeaFromIdeaList'
         },
         initialize: function (options) {
             var that = this;

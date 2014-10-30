@@ -5,11 +5,17 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             template: '#tmpl-navBar',
             tagName: 'nav',
             className: 'navbar navbar-default',
+            ui: {
+                currentLocal: '.js_setLocale',
+                groups: '.js_addGroup',
+                expertInterface: '.js_switchToExpertInterface',
+                simpleInterface: '.js_switchToSimpleInterface'
+            },
             events: {
-                'click .js_setLocale': 'setLocale',
-                'click .js_addGroup': 'addGroup',
-                'click .js_switchToExpertInterface': 'switchToExpertInterface',
-                'click .js_switchToSimpleInterface': 'switchToSimpleInterface'
+                'click @ui.currentLocal': 'setLocale',
+                'click @ui.groups': 'addGroup',
+                'click @ui.expertInterface': 'switchToExpertInterface',
+                'click @ui.simpleInterface': 'switchToSimpleInterface'
             },
             serializeData: function () {
                 return {

@@ -7,9 +7,11 @@ define(function (require) {
         template: '#tmpl-home',
         panelType: 'homeNavPanel',
         className: 'homeNavPanel',
-
+        ui: {
+            debate: '.js_go-to-debate'
+        },
         events: {
-            'click .go-to-debate': 'goToDebate'
+            'click @ui.debate': 'goToDebate'
         },
 
         goToDebate: function () {

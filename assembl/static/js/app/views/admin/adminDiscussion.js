@@ -22,32 +22,11 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
                 'add': 'render'
             },
 
-            events: {
-                'click .js_add-partner': 'addPartner'
-            },
 
             serializeData: function () {
                 return {
-                    partners: this.collection.models,
                     ctx: Ctx
                 }
-            },
-
-            addPartner: function (e) {
-                e.preventDefault();
-
-                var dataPartner = $(e.target).parent('form').serialize(),
-                    urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/';
-
-                $.ajax({
-                    url: urlPartner,
-                    type: "post",
-                    data: dataPartner,
-                    success: function () {
-                    },
-                    error: function () {
-                    }
-                });
             }
 
         });
