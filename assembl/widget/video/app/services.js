@@ -14,6 +14,25 @@ widgetServices.factory('localConfig', function ($http) {
 
 });
 
+widgetServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
+    this.resourceToUrl = function (str) {
+        var start = "local:";
+        if (str && str.indexOf(start) == 0) {
+            str = "/data/" + str.slice(start.length);
+        }
+        return str;
+    };
+
+    this.urlToResource = function (str) {
+        var startSlash = "/data/";
+        var startUri = "local:";
+        if ( str && str.indexOf(startSlash) == 0 ) {
+            str = startUri + str.slice(startSlash.length);
+        }
+        return str;
+    };
+}]);
+
 /**
  * Resolve configuration before access to a controller
  * */
@@ -147,7 +166,8 @@ widgetServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$log'
             youtube.state = 'paused';
         } else if (event.data == YT.PlayerState.ENDED) {
             youtube.state = 'ended';
-            service.launchPlayer(upcoming[0].id, upcoming[0].title);
+            if ( upcoming && upcoming.length > 0 )
+                service.launchPlayer(upcoming[0].id, upcoming[0].title);
         }
         $rootScope.$apply();
     }
