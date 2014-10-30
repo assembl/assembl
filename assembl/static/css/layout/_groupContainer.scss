@@ -264,6 +264,23 @@
   }
 }
 
+.creativity-popin {
+  .popin, .bbm-modal {
+    min-width: 1020px;
+    max-width: 1400px;
+    .popin-body {
+      padding: 0;
+      iframe {
+        width: 100%;
+        height: calc(100vh - 100px);
+      }
+    }
+    .popin-footer {
+      padding: 3px;
+    }
+  }
+}
+
 .selectedGroup {
   max-width: 500px;
   .itemGroup {

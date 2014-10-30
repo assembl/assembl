@@ -263,8 +263,9 @@ define(function (require) {
             var Modal = Backbone.Modal.extend({
                 //template: _.template($('#tmpl-widgetCreativity').html()),
                 template: Ctx.loadTemplate('widgetCreativity'),
-                className: 'group-modal popin-wrapper',
+                className: 'group-modal popin-wrapper creativity-popin',
                 cancelEl: '.close',
+                keyControl: false,
                 model: model
             });
 
