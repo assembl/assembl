@@ -267,6 +267,9 @@ videosApp.controller('videosCtl',
                 console.log("sendIdea()");
                 var messageSubject = $("#messageTitle").val();
                 var messageContent = $("#messageContent").val();
+                if ( !messageSubject || !messageContent ){
+                    return;
+                }
                 var videoUrl = "http://www.youtube.com/watch?v=" + $scope.currentVideoId;
                 var videoTitle = $scope.currentVideoTitle; // TODO: use these last 2 pieces of info
                 console.log("messageSubject: ", messageSubject);
@@ -374,6 +377,8 @@ videosApp.controller('videosCtl',
                     
                     // tell the user that the message has been successfully posted
                     alert("Your message has been successfully posted.");
+                    $("#messageTitle").val("");
+                    $("#messageContent").val("");
                 }).error(function (data) {
                     console.log("Error: ", data);
                 });
