@@ -332,10 +332,6 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                 IdeaLink.source_id == root_idea_id).all():
             post.hidden = (post.uri() not in post_ids)
 
-    def get_add_post_endpoint(self, idea):
-        return 'local:Discussion/%d/widgets/%d/base_idea/-/children/%d/widgetposts' % (
-            self.discussion_id, self.id, idea.id)
-
     def get_ideas_hiding_url(self):
         return 'local:Discussion/%d/widgets/%d/base_idea_hiding/-/children' % (
             self.discussion_id, self.id)
@@ -450,6 +446,10 @@ class InspirationWidget(IdeaCreatingWidget):
         # TODO: Make this configurable.
         return "/widget/creativity/"
 
+    def get_add_post_endpoint(self, idea):
+        return 'local:Discussion/%d/widgets/%d/base_idea_descendants/%d/linkedposts' % (
+            self.discussion_id, self.id, idea.id)
+
 
 class CreativitySessionWidget(IdeaCreatingWidget):
     default_view = 'creativity_widget'
@@ -484,6 +484,10 @@ class CreativitySessionWidget(IdeaCreatingWidget):
             time_to_end=time_to_end,
             num_participants=len(participant_ids),
             num_ideas=len(self.generated_idea_links))
+
+    def get_add_post_endpoint(self, idea):
+        return 'local:Discussion/%d/widgets/%d/base_idea/-/children/%d/widgetposts' % (
+            self.discussion_id, self.id, idea.id)
 
 
 class MultiCriterionVotingWidget(Widget):
