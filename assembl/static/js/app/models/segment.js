@@ -1,5 +1,5 @@
 define(['underscore', 'models/base', 'common/context', 'models/user', 'models/message', 'utils/types', 'annotator'],
-    function (_, Base, Ctx, User, Message, Types) {
+    function (_, Base, Ctx, User, Message, Types, Annotator) {
         'use strict';
 
         /**
@@ -25,8 +25,8 @@ define(['underscore', 'models/base', 'common/context', 'models/user', 'models/me
 
                 _.each(ranges, function (range, index) {
 
-                    if (!(range instanceof Range.SerializedRange)) {
-                        ranges[index] = new Range.SerializedRange(range);
+                    if (!(range instanceof Annotator.Range.SerializedRange)) {
+                        ranges[index] = new Annotator.Range.SerializedRange(range);
                     }
 
                     _ranges[index] = ranges[index];
