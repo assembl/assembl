@@ -250,11 +250,11 @@ class Discussion(DiscussionBoundBase):
             for n in widget.has_notification():
                 yield n
 
-    def get_user_template(self, role_name):
+    def get_user_template(self, role_name, autocreate=False):
         template = self.db.query(UserTemplate).join(
             Role).filter(Role.name == role_name).join(
             Discussion).filter(Discussion.id == self.id).first()
-        if not template:
+        if autocreate and not template:
             # There is a template user per discussion.  If it doesn't exist yey
             # create it.
             from .notification import (
@@ -267,7 +267,8 @@ class Discussion(DiscussionBoundBase):
         return template
 
     def get_participant_template(self):
-        return self.get_user_template('r:participant')
+        from ..auth import R_PARTICIPANT
+        return self.get_user_template(R_PARTICIPANT, True)
 
     @classmethod
     def extra_collections(cls):
