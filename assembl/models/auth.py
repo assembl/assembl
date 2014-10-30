@@ -537,6 +537,9 @@ class User(AgentProfile):
                 # Don't I need the context to get the discussion? Rats!
                 return True
 
+            def get_default_view(self):
+                return "extended"
+
         return {'notification_subscriptions': NotificationSubscriptionCollection(cls)}
 
     def get_notification_subscriptions_for_current_discussion(self):
