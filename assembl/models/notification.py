@@ -177,7 +177,6 @@ class NotificationSubscription(DiscussionBoundBase):
         pass
 
     def update_json(self, json, user_id=Everyone):
-        import pdb; pdb.set_trace()
         if user_id != self.user_id:
             from ..auth.util import user_has_permission
             if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
