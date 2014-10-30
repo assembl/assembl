@@ -583,10 +583,14 @@ class CollectionDefinition(AbstractCollectionDefinition):
     def get_instance(self, key, parent_instance):
         instance = None
         if key == '-':
-            if uses_list(self.property):
-                raise KeyError()
-            else:
+            if not uses_list(self.property):
                 instance = getattr(parent_instance, self.property.key, None)
+            else:
+                # Allow if it happens to be a singleton.
+                instances = getattr(parent_instance, self.property.key)
+                if len(instances) == 1:
+                    return instances[0]
+                raise KeyError()
         else:
             instance = self.collection_class.get_instance(key)
         # Validate that the instance belongs to the collection...

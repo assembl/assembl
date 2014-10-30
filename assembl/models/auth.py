@@ -516,7 +516,10 @@ class User(AgentProfile):
                 if discussion is not None:
                     # Materialize active subscriptions... TODO: Make this batch,
                     # also dematerialize
-                    ctx.parent_instance.get_notification_subscriptions(discussion.id)
+                    if isinstance(ctx.parent_instance, UserTemplate):
+                        ctx.parent_instance.get_notification_subscriptions()
+                    else:
+                        ctx.parent_instance.get_notification_subscriptions(discussion.id)
                     query = query.filter(last_alias.discussion_id == discussion.id)
                 return query
 
