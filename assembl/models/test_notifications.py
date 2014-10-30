@@ -91,7 +91,7 @@ def test_notification_follow_direct_replies(test_session,
     subscription = NotificationSubscriptionFollowOwnMessageDirectReplies(
         discussion=discussion,
         user=participant1_user,
-        creation_origin = NotificationCreationOrigin.USER_REQUEST,
+        creation_origin = NotificationCreationOrigin.USER_REQUESTED,
        )
     test_session.add(subscription)
     
