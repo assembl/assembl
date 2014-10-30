@@ -39,10 +39,11 @@ import inspect as pyinspect
 from sqlalchemy import inspect
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
-    HTTPCreated, HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPOk)
+    HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPOk)
 from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyld import jsonld
+from simplejson import dumps
 
 from ..traversal import InstanceContext, CollectionContext, ClassContext, Api2Context
 from assembl.auth import P_READ, P_SYSADMIN, R_SYSADMIN, Everyone
@@ -144,7 +145,10 @@ def collection_add(request, args):
             db.add(instance)
         session.autoflush = old_autoflush
         session.flush()
-        return Response(location=first.uri_generic(first.id), status_code=201)
+        return Response(
+            dumps(first.generic_json()),
+            location=first.uri_generic(first.id),
+            status_code=201)
     raise HTTPBadRequest()
 
 
@@ -308,7 +312,10 @@ def class_add(request):
         for instance in instances:
             db.add(instance)
         db.flush()
-        return Response(location=first.uri_generic(first.id), status_code=201)
+        return Response(
+            dumps(first.generic_json()),
+            location=first.uri_generic(first.id),
+            status_code=201)
     raise HTTPBadRequest()
 
 
@@ -335,7 +342,10 @@ def collection_add_json(request):
         for instance in instances:
             db.add(instance)
         db.flush()
-        return HTTPCreated(first.uri_generic(first.id))
+        return Response(
+            dumps(first.generic_json()),
+            location=first.uri_generic(first.id),
+            status_code=201)
 
 
 # Votes are private
@@ -381,7 +391,10 @@ def votes_collection_add_json(request):
         for instance in instances:
             db.add(instance)
         db.flush()
-        return HTTPCreated(first.uri_generic(first.id))
+        return Response(
+            dumps(first.generic_json()),
+            location=first.uri_generic(first.id),
+            status_code=201)
 
 
 @view_config(context=CollectionContext, request_method='POST',
@@ -409,7 +422,11 @@ def notif_collection_add_json(request):
         for instance in instances:
             db.add(instance)
         db.flush()
-        return HTTPCreated(first.uri_generic(first.id))
+        return Response(
+            dumps(first.generic_json()),
+            location=first.uri_generic(first.id),
+            status_code=201)
+
 
 
 @view_config(context=CollectionContext, request_method='POST',
@@ -443,5 +460,8 @@ def votes_collection_add(request):
         print "before flush"
         db.flush()
         print "after flush"
-        return Response(location=first.uri_generic(first.id), status_code=201)
+        return Response(
+            dumps(first.generic_json()),
+            location=first.uri_generic(first.id),
+            status_code=201)
     raise HTTPBadRequest()
