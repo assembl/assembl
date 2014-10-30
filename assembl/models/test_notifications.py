@@ -25,7 +25,7 @@ def test_subscribe_notification(test_session,
     subscription = NotificationSubscriptionFollowSyntheses(
         discussion=discussion,
         user=participant1_user,
-        creation_origin = NotificationCreationOrigin.USER_REQUEST
+        creation_origin = NotificationCreationOrigin.USER_REQUESTED
        )
     test_session.add(subscription)
     test_session.flush()
@@ -39,7 +39,7 @@ def test_notification_follow_synthesis(test_session,
     subscription = NotificationSubscriptionFollowSyntheses(
         discussion=discussion,
         user=participant1_user,
-        creation_origin = NotificationCreationOrigin.USER_REQUEST
+        creation_origin = NotificationCreationOrigin.USER_REQUESTED
        )
     test_session.add(subscription)
     
@@ -66,7 +66,7 @@ def test_notification_follow_all_messages(test_session,
     subscription = NotificationSubscriptionFollowAllMessages(
         discussion=discussion,
         user=participant1_user,
-        creation_origin = NotificationCreationOrigin.USER_REQUEST,
+        creation_origin = NotificationCreationOrigin.USER_REQUESTED,
        )
     test_session.add(subscription)
     
@@ -113,13 +113,13 @@ def test_notification_multiple_subscriptions_create_single_notification(test_ses
     subscription = NotificationSubscriptionFollowAllMessages(
         discussion=discussion,
         user=participant1_user,
-        creation_origin = NotificationCreationOrigin.USER_REQUEST,
+        creation_origin = NotificationCreationOrigin.USER_REQUESTED,
        )
     test_session.add(subscription)
     subscription2 = NotificationSubscriptionFollowSyntheses(
         discussion=discussion,
         user=participant1_user,
-        creation_origin = NotificationCreationOrigin.USER_REQUEST,
+        creation_origin = NotificationCreationOrigin.USER_REQUESTED,
        )
     test_session.add(subscription2)
     

@@ -56,7 +56,7 @@ class NotificationSubscriptionClasses(DeclEnum):
     SYSTEM_ERRORS = "SYSTEM_ERRORS", ""
 
 class NotificationCreationOrigin(DeclEnum):
-    USER_REQUEST = "USER_REQUESTED", "A direct user action created the notification subscription"
+    USER_REQUESTED = "USER_REQUESTED", "A direct user action created the notification subscription"
     DISCUSSION_DEFAULT = "DISCUSSION_DEFAULT", "The notification subscription was created by the default discussion configuration"
     PARENT_NOTIFICATION = "PARENT_NOTIFICATION", "The notification subscription was created by another subscription (such as following all message threads a user participated in"
 

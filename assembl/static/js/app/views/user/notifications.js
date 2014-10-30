@@ -36,7 +36,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                 
                 /*No need to filter in this case
                  * var userNotifications = _.filter(this.collection.models, function (m) {
-                    return m.get('creation_origin') === 'USER_REQUEST';
+                    return m.get('creation_origin') === 'USER_REQUESTED';
                 });
                 */
                 var that = this,
@@ -67,9 +67,10 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
               var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
               var notificationSubscriptionTemplateModel = this.notificationTemplates.get(elm.attr('id'));
               var notificationSubscriptionModel = new NotificationSubscription.Model(
-                  {creation_origin: "USER_REQUEST",
+                  {creation_origin: "USER_REQUESTED",
                    status: status,
-                   '@type': notificationSubscriptionTemplateModel.get('@type')
+                   '@type': notificationSubscriptionTemplateModel.get('@type'),
+                   discussion: notificationSubscriptionTemplateModel.get('discussion')
                   });
               this.collection.add(notificationSubscriptionModel);
               notificationSubscriptionModel.save()
