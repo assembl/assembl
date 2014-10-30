@@ -76,7 +76,7 @@ class WordCountVisitor(IdeaVisitor):
         return self.counter.best(num)
 
 
-class Idea(DiscussionBoundBase, Tombstonable):
+class Idea(Tombstonable, DiscussionBoundBase):
     """
     A core concept taken from the associated discussion
     """
@@ -805,7 +805,7 @@ class Criterion(Idea):
     }
 
 
-class IdeaLink(DiscussionBoundBase, Tombstonable):
+class IdeaLink(Tombstonable, DiscussionBoundBase):
     """
     A generic link between two ideas
 
