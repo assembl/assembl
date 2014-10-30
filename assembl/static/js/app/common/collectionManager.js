@@ -12,8 +12,7 @@ define(function (require) {
         Synthesis = require('models/synthesis'),
         PartnerOrg = require('models/partner_organization'),
         User = require('models/user'),
-        DiscussionPush = require('models/discussion_push'),
-        UserPush = require('models/user_push'),
+        NotificationSubscription = require('models/notificationSubscription'),
         $ = require('jquery'),
         Storage = require('objects/storage'),
         Types = require('utils/types'),
@@ -451,7 +450,8 @@ define(function (require) {
                 deferred = $.Deferred();
 
             if (this._allNotificationsDiscussionCollectionPromise === undefined) {
-                this._allNotificationsDiscussionCollection = new DiscussionPush.Collection();
+                this._allNotificationsDiscussionCollection = new NotificationSubscription.Collection();
+                this._allNotificationsDiscussionCollection.setUrlToDiscussionTemplateSubscriptions();
                 this._allNotificationsDiscussionCollection.collectionManager = this;
                 this._allNotificationsDiscussionCollectionPromise = this._allNotificationsDiscussionCollection.fetch();
                 this._allNotificationsDiscussionCollectionPromise.done(function () {
@@ -471,7 +471,8 @@ define(function (require) {
                 deferred = $.Deferred();
 
             if (this._allNotificationsUserCollectionPromise === undefined) {
-                this._allNotificationsUserCollection = new UserPush.Collection();
+                this._allNotificationsUserCollection = new NotificationSubscription.Collection();
+                this._allNotificationsUserCollection.setUrlToUserSubscription();
                 this._allNotificationsUserCollection.collectionManager = this;
                 this._allNotificationsUserCollectionPromise = this._allNotificationsUserCollection.fetch();
                 this._allNotificationsUserCollectionPromise.done(function () {
