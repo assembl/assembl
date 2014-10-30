@@ -165,12 +165,12 @@ def instance_put_json(request):
     user_id = authenticated_userid(request)
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
-    instance = context._instance
+    instance = ctx._instance
     if P_SYSADMIN not in permissions:
         required = instance.crud_permissions
         if required.update not in permissions:
             if required.update_owned not in permissions or\
-                    User.get(user_id) not in context._instance.get_owners():
+                    User.get(user_id) not in ctx._instance.get_owners():
                 raise HTTPUnauthorized()
     try:
         return instance.update_json(request.json_body, user_id)
