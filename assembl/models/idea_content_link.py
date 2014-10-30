@@ -31,7 +31,7 @@ from ..auth import (
     P_EDIT_EXTRACT, P_ADD_IDEA, P_ADD_EXTRACT,
     P_EDIT_MY_EXTRACT)
 from ..semantic.namespaces import (
-    CATALYST, ASSEMBL, DCTERMS, OA, QUADNAMES, RDF)
+    CATALYST, ASSEMBL, DCTERMS, OA, QUADNAMES, RDF, SIOC)
 
 
 class IdeaContentLink(DiscussionBoundBase):
