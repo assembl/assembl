@@ -77,7 +77,7 @@
     #}
 
     <fieldset id="ideaPanel-section-segments" class="panel-section">
-      <% if(Ctx.userCanChangeUi()){ %>
+      <% if(Ctx.canUseExpertInterface()){ %>
         <div class="ideaPanel-section-segments-legend pvs" data-toggle="tooltip" title="{{gettext('Expressions of this idea in segments of posts or on the web')}}">
            <i class="icon-diamond"></i><span class="legend"><% print(getExtractsLabel()) %></span>
         </div>

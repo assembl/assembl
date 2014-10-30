@@ -56,9 +56,9 @@ define(function (require) {
                 title: this.contentsView.getTitle(),
                 tooltip: this.contentsView.tooltip || '',
                 headerClass: this.contentsView.headerClass || '',
-                userCanChangeUi: Ctx.userCanChangeUi(),
+                userCanChangeUi: Ctx.canUseExpertInterface(),
                 hasLock: this.contentsView.lockable,
-                hasMinimize: this.contentsView.minimizeable || Ctx.userCanChangeUi(),
+                hasMinimize: this.contentsView.minimizeable || Ctx.canUseExpertInterface(),
                 hasClose: this.contentsView.closeable,
                 icon: this.getIcon()
             }

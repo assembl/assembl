@@ -161,7 +161,7 @@ define(function (require) {
         serializeData: function () {
             return {
                 Ctx: ctx,
-                hasMinimize: ctx.userCanChangeUi(),
+                hasMinimize: ctx.canUseExpertInterface(),
                 canAdd: ctx.getCurrentUser().can(Permissions.ADD_IDEA)
             }
         },

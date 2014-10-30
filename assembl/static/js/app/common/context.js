@@ -205,10 +205,6 @@ define(function (require) {
             this._annotatorEditor = annotatorEditor;
         },
 
-        userCanChangeUi: function () {
-            return this.getCurrentUser().can(Permissions.EDIT_EXTRACT);
-        },
-
         /**
          * Set the given Idea as the current one to be edited
          * @param  {Idea} [idea]
