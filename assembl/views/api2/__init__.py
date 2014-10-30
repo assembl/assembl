@@ -335,7 +335,7 @@ def collection_add_json(request):
         for instance in instances:
             db.add(instance)
         db.flush()
-        raise HTTPCreated(first.uri_generic(first.id))
+        return HTTPCreated(first.uri_generic(first.id))
 
 
 # Votes are private
@@ -381,7 +381,7 @@ def votes_collection_add_json(request):
         for instance in instances:
             db.add(instance)
         db.flush()
-        raise HTTPCreated(first.uri_generic(first.id))
+        return HTTPCreated(first.uri_generic(first.id))
 
 
 @view_config(context=CollectionContext, request_method='POST',
@@ -409,7 +409,7 @@ def notif_collection_add_json(request):
         for instance in instances:
             db.add(instance)
         db.flush()
-        raise HTTPCreated(first.uri_generic(first.id))
+        return HTTPCreated(first.uri_generic(first.id))
 
 
 @view_config(context=CollectionContext, request_method='POST',
