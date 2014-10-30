@@ -67,6 +67,7 @@ class IdeaContentLink(DiscussionBoundBase):
         Integer,
         ForeignKey('agent_profile.id'),
         nullable=False,
+        info= {'rdf': QuadMapPatternS(None, SIOC.has_creator)}
     )
 
     creator = relationship(
