@@ -159,7 +159,8 @@ def instance_post(request):
     raise HTTPBadRequest()
 
 
-@view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER)
+@view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER,
+    renderer='json')
 def instance_put_json(request):
     ctx = request.context
     user_id = authenticated_userid(request)
@@ -173,7 +174,13 @@ def instance_put_json(request):
                     User.get(user_id) not in ctx._instance.get_owners():
                 raise HTTPUnauthorized()
     try:
-        return instance.update_json(request.json_body, user_id)
+        updated = instance.update_json(request.json_body, user_id)
+        view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
+        if view == 'id_only':
+            return [updated.uri()]
+        else:
+            return [updated.generic_json(view)]
+
     except NotImplemented as err:
         raise HTTPNotImplemented()
 

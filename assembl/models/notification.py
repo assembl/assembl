@@ -1,9 +1,8 @@
 # coding=UTF-8
 from datetime import datetime
 from collections import defaultdict
-from . import  Base, DiscussionBoundBase
-from sqlalchemy.orm import (
-    relationship, backref, aliased, contains_eager, joinedload)
+from abc import abstractmethod
+
 from sqlalchemy import (
     Column,
     Boolean,
@@ -13,15 +12,20 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     ForeignKey,
-    event
+    event,
+    inspect
 )
+from sqlalchemy.orm import (
+    relationship, backref, aliased, contains_eager, joinedload)
+from zope import interface
+from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
+
+from . import  Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
-from .auth import User
+from .auth import (User, Everyone, P_ADMIN_DISC)
 from .discussion import Discussion
-from zope import interface
 from .post import Post, SynthesisPost
-from abc import abstractmethod
 
 class NotificationSubscriptionClasses(DeclEnum):
     #System notifications (can't unsubscribe)
@@ -172,6 +176,33 @@ class NotificationSubscription(DiscussionBoundBase):
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         pass
 
+    def update_json(self, json, user_id=Everyone):
+        import pdb; pdb.set_trace()
+        if user_id != self.user_id:
+            from ..auth.util import user_has_permission
+            if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
+                raise HTTPUnauthorized()
+        # For now, do not allow changing user or discussion, it's way too complicated.
+        if 'user_id' in json and json['user_id'] != self.user_id:
+            raise HTTPBadRequest()
+        if 'discussion_id' in json and json['discussion_id'] != self.discussion_id:
+            raise HTTPBadRequest()
+        new_type = json.get('@type', self.type)
+        if self.external_typename() != new_type:
+            polymap = inspect(self.__class__).polymorphic_identity
+            if new_type not in polymap:
+                raise HTTPBadRequest()
+            new_type = polymap[new_type].class_
+            new_instance = self.change_class(new_type)
+            return new_instance.update_json(json)
+        self.creation_origin = getattr(json, 'creation_origin', self.creation_origin)
+        self.parent_subscription_id = getattr(json, 'parent_subscription_id', self.parent_subscription_id)
+        if getattr(json, 'status', self.status) != self.status:
+            self.status = json['status']
+            self.last_status_change_date = datetime.now()
+        return self
+
+
 @event.listens_for(NotificationSubscription.status, 'set', propagate=True)
 def update_last_status_change_date(target, value, oldvalue, initiator):
     target.last_status_change_date = datetime.utcnow()
@@ -219,6 +250,12 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
     def followed_object(self):
         return self.post
 
+    def update_json(self, json, user_id=Everyone):
+        updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
+        if updated == self:
+            self.post_id = getattr(json, 'post_id', self.post_id)
+        return updated
+
 
 class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
@@ -242,6 +279,12 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     def followed_object(self):
         return self.idea
+
+    def update_json(self, json, user_id=Everyone):
+        updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
+        if updated == self:
+            self.idea_id = getattr(json, 'idea_id', self.idea_id)
+        return updated
 
 
 class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
@@ -267,6 +310,12 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
     def followed_object(self):
         return self.extract
 
+    def update_json(self, json, user_id=Everyone):
+        updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
+        if updated == self:
+            self.extract_id = getattr(json, 'extract_id', self.extract_id)
+        return updated
+
 
 class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
@@ -290,6 +339,12 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     def followed_object(self):
         return self.user
+
+    def update_json(self, json, user_id=Everyone):
+        updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
+        if updated == self:
+            self.on_user_id = getattr(json, 'on_user_id', self.on_user_id)
+        return updated
 
 
 class CrudVerbs():
