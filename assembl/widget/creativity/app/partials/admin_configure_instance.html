@@ -10,6 +10,9 @@
                 href="?config={{ widget_uri }}&target={{ target }}" target="_blank">here</a>.
         </span>
     </p>
+    <p>
+        Available actions:
+    </p>
 
     <ul>
         <li>
@@ -20,5 +23,12 @@
             <a href="#/admin/configure_instance_set_associated_ideas?widget_uri={{ widget_uri }}&target={{ target }}">Set associated ideas (TODO: backend side)</a>
         </li>
     </ul>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <button ng-click="deleteThisWidget()">Delete this creativity widget instance</button>
+    <span id="widget_delete_result"></span>
 
 </div>

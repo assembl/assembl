@@ -26,6 +26,28 @@ creativityApp.controller('adminConfigureInstanceCtl',
 
                 $scope.widget_endpoint = AssemblToolsService.resourceToUrl($scope.widget_uri);
             };
+
+            $scope.deleteThisWidget = function (){
+                var approve = confirm("Do you confirm that you want to delete this widget instance?");
+                if ( approve )
+                {
+                    $scope.deleteWidget($scope.widget_endpoint, $("#widget_delete_result"));
+                }
+            };
+
+            $scope.deleteWidget = function(endpoint, result_holder){
+                $http({
+                    method: 'DELETE',
+                    url: endpoint,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).success(function(data, status, headers){
+                    console.log("success");
+                    result_holder.text("Success!");
+                }).error(function(status, headers){
+                    console.log("error");
+                    result_holder.text("Error");
+                });
+            };
         }
     ]
 );
