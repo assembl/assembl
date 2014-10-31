@@ -111,10 +111,10 @@
     <% _.each(votable_widgets, function(votable_widget, i){
         var url = votable_widget.widget_url+encodeURIComponent("?target="+idea.getId());
         print("<div class=\"dispb mls mts\">");
-        print("<a href=\""+url+"\" target=\"_blank\">{{gettext('Vote on this idea')}}</a>");
+        print("<a href=\""+url+"\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Vote on this idea')}}\">{{gettext('Vote on this idea')}}</a>");
         if ( canCreateWidgets ) {
             var configure_url = "/widget/vote/?admin=1#/admin/configure_instance?widget_uri="+votable_widget.widget_uri+"&target="+idea.getId();
-            print(" - <a href=\""+configure_url+"\" target=\"_blank\">{{gettext('Configure this vote widget')}}</a>");
+            print(" - <a href=\""+configure_url+"\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Configure this vote widget')}}\">{{gettext('Configure this vote widget')}}</a>");
         }
         print("</div>");
      }); %>
@@ -123,9 +123,9 @@
        And show configuration link of this widget if available #}
     <% if ( idea.get('inspiration_widget_url') ){
       print("<div class=\"dispb mls mts\">");
-      print("<a href=\"" + idea.get('inspiration_widget_url') + "\" target=\"_blank\" class=\"js_inspireMe\">{{gettext('Inspire me!')}}</a>");
+      print("<a href=\"" + idea.get('inspiration_widget_url') + "\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Inspire me!')}}\">{{gettext('Inspire me!')}}</a>");
       if ( idea.get('inspiration_widget_configure_url') ){
-        print(" - <a href=\"" + idea.get('inspiration_widget_configure_url') + "\" target=\"_blank\" class=\"js_inspireMe\">{{gettext('Configure this creativity widget')}}</a>");
+        print(" - <a href=\"" + idea.get('inspiration_widget_configure_url') + "\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Configure this creativity widget')}}\">{{gettext('Configure this creativity widget')}}</a>");
       }
       print("</div>");
     } %>
@@ -135,10 +135,10 @@
     <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE){
       if ( canCreateWidgets ) {
           var create_vote_widget_url = "/widget/vote/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
-          print("<a href=\""+create_vote_widget_url+"\" target=\"_blank\" class='dispb mls mts'>{{gettext('Create a vote widget on this idea')}}</a>");
+          print("<a href=\""+create_vote_widget_url+"\" target=\"_blank\" class='dispb mls mts js_openTargetInModal' data-modal-title=\"{{gettext('Create a vote widget on this idea')}}\">{{gettext('Create a vote widget on this idea')}}</a>");
 
           if ( idea.get('inspiration_widget_create_url') ) {
-            print("<a href=\"" + idea.get('inspiration_widget_create_url') + "\" target=\"_blank\" class='dispb mls mts'>{{gettext('Create a creativity widget on this idea')}}</a>");
+            print("<a href=\"" + idea.get('inspiration_widget_create_url') + "\" target=\"_blank\" class='dispb mls mts js_openTargetInModal' data-modal-title=\"{{gettext('Create a creativity widget on this idea')}}\">{{gettext('Create a creativity widget on this idea')}}</a>");
           }
       }
     } %>

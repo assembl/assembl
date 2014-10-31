@@ -68,7 +68,7 @@ define(function (require) {
             'click .js_seeMore': 'seeMoreOrLess',
             'click .js_seeLess': 'seeMoreOrLess',
             'click .js_edit-definition': 'editDefinition',
-            'click .js_inspireMe': 'openInspireMeModal'
+            'click .js_openTargetInModal': 'openTargetInModal'
         },
 
         getTitle: function () {
@@ -250,20 +250,25 @@ define(function (require) {
 
         },
 
-        openInspireMeModal: function (evt) {
+        // TODO: set Modal dimensions dynamically
+        openTargetInModal: function (evt) {
             console.log("openInspireMeModal()");
             console.log("evt: ", evt);
             var target_url = (evt && evt.currentTarget) ? $(evt.currentTarget).attr("href") : null;
             if ( !target_url )
                 target_url = "/widget/creativity/?config=local:Widget/52&target=local:Idea/4";
 
+            var modal_title = (evt && evt.currentTarget) ? $(evt.currentTarget).attr("data-modal-title") : null;
+            if ( !modal_title )
+                modal_title = "";
+
             var model = new Backbone.Model();
             model.set("iframe_url", target_url);
+            model.set("modal_title", modal_title);
 
             var Modal = Backbone.Modal.extend({
-                //template: _.template($('#tmpl-widgetCreativity').html()),
-                template: Ctx.loadTemplate('widgetCreativity'),
-                className: 'group-modal popin-wrapper creativity-popin',
+                template: Ctx.loadTemplate('modalWithIframe'),
+                className: 'group-modal popin-wrapper iframe-popin',
                 cancelEl: '.close',
                 keyControl: false,
                 model: model
