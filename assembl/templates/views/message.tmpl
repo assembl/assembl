@@ -21,6 +21,12 @@
       #}<% } %>
 {%- endmacro %}
 
+{% macro showInspirationSource() -%}
+  <% if ( metadata_json && metadata_json["inspiration_url"] ){ %>{# Strip whitespace ...
+      #} &middot; <span class="inspirationSource"><a href="<%= metadata_json["inspiration_url"] %>" target="_blank" data-toggle="tooltip" data-placement="top" title="{{ gettext('This link inspired the author to write this message') }}">{{ gettext('Inspiration source') }}</a></span>{# Strip whitespace ...
+  #}<% } %>
+{%- endmacro %}
+
 {% macro menuAction() -%}
    <div class="message-menu">
      <div class="dropdown mrxl mtxs">
@@ -60,7 +66,7 @@
     </div><span class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
   </div>
   <div class="rightSection">
-    <span class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</span>
+    <span class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }} {{ showInspirationSource() }}</span>
     {# Strip whitespace ...#}{{ readUnreadIndicator() }}{# Strip whitespace ...#}
   </div>
   <div class="centerSection">
@@ -76,7 +82,7 @@
     <a class="img-left avatar img-rounded mtxs" href="#"><img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}" width="30" height="30"></a>
     <div class="bd">
       <div class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }} {{ readUnreadIndicator() }}</div>
-      <div class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</div>
+      <div class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }} {{ showInspirationSource() }}</div>
     </div>
   </div>
 
