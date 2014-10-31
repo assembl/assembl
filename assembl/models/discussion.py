@@ -13,13 +13,14 @@ from sqlalchemy import (
     event,
     and_,
 )
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, join
 
 from assembl.lib.utils import slugify
 from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
-    P_READ, R_SYSADMIN, P_ADMIN_DISC, Authenticated, Everyone)
+    P_READ, R_SYSADMIN, P_ADMIN_DISC, R_PARTICIPANT,
+    Authenticated, Everyone)
 from .auth import (
     DiscussionPermission, Role, Permission, User, UserRole, LocalUserRole,
     UserTemplate)
@@ -292,6 +293,20 @@ class Discussion(DiscussionBoundBase):
                 return True
 
         return {'all_users': AllUsersCollection(cls)}
+
+    all_participants = relationship(
+        User, viewonly=True, secondary=LocalUserRole.__table__,
+        primaryjoin="LocalUserRole.discussion_id == Discussion.id",
+        secondaryjoin=LocalUserRole.user_id == User.id,
+        backref="involved_in_discussion")
+
+    simple_participants = relationship(
+        User, viewonly=True,
+        secondary=join(LocalUserRole, Role,
+            ((LocalUserRole.role_id == Role.id) & (Role.name == R_PARTICIPANT))),
+        primaryjoin="LocalUserRole.discussion_id == Discussion.id",
+        secondaryjoin=LocalUserRole.user_id == User.id,
+        backref="participant_in_discussion")
 
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
