@@ -87,7 +87,11 @@ class DeclEnumType(SchemaType, TypeDecorator):
         print "*************", value
         if value is None:
             return None
-        return value.value
+        if isinstance(value, EnumSymbol):
+            return value.value
+        elif isinstance(value, (str, unicode)):
+            # Should not happen, but mask the error for now.
+            return value
 
     def process_result_value(self, value, dialect):
         if value is None:

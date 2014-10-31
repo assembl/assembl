@@ -54,6 +54,15 @@ class NotificationSubscriptionClasses(DeclEnum):
 
     #System error notifications
     SYSTEM_ERRORS = "SYSTEM_ERRORS", ""
+    # Abstract notification types. Those need not be in the constraint, so no migration.
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION = "ABSTRACT_NOTIFICATION_SUBSCRIPTION"
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_DISCUSSION = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_DISCUSSION"
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_OBJECT = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_OBJECT"
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_POST = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_POST"
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_IDEA = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_IDEA"
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_EXTRACT = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_EXTRACT"
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_USERACCOUNT = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_USERACCOUNT"
+
 
 class NotificationCreationOrigin(DeclEnum):
     USER_REQUESTED = "USER_REQUESTED", "A direct user action created the notification subscription"
@@ -135,7 +144,7 @@ class NotificationSubscription(DiscussionBoundBase):
     unsubscribe_allowed = False
 
     __mapper_args__ = {
-        'polymorphic_identity': 'abstract_notification_subscription',
+        'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION,
         'polymorphic_on': 'type',
         'with_polymorphic': '*'
     }
@@ -230,9 +239,8 @@ def update_last_status_change_date(target, value, oldvalue, initiator):
 
 
 class NotificationSubscriptionGlobal(NotificationSubscription):
-    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_discussion',
-        'polymorphic_on': 'type',
-        'with_polymorphic': '*'
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_DISCUSSION
     }
 
     def followed_object(self):
@@ -240,9 +248,8 @@ class NotificationSubscriptionGlobal(NotificationSubscription):
 
 
 class NotificationSubscriptionOnObject(NotificationSubscription):
-    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_object',
-        'polymorphic_on': 'type',
-        'with_polymorphic': '*'
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_OBJECT
     }
 
     def followed_object(self):
@@ -251,9 +258,8 @@ class NotificationSubscriptionOnObject(NotificationSubscription):
 class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
 
     __tablename__ = "notification_subscription_on_post"
-    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_post',
-        'polymorphic_on': 'type',
-        'with_polymorphic': '*'
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_POST
     }
 
     id = Column(Integer, ForeignKey(
@@ -281,9 +287,8 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
 class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     __tablename__ = "notification_subscription_on_idea"
-    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_idea',
-        'polymorphic_on': 'type',
-        'with_polymorphic': '*'
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_IDEA
     }
 
     id = Column(Integer, ForeignKey(
@@ -311,9 +316,8 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
 
     __tablename__ = "notification_subscription_on_extract"
-    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_extract',
-        'polymorphic_on': 'type',
-        'with_polymorphic': '*'
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_EXTRACT
     }
 
     id = Column(Integer, ForeignKey(
@@ -341,9 +345,8 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
 class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     __tablename__ = "notification_subscription_on_useraccount"
-    __mapper_args__ = { 'polymorphic_identity': 'abstract_notification_subscription_on_useraccount',
-        'polymorphic_on': 'type',
-        'with_polymorphic': '*'
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_USERACCOUNT
     }
 
     id = Column(Integer, ForeignKey(
@@ -392,8 +395,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
         self.db.add(notification)
 
     __mapper_args__ = {
-        'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_SYNTHESES,
-        'with_polymorphic': '*'
+        'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_SYNTHESES
     }
 
 class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
@@ -415,8 +417,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
         self.db.add(notification)
 
     __mapper_args__ = {
-        'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_ALL_MESSAGES,
-        'with_polymorphic': '*'
+        'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_ALL_MESSAGES
     }
 
 class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscriptionGlobal):
@@ -441,8 +442,7 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
         self.db.add(notification)
 
     __mapper_args__ = {
-        'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_OWN_MESSAGES_DIRECT_REPLIES,
-        'with_polymorphic': '*'
+        'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_OWN_MESSAGES_DIRECT_REPLIES
     }
 
 class ModelEventWatcherNotificationSubscriptionDispatcher(object):
