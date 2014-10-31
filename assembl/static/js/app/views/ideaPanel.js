@@ -100,7 +100,7 @@ define(function (require) {
                 len = this.extractList.models.length;
             }
             if (len == 0) {
-                if (Ctx.canUseExpertInterface()) {
+                if (Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
                     return i18n.gettext('No extract was harvested');
                 }
                 else {
@@ -108,7 +108,7 @@ define(function (require) {
                 }
             }
             else {
-                if (Ctx.canUseExpertInterface()) {
+                if (Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
                     return i18n.sprintf(i18n.ngettext('%d extract was harvested', '%d extracts were harvested', len), len);
                 }
                 else {
@@ -231,7 +231,7 @@ define(function (require) {
 
             if (this.model) {
                 // display only important extract for simple user
-                if (!Ctx.canUseExpertInterface()) {
+                if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
                     this.extractList.models = _.filter(this.extractList.models, function (model) {
                         return model.get('important');
                     });

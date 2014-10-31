@@ -1,4 +1,4 @@
-<% if( Ctx.canUseExpertInterface() ){ %>
+<% if( Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT ){ %>
 	<div class="groupHeader editable">
 	  <a class="js_closeGroup close-group"><i class="icon-delete"></i></a>
 	</div>

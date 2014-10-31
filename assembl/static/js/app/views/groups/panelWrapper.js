@@ -58,7 +58,7 @@ define(function (require) {
                 headerClass: this.contentsView.headerClass || '',
                 userCanChangeUi: Ctx.canUseExpertInterface(),
                 hasLock: this.contentsView.lockable,
-                hasMinimize: this.contentsView.minimizeable || Ctx.canUseExpertInterface(),
+                hasMinimize: this.contentsView.minimizeable || (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT),
                 hasClose: this.contentsView.closeable,
                 icon: this.getIcon()
             }

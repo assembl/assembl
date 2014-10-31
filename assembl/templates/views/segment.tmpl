@@ -21,7 +21,7 @@
 
   <span class="text-quotation"><i class="icon-quote quoteLeft"></i><%= segment.getQuote() %><i class="icon-quote quoteRight"></i></span>
   <div class="postit-footer">
-    <% if(ctx.canUseExpertInterface()) { %>
+    <% if(canAddExtracts) { %>
       <div class="tar">
       <a href="#" class="ideaPanelNuggets js_selectAsNugget <%= segment.get('important') ? 'isSelected':'' %>"><i class="icon-diamond"></i></a>
       </div>
@@ -60,14 +60,14 @@
   <div class="postit-footer">
     <p class="text-quotation"><%= segment.getQuote() %></p>
 
-    <% if(ctx.canUseExpertInterface()) { %>
+    <% if(canAddExtracts) { %>
       <div class="segment-harvester tac">
         <div class="avatar img-rounded">
           {{ gettext('%(img)s')|format(img=segmentCreatorAvatarImg)|safe }}
           {#<span class="creatorName">{{ segmentCreatorName|safe }}</span>#}
         </div>
 
-        <% if(ctx.canUseExpertInterface()) { %>
+        <% if(canAddExtracts) { %>
           <div class="nugget-indice">
             <a href="#" class="nugget js_selectAsNugget <%= segment.get('important') ? 'isSelected':'' %>"><i class="icon-diamond"></i></a>
           </div>

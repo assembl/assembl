@@ -50,6 +50,7 @@ define(function (require) {
                 harvester: harvester,
                 allUsersCollection: this.allUsersCollection,
                 canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
+                canAddExtracts: currentUser.can(Permissions.ADD_EXTRACT),
                 canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 ctx: Ctx
             }
