@@ -23,7 +23,7 @@ def upgrade(pyramid_env):
     schema = config.get('db_schema')+"."+config.get('db_user')
     with context.begin_transaction():
             #No clean way to address constraints, and I didn't find a way to add JUST the constraint from sqlalchemy data structures
-            constraintNameOld = "ck_"+config.get('db_schema')+"_"+config.get('db_user')+"_notification_subscription_notification_status"
+            constraintNameOld = "ck_"+config.get('db_schema')+"_"+config.get('db_user')+"_notification_subscription_notification_subscription_status"
             op.execute("""ALTER TABLE assembl.assembl.notification_subscription DROP CONSTRAINT """+constraintNameOld)
             constraintNameNew = "ck_"+config.get('db_schema')+"_"+config.get('db_user')+"_notification_subscription_notification_subscription_status"
             op.execute("""ALTER TABLE assembl.assembl.notification_subscription ADD CONSTRAINT """+constraintNameNew+"""
