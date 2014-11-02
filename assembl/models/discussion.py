@@ -297,7 +297,8 @@ class Discussion(DiscussionBoundBase):
     all_participants = relationship(
         User, viewonly=True, secondary=LocalUserRole.__table__,
         primaryjoin="LocalUserRole.discussion_id == Discussion.id",
-        secondaryjoin=LocalUserRole.user_id == User.id,
+        secondaryjoin=((LocalUserRole.user_id == User.id)
+            & (LocalUserRole.requested == 0)),
         backref="involved_in_discussion")
 
     simple_participants = relationship(
@@ -305,7 +306,8 @@ class Discussion(DiscussionBoundBase):
         secondary=join(LocalUserRole, Role,
             ((LocalUserRole.role_id == Role.id) & (Role.name == R_PARTICIPANT))),
         primaryjoin="LocalUserRole.discussion_id == Discussion.id",
-        secondaryjoin=LocalUserRole.user_id == User.id,
+        secondaryjoin=((LocalUserRole.user_id == User.id)
+            & (LocalUserRole.requested == 0)),
         backref="participant_in_discussion")
 
 

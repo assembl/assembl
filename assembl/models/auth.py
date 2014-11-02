@@ -467,7 +467,7 @@ class User(AgentProfile):
 
     def __repr__(self):
         if self.username:
-            return "<User '%s'>" % self.username.username
+            return "<User '%s'>" % self.username.username.encode('utf-8')
         else:
             return "<User id=%d>" % self.id
 
@@ -600,7 +600,7 @@ class Username(Base):
                      ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
                      unique=True)
     username = Column(Unicode(20), primary_key=True)
-    user = relationship(User, backref=backref('username', uselist=False))
+    user = relationship(User, backref=backref('username', uselist=False, lazy="joined"))
 
     def get_id_as_str(self):
         return str(self.user_id)
@@ -642,7 +642,7 @@ class UserRole(Base):
                      index=True)
     user = relationship(User, backref="roles")
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
-    role = relationship(Role, lazy="joined")
+    role = relationship(Role)
 
     @classmethod
     def special_quad_patterns(cls, alias_manager, discussion_id):
@@ -663,9 +663,10 @@ class LocalUserRole(DiscussionBoundBase):
     user = relationship(User, backref="local_roles")
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE'))
-    discussion = relationship('Discussion')
+    discussion = relationship('Discussion', backref="local_user_roles")
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
-    role = relationship(Role, lazy="joined")
+    role = relationship(Role)
+    requested = Column(Boolean, server_default='0', default='0')
     # BUG in virtuoso: It will often refuse to create an index
     # whose name exists in another schema. So having this index in
     # schemas assembl and assembl_test always fails.
@@ -708,12 +709,12 @@ class DiscussionPermission(DiscussionBoundBase):
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE', onupdate='CASCADE'))
     discussion = relationship(
-        'Discussion', backref=backref("acls", lazy="joined"))
+        'Discussion', backref=backref("acls"))
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
-    role = relationship(Role, lazy="joined")
+    role = relationship(Role)
     permission_id = Column(Integer, ForeignKey(
         'permission.id', ondelete='CASCADE', onupdate='CASCADE'))
-    permission = relationship(Permission, lazy="joined")
+    permission = relationship(Permission)
 
     def role_name(self):
         return self.role.name
