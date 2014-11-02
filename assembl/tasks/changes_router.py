@@ -87,7 +87,7 @@ class ZMQRouter(SockJSConnection):
             self.socket = context.socket(zmq.SUB)
             self.socket.connect(INTERNAL_SOCKET)
             self.socket.setsockopt(zmq.SUBSCRIBE, '*')
-            self.socket.setsockopt(zmq.SUBSCRIBE, self.discussion)
+            self.socket.setsockopt(zmq.SUBSCRIBE, str(self.discussion))
             self.loop = zmqstream.ZMQStream(self.socket, io_loop=io_loop)
             self.loop.on_recv(self.on_recv)
             print "connected"
