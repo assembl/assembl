@@ -224,8 +224,8 @@
 }
 
 .groupBody .groupPanel header ~ .panelContents {
-  //@include calc(height, "100vh - 34px");  need hack safari
-  @include calc(height, "100% - 34px"); /* retain the height of the header */
+  //@include calc(height, "100vh - 40px");  need hack safari
+  @include calc(height, "100% - 40px"); /* retain the height of the header */
 }
 
 /* CSS hack to target specificly IE >= 10 (see browserhacks.com). IE uses wrong 100% value in previous rule */
@@ -234,8 +234,8 @@ _:-ms-input-placeholder, :root .groupBody .groupPanel header ~ .panelContents {
 }
 
 .groupBody.editable .groupPanel header ~ .panelContents {
-  //@include calc(height, "100vh - 34px"); need hack safari
-  @include calc(height, "100% - 34px"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+  //@include calc(height, "100vh - 40px"); need hack safari
+  @include calc(height, "100% - 40px"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
 
 .panelContents > div {
@@ -255,7 +255,7 @@ _:-ms-input-placeholder, :root .groupBody .groupPanel header ~ .panelContents {
   position: absolute;
   top: 30px;
   right: 0;
-  bottom: 1px;
+  bottom: 0;
   left: 0;
   box-sizing: border-box;
   overflow: auto;
