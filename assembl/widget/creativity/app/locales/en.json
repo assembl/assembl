@@ -1,11 +1,5 @@
 {
-    "comment": "Comment",
-    "acomment": "Comment",
-    "send": "Send",
-    "reply": "Reply",
-    "comments": "See the {{nb}} comments",
-    "vote": "Vote",
-    "title": "title",
-    "cancel": "Cancel",
-    "validVote": "Valid your votes"
+    "creativityModulesListTitle": "Select a way of getting inspired",
+    "creativityModuleTitleVideos": "Videos",
+    "creativityModuleTitleCards": "Cards"
 }

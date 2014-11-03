@@ -574,7 +574,7 @@ creativityApp.controller('indexCtl',
                 if ($scope.settings.active_modules) {
                     if ($scope.settings.active_modules.video && $scope.settings.active_modules.video == true) {
                         $scope.active_modules.video = {};
-                        $scope.active_modules.video.name = "Vidéos";
+                        $scope.active_modules.video.name = "creativityModuleTitleVideos";
 
                         $scope.active_modules.video.url = "/widget/video/";
                         if ($scope.config)
@@ -588,7 +588,7 @@ creativityApp.controller('indexCtl',
 
                     if ($scope.settings.active_modules.card && $scope.settings.active_modules.card == true) {
                         $scope.active_modules.card = {};
-                        $scope.active_modules.card.name = "Cartes";
+                        $scope.active_modules.card.name = "creativityModuleTitleCards";
                         // TODO: verify URL format
                         
                         $scope.active_modules.card.url = "/widget/card/#/?";

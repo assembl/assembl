@@ -34,6 +34,7 @@ videosApp.controller('videosCtl',
 
                 // set default model fields
 
+                $scope.message_is_sent = false;
                 $scope.youtube = JukeTubeVideosService.getYoutube();
                 $scope.results = JukeTubeVideosService.getResults();
                 $scope.pageInfo = JukeTubeVideosService.getPageInfo();
@@ -183,6 +184,17 @@ videosApp.controller('videosCtl',
 
             };
 
+            $scope.resumeInspiration = function(){
+                console.log("resumeInspiration()");
+                $scope.message_is_sent = false;
+            };
+
+            $scope.exit = function(){
+                console.log("exit()");
+                window.parent.exitModal();
+                console.log("called exitModal");
+            };
+
             $scope.keywordClick = function ($event) {
                 var keyword_value = $($event.target).html();
                 var values = $("#query").select2("val");
@@ -263,8 +275,18 @@ videosApp.controller('videosCtl',
                 
             };
 
+            $scope.sendIdeaFake = function(){
+                // tell the user that the message has been successfully posted
+                //alert("Your message has been successfully posted.");
+                $scope.message_is_sent = true;
+                $("#messageTitle").val("");
+                $("#messageContent").val("");
+            };
+
             $scope.sendIdea = function () {
                 console.log("sendIdea()");
+                try {
+                
                 var messageSubject = $("#messageTitle").val();
                 var messageContent = $("#messageContent").val();
                 if ( !messageSubject || !messageContent ){
@@ -359,6 +381,7 @@ videosApp.controller('videosCtl',
                         url = AssemblToolsService.resourceToUrl(endpoints[Object.keys(endpoints)[0]]);
                 }
                 // an example value for url is "/data/Discussion/1/widgets/56/base_idea_descendants/4/linkedposts";
+                // FIXME: error when http://localhost:6543/widget/video/?config=/data/Widget/40#/?idea=local:Idea%2F4%3Fview%3Dcreativity_widget => $scope.config.idea.widget_add_post_endpoint is an empty object
 
                 //var url = utils.urlApi($scope.config.widget.ideas_url);
                 console.log("url: ", url);
@@ -376,7 +399,8 @@ videosApp.controller('videosCtl',
                     */
                     
                     // tell the user that the message has been successfully posted
-                    alert("Your message has been successfully posted.");
+                    //alert("Your message has been successfully posted.");
+                    $scope.message_is_sent = true;
                     $("#messageTitle").val("");
                     $("#messageContent").val("");
                 }).error(function (data) {
@@ -414,6 +438,9 @@ videosApp.controller('videosCtl',
                  // The resource could not be found.
                  */
 
+             } catch(err){
+                console.log("Error:" err);
+             }
             };
 
             /*

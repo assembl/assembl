@@ -1,28 +1,4 @@
 {
-    "comment": "Écrire un commentaire...",
-    "acomment": "Commentaire",
-    "send": "Envoyez",
-    "reply": "Répondre",
-    "comments": "Voir les {{nb}} commentaires",
-    "vote": "Votez",
-    "title": "titre",
-    "cancel": "Annuler",
-    "validVote": "Validez vos votes",
-    "ideaPrompt": "Cette question est relative à l'idée \"{{parentIdeaTitle}} \". Inspirez-vous de la carte ci-dessous pour y répondre !",
-    "needToConnect": "Vous allez être redirigé vers la page de connexion dans {{time}}s ",
-    "connect": "Connectez-vous !",
-    "subIdeaPosted": "Votre sous-idée a bien été publiée",
-    "validVoteCatcher": "catching success",
-    "errorVoteCatcher": "catch error",
-    "topIdea": "Top des idées",
-    "shuffle": "Piocher une nouvelle carte",
-    "firstToPost": "Personne n'a encore contribué une nouvelle idée.  La vôtre sera la première!",
-    "pointToShare": "Il vous reste {{wallet}} points à répartir sur les idées suivantes",
-    "proposeIdea": "Proposez votre idée pour répondre à la question posée :",
-    "validateChoose": "Valider votre choix",
-    "session_question": "Cette question sera visible au dessus de la carte",
-    "session_jeton": "Nombre de jetons",
-
     "videoTopExplanation": "Utilisez la barre de recherche ci-dessous pour trouver des vidéos qui vous inspirent à propos de l'idée \"{{ idea }}\", dans la discussion \"{{ discussion }}\". Vous pouvez par exemple utiliser certains de ces mots-clés issus de la discussion :",
     "videoTopExplanationSecondRowKeywords": "Voici également quelques mots-clés qui pourraient s'approcher de ces sujets :",
     "videoDoesThisVideoInspireYou": "Cette vidéo vous inspire ? Écrivez votre idée ci-dessous",
@@ -31,5 +7,8 @@
     "videoSendIdeaButton": "Envoyer",
     "videoByVideoAuthor": "par",
     "videoPreviousPage": "« Page précédente",
-    "videoNextPage": "Page suivante »"
+    "videoNextPage": "Page suivante »",
+    "messageSuccessfullyPosted": "Votre message a été posté avec succès.",
+    "resumeInspirationButton": "Continuer à chercher l'inspiration",
+    "exitButton": "Retourner au débat"
 }

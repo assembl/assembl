@@ -6,24 +6,32 @@
             <p id="current">{{ youtube.videoTitle }}</p>
 
             <div class="card-comment">
-                <p>
-                    {{ 'videoDoesThisVideoInspireYou' | translate }}
-                </p>
+                
+                <div ng-hide="message_is_sent">
+                    <p>
+                        {{ 'videoDoesThisVideoInspireYou' | translate }}
+                    </p>
 
-                <form role="form">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="messageTitle"
-                               placeholder="{{ 'videoCommentTitlePlaceholder' | translate }}">
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" rows="3"
-                                  placeholder="{{ 'videoCommentContentPlaceholder' | translate }}"
-                                  id="messageContent"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" ng-click="sendIdea()">{{ 'videoSendIdeaButton' |
-                        translate }}
-                    </button>
-                </form>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="messageTitle"
+                                   placeholder="{{ 'videoCommentTitlePlaceholder' | translate }}">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3"
+                                      placeholder="{{ 'videoCommentContentPlaceholder' | translate }}"
+                                      id="messageContent"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="sendIdea()">{{ 'videoSendIdeaButton' | translate }}</button>
+                    </form>
+                </div>
+                
+                <div ng-show="message_is_sent">
+                    <p>{{ 'messageSuccessfullyPosted' | translate }}</p>
+                    <button type="submit" class="btn btn-primary mhl" ng-click="resumeInspiration()">{{ 'resumeInspirationButton' | translate }}</button>
+                    <button type="submit" class="btn btn-secondary mhl" ng-click="exit()">{{ 'exitButton' | translate }}</button>
+                </div>
+
             </div>
         </div>
 

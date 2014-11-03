@@ -274,7 +274,12 @@ define(function (require) {
                 model: model
             });
 
-            Assembl.slider.show(new Modal());
+            window.modal_instance = new Modal();
+            window.exitModal = function(){
+                window.modal_instance.destroy();
+            };
+
+            Assembl.slider.show(window.modal_instance);
 
             return false; // so that we cancel the normal behaviour of the clicked link (aka making browser go to "target" attribute of the "a" tag)
         },
