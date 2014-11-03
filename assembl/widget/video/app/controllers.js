@@ -439,7 +439,7 @@ videosApp.controller('videosCtl',
                  */
 
              } catch(err){
-                console.log("Error:" err);
+                console.log("Error:", err);
              }
             };
 
