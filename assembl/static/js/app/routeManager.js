@@ -10,9 +10,9 @@ define(function (require) {
         CollectionManager = require('common/collectionManager'),
         viewsFactory = require('objects/viewsFactory'),
         adminDiscussion = require('views/admin/adminDiscussion'),
-        adminNotifications = require('views/admin/adminNotifications'),
+        adminNotificationSubscriptions = require('views/admin/adminNotificationSubscriptions'),
         adminPartners = require('views/admin/adminPartners'),
-        userNotifications = require('views/user/notifications'),
+        userNotificationSubscriptions = require('views/user/userNotificationSubscriptions'),
         userProfile = require('views/user/profile');
 
     var routeManager = Marionette.Controller.extend({
@@ -56,14 +56,14 @@ define(function (require) {
         notifications: function () {
             Assembl.headerRegions.show(new navBar());
 
-            var notifications = new adminNotifications();
+            var notifications = new adminNotificationSubscriptions();
             Assembl.groupContainer.show(notifications);
         },
 
         userNotifications: function () {
             Assembl.headerRegions.show(new navBar());
 
-            var user = new userNotifications();
+            var user = new userNotificationSubscriptions();
             Assembl.groupContainer.show(user);
         },
 

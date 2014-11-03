@@ -3,8 +3,8 @@ define(['backbone.marionette', 'common/collectionManager'],
         'use strict';
 
 
-        var adminNotifications = Marionette.LayoutView.extend({
-            template: '#tmpl-adminNotifications',
+        var adminNotificationSubscriptions = Marionette.LayoutView.extend({
+            template: '#tmpl-adminNotificationSubscriptions',
             className: 'admin-notifications',
             ui: {
               subscribeCheckbox: ".js_adminNotification"
@@ -52,5 +52,5 @@ define(['backbone.marionette', 'common/collectionManager'],
 
         });
 
-        return adminNotifications;
+        return adminNotificationSubscriptions;
     });

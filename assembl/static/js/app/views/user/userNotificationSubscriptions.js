@@ -2,8 +2,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
     function (Marionette, $, _, CollectionManager, Ctx, NotificationSubscription) {
         'use strict';
 
-        var Notifications = Marionette.LayoutView.extend({
-            template: '#tmpl-user-notifications',
+        var userNotificationSubscriptions = Marionette.LayoutView.extend({
+            template: '#tmpl-userNotificationSubscriptions',
             className: 'admin-notifications',
             ui: {
               currentSubscribeCheckbox: ".js_userNotification",
@@ -96,5 +96,5 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
         });
 
-        return Notifications;
+        return userNotificationSubscriptions;
     });
