@@ -155,8 +155,9 @@ class NotificationSubscription(DiscussionBoundBase):
     def class_description(self):
         return self.type.description
 
+    @abstractmethod
     def followed_object(self):
-        return self.discussion
+        pass
 
     @classmethod
     def get_discussion_condition(cls, discussion_id):
@@ -385,9 +386,8 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
-        notification = Notification(
-            event_source_type = NotificationEventSourceType.MESSAGE_POSTED,
-            event_source_object_id = objectInstance.id,
+        notification = NotificationOnPostCreated(
+            post = objectInstance,
             first_matching_subscription = self,
             push_method = NotificationPushMethodType.EMAIL,
             #push_address = TODO
@@ -407,9 +407,8 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
-        notification = Notification(
-            event_source_type = NotificationEventSourceType.MESSAGE_POSTED,
-            event_source_object_id = objectInstance.id,
+        notification = NotificationOnPostCreated(
+            post = objectInstance,
             first_matching_subscription = self,
             push_method = NotificationPushMethodType.EMAIL,
             #push_address = TODO
@@ -432,9 +431,8 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
-        notification = Notification(
-            event_source_type = NotificationEventSourceType.MESSAGE_POSTED,
-            event_source_object_id = objectInstance.id,
+        notification = NotificationOnPostCreated(
+            post = objectInstance,
             first_matching_subscription = self,
             push_method = NotificationPushMethodType.EMAIL,
             #push_address = TODO
@@ -493,13 +491,6 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
     def processAccountModified(self, id):
         print "processAccountModified", id
 
-class NotificationEventSourceType(DeclEnum):
-    """
-    The type of event that caused the notification to be created
-    """
-    MESSAGE_POSTED = "MESSAGE_POSTED", "A message was posted"
-    IDEA_SESSION_STARTING = "IDEA_SESSION_STARTING", "A creativity or other session is starting"
-
 class NotificationPushMethodType(DeclEnum):
     """
     The type of event that caused the notification to be created
@@ -528,21 +519,35 @@ class NotificationDeliveryConfirmationType(DeclEnum):
     LINK_FOLLOWED = "LINK_FOLLOWED", "The user followed a link in the notification"
     NOTIFICATION_DISMISSED = "NOTIFICATION_DISMISSED", "The user dismissed the notification"
 
+class NotificationClasses():
+
+    ABSTRACT_NOTIFICATION = "ABSTRACT_NOTIFICATION"
+    ABSTRACT_NOTIFICATION_ON_POST = "ABSTRACT_NOTIFICATION_ON_POST"
+    NOTIFICATION_ON_POST_CREATED = "NOTIFICATION_ON_POST_CREATED"
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_POST = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_POST"
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_IDEA = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_IDEA"
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_EXTRACT = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_EXTRACT"
+    ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_USERACCOUNT = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_USERACCOUNT"
+
 class Notification(Base):
     """
     A notification
     """
     __tablename__ = "notification"
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationClasses.ABSTRACT_NOTIFICATION,
+        'polymorphic_on': 'sqla_type',
+        'with_polymorphic': '*'
+    }
     id = Column(
         Integer,
-        primary_key=True)
-    event_source_type = Column(
-        NotificationEventSourceType.db_type(),
-        nullable = False)
-    event_source_object_id = Column(
-        Integer,
-        nullable = False,
-        doc="An annonymous pointer to the database object that originated the event")
+    primary_key=True)
+    
+    sqla_type = Column(
+        String,
+        nullable=False,
+        index=True)
+    
     first_matching_subscription_id = Column(
         Integer,
         ForeignKey(
@@ -586,5 +591,45 @@ class Notification(Base):
         DateTime,
         nullable = True,
         default = datetime.utcnow)
+    
+    @abstractmethod
+    def event_source_object(self):
+        pass
 
+class NotificationOnPost(Notification):
 
+    __tablename__ = "notification_on_post"
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationClasses.ABSTRACT_NOTIFICATION_ON_POST,
+        'polymorphic_on': 'sqla_type',
+        'with_polymorphic': '*'
+    }
+
+    id = Column(Integer, ForeignKey(
+        Notification.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    post_id = Column(
+        Integer,
+        ForeignKey(
+            Post.id,
+            ondelete='CASCADE',
+             onupdate='CASCADE'),
+        nullable = False)
+
+    post = relationship(Post)
+
+    @abstractmethod
+    def event_source_object(self):
+        return self.post
+
+class NotificationOnPostCreated(NotificationOnPost):
+    __mapper_args__ = {
+        'polymorphic_identity': NotificationClasses.NOTIFICATION_ON_POST_CREATED,
+        'with_polymorphic': '*'
+    }
+    
+    def event_source_object(self):
+        return NotificationOnPost.event_source_object(self)
