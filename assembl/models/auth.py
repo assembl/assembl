@@ -682,10 +682,48 @@ class LocalUserRole(DiscussionBoundBase):
     def get_discussion_condition(cls, discussion_id):
         return cls.id == discussion_id
 
+    def get_role_name(self):
+        return self.role.name
+
+    def update_json(self, json, user_id=Everyone):
+        json_user_id = json.get('user', None)
+        if json_user_id is None:
+            json_user_id = user_id
+        else:
+            json_user_id = User.get_database_id(json_user_id)
+            # Do not allow changing user
+            if self.user_id is not None and json_user_id != self.user_id:
+                raise HTTPBadRequest()
+        role_name = json.get("role", None)
+        if not (role_name or self.role_id):
+            role_name = R_PARTICIPANT
+        if role_name:
+            role_id = self.db.query(Role.id).filter_by(name=role_name).first()
+            if not role_id:
+                raise HTTPBadRequest("Invalid role name:"+role_name)
+            self.role_id = role_id[0]
+        json_discussion_id = json.get('discussion', None)
+        if json_discussion_id:
+            json_discussion_id = Discussion.get_database_id(json_discussion_id)
+            # Do not allow change of discussion
+            if self.discussion_id is not None \
+                    and json_discussion_id != self.discussion_id:
+                raise HTTPBadRequest()
+            self.discussion_id = json_discussion_id
+        else:
+            if not self.discussion_id:
+                raise HTTPBadRequest()
+
+    @classmethod
+    def base_condition(cls, alias=None):
+        cls = alias or cls
+        return cls.requested == 0
+
     @classmethod
     def special_quad_patterns(cls, alias_manager, discussion_id):
-        return [QuadMapPatternS(User.iri_class().apply(LocalUserRole.user_id),
-            SIOC.has_function, Role.iri_class().apply(LocalUserRole.role_id),
+        return [QuadMapPatternS(User.iri_class().apply(cls.user_id),
+            SIOC.has_function, Role.iri_class().apply(cls.role_id),
+            condition=cls.requested == 0,
             name=QUADNAMES.class_LocalUserRole)]
 
 

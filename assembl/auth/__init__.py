@@ -23,13 +23,16 @@ P_ADD_IDEA = 'add_idea'
 P_EDIT_IDEA = 'edit_idea'
 P_EDIT_SYNTHESIS = 'edit_synthesis'
 P_SEND_SYNTHESIS = 'send_synthesis'
+P_SELF_REGISTER = 'self_register'
+P_SELF_REGISTER_REQUEST = 'self_register_req'
 P_ADMIN_DISC = 'admin_discussion'
 P_SYSADMIN = 'sysadmin'
 
 ASSEMBL_PERMISSIONS = set((
     P_READ, P_ADD_POST, P_EDIT_POST, P_ADD_EXTRACT, P_EDIT_EXTRACT,
     P_EDIT_MY_EXTRACT, P_ADD_IDEA, P_EDIT_IDEA, P_EDIT_SYNTHESIS,
-    P_SEND_SYNTHESIS, P_ADMIN_DISC, P_SYSADMIN))
+    P_SEND_SYNTHESIS, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
+    P_ADMIN_DISC, P_SYSADMIN))
 
 class CrudPermissions(object):
     __slots__=('create', 'read', 'update', 'delete',

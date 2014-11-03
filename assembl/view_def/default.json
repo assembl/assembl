@@ -337,5 +337,10 @@
     },
     "NotificationSubscriptionFollowOwnMessageDirectReplies": {
         "@extends": "NotificationSubscription"
+    },
+    "LocalUserRole": {
+        "user": true,
+        "role": "&get_role_name",
+        "discussion": true
     }
 }
