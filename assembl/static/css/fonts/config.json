@@ -555,6 +555,42 @@
             "css": "check-empty",
             "code": 59420,
             "src": "fontawesome"
+        },
+        {
+            "uid": "8e04c98c8f5ca0a035776e3001ad2638",
+            "css": "facebook",
+            "code": 59433,
+            "src": "fontawesome"
+        },
+        {
+            "uid": "5e0a374728ffa8d0ae1f331a8f648231",
+            "css": "github",
+            "code": 59436,
+            "src": "fontawesome"
+        },
+        {
+            "uid": "b8d0c7d76e87b94882329a88e8e43d3d",
+            "css": "gplus",
+            "code": 59435,
+            "src": "fontawesome"
+        },
+        {
+            "uid": "1145676a91138011729fa2909997af66",
+            "css": "linkedin-squared",
+            "code": 59437,
+            "src": "fontawesome"
+        },
+        {
+            "uid": "da8a58b1deff73d1ba89ba1172ca4bcc",
+            "css": "openid",
+            "code": 59438,
+            "src": "fontawesome"
+        },
+        {
+            "uid": "627abcdb627cb1789e009c08e2678ef9",
+            "css": "twitter",
+            "code": 59434,
+            "src": "fontawesome"
         }
     ]
 }

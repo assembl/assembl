@@ -1,30 +1,30 @@
 {% extends 'base.jinja2' %}
 
 {% macro form(name, title, image) %}
-{% if name in providers %}
-<form id="{{name}}" method="post" action="/login/{{name}}">
-{% for k,v in kwargs.items() %}
-    <input type="hidden" name="{{ k }}" value="{{ v }}" />
-{% endfor %}
-{% if name == "openid" %}
-    <input type="text" name="openid_identifier" class="form-control" />
-{% endif %}
-{% if image %}
-    <input type="image" value="" src="{{ STATIC_URL }}/img/loginbox/{{name}}.png" alt="{{title}}"/>
-{% else %}
-    <input type="submit" value="{{ title }}" />
-{% endif %}
-</form>
-{% endif %}
+  {% if name in providers %}
+  <form id="{{name}}" class="mts" method="post" action="/login/{{name}}">
+  {% for k,v in kwargs.items() %}
+      <input type="hidden" name="{{ k }}" value="{{ v }}" />
+  {% endfor %}
+
+  {% if name == "openid" %}
+       <div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />
+  {% endif %}
+  {% if name == "google" %}
+     <div class="g-icon-bg"></div><input type="submit" class="g-bg" value="{{title}}"></input>
+  {% endif %}
+  {% if name == "twitter" %}
+     <div class="twi-icon-bg"></div><input type="submit" class="twi-bg" value="{{title}}"></input>
+  {% endif %}
+  {% if name == "facebook" %}
+     <div class="fb-icon-bg"></div><input type="submit" class="fb-bg" value="{{title}}"></input>
+  {% endif %}
+
+  </form>
+  {% endif %}
 {% endmacro %}
 
 {% block content %}
-
-<style>
-body{
-    background: #eee;
-}
-</style>
 
 <div class="loginbox sign-in">
     <header>
