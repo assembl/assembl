@@ -56,7 +56,8 @@ define(function (require) {
             messageList: '.messageList-list',
             userThreadedViewButton: '.messageListViewStyleUserThreaded',
             userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew',
-            stickyBar: '.sticky-box'
+            stickyBar: '.sticky-box',
+            replyBox: '.messagelist-replybox'
         },
 
         initialize: function (options) {
@@ -394,7 +395,6 @@ define(function (require) {
          * @type {Object}
          */
         currentQuery: new PostQuery(),
-
 
         /**
          * Reset the offset values to initial values
@@ -909,10 +909,6 @@ define(function (require) {
                 'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
                 'messageList': that
             });
-
-
-            //this.newTopicView = new MessageBoxView({ });
-
             this.$('.messagelist-replybox').html(this.newTopicView.render().el);
 
             // Resetting the messages

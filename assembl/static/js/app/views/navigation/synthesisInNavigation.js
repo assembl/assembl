@@ -57,11 +57,14 @@ define(function (require) {
             this.displaySynthesis(messageId);
         },
         displaySynthesis: function (messageId) {
-            var collectionManager = new CollectionManager();
-            messageListView = this.groupContent.getViewByTypeName('messageList');
+            var messageListView = this.groupContent.getViewByTypeName('messageList');
             messageListView.currentQuery.clearAllFilters();
             messageListView.toggleFilterByPostId(messageId);
             messageListView.showMessageById(messageId, undefined, false);
+
+            messageListView.ui.stickyBar.addClass('hidden');
+            messageListView.ui.replyBox.addClass('hidden');
+
             // Show that entry is selected
             this.selectSynthesisInMenu(messageId);
         },

@@ -2,7 +2,6 @@ define(function (require) {
     'use strict';
 
     var objectTreeRenderVisitor = require('views/visitors/objectTreeRenderVisitor'),
-        Backbone = require('backbone'),
         _ = require('underscore'),
         $ = require('jquery'),
         Assembl = require('app'),
