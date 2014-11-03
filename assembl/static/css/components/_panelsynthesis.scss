@@ -7,53 +7,13 @@
   div {
     margin: 0;
   }
-  .synthesisIdea-replybox {
-    &.hidden {
-      display: none;
+  .comment {
+    font-size: 11px;
+    .synthesisIdea-replybox-openbtn {
+      text-decoration: none;
+      font-size: 20px;
+      visibility: hidden;
+      opacity: 0;
     }
-  }
-  .synthesisPanel-ideas {
-    .panel-editablearea {
-      color: $black;
-    }
-    .synthesis-idea {
-      min-height: 40px;
-      padding-top: 10px;
-      &:hover {
-        .comment {
-          .synthesisIdea-replybox-openbtn {
-            visibility: visible;
-            opacity: 1;
-          }
-        }
-      }
-      .panel-editablearea {
-        width: 100%;
-      }
-      .synthesis-expression {
-        display: inline;
-        margin: 0;
-        & > *:first-child {
-          margin-top: 0px;
-        }
-        & > *:last-child {
-          display: inline;
-        }
-      }
-      .comment {
-        font-size: 11px;
-        .synthesisIdea-replybox-openbtn {
-          text-decoration: none;
-          font-size: 20px;
-          visibility: hidden;
-          opacity: 0;
-        }
-      }
-    }
-
-    .idealist-item {
-      line-height: 38px;
-    }
-
   }
 }
