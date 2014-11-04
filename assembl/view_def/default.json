@@ -355,6 +355,7 @@
     },
     "LocalUserRole": {
         "user": true,
+        "requested": true,
         "role": "&get_role_name",
         "discussion": true
     }

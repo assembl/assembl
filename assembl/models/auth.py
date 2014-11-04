@@ -21,6 +21,8 @@ from sqlalchemy import (
     Index
 )
 
+from pyramid.httpexceptions import (
+    HTTPUnauthorized, HTTPBadRequest)
 from sqlalchemy.orm import relationship, backref, deferred
 from sqlalchemy import inspect
 from sqlalchemy.types import Text
@@ -686,6 +688,7 @@ class LocalUserRole(DiscussionBoundBase):
         return self.role.name
 
     def update_json(self, json, user_id=Everyone):
+        # TODO: Verify uniqueness
         json_user_id = json.get('user', None)
         if json_user_id is None:
             json_user_id = user_id
@@ -694,16 +697,18 @@ class LocalUserRole(DiscussionBoundBase):
             # Do not allow changing user
             if self.user_id is not None and json_user_id != self.user_id:
                 raise HTTPBadRequest()
+        self.user_id = json_user_id
         role_name = json.get("role", None)
         if not (role_name or self.role_id):
             role_name = R_PARTICIPANT
         if role_name:
-            role_id = self.db.query(Role.id).filter_by(name=role_name).first()
-            if not role_id:
+            role = self.db.query(Role).filter_by(name=role_name).first()
+            if not role:
                 raise HTTPBadRequest("Invalid role name:"+role_name)
-            self.role_id = role_id[0]
+            self.role = role
         json_discussion_id = json.get('discussion', None)
         if json_discussion_id:
+            from .discussion import Discussion
             json_discussion_id = Discussion.get_database_id(json_discussion_id)
             # Do not allow change of discussion
             if self.discussion_id is not None \
@@ -713,6 +718,7 @@ class LocalUserRole(DiscussionBoundBase):
         else:
             if not self.discussion_id:
                 raise HTTPBadRequest()
+        return self
 
     @classmethod
     def base_condition(cls, alias=None):
