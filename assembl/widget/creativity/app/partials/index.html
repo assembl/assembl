@@ -4,11 +4,12 @@ We have to clear the cache or force refresh of the exact URL of this template pa
 -->
 
 <div id="index" ng-controller="indexCtl" ng-init="init()">
-    <h1>{{'creativityModulesListTitle' | translate}}</h1>
+	<div ng-show="ready">
+	    <h1>{{'creativityModulesListTitle' | translate}}</h1>
 
-    <div ng-repeat="(key, value) in active_modules">
-        <a href="{{ value.url }}">{{ value.name | translate }}</a>
-        <br/>
-    </div>
-
+	    <div ng-repeat="(key, value) in active_modules">
+	        <a href="{{ value.url }}">{{ value.name | translate }}</a>
+	        <br/>
+	    </div>
+	</div>
 </div>

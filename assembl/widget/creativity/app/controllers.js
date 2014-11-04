@@ -554,6 +554,7 @@ creativityApp.controller('indexCtl',
             $scope.init = function () {
                 console.log("indexCtl::init()");
 
+                $scope.ready = false;
                 console.log("configService:");
                 console.log(configService);
                 $scope.settings = configService.settings;
@@ -613,11 +614,14 @@ creativityApp.controller('indexCtl',
 
                 // if there is only one active module, redirect to it directly (instead of showing a selection on 1 element)
                 var keys = Object.keys($scope.active_modules);
-                if (keys.length == 1) {
+                if (keys.length == 1)
+                {
                     window.location.replace($scope.active_modules[keys[0]].url);
                 }
-
-
+                else
+                {
+                    $scope.ready = true;
+                }
             };
 
         }]);
