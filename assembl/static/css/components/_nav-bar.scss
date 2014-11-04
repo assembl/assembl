@@ -58,9 +58,24 @@
       }
     }
     .nav-notification {
+      position: relative;
       .dropdown-arrow {
         color: $gray1;
         font-size: 150%;
+      }
+      .ui-label-content {
+        position: absolute;
+        top: -3px;
+        right: -8px;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        .ui-label {
+          padding: 0px 4px;
+          font-size: 9px;
+          box-sizing: border-box;
+          height: 19px;
+        }
       }
     }
   }

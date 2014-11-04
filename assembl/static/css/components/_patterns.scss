@@ -72,40 +72,22 @@
   margin-left: $spacingXl;
 }
 
-/*.ui-label {
+.ui-label {
   display: inline-block;
   margin: 0 1px $spacingXs 0;
-  padding: 1px 14px;
+  padding: 2px 6px;
   font-size: 11px;
-  background: $panelBackground;
-  //border: 1px solid $borderColor;
+  color: $white;
+  background: $green;
+  border: 1px solid $gray3;
   border-radius: 12px;
 
-  .vicon {
+  /*.vicon {
     margin-right: -9px;
     color: $borderColor;
     font-size: 8px;
-  }
-
-  &:hover {
-    background: $panelBorder;
-
-    .vicon {
-      color: darken($borderColor, 25%);
-
-      &:hover {
-        color: $errorText;
-      }
-    }
-  }
-
-  a:hover,
-  a:focus {
-    .vicon {
-      color: $errorText;
-    }
-  }
-} */
+  }*/
+}
 
 /*.ui-label-premium {
   background: mix(#ffffff, $black, 24%);
@@ -127,7 +109,6 @@
 }*/
 
 .ui-badge {
-  //@include gradient-vertical(#FF7919, #F56600);
   background-color: $green;
   border: 1px solid $gray3;
   color: $white;
