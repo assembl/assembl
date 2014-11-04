@@ -184,6 +184,17 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
             return getattr(QUADNAMES, 'col_pattern_%s_%s' % (
                 clsname, column.name))
 
+    def delayed_class(self, sqla_cls):
+        from ..models import DiscussionBoundBase
+        return (
+            self.discussion_id
+            and issubclass(sqla_cls, DiscussionBoundBase)
+            and getattr(sqla_cls.get_discussion_condition,
+                        '__isabstractmethod__', None))
+
+    def delayed_column(self, sqla_cls, column):
+        return self.delayed_class(sqla_cls.mro()[1])
+
     def _extract_column_info(self, sqla_cls, subject_pattern):
         rdf_class = sqla_cls.__dict__.get('rdf_class', None)
         rdf_section = getattr(sqla_cls, 'rdf_section', DISCUSSION_DATA_SECTION)
@@ -244,9 +255,7 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
 
     def extract_info(self, sqla_cls, subject_pattern=None):
         from ..models import DiscussionBoundBase
-        if (self.discussion_id and issubclass(sqla_cls, DiscussionBoundBase)
-                and getattr(sqla_cls.get_discussion_condition,
-                            '__isabstractmethod__', None)):
+        if self.delayed_class(sqla_cls):
             return ()
         return super(AssemblClassPatternExtractor, self).extract_info(
             sqla_cls, subject_pattern)
