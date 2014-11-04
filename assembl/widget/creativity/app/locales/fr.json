@@ -11,6 +11,7 @@
     "adminConfigureInstanceSetAssociatedIdeas": "Définir les idées associées à cette instance (TODO: backend side)",
     "adminConfigureInstanceDelete": "Supprimer cette instance de widget",
     "gettingDataFromServer": "Récupération des données depuis le serveur...",
+    "gettingDataFromServerWidgetInstance": "Récupération des données depuis le serveur à propos de l'instance de widget ",
     "adminCreateFromIdeaTitle": "Confirmez la création du widget",
     "adminCreateFromIdeaDescriptionWithIdea": "Vous êtes sur le point de créer une instance du widget de créativité, et de l'associer à l'idée",
     "showDetails": "Voir les détails",
@@ -23,5 +24,9 @@
     "adminCreateFromIdeaSuccessTitle": "Succès",
     "adminCreateFromIdeaSuccessDetails": "Le widget a été créé avec succès. Son URI est",
     "adminCreateFromIdeaSuccessDetails2": "et son point d'API est",
-    "configureIt": "Configurer le widget"
+    "configureIt": "Configurer le widget",
+    "historyBack": "Retour",
+    "adminConfigureInstanceSetModulesTitle": "Sélectionner les modules activés",
+    "adminConfigureInstanceSetModulesDetails": "Veuillez sélectionner les modules de créativité qui seront listés à l'utilisateur et qu'il pourra utiliser pour être inspiré.",
+    "adminConfigureInstanceSetModulesValidate": "Valider la sélection"
 }

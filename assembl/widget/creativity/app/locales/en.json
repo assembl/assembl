@@ -11,6 +11,7 @@
     "adminConfigureInstanceSetAssociatedIdeas": "Set associated ideas (TODO: backend side)",
     "adminConfigureInstanceDelete": "Delete this creativity widget instance",
     "gettingDataFromServer": "Getting data from server...",
+    "gettingDataFromServerWidgetInstance": "Getting data from server about the widget instance",
     "adminCreateFromIdeaTitle": "Confirm widget creation",
     "adminCreateFromIdeaDescriptionWithIdea": "You are about to create an instance of the Creativity widget, and to associate it with the idea",
     "showDetails": "Show details",
@@ -23,5 +24,9 @@
     "adminCreateFromIdeaSuccessTitle": "Success",
     "adminCreateFromIdeaSuccessDetails": "The widget has been successfully created. Its URI is",
     "adminCreateFromIdeaSuccessDetails2": "and its endpoint is",
-    "configureIt": "Configure it"
+    "configureIt": "Configure it",
+    "historyBack": "Back",
+    "adminConfigureInstanceSetModulesTitle": "Select modules",
+    "adminConfigureInstanceSetModulesDetails": "Please select the creativity modules which will be listed to the user and which he will be able to select and use.",
+    "adminConfigureInstanceSetModulesValidate": "Validate these modules"
 }
