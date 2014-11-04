@@ -155,6 +155,7 @@ define(function (require) {
                 canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
                 canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT), //TODO: This is a bit too coarse
                 canCreateWidgets: currentUser.can(Permissions.ADMIN_DISCUSSION),
+                canUseWidget: currentUser.can(Permissions.ADD_POST),
                 Ctx: Ctx,
                 editing: this.editing
             }

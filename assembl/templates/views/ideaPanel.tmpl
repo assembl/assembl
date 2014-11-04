@@ -108,7 +108,8 @@
 
     {# List votable widgets of this idea
        And show configuration link of this widget if available #}
-    <% _.each(votable_widgets, function(votable_widget, i){
+    <% if ( canUseWidget ) {
+      _.each(votable_widgets, function(votable_widget, i){
         var url = votable_widget.widget_url+encodeURIComponent("?target="+idea.getId());
         print("<div class=\"dispb mls mts\">");
         print("<a href=\""+url+"\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Vote on this idea')}}\">{{gettext('Vote on this idea')}}</a>");
@@ -117,14 +118,15 @@
             print(" - <a href=\""+configure_url+"\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Configure this vote widget')}}\">{{gettext('Configure this vote widget')}}</a>");
         }
         print("</div>");
-     }); %>
+      });
+    } %>
 
     {# Show creativity/inspiration widget if available
        And show configuration link of this widget if available #}
-    <% if ( idea.get('inspiration_widget_url') ){
+    <% if ( canUseWidget && idea.get('inspiration_widget_url') ){
       print("<div class=\"dispb mls mts\">");
       print("<a href=\"" + idea.get('inspiration_widget_url') + "\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Inspire me!')}}\">{{gettext('Inspire me!')}}</a>");
-      if ( idea.get('inspiration_widget_configure_url') ){
+      if ( canCreateWidgets && idea.get('inspiration_widget_configure_url') ){
         print(" - <a href=\"" + idea.get('inspiration_widget_configure_url') + "\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Configure this creativity widget')}}\">{{gettext('Configure this creativity widget')}}</a>");
       }
       print("</div>");
