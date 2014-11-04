@@ -179,17 +179,18 @@ def instance_put_json(request):
                 raise HTTPUnauthorized()
     try:
         updated = instance.update_json(request.json_body, user_id)
-        view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
+        view = request.GET.get('view', None) or 'default'
         if view == 'id_only':
             return [updated.uri()]
         else:
-            return [updated.generic_json(view)]
+            return updated.generic_json(view)
 
     except NotImplemented as err:
         raise HTTPNotImplemented()
 
 
-@view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER)
+@view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER,
+    renderer='json')
 def instance_put(request):
     user_id = authenticated_userid(request)
     context = request.context
@@ -256,7 +257,11 @@ def instance_put(request):
             setattr(instance, key, value)
     except:
         raise HTTPBadRequest()
-    return Response("OK")
+    view = request.GET.get('view', None) or 'default'
+    if view == 'id_only':
+        return [instance.uri()]
+    else:
+        return instance.generic_json(view)
 
 
 @view_config(context=InstanceContext, request_method='DELETE')
@@ -342,8 +347,9 @@ def collection_add_json(request):
         for instance in instances:
             db.add(instance)
         db.flush()
+        view = request.GET.get('view', None) or 'default'
         return Response(
-            dumps(first.generic_json()),
+            dumps(first.generic_json(view)),
             location=first.uri_generic(first.id),
             status_code=201)
 
@@ -391,8 +397,9 @@ def votes_collection_add_json(request):
         for instance in instances:
             db.add(instance)
         db.flush()
+        view = request.GET.get('view', None) or 'default'
         return Response(
-            dumps(first.generic_json()),
+            dumps(first.generic_json(view)),
             location=first.uri_generic(first.id),
             status_code=201)
 
@@ -422,8 +429,9 @@ def notif_collection_add_json(request):
         for instance in instances:
             db.add(instance)
         db.flush()
+        view = request.GET.get('view', None) or 'default'
         return Response(
-            dumps(first.generic_json()),
+            dumps(first.generic_json(view)),
             location=first.uri_generic(first.id),
             status_code=201)
 

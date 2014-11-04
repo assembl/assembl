@@ -54,8 +54,9 @@ def add_local_role(request):
         for instance in instances:
             db.add(instance)
         db.flush()
+        view = request.GET.get('view', None) or 'default'
         return Response(
-            dumps(first.generic_json()),
+            dumps(first.generic_json(view)),
             location=first.uri_generic(first.id),
             status_code=201)
 
@@ -88,11 +89,11 @@ def set_local_role(request):
         else:
             raise HTTPUnauthorized()
     updated = instance.update_json(json, user_id)
-    view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
+    view = request.GET.get('view', None) or 'default'
     if view == 'id_only':
         return [updated.uri()]
     else:
-        return [updated.generic_json(view)]
+        return updated.generic_json(view)
 
 
 @view_config(
