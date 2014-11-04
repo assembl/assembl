@@ -42,6 +42,24 @@
                 </li>
             </ul>
         </div>
+        <div class="nav-notification dispib">
+          <div class="dropdown">
+              <div class="dropdown-label">
+                  <span class="dropdown-arrow icon-bell"></span>
+              </div>
+              <ul class="dropdown-list dropdown-list--bottomright">
+                  <li class="dropdown-listitem">
+                       <!-- TODO: loop in notifications array -->
+                  </li>
+                  <li class="dropdown-listitem">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  </li>
+                  <li class="dropdown-listitem">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  </li>
+              </ul>
+          </div>
+        </div>
         {% else %}
             {% if request.current_route_path() != "/login" %}
                 {% if request.current_route_path() != "/register" %}

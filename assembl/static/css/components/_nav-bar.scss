@@ -57,6 +57,12 @@
         color: $green;
       }
     }
+    .nav-notification {
+      .dropdown-arrow {
+        color: $gray1;
+        font-size: 150%;
+      }
+    }
   }
 }
 
