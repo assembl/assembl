@@ -1,15 +1,19 @@
-from copy import deepcopy
+#!env python
 import itertools
 from collections import defaultdict
+import argparse
 
-from sqlalchemy.orm import class_mapper, undefer, with_polymorphic
-from sqlalchemy.orm.session import make_transient
+from pyramid.paster import get_appsettings, bootstrap
+from sqlalchemy.orm import class_mapper, undefer, with_polymorphic, sessionmaker
 from sqlalchemy.orm.properties import ColumnProperty
+import transaction
+from virtuoso.vmapping import GatherColumnsVisitor
 
-from ..models import (
-    DiscussionBoundBase, Discussion, AgentProfile, Webpage, Permission,
-    Role, IdentityProvider, IdentityProviderAccount, EmailAccount, User)
-from assembl.lib.sqla import class_registry
+from assembl.lib.config import set_config
+from assembl.lib.sqla import configure_engine, get_session_maker
+from assembl.lib.zmqlib import configure_zmq
+from assembl.lib.model_watcher import configure_model_watcher
+
 
 def find_or_create_object_by_keys(db, obj, keys, columns=None):
     args = {key: getattr(obj, key) for key in keys}
@@ -21,30 +25,42 @@ def find_or_create_object_by_keys(db, obj, keys, columns=None):
         db.add(eq)
     return eq
 
+
 def find_or_create_permission(db, perm):
+    from assembl.models import Permission
     assert isinstance(perm, Permission)
     return find_or_create_object_by_keys(db, perm, ['name'])
 
+
 def find_or_create_role(db, role):
+    from assembl.models import Role
     assert isinstance(role, Role)
     return find_or_create_object_by_keys(db, role, ['name'])
 
+
 def find_or_create_webpage(db, page):
+    from assembl.models import Webpage
     assert isinstance(page, Webpage)
     page = find_or_create_object_by_keys(db, page, ['url'])
     # Do something with last_modified_date?
     return page
 
+
 def find_or_create_identity_provider(db, provider):
+    from assembl.models import IdentityProvider
     assert isinstance(provider, IdentityProvider)
     return find_or_create_object_by_keys(db, obj, ['provider_type', 'name'])
 
+
 def find_or_create_email_account(db, account):
+    from assembl.models import EmailAccount
     assert isinstance(account, EmailAccount)
     return find_or_create_object_by_keys(db, obj, ['email'], ['preferred'])
 
+
 def find_or_create_provider_account(db, account):
-    assert isinstance(account, IdentityProviderAccount)
+    from assembl.models import IdentityProviderAccount
+    assert isinstance(account, IdentityProviderAccount, IdentityProvider)
     provider = find_or_create_identity_provider(account.provider)
     args = {
         "provider": provider,
@@ -55,12 +71,15 @@ def find_or_create_provider_account(db, account):
     account = db.query(IdentityProviderAccount).filter_by(**args).first()
     if account is None:
         for k in ['profile_info', 'picture_url']:
-        args[k] = getattr(account, k)
+            args[k] = getattr(account, k)
         account = IdentityProvider(**args)
         db.add(account)
     return account
 
+
 def find_or_create_agent_profile(db, profile):
+    from assembl.models import (
+        AgentProfile, IdentityProviderAccount, EmailAccount, User)
     assert isinstance(profile, AgentProfile)
     accounts = []
     profiles = set()
@@ -68,7 +87,7 @@ def find_or_create_agent_profile(db, profile):
         if isinstance(account, EmailAccount):
             eq = find_or_create_email_account(account)
         elif isinstance(account, IdentityProviderAccount):
-            eq= find_or_create_provider_account(account)
+            eq = find_or_create_provider_account(account)
         if eq.profile:
             profiles.add(eq.profile)
         accounts.append(eq)
@@ -88,25 +107,33 @@ def find_or_create_agent_profile(db, profile):
             db.add(account)
     return new_profile
 
-special_classes = {
-    AgentProfile: find_or_create_agent_profile,
-    User: find_or_create_agent_profile,
-    Webpage: find_or_create_webpage,
-    Permission: find_or_create_permission,
-    Role: find_or_create_role}
+
+def get_special_classes():
+    from assembl.models import (
+        AgentProfile, User, Webpage, Permission, Role)
+    return {
+        AgentProfile: find_or_create_agent_profile,
+        User: find_or_create_agent_profile,
+        Webpage: find_or_create_webpage,
+        Permission: find_or_create_permission,
+        Role: find_or_create_role}
+
 
 def print_path(path):
-    print [(x, y.__class__.__name__, y.id) for (x,y) in path]
+    print [(x, y.__class__.__name__, y.id) for (x, y) in path]
 
 
 def prefetch(session, discussion_id):
+    from assembl.lib.sqla import class_registry
+    from assembl.models import DiscussionBoundBase
     for name, cls in class_registry.items():
         if issubclass(cls, DiscussionBoundBase) and cls != DiscussionBoundBase:
             mapper = class_mapper(cls)
             undefers = [undefer(attr.key) for attr in mapper.iterate_properties
                         if getattr(attr, 'deferred', False)]
             condition = cls.get_discussion_condition(discussion_id)
-            session.query(with_polymorphic(cls, "*")).filter(condition).options(*undefers).all()
+            session.query(with_polymorphic(cls, "*")).filter(
+                condition).options(*undefers).all()
 
 
 def recursive_fetch(ob, visited=None):
@@ -127,11 +154,12 @@ def recursive_fetch(ob, visited=None):
             if subob in visited:
                 continue
             visited.add(subob)
-            if isinstance(subob, special_classes.keys()):
+            if isinstance(subob, tuple(get_special_classes().keys())):
                 continue
             recursive_fetch(subob, visited)
 
 class_info = {}
+
 
 def get_mapper_info(mapper):
     if mapper not in class_info:
@@ -148,8 +176,10 @@ def get_mapper_info(mapper):
         non_nullable_reln = {r for r in direct_reln
             if any([not c.nullable for c in r.local_columns])}
         nullable_relns = direct_reln - non_nullable_reln
-        class_info[mapper] = (direct_reln, copy_col_props, nullable_relns, non_nullable_reln)
+        class_info[mapper] = (
+            direct_reln, copy_col_props, nullable_relns, non_nullable_reln)
     return class_info[mapper]
+
 
 def assign_dict(values, r, subob):
     assert r.direction.name == 'MANYTOONE'
@@ -159,6 +189,7 @@ def assign_dict(values, r, subob):
             fkcol = next(iter(col.foreign_keys)).column
             k = next(iter(r.local_columns))
             values[col.key] = getattr(subob, fkcol.key)
+
 
 def assign_ob(ob, r, subob):
     assert r.direction.name == 'MANYTOONE'
@@ -170,8 +201,52 @@ def assign_ob(ob, r, subob):
             setattr(ob, col.key, getattr(subob, fkcol.key))
 
 
+def base_discussionbound_class(cls):
+    from assembl.models import DiscussionBoundBase
+    last_cls = cls
+    for k in cls.mro():
+        if k == DiscussionBoundBase:
+            return last_cls
+        last_cls = k
 
-def clone_discussion(from_session, discussion_id, to_session=None, new_slug=None):
+
+def delete_discussion(session, discussion_id):
+    from assembl.models import DiscussionBoundBase
+    classes = DiscussionBoundBase._decl_class_registry.itervalues()
+    # TODO: look for subclasses with abstract direct parents. Make Action abstract.
+    classes_by_table = {
+        getattr(cls, '__table__', cls): cls for cls in classes
+        if issubclass(cls, DiscussionBoundBase)}
+    tables = DiscussionBoundBase.metadata.sorted_tables
+    tables.reverse()
+    # for t in tables:
+    #     print t.name
+    for table in tables:
+        if table not in classes_by_table:
+            continue
+        cls = classes_by_table[table]
+        if cls != base_discussionbound_class(cls):
+            continue
+        print 'deleting', cls.__name__
+        query = session.query(cls.id)
+        cond = cls.get_discussion_condition(discussion_id)
+        if cond is not None:
+            v = GatherColumnsVisitor(DiscussionBoundBase._decl_class_registry)
+            v.traverse(cond)
+            print v.get_classes()
+            for cls2 in v.get_classes():
+                if not (issubclass(cls, cls2) or issubclass(cls2, cls)):
+                    query = query.join(cls2)
+            query = query.filter(cond)
+        else:
+            # Action. sigh.
+            continue
+        session.query(cls).filter(cls.id.in_(query.subquery())).delete(False)
+
+
+def clone_discussion(
+        from_session, discussion_id, to_session=None, new_slug=None):
+    from assembl.models import DiscussionBoundBase, Discussion, Post
     discussion = Discussion.get(discussion_id)
     prefetch(from_session, discussion_id)
     changes = defaultdict(dict)
@@ -200,11 +275,11 @@ def clone_discussion(from_session, discussion_id, to_session=None, new_slug=None
         if ob in in_process:
             print "in process", ob.__class__, ob.id
             return None
-        if isinstance(ob, special_classes.keys()):
+        if isinstance(ob, tuple(get_special_classes().keys())):
             if from_session == to_session:
                 copy = ob
             else:
-                copy = special_classes[ob.__class__](ob)
+                copy = get_special_classes()[ob.__class__](ob)
             copies_of[ob] = copy
             return copy
         if isinstance(ob, DiscussionBoundBase):
@@ -264,14 +339,15 @@ def clone_discussion(from_session, discussion_id, to_session=None, new_slug=None
         return copy
 
     treating = set()
+
     def stage_2_rec_clone(ob, path):
         if ob in treating:
             return
-        if isinstance(ob, special_classes.keys()):
+        if isinstance(ob, tuple(get_special_classes().keys())):
             if from_session == to_session:
                 copy = ob
             else:
-                copy = special_classes[ob.__class__](ob)
+                copy = get_special_classes()[ob.__class__](ob)
             copies_of[ob] = copy
             return copy
         print "stage_2_rec_clone",
@@ -299,6 +375,57 @@ def clone_discussion(from_session, discussion_id, to_session=None, new_slug=None
                 stage_2_rec_clone(subob, path + [(r.key, subob)])
 
     path = [('', discussion)]
-    recursive_clone(discussion, path)
+    copy = recursive_clone(discussion, path)
     stage_2_rec_clone(discussion, path)
     to_session.flush()
+    for p in to_session.query(Post).filter_by(
+            discussion=copy, parent_id=None).all():
+        p._set_ancestry('')
+    to_session.flush()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "configuration",
+        help="configuration file with destination database configuration")
+    parser.add_argument("-n", "--new_name", help="slug of new discussion")
+    parser.add_argument("-d", "--delete", action="store_true", default=False,
+                        help="delete discussion copy if exists")
+    parser.add_argument(
+        "-c", "--connection_string",
+        help="connection string of source database if different")
+    parser.add_argument("discussion", help="original discussion slug")
+    args = parser.parse_args()
+    env = bootstrap(args.configuration)
+    settings = get_appsettings(args.configuration)
+    set_config(settings)
+    configure_zmq(settings['changes.socket'], False)
+    configure_model_watcher(env['registry'], 'assembl')
+    to_engine = configure_engine(settings, True)
+    to_session = get_session_maker()
+    new_slug = args.new_name or (args.discussion + "_copy")
+    if args.connection_string:
+        from_engine = configure_engine(args.connection)
+        from_session = session_maker(from_engine)()
+    else:
+        from_engine = to_engine
+        from_session = to_session
+    from assembl.models import Discussion
+    discussion = from_session.query(Discussion).filter_by(
+        slug=args.discussion).one()
+    assert discussion, "No discussion named " + args.discussion
+    existing = to_session.query(Discussion).filter_by(slug=new_slug).first()
+    if existing:
+        if args.delete:
+            print "deleting", new_slug
+            with transaction.manager:
+                delete_discussion(to_session, existing.id)
+        else:
+            print "Discussion", new_slug,
+            print "already exists! Add -d to delete it."
+            exit(0)
+    with transaction.manager:
+        clone_discussion(from_session, discussion.id, to_session, new_slug)
+    # TODO: Options to clone participant permissions into 
+    # Authenticated permissions. Maybe also to make globally readable.
