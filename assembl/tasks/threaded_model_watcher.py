@@ -79,5 +79,7 @@ class ThreadedModelEventWatcher(object):
 
 def includeme(config):
     resolver = DottedNameResolver(__package__)
-    class_name = config.get_settings().get('assembl.threadedmodelwatcher')
+    class_name = config.get_settings().get(
+        'assembl.threadedmodelwatcher',
+        "assembl.lib.model_watcher.ModelEventWatcherPrinter")
     ThreadDispatcher.mw_class = resolver.resolve(class_name)
