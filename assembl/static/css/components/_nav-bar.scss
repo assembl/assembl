@@ -59,6 +59,7 @@
     }
     .nav-notification {
       position: relative;
+      display: none;
       .dropdown-arrow {
         color: $gray1;
         font-size: 150%;
