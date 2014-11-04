@@ -719,7 +719,8 @@ class WidgetUserConfig(DiscussionBoundBase):
         ForeignKey('widget.id',
                    ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False)
-    widget = relationship(Widget, backref="user_configs")
+    widget = relationship(Widget, backref=backref(
+        "user_configs", cascade="all, delete-orphan"))
 
     user_id = Column(
         Integer,
