@@ -40,6 +40,7 @@ def init_task_config():
 
 
 def includeme(config):
+    config.include('.threaded_model_watcher')
     configure(config.registry, 'assembl')
     config.include('.imap')
     config.include('.notification_dispatch')
