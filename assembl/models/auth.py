@@ -785,6 +785,7 @@ def create_default_permissions(session, discussion):
                 discussion=discussion, role=roles[role],
                 permission=permissions[permission_name]))
     add_perm(P_READ, [Everyone])
+    add_perm(P_SELF_REGISTER, [Authenticated])
     add_perm(P_ADD_POST,
              [R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_EDIT_POST, [R_MODERATOR, R_ADMINISTRATOR])
