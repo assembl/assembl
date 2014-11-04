@@ -576,11 +576,20 @@ creativityApp.controller('indexCtl',
                         $scope.active_modules.video = {};
                         $scope.active_modules.video.name = "creativityModuleTitleVideos";
 
+                        /*
                         $scope.active_modules.video.url = "/widget/video/";
                         if ($scope.config)
                             $scope.active_modules.video.url += "?config=" + $scope.config;
                         if ($scope.target)
                             $scope.active_modules.video.url += "#/?idea=" + $scope.target;
+                        */
+                       
+                        $scope.active_modules.video.url = "/widget/video/#/?";
+                        if ($scope.config)
+                            $scope.active_modules.video.url += "&config=" + $scope.config;
+                        if ($scope.target)
+                            $scope.active_modules.video.url += "&idea=" + $scope.target;
+                        
                         if (!/%3F/.test($scope.target)) // TODO: better test (test that the urlencoded view param is not present)
                             $scope.active_modules.video.url += encodeURIComponent("?view=creativity_widget");
                         // gives: http://localhost:6543/widget/video/?config=http%3A%2F%2Flocalhost%3A6543%2Fdata%2FWidget%2F43#/?idea=http%3A%2F%2Flocalhost%3A6543%2Fdata%2FIdea%2F3%3Fview%3Dcreativity_widget

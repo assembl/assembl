@@ -1,8 +1,8 @@
 "use strict";
 
 videosApp.controller('videosCtl',
-    ['$scope', '$q', '$http', '$routeParams', '$log', '$resource', 'localConfig', 'JukeTubeVideosService', 'DiscussionService', 'sendIdeaService', 'configService', 'utils', 'AssemblToolsService', 
-        function ($scope, $q, $http, $routeParams, $log, $resource, localConfig, JukeTubeVideosService, DiscussionService, sendIdeaService, configService, utils, AssemblToolsService) {
+    ['$scope', '$q', '$http', '$route', '$routeParams', '$log', '$resource', 'localConfig', 'JukeTubeVideosService', 'DiscussionService', 'sendIdeaService', 'configService', 'utils', 'AssemblToolsService', 
+        function ($scope, $q, $http, $route, $routeParams, $log, $resource, localConfig, JukeTubeVideosService, DiscussionService, sendIdeaService, configService, utils, AssemblToolsService) {
 
             // intialization code (constructor)
 
@@ -14,8 +14,9 @@ videosApp.controller('videosCtl',
                 $scope.config = {};
                 $scope.config.widget = configService.data.widget;
                 $scope.config.idea = configService.data.idea;
-                $scope.urlParameterConfig = $routeParams.config;
                 console.log("$scope.config: ", $scope.config);
+                $scope.urlParameterConfig = $route.current.params.config; //$routeParams.config;
+                console.log("$scope.urlParameterConfig: ", $scope.urlParameterConfig);
                 if ( !$scope.config.widget && !$scope.config.idea )
                 {
                     console.log("Error: no config or idea given.");
@@ -373,12 +374,22 @@ videosApp.controller('videosCtl',
                 if ( "widget_add_post_endpoint" in $scope.config.idea)
                     endpoints = $scope.config.idea.widget_add_post_endpoint;
                 var widgetUri = AssemblToolsService.urlToResource($scope.urlParameterConfig);
+                console.log("$scope.urlParameterConfig: ", $scope.urlParameterConfig);
+                console.log("widgetUri: ", widgetUri);
                 if ( endpoints && Object.keys(endpoints).length > 0 )
                 {
                     if ( widgetUri in endpoints )
+                    {
                         url = AssemblToolsService.resourceToUrl(endpoints[widgetUri]);
+                    }
                     else
+                    {
                         url = AssemblToolsService.resourceToUrl(endpoints[Object.keys(endpoints)[0]]);
+                    }
+                }
+                else
+                {
+                    throw "no endpoint";
                 }
                 // an example value for url is "/data/Discussion/1/widgets/56/base_idea_descendants/4/linkedposts";
                 // FIXME: error when http://localhost:6543/widget/video/?config=/data/Widget/40#/?idea=local:Idea%2F4%3Fview%3Dcreativity_widget => $scope.config.idea.widget_add_post_endpoint is an empty object
