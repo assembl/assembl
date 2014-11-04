@@ -1,5 +1,27 @@
 {
     "creativityModulesListTitle": "Select a way of getting inspired",
     "creativityModuleTitleVideos": "Videos",
-    "creativityModuleTitleCards": "Cards"
+    "creativityModuleTitleCards": "Cards",
+    "adminConfigureInstanceTitle": "Configure a creativity widget instance",
+    "adminConfigureInstanceCurrent": "Currently selected widget is",
+    "adminConfigureInstanceCurrentUse": "The URL to access selection menu associated to this widget (on one of its associated ideas) is",
+    "adminConfigureInstanceCurrentUseHere": "here",
+    "adminConfigureInstanceAvailableActions": "Available actions:",
+    "adminConfigureInstanceDefineEnabledModules": "Define which creativity modules are enabled",
+    "adminConfigureInstanceSetAssociatedIdeas": "Set associated ideas (TODO: backend side)",
+    "adminConfigureInstanceDelete": "Delete this creativity widget instance",
+    "gettingDataFromServer": "Getting data from server...",
+    "adminCreateFromIdeaTitle": "Confirm widget creation",
+    "adminCreateFromIdeaDescriptionWithIdea": "You are about to create an instance of the Creativity widget, and to associate it with the idea",
+    "showDetails": "Show details",
+    "hideDetails": "Hide details",
+    "widgetCreationEndpoint": "widget creation endpoint:",
+    "widgetType": "widget type:",
+    "associatedIdea": "associated idea:",
+    "adminCreateFromIdeaConfirmationQuestion": "Do you confirm the creation of the widget?",
+    "adminCreateFromIdeaConfirmationYes": "Yes, create it",
+    "adminCreateFromIdeaSuccessTitle": "Success",
+    "adminCreateFromIdeaSuccessDetails": "The widget has been successfully created. Its URI is",
+    "adminCreateFromIdeaSuccessDetails2": "and its endpoint is",
+    "configureIt": "Configure it"
 }

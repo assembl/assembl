@@ -1,26 +1,25 @@
 <div id="admin" ng-controller="adminConfigureInstanceCtl" ng-init="init()">
 
-    <h1>Configure a creativity widget instance</h1>
+    <h1>{{'adminConfigureInstanceTitle' | translate}}</h1>
 
     <p>
-        Currently selected widget is <a href="{{ widget_endpoint }}">{{ widget_uri }}</a>.
+        {{'adminConfigureInstanceCurrent' | translate}} <a href="{{ widget_endpoint }}">{{ widget_uri }}</a>.
 
         <span ng-if="target != null">
-            The URL to access selection menu associated to this widget (on one of its associated ideas) is <a
-                href="?config={{ widget_uri }}&target={{ target }}" target="_blank">here</a>.
+            {{'adminConfigureInstanceCurrentUse' | translate}}
+            <a href="?config={{ widget_uri }}&target={{ target }}" target="_blank">{{'adminConfigureInstanceCurrentUseHere' | translate}}</a>.
         </span>
     </p>
     <p>
-        Available actions:
+        {{'adminConfigureInstanceAvailableActions' | translate}}
     </p>
 
     <ul>
         <li>
-            <a href="#/admin/configure_instance_set_modules?widget_uri={{ widget_uri }}&target={{ target }}">Define
-                which creativity modules are enabled</a>
+            <a href="#/admin/configure_instance_set_modules?widget_uri={{ widget_uri }}&target={{ target }}">{{'adminConfigureInstanceDefineEnabledModules' | translate}}</a>
         </li>
         <li>
-            <a href="#/admin/configure_instance_set_associated_ideas?widget_uri={{ widget_uri }}&target={{ target }}">Set associated ideas (TODO: backend side)</a>
+            <a href="#/admin/configure_instance_set_associated_ideas?widget_uri={{ widget_uri }}&target={{ target }}">{{'adminConfigureInstanceSetAssociatedIdeas' | translate}}</a>
         </li>
     </ul>
 
@@ -28,7 +27,7 @@
     <br/>
     <br/>
 
-    <button ng-click="deleteThisWidget()">Delete this creativity widget instance</button>
+    <button ng-click="deleteThisWidget()">{{'adminConfigureInstanceDelete' | translate}}</button>
     <span id="widget_delete_result"></span>
 
 </div>
