@@ -848,22 +848,33 @@ class UserTemplate(DiscussionBoundBase, User):
         """the notification subscriptions for this template.
         Materializes applicable subscriptions.."""
         from .notification import (
-            NotificationSubscription, NotificationSubscriptionStatus, NotificationCreationOrigin)
+            NotificationSubscription,
+            NotificationSubscriptionStatus,
+            NotificationCreationOrigin)
         my_subscriptions = self.db.query(NotificationSubscription).filter_by(
             discussion_id=self.discussion_id, user_id=self.id).all()
         my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
-        needed_classes = self.get_applicable_notification_subscriptions_classes()
+        needed_classes = \
+            self.get_applicable_notification_subscriptions_classes()
         missing = set(needed_classes) - my_subscriptions_classes
         if not missing:
             return my_subscriptions
         # TODO: Fill from config.
         subscribed = defaultdict(bool)
+        role_name = self.for_role.name.split(':')[-1]
+        default_config = config.get_config().get(
+            ".".join(("subscriptions", role_name, "default")),
+            "FOLLOW_SYNTHESES")
+        for role in default_config.split('\n'):
+            subscribed[role.strip()] = True
         defaults = [
             cls(
                 discussion_id=self.discussion_id,
                 user_id=self.id,
                 creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
-                status=NotificationSubscriptionStatus.ACTIVE if subscribed[cls] else NotificationSubscriptionStatus.INACTIVE_DFT)
+                status=(NotificationSubscriptionStatus.ACTIVE
+                        if subscribed[cls.__mapper__.polymorphic_identity.name]
+                        else NotificationSubscriptionStatus.INACTIVE_DFT))
             for cls in missing
         ]
         for d in defaults:
