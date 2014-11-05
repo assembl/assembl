@@ -2,6 +2,7 @@
 from datetime import datetime
 from collections import defaultdict
 from abc import abstractmethod
+from time import sleep
 
 from sqlalchemy import (
     Column,
@@ -443,12 +444,22 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_OWN_MESSAGES_DIRECT_REPLIES
     }
 
+
+def waiting_get(objectClass, objectId):
+    # Waiting for an object to be committed on another thread
+    for i in range(100):
+        objectInstance = objectClass.get(objectId)
+        if objectInstance is not None:
+            return objectInstance
+        sleep(0.02)
+
+
 class ModelEventWatcherNotificationSubscriptionDispatcher(object):
     interface.implements(IModelEventWatcher)
 
     def processEvent(self, verb, objectClass, objectId):
         from ..lib.utils import get_concrete_subclasses_recursive
-        objectInstance = objectClass.get(objectId)
+        objectInstance = waiting_get(objectClass, objectId)
         assert objectInstance
         #We need the discussion id
         assert isinstance(objectInstance, DiscussionBoundBase)
