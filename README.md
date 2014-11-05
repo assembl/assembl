@@ -1,5 +1,7 @@
 ## Assembl
 
+[![Coverage Status](https://coveralls.io/repos/ImaginationForPeople/assembl/badge.png)](https://coveralls.io/r/ImaginationForPeople/assembl)
+
 **Prerequisites**
 
 - On Mac OS X 10.9.2: The system python is incompatible with the clang 5.1. You need to remove all occurences of `-mno-fused-madd` in `/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/_sysconfigdata.py`. Also renew (or delete) the corresponding `.pyc`, `.pyo` files.
