@@ -507,7 +507,7 @@ class User(AgentProfile):
         class NotificationSubscriptionCollection(CollectionDefinition):
             def __init__(self, cls):
                 super(NotificationSubscriptionCollection, self).__init__(
-                    cls, User.notification_subscriptions)
+                    cls, User.notification_subscriptions.property)
 
             def decorate_query(self, query, last_alias, parent_instance, ctx):
 
@@ -518,10 +518,10 @@ class User(AgentProfile):
                 if discussion is not None:
                     # Materialize active subscriptions... TODO: Make this batch,
                     # also dematerialize
-                    if isinstance(ctx.parent_instance, UserTemplate):
-                        ctx.parent_instance.get_notification_subscriptions()
+                    if isinstance(parent_instance, UserTemplate):
+                        parent_instance.get_notification_subscriptions()
                     else:
-                        ctx.parent_instance.get_notification_subscriptions(discussion.id)
+                        parent_instance.get_notification_subscriptions(discussion.id)
                     query = query.filter(last_alias.discussion_id == discussion.id)
                 return query
 
