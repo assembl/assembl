@@ -112,10 +112,11 @@ define(function (require) {
                     Assembl.vent.trigger('messageList:currentQuery');
                     Ctx.setCurrentIdea(that.model);
                 };
+
             this.replyView = new MessageSendView({
                 'allow_setting_subject': false,
                 //TODO:  Benoitg:  Once we fix backend support for publishing, this needs to point to the synthesis message
-                //'reply_message': this.model.publised_by...,
+                'reply_message': this.synthesis,
                 'reply_idea': this.model,
                 'body_help_message': i18n.gettext('Type your response here...'),
                 'cancel_button_label': null,

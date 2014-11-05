@@ -83,7 +83,7 @@ define(function (require) {
                 reply_idea_id = this.options.reply_idea.getId();
             }
             if (this.options.reply_message) {
-                reply_message_id = this.options.reply_message.getId();
+                reply_message_id = this.options.reply_message.get('published_in_post');
             }
 
             if (!message_subject && (this.options.mandatory_subject_missing_msg || (!reply_idea_id && !reply_message_id))) {
@@ -179,9 +179,10 @@ define(function (require) {
          * TODO: Must be converted to real backbone sync
          */
         sendPostToServer: function (message_body, message_subject, reply_message_id, reply_idea_id, success_callback) {
+
             var url = Ctx.getApiUrl('posts'),
-                data = {},
-                that = this;
+                data = {};
+
             data.message = message_body;
             if (message_subject) {
                 data.subject = message_subject;
@@ -205,6 +206,7 @@ define(function (require) {
             });
 
         }
+
     });
 
     return MessageSendView;
