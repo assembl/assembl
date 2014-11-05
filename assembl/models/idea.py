@@ -1,9 +1,9 @@
 from itertools import chain
 from collections import defaultdict
 from abc import ABCMeta, abstractmethod
-import HTMLParser
 from datetime import datetime
 
+from bs4 import BeautifulSoup
 from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload)
 from sqlalchemy.orm.attributes import NO_VALUE
@@ -61,16 +61,17 @@ class IdeaLinkVisitor(object):
 class WordCountVisitor(IdeaVisitor):
     def __init__(self, lang):
         self.counter = WordCounter(lang)
-        # TODO bgregoire: We can remove this when we have clean idea text
-        self.parser = HTMLParser.HTMLParser()
+
+    def cleantext(self, text):
+        return BeautifulSoup(text).get_text().strip()
 
     def visit_idea(self, idea):
-        short_title = idea.short_title or ''
-        self.counter.add_text(self.parser.unescape(short_title))
-        self.counter.add_text(self.parser.unescape(
-            idea.long_title or short_title))
-        self.counter.add_text(self.parser.unescape(
-            idea.definition or short_title))
+        if idea.short_title:
+            self.counter.add_text(self.cleantext(idea.short_title))
+        if idea.long_title:
+            self.counter.add_text(self.cleantext(idea.long_title))
+        if idea.definition:
+            self.counter.add_text(self.cleantext(idea.definition))
 
     def best(self, num=8):
         return self.counter.best(num)
