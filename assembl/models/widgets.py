@@ -48,7 +48,8 @@ class Widget(DiscussionBoundBase):
         ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False
     )
-    discussion = relationship(Discussion, backref="widgets")
+    discussion = relationship(
+        Discussion, backref=backref("widgets", cascade="all, delete-orphan"))
 
     def __init__(self, *args, **kwargs):
         super(Widget, self).__init__(*args, **kwargs)

@@ -103,7 +103,8 @@ class NotificationSubscription(DiscussionBoundBase):
     )
     discussion = relationship(
         Discussion,
-        backref=backref('notificationSubscriptions')
+        backref=backref('notificationSubscriptions',
+                        cascade="all, delete-orphan")
     )
     creation_date = Column(
         DateTime,
@@ -569,12 +570,12 @@ class Notification(Base):
     id = Column(
         Integer,
     primary_key=True)
-    
+
     sqla_type = Column(
         String,
         nullable=False,
         index=True)
-    
+
     first_matching_subscription_id = Column(
         Integer,
         ForeignKey(
@@ -587,7 +588,7 @@ class Notification(Base):
 
     first_matching_subscription = relationship(
         NotificationSubscription,
-        backref=backref('notifications')
+        backref=backref('notifications', cascade="all, delete-orphan")
     )
     creation_date = Column(
         DateTime,

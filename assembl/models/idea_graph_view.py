@@ -49,7 +49,8 @@ class IdeaGraphView(DiscussionBoundBase):
         nullable=False,
         info = {'rdf': QuadMapPatternS(None, SIOC.has_container)}
     )
-    discussion = relationship(Discussion, backref="views")
+    discussion = relationship(
+        Discussion, backref=backref("views", cascade="all, delete-orphan"))
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea_graph_view',
@@ -78,7 +79,9 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
     sub_graph_id = Column(Integer, ForeignKey(
         'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
         index=True, nullable=False)
-    sub_graph = relationship("ExplicitSubGraphView", backref="idea_assocs")
+    sub_graph = relationship(
+        "ExplicitSubGraphView", backref=backref(
+            "idea_assocs", cascade="all, delete-orphan"))
     idea_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
     # reference to the "Idea" object for proxying
@@ -113,7 +116,9 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
     sub_graph_id = Column(Integer, ForeignKey(
         'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
         index=True, nullable=False)
-    sub_graph = relationship("ExplicitSubGraphView", backref="idealink_assocs")
+    sub_graph = relationship(
+        "ExplicitSubGraphView", backref=backref(
+            "idealink_assocs", cascade="all, delete-orphan"))
 
     idea_link_id = Column(Integer, ForeignKey(
         'idea_idea_link.id', ondelete="CASCADE", onupdate="CASCADE"),

@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlalchemy import (
     Column, Integer, ForeignKey, Boolean, String, Float, DateTime, and_)
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 from . import (Base, DiscussionBoundBase, Tombstonable)
 from .idea import Idea
@@ -37,7 +37,7 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
         Idea,
         primaryjoin="and_(Idea.id==AbstractIdeaVote.idea_id, "
                     "Idea.is_tombstone==False)",
-        backref="votes")
+        backref=backref("votes", cascade="all, delete-orphan"))
 
     criterion_id = Column(
         Integer,

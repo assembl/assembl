@@ -2,12 +2,13 @@
 import itertools
 from collections import defaultdict
 import argparse
+from inspect import isabstract
 
 from pyramid.paster import get_appsettings, bootstrap
 from sqlalchemy.orm import class_mapper, undefer, with_polymorphic, sessionmaker
 from sqlalchemy.orm.properties import ColumnProperty
 import transaction
-from virtuoso.vmapping import GatherColumnsVisitor
+from sqlalchemy.sql.visitors import ClauseVisitor
 
 from assembl.lib.config import set_config
 from assembl.lib.sqla import configure_engine, get_session_maker
@@ -127,7 +128,7 @@ def prefetch(session, discussion_id):
     from assembl.lib.sqla import class_registry
     from assembl.models import DiscussionBoundBase
     for name, cls in class_registry.items():
-        if issubclass(cls, DiscussionBoundBase) and cls != DiscussionBoundBase:
+        if issubclass(cls, DiscussionBoundBase) and not isabstract(cls):
             mapper = class_mapper(cls)
             undefers = [undefer(attr.key) for attr in mapper.iterate_properties
                         if getattr(attr, 'deferred', False)]
@@ -201,47 +202,94 @@ def assign_ob(ob, r, subob):
             setattr(ob, col.key, getattr(subob, fkcol.key))
 
 
-def base_discussionbound_class(cls):
-    from assembl.models import DiscussionBoundBase
-    last_cls = cls
-    for k in cls.mro():
-        if k == DiscussionBoundBase:
-            return last_cls
-        last_cls = k
+class JoinColumnsVisitor(ClauseVisitor):
+    def __init__(self, cls, query, classes_by_table):
+        super(JoinColumnsVisitor, self).__init__()
+        self.classes = {cls}
+        self.query = query
+        self.classes_by_table = classes_by_table
+        self.missing = []
+
+    def is_known_class(self, cls):
+        if cls in self.classes:
+            return True
+        for other_cls in self.classes:
+            if issubclass(cls, other_cls):
+                self.classes.add(cls)
+                return True
+            elif issubclass(other_cls, cls):
+                self.classes.add(cls)
+                return True
+
+    def treat_column(self, column):
+        source_cls = self.classes_by_table[column.table]
+        foreign_keys = getattr(column, 'foreign_keys', ())
+        for foreign_key in foreign_keys:
+            # Do not bother with inheritance here
+            dest_cls = self.classes_by_table[foreign_key.column.table]
+            if not self.is_known_class(dest_cls):
+                orm_reln = filter(
+                    lambda r: column in r.local_columns,
+                    source_cls.__mapper__.relationships)
+                assert len(orm_reln) == 1
+                rattrib = getattr(source_cls, orm_reln[0].key)
+                self.query = self.query.join(dest_cls, rattrib)
+                self.classes.add(dest_cls)
+
+    def final_query(self):
+        while len(self.missing):
+            missing = []
+            for column in self.missing:
+                source_cls = self.classes_by_table[column.table]
+                if self.is_known_class(source_cls):
+                    self.treat_column(column)
+                else:
+                    missing.append(column)
+            if len(missing) == len(self.missing):
+                break
+            self.missing = missing
+        assert not self.missing
+        return self.query
+
+    def visit_column(self, column):
+        source_cls = self.classes_by_table[column.table]
+        if not self.is_known_class(source_cls):
+            self.missing.append(column)
+            return
+        self.treat_column(column)
 
 
 def delete_discussion(session, discussion_id):
-    from assembl.models import DiscussionBoundBase
+    from assembl.models import Discussion, DiscussionBoundBase
+    # First, delete the discussion.
+    session.delete(Discussion.get(discussion_id))
+    session.flush()
+    # See if anything is left...
     classes = DiscussionBoundBase._decl_class_registry.itervalues()
-    # TODO: look for subclasses with abstract direct parents. Make Action abstract.
     classes_by_table = {
-        getattr(cls, '__table__', cls): cls for cls in classes
-        if issubclass(cls, DiscussionBoundBase)}
+        cls.__dict__.get('__table__', None): cls for cls in classes }
+    # Only direct subclass of abstract
+    concrete_classes = set(filter(lambda cls:
+        issubclass(cls, DiscussionBoundBase) and (not isabstract(cls)) and isabstract(cls.mro()[1]),
+        classes_by_table.values()))
     tables = DiscussionBoundBase.metadata.sorted_tables
     tables.reverse()
-    # for t in tables:
-    #     print t.name
     for table in tables:
         if table not in classes_by_table:
             continue
         cls = classes_by_table[table]
-        if cls != base_discussionbound_class(cls):
+        if cls not in concrete_classes:
             continue
         print 'deleting', cls.__name__
         query = session.query(cls.id)
         cond = cls.get_discussion_condition(discussion_id)
-        if cond is not None:
-            v = GatherColumnsVisitor(DiscussionBoundBase._decl_class_registry)
-            v.traverse(cond)
-            print v.get_classes()
-            for cls2 in v.get_classes():
-                if not (issubclass(cls, cls2) or issubclass(cls2, cls)):
-                    query = query.join(cls2)
-            query = query.filter(cond)
-        else:
-            # Action. sigh.
-            continue
-        session.query(cls).filter(cls.id.in_(query.subquery())).delete(False)
+        assert cond is not None
+        v = JoinColumnsVisitor(cls, query, classes_by_table)
+        v.traverse(cond)
+        query = v.final_query().filter(cond)
+        if query.count():
+            print "*" * 20, "Not all deleted!"
+            session.query(cls).filter(cls.id.in_(query.subquery())).delete(False)
 
 
 def clone_discussion(

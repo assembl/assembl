@@ -642,7 +642,7 @@ class UserRole(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
                      index=True)
-    user = relationship(User, backref="roles")
+    user = relationship(User, backref=backref("roles", cascade="all, delete-orphan"))
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
     role = relationship(Role)
 
@@ -662,10 +662,12 @@ class LocalUserRole(DiscussionBoundBase):
     __tablename__ = 'local_user_role'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'))
-    user = relationship(User, backref="local_roles")
+    user = relationship(User, backref=backref("local_roles", cascade="all, delete-orphan"))
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE'))
-    discussion = relationship('Discussion', backref="local_user_roles")
+    discussion = relationship(
+        'Discussion', backref=backref(
+            "local_user_roles", cascade="all, delete-orphan"))
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
     role = relationship(Role)
     requested = Column(Boolean, server_default='0', default='0')
@@ -753,7 +755,8 @@ class DiscussionPermission(DiscussionBoundBase):
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE', onupdate='CASCADE'))
     discussion = relationship(
-        'Discussion', backref=backref("acls"))
+        'Discussion', backref=backref(
+            "acls", cascade="all, delete-orphan"))
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
     role = relationship(Role)
     permission_id = Column(Integer, ForeignKey(
@@ -817,7 +820,9 @@ class UserTemplate(DiscussionBoundBase, User):
 
     discussion_id = Column(Integer, ForeignKey(
         "discussion.id", ondelete='CASCADE', onupdate='CASCADE'))
-    discussion = relationship("Discussion", backref="user_templates")
+    discussion = relationship(
+        "Discussion", backref=backref(
+            "user_templates", cascade="all, delete-orphan"))
 
     role_id = Column(Integer, ForeignKey(
         Role.id, ondelete='CASCADE', onupdate='CASCADE'))
@@ -895,7 +900,9 @@ class PartnerOrganization(DiscussionBoundBase):
     discussion_id = Column(Integer, ForeignKey(
         "discussion.id", ondelete='CASCADE'),
         info={'rdf': QuadMapPatternS(None, DCTERMS.contributor)})
-    discussion = relationship('Discussion', backref='partner_organizations')
+    discussion = relationship(
+        'Discussion', backref=backref(
+            'partner_organizations', cascade="all, delete-orphan"))
 
     name = Column(Unicode(256),
         info={'rdf': QuadMapPatternS(None, FOAF.name)})

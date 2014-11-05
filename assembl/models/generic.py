@@ -55,7 +55,9 @@ class ContentSource(DiscussionBoundBase):
 
     discussion = relationship(
         "Discussion",
-        backref=backref('sources', order_by=creation_date)
+        backref=backref(
+            'sources', order_by=creation_date,
+            cascade="all, delete-orphan")
     )
 
     __mapper_args__ = {
@@ -176,7 +178,9 @@ class Content(DiscussionBoundBase):
 
     discussion = relationship(
         "Discussion",
-        backref=backref('posts', order_by=creation_date)
+        backref=backref(
+            'posts', order_by=creation_date,
+            cascade="all, delete-orphan")
     )
 
     hidden = Column(Boolean, server_default='0')

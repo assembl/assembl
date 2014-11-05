@@ -113,7 +113,9 @@ class Idea(Tombstonable, DiscussionBoundBase):
 
     discussion = relationship(
         Discussion,
-        backref=backref('ideas', order_by=creation_date)
+        backref=backref(
+            'ideas', order_by=creation_date,
+            cascade="all, delete-orphan")
     )
 
     #widget_id = deferred(Column(Integer, ForeignKey('widget.id')))

@@ -84,7 +84,9 @@ class TimelineEvent(DiscussionBoundBase):
 
     discussion = relationship(
         Discussion,
-        backref=backref('timeline_events', order_by=start)
+        backref=backref(
+            'timeline_events', order_by=start,
+            cascade="all, delete-orphan")
     )
 
     def set_previous_event(self, previous_event):
