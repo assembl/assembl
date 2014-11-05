@@ -610,6 +610,11 @@ class Notification(Base):
     def event_source_object(self):
         pass
 
+User.notifications = relationship(
+    Notification, viewonly=True,
+    secondary=NotificationSubscription.__mapper__.mapped_table)
+
+
 class NotificationOnPost(Notification):
 
     __tablename__ = "notification_on_post"
