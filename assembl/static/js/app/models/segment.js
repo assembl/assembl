@@ -1,5 +1,5 @@
-define(['underscore', 'models/base', 'common/context', 'models/user', 'models/message', 'utils/types', 'annotator'],
-    function (_, Base, Ctx, User, Message, Types, Annotator) {
+define(['underscore', 'models/base', 'common/context', 'models/user', 'models/message', 'utils/types', 'annotator', 'utils/i18n'],
+    function (_, Base, Ctx, User, Message, Types, Annotator, i18n) {
         'use strict';
 
         /**
@@ -91,6 +91,20 @@ define(['underscore', 'models/base', 'common/context', 'models/user', 'models/me
                 if (!id) {
                     return i18n.gettext('You must be logged in to create segments');
                 }
+
+                if (attrs.idPost === '' || typeof attrs.idPost !== 'string') {
+                    return i18n.gettext('missing: ' + attrs.idPost);
+                }
+                if (attrs.creationDate === '' || typeof attrs.creationDate !== 'number') {
+                    return i18n.gettext('missing: ' + attrs.creationDate);
+                }
+                if (attrs.idIdea === '' || typeof attrs.idIdea !== 'string') {
+                    return i18n.gettext('missing: ' + attrs.idIdea);
+                }
+                if (attrs.idCreator === '' || typeof attrs.idCreator !== 'string') {
+                    return i18n.gettext('missing: ' + attrs.idCreator);
+                }
+
             },
 
             /** Return a promise for the Post the segments is associated to, if any
