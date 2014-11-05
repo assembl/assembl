@@ -405,39 +405,6 @@ def votes_collection_add_json(request):
 
 
 @view_config(context=CollectionContext, request_method='POST',
-             header=JSON_HEADER, #permission=P_ADD_VOTE?,
-             ctx_collection_class=NotificationSubscription)
-def notif_collection_add_json(request):
-    ctx = request.context
-    typename = ctx.collection_class.external_typename()
-    user_id = authenticated_userid(request)
-    typename = request.json_body.get('@type', ctx.collection_class.external_typename())
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
-    if P_SYSADMIN not in permissions:
-        cls = ctx.get_collection_class(typename)
-        if cls.crud_permissions.create not in permissions:
-            raise HTTPUnauthorized()
-    json = request.json_body
-    try:
-        instances = ctx.create_object(typename, json, user_id)
-    except Exception as e:
-        raise HTTPBadRequest(e)
-    if instances:
-        first = instances[0]
-        db = first.db()
-        for instance in instances:
-            db.add(instance)
-        db.flush()
-        view = request.GET.get('view', None) or 'default'
-        return Response(
-            dumps(first.generic_json(view)),
-            location=first.uri_generic(first.id),
-            status_code=201)
-
-
-
-@view_config(context=CollectionContext, request_method='POST',
              header=FORM_HEADER, ctx_collection_class=AbstractIdeaVote)
 def votes_collection_add(request):
     ctx = request.context
