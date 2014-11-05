@@ -343,6 +343,21 @@
     "NotificationSubscriptionFollowOwnMessageDirectReplies": {
         "@extends": "NotificationSubscription"
     },
+    "Notification": {
+        "event_source_object": "&event_source_object",
+        "first_matching_subscription": true,
+        "creation_date": true,
+        "push_method": true,
+        "push_address": true,
+        "push_date": true,
+        "delivery_state": true,
+        "delivery_confirmation": true,
+        "delivery_confirmation_date": true
+    },
+    "NotificationOnPostCreated": {
+        "@extends": "Notification",
+        "post": true
+    },
     "Role": {
         "name": true
     },
