@@ -61,7 +61,7 @@ define(function (require) {
                     that.$('.message-subject').html(synthesis.get('subject'));
                     that.synthesisPanel = new SynthesisPanel({
                         model: synthesis,
-                        messageListView = that.messageListView;
+                        messageListView: that.messageListView
                     });
                     that.synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
                     that.synthesisPanel.render();
