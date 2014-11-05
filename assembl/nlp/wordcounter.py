@@ -97,19 +97,28 @@ class DummyStemmer(object):
 
 
 class WordCounter(defaultdict):
-    def __init__(self, lang):
+    def __init__(self, langs):
         super(WordCounter, self).__init__(StemSet)
-        if lang not in known_languages:
-            if len(lang) == 2:
-                lang = languages_by_iso2.get(lang, lang)
-            elif len(lang) == 3:
-                lang = languages_by_iso3.get(lang, lang)
-        self.lang = lang
-        if lang in known_languages:
-            self.stemmer = Stemmer(self.lang)
+        self.langs = []
+        # We will base stemmer on first known language.
+        stemmer = None
+        stopwords = set()
+        for lang in langs:
+            if lang not in known_languages:
+                if len(lang) == 2:
+                    lang = languages_by_iso2.get(lang, lang)
+                elif len(lang) == 3:
+                    lang = languages_by_iso3.get(lang, lang)
+            if lang in known_languages:
+                stopwords.update(get_stop_words(lang))
+            self.langs.append(lang)
+            if lang in known_languages and not stemmer:
+                stemmer = Stemmer(lang)
+        if stemmer:
+            self.stemmer = stemmer
         else:
             self.stemmer = DummyStemmer()
-        self.stop_words = get_stop_words(self.lang)
+        self.stop_words = stopwords
 
     def add_text(self, text, weight=1.0):
         for word in text.split():

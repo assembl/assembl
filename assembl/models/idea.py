@@ -59,8 +59,8 @@ class IdeaLinkVisitor(object):
 
 
 class WordCountVisitor(IdeaVisitor):
-    def __init__(self, lang):
-        self.counter = WordCounter(lang)
+    def __init__(self, langs):
+        self.counter = WordCounter(langs)
 
     def cleantext(self, text):
         return BeautifulSoup(text).get_text().strip()
@@ -315,9 +315,9 @@ JOIN post AS family_posts ON (
         if not lang:
             # TODO: Is there a better way to do this than get_current_registry?
             from pyramid.threadlocal import get_current_registry
-            lang = get_current_registry().settings.get(
-                'pyramid.default_locale_name', 'fr')
-        word_counter = WordCountVisitor(lang)
+            langs = get_current_registry().settings.get(
+                'available_languages', 'fr en').split()
+        word_counter = WordCountVisitor(langs)
         self.visit_ideas_depth_first(word_counter)
         return word_counter.best(num)
 
