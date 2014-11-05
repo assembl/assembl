@@ -30,7 +30,7 @@ define(function (require) {
         pieChartShowMessages: false,
 
         events: {
-            'click #introduction-button-see-more': 'introductionShowMore',
+            'click #js_introductionSeeMore': 'introductionSeeMore',
             'click #js_readSynthesis': 'readSynthesis'
         },
 
@@ -146,7 +146,7 @@ define(function (require) {
 
         },
 
-        introductionShowMore: function () {
+        introductionSeeMore: function () {
             $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
                 var model = new Backbone.Model();
                 model.set("introduction", discussion.introduction);
