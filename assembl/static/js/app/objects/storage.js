@@ -45,16 +45,15 @@ define(function (require) {
         },
 
         saveGroupSpecs: function () {
-            if (Ctx.getCurrentInterfaceType() !== Ctx.InterfaceTypes.SIMPLE) {
-                this._store.setItem(this.getStoragePrefix() + 'groupItems', JSON.stringify(this.groupSpecs));
-                this._store.setItem(this.getStoragePrefix() + 'lastViewSave', Date.now());
-            }
+            this._store.setItem(this.getStoragePrefix() + 'groupItems', JSON.stringify(this.groupSpecs));
+            this._store.setItem(this.getStoragePrefix() + 'lastViewSave', Date.now());
         },
 
         getDateOfLastViewSave: function () {
             var lastSave = this._store.getItem(this.getStoragePrefix() + 'lastViewSave');
-            if (lastSave)
+            if (lastSave) {
                 return new Date(lastSave);
+            }
         },
 
         getStorageGroupItem: function () {
