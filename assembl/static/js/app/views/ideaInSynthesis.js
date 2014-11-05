@@ -32,6 +32,7 @@ define(function (require) {
         initialize: function (options) {
             this.listenTo(this.model, 'change:shortTitle change:longTitle change:segments', this.render);
             this.synthesis = options.synthesis || null;
+            this.messageListView = options.messageListView;
             this.editing = false;
         },
 
@@ -115,9 +116,8 @@ define(function (require) {
 
             this.replyView = new MessageSendView({
                 'allow_setting_subject': false,
-                //TODO:  Benoitg:  Once we fix backend support for publishing, this needs to point to the synthesis message
-                'reply_message': this.synthesis,
-                'reply_idea': this.model,
+                'reply_message_id': this.synthesis.get('published_in_post'),
+                'reply_idea_id': this.model.getId(),
                 'body_help_message': i18n.gettext('Type your response here...'),
                 'cancel_button_label': null,
                 'send_button_label': i18n.gettext('Send your reply'),
@@ -125,7 +125,8 @@ define(function (require) {
                 'default_subject': 'Re: ' + Ctx.stripHtml(this.model.getLongTitleDisplayText()).substring(0, 50),
                 'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
                 'mandatory_subject_missing_msg': null,
-                'send_callback': send_callback
+                'send_callback': send_callback,
+                'messageList': this.messageListView
             });
             this.$('.synthesisIdea-replybox').append(this.replyView.render().el);
         },

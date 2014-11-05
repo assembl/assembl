@@ -901,7 +901,6 @@ define(function (require) {
 
             this.newTopicView = new MessageSendView({
                 'allow_setting_subject': true,
-                'reply_idea': null,
                 'send_button_label': i18n.gettext('Start a new topic in this discussion'),
                 'subject_label': i18n.gettext('Subject'),
                 'body_help_message': i18n.gettext('Add a subject above and start a new topic here'),

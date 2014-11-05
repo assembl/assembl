@@ -29,7 +29,10 @@ define(function (require) {
         initialize: function (obj) {
             var that = this,
                 collectionManager = new CollectionManager();
-
+            
+            //This is used if the panel is displayed as part of a message
+            // that publishes this synthesis
+            this.messageListView = obj.messageListView;
             this.ideas = new Idea.Collection();
             $.when(collectionManager.getAllSynthesisCollectionPromise(),
                 collectionManager.getAllIdeasCollectionPromise()
@@ -160,7 +163,10 @@ define(function (require) {
                         var rendered_idea_view = new IdeaFamilyView(
                             {model: idea,
                                 innerViewClass: IdeaInSynthesisView,
-                                innerViewClassInitializeParams: {synthesis: that.model}
+                                innerViewClassInitializeParams: {
+                                  synthesis: that.model,
+                                  messageListView: that.messageListView
+                                  }
                             }
                             , view_data);
                         that.$('.synthesisPanel-ideas').append(rendered_idea_view.render().el);

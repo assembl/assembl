@@ -23,6 +23,47 @@ define(function (require) {
 
         /**
          * @init
+         * 
+         * @param {
+         * 
+         * reply_message_id:  The id of the message model this replies to
+         *  (if any)
+         *  
+         * reply_idea_id:  The id of the idea object this message comments or 
+         *  replies to (if any)
+         *  
+         * cancel_button_label:  String, the label used for the Cancel button
+         * 
+         * send_button_label:  String, the label used for the Send button
+         * 
+         * allow_setting_subject:  Boolean, if true, the user is allowed to set
+         *  his own subject for the message
+         *  
+         * subject_label:  String:  If set, the label of the subject field.
+         * 
+         * default_subject:  String:  If set, the dfault subject if the user 
+         *  doesn't change it.  Can be used even if allow_setting_subject is 
+         *  false.  Is the default value sent to the server.
+         *  
+         * mandatory_subject_missing_msg:  String.  If set, the user must 
+         *  provide a mesasge subject.  If he doesn't, this string is used as
+         *  the error message
+         *  
+         * body_help_message:  String:  The text present in the body field to
+         *  tell the user what to do.  It is NOT used as a default value sent
+         *  to the server, the user must replace it.
+         *  
+         * mandatory_body_missing_msg:  String.  Providing a body is always 
+         *  mandatory.  Only sets the error displayed to the user if he doesn't 
+         *  provide a body
+         *  
+         * messageList: MessageListView that we expect to refresh once the 
+         *  message has been processed
+         * 
+         * send_callback:  Function.  A callback to call once the message has 
+         *  been accepted by the server, and the mesasgeList has refreshed.
+         *  
+         *  }
          */
         initialize: function (options) {
             this.options = options;
@@ -79,11 +120,11 @@ define(function (require) {
                 reply_message_id = null,
                 success_callback = null;
 
-            if (this.options.reply_idea) {
-                reply_idea_id = this.options.reply_idea.getId();
+            if (this.options.reply_idea_id) {
+                reply_idea_id = this.options.reply_idea_id;
             }
-            if (this.options.reply_message) {
-                reply_message_id = this.options.reply_message.get('published_in_post');
+            if (this.options.reply_message_id) {
+                reply_message_id = this.options.reply_message_id;
             }
 
             if (!message_subject && (this.options.mandatory_subject_missing_msg || (!reply_idea_id && !reply_message_id))) {

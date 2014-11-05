@@ -203,7 +203,7 @@ define(function (require) {
 
                     that.replyView = new MessageSendView({
                         'allow_setting_subject': false,
-                        'reply_message': that.model,
+                        'reply_message_id': that.model.getId(),
                         'body_help_message': i18n.gettext('Type your response here...'),
                         'cancel_button_label': null,
                         'send_button_label': i18n.gettext('Send your reply'),

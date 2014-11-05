@@ -336,12 +336,13 @@ define(function (require) {
 
             this.commentView = new MessageSendView({
                 'allow_setting_subject': false,
-                'reply_idea': this.model,
+                'reply_idea_id': this.model.getId(),
                 'body_help_message': i18n.gettext('Comment on this idea here...'),
                 'send_button_label': i18n.gettext('Send your comment'),
                 'subject_label': null,
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
                 'mandatory_subject_missing_msg': null
+                //TODO:  Pass the messageListView that is expected to refresh with the new comment
             });
             this.$('#ideaPanel-comment').append(this.commentView.render().el);
 
