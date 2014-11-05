@@ -3,6 +3,7 @@ from datetime import datetime
 from collections import defaultdict
 from abc import abstractmethod
 from time import sleep
+import transaction
 
 from sqlalchemy import (
     Column,
@@ -469,10 +470,12 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
             applicableInstances = subscriptionClass.findApplicableInstances(objectInstance.get_discussion_id(), CrudVerbs.CREATE, objectInstance)
             for subscription in applicableInstances:
                 applicableInstancesByUser[subscription.user_id].append(subscription)
-        for userId, applicableInstances in applicableInstancesByUser.iteritems():
-            if(len(applicableInstances) > 0):
-                applicableInstances.sort(cmp=lambda x,y: cmp(x.priority, y.priority))
-                applicableInstances[0].process(objectInstance.get_discussion_id, verb, objectInstance, applicableInstances[1:])
+        with transaction.manager:
+            for userId, applicableInstances in applicableInstancesByUser.iteritems():
+                if(len(applicableInstances) > 0):
+                    applicableInstances.sort(cmp=lambda x,y: cmp(x.priority, y.priority))
+                    applicableInstances[0].process(objectInstance.get_discussion_id, verb, objectInstance, applicableInstances[1:])
+
 
     def processPostCreated(self, id):
         print "processPostCreated", id
