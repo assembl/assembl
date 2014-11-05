@@ -4,7 +4,7 @@ from collections import defaultdict
 from abc import abstractmethod
 from time import sleep
 import transaction
-
+import os
 from sqlalchemy import (
     Column,
     Boolean,
@@ -28,6 +28,11 @@ from ..lib.decl_enums import DeclEnum
 from .auth import (User, Everyone, P_ADMIN_DISC)
 from .discussion import Discussion
 from .post import Post, SynthesisPost
+from jinja2 import Environment, PackageLoader
+from gettext import gettext, ngettext
+
+jinja_env = Environment(loader=PackageLoader('assembl', 'templates'), extensions=['jinja2.ext.i18n'])
+jinja_env.install_gettext_callables(gettext, ngettext, newstyle=True)
 
 class NotificationSubscriptionClasses(DeclEnum):
     #System notifications (can't unsubscribe)
@@ -409,8 +414,14 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
+        from sqlalchemy import inspect
+        insp = inspect(objectInstance)
+        print "persistent"
+        print insp.persistent
+        print repr(insp)
+        #self.db.flush()
         notification = NotificationOnPostCreated(
-            post = objectInstance,
+            post_id = objectInstance.id,
             first_matching_subscription = self,
             push_method = NotificationPushMethodType.EMAIL,
             #push_address = TODO
@@ -460,8 +471,10 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
 
     def processEvent(self, verb, objectClass, objectId):
         from ..lib.utils import get_concrete_subclasses_recursive
+        assert objectId
         objectInstance = waiting_get(objectClass, objectId)
         assert objectInstance
+        assert objectInstance.id
         #We need the discussion id
         assert isinstance(objectInstance, DiscussionBoundBase)
         applicableInstancesByUser = defaultdict(list)
@@ -609,6 +622,9 @@ class Notification(Base):
     @abstractmethod
     def event_source_object(self):
         pass
+    
+    def event_source_type(self):
+        return self.event_source_object().external_typename()
 
 User.notifications = relationship(
     Notification, viewonly=True,
@@ -652,3 +668,13 @@ class NotificationOnPostCreated(NotificationOnPost):
     
     def event_source_object(self):
         return NotificationOnPost.event_source_object(self)
+    
+    def render_to_html(self):
+        ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
+        ink_css = open(ink_css_path)
+        assert ink_css
+        template = jinja_env.get_template('notifications/post.jinja2')
+        return template.render(subscription=self.first_matching_subscription,
+                               notification=self,
+                               post=self.post,
+                               ink_css=ink_css.read())

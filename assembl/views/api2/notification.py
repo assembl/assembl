@@ -4,14 +4,15 @@ from pyramid.view import view_config
 from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyramid.httpexceptions import (
-    HTTPUnauthorized, HTTPBadRequest)
+    HTTPOk, HTTPNoContent, HTTPNotFound, HTTPUnauthorized, HTTPBadRequest)
+from pyramid.response import Response
 
 from assembl.auth import (
     P_READ, P_SYSADMIN)
 from assembl.models import (
     NotificationSubscription, Notification)
 from assembl.auth.util import get_permissions
-from ..traversal import CollectionContext
+from ..traversal import CollectionContext, InstanceContext
 from . import JSON_HEADER
 
 
@@ -26,8 +27,7 @@ def view_notification_collection(request):
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
     else:
         return [i.generic_json(view) for i in q.all()]
-
-
+    
 @view_config(context=CollectionContext, renderer='json', request_method='GET',
              ctx_collection_class=NotificationSubscription, permission=P_READ,
              accept="application/json")
@@ -72,3 +72,10 @@ def notif_collection_add_json(request):
             dumps(first.generic_json(view)),
             location=first.uri_generic(first.id),
             status_code=201)
+
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=Notification, permission=P_READ,
+             accept="text/html", name="html")
+def html(request):
+    return Response(request.context._instance.render_to_html(),
+                    content_type = 'text/html')
