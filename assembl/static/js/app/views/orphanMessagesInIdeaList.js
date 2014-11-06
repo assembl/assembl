@@ -20,7 +20,7 @@ define(function (require) {
             var data = this.model.toJSON();
 
             this.$el.addClass('idealist-item');
-            if (this.model.get('num_orphan_posts') == 0) {
+            if (this.model.get('num_orphan_posts') === 0) {
                 this.$el.addClass('hidden');
             }
             else {

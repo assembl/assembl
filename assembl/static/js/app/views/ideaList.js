@@ -16,7 +16,8 @@ define(function (require) {
         ideaGraphLoader = require('views/ideaGraph'),
         _ = require('underscore'),
         CollectionManager = require('common/collectionManager'),
-        i18n = require('utils/i18n');
+        i18n = require('utils/i18n'),
+        OtherInIdeaListView = require('views/otherInIdeaList');
 
     var FEATURED = 'featured',
         IN_SYNTHESIS = 'inNextSynthesis';
@@ -185,6 +186,12 @@ define(function (require) {
                         list.appendChild(ideaView.render().el);
                     });
 
+                    //sub menu other
+                    var OtherView = new OtherInIdeaListView({
+                        model: rootIdea
+                    });
+                    list.appendChild(OtherView.render().el);
+
                     // Synthesis posts pseudo-idea
                     var synthesisView = new SynthesisInIdeaListView({
                         model: rootIdea, groupContent: that.groupContent
@@ -217,6 +224,7 @@ define(function (require) {
                     data.filter = that.filter;
                     that.$el.html(that.template(data));
                     Ctx.initTooltips(that.$el);
+
                     that.$('.idealist').append(list);
 
                     that.body = that.$('.panel-body');
