@@ -508,14 +508,18 @@ define(function (require) {
          */
         calculateThreadedMessagesOffsets: function (data_by_object, order_lookup_table, requestedOffsets) {
             var returnedDataOffsets = {},
-                numMessages = order_lookup_table.length,
-                i;
+                numMessages = order_lookup_table.length;
+
             if (numMessages > 0) {
                 //Find preceding root message, and include it
                 //It is not possible that we do not find one if there is 
                 //at least one message
-                for (i = requestedOffsets['offsetStart']; i >= 0; i--) {
-                    if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] == undefined) {
+                //Gaby: Never declare an incremental variable "i" out of loop, it's a memory leak
+                for (var i = requestedOffsets['offsetStart']; i >= 0; i--) {
+
+                    if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === undefined ||
+                        data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
+
                         returnedDataOffsets['offsetStart'] = i;
                         break;
                     }
@@ -528,20 +532,20 @@ define(function (require) {
                 returnedDataOffsets['offsetEnd'] = (numMessages - 1);
             }
             else {
-                if (data_by_object[order_lookup_table[requestedOffsets['offsetEnd']]]['last_ancestor_id'] == undefined) {
+                if (data_by_object[order_lookup_table[requestedOffsets['offsetEnd']]]['last_ancestor_id'] === undefined) {
                     returnedDataOffsets['offsetEnd'] = requestedOffsets['offsetEnd'];
                 }
                 else {
                     //If the requested offsetEnd isn't a root, find next root message, and stop just
                     //before it
 
-                    for (i = requestedOffsets['offsetEnd']; i < numMessages; i++) {
-                        if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] == undefined) {
+                    for (var i = requestedOffsets['offsetEnd']; i < numMessages; i++) {
+                        if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === undefined) {
                             returnedDataOffsets['offsetEnd'] = i - 1;
                             break;
                         }
                     }
-                    if (returnedDataOffsets['offsetEnd'] == undefined) {
+                    if (returnedDataOffsets['offsetEnd'] === undefined) {
                         //It's possible we didn't find a root, if we are at the very end of the list
                         returnedDataOffsets['offsetEnd'] = numMessages;
                     }
