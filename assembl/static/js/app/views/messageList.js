@@ -186,6 +186,8 @@ define(function (require) {
                     'click .js_messageList-prevbutton': 'showPreviousMessages',
                     'click .js_messageList-morebutton': 'showNextMessages',
 
+                    'click .js_openTargetInModal': 'openTargetInModal',
+
                     'click .js_scrollToMsgBox': 'scrollToMsgBox'
                 };
 
@@ -239,6 +241,9 @@ define(function (require) {
 
 
         storedMessageListConfig: Ctx.getMessageListConfigFromStorage(),
+
+        inspireMeLink: null,
+
         /**
          * get a view style definition by id
          * @param {viewStyle.id}
@@ -294,7 +299,8 @@ define(function (require) {
          */
         syncWithCurrentIdea: function () {
             var currentIdea = Ctx.getCurrentIdea(),
-                filterValue;
+                filterValue,
+                that = this;
 
             Ctx.openPanel(this);
             //!currentIdea?filterValue=null:filterValue=currentIdea.getId();
@@ -325,7 +331,20 @@ define(function (require) {
                 //console.log("messageList:syncWithCurrentIdea(): Query is now: ",this.currentQuery._query);
                 this.render();
             }
+
+            var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(currentIdea.getId());
+            promise.done(
+                function (data) {
+                    console.log("syncWithCurrentIdea getWidgetDataAssociatedToIdeaPromise received data: ", data);
+                    if ( "inspiration_widget_url" in data )
+                    {
+                        that.inspireMeLink = data.inspiration_widget_url;
+                        that.render();
+                    }
+                }
+            );
         },
+
         /**
          * The template
          * @type {_.template}
@@ -875,7 +894,8 @@ define(function (require) {
                 availableViewStyles: this.ViewStyles,
                 currentViewStyle: this.currentViewStyle,
                 collapsed: this.collapsed,
-                canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST)
+                canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST),
+                inspireMeLink: this.inspireMeLink
             };
         },
 
@@ -1436,6 +1456,10 @@ define(function (require) {
         addFilterIsUnreadMessage: function () {
             this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, true);
             this.render();
+        },
+
+        openTargetInModal: function (evt) {
+            return Ctx.openTargetInModal(evt);
         },
 
         /**

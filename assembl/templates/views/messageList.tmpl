@@ -50,6 +50,9 @@
 
 <% if (canPost) { %>
   <div class="sticky-box tac">
-      <a href="#" class="js_scrollToMsgBox"><i class="icon-comment"></i> {{ gettext('React to the ongoing discussion') }} </a>
+      <a href="#" class="js_scrollToMsgBox"><i class="icon-comment"></i> {{ gettext('React to the ongoing discussion') }}</a>
+      <% if (inspireMeLink) { %>
+        &nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<a href="<%= inspireMeLink %>" class="js_openTargetInModal" data-modal-title="{{gettext('Inspire me!')}}"><i class="icon-lab"></i> {{ gettext('Inspire me!') }}</a>
+      <% } %>
   </div>
 <% } %>

@@ -13,7 +13,7 @@ define(function (require) {
         AssemblPanel = require('views/assemblPanel'),
         CKEditorField = require('views/ckeditorField'),
         backboneModal = require('backbone.modal'),
-        marionetteModdal = require('backbone.marionette.modals');
+        marionetteModal = require('backbone.marionette.modals');
 
     var contextPage = Marionette.LayoutView.extend({
         template: '#tmpl-contextPage',

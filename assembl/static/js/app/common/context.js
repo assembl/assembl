@@ -8,6 +8,8 @@ define(function (require) {
         Moment = require('moment'),
         i18n = require('../utils/i18n'),
         Zeroclipboard = require('zeroclipboard'),
+        backboneModal = require('backbone.modal'),
+        marionetteModal = require('backbone.marionette.modals'),
         bootstrap = require('bootstrap');
 
 
@@ -134,6 +136,13 @@ define(function (require) {
          * @type {Promise}
          */
         this.discussionPromise = undefined;
+
+
+        /*
+         * Cached associative array (String -> Promise which returns an Object[String -> String]) of widget data associated to an idea
+         * @type {Object}
+         */
+        this.cachedWidgetDataAssociatedToIdeasPromises = {};
 
         this.init();
     }
@@ -425,6 +434,115 @@ define(function (require) {
          */
         isInFullscreen: function () {
             return this.openedPanels === 1;
+        },
+
+        // TODO: set Modal dimensions dynamically
+        openTargetInModal: function (evt) {
+            console.log("openInspireMeModal()");
+            console.log("evt: ", evt);
+
+            var target_url = null;
+            if ( evt && evt.currentTarget )
+            {
+                if ( $(evt.currentTarget).attr("data-href") )
+                    target_url = $(evt.currentTarget).attr("data-href");
+                else if ( $(evt.currentTarget).attr("href") && $(evt.currentTarget).attr("href") != "#" )
+                    target_url = $(evt.currentTarget).attr("href");
+            }
+            if ( !target_url )
+                return false;
+
+            var modal_title = "";
+            if ( evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-title") )
+                modal_title = $(evt.currentTarget).attr("data-modal-title");
+
+            var model = new Backbone.Model();
+            model.set("iframe_url", target_url);
+            model.set("modal_title", modal_title);
+
+            var Modal = Backbone.Modal.extend({
+                template: Ctx.loadTemplate('modalWithIframe'),
+                className: 'group-modal popin-wrapper iframe-popin',
+                cancelEl: '.close',
+                keyControl: false,
+                model: model
+            });
+
+            window.modal_instance = new Modal();
+            window.exitModal = function(){
+                window.modal_instance.destroy();
+            };
+
+            Assembl.slider.show(window.modal_instance);
+
+            return false; // so that we cancel the normal behaviour of the clicked link (aka making browser go to "target" attribute of the "a" tag)
+        },
+
+        invalidateWidgetDataAssociatedToIdea: function(idea_id){
+            this.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = null;
+        },
+
+        getWidgetDataAssociatedToIdeaPromise: function(idea_id){
+            var returned_data = {};
+            var that = this;
+            var deferred = $.Deferred();
+
+            if ( idea_id in that.cachedWidgetDataAssociatedToIdeasPromises && that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] != null )
+            {
+                that.cachedWidgetDataAssociatedToIdeasPromises[idea_id].done(function(data){
+                    deferred.resolve(data);
+                });
+                return deferred.promise();
+            }
+
+            // Get inspiration widgets associated to this idea, via "ancestor_inspiration_widgets"
+            // And compute a link to create an inspiration widget
+            
+            var inspiration_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/ancestor_inspiration_widgets");
+            var inspiration_widgets = null;
+            var inspiration_widget_url = null;
+            var inspiration_widget_configure_url = null;
+            var inspiration_widget_create_url = null;
+
+            inspiration_widget_create_url = "/widget/creativity/?admin=1#/admin/create_from_idea?idea="
+                + encodeURIComponent( idea_id + "?view=creativity_widget" ); // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
+            returned_data["inspiration_widget_create_url"] = inspiration_widget_create_url;
+
+
+            $.getJSON(inspiration_widgets_url, function (data) {
+                console.log("ancestor_inspiration_widgets data: ", data);
+
+                if ( data
+                    && data instanceof Array
+                    && data.length > 0
+                )
+                {
+                    inspiration_widgets = data;
+                    returned_data["inspiration_widgets"] = inspiration_widgets;
+                    var inspiration_widget_uri = inspiration_widgets[inspiration_widgets.length - 1]; // for example: "local:Widget/52"
+                    console.log("inspiration_widget_uri: ", inspiration_widget_uri);
+                    
+                    inspiration_widget_url = "/widget/creativity/?config="
+                        + Ctx.getUrlFromUri(inspiration_widget_uri)
+                        + "&target="
+                        + idea_id; // example: "http://localhost:6543/widget/creativity/?config=/data/Widget/43&target=local:Idea/3#/"
+                    console.log("inspiration_widget_url: ", inspiration_widget_url);
+                    returned_data["inspiration_widget_url"] = inspiration_widget_url;
+
+                    inspiration_widget_configure_url = "/widget/creativity/?admin=1#/admin/configure_instance?widget_uri="
+                        + Ctx.getUrlFromUri(inspiration_widget_uri)
+                        + "&target="
+                        + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
+                    returned_data["inspiration_widget_configure_url"] = inspiration_widget_configure_url;
+                }
+                //that.cachedWidgetDataAssociatedToIdeas[idea_id] = returned_data;
+                deferred.resolve(returned_data);
+            });
+
+            that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = deferred;
+            
+
+            return deferred.promise();
         },
 
         /**

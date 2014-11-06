@@ -370,7 +370,7 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
             },
 
             getWidgets: function () {
-                console.log("idea widgets: ", this.get('widget_data'));
+                //console.log("idea widgets: ", this.get('widget_data'));
                 return this.get('widget_data');
             },
 

@@ -15,7 +15,7 @@ define(function (require) {
         AssemblPanel = require('views/assemblPanel'),
         Marionette = require('backbone.marionette'),
         backboneModal = require('backbone.modal'),
-        marionetteModdal = require('backbone.marionette.modals'),
+        marionetteModal = require('backbone.marionette.modals'),
         $ = require('jquery'),
         _ = require('underscore');
 
@@ -178,46 +178,21 @@ define(function (require) {
 
         populateAssociatedWidgetData: function(){
             if (this.model) {
-                // Get inspiration widgets associated to this idea, via "ancestor_inspiration_widgets"
-                // And compute a link to create an inspiration widget
-                
                 var that = this;
-                var inspiration_widgets_url = Ctx.getApiV2DiscussionUrl("ideas/" + Ctx.extractId(this.model.getId()) + "/ancestor_inspiration_widgets");
-                var inspiration_widgets = null;
-                var inspiration_widget_url = null;
-                var inspiration_widget_configure_url = null;
-                var inspiration_widget_create_url = null;
-                $.getJSON(inspiration_widgets_url, function (data) {
-                    console.log("ancestor_inspiration_widgets data: ", data);
-
-                    if ( data
-                        && data instanceof Array
-                        && data.length > 0
-                    )
-                    {
-                        inspiration_widgets = data;
-                        that.model.set("inspiration_widgets", inspiration_widgets);
-                        var inspiration_widget_uri = inspiration_widgets[inspiration_widgets.length - 1]; // for example: "local:Widget/52"
-                        console.log("inspiration_widget_uri: ", inspiration_widget_uri);
-                        
-                        inspiration_widget_url = "/widget/creativity/?config="
-                            + Ctx.getUrlFromUri(inspiration_widget_uri)
-                            + "&target="
-                            + that.model.getId(); // example: "http://localhost:6543/widget/creativity/?config=/data/Widget/43&target=local:Idea/3#/"
-                        console.log("inspiration_widget_url: ", inspiration_widget_url);
-                        that.model.set("inspiration_widget_url", inspiration_widget_url);
-
-                        inspiration_widget_configure_url = "/widget/creativity/?admin=1#/admin/configure_instance?widget_uri="
-                            + Ctx.getUrlFromUri(inspiration_widget_uri)
-                            + "&target="
-                            + that.model.getId(); // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
-                        that.model.set("inspiration_widget_configure_url", inspiration_widget_configure_url);
+                var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(this.model.getId());
+                promise.done(
+                    function (data) {
+                        console.log("populateAssociatedWidgetData received data: ", data);
+                        if ( "inspiration_widget_create_url" in data )
+                            that.model.set("inspiration_widget_create_url", data.inspiration_widget_create_url);
+                        if ( "inspiration_widgets" in data )
+                            that.model.set("inspiration_widgets", data.inspiration_widgets);
+                        if ( "inspiration_widget_url" in data )
+                            that.model.set("inspiration_widget_url", data.inspiration_widget_url);
+                        if ( "inspiration_widget_configure_url" in data )
+                            that.model.set("inspiration_widget_configure_url", data.inspiration_widget_configure_url);
                     }
-                });
-
-                inspiration_widget_create_url = "/widget/creativity/?admin=1#/admin/create_from_idea?idea="
-                    + encodeURIComponent( that.model.getId() + "?view=creativity_widget" ); // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
-                that.model.set("inspiration_widget_create_url", inspiration_widget_create_url);
+                );
             }
 
         },
@@ -251,38 +226,8 @@ define(function (require) {
 
         },
 
-        // TODO: set Modal dimensions dynamically
         openTargetInModal: function (evt) {
-            console.log("openInspireMeModal()");
-            console.log("evt: ", evt);
-            var target_url = (evt && evt.currentTarget) ? $(evt.currentTarget).attr("href") : null;
-            if ( !target_url )
-                target_url = "/widget/creativity/?config=local:Widget/52&target=local:Idea/4";
-
-            var modal_title = (evt && evt.currentTarget) ? $(evt.currentTarget).attr("data-modal-title") : null;
-            if ( !modal_title )
-                modal_title = "";
-
-            var model = new Backbone.Model();
-            model.set("iframe_url", target_url);
-            model.set("modal_title", modal_title);
-
-            var Modal = Backbone.Modal.extend({
-                template: Ctx.loadTemplate('modalWithIframe'),
-                className: 'group-modal popin-wrapper iframe-popin',
-                cancelEl: '.close',
-                keyControl: false,
-                model: model
-            });
-
-            window.modal_instance = new Modal();
-            window.exitModal = function(){
-                window.modal_instance.destroy();
-            };
-
-            Assembl.slider.show(window.modal_instance);
-
-            return false; // so that we cancel the normal behaviour of the clicked link (aka making browser go to "target" attribute of the "a" tag)
+            return Ctx.openTargetInModal(evt);
         },
 
         getExtractslist: function () {
