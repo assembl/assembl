@@ -12,6 +12,7 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
             last_status_change_date: null,
             creation_date: null,
             creation_origin: null,
+            human_readable_description: null,
             user: null
         }
     });

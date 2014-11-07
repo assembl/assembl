@@ -310,6 +310,15 @@ class Discussion(DiscussionBoundBase):
             & (LocalUserRole.requested == 0)),
         backref="participant_in_discussion")
 
+    def get_base_url(self):
+        """ Abstracted so that we can support virtual hosts or communities in 
+        the future and access the urls when we can't rely on pyramid's current
+        request (such as when celery generates notifications
+        """
+        from assembl.lib import config
+        port = config.get('public_port')
+        portString = (':'+port) if port != 80 else ''
+        return 'http://'+config.get('public_hostname')+portString
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
     """

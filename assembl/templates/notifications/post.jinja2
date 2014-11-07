@@ -31,10 +31,10 @@
                         <table class="twelve columns">
                           <tr>
                             <td class="six sub-columns">
-                              <img src="http://placehold.it/200x50">
+                              <img src="{{frontendUrls.getDiscussionLogoUrl()}}">
                             </td>
                             <td class="six sub-columns last" style="text-align:right; vertical-align:middle;">
-                              <span class="template-label">BASIC</span>
+                              <span class="template-label">{{ discussion.topic }}</span>
                             </td>
                             <td class="expander"></td>
                           </tr>
@@ -69,6 +69,26 @@
                     </td>
                   </tr>
                 </table>
+                <table class="row">
+                  <tr>
+                    <td class="wrapper center offset-by-four last" align="center">
+
+                      <table class="four columns">
+                        <tr>
+                          <td class="left-text-pad">
+                            <table class="tiny-button facebook">
+                              <tr>
+                                <td>
+                                  <a href="#">Reply to this message</a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                          <td class="expander"></td>
+                        </tr>
+                      </table>
+                  </tr>
+                </table>
 
                 <table class="row callout">
                   <tr>
@@ -77,7 +97,22 @@
                       <table class="twelve columns">
                         <tr>
                           <td class="panel">
-                            <p>{{ gettext("You are receiving this because %(notificationType)s",notificationType=subscription.external_typename()) }} <a href="#">Click it! »</a></p>
+                            {% set discussionUrl = frontendUrls.getDiscussionUrl() %}
+                            {% set notificationConfigUrl = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl() %}
+                            {% set discussionTopic = subscription.discussion.topic %}
+                            <p>{{ gettext("You are receiving this because you are %(notificationConfigLink)s to discussion %(discussionLink)s.  Specifically, you currently receive a notification when:",
+                                    discussionLink='<a href="'+discussionUrl+'">'+discussionTopic+'</a>',
+                                    notificationConfigLink='<a href="'+notificationConfigUrl+'">'+gettext('subscribed')+'</a>')
+                               }}
+                            <ul>
+                              
+                              {% for applicableSubscription in notification.get_applicable_subscriptions() %}
+                                <li>
+                                  {{ applicableSubscription.get_human_readable_description() }}
+                                  <a href="{{ frontendUrls.getUserNotificationSubscriptionUnsubscribeUrl(applicableSubscription) }}">{{ gettext('Unsubscribe') }}</a>
+                                </li>
+                              {% endfor %}
+                            </ul>
                           </td>
                           <td class="expander"></td>
                         </tr>
@@ -87,86 +122,6 @@
                   </tr>
                 </table>
 
-                <table class="row footer">
-                  <tr>
-                    <td class="wrapper">
-
-                      <table class="six columns">
-                        <tr>
-                          <td class="left-text-pad">
-
-                            <h5>Connect With Us:</h5>
-
-                            <table class="tiny-button facebook">
-                              <tr>
-                                <td>
-                                  <a href="#">Facebook</a>
-                                </td>
-                              </tr>
-                            </table>
-
-                            <br>
-
-                            <table class="tiny-button twitter">
-                              <tr>
-                                <td>
-                                  <a href="#">Twitter</a>
-                                </td>
-                              </tr>
-                            </table>
-
-                            <br>
-
-                            <table class="tiny-button google-plus">
-                              <tr>
-                                <td>
-                                  <a href="#">Google +</a>
-                                </td>
-                              </tr>
-                            </table>
-
-                          </td>
-                          <td class="expander"></td>
-                        </tr>
-                      </table>
-
-                    </td>
-                    <td class="wrapper last">
-
-                      <table class="six columns">
-                        <tr>
-                          <td class="last right-text-pad">
-                            <h5>Contact Info:</h5>
-                            <p>Phone: 408.341.0600</p>
-                            <p>Email: <a href="mailto:hseldon@trantor.com">hseldon@trantor.com</a></p>
-                          </td>
-                          <td class="expander"></td>
-                        </tr>
-                      </table>
-
-                    </td>
-                  </tr>
-                </table>
-
-
-                <table class="row">
-                  <tr>
-                    <td class="wrapper last">
-
-                      <table class="twelve columns">
-                        <tr>
-                          <td align="center">
-                            <center>
-                              <p style="text-align:center;"><a href="#">Terms</a> | <a href="#">Privacy</a> | <a href="#">Unsubscribe</a></p>
-                            </center>
-                          </td>
-                          <td class="expander"></td>
-                        </tr>
-                      </table>
-
-                    </td>
-                  </tr>
-                </table>
 
               <!-- container end below -->
               </td>

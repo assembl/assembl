@@ -332,6 +332,7 @@
         "status": true,
         "last_status_change_date": true,
         "followed_object": "&followed_object",
+        "human_readable_description": "&get_human_readable_description",
         "user": true
     },
     "NotificationSubscriptionFollowSyntheses": {

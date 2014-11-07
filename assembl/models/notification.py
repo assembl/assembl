@@ -25,11 +25,13 @@ from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 from . import  Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
+from ..lib.frontend_urls import FrontendUrls
 from .auth import (User, Everyone, P_ADMIN_DISC)
 from .discussion import Discussion
 from .post import Post, SynthesisPost
 from jinja2 import Environment, PackageLoader
 from gettext import gettext, ngettext
+_ = gettext
 
 jinja_env = Environment(loader=PackageLoader('assembl', 'templates'), extensions=['jinja2.ext.i18n'])
 jinja_env.install_gettext_callables(gettext, ngettext, newstyle=True)
@@ -176,7 +178,7 @@ class NotificationSubscription(DiscussionBoundBase):
         return False
 
     @classmethod
-    def findApplicableInstances(cls, discussion_id, verb, object):
+    def findApplicableInstances(cls, discussion_id, verb, object, user=None):
         """
         Returns all subscriptions that would fire on the object, and verb given
 
@@ -185,15 +187,24 @@ class NotificationSubscription(DiscussionBoundBase):
         override this with a more optimal implementation
         """
         applicable_subscriptions = []
-        subscriptions = cls.db.query(cls).filter(cls.status==NotificationSubscriptionStatus.ACTIVE);
-        for subscription in subscriptions:
+        subscriptionsQuery = cls.db.query(cls).filter(cls.status==NotificationSubscriptionStatus.ACTIVE);
+        if user:
+            subscriptionsQuery.filter(cls.user==user)
+            
+        for subscription in subscriptionsQuery:
             if(subscription.wouldCreateNotification(object.get_discussion_id(), verb, object)):
                 applicable_subscriptions.append(subscription)
         return applicable_subscriptions
+    
     @abstractmethod
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         pass
 
+    def get_human_readable_description(self):
+        """ A human readable description of this notification subscription
+        Default implementation, expected to be overriden by child classes """
+        return self.external_typename()
+    
     def update_json(self, json, user_id=Everyone):
         from ..auth.util import user_has_permission
         if self.user_id:
@@ -389,6 +400,9 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
     priority = 1
     unsubscribe_allowed = True
 
+    def get_human_readable_description(self):
+        return gettext("A periodic synthesis of the discussion is posted by the moderator")
+    
     def wouldCreateNotification(self, discussion_id, verb, object):
         return (verb == CrudVerbs.CREATE) & isinstance(object, SynthesisPost)
 
@@ -410,6 +424,9 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
     priority = 1
     unsubscribe_allowed = True
 
+    def get_human_readable_description(self):
+        return _("Any message is posted to the discussion")
+    
     def wouldCreateNotification(self, discussion_id, verb, object):
         return (verb == CrudVerbs.CREATE) & isinstance(object, Post)
 
@@ -437,10 +454,14 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
     priority = 1
     unsubscribe_allowed = True
 
+    def get_human_readable_description(self):
+        return _("Someone directly responds to any message you posted")
+    
     def wouldCreateNotification(self, discussion_id, verb, object):
         return ( (verb == CrudVerbs.CREATE)
-                 & isinstance(object, Post)
-                 & (object.parent.creator == self.user)
+                 and isinstance(object, Post)
+                 and object.parent is not None
+                 and object.parent.creator == self.user
                  )
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
@@ -626,7 +647,26 @@ class Notification(Base):
     
     def event_source_type(self):
         return self.event_source_object().external_typename()
+    
+    def get_applicable_subscriptions(self):
+        """ Fist matching_subscription is guaranteed to always be on top """
+        #TODO: Store CRUDVERB
+        applicableInstances = NotificationSubscription.findApplicableInstances(
+            self.event_source_object().get_discussion_id(),
+            CrudVerbs.CREATE, self.event_source_object(),
+            self.first_matching_subscription.user)
+        def sortSubscriptions(x,y):
+            if x.id == self.first_matching_subscription_id:
+                return -1
+            elif y.id == self.first_matching_subscription_id:
+                return 1
+            else:
+                return cmp(x.priority, y.priority)
+        applicableInstances.sort(cmp=sortSubscriptions)
+        print repr(applicableInstances)
+        return applicableInstances
 
+        
 User.notifications = relationship(
     Notification, viewonly=True,
     secondary=NotificationSubscription.__mapper__.mapped_table)
@@ -678,4 +718,6 @@ class NotificationOnPostCreated(NotificationOnPost):
         return template.render(subscription=self.first_matching_subscription,
                                notification=self,
                                post=self.post,
+                               discussion=self.first_matching_subscription.discussion,
+                               frontendUrls = FrontendUrls(self.first_matching_subscription.discussion),
                                ink_css=ink_css.read())
