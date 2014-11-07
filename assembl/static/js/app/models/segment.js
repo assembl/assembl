@@ -92,17 +92,17 @@ define(['underscore', 'models/base', 'common/context', 'models/user', 'models/me
                     return i18n.gettext('You must be logged in to create segments');
                 }
 
-                if (attrs.idPost === '' || typeof attrs.idPost !== 'string') {
-                    return i18n.gettext('missing: ' + attrs.idPost);
+                if (attrs.idPost === null || typeof attrs.idPost !== 'string') {
+                    return i18n.gettext('invalid idPost: ' + attrs.idPost);
                 }
-                if (attrs.creationDate === '' || typeof attrs.creationDate !== 'number') {
-                    return i18n.gettext('missing: ' + attrs.creationDate);
+                if (attrs.creationDate === null) {
+                    return i18n.gettext('invalid creationDate: ' + attrs.creationDate);
                 }
-                if (attrs.idIdea === '' || typeof attrs.idIdea !== 'string') {
-                    return i18n.gettext('missing: ' + attrs.idIdea);
+                if (attrs.idIdea !== null && typeof attrs.idIdea !== 'string') {
+                    return i18n.gettext('invalid idIdea: ' + attrs.idIdea);
                 }
-                if (attrs.idCreator === '' || typeof attrs.idCreator !== 'string') {
-                    return i18n.gettext('missing: ' + attrs.idCreator);
+                if (attrs.idCreator === null || typeof attrs.idCreator !== 'string') {
+                    return i18n.gettext('invalid idCreator: ' + attrs.idCreator);
                 }
 
             },
