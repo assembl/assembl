@@ -11,8 +11,8 @@ define(function (require) {
         MessageSendView = require('views/messageSend'),
         User = require('models/user'),
         CollectionManager = require('common/collectionManager'),
-        $ = require('jquery'),
-        dot = require('jquery.dotdotdot');
+        $ = require('jquery');
+    require('jquery.dotdotdot');
 
     var MIN_TEXT_TO_TOOLTIP = 5,
         TOOLTIP_TEXT_LENGTH = 10;
@@ -154,7 +154,7 @@ define(function (require) {
                     data['date'] = data.date; //Ctx.formatDate(data.date);
                     data['creator'] = creator;
 
-                    if ( !("metadata_json" in data) ) // this property needs to exist to display the inspiration source of a message (creativity widget)
+                    if (!("metadata_json" in data)) // this property needs to exist to display the inspiration source of a message (creativity widget)
                         data['metadata_json'] = null;
 
                     data['viewStyle'] = that.viewStyle;

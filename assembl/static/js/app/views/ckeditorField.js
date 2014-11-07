@@ -4,7 +4,8 @@ define(function (require) {
     var Backbone = require('backbone'),
         _ = require('underscore'),
         Ctx = require('common/context'),
-        ckeditor = require('ckeditor-sharedspace');
+        ckeditor = require('ckeditor-sharedspace'),
+        $ = require('jquery');
 
 
     var CKEditorField = Backbone.View.extend({
