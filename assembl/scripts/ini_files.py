@@ -2,9 +2,10 @@
 
 import sys
 from platform import system
-from os import getenv, listdir, mkdir
+from os import listdir, mkdir
 from os.path import exists, join, dirname, abspath
 from ConfigParser import ConfigParser, NoSectionError
+
 
 def main():
     if len(sys.argv) < 2:
@@ -50,7 +51,9 @@ def main():
     try:
         metrics_code_dir = config.get('metrics', 'metrics_code_dir')
         metrics_cl = config.get('metrics', 'metrics_cl')
-        has_metrics_server = metrics_code_dir and exists(metrics_code_dir) and exists(metrics_cl)
+        has_metrics_server = (
+            metrics_code_dir and exists(metrics_code_dir)
+            and exists(metrics_cl))
     except NoSectionError:
         has_metrics_server = False
         metrics_cl = '/bin/ls'  # innocuous
@@ -63,8 +66,12 @@ def main():
         'VIRTUOSO_ROOT_VAR': vroot_var,
         'VIRTUOSO_ROOT_LIB': vroot_lib,
         'VIRTUOSO_SUBDIR_NAME': vname,
-        'IMAP_CELERY_BROKER': config.get('app:main', 'celery_tasks.imap.broker'),
-        'NOTIF_DISPATCH_CELERY_BROKER': config.get('app:main', 'celery_tasks.notification_dispatch.broker'),
+        'IMAP_CELERY_BROKER': config.get(
+            'app:main', 'celery_tasks.imap.broker'),
+        'NOTIF_DISPATCH_CELERY_BROKER': config.get(
+            'app:main', 'celery_tasks.notification_dispatch.broker'),
+        'NOTIFY_CELERY_BROKER': config.get(
+            'app:main', 'celery_tasks.notify.broker'),
         'here': dirname(abspath('supervisord.conf')),
         'CONFIG_FILE': config_uri,
         'has_metrics_server': 'true' if has_metrics_server else 'false',

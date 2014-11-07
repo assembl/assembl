@@ -44,3 +44,4 @@ def includeme(config):
     configure(config.registry, 'assembl')
     config.include('.imap')
     config.include('.notification_dispatch')
+    config.include('.notify')

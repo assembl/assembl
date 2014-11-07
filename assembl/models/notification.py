@@ -408,6 +408,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
         return (verb == CrudVerbs.CREATE) & isinstance(object, SynthesisPost)
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
+        from ..tasks.notify import notify
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         notification = NotificationOnPostCreated(
             post = objectInstance,
@@ -416,6 +417,8 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
             #push_address = TODO
             )
         self.db.add(notification)
+        self.db.flush()
+        notify.delay(notification.id)
 
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_SYNTHESES
@@ -434,6 +437,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         from sqlalchemy import inspect
+        from ..tasks.notify import notify
         notification = NotificationOnPostCreated(
             post_id = objectInstance.id,
             first_matching_subscription = self,
@@ -441,6 +445,8 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
             #push_address = TODO
             )
         self.db.add(notification)
+        self.db.flush()
+        notify.delay(notification.id)
 
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_ALL_MESSAGES
@@ -462,6 +468,7 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
+        from ..tasks.notify import notify
         notification = NotificationOnPostCreated(
             post = objectInstance,
             first_matching_subscription = self,
@@ -469,6 +476,8 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
             #push_address = TODO
             )
         self.db.add(notification)
+        self.db.flush()
+        notify.delay(notification.id)
 
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_OWN_MESSAGES_DIRECT_REPLIES
