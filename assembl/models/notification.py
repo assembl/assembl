@@ -5,6 +5,7 @@ from abc import abstractmethod
 from time import sleep
 import transaction
 import os
+import email
 from sqlalchemy import (
     Column,
     Boolean,
@@ -433,11 +434,6 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         from sqlalchemy import inspect
-        insp = inspect(objectInstance)
-        print "persistent"
-        print insp.persistent
-        print repr(insp)
-        #self.db.flush()
         notification = NotificationOnPostCreated(
             post_id = objectInstance.id,
             first_matching_subscription = self,
@@ -663,14 +659,64 @@ class Notification(Base):
             else:
                 return cmp(x.priority, y.priority)
         applicableInstances.sort(cmp=sortSubscriptions)
-        print repr(applicableInstances)
         return applicableInstances
+    
+    def render_to_email_html_part(self):
+        """Override in child classes if your notification can be represented as
+         email HTML part.  Otherwise return a falsy string (len must be defined)"""
+        return False
 
+    def render_to_email_text_part(self):
+        """Override in child classes if your notification can be represented as
+         email HTML part.  Otherwise return a falsy string (len must be defined)"""
+        return ''
+    
+    @abstractmethod
+    def get_notification_subject(self):
+        """Typically for email"""
         
+    def render_to_email(self):
+
+        email_text_part = self.render_to_email_text_part()
+        email_html_part = self.render_to_email_html_part()
+        if not email_text_part and not email_html_part:
+            return ''
+        frontendUrls = FrontendUrls(self.first_matching_subscription.discussion)
+        msg = email.mime.Multipart.MIMEMultipart('alternative')
+        from email.header import Header
+        msg['Precedence'] = 'list'
+        
+        msg['List-ID'] = self.first_matching_subscription.discussion.uri()
+        msg['Date'] = email.Utils.formatdate()
+
+        if isinstance(self.event_source_object(), Post):
+            msg['Message-ID'] = self.event_source_object().message_id
+            if self.event_source_object().parent:
+                msg['In-Reply-To'] = self.event_source_object().parent.message_id
+        else:
+            raise NotImplementedError("TODO:  Implement message id's for non-Post event_source")
+        
+        #Archived-At: A direct link to the archived form of an individual email message.
+        msg['List-Subscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
+        msg['List-Unsubscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
+        msg['Subject'] = Header(self.get_notification_subject(), 'utf-8')
+        from assembl.lib import config
+        # TODO:  This is unlikely to be the righ email!  benoitg-2014-11-07
+        # We need to store one in the discussion
+        from_email = config.get('assembl.admin_email')
+        assert from_email
+        msg['From'] = from_email
+        msg['To'] = self.first_matching_subscription.user.get_preferred_email()
+        if email_text_part:
+            msg.attach(email.mime.Text.MIMEText(email_text_part, 'plain'))
+        if email_html_part:
+            msg.attach(email.mime.Text.MIMEText(email_html_part, 'html'))
+        
+        return msg.as_string()
+
 User.notifications = relationship(
     Notification, viewonly=True,
     secondary=NotificationSubscription.__mapper__.mapped_table)
-
 
 class NotificationOnPost(Notification):
 
@@ -700,6 +746,9 @@ class NotificationOnPost(Notification):
     @abstractmethod
     def event_source_object(self):
         return self.post
+    
+    def get_notification_subject(self):
+        return self.post.subject
 
 class NotificationOnPostCreated(NotificationOnPost):
     __mapper_args__ = {
@@ -710,14 +759,12 @@ class NotificationOnPostCreated(NotificationOnPost):
     def event_source_object(self):
         return NotificationOnPost.event_source_object(self)
     
-    def render_to_html(self):
+    def render_to_email_html_part(self):
         ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
         ink_css = open(ink_css_path)
         assert ink_css
         template = jinja_env.get_template('notifications/post.jinja2')
         return template.render(subscription=self.first_matching_subscription,
                                notification=self,
-                               post=self.post,
-                               discussion=self.first_matching_subscription.discussion,
                                frontendUrls = FrontendUrls(self.first_matching_subscription.discussion),
                                ink_css=ink_css.read())

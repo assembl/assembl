@@ -1,3 +1,19 @@
+{#
+This is a jinja2 template.  Doc:  http://jinja.pocoo.org/docs/dev/templates/
+
+The HTML conforms to ink's CSS.  http://zurb.com/ink/docs.php
+
+It expects variables:
+subscription
+notification
+frontendUrls
+ink_css
+#}
+
+{% set discussionUrl = frontendUrls.getDiscussionUrl() %}
+{% set notificationConfigUrl = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl() %}
+{% set discussionTopic = subscription.discussion.topic %}
+{% set discussionLink='<a href="'+discussionUrl+'">'+discussionTopic+'</a>' %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -34,7 +50,7 @@
                               <img src="{{frontendUrls.getDiscussionLogoUrl()}}">
                             </td>
                             <td class="six sub-columns last" style="text-align:right; vertical-align:middle;">
-                              <span class="template-label">{{ discussion.topic }}</span>
+                              <span class="template-label">{{ discussionLink }}</span>
                             </td>
                             <td class="expander"></td>
                           </tr>
@@ -60,7 +76,7 @@
                       <table class="twelve columns">
                         <tr>
                           <td>
-                            {{ post.body }}
+                            {{ notification.event_source_object().body }}
                           </td>
                           <td class="expander"></td>
                         </tr>
@@ -97,11 +113,8 @@
                       <table class="twelve columns">
                         <tr>
                           <td class="panel">
-                            {% set discussionUrl = frontendUrls.getDiscussionUrl() %}
-                            {% set notificationConfigUrl = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl() %}
-                            {% set discussionTopic = subscription.discussion.topic %}
                             <p>{{ gettext("You are receiving this because you are %(notificationConfigLink)s to discussion %(discussionLink)s.  Specifically, you currently receive a notification when:",
-                                    discussionLink='<a href="'+discussionUrl+'">'+discussionTopic+'</a>',
+                                    discussionLink=discussionLink,
                                     notificationConfigLink='<a href="'+notificationConfigUrl+'">'+gettext('subscribed')+'</a>')
                                }}
                             <ul>

@@ -75,7 +75,21 @@ def notif_collection_add_json(request):
 
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Notification, permission=P_READ,
-             accept="text/html", name="html")
-def html(request):
-    return Response(request.context._instance.render_to_html(),
+             accept="text/html", name="mail_html_preview")
+def mail_html_preview(request):
+    return Response(request.context._instance.render_to_email_html_part(),
                     content_type = 'text/html')
+    
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=Notification, permission=P_READ,
+             accept="text/html", name="mail_text_preview")
+def mail_text_preview(request):
+    return Response(request.context._instance.render_to_email_text_part(),
+                    content_type = 'text/plain')
+    
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=Notification, permission=P_READ,
+             accept="text/html", name="mail")
+def mail(request):
+    return Response(request.context._instance.render_to_email(),
+                    content_type = 'text/plain')
