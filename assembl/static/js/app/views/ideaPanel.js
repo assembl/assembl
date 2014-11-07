@@ -68,8 +68,7 @@ define(function (require) {
             'click .js_seeMore': 'seeMoreOrLess',
             'click .js_seeLess': 'seeMoreOrLess',
             'click .js_edit-definition': 'editDefinition',
-            'click .js_openTargetInModal': 'openTargetInModal',
-            'click .js_clearWidgetDataAssociatedToIdea': 'clearWidgetDataAssociatedToIdea'
+            'click .js_openTargetInModal': 'openTargetInModal'
         },
 
         getTitle: function () {

@@ -57,7 +57,9 @@ define(function (require) {
             userThreadedViewButton: '.messageListViewStyleUserThreaded',
             userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew',
             stickyBar: '.sticky-box',
-            replyBox: '.messagelist-replybox'
+            replyBox: '.messagelist-replybox',
+            inspireMe: '.js_inspireMe',
+            inspireMeAnchor: '.js_inspireMeAnchor'
         },
 
         initialize: function (options) {
@@ -339,8 +341,18 @@ define(function (require) {
                     if ( "inspiration_widget_url" in data )
                     {
                         that.inspireMeLink = data.inspiration_widget_url;
-                        that.render();
+                        if ( that.inspireMeLink )
+                        {
+                            console.log("change the href of the inspireMe link");
+                            that.ui.inspireMeAnchor.attr("href", that.inspireMeLink);
+                            that.ui.inspireMe.show();
+                        }
+                        //that.render();
                     }
+                    else
+                        that.inspireMeLink = null;
+                    if ( !that.inspireMeLink )
+                        that.ui.inspireMe.hide();
                 }
             );
         },
