@@ -28,13 +28,21 @@
             </p>
 
             <form id="widget_set_modules" method="POST">
-                <input type="checkbox" name="modules" value="card" ng-model="widget.settings.active_modules.card">
-                {{'creativityModuleTitleCards' | translate}}
+                <label>
+                    <input type="checkbox" name="modules" value="card" ng-model="widget.settings.active_modules.card">
+                    {{'creativityModuleTitleCards' | translate}}
+                </label>
+
                 <br/>
-                <input type="checkbox" name="modules" value="video" ng-model="widget.settings.active_modules.video">
-                {{'creativityModuleTitleVideos' | translate}}
+
+                <label>
+                    <input type="checkbox" name="modules" value="video" ng-model="widget.settings.active_modules.video">
+                    {{'creativityModuleTitleVideos' | translate}}
+                </label>
+
                 <br/>
                 <br/>
+
                 <input type="submit" value="{{'adminConfigureInstanceSetModulesValidate' | translate}}"/>
                 <span id="widget_select_modules_result"></span>
             </form>

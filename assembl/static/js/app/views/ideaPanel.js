@@ -68,7 +68,8 @@ define(function (require) {
             'click .js_seeMore': 'seeMoreOrLess',
             'click .js_seeLess': 'seeMoreOrLess',
             'click .js_edit-definition': 'editDefinition',
-            'click .js_openTargetInModal': 'openTargetInModal'
+            'click .js_openTargetInModal': 'openTargetInModal',
+            'click .js_clearWidgetDataAssociatedToIdea': 'clearWidgetDataAssociatedToIdea'
         },
 
         getTitle: function () {
@@ -76,6 +77,11 @@ define(function (require) {
         },
 
         tooltip: i18n.gettext('Detailled information about the currently selected idea in the Table of ideas'),
+
+        inspiration_widget_create_url: null,
+        inspiration_widgets: null,
+        inspiration_widget_url: null,
+        inspiration_widget_configure_url: null,
 
         /**
          * This is not inside the template beacuse babel wouldn't extract it in
@@ -127,17 +133,26 @@ define(function (require) {
          */
 
         serializeData: function () {
+            console.log("ideaPanel::serializeData()");
             var subIdeas = {},
                 votable_widgets = [],
                 currentUser = Ctx.getCurrentUser(),
                 canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
                 canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
-                contributors = null;
+                contributors = null,
+                inspiration_widget_create_url = null,
+                inspiration_widgets = null,
+                inspiration_widget_url = null,
+                inspiration_widget_configure_url = null;
 
             if (this.model) {
                 subIdeas = this.model.getChildren();
                 votable_widgets = this.model.getVotableOnWhichWidgets();
                 contributors = this.model.get('contributors');
+                inspiration_widget_create_url = this.inspiration_widget_create_url;
+                inspiration_widgets = this.inspiration_widgets;
+                inspiration_widget_url = this.inspiration_widget_url;
+                inspiration_widget_configure_url = this.inspiration_widget_configure_url;
             }
 
             return {
@@ -145,6 +160,10 @@ define(function (require) {
                 contributors: contributors,
                 subIdeas: subIdeas,
                 votable_widgets: votable_widgets,
+                inspiration_widget_create_url: inspiration_widget_create_url,
+                inspiration_widgets: inspiration_widgets,
+                inspiration_widget_url: inspiration_widget_url,
+                inspiration_widget_configure_url: inspiration_widget_configure_url,
                 canEdit: canEdit,
                 i18n: i18n,
                 getExtractsLabel: this.getExtractsLabel,
@@ -176,21 +195,63 @@ define(function (require) {
             }
         },
 
+        clearWidgetDataAssociatedToIdea: function(){
+            console.log("clearWidgetDataAssociatedToIdea()");
+            /* In case once the admin deletes the widget after having opened the configuration modal,
+            we have to invalidate widget data for this idea and all its sub-ideas recursively.
+            So to make it more simple we invalidate all widget data. */
+            Ctx.invalidateWidgetDataAssociatedToIdea("all");
+        },
+
         populateAssociatedWidgetData: function(){
             if (this.model) {
                 var that = this;
+                var previous = {};
+                previous.inspiration_widget_create_url = that.inspiration_widget_create_url;
+                previous.inspiration_widgets = that.inspiration_widgets;
+                previous.inspiration_widget_url = that.inspiration_widget_url;
+                previous.inspiration_widget_configure_url = that.inspiration_widget_configure_url;
                 var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(this.model.getId());
                 promise.done(
                     function (data) {
                         console.log("populateAssociatedWidgetData received data: ", data);
+
+                        that.inspiration_widget_create_url = null;
+                        that.inspiration_widgets = null;
+                        that.inspiration_widget_url = null;
+                        that.inspiration_widget_configure_url = null;
+
                         if ( "inspiration_widget_create_url" in data )
-                            that.model.set("inspiration_widget_create_url", data.inspiration_widget_create_url);
+                        {
+                            // that.model.set("inspiration_widget_create_url", data.inspiration_widget_create_url);
+                            that.inspiration_widget_create_url = data.inspiration_widget_create_url;
+                        }
+                            
                         if ( "inspiration_widgets" in data )
-                            that.model.set("inspiration_widgets", data.inspiration_widgets);
+                        {
+                            // that.model.set("inspiration_widgets", data.inspiration_widgets);
+                            that.inspiration_widgets = data.inspiration_widgets;
+                        }
+
                         if ( "inspiration_widget_url" in data )
-                            that.model.set("inspiration_widget_url", data.inspiration_widget_url);
+                        {
+                            // that.model.set("inspiration_widget_url", data.inspiration_widget_url);
+                            that.inspiration_widget_url = data.inspiration_widget_url;
+                        }
+
                         if ( "inspiration_widget_configure_url" in data )
-                            that.model.set("inspiration_widget_configure_url", data.inspiration_widget_configure_url);
+                        {
+                            // that.model.set("inspiration_widget_configure_url", data.inspiration_widget_configure_url);
+                            that.inspiration_widget_configure_url = data.inspiration_widget_configure_url;
+                        }
+                        if ( previous.inspiration_widget_create_url != that.inspiration_widget_create_url
+                            || previous.inspiration_widgets != that.inspiration_widgets
+                            || previous.inspiration_widget_url != that.inspiration_widget_url
+                            || previous.inspiration_widget_configure_url != that.inspiration_widget_configure_url )
+                        {
+                            console.log("we will re-render the idea panel");
+                            that.render();
+                        }
                     }
                 );
             }
@@ -198,6 +259,7 @@ define(function (require) {
         },
 
         onRender: function () {
+            console.log("ideaPanel::onRender()");
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
             Ctx.initTooltips(this.$el);
@@ -227,7 +289,19 @@ define(function (require) {
         },
 
         openTargetInModal: function (evt) {
-            return Ctx.openTargetInModal(evt);
+            var that = this;
+            var onDestroyCallback = function(){
+                console.log("onDestroyCallback()");
+                setTimeout(function(){
+                    //Ctx.invalidateWidgetDataAssociatedToIdea("all");
+                    that.clearWidgetDataAssociatedToIdea();
+                    that.render();
+                });
+            };
+            if ( evt && evt.currentTarget && $(evt.currentTarget).hasClass("js_clearWidgetDataAssociatedToIdea") )
+                return Ctx.openTargetInModal(evt, onDestroyCallback);
+            else
+                return Ctx.openTargetInModal(evt);
         },
 
         getExtractslist: function () {

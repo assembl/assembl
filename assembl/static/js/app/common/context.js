@@ -437,7 +437,7 @@ define(function (require) {
         },
 
         // TODO: set Modal dimensions dynamically
-        openTargetInModal: function (evt) {
+        openTargetInModal: function (evt, onDestroyCallback) {
             console.log("openInspireMeModal()");
             console.log("evt: ", evt);
 
@@ -469,6 +469,8 @@ define(function (require) {
             });
 
             window.modal_instance = new Modal();
+            if ( onDestroyCallback )
+                window.modal_instance.onDestroy = onDestroyCallback;
             window.exitModal = function(){
                 window.modal_instance.destroy();
             };
@@ -479,16 +481,23 @@ define(function (require) {
         },
 
         invalidateWidgetDataAssociatedToIdea: function(idea_id){
-            this.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = null;
+            console.log("invalidateWidgetDataAssociatedToIdea(", idea_id, ")");
+            console.log("this.cachedWidgetDataAssociatedToIdeasPromises: ", this.cachedWidgetDataAssociatedToIdeasPromises);
+            if ( idea_id == "all" )
+                this.cachedWidgetDataAssociatedToIdeasPromises = {};
+            else
+                this.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = null;
         },
 
         getWidgetDataAssociatedToIdeaPromise: function(idea_id){
+            console.log("getWidgetDataAssociatedToIdeaPromise()");
             var returned_data = {};
             var that = this;
             var deferred = $.Deferred();
 
             if ( idea_id in that.cachedWidgetDataAssociatedToIdeasPromises && that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] != null )
             {
+                console.log("getWidgetDataAssociatedToIdeaPromise(): we will serve the cached promise");
                 that.cachedWidgetDataAssociatedToIdeasPromises[idea_id].done(function(data){
                     deferred.resolve(data);
                 });

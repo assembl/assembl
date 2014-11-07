@@ -18,8 +18,14 @@
         <li>
             <a href="#/admin/configure_instance_set_modules?widget_uri={{ widget_uri }}&target={{ target }}">{{'adminConfigureInstanceDefineEnabledModules' | translate}}</a>
         </li>
+        <!--
         <li>
             <a href="#/admin/configure_instance_set_associated_ideas?widget_uri={{ widget_uri }}&target={{ target }}">{{'adminConfigureInstanceSetAssociatedIdeas' | translate}}</a>
+        </li>
+        -->
+        <li>
+            <button ng-click="deleteThisWidget()">{{'adminConfigureInstanceDelete' | translate}}</button>
+            <span id="widget_delete_result"></span>
         </li>
     </ul>
 
@@ -27,7 +33,6 @@
     <br/>
     <br/>
 
-    <button ng-click="deleteThisWidget()">{{'adminConfigureInstanceDelete' | translate}}</button>
-    <span id="widget_delete_result"></span>
+    
 
 </div>
