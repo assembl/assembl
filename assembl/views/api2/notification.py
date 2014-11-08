@@ -12,7 +12,7 @@ from assembl.auth import (
 from assembl.models import (
     NotificationSubscription, Notification)
 from assembl.auth.util import get_permissions
-from ..traversal import CollectionContext, InstanceContext
+from ..traversal import CollectionContext, InstanceContext, ClassContext
 from . import JSON_HEADER
 
 
@@ -93,3 +93,22 @@ def mail_text_preview(request):
 def mail(request):
     return Response(request.context._instance.render_to_email(),
                     content_type = 'text/plain')
+    
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=Notification, permission=P_READ,
+             accept="text/plain", name="process_now")
+def process_now(request):
+    from ...tasks.notify import notify
+    notify.delay(request.context._instance.id)
+    return Response("Celery notified to process notification "+str(request.context._instance.id),
+                    content_type = 'text/plain')
+    
+@view_config(context=ClassContext, request_method='GET',
+             ctx_class=Notification, permission=P_READ,
+             accept="text/plain", name="process_now")
+def process_all_now(request):
+    from ...tasks.notify import process_pending_notifications
+    process_pending_notifications.delay()
+    return Response("Celery notified to process all notifications",
+                    content_type = 'text/plain')
+    

@@ -334,12 +334,15 @@ def create_post(request):
     if subject:
         subject = subject
     else:
+        print(in_reply_to_post.subject, discussion.topic)
         if in_reply_to_post:
-            subject = in_reply_to_post.subject
+            subject = in_reply_to_post.subject if in_reply_to_post.subject else ''
         elif in_reply_to_idea:
-            subject = in_reply_to_idea.short_title
+            #TODO:  THis should use a cascade like the frontend   
+            subject = in_reply_to_idea.short_title if in_reply_to_idea.short_title else ''
         else:
-            subject = discussion.topic
+            subject = discussion.topic if discussion.topic else ''
+        print subject
         subject = "Re: " + restrip_pat.sub('', subject)
 
     post_constructor_args = {

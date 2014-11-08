@@ -603,9 +603,9 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
     def send_post(self, post):
         #TODO benoitg
         print "TODO: Mail::send_post():  Actually queue message"
-        #self.send_mail(sender=post.creator, message_body=post.body, subject=post.subject)
+        #self.DECRECATEDsend_mail(sender=post.creator, message_body=post.body, subject=post.subject)
         
-    def send_mail(
+    def DECRECATEDsend_mail(
         self,
         sender,
         message_body,

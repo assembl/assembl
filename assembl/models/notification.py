@@ -564,6 +564,15 @@ class NotificationDeliveryStateType(DeclEnum):
     DELIVERY_TEMPORARY_FAILURE = "DELIVERY_TEMPORARY_FAILURE", "Active notification whose delivery is delayed.  Ex:  email soft-bounce, smtp server is down, etc."
     OBSOLETED = "OBSOLETED", "Inactive notification that has been rendered useless by some event.  For example, the user has read the message the notification was about from the web interface before the notification was delivered"
     EXPIRED = "EXPIRED", "Similar to OBSOLETED:  Inactive notification that has been rendered obsolete by the mere passage of time since the first delivery attempt."
+    
+    @classmethod
+    def getNonRetryableDeliveryStates(cls):
+        return [cls.DELIVERY_IN_PROGRESS,
+                cls.DELIVERY_CONFIRMED,
+                cls.READ_CONFIRMED,
+                cls.DELIVERY_FAILURE,
+                cls.OBSOLETED,
+                cls.EXPIRED]
 
 class NotificationDeliveryConfirmationType(DeclEnum):
     """
@@ -683,7 +692,20 @@ class Notification(Base):
     @abstractmethod
     def get_notification_subject(self):
         """Typically for email"""
-        
+
+    def get_from_email_address(self):
+        from assembl.lib import config
+        # TODO:  This is unlikely to be the right email!  benoitg-2014-11-07
+        # We need to store one in the discussion
+        from_email = config.get('assembl.admin_email')
+        assert from_email
+        return from_email
+    
+    def get_to_email_address(self):
+        to_email = self.first_matching_subscription.user.get_preferred_email()
+        assert to_email
+        return to_email
+    
     def render_to_email(self):
 
         email_text_part = self.render_to_email_text_part()
@@ -709,13 +731,10 @@ class Notification(Base):
         msg['List-Subscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
         msg['List-Unsubscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
         msg['Subject'] = Header(self.get_notification_subject(), 'utf-8')
-        from assembl.lib import config
-        # TODO:  This is unlikely to be the righ email!  benoitg-2014-11-07
-        # We need to store one in the discussion
-        from_email = config.get('assembl.admin_email')
-        assert from_email
-        msg['From'] = from_email
-        msg['To'] = self.first_matching_subscription.user.get_preferred_email()
+
+
+        msg['From'] = self.get_from_email_address()
+        msg['To'] = self.get_to_email_address()
         if email_text_part:
             msg.attach(email.mime.Text.MIMEText(email_text_part, 'plain'))
         if email_html_part:

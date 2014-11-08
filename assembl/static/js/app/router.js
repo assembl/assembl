@@ -4,6 +4,7 @@ define(['backbone.marionette', 'routeManager'],
 
         var Router = Marionette.AppRouter.extend({
             controller: routeManager,
+            //Note:  This should match with assembl/lib/frontend_url.py
             appRoutes: {
                 "": "home",
                 "edition": "edition",

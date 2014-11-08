@@ -13,7 +13,9 @@ class FrontendUrls():
     def getDiscussionUrl(self):
         from pyramid.request import Request
         req = Request.blank('/', base_url=self.discussion.get_base_url())
-        return req.route_url('home', discussion_slug=self.discussion.slug)
+        #Celery didn't like this.  To revisit once we have virtual hosts
+        #return req.route_url('home', discussion_slug=self.discussion.slug)
+        return urljoin(self.discussion.get_base_url(), self.discussion.slug+'/')
     
     def getUserNotificationSubscriptionsConfigurationUrl(self):
         return urljoin(self.getDiscussionUrl(),'users/notifications')

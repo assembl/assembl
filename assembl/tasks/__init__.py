@@ -5,6 +5,7 @@ from pyramid.paster import get_appsettings
 
 from ..lib.sqla import configure_engine, get_session_maker
 from ..lib.zmqlib import configure_zmq
+from ..lib.config import set_config
 from zope.component import getGlobalSiteManager
 from ..lib.model_watcher import configure_model_watcher
 
@@ -34,6 +35,7 @@ def init_task_config():
         settings = get_appsettings(join(rootdir, 'development.ini'))
     registry = getGlobalSiteManager()
     registry.settings = settings
+    set_config(settings)
     configure(registry, current_app.main)
     config_celery_app(current_app, settings)
     _inited = True
