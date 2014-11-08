@@ -46,7 +46,13 @@ startsecs = 2
 
 [program:celery_notify]
 directory = %(here)s
-command = celery worker -l info -A assembl.tasks.notify -c 1 -b %(NOTIFY_CELERY_BROKER)s
+command = celery worker -l info -A assembl.tasks.notify -c 2 -b %(NOTIFY_CELERY_BROKER)s
+autorestart = true
+startsecs = 2
+
+[program:celery_notify_beat]
+directory = %(here)s
+command = celery -A assembl.tasks.notify beat -b %(NOTIFY_CELERY_BROKER)s
 autorestart = true
 startsecs = 2
 
