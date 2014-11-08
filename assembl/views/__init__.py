@@ -18,18 +18,20 @@ default_context = {
 TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
 
 def backbone_include(config):
-    config.add_route('home', '/')
+
     config.add_route('edition', '/edition')
     config.add_route('partners', '/partners')
     config.add_route('slug_notifications', '/notifications')
 
     config.add_route('profile', '/users/edit')
     config.add_route('user_notifications', '/users/notifications')
+    config.add_route('purl_posts', '/posts*remainder')
 
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
     config.add_route('graph_view', '/graph')
+    config.add_route('home', '/')
 
 def get_default_context(request):
     from ..auth.util import get_user

@@ -73,6 +73,12 @@ define(function (require) {
             var profile = new userProfile();
             Assembl.groupContainer.show(profile);
         },
+        
+        post: function (id) {
+          //TODO: add new behavior to show messageList Panel
+          this.restoreViews();
+          Assembl.vent.trigger('messageList:showMessageById', id);
+        },
 
         loadCurrentUser: function () {
             if (Ctx.getCurrentUserId()) {

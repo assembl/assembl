@@ -47,7 +47,7 @@ ink_css
                         <table class="twelve columns">
                           <tr>
                             <td class="six sub-columns">
-                              <img src="{{frontendUrls.getDiscussionLogoUrl()}}">
+                              <img src="{{ frontendUrls.getDiscussionLogoUrl() }}">
                             </td>
                             <td class="six sub-columns last" style="text-align:right; vertical-align:middle;">
                               <span class="template-label">{{ discussionLink }}</span>
@@ -95,7 +95,7 @@ ink_css
                             <table class="tiny-button facebook">
                               <tr>
                                 <td>
-                                  <a href="#">Reply to this message</a>
+                                  <a href="{{ frontendUrls.getPostUrl(notification.event_source_object()) }}">{{ gettext("Reply to this message") }}</a>
                                 </td>
                               </tr>
                             </table>

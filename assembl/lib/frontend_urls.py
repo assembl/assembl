@@ -1,5 +1,7 @@
 from ..models import Discussion
 from urlparse import urljoin
+import urllib
+
 class FrontendUrls():
     def __init__(self, discussion):
         assert isinstance(discussion, Discussion)
@@ -19,3 +21,6 @@ class FrontendUrls():
     def getUserNotificationSubscriptionUnsubscribeUrl(self, subscription):
         """ TODO:  Give an actual subscription URL """
         return self.getUserNotificationSubscriptionsConfigurationUrl()
+    
+    def getPostUrl(self, post):
+        return urljoin(self.getDiscussionUrl(),'posts/'+urllib.quote(post.uri(), ''))
