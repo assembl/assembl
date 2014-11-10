@@ -9,6 +9,9 @@
     {% if discussion.admin_url %}
         <br/><a href='{{ discussion.admin_url }}'><em>{{ gettext("Admin") }}</em></a>
     {% endif %}
+    {% if discussion.admin_url %}
+        <br/><a href='{{ discussion.permissions_url }}'><em>{{ gettext("Permissions") }}</em></a>
+    {% endif %}
     </span>
   </div>
   {% endfor %}

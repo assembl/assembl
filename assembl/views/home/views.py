@@ -7,6 +7,7 @@ from pyramid.security import authenticated_userid, Everyone, Authenticated
 from assembl.auth import P_SYSADMIN, R_SYSADMIN, P_ADMIN_DISC
 from assembl.models import Discussion, User
 from assembl.auth.util import discussions_with_access, user_has_permission, get_roles
+from assembl.lib.frontend_urls import FrontendUrls
 from .. import get_default_context
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
@@ -31,10 +32,13 @@ def discussion_list_view(request):
             'slug': discussion.slug
         }
         if user_has_permission(discussion.id, user_id, P_ADMIN_DISC):
-            discussion_context['admin_url'] = request.route_url('discussion_edit', discussion_id=discussion.id)
+            discussion_context['admin_url'] = FrontendUrls(
+                discussion).get_discussion_edition_url()
+            discussion_context['permissions_url'] = request.route_url(
+                'discussion_permissions', discussion_id=discussion.id)
         context['discussions'].append(discussion_context)
-        if R_SYSADMIN in roles:
-            context['discussions_admin_url'] = request.route_url('discussion_admin')
-            context['permissions_admin_url'] = request.route_url('general_permissions')
+    if R_SYSADMIN in roles:
+        context['discussions_admin_url'] = request.route_url('discussion_admin')
+        context['permissions_admin_url'] = request.route_url('general_permissions')
     context['user'] = user
     return context
