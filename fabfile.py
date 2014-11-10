@@ -257,13 +257,13 @@ def compile_stylesheets():
     execute(update_compass)
     with cd(env.projectpath):
         run('bundle exec compass compile --force', shell=True)
-        with cd('assembl/widget/card/app'):
+        with cd('assembl/static/widget/card/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
-        with cd('assembl/widget/session'):
+        with cd('assembl/static/widget/session'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
-        with cd('assembl/widget/video/app'):
+        with cd('assembl/static/widget/video/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
 
@@ -575,11 +575,11 @@ def bower_cmd(cmd, relative_path='.'):
 @task
 def bower_install():
     bower_cmd('install')
-    bower_cmd('install', 'assembl/widget/card')
-    bower_cmd('install', 'assembl/widget/session')
-    bower_cmd('install', 'assembl/widget/video')
-    bower_cmd('install', 'assembl/widget/vote')
-    bower_cmd('install', 'assembl/widget/creativity')
+    bower_cmd('install', 'assembl/static/widget/card')
+    bower_cmd('install', 'assembl/static/widget/session')
+    bower_cmd('install', 'assembl/static/widget/video')
+    bower_cmd('install', 'assembl/static/widget/vote')
+    bower_cmd('install', 'assembl/static/widget/creativity')
 
 
 @task
