@@ -445,7 +445,7 @@ class InspirationWidget(IdeaCreatingWidget):
     @classmethod
     def get_ui_endpoint_base(cls):
         # TODO: Make this configurable.
-        return "/widget/creativity/"
+        return "/static/widget/creativity/"
 
     def get_add_post_endpoint(self, idea):
         return 'local:Discussion/%d/widgets/%d/base_idea_descendants/%d/linkedposts' % (
@@ -461,7 +461,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
     @classmethod
     def get_ui_endpoint_base(cls):
         # TODO: Make this configurable.
-        return "/widget/session/"
+        return "/static/widget/session/"
 
     def notification_data(self, data):
         end = data.get('end', None)
@@ -500,7 +500,7 @@ class MultiCriterionVotingWidget(Widget):
     @classmethod
     def get_ui_endpoint_base(cls):
         # TODO: Make this configurable.
-        return "/widget/vote/"
+        return "/static/widget/vote/"
 
     def idea_data(self, user_id):
         for link in self.criteria_links:
