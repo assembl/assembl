@@ -10,6 +10,8 @@
     "AgentProfile": {
         "description": true,
         "avatar_url_base": "&external_avatar_url",
+        "name": "&display_name",
+        "real_name": "&real_name",
         "preferred_email": false
     },
     "User": {
@@ -18,9 +20,7 @@
         "last_login": true,
         "login_failures": false,
         "password": false,
-        "verified": true,
-        "name": "&display_name",
-        "real_name": "&real_name"
+        "verified": true
     },
     "Idea": {
         "longTitle": "long_title",

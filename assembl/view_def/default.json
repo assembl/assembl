@@ -13,6 +13,8 @@
     "AgentProfile": {
         "description": true,
         "avatar_url_base": "&external_avatar_url",
+        "name": "&display_name",
+        "real_name": "&real_name",
         "preferred_email": false
     },
     "User": {
@@ -22,8 +24,6 @@
         "login_failures": false,
         "password": false,
         "verified": true,
-        "name": "&display_name",
-        "real_name": "&real_name",
         "permissions": "&get_all_permissions"
     },
     "UserTemplate": {
