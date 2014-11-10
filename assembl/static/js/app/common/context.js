@@ -513,7 +513,7 @@ define(function (require) {
             var inspiration_widget_configure_url = null;
             var inspiration_widget_create_url = null;
 
-            inspiration_widget_create_url = "/widget/creativity/?admin=1#/admin/create_from_idea?idea="
+            inspiration_widget_create_url = "/static/widget/creativity/?admin=1#/admin/create_from_idea?idea="
                 + encodeURIComponent( idea_id + "?view=creativity_widget" ); // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
             returned_data["inspiration_widget_create_url"] = inspiration_widget_create_url;
 
@@ -531,14 +531,14 @@ define(function (require) {
                     var inspiration_widget_uri = inspiration_widgets[inspiration_widgets.length - 1]; // for example: "local:Widget/52"
                     console.log("inspiration_widget_uri: ", inspiration_widget_uri);
                     
-                    inspiration_widget_url = "/widget/creativity/?config="
+                    inspiration_widget_url = "/static/widget/creativity/?config="
                         + Ctx.getUrlFromUri(inspiration_widget_uri)
                         + "&target="
                         + idea_id; // example: "http://localhost:6543/widget/creativity/?config=/data/Widget/43&target=local:Idea/3#/"
                     console.log("inspiration_widget_url: ", inspiration_widget_url);
                     returned_data["inspiration_widget_url"] = inspiration_widget_url;
 
-                    inspiration_widget_configure_url = "/widget/creativity/?admin=1#/admin/configure_instance?widget_uri="
+                    inspiration_widget_configure_url = "/static/widget/creativity/?admin=1#/admin/configure_instance?widget_uri="
                         + Ctx.getUrlFromUri(inspiration_widget_uri)
                         + "&target="
                         + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"

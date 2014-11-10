@@ -587,7 +587,7 @@ creativityApp.controller('indexCtl',
                             $scope.active_modules.video.url += "#/?idea=" + $scope.target;
                         */
                        
-                        $scope.active_modules.video.url = "/widget/video/#/?";
+                        $scope.active_modules.video.url = "/static/widget/video/#/?";
                         if ($scope.config)
                             $scope.active_modules.video.url += "&config=" + $scope.config;
                         if ($scope.target)
@@ -603,7 +603,7 @@ creativityApp.controller('indexCtl',
                         $scope.active_modules.card.name = "creativityModuleTitleCards";
                         // TODO: verify URL format
                         
-                        $scope.active_modules.card.url = "/widget/card/#/?";
+                        $scope.active_modules.card.url = "/static/widget/card/#/?";
                         if ($scope.config)
                             $scope.active_modules.card.url += "&config=" + AssemblToolsService.resourceToUrl($scope.config);
                         if ($scope.target)
