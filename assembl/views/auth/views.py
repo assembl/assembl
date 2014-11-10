@@ -517,9 +517,27 @@ def user_confirm_email(request):
     localizer = request.localizer
     if not email:
         raise HTTPUnauthorized(localizer.translate(_("Wrong email token.")))
+    assert isinstance(email.profile, User)
+    user = email.profile
+    username = user.username.username if user.username else None
+    userid = user.id
+    # We do not know from which discussion the user started to log in...
+    # We have to think about this. Maybe put in the token?
+    # Send to discussion if there happens to be only one.
+    discussions = user.involved_in_discussion
+    if len(discussions) == 1:
+        location = 'home'
+        location_params = dict(discussion_slug=discussions[0].slug)
+    else:
+        location = 'discussion_list'
+        location_params = dict()
+
     if email.verified:
+        location
         raise HTTPFound(location=request.route_url(
-            'profile_user', type='id', identifier=email.profile_id))
+            location, **dict(location_params,
+            _query=dict(message=localizer.translate(_(
+                "Email <%s> already confirmed")) % (email.email,)))))
     else:
         # maybe another profile already verified that email
         other_email_account = session.query(EmailAccount).filter_by(
@@ -546,10 +564,14 @@ def user_confirm_email(request):
             userid = user.id
         if username:
             return HTTPFound(location=request.route_url(
-                'profile_user', type='u', identifier=username))
+                location, **dict(location_params,
+                _query=dict(message=localizer.translate(_(
+                    "Email <%s> confirmed")) % (email.email,)))))
         elif userid:
             return HTTPFound(location=request.route_url(
-                'profile_user', type='id', identifier=userid))
+                location, **dict(location_params,
+                _query=dict(message=localizer.translate(_(
+                    "Email <%s> confirmed")) % (email.email,)))))
         else:
             # we confirmed a profile without a user? Now what?
             raise HTTPServerError()
