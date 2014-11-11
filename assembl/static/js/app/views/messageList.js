@@ -549,8 +549,7 @@ define(function (require) {
                 //Gaby: Never declare an incremental variable "i" out of loop, it's a memory leak
                 for (var i = requestedOffsets['offsetStart']; i >= 0; i--) {
 
-                    if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === undefined ||
-                        data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
+                    if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
 
                         returnedDataOffsets['offsetStart'] = i;
                         break;
@@ -564,7 +563,7 @@ define(function (require) {
                 returnedDataOffsets['offsetEnd'] = (numMessages - 1);
             }
             else {
-                if (data_by_object[order_lookup_table[requestedOffsets['offsetEnd']]]['last_ancestor_id'] === undefined) {
+                if (data_by_object[order_lookup_table[requestedOffsets['offsetEnd']]]['last_ancestor_id'] === null) {
                     returnedDataOffsets['offsetEnd'] = requestedOffsets['offsetEnd'];
                 }
                 else {
@@ -572,7 +571,7 @@ define(function (require) {
                     //before it
 
                     for (var i = requestedOffsets['offsetEnd']; i < numMessages; i++) {
-                        if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === undefined) {
+                        if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
                             returnedDataOffsets['offsetEnd'] = i - 1;
                             break;
                         }
