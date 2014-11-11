@@ -936,7 +936,7 @@ define(function (require) {
             this.renderDefaultMessageViewDropdown();
             this.renderMessageListViewStyleDropdown();
 
-            this.newTopicView = new MessageSendView({
+            var options = {
                 'allow_setting_subject': true,
                 'send_button_label': i18n.gettext('Start a new topic in this discussion'),
                 'subject_label': i18n.gettext('Subject'),
@@ -944,7 +944,14 @@ define(function (require) {
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
                 'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
                 'messageList': that
-            });
+            };
+
+            var currentIdea = Ctx.getCurrentIdea();
+            if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
+                options.reply_idea_id = currentIdea.getId();
+            }
+
+            this.newTopicView = new MessageSendView(options);
             this.$('.messagelist-replybox').html(this.newTopicView.render().el);
 
             // Resetting the messages
