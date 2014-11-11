@@ -256,7 +256,7 @@ class Discussion(DiscussionBoundBase):
             Role).filter(Role.name == role_name).join(
             Discussion).filter(Discussion.id == self.id).first()
         if autocreate and not template:
-            # There is a template user per discussion.  If it doesn't exist yey
+            # There is a template user per discussion.  If it doesn't exist yet
             # create it.
             from .notification import (
                 NotificationCreationOrigin, NotificationSubscriptionFollowSyntheses)
@@ -270,6 +270,10 @@ class Discussion(DiscussionBoundBase):
     def get_participant_template(self):
         from ..auth import R_PARTICIPANT
         return self.get_user_template(R_PARTICIPANT, True)
+
+    def reset_participant_defaults(self):
+        for participant in self.all_participants:
+            participant.get_notification_subscriptions(self.id, True)
 
     @classmethod
     def extra_collections(cls):

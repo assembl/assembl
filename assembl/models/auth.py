@@ -555,7 +555,7 @@ class User(AgentProfile):
             return []
         return self.get_notification_subscriptions(discussion.id)
 
-    def get_notification_subscriptions(self, discussion_id):
+    def get_notification_subscriptions(self, discussion_id, reset_defaults=False):
         """the notification subscriptions for this user and discussion.
         Includes materialized subscriptions from the template."""
         from .notification import (
@@ -567,18 +567,28 @@ class User(AgentProfile):
         my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
         needed_classes = UserTemplate.get_applicable_notification_subscriptions_classes()
         missing = set(needed_classes) - my_subscriptions_classes
-        if not missing:
+        if (not missing) and not reset_defaults:
             return my_subscriptions
         discussion = Discussion.get(discussion_id)
         assert discussion
         my_roles = get_roles(self.id, discussion_id)
         subscribed = defaultdict(bool)
         for role in my_roles:
-            template = discussion.get_user_template(R_PARTICIPANT, True)
+            template = discussion.get_user_template(role, True)
             if template is None:
                 continue
             for subscription in template.get_notification_subscriptions():
                 subscribed[subscription.__class__] |= subscription.status == NotificationSubscriptionStatus.ACTIVE
+        if reset_defaults:
+            for sub in my_subscriptions[:]:
+                if (sub.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT
+                        and sub.status == NotificationSubscriptionStatus.ACTIVE
+                        and sub.__class__ in subscribed  # only actual defaults
+                        and not subscribed[sub.__class__]):
+                    self.db.delete(sub)
+                    my_subscriptions.remove(sub)
+                    my_subscriptions_classes.remove(sub.__class__)
+            missing = set(needed_classes) - my_subscriptions_classes
         defaults = []
         for cls in missing:
             active = subscribed[cls]
