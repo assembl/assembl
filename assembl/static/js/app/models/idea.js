@@ -61,10 +61,10 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                     return i18n.gettext('The root idea will not be in the synthesis');
                 }
 
-                if (Ctx.stripHtml(this.get('definition')) !== '') {
+                if (Ctx.stripHtml(this.get('definition'))) {
                     return this.get('definition');
                 } 
-                else if (Ctx.stripHtml(this.get('longTitle')) !== '') {
+                else if (Ctx.stripHtml(this.get('longTitle'))) {
                     return this.get('longTitle');
                 }
                 else {
@@ -87,13 +87,13 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                   return i18n.gettext('The root idea will never be in the synthesis');
                 }
 
-                if (Ctx.stripHtml(this.get('longTitle')) !== '') {
+                if (Ctx.stripHtml(this.get('longTitle'))) {
                   return this.get('longTitle');
                 }
-                else if (Ctx.stripHtml(this.get('shortTitle')) !== '') {
+                else if (Ctx.stripHtml(this.get('shortTitle'))) {
                   return this.get('shortTitle');
                 }
-                else if (Ctx.stripHtml(this.get('definition')) !== '') {
+                else if (Ctx.stripHtml(this.get('definition'))) {
                   return this.get('definition');
                 }
                 else {
@@ -109,13 +109,13 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
               if(this.isRootIdea()){
                 return i18n.gettext('All posts');
               }
-              else if (Ctx.stripHtml(this.get('shortTitle')) !== '') {
+              else if (Ctx.stripHtml(this.get('shortTitle'))) {
                 return this.get('shortTitle');
               }
-              else if (Ctx.stripHtml(this.get('longTitle')) !== '') {
+              else if (Ctx.stripHtml(this.get('longTitle'))) {
                 return this.get('longTitle');
               }
-              else if (Ctx.stripHtml(this.get('definition')) !== '') {
+              else if (Ctx.stripHtml(this.get('definition'))) {
                 return this.get('definition');
               }
               else {
