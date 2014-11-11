@@ -10,18 +10,18 @@
         <% } %>
 
         <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
-          <span class="ideaPanel-legend legend">{{ gettext('Description of idea') }}</span>
+          <span class="ideaPanel-legend legend">{{ gettext('Description of this idea') }}</span>
         <% } %>
 
         <% if( editing ) { %>
             <div class="ideaPanel-definition-editor"></div>
         <% } else { %>
-            <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
+            <% if (canEdit) { %>
                <% if(idea.get('definition').length){ %>
                  <div class="ideaPanel-definition js_edit-definition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
                    <%= idea.get('definition') %>
                  </div>
-               <% }else{ %>
+               <% } else { %>
                  <div class="add-description js_edit-definition">
                    <i class="icon-add"></i> {{ gettext('Add a description') }}
                  </div>

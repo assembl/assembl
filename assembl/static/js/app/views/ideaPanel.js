@@ -698,7 +698,6 @@ define(function (require) {
         },
 
         renderCKEditor: function () {
-
             var that = this,
                 area = this.$('.ideaPanel-definition-editor');
 
