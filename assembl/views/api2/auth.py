@@ -54,6 +54,8 @@ def add_local_role(request):
         for instance in instances:
             db.add(instance)
         db.flush()
+        if not first.requested:
+            first.user.get_notification_subscriptions(discussion_id, True)
         view = request.GET.get('view', None) or 'default'
         return Response(
             dumps(first.generic_json(view)),

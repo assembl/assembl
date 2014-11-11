@@ -104,6 +104,9 @@ class Discussion(DiscussionBoundBase):
             from .idea_graph_view import Synthesis
             synthesis = Synthesis(discussion=self)
             self.db.add(synthesis)
+        participant = self.db.query(Role).filter_by(name=R_PARTICIPANT).one()
+        participant_template = UserTemplate(discussion=self, for_role=participant)
+        self.db.add(participant_template)
 
     def serializable(self):
         return {
@@ -255,6 +258,7 @@ class Discussion(DiscussionBoundBase):
         template = self.db.query(UserTemplate).join(
             Role).filter(Role.name == role_name).join(
             Discussion).filter(Discussion.id == self.id).first()
+        changed = False
         if autocreate and not template:
             # There is a template user per discussion.  If it doesn't exist yet
             # create it.
@@ -263,19 +267,20 @@ class Discussion(DiscussionBoundBase):
             role = self.db.query(Role).filter_by(name=role_name).one()
             template = UserTemplate(for_role=role, discussion=self)
             self.db.add(template)
-            template.get_notification_subscriptions()
+            subs, changed = template.get_notification_subscriptions()
             self.db.flush()
-        return template
+        return template, changed
 
     def get_participant_template(self):
         from ..auth import R_PARTICIPANT
         return self.get_user_template(R_PARTICIPANT, True)
 
-    def reset_participant_default_subscriptions(self):
-        self.get_participant_template()
+    def reset_participant_default_subscriptions(self, force=True):
+        template, changed = self.get_participant_template()
         # TODO maparent: This is too slow. I need to preload subscriptions.
-        for participant in self.all_participants:
-            participant.get_notification_subscriptions(self.id, True)
+        if changed or force:
+            for participant in self.all_participants:
+                participant.get_notification_subscriptions(self.id, True)
 
     @classmethod
     def extra_collections(cls):

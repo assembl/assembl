@@ -33,6 +33,10 @@ def view_notification_collection(request):
              accept="application/json")
 def view_notification_subscription_collection(request):
     ctx = request.context
+    templates = ctx.find_collection(
+        'CollectionDefinition.user_templates')
+    if templates:
+        templates.parent_instance.reset_participant_default_subscriptions(False)
     view = request.GET.get('view', None) or ctx.get_default_view() or 'default'
     q = ctx.create_query(view == 'id_only')
     if view == 'id_only':

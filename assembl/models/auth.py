@@ -574,7 +574,7 @@ class User(AgentProfile):
         my_roles = get_roles(self.id, discussion_id)
         subscribed = defaultdict(bool)
         for role in my_roles:
-            template = discussion.get_user_template(
+            template, changed = discussion.get_user_template(
                 role, role == R_PARTICIPANT)
             if template is None:
                 continue
@@ -896,7 +896,7 @@ class UserTemplate(DiscussionBoundBase, User):
         for d in defaults:
             self.db.add(d)
         self.db.flush()
-        return chain(my_subscriptions, defaults)
+        return chain(my_subscriptions, defaults), bool(missing)
 
 
 Index("user_template", "discussion_id", "role_id")
