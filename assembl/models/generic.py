@@ -135,8 +135,9 @@ class PostSource(ContentSource):
 
     def send_post(self, post):
         """ Send a new post in the discussion to the source. """
-        raise "Source %s did not implement PostSource::send_post() "\
-            % self.__class__.__name__
+        raise NotImplementedError(
+            "Source %s did not implement PostSource::send_post()"
+            % self.__class__.__name__)
 
 
 class AnnotatorSource(ContentSource):

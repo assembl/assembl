@@ -54,6 +54,8 @@ class AbstractMailbox(PostSource):
 
     folder = Column(UnicodeText, default=u"INBOX", nullable=False)
 
+    admin_sender = Column(String)
+
     last_imported_email_uid = Column(UnicodeText)
     subject_mangling_regex = Column(UnicodeText, nullable=True)
     subject_mangling_replacement = Column(UnicodeText, nullable=True)
@@ -592,12 +594,39 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
 
         with transaction.manager:
             self.thread_mails(emails)
-        
+
     def import_content(self, only_new=True):
         #Mailbox.do_import_content(self, only_new)
         assert self.id
         import_mails.delay(self.id, only_new)
 
+    _address_match_re = re.compile(
+        r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}'
+    )
+
+    def most_common_recipient_address(self):
+        """
+        Find the most common recipient address of the contents of this emaila
+        address. This address can, in most use-cases can be considered the
+        mailing list address.
+        """
+
+        recipients = self.db.query(
+            Email.recipients,
+        ).filter(
+            Email.source_id == self.id,
+        )
+
+        addresses = defaultdict(int)
+
+        for (recipients, ) in recipients:
+            for address in self._address_match_re.findall(recipients):
+                addresses[address] += 1
+
+        if addresses:
+            addresses = addresses.items()
+            addresses.sort(key=lambda (address, count): count)
+            return addresses[-1][0]
 
 
     def send_post(self, post):
@@ -756,34 +785,6 @@ class IMAPMailbox(AbstractMailbox):
 
                 AbstractMailbox.thread_mails(emails)
                 mark_changed()
-
-    _address_match_re = re.compile(
-        r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}'
-    )
-
-    def most_common_recipient_address(self):
-        """
-        Find the most common recipient address of the contents of this emaila
-        address. This address can, in most use-cases can be considered the
-        mailing list address.
-        """
-
-        recipients = self.db.query(
-            Email.recipients,
-        ).filter(
-            Email.source_id == self.id,
-        )
-
-        addresses = defaultdict(int)
-
-        for (recipients, ) in recipients:
-            for address in self._address_match_re.findall(recipients):
-                addresses[address] += 1
-
-        if addresses:
-            addresses = addresses.items()
-            addresses.sort(key=lambda (address, count): count)
-            return addresses[-1][0]
 
     def get_send_address(self):
         """
