@@ -156,6 +156,7 @@ changes.websocket.url = http://localhost:%(changes.websocket.port)s%(changes.pre
 
 # direct for testing
 assembl.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
+
 # ZMQ model changes local socket (backend will connect to this)
 # TODO:  There are only 15 databases available in a default redis install.
 # We should use the same redis and just change the default queue in celery
@@ -168,6 +169,7 @@ assembl.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
 # /10, /12: production
 celery_tasks.imap.broker = redis://localhost:6379/0
 celery_tasks.imap.imodeleventwatcher = assembl.tasks.notification_dispatch.ModelEventWatcherCelerySender
+celery_tasks.notification_dispatch.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
 
 # UNIQUE_PER_SERVER
 # However, for running tests in development, the same socket can be used
@@ -237,7 +239,7 @@ handlers = console
 [logger_assembl]
 level = INFO
 handlers = console
-qualname = assembl, assembl_tests, nose.plugins.assembl
+qualname = assembl, assembl_tests, nose.plugins.assembl, pytest.assembl
 
 [logger_sqlalchemy]
 level = INFO
