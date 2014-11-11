@@ -19,9 +19,6 @@ define(function (require) {
         $ = require('jquery'),
         _ = require('underscore');
 
-    //2014/08/03 ghourlier, never use ? delete it ?
-    //var LONG_TITLE_ID = 'ideaPanel-longtitle';
-
     var IdeaPanel = AssemblPanel.extend({
         template: '#tmpl-ideaPanel',
         panelType: 'ideaPanel',
@@ -132,7 +129,9 @@ define(function (require) {
          */
 
         serializeData: function () {
-            console.log("ideaPanel::serializeData()");
+            if (Ctx.debugRender) {
+              console.log("ideaPanel::serializeData()");
+            }
             var subIdeas = {},
                 votable_widgets = [],
                 currentUser = Ctx.getCurrentUser(),
@@ -258,7 +257,9 @@ define(function (require) {
         },
 
         onRender: function () {
-            console.log("ideaPanel::onRender()");
+            if (Ctx.debugRender) {
+              console.log("ideaPanel::onRender()");
+            }
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
             Ctx.initTooltips(this.$el);
