@@ -4,15 +4,15 @@ from pyramid.view import view_config
 from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyramid.httpexceptions import (
-    HTTPUnauthorized, HTTPBadRequest)
+    HTTPOk, HTTPUnauthorized, HTTPBadRequest)
 
 from assembl.auth import (
-    P_READ, P_SYSADMIN)
+    P_READ, P_SYSADMIN, P_ADMIN_DISC)
 from assembl.models import (
-    NotificationSubscription, Notification)
+    NotificationSubscription, Notification, Discussion)
 from assembl.auth.util import get_permissions
 from ..traversal import CollectionContext, InstanceContext, ClassContext
-from . import JSON_HEADER
+from . import JSON_HEADER, instance_put_json
 
 
 @view_config(context=CollectionContext, renderer='json', request_method='GET',
@@ -117,3 +117,23 @@ def process_all_now(request):
     process_pending_notifications.delay()
     return Response("Celery notified to process all notifications",
                     content_type='text/plain')
+
+
+@view_config(context=InstanceContext, request_method='PUT',
+    ctx_instance_class=NotificationSubscription,
+    header=JSON_HEADER, renderer='json')
+def put_notification_request(request):
+    result = instance_put_json(request)
+    templates = request.context.find_collection(
+        'CollectionDefinition.user_templates')
+    if templates:
+        templates.parent_instance.reset_participant_default_subscriptions()
+    return result
+
+
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=Discussion, permission=P_ADMIN_DISC,
+             name="reset_default_subscriptions")
+def reset_default_subscriptions(request):
+    request.context._instance.reset_participant_default_subscriptions()
+    return HTTPOk()

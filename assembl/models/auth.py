@@ -588,7 +588,7 @@ class User(AgentProfile):
                         and not subscribed[sub.__class__]):
                     self.db.delete(sub)
                     my_subscriptions.remove(sub)
-                    my_subscriptions_classes.remove(sub.__class__)
+                    my_subscriptions_classes.discard(sub.__class__)
             missing = set(needed_classes) - my_subscriptions_classes
         defaults = []
         for cls in missing:

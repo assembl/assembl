@@ -271,7 +271,9 @@ class Discussion(DiscussionBoundBase):
         from ..auth import R_PARTICIPANT
         return self.get_user_template(R_PARTICIPANT, True)
 
-    def reset_participant_defaults(self):
+    def reset_participant_default_subscriptions(self):
+        self.get_participant_template()
+        # TODO maparent: This is too slow. I need to preload subscriptions.
         for participant in self.all_participants:
             participant.get_notification_subscriptions(self.id, True)
 
