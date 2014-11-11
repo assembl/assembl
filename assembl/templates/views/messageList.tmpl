@@ -44,6 +44,9 @@
 
   <% if (canPost) { %>
     <div class="messagelist-replybox"></div>
+    <div class="mam tac js_inspireMe hidden">
+        <a href="#" class="js_openTargetInModal js_inspireMeAnchor" data-modal-title="{{gettext('Inspire me!')}}"><i class="icon-lab"></i> {{ gettext('Inspire me!') }}</a>
+    </div>
   <% } %>
 
 </div>
@@ -51,7 +54,7 @@
 <% if (canPost) { %>
   <div class="sticky-box tac">
       <a href="#" class="js_scrollToMsgBox"><i class="icon-comment"></i> {{ gettext('React to the ongoing discussion') }}</a>
-      <span class="js_inspireMe">
+      <span class="js_inspireMe hidden">
         &nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<a href="#" class="js_openTargetInModal js_inspireMeAnchor" data-modal-title="{{gettext('Inspire me!')}}"><i class="icon-lab"></i> {{ gettext('Inspire me!') }}</a>
       </span>
   </div>

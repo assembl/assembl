@@ -121,14 +121,26 @@
       });
     } %>
 
-    {# Show creativity/inspiration widget if available
-       And show configuration link of this widget if available #}
+    {#
+      This version is commented out (we want to show the "Inspire me!" link in the Conversation panel instead of the Idea panel). 
+      Show creativity/inspiration widget if available
+      And show configuration link of this widget if available
     <% if ( canUseWidget && inspiration_widget_url ){
       print("<div class=\"dispb mls mts\">");
       print("<a href=\"" + inspiration_widget_url + "\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Inspire me!')}}\">{{gettext('Inspire me!')}}</a>");
       if ( canCreateWidgets && inspiration_widget_configure_url ){
         print(" - <a href=\"" + inspiration_widget_configure_url + "\" target=\"_blank\" class=\"js_openTargetInModal js_clearWidgetDataAssociatedToIdea\" data-modal-title=\"{{gettext('Configure this creativity widget')}}\">{{gettext('Configure this creativity widget')}}</a>");
       }
+      print("</div>");
+    } %>
+    #}
+
+    {# 
+      If available, show configuration link of the inspiration/creativity widget associated to this idea
+    #}
+    <% if ( canCreateWidgets && inspiration_widget_configure_url ){
+      print("<div class=\"dispb mls mts\">");
+      print("<a href=\"" + inspiration_widget_configure_url + "\" target=\"_blank\" class=\"js_openTargetInModal js_clearWidgetDataAssociatedToIdea\" data-modal-title=\"{{gettext('Configure the creativity widget associated to this idea')}}\">{{gettext('Configure the creativity widget associated to this idea')}}</a>");
       print("</div>");
     } %>
 

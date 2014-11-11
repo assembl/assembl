@@ -335,6 +335,7 @@ define(function (require) {
             }
 
             var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(currentIdea.getId());
+            that.ui.inspireMe.hide();
             promise.done(
                 function (data) {
                     console.log("syncWithCurrentIdea getWidgetDataAssociatedToIdeaPromise received data: ", data);
