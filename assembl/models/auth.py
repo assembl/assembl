@@ -574,7 +574,8 @@ class User(AgentProfile):
         my_roles = get_roles(self.id, discussion_id)
         subscribed = defaultdict(bool)
         for role in my_roles:
-            template = discussion.get_user_template(role, True)
+            template = discussion.get_user_template(
+                role, role == R_PARTICIPANT)
             if template is None:
                 continue
             for subscription in template.get_notification_subscriptions():
