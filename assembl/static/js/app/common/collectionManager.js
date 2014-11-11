@@ -214,6 +214,23 @@ define(function (require) {
                     if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
                         console.log("Added request for id:" + id + ", queue size is now:" + _.size(this.requests));
                     }
+                    // Each id can take up to ~40 characters.  To not exceed 
+                    // the 2048 characters unofficial limit for GET URLs, 
+                    // (IE and others), we only request up to do up to:
+                    // 2000/40 ~= 50 id's at a time
+                    if(_.size(this.requests) >= 50) {
+                      if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                        console.log("Executing request immediately, queue size is now:" + _.size(this.requests));
+                      }
+                      //TODO:  This is suboptimal, as the server can be hammered 
+                      //with concurrent requests for the same data, causing 
+                      //database contention.  Like a bit below, we should remember
+                      //how many requests are in transit, and not have more than 3
+                      
+                      //Alternatively, we could POST on a fake URL, with the url path
+                      //as the body of the request and avoid this spliting completely.
+                      this.executeRequest();
+                    }
                 },
 
                 this.executeRequest = function () {
