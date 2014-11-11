@@ -1,6 +1,6 @@
 Babel==1.3
 Beaker==1.6.4
-Chameleon==2.16
+Chameleon==2.18
 Chroma==0.2.0
 ColanderAlchemy==0.3.1
 DateTime==4.0.1
@@ -10,9 +10,9 @@ Mako==1.0.0
 MarkupSafe==0.23
 PasteDeploy==1.5.2
 PyJWT==0.3.0
-PyLD==0.6.1
+PyLD==0.6.4
 PyStemmer==1.3.0
-Pygments==1.6
+Pygments==2.0.1
 SPARQLWrapper==1.6.4
 SQLAlchemy==0.9.8
 Sphinx==1.2.3
@@ -39,12 +39,12 @@ ecdsa==0.11
 greenlet==0.4.5
 html5lib==0.999
 imaplib2==2.28.3
-isodate==0.5.0
+isodate==0.5.1
 iso8601==0.1.10
 -e git+https://github.com/maparent/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.23
-lingua==3.3
+lingua==3.6.1
 lxml==3.4.0
 meld3==1.0.0
 mock==1.0.1
@@ -53,28 +53,28 @@ paramiko==1.15.1
 pinocchio==0.4.1
 polib==1.0.5
 premailer==2.7.0
-py==1.4.25
+py==1.4.26
 pyOpenSSL==0.14
 pycparser==2.10
 pycrypto==2.6.1
 pylibmc==1.3.0
-pyparsing==2.0.2
-pyramid==1.5.1
+pyparsing==2.0.3
+pyramid==1.5.2
 pyramid-beaker==0.8
-pyramid-debugtoolbar==2.2
+pyramid-debugtoolbar==2.2.2
 pyramid-jinja2==2.3.3
 pyramid-mailer==0.13
 pyramid-mako==1.0.2
 pyramid-tm==0.7
 pytest==2.6.4
-pytest-cov==1.8.0
+pytest-cov==1.8.1
 pytest-localserver==0.3.3
 pytest-mock==0.4.0
 pytest-splinter==1.2.4
 python-memcached==1.53
 python-openid==2.2.5
 pytz==2014.7
-pyzmq==14.4.0
+pyzmq==14.4.1
 rdflib==4.1.2
 redis==2.10.3
 docutils==0.12
@@ -87,12 +87,12 @@ simplejson==3.6.5
 six==1.8.0
 -e git+https://github.com/mrjoes/sockjs-tornado.git@master#egg=sockjs_tornado
 sockjsproxy==0.7.1
-sphinx-bootstrap-theme==0.4.2
+sphinx-bootstrap-theme==0.4.3
 splinter==0.6.0
-supervisor==3.1.2
+supervisor==3.1.3
 tornado==4.0.2
 transaction==1.4.3
-translationstring==1.1
+translationstring==1.3
 uricore==0.1.2
 uwsgitop==0.8
 -e git+https://github.com/maparent/velruse.git#egg=velruse
