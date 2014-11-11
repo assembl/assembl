@@ -45,11 +45,12 @@ from pyramid.response import Response
 from pyld import jsonld
 from simplejson import dumps
 
-from ..traversal import InstanceContext, CollectionContext, ClassContext, Api2Context
+from ..traversal import (
+    InstanceContext, CollectionContext, ClassContext, Api2Context)
 from assembl.auth import P_READ, P_SYSADMIN, R_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
-from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase, NotificationSubscription
+from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase
 from assembl.lib.decl_enums import DeclEnumType
 
 FIXTURE_DIR = os.path.join(

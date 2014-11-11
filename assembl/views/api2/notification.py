@@ -4,8 +4,7 @@ from pyramid.view import view_config
 from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyramid.httpexceptions import (
-    HTTPOk, HTTPNoContent, HTTPNotFound, HTTPUnauthorized, HTTPBadRequest)
-from pyramid.response import Response
+    HTTPUnauthorized, HTTPBadRequest)
 
 from assembl.auth import (
     P_READ, P_SYSADMIN)
@@ -27,7 +26,8 @@ def view_notification_collection(request):
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
     else:
         return [i.generic_json(view) for i in q.all()]
-    
+
+
 @view_config(context=CollectionContext, renderer='json', request_method='GET',
              ctx_collection_class=NotificationSubscription, permission=P_READ,
              accept="application/json")
@@ -73,36 +73,42 @@ def notif_collection_add_json(request):
             location=first.uri_generic(first.id),
             status_code=201)
 
+
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Notification, permission=P_READ,
              accept="text/html", name="mail_html_preview")
 def mail_html_preview(request):
     return Response(request.context._instance.render_to_email_html_part(),
-                    content_type = 'text/html')
-    
+                    content_type='text/html')
+
+
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Notification, permission=P_READ,
              accept="text/html", name="mail_text_preview")
 def mail_text_preview(request):
     return Response(request.context._instance.render_to_email_text_part(),
-                    content_type = 'text/plain')
-    
+                    content_type='text/plain')
+
+
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Notification, permission=P_READ,
              accept="text/html", name="mail")
 def mail(request):
     return Response(request.context._instance.render_to_email(),
-                    content_type = 'text/plain')
-    
+                    content_type='text/plain')
+
+
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Notification, permission=P_READ,
              accept="text/plain", name="process_now")
 def process_now(request):
     from ...tasks.notify import notify
     notify.delay(request.context._instance.id)
-    return Response("Celery notified to process notification "+str(request.context._instance.id),
-                    content_type = 'text/plain')
-    
+    return Response("Celery notified to process notification " +
+                    str(request.context._instance.id),
+                    content_type='text/plain')
+
+
 @view_config(context=ClassContext, request_method='GET',
              ctx_class=Notification, permission=P_READ,
              accept="text/plain", name="process_now")
@@ -110,5 +116,4 @@ def process_all_now(request):
     from ...tasks.notify import process_pending_notifications
     process_pending_notifications.delay()
     return Response("Celery notified to process all notifications",
-                    content_type = 'text/plain')
-    
+                    content_type='text/plain')
