@@ -147,7 +147,9 @@ class NotificationSubscription(DiscussionBoundBase):
             index = True)
     user = relationship(
         User,
-        backref=backref('notification_subscriptions', order_by=creation_date)
+        backref=backref(
+            'notification_subscriptions', order_by=creation_date,
+            cascade="all, delete-orphan")
     )
 
     #allowed_transports Ex: email_bounce cannot be bounced by the same email.  For now we'll special case in code
@@ -191,12 +193,12 @@ class NotificationSubscription(DiscussionBoundBase):
         subscriptionsQuery = cls.db.query(cls).filter(cls.status==NotificationSubscriptionStatus.ACTIVE);
         if user:
             subscriptionsQuery.filter(cls.user==user)
-            
+
         for subscription in subscriptionsQuery:
             if(subscription.wouldCreateNotification(object.get_discussion_id(), verb, object)):
                 applicable_subscriptions.append(subscription)
         return applicable_subscriptions
-    
+
     @abstractmethod
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         pass
@@ -205,7 +207,7 @@ class NotificationSubscription(DiscussionBoundBase):
         """ A human readable description of this notification subscription
         Default implementation, expected to be overriden by child classes """
         return self.external_typename()
-    
+
     def update_json(self, json, user_id=Everyone):
         from ..auth.util import user_has_permission
         if self.user_id:
