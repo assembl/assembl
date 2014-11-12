@@ -46,6 +46,10 @@
       padding: 0;
     }
 
+    &.empty {
+      background: $white;
+    }
+
     .close {
       position: absolute;
       top: 0;

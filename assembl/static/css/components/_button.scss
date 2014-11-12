@@ -239,3 +239,24 @@
   line-height: 1.5;
   border-radius: 3px;
 }
+
+/*********************/
+.btn-third {
+  color: $white;
+  background-color: $green;
+}
+
+.btn-third:hover {
+  opacity: 0.8;
+  text-decoration: none;
+}
+
+.btn-third:focus {
+  outline: 0;
+}
+
+.btn-third:active,
+.btn-third.active {
+  opacity: 1;
+  outline: 0;
+}
