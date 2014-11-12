@@ -65,7 +65,7 @@ define(function (require) {
         initialize: function (options) {
             var that = this,
                 collectionManager = new CollectionManager();
-
+            that.renderIsComplete = false;
             this.renderedMessageViewsCurrent = {};
 
             this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
@@ -718,6 +718,7 @@ define(function (require) {
                 }
 
                 that.resumeAnnotatorRefresh();
+                that.renderIsComplete = true;
                 that.trigger("messageList:render_complete", "Render complete");
             });
 
@@ -912,6 +913,19 @@ define(function (require) {
         },
 
         /**
+         * Retrieves the first new message id (if any) for the current user
+         * @return Message.Model or undefined
+         */
+        findFirstUnreadMessageId: function (visitorOrderLookupTable, messageCollection) {
+          return _.find(visitorOrderLookupTable, function(messageId){
+            var is_new = messageCollection.get(messageId).get('read') === false;
+            //console.log(is_new, messageCollection.get(messageId));
+            return is_new;
+            });
+        },
+        
+        
+        /**
          * The actual rendering for the render function
          * @return {views.Message}
          */
@@ -959,14 +973,17 @@ define(function (require) {
             collectionManager.getAllMessageStructureCollectionPromise().done(
                 function (allMessageStructureCollection) {
                     that.allMessageStructureCollection = allMessageStructureCollection;
+                    var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, that.allMessageStructureCollection);
                     that.showMessages({
-                        offsetStart: 0,
-                        offsetEnd: MORE_PAGES_NUMBER
-                    })
-
-
+                      offsetStart: 0,
+                      offsetEnd: MORE_PAGES_NUMBER
+                    });
+                    if (that.currentViewStyle === that.ViewStyles.NEW_MESSAGES && first_unread_id) {
+                      //console.log('Highlighting first new message (may not be on the same page)');
+                      that.showMessageById(first_unread_id, undefined, undefined, false);
+                    }
+                    that._startPostRenderSlowCallbackProcessing();
                 })
-            this._startPostRenderSlowCallbackProcessing();
             return this;
         },
 
@@ -982,7 +999,7 @@ define(function (require) {
         onRender: function () {
             var that = this,
                 collectionManager = new CollectionManager();
-
+            this.renderIsComplete = false;
             var successCallback = function (messageStructureCollection, resultMessageIdCollection) {
                 that = that.render_real();
                 that.unblockPanel();
@@ -1623,10 +1640,8 @@ define(function (require) {
             var messageOffset;
             if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
                 (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
-                if (this.visitorViewData[messageId] != null) {
-                    // TODO: Re-thread messages
-                    //Assembl.vent.trigger('render');
-                    //return -1;
+                if (!this.visitorViewData[messageId]) {
+                  console.log("getMessageOffset: ERROR; visitor data for message "+messageId+"isn't in: ", this.visitorViewData);
                 }
                 messageOffset = this.visitorViewData[messageId].traversal_order;
             } else {
@@ -1653,58 +1668,84 @@ define(function (require) {
          * @param {Function} [callback] Optional: The callback function to call if message is found
          * @param {Boolean} shouldHighlightMessageSelected, defaults to true
          */
-        showMessageById: function (id, callback, shouldHighlightMessageSelected) {
-            var that = this,
-                selector = Ctx.format('[id="message-{0}"]', id),
-                el,
-                messageIsDisplayed = false,
-                that = this,
-                requestedOffsets,
-                collectionManager = new CollectionManager();
+        showMessageById: function (id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes) {
+          var that = this,
+          selector = Ctx.format('[id="message-{0}"]', id),
+          el,
+          messageIsInFilter = false,
+          that = this,
+          requestedOffsets,
+          collectionManager = new CollectionManager(),
+          shouldRecurse;
+          
+          //console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldRecurseMaxMoreTimes);
+          
+          shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
+          shouldOpenMessageSelected = (typeof shouldOpenMessageSelected === "undefined") ? true : shouldOpenMessageSelected;
+          shouldRecurseMaxMoreTimes = (typeof shouldRecurseMaxMoreTimes === "undefined") ? 3 : shouldRecurseMaxMoreTimes;
+          shouldRecurse = shouldRecurseMaxMoreTimes > 0;
 
-            shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
+          $.when(collectionManager.getAllMessageStructureCollectionPromise(),
+              this.currentQuery.getResultMessageIdCollectionPromise()).done(
+              function (allMessageStructureCollection, resultMessageIdCollection) {
+                  var message = allMessageStructureCollection.get(id);
 
-            $.when(collectionManager.getAllMessageStructureCollectionPromise(),
-                this.currentQuery.getResultMessageIdCollectionPromise()).done(
-                function (allMessageStructureCollection, resultMessageIdCollection) {
-                    var message = allMessageStructureCollection.get(id);
-
-                    resultMessageIdCollection.forEach(function (displayedId) {
-                        if (displayedId == id) {
-                            messageIsDisplayed = true;
-                        }
-                    });
-                    //Not entirely sure if isMessageOnscreen() is safe on first render, even inside the promise - benoitg - 2014-08-21
-                    if (messageIsDisplayed && !that.isMessageOnscreen(id)) {
-                        var success = function () {
-                            console.log("showMessageById() message " + id + " not onscreen, calling showMessageById() recursively");
-                            that.showMessageById(id, callback);
-                        };
-                        requestedOffsets = that.calculateRequestedOffsetToShowMessage(id);
-                        that.showMessages(requestedOffsets);
-                        that.listenToOnce(that, "messageList:render_complete", success);
+                  //TODO:  This should be a find, not a foreach - benoitg
+                  resultMessageIdCollection.forEach(function (displayedId) {
+                      if (displayedId === id) {
+                          //console.log("showMessageById: OK, found message in query results:", displayedId)
+                          messageIsInFilter = true;
+                      }
+                  });
+                  //Not entirely sure if isMessageOnscreen() is safe on first render, even inside the promise - benoitg - 2014-08-21
+                  if (messageIsInFilter && !that.isMessageOnscreen(id)) {
+                    if(shouldRecurse) {
+                      var success = function () {
+                          console.log("showMessageById() message " + id + " in query results but not onscreen, calling showMessageById() recursively, only once");
+                          that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, 0);
+                      };
+                      requestedOffsets = that.calculateRequestedOffsetToShowMessage(id);
+                      that.showMessages(requestedOffsets);
+                      that.listenToOnce(that, "messageList:render_complete", success);
                     }
-                    if (!messageIsDisplayed) {
-                        //The current filters might not include the message
-                        that.showAllMessages();
-                        var success = function () {
-                            console.log("showMessageById() message " + id + " not found, calling showMessageById() recursively");
-                            that.showMessageById(id, callback);
-                        };
-                        that.listenToOnce(that, "messageList:render_complete", success);
-                        return;
+                    else {
+                      console.log("showMessageById: ERROR:  Message is in query results but not in current page, and we are not allowed to recurse");
                     }
-                    var real_callback = function () {
-                        if (shouldHighlightMessageSelected) {
-                            $(selector).highlight();
-                        }
-                        if (_.isFunction(callback)) {
-                            callback();
-                        }
-                    };
+                    return;
+                  }
+                  if (!messageIsInFilter) {
+                      //The current filters might not include the message
+                    if(shouldRecurse) {
+                      that.showAllMessages();
+                      var success = function () {
+                          console.log("showMessageById() message " + id + " not in query result found, calling showMessageById() recursively");
+                          that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes-1);
+                      };
+                      that.listenToOnce(that, "messageList:render_complete", success);
+                    }
+                    else {
+                      console.log("showMessageById: ERROR:  Message is in query results but not in current page, and we are not allowed to recurse");
+                    }
+                    return;
+                  }
+                  var real_callback = function () {
+                      if (shouldHighlightMessageSelected) {
+                          $(selector).highlight();
+                      }
+                      if (_.isFunction(callback)) {
+                          callback();
+                      }
+                  };
 
-                    if (message) {
+
+                  if (message) {
+                    var animate_message = function(message) {
+                      if(shouldOpenMessageSelected) {
                         message.trigger('showBody');
+                      }
+                      //Trigerring showBody above requires the message to re-render.  Give it time
+                      
+                      setTimeout(function () {
                         el = $(selector);
                         if (el[0]) {
                             var panelOffset = that.ui.panelBody.offset().top;
@@ -1715,11 +1756,26 @@ define(function (require) {
                         } else {
                             console.log("showMessageById(): ERROR:  Message " + id + " not found in the DOM with selector: " + selector);
                         }
+                      }, 10);
+                    };
+                    
+                    if(that.renderIsComplete) {
+                      animate_message(message);
                     }
                     else {
-                        console.log("showMessageById(): ERROR:  Message " + id + " not found in collection");
+                      //console.log("showMessageById(): waiting for render to complete");
+                      that.listenToOnce(that, "messageList:render_complete", function() {
+                        //console.log("showMessageById(): render has completed, animating");
+                        animate_message(message);
+                        });
                     }
-                });
+                    
+                  }
+                  else {
+                      console.log("showMessageById(): ERROR:  Message " + id + " not found in collection");
+                  }
+                  
+              });
 
         },
 
