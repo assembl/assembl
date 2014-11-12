@@ -952,7 +952,7 @@ define(function (require) {
 
             var options = {
                 'allow_setting_subject': true,
-                'send_button_label': i18n.gettext('Start a new topic in this discussion'),
+                'send_button_label': i18n.gettext('Send'),
                 'subject_label': i18n.gettext('Subject'),
                 'body_help_message': i18n.gettext('Add a subject above and start a new topic here'),
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
