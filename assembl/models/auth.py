@@ -783,6 +783,10 @@ class LocalUserRole(DiscussionBoundBase):
             condition=cls.requested == 0,
             name=QUADNAMES.class_LocalUserRole)]
 
+    crud_permissions = CrudPermissions(
+        P_SELF_REGISTER, P_READ, P_ADMIN_DISC, P_ADMIN_DISC,
+        P_SELF_REGISTER, P_SELF_REGISTER)
+
 
 class Permission(Base):
     """A permission that a user may have"""
