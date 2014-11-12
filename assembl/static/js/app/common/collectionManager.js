@@ -337,10 +337,11 @@ define(function (require) {
                 _.each(ids, function (id) {
                     returnedModelsPromises.push(that.getMessageFullModelPromise(id));
                 });
-                //console.log("getMessageFullModelsPromise() resolving with:", returnedModels);
                 $.when.apply($, returnedModelsPromises).then(
                     function () {
-                        var args = Array.prototype.slice(arguments);
+                        var args = Array.prototype.slice.call(arguments);
+                        //console.log("getMessageFullModelsPromise() resolved promises:", returnedModelsPromises);
+                        //console.log("getMessageFullModelsPromise() resolving with:", args);
                         deferred.resolve(args);
                     },
                     function () {

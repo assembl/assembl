@@ -671,6 +671,7 @@ define(function (require) {
                 messageIdsToShow = [],
                 messageFullModelsToShowPromise;
 
+            //console.log("showMessages() called with requestedOffsets: ", requestedOffsets);
             /* The MessageFamilyView will re-fill the renderedMessageViewsCurrent
              * array with the newly calculated rendered MessageViews.
              */
@@ -1158,7 +1159,7 @@ define(function (require) {
                 isValid,
                 defer = $.Deferred(),
                 collectionManager = new CollectionManager(),
-                returnedModelsPromises = [];
+                requestedIds = [];
 
             returnedDataOffsets['offsetStart'] = i;
             returnedDataOffsets['offsetEnd'] = _.isUndefined(requestedOffsets['offsetEnd']) ? MORE_PAGES_NUMBER : requestedOffsets['offsetEnd'];
@@ -1175,13 +1176,12 @@ define(function (require) {
                     console.log("FIXME:  This should NOT happen!");
                     continue;
                 }
-                returnedModelsPromises.push(collectionManager.getMessageFullModelPromise(messageStructureModel.id));
+                requestedIds.push(messageStructureModel.id);
             }
 
-            $.when.apply($, returnedModelsPromises).then(
-                function () {
-                    var fullMessageModels = Array.prototype.slice(arguments),
-                        list = [];
+            collectionManager.getMessageFullModelsPromise(requestedIds).done(
+                function (fullMessageModels) {
+                    var list = [];
                     _.each(fullMessageModels, function (fullMessageModel) {
                         view = new MessageFamilyView({
                             model: fullMessageModel,
@@ -1190,6 +1190,7 @@ define(function (require) {
                         view.hasChildren = false;
                         list.push(view.render().el);
                     });
+                    //console.log("getRenderedMessagesFlat():  Resolving promise with:",list);
                     defer.resolve(list);
                 },
                 function () {
