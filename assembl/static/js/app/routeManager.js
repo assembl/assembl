@@ -78,6 +78,9 @@ define(function (require) {
           //TODO: add new behavior to show messageList Panel
           this.restoreViews();
           Assembl.vent.trigger('messageList:showMessageById', id);
+          //TODO: fix this horrible hack that prevents calling 
+          //showMessageById over and over.
+          window.history.pushState('object or string', 'Title', '../');
         },
 
         loadCurrentUser: function () {

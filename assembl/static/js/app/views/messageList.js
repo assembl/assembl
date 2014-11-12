@@ -980,8 +980,8 @@ define(function (require) {
                       offsetEnd: MORE_PAGES_NUMBER
                     });
                     if (that.currentViewStyle === that.ViewStyles.NEW_MESSAGES && first_unread_id) {
-                      //console.log('Highlighting first new message (may not be on the same page)');
-                      that.showMessageById(first_unread_id, undefined, undefined, false);
+                      console.log('DISABLED (BUGGY):  Highlighting first new message (may not be on the same page)');
+                      //that.showMessageById(first_unread_id, undefined, undefined, false);
                     }
                     that._startPostRenderSlowCallbackProcessing();
                 })
@@ -1679,7 +1679,7 @@ define(function (require) {
           collectionManager = new CollectionManager(),
           shouldRecurse;
           
-          //console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldRecurseMaxMoreTimes);
+          console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldRecurseMaxMoreTimes);
           
           shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
           shouldOpenMessageSelected = (typeof shouldOpenMessageSelected === "undefined") ? true : shouldOpenMessageSelected;
@@ -1719,7 +1719,7 @@ define(function (require) {
                     if(shouldRecurse) {
                       that.showAllMessages();
                       var success = function () {
-                          console.log("showMessageById() message " + id + " not in query result found, calling showMessageById() recursively");
+                          console.log("showMessageById() message " + id + " not in query results, calling showMessageById() recursively after clearing filters");
                           that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes-1);
                       };
                       that.listenToOnce(that, "messageList:render_complete", success);
@@ -1741,12 +1741,13 @@ define(function (require) {
 
                   if (message) {
                     var animate_message = function(message) {
-                      if(shouldOpenMessageSelected) {
-                        message.trigger('showBody');
-                      }
                       //Trigerring showBody above requires the message to re-render.  Give it time
-                      
+                      console.log("showMessageById(): TODO:  Waiting for 2 seconds is really bad, need to retry periodically up to a few seconds");
                       setTimeout(function () {
+                        if(shouldOpenMessageSelected) {
+                          //console.log("showMessageById(): sending showBody to message", message.id);
+                          message.trigger('showBody');
+                        }
                         el = $(selector);
                         if (el[0]) {
                             var panelOffset = that.ui.panelBody.offset().top;
@@ -1757,7 +1758,7 @@ define(function (require) {
                         } else {
                             console.log("showMessageById(): ERROR:  Message " + id + " not found in the DOM with selector: " + selector);
                         }
-                      }, 10);
+                      }, 2000);
                     };
                     
                     if(that.renderIsComplete) {
