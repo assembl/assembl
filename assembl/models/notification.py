@@ -696,10 +696,7 @@ class Notification(Base):
         """Typically for email"""
 
     def get_from_email_address(self):
-        from assembl.lib import config
-        # TODO:  This is unlikely to be the right email!  benoitg-2014-11-07
-        # We need to store one in the discussion
-        from_email = config.get('assembl.admin_email')
+        from_email = self.first_matching_subscription.discussion.admin_source.admin_sender
         assert from_email
         return from_email
     

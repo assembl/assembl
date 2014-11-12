@@ -50,6 +50,16 @@ class Discussion(DiscussionBoundBase):
     introduction = Column(UnicodeText)
     introductionDetails = Column(UnicodeText)
 
+    @property
+    def admin_source(self):
+        """ Return the admin source for this discussion.  Used by notifications
+        Very naive temporary implementation, to be revised with a proper relationship later """
+        from .mail import AbstractMailbox
+        for source in self.sources:
+            if isinstance(source, AbstractMailbox):
+                return source
+        raise ValueError("No source of type AbstractMailbox found to serve as admin source")
+
 
     def read_post_ids(self, user_id):
         from .post import Post
