@@ -5,6 +5,20 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             template: '#tmpl-navBar',
             tagName: 'nav',
             className: 'navbar navbar-default',
+            initialize: function () {
+
+                var that = this,
+                    collectionManager = new CollectionManager();
+
+                this.roles = new Backbone.Model();
+
+                $.when(collectionManager.getLocalRoleCollectionPromise()).then(
+                    function (allRole) {
+                        that.roles = allRole.models;
+                        that.render()
+                    });
+
+            },
             ui: {
                 currentLocal: '.js_setLocale',
                 groups: '.js_addGroup',
@@ -19,9 +33,11 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 'click @ui.simpleInterface': 'switchToSimpleInterface',
                 'click @ui.joinDiscussion': 'joinDiscussion'
             },
+
             serializeData: function () {
                 return {
-                    "Ctx": Ctx
+                    'Ctx': Ctx,
+                    'Roles': this.roles
                 }
             },
 
@@ -160,22 +176,23 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     cancelEl: '.close, .btn-cancel',
                     initialize: function () {
                         this.$('.bbm-modal').addClass('popin');
+
                     },
                     events: {
                         'click .js_subscribe': 'subscription'
                     },
-
                     subscription: function () {
 
                         if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
 
                             $.ajax({
                                 type: 'POST',
+                                contentType: 'application/json; charset=utf-8',
                                 url: 'http://localhost:6543/data/Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/local_roles',
-                                data: {
+                                data: JSON.stringify({
                                     role: 'r:participant',
                                     discussion: 'local:Discussion/' + Ctx.getDiscussionId()
-                                },
+                                }),
                                 success: function (response, text) {
 
                                     console.log('success', response, text);

@@ -19,7 +19,9 @@
   <div class="gr">
     <div class="gu gu-1of2">
       {% if user %}
-        <a href="#" class="btn btn-primary btn-xs js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
+        <% if( _.isEmpty(Roles) ){ %>
+          <a href="#" class="btn btn-primary btn-xs js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
+        <% } %>
       {% else %}
         {% if request.current_route_path() != "/login" %}
             {% if request.current_route_path() != "/register" %}
@@ -29,7 +31,7 @@
       {% endif %}
     </div>
     <div class="gu gu-last">
-      <div class="connexion">
+      <div class="connexion fr">
         {% if user %}
           <div class="avatar img-rounded fl ptxs">
             <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>

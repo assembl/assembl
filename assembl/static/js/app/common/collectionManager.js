@@ -16,7 +16,8 @@ define(function (require) {
         $ = require('jquery'),
         Storage = require('objects/storage'),
         Types = require('utils/types'),
-        i18n = require('utils/i18n');
+        i18n = require('utils/i18n'),
+        LocalRole = require('models/roles');
 
     /**
      * @class CollectionManager
@@ -110,6 +111,12 @@ define(function (require) {
         _allNotificationsUserCollection: undefined,
         _allNotificationsUserCollectionPromise: undefined,
 
+
+        /**
+         *
+         * */
+        _allLocalRoleCollection: undefined,
+        _allLocalRoleCollectionPromise: undefined,
 
         /**
          * Returns the collection from the giving object's @type .
@@ -218,18 +225,18 @@ define(function (require) {
                     // the 2048 characters unofficial limit for GET URLs, 
                     // (IE and others), we only request up to do up to:
                     // 2000/40 ~= 50 id's at a time
-                    if(_.size(this.requests) >= 50) {
-                      if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                        console.log("Executing request immediately, queue size is now:" + _.size(this.requests));
-                      }
-                      //TODO:  This is suboptimal, as the server can be hammered 
-                      //with concurrent requests for the same data, causing 
-                      //database contention.  Like a bit below, we should remember
-                      //how many requests are in transit, and not have more than 3
-                      
-                      //Alternatively, we could POST on a fake URL, with the url path
-                      //as the body of the request and avoid this spliting completely.
-                      this.executeRequest();
+                    if (_.size(this.requests) >= 50) {
+                        if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                            console.log("Executing request immediately, queue size is now:" + _.size(this.requests));
+                        }
+                        //TODO:  This is suboptimal, as the server can be hammered
+                        //with concurrent requests for the same data, causing
+                        //database contention.  Like a bit below, we should remember
+                        //how many requests are in transit, and not have more than 3
+
+                        //Alternatively, we could POST on a fake URL, with the url path
+                        //as the body of the request and avoid this spliting completely.
+                        this.executeRequest();
                     }
                 },
 
@@ -531,6 +538,26 @@ define(function (require) {
                 deferred.resolve(collection);
             }
             return this._allGroupSpecsCollectionPromise;
+        },
+
+        getLocalRoleCollectionPromise: function () {
+            var that = this,
+                deferred = $.Deferred();
+
+            if (this._allLocalRoleCollectionPromise === undefined) {
+                this._allLocalRoleCollection = new LocalRole.Collection();
+                this._allLocalRoleCollection.collectionManager = this;
+                this._allLocalRoleCollectionPromise = this._allLocalRoleCollection.fetch();
+                this._allLocalRoleCollectionPromise.done(function () {
+                    deferred.resolve(that._allLocalRoleCollection);
+                });
+            }
+            else {
+                this._allLocalRoleCollectionPromise.done(function () {
+                    deferred.resolve(that._allLocalRoleCollection);
+                });
+            }
+            return deferred.promise();
         }
     });
 
