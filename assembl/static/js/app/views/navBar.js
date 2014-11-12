@@ -9,13 +9,15 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 currentLocal: '.js_setLocale',
                 groups: '.js_addGroup',
                 expertInterface: '.js_switchToExpertInterface',
-                simpleInterface: '.js_switchToSimpleInterface'
+                simpleInterface: '.js_switchToSimpleInterface',
+                joinDiscussion: '.js_joinDiscussion'
             },
             events: {
                 'click @ui.currentLocal': 'setLocale',
                 'click @ui.groups': 'addGroup',
                 'click @ui.expertInterface': 'switchToExpertInterface',
-                'click @ui.simpleInterface': 'switchToSimpleInterface'
+                'click @ui.simpleInterface': 'switchToSimpleInterface',
+                'click @ui.joinDiscussion': 'joinDiscussion'
             },
             serializeData: function () {
                 return {
@@ -148,11 +150,51 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
                 });
 
-                var modalView = new Modal();
+                Assembl.slider.show(new Modal());
+            },
 
-                Assembl.slider.show(modalView)
+            joinDiscussion: function () {
+                var Modal = Backbone.Modal.extend({
+                    template: _.template($('#tmpl-joinDiscussion').html()),
+                    className: 'group-modal popin-wrapper modal-joinDiscussion',
+                    cancelEl: '.close, .btn-cancel',
+                    initialize: function () {
+                        this.$('.bbm-modal').addClass('popin');
+                    },
+                    events: {
+                        'click .js_subscribe': 'subscription'
+                    },
 
-                //$('#slider').html(modalView.render().el);
+                    subscription: function () {
+
+                        if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
+
+                            $.ajax({
+                                type: 'POST',
+                                url: 'http://localhost:6543/data/Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/local_roles',
+                                data: {
+                                    role: 'r:participant',
+                                    discussion: 'local:Discussion/' + Ctx.getDiscussionId()
+                                },
+                                success: function (response, text) {
+
+                                    console.log('success', response, text);
+
+                                },
+                                error: function (request, status, error) {
+
+                                    console.log('error', request, status, error);
+
+                                }
+
+                            })
+
+                        }
+                    }
+                });
+
+                Assembl.slider.show(new Modal());
+
             }
 
         });

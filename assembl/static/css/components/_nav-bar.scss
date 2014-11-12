@@ -38,6 +38,7 @@
   }
 
   .navbar-right {
+    width: 350px;
     float: right;
     .connexion {
       padding: 0 10px;
@@ -79,6 +80,9 @@
         }
       }
     }
+    .joinDiscussion {
+      margin-top: 7px;
+    }
   }
 }
 
@@ -113,5 +117,16 @@
     padding: 0;
     line-height: 40px;
     color: #FFFFFF;
+  }
+}
+
+.modal-joinDiscussion {
+  text-align: center;
+  .icon-discuss {
+    color: $green;
+    font-size: 300%;
+  }
+  .content {
+
   }
 }
