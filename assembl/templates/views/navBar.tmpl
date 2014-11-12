@@ -17,15 +17,15 @@
 </div>
 <div class="navbar-right">
   <div class="gr">
-    <div class="gu gu-1of2">
+    <div class="gu gu-4of2">
       {% if user %}
         <% if( _.isEmpty(Roles) ){ %>
-          <a href="#" class="btn btn-primary btn-xs js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
+          <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
         <% } %>
       {% else %}
         {% if request.current_route_path() != "/login" %}
             {% if request.current_route_path() != "/register" %}
-                <a href="/login?next_view={{request.current_route_path()}}" class="btn btn-primary btn-xs joinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
+                <a href="/login?next_view={{request.current_route_path()}}" class="btn btn-primary btn-sm joinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
             {% endif %}
         {% endif %}
       {% endif %}
