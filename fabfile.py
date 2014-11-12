@@ -145,7 +145,7 @@ def reloadapp():
         print(cyan('Asking supervisor to restart %(projectname)s' % env))
         run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
     else:
-        venvcmd("supervisorctl restart celery_imap changes_router")
+        venvcmd("supervisorctl restart celery_imap changes_router celery_notification_dispatch celery_notify celery_notify_beat")
         if env.uses_uwsgi:
             venvcmd("supervisorctl restart prod:uwsgi")
     """ This will log everyone out, hopefully the code is now resilient enough
