@@ -182,6 +182,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                         'click .js_subscribe': 'subscription'
                     },
                     subscription: function () {
+                        var that = this;
 
                         if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
 
@@ -194,9 +195,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                     discussion: 'local:Discussion/' + Ctx.getDiscussionId()
                                 }),
                                 success: function (response, text) {
-
-                                    console.log('success', response, text);
-
+                                    that.triggerSubmit();
                                 },
                                 error: function (request, status, error) {
 
