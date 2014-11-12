@@ -11,13 +11,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     collectionManager = new CollectionManager();
 
                 this.roles = new Backbone.Model();
-
-                $.when(collectionManager.getLocalRoleCollectionPromise()).then(
-                    function (allRole) {
-                        that.roles = allRole.models;
-                        that.render()
-                    });
-
+                if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
+                    $.when(collectionManager.getLocalRoleCollectionPromise()).then(
+                        function (allRole) {
+                            that.roles = allRole.models;
+                            that.render()
+                        });
+                }
             },
             ui: {
                 currentLocal: '.js_setLocale',
@@ -185,11 +185,11 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                         var that = this;
 
                         if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-
+                            // TODO ghourlier: Pourquoi ne pas utiliser backbone?
                             $.ajax({
                                 type: 'POST',
                                 contentType: 'application/json; charset=utf-8',
-                                url: 'http://localhost:6543/data/Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/local_roles',
+                                url: '/data/Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/local_roles',
                                 data: JSON.stringify({
                                     role: 'r:participant',
                                     discussion: 'local:Discussion/' + Ctx.getDiscussionId()
