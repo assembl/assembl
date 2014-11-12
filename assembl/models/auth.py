@@ -542,7 +542,41 @@ class User(AgentProfile):
             def get_default_view(self):
                 return "extended"
 
-        return {'notification_subscriptions': NotificationSubscriptionCollection(cls)}
+        class LocalRoleCollection(CollectionDefinition):
+            def __init__(self, cls):
+                super(LocalRoleCollection, self).__init__(
+                    cls, User.local_roles.property)
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+
+                query = super(
+                    LocalRoleCollection, self).decorate_query(
+                    query, last_alias, parent_instance, ctx)
+                discussion = ctx.get_instance_of_class(Discussion)
+                if discussion is not None:
+                    query = query.filter(last_alias.discussion_id == discussion.id)
+                return query
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
+                super(LocalRoleCollection,
+                      self).decorate_instance(instance, parent_instance, assocs, user_id,
+                    ctx, kwargs)
+
+            def contains(self, parent_instance, instance):
+                if not super(LocalRoleCollection, self).contains(
+                        parent_instance, instance):
+                    return False
+                # Don't I need the context to get the discussion? Rats!
+                return True
+
+            def get_default_view(self):
+                return "default"
+
+        return {
+            'notification_subscriptions': NotificationSubscriptionCollection(cls),
+            'local_roles': LocalRoleCollection(cls)}
 
     def get_notification_subscriptions_for_current_discussion(self):
         "CAN ONLY BE CALLED FROM API V2"
