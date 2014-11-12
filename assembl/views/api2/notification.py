@@ -12,20 +12,14 @@ from assembl.models import (
     NotificationSubscription, Notification, Discussion)
 from assembl.auth.util import get_permissions
 from ..traversal import CollectionContext, InstanceContext, ClassContext
-from . import JSON_HEADER, instance_put_json
+from . import JSON_HEADER, instance_put_json, collection_view
 
 
 @view_config(context=CollectionContext, renderer='json', request_method='GET',
              ctx_collection_class=Notification, permission=P_READ,
              accept="application/json")
 def view_notification_collection(request):
-    ctx = request.context
-    view = request.GET.get('view', None) or ctx.get_default_view() or 'default'
-    q = ctx.create_query(view == 'id_only')
-    if view == 'id_only':
-        return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
-    else:
-        return [i.generic_json(view) for i in q.all()]
+    return collection_view(request, 'default')
 
 
 @view_config(context=CollectionContext, renderer='json', request_method='GET',
@@ -37,12 +31,7 @@ def view_notification_subscription_collection(request):
         'CollectionDefinition.user_templates')
     if templates:
         templates.parent_instance.reset_participant_default_subscriptions(False)
-    view = request.GET.get('view', None) or ctx.get_default_view() or 'default'
-    q = ctx.create_query(view == 'id_only')
-    if view == 'id_only':
-        return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
-    else:
-        return [i.generic_json(view) for i in q.all()]
+    return collection_view(request, 'default')
 
 
 @view_config(context=CollectionContext, request_method='POST',

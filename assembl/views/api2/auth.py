@@ -7,11 +7,12 @@ from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError)
 
 from assembl.auth import (
-    P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST, R_PARTICIPANT)
+    P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST, P_READ,
+    R_PARTICIPANT)
 from assembl.models import (User, Discussion, LocalUserRole)
 from assembl.auth.util import get_permissions
 from ..traversal import (CollectionContext, InstanceContext)
-from . import FORM_HEADER, JSON_HEADER, instance_put, collection_add
+from . import (FORM_HEADER, JSON_HEADER, collection_view)
 
 
 @view_config(
@@ -112,3 +113,10 @@ def use_json_header_for_LocalUserRole_POST(request):
     header=FORM_HEADER)
 def use_json_header_for_LocalUserRole_PUT(request):
     raise HTTPNotFound()
+
+
+@view_config(context=CollectionContext, renderer='json', request_method='GET',
+             ctx_collection_class=LocalUserRole, permission=P_READ,
+             accept="application/json")
+def view_localuserrole_collection(request):
+    return collection_view(request, 'default')

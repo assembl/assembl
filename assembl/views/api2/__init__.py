@@ -106,9 +106,9 @@ def instance_view(request):
 
 @view_config(context=CollectionContext, renderer='json',
              request_method='GET', permission=P_READ)
-def collection_view(request):
+def collection_view(request, default_view='id_only'):
     ctx = request.context
-    view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
+    view = request.GET.get('view', None) or ctx.get_default_view() or default_view
     q = ctx.create_query(view == 'id_only')
     if view == 'id_only':
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
