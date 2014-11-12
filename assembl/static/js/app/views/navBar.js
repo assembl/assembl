@@ -170,6 +170,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             },
 
             joinDiscussion: function () {
+
+                var self = this;
+
                 var Modal = Backbone.Modal.extend({
                     template: _.template($('#tmpl-joinDiscussion').html()),
                     className: 'group-modal popin-wrapper modal-joinDiscussion',
@@ -195,6 +198,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                     discussion: 'local:Discussion/' + Ctx.getDiscussionId()
                                 }),
                                 success: function (response, text) {
+                                    self.ui.joinDiscussion.css('visibility', 'hidden');
                                     that.triggerSubmit();
                                 },
                                 error: function (request, status, error) {
