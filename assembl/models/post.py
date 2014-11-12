@@ -111,6 +111,12 @@ class Post(Content):
     def get_body(self):
         return self.body.strip()
 
+    def get_body_as_html(self):
+        if self.get_body_mime_type == 'text/html':
+            return self.body
+        else:
+            return '<pre>%s</pre>' % self.body
+
     def get_body_preview(self):
         body = self.get_body().strip()
         target_len = 120

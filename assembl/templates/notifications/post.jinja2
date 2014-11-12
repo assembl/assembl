@@ -76,7 +76,7 @@ ink_css
                       <table class="twelve columns">
                         <tr>
                           <td>
-                            {{ notification.event_source_object().body }}
+                            {{ notification.event_source_object().get_body_as_html() }}
                           </td>
                           <td class="expander"></td>
                         </tr>
