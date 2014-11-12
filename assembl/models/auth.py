@@ -64,18 +64,21 @@ class AgentProfile(Base):
         'with_polymorphic': '*'
     }
 
-    def get_preferred_email(self):
+    def get_preferred_email_account(self):
         if inspect(self).attrs.email_accounts.loaded_value is NO_VALUE:
-            email = self.db.query(EmailAccount.email).filter_by(
+            account = self.db.query(EmailAccount).filter_by(
                 profile_id=self.id).order_by(
                 EmailAccount.verified.desc(),
                 EmailAccount.preferred.desc()).first()
-            if email:
-                return email[0]
+            if account:
+                return account
         elif self.email_accounts:
             accounts = self.email_accounts[:]
             accounts.sort(key=lambda e: (not e.verified, not e.preferred))
-            return accounts[0].email
+            return accounts[0]
+
+    def get_preferred_email(self):
+        return self.get_preferred_email_account().email
 
     def real_name(self):
         if not self.name:

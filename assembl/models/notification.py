@@ -593,7 +593,8 @@ class NotificationClasses():
     ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_IDEA = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_IDEA"
     ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_EXTRACT = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_EXTRACT"
     ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_USERACCOUNT = "ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_USERACCOUNT"
-
+class UnverifiedEmailException(Exception):
+    pass
 class Notification(Base):
     """
     A notification
@@ -699,9 +700,15 @@ class Notification(Base):
         from_email = self.first_matching_subscription.discussion.admin_source.admin_sender
         assert from_email
         return from_email
-    
+
     def get_to_email_address(self):
-        to_email = self.first_matching_subscription.user.get_preferred_email()
+        """
+        :raises: UnverifiedEmailException: If the prefered email isn't validated
+        """
+        prefered_email_account = self.first_matching_subscription.user.get_preferred_email_account()
+        if not prefered_email_account.verified:
+            raise UnverifiedEmailException("Email account for email "+ prefered_email_account.email +"is not verified")
+        to_email = prefered_email_account.email
         assert to_email
         return to_email
     

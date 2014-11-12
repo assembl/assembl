@@ -22,7 +22,7 @@ notify_celery_app._preconf = {"CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE}
 watcher = None
 
 def process_notification(notification):
-    from ..models.notification import Notification, NotificationDeliveryStateType
+    from ..models.notification import Notification, NotificationDeliveryStateType, UnverifiedEmailException
     import smtplib, socket
     from assembl.lib import config
     
@@ -31,11 +31,12 @@ def process_notification(notification):
     if notification.delivery_state in NotificationDeliveryStateType.getNonRetryableDeliveryStates():
         sys.stderr.write("Refusing to process notification "+str(notification.id)+" because it's delivery state is: "+notification.delivery_state)
         return
-    email_str = notification.render_to_email()
-    #sys.stderr.write(email_str)
-    mail_host = config.get('mail.host')
-    assert mail_host
     try:
+        email_str = notification.render_to_email()
+        #sys.stderr.write(email_str)
+        mail_host = config.get('mail.host')
+        assert mail_host
+
         smtp_connection = smtplib.SMTP(
             mail_host
         )
@@ -52,15 +53,18 @@ def process_notification(notification):
                 
         notification.delivery_state = NotificationDeliveryStateType.DELIVERY_IN_PROGRESS
         smtp_connection.quit()
-    except (smtplib.SMTPConnectError, socket.timeout, socket.error, smtplib.SMTPHeloError) as exept:
-        sys.stderr.write("Temporary failure: "+repr(exept))
+    except UnverifiedEmailException as e:
+        sys.stderr.write("Not sending to unverified email: "+repr(e))
         notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
-    except smtplib.SMTPRecipientsRefused as exept:
+    except (smtplib.SMTPConnectError, socket.timeout, socket.error, smtplib.SMTPHeloError) as e:
+        sys.stderr.write("Temporary failure: "+repr(e))
+        notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
+    except smtplib.SMTPRecipientsRefused as e:
         notification.delivery_state = NotificationDeliveryStateType.DELIVERY_FAILURE
-        sys.stderr.write("Recepients refused: "+repr(exept))
-    except smtplib.SMTPSenderRefused as exept:
+        sys.stderr.write("Recepients refused: "+repr(e))
+    except smtplib.SMTPSenderRefused as e:
         notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
-        sys.stderr.write("Invalid configuration! :"+repr(exept))
+        sys.stderr.write("Invalid configuration! :"+repr(e))
 
     mark_changed()
     sys.stderr.write("process_notification finished processing %d, state is now %s" % (notification.id, notification.delivery_state))
