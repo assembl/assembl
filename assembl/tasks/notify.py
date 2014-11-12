@@ -21,15 +21,25 @@ notify_celery_app._preconf = {"CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE}
 
 watcher = None
 
+
 def process_notification(notification):
-    from ..models.notification import Notification, NotificationDeliveryStateType, UnverifiedEmailException
-    import smtplib, socket
+    from ..models.notification import (
+        NotificationDeliveryStateType, UnverifiedEmailException)
+    import smtplib
+    import socket
     from assembl.lib import config
-    
+
     assert notification
-    sys.stderr.write("process_notification called with notification %d, state was %s"%(notification.id, notification.delivery_state))
-    if notification.delivery_state in NotificationDeliveryStateType.getNonRetryableDeliveryStates():
-        sys.stderr.write("Refusing to process notification "+str(notification.id)+" because it's delivery state is: "+notification.delivery_state)
+    sys.stderr.write(
+        "process_notification called with notification %d, state was %s" % (
+            notification.id, notification.delivery_state))
+    if notification.delivery_state in \
+            NotificationDeliveryStateType.getNonRetryableDeliveryStates():
+        sys.stderr.write(
+            "Refusing to process notification "
+            + str(notification.id)
+            + " because it's delivery state is: "
+            + str(notification.delivery_state))
         return
     try:
         email_str = notification.render_to_email()
@@ -50,13 +60,15 @@ def process_notification(notification):
             sys.stderr.write("Some but not all recipients failed:")
             for failed_recipient, errors in smtp_retval:
                 sys.stderr.write(repr(failed_recipient), repr(errors))
-                
+
         notification.delivery_state = NotificationDeliveryStateType.DELIVERY_IN_PROGRESS
         smtp_connection.quit()
     except UnverifiedEmailException as e:
         sys.stderr.write("Not sending to unverified email: "+repr(e))
         notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
-    except (smtplib.SMTPConnectError, socket.timeout, socket.error, smtplib.SMTPHeloError) as e:
+    except (smtplib.SMTPConnectError,
+            socket.timeout, socket.error,
+            smtplib.SMTPHeloError) as e:
         sys.stderr.write("Temporary failure: "+repr(e))
         notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
     except smtplib.SMTPRecipientsRefused as e:
@@ -67,12 +79,15 @@ def process_notification(notification):
         sys.stderr.write("Invalid configuration! :"+repr(e))
 
     mark_changed()
-    sys.stderr.write("process_notification finished processing %d, state is now %s" % (notification.id, notification.delivery_state))
+    sys.stderr.write(
+        "process_notification finished processing %d, state is now %s"
+        % (notification.id, notification.delivery_state))
+
 
 @notify_celery_app.task(ignore_result=False)
 def notify(id):
     """ Can be triggered by 
-     http://localhost:6543/data/Discussion/6/all_users/2/notifications/12/process_now """
+    http://localhost:6543/data/Discussion/6/all_users/2/notifications/12/process_now """
     init_task_config()
     from ..models.notification import Notification
     sys.stderr.write("notify called with "+str(id))
@@ -80,18 +95,22 @@ def notify(id):
         notification = Notification.get(id)
         assert notification
         process_notification(notification)
-        
+
 
 @notify_celery_app.task(ignore_result=False)
 def process_pending_notifications():
     """ Can be triggered by http://localhost:6543/data/Notification/process_now """
     init_task_config()
-    from ..models.notification import Notification, NotificationDeliveryStateType
+    from ..models.notification import (
+        Notification, NotificationDeliveryStateType)
     sys.stderr.write("process_pending_notifications called")
     with transaction.manager:
-        retryable_notifications = Notification.db.query(Notification).filter(Notification.delivery_state not in NotificationDeliveryStateType.getNonRetryableDeliveryStates())
+        retryable_notifications = Notification.db.query(Notification).filter(
+            Notification.delivery_state not in
+            NotificationDeliveryStateType.getNonRetryableDeliveryStates())
         for notification in retryable_notifications:
             process_notification(notification)
+
 
 def includeme(config):
     config_celery_app(notify_celery_app, config.registry.settings)
