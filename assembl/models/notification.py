@@ -794,11 +794,14 @@ class NotificationOnPostCreated(NotificationOnPost):
         return NotificationOnPost.event_source_object(self)
     
     def render_to_email_html_part(self):
+        from premailer import Premailer
         ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
         ink_css = open(ink_css_path)
         assert ink_css
         template = jinja_env.get_template('notifications/post.jinja2')
-        return template.render(subscription=self.first_matching_subscription,
-                               notification=self,
-                               frontendUrls = FrontendUrls(self.first_matching_subscription.discussion),
-                               ink_css=ink_css.read())
+        html = template.render(subscription=self.first_matching_subscription,
+                    notification=self,
+                    frontendUrls = FrontendUrls(self.first_matching_subscription.discussion),
+                    ink_css=ink_css.read(),
+                    )
+        return Premailer(html).transform()
