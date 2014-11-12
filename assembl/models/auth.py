@@ -78,7 +78,8 @@ class AgentProfile(Base):
             return accounts[0]
 
     def get_preferred_email(self):
-        return self.get_preferred_email_account().email
+        if self.get_preferred_email_account() is not None:
+            return self.get_preferred_email_account().email
 
     def real_name(self):
         if not self.name:
