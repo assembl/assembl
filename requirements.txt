@@ -48,7 +48,7 @@ lingua==3.6.1
 lxml==3.4.0
 meld3==1.0.0
 mock==1.0.1
-oauthlib==0.6.3
+oauthlib==0.7.1
 paramiko==1.15.1
 pinocchio==0.4.1
 polib==1.0.5
