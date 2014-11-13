@@ -19,3 +19,11 @@ Actions (not strictly REST, but usefull for debugging):
 /process_now:  Notify the celery_notify celery task to try processing the notification immediately
 A global equivalent exists for all notifications:
 http://localhost:6543/data/Notification/process_now
+
+Get all posts for a discussion:
+http://localhost:6543/api/v1/discussion/1/posts
+You can append a view, such as ?view=id_only
+
+Frontend notes:
+Specific messages are adressed with urls such as 
+http://localhost:6543/jacklayton/posts/local%3AContent%2F16

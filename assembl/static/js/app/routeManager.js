@@ -77,7 +77,13 @@ define(function (require) {
         post: function (id) {
           //TODO: add new behavior to show messageList Panel
           this.restoreViews();
-          Assembl.vent.trigger('messageList:showMessageById', id);
+
+          setTimeout(function () {
+            //TODO: fix this horrible hack
+            //We really need to address panels explicitely
+            Assembl.vent.trigger("navigation:selected", 'debate');
+            Assembl.vent.trigger('messageList:showMessageById', id);
+          }, 1000);
           //TODO: fix this horrible hack that prevents calling 
           //showMessageById over and over.
           window.history.pushState('object or string', 'Title', '../');
