@@ -493,7 +493,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 //
 .message-replybox {
   .messageSend-body {
-    height: 75px; //2px to compensate borders
+    height: 75px;
   }
   padding: {
     right: 0px;
@@ -502,12 +502,6 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 }
 
 /* ------------------- Start of message family section ---------------------- */
-
-// @for $i from 1 through 30 {
-//     .message[data-message-level="#{$i}"] {                                                                                                                    c
-//         padding-left: ((21px * $i) + 5px) - 21px;
-//     }
-// }
 
 // The arrow
 // ------------
