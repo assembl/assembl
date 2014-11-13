@@ -186,10 +186,10 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     cancelEl: '.close, .btn-cancel',
                     initialize: function () {
                         this.$('.bbm-modal').addClass('popin');
-
                     },
                     events: {
-                        'click .js_subscribe': 'subscription'
+                        'click .js_subscribe': 'subscription',
+                        'click .js_close': 'closeModal'
                     },
                     subscription: function () {
                         var that = this;
@@ -206,17 +206,21 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                 }),
                                 success: function (response, text) {
                                     self.ui.joinDiscussion.css('visibility', 'hidden');
+                                    self._store.removeItem('needJoinDiscussion');
                                     that.triggerSubmit();
                                 },
                                 error: function (request, status, error) {
-
+                                    self._store.removeItem('needJoinDiscussion');
                                     console.log('error', request, status, error);
-
                                 }
 
                             })
 
                         }
+                    },
+
+                    closeModal: function () {
+                        self._store.removeItem('needJoinDiscussion');
                     }
                 });
 
@@ -225,9 +229,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             },
 
             initPopinDiscussion: function () {
-                if (this._store.getItem('needJoinDiscussion') &&
-                    _.isEmpty(this.roles)) {
+                var needPopIn = this._store.getItem('needJoinDiscussion');
 
+                if (needPopIn && _.isEmpty(this.roles.attributes)) {
                     this.joinDiscussion();
                 } else {
                     this._store.removeItem('needJoinDiscussion');
