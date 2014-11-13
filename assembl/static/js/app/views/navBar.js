@@ -199,7 +199,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                             $.ajax({
                                 type: 'POST',
                                 contentType: 'application/json; charset=utf-8',
-                                url: 'http://localhost:6543/data/Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/local_roles',
+                                url: '/data/Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/local_roles',
                                 data: JSON.stringify({
                                     role: 'r:participant',
                                     discussion: 'local:Discussion/' + Ctx.getDiscussionId()
