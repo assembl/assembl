@@ -25,6 +25,7 @@ from assembl.models import (
     Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action,
     IdeaRelatedPostLink, Email)
 import uuid
+from assembl.lib import config
 from jwzthreading import restrip_pat
 
 posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
@@ -347,7 +348,7 @@ def create_post(request):
 
     post_constructor_args = {
         'discussion': discussion,
-        'message_id': uuid.uuid1().urn,
+        'message_id': uuid.uuid1().hex+"@"+config.get('public_hostname'),
         'creator_id': user_id,
         'subject': subject,
         'body': html if html else message
