@@ -753,7 +753,7 @@ class Notification(Base):
         msg['Date'] = email.Utils.formatdate()
 
         if isinstance(self.event_source_object(), Post):
-            msg['Message-ID'] = self.event_source_object().message_id
+            msg['Message-ID'] = "<"+self.event_source_object().message_id+">"
             if self.event_source_object().parent:
                 msg['In-Reply-To'] = self.event_source_object().parent.message_id
         else:
