@@ -145,11 +145,16 @@ class Idea(Tombstonable, DiscussionBoundBase):
 
     @property
     def widget_add_post_endpoint(self):
-        return {
+        # HACK. Review consequences after test.
+        inherited = dict()
+        for p in self.parents:
+            inherited.update(p.widget_add_post_endpoint)
+        inherited.update({
             widget.uri(): widget.get_add_post_endpoint(self)
             for widget in self.widgets
             if getattr(widget, 'get_add_post_endpoint', None)
-        }
+        })
+        return inherited
 
     def get_all_ancestors(self):
         """ Get all ancestors of this idea by following source links.
