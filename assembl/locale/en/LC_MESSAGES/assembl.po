@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-11-12 14:03+0100\n"
+"POT-Creation-Date: 2014-11-13 14:15-0500\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -543,7 +543,7 @@ msgid "Are you sure you want to empty your entire clipboard?"
 msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:79
-#: assembl/templates/views/navigation.tmpl:21
+#: assembl/templates/views/navigation.tmpl:23
 msgid "Synthesis"
 msgstr ""
 
@@ -553,6 +553,10 @@ msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:243
 msgid "Synthesis published!"
+msgstr ""
+
+#: assembl/static/js/app/views/admin/adminPartners.js:67
+msgid "your partners has been posted"
 msgstr ""
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:107
@@ -599,7 +603,7 @@ msgstr ""
 
 #: assembl/templates/discussion_list.jinja2:22
 #: assembl/templates/discussion_list.jinja2:29
-#: assembl/templates/views/navBar.tmpl:80
+#: assembl/templates/views/navBar.tmpl:82
 msgid "Sign in"
 msgstr ""
 
@@ -844,11 +848,11 @@ msgid ""
 "underline;\">update your browser</span>."
 msgstr ""
 
-#: assembl/templates/notifications/post.jinja2:98
+#: assembl/templates/notifications/post.jinja2:101
 msgid "Reply to this message"
 msgstr ""
 
-#: assembl/templates/notifications/post.jinja2:116
+#: assembl/templates/notifications/post.jinja2:119
 #, python-format
 msgid ""
 "You are receiving this because you are %(notificationConfigLink)s to "
@@ -856,11 +860,11 @@ msgid ""
 "notification when:"
 msgstr ""
 
-#: assembl/templates/notifications/post.jinja2:118
+#: assembl/templates/notifications/post.jinja2:121
 msgid "subscribed"
 msgstr ""
 
-#: assembl/templates/notifications/post.jinja2:125
+#: assembl/templates/notifications/post.jinja2:128
 msgid "Unsubscribe"
 msgstr ""
 
@@ -1132,9 +1136,8 @@ msgstr ""
 msgid "Close panel"
 msgstr ""
 
-#: assembl/templates/views/ideaList.tmpl:41
-#: assembl/templates/views/ideaList.tmpl:56
-#: assembl/templates/views/navigation.tmpl:13
+#: assembl/templates/views/ideaList.tmpl:43
+#: assembl/templates/views/ideaList.tmpl:60
 msgid "Add idea"
 msgstr ""
 
@@ -1379,22 +1382,22 @@ msgstr ""
 msgid "Switch to expert mode"
 msgstr ""
 
-#: assembl/templates/views/navBar.tmpl:22
-#: assembl/templates/views/navBar.tmpl:26
+#: assembl/templates/views/navBar.tmpl:23
+#: assembl/templates/views/navBar.tmpl:28
 msgid "subscribe to discussion"
 msgstr ""
 
-#: assembl/templates/views/navBar.tmpl:45
+#: assembl/templates/views/navBar.tmpl:47
 msgid "Edit your profile"
 msgstr ""
 
-#: assembl/templates/views/navBar.tmpl:49
+#: assembl/templates/views/navBar.tmpl:51
 #: assembl/templates/views/profile.tmpl:9
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:9
 msgid "notifications"
 msgstr ""
 
-#: assembl/templates/views/navBar.tmpl:52
+#: assembl/templates/views/navBar.tmpl:54
 msgid "Sign out"
 msgstr ""
 
@@ -1515,24 +1518,24 @@ msgstr ""
 msgid "Currently you will be informed when :"
 msgstr ""
 
-#: assembl/views/api/post.py:58 assembl/views/api/post.py:331
+#: assembl/views/api/post.py:59 assembl/views/api/post.py:332
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr ""
 
-#: assembl/views/api/post.py:116
+#: assembl/views/api/post.py:117
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:123
+#: assembl/views/api/post.py:124
 msgid "Getting non-orphan posts isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:165
+#: assembl/views/api/post.py:166
 msgid "You must be logged in to view which posts are read"
 msgstr ""
 
-#: assembl/views/api/post.py:314
+#: assembl/views/api/post.py:315
 msgid "Your message is empty"
 msgstr ""
 
