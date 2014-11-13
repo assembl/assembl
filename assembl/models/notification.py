@@ -31,11 +31,32 @@ from .auth import (User, Everyone, P_ADMIN_DISC)
 from .discussion import Discussion
 from .post import Post, SynthesisPost
 from jinja2 import Environment, PackageLoader
+from email import (charset as Charset)
+from email.mime.text import MIMEText
 from gettext import gettext, ngettext
 _ = gettext
 
 jinja_env = Environment(loader=PackageLoader('assembl', 'templates'), extensions=['jinja2.ext.i18n'])
 jinja_env.install_gettext_callables(gettext, ngettext, newstyle=True)
+
+# Don't BASE64-encode UTF-8 messages so that we avoid unwanted attention from
+# some spam filters.
+utf8_charset = Charset.Charset('utf-8')
+utf8_charset.body_encoding = None # Python defaults to BASE64
+
+class SafeMIMEText(MIMEText):
+    def __init__(self, text, subtype, charset):
+        self.encoding = charset
+        if charset == 'utf-8':
+            # Unfortunately, Python < 3.5 doesn't support setting a Charset instance
+            # as MIMEText init parameter (http://bugs.python.org/issue16324).
+            # We do it manually and trigger re-encoding of the payload.
+            MIMEText.__init__(self, text, subtype, None)
+            del self['Content-Transfer-Encoding']
+            self.set_payload(text, utf8_charset)
+            self.replace_header('Content-Type', 'text/%s; charset="%s"' % (subtype, charset))
+        else:
+            MIMEText.__init__(self, text, subtype, charset)
 
 class NotificationSubscriptionClasses(DeclEnum):
     #System notifications (can't unsubscribe)
@@ -747,9 +768,9 @@ class Notification(Base):
         msg['From'] = self.get_from_email_address()
         msg['To'] = self.get_to_email_address()
         if email_text_part:
-            msg.attach(email.mime.Text.MIMEText(email_text_part, 'plain'))
+            msg.attach(SafeMIMEText(email_text_part.encode('utf-8'), 'plain', 'utf-8'))
         if email_html_part:
-            msg.attach(email.mime.Text.MIMEText(email_html_part, 'html'))
+            msg.attach(SafeMIMEText(email_html_part.encode('utf-8'), 'html', 'utf-8'))
         
         return msg.as_string()
 

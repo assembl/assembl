@@ -118,7 +118,7 @@ class Post(Content):
         if self.get_body_mime_type == 'text/html':
             return self.body
         else:
-            return '<pre>%s</pre>' % self.body
+            return '<span style="white-space: pre-wrap">%s</div>' % self.body
 
     def get_body_preview(self):
         body = self.get_body().strip()

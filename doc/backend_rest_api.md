@@ -5,12 +5,12 @@ Uses the generic api
 Get user notifications:
 
 All notifications, for this user, this discussion: 
-http://localhost:6543/data/Discussion/6/all_users/2/
+http://localhost:6543/data/Discussion/6/all_users/2/notification
 
 A specific notification:
-http://localhost:6543/data/Discussion/6/all_users/2/
+http://localhost:6543/data/Discussion/6/all_users/2/notification/1
 
-Specific formats:
+Specific formats, append:
 /mail:  Raw email
 /mail_html_preview: Preview the html part of the notification mail (if any)
 /mail_text_preview: Preview the plain text part of the notification mail (if any)
