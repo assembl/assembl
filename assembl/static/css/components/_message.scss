@@ -493,7 +493,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 //
 .message-replybox {
   .messageSend-body {
-    height: $avatarSize+2px; //2px to compensate borders
+    height: 75px; //2px to compensate borders
   }
   padding: {
     right: 0px;
