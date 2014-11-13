@@ -739,36 +739,61 @@ class IMAPMailbox(AbstractMailbox):
         mailbox.select(mbox.folder)
 
         command = "ALL"
-
+        
+        email_ids = None
         if only_new and mbox.last_imported_email_uid:
             command = "(UID %s:*)" % mbox.last_imported_email_uid
-
-        search_status, search_result = mailbox.uid('search', None, command)
-
-        email_ids = search_result[0].split()
-
-        if only_new and mbox.last_imported_email_uid:
+            
+            search_status, search_result = mailbox.uid('search', None, command)
+            #print "UID searched with: "+ command + ", got result "+repr(search_status)+" and found "+repr(search_result)
+            email_ids = search_result[0].split()
+            #print email_ids
+            
+        if only_new and search_status == 'OK' and email_ids[0] == mbox.last_imported_email_uid:
+            # Note:  the email_ids[0]==mbox.last_imported_email_uid test is
+            # necessary beacuse according to https://tools.ietf.org/html/rfc3501
+            # seq-range like "3291:* includes the UID of the last message in
+            # the mailbox, even if that value is less than 3291."
+            
             # discard the first message, it should be the last imported email.
             del email_ids[0]
+        else:
+            # Either:
+            # a) we don't import only new messages or
+            # b) the message with mbox.last_imported_email_uid hasn't been found
+            #    (may have been deleted)
+            # In this case we request all messages and rely on duplicate 
+            # detection
+            command = "ALL"
+            search_status, search_result = mailbox.uid('search', None, command)
+            #print "UID searched with: "+ command + ", got result "+repr(search_status)+" and found "+repr(search_result)
+            assert search_status == 'OK'
+            email_ids = search_result[0].split()
 
         def import_email(mailbox_obj, email_id):
             session = mailbox_obj.db()
+            #print "running fetch for message: "+email_id
             status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
+            assert status == 'OK'
+            #print repr(message_data)
             for response_part in message_data:
                 if isinstance(response_part, tuple):
                     message_string = response_part[1]
-
+            assert message_string
             (email_object, dummy, error) = mailbox_obj.parse_email(message_string)
             if error:
                 raise Exception(error)
             session.add(email_object)
-            mailbox_obj.last_imported_email_uid = \
-                email_ids[len(email_ids)-1]
+            #print "Setting mailbox_obj.last_imported_email_uid to "+email_id
+            mailbox_obj.last_imported_email_uid = email_id
             transaction.commit()
             mailbox_obj = AbstractMailbox.get(mailbox_obj.id)
 
         if len(email_ids):
+            print "Processing messages from IMAP: %d "% (len(email_ids))
             new_emails = [import_email(mbox, email_id) for email_id in email_ids]
+        else:
+            print "No IMAP messages to process"
 
         discussion_id = mbox.discussion_id
         mailbox.close()
