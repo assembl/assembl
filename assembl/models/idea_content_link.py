@@ -237,8 +237,9 @@ class Extract(IdeaContentPositiveLink):
                 name=QUADNAMES.oa_hasBody,
                 condition=cls.idea_id != None),
             QuadMapPatternS(
-                Content.iri_class().apply(cls.content_id),
-                ASSEMBL.postExtractRelatedToIdea,
+                #Content.iri_class().apply(cls.content_id),
+                cls.specific_resource_iri.apply(cls.id),
+                ASSEMBL.resourceExpressesIdea,
                 Idea.iri_class().apply(cls.idea_id),
                 name=QUADNAMES.assembl_postExtractRelatedToIdea,
                 condition=cls.idea_id != None),
