@@ -186,6 +186,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     cancelEl: '.close, .btn-cancel',
                     initialize: function () {
                         this.$('.bbm-modal').addClass('popin');
+
                     },
                     events: {
                         'click .js_subscribe': 'subscription'
@@ -194,26 +195,27 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                         var that = this;
 
                         if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-                            // TODO ghourlier: Pourquoi ne pas utiliser backbone?
+
                             $.ajax({
                                 type: 'POST',
                                 contentType: 'application/json; charset=utf-8',
-                                url: '/data/Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/local_roles',
+                                url: 'http://localhost:6543/data/Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/local_roles',
                                 data: JSON.stringify({
                                     role: 'r:participant',
                                     discussion: 'local:Discussion/' + Ctx.getDiscussionId()
                                 }),
                                 success: function (response, text) {
                                     self.ui.joinDiscussion.css('visibility', 'hidden');
-                                    self._store.removeItem('needJoinDiscussion');
                                     that.triggerSubmit();
                                 },
                                 error: function (request, status, error) {
-                                    self._store.removeItem('needJoinDiscussion');
+
                                     console.log('error', request, status, error);
 
                                 }
+
                             })
+
                         }
                     }
                 });
