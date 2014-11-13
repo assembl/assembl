@@ -55,7 +55,10 @@ class Post(Content):
 
     ancestry = Column(String, default="")
 
-    parent_id = Column(Integer, ForeignKey('post.id'))
+    parent_id = Column(Integer, ForeignKey(
+        'post.id',
+        ondelete='CASCADE',
+        onupdate='SET NULL'))
     children = relationship(
         "Post",
         foreign_keys=[parent_id],
