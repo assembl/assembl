@@ -60,7 +60,7 @@ def test_notification_follow_synthesis(test_session,
     assert notification_count == initial_notification_count + 1, "The synthesis post should have matched and created a notification"
 
 def test_notification_follow_all_messages(test_session, 
-        discussion, participant1_user, reply_post_2, test_app, root_post_1, synthesis_post_1):
+        discussion, participant1_user, reply_post_2, test_app, root_post_1, synthesis_post_1, discussion2_root_post_1):
     
     test_session.flush()
     subscription = NotificationSubscriptionFollowAllMessages(
@@ -75,10 +75,16 @@ def test_notification_follow_all_messages(test_session,
     dispatcher.processPostCreated(reply_post_2.id)
     notification_count = test_session.query(Notification).count() 
     assert notification_count == initial_notification_count + 1
-    #Check thas subclasses are still caught
+    
+    #Check that subclasses are still caught
     dispatcher.processPostCreated(synthesis_post_1.id)
     notification_count = test_session.query(Notification).count() 
-    assert notification_count == initial_notification_count + 2
+    assert notification_count == initial_notification_count + 2, "A post with a subclass should have been caught"
+    
+    #Smoke test that other discussion's post do not leak 
+    dispatcher.processPostCreated(discussion2_root_post_1.id)
+    notification_count = test_session.query(Notification).count() 
+    assert notification_count == initial_notification_count + 2, "A post from another discussion should NOT have been caught"
     
 def test_notification_follow_direct_replies(test_session, 
         discussion, participant1_user,  participant2_user, root_post_1, reply_post_1, reply_post_2, test_app):

@@ -104,6 +104,16 @@ def discussion(request, test_session, test_app_no_perm):
         test_session.delete(d)
     return d
 
+@pytest.fixture(scope="function")
+def discussion2(request, test_session, test_app_no_perm):
+    from assembl.models import Discussion
+    d = Discussion(topic=u"Second discussion", slug="testdiscussion2")
+    test_session.add(d)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(d)
+    return d
 
 @pytest.fixture(scope="function")
 def admin_user(request, test_session):
@@ -223,6 +233,23 @@ def root_post_1(request, participant1_user, discussion, test_session):
     from assembl.models import Post
     p = Post(
         discussion=discussion, creator=participant1_user,
+        subject=u"a root post", body=u"post body",
+        type="post", message_id="msg1")
+    test_session.add(p)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(p)
+    return p
+
+@pytest.fixture(scope="function")
+def discussion2_root_post_1(request, participant1_user, discussion2, test_session):
+    """
+    From participant1_user
+    """
+    from assembl.models import Post
+    p = Post(
+        discussion=discussion2, creator=participant1_user,
         subject=u"a root post", body=u"post body",
         type="post", message_id="msg1")
     test_session.add(p)

@@ -211,7 +211,9 @@ class NotificationSubscription(DiscussionBoundBase):
         override this with a more optimal implementation
         """
         applicable_subscriptions = []
-        subscriptionsQuery = cls.db.query(cls).filter(cls.status==NotificationSubscriptionStatus.ACTIVE);
+        subscriptionsQuery = cls.db.query(cls)
+        subscriptionsQuery = subscriptionsQuery.filter(cls.status==NotificationSubscriptionStatus.ACTIVE);
+        subscriptionsQuery = subscriptionsQuery.filter(cls.discussion_id==discussion_id);
         if user:
             subscriptionsQuery.filter(cls.user==user)
 
@@ -433,7 +435,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
         return gettext("A periodic synthesis of the discussion is posted by the moderator")
 
     def wouldCreateNotification(self, discussion_id, verb, object):
-        return (verb == CrudVerbs.CREATE) & isinstance(object, SynthesisPost)
+        return (verb == CrudVerbs.CREATE) and isinstance(object, SynthesisPost) and discussion_id == object.get_discussion_id()
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         from ..tasks.notify import notify
@@ -460,7 +462,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
         return _("Any message is posted to the discussion")
     
     def wouldCreateNotification(self, discussion_id, verb, object):
-        return (verb == CrudVerbs.CREATE) & isinstance(object, Post)
+        return (verb == CrudVerbs.CREATE) and isinstance(object, Post) and discussion_id == object.get_discussion_id()
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
@@ -490,6 +492,7 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
     def wouldCreateNotification(self, discussion_id, verb, object):
         return ( (verb == CrudVerbs.CREATE)
                  and isinstance(object, Post)
+                 and discussion_id == object.get_discussion_id()
                  and object.parent is not None
                  and object.parent.creator == self.user
                  )
@@ -542,7 +545,7 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
             for userId, applicableInstances in applicableInstancesByUser.iteritems():
                 if(len(applicableInstances) > 0):
                     applicableInstances.sort(cmp=lambda x,y: cmp(x.priority, y.priority))
-                    applicableInstances[0].process(objectInstance.get_discussion_id, verb, objectInstance, applicableInstances[1:])
+                    applicableInstances[0].process(objectInstance.get_discussion_id(), verb, objectInstance, applicableInstances[1:])
 
 
     def processPostCreated(self, id):
