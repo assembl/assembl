@@ -7,6 +7,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             className: 'navbar navbar-default',
             initialize: function () {
 
+                this._store = window.localStorage;
+
                 var that = this,
                     collectionManager = new CollectionManager();
 
@@ -15,23 +17,28 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     $.when(collectionManager.getLocalRoleCollectionPromise()).then(
                         function (allRole) {
                             that.roles = allRole.models;
-                            that.render()
+                            that.render();
                         });
                 }
+
+                this.initPopinDiscussion();
+
             },
             ui: {
                 currentLocal: '.js_setLocale',
                 groups: '.js_addGroup',
                 expertInterface: '.js_switchToExpertInterface',
                 simpleInterface: '.js_switchToSimpleInterface',
-                joinDiscussion: '.js_joinDiscussion'
+                joinDiscussion: '.js_joinDiscussion',
+                needJoinDiscussion: '.js_needJoinDiscussion'
             },
             events: {
                 'click @ui.currentLocal': 'setLocale',
                 'click @ui.groups': 'addGroup',
                 'click @ui.expertInterface': 'switchToExpertInterface',
                 'click @ui.simpleInterface': 'switchToSimpleInterface',
-                'click @ui.joinDiscussion': 'joinDiscussion'
+                'click @ui.joinDiscussion': 'joinDiscussion',
+                'click @ui.needJoinDiscussion': 'needJoinDiscussion'
             },
 
             serializeData: function () {
@@ -179,7 +186,6 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     cancelEl: '.close, .btn-cancel',
                     initialize: function () {
                         this.$('.bbm-modal').addClass('popin');
-
                     },
                     events: {
                         'click .js_subscribe': 'subscription'
@@ -199,22 +205,37 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                 }),
                                 success: function (response, text) {
                                     self.ui.joinDiscussion.css('visibility', 'hidden');
+                                    self._store.removeItem('needJoinDiscussion');
                                     that.triggerSubmit();
                                 },
                                 error: function (request, status, error) {
-
+                                    self._store.removeItem('needJoinDiscussion');
                                     console.log('error', request, status, error);
 
                                 }
-
                             })
-
                         }
                     }
                 });
 
                 Assembl.slider.show(new Modal());
 
+            },
+
+            initPopinDiscussion: function () {
+                if (this._store.getItem('needJoinDiscussion') &&
+                    _.isEmpty(this.roles)) {
+
+                    this.joinDiscussion();
+                } else {
+                    this._store.removeItem('needJoinDiscussion');
+                }
+            },
+
+            needJoinDiscussion: function () {
+                if (!this._store.getItem('needJoinDiscussion')) {
+                    this._store.setItem('needJoinDiscussion', true);
+                }
             }
 
         });

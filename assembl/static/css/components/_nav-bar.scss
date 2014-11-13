@@ -38,7 +38,8 @@
   }
 
   .navbar-right {
-    width: 350px;
+    width: 400px;
+    min-width: 400px;
     float: right;
     .connexion {
       padding: 0 10px;
@@ -81,7 +82,7 @@
       }
     }
     .joinDiscussion {
-      margin-top: 7px;
+      margin-top: 3px;
     }
   }
 }

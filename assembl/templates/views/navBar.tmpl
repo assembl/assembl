@@ -25,7 +25,7 @@
       {% else %}
         {% if request.current_route_path() != "/login" %}
             {% if request.current_route_path() != "/register" %}
-                <a href="/login?next_view={{request.current_route_path()}}" class="btn btn-primary btn-sm joinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
+                <a href="/login?next_view={{request.current_route_path()}}" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
             {% endif %}
         {% endif %}
       {% endif %}
