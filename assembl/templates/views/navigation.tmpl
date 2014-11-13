@@ -9,11 +9,13 @@
   </li>
   <li>
     <a href="#" class="nav js_navigation" data-view="debate"><i class="icon-discuss btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Debate') }}
+      {#
       <% if (canAdd) { %>
-      <span id="ideaList-addbutton" class="btn btn-xs fr js_addIdeaFromIdeaList iconbutton" data-toggle="tooltip" data-placement="top" title="{{ gettext('Add idea') }}">
+      <span class="js_ideaList-addbutton" class="btn btn-xs fr js_addIdeaFromIdeaList iconbutton" data-toggle="tooltip" data-placement="top" title="{{ gettext('Add idea') }}">
         <i class="icon-add-2"></i>
       </span>
       <% } %>
+      #}
     </a>
     <div class="second-level debate"></div>
   </li>

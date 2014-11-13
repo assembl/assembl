@@ -122,9 +122,6 @@
             i:not(.icon-arrowleft) {
               color: $white;
             }
-            #ideaList-addbutton {
-              visibility: visible;
-            }
           }
           i {
             font-size: 22px;
@@ -136,10 +133,6 @@
           }
           .icon-arrowleft {
             font-size: 14px;
-          }
-
-          #ideaList-addbutton {
-            visibility: hidden;
           }
         }
         > a:first-child {
