@@ -76,6 +76,9 @@ ink_css
                       <table class="twelve columns">
                         <tr>
                           <td>
+                            <img style="margin: 0 10px 10px 0;" src="{{ frontendUrls.get_agentprofile_avatar_url(notification.event_source_object().creator, 40) }}">
+                            <em>{{ notification.event_source_object().creator.name }}</em>
+                            <hr style="clear: both">
                             {{ notification.event_source_object().get_body_as_html() }}
                           </td>
                           <td class="expander"></td>

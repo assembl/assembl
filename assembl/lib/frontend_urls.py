@@ -35,3 +35,7 @@ class FrontendUrls():
     def get_discussion_edition_url(self):
         return urljoin(
             self.getDiscussionUrl(), 'edition')
+
+    def get_agentprofile_avatar_url(self, profile, pixelSize):
+        return urljoin(
+            self.discussion.get_base_url(), profile.external_avatar_url()+str(pixelSize))
