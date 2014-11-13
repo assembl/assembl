@@ -295,7 +295,8 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
         Integer, ForeignKey("post.id",
             ondelete='CASCADE', onupdate='CASCADE'))
 
-    post = relationship("Post")
+    post = relationship("Post", backref=backref(
+        "subscriptions_on_post", cascade="all, delete-orphan"))
 
     def followed_object(self):
         return self.post
@@ -324,7 +325,8 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
         Integer, ForeignKey("idea.id",
             ondelete='CASCADE', onupdate='CASCADE'))
 
-    idea = relationship("Idea")
+    idea = relationship("Idea", backref=backref(
+        "subscriptions_on_idea", cascade="all, delete-orphan"))
 
     def followed_object(self):
         return self.idea
@@ -353,7 +355,8 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
         Integer, ForeignKey("extract.id",
             ondelete='CASCADE', onupdate='CASCADE'))
 
-    extract = relationship("Extract")
+    extract = relationship("Extract", backref=backref(
+        "subscriptions_on_extract", cascade="all, delete-orphan"))
 
     def followed_object(self):
         return self.extract
@@ -382,7 +385,8 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
         Integer, ForeignKey("user.id",
             ondelete='CASCADE', onupdate='CASCADE'))
 
-    on_user = relationship("User", foreign_keys=[on_user_id])
+    on_user = relationship("User", foreign_keys=[on_user_id], backref=backref(
+        "subscriptions_on_user", cascade="all, delete-orphan"))
 
     def followed_object(self):
         return self.user
@@ -399,13 +403,14 @@ class CrudVerbs():
     UPDATE = "UPDATE"
     DELETE = "DELETE"
 
+
 class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
     priority = 1
     unsubscribe_allowed = True
 
     def get_human_readable_description(self):
         return gettext("A periodic synthesis of the discussion is posted by the moderator")
-    
+
     def wouldCreateNotification(self, discussion_id, verb, object):
         return (verb == CrudVerbs.CREATE) & isinstance(object, SynthesisPost)
 
@@ -775,7 +780,8 @@ class NotificationOnPost(Notification):
              onupdate='CASCADE'),
         nullable = False)
 
-    post = relationship(Post)
+    post = relationship(Post, backref=backref(
+        "notifications_on_post", cascade="all, delete-orphan"))
 
     @abstractmethod
     def event_source_object(self):
