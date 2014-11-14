@@ -4,12 +4,12 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
         urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/" + Ctx.getCurrentUserId() + "/local_roles"),
         defaults: {
             'requested': false,
-            'discussion': "",
-            'role': "",
-            'user': "",
-            '@id': "",
-            '@type': "",
-            '@view': ""
+            'discussion': null,
+            'role': null,
+            'user': null,
+            '@id': null,
+            '@type': null,
+            '@view': null
         }
 
     });

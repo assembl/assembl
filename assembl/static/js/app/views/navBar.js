@@ -1,5 +1,5 @@
-define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'objects/viewsFactory', 'backbone.modal', 'backbone.marionette.modals'],
-    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, viewsFactory) {
+define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'objects/viewsFactory', 'models/roles', 'backbone.modal', 'backbone.marionette.modals'],
+    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, viewsFactory, RolesModel) {
 
         var navBar = Marionette.LayoutView.extend({
             template: '#tmpl-navBar',
@@ -196,26 +196,21 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
                         if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
 
-                            $.ajax({
-                                type: 'POST',
-                                contentType: 'application/json; charset=utf-8',
-                                url: '/data/Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/local_roles',
-                                data: JSON.stringify({
-                                    role: 'r:participant',
-                                    discussion: 'local:Discussion/' + Ctx.getDiscussionId()
-                                }),
-                                success: function (response, text) {
+                            var LocalRolesUser = new RolesModel.Model({
+                                role: 'r:participant',
+                                discussion: 'local:Discussion/' + Ctx.getDiscussionId()
+                            });
+
+                            LocalRolesUser.save(null, {
+                                success: function (model, resp) {
                                     self.ui.joinDiscussion.css('visibility', 'hidden');
                                     self._store.removeItem('needJoinDiscussion');
                                     that.triggerSubmit();
                                 },
-                                error: function (request, status, error) {
-                                    self._store.removeItem('needJoinDiscussion');
-                                    console.log('error', request, status, error);
+                                error: function (model, resp) {
+                                    console.log('error', resp);
                                 }
-
                             })
-
                         }
                     },
 
