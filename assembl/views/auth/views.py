@@ -140,16 +140,18 @@ def assembl_profile(request):
         user_id = profile.id
         redirect = False
         username = request.params.get('username', '').strip()
-        if username and username != profile.username.username:
+        if username and (
+                profile.username is None or username != profile.username.username):
             # check if exists
             if session.query(Username).filter_by(username=username).count():
                 errors.append(localizer.translate(_(
                     'The username %s is already used')) % (username,))
             else:
                 old_username = profile.username
-                # free existing username
-                session.delete(old_username)
-                session.flush()
+                if old_username is not None:
+                    # free existing username
+                    session.delete(old_username)
+                    session.flush()
                 # add new username
                 session.add(Username(username=username, user=profile))
 
