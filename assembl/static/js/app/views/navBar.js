@@ -43,8 +43,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
             serializeData: function () {
                 return {
-                    'Ctx': Ctx,
-                    'Roles': this.roles
+                    Ctx: Ctx,
+                    Roles: this.roles
                 }
             },
 
