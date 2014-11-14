@@ -40,6 +40,8 @@ def get_default_context(request):
     user=get_user(request)
     if user and user.username:
         user_profile_edit_url = request.route_url('profile_user',type='u',identifier=user.username.username)
+    elif user:
+        user_profile_edit_url = request.route_url('profile_user',type='id',identifier=user.id)
     else:
         user_profile_edit_url = None
     return dict(default_context,
