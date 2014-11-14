@@ -335,7 +335,7 @@ def create_post(request):
     if subject:
         subject = subject
     else:
-        print(in_reply_to_post.subject, discussion.topic)
+        #print(in_reply_to_post.subject, discussion.topic)
         if in_reply_to_post:
             subject = in_reply_to_post.subject if in_reply_to_post.subject else ''
         elif in_reply_to_idea:
@@ -343,7 +343,7 @@ def create_post(request):
             subject = in_reply_to_idea.short_title if in_reply_to_idea.short_title else ''
         else:
             subject = discussion.topic if discussion.topic else ''
-        print subject
+        #print subject
         subject = "Re: " + restrip_pat.sub('', subject)
 
     post_constructor_args = {
