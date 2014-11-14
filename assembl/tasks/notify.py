@@ -88,11 +88,11 @@ def process_notification(notification):
 def notify(id):
     """ Can be triggered by 
     http://localhost:6543/data/Discussion/6/all_users/2/notifications/12/process_now """
-    init_task_config()
-    from ..models.notification import Notification
+    init_task_config(notify_celery_app)
+    from ..models.notification import Notification, waiting_get
     sys.stderr.write("notify called with "+str(id))
     with transaction.manager:
-        notification = Notification.get(id)
+        notification = waiting_get(Notification, id)
         assert notification
         process_notification(notification)
 
@@ -100,7 +100,7 @@ def notify(id):
 @notify_celery_app.task(ignore_result=False)
 def process_pending_notifications():
     """ Can be triggered by http://localhost:6543/data/Notification/process_now """
-    init_task_config()
+    init_task_config(notify_celery_app)
     from ..models.notification import (
         Notification, NotificationDeliveryStateType)
     sys.stderr.write("process_pending_notifications called")

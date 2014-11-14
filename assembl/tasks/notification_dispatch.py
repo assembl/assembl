@@ -23,7 +23,7 @@ class ModelEventWatcherCeleryReceiver(object):
         return cls.singleton
 
     def __init__(self):
-        init_task_config()
+        init_task_config(notif_dispatch_celery_app)
         self.mw = get_model_watcher()
         assert self.mw
 

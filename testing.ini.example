@@ -152,51 +152,43 @@ changes.prefix = /socket
 changes.websocket.url = http://localhost:%(changes.websocket.port)s%(changes.prefix)s/
 #changes.websocket.url = http://%(public_hostname)s:%(public_port)s%(changes.prefix)s/
 
-# Notification broker. 3 possible configurations:
+# Notification broker. possible configurations:
 
 # Noop configurations: Just print.
 # assembl.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
 # celery_tasks.notification_dispatch.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
-# assembl.threadedmodelwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
+# celery_tasks.imap.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
+
+# Direct configuration
+assembl.imodeleventwatcher = assembl.models.notification.ModelEventWatcherNotificationSubscriptionDispatcher
+celery_tasks.notification_dispatch.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
+celery_tasks.imap.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
 
 # Threaded configurations: Send to thread, thread acts.
-assembl.imodeleventwatcher = assembl.tasks.threaded_model_watcher.ThreadedModelEventWatcher
-celery_tasks.notification_dispatch.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
-assembl.threadedmodelwatcher = assembl.models.notification.ModelEventWatcherNotificationSubscriptionDispatcher
+# assembl.imodeleventwatcher = assembl.tasks.threaded_model_watcher.ThreadedModelEventWatcher
+# celery_tasks.notification_dispatch.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
+# assembl.threadedmodelwatcher = assembl.models.notification.ModelEventWatcherNotificationSubscriptionDispatcher
+# celery_tasks.imap.imodeleventwatcher = assembl.tasks.threaded_model_watcher.ThreadedModelEventWatcher
+# celery_tasks.imap.threadedmodelwatcher = assembl.models.notification.ModelEventWatcherNotificationSubscriptionDispatcher
 
-# Broker configurations: send to celery, celery task acts. Not functional at this point.
+# Broker configurations: send to celery, celery task acts.
 # assembl.imodeleventwatcher = assembl.tasks.notification_dispatch.ModelEventWatcherCelerySender
 # celery_tasks.notification_dispatch.imodeleventwatcher = assembl.models.notification.ModelEventWatcherNotificationSubscriptionDispatcher
-# assembl.threadedmodelwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
+# celery_tasks.imap.imodeleventwatcher = assembl.tasks.notification_dispatch.ModelEventWatcherCelerySender
 
 # ZMQ model changes local socket (backend will connect to this)
-# TODO:  There are only 15 databases available in a default redis install.
-# We should use the same redis and just change the default queue in celery
-# http://celery.readthedocs.org/en/latest/userguide/routing.html#routing-changing-default-queue
 # UNIQUE_PER_SERVER
 # Convention:
-# /0, /3: reserved for development
-# /6: reserved for automated testing
-# /9, /12: production
-celery_tasks.imap.broker = redis://localhost:6379/6
+# /0 - /3: reserved for development
+# /4: reserved for automated testing
+# /5 - /12: production
+celery_tasks.imap.broker = redis://localhost:6379/4
+celery_tasks.notification_dispatch.broker = redis://localhost:6379/4
+celery_tasks.notify.broker = redis://localhost:6379/4
 
-# UNIQUE_PER_SERVER
-# Convention:
-# /1, /4: reserved for development
-# /7: reserved for automated testing
-# /10, /13: production
-celery_tasks.notification_dispatch.broker = redis://localhost:6379/7
-
-# UNIQUE_PER_SERVER
-# Convention:
-# /2, /5: reserved for development
-# /8: reserved for automated testing
-# /11, /14: production
-celery_tasks.notify.broker = redis://localhost:6379/8
-
-# Those have to be defined as noops.
-celery_tasks.imap.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
+# Has to be defined as noop.
 celery_tasks.notify.imodeleventwatcher = assembl.lib.model_watcher.ModelEventWatcherPrinter
+
 
 
 cache_viewdefs = true

@@ -2,7 +2,6 @@ from threading import Thread
 from Queue import Queue
 
 from zope import interface
-from pyramid.path import DottedNameResolver
 
 from ..lib.model_watcher import IModelEventWatcher
 
@@ -78,7 +77,7 @@ class ThreadedModelEventWatcher(object):
 
 
 def includeme(config):
-    resolver = DottedNameResolver(__package__)
+    from . import resolver
     class_name = config.get_settings().get(
         'assembl.threadedmodelwatcher',
         "assembl.lib.model_watcher.ModelEventWatcherPrinter")

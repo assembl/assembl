@@ -447,7 +447,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
             #push_address = TODO
             )
         self.db.add(notification)
-        self.db.flush()
+        self.db.commit()
         notify.delay(notification.id)
 
     __mapper_args__ = {
@@ -475,7 +475,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
             #push_address = TODO
             )
         self.db.add(notification)
-        self.db.flush()
+        self.db.commit()
         notify.delay(notification.id)
 
     __mapper_args__ = {
@@ -507,7 +507,7 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
             #push_address = TODO
             )
         self.db.add(notification)
-        self.db.flush()
+        self.db.commit()
         notify.delay(notification.id)
 
     __mapper_args__ = {
