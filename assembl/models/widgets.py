@@ -762,7 +762,8 @@ class IdeaWidgetLink(DiscussionBoundBase):
 
     idea_id = Column(Integer, ForeignKey(Idea.id),
                      nullable=False, index=True)
-    idea = relationship(Idea, backref="widget_links")
+    idea = relationship(Idea, backref=backref(
+        "widget_links", cascade="all, delete-orphan"))
 
     widget_id = Column(Integer, ForeignKey(
         Widget.id, ondelete="CASCADE", onupdate="CASCADE"),

@@ -71,7 +71,8 @@ class IdeaContentLink(DiscussionBoundBase):
     )
 
     creator = relationship(
-        'AgentProfile', foreign_keys=[creator_id], backref='extracts_created')
+        'AgentProfile', foreign_keys=[creator_id], backref=backref(
+            'extracts_created', cascade="all")) # do not delete orphan
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:relatedToIdea',

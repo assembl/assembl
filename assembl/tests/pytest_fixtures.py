@@ -31,6 +31,7 @@ def session_factory(request):
     session_factory = get_session_maker()
 
     def fin():
+        print "finalizer session_factory"
         session_factory.remove()
     request.addfinalizer(fin)
     return session_factory
@@ -52,6 +53,7 @@ def db_tables(request, empty_db, app_settings):
     transaction.commit()
 
     def fin():
+        print "finalizer db_tables"
         session = empty_db()
         drop_tables(app_settings, session)
         transaction.commit()
@@ -65,6 +67,7 @@ def db_default_data(request, db_tables, app_settings):
     transaction.commit()
 
     def fin():
+        print "finalizer db_default_data"
         session = db_tables()
         clear_rows(app_settings, session)
         transaction.commit()
@@ -77,9 +80,11 @@ def test_session(request, db_default_data):
     session = db_default_data()
 
     def fin():
+        print "finalizer test_session"
         session.rollback()
     request.addfinalizer(fin)
     return session
+
 
 @pytest.fixture(scope="function")
 def test_app_no_perm(request, app_settings):
@@ -98,22 +103,42 @@ def discussion(request, test_session, test_app_no_perm):
     from assembl.models import Discussion
     d = Discussion(topic=u"Jack Layton", slug="jacklayton2")
     test_session.add(d)
+    test_session.add(d.next_synthesis)
+    test_session.add(d.root_idea)
+    test_session.add(d.table_of_contents)
     test_session.flush()
 
     def fin():
+        print "finalizer discussion"
+        test_session.delete(d.table_of_contents)
+        test_session.delete(d.root_idea)
+        test_session.delete(d.next_synthesis)
         test_session.delete(d)
+        test_session.flush()
+    request.addfinalizer(fin)
     return d
+
 
 @pytest.fixture(scope="function")
 def discussion2(request, test_session, test_app_no_perm):
     from assembl.models import Discussion
     d = Discussion(topic=u"Second discussion", slug="testdiscussion2")
     test_session.add(d)
+    test_session.add(d.next_synthesis)
+    test_session.add(d.root_idea)
+    test_session.add(d.table_of_contents)
     test_session.flush()
 
     def fin():
+        print "finalizer discussion2"
+        test_session.delete(d.table_of_contents)
+        test_session.delete(d.root_idea)
+        test_session.delete(d.next_synthesis)
         test_session.delete(d)
+        test_session.flush()
+    request.addfinalizer(fin)
     return d
+
 
 @pytest.fixture(scope="function")
 def admin_user(request, test_session):
@@ -126,7 +151,10 @@ def admin_user(request, test_session):
     test_session.flush()
 
     def fin():
+        print "finalizer admin_user"
         test_session.delete(u)
+        test_session.flush()
+    request.addfinalizer(fin)
     return u
 
 
@@ -162,7 +190,10 @@ def participant1_user(request, test_session):
     test_session.flush()
 
     def fin():
+        print "finalizer participant1_user"
         test_session.delete(u)
+        test_session.flush()
+    request.addfinalizer(fin)
     return u
 
 
@@ -177,7 +208,10 @@ def participant2_user(request, test_session):
     test_session.flush()
 
     def fin():
+        print "finalizer participant2_user"
         test_session.delete(u)
+        test_session.flush()
+    request.addfinalizer(fin)
     return u
 
 
@@ -189,7 +223,10 @@ def mailbox(request, discussion, test_session):
     test_session.flush()
 
     def fin():
+        print "finalizer mailbox"
         test_session.delete(m)
+        test_session.flush()
+    request.addfinalizer(fin)
     return m
 
 
@@ -208,7 +245,10 @@ def jack_layton_mailbox(request, discussion, test_session):
     test_session.flush()
 
     def fin():
+        print "finalizer jack_layton_mailbox"
         test_session.delete(m)
+        test_session.flush()
+    request.addfinalizer(fin)
     return m
 
 
@@ -221,7 +261,10 @@ def post_source(request, discussion, test_session):
     test_session.flush()
 
     def fin():
+        print "finalizer post_source"
         test_session.delete(ps)
+        test_session.flush()
+    request.addfinalizer(fin)
     return ps
 
 
@@ -239,8 +282,12 @@ def root_post_1(request, participant1_user, discussion, test_session):
     test_session.flush()
 
     def fin():
+        print "finalizer root_post_1"
         test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
     return p
+
 
 @pytest.fixture(scope="function")
 def discussion2_root_post_1(request, participant1_user, discussion2, test_session):
@@ -256,8 +303,12 @@ def discussion2_root_post_1(request, participant1_user, discussion2, test_sessio
     test_session.flush()
 
     def fin():
+        print "finalizer discussion2_root_post_1"
         test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
     return p
+
 
 @pytest.fixture(scope="function")
 def synthesis_post_1(request, participant1_user, discussion, test_session, synthesis_1):
@@ -271,8 +322,12 @@ def synthesis_post_1(request, participant1_user, discussion, test_session, synth
     test_session.flush()
 
     def fin():
+        print "finalizer synthesis_post_1"
         test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
     return p
+
 
 @pytest.fixture(scope="function")
 def reply_post_1(request, participant2_user, discussion,
@@ -291,7 +346,10 @@ def reply_post_1(request, participant2_user, discussion,
     test_session.flush()
 
     def fin():
+        print "finalizer reply_post_1"
         test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
     return p
 
 
@@ -312,7 +370,10 @@ def reply_post_2(request, participant1_user, discussion,
     test_session.flush()
 
     def fin():
+        print "finalizer reply_post_2"
         test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
     return p
 
 
@@ -333,20 +394,16 @@ def reply_post_3(request, participant2_user, discussion,
     test_session.flush()
 
     def fin():
+        print "finalizer reply_post_3"
         test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
     return p
 
 
 @pytest.fixture(scope="function")
 def root_idea(request, discussion, test_session):
-    from assembl.models import RootIdea
-    i = RootIdea(short_title="the root", discussion=discussion)
-    test_session.add(i)
-    test_session.flush()
-
-    def fin():
-        test_session.delete(i)
-    return i
+    return discussion.root_idea
 
 
 @pytest.fixture(scope="function")
@@ -359,8 +416,11 @@ def subidea_1(request, discussion, root_idea, test_session):
     test_session.flush()
 
     def fin():
-        test_session.delete(i)
+        print "finalizer subidea_1"
         test_session.delete(l_r_1)
+        test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
     return i
 
 
@@ -374,8 +434,11 @@ def subidea_1_1(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        test_session.delete(i)
+        print "finalizer subidea_1_1"
         test_session.delete(l_1_11)
+        test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
     return i
 
 
@@ -389,8 +452,11 @@ def criterion_1(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        test_session.delete(i)
+        print "finalizer criterion_1"
         test_session.delete(l_1_11)
+        test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
     return i
 
 
@@ -404,8 +470,11 @@ def criterion_2(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        test_session.delete(i)
+        print "finalizer criterion_2"
         test_session.delete(l_1_11)
+        test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
     return i
 
 
@@ -419,8 +488,11 @@ def criterion_3(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        test_session.delete(i)
+        print "finalizer criterion_3"
         test_session.delete(l_1_11)
+        test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
     return i
 
 
@@ -432,7 +504,10 @@ def lickert_range(request, test_session):
     test_session.flush()
 
     def fin():
+        print "finalizer lickert_range"
         test_session.delete(lr)
+        test_session.flush()
+    request.addfinalizer(fin)
     return lr
 
 
@@ -446,8 +521,11 @@ def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
     test_session.flush()
 
     def fin():
-        test_session.delete(i)
+        print "finalizer subidea_1_1_1"
         test_session.delete(l_11_111)
+        test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
     return i
 
 
@@ -467,10 +545,13 @@ def synthesis_1(request, discussion, subidea_1, subidea_1_1, test_session):
     test_session.flush()
 
     def fin():
-        test_session.delete(i1_a)
-        test_session.delete(i11_a)
+        print "finalizer synthesis_1"
         test_session.delete(l_1_11_a)
+        test_session.delete(i11_a)
+        test_session.delete(i1_a)
         test_session.delete(s)
+        test_session.flush()
+    request.addfinalizer(fin)
 
     return s
 
@@ -492,7 +573,10 @@ def extract_post_1_to_subidea_1_1(
     test_session.flush()
 
     def fin():
+        print "finalizer extract_post_1_to_subidea_1_1"
         test_session.delete(e)
+        test_session.flush()
+    request.addfinalizer(fin)
     return e
 
 
@@ -515,7 +599,10 @@ def creativity_session_widget(
     test_session.add(c)
 
     def fin():
+        print "finalizer creativity_session_widget"
         test_session.delete(c)
+        test_session.flush()
+    request.addfinalizer(fin)
 
     return c
 
@@ -540,10 +627,13 @@ def creativity_session_widget_new_idea(
         message_id='proposal', subject=u"propose idea", body="")
     test_session.add(ipp)
     def fin():
+        print "finalizer creativity_session_widget_new_idea"
         test_session.delete(ipp)
         test_session.delete(l_w_wi)
         test_session.delete(l_1_wi)
         test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
 
     return i
 
@@ -565,7 +655,10 @@ def creativity_session_widget_post(
     test_session.add(icwl)
 
     def fin():
+        print "finalizer creativity_session_widget_post"
         test_session.delete(icwl)
         test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
 
     return i
