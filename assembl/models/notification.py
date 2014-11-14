@@ -27,7 +27,7 @@ from . import  Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
 from ..lib.frontend_urls import FrontendUrls
-from .auth import (User, Everyone, P_ADMIN_DISC)
+from .auth import (User, Everyone, P_ADMIN_DISC, CrudPermissions, P_READ)
 from .discussion import Discussion
 from .post import Post, SynthesisPost
 from jinja2 import Environment, PackageLoader
@@ -277,6 +277,13 @@ class NotificationSubscription(DiscussionBoundBase):
                 self.status = status
                 self.last_status_change_date = datetime.now()
         return self
+
+    def get_owners(self):
+        return (self.user)
+
+    crud_permissions = CrudPermissions(
+        P_READ, P_READ, P_ADMIN_DISC, P_ADMIN_DISC,
+        P_READ, P_READ)
 
 
 @event.listens_for(NotificationSubscription.status, 'set', propagate=True)
@@ -776,6 +783,7 @@ class Notification(Base):
             msg.attach(SafeMIMEText(email_html_part.encode('utf-8'), 'html', 'utf-8'))
         
         return msg.as_string()
+
 
 User.notifications = relationship(
     Notification, viewonly=True,
