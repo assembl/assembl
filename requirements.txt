@@ -80,7 +80,7 @@ rdflib==4.1.2
 redis==2.10.3
 docutils==0.12
 repoze.lru==0.6
-repoze.sendmail==4.2
+repoze.sendmail==4.1
 requests==2.4.3
 requests-oauthlib==0.4.2
 selenium==2.44.0
