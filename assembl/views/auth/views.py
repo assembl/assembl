@@ -21,6 +21,7 @@ from pyramid.settings import asbool
 from sqlalchemy import desc
 import transaction
 from velruse import login_url
+from pyisemail import is_email
 
 from assembl.models import (
     EmailAccount, IdentityProvider, IdentityProviderAccount,
@@ -169,7 +170,10 @@ def assembl_profile(request):
             profile.set_password(p1)
         add_email = request.params.get('add_email', '').strip()
         if add_email:
-            # TODO: Check it's a valid email.
+            if not is_email(add_email):
+                return dict(get_default_context(request),
+                            error=localizer.translate(_(
+                                "This is not a valid email")))
             # No need to check presence since not validated yet
             email = EmailAccount(
                 email=add_email, profile=profile)
@@ -225,6 +229,10 @@ def assembl_register_view(request):
     password = request.params.get('password', '').strip()
     password2 = request.params.get('password2', '').strip()
     email = request.params.get('email', '').strip()
+    if not is_email(email):
+        return dict(get_default_context(request),
+                    error=localizer.translate(_(
+                        "This is not a valid email")))
     # Find agent account to avoid duplicates!
     if session.query(EmailAccount).filter_by(
             email=email, verified=True).count():
