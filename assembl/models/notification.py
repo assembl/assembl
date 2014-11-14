@@ -22,6 +22,7 @@ from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload)
 from zope import interface
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
+from celery import current_task
 
 from . import  Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
@@ -454,7 +455,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
             #push_address = TODO
             )
         self.db.add(notification)
-        self.db.commit()
+        self.db.flush()
         notify.delay(notification.id)
 
     __mapper_args__ = {
@@ -482,7 +483,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
             #push_address = TODO
             )
         self.db.add(notification)
-        self.db.commit()
+        self.db.flush()
         notify.delay(notification.id)
 
     __mapper_args__ = {
@@ -514,7 +515,7 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
             #push_address = TODO
             )
         self.db.add(notification)
-        self.db.commit()
+        self.db.flush()
         notify.delay(notification.id)
 
     __mapper_args__ = {
@@ -523,7 +524,7 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
 
 
 def waiting_get(objectClass, objectId):
-    # Waiting for an object to be committed on another thread
+    # Waiting for an object to be flushted on another thread
     for i in range(100):
         objectInstance = objectClass.get(objectId)
         if objectInstance is not None:
@@ -553,6 +554,9 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
                 if(len(applicableInstances) > 0):
                     applicableInstances.sort(cmp=lambda x,y: cmp(x.priority, y.priority))
                     applicableInstances[0].process(objectInstance.get_discussion_id(), verb, objectInstance, applicableInstances[1:])
+        if bool(current_task):
+            # In a celery task, there's no one else to commit
+            objectInstance.db.commit()
 
 
     def processPostCreated(self, id):
