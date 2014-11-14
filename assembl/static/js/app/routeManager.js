@@ -13,7 +13,8 @@ define(function (require) {
         adminNotificationSubscriptions = require('views/admin/adminNotificationSubscriptions'),
         adminPartners = require('views/admin/adminPartners'),
         userNotificationSubscriptions = require('views/user/userNotificationSubscriptions'),
-        userProfile = require('views/user/profile');
+        userProfile = require('views/user/profile'),
+        Authorization = require('views/authorization');
 
     var routeManager = Marionette.Controller.extend({
 
@@ -27,7 +28,6 @@ define(function (require) {
              * fulfill app.currentUser
              */
             this.loadCurrentUser();
-
         },
 
         defaults: function () {
@@ -41,37 +41,42 @@ define(function (require) {
 
         edition: function () {
             Assembl.headerRegions.show(new navBar());
-
-            var edition = new adminDiscussion();
-            Assembl.groupContainer.show(edition);
+            if (this.isAuthenticated()) {
+                var edition = new adminDiscussion();
+                Assembl.groupContainer.show(edition);
+            }
         },
 
         partners: function () {
             Assembl.headerRegions.show(new navBar());
-
-            var partners = new adminPartners();
-            Assembl.groupContainer.show(partners);
+            if (this.isAuthenticated()) {
+                var partners = new adminPartners();
+                Assembl.groupContainer.show(partners);
+            }
         },
 
         notifications: function () {
             Assembl.headerRegions.show(new navBar());
-
-            var notifications = new adminNotificationSubscriptions();
-            Assembl.groupContainer.show(notifications);
+            if (this.isAuthenticated()) {
+                var notifications = new adminNotificationSubscriptions();
+                Assembl.groupContainer.show(notifications);
+            }
         },
 
         userNotifications: function () {
             Assembl.headerRegions.show(new navBar());
-
-            var user = new userNotificationSubscriptions();
-            Assembl.groupContainer.show(user);
+            if (this.isAuthenticated()) {
+                var user = new userNotificationSubscriptions();
+                Assembl.groupContainer.show(user);
+            }
         },
 
         profile: function () {
             Assembl.headerRegions.show(new navBar());
-
-            var profile = new userProfile();
-            Assembl.groupContainer.show(profile);
+            if (this.isAuthenticated()) {
+                var profile = new userProfile();
+                Assembl.groupContainer.show(profile);
+            }
         },
         
         post: function (id) {
@@ -156,6 +161,17 @@ define(function (require) {
                 window.localStorage.setItem('lastCurrentUser', this.user.get('@id'));
             }
 
+        },
+
+        isAuthenticated: function () {
+            if (!Ctx.getCurrentUserId()) {
+                var authorization = new Authorization();
+                Assembl.groupContainer.show(authorization);
+                return false;
+            }
+            else {
+                return true;
+            }
         }
 
     });
