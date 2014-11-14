@@ -739,22 +739,24 @@ class IMAPMailbox(AbstractMailbox):
         mailbox.select(mbox.folder)
 
         command = "ALL"
-        
+        search_status = None
+
         email_ids = None
         if only_new and mbox.last_imported_email_uid:
             command = "(UID %s:*)" % mbox.last_imported_email_uid
-            
+
             search_status, search_result = mailbox.uid('search', None, command)
             #print "UID searched with: "+ command + ", got result "+repr(search_status)+" and found "+repr(search_result)
             email_ids = search_result[0].split()
             #print email_ids
-            
-        if only_new and search_status == 'OK' and email_ids[0] == mbox.last_imported_email_uid:
+
+        if (only_new and search_status == 'OK' and email_ids
+                and email_ids[0] == mbox.last_imported_email_uid):
             # Note:  the email_ids[0]==mbox.last_imported_email_uid test is
             # necessary beacuse according to https://tools.ietf.org/html/rfc3501
             # seq-range like "3291:* includes the UID of the last message in
             # the mailbox, even if that value is less than 3291."
-            
+
             # discard the first message, it should be the last imported email.
             del email_ids[0]
         else:
