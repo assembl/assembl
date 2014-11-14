@@ -80,7 +80,6 @@
         <div class="control-group">
           <label for="#" class="control-label">{{ gettext('Emails') }}</label>
           <div class="controls">
-            <input class="input-xlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
             {% for email_account in the_user.email_accounts %}
                 <li class="mvs">{{ email_account.email }}
                 {% if not email_account.verified %}
