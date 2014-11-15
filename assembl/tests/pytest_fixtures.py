@@ -11,6 +11,7 @@ import transaction
 from webtest import TestApp
 from pkg_resources import get_distribution
 import simplejson as json
+from splinter import Browser
 
 import assembl
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
@@ -662,3 +663,14 @@ def creativity_session_widget_post(
     request.addfinalizer(fin)
 
     return i
+
+
+@pytest.fixture(scope="module")
+def browser(request):
+    browser = Browser()
+    def fin():
+        print "finalizer browser"
+        browser.quit()
+    request.addfinalizer(fin)
+
+    return browser
