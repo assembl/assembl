@@ -62,7 +62,19 @@ def db_tables(request, empty_db, app_settings):
 
 
 @pytest.fixture(scope="module")
-def db_default_data(request, db_tables, app_settings):
+def test_app_no_perm(request, app_settings):
+    global_config = {
+        '__file__': request.config.getoption('test_settings_file'),
+        'here': get_distribution('assembl').location
+    }
+    app = TestApp(assembl.main(
+        global_config, nosecurity=True, **app_settings))
+    configure_tasks(app.app.registry, 'assembl')
+    return app
+
+
+@pytest.fixture(scope="module")
+def db_default_data(request, db_tables, app_settings, test_app_no_perm):
     bootstrap_db_data(db_tables)
     transaction.commit()
 
@@ -81,21 +93,9 @@ def test_session(request, db_default_data):
 
     def fin():
         print "finalizer test_session"
-        session.rollback()
+        session.commit()
     request.addfinalizer(fin)
     return session
-
-
-@pytest.fixture(scope="function")
-def test_app_no_perm(request, app_settings):
-    global_config = {
-        '__file__': request.config.getoption('test_settings_file'),
-        'here': get_distribution('assembl').location
-    }
-    app = TestApp(assembl.main(
-        global_config, nosecurity=True, **app_settings))
-    configure_tasks(app.app.registry, 'assembl')
-    return app
 
 
 @pytest.fixture(scope="function")
@@ -141,7 +141,7 @@ def discussion2(request, test_session, test_app_no_perm):
 
 
 @pytest.fixture(scope="function")
-def admin_user(request, test_session):
+def admin_user(request, test_session, db_default_data):
     from assembl.models import User, UserRole, Role
     u = User(name=u"Mr. Adminstrator", type="user")
     test_session.add(u)
