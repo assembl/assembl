@@ -90,6 +90,28 @@ define(function (require) {
                 function (allMessageStructureCollection) {
                     that.listenTo(allMessageStructureCollection, 'add reset', function () {
                         that.currentQuery.invalidateResults();
+                        /*
+                        Disable refresh if a message is being written.
+                        TODO ghourlier, bgregoire review my approach.
+                        We might also allow a redraw, while saving current message.
+                        Difficult to avoid the jarring effect, then.
+                        Maybe check if the cursor is in one of the fields.
+                        I assume the message will be drawn when the message is sent.
+                        */
+                        var messageFields = $('.messageSend-body');
+                        if (_.any(messageFields, function (b) {
+                            // why are we not using a placeholder?
+                            return !_.contains(b.classList, "text-muted");
+                        })) {
+                            return;
+                        }
+                        messageFields = $('.messageSend-subject');
+                        if (_.any(messageFields, function (b) {
+                            // why are we not using a placeholder?
+                            return b.value.length != 0;
+                        })) {
+                            return;
+                        }
                         that.render();
                     });
                 }

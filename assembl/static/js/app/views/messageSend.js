@@ -166,6 +166,9 @@ define(function (require) {
                     that.$('.messageSend-cancelbtn').trigger('click');
                 }, 5000);
             };
+            // This is not too good, but it allows the next render to come.
+            message_subject_field.value = "";
+            message_body_field.addClass("text-muted");
             this.sendPostToServer(message_body, message_subject, reply_message_id, reply_idea_id, success_callback);
 
         },
