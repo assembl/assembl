@@ -279,7 +279,7 @@ def instance_del(request):
                     User.get(user_id) not in context._instance.get_owners():
                 raise HTTPUnauthorized()
     instance.db.delete(instance)
-    return HTTPOk()
+    return {}
 
 
 @view_config(name="collections", context=InstanceContext, renderer='json',
