@@ -103,6 +103,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
             },
 
             unSubscription: function () {
+                var that = this;
 
                 this.roles.forEach(function (model) {
 
@@ -111,9 +112,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                             id: model.get('@id')
                         });
 
-                        roles.destroy(null, {
+                        roles.destroy({
                             success: function (model, resp) {
-                                console.log(resp);
+                                that.ui.unSubscription.addClass('hidden');
                             },
                             error: function (model, resp) {
                                 console.error(resp);
