@@ -62,7 +62,9 @@ define(['models/base', 'models/panelSpec'], function (Base, panelSpec) {
         },
 
         /**
-         * @params panel type name or panelSpec options or array of either
+         * @list_of_options panel type name or panelSpec options or array of either
+         * @position int order in sequence of panels
+         * find or create panels at a given position
          */
         ensurePanelsAt: function (list_of_options, position) {
             if (!Array.isArray(list_of_options)) {
