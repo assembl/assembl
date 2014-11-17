@@ -89,7 +89,6 @@ define(function (require) {
             collectionManager.getAllMessageStructureCollectionPromise().done(
                 function (allMessageStructureCollection) {
                     that.listenTo(allMessageStructureCollection, 'add reset', function () {
-                        that.currentQuery.invalidateResults();
                         /*
                         Disable refresh if a message is being written.
                         TODO ghourlier, bgregoire review my approach.
@@ -105,6 +104,7 @@ define(function (require) {
                         })) {
                             return;
                         }
+                        that.currentQuery.invalidateResults();
                         messageFields = $('.messageSend-subject');
                         if (_.any(messageFields, function (b) {
                             // why are we not using a placeholder?
