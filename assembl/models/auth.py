@@ -503,6 +503,25 @@ class User(AgentProfile):
         #r['email'] = use_email or self.get_preferred_email()
         return ser
 
+    def subscribe(self, discussion, role=R_PARTICIPANT):
+        existing = self.db.query(LocalUserRole).join(Role).filter(
+            LocalUserRole.user_id == self.id,
+            Role.name == role,
+            LocalUserRole.discussion_id == discussion.id).first()
+        if not existing:
+            role = self.db.query(Role).filter_by(name=role).one()
+            self.db.add(LocalUserRole(
+                user=self, role=role, discussion=discussion))
+
+    def unsubscribe(self, discussion, role=R_PARTICIPANT):
+        existing = self.db.query(LocalUserRole).join(Role).filter(
+            LocalUserRole.user_id == self.id,
+            Role.name == role,
+            LocalUserRole.discussion_id == discussion.id).all()
+        if existing:
+            for lur in existing:
+                self.db.delete(lur)
+
     @classmethod
     def extra_collections(cls):
         from assembl.views.traversal import CollectionDefinition
