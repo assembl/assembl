@@ -265,7 +265,7 @@ def instance_put(request):
         return instance.generic_json(view)
 
 
-@view_config(context=InstanceContext, request_method='DELETE')
+@view_config(context=InstanceContext, request_method='DELETE', renderer='json')
 def instance_del(request):
     ctx = request.context
     user_id = authenticated_userid(request)
