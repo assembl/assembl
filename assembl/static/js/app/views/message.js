@@ -242,10 +242,10 @@ define(function (require) {
                                 callback: function (isTruncated, orgContent) {
                                     //console.log(isTruncated, orgContent);
                                     if (isTruncated) {
-                                        that.$(".ellipsis > a.readMore").removeClass('hidden');
+                                        that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
                                     }
                                     else {
-                                        that.$(".ellipsis > a.readMore").addClass('hidden');
+                                        that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
                                     }
                                 },
                                 watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
