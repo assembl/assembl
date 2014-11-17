@@ -216,8 +216,9 @@ class NotificationSubscription(DiscussionBoundBase):
         subscriptionsQuery = subscriptionsQuery.filter(cls.status==NotificationSubscriptionStatus.ACTIVE);
         subscriptionsQuery = subscriptionsQuery.filter(cls.discussion_id==discussion_id);
         if user:
-            subscriptionsQuery.filter(cls.user==user)
-
+            subscriptionsQuery = subscriptionsQuery.filter(cls.user==user)
+        #print "findApplicableInstances(called) with discussion_id=%s, verb=%s, object=%s, user=%s"%(discussion_id, verb, object, user)
+        #print repr(subscriptionsQuery.all())
         for subscription in subscriptionsQuery:
             if(subscription.wouldCreateNotification(object.get_discussion_id(), verb, object)):
                 applicable_subscriptions.append(subscription)
@@ -710,7 +711,8 @@ class Notification(Base):
         #TODO: Store CRUDVERB
         applicableInstances = NotificationSubscription.findApplicableInstances(
             self.event_source_object().get_discussion_id(),
-            CrudVerbs.CREATE, self.event_source_object(),
+            CrudVerbs.CREATE,
+            self.event_source_object(),
             self.first_matching_subscription.user)
         def sortSubscriptions(x,y):
             if x.id == self.first_matching_subscription_id:

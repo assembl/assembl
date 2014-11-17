@@ -24,6 +24,9 @@ Get all posts for a discussion:
 http://localhost:6543/api/v1/discussion/1/posts
 You can append a view, such as ?view=id_only
 
+Delete a message (Superadmin):
+DELETE http://localhost:6543/data/Content/3244
+
 Frontend notes:
 Specific messages are adressed with urls such as 
 http://localhost:6543/jacklayton/posts/local%3AContent%2F16
