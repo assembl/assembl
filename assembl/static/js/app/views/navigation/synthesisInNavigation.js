@@ -1,6 +1,7 @@
 define(function (require) {
 
     var AssemblPanel = require('views/assemblPanel'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         CollectionManager = require('common/collectionManager'),
         Types = require('utils/types'),
         Ctx = require('common/context'),
@@ -9,7 +10,7 @@ define(function (require) {
 
     var SynthesisInNavigationPanel = AssemblPanel.extend({
         template: '#tmpl-synthesisInNavigationPanel',
-        panelType: 'synthesisNavPanel',
+        panelType: PanelSpecTypes.NAVIGATION_PANEL_SYNTHESIS_SECTION,
         className: 'synthesisNavPanel',
 
         ui: {
@@ -57,7 +58,7 @@ define(function (require) {
             this.displaySynthesis(messageId);
         },
         displaySynthesis: function (messageId) {
-            var messageListView = this.groupContent.getViewByTypeName('messageList');
+            var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
             messageListView.currentQuery.clearAllFilters();
             messageListView.toggleFilterByPostId(messageId);
             messageListView.showMessageById(messageId, undefined, false);

@@ -44,7 +44,7 @@ define(function (require) {
          * @event
          */
         onTitleClick: function () {
-            var messageListView = this.groupContent.getViewByTypeName('messageList');
+            var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
             messageListView.triggerMethod('messageList:clearAllFilters');
             messageListView.triggerMethod('messageList:addFilterIsSynthesisMessage');
 

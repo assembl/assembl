@@ -369,7 +369,7 @@ define(function (require) {
                             return;
                         }
                         if (segment.get('idIdea')) {
-                            if (that.messageListView.panelWrapper.groupContent.getViewByTypeName("ideaPanel")) {
+                            if (that.messageListView.panelWrapper.groupContent.findViewByType(PanelSpecTypes.IDEA_PANEL)) {
                                 //FIXME:  We don't want to affect every panel, only the one in the current group
                                 Ctx.setCurrentIdea(allIdeasCollection.get(annotation.idIdea));
                                 Assembl.vent.trigger('ideaPanel:showSegment', segment);
@@ -378,7 +378,7 @@ define(function (require) {
                                 console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
                             }
                         } else {
-                            if (that.messageListView.panelWrapper.groupContent.getViewByTypeName("clipboard")) {
+                            if (that.messageListView.panelWrapper.groupContent.findViewByType(PanelSpecTypes.CLIPBOARD)) {
                                 //FIXME:  We don't want to affect every panel, only the one in the current group
                                 Assembl.vent.trigger('segmentList:showSegment', segment);
                             }

@@ -43,7 +43,7 @@ define(function (require) {
          * @event
          */
         onTitleClick: function (e) {
-            var messageListView = this.groupContent.getViewByTypeName('messageList');
+            var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
             if (messageListView) {
                 e.stopPropagation();
 

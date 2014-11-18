@@ -42,7 +42,7 @@ define(function (require) {
          * @event
          */
         onTitleClick: function () {
-            var messageListView = this.groupContent.getViewByTypeName('messageList');
+            var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
             messageListView.triggerMethod('messageList:clearAllFilters');
             Ctx.setCurrentIdea(null);
             //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.

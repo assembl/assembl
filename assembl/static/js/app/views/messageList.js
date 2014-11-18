@@ -13,6 +13,7 @@ define(function (require) {
         PostQuery = require('views/messageListPostQuery'),
         Permissions = require('utils/permissions'),
         MessageSendView = require('views/messageSend'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         AssemblPanel = require('views/assemblPanel'),
         CollectionManager = require('common/collectionManager');
 
@@ -37,7 +38,7 @@ define(function (require) {
      * @class views.MessageList
      */
     var MessageList = AssemblPanel.extend({
-        panelType: 'messageList',
+        panelType: PanelSpecTypes.MESSAGE_LIST,
         className: 'panel messageList',
         lockable: true,
         gridSize: AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE,

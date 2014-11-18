@@ -522,14 +522,27 @@ define(function (require) {
                 var collection,
                     data = Storage.getStorageGroupItem();
                 if (data !== undefined) {
-                    collection = new groupSpec.Collection(data, {'parse': true});
-                    if (!collection.validate(viewsFactory)) {
+                    collection = new groupSpec.Collection(data, {'parse': true, 'viewsFactory': viewsFactory});
+                    if (!collection.validate()) {
+                      console.log("getGroupSpecsCollectionPromise():  ERROR: Collection in local storage is invalid, will return a new one");
                         collection = undefined;
                     }
                 }
                 if (collection === undefined) {
                     collection = new groupSpec.Collection();
-                    collection.add(new groupSpec.Model());
+                    var panelSpec = require('models/panelSpec');
+                    var PanelSpecTypes = require('utils/panelSpecTypes');
+                    var defaults = {
+                      panels: new panelSpec.Collection([
+                          {type: PanelSpecTypes.NAV_SIDEBAR.id },
+                          {type: PanelSpecTypes.IDEA_PANEL.id, minimized: true},
+                          {type: PanelSpecTypes.MESSAGE_LIST.id}
+                          ],
+                          {'viewsFactory': viewsFactory }),
+                      navigationState: 'home'
+                    };
+                    collection.add(new groupSpec.Model(defaults, {'viewsFactory': viewsFactory }));
+
                 }
                 collection.collectionManager = this;
                 Storage.bindGroupSpecs(collection);

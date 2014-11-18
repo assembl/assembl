@@ -1,30 +1,30 @@
-define(['models/base', 'models/panelSpec'], function (Base, panelSpec) {
+define(['models/base', 'utils/panelSpecTypes', 'models/panelSpec'], function (Base, PanelSpecTypes, panelSpec) {
     'use strict';
 
+    /**
+     * @class GroupSpecModel
+     * 
+     * Represents an independen group of panels in the interface.  When added 
+     * the matching views (groupContainerView) will be instanciated
+     */
     var GroupSpecModel = Base.Model.extend({
         parse: function (model) {
             model.panels = new panelSpec.Collection(model.panels);
             return model;
         },
-
-        defaults: {
-            panels: new panelSpec.Collection([
-                {type: 'navSidebar'},
-                {type: 'ideaPanel', minimized: true},
-                {type: 'messageList'}
-            ]),
-            navigationState: 'home'
-        },
-
         /**
-         * @params list of panel type names
+         * @params list of panelSpecTypes
          */
         removePanels: function () {
             var args = Array.prototype.slice.call(arguments);
             var panels = this.get('panels');
             var panelsToRemove = _.filter(panels.models, function (el) {
-                return _.contains(args, el.get('type'));
+                return _.contains(args, PanelSpecTypes.getById(el.get('type')));
             });
+            if(_.size(args) !== _.size(panelsToRemove)){
+              console.log("WARNING: groupSpec.Model.removePanels(): "+_.size(args)+" arguments, but found only "+_.size(panelsToRemove)+" panels to remove.");
+              console.log(args, panels, panelsToRemove);
+            }
             _.each(panelsToRemove, function (el) {
                 panels.remove(el);
             });
@@ -41,12 +41,18 @@ define(['models/base', 'models/panelSpec'], function (Base, panelSpec) {
          * Return the part of the groupSpec that contains the navigation panel
          * (if any)
          */
-        getNavigationPanelSpec: function () {
-            return this.get('panels').findWhere({type: 'navSidebar'});
+        findNavigationSidebarPanelSpec: function () {
+            return this.get('panels').findWhere({type: PanelSpecTypes.NAV_SIDEBAR.id});
         },
 
         addPanel: function (options, position) {
             var aPanelSpec = new panelSpec.Model(options);
+            if (!aPanelSpec.isValid()) {
+              throw "Can't add an invalid panelSpec, error was: "+aPanelSpec.validationError;
+            }
+            else {
+              //console.log("added panelSpec ok:", aPanelSpec, aPanelSpec.isValid());
+            }
             var panels = this.get('panels');
             if (position === undefined) {
                 panels.add(aPanelSpec);
@@ -55,52 +61,64 @@ define(['models/base', 'models/panelSpec'], function (Base, panelSpec) {
             }
         },
 
-        getPanelSpecByType: function (typename) {
-            return _.find(this.get('panels').models, function (el) {
-                return el.get('type') == typename;
-            });
+        /* @param:  a panel spec type */
+        getPanelSpecByType: function (panelSpecType) {
+          //Ensure it's a real panelSpecType
+          var validPanelSpecType = PanelSpecTypes.validate(panelSpecType);
+          if (validPanelSpecType === undefined) {
+            console.log("getPanelSpecByType: ERROR: the panelSpecType provided isn't valid panelSpecType:",panelSpecType);
+            throw "invalid panelSpecType";
+          }
+          return _.find(this.get('panels').models, function (el) {
+              return el.get('type') == validPanelSpecType.id;
+          });
         },
-
+        
         /**
-         * @list_of_options panel type name or panelSpec options or array of either
-         * @position int order in sequence of panels
+         * Note that despite the name, this function does NOT check that if
+         * the panel exists, it exists at the right position. - benoitg
+         * @list_of_options PanelType or array of PanelType
+         * @position int order of first panel listed in sequence of panels
          * find or create panels at a given position
          */
         ensurePanelsAt: function (list_of_options, position) {
+          var that = this;
+          //console.log("ensurePanelsAt() called with",list_of_options, position);
             if (!Array.isArray(list_of_options)) {
                 list_of_options = [list_of_options];
             }
             if (_.any(list_of_options, function (el) {
-                return typeof(el) == 'string'
+                return !(PanelSpecTypes.validate(el))
             })) {
-                list_of_options = _.map(list_of_options, function (el) {
-                    return {type: el};
-                });
+              console.log("ERROR: One of the panelSpecTypes in the following options isn't valid: ", list_of_options);
+              throw "One of the panelSpecTypes in the option isn't valid"
             }
             var that = this;
-            _.each(list_of_options, function (options) {
-                if (!that.getPanelSpecByType(options.type)) {
-                    that.addPanel(options, position++);
+            _.each(list_of_options, function (option) {
+                if (!that.getPanelSpecByType(option)) {
+                    that.addPanel({'type': option.id}, position++);
                 }
             });
         },
-        validate: function (viewsFactory) {
+        validate: function () {
             var panels = this.get('panels');
-            return panels.validate(viewsFactory);
+            return panels.validate();
         }
     });
 
     var GroupSpecs = Base.Collection.extend({
         model: GroupSpecModel,
-        validate: function (viewsFactory) {
+        validate: function () {
             var invalid = [];
             this.each(function (groupSpec) {
-                if (!groupSpec.validate(viewsFactory)) {
-                    invalid.push(panelSpec);
+                if (!groupSpec.validate()) {
+                    invalid.push(groupSpec);
                 }
             });
             if (invalid.length) {
+                console.log("GroupSpec.Collection: removing "+invalid.length+" invalid groupSpecs from "+this.length+" groupSpecs.");
                 this.remove(invalid);
+                console.log("GroupSpec.Collection: after removal, number of remaining valid groupSpecs: ", (this.length));
             }
             return (this.length > 0);
         }

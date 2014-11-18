@@ -10,6 +10,7 @@ define(function (require) {
         i18n = require('utils/i18n'),
         Moment = require('moment'),
         Permissions = require('utils/permissions'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         AssemblPanel = require('views/assemblPanel'),
         CKEditorField = require('views/ckeditorField'),
         backboneModal = require('backbone.modal'),
@@ -17,7 +18,7 @@ define(function (require) {
 
     var contextPage = Marionette.LayoutView.extend({
         template: '#tmpl-contextPage',
-        panelType: 'homePanel',
+        panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
         className: 'homePanel',
         gridSize: AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE,
         hideHeader: true,

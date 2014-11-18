@@ -8,6 +8,7 @@ define(function (require) {
         EditableField = require('views/editableField'),
         CKEditorField = require('views/ckeditorField'),
         Permissions = require('utils/permissions'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         MessageSendView = require('views/messageSend'),
         Notification = require('views/notification'),
         SegmentList = require('views/segmentList'),
@@ -21,7 +22,7 @@ define(function (require) {
 
     var IdeaPanel = AssemblPanel.extend({
         template: '#tmpl-ideaPanel',
-        panelType: 'ideaPanel',
+        panelType: PanelSpecTypes.IDEA_PANEL,
         className: 'ideaPanel',
         minimizeable: true,
         closeable: false,

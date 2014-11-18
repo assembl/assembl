@@ -9,11 +9,12 @@ define(function (require) {
         AssemblPanel = require('views/assemblPanel'),
         ctx = require('common/context'),
         Permissions = require('utils/permissions'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         $ = require('jquery');
 
     var NavigationView = AssemblPanel.extend({
         template: "#tmpl-navigation",
-        panelType: "navSidebar",
+        panelType: PanelSpecTypes.NAV_SIDEBAR,
         className: "navSidebar",
         hideHeader: true,
         gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
@@ -88,7 +89,7 @@ define(function (require) {
             // clear aspects of current state
             switch (this.groupContent.model.get('navigationState')) {
                 case 'synthesis':
-                    var messageListView = this.groupContent.getViewByTypeName('messageList');
+                    var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
                     if (messageListView) {
                         messageListView.currentQuery.clearAllFilters();
                         if (view == 'debate') {

@@ -4,7 +4,8 @@ define(function (require) {
         ctx = require('common/context'),
         panelSpec = require('models/panelSpec'),
         AssemblPanel = require('views/assemblPanel'),
-        PanelWrapper = require('views/groups/panelWrapper');
+        PanelWrapper = require('views/groups/panelWrapper'),
+        PanelSpecTypes = require('utils/panelSpecTypes');
 
     /** Reprents the content of an entire group */
     var groupContent = Marionette.CompositeView.extend({
@@ -19,7 +20,7 @@ define(function (require) {
             this.collection = this.model.get('panels');
             this.groupContainer = options['groupContainer'];
             setTimeout(function () {
-                var navView = that.getViewByTypeName('navSidebar');
+                var navView = that.findViewByType(PanelSpecTypes.NAV_SIDEBAR);
                 if (navView) {
                     //navView.loadView(that.model.get('navigationState'));
                     navView.toggleMenuByName(that.model.get('navigationState'));
@@ -163,16 +164,16 @@ define(function (require) {
             }
         },
 
-        getNavigationPanelSpec: function () {
-            return this.model.getNavigationPanelSpec();
+        findNavigationSidebarPanelSpec: function () {
+            return this.model.findNavigationSidebarPanelSpec();
         },
 
         resetDebateState: function (skip_animation) {
-            if (this.getNavigationPanelSpec()) {
+            if (this.findNavigationSidebarPanelSpec()) {
                 this.groupContainer.suspendResize();
                 this.model.set('navigationState', 'debate');
-                this.removePanels('homePanel');
-                this.ensurePanelsVisible('ideaPanel', 'messageList');
+                this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT);
+                this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
                 this.resetMessagePanelState();
 
                 if (skip_animation === false)
@@ -183,30 +184,30 @@ define(function (require) {
         },
 
         resetContextState: function () {
-            var nav = this.getNavigationPanelSpec();
+            var nav = this.findNavigationSidebarPanelSpec();
             if (nav) {
                 this.groupContainer.suspendResize();
                 this.model.set('navigationState', 'home');
-                this.ensureOnlyPanelsVisible('homePanel');
+                this.ensureOnlyPanelsVisible(PanelSpecTypes.DISCUSSION_CONTEXT);
                 this.groupContainer.resumeResize();
             }
         },
 
         resetSynthesisMessagesState: function (synthesisInNavigationPanel) {
-            if (this.getNavigationPanelSpec()) {
+            if (this.findNavigationSidebarPanelSpec()) {
                 this.groupContainer.suspendResize();
-                this.removePanels('homePanel');
-                this.ensurePanelsVisible('messageList');
-                this.ensurePanelsHidden('ideaPanel');
+                this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT);
+                this.ensurePanelsVisible(PanelSpecTypes.MESSAGE_LIST);
+                this.ensurePanelsHidden(PanelSpecTypes.IDEA_PANEL);
                 this.resetMessagePanelWidth();
                 this.groupContainer.resumeResize(true);
             }
         },
 
         resetMessagePanelWidth: function () {
-            var messagePanel = this.getWrapperByTypeName('messageList');
+            var messagePanel = this.findWrapperByType(PanelSpecTypes.MESSAGE_LIST);
             if (this.groupContainer.isOneNavigationGroup()) {
-                var ideaPanel = this.getWrapperByTypeName('ideaPanel');
+                var ideaPanel = this.findWrapperByType(PanelSpecTypes.IDEA_PANEL);
                 if (ideaPanel.isPanelMinimized() || ideaPanel.isPanelHidden()) {
                     messagePanel.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
                     messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(ideaPanel.minWidth);
@@ -222,9 +223,9 @@ define(function (require) {
 
         resetMessagePanelState: function () {
             this.groupContainer.suspendResize();
-            this.ensurePanelsVisible('ideaPanel', 'messageList');
-            var nav = this.getNavigationPanelSpec(),
-                ideaPanel = this.getWrapperByTypeName('ideaPanel');
+            this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
+            var nav = this.findNavigationSidebarPanelSpec(),
+                ideaPanel = this.findWrapperByType(PanelSpecTypes.IDEA_PANEL);
             this.resetMessagePanelWidth();
             if (ideaPanel != null && !ideaPanel.model.get('locked') && (!nav || this.model.get('navigationState') == 'debate')) {
                 if (ctx.getCurrentIdea() == undefined) {
@@ -245,13 +246,13 @@ define(function (require) {
 
         resetNavigation: function () {
             var that = this,
-                navigationSpec = this.getNavigationPanelSpec(),
-                ideaPanel = this.model.getPanelSpecByType('ideaPanel'),
-                messagePanelSpec = this.model.getPanelSpecByType('messagePanel'),
+                navigationSpec = this.findNavigationSidebarPanelSpec(),
+                ideaPanel = this.model.getPanelSpecByType(PanelSpecTypes.IDEA_PANEL),
+                messagePanelSpec = this.model.getPanelSpecByType(PanelSpecTypes.MESSAGE_LIST),
                 messagePanelView = this.children.findByModel(messagePanelSpec);
             if (navigationSpec && messagePanelSpec) {
                 function setSize() {
-                    messagePanelView = that.children.findByModel(messagePanel);
+                    messagePanelView = that.children.findByModel(messagePanelSpec);
                     if (ideaPanel == null || ideaPanel.get('hidden'))
                         messagePanelView.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE);
                     else
@@ -267,7 +268,7 @@ define(function (require) {
 
 
         /**
-         * @params list of panel names
+         * @params panelSpecTypes
          */
         removePanels: function () {
             this.model.removePanels.apply(this.model, arguments);
@@ -288,66 +289,108 @@ define(function (require) {
          * panel class
          * 
          */
-        getWrapperByTypeName: function (typeName) {
-            var model = this.model.getPanelSpecByType(typeName);
+        findWrapperByType: function (panelSpecType) {
+            var model = this.model.getPanelSpecByType(panelSpecType);
             if (model !== undefined) {
                 var view = this.children.findByModel(model);
                 if (view == null)
                     return;
                 return view;
             }
+            else {
+                console.log("findWrapperByType: WARNING: unable to find a wrapper for type", panelSpecType);
+              }
         },
 
-        getViewByTypeName: function (typeName) {
-            var wrapper = this.getWrapperByTypeName(typeName);
+        findViewByType: function (panelSpecType) {
+            var wrapper = this.findWrapperByType(panelSpecType);
             if (wrapper != null && wrapper.contents !== undefined) {
                 return wrapper.contents.currentView;
             }
-            return wrapper;
+            else {
+              console.log("findViewByType: WARNING: unable to find a view for type", panelSpecType);
+            }
+            return undefined;
         },
 
         /**
+         * ensure only the listed panels, are visible
+         * However, all panels are created if necessary
          * @params list of panel names
          */
         ensureOnlyPanelsVisible: function () {
-            var that = this,
-                args = Array.prototype.slice.call(arguments),
-                panels = this.model.get('panels');
-
-            // add missing panels
-            this.model.ensurePanelsAt(args, 1);
-            // show and hide panels
-            _.each(this.model.get('panels').models, function (aPanelSpec) {
-                if (aPanelSpec.get('type') == 'navSidebar')
-                    return;
-                var view = that.children.findByModel(aPanelSpec);
-                if (!view)
-                    return;
-                var shouldBeVisible = _.contains(args, aPanelSpec.get('type'));
-                aPanelSpec.set('hidden', !shouldBeVisible);
-            });
+          var that = this,
+              args = Array.prototype.slice.call(arguments),
+              panels = this.model.get('panels');
+          //console.log("ensureOnlyPanelsVisible called with", args);
+          // add missing panels
+          this.model.ensurePanelsAt(args, 1);
+          // show and hide panels
+          _.each(this.model.get('panels').models, function (aPanelSpec) {
+            var panelSpecType = PanelSpecTypes.getById(aPanelSpec.get('type'));
+              if (panelSpecType === PanelSpecTypes.NAV_SIDEBAR)
+                  return;
+              var view = that.children.findByModel(aPanelSpec);
+              if (!view)
+                  return;
+              var shouldBeVisible = _.find(args, function(arg) { return panelSpecType === arg}) !== undefined;
+              aPanelSpec.set('hidden', !shouldBeVisible);
+          });
         },
 
         /**
-         * @params list of panel names
+         * Ensure all listed panels are visible, and in the order listed
+         * creating them if necessary.
+         * Does not touch visibility of PanelSpecTypes.NAV_SIDEBAR, but creates
+         * it if absent
+         * @params list of PanelSpecTypes
          */
+        /*ensurePanelsVisible: function () {
+          var that = this;
+          var args = Array.prototype.slice.call(arguments);
+          var panels = this.model.get('panels');
+          //console.log("ensurePanelsVisible called with", args);
+          // add missing panels
+          this.model.ensurePanelsAt(args, 1);
+          // show and hide panels
+          _.each(this.model.get('panels').models, function (aPanelSpec) {
+            var panelSpecType = PanelSpecTypes.getById(aPanelSpec.get('type'));
+            if (panelSpecType === PanelSpecTypes.NAV_SIDEBAR)
+              return;
+            var shouldBeVisible = _.find(args, function(arg) {return panelSpecType === arg}) !== undefined;
+            if (shouldBeVisible) {
+              aPanelSpec.set('hidden', false);
+            }
+            else {
+              console.log()
+              throw "Unable to find panel type "+panelSpecType.id+" to change visibility";
+            }
+          });
+        },*/
         ensurePanelsVisible: function () {
-            var that = this;
-            var args = Array.prototype.slice.call(arguments);
-            var panels = this.model.get('panels');
-            // add missing panels
-            this.model.ensurePanelsAt(args, 1);
-            // show and hide panels
-            _.each(this.model.get('panels').models, function (aPanelSpec) {
-                if (aPanelSpec.get('type') == 'navSidebar')
-                    return;
-                var shouldBeVisible = _.contains(args, aPanelSpec.get('type'));
-                if (shouldBeVisible)
-                    aPanelSpec.set('hidden', false);
+          var that = this;
+          var args = Array.prototype.slice.call(arguments);
+          var panels = this.model.get('panels');
+          //console.log("ensurePanelsVisible called with", args);
+          // add missing panels
+          this.model.ensurePanelsAt(args, 1);
+          // show and hide panels
+          var panelSpecsToMakeVisible = this.model.get('panels').models.filter(function (aPanelSpec) {
+            var panelSpecType = PanelSpecTypes.getById(aPanelSpec.get('type'));
+            return _.contains(args, panelSpecType);
+          });
+          if(_.size(args) !== _.size(panelSpecsToMakeVisible)) {
+            console.log(args, panelSpecsToMakeVisible);
+            throw "Error, unable to find all panels to make visible";
+          }
+          _.each(panelSpecsToMakeVisible, function (aPanelSpec) {
+            aPanelSpec.set('hidden', false);
             });
         },
-
+        
         /**
+         * Ensure all listed panels are hidden if present
+         * Skips PanelSpecTypes.NAV_SIDEBAR
          * @params list of panel names
          */
         ensurePanelsHidden: function () {
@@ -356,11 +399,18 @@ define(function (require) {
             var panels = this.model.get('panels');
             // show and hide panels
             _.each(this.model.get('panels').models, function (aPanelSpec) {
-                if (aPanelSpec.get('type') == 'navSidebar')
-                    return;
-                var shouldBeHidden = _.contains(args, aPanelSpec.get('type'));
-                if (shouldBeHidden)
+              var panelSpecType = PanelSpecTypes.getById(aPanelSpec.get('type'));
+              if (panelSpecType === PanelSpecTypes.NAV_SIDEBAR) {
+                return;
+              }
+              var shouldBeHidden = _.find(args, function(arg) {return panelSpecType === arg}) !== undefined;
+                if (shouldBeHidden) {
+                  //console.log("hiding: ", panelSpecType)
                     aPanelSpec.set('hidden', true);
+                }
+                else {
+                  //console.log("leaving alone: ", panelSpecType)
+                }
             });
         }
     });

@@ -161,7 +161,7 @@ define(function (require) {
             var messageListView;
             e.stopPropagation();
             if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-                messageListView = this.groupContent.getViewByTypeName('messageList');
+                messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
                 messageListView.triggerMethod('messageList:clearAllFilters');
             }
             if (this.model === Ctx.getCurrentIdea()) {

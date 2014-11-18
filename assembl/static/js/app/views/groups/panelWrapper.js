@@ -1,10 +1,11 @@
 define(function (require) {
 
     var Marionette = require('backbone.marionette'),
-        panelClassByTypeName = require('objects/viewsFactory'),
+        panelViewByPanelSpec = require('objects/viewsFactory'),
         Ctx = require('common/context'),
         AssemblPanel = require('views/assemblPanel'),
         i18n = require('utils/i18n'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         panelSpec = require('models/panelSpec');
 
     /**
@@ -37,7 +38,7 @@ define(function (require) {
         _minimizedStateButton: null,
 
         initialize: function (options) {
-            var contentClass = panelClassByTypeName(options.contentSpec);
+            var contentClass = panelViewByPanelSpec(options.contentSpec);
             this.groupContent = options.groupContent;
             this.contentsView = new contentClass({
                 groupContent: options.groupContent,
@@ -166,7 +167,7 @@ define(function (require) {
         unminimizePanel: function (evt) {
             if (!this.model.get('minimized'))
                 return;
-            if (this.model.get("type") == "ideaPanel" && Ctx.getCurrentIdea() == undefined && evt && evt.currentTarget) {
+            if (this.model.get("type") == PanelSpecTypes.IDEA_PANEL && Ctx.getCurrentIdea() == undefined && evt && evt.currentTarget) {
                 // do not accept to unminimize if no idea to show
                 var el = this.ui.minimizePanel;
                 el.attr("data-original-title", i18n.gettext('Please select an idea in the table of ideas to open the idea panel.'));
@@ -181,7 +182,7 @@ define(function (require) {
 
             this.$el.addClass("unminimizing");
 
-            if (this.model.get("type") == "ideaPanel") {
+            if (this.model.get("type") == PanelSpecTypes.IDEA_PANEL ) {
                 this.groupContent.resetMessagePanelWidth();
                 var _store = window.localStorage;
                 //_store.removeItem('ideaPanelHelpShown'); // uncomment this to test
@@ -215,7 +216,7 @@ define(function (require) {
 
             this.$el.addClass("minimizing");
 
-            if (this.model.get("type") == "ideaPanel") {
+            if (this.model.get("type") == PanelSpecTypes.IDEA_PANEL) {
                 this.groupContent.resetMessagePanelWidth();
             }
 
@@ -302,8 +303,8 @@ define(function (require) {
                 //var myCorrection = extra_pixels * gridSize / num_units;
                 var myCorrection = extra_pixels * gridSize / group_units;
                 if (this.groupContent.groupContainer.isOneNavigationGroup()
-                    && this.model.get('type') == 'messageList'
-                    && this.groupContent.model.getPanelSpecByType('ideaPanel').get('minimized')) {
+                    && this.model.get('type') == PanelSpecTypes.MESSAGE_LIST
+                    && this.groupContent.model.getPanelSpecByType(PanelSpecTypes.IDEA_PANEL).get('minimized')) {
                     myCorrection += AssemblPanel.prototype.minimized_size;
                 }
                 if (isNaN(myCorrection))
@@ -402,24 +403,24 @@ define(function (require) {
             var type = this.contentsView.panelType,
                 icon = '';
             switch (type) {
-                case'ideaPanel':
+                case PanelSpecTypes.IDEA_PANEL:
                     icon = 'icon-idea';
                     break;
-                case'navSidebar':
+                case PanelSpecTypes.NAV_SIDEBAR:
                     icon = 'icon-home';
                     break;
-                case'messageList':
+                case PanelSpecTypes.MESSAGE_LIST:
                     icon = 'icon-comment';
                     break;
-                case'clipboard':
+                case PanelSpecTypes.CLIPBOARD:
                     // ne need because of resetTitle - segment
                     break;
-                case'synthesisPanel':
+                case PanelSpecTypes.SYNTHESIS_EDITOR:
                     icon = 'icon-doc';
                     break;
-                case'homePanel':
+                case PanelSpecTypes.DISCUSSION_CONTEXT:
                     break;
-                case'ideaList':
+                case PanelSpecTypes.TABLE_OF_IDEAS:
                     icon = 'icon-discuss';
                     break;
                 default:
