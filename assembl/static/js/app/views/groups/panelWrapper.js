@@ -166,13 +166,13 @@ define(function (require) {
         unminimizePanel: function (evt) {
             if (!this.model.get('minimized'))
                 return;
-            if (this.model.get("type") == "ideaPanel" && Ctx.getCurrentIdea() == undefined) {
+            if (this.model.get("type") == "ideaPanel" && Ctx.getCurrentIdea() == undefined && evt && evt.currentTarget) {
                 // do not accept to unminimize if no idea to show
-
-                $(evt.currentTarget).attr("data-original-title", i18n.gettext('Please select an idea in the table of ideas to open the idea panel.'));
-                $(evt.currentTarget).tooltip('destroy');
-                $(evt.currentTarget).tooltip({container: 'body'});
-                $(evt.currentTarget).tooltip('show');
+                var el = this.ui.minimizePanel;
+                el.attr("data-original-title", i18n.gettext('Please select an idea in the table of ideas to open the idea panel.'));
+                el.tooltip('destroy');
+                el.tooltip({container: 'body'});
+                el.tooltip('show');
 
                 return;
             }
@@ -183,6 +183,25 @@ define(function (require) {
 
             if (this.model.get("type") == "ideaPanel") {
                 this.groupContent.resetMessagePanelWidth();
+                var _store = window.localStorage;
+                //_store.removeItem('ideaPanelHelpShown'); // uncomment this to test
+                if (!_store.getItem('ideaPanelHelpShown')) {
+                    _store.setItem('ideaPanelHelpShown', true);
+                    var that = this;
+                    setTimeout(function(){
+                        var el = that.ui.minimizePanel;
+                        var initialTitle = el.attr("data-original-title");
+                        el.attr("data-original-title", i18n.gettext('Need more room for messages? Click here to minimize the Idea panel.'));
+                        el.tooltip('destroy');
+                        el.tooltip({container: 'body', placement: 'left'});
+                        el.tooltip('show');
+                        setTimeout(function(){
+                            el.attr("data-original-title", initialTitle);
+                            el.tooltip('destroy');
+                            el.tooltip({container: 'body'});
+                        }, 7000);
+                    }, 2500);
+                }
             }
 
             this.groupContent.groupContainer.resizeAllPanels();
