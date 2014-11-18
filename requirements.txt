@@ -44,14 +44,14 @@ isodate==0.5.1
 iso8601==0.1.10
 -e git+https://github.com/maparent/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
-kombu==3.0.23
+kombu==3.0.24
 lingua==3.6.1
 lxml==3.4.0
 meld3==1.0.0
 mock==1.0.1
-oauthlib==0.7.1
+oauthlib==0.7.2
 paramiko==1.15.1
-pinocchio==0.4.1
+pinocchio==0.4.2
 polib==1.0.5
 premailer==2.7.0
 py==1.4.26
@@ -68,7 +68,7 @@ pyramid-debugtoolbar==2.2.2
 pyramid-jinja2==2.3.3
 pyramid-mailer==0.13
 pyramid-mako==1.0.2
-pyramid-tm==0.7
+pyramid-tm==0.8
 pytest==2.6.4
 pytest-cov==1.8.1
 pytest-localserver==0.3.3
