@@ -8,6 +8,7 @@ define(function (require) {
         Ctx = require('common/context'),
         Permissions = require('utils/permissions'),
         i18n = require('utils/i18n');
+    require('jquery-autosize');
 
     var MessageSendView = Backbone.View.extend({
         /**
@@ -205,6 +206,7 @@ define(function (require) {
          */
         onChangeBody: function () {
             var message_body = this.$('.messageSend-body').val();
+            this.$('.messageSend-body').autosize();
 
             if (message_body && message_body != this.initialBody) {
                 this.$('.messageSend-body').removeClass("text-muted");

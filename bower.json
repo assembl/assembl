@@ -34,6 +34,7 @@
         "Backbone.Subset": "maparent/Backbone.Subset",
         "d3": "~3.4.11",
         "backbone-modal": "~1.1.1",
-        "ink": "1.0.5"
+        "ink": "1.0.5",
+        "jquery-autosize": "~1.18.15"
     }
 }
