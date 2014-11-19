@@ -2,6 +2,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from pyramid.security import authenticated_userid
 from sqlalchemy.orm import joinedload
 from cornice import Service
+import simplejson as json
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ
@@ -20,7 +21,7 @@ agent = Service(
 
 user = Service(
     name='user', path=API_DISCUSSION_PREFIX + '/user/{id:.+}',
-    description="Retrieve a single agent", renderer='json')
+    description="Retrieve a single user", renderer='json')
 
 def _get_agents_real(discussion, view_def=None, include_email=False):
     agents = AgentProfile.db().query(AgentProfile)
@@ -82,7 +83,7 @@ def get_user(request):
     return dict(
       the_user=profile,
       unverified_emails=unverified_emails,
-      user=session.query(User).get(logged_in)) 
+      user=session.query(User).get(logged_in))
 
         
 
