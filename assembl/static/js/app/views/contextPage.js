@@ -308,6 +308,13 @@ define(function (require) {
                     // console.log("collections allUsersCollection, allMessagesCollection are loaded");
                     // console.log(allMessagesCollection);
 
+                    if ( allMessagesCollection.size() == 0 ){
+                        var chart_div = that.$('.chart');
+                        chart_div.html( i18n.gettext("Not enough data yet.") );
+                        that.$(".pie").hide();
+                        return;
+                    }
+
                     var messages_sorted_by_date = new Backbone.Collection(allMessagesCollection.toJSON()); // clone
                     messages_sorted_by_date.sortBy(function (msg) {
                         return msg.date;
