@@ -1,10 +1,11 @@
 from pyramid.httpexceptions import HTTPNotFound
+from pyramid.security import authenticated_userid
 from sqlalchemy.orm import joinedload
 from cornice import Service
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ
-from assembl.models import Discussion, AgentProfile
+from assembl.models import Discussion, AgentProfile, User
 
 
 agents = Service(
@@ -15,6 +16,10 @@ agents = Service(
 
 agent = Service(
     name='agent', path=API_DISCUSSION_PREFIX + '/agents/{id:.+}',
+    description="Retrieve a single agent", renderer='json')
+
+user = Service(
+    name='user', path=API_DISCUSSION_PREFIX + '/user/{id:.+}',
     description="Retrieve a single agent", renderer='json')
 
 def _get_agents_real(discussion, view_def=None, include_email=False):
@@ -55,3 +60,31 @@ def get_agent(request):
         return agent.generic_json(view_def)
     else:
         return agent.serializable()
+
+@user.get(permission=P_READ)
+def get_user(request):
+    user_id = request.matchdict['id']
+    #user = AgentProfile.get_instance(user_id)
+    session = AgentProfile.db
+    logged_in = authenticated_userid(request)
+
+    try:
+        id = int(user_id)
+    except:
+      raise HTTPNotFound()
+    profile = session.query(AgentProfile).get(id)
+
+    unverified_emails = [
+        (ea, session.query(EmailAccount).filter_by(
+            email=ea.email, verified=True).first())
+        for ea in profile.email_accounts if not ea.verified]
+
+    return dict(
+      the_user=profile,
+      unverified_emails=unverified_emails,
+      user=session.query(User).get(logged_in)) 
+
+        
+
+
+
