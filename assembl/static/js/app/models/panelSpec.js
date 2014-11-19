@@ -1,4 +1,4 @@
-define(['models/base'], function (Base) {
+define(['models/base', 'utils/panelSpecTypes'], function (Base, PanelSpecTypes) {
     'use strict';
 
     /**
@@ -34,7 +34,7 @@ define(['models/base'], function (Base) {
         },
 
         isOfType: function(psType) {
-          return this.get('type') == psType.id;
+          return PanelSpecTypes.getById(this.get('type')) == psType;
         }
     });
 

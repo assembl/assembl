@@ -239,8 +239,7 @@ define(function (require) {
         // not used?
         setPanelWidthByType: function (panelType, width) {
             var panels = this.model.get('panels');
-            // TODO benoitg: should this be panelType.id?
-            var panel = panels.findWhere({'type': panelType});
+            var panel = panels.findWhere({'type': panelType.id});
             var view = this.children.findByModel(panel);
             view.setGridSize(width);
         },
