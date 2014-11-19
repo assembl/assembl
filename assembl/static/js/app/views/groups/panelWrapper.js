@@ -167,7 +167,7 @@ define(function (require) {
         unminimizePanel: function (evt) {
             if (!this.model.get('minimized'))
                 return;
-            if (this.model.get("type") == PanelSpecTypes.IDEA_PANEL && Ctx.getCurrentIdea() == undefined && evt && evt.currentTarget) {
+            if (this.model.isOfType(PanelSpecTypes.IDEA_PANEL) && Ctx.getCurrentIdea() == undefined && evt && evt.currentTarget) {
                 // do not accept to unminimize if no idea to show
                 var el = this.ui.minimizePanel;
                 el.attr("data-original-title", i18n.gettext('Please select an idea in the table of ideas to open the idea panel.'));
@@ -182,7 +182,7 @@ define(function (require) {
 
             this.$el.addClass("unminimizing");
 
-            if (this.model.get("type") == PanelSpecTypes.IDEA_PANEL ) {
+            if (this.model.isOfType(PanelSpecTypes.IDEA_PANEL) ) {
                 this.groupContent.resetMessagePanelWidth();
                 var _store = window.localStorage;
                 //_store.removeItem('ideaPanelHelpShown'); // uncomment this to test
@@ -216,7 +216,7 @@ define(function (require) {
 
             this.$el.addClass("minimizing");
 
-            if (this.model.get("type") == PanelSpecTypes.IDEA_PANEL) {
+            if (this.model.isOfType(PanelSpecTypes.IDEA_PANEL)) {
                 this.groupContent.resetMessagePanelWidth();
             }
 
@@ -303,7 +303,7 @@ define(function (require) {
                 //var myCorrection = extra_pixels * gridSize / num_units;
                 var myCorrection = extra_pixels * gridSize / group_units;
                 if (this.groupContent.groupContainer.isOneNavigationGroup()
-                    && this.model.get('type') == PanelSpecTypes.MESSAGE_LIST
+                    && this.model.isOfType(PanelSpecTypes.MESSAGE_LIST)
                     && this.groupContent.model.getPanelSpecByType(PanelSpecTypes.IDEA_PANEL).get('minimized')) {
                     myCorrection += AssemblPanel.prototype.minimized_size;
                 }

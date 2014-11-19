@@ -31,8 +31,11 @@ define(['models/base'], function (Base) {
             return "An exception was thrown trying to create the view for this panelSpec";
           }
           //Everything ok
-        }
+        },
 
+        isOfType: function(psType) {
+          return this.get('type') == psType.id;
+        }
     });
 
     var PanelSpecs = Base.Collection.extend({
