@@ -3,6 +3,7 @@ define(function (require) {
 
     var Assembl = require('app'),
         Ctx = require('common/context'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         IdeaView = require('views/idea');
 
     var OrphanMessagesInIdeaListView = IdeaView.extend({

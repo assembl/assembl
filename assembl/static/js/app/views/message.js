@@ -11,6 +11,7 @@ define(function (require) {
         MessageSendView = require('views/messageSend'),
         User = require('models/user'),
         CollectionManager = require('common/collectionManager'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         $ = require('jquery');
     require('jquery.dotdotdot');
 

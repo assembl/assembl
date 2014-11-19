@@ -2,7 +2,8 @@ define(function (require) {
     'use strict';
 
     var IdeaView = require('views/idea'),
-        Ctx = require('common/context');
+        Ctx = require('common/context'),
+        PanelSpecTypes = require('utils/panelSpecTypes');
 
     var AllMessagesInIdeaListView = IdeaView.extend({
         /**

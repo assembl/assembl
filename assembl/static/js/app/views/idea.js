@@ -5,7 +5,8 @@ define(function (require) {
         _ = require('underscore'),
         Assembl = require('app'),
         Ctx = require('common/context'),
-        Permissions = require('utils/permissions');
+        Permissions = require('utils/permissions'),
+        PanelSpecTypes = require('utils/panelSpecTypes');
 
     var IdeaView = Backbone.View.extend({
         /**

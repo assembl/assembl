@@ -3,6 +3,7 @@ define(function (require) {
 
     var Ctx = require('common/context'),
         Assembl = require('app'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         IdeaView = require('views/idea');
 
     var SynthesisIdeaView = IdeaView.extend({
