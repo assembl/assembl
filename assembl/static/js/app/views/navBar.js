@@ -1,6 +1,5 @@
-define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'backbone.modal', 'backbone.marionette.modals'],
-    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel) {
-
+define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'backbone.modal', 'backbone.marionette.modals'],
+    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions) {
         var navBar = Marionette.LayoutView.extend({
             template: '#tmpl-navBar',
             tagName: 'nav',
@@ -44,7 +43,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             serializeData: function () {
                 return {
                     Ctx: Ctx,
-                    Roles: this.roles
+                    Roles: this.roles,
+                    canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER)
                 }
             },
 

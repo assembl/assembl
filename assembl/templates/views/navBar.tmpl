@@ -19,7 +19,7 @@
   <div class="gr">
     <div class="gu gu-4of2">
       {% if user %}
-        <% if( _.isEmpty(Roles) ){ %>
+        <% if( _.isEmpty(Roles) && canSubscribeToDiscussion ){ %>
           <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
         <% } %>
       {% else %}
