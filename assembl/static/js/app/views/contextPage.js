@@ -13,8 +13,9 @@ define(function (require) {
         PanelSpecTypes = require('utils/panelSpecTypes'),
         AssemblPanel = require('views/assemblPanel'),
         CKEditorField = require('views/ckeditorField'),
-        backboneModal = require('backbone.modal'),
-        marionetteModal = require('backbone.marionette.modals');
+        Types = require('utils/types');
+    require('backbone.modal');
+    require('backbone.marionette.modals');
 
     var contextPage = Marionette.LayoutView.extend({
         template: '#tmpl-contextPage',
@@ -36,15 +37,20 @@ define(function (require) {
         },
 
         initialize: function (options) {
-            //console.log("contextPage::initialize()");
-            // add editable "objectives" field
             var that = this,
+                collectionManager = new CollectionManager(),
                 currentUser = Ctx.getCurrentUser(),
                 canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
 
-            this.collection = new Backbone.Collection();
+            this.synthesis = new Backbone.Model();
+            this.partners = new Backbone.Collection();
 
-            $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
+            $.when(Ctx.getDiscussionPromise(),
+                collectionManager.getAllMessageStructureCollectionPromise(),
+                collectionManager.getAllSynthesisCollectionPromise(),
+                collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
+                function (discussion, allMessageStructureCollection, allSynthesisCollection, Organization) {
+
                 // we implement here get() and save() methods (needed by CKEditor), so we mock a model instance
                 // TODO: find a better solution, for example create and use a real Discussion model instead?
                 discussion.get = function (field) {
@@ -90,7 +96,6 @@ define(function (require) {
                     'canEdit': canEdit
                 });
 
-
                 // FIXME: here we try to apply the dots again after text has been edited but it does not seem to work
                 var onCKEditorChange = function () {
                     console.log("Updating dotdotdot");
@@ -101,6 +106,34 @@ define(function (require) {
                 that.listenTo(that.introductionField, "cancel", onCKEditorChange);
                 // end of FIXME
 
+                    /**
+                     * Next synthesis published
+                     * */
+                    var synthesisMessages = allMessageStructureCollection.where({'@type': Types.SYNTHESIS_POST});
+                    if (synthesisMessages.length > 0) {
+                        _.sortBy(synthesisMessages, function (message) {
+                            return message.get('date');
+                        });
+                        synthesisMessages.reverse();
+
+                        _.each(synthesisMessages, function (message, index) {
+                            if (index === 0) {
+                                that.synthesis = allSynthesisCollection.get(message.get('publishes_synthesis'));
+                            }
+                        })
+                    }
+                    else {
+                        that.synthesis.set({
+                            empty: i18n.gettext("No synthesis of the discussion has been published yet")
+                        });
+                    }
+
+                    /**
+                     * Organization
+                     * */
+                    that.partners = Organization;
+
+                    that.render();
             });
 
             this.computeStatistics();
@@ -108,43 +141,10 @@ define(function (require) {
 
         serializeData: function () {
             return {
-                contextPage: this.model,
-                partners: this.collection.models,
+                synthesis: this.synthesis,
+                partners: this.partners.models,
                 ctx: Ctx
             }
-        },
-
-        displayLastSynthesis: function () {
-            var collectionManager = new CollectionManager(),
-                that = this;
-
-            $.when(collectionManager.getAllSynthesisCollectionPromise()
-            ).then(function (synthesisCollection) {
-
-                    if (!that.model) {
-                        //If unspecified, we find the next_synthesis
-                        that.model = _.find(synthesisCollection.models, function (model) {
-                            return model.get('is_next_synthesis');
-                        });
-                    }
-
-                    that.$('.lastSynthesis').dotdotdot({
-                        height: 70,
-                        ellipsis: '... '
-                    });
-
-                });
-        },
-
-        displayPartners: function () {
-            var collectionManager = new CollectionManager(),
-                that = this;
-
-            $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).
-                then(function (Organization) {
-                    that.collection.add(Organization.models);
-                });
-
         },
 
         introductionSeeMore: function () {
@@ -208,10 +208,6 @@ define(function (require) {
             });
 
             this.draw();
-
-            this.displayLastSynthesis();
-
-            this.displayPartners();
         },
 
         /*
