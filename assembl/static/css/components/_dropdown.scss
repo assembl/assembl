@@ -74,7 +74,7 @@
 // The option list
 // ---------------
 .dropdown-list {
-  $dropdown-time: 0.4s;
+  $dropdown-time: 0.3s;
   @extend .contextmenu;
 
   position: absolute;
@@ -85,11 +85,11 @@
   overflow: visible;
   white-space: nowrap;
 
-  @include transition(top $dropdown-time, opacity $dropdown-time, left 0 linear $dropdown-time, right 0 linear $dropdown-time);
+  @include transition(opacity $dropdown-time);
   @include opacity(0);
 
   .dropdown.is-open & {
-    @include transition(top $dropdown-time, opacity $dropdown-time, left 0 linear 0, right 0 linear 0);
+    @include transition(opacity $dropdown-time);
     top: 8px;
     @include opacity(1);
     left: 0;

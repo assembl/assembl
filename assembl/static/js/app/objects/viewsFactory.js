@@ -13,20 +13,19 @@ define(function (require) {
         SynthesisNavPanel = require('views/navigation/synthesisInNavigation'),  // synthesisNavPanel
         SynthesisPanel = require('views/synthesisPanel');  // synthesisPanel
 
-    // Design note: This requires our panels to have a panelType variable.
-    // I deliberately gave it the same values as panelClass, so we have less to remember.
-    // I almost used panelClass, but decided that variable overloading was error-prone.
-    // However, I will use the first CSS class in panelClass if panelType is absent. MAP
+    /*
+     * A registry of AssemblView subclasses implementing a panelSpec,
+     * indexed by PanelSpec.id
+     */
     var panelTypeRegistry = {};
     _.each([
         HomeNavPanel, HomePanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList, SynthesisNavPanel, SynthesisPanel
     ], function (panelClass) {
-        var panelType = panelClass.prototype.panelType || panelClass.prototype.panelClass;
-        if (panelType.indexOf(' ') > 0) {
-            panelType = panelType.split(' ')[0];
-        }
-        panelTypeRegistry[panelType] = panelClass;
+        var panelType = panelClass.prototype.panelType;
+        //console.log(panelClass.prototype.panelType);
+        panelTypeRegistry[panelType.id] = panelClass;
     });
+    //console.log("panelTypeRegistry:", panelTypeRegistry);
 
     /**
      * Factory to create a view instance from the panelSpec passed as parameter
@@ -34,14 +33,30 @@ define(function (require) {
      * @param <PanelSpecs.Model> panelSpecModel
      * @return <AssemblPanel> AssemblPanel view
      */
-    function panelClassByTypeName(panelSpecModel) {
-        try {
-            return panelTypeRegistry[panelSpecModel.get('type')];
-        } catch (err) {
-            console.log('invalid spec:', panelSpecModel);
+    function panelViewByPanelSpec(panelSpecModel) {
+      var panelClass,
+          id;
+      //console.log("panelViewByPanelSpec() called with ",panelSpecModel);
+      try {
+        id = panelSpecModel.get('type');
+        if (id) {
+          panelClass = panelTypeRegistry[id];
         }
-        return AssemblPanel;
+        else {
+          throw "panelSpecModel.get('type') was empty";
+        }
+        
+        if (! panelClass instanceof AssemblPanel) {
+          throw "panelClass isn't an instance of AssemblPanel";
+        }
+        //console.log("panelViewByPanelSpec() returning ",panelClass, "for",panelSpecModel)
+        return panelClass;
+      }
+      catch (err) {
+        console.log('invalid spec:', panelSpecModel, "error was", err);
+        throw "invalidPanelSpecModel";
+      }
     }
 
-    return panelClassByTypeName;
+    return panelViewByPanelSpec;
 });

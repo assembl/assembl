@@ -1,10 +1,11 @@
 from pyramid.httpexceptions import HTTPNotFound
+from pyramid.security import authenticated_userid
 from sqlalchemy.orm import joinedload
 from cornice import Service
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ
-from assembl.models import Discussion, AgentProfile
+from assembl.models import (Discussion, AgentProfile, EmailAccount, User, Username)
 
 
 agents = Service(
@@ -49,9 +50,59 @@ def get_agent(request):
     agent = AgentProfile.get_instance(agent_id)
 
     if not agent:
-        raise HTTPNotFound("Agent with id '%s' not found." % agent_id)
+      raise HTTPNotFound("Agent with id '%s' not found." % agent_id)
 
     if view_def:
-        return agent.generic_json(view_def)
+      return agent.generic_json(view_def)
     else:
-        return agent.serializable()
+      return agent.serializable()
+
+@agent.post()
+def post_agent(request):
+    agent_id = request.matchdict['id']
+    agent = AgentProfile.get_instance(agent_id)
+    redirect = False
+    username = request.params.get('username', '').strip()
+    session = AgentProfile.db
+    localizer = request.localizer
+
+    if username and (
+            agent.username is None or username != agent.username):
+        # check if exists
+        if session.query(Username).filter_by(username=username).count():
+            errors.append(localizer.translate(_(
+                'The username %s is already used')) % (username,))
+        else:
+            old_username = agent.username
+            if old_username is not None:
+                # free existing username
+                session.delete(old_username)
+                session.flush()
+            # add new username
+            session.add(Username(username=username, user=agent))
+
+    name = request.params.get('name', '').strip()
+    if name:
+        agent.name = name
+    p1, p2 = (request.params.get('password1', '').strip(),
+              request.params.get('password2', '').strip())
+    if p1 != p2:
+        errors.append(localizer.translate(_(
+            'The passwords are not identical')))
+    elif p1:
+        agent.set_password(p1)
+    add_email = request.params.get('add_email', '').strip()
+    if add_email:
+        if not is_email(add_email):
+            return dict(get_default_context(request),
+                        error=localizer.translate(_(
+                            "This is not a valid email")))
+        # No need to check presence since not validated yet
+        email = EmailAccount(
+            email=add_email, profile=agent)
+        session.add(email)
+    if redirect:
+        return HTTPFound(location=request.route_url(
+            'profile_user', type='u', identifier=username))
+    profile = session.query(User).get(agent_id)
+    return {}

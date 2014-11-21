@@ -12,6 +12,7 @@ define(function (require) {
         Ctx = require('common/context'),
         Idea = require('models/idea'),
         IdeaView = require('views/idea'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         AssemblPanel = require('views/assemblPanel'),
         ideaGraphLoader = require('views/ideaGraph'),
         _ = require('underscore'),
@@ -24,7 +25,7 @@ define(function (require) {
 
 
     var IdeaList = AssemblPanel.extend({
-        panelType: 'ideaList',
+        panelType: PanelSpecTypes.TABLE_OF_IDEAS,
         className: 'ideaList',
         /**
          * The filter applied to the idea list

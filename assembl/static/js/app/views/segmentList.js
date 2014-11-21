@@ -12,6 +12,7 @@ define(function (require) {
         i18n = require('utils/i18n'),
         Permissions = require('utils/permissions'),
         CollectionManager = require('common/collectionManager'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         AssemblPanel = require('views/assemblPanel');
 
     var SegmentView = Marionette.ItemView.extend({
@@ -173,7 +174,7 @@ define(function (require) {
 
     var SegmentListPanel = AssemblPanel.extend({
         template: '#tmpl-segmentList',
-        panelType: 'clipboard',
+        panelType: PanelSpecTypes.CLIPBOARD,
         className: 'clipboard',
         minWidth: 270,
 

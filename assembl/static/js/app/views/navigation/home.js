@@ -1,11 +1,12 @@
 define(function (require) {
 
     var Assembl = require('app'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         AssemblPanel = require('views/assemblPanel');
 
     var HomePanel = AssemblPanel.extend({
         template: '#tmpl-home',
-        panelType: 'homeNavPanel',
+        panelType: PanelSpecTypes.NAVIGATION_PANEL_HOME_SECTION,
         className: 'homeNavPanel',
         ui: {
             debate: '.js_go-to-debate'

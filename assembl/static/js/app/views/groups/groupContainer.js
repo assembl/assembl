@@ -2,11 +2,13 @@ define(function (require) {
 
     var Marionette = require('backbone.marionette'),
         Assembl = require('app'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         GroupContent = require('views/groups/groupContent'),
         AssemblPanel = require('views/assemblPanel'),
         Notification = require('views/notification');
     /**
-     * Manages all the groups in the interface
+     * Manages all the groups in the interface, essentially the GroupSpec.Collection
+     * Normally referenced with Assembl.groupContainer
      */
     var groupContainer = Marionette.CollectionView.extend({
         id: 'groupsContainer',
@@ -22,6 +24,26 @@ define(function (require) {
             }, 200);
         },
 
+        /*
+         * @param view A view (such as a messageList) for
+         * which we want the matching groupContent to send events or manipulate
+         * state.
+         * 
+         * @return: A groupContent view
+         */
+        getGroupContent: function (view) {
+          console.log("getGroupContent(): WRITEME!")
+        },
+        
+        /*
+         * @param viewClass A view (such as a messageList) for
+         * which we want the matching groupContent to send events or manipulate
+         * state.
+         */
+        findPanelInstance: function (viewClass) {
+          console.log("getGroupContent(): WRITEME!")
+        },
+        
         childViewOptions: function (child, index) {
             return {
                 groupContainer: this
@@ -58,10 +80,10 @@ define(function (require) {
                 var group1 = this.collection.first();
                 var panel_types = group1.get('panels').pluck('type');
                 if (panel_types.length == 3
-                    && (panel_types[0] == 'navSidebar'
-                        || panel_types[0] == 'ideaList')
-                    && panel_types[1] == 'ideaPanel'
-                    && panel_types[2] == 'messageList')
+                    && (PanelSpecTypes.getById(panel_types[0]) === PanelSpecTypes.NAV_SIDEBAR
+                        || PanelSpecTypes.getById(panel_types[0]) === PanelSpecTypes.TABLE_OF_IDEAS)
+                    && PanelSpecTypes.getById(panel_types[1]) === PanelSpecTypes.IDEA_PANEL
+                    && PanelSpecTypes.getById(panel_types[2]) === PanelSpecTypes.MESSAGE_LIST)
                     return true;
             }
             return false;
@@ -107,7 +129,7 @@ define(function (require) {
 
         getMinIdeaPixels: function () {
             if (this.isOneNavigationGroup()) {
-                if (this.collection.first().getPanelSpecByType('ideaPanel').get('minimized')) {
+                if (this.collection.first().getPanelSpecByType(PanelSpecTypes.IDEA_PANEL).get('minimized')) {
                     return AssemblPanel.prototype.minimized_size;
                 }
             }

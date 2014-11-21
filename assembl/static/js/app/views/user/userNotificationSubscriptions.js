@@ -6,8 +6,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
             template: '#tmpl-userNotificationSubscriptions',
             className: 'admin-notifications',
             ui: {
-              currentSubscribeCheckbox: ".js_userNotification",
-              newSubscribeCheckbox: ".js_userNewNotification",
+                currentSubscribeCheckbox: ".js_userNotification",
+                newSubscribeCheckbox: ".js_userNewNotification",
                 unSubscription: ".js_unSubscription"
             },
 
@@ -40,6 +40,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                 //TODO: change this system when we will have many subscriptions
                 if (!_.isEmpty(this.roles.models)) {
                     this.ui.unSubscription.removeClass('hidden');
+                } else {
+                    this.ui.currentSubscribeCheckbox.attr('disabled', true);
                 }
             },
 
@@ -47,18 +49,18 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                 var that = this,
                     addableGlobalSubscriptions = [];
-                this.notificationTemplates.each(function(template) {
-                  var alreadyPresent = that.collection.find(function(subscription) {
-                    if (subscription.get('@type') === template.get('@type')){
-                      return true;
+                this.notificationTemplates.each(function (template) {
+                    var alreadyPresent = that.collection.find(function (subscription) {
+                        if (subscription.get('@type') === template.get('@type')) {
+                            return true;
+                        }
+                        else {
+                            return false
+                        }
+                    });
+                    if (alreadyPresent === undefined) {
+                        addableGlobalSubscriptions.push(template)
                     }
-                    else {
-                      return false
-                    }
-                  });
-                  if(alreadyPresent === undefined) {
-                    addableGlobalSubscriptions.push(template)
-                  }
                 })
                 console.log(addableGlobalSubscriptions);
                 return {
@@ -68,22 +70,22 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                 }
             },
 
-            userNewSubscription : function (e) {
-              var elm = $(e.target);
+            userNewSubscription: function (e) {
+                var elm = $(e.target);
 
-              var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
-              var notificationSubscriptionTemplateModel = this.notificationTemplates.get(elm.attr('id'));
-              var notificationSubscriptionModel = new NotificationSubscription.Model(
-                  {
-                      creation_origin: "USER_REQUESTED",
-                      status: status,
-                      '@type': notificationSubscriptionTemplateModel.get('@type'),
-                      discussion: notificationSubscriptionTemplateModel.get('discussion')
-                  });
-              this.collection.add(notificationSubscriptionModel);
-              notificationSubscriptionModel.save()
+                var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
+                var notificationSubscriptionTemplateModel = this.notificationTemplates.get(elm.attr('id'));
+                var notificationSubscriptionModel = new NotificationSubscription.Model(
+                    {
+                        creation_origin: "USER_REQUESTED",
+                        status: status,
+                        '@type': notificationSubscriptionTemplateModel.get('@type'),
+                        discussion: notificationSubscriptionTemplateModel.get('discussion')
+                    });
+                this.collection.add(notificationSubscriptionModel);
+                notificationSubscriptionModel.save()
             },
-            
+
             userNotification: function (e) {
                 var elm = $(e.target);
 
@@ -96,7 +98,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                  * SubscriptionFollowSyntheses
                  * SubscriptionFollowOwnMessageDirectReplies
                  * */
-                
+
                 var notificationSubscriptionModel = this.collection.get(elm.attr('id'));
                 notificationSubscriptionModel.set("status", status);
                 notificationSubscriptionModel.save();

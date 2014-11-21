@@ -11,6 +11,7 @@ define(function (require) {
         Permissions = require('utils/permissions'),
         IdeaFamilyView = require('views/ideaFamily'),
         IdeaInSynthesisView = require('views/ideaInSynthesis'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         AssemblPanel = require('views/assemblPanel'),
         i18n = require('utils/i18n'),
         EditableField = require('views/editableField'),
@@ -20,7 +21,7 @@ define(function (require) {
 
     var SynthesisPanel = AssemblPanel.extend({
         template: '#tmpl-synthesisPanel',
-        panelType: 'synthesisPanel',
+        panelType: PanelSpecTypes.SYNTHESIS_EDITOR,
         className: 'synthesisPanel',
         gridSize: AssemblPanel.prototype.SYNTHESIS_PANEL_GRID_SIZE,
         /**

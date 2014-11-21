@@ -126,7 +126,7 @@ define(function (require) {
                      usable, or if it wasn't initialized before */
                     // Find if a group exists that has a navigation panel
                     var navigableGroupSpec = groupSpecs.find(function (aGroupSpec) {
-                        return aGroupSpec.getNavigationPanelSpec();
+                        return aGroupSpec.findNavigationSidebarPanelSpec();
                     });
                     if (navigableGroupSpec) {
                         setTimeout(function () {
@@ -135,6 +135,7 @@ define(function (require) {
                         });
                     }
                 }
+                //console.log(group);
                 group.resizeAllPanels();
                 Assembl.groupContainer.show(group);
             });

@@ -5,23 +5,24 @@ $text-muted: #999;
 .formfield {
   width: 100%;
   @include box-sizing(border-box);
-  padding: 0 5px;
+  padding: 10px;
   height: 35px;
   line-height: 35px;
-  border: solid 1px $form-border-color;
-  font-size: 16px;
+  border: solid 1px $white;
+  font-size: 14px;
+  font-style: italic;
 }
 
 // Default textarea
 .formtextarea {
-  //min-height: 4em;
   width: 100%;
   @include box-sizing(border-box);
   resize: vertical;
-  padding: 2px 5px;
-  border: 1px solid #cccccc;
+  padding: 10px;
+  border: 1px solid $white;
   font-size: 14px;
-  @include border-radius(2px);
+  @include border-radius(3px);
+  font-style: italic;
 
   &:focus {
     outline: 0;

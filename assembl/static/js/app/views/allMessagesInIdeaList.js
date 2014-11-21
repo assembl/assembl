@@ -2,7 +2,8 @@ define(function (require) {
     'use strict';
 
     var IdeaView = require('views/idea'),
-        Ctx = require('common/context');
+        Ctx = require('common/context'),
+        PanelSpecTypes = require('utils/panelSpecTypes');
 
     var AllMessagesInIdeaListView = IdeaView.extend({
         /**
@@ -42,7 +43,7 @@ define(function (require) {
          * @event
          */
         onTitleClick: function () {
-            var messageListView = this.groupContent.getViewByTypeName('messageList');
+            var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
             messageListView.triggerMethod('messageList:clearAllFilters');
             Ctx.setCurrentIdea(null);
             //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.

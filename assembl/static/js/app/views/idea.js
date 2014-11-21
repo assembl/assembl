@@ -5,7 +5,8 @@ define(function (require) {
         _ = require('underscore'),
         Assembl = require('app'),
         Ctx = require('common/context'),
-        Permissions = require('utils/permissions');
+        Permissions = require('utils/permissions'),
+        PanelSpecTypes = require('utils/panelSpecTypes');
 
     var IdeaView = Backbone.View.extend({
         /**
@@ -161,7 +162,7 @@ define(function (require) {
             var messageListView;
             e.stopPropagation();
             if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-                messageListView = this.groupContent.getViewByTypeName('messageList');
+                messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
                 messageListView.triggerMethod('messageList:clearAllFilters');
             }
             if (this.model === Ctx.getCurrentIdea()) {

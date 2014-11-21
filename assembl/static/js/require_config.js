@@ -5,6 +5,7 @@ var requirejs_config = {
         'jquery': "../bower/jquery/jquery",
         'jquery-highlight': '../lib/jquery-highlight/jquery.highlight',
         'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
+        'jquery-autosize': '../bower/jquery-autosize/jquery.autosize',
 
         'backbone': '../bower/backbone/backbone',
         'backbone.subset': '../bower/Backbone.Subset/backbone.subset',
@@ -47,7 +48,7 @@ var requirejs_config = {
             exports: 'jQuery'
         },
         'common/context': {
-            deps: ['annotator', 'ckeditor', 'utils/i18n', 'jquery-highlight', 'jquery.dotdotdot'],
+            deps: ['annotator', 'ckeditor', 'jquery-highlight', 'jquery.dotdotdot'],
             exports: 'context'
         },
         'utils/i18n': {
@@ -97,6 +98,9 @@ var requirejs_config = {
             deps: ['backbone']
         },
         'bootstrap': {
+            deps: ['jquery']
+        },
+        'jquery-autosize': {
             deps: ['jquery']
         }
     }

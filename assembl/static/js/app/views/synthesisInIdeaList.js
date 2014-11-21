@@ -3,6 +3,7 @@ define(function (require) {
 
     var Ctx = require('common/context'),
         Assembl = require('app'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         IdeaView = require('views/idea');
 
     var SynthesisIdeaView = IdeaView.extend({
@@ -44,7 +45,7 @@ define(function (require) {
          * @event
          */
         onTitleClick: function () {
-            var messageListView = this.groupContent.getViewByTypeName('messageList');
+            var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
             messageListView.triggerMethod('messageList:clearAllFilters');
             messageListView.triggerMethod('messageList:addFilterIsSynthesisMessage');
 

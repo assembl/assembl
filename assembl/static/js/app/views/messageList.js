@@ -13,6 +13,7 @@ define(function (require) {
         PostQuery = require('views/messageListPostQuery'),
         Permissions = require('utils/permissions'),
         MessageSendView = require('views/messageSend'),
+        PanelSpecTypes = require('utils/panelSpecTypes'),
         AssemblPanel = require('views/assemblPanel'),
         CollectionManager = require('common/collectionManager');
 
@@ -37,11 +38,12 @@ define(function (require) {
      * @class views.MessageList
      */
     var MessageList = AssemblPanel.extend({
-        panelType: 'messageList',
+        panelType: PanelSpecTypes.MESSAGE_LIST,
         className: 'panel messageList',
         lockable: true,
         gridSize: AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE,
         minWidth: 400, // basic, may receive idea offset.
+        debugPaging: false,
 
         ui: {
             panelBody: ".panel-body",
@@ -684,66 +686,71 @@ define(function (require) {
          * and `offsetEnd` prop
          */
         showMessages: function (requestedOffsets) {
-            var that = this,
-                views_promise,
-                models,
-                offsets,
-                numMessages,
-                returnedOffsets = {},
-                messageIdsToShow = [],
-                messageFullModelsToShowPromise;
+          var that = this,
+              views_promise,
+              models,
+              offsets,
+              numMessages,
+              returnedOffsets = {},
+              messageIdsToShow = [],
+              messageFullModelsToShowPromise;
 
-            //console.log("showMessages() called with requestedOffsets: ", requestedOffsets);
-            /* The MessageFamilyView will re-fill the renderedMessageViewsCurrent
-             * array with the newly calculated rendered MessageViews.
-             */
-            this.renderedMessageViewsCurrent = {};
-            this.suspendAnnotatorRefresh();
-            this.previousScrollTarget = this.getPreviousScrollTarget();
+          /* The MessageFamilyView will re-fill the renderedMessageViewsCurrent
+           * array with the newly calculated rendered MessageViews.
+           */
+          this.renderedMessageViewsCurrent = {};
+          this.suspendAnnotatorRefresh();
+          this.previousScrollTarget = this.getPreviousScrollTarget();
 
-            if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
-                (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
-                models = this.visitorRootMessagesToDisplay;
-                numMessages = _.size(that.visitorOrderLookupTable);
-                returnedOffsets = this.calculateThreadedMessagesOffsets(this.visitorViewData, that.visitorOrderLookupTable, requestedOffsets);
-                messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']);
-                var collectionManager = new CollectionManager();
+          if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
+              (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
+              models = _.clone(this.visitorRootMessagesToDisplay);
+              numMessages = _.size(that.visitorOrderLookupTable);
+              returnedOffsets = this.calculateThreadedMessagesOffsets(this.visitorViewData, that.visitorOrderLookupTable, requestedOffsets);
+              messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']);
+              var collectionManager = new CollectionManager();
 
-                messageFullModelsToShowPromise = collectionManager.getMessageFullModelsPromise(messageIdsToShow);
+              messageFullModelsToShowPromise = collectionManager.getMessageFullModelsPromise(messageIdsToShow);
+              if(that.debugPaging) {
+                console.log("showMessages() num root messages passed to getRenderedMessagesThreaded:", _.size(models));
+                }
+              views_promise = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
+          } else {
+              models = this.getAllMessageStructureModelsToDisplay();
+              numMessages = _.size(models);
+              views_promise = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
+          }
+          $.when(views_promise).done(function (views) {
+            if(that.debugPaging) {
+              console.log("showMessages() requestedOffsets:",requestedOffsets, "returnedOffsets:", returnedOffsets, "messageIdsToShow", messageIdsToShow, "out of numMessages", numMessages, "root views", views);
+              }
+              
+            that.offsetStart = returnedOffsets['offsetStart']
+            that.offsetEnd = returnedOffsets['offsetEnd']
 
-                views_promise = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
+            if (views.length === 0) {
+              //TODO:  This is probably where https://app.asana.com/0/15264711598672/20633284646643 occurs
+              that.ui.messageList.html(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
             } else {
-                models = this.getAllMessageStructureModelsToDisplay();
-                numMessages = _.size(models);
-                views_promise = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
+              that.ui.messageList.html(views);
             }
-            $.when(views_promise).done(function (views) {
-                //console.log("requestedOffsets:",requestedOffsets, "returnedOffsets:", returnedOffsets, "numMessages", numMessages);
-                that.offsetStart = returnedOffsets['offsetStart']
-                that.offsetEnd = returnedOffsets['offsetEnd']
+            that.scrollToPreviousScrollTarget();
+            if (that.offsetStart <= 0) {
+              that.ui.topArea.addClass('hidden');
+            } else {
+              that.ui.topArea.removeClass('hidden');
+            }
 
-                if (views.length === 0) {
-                    that.ui.messageList.append(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
-                } else {
-                    that.ui.messageList.append(views);
-                }
-                that.scrollToPreviousScrollTarget();
-                if (that.offsetStart <= 0) {
-                    that.ui.topArea.addClass('hidden');
-                } else {
-                    that.ui.topArea.removeClass('hidden');
-                }
+            if (that.offsetEnd >= (numMessages - 1)) {
+              that.ui.bottomArea.addClass('hidden');
+            } else {
+              that.ui.bottomArea.removeClass('hidden');
+            }
 
-                if (that.offsetEnd >= (numMessages - 1)) {
-                    that.ui.bottomArea.addClass('hidden');
-                } else {
-                    that.ui.bottomArea.removeClass('hidden');
-                }
-
-                that.resumeAnnotatorRefresh();
-                that.renderIsComplete = true;
-                that.trigger("messageList:render_complete", "Render complete");
-            });
+            that.resumeAnnotatorRefresh();
+            that.renderIsComplete = true;
+            that.trigger("messageList:render_complete", "Render complete");
+          });
 
         },
 
@@ -1228,7 +1235,8 @@ define(function (require) {
          * @param {Message.Model[]} list of messages to render at the current level
          * @param {Number} [level=1] The current hierarchy level
          * @param {Object[]} data_by_object render information from ideaRendervisitor
-         * @return {jquery.promise}
+         * @param {Object[]} offsets the message offset range to show
+         * @return [jquery.promise]
          */
         getRenderedMessagesThreaded: function (sibblings, level, data_by_object, offsets) {
             var that = this,
@@ -1243,7 +1251,9 @@ define(function (require) {
                 current_message_info,
                 defer = $.Deferred(),
                 collectionManager = new CollectionManager();
-
+            if(that.debugPaging) {
+              console.log("getRenderedMessagesThreaded() num sibblings:",_.size(sibblings), "level:", level, "offsets", offsets);
+              }
             /**  [last_sibling_chain] which of the view's ancestors are the last child of their respective parents.
              *
              * @param message
@@ -1268,72 +1278,93 @@ define(function (require) {
                 level = 1;
             }
             //console.log("sibblings",sibblings.length);
-            //This actually replaces the for loop for sibblings
+            //This actually replaces the for loop for sibblings -benoitg - I wrote it, but can't remember why...
+            /* This recursively pops untill a valid model is found, and returns false if not */
+            var popFirstValidFromSibblings = function(sibblings) {
+              var model = sibblings.shift(),
+                  current_message_info;
+             if (model) {
+               current_message_info = data_by_object[model.getId()];
+             }
+             else {
+               //array was empty
+               return undefined;
+             }
+             //Only process if message is within requested offsets
+               if ((current_message_info['traversal_order'] >= offsets['offsetStart'])
+                   && (current_message_info['traversal_order'] <= offsets['offsetEnd'])) {
+                 return model;
+               }
+               else {
+                 if(that.debugPaging) {
+                   console.log("popFirstValidFromSibblings() discarding message "+model.getId()+" at offset "+current_message_info['traversal_order']);
+                   }
+                 return popFirstValidFromSibblings(sibblings);
+               }
+             };
+            messageStructureModel = popFirstValidFromSibblings(sibblings);
 
-            messageStructureModel = sibblings.shift();
-            //console.log("messageStructureModel",messageStructureModel);
             if (!messageStructureModel) {
-                return list;
+              if(that.debugPaging) {
+                console.log("getRenderedMessagesThreaded() sibblings is now empty, returning.");
+              }
+              return list;
             }
             current_message_info = data_by_object[messageStructureModel.getId()];
+            if(that.debugPaging) {
+              console.log("getRenderedMessagesThreaded() processing message: ", messageStructureModel.id, " at offset",current_message_info['traversal_order'],"with",_.size(current_message_info['children']),"children");
+              }
+            
+            if (current_message_info['last_sibling_chain'] === undefined) {
+              current_message_info['last_sibling_chain'] = buildLastSibblingChain(messageStructureModel, data_by_object);
+            }
+            last_sibling_chain = current_message_info['last_sibling_chain']
+            //console.log(last_sibling_chain);
 
-            //Only process if message is within requested offsets
-            if ((current_message_info['traversal_order'] >= offsets['offsetStart'])
-                && (current_message_info['traversal_order'] <= offsets['offsetEnd'])) {
+            children = _.clone(current_message_info['children']);
 
-                if (current_message_info['last_sibling_chain'] === undefined) {
-                    current_message_info['last_sibling_chain'] = buildLastSibblingChain(messageStructureModel, data_by_object);
-                }
-                last_sibling_chain = current_message_info['last_sibling_chain']
-                //console.log(last_sibling_chain);
-
-                children = current_message_info['children'];
-
-                //Process children, if any
-                if (_.size(children) > 0) {
-                    var subviews_promise = this.getRenderedMessagesThreaded(children, level + 1, data_by_object, offsets);
-                }
-                else {
-                    var subviews_promise = [];
-                }
-
-                //Process sibblings, if any (this is for-loop rewritten as recursive calls to avoid locking the browser)
-                if (sibblings.length > 0) {
-                    var sibblingsviews_promise = this.getRenderedMessagesThreaded(sibblings, level, data_by_object, offsets);
-                }
-                else {
-                    var sibblingsviews_promise = [];
-                }
-
-                $.when(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.id)).done(function (subviews, sibblingsviews, messageFullModel) {
-                    view = new MessageFamilyView({model: messageFullModel, messageListView: that}, last_sibling_chain);
-                    view.currentLevel = level;
-                    //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
-                    view.hasChildren = (subviews.length > 0);
-                    list.push(view.render().el);
-                    view.$('.messagelist-children').append(subviews);
-
-                    /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
-                     * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
-                    /*if (!isValid && this.hasDescendantsInFilter(model)) {
-                     //Generate ghost message
-                     var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
-                     console.log("Invalid message was:",model);
-                     list.push(ghost_element);
-                     children = model.getChildren();
-                     ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
-                     children, level+1, data_by_object) );
-                     }
-                     */
-                    if (sibblingsviews.length > 0) {
-                        list = list.concat(sibblingsviews);
-                    }
-                    defer.resolve(list);
-                });
+            //Process children, if any
+            if (_.size(children) > 0) {
+                var subviews_promise = this.getRenderedMessagesThreaded(children, level + 1, data_by_object, offsets);
             }
             else {
-                return list;
+                var subviews_promise = [];
             }
+
+            //Process sibblings, if any (this is for-loop rewritten as recursive calls to avoid locking the browser)
+            if (sibblings.length > 0) {
+                var sibblingsviews_promise = this.getRenderedMessagesThreaded(sibblings, level, data_by_object, offsets);
+            }
+            else {
+                var sibblingsviews_promise = [];
+            }
+
+            $.when(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.id)).done(function (subviews, sibblingsviews, messageFullModel) {
+                view = new MessageFamilyView({model: messageFullModel, messageListView: that}, last_sibling_chain);
+                view.currentLevel = level;
+                //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
+                view.hasChildren = (subviews.length > 0);
+                list.push(view.render().el);
+                view.$('.messagelist-children').append(subviews);
+
+                /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
+                 * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
+                /*if (!isValid && this.hasDescendantsInFilter(model)) {
+                 //Generate ghost message
+                 var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
+                 console.log("Invalid message was:",model);
+                 list.push(ghost_element);
+                 children = model.getChildren();
+                 ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
+                 children, level+1, data_by_object) );
+                 }
+                 */
+                if (sibblingsviews.length > 0) {
+                    list = list.concat(sibblingsviews);
+                }
+                defer.resolve(list);
+            });
+
             return defer.promise();
         },
 

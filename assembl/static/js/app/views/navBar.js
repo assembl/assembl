@@ -1,6 +1,5 @@
-define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'objects/viewsFactory', 'models/roles', 'backbone.modal', 'backbone.marionette.modals'],
-    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, viewsFactory, RolesModel) {
-
+define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'backbone.modal', 'backbone.marionette.modals'],
+    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions) {
         var navBar = Marionette.LayoutView.extend({
             template: '#tmpl-navBar',
             tagName: 'nav',
@@ -44,7 +43,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             serializeData: function () {
                 return {
                     Ctx: Ctx,
-                    Roles: this.roles
+                    Roles: this.roles,
+                    canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER)
                 }
             },
 
@@ -77,6 +77,11 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     template: _.template($('#tmpl-create-group').html()),
                     className: 'group-modal popin-wrapper',
                     cancelEl: '.close, .btn-cancel',
+                    serializeData: function () {
+                      return {
+                        PanelSpecTypes:  PanelSpecTypes
+                      }
+                    },
                     initialize: function () {
                         this.$('.bbm-modal').addClass('popin');
                     },
@@ -92,31 +97,31 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
                         if (elm.parent().hasClass('is-selected')) {
                             switch (item) {
-                                case 'navSidebar':
-                                    this.disableView(['ideaList', 'synthesisPanel', 'clipboard', 'messageList', 'ideaPanel']);
+                                case PanelSpecTypes.NAV_SIDEBAR.id:
+                                    this.disableView([PanelSpecTypes.TABLE_OF_IDEAS, PanelSpecTypes.SYNTHESIS_EDITOR, PanelSpecTypes.CLIPBOARD, PanelSpecTypes.MESSAGE_LIST, PanelSpecTypes.IDEA_PANEL]);
                                     break;
-                                case 'synthesisPanel':
-                                    this.disableView(['ideaList', 'navSidebar']);
-                                    this.enableView(['ideaPanel', 'messageList']);
+                                case PanelSpecTypes.SYNTHESIS_EDITOR.id:
+                                    this.disableView([PanelSpecTypes.TABLE_OF_IDEAS, PanelSpecTypes.NAV_SIDEBAR]);
+                                    this.enableView([PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST]);
                                     break;
-                                case 'ideaList':
-                                    this.disableView(['synthesisPanel', 'navSidebar']);
-                                    this.enableView(['ideaPanel', 'messageList']);
+                                case PanelSpecTypes.TABLE_OF_IDEAS.id:
+                                    this.disableView([PanelSpecTypes.SYNTHESIS_EDITOR, PanelSpecTypes.NAV_SIDEBAR]);
+                                    this.enableView([PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST]);
                                     break;
                             }
 
                         } else {
                             switch (item) {
-                                case 'navSidebar':
-                                    this.enableView(['ideaList', 'synthesisPanel', 'clipboard']);
+                                case PanelSpecTypes.NAV_SIDEBAR.id:
+                                    this.enableView([PanelSpecTypes.TABLE_OF_IDEAS, PanelSpecTypes.SYNTHESIS_EDITOR, PanelSpecTypes.CLIPBOARD]);
                                     break;
-                                case 'synthesisPanel':
-                                    this.enableView(['ideaList', 'navSidebar']);
-                                    this.disableView(['ideaPanel', 'messageList']);
+                                case PanelSpecTypes.SYNTHESIS_EDITOR.id:
+                                    this.enableView([PanelSpecTypes.TABLE_OF_IDEAS, PanelSpecTypes.NAV_SIDEBAR]);
+                                    this.disableView([PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST]);
                                     break;
-                                case 'ideaList':
-                                    this.disableView(['ideaPanel', 'messageList']);
-                                    this.enableView(['synthesisPanel', 'navSidebar']);
+                                case PanelSpecTypes.TABLE_OF_IDEAS.id:
+                                    this.disableView([PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST]);
+                                    this.enableView([PanelSpecTypes.SYNTHESIS_EDITOR, PanelSpecTypes.NAV_SIDEBAR]);
                                     break;
                             }
                         }
@@ -125,7 +130,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
                     disableView: function (items) {
                         items.forEach(function (item) {
-                            var panel = $(".itemGroup[data-view='" + item + "']");
+                            var panel = $(".itemGroup[data-view='" + item.id + "']");
                             panel.removeClass('is-selected');
                             panel.addClass('is-disabled');
                         });
@@ -133,7 +138,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
                     enableView: function (items) {
                         items.forEach(function (item) {
-                            var panel = $(".itemGroup[data-view='" + item + "']");
+                            var panel = $(".itemGroup[data-view='" + item.id + "']");
                             panel.removeClass('is-disabled');
                         });
                     },
@@ -148,10 +153,10 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                 var item = $(this).attr('data-view');
                                 items.push({type: item});
                             });
-
+                            console.log(items);
                             groupSpecsP.done(function (groupSpecs) {
                                 var groupSpec = new GroupSpec.Model(
-                                    {'panels': items}, {'parse': true});
+                                    {'panels': items}, {'parse': true, 'viewsFactory': viewsFactory});
                                 groupSpecs.add(groupSpec);
                             });
 

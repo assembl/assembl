@@ -166,6 +166,9 @@
 .navSidebar .nav .panel-header-minimize,
 .panel-header .panel-header-minimize {
   padding: 8px;
+  .icon-arrowleft:before, .icon-arrowright:before {
+    font-weight: bold !important;
+  }
 }
 
 // An editable area within the .panel-header

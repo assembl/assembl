@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-11-13 14:15-0500\n"
-"PO-Revision-Date: 2014-11-12 11:34+0000\n"
-"Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
+"POT-Creation-Date: 2014-11-17 20:39-0500\n"
+"PO-Revision-Date: 2014-11-13 19:15+0000\n"
+"Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: English (Canada) "
 "(http://www.transifex.com/projects/p/assembl/language/en_CA/)\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -271,7 +271,7 @@ msgid "Send your comment"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaPanel.js:362
-#: assembl/static/js/app/views/messageList.js:958
+#: assembl/static/js/app/views/messageList.js:980
 msgid "You need to type a comment first..."
 msgstr ""
 
@@ -301,71 +301,71 @@ msgstr ""
 msgid "You can drag the segment above directly to the table of ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:210
+#: assembl/static/js/app/views/messageList.js:232
 msgid "Conversations"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:217
+#: assembl/static/js/app/views/messageList.js:239
 msgid "Threaded"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:222
+#: assembl/static/js/app/views/messageList.js:244
 #: assembl/static/js/app/views/messageListPostQuery.js:166
 msgid "Chronological"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:227
+#: assembl/static/js/app/views/messageList.js:249
 msgid "Reverse-Chronological"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:232
+#: assembl/static/js/app/views/messageList.js:254
 msgid "New Messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:704
+#: assembl/static/js/app/views/messageList.js:726
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:955
+#: assembl/static/js/app/views/messageList.js:977
 #: assembl/static/js/app/views/messageSend.js:85
 #: assembl/templates/do_password_change.jinja2:18
 #: assembl/templates/request_password_change.jinja2:26
 msgid "Send"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:956
+#: assembl/static/js/app/views/messageList.js:978
 msgid "Subject"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:957
+#: assembl/static/js/app/views/messageList.js:979
 msgid "Add a subject above and start a new topic here"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:959
+#: assembl/static/js/app/views/messageList.js:981
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1086
+#: assembl/static/js/app/views/messageList.js:1108
 #, python-format
 msgid "All %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1088
+#: assembl/static/js/app/views/messageList.js:1110
 #, python-format
 msgid "Unread %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1097
+#: assembl/static/js/app/views/messageList.js:1119
 #: assembl/templates/views/ideaList.tmpl:27
 msgid "Expand all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1100
+#: assembl/static/js/app/views/messageList.js:1122
 #: assembl/templates/views/ideaList.tmpl:27
 msgid "Collapse all"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1355
+#: assembl/static/js/app/views/messageList.js:1377
 msgid "Send to clipboard"
 msgstr ""
 
@@ -639,8 +639,7 @@ msgstr ""
 
 #: assembl/templates/do_password_change.jinja2:17
 #: assembl/templates/profile.jinja2:74 assembl/templates/profile.jinja2:76
-#: assembl/templates/profile.jinja2:83 assembl/templates/register.jinja2:26
-#: assembl/templates/views/profile.tmpl:48
+#: assembl/templates/register.jinja2:26 assembl/templates/views/profile.tmpl:48
 #: assembl/templates/views/profile.tmpl:50
 #: assembl/templates/views/profile.tmpl:57
 msgid "Repeat password"
@@ -654,35 +653,35 @@ msgstr ""
 msgid "Log in using one of these social networks"
 msgstr ""
 
-#: assembl/templates/login.jinja2:41 assembl/templates/profile.jinja2:228
+#: assembl/templates/login.jinja2:41 assembl/templates/profile.jinja2:227
 msgid "Login with Google"
 msgstr ""
 
-#: assembl/templates/login.jinja2:42 assembl/templates/profile.jinja2:229
+#: assembl/templates/login.jinja2:42 assembl/templates/profile.jinja2:228
 msgid "Login with Twitter"
 msgstr ""
 
-#: assembl/templates/login.jinja2:43 assembl/templates/profile.jinja2:230
+#: assembl/templates/login.jinja2:43 assembl/templates/profile.jinja2:229
 msgid "Login with Facebook"
 msgstr ""
 
-#: assembl/templates/login.jinja2:44 assembl/templates/profile.jinja2:231
+#: assembl/templates/login.jinja2:44 assembl/templates/profile.jinja2:230
 msgid "Login with Yahoo"
 msgstr ""
 
-#: assembl/templates/login.jinja2:45 assembl/templates/profile.jinja2:233
+#: assembl/templates/login.jinja2:45 assembl/templates/profile.jinja2:232
 msgid "Login with Windows Live"
 msgstr ""
 
-#: assembl/templates/login.jinja2:46 assembl/templates/profile.jinja2:234
+#: assembl/templates/login.jinja2:46 assembl/templates/profile.jinja2:233
 msgid "Login with Github"
 msgstr ""
 
-#: assembl/templates/login.jinja2:47 assembl/templates/profile.jinja2:235
+#: assembl/templates/login.jinja2:47 assembl/templates/profile.jinja2:234
 msgid "Login with Bitbucket"
 msgstr ""
 
-#: assembl/templates/login.jinja2:48 assembl/templates/profile.jinja2:236
+#: assembl/templates/login.jinja2:48 assembl/templates/profile.jinja2:235
 msgid "Login with OpenID"
 msgstr ""
 
@@ -690,9 +689,9 @@ msgstr ""
 msgid "Already have an account?"
 msgstr ""
 
-#: assembl/templates/login.jinja2:64
-#: assembl/templates/request_password_change.jinja2:25
-msgid "Email or username"
+#: assembl/templates/login.jinja2:64 assembl/templates/profile.jinja2:102
+#: assembl/templates/register.jinja2:24 assembl/templates/views/profile.tmpl:65
+msgid "Email"
 msgstr ""
 
 #: assembl/templates/login.jinja2:69
@@ -747,28 +746,23 @@ msgstr ""
 msgid "Emails"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:89
+#: assembl/templates/profile.jinja2:88
 msgid "Confirm and fuse accounts"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:91
+#: assembl/templates/profile.jinja2:90
 msgid "unconfirmed"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:92
+#: assembl/templates/profile.jinja2:91
 msgid "Send confirmation message"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:101 assembl/templates/views/profile.tmpl:63
+#: assembl/templates/profile.jinja2:100 assembl/templates/views/profile.tmpl:63
 msgid "Add an email account"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:103 assembl/templates/register.jinja2:24
-#: assembl/templates/views/profile.tmpl:65
-msgid "Email"
-msgstr ""
-
-#: assembl/templates/profile.jinja2:108
+#: assembl/templates/profile.jinja2:107
 #: assembl/templates/admin/discussion_permissions.jinja2:47
 #: assembl/templates/admin/discussion_permissions.jinja2:82
 #: assembl/templates/admin/global_permissions.jinja2:37
@@ -778,7 +772,7 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:225
+#: assembl/templates/profile.jinja2:224
 msgid "Connect other accounts to Assembl"
 msgstr ""
 
@@ -792,6 +786,10 @@ msgstr ""
 
 #: assembl/templates/register.jinja2:31
 msgid "Log in!"
+msgstr ""
+
+#: assembl/templates/request_password_change.jinja2:25
+msgid "Email or username"
 msgstr ""
 
 #: assembl/templates/view_profile.jinja2:48
@@ -926,6 +924,14 @@ msgstr "All messages"
 
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:4
 msgid "Number of posts in the entire discussion"
+msgstr ""
+
+#: assembl/templates/views/authorization.tmpl:3
+msgid "You must be logged in to access this page."
+msgstr ""
+
+#: assembl/templates/views/authorization.tmpl:3
+msgid "Click here to login."
 msgstr ""
 
 #: assembl/templates/views/bookmarket.tmpl:3
@@ -1522,6 +1528,10 @@ msgstr ""
 msgid "Currently you will be informed when :"
 msgstr ""
 
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:64
+msgid "unsubscribe"
+msgstr ""
+
 #: assembl/views/api/post.py:59 assembl/views/api/post.py:332
 #, python-format
 msgid "No discussion found with id=%s"
@@ -1543,106 +1553,110 @@ msgstr ""
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/auth/views.py:146
+#: assembl/views/auth/views.py:148
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:164 assembl/views/auth/views.py:728
+#: assembl/views/auth/views.py:167 assembl/views/auth/views.py:738
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:230
+#: assembl/views/auth/views.py:175 assembl/views/auth/views.py:234
+msgid "This is not a valid email"
+msgstr ""
+
+#: assembl/views/auth/views.py:240
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:234
+#: assembl/views/auth/views.py:244
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:309 assembl/views/auth/views.py:655
+#: assembl/views/auth/views.py:319 assembl/views/auth/views.py:665
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:328
+#: assembl/views/auth/views.py:338
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:502 assembl/views/auth/views.py:628
+#: assembl/views/auth/views.py:512 assembl/views/auth/views.py:638
 msgid "Confirmation requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:503 assembl/views/auth/views.py:629
+#: assembl/views/auth/views.py:513 assembl/views/auth/views.py:639
 msgid ""
 "We have sent you a confirmation email. Please use the link to confirm "
 "your email to Assembl"
 msgstr ""
 
-#: assembl/views/auth/views.py:519
+#: assembl/views/auth/views.py:529
 msgid "Wrong email token."
 msgstr ""
 
-#: assembl/views/auth/views.py:539
+#: assembl/views/auth/views.py:549
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:568 assembl/views/auth/views.py:573
+#: assembl/views/auth/views.py:578 assembl/views/auth/views.py:583
 #, python-format
 msgid "Email <%s> confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:587
+#: assembl/views/auth/views.py:597
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/auth/views.py:636
+#: assembl/views/auth/views.py:646
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:650 assembl/views/auth/views.py:656
+#: assembl/views/auth/views.py:660 assembl/views/auth/views.py:666
 msgid "I forgot my password"
 msgstr ""
 
-#: assembl/views/auth/views.py:678
+#: assembl/views/auth/views.py:688
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:679
+#: assembl/views/auth/views.py:689
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:696
+#: assembl/views/auth/views.py:706
 msgid "Wrong password token."
 msgstr ""
 
-#: assembl/views/auth/views.py:701
+#: assembl/views/auth/views.py:711
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/auth/views.py:710
+#: assembl/views/auth/views.py:720
 msgid "Change your password"
 msgstr ""
 
-#: assembl/views/auth/views.py:733
+#: assembl/views/auth/views.py:743
 msgid "Password changed"
 msgstr ""
 
-#: assembl/views/auth/views.py:742
+#: assembl/views/auth/views.py:752
 msgid "email"
 msgstr ""
 
-#: assembl/views/auth/views.py:744
+#: assembl/views/auth/views.py:754
 msgid "account"
 msgstr ""
 
-#: assembl/views/auth/views.py:755
+#: assembl/views/auth/views.py:765
 msgid "Please confirm your ${confirm_what} with <${assembl}>"
 msgstr ""
 
-#: assembl/views/auth/views.py:758
+#: assembl/views/auth/views.py:768
 msgid ""
 "Hello, ${name}!\n"
 "Please confirm your ${confirm_what} <${email}> with ${assembl} by "
@@ -1650,18 +1664,18 @@ msgid ""
 "<${confirm_url}>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:762
+#: assembl/views/auth/views.py:772
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">confirm your ${confirm_what}</a> "
 "&lt;${email}&gt; with <${assembl}>.</p>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:779
+#: assembl/views/auth/views.py:789
 msgid "Request for password change"
 msgstr ""
 
-#: assembl/views/auth/views.py:782
+#: assembl/views/auth/views.py:792
 msgid ""
 "Hello, ${name}!\n"
 "You asked to change your password on <${assembl}>. (We hope it was you!)\n"
@@ -1670,7 +1684,7 @@ msgid ""
 "<${confirm_url}>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:787
+#: assembl/views/auth/views.py:797
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>You asked to <a href=\"${confirm_url}\">change your password</a> on "

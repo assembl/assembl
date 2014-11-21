@@ -2,6 +2,7 @@ define([], function () {
 
     var Permissions = {
         READ: "read",
+        SELF_REGISTER: "self_register",
         ADD_POST: "add_post",
         EDIT_POST: "edit_post",
         ADD_EXTRACT: "add_extract",
