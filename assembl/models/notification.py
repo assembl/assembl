@@ -780,8 +780,9 @@ class Notification(Base):
         msg['List-Unsubscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
         msg['Subject'] = Header(self.get_notification_subject(), 'utf-8')
 
-
-        msg['From'] = Header(self.event_source_object().creator.name + " <" + self.get_from_email_address() + ">", 'utf-8')
+        from_header = Header(self.event_source_object().creator.name, 'utf-8')
+        from_header.append(" <" + self.get_from_email_address() + ">", 'ascii')
+        msg['From'] = from_header
         msg['To'] = self.get_to_email_address()
         if email_text_part:
             msg.attach(SafeMIMEText(email_text_part.encode('utf-8'), 'plain', 'utf-8'))
