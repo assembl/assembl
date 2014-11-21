@@ -156,14 +156,14 @@ define(function (require) {
          *  Opens the reply box the reply button
          */
         openReplyBox: function () {
-            this.$('.synthesisIdea-replybox').show();
+          this.$('.synthesisIdea-replybox').removeClass("hidden");
         },
 
         /**
          *  Closes the reply box
          */
         closeReplyBox: function () {
-            this.$('.synthesisIdea-replybox').hide();
+          this.$('.synthesisIdea-replybox').addClass("hidden");
         },
         /**
          * @event
