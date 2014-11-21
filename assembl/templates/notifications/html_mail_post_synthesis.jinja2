@@ -1,0 +1,31 @@
+{#
+This is a jinja2 template.  Doc:  http://jinja.pocoo.org/docs/dev/templates/
+
+The HTML conforms to ink's CSS.  http://zurb.com/ink/docs.php
+
+It expects variables:
+subscription
+notification
+frontendUrls
+ink_css
+synthesis
+#}
+
+{% extends "notifications/html_mail_post.jinja2" %}
+
+{%- block post_body %}
+  {{ synthesis.introduction }}
+  {#
+  {{ synthesis.conclusion }}
+  #}
+{% endblock post_body %}
+
+{%- block action_button %}
+<table class="medium-button">
+  <tr>
+    <td>
+      <a href="{{ frontendUrls.getPostUrl(notification.event_source_object()) }}">{{ gettext("Please read the rest of this synthesis online") }}</a>
+    </td>
+  </tr>
+</table>
+{% endblock action_button %}

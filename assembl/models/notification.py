@@ -825,9 +825,6 @@ class NotificationOnPost(Notification):
     @abstractmethod
     def event_source_object(self):
         return self.post
-    
-    def get_notification_subject(self):
-        return self.post.subject
 
 class NotificationOnPostCreated(NotificationOnPost):
     __mapper_args__ = {
@@ -838,15 +835,29 @@ class NotificationOnPostCreated(NotificationOnPost):
     def event_source_object(self):
         return NotificationOnPost.event_source_object(self)
     
+    def get_notification_subject(self):
+        subject = "[" + self.first_matching_subscription.discussion.topic + "] "
+        if isinstance(self.post, SynthesisPost):
+            subject += _("SYNTHESIS: ") + self.post.publishes_synthesis.subject
+        else:
+            subject += self.post.subject
+        return subject
+    
     def render_to_email_html_part(self):
         from premailer import Premailer
         ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
         ink_css = open(ink_css_path)
         assert ink_css
-        template = jinja_env.get_template('notifications/post.jinja2')
-        html = template.render(subscription=self.first_matching_subscription,
-                    notification=self,
-                    frontendUrls = FrontendUrls(self.first_matching_subscription.discussion),
-                    ink_css=ink_css.read(),
-                    )
+        template_data={'subscription': self.first_matching_subscription,
+                       'notification': self,
+                       'frontendUrls': FrontendUrls(self.first_matching_subscription.discussion),
+                       'ink_css': ink_css.read()
+                       }
+        if isinstance(self.post, SynthesisPost):
+            template = jinja_env.get_template('notifications/html_mail_post_synthesis.jinja2')
+            template_data['synthesis'] = self.post.publishes_synthesis
+        else:
+            template = jinja_env.get_template('notifications/html_mail_post.jinja2')
+            
+        html = template.render(**template_data)
         return Premailer(html).transform()

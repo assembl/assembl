@@ -1,0 +1,59 @@
+{#
+This is a jinja2 template.  Doc:  http://jinja.pocoo.org/docs/dev/templates/
+
+The HTML conforms to ink's CSS.  http://zurb.com/ink/docs.php
+
+It expects variables:
+subscription
+notification
+frontendUrls
+ink_css
+#}
+
+{% extends "notifications/html_mail.jinja2" %}
+
+{% block notification_content %}
+  <table class="row">
+    <tr>
+      <td class="wrapper last">
+
+        <table class="twelve columns">
+          <tr>
+            <td>
+              <img style="margin: 0 10px 10px 0;" src="{{ frontendUrls.get_agentprofile_avatar_url(notification.event_source_object().creator, 40) }}">
+              <em>{{ notification.event_source_object().creator.name }}</em>
+              <hr style="clear: both">
+              {%- block post_body %}
+                {{ notification.event_source_object().get_body_as_html() }}
+              {% endblock post_body %}
+            </td>
+            <td class="expander"></td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+  <table class="row">
+    <tr>
+      <td class="wrapper center offset-by-four last" align="center">
+
+        <table class="four columns">
+          <tr>
+            <td class="left-text-pad">
+              {%- block action_button %}
+              <table class="tiny-button facebook">
+                <tr>
+                  <td>
+                    <a href="{{ frontendUrls.getPostUrl(notification.event_source_object()) }}">{{ gettext("Reply to this message") }}</a>
+                  </td>
+                </tr>
+              </table>
+              {% endblock action_button %}
+            </td>
+            <td class="expander"></td>
+          </tr>
+        </table>
+    </tr>
+  </table>
+{% endblock notification_content %}
