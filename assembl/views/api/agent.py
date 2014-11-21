@@ -52,12 +52,9 @@ def get_agent(request):
     if not agent:
       raise HTTPNotFound("Agent with id '%s' not found." % agent_id)
 
-    if view_def:
-      return agent.generic_json(view_def)
-    else:
-      return agent.serializable()
+    return agent.generic_json()
 
-@agent.post()
+@agent.put()
 def post_agent(request):
     agent_id = request.matchdict['id']
     agent = AgentProfile.get_instance(agent_id)
@@ -84,6 +81,7 @@ def post_agent(request):
     name = request.params.get('name', '').strip()
     if name:
         agent.name = name
+
     p1, p2 = (request.params.get('password1', '').strip(),
               request.params.get('password2', '').strip())
     if p1 != p2:
