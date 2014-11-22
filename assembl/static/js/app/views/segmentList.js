@@ -4,7 +4,6 @@ define(function (require) {
     var Backbone = require('backbone'),
         _ = require('underscore'),
         $ = require('jquery'),
-        BackboneSubset = require('backbone.subset'),
         Assembl = require('app'),
         Ctx = require('common/context'),
         Segment = require('models/segment'),
@@ -14,6 +13,8 @@ define(function (require) {
         CollectionManager = require('common/collectionManager'),
         PanelSpecTypes = require('utils/panelSpecTypes'),
         AssemblPanel = require('views/assemblPanel');
+
+    require('backbone.subset');
 
     var SegmentView = Marionette.ItemView.extend({
         template: '#tmpl-segment',
@@ -30,6 +31,7 @@ define(function (require) {
             this.allMessagesCollection = options.allMessagesCollection;
             this.closeDeletes = options.closeDeletes;
         },
+
         serializeData: function () {
             var post,
                 postCreator,
@@ -56,17 +58,11 @@ define(function (require) {
                 ctx: Ctx
             }
         },
-        /**
-         * The render
-         * @return {segmentList}
-         */
+
         onRender: function () {
             Ctx.initTooltips(this.$el);
         },
 
-        /**
-         * @event
-         */
         onDragStart: function (ev) {
             ev.currentTarget.style.opacity = 0.4;
 
@@ -77,9 +73,6 @@ define(function (require) {
             Ctx.draggedSegment = segment;
         },
 
-        /**
-         * @event
-         */
         onSegmentLinkClick: function (ev) {
             var cid = ev.currentTarget.getAttribute('data-segmentid'),
                 collectionManager = new CollectionManager();
@@ -90,9 +83,7 @@ define(function (require) {
                     Ctx.showTargetBySegment(segment);
                 });
         },
-        /**this
-         * @event
-         */
+
         onCloseButtonClick: function (ev) {
             var cid = ev.currentTarget.getAttribute('data-segmentid');
             if (this.closeDeletes) {
@@ -186,9 +177,6 @@ define(function (require) {
             extractList: '.postitlist'
         },
 
-        /**
-         * @init
-         */
         initialize: function (options) {
             var that = this,
                 collectionManager = new CollectionManager();
@@ -208,9 +196,10 @@ define(function (require) {
                         that.highlightSegment(segment);
                     });
                     that.listenTo(that.clipboard, 'add remove reset change', that.resetTitle);
-                    window.setTimeout(function () {
-                        that.render();
-                    }, 0);
+                    /*window.setTimeout(function () {
+
+                     }, 0);*/
+                    that.render();
                 });
 
             this.listenTo(Assembl.vent, 'segmentListPanel:showSegment', function (segment) {
@@ -218,10 +207,6 @@ define(function (require) {
             });
         },
 
-        /**
-         * The events
-         * @type {Object}
-         */
         events: {
             'dragend .postit': "onDragEnd",
             'dragover': 'onDragOver',
@@ -246,10 +231,6 @@ define(function (require) {
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
         },
 
-        /**
-         * The render
-         * @return {segmentList}
-         */
         onRender: function () {
             var that = this,
                 collectionManager = new CollectionManager();
@@ -369,9 +350,6 @@ define(function (require) {
             Ctx.draggedSegment = null;
         },
 
-        /**
-         * @event
-         */
         onDragOver: function (ev) {
             ev.preventDefault();
 
@@ -389,16 +367,10 @@ define(function (require) {
             }
         },
 
-        /**
-         * @event
-         */
         onDragLeave: function () {
             this.$el.removeClass('is-dragover');
         },
 
-        /**
-         * @event
-         */
         onDrop: function (ev) {
             if (ev) {
                 ev.preventDefault();
@@ -431,9 +403,6 @@ define(function (require) {
             }
         },
 
-        /**
-         * @event
-         */
         onClearButtonClick: function (ev) {
             var that = this,
                 collectionManager = new CollectionManager(),
