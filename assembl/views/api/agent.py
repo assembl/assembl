@@ -45,14 +45,19 @@ def get_agents(request, discussion_only=False):
 
 @agent.get(permission=P_READ)
 def get_agent(request):
-    view_def = request.GET.get('view')
+    view_def = request.GET.get('view') or 'default'
     agent_id = request.matchdict['id']
     agent = AgentProfile.get_instance(agent_id)
 
     if not agent:
       raise HTTPNotFound("Agent with id '%s' not found." % agent_id)
 
-    return agent.generic_json()
+    agent_json = agent.generic_json(view_def)
+    current_user = authenticated_userid(request)
+    if current_user == agent.id:
+        # We probably should add all profile info here.
+        agent_json['preferred_email'] = agent.get_preferred_email()
+    return agent_json
 
 @agent.put()
 def post_agent(request):
