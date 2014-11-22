@@ -156,11 +156,14 @@ class AgentProfile(Base):
         return "/user/id/%d/avatar/" % (self.id,)
 
     def serializable(self, use_email=None):
+        # Obsolete method. We want to switch to view_defs.
+        # Not returning the email is intentional for confidentiality reasons
         return {
             '@type': self.external_typename(),
             '@id': self.uri_generic(self.id),
             'name': self.name or self.display_name()
         }
+
     def get_agent_preload(self, view_def=None):
         if view_def:
             result = self.generic_json(view_def)
@@ -220,6 +223,7 @@ class EmailAccount(AbstractAgentAccount):
             return self.email
 
     def serialize_profile(self):
+        # Obsolete method. We want to switch to view_defs.
         return self.profile.serializable(self.email)
 
     def signature(self):
@@ -498,6 +502,7 @@ class User(AgentProfile):
             watcher.processAccountCreated(self.id)
 
     def serializable(self, use_email=None):
+        # Obsolete method. We want to switch to view_defs.
         ser = super(User, self).serializable()
         ser['username'] = self.display_name()
         #r['email'] = use_email or self.get_preferred_email()
