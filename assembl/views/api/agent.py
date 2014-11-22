@@ -1,4 +1,4 @@
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized
 from pyramid.security import authenticated_userid
 from sqlalchemy.orm import joinedload
 from cornice import Service
@@ -58,6 +58,10 @@ def get_agent(request):
 def post_agent(request):
     agent_id = request.matchdict['id']
     agent = AgentProfile.get_instance(agent_id)
+    current_user = authenticated_userid(request)
+    if current_user != agent.id:
+        # Only allow post by self.
+        raise HTTPUnauthorized()
     redirect = False
     username = request.params.get('username', '').strip()
     session = AgentProfile.db
