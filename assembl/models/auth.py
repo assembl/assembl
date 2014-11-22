@@ -159,8 +159,7 @@ class AgentProfile(Base):
         return {
             '@type': self.external_typename(),
             '@id': self.uri_generic(self.id),
-            'name': self.name or self.display_name(),
-            'preferred_email': self.get_preferred_email()
+            'name': self.name or self.display_name()
         }
     def get_agent_preload(self, view_def=None):
         if view_def:
