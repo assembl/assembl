@@ -1728,6 +1728,10 @@ define(function (require) {
                 (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
                 if (!this.visitorViewData[messageId]) {
                   console.log("getMessageOffset: ERROR; visitor data for message "+messageId+" isn't in: ", this.visitorViewData);
+                  // this is bound to cause more issues later, 
+                  // but it's impossible to trace through code with the exception that occurs otherwise.
+                  // TODO benoitg repair this.
+                  return -1;
                 }
                 messageOffset = this.visitorViewData[messageId].traversal_order;
             } else {
