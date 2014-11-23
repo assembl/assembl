@@ -652,7 +652,7 @@ define(function (require) {
             else {
                 //request an offset centered on the message
                 requestedOffsets['offsetStart'] = messageOffset - Math.floor(MORE_PAGES_NUMBER / 2);
-                requestedOffsets['offsetStart'] = messageOffset + Math.ceil(MORE_PAGES_NUMBER / 2);
+                requestedOffsets['offsetEnd'] = messageOffset + Math.ceil(MORE_PAGES_NUMBER / 2);
             }
 
             return requestedOffsets;
@@ -1695,7 +1695,7 @@ define(function (require) {
             if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
                 (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
                 if (!this.visitorViewData[messageId]) {
-                  console.log("getMessageOffset: ERROR; visitor data for message "+messageId+"isn't in: ", this.visitorViewData);
+                  console.log("getMessageOffset: ERROR; visitor data for message "+messageId+" isn't in: ", this.visitorViewData);
                 }
                 messageOffset = this.visitorViewData[messageId].traversal_order;
             } else {
