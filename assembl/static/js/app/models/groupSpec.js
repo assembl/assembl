@@ -22,8 +22,8 @@ define(['models/base', 'utils/panelSpecTypes', 'models/panelSpec'], function (Ba
                 return _.contains(args, PanelSpecTypes.getById(el.get('type')));
             });
             if(_.size(args) !== _.size(panelsToRemove)){
-              console.log("WARNING: groupSpec.Model.removePanels(): "+_.size(args)+" arguments, but found only "+_.size(panelsToRemove)+" panels to remove.");
-              console.log(args, panels, panelsToRemove);
+              //console.log("WARNING: groupSpec.Model.removePanels(): "+_.size(args)+" arguments, but found only "+_.size(panelsToRemove)+" panels to remove.");
+              //console.log(args, panels, panelsToRemove);
             }
             _.each(panelsToRemove, function (el) {
                 panels.remove(el);

@@ -214,7 +214,7 @@ define(function (require) {
                 var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(this.model.getId());
                 promise.done(
                     function (data) {
-                        console.log("populateAssociatedWidgetData received data: ", data);
+                        //console.log("populateAssociatedWidgetData received data: ", data);
 
                         that.inspiration_widget_create_url = null;
                         that.inspiration_widgets = null;
