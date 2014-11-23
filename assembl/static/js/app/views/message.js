@@ -9,6 +9,7 @@ define(function (require) {
         i18n = require('utils/i18n'),
         Permissions = require('utils/permissions'),
         MessageSendView = require('views/messageSend'),
+        MessagesInProgress = require('objects/messagesInProgress'),
         User = require('models/user'),
         CollectionManager = require('common/collectionManager'),
         PanelSpecTypes = require('utils/panelSpecTypes'),
@@ -130,7 +131,8 @@ define(function (require) {
          * @return {MessageView}
          */
         render: function () {
-            var that = this;
+            var that = this,
+                modelId = this.model.id;
             if (Ctx.debugRender) {
                 console.log("message:render() is firing for message", this.model.id);
             }
@@ -201,16 +203,19 @@ define(function (require) {
                     that.$el.html(that.template(data));
                     Ctx.initTooltips(that.$el);
                     Ctx.initClipboard();
+                    var partialMessage = MessagesInProgress.getMessage(modelId);
 
                     that.replyView = new MessageSendView({
                         'allow_setting_subject': false,
-                        'reply_message_id': that.model.getId(),
+                        'reply_message_id': modelId,
                         'body_help_message': i18n.gettext('Type your response here...'),
                         'cancel_button_label': null,
                         'send_button_label': i18n.gettext('Send your reply'),
                         'subject_label': null,
                         'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
                         'messageList': that.messageListView,
+                        'msg_in_progress_body': partialMessage['body'],
+                        'msg_in_progress_ctx': modelId,
                         'mandatory_subject_missing_msg': null
                     });
                     that.$('.message-replybox').append(that.replyView.render().el);

@@ -13,6 +13,7 @@ define(function (require) {
         PostQuery = require('views/messageListPostQuery'),
         Permissions = require('utils/permissions'),
         MessageSendView = require('views/messageSend'),
+        MessagesInProgress = require('objects/messagesInProgress'),
         PanelSpecTypes = require('utils/panelSpecTypes'),
         AssemblPanel = require('views/assemblPanel'),
         CollectionManager = require('common/collectionManager');
@@ -93,27 +94,23 @@ define(function (require) {
                     that.listenTo(allMessageStructureCollection, 'add reset', function () {
                         /*
                         Disable refresh if a message is being written.
-                        TODO ghourlier, bgregoire review my approach.
-                        We might also allow a redraw, while saving current message.
-                        Difficult to avoid the jarring effect, then.
-                        Maybe check if the cursor is in one of the fields.
-                        I assume the message will be drawn when the message is sent.
-                        */
-                        var messageFields = $('.messageSend-body');
-                        if (_.any(messageFields, function (b) {
-                            // why are we not using a placeholder?
-                            return !_.contains(b.classList, "text-muted");
-                        })) {
-                            return;
-                        }
-                        that.currentQuery.invalidateResults();
-                        messageFields = $('.messageSend-subject');
-                        if (_.any(messageFields, function (b) {
-                            // why are we not using a placeholder?
+                        Not as necessary now that we save messages,
+                        but it prevents a jarring refresh, so keeping it as a comment.
+
+                        var messageFields = that.$('.messageSend-body');
+                        function not_empty(b) {
                             return b.value.length != 0;
-                        })) {
+                        };
+
+                        if (_.any(messageFields, not_empty)) {
                             return;
                         }
+                        messageFields = that.$('.messageSend-subject');
+                        if (_.any(messageFields, not_empty)) {
+                            return;
+                        }
+                        */
+                        that.currentQuery.invalidateResults();
                         that.render();
                     });
                 }
@@ -269,6 +266,30 @@ define(function (require) {
         storedMessageListConfig: Ctx.getMessageListConfigFromStorage(),
 
         inspireMeLink: null,
+
+        saveMessagesInProgress: function () {
+            if (this.newTopicView !== undefined) {
+                this.newTopicView.savePartialMessage();
+            }
+            // Otherwise I need to work from the DOM and not view objects, for those are buried in messages
+            var messageFields = this.$('.messageSend-body');
+
+            function not_empty(b) {
+                return b.value.length != 0;
+            };
+
+            messageFields = _.filter(messageFields, not_empty);
+
+            _.each(messageFields, function(f) {
+                var parent_messages = $(f).parents('.message');
+                if (parent_messages.length > 0) {
+                    var messageId = parent_messages[0].attributes.getNamedItem('id').textContent.substr(8);
+                    MessagesInProgress.saveMessage(messageId, f.value);
+                } else {
+                    // this was the newTopicView
+                }
+            });
+        },
 
         /**
          * get a view style definition by id
@@ -961,7 +982,10 @@ define(function (require) {
          */
         render_real: function () {
             var that = this,
-                views = [];
+                views = [],
+                // We could distinguish on current idea, but I think that would be confusing.
+                partialMessageContext = "new-topic-" + Ctx.getDiscussionId(),
+                partialMessage = MessagesInProgress.getMessage(partialMessageContext);
 
             if (!(Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))) {
                 $("body").addClass("js_annotatorUserCannotAddExtract");
@@ -986,6 +1010,9 @@ define(function (require) {
                 'body_help_message': i18n.gettext('Add a subject above and start a new topic here'),
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
                 'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
+                'msg_in_progress_ctx': partialMessageContext,
+                'msg_in_progress_title': partialMessage['title'],
+                'msg_in_progress_body': partialMessage['body'],
                 'messageList': that
             };
 
@@ -1017,7 +1044,12 @@ define(function (require) {
             return this;
         },
 
+        onBeforeDestroy: function() {
+            this.saveMessagesInProgress();
+        },
+
         onBeforeRender: function () {
+            this.saveMessagesInProgress();
             this._clearPostRenderSlowCallbacksCallbackProcessing();
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
         },

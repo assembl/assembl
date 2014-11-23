@@ -7,6 +7,7 @@ define(function (require) {
         $ = require('jquery'),
         Ctx = require('common/context'),
         Permissions = require('utils/permissions'),
+        MessagesInProgress = require('objects/messagesInProgress'),
         i18n = require('utils/i18n');
     require('jquery-autosize');
 
@@ -79,17 +80,24 @@ define(function (require) {
          */
         render: function () {
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+            this.msg_in_progress_ctx = this.options.msg_in_progress_ctx
             var data = {
                 body_help_message: this.initialBody,
                 allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,
                 cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label : i18n.gettext('Cancel'),
                 send_button_label: this.options.send_button_label ? this.options.send_button_label : i18n.gettext('Send'),
                 subject_label: this.options.subject_label ? this.options.subject_label : i18n.gettext('Subject:'),
-                canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST)
+                canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST),
+                msg_in_progress_body: this.options.msg_in_progress_body,
+                msg_in_progress_title: this.options.msg_in_progress_title
             }
 
             this.$el.html(this.template(data));
             Ctx.initTooltips(this.$el);
+            if (this.options.msg_in_progress_body
+                || this.options.msg_in_progress_title) {
+                this.onChangeBody();
+            }
 
             return this;
         },
@@ -100,7 +108,6 @@ define(function (require) {
         events: {
             'click .messageSend-sendbtn': 'onSendMessageButtonClick',
             'click .messageSend-cancelbtn': 'onCancelMessageButtonClick',
-            'focus .messageSend-body': 'onFocusMessage',
             'blur .messageSend-body': 'onBlurMessage',
             'keyup .messageSend-body': 'onChangeBody'
         },
@@ -136,7 +143,7 @@ define(function (require) {
                 }
                 return;
             }
-            if (!message_body || (message_body == this.initialBody)) {
+            if (!message_body) {
                 if (this.options.mandatory_body_missing_msg) {
                     alert(this.options.mandatory_body_missing_msg)
                 } else {
@@ -144,6 +151,7 @@ define(function (require) {
                 }
                 return;
             }
+            this.savePartialMessage();
             btn.text(i18n.gettext('Sending...'));
 
             success_callback = function (data, textStatus, jqXHR) {
@@ -153,6 +161,14 @@ define(function (require) {
                         if (_.isFunction(that.options.send_callback)) {
                             that.options.send_callback();
                         }
+                        // clear on success... so not lost in case of failure.
+                        MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
+                        var el = that.$el.$('.messageSend-body');
+                        if (el.length > 0)
+                            el[0].text = '';
+                        el = that.$el.$('.messageSend-subject');
+                        if (el.length > 0)
+                            el[0].text = '';
 
                         setTimeout(function () {
                             //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
@@ -169,7 +185,7 @@ define(function (require) {
             };
             // This is not too good, but it allows the next render to come.
             message_subject_field.value = "";
-            message_body_field.addClass("text-muted");
+            //message_body_field.addClass("text-muted");
             this.sendPostToServer(message_body, message_subject, reply_message_id, reply_idea_id, success_callback);
 
         },
@@ -178,7 +194,7 @@ define(function (require) {
          * @event
          */
         onCancelMessageButtonClick: function () {
-            this.$('.messageSend-body').val(this.initialBody);
+            this.clearPartialMessage();
             this.$('.messageSend-sendbtn').addClass("hidden");
             this.$('.messageSend-cancelbtn').addClass("hidden");
         },
@@ -186,19 +202,19 @@ define(function (require) {
         /**
          * @event
          */
-        onFocusMessage: function () {
-            if (this.$('.messageSend-body').val() == this.initialBody) {
-                this.$('.messageSend-body').val('');
-            }
+        onBlurMessage: function () {
+            this.savePartialMessage();
         },
 
-        /**
-         * @event
-         */
-        onBlurMessage: function () {
-            if (this.$('.messageSend-body').val() == '') {
-                this.$('.messageSend-body').val(this.initialBody);
-            }
+        savePartialMessage: function () {
+            var message_body = this.$('.messageSend-body').val();
+            var message_title = this.$('.messageSend-subject').val();
+            MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body, message_title);
+        },
+
+        clearPartialMessage: function() {
+            this.$('.messageSend-body').val('');
+            MessagesInProgress.clearMessage(this.msg_in_progress_ctx);
         },
 
         /**
@@ -208,13 +224,13 @@ define(function (require) {
             var message_body = this.$('.messageSend-body').val();
             this.$('.messageSend-body').autosize();
 
-            if (message_body && message_body != this.initialBody) {
-                this.$('.messageSend-body').removeClass("text-muted");
+            if (message_body && message_body.length > 0) {
+                //this.$('.messageSend-body').removeClass("text-muted");
                 this.$('.messageSend-sendbtn').removeClass("hidden");
                 this.$('.messageSend-cancelbtn').removeClass("hidden");
             }
             else {
-                this.$('.messageSend-body').addClass("text-muted");
+                //this.$('.messageSend-body').addClass("text-muted");
                 this.$('.messageSend-sendbtn').addClass("hidden");
                 this.$('.messageSend-cancelbtn').addClass("hidden");
             }

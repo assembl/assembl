@@ -9,6 +9,7 @@ define(function (require) {
         Permissions = require('utils/permissions'),
         CKEditorField = require('views/ckeditorField'),
         MessageSendView = require('views/messageSend'),
+        MessagesInProgress = require('objects/messagesInProgress'),
         CollectionManager = require('common/collectionManager');
 
     var IdeaInSynthesisView = Backbone.View.extend({
@@ -53,6 +54,7 @@ define(function (require) {
             ).then(
                 function (allMessageStructureCollection, allUsersCollection, ideaExtracts) {
                     that.$el.addClass('synthesis-idea');
+                    that.$el.attr('id', 'synthesis-idea-'+that.model.id);
                     Ctx.removeCurrentlyDisplayedTooltips(that.$el);
                     ideaExtracts.forEach(function (segment) {
                         var post = allMessageStructureCollection.get(segment.get('idPost'));
@@ -104,11 +106,14 @@ define(function (require) {
             this.ckeditor.renderTo(area);
             this.ckeditor.changeToEditMode();
         },
+
         /**
          * renders the reply interface
          */
         renderReplyView: function () {
             var that = this,
+                partialCtx = "synthesis-idea-"+this.model.getId(),
+                partialMessage = MessagesInProgress.getMessage(partialCtx),
                 send_callback = function () {
                     Assembl.vent.trigger('messageList:currentQuery');
                     Ctx.setCurrentIdea(that.model);
@@ -125,6 +130,8 @@ define(function (require) {
                 'default_subject': 'Re: ' + Ctx.stripHtml(this.model.getLongTitleDisplayText()).substring(0, 50),
                 'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
                 'mandatory_subject_missing_msg': null,
+                'msg_in_progress_body': partialMessage['body'],
+                'msg_in_progress_ctx': partialCtx,
                 'send_callback': send_callback,
                 'messageList': this.messageListView
             });

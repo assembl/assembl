@@ -8,13 +8,13 @@
           <% if(allow_setting_subject) { %>
             <div class="topic-subject mbxs">
                 <span class="topic-subject-input">
-                  <input type="text" class="messageSend-subject formfield text bras" placeholder="{{gettext('New topic subject:')}}" />
+                  <input type="text" class="messageSend-subject formfield text bras" placeholder="{{gettext('New topic subject:')}}" value="<%= msg_in_progress_title %>" />
                 </span>
             </div>
           <% } %>
         </div>
         <div>
-          <textarea class="formtextarea messageSend-body text text-muted mbxs"><%= body_help_message %></textarea>
+          <textarea class="formtextarea messageSend-body text mbxs" placeholder="<%= body_help_message %>"><%= msg_in_progress_body %></textarea>
           <div  class="messageSend-buttons fr">
               <a class="btn btn-primary btn-xs messageSend-sendbtn hidden"><%= send_button_label %></a>
               <a class="btn btn-cancel btn-sm messageSend-cancelbtn hidden"><%= cancel_button_label %></a>

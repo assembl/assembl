@@ -10,6 +10,7 @@ define(function (require) {
         Permissions = require('utils/permissions'),
         PanelSpecTypes = require('utils/panelSpecTypes'),
         MessageSendView = require('views/messageSend'),
+        MessagesInProgress = require('objects/messagesInProgress'),
         Notification = require('views/notification'),
         SegmentList = require('views/segmentList'),
         CollectionManager = require('common/collectionManager'),
@@ -333,7 +334,9 @@ define(function (require) {
 
             var currentUser = Ctx.getCurrentUser(),
                 canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
-                canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS);
+                canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
+                modelId = this.model.id,
+                partialMessage = MessagesInProgress.getMessage(modelId);
 
             var shortTitleField = new EditableField({
                 'model': this.model,
@@ -360,6 +363,8 @@ define(function (require) {
                 'body_help_message': i18n.gettext('Comment on this idea here...'),
                 'send_button_label': i18n.gettext('Send your comment'),
                 'subject_label': null,
+                'msg_in_progress_body': partialMessage['body'],
+                'msg_in_progress_ctx': modelId,
                 'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
                 'mandatory_subject_missing_msg': null
                 //TODO:  Pass the messageListView that is expected to refresh with the new comment

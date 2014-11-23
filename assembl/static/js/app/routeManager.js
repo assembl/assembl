@@ -35,7 +35,7 @@ define(function (require) {
         },
 
         home: function () {
-            this.isNewUser();
+            Ctx.isNewUser();
             this.restoreViews();
         },
 
@@ -139,29 +139,6 @@ define(function (require) {
                 group.resizeAllPanels();
                 Assembl.groupContainer.show(group);
             });
-        },
-
-        isNewUser: function () {
-            var currentUser = null,
-                connectedUser = null;
-
-            if (window.localStorage.getItem('lastCurrentUser')) {
-                currentUser = window.localStorage.getItem('lastCurrentUser').split('/')[1];
-            }
-
-            if (this.user.get('@id') !== 'system.Everyone') {
-                connectedUser = this.user.get('@id').split('/')[1];
-            }
-
-            if (currentUser) {
-                if (connectedUser != currentUser) {
-                    window.localStorage.removeItem('expertInterfacegroupItems');
-                    window.localStorage.removeItem('simpleInterfacegroupItems');
-                }
-            } else {
-                window.localStorage.setItem('lastCurrentUser', this.user.get('@id'));
-            }
-
         },
 
         isAuthenticated: function () {

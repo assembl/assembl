@@ -1055,6 +1055,29 @@ define(function (require) {
             });
         },
 
+        isNewUser: function () {
+            var currentUser = null,
+                connectedUser = null;
+
+            if (window.localStorage.getItem('lastCurrentUser')) {
+                currentUser = window.localStorage.getItem('lastCurrentUser').split('/')[1];
+            }
+
+            if (this.currentUser.get('@id') !== 'system.Everyone') {
+                connectedUser = this.currentUser.get('@id').split('/')[1];
+            }
+
+            if (currentUser) {
+                if (connectedUser != currentUser) {
+                    window.localStorage.removeItem('expertInterfacegroupItems');
+                    window.localStorage.removeItem('simpleInterfacegroupItems');
+                    window.localStorage.removeItem('composing_messages');
+                }
+            } else {
+                window.localStorage.setItem('lastCurrentUser', this.user.get('@id'));
+            }
+
+        },
         /**
          * @init
          * inits ALL app components
