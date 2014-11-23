@@ -1,17 +1,7 @@
 'use strict';
 
-define(function (require) {
-
-    var Assembl = require('../app'),
-        $ = require('jquery'),
-        Permissions = require('../utils/permissions'),
-        Moment = require('moment'),
-        i18n = require('../utils/i18n'),
-        Zeroclipboard = require('zeroclipboard'),
-        backboneModal = require('backbone.modal'),
-        marionetteModal = require('backbone.marionette.modals'),
-        bootstrap = require('bootstrap');
-
+define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap'],
+    function (Assembl, $, Permissions, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap) {
 
     var Context = function () {
 
@@ -490,14 +480,14 @@ define(function (require) {
         },
 
         getWidgetDataAssociatedToIdeaPromise: function(idea_id){
-            //console.log("getWidgetDataAssociatedToIdeaPromise()");
+            console.log("getWidgetDataAssociatedToIdeaPromise()");
             var returned_data = {};
             var that = this;
             var deferred = $.Deferred();
 
             if ( idea_id in that.cachedWidgetDataAssociatedToIdeasPromises && that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] != null )
             {
-                //console.log("getWidgetDataAssociatedToIdeaPromise(): we will serve the cached promise");
+                console.log("getWidgetDataAssociatedToIdeaPromise(): we will serve the cached promise");
                 that.cachedWidgetDataAssociatedToIdeasPromises[idea_id].done(function(data){
                     deferred.resolve(data);
                 });

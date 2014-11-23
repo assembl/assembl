@@ -1,6 +1,7 @@
+'use strict';
+
 define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/types', 'utils/permissions'],
     function (_, Base, Ctx, i18n, Types, Permissions) {
-        'use strict';
 
         /**
          * @class IdeaModel
@@ -63,7 +64,7 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
 
                 if (Ctx.stripHtml(this.get('definition'))) {
                     return this.get('definition');
-                } 
+                }
                 else if (Ctx.stripHtml(this.get('longTitle'))) {
                     return this.get('longTitle');
                 }
@@ -84,20 +85,20 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
              */
             getLongTitleDisplayText: function () {
                 if (this.get('root') === true) {
-                  return i18n.gettext('The root idea will never be in the synthesis');
+                    return i18n.gettext('The root idea will never be in the synthesis');
                 }
 
                 if (Ctx.stripHtml(this.get('longTitle'))) {
-                  return this.get('longTitle');
+                    return this.get('longTitle');
                 }
                 else if (Ctx.stripHtml(this.get('shortTitle'))) {
-                  return this.get('shortTitle');
+                    return this.get('shortTitle');
                 }
                 else if (Ctx.stripHtml(this.get('definition'))) {
-                  return this.get('definition');
+                    return this.get('definition');
                 }
                 else {
-                  return i18n.gettext('Add and expression for the next synthesis');
+                    return i18n.gettext('Add and expression for the next synthesis');
                 }
             },
 
@@ -106,23 +107,23 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
              * HTML Striping if necessary is the responsability of the caller.
              */
             getShortTitleDisplayText: function () {
-              if(this.isRootIdea()){
-                return i18n.gettext('All posts');
-              }
-              else if (Ctx.stripHtml(this.get('shortTitle'))) {
-                return this.get('shortTitle');
-              }
-              else if (Ctx.stripHtml(this.get('longTitle'))) {
-                return this.get('longTitle');
-              }
-              else if (Ctx.stripHtml(this.get('definition'))) {
-                return this.get('definition');
-              }
-              else {
-                return i18n.gettext('New idea');
-              }
+                if (this.isRootIdea()) {
+                    return i18n.gettext('All posts');
+                }
+                else if (Ctx.stripHtml(this.get('shortTitle'))) {
+                    return this.get('shortTitle');
+                }
+                else if (Ctx.stripHtml(this.get('longTitle'))) {
+                    return this.get('longTitle');
+                }
+                else if (Ctx.stripHtml(this.get('definition'))) {
+                    return this.get('definition');
+                }
+                else {
+                    return i18n.gettext('New idea');
+                }
             },
-            
+
             /**
              * @return {Boolean} true if the current idea is the root idea
              */

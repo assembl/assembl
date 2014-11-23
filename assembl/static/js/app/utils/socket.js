@@ -1,3 +1,5 @@
+'use strict';
+
 define(["app", 'common/context', 'underscore', 'sockjs', 'common/collectionManager'],
     function (Assembl, Ctx, _, SockJS, CollectionManager) {
         'use strict';

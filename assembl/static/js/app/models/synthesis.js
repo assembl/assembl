@@ -1,6 +1,7 @@
+'use strict';
+
 define(['models/base', 'common/context', 'utils/i18n'],
     function (Base, Ctx, i18n) {
-        'use strict';
 
         /**
          * @class SynthesisModel

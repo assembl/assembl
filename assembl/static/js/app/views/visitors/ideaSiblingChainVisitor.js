@@ -1,4 +1,6 @@
-define([], function () {
+'use strict';
+
+define(function () {
     /** Generates the last_sibbling_chains for ideas, in the following structure:
      * data_by_idea[visited_idea_id]['last_sibling_chain'][for_each_level_is_the_parent_a_last_sibbling]
      * Assumes data_by_idea was previously filled by objectTreeRenderVisitor

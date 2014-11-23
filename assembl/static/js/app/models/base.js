@@ -1,5 +1,6 @@
+'use strict';
+
 define(['backbone', 'common/context'], function (Backbone, Ctx) {
-    'use strict';
 
     /**
      * @class Model

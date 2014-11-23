@@ -1,4 +1,6 @@
-define([], function () {
+'use strict';
+
+define(function () {
     /** A visitor function to be passed to to a visit function such as
      * Idea.visitBreadthFirst or MessageCollection.visitDepthFirst
      *

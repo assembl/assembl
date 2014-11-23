@@ -1,6 +1,7 @@
+'use strict';
+
 define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
     function (_, $, Assembl, Ctx, Base) {
-        'use strict';
 
         /**
          * @class MessageModel

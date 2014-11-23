@@ -1,5 +1,6 @@
+'use strict';
+
 define(['underscore', 'models/base'], function (_, Base) {
-    'use strict';
 
     /**
      * @class IdeaModel

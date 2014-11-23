@@ -1,3 +1,5 @@
+'use strict';
+
 define(['models/base', 'common/context'], function (Base, Ctx) {
 
     var roleModel = Base.Model.extend({

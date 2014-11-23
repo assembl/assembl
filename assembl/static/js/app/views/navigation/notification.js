@@ -1,6 +1,6 @@
-define(function (require) {
+'use strict';
 
-    var Marionette = require('backbone.marionette');
+define(['backbone.marionette'], function (Marionette) {
 
     var sidebarNotification = Marionette.ItemView.extend({
         template: '#tmpl-sidebar-notification'

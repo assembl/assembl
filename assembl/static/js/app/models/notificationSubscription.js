@@ -1,5 +1,6 @@
+'use strict';
+
 define(['models/base', 'common/context'], function (Base, Ctx) {
-    'use strict';
 
     var notificationsSubscriptionModel = Base.Model.extend({
         defaults: {
@@ -19,20 +20,20 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
 
     var notificationsSubscriptionCollection = Base.Collection.extend({
         model: notificationsSubscriptionModel,
-        
+
         /**
          * Set the collection url for a specific user subscription
          */
-        setUrlToUserSubscription: function() {
-          var root = 'Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/notification_subscriptions';
-          this.url = Ctx.getApiV2Url(root);
+        setUrlToUserSubscription: function () {
+            var root = 'Discussion/' + Ctx.getDiscussionId() + '/all_users/' + Ctx.getCurrentUserId() + '/notification_subscriptions';
+            this.url = Ctx.getApiV2Url(root);
         },
-        
+
         /**
          * Set the collection url for global discussion template subscription
          */
-        setUrlToDiscussionTemplateSubscriptions: function() {
-          this.url = Ctx.getApiV2DiscussionUrl("user_templates/-/notification_subscriptions");
+        setUrlToDiscussionTemplateSubscriptions: function () {
+            this.url = Ctx.getApiV2DiscussionUrl("user_templates/-/notification_subscriptions");
         }
     });
 

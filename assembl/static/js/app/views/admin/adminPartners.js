@@ -1,7 +1,7 @@
+'use strict';
+
 define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/context', 'utils/i18n'],
     function (Marionette, $, CollectionManager, Ctx, i18n) {
-        'use strict';
-
 
         var adminPartners = Marionette.LayoutView.extend({
             template: '#tmpl-adminPartners',

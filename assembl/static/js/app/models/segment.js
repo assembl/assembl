@@ -1,6 +1,7 @@
+'use strict';
+
 define(['underscore', 'models/base', 'common/context', 'models/user', 'models/message', 'utils/types', 'annotator', 'utils/i18n'],
     function (_, Base, Ctx, User, Message, Types, Annotator, i18n) {
-        'use strict';
 
         /**
          * @class SegmentModel

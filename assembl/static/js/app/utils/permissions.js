@@ -1,4 +1,6 @@
-define([], function () {
+'use strict';
+
+define(function () {
 
     var Permissions = {
         READ: "read",

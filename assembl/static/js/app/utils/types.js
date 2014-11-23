@@ -1,4 +1,6 @@
-define([], function () {
+'use strict';
+
+define(function () {
 
     var Types = {
         DISCUSSION: 'Discussion',

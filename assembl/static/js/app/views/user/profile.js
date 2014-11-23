@@ -1,5 +1,6 @@
+'use strict';
+
 define(['backbone.marionette'], function (Marionette) {
-    'use strict';
 
     var userProfile = Marionette.LayoutView.extend({
         template: '#tmpl-profile',

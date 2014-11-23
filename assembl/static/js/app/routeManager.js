@@ -1,20 +1,7 @@
-define(function (require) {
+'use strict';
 
-    var Marionette = require('backbone.marionette'),
-        Assembl = require('app'),
-        Ctx = require('common/context'),
-        User = require('models/user'),
-        storage = require('objects/storage'),
-        navBar = require('views/navBar'),
-        GroupContainer = require('views/groups/groupContainer'),
-        CollectionManager = require('common/collectionManager'),
-        viewsFactory = require('objects/viewsFactory'),
-        adminDiscussion = require('views/admin/adminDiscussion'),
-        adminNotificationSubscriptions = require('views/admin/adminNotificationSubscriptions'),
-        adminPartners = require('views/admin/adminPartners'),
-        userNotificationSubscriptions = require('views/user/userNotificationSubscriptions'),
-        userProfile = require('views/user/profile'),
-        Authorization = require('views/authorization');
+define(['backbone.marionette', 'app', 'common/context', 'models/user', 'objects/storage', 'views/navBar', 'views/groups/groupContainer', 'common/collectionManager', 'objects/viewsFactory', 'views/admin/adminDiscussion', 'views/admin/adminNotificationSubscriptions', 'views/admin/adminPartners', 'views/user/userNotificationSubscriptions', 'views/user/profile', 'views/authorization'],
+    function (Marionette, Assembl, Ctx, User, storage, navBar, GroupContainer, CollectionManager, viewsFactory, adminDiscussion, adminNotificationSubscriptions, adminPartners, userNotificationSubscriptions, userProfile, Authorization) {
 
     var routeManager = Marionette.Controller.extend({
 
@@ -35,7 +22,7 @@ define(function (require) {
         },
 
         home: function () {
-            Ctx.isNewUser();
+            this.isNewUser();
             this.restoreViews();
         },
 

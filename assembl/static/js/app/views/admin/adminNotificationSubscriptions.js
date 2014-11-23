@@ -1,24 +1,24 @@
+'use strict';
+
 define(['backbone.marionette', 'common/collectionManager'],
     function (Marionette, CollectionManager) {
-        'use strict';
-
 
         var adminNotificationSubscriptions = Marionette.LayoutView.extend({
             template: '#tmpl-adminNotificationSubscriptions',
             className: 'admin-notifications',
             ui: {
-              subscribeCheckbox: ".js_adminNotification"
+                subscribeCheckbox: ".js_adminNotification"
             },
             collectionEvents: {
-              "reset": "render", // equivalent to view.listenTo(view.collection, "reset", view.render, view)
-              "sync": "render"
+                "reset": "render", // equivalent to view.listenTo(view.collection, "reset", view.render, view)
+                "sync": "render"
             },
             initialize: function () {
                 var collectionManager = new CollectionManager(),
                     that = this;
 
                 this.collection = new Backbone.Collection();
-                
+
                 $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then(
                     function (NotificationsDiscussion) {
                         that.collection.reset(NotificationsDiscussion.models);
@@ -43,7 +43,7 @@ define(['backbone.marionette', 'common/collectionManager'],
                 var elm = $(e.target);
 
                 var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
-                
+
                 var notificationSubscriptionModel = this.collection.get(elm.attr('id'));
                 notificationSubscriptionModel.set("status", status);
                 notificationSubscriptionModel.save();

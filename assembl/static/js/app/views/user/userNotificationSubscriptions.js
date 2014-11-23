@@ -1,6 +1,8 @@
+'use strict';
+
 define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager', 'common/context', 'models/notificationSubscription', 'models/roles', 'utils/i18n'],
     function (Marionette, $, _, CollectionManager, Ctx, NotificationSubscription, RolesModel, i18n) {
-        'use strict';
+
 
         var userNotificationSubscriptions = Marionette.LayoutView.extend({
             template: '#tmpl-userNotificationSubscriptions',
@@ -63,6 +65,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                     }
                 })
                 console.log(addableGlobalSubscriptions);
+
+                console.log(this.collection.models);
+
                 return {
                     UserNotifications: this.collection.models,
                     addableGlobalSubscriptions: addableGlobalSubscriptions,

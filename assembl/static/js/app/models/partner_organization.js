@@ -1,6 +1,7 @@
+'use strict';
+
 define(['jquery', 'models/base', 'utils/i18n', 'common/context'],
     function ($, Base, i18n, Ctx) {
-        'use strict';
 
         /**
          * @class PartnerOrganizationModel

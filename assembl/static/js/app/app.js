@@ -1,3 +1,5 @@
+'use strict';
+
 define(['backbone.marionette', 'jquery'], function (Marionette, $) {
 
     var App = new Marionette.Application();
