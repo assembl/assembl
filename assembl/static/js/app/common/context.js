@@ -1074,7 +1074,7 @@ define(function (require) {
                     window.localStorage.removeItem('composing_messages');
                 }
             } else {
-                window.localStorage.setItem('lastCurrentUser', this.user.get('@id'));
+                window.localStorage.setItem('lastCurrentUser', this.currentUser.get('@id'));
             }
 
         },
