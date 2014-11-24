@@ -364,26 +364,36 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     this.render();
                 }
 
+
                 var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(currentIdea.getId());
-                that.ui.inspireMe.hide();
+                that.ui.inspireMe.addClass('hidden');
+                //that.ui.inspireMe.hide();
                 promise.done(
                     function (data) {
-                        console.log("syncWithCurrentIdea getWidgetDataAssociatedToIdeaPromise received data: ", data);
-                        if ("inspiration_widget_url" in data) {
+                        //console.log("syncWithCurrentIdea getWidgetDataAssociatedToIdeaPromise received data: ", data);
+                        if ( "inspiration_widget_url" in data && data.inspiration_widget_url )
+                        {
                             that.inspireMeLink = data.inspiration_widget_url;
-                            if (that.inspireMeLink) {
-                                console.log("change the href of the inspireMe link");
-                                that.ui.inspireMeAnchor.attr("href", that.inspireMeLink);
-                                that.ui.inspireMe.show();
-                            }
+                            //console.log("change the href of the inspireMe link");
+                            that.ui.inspireMeAnchor.attr("href", that.inspireMeLink);
                             //that.render();
                         }
                         else
                             that.inspireMeLink = null;
-                        if (!that.inspireMeLink)
-                            that.ui.inspireMe.hide();
+
+                        if ( !that.inspireMeLink )
+                        {
+                            that.ui.inspireMe.addClass('hidden');
+                            //that.ui.inspireMe.hide();
+                        }
+                        else
+                        {
+                            that.ui.inspireMe.removeClass('hidden');
+                            //that.ui.inspireMe.show();
+                        }
                     }
                 );
+
             },
 
             /**
