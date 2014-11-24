@@ -22,7 +22,7 @@ define(['backbone.marionette', 'app', 'common/context', 'models/user', 'objects/
         },
 
         home: function () {
-            this.isNewUser();
+            Ctx.isNewUser();
             this.restoreViews();
         },
 
