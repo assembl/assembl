@@ -471,8 +471,8 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
         },
 
         invalidateWidgetDataAssociatedToIdea: function(idea_id){
-            console.log("invalidateWidgetDataAssociatedToIdea(", idea_id, ")");
-            console.log("this.cachedWidgetDataAssociatedToIdeasPromises: ", this.cachedWidgetDataAssociatedToIdeasPromises);
+            //console.log("invalidateWidgetDataAssociatedToIdea(", idea_id, ")");
+            //console.log("this.cachedWidgetDataAssociatedToIdeasPromises: ", this.cachedWidgetDataAssociatedToIdeasPromises);
             if ( idea_id == "all" )
                 this.cachedWidgetDataAssociatedToIdeasPromises = {};
             else

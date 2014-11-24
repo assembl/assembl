@@ -4,7 +4,8 @@ define(['backbone.marionette', 'app', 'views/groups/groupContent', 'views/assemb
     function (Marionette, Assembl, GroupContent, AssemblPanel, Notification, PanelSpecTypes) {
 
         /**
-         * Manages all the groups in the interface
+         * Manages all the groups in the interface, essentially the GroupSpec.Collection
+         * Normally referenced with Assembl.groupContainer
          */
         var groupContainer = Marionette.CollectionView.extend({
             id: 'groupsContainer',
