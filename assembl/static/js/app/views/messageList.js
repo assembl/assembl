@@ -54,12 +54,18 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 var that = this,
                     collectionManager = new CollectionManager();
                 that.renderIsComplete = false;
+                that.showMessageByIdInProgress = false;
                 this.renderedMessageViewsCurrent = {};
 
                 this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
                 this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
                 this.panelWrapper = options.panelWrapper;
+                
+                this.requestMessages({
+                    offsetStart: 0,
+                    offsetEnd: MORE_PAGES_NUMBER
+                  });
                 /**
                  * @ghourlier
                  * TODO: Usually it would necessary to push notification rather than fetch every time the model change
@@ -180,7 +186,6 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
             events: function () {
                 var that = this,
                     data = {
-                        'click .idealist-title': 'onTitleClick',
                         'click .post-query-filter-info .js_deleteFilter ': 'onFilterDeleteClick',
                         'click .js_messageList-collapseButton': 'toggleMessageView',
 
@@ -556,20 +561,11 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 }
             },
 
+            /**
+             * This is used by groupContent.js
+             */
             getMinWidthWithOffset: function (offset) {
                 return this.minWidth + offset;
-            },
-
-            scrollToElement: function (el) {
-                if (this.ui.panelBody.offset() !== undefined) {
-                    var panelOffset = this.ui.panelBody.offset().top,
-                        panelScrollTop = this.ui.panelBody.scrollTop(),
-                        elOffset = el.offset().top,
-                        margin = 30,
-                        target = elOffset - panelOffset + panelScrollTop - margin;
-
-                    this.ui.panelBody.animate({ scrollTop: target });
-                }
             },
 
             /**
@@ -695,9 +691,17 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 return toReturn;
             },
 
+            /** Essentially the default value of showMessages.
+             * Whoever first calls it will get this as the first value of the messagelist upon render */
+            requestMessages:  function (requestedOffsets) {
+              this._requestedOffsets = requestedOffsets;
+            },
+            
             /**
              * Load the new batch of messages according to the requested `offsetStart`
              * and `offsetEnd` prop
+             * 
+             * If requestedOffsets is falsy, the value set by requestMessages is used
              */
             showMessages: function (requestedOffsets) {
                 var that = this,
@@ -709,6 +713,23 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     messageIdsToShow = [],
                     messageFullModelsToShowPromise;
 
+                if (that.debugPaging) {
+                  console.log("showMessages() called with requestedOffsets:", requestedOffsets);
+                }
+                //Note that this can also be set to false in onRender()
+                that.renderIsComplete = false;
+                
+                if(!requestedOffsets) {
+                  if (that.debugPaging) {
+                    console.log("showMessages() using previously set offset request:", this._requestedOffsets);
+                  }
+                  requestedOffsets = this._requestedOffsets;
+                }
+                else {
+                  this._requestedOffsets = requestedOffsets;
+                }
+
+                
                 /* The MessageFamilyView will re-fill the renderedMessageViewsCurrent
                  * array with the newly calculated rendered MessageViews.
                  */
@@ -725,22 +746,20 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     var collectionManager = new CollectionManager();
 
                     messageFullModelsToShowPromise = collectionManager.getMessageFullModelsPromise(messageIdsToShow);
-                    if (that.debugPaging) {
-                        console.log("showMessages() num root messages passed to getRenderedMessagesThreaded:", _.size(models));
-                    }
                     views_promise = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
                 } else {
                     models = this.getAllMessageStructureModelsToDisplay();
                     numMessages = _.size(models);
                     views_promise = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
                 }
+
+                this.offsetStart = returnedOffsets['offsetStart']
+                this.offsetEnd = returnedOffsets['offsetEnd']
+                
                 $.when(views_promise).done(function (views) {
                     if (that.debugPaging) {
-                        console.log("showMessages() requestedOffsets:", requestedOffsets, "returnedOffsets:", returnedOffsets, "messageIdsToShow", messageIdsToShow, "out of numMessages", numMessages, "root views", views);
+                        console.log("showMessages() showing requestedOffsets:", requestedOffsets, "returnedOffsets:", returnedOffsets, "messageIdsToShow", messageIdsToShow, "out of numMessages", numMessages, "root views", views);
                     }
-
-                    that.offsetStart = returnedOffsets['offsetStart']
-                    that.offsetEnd = returnedOffsets['offsetEnd']
 
                     if (views.length === 0) {
                         //TODO:  This is probably where https://app.asana.com/0/15264711598672/20633284646643 occurs
@@ -867,7 +886,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 var requestedOffsets = {};
 
                 requestedOffsets = this.getNextMessagesRequestedOffsets();
-
+                //console.log("showNextMessages calling showMessages");
                 this.showMessages(requestedOffsets);
             },
 
@@ -878,7 +897,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 var requestedOffsets = {};
 
                 requestedOffsets = this.getPreviousMessagesRequestedOffsets();
-
+                //console.log("showPreviousMessages calling showMessages");
                 this.showMessages(requestedOffsets);
             },
 
@@ -1018,16 +1037,20 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 this.$('.messagelist-replybox').html(this.newTopicView.render().el);
 
                 // Resetting the messages
-                this.resetOffsets();
+                //this.resetOffsets();
                 var collectionManager = new CollectionManager();
                 collectionManager.getAllMessageStructureCollectionPromise().done(
                     function (allMessageStructureCollection) {
                         that.allMessageStructureCollection = allMessageStructureCollection;
                         var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, that.allMessageStructureCollection);
-                        that.showMessages({
-                            offsetStart: 0,
-                            offsetEnd: MORE_PAGES_NUMBER
-                        });
+                        if(true) {//was that.showMessageByIdInProgress === false //TODO:  requested offsets should be stored by showMessageById, and this should just call with no parameters to use a default.
+                          //Would avoid rendering twice, and would allow showMessageById to just request showing messages systematically
+                          console.log("render_real calling showMessages");
+                          that.showMessages();
+                        }
+                        else {
+                            // We DONT that.renderIsComplete = true here, otherwise, showMessageById would never fire on first render
+                        }
                         if (that.currentViewStyle === that.ViewStyles.NEW_MESSAGES && first_unread_id) {
                             console.log('DISABLED (BUGGY):  Highlighting first new message (may not be on the same page)');
                             //that.showMessageById(first_unread_id, undefined, undefined, false);
@@ -1275,8 +1298,9 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     last_sibling_chain,
                     current_message_info,
                     defer = $.Deferred(),
-                    collectionManager = new CollectionManager();
-                if (that.debugPaging) {
+                    collectionManager = new CollectionManager(),
+                    debug=false;
+                if (debug) {
                     console.log("getRenderedMessagesThreaded() num sibblings:", _.size(sibblings), "level:", level, "offsets", offsets);
                 }
                 /**  [last_sibling_chain] which of the view's ancestors are the last child of their respective parents.
@@ -1321,7 +1345,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                         return model;
                     }
                     else {
-                        if (that.debugPaging) {
+                        if (debug) {
                             console.log("popFirstValidFromSibblings() discarding message " + model.getId() + " at offset " + current_message_info['traversal_order']);
                         }
                         return popFirstValidFromSibblings(sibblings);
@@ -1330,13 +1354,13 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 messageStructureModel = popFirstValidFromSibblings(sibblings);
 
                 if (!messageStructureModel) {
-                    if (that.debugPaging) {
+                    if (debug) {
                         console.log("getRenderedMessagesThreaded() sibblings is now empty, returning.");
                     }
                     return list;
                 }
                 current_message_info = data_by_object[messageStructureModel.getId()];
-                if (that.debugPaging) {
+                if (debug) {
                     console.log("getRenderedMessagesThreaded() processing message: ", messageStructureModel.id, " at offset", current_message_info['traversal_order'], "with", _.size(current_message_info['children']), "children");
                 }
 
@@ -1735,7 +1759,8 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
 
             /**
              * Is the message currently onscreen (in the set of filtered messages
-             * AND between the offsets onscreen
+             * AND between the offsets onscreen.
+             * This does NOT mean it's view has already finished rendering
              * @param {String} id
              * @return{Boolean} true or false
              */
@@ -1745,6 +1770,108 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 return (this.offsetStart <= messageIndex) && (messageIndex <= this.offsetEnd);
             },
 
+
+            /**
+             * scrolls to any dom element in the messageList.  
+             * Unlike scrollToMessage, the element must already be onscreen.
+             * This is also called by views/message.js
+             * 
+             * @param callback:  will be called once animation is complete
+             */
+            scrollToElement: function (el, callback) {
+                if (this.ui.panelBody.offset() !== undefined) {
+                    var panelOffset = this.ui.panelBody.offset().top,
+                        panelScrollTop = this.ui.panelBody.scrollTop(),
+                        elOffset = el.offset().top,
+                        margin = 30,
+                        target = elOffset - panelOffset + panelScrollTop - margin;
+
+                    this.ui.panelBody.animate({ scrollTop: target }, { complete: callback });
+                }
+            },
+            
+            /** Scrools to a specific message, retrying untill relevent renders 
+             * are complete
+             */
+            scrollToMessage: function (messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth) {
+              var that = this,
+                  RETRY_INTERVAL = 100,  //10 times per second
+                  MAX_RETRIES = 300 //Stop after 30 seconds
+                  
+              recursionDepth = recursionDepth || 0;
+              shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
+              shouldOpenMessageSelected = (typeof shouldOpenMessageSelected === "undefined") ? true : shouldOpenMessageSelected;
+              
+              if (!messageModel) {
+                throw "scrollToMessage(): ERROR:  Message wasn't provided";
+              }
+              if (recursionDepth === 0 && this.scrollToMessageInProgress) {
+                console.log("scrollToMessage():  WARNING:  a scrollToMessage was already in progress, aborting");
+                if (_.isFunction(failedCallback)) {
+                  failedCallback();
+                }
+                return;
+              }
+              else {
+                this.scrollToMessageInProgress = true;
+              }
+                var animate_message = function (message) {
+                  var selector = Ctx.format('[id="message-{0}"]', message.id),
+                  el = $(selector);;
+
+                  if (el[0]) {
+                    if (shouldOpenMessageSelected) {
+                      // console.log("showMessageById(): sending showBody
+                      // to message", message.id);
+                      //TODO:  This is horrible, we need to get the reference,
+                      // check that it's not already open, 
+                      // then if it's not re-render message and wait
+                      message.trigger('showBody');
+                      setTimeout(function () {
+                        console.log("scrollToMessage(): INFO:  shouldOpenMessageSelected is true, calling recursively after a delay");
+                        that.scrollToMessage(messageModel, shouldHighlightMessageSelected, false, callback, failedCallback, recursionDepth + 1);
+                        },1000); //Add a delay if we had to open the message
+                    }
+                    else {
+                      var real_callback = function () {
+                        if (shouldHighlightMessageSelected) {
+                            $(selector).highlight();
+                        }
+                        if (_.isFunction(callback)) {
+                            callback();
+                        }
+                      };
+                      that.scrollToElement(el, real_callback);
+                    }
+                  } else {
+                    // Trigerring showBody above requires the message to
+                    // re-render. WE may have to give it time
+                      if(recursionDepth <= MAX_RETRIES){
+                        console.log("scrollToMessage(): ERROR:  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
+                        setTimeout(function () {
+                          that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1);
+                        }, RETRY_INTERVAL);
+                      }
+                      else {
+                        console.log("scrollToMessage(): ERROR: MAX_RETRIES has been reached: ", recursionDepth);
+                      }
+                  }
+
+                };
+
+                if (that.renderIsComplete) {
+                  animate_message(messageModel);
+                }
+                else {
+                  // console.log("scrollToMessage(): waiting for render to complete");
+                  that.listenToOnce(that, "messageList:render_complete", function () {
+                      // console.log("scrollToMessage(): render has completed, animating");
+                      animate_message(messageModel);
+                  });
+                }
+
+            },
+            
             /**
              * Highlights the message by the given id
              * @param {String} id
@@ -1753,21 +1880,35 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
              */
             showMessageById: function (id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes) {
                 var that = this,
-                    selector = Ctx.format('[id="message-{0}"]', id),
-                    el,
                     messageIsInFilter = false,
                     that = this,
                     requestedOffsets,
                     collectionManager = new CollectionManager(),
                     shouldRecurse;
 
-                console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldRecurseMaxMoreTimes);
+                console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes);
 
-                shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
-                shouldOpenMessageSelected = (typeof shouldOpenMessageSelected === "undefined") ? true : shouldOpenMessageSelected;
+                if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
+                  console.log("showMessageById():  ERROR:  a showMessageById was already in progress, aborting");
+                  return;
+                }
+                else if (shouldRecurseMaxMoreTimes === undefined) {
+                  this.showMessageByIdInProgress = true; 
+                }
+                
                 shouldRecurseMaxMoreTimes = (typeof shouldRecurseMaxMoreTimes === "undefined") ? 3 : shouldRecurseMaxMoreTimes;
                 shouldRecurse = shouldRecurseMaxMoreTimes > 0;
-
+                
+                if (!this.renderIsComplete) {
+                  // If there is already a render in progress, really weird things
+                  // can happen.  Wait untill things calm down.
+                  this.listenToOnce(that, "messageList:render_complete", function () {
+                    console.log("showMessageById(): calling recursively after waiting for render to complete");
+                    that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes - 1);
+                  });
+                  return;
+                }
+                
                 $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                     this.currentQuery.getResultMessageIdCollectionPromise()).done(
                     function (allMessageStructureCollection, resultMessageIdCollection) {
@@ -1784,12 +1925,14 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                         if (messageIsInFilter && !that.isMessageOnscreen(id)) {
                             if (shouldRecurse) {
                                 var success = function () {
-                                    console.log("showMessageById() message " + id + " in query results but not onscreen, calling showMessageById() recursively, only once");
+                                    console.log("showMessageById(): INFO: message " + id + " was in query results but not onscreen, we requested a page change and now call showMessageById() recursively after waiting for render to complete");
                                     that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, 0);
                                 };
                                 requestedOffsets = that.calculateRequestedOffsetToShowMessage(id);
-                                that.showMessages(requestedOffsets);
+                                that.requestMessages(requestedOffsets); //It may be that a render in progress will actually use it
+                                //console.log("showMessageById() requesting page change with requestedOffset:", requestedOffsets);
                                 that.listenToOnce(that, "messageList:render_complete", success);
+                                that.showMessages(requestedOffsets);
                             }
                             else {
                                 console.log("showMessageById: ERROR:  Message is in query results but not in current page, and we are not allowed to recurse");
@@ -1801,7 +1944,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                             if (shouldRecurse) {
                                 that.showAllMessages();
                                 var success = function () {
-                                    console.log("showMessageById() message " + id + " not in query results, calling showMessageById() recursively after clearing filters");
+                                    console.log("showMessageById(): WARNING: message " + id + " not in query results, calling showMessageById() recursively after clearing filters");
                                     that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes - 1);
                                 };
                                 that.listenToOnce(that, "messageList:render_complete", success);
@@ -1811,66 +1954,24 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                             }
                             return;
                         }
+
                         var real_callback = function () {
-                            if (shouldHighlightMessageSelected) {
-                                $(selector).highlight();
-                            }
-                            if (_.isFunction(callback)) {
-                                callback();
-                            }
+                          if (_.isFunction(callback)) {
+                              callback();
+                          }
+                          that.showMessageByIdInProgress = false; 
                         };
-
-
-                        if (message) {
-                            var animate_message = function (message) {
-                                //Trigerring showBody above requires the message to re-render.  Give it time
-                                console.log("showMessageById(): TODO:  Waiting for 2 seconds is really bad, need to retry periodically up to a few seconds");
-                                setTimeout(function () {
-                                    if (shouldOpenMessageSelected) {
-                                        //console.log("showMessageById(): sending showBody to message", message.id);
-                                        message.trigger('showBody');
-                                    }
-                                    el = $(selector);
-                                    if (el[0]) {
-                                        var panelOffset = that.ui.panelBody.offset().top;
-                                        var offset = el.offset().top;
-                                        // Scrolling to the element
-                                        var target = offset - panelOffset + that.ui.panelBody.scrollTop();
-                                        that.ui.panelBody.animate({ scrollTop: target }, { complete: real_callback });
-                                    } else {
-                                        console.log("showMessageById(): ERROR:  Message " + id + " not found in the DOM with selector: " + selector);
-                                    }
-                                }, 2000);
-                            };
-
-                            if (that.renderIsComplete) {
-                                animate_message(message);
-                            }
-                            else {
-                                //console.log("showMessageById(): waiting for render to complete");
-                                that.listenToOnce(that, "messageList:render_complete", function () {
-                                    //console.log("showMessageById(): render has completed, animating");
-                                    animate_message(message);
-                                });
-                            }
-
-                        }
-                        else {
-                            console.log("showMessageById(): ERROR:  Message " + id + " not found in collection");
-                        }
+                        var failed_callback = function () {
+                          that.showMessageByIdInProgress = false; 
+                        };
+                        //console.log("showMessageById: DEBUG:  handing off to scrollToMessage");
+                        that.scrollToMessage(message, shouldHighlightMessageSelected, shouldOpenMessageSelected, real_callback, failed_callback);
+                        
 
                     });
 
             },
 
-            /**
-             * @event
-             */
-            onTitleClick: function (ev) {
-                var id = ev.currentTarget.getAttribute('data-messageid');
-
-                this.openMessageByid(id); // FIXME: has this method disappeared?
-            },
 
             /**
              * @event
