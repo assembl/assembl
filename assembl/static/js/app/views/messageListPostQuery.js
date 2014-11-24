@@ -1,7 +1,7 @@
 'use strict';
 
-define(['common/context', 'utils/i18n'],
-    function (require) {
+define(['common/context', 'utils/i18n', 'common/collectionManager'],
+    function (Ctx, i18n, CollectionManager) {
 
         /**
          * @class PostQuery
@@ -12,8 +12,8 @@ define(['common/context', 'utils/i18n'],
          * be done inside this class, to ease unit testing and code clarity.
          */
         var PostQuery = function () {
-            var CollectionManager = require('common/collectionManager'),
-                collectionManager = new CollectionManager();
+            var collectionManager = new CollectionManager();
+
             this._returnHtmlDescriptionPostInContextOfIdea = function (filterDef, queryObjects) {
                 var retval = '',
                     idea = null,
@@ -55,8 +55,8 @@ define(['common/context', 'utils/i18n'],
                     var value = true;
                     if (queryObjects[0].hasOwnProperty("value"))
                         value = queryObjects[0].value;
-                    var retval = '',
-                        closeBtn = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></a>\n';
+
+                    var closeBtn = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></a>\n';
 
                     if (value === true) {
                         retval += i18n.sprintf(i18n.gettext("%s %s"), "You haven't read yet", closeBtn);
@@ -203,7 +203,7 @@ define(['common/context', 'utils/i18n'],
              */
             this.getFilterDefById = function (filterDefId) {
                 for (var filterDefPropName in this.availableFilters) {
-                    filterDef = this.availableFilters[filterDefPropName]
+                    var filterDef = this.availableFilters[filterDefPropName];
                     if (filterDef.id == filterDefId) {
                         return filterDef;
                     }
