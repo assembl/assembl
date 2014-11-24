@@ -19,7 +19,7 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
 
                 this.collection = new Backbone.Collection();
                 if (!Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
-                    // TODO ghourlier: Mettre un unauthorized sur la vue.
+                    // TODO ghourlier: Éviter que les gens n'ayant pas l'autorisation accèdent à cet écran.
                     alert("This is an administration screen.");
                     return;
                 }
