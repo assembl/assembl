@@ -343,7 +343,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                         });
                         var messages_per_day_totals = {};
                         var messages_per_day_totals_array = [];
-                        for (k in messages_per_day) {
+                        for (var k in messages_per_day) {
                             var sz = messages_per_day[k].length;
                             messages_per_day_totals[k] = sz;
                             messages_per_day_totals_array.push({ 'date': k, 'value': sz });
@@ -413,7 +413,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                         // convert object to array
 
                         var messages_per_day_totals_filled_array = [];
-                        for (v in messages_per_day_totals_filled) {
+                        for (var v in messages_per_day_totals_filled) {
                             messages_per_day_totals_filled_array.push({ 'date': new Date(v), 'value': messages_per_day_totals_filled[v] });
                         }
                         //console.log("messages_per_day_totals_filled_array:");
@@ -995,7 +995,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                         }
                         data_slices.push([start_deg, stop_deg, name, level, data[1], data[2], data[3], relative_ratio]);
                         for (var key in children) {
-                            child = children[key];
+                            var child = children[key];
                             var child_relative_ratio = child[count_index] / total;
                             var inc_deg = (stop_deg - start_deg) / total * child[count_index];
                             var child_start_deg = current_deg;
