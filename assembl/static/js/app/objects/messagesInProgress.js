@@ -30,6 +30,7 @@ define(function (require) {
                 title = '';
             }
             if (body === undefined) {
+                console.log("ERROR: save undefined message body");
                 body = '';
             }
             if (title.length == 0 && body.length == 0) {

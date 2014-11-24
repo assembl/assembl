@@ -199,9 +199,11 @@ define(['backbone', 'app', 'underscore', 'jquery', 'common/context', 'utils/perm
             },
 
             savePartialMessage: function () {
-                var message_body = this.$('.messageSend-body').val();
-                var message_title = this.$('.messageSend-subject').val();
-                MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body, message_title);
+                var message_body = this.$('.messageSend-body');
+                if (message_body.length > 0) {
+                    var message_title = this.$('.messageSend-subject').val();
+                    MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title);
+                }
             },
 
             clearPartialMessage: function () {
