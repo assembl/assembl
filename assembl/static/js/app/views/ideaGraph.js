@@ -1,7 +1,6 @@
-define(function (require) {
+'use strict';
 
-    var $jit = require('jit'),
-        Ctx = require('common/context');
+define(['jit', 'common/context'], function ($jit, Ctx) {
 
 // Hackity node that changes shape according to data.
     var ht;

@@ -1,9 +1,6 @@
-define(function (require) {
-    'use strict';
+'use strict';
 
-    var Backbone = require('backbone'),
-        _ = require('underscore'),
-        Ctx = require('common/context');
+define(['backbone', 'underscore', 'common/context'], function (Backbone, _, Ctx) {
 
     var IdeaFamilyView = Backbone.View.extend({
         /**

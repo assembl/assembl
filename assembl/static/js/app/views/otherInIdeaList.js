@@ -1,9 +1,6 @@
-define(function (require) {
-    'use strict';
+'use strict';
 
-    var Ctx = require('common/context'),
-        IdeaView = require('views/idea'),
-        _ = require('underscore');
+define(['common/context', 'views/idea', 'underscore'], function (Ctx, IdeaView, _) {
 
     var otherInIdeaList = IdeaView.extend({
         template: Ctx.loadTemplate('otherInIdeaList'),

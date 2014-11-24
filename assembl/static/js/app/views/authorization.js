@@ -1,3 +1,5 @@
+'use strict';
+
 define(['backbone.marionette', 'common/context'], function (Marionette, Ctx) {
 
     var authorization = Marionette.LayoutView.extend({

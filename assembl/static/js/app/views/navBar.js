@@ -1,3 +1,5 @@
+'use strict';
+
 define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'backbone.modal', 'backbone.marionette.modals'],
     function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions) {
         var navBar = Marionette.LayoutView.extend({
@@ -78,9 +80,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     className: 'group-modal popin-wrapper',
                     cancelEl: '.close, .btn-cancel',
                     serializeData: function () {
-                      return {
-                        PanelSpecTypes:  PanelSpecTypes
-                      }
+                        return {
+                            PanelSpecTypes: PanelSpecTypes
+                        }
                     },
                     initialize: function () {
                         this.$('.bbm-modal').addClass('popin');

@@ -1,7 +1,6 @@
-define(function (require) {
-    'use strict';
+'use strict';
 
-    var Marionette = require('backbone.marionette');
+define(['backbone.marionette'], function (Marionette) {
 
     /**
      * An abstract class every panel should eventually extend
