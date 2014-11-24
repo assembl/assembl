@@ -29,6 +29,9 @@ define(function (require) {
             if (title === undefined) {
                 title = '';
             }
+            if (body === undefined) {
+                body = '';
+            }
             if (title.length == 0 && body.length == 0) {
                 delete messages[context];
             } else {
