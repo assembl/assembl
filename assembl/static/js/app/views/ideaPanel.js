@@ -225,7 +225,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                                 || previous.inspiration_widgets != that.inspiration_widgets
                                 || previous.inspiration_widget_url != that.inspiration_widget_url
                                 || previous.inspiration_widget_configure_url != that.inspiration_widget_configure_url) {
-                                console.log("we will re-render the idea panel");
+                                //console.log("we will re-render the idea panel");
                                 that.render();
                             }
                         }

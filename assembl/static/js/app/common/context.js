@@ -480,14 +480,14 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
         },
 
         getWidgetDataAssociatedToIdeaPromise: function(idea_id){
-            console.log("getWidgetDataAssociatedToIdeaPromise()");
+            //console.log("getWidgetDataAssociatedToIdeaPromise()");
             var returned_data = {};
             var that = this;
             var deferred = $.Deferred();
 
             if ( idea_id in that.cachedWidgetDataAssociatedToIdeasPromises && that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] != null )
             {
-                console.log("getWidgetDataAssociatedToIdeaPromise(): we will serve the cached promise");
+                //console.log("getWidgetDataAssociatedToIdeaPromise(): we will serve the cached promise");
                 that.cachedWidgetDataAssociatedToIdeasPromises[idea_id].done(function(data){
                     deferred.resolve(data);
                 });
@@ -509,7 +509,7 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
 
 
             $.getJSON(inspiration_widgets_url, function (data) {
-                console.log("ancestor_inspiration_widgets data: ", data);
+                //console.log("ancestor_inspiration_widgets data: ", data);
 
                 if ( data
                     && data instanceof Array
@@ -519,13 +519,13 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
                     inspiration_widgets = data;
                     returned_data["inspiration_widgets"] = inspiration_widgets;
                     var inspiration_widget_uri = inspiration_widgets[inspiration_widgets.length - 1]; // for example: "local:Widget/52"
-                    console.log("inspiration_widget_uri: ", inspiration_widget_uri);
+                    //console.log("inspiration_widget_uri: ", inspiration_widget_uri);
                     
                     inspiration_widget_url = "/static/widget/creativity/?config="
                         + Ctx.getUrlFromUri(inspiration_widget_uri)
                         + "&target="
                         + idea_id; // example: "http://localhost:6543/widget/creativity/?config=/data/Widget/43&target=local:Idea/3#/"
-                    console.log("inspiration_widget_url: ", inspiration_widget_url);
+                    //console.log("inspiration_widget_url: ", inspiration_widget_url);
                     returned_data["inspiration_widget_url"] = inspiration_widget_url;
 
                     inspiration_widget_configure_url = "/static/widget/creativity/?admin=1#/admin/configure_instance?widget_uri="
