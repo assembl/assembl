@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'common/collectionManager'],
-    function (Marionette, CollectionManager) {
+define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 'common/context'],
+    function (Marionette, CollectionManager, Permissions, Ctx) {
 
         var adminNotificationSubscriptions = Marionette.LayoutView.extend({
             template: '#tmpl-adminNotificationSubscriptions',
@@ -18,6 +18,11 @@ define(['backbone.marionette', 'common/collectionManager'],
                     that = this;
 
                 this.collection = new Backbone.Collection();
+                if (!Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
+                    // TODO ghourlier: Mettre un unauthorized sur la vue.
+                    alert("This is an administration screen.");
+                    return;
+                }
 
                 $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then(
                     function (NotificationsDiscussion) {
