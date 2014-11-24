@@ -10,5 +10,6 @@
     "videoNextPage": "Page suivante »",
     "messageSuccessfullyPosted": "Votre message a été posté avec succès.",
     "resumeInspirationButton": "Continuer à chercher l'inspiration",
-    "exitButton": "Retourner au débat"
+    "exitButton": "Retourner au débat",
+    "videoNoSearchResults": "Il n'y a pas de résultat de recherche pour cette requête."
 }

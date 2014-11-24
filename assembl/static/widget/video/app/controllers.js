@@ -30,6 +30,13 @@ videosApp.controller('videosCtl',
                     console.log("localConfig received");
                     $scope.localConfig = data;
                 });
+
+
+                $scope.sendMessageEndpointUrl = $scope.computeSendMessageEndpointUrl();
+                console.log("$scope.sendMessageEndpointUrl: ", $scope.sendMessageEndpointUrl);
+                if ( !$scope.sendMessageEndpointUrl ){
+                    $("#results > p").first().after ( document.createTextNode("This idea is not linked to a video creativity widget, so you will not be able to post a message.") );
+                }
                 
 
 
@@ -67,6 +74,9 @@ videosApp.controller('videosCtl',
                 ];
 
                 $scope.inspiration_keywords_used = {};
+
+
+                $scope.hasSearched = false;
 
 
                 // get inspiration keywords from the idea URL given in the configuration JSON
@@ -247,6 +257,7 @@ videosApp.controller('videosCtl',
 
             $scope.search = function (pageToken) {
                 console.log("search()");
+                $scope.hasSearched = true;
                 $q.when($scope.localConfigPromise).then(function(){
                     console.log("$scope.localConfigPromise is ready");
                     var q = $('#query').val();
@@ -274,6 +285,35 @@ videosApp.controller('videosCtl',
                     });
                 });
                 
+            };
+
+            $scope.computeSendMessageEndpointUrl = function(){
+                console.log("config: ", $scope.config);
+                //console.log("$scope.config.widget.ideas_url: ", $scope.config.widget.ideas_url);
+                console.log("$scope.config.idea.widget_add_post_endpoint: ", $scope.config.idea.widget_add_post_endpoint);
+                var endpoints = null;
+                var url = null;
+                if ( "widget_add_post_endpoint" in $scope.config.idea)
+                    endpoints = $scope.config.idea.widget_add_post_endpoint;
+                var widgetUri = AssemblToolsService.urlToResource($scope.urlParameterConfig);
+                console.log("$scope.urlParameterConfig: ", $scope.urlParameterConfig);
+                console.log("widgetUri: ", widgetUri);
+                if ( endpoints && Object.keys(endpoints).length > 0 )
+                {
+                    if ( widgetUri in endpoints )
+                    {
+                        url = AssemblToolsService.resourceToUrl(endpoints[widgetUri]);
+                    }
+                    else
+                    {
+                        url = AssemblToolsService.resourceToUrl(endpoints[Object.keys(endpoints)[0]]);
+                    }
+                }
+                else
+                {
+                    console.log("error: could not determine an endpoint URL to post message to");
+                }
+                return url;
             };
 
             $scope.sendIdeaFake = function(){
@@ -366,28 +406,8 @@ videosApp.controller('videosCtl',
                 };
                 
                 console.log("message: ", message);
-                console.log("config: ", $scope.config);
-                //console.log("$scope.config.widget.ideas_url: ", $scope.config.widget.ideas_url);
-                console.log("$scope.config.idea.widget_add_post_endpoint: ", $scope.config.idea.widget_add_post_endpoint);
-                var endpoints = null;
-                var url = null;
-                if ( "widget_add_post_endpoint" in $scope.config.idea)
-                    endpoints = $scope.config.idea.widget_add_post_endpoint;
-                var widgetUri = AssemblToolsService.urlToResource($scope.urlParameterConfig);
-                console.log("$scope.urlParameterConfig: ", $scope.urlParameterConfig);
-                console.log("widgetUri: ", widgetUri);
-                if ( endpoints && Object.keys(endpoints).length > 0 )
-                {
-                    if ( widgetUri in endpoints )
-                    {
-                        url = AssemblToolsService.resourceToUrl(endpoints[widgetUri]);
-                    }
-                    else
-                    {
-                        url = AssemblToolsService.resourceToUrl(endpoints[Object.keys(endpoints)[0]]);
-                    }
-                }
-                else
+                var url = $scope.sendMessageEndpointUrl;
+                if ( !url )
                 {
                     throw "no endpoint";
                 }

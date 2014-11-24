@@ -58,10 +58,12 @@
         -->
 
         <form id="search" data-ng-submit="search()">
-            <input id="query" class="select2-offscreen" type="hidden" value=""
+            <input ng-model="query" id="query" class="select2-offscreen" type="hidden" value=""
                    placeholder="Entrez ici votre recherche..."/>
             <input type="submit" id="search-button" value="Rechercher" class="btn btn-default"/>
         </form>
+
+        <p ng-show="hasSearched && !results.length">{{ 'videoNoSearchResults' | translate: {query: query} }}</p>
 
         <div class="video" data-ng-repeat="video in results"
              data-ng-click="scrollToPlayerAndLaunch(video.id, video.title)" data-ng-class="{selected: video.id == currentVideoId}">
