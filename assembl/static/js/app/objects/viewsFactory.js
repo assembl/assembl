@@ -8,8 +8,6 @@ define(['views/assemblPanel', 'underscore', 'views/navigation/home', 'views/cont
          * indexed by PanelSpec.id
          */
         var panelTypeRegistry = {};
-
-
         _.each([
             HomeNavPanel, HomePanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList.SegmentListPanel, SynthesisNavPanel, SynthesisPanel
         ], function (panelClass) {
