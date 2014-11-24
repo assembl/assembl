@@ -38,73 +38,15 @@ define(function (require) {
 
         initialize: function (options) {
             var that = this,
-                collectionManager = new CollectionManager(),
-                currentUser = Ctx.getCurrentUser(),
-                canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
+                collectionManager = new CollectionManager();
 
             this.synthesis = new Backbone.Model();
             this.partners = new Backbone.Collection();
 
-            $.when(Ctx.getDiscussionPromise(),
-                collectionManager.getAllMessageStructureCollectionPromise(),
+            $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                 collectionManager.getAllSynthesisCollectionPromise(),
                 collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
-                function (discussion, allMessageStructureCollection, allSynthesisCollection, Organization) {
-
-                // we implement here get() and save() methods (needed by CKEditor), so we mock a model instance
-                // TODO: find a better solution, for example create and use a real Discussion model instead?
-                discussion.get = function (field) {
-                    return this[field];
-                };
-                discussion.save = function (field, value) {
-                    this[field] = value;
-
-                    // PUT changed data to the discussion endpoint
-                    var endpoint_url = Ctx.getApiV2DiscussionUrl();
-                    var post_data = {};
-                    post_data[field] = value;
-                    $.ajax({
-                        method: 'PUT',
-                        url: endpoint_url,
-                        data: $.param(post_data),
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                    }).success(function (data) {
-                        //console.log("discussion PUT success:", data);
-                    });
-
-                    return true;
-                };
-
-                that.objectivesField = new CKEditorField({
-                    'model': discussion,
-                    'modelProp': 'objectives',
-                    'placeholder': 'Objectives',
-                    'canEdit': canEdit
-                });
-                // add editable "instigator" field
-                that.instigatorField = new CKEditorField({
-                    'model': discussion,
-                    'modelProp': 'instigator',
-                    'placeholder': 'Instigator',
-                    'canEdit': canEdit
-                });
-                // add editable "introduction" field
-                that.introductionField = new CKEditorField({
-                    'model': discussion,
-                    'modelProp': 'introduction',
-                    'placeholder': 'Introduction',
-                    'canEdit': canEdit
-                });
-
-                // FIXME: here we try to apply the dots again after text has been edited but it does not seem to work
-                var onCKEditorChange = function () {
-                    console.log("Updating dotdotdot");
-                    that.$(".introduction .ckeditorField-mainfield").trigger('update.dot');
-                    that.$(".introduction .ckeditorField-mainfield").trigger('update');
-                };
-                that.listenTo(that.introductionField, "save", onCKEditorChange);
-                that.listenTo(that.introductionField, "cancel", onCKEditorChange);
-                // end of FIXME
+                function (allMessageStructureCollection, allSynthesisCollection, Organization) {
 
                     /**
                      * Next synthesis published
@@ -140,17 +82,23 @@ define(function (require) {
         },
 
         serializeData: function () {
+            var partners = null;
+            if (this.partners.models) {
+                partners = this.partners.models;
+            }
+
             return {
                 synthesis: this.synthesis,
-                partners: this.partners.models,
+                partners: partners,
                 ctx: Ctx
             }
         },
 
         introductionSeeMore: function () {
             $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
-                var model = new Backbone.Model();
-                model.set("introduction", discussion.introduction);
+                var model = new Backbone.Model({
+                    introduction: discussion.introduction
+                });
 
                 var Modal = Backbone.Modal.extend({
                     template: _.template($('#tmpl-homeIntroductionDetail').html()),
@@ -164,12 +112,77 @@ define(function (require) {
         },
 
         onRender: function () {
+            this.displayFieldsContext();
+            this.draw();
+        },
+
+        displayFieldsContext: function () {
             var that = this,
                 currentUser = Ctx.getCurrentUser(),
                 canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
 
             $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
                 //console.log("discussion successfully loaded: ", discussion);
+
+                that.objectivesField = new CKEditorField({
+                    'model': discussion,
+                    'modelProp': 'objectives',
+                    'placeholder': 'Objectives',
+                    'canEdit': canEdit
+                });
+                // add editable "instigator" field
+                that.instigatorField = new CKEditorField({
+                    'model': discussion,
+                    'modelProp': 'instigator',
+                    'placeholder': 'Instigator',
+                    'canEdit': canEdit
+                });
+                // add editable "introduction" field
+                that.introductionField = new CKEditorField({
+                    'model': discussion,
+                    'modelProp': 'introduction',
+                    'placeholder': 'Introduction',
+                    'canEdit': canEdit
+                });
+
+                that.$('.objectives').empty();
+                that.$('.instigator').empty();
+                that.$('.introduction').empty();
+
+                // we implement here get() and save() methods (needed by CKEditor), so we mock a model instance
+                // TODO: find a better solution, for example create and use a real Discussion model instead?
+                discussion.get = function (field) {
+                    return this[field];
+                };
+
+                discussion.save = function (field, value) {
+                    this[field] = value;
+
+                    // PUT changed data to the discussion endpoint
+                    var endpoint_url = Ctx.getApiV2DiscussionUrl();
+                    var post_data = {};
+                    post_data[field] = value;
+                    $.ajax({
+                        method: 'PUT',
+                        url: endpoint_url,
+                        data: $.param(post_data),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).success(function (data) {
+                        //console.log("discussion PUT success:", data);
+                    });
+
+                    return true;
+                };
+
+                // FIXME: here we try to apply the dots again after text has been edited but it does not seem to work
+                var onCKEditorChange = function () {
+                    console.log("Updating dotdotdot");
+                    that.$(".introduction .ckeditorField-mainfield").trigger('update.dot');
+                    that.$(".introduction .ckeditorField-mainfield").trigger('update');
+                };
+                that.listenTo(that.introductionField, "save", onCKEditorChange);
+                that.listenTo(that.introductionField, "cancel", onCKEditorChange);
+                // end of FIXME
 
                 // show discussion title
                 that.$(".js_discussionTitle").html(discussion.topic);
@@ -185,8 +198,7 @@ define(function (require) {
                     that.introductionField.delegateEvents();
                 }
 
-
-                /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show 
+                /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
                  * Read More links for introduction preview
                  */
                 that.$(".introduction .ckeditorField-mainfield").dotdotdot({
@@ -204,12 +216,9 @@ define(function (require) {
                     watch: "window"
                 });
 
-
             });
 
-            this.draw();
         },
-
         /*
          * @param messages: [{'day': '2012-01-01', 'value': 1},...] sorted by date ascending
          * @param threshold: Number
