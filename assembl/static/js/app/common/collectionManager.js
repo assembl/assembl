@@ -206,17 +206,19 @@ define(['app',
             },
 
             _waitingWorker: undefined,
+            
+            _messageFullModelRequests: {},
 
             getMessageFullModelRequestWorker: function (collectionManager) {
                 this.collectionManager = collectionManager,
-
-                    this.requests = {},
-
+                this.requests = this.collectionManager._messageFullModelRequests,
+                
                     this.addRequest = function (id, promise) {
                         if (this.requests[id] === undefined) {
-                            this.requests[id] = []
+                            this.requests[id] = {'promises': [],
+                                                 'serverRequestInProgress': false}
                         }
-                        this.requests[id].push(promise);
+                        this.requests[id]['promises'].push(promise);
                         if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
                             console.log("Added request for id:" + id + ", queue size is now:" + _.size(this.requests));
                         }
@@ -257,30 +259,39 @@ define(['app',
                                 ids = [],
                                 viewDef = 'default';
 
-                            _.each(that.requests, function (deferredList, id) {
-                                var structureModel = allMessageStructureCollection.get(id);
-                                ids.push(id);
+                            _.each(that.requests, function (request, id) {
+                                //var structureModel = allMessageStructureCollection.get(id);
+                                if(request['serverRequestInProgress'] === false) {
+                                  request['serverRequestInProgress'] = true;
+                                  ids.push(id);
+                                }
                             });
-
-                            postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
-                            postQuery.setViewDef(viewDef); //We want the full messages
-                            postQuery.getResultRawDataPromise().done(function (results) {
-                                _.each(results, function (jsonData) {
-                                    var id = jsonData['@id'],
-                                        structureModel = allMessageStructureCollection.get(id),
-                                        deferredList = that.requests[id];
-                                    if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                        console.log("executeRequest resolving for id", id, deferredList.length, "deferred queued for that id");
-                                    }
-                                    structureModel.set(jsonData);
-                                    structureModel.viewDef = viewDef;
-
-                                    _.each(deferredList, function (deferred) {
-                                        deferred.resolve(structureModel);
-                                    });
-
-                                });
-                            });
+                            if(_.size(ids) > 0) {
+                              postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
+                              postQuery.setViewDef(viewDef); //We want the full messages
+                              postQuery.getResultRawDataPromise().done(function (results) {
+                                  _.each(results, function (jsonData) {
+                                      var id = jsonData['@id'],
+                                          structureModel = allMessageStructureCollection.get(id),
+                                          deferredList = that.requests[id];
+                                      if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                                          console.log("executeRequest resolving for id", id, deferredList['promises'].length, "deferred queued for that id");
+                                      }
+                                      structureModel.set(jsonData);
+                                      structureModel.viewDef = viewDef;
+                                      _.each(deferredList['promises'], function (deferred) {
+                                          deferred.resolve(structureModel);
+                                      });
+                                      delete that.requests[id];
+  
+                                  });
+                              });
+                            }
+                            else {
+                              if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                                console.log("executeRequest called, but no ids to request from the server out of the list of ", _.size(that.requests));
+                              }
+                            }
                         });
                     }
 
