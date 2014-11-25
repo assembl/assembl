@@ -3,7 +3,7 @@
 .navbar {
   @include no-selection;
   @include box-sizing(border-box);
-  @include transform(translateZ(0));
+  //@include transform(translateZ(0));
   display: block;
   position: relative;
   z-index: 100; /* for dropdowns */
@@ -30,7 +30,7 @@
     top: 0;
     left: 0;
     right: 0;
-    width: 40%;
+    //width: 40%;
     .add-group {
       text-decoration: none;
       cursor: pointer;
@@ -38,9 +38,11 @@
   }
 
   .navbar-right {
-    width: 400px;
-    min-width: 400px;
-    float: right;
+    //width: 400px;
+    //min-width: 400px;
+    //float: right;
+    position: absolute;
+    right: 0;
     .connexion {
       padding: 0 10px;
       line-height: 34px;

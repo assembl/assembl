@@ -16,8 +16,8 @@
 <% } %>
 </div>
 <div class="navbar-right">
-  <div class="gr">
-    <div class="gu gu-4of2">
+  <div>
+    <div class="dispib vat">
       {% if user %}
         <% if( _.isEmpty(Roles) && canSubscribeToDiscussion ){ %>
           <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
@@ -30,8 +30,8 @@
         {% endif %}
       {% endif %}
     </div>
-    <div class="gu gu-last">
-      <div class="connexion fr">
+    <div class="dispib">
+      <div class="connexion">
         {% if user %}
           
           <div class="dropdown">
