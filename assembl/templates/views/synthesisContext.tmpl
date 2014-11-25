@@ -2,6 +2,9 @@
   <div class="gu gu-1of2">
     <div class="block-content">
       <% if(synthesis.get('empty')) { %>
+        <h2 class="lastSynthesisTitle">
+          {{ gettext('Synthesis') }}
+        </h2>
         <p> <%= synthesis.get('empty') %> </p>
       <% } else { %>
         <h2 class="lastSynthesisTitle">
