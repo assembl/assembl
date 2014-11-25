@@ -70,10 +70,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 this.segmentList.reset();
             },
 
-            show: function (view) {
-                this.$el.html(view.render().el);
-            },
-
             /**
              * This is not inside the template beacuse babel wouldn't extract it in
              * the pot file
