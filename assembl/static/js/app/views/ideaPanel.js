@@ -12,7 +12,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             gridSize: AssemblPanel.prototype.IDEA_PANEL_GRID_SIZE,
             minWidth: 270,
             regions: {
-                segmentList: ".postitlist"
+                segmentList: "#idea-container"
             },
             initialize: function (options) {
                 this.editing = false;
@@ -32,8 +32,12 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 });
 
             },
+            ui: {
+                'postIt': '.postitlist'
+            },
             modelEvents: {
-                'change': 'render'
+                'change': 'render',
+                'replacedBy': 'onReplaced'
             },
             events: {
                 'dragstart .bx': 'onDragStart',
@@ -61,6 +65,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             inspiration_widgets: null,
             inspiration_widget_url: null,
             inspiration_widget_configure_url: null,
+
+            resetView: function () {
+                this.segmentList.reset();
+            },
+
+            show: function (view) {
+                this.$el.html(view.render().el);
+            },
 
             /**
              * This is not inside the template beacuse babel wouldn't extract it in
@@ -106,10 +118,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 this.$('.ideaPanel-section-segments-legend .legend').html(
                     this.getExtractsLabel());
             },
-
-            /**
-             * The render
-             */
 
             serializeData: function () {
                 if (Ctx.debugRender) {
@@ -298,7 +306,11 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                                 allUsersCollection: allUsersCollection,
                                 allMessagesCollection: allMessagesCollection
                             });
-                            that.segmentList.show(that.extractListView);
+
+                            //TODO: override show method to remove dom before inject
+                            that.ui.postIt.html(that.extractListView.render().el);
+                            //that.segmentList.show(that.extractListView);
+
                             that.renderTemplateGetExtractsLabel();
                         });
                 } else {
@@ -407,11 +419,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
              */
             setIdeaModel: function (idea) {
                 var that = this,
-                    collectionManager = new CollectionManager(),
-                    ideaChangeCallback = function () {
-                        //console.log("setCurrentIdea:ideaChangeCallback fired");
-                        that.render();
-                    };
+                    collectionManager = new CollectionManager();
+
                 if (idea !== this.model) {
                     if (this.model !== null) {
                         this.stopListening(this.model, 'change replacedBy acquiredId');
@@ -426,12 +435,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                         this.extractListView = null;
                     }
                     if (this.model !== null) {
-                        this.segmentList.reset();
-                        //console.log("setCurrentIdea:  setting up new listeners for "+this.model.id);
-                        this.listenTo(this.model, 'change', ideaChangeCallback);
-                        this.listenTo(this.model, 'replacedBy', function (m) {
-                            that.onReplaced(m);
-                        });
+                        this.resetView();
+
                         this.listenTo(this.model, 'acquiredId', function (m) {
                             // model has acquired an ID. Reset everything.
                             var model = that.model;
@@ -454,7 +459,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                         //TODO: More sophisticated behaviour here, depending
                         //on if the panel was opened by selection, or by something else.
                         //app.closePanel(app.ideaPanel);
-                        this.segmentList.empty();
+                        this.resetView();
                         this.render();
                     }
                 }
@@ -633,7 +638,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     seeMore.removeClass('hidden');
                 }
             },
-
 
             editDefinition: function () {
                 if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
