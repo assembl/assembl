@@ -771,7 +771,7 @@ class Notification(Base):
         if isinstance(self.event_source_object(), Post):
             msg['Message-ID'] = "<"+self.event_source_object().message_id+">"
             if self.event_source_object().parent:
-                msg['In-Reply-To'] = self.event_source_object().parent.message_id
+                msg['In-Reply-To'] = "<"+self.event_source_object().parent.message_id+">"
         else:
             raise NotImplementedError("TODO:  Implement message id's for non-Post event_source")
         
