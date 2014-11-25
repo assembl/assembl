@@ -1188,7 +1188,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
 
                 html += '<span class="dropdown-label">';
                 html += this.defaultMessageStyle.label;
-                html += '</span><i class="icon-arrowdown"></i>';
+                html += '<i class="icon-arrowdown"></i></span>';
                 html += '<ul class="dropdown-list">';
                 _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function (messageViewStyle) {
                     html += '<li class="' + that.getMessageViewStyleCssClass(messageViewStyle) + ' dropdown-listitem">' + messageViewStyle.label + '</li>';
@@ -1206,7 +1206,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
 
                 html += '<span class="dropdown-label">';
                 html += this.currentViewStyle.label;
-                html += '</span><i class="icon-arrowdown"></i>';
+                html += '<i class="icon-arrowdown"></i></span>';
                 html += '<ul class="dropdown-list">';
                 _.each(this.ViewStyles, function (messageListViewStyle) {
                     html += '<li class="' + messageListViewStyle.css_class + ' dropdown-listitem">' + messageListViewStyle.label + '</li>';

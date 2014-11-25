@@ -33,11 +33,12 @@
     <div class="gu gu-last">
       <div class="connexion fr">
         {% if user %}
-          <div class="avatar img-rounded fl ptxs">
-            <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
-          </div>
+          
           <div class="dropdown">
               <div class="dropdown-label">
+                  <span class="avatar img-rounded fl">
+                    <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
+                  </span>
                   <span class="mlxs">{{ user.display_name() }}</span>
                   <span class="dropdown-arrow icon-arrowdown"></span>
               </div>

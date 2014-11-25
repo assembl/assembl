@@ -903,16 +903,13 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
          * @event
          */
         onDropdownClick: function (e) {
+            if ( !e || !(e.target) )
+                return;
             var dropdown = $(e.target);
-
-            if (!dropdown.hasClass("dropdown-label")) {
-                var parent = $(e.target).parent();
-                if (parent.hasClass("dropdown-label")) {
-                    dropdown = parent;
-                }
-                else
-                    return;
-            }
+            if ( !dropdown.hasClass("dropdown-label") )
+                dropdown = dropdown.parents(".dropdown-label").first();
+            if ( !dropdown )
+                return;
 
             var parent = dropdown.parent();
 
