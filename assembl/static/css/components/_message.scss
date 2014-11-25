@@ -436,15 +436,6 @@ $previewNumLines: 4;
     }
   }
   .dropdown {
-    //Not all message-menus are dropdown
-    opacity: 0.7;
-    i {
-      opacity: 0.5;
-    }
-    &:hover {
-      color: $purple1;
-      opacity: 1;
-    }
     position: absolute;
     right: 5px;
     top: 0;
