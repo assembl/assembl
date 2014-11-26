@@ -183,13 +183,13 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         that.ui.messageBody.val('');
                         that.ui.topicSubject.val('');
 
+                        MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
                         if (that.messageList) {
                             that.listenToOnce(that.messageList, "messageList:render_complete", function () {
                                 if (_.isFunction(that.options.send_callback)) {
                                     that.options.send_callback();
                                 }
                                 // clear on success... so not lost in case of failure.
-                                MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
                                 var el = that.$el.$('.messageSend-body');
                                 if (el.length > 0)
                                     el[0].text = '';
