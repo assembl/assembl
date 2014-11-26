@@ -47,6 +47,10 @@ class Tombstonable(object):
 
     @classmethod
     def base_condition(cls, alias=None):
+        return cls.tombstone_condition(alias)
+
+    @classmethod
+    def tombstone_condition(cls, alias=None):
         cls = alias or cls
         return cls.is_tombstone == False
 
