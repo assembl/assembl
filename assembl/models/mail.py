@@ -352,6 +352,7 @@ class AbstractMailbox(PostSource):
         return html.tostring(doc)
 
     def parse_email(self, message_string, existing_email=None):
+        """ Creates or replace a email from a string """
         parsed_email = email.message_from_string(message_string)
         body = None
         error_description = None
@@ -699,6 +700,27 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
 
         smtp_connection.quit()
 
+    def message_ok_to_import(self, message_string):
+        """Check if message should be imported at all (not a bounce, vacation, 
+        etc.)
+        
+        The reference is La référence est http://tools.ietf.org/html/rfc3834 
+        """
+        #TODO:  This is a double-parse, refactor parse_message so we can reuse it
+        parsed_email = email.message_from_string(message_string)
+        if parsed_email.get('Return-Path', None) == '<>':
+            #TODO:  Check if a report-type=delivery-status; is present, 
+            # and process the bounce
+            return False
+        if parsed_email.get('Precedence', None) == 'bulk':
+            return False
+        if parsed_email.get('Precedence', None) == 'list':
+            # A mailing list
+            return False
+        if parsed_email.get('Auto-Submitted', None) == 'auto-generated':
+            return False        
+        return True
+        
     def __repr__(self):
         return "<%s %s: %s>" % (type(self).__name__ , repr(self.id),repr(self.name))
 
@@ -777,15 +799,19 @@ class IMAPMailbox(AbstractMailbox):
             #print "running fetch for message: "+email_id
             status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
             assert status == 'OK'
+                
             #print repr(message_data)
             for response_part in message_data:
                 if isinstance(response_part, tuple):
                     message_string = response_part[1]
             assert message_string
-            (email_object, dummy, error) = mailbox_obj.parse_email(message_string)
-            if error:
-                raise Exception(error)
-            session.add(email_object)
+            if mailbox_obj.message_ok_to_import(message_string):
+                (email_object, dummy, error) = mailbox_obj.parse_email(message_string)
+                if error:
+                    raise Exception(error)
+                session.add(email_object)
+            else:
+                print "Skipped message with imap id %s (bounce or vacation message)"% (email_id)
             #print "Setting mailbox_obj.last_imported_email_uid to "+email_id
             mailbox_obj.last_imported_email_uid = email_id
             transaction.commit()
