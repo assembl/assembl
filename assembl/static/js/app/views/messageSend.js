@@ -3,6 +3,51 @@
 define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'common/context', 'utils/permissions', 'objects/messagesInProgress', 'utils/i18n', 'jquery-autosize', 'models/message'],
     function (Backbone, Marionette, Assembl, _, $, Ctx, Permissions, MessagesInProgress, i18n, autosize, Messages) {
 
+        /**
+         * @init
+         *
+         * @param {
+         *
+         * reply_message_id:  The id of the message model this replies to
+         *  (if any)
+         *
+         * reply_idea_id:  The id of the idea object this message comments or
+         *  replies to (if any)
+         *
+         * cancel_button_label:  String, the label used for the Cancel button
+         *
+         * send_button_label:  String, the label used for the Send button
+         *
+         * allow_setting_subject:  Boolean, if true, the user is allowed to set
+         *  his own subject for the message
+         *
+         * subject_label:  String:  If set, the label of the subject field.
+         *
+         * default_subject:  String:  If set, the dfault subject if the user
+         *  doesn't change it.  Can be used even if allow_setting_subject is
+         *  false.  Is the default value sent to the server.
+         *
+         * mandatory_subject_missing_msg:  String.  If set, the user must
+         *  provide a mesasge subject.  If he doesn't, this string is used as
+         *  the error message
+         *
+         * body_help_message:  String:  The text present in the body field to
+         *  tell the user what to do.  It is NOT used as a default value sent
+         *  to the server, the user must replace it.
+         *
+         * mandatory_body_missing_msg:  String.  Providing a body is always
+         *  mandatory.  Only sets the error displayed to the user if he doesn't
+         *  provide a body
+         *
+         * messageList: MessageListView that we expect to refresh once the
+         *  message has been processed
+         *
+         * send_callback:  Function.  A callback to call once the message has
+         *  been accepted by the server, and the mesasgeList has refreshed.
+         *
+         *  }
+         */
+
         var messageSend = Marionette.ItemView.extend({
             template: '#tmpl-messageSend',
             className: 'messageSend',
@@ -18,7 +63,9 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             ui: {
                 sendButton: '.messageSend-sendbtn',
                 cancelButton: '.messageSend-cancelbtn',
-                messageBody: '.messageSend-body'
+                messageBody: '.messageSend-body',
+                messageSubject: '.messageSend-subject',
+                topicSubject: '.topic-subject .formfield'
             },
 
             events: {
@@ -56,7 +103,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     that = this,
                     btn_original_text = btn.text(),
                     message_body = this.ui.messageBody.val(),
-                    message_subject_field = this.$('.topic-subject .formfield'),
+                    message_subject_field = this.ui.topicSubject,
                     message_subject = message_subject_field.val() || this.options.default_subject,
                     reply_idea_id = null,
                     reply_message_id = null,
@@ -131,10 +178,11 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
 
                 model.save(null, {
                     success: function (model, resp) {
-                        that.ui.messageBody.val('');
-                        that.$('.topic-subject .formfield').val('');
-
                         btn.text(i18n.gettext('Message posted!'));
+
+                        that.ui.messageBody.val('');
+                        that.ui.topicSubject.val('');
+
                         if (that.messageList) {
                             that.listenToOnce(that.messageList, "messageList:render_complete", function () {
                                 if (_.isFunction(that.options.send_callback)) {
@@ -159,7 +207,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         }
                         setTimeout(function () {
                             btn.text(btn_original_text);
-                            that.$('.messageSend-cancelbtn').trigger('click');
+                            that.ui.cancelButton.trigger('click');
                         }, 5000);
                     },
                     error: function (model, resp) {
@@ -183,7 +231,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             savePartialMessage: function () {
                 var message_body = this.ui.messageBody;
                 if (message_body.length > 0) {
-                    var message_title = this.$('.messageSend-subject').val();
+                    var message_title = this.ui.messageSubject.val();
                     MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title);
                 }
             },
