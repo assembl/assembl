@@ -144,10 +144,10 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                             }
                             // clear on success... so not lost in case of failure.
                             MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
-                            var el = that.$el.$('.messageSend-body');
+                            var el = that.ui.messageBody;
                             if (el.length > 0)
                                 el[0].text = '';
-                            el = that.$el.$('.messageSend-subject');
+                            el = that.ui.messageSubject;
                             if (el.length > 0)
                                 el[0].text = '';
 
@@ -183,24 +183,24 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         that.ui.messageBody.val('');
                         that.ui.topicSubject.val('');
 
+                        // clear on success... so not lost in case of failure.
                         MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
                         if (that.messageList) {
                             that.listenToOnce(that.messageList, "messageList:render_complete", function () {
                                 if (_.isFunction(that.options.send_callback)) {
                                     that.options.send_callback();
                                 }
-                                // clear on success... so not lost in case of failure.
-                                var el = that.$el.$('.messageSend-body');
+                                var el = that.ui.messageBody;
                                 if (el.length > 0)
                                     el[0].text = '';
-                                el = that.$el.$('.messageSend-subject');
+                                el = that.ui.messageSubject;
                                 if (el.length > 0)
                                     el[0].text = '';
 
                                 setTimeout(function () {
                                     //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
                                     //console.log("Calling showMessageById for "+data['@id']);
-                                    Assembl.vent.trigger('messageList:showMessageById', data['@id']);
+                                    Assembl.vent.trigger('messageList:showMessageById', model['@id']);
 
                                 }, 1000);
                             });
