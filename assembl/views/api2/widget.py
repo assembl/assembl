@@ -180,6 +180,14 @@ def get_idea_vote_results(request):
 
 
 @view_config(
+    context=InstanceContext, ctx_instance_class=Idea,
+    request_method="GET", permission=P_READ,
+    renderer="json", name="vote_counts")
+def get_idea_vote_count(request):
+    return request.context._instance.get_vote_count()
+
+
+@view_config(
     context=InstanceContext, ctx_instance_class=Widget,
     request_method="GET", permission=P_READ,
     renderer="json", name="user_states")
