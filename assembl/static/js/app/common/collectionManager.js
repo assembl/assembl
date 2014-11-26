@@ -279,11 +279,12 @@ define(['app',
                                       }
                                       structureModel.set(jsonData);
                                       structureModel.viewDef = viewDef;
-                                      _.each(deferredList['promises'], function (deferred) {
-                                          deferred.resolve(structureModel);
-                                      });
-                                      delete that.requests[id];
-  
+                                      if (deferredList !== undefined) {
+                                        _.each(deferredList['promises'], function (deferred) {
+                                            deferred.resolve(structureModel);
+                                        });
+                                        delete that.requests[id];
+                                      }
                                   });
                               });
                             }
