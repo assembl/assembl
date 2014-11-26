@@ -200,7 +200,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                                 setTimeout(function () {
                                     //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
                                     //console.log("Calling showMessageById for "+data['@id']);
-                                    Assembl.vent.trigger('messageList:showMessageById', model['@id']);
+                                    Assembl.vent.trigger('messageList:showMessageById', model.id);
 
                                 }, 1000);
                             });
