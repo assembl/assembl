@@ -576,6 +576,10 @@ class MultiCriterionVotingWidget(Widget):
         return 'local:Discussion/%d/widgets/%d/targets/%d/vote_results' % (
             self.discussion_id, self.id, Idea.get_database_id(idea_id))
 
+    def get_vote_counts_url(self, idea_id):
+        return 'local:Discussion/%d/widgets/%d/targets/%d/vote_counts' % (
+            self.discussion_id, self.id, Idea.get_database_id(idea_id))
+
     def get_voting_urls(self, idea_id):
         return {
             Idea.uri_generic(criterion_link.idea_id):

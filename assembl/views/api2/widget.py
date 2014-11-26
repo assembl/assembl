@@ -219,6 +219,7 @@ def voting_widget_view(request):
     if target_id and Idea.get_database_id(target_id):
         json['user_votes_url'] = widget.get_user_votes_url(target_id)
         json['vote_results_url'] = widget.get_vote_results_url(target_id)
+        json['vote_count_url'] = widget.get_vote_counts_url(target_id)
         json['voting_urls'] = widget.get_voting_urls(target_id)
     json['criteria'] = [idea.generic_json(view_def_name=view)
                         for idea in widget.criteria]
