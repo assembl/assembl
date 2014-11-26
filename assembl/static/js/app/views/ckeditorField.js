@@ -24,6 +24,8 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
             showPlaceholderOnEditIfEmpty: false,
 
             initialize: function (options) {
+                this.view = this;
+
                 this.topId = _.uniqueId('ckeditorField-topid');
                 this.fieldId = _.uniqueId('ckeditorField');
                 this.bottomId = _.uniqueId('ckeditorField-bottomid');
@@ -42,7 +44,7 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
                     throw new Error('EditableField needs a model');
                 }
 
-                this.listenTo(Assembl.vent, 'cKEditorField:render', this.render);
+                this.listenTo(this.view, 'cKEditorField:render', this.render);
             },
 
             ui: {
@@ -89,9 +91,9 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
              * set the templace in editing mode
              */
             startEditing: function () {
-                var editingArea = this.$('#' + this.fieldId).get(0),
-                    that = this,
-                    config = _.extend({}, this.CKEDITOR_CONFIG, {
+                var editingArea = this.$('#' + this.fieldId).get(0);
+
+                var config = _.extend({}, this.CKEDITOR_CONFIG, {
                         sharedSpaces: { top: this.topId, bottom: this.bottomId }
                     });
 
@@ -133,7 +135,7 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
             renderTo: function (el, editing) {
                 this.editing = editing;
                 $(el).append(this.$el);
-                Assembl.vent.trigger('cKEditorField:render');
+                this.view.trigger('cKEditorField:render');
             },
 
             /**
@@ -151,7 +153,7 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
             changeToEditMode: function () {
                 if (this.canEdit) {
                     this.editing = true;
-                    Assembl.vent.trigger('cKEditorField:render');
+                    this.view.trigger('cKEditorField:render');
                 }
             },
 
@@ -168,12 +170,19 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
                         /* Nor save to the database and fire change events
                          * if the value didn't change from the model
                          */
-                        this.model.save(this.modelProp, text);
+                        this.model.save(this.modelProp, text, {
+                            success: function () {
+
+                            },
+                            error: function () {
+
+                            }
+                        });
                         this.trigger('save', [this]);
                     }
                 }
                 this.editing = false;
-                Assembl.vent.trigger('cKEditorField:render');
+                this.view.trigger('cKEditorField:render');
             },
 
             cancelEdition: function (ev) {
@@ -187,7 +196,7 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
                 }
 
                 this.editing = false;
-                Assembl.vent.trigger('cKEditorField:render');
+                this.view.trigger('cKEditorField:render');
 
                 this.trigger('cancel', [this]);
             }

@@ -6,6 +6,8 @@ define(['backbone', 'backbone.marionette', 'app', 'common/context', 'underscore'
         var EditableField = Marionette.ItemView.extend({
             template: _.template(""),
             initialize: function (options) {
+                this.view = this;
+
                 (_.has(options, 'canEdit')) ? this.canEdit = options.canEdit : this.canEdit = true;
                 (_.has(options, 'modelProp')) ? this.modelProp = options.modelProp : this.modelProp = null;
                 (_.has(options, 'placeholder')) ? this.placeholder = options.placeholder : this.placeholder = null;
@@ -14,7 +16,7 @@ define(['backbone', 'backbone.marionette', 'app', 'common/context', 'underscore'
                 throw new Error('EditableField needs a model');
             }
 
-                this.listenTo(Assembl.vent, 'EditableField:render', this.render);
+                this.listenTo(this.view, 'EditableField:render', this.render);
             },
 
             events: {
@@ -39,7 +41,7 @@ define(['backbone', 'backbone.marionette', 'app', 'common/context', 'underscore'
          */
         renderTo: function (el) {
             $(el).append(this.$el);
-            Assembl.vent.trigger('EditableField:render');
+            this.view.trigger('EditableField:render');
         },
 
         onBlur: function (ev) {
