@@ -93,6 +93,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 statistics: '.statistics',
                 chart: '.chart'
             },
+
+            lineChartIsCumulative: true,
+            lineChartShowPoints: false,
+            pieChartShowMessages: false,
+
             onRender: function () {
                 this.draw();
             },
@@ -104,7 +109,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 if (this.pie_chart_data === undefined) {
                     return;
                 }
-
+                var stats = this.stats;
                 var t = this.lineChartIsCumulative ? i18n.gettext("Evolution of the total number of messages") : i18n.gettext("Evolution of the number of messages posted");
                 this.ui.statistics.html("<h2>" + i18n.gettext("Statistics") + "</h2><p class='stats_messages'>" + t + "</p>");
                 this.drawLineGraph(this.messages_per_day_for_line_graph);
@@ -1183,9 +1188,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 synthesis: '#context-synthesis',
                 statistics: '#context-statistics'
             },
-            lineChartIsCumulative: true,
-            lineChartShowPoints: false,
-            pieChartShowMessages: false,
 
             events: {
                 'click #js_introductionSeeMore': 'introductionSeeMore'
