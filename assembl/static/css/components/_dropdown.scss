@@ -76,7 +76,7 @@
 .dropdown-list {
   $dropdown-time: 0.3s;
   @extend .contextmenu;
-
+  padding:0;
   position: absolute;
   top: 0;
   left: -10000px;
@@ -123,7 +123,13 @@
 //
 .dropdown-listitem {
   @extend .contextmenu-item;
-  margin-top: 3px;
+  margin:3px 0;
+  a {
+    padding: $spacingXs $spacingM;
+  }
+  &:hover {
+    background-color: $gray3;
+  }
 }
 
 
