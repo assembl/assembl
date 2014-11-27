@@ -183,10 +183,9 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                             that.highlightSegment(segment);
                         });
                         that.listenTo(that.clipboard, 'add remove reset change', that.resetTitle);
-                        /*window.setTimeout(function () {
-
-                         }, 0);*/
-                        that.render();
+                        window.setTimeout(function () {
+                            that.render();
+                        }, 1000);
                     });
 
                 this.listenTo(Assembl.vent, 'segmentListPanel:showSegment', function (segment) {
@@ -201,7 +200,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 'drop': 'onDrop',
                 'click #segmentList-clear': "onClearButtonClick",
                 'click #segmentList-closeButton': "closePanel",
-                'click .js_bookmark': 'bookmark'
+                'click .js_bookmark': 'onBookmark'
             },
 
             getTitle: function () {
@@ -408,17 +407,16 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 }
             },
 
-            bookmark: function (e) {
+            onBookmark: function (e) {
                 e.preventDefault();
 
                 var Modal = Backbone.Modal.extend({
                     template: _.template($('#tmpl-bookmarket').html()),
-                    className: 'capture',
+                    className: 'capture group-modal popin-wrapper',
                     cancelEl: '.close, .btn-primary'
                 });
 
-                var modalView = new Modal();
-                $('.popin-container').html(modalView.render().el);
+                Assembl.slider.show(new Modal());
             }
 
         });
