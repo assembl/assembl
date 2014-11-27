@@ -276,7 +276,7 @@ def instance_del(request):
         required = instance.crud_permissions
         if required.delete not in permissions:
             if required.delete_owned not in permissions or\
-                    User.get(user_id) not in context._instance.get_owners():
+                    User.get(user_id) not in instance.get_owners():
                 raise HTTPUnauthorized()
     instance.db.delete(instance)
     return {}
