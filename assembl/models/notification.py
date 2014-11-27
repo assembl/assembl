@@ -281,7 +281,7 @@ class NotificationSubscription(DiscussionBoundBase):
         return self
 
     def get_owners(self):
-        return (self.user)
+        return (self.user, )
 
     crud_permissions = CrudPermissions(
         P_READ, P_READ, P_ADMIN_DISC, P_ADMIN_DISC,

@@ -795,6 +795,9 @@ class LocalUserRole(DiscussionBoundBase):
                 raise HTTPBadRequest()
         return self
 
+    def get_owners(self):
+        return (self.user, )
+
     @classmethod
     def base_condition(cls, alias=None):
         cls = alias or cls
