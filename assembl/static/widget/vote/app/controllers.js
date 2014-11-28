@@ -215,6 +215,20 @@ voteApp.controller('adminConfigureInstanceSetVotableIdeasCtl',
   };
 }]);
 
+voteApp.controller('adminConfigureInstanceSetSettingsCriterionCtl', ['$scope', function($scope){
+  // pre-fill "name" field: if the user selects a criterion for a voting item (or sets the currently selected criterion to another one), set its "pretty" name to the criterion shortTitle
+  $scope.$watch('criterion.entity_id', function (newValue, oldValue) {
+    if ( newValue != oldValue ) // && !$scope.criterion.name
+    {
+      var criterionWithDetails = _.find($scope.criteria, function(criterion){
+        return criterion["@id"] == newValue;
+      });
+      if ( criterionWithDetails && criterionWithDetails.shortTitle )
+        $scope.criterion.name = criterionWithDetails.shortTitle;
+    }
+  });
+}]);
+
 
 voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService', 
