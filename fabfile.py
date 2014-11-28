@@ -271,7 +271,7 @@ def compile_stylesheets():
 def minify_javascript_maybe():
     config = get_config()
     try:
-        minify = config.get('app:main', 'minified_js')
+        minify = config.get('app:assembl', 'minified_js')
         print minify
         if minify == 'debug':
             execute(minify_javascript_debug)
