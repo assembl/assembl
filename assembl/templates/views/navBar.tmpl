@@ -1,10 +1,3 @@
-<div class="navbar-left">
-    <a href="/" class="assembl-logo" class="sign-in">Assembl <i class="icon-infinite"></i></a>
-    <!--<span id="onlinedot">
-        <small class="dot-offline">&nbsp;&nbsp;&nbsp;{{ gettext('Connecting...') }}</small>
-        <span class="dot-online theme_navbarDebateName"><span class="breadcrumb-level-indicator"></span> <span class="debate-icon icon-discuss"></span> {{ discussion.topic }}</span>
-    </span>-->
-</div>
 <div class="navbar-center tac">
 <% if( Ctx.canUseExpertInterface() ){ %>
   <% if( Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT ) { %>
@@ -15,9 +8,16 @@
   <% } %>
 <% } %>
 </div>
+<div class="navbar-left">
+    <a href="/" class="assembl-logo" class="sign-in">Assembl <i class="icon-infinite"></i></a>
+    <!--<span id="onlinedot">
+        <small class="dot-offline">&nbsp;&nbsp;&nbsp;{{ gettext('Connecting...') }}</small>
+        <span class="dot-online theme_navbarDebateName"><span class="breadcrumb-level-indicator"></span> <span class="debate-icon icon-discuss"></span> {{ discussion.topic }}</span>
+    </span>-->
+</div>
 <div class="navbar-right">
-  <div class="gr">
-    <div class="gu gu-4of2">
+  <div>
+    <div class="dispib vat">
       {% if user %}
         <% if( _.isEmpty(Roles) && canSubscribeToDiscussion ){ %>
           <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
@@ -30,14 +30,15 @@
         {% endif %}
       {% endif %}
     </div>
-    <div class="gu gu-last">
-      <div class="connexion fr">
+    <div class="dispib">
+      <div class="connexion">
         {% if user %}
-          <div class="avatar img-rounded fl ptxs">
-            <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
-          </div>
-          <div class="dropdown">
+          
+          <div class="dropdown vam" style="height: 22px; /* why do I have to do this? */">
               <div class="dropdown-label">
+                  <span class="avatar img-rounded fl">
+                    <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
+                  </span>
                   <span class="mlxs">{{ user.display_name() }}</span>
                   <span class="dropdown-arrow icon-arrowdown"></span>
               </div>
@@ -84,7 +85,7 @@
               {% endif %}
           {% endif %}
           {% if locales.__len__ > 1 %}
-              <div class="dropdown mls">
+              <div class="dropdown mlxs">
                   <div class="dropdown-label">{{locale | upper}} <span class="dropdown-arrow icon-arrowdown"></span></div>
                   <ul class="dropdown-list dropdown-list--bottomright locales">
                       {% for loc in locales %}

@@ -50,72 +50,8 @@
  </div>
 </div>
 
-<div class="gr mts">
-  <div class="gu gu-1of2">
-    <div class="block-content">
-        <div class="statistics">
-            <h2>{{ gettext('Statistics') }}</h2>
-        </div>
-        <div class="chart">{{ gettext('Loading...') }}</div>
-    </div>
-  </div>
-  <div class="gu gu-last">
-    <div class="block-content pie">
-      <div class='pie_chart_legend'></div>
-      <div class='pie_chart'></div>
-    </div>
-  </div>
-</div>
+<div id="context-statistics"></div>
 
-<div class="gr mvxl">
-  <div class="gu gu-1of2">
-    <div class="block-content">
-      <% if(synthesis.get('empty')) { %>
-        <p> <%= synthesis.get('empty') %> </p>
-      <% } else { %>
-        <h2 class="lastSynthesisTitle">
-          <span>{{ gettext('Last synthesis') }}</span>
-          <span class='message-date vam mlxs'>
-            <time title=<%= ctx.getReadableDateTime(synthesis.get('creation_date')) %> >
-            <%= ctx.getNiceDateTime(synthesis.get('creation_date')) %>
-            </time>
-          </span>
-        </h2>
-        <p class="lastSynthesis mbs">
-          <%= synthesis.get('introduction') %>
-        </p>
-        <button id="js_readSynthesis" class="btn btn-secondary btn-sm fr">{{ gettext('Read the synthesis') }}</button>
-      <% } %>
-    </div>
-  </div>
-  <div class="gu gu-last">
-  </div>
-</div>
+<div id="context-synthesis"></div>
 
-
-<div class="gr mvxl">
-<% if(partners.length){ %>
-  <div class="block-content">
-    <h2>{{ gettext('Partners') }}</h2>
-  </div>
-  <div class="gu gu-1of1">
-    <div class="block-content">
-         <div class="gr">
-          <% _.each(partners, function(partner) { %>
-            <div class="gu gu-1of6">
-              <a href="<%= partner.get('homepage') %>" class="popover-display" target="_blank">
-                <img width="100" src="<%= partner.get('logo')  %>" />
-                <span class="popover">
-                  <span class="popover-header"><%= partner.get('name') %></span>
-                  <span class="popover-content">
-                    <%= partner.get('description') %>
-                  </span>
-                </span>
-              </a>
-            </div>
-          <% }) %>
-         </div>
-    </div>
-  </div>
-<% } %>
-</div>
+<div id="context-partners"></div>

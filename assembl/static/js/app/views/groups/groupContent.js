@@ -172,10 +172,13 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                     this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
                     this.resetMessagePanelState();
 
-                    if (skip_animation === false)
+                    if (skip_animation === false) {
                         this.groupContainer.resumeResize(false);
-                    else
+                    }
+                    else {
                         this.groupContainer.resumeResize(true);
+                    }
+
                 }
             },
 

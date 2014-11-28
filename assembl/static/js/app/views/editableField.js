@@ -1,59 +1,30 @@
 'use strict';
 
-define(['backbone', 'common/context'], function (Backbone, Ctx) {
+define(['backbone', 'backbone.marionette', 'app', 'common/context', 'underscore'],
+    function (Backbone, Marionette, Assembl, Ctx, _) {
 
-    var EditableField = Backbone.View.extend({
+        var EditableField = Marionette.ItemView.extend({
+            template: _.template(""),
+            initialize: function (options) {
+                this.view = this;
 
-        /**
-         * @type {String}
-         */
-        tagName: 'div',
-
-        /**
-         * @type {BaseModel}
-         */
-        model: null,
-
-        /**
-         * The model's property which will be setted when changed
-         * @type {String}
-         */
-        modelProp: '',
-
-        /**
-         * The text to be shown if the model is empty
-         * @type {String}
-         */
-        placeholder: '',
-
-        /**
-         * @init
-         */
-        initialize: function (obj) {
-            if ('canEdit' in obj) {
-                this.canEdit = obj.canEdit;
-            } else {
-                this.canEdit = true;
-            }
-
-            if ('modelProp' in obj) {
-                this.modelProp = obj.modelProp;
-            }
-
-            if ('placeholder' in obj) {
-                this.placeholder = obj.placeholder;
-            }
-
+                (_.has(options, 'canEdit')) ? this.canEdit = options.canEdit : this.canEdit = true;
+                (_.has(options, 'modelProp')) ? this.modelProp = options.modelProp : this.modelProp = null;
+                (_.has(options, 'placeholder')) ? this.placeholder = options.placeholder : this.placeholder = null;
 
             if (this.model === null) {
                 throw new Error('EditableField needs a model');
             }
-        },
 
-        /**
-         * The render
-         */
-        render: function () {
+                this.listenTo(this.view, 'EditableField:render', this.render);
+            },
+
+            events: {
+                'blur': 'onBlur',
+                'keydown': 'onKeyDown'
+            },
+
+            onRender: function () {
             if (this.canEdit) {
                 if (!(this.$el.attr('contenteditable'))) {
                     this.$el.attr('contenteditable', true);
@@ -62,8 +33,6 @@ define(['backbone', 'common/context'], function (Backbone, Ctx) {
             }
             var text = this.model.get(this.modelProp);
             this.el.innerHTML = text || this.placeholder;
-
-            return this;
         },
 
         /**
@@ -71,20 +40,10 @@ define(['backbone', 'common/context'], function (Backbone, Ctx) {
          * @param {jQuery|HTMLElement|string} el
          */
         renderTo: function (el) {
-            $(el).append(this.render().el);
+            $(el).append(this.$el);
+            this.view.trigger('EditableField:render');
         },
 
-        /**
-         * @events
-         */
-        events: {
-            'blur': 'onBlur',
-            'keydown': 'onKeyDown'
-        },
-
-        /**
-         * @event
-         */
         onBlur: function (ev) {
             if (this.canEdit) {
                 var data = Ctx.stripHtml(ev.currentTarget.textContent);
@@ -102,9 +61,6 @@ define(['backbone', 'common/context'], function (Backbone, Ctx) {
             }
         },
 
-        /**
-         * @event
-         */
         onKeyDown: function (ev) {
             if (ev.which === 13 || ev.which === 27) {
                 ev.preventDefault();

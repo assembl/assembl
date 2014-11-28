@@ -1,13 +1,13 @@
 'use strict';
 
-define(['backbone.marionette'], function (Marionette) {
+define(['backbone.marionette', 'underscore'], function (Marionette, _) {
 
     /**
      * An abstract class every panel should eventually extend
      * @class AssemblPanel
      */
     var AssemblPanel = Marionette.LayoutView.extend({
-        template: "#tmpl-groupItem",
+        template: _.template(""),
         lockable: false,
         minimizeable: false,
         closeable: false,

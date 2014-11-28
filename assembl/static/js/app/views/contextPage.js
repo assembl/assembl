@@ -1,42 +1,39 @@
 'use strict';
 
-define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'backbone.modal', 'backbone.marionette.modals'],
-    function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types) {
+define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'backbone.modal', 'backbone.marionette.modals', 'models/partner_organization'],
+    function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types, backboneModal, marionetteModals, organization) {
 
-        var contextPage = Marionette.LayoutView.extend({
-            template: '#tmpl-contextPage',
-            panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
-            className: 'homePanel',
-            gridSize: AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE,
-            hideHeader: true,
-            getTitle: function () {
-                return i18n.gettext('Home'); // unused
+
+        var Partners = Marionette.ItemView.extend({
+            template: '#tmpl-partnersOrganizations',
+            initialize: function () {
+                this.collection = new organization.Collection();
+                this.collection.fetch();
             },
-
-            lineChartIsCumulative: true,
-            lineChartShowPoints: false,
-            pieChartShowMessages: false,
-
-            events: {
-                'click #js_introductionSeeMore': 'introductionSeeMore',
-                'click #js_readSynthesis': 'readSynthesis'
+            collectionEvents: {
+                'add change': 'render'
             },
+            serializeData: function () {
+                return {
+                    organizations: this.collection.models,
+                    ctx: Ctx
+                }
+            }
 
-            initialize: function (options) {
+        });
+
+        var Synthesis = Marionette.ItemView.extend({
+            template: '#tmpl-synthesisContext',
+            initialize: function () {
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                this.synthesis = new Backbone.Model();
-                this.partners = new Backbone.Collection();
+                this.model = new Backbone.Model();
 
                 $.when(collectionManager.getAllMessageStructureCollectionPromise(),
-                    collectionManager.getAllSynthesisCollectionPromise(),
-                    collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
-                    function (allMessageStructureCollection, allSynthesisCollection, Organization) {
+                    collectionManager.getAllSynthesisCollectionPromise()).then(
+                    function (allMessageStructureCollection, allSynthesisCollection) {
 
-                        /**
-                         * Next synthesis published
-                         * */
                         var synthesisMessages = allMessageStructureCollection.where({'@type': Types.SYNTHESIS_POST});
                         if (synthesisMessages.length > 0) {
                             _.sortBy(synthesisMessages, function (message) {
@@ -46,555 +43,75 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
                             _.each(synthesisMessages, function (message, index) {
                                 if (index === 0) {
-                                    that.synthesis = allSynthesisCollection.get(message.get('publishes_synthesis'));
+                                    var all = allSynthesisCollection.get(message.get('publishes_synthesis'));
+
+                                    that.model.set({
+                                        creation_date: all.get('creation_date'),
+                                        introduction: all.get('introduction')
+                                    })
                                 }
                             })
                         }
                         else {
-                            that.synthesis.set({
+                            that.model.set({
                                 empty: i18n.gettext("No synthesis of the discussion has been published yet")
                             });
                         }
 
-                        /**
-                         * Organization
-                         * */
-                        that.partners = Organization;
 
-                        that.render();
                     });
+            },
 
-                this.computeStatistics();
+            events: {
+                'click .js_readSynthesis': 'readSynthesis'
+            },
+
+            modelEvents: {
+                'add change': 'render'
             },
 
             serializeData: function () {
-                var partners = null;
-                if (this.partners.models) {
-                    partners = this.partners.models;
-                }
-
                 return {
-                    synthesis: this.synthesis,
-                    partners: partners,
+                    synthesis: this.model,
                     ctx: Ctx
                 }
             },
 
-            introductionSeeMore: function () {
-                $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
-                    var model = new Backbone.Model({
-                        introduction: discussion.introduction
-                    });
+            readSynthesis: function () {
+                Assembl.vent.trigger("navigation:selected", "synthesis");
+            }
 
-                    var Modal = Backbone.Modal.extend({
-                        template: _.template($('#tmpl-homeIntroductionDetail').html()),
-                        className: 'group-modal popin-wrapper',
-                        model: model,
-                        cancelEl: '.close'
-                    });
+        });
 
-                    Assembl.slider.show(new Modal())
-                });
+        var Statistics = Marionette.ItemView.extend({
+            template: '#tmpl-statistics',
+            initialize: function () {
+                this.listenTo(Assembl.vent, 'contextPage:render', this.render);
+                this.computeStatistics();
             },
+            ui: {
+                statistics: '.statistics',
+                chart: '.chart'
+            },
+
+            lineChartIsCumulative: true,
+            lineChartShowPoints: false,
+            pieChartShowMessages: false,
 
             onRender: function () {
-                this.displayFieldsContext();
                 this.draw();
-            },
-
-            displayFieldsContext: function () {
-                var that = this,
-                    currentUser = Ctx.getCurrentUser(),
-                    canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
-
-                $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
-                    //console.log("discussion successfully loaded: ", discussion);
-
-                    that.objectivesField = new CKEditorField({
-                        'model': discussion,
-                        'modelProp': 'objectives',
-                        'placeholder': 'Objectives',
-                        'canEdit': canEdit
-                    });
-                    // add editable "instigator" field
-                    that.instigatorField = new CKEditorField({
-                        'model': discussion,
-                        'modelProp': 'instigator',
-                        'placeholder': 'Instigator',
-                        'canEdit': canEdit
-                    });
-                    // add editable "introduction" field
-                    that.introductionField = new CKEditorField({
-                        'model': discussion,
-                        'modelProp': 'introduction',
-                        'placeholder': 'Introduction',
-                        'canEdit': canEdit
-                    });
-
-                    that.$('.objectives').empty();
-                    that.$('.instigator').empty();
-                    that.$('.introduction').empty();
-
-                    // we implement here get() and save() methods (needed by CKEditor), so we mock a model instance
-                    // TODO: find a better solution, for example create and use a real Discussion model instead?
-                    discussion.get = function (field) {
-                        return this[field];
-                    };
-
-                    discussion.save = function (field, value) {
-                        this[field] = value;
-
-                        // PUT changed data to the discussion endpoint
-                        var endpoint_url = Ctx.getApiV2DiscussionUrl();
-                        var post_data = {};
-                        post_data[field] = value;
-                        $.ajax({
-                            method: 'PUT',
-                            url: endpoint_url,
-                            data: $.param(post_data),
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        }).success(function (data) {
-                            //console.log("discussion PUT success:", data);
-                        });
-
-                        return true;
-                    };
-
-                    // FIXME: here we try to apply the dots again after text has been edited but it does not seem to work
-                    var onCKEditorChange = function () {
-                        console.log("Updating dotdotdot");
-                        that.$(".introduction .ckeditorField-mainfield").trigger('update.dot');
-                        that.$(".introduction .ckeditorField-mainfield").trigger('update');
-                    };
-                    that.listenTo(that.introductionField, "save", onCKEditorChange);
-                    that.listenTo(that.introductionField, "cancel", onCKEditorChange);
-                    // end of FIXME
-
-                    // show discussion title
-                    that.$(".js_discussionTitle").html(discussion.topic);
-
-                    that.objectivesField.renderTo(that.$('.objectives'));
-                    that.instigatorField.renderTo(that.$('.instigator'));
-                    that.introductionField.renderTo(that.$('.introduction'));
-
-                    if (canEdit) {
-                        // Not clear why this is necessary.
-                        that.objectivesField.delegateEvents();
-                        that.instigatorField.delegateEvents();
-                        that.introductionField.delegateEvents();
-                    }
-
-                    /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
-                     * Read More links for introduction preview
-                     */
-                    that.$(".introduction .ckeditorField-mainfield").dotdotdot({
-                        after: "#introduction-button-see-more",
-                        height: 70,
-                        callback: function (isTruncated, orgContent) {
-                            //console.log("dotdotdot callback: ", isTruncated, orgContent);
-                            if (isTruncated) {
-                                that.$('#introduction-button-see-more').show();
-                            }
-                            else {
-                                that.$('#introduction-button-see-more').hide();
-                            }
-                        },
-                        watch: "window"
-                    });
-
-                });
-
-            },
-            /*
-             * @param messages: [{'day': '2012-01-01', 'value': 1},...] sorted by date ascending
-             * @param threshold: Number
-             * @returns a period object {'period_type': 'last 2 weeks', 'date_min': Date, 'date_max': Date }
-             */
-            deduceGoodPeriod: function (messages, threshold) {
-                var count = 0;
-                var sz = messages.length;
-                var date_threshold_min = messages[0].date;
-                var date_threshold_max = messages[sz - 1].date; // or we could want it to be today
-                var threshold_passed = false;
-                for (var i = sz - 1; i >= 0; --i) {
-                    count += messages[i]['value'];
-                    if (count >= threshold) {
-                        threshold_passed = true;
-                        date_threshold_min = messages[i]['date'];
-                        //console.log("count:");
-                        //console.log(count);
-                        break;
-                    }
-                }
-
-                //console.log("threshold_passed:");
-                //console.log(threshold_passed);
-                //console.log("date_threshold_max:");
-                //console.log(date_threshold_max);
-                //console.log("date_threshold_min:");
-                //console.log(date_threshold_min);
-
-                // deduce the period to apply from the date_threshold_min and date_threshold_max values
-                var date_min = new Date(date_threshold_min);
-                var threshold_date = date_min;
-                var date_max = new Date(date_threshold_max);
-                var date_min_moment = Moment(date_threshold_min);
-                var date_max_moment = Moment(date_threshold_max);
-                var number_of_days = date_max_moment.diff(date_min_moment, 'days');
-                var period_type = 'last week';
-                if (number_of_days <= 7) {
-                    period_type = 'last week';
-                    date_min_moment = date_max_moment.subtract('days', 7);
-                    date_min = date_min_moment.toDate();
-                }
-                if (number_of_days <= 14) {
-                    period_type = 'last 2 weeks';
-                    date_min_moment = date_max_moment.subtract('days', 14);
-                    date_min = date_min_moment.toDate();
-                }
-                else if (number_of_days <= 31) {
-                    period_type = 'last month';
-                    date_min_moment = date_max_moment.subtract('months', 1);
-                    date_min = date_min_moment.toDate();
-                }
-                else if (number_of_days <= (31 + 30 + 30)) {
-                    period_type = 'last 3 months';
-                    date_min_moment = date_max_moment.subtract('months', 3);
-                    date_min = date_min_moment.toDate();
-                }
-                else if (number_of_days <= (31 + 30) * 3) {
-                    period_type = 'last 6 months';
-                    date_min_moment = date_max_moment.subtract('months', 6);
-                    date_min = date_min_moment.toDate();
-                }
-                else {
-                    period_type = 'last year';
-                    date_min_moment = date_max_moment.subtract('years', 1);
-                    date_min = date_min_moment.toDate();
-                }
-                // console.log("period_type:");
-                // console.log(period_type);
-                // console.log("date_min:");
-                // console.log(date_min);
-                // console.log("date_max:");
-                // console.log(date_max);
-                return {
-                    "period_type": period_type,
-                    "date_min": date_min,
-                    "date_max": date_max,
-                    "threshold_passed": threshold_passed,
-                    "threshold_date": threshold_date,
-                    "threshold_value": count
-                };
-            },
-
-            computeStatistics: function () {
-                var that = this;
-                var collectionManager = new CollectionManager();
-                //var users = collectionManager.getAllUsersCollectionPromise();
-
-                $.when(collectionManager.getAllUsersCollectionPromise(),
-                    collectionManager.getAllMessageStructureCollectionPromise()
-                ).then(function (allUsersCollection, allMessagesCollection) {
-                        // console.log("collections allUsersCollection, allMessagesCollection are loaded");
-                        // console.log(allMessagesCollection);
-
-                        if (allMessagesCollection.size() == 0) {
-                            var chart_div = that.$('.chart');
-                            chart_div.html(i18n.gettext("Not enough data yet."));
-                            that.$(".pie").hide();
-                            return;
-                        }
-
-                        var messages_sorted_by_date = new Backbone.Collection(allMessagesCollection.toJSON()); // clone
-                        messages_sorted_by_date.sortBy(function (msg) {
-                            return msg.date;
-                        });
-                        //console.log("messages_sorted_by_date1:");
-                        //console.log(messages_sorted_by_date);
-
-                        messages_sorted_by_date = messages_sorted_by_date.toJSON();
-
-                        //console.log("messages_sorted_by_date2:");
-                        //console.log(messages_sorted_by_date);
-
-                        var messages_total = messages_sorted_by_date.length;
-                        // console.log("messages_total: " + messages_total);
-
-                        // pick only day, because date field looks like "2012-06-19T15:14:56"
-                        var convertDateTimeToDate = function (datetime) {
-                            return datetime.substr(0, datetime.indexOf('T'));
-                        };
-
-                        var first_message_date = convertDateTimeToDate(messages_sorted_by_date[0].date);
-                        // console.log("first_message_date: " + first_message_date);
-                        var last_message_date = convertDateTimeToDate(messages_sorted_by_date[messages_total - 1].date);
-                        // console.log("last_message_date: " + last_message_date);
-
-
-                        // find which period is best to show the stats: the first period among week, month, debate which gathers at least X% of the contributions
-
-                        var messages_threshold = messages_total * 0.15;
-                        //console.log("messages_threshold:");
-                        //console.log(messages_threshold);
-
-                        var messages_per_day = _.groupBy(messages_sorted_by_date, function (msg) {
-                            return convertDateTimeToDate(msg.date);
-                        });
-                        var messages_per_day_totals = {};
-                        var messages_per_day_totals_array = [];
-                        for (var k in messages_per_day) {
-                            var sz = messages_per_day[k].length;
-                            messages_per_day_totals[k] = sz;
-                            messages_per_day_totals_array.push({ 'date': k, 'value': sz });
-                            //messages_per_day_totals_array.push({ 'date': new Date(k), 'value': sz });
-                        }
-                        messages_per_day_totals_array = _.sortBy(messages_per_day_totals_array, function (msg) {
-                            return msg['date'];
-                        });
-                        //console.log("messages_per_day_totals_array:");
-                        //console.log(messages_per_day_totals_array);
-
-                        var period = that.deduceGoodPeriod(messages_per_day_totals_array, messages_threshold);
-
-                        var statsPeriodName = i18n.gettext(period.period_type);
-                        // this switch is here just so that the i18n strings are correcly parsed and put into the .pot file
-                        switch (period.period_type) {
-                            case 'last week':
-                                statsPeriodName = i18n.gettext('last week');
-                                break;
-                            case 'last 2 weeks':
-                                statsPeriodName = i18n.gettext('last 2 weeks');
-                                break;
-                            case 'last month':
-                                statsPeriodName = i18n.gettext('last month');
-                                break;
-                            case 'last 3 months':
-                                statsPeriodName = i18n.gettext('last 3 months');
-                                break;
-                            case 'last 6 months':
-                                statsPeriodName = i18n.gettext('last 6 months');
-                                break;
-                            case 'last year':
-                                statsPeriodName = i18n.gettext('last year');
-                                break;
-                        }
-
-                        var date_min = period.date_min;
-                        var date_max = period.date_max;
-
-
-                        // fill missing days
-
-                        /*
-                         * data: { "2012-01-01" : 42 }
-                         * first_date: Date object // was "2012-01-01"
-                         * last_date: Date object // was "2012-01-01"
-                         */
-                        function fillMissingDays(data, first_date, last_date) {
-                            //var first_date = new Date(first_day);
-                            //var last_date = new Date(last_day);
-                            // use new Date(first_date.getTime()) to clone the Date object
-                            for (var d = new Date(first_date.getTime()); d <= last_date; d.setDate(d.getDate() + 1)) {
-                                var key = convertDateTimeToDate(d.toISOString());
-                                if (!( key in data)) {
-                                    data[key] = 0;
-                                }
-                            }
-                            return data;
-                        }
-
-                        //var messages_per_day_totals_filled = fillMissingDays(messages_per_day_totals, date_min, date_max);
-                        var messages_per_day_totals_filled = fillMissingDays(messages_per_day_totals, new Date(first_message_date), new Date(last_message_date));
-                        //console.log("messages_per_day_totals_filled:");
-                        //console.log(messages_per_day_totals_filled);
-
-
-                        // convert object to array
-
-                        var messages_per_day_totals_filled_array = [];
-                        for (var v in messages_per_day_totals_filled) {
-                            messages_per_day_totals_filled_array.push({ 'date': new Date(v), 'value': messages_per_day_totals_filled[v] });
-                        }
-                        //console.log("messages_per_day_totals_filled_array:");
-                        //console.log(messages_per_day_totals_filled_array);
-
-                        messages_per_day_totals_filled_array = _.sortBy(messages_per_day_totals_filled_array, function (msg) {
-                            return msg['date'];
-                        });
-
-
-                        var messages_in_period = _.filter(messages_per_day_totals_filled_array, function (msg) {
-                            return (msg.date >= date_min && msg.date <= date_max);
-                        });
-
-                        //console.log("messages_in_period:");
-                        //console.log(messages_in_period);
-
-
-                        messages_in_period = _.sortBy(messages_in_period, function (msg) {
-                            return msg.date;
-                        });
-
-
-                        // accumulate messages. maybe we should not start at 0 but at the accumulated value on start date (accumulated from the beginning of the debate)
-                        var messages_in_period_total = 0;
-                        _.each(messages_in_period, function (msg) {
-                            messages_in_period_total += msg.value;
-                            //msg.value = messages_in_period_total;
-                        });
-
-                        if (that.lineChartIsCumulative) {
-                            var i = 0;
-                            var messages_per_day_totals_filled_array_cumulative = $.extend(true, [], messages_per_day_totals_filled_array);
-                            _.each(messages_per_day_totals_filled_array_cumulative, function (msg) {
-                                i += msg.value;
-                                msg.value = i;
-                            });
-                            that.messages_per_day_for_line_graph = messages_per_day_totals_filled_array_cumulative;
-                        }
-                        else {
-                            that.messages_per_day_for_line_graph = messages_per_day_totals_filled_array;
-                        }
-
-
-                        // -----
-                        // compute messages authors for 2 periods: current period and since the beginning of the debate
-                        // -----
-
-                        var extractMessageAuthor = function (msg) {
-                            return msg.idCreator;
-                        };
-
-                        var authors = _.map(messages_sorted_by_date, extractMessageAuthor);
-                        //console.log("authors:");
-                        //console.log(authors);
-                        authors = _.uniq(authors);
-                        //console.log("authors:");
-                        //console.log(authors);
-                        var authors_total = authors.length;
-
-                        var messages_in_period_full = _.filter(messages_sorted_by_date, function (msg) {
-                            var d = new Date(msg.date);
-                            return d >= date_min && d <= date_max;
-                        });
-                        messages_in_period_total = messages_in_period_full.length;
-
-                        var messages_not_in_period_full = _.filter(messages_sorted_by_date, function (msg) {
-                            var d = new Date(msg.date);
-                            return d < date_min || d > date_max;
-                        });
-
-                        var authors_in_period = _.map(messages_in_period_full, extractMessageAuthor);
-                        //console.log("authors_in_period:");
-                        //console.log(authors_in_period);
-                        authors_in_period = _.uniq(authors_in_period);
-                        //console.log("authors_in_period:");
-                        //console.log(authors_in_period);
-                        var authors_in_period_total = authors_in_period.length;
-
-                        var authors_not_in_period = _.map(messages_not_in_period_full, extractMessageAuthor);
-                        authors_not_in_period = _.uniq(authors_not_in_period);
-                        var authors_not_in_period_total = authors_not_in_period.length;
-
-                        var authors_except_those_in_period = _.difference(authors, authors_in_period);
-                        var authors_except_those_in_period_total = authors_except_those_in_period.length;
-
-                        //console.log("authors_not_in_period:",authors_not_in_period);
-                        //console.log("authors_in_period:",authors_in_period);
-                        var new_authors_in_period = _.difference(authors_in_period, authors_not_in_period);
-                        //console.log("new_authors_in_period:",new_authors_in_period);
-                        var new_authors_in_period_total = new_authors_in_period.length;
-
-                        var messages_in_period_by_new_authors = _.filter(messages_in_period_full, function (msg) {
-                            return _.contains(new_authors_in_period, msg.idCreator);
-                        });
-                        var messages_in_period_by_new_authors_total = messages_in_period_by_new_authors.length;
-
-                        // -----
-                        // show results
-                        // -----
-
-                        that.stats = {
-                            "statsPeriodName": statsPeriodName,
-                            "messages_in_period_total": messages_in_period_total,
-                            "messages_total": messages_total
-                        }
-
-                        var pie_chart_data = [
-                            "the title of the first element is purposely not used, only its data is used", //"posted since the beginning of the debate",
-                            authors_total,
-                            messages_total,
-                            "",
-                            {
-                                "active_authors_during_current_period": [
-                                    i18n.sprintf(i18n.gettext('%d participants have contributed in the %s'), authors_in_period_total, statsPeriodName),
-                                    authors_in_period_total,
-                                    messages_in_period_total,
-                                    "#FFA700",
-                                    {
-                                        "new_authors": [
-                                            i18n.sprintf(i18n.gettext("%d new participants started contributing in the %s"), new_authors_in_period_total, statsPeriodName),
-                                            new_authors_in_period_total,
-                                            messages_in_period_by_new_authors_total,
-                                            "#FFBD40",
-                                            {}
-                                        ],
-                                        "still_active_authors": [
-                                            i18n.sprintf(i18n.gettext("%d active participants had contributed before %s"), authors_in_period_total - new_authors_in_period_total, statsPeriodName),
-                                                authors_in_period_total - new_authors_in_period_total,
-                                                messages_in_period_total - messages_in_period_by_new_authors_total,
-                                            "#FFD37F",
-                                            {}
-                                        ]
-                                    }
-                                ],
-                                "inactive_authors_during_current_period": [
-                                    i18n.sprintf(i18n.gettext("%d participants' last contribution was prior to %s"), authors_except_those_in_period_total, statsPeriodName),
-                                    authors_except_those_in_period_total,
-                                    0, // not needed now
-                                    "#9A3FD5",
-                                    {}
-                                ]
-                            }
-                        ];
-
-                        var pie_chart_default_legend_data = [
-                            null,
-                            null,
-                            i18n.sprintf(i18n.gettext("%d participants have contributed since the beginning of the debate"), authors_total),
-                            null,
-                            authors_total,
-                            messages_total
-                        ];
-
-                        var legend_squares_data = [
-                            {
-                                "color": "#FFA700",
-                                "title": i18n.gettext("Contributors active recently")
-                            },
-                            {
-                                "color": "#9A3FD5",
-                                "title": i18n.gettext("Contributors inactive recently")
-                            }
-                        ];
-
-                        that.pie_chart_data = pie_chart_data;
-                        that.pie_chart_default_legend_data = pie_chart_default_legend_data;
-                        that.legend_squares_data = legend_squares_data;
-                        that.render();
-                    });
             },
 
             draw: function () {
                 // -----
                 // show results
                 // -----
-                if (this.pie_chart_data === undefined)
+                if (this.pie_chart_data === undefined) {
                     return;
+                }
                 var stats = this.stats;
                 var t = this.lineChartIsCumulative ? i18n.gettext("Evolution of the total number of messages") : i18n.gettext("Evolution of the number of messages posted");
-                this.$(".statistics").html("<h2>" + i18n.gettext("Statistics") + "</h2><p class='stats_messages'>" + t + "</p>");
+                this.ui.statistics.html("<h2>" + i18n.gettext("Statistics") + "</h2><p class='stats_messages'>" + t + "</p>");
                 this.drawLineGraph(this.messages_per_day_for_line_graph);
                 this.drawPieChart(this.pie_chart_data, this.pie_chart_default_legend_data, this.legend_squares_data);
             },
@@ -842,18 +359,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                         })
                         .style("opacity", 1e-6)
                         .remove();
-                    /*
-                     $('svg circle').tipsy({
-                     gravity: 'w',
-                     html: true,
-                     title: function() {
-                     var d = this.__data__;
-                     var pDate = d.date;
-                     return 'Date: ' + pDate + '<br>Value: ' + d.value; // could be i18n
-                     }
-                     });
-                     */
-
 
                     // define a gradient in the SVG (using a "linearGradient" tag inside the "defs" tag). 0% = top; 100% = bottom
                     var defs = svg_orig.append("defs");
@@ -961,6 +466,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
                 function init_pie_chart_plot(element_name, data) {
                     var plot = that.$('.' + element_name)[0];
+
+                    if (!plot) {
+                        return;
+                    }
+
                     while (plot.hasChildNodes()) {
                         plot.removeChild(plot.firstChild);
                     }
@@ -1279,8 +789,551 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 init_plots();
             },
 
-            readSynthesis: function () {
-                Assembl.vent.trigger("navigation:selected", "synthesis");
+            computeStatistics: function () {
+                var that = this;
+                var collectionManager = new CollectionManager();
+                //var users = collectionManager.getAllUsersCollectionPromise();
+
+                $.when(collectionManager.getAllUsersCollectionPromise(),
+                    collectionManager.getAllMessageStructureCollectionPromise()
+                ).then(function (allUsersCollection, allMessagesCollection) {
+                        // console.log("collections allUsersCollection, allMessagesCollection are loaded");
+                        // console.log(allMessagesCollection);
+
+                        if (allMessagesCollection.size() == 0) {
+                            var chart_div = that.$('.chart');
+                            chart_div.html(i18n.gettext("Not enough data yet."));
+                            that.$(".pie").hide();
+                            return;
+                        }
+
+                        var messages_sorted_by_date = new Backbone.Collection(allMessagesCollection.toJSON()); // clone
+                        messages_sorted_by_date.sortBy(function (msg) {
+                            return msg.date;
+                        });
+                        //console.log("messages_sorted_by_date1:");
+                        //console.log(messages_sorted_by_date);
+
+                        messages_sorted_by_date = messages_sorted_by_date.toJSON();
+
+                        //console.log("messages_sorted_by_date2:");
+                        //console.log(messages_sorted_by_date);
+
+                        var messages_total = messages_sorted_by_date.length;
+                        // console.log("messages_total: " + messages_total);
+
+                        // pick only day, because date field looks like "2012-06-19T15:14:56"
+                        var convertDateTimeToDate = function (datetime) {
+                            return datetime.substr(0, datetime.indexOf('T'));
+                        };
+
+                        var first_message_date = convertDateTimeToDate(messages_sorted_by_date[0].date);
+                        // console.log("first_message_date: " + first_message_date);
+                        var last_message_date = convertDateTimeToDate(messages_sorted_by_date[messages_total - 1].date);
+                        // console.log("last_message_date: " + last_message_date);
+
+
+                        // find which period is best to show the stats: the first period among week, month, debate which gathers at least X% of the contributions
+
+                        var messages_threshold = messages_total * 0.15;
+                        //console.log("messages_threshold:");
+                        //console.log(messages_threshold);
+
+                        var messages_per_day = _.groupBy(messages_sorted_by_date, function (msg) {
+                            return convertDateTimeToDate(msg.date);
+                        });
+                        var messages_per_day_totals = {};
+                        var messages_per_day_totals_array = [];
+                        for (var k in messages_per_day) {
+                            var sz = messages_per_day[k].length;
+                            messages_per_day_totals[k] = sz;
+                            messages_per_day_totals_array.push({ 'date': k, 'value': sz });
+                            //messages_per_day_totals_array.push({ 'date': new Date(k), 'value': sz });
+                        }
+                        messages_per_day_totals_array = _.sortBy(messages_per_day_totals_array, function (msg) {
+                            return msg['date'];
+                        });
+                        //console.log("messages_per_day_totals_array:");
+                        //console.log(messages_per_day_totals_array);
+
+                        var period = that.deduceGoodPeriod(messages_per_day_totals_array, messages_threshold);
+
+                        var statsPeriodName = i18n.gettext(period.period_type);
+                        // this switch is here just so that the i18n strings are correcly parsed and put into the .pot file
+                        switch (period.period_type) {
+                            case 'last week':
+                                statsPeriodName = i18n.gettext('last week');
+                                break;
+                            case 'last 2 weeks':
+                                statsPeriodName = i18n.gettext('last 2 weeks');
+                                break;
+                            case 'last month':
+                                statsPeriodName = i18n.gettext('last month');
+                                break;
+                            case 'last 3 months':
+                                statsPeriodName = i18n.gettext('last 3 months');
+                                break;
+                            case 'last 6 months':
+                                statsPeriodName = i18n.gettext('last 6 months');
+                                break;
+                            case 'last year':
+                                statsPeriodName = i18n.gettext('last year');
+                                break;
+                        }
+
+                        var date_min = period.date_min;
+                        var date_max = period.date_max;
+
+
+                        // fill missing days
+
+                        /*
+                         * data: { "2012-01-01" : 42 }
+                         * first_date: Date object // was "2012-01-01"
+                         * last_date: Date object // was "2012-01-01"
+                         */
+                        function fillMissingDays(data, first_date, last_date) {
+                            //var first_date = new Date(first_day);
+                            //var last_date = new Date(last_day);
+                            // use new Date(first_date.getTime()) to clone the Date object
+                            for (var d = new Date(first_date.getTime()); d <= last_date; d.setDate(d.getDate() + 1)) {
+                                var key = convertDateTimeToDate(d.toISOString());
+                                if (!( key in data)) {
+                                    data[key] = 0;
+                                }
+                            }
+                            return data;
+                        }
+
+                        //var messages_per_day_totals_filled = fillMissingDays(messages_per_day_totals, date_min, date_max);
+                        var messages_per_day_totals_filled = fillMissingDays(messages_per_day_totals, new Date(first_message_date), new Date(last_message_date));
+                        //console.log("messages_per_day_totals_filled:");
+                        //console.log(messages_per_day_totals_filled);
+
+
+                        // convert object to array
+
+                        var messages_per_day_totals_filled_array = [];
+                        for (var v in messages_per_day_totals_filled) {
+                            messages_per_day_totals_filled_array.push({ 'date': new Date(v), 'value': messages_per_day_totals_filled[v] });
+                        }
+                        //console.log("messages_per_day_totals_filled_array:");
+                        //console.log(messages_per_day_totals_filled_array);
+
+                        messages_per_day_totals_filled_array = _.sortBy(messages_per_day_totals_filled_array, function (msg) {
+                            return msg['date'];
+                        });
+
+
+                        var messages_in_period = _.filter(messages_per_day_totals_filled_array, function (msg) {
+                            return (msg.date >= date_min && msg.date <= date_max);
+                        });
+
+                        //console.log("messages_in_period:");
+                        //console.log(messages_in_period);
+
+
+                        messages_in_period = _.sortBy(messages_in_period, function (msg) {
+                            return msg.date;
+                        });
+
+
+                        // accumulate messages. maybe we should not start at 0 but at the accumulated value on start date (accumulated from the beginning of the debate)
+                        var messages_in_period_total = 0;
+                        _.each(messages_in_period, function (msg) {
+                            messages_in_period_total += msg.value;
+                            //msg.value = messages_in_period_total;
+                        });
+
+                        if (that.lineChartIsCumulative) {
+                            var i = 0;
+                            var messages_per_day_totals_filled_array_cumulative = $.extend(true, [], messages_per_day_totals_filled_array);
+                            _.each(messages_per_day_totals_filled_array_cumulative, function (msg) {
+                                i += msg.value;
+                                msg.value = i;
+                            });
+                            that.messages_per_day_for_line_graph = messages_per_day_totals_filled_array_cumulative;
+                        }
+                        else {
+                            that.messages_per_day_for_line_graph = messages_per_day_totals_filled_array;
+                        }
+
+
+                        // -----
+                        // compute messages authors for 2 periods: current period and since the beginning of the debate
+                        // -----
+
+                        var extractMessageAuthor = function (msg) {
+                            return msg.idCreator;
+                        };
+
+                        var authors = _.map(messages_sorted_by_date, extractMessageAuthor);
+                        //console.log("authors:");
+                        //console.log(authors);
+                        authors = _.uniq(authors);
+                        //console.log("authors:");
+                        //console.log(authors);
+                        var authors_total = authors.length;
+
+                        var messages_in_period_full = _.filter(messages_sorted_by_date, function (msg) {
+                            var d = new Date(msg.date);
+                            return d >= date_min && d <= date_max;
+                        });
+                        messages_in_period_total = messages_in_period_full.length;
+
+                        var messages_not_in_period_full = _.filter(messages_sorted_by_date, function (msg) {
+                            var d = new Date(msg.date);
+                            return d < date_min || d > date_max;
+                        });
+
+                        var authors_in_period = _.map(messages_in_period_full, extractMessageAuthor);
+                        //console.log("authors_in_period:");
+                        //console.log(authors_in_period);
+                        authors_in_period = _.uniq(authors_in_period);
+                        //console.log("authors_in_period:");
+                        //console.log(authors_in_period);
+                        var authors_in_period_total = authors_in_period.length;
+
+                        var authors_not_in_period = _.map(messages_not_in_period_full, extractMessageAuthor);
+                        authors_not_in_period = _.uniq(authors_not_in_period);
+                        var authors_not_in_period_total = authors_not_in_period.length;
+
+                        var authors_except_those_in_period = _.difference(authors, authors_in_period);
+                        var authors_except_those_in_period_total = authors_except_those_in_period.length;
+
+                        //console.log("authors_not_in_period:",authors_not_in_period);
+                        //console.log("authors_in_period:",authors_in_period);
+                        var new_authors_in_period = _.difference(authors_in_period, authors_not_in_period);
+                        //console.log("new_authors_in_period:",new_authors_in_period);
+                        var new_authors_in_period_total = new_authors_in_period.length;
+
+                        var messages_in_period_by_new_authors = _.filter(messages_in_period_full, function (msg) {
+                            return _.contains(new_authors_in_period, msg.idCreator);
+                        });
+                        var messages_in_period_by_new_authors_total = messages_in_period_by_new_authors.length;
+
+                        // -----
+                        // show results
+                        // -----
+
+                        that.stats = {
+                            "statsPeriodName": statsPeriodName,
+                            "messages_in_period_total": messages_in_period_total,
+                            "messages_total": messages_total
+                        }
+
+                        var pie_chart_data = [
+                            "the title of the first element is purposely not used, only its data is used", //"posted since the beginning of the debate",
+                            authors_total,
+                            messages_total,
+                            "",
+                            {
+                                "active_authors_during_current_period": [
+                                    i18n.sprintf(i18n.gettext('%d participants have contributed in the %s'), authors_in_period_total, statsPeriodName),
+                                    authors_in_period_total,
+                                    messages_in_period_total,
+                                    "#FFA700",
+                                    {
+                                        "new_authors": [
+                                            i18n.sprintf(i18n.gettext("%d new participants started contributing in the %s"), new_authors_in_period_total, statsPeriodName),
+                                            new_authors_in_period_total,
+                                            messages_in_period_by_new_authors_total,
+                                            "#FFBD40",
+                                            {}
+                                        ],
+                                        "still_active_authors": [
+                                            i18n.sprintf(i18n.gettext("%d active participants had contributed before %s"), authors_in_period_total - new_authors_in_period_total, statsPeriodName),
+                                                authors_in_period_total - new_authors_in_period_total,
+                                                messages_in_period_total - messages_in_period_by_new_authors_total,
+                                            "#FFD37F",
+                                            {}
+                                        ]
+                                    }
+                                ],
+                                "inactive_authors_during_current_period": [
+                                    i18n.sprintf(i18n.gettext("%d participants' last contribution was prior to %s"), authors_except_those_in_period_total, statsPeriodName),
+                                    authors_except_those_in_period_total,
+                                    0, // not needed now
+                                    "#9A3FD5",
+                                    {}
+                                ]
+                            }
+                        ];
+
+                        var pie_chart_default_legend_data = [
+                            null,
+                            null,
+                            i18n.sprintf(i18n.gettext("%d participants have contributed since the beginning of the debate"), authors_total),
+                            null,
+                            authors_total,
+                            messages_total
+                        ];
+
+                        var legend_squares_data = [
+                            {
+                                "color": "#FFA700",
+                                "title": i18n.gettext("Contributors active recently")
+                            },
+                            {
+                                "color": "#9A3FD5",
+                                "title": i18n.gettext("Contributors inactive recently")
+                            }
+                        ];
+
+                        that.pie_chart_data = pie_chart_data;
+                        that.pie_chart_default_legend_data = pie_chart_default_legend_data;
+                        that.legend_squares_data = legend_squares_data;
+
+                        Assembl.vent.trigger('contextPage:render');
+
+                    });
+            },
+
+            /*
+             * @param messages: [{'day': '2012-01-01', 'value': 1},...] sorted by date ascending
+             * @param threshold: Number
+             * @returns a period object {'period_type': 'last 2 weeks', 'date_min': Date, 'date_max': Date }
+             */
+            deduceGoodPeriod: function (messages, threshold) {
+                var count = 0;
+                var sz = messages.length;
+                var date_threshold_min = messages[0].date;
+                var date_threshold_max = messages[sz - 1].date; // or we could want it to be today
+                var threshold_passed = false;
+                for (var i = sz - 1; i >= 0; --i) {
+                    count += messages[i]['value'];
+                    if (count >= threshold) {
+                        threshold_passed = true;
+                        date_threshold_min = messages[i]['date'];
+                        //console.log("count:");
+                        //console.log(count);
+                        break;
+                    }
+                }
+
+                //console.log("threshold_passed:");
+                //console.log(threshold_passed);
+                //console.log("date_threshold_max:");
+                //console.log(date_threshold_max);
+                //console.log("date_threshold_min:");
+                //console.log(date_threshold_min);
+
+                // deduce the period to apply from the date_threshold_min and date_threshold_max values
+                var date_min = new Date(date_threshold_min);
+                var threshold_date = date_min;
+                var date_max = new Date(date_threshold_max);
+                var date_min_moment = Moment(date_threshold_min);
+                var date_max_moment = Moment(date_threshold_max);
+                var number_of_days = date_max_moment.diff(date_min_moment, 'days');
+                var period_type = 'last week';
+                if (number_of_days <= 7) {
+                    period_type = 'last week';
+                    date_min_moment = date_max_moment.subtract('days', 7);
+                    date_min = date_min_moment.toDate();
+                }
+                if (number_of_days <= 14) {
+                    period_type = 'last 2 weeks';
+                    date_min_moment = date_max_moment.subtract('days', 14);
+                    date_min = date_min_moment.toDate();
+                }
+                else if (number_of_days <= 31) {
+                    period_type = 'last month';
+                    date_min_moment = date_max_moment.subtract('months', 1);
+                    date_min = date_min_moment.toDate();
+                }
+                else if (number_of_days <= (31 + 30 + 30)) {
+                    period_type = 'last 3 months';
+                    date_min_moment = date_max_moment.subtract('months', 3);
+                    date_min = date_min_moment.toDate();
+                }
+                else if (number_of_days <= (31 + 30) * 3) {
+                    period_type = 'last 6 months';
+                    date_min_moment = date_max_moment.subtract('months', 6);
+                    date_min = date_min_moment.toDate();
+                }
+                else {
+                    period_type = 'last year';
+                    date_min_moment = date_max_moment.subtract('years', 1);
+                    date_min = date_min_moment.toDate();
+                }
+                // console.log("period_type:");
+                // console.log(period_type);
+                // console.log("date_min:");
+                // console.log(date_min);
+                // console.log("date_max:");
+                // console.log(date_max);
+                return {
+                    "period_type": period_type,
+                    "date_min": date_min,
+                    "date_max": date_max,
+                    "threshold_passed": threshold_passed,
+                    "threshold_date": threshold_date,
+                    "threshold_value": count
+                };
+            }
+
+        });
+
+        var contextPage = Marionette.LayoutView.extend({
+            template: '#tmpl-contextPage',
+            panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
+            className: 'homePanel',
+            gridSize: AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE,
+            hideHeader: true,
+            getTitle: function () {
+                return i18n.gettext('Home'); // unused
+            },
+            regions: {
+                organizations: '#context-partners',
+                synthesis: '#context-synthesis',
+                statistics: '#context-statistics'
+            },
+
+            events: {
+                'click #js_introductionSeeMore': 'introductionSeeMore'
+            },
+
+            initialize: function (options) {
+                this.listenTo(this, 'contextPage:render', this.render);
+            },
+
+            serializeData: function () {
+                return {
+                    ctx: Ctx
+                }
+            },
+
+            introductionSeeMore: function () {
+                $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
+                    var model = new Backbone.Model({
+                        introduction: discussion.introduction
+                    });
+
+                    var Modal = Backbone.Modal.extend({
+                        template: _.template($('#tmpl-homeIntroductionDetail').html()),
+                        className: 'group-modal popin-wrapper',
+                        model: model,
+                        cancelEl: '.close'
+                    });
+
+                    Assembl.slider.show(new Modal())
+                });
+            },
+
+            onRender: function () {
+                var partners = new Partners(),
+                    synthesis = new Synthesis(),
+                    statistics = new Statistics();
+
+                this.statistics.show(statistics);
+                this.synthesis.show(synthesis);
+                this.organizations.show(partners);
+
+                this.displayFieldsContext();
+            },
+
+            displayFieldsContext: function () {
+                var that = this,
+                    currentUser = Ctx.getCurrentUser(),
+                    canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
+
+                $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
+                    //console.log("discussion successfully loaded: ", discussion);
+
+                    that.objectivesField = new CKEditorField({
+                        'model': discussion,
+                        'modelProp': 'objectives',
+                        'placeholder': 'Objectives',
+                        'canEdit': canEdit
+                    });
+                    // add editable "instigator" field
+                    that.instigatorField = new CKEditorField({
+                        'model': discussion,
+                        'modelProp': 'instigator',
+                        'placeholder': 'Instigator',
+                        'canEdit': canEdit
+                    });
+                    // add editable "introduction" field
+                    that.introductionField = new CKEditorField({
+                        'model': discussion,
+                        'modelProp': 'introduction',
+                        'placeholder': 'Introduction',
+                        'canEdit': canEdit
+                    });
+
+                    that.$('.objectives').empty();
+                    that.$('.instigator').empty();
+                    that.$('.introduction').empty();
+
+                    // we implement here get() and save() methods (needed by CKEditor), so we mock a model instance
+                    // TODO: find a better solution, for example create and use a real Discussion model instead?
+                    discussion.get = function (field) {
+                        return this[field];
+                    };
+
+                    discussion.save = function (field, value) {
+                        this[field] = value;
+
+                        // PUT changed data to the discussion endpoint
+                        var endpoint_url = Ctx.getApiV2DiscussionUrl();
+                        var post_data = {};
+                        post_data[field] = value;
+                        $.ajax({
+                            method: 'PUT',
+                            url: endpoint_url,
+                            data: $.param(post_data),
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }).success(function (data) {
+                            //console.log("discussion PUT success:", data);
+                        });
+
+                        return true;
+                    };
+
+                    // FIXME: here we try to apply the dots again after text has been edited but it does not seem to work
+                    var onCKEditorChange = function () {
+                        console.log("Updating dotdotdot");
+                        that.$(".introduction .ckeditorField-mainfield").trigger('update.dot');
+                        that.$(".introduction .ckeditorField-mainfield").trigger('update');
+                    };
+                    that.listenTo(that.introductionField, "save", onCKEditorChange);
+                    that.listenTo(that.introductionField, "cancel", onCKEditorChange);
+                    // end of FIXME
+
+                    // show discussion title
+                    that.$(".js_discussionTitle").html(discussion.topic);
+
+                    that.objectivesField.renderTo(that.$('.objectives'));
+                    that.instigatorField.renderTo(that.$('.instigator'));
+                    that.introductionField.renderTo(that.$('.introduction'));
+
+                    if (canEdit) {
+                        // Not clear why this is necessary.
+                        that.objectivesField.delegateEvents();
+                        that.instigatorField.delegateEvents();
+                        that.introductionField.delegateEvents();
+                    }
+
+                    /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
+                     * Read More links for introduction preview
+                     */
+                    that.$(".introduction .ckeditorField-mainfield").dotdotdot({
+                        after: "#introduction-button-see-more",
+                        height: 70,
+                        callback: function (isTruncated, orgContent) {
+                            //console.log("dotdotdot callback: ", isTruncated, orgContent);
+                            if (isTruncated) {
+                                that.$('#introduction-button-see-more').show();
+                            }
+                            else {
+                                that.$('#introduction-button-see-more').hide();
+                            }
+                        },
+                        watch: "window"
+                    });
+
+                });
+
             }
 
         });

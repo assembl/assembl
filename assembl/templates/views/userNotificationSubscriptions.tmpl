@@ -8,9 +8,6 @@
           <li class="active">
             <a href="#users/notifications" class="menu">{{ gettext('notifications') }}</a>
           </li>
-          <li class="mtxl">
-            <a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a>
-          </li>
         </ul>
     </nav>
   </div>
@@ -62,5 +59,7 @@
       </div>
     </div>
       <button class="btn btn-primary mls js_unSubscription hidden">{{ gettext('unsubscribe') }}</button>
+
+      <div class="mls mtxl"><h4 class="h4"><a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a></h4></div>
   </div>
 </div>

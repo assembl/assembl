@@ -1,45 +1,11 @@
 'use strict';
 
-define(['backbone', 'underscore', 'common/context', 'ckeditor-sharedspace', 'jquery'],
-    function (Backbone, _, Ctx, ckeditor, $) {
-
-        var CKEditorField = Backbone.View.extend({
-            /**
-             * @type {Object}
-             */
-            attributes: {},
-
-            /**
-             * The tempate
-             * @type {_.template}
-             */
-            template: Ctx.loadTemplate('ckeditorField'),
-
-            /**
-             * CKeditor instance for this view
-             * @type {CKeditor}
-             */
-            ckInstance: null,
-
-            /**
-             * @type {Base.Model}
-             */
-            model: null,
-
-            /**
-             * @type {String}
-             */
-            modelProp: '',
-
-            /**
-             * The text to be shown if the model is empty
-             * @type {String}
-             */
-            placeholder: '',
+define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor-sharedspace', 'jquery'],
+    function (Marionette, Assembl, _, Ctx, ckeditor, $) {
 
 
-            showPlaceholderOnEditIfEmpty: false,
-
+        var cKEditorField = Marionette.ItemView.extend({
+            template: '#tmpl-ckeditorField',
             /**
              * Ckeditor default configuration
              * @type {object}
@@ -53,75 +19,81 @@ define(['backbone', 'underscore', 'common/context', 'ckeditor-sharedspace', 'jqu
                 sharedSpaces: { top: 'ckeditor-toptoolbar', bottom: 'ckeditor-bottomtoolbar' }
             },
 
-            /**
-             * @init
-             */
-            initialize: function (obj) {
+            ckInstance: null,
+
+            showPlaceholderOnEditIfEmpty: false,
+
+            initialize: function (options) {
+                this.view = this;
+
                 this.topId = _.uniqueId('ckeditorField-topid');
                 this.fieldId = _.uniqueId('ckeditorField');
                 this.bottomId = _.uniqueId('ckeditorField-bottomid');
 
-                if ('modelProp' in obj) {
-                    this.modelProp = obj.modelProp;
-                }
+                (this.editing) ? this.editing = true : this.editing = false;
 
-                if ('placeholder' in obj) {
-                    this.placeholder = obj.placeholder;
-                }
+                (_.has(options, 'modelProp')) ? this.modelProp = options.modelProp : this.modelProp = null;
 
-                if ('showPlaceholderOnEditIfEmpty' in obj) {
-                    this.showPlaceholderOnEditIfEmpty = obj.showPlaceholderOnEditIfEmpty;
-                }
+                (_.has(options, 'placeholder')) ? this.placeholder = options.placeholder : this.placeholder = null;
 
-                if ('canEdit' in obj) {
-                    this.canEdit = obj.canEdit;
-                } else {
-                    this.canEdit = true;
-                }
+                (_.has(options, 'showPlaceholderOnEditIfEmpty')) ? this.showPlaceholderOnEditIfEmpty = options.showPlaceholderOnEditIfEmpty : this.showPlaceholderOnEditIfEmpty = null;
+
+                (_.has(options, 'canEdit')) ? this.canEdit = options.canEdit : this.canEdit = true;
 
                 if (this.model === null) {
                     throw new Error('EditableField needs a model');
                 }
-                //console.log(this);
+
+                this.listenTo(this.view, 'cKEditorField:render', this.render);
             },
 
-            /**
-             * @return {[type]} [description]
-             */
-            render: function (editing) {
-                this.destroy();
+            ui: {
+                mainfield: '.ckeditorField-mainfield',
+                saveButton: '.ckeditorField-savebtn',
+                cancelButton: '.ckeditorField-cancelbtn'
+            },
 
-                if (_.isUndefined(editing)) {
-                    editing = false;
+            events: {
+                'click @ui.mainfield': 'changeToEditMode',
+                'click @ui.saveButton': 'saveEdition',
+                'click @ui.cancelButton': 'cancelEdition'
+            },
+
+            serializeData: function () {
+                var textToShow = null;
+
+                if (this.showPlaceholderOnEditIfEmpty) {
+                    textToShow = this.placeholder;
+                }
+                else {
+                    textToShow = this.model.get(this.modelProp);
                 }
 
-                var textToShow = this.showPlaceholderOnEditIfEmpty ? this.placeholder : this.model.get(this.modelProp);
-                var data = {
+                return {
                     topId: this.topId,
                     fieldId: this.fieldId,
                     bottomId: this.bottomId,
                     text: textToShow,
-                    editing: editing,
+                    editing: this.editing,
                     canEdit: this.canEdit,
                     placeholder: this.placeholder
-                };
+                }
+            },
 
-                this.$el.html(this.template(data));
-
-                if (editing) {
+            onRender: function () {
+                this.destroy();
+                if (this.editing) {
                     this.startEditing();
                 }
-
-                return this;
             },
 
             /**
              * set the templace in editing mode
              */
             startEditing: function () {
-                var editingArea = this.$('#' + this.fieldId).get(0),
-                    that = this,
-                    config = _.extend({}, this.CKEDITOR_CONFIG, {
+                var editingArea = this.$('#' + this.fieldId).get(0);
+
+                var config = _.extend({}, this.CKEDITOR_CONFIG, {
                         sharedSpaces: { top: this.topId, bottom: this.bottomId }
                     });
 
@@ -161,39 +133,30 @@ define(['backbone', 'underscore', 'common/context', 'ckeditor-sharedspace', 'jqu
              * @param {Boolean} editing
              */
             renderTo: function (el, editing) {
-                $(el).append(this.render(editing).el);
-            },
-
-            /**
-             * @events
-             */
-            events: {
-                'click .ckeditorField-mainfield': 'changeToEditMode',
-                'click .ckeditorField-savebtn': 'saveEdition',
-                'click .ckeditorField-cancelbtn': 'cancelEdition'
+                this.editing = editing;
+                $(el).append(this.$el);
+                this.view.trigger('cKEditorField:render');
             },
 
             /**
              * Destroy the ckeditor instance
              */
             destroy: function () {
-                if (this.ckInstance) {
-                    this.ckInstance.destroy();
-                }
+                //FIXME: need this ?
+                /*if (this.ckInstance) {
+                 this.ckInstance.destroy();
+                 } */
+
+                this.ckInstance = null;
             },
 
-            /**
-             * @event
-             */
             changeToEditMode: function () {
                 if (this.canEdit) {
-                    this.render(true);
+                    this.editing = true;
+                    this.view.trigger('cKEditorField:render');
                 }
             },
 
-            /**
-             * @event
-             */
             saveEdition: function (ev) {
                 if (ev) {
                     ev.stopPropagation();
@@ -207,16 +170,21 @@ define(['backbone', 'underscore', 'common/context', 'ckeditor-sharedspace', 'jqu
                         /* Nor save to the database and fire change events
                          * if the value didn't change from the model
                          */
-                        this.model.save(this.modelProp, text);
+                        this.model.save(this.modelProp, text, {
+                            success: function () {
+
+                            },
+                            error: function () {
+
+                            }
+                        });
                         this.trigger('save', [this]);
                     }
                 }
-                this.render(false);
+                this.editing = false;
+                this.view.trigger('cKEditorField:render');
             },
 
-            /**
-             * @event
-             */
             cancelEdition: function (ev) {
                 if (ev) {
                     ev.stopPropagation();
@@ -227,12 +195,14 @@ define(['backbone', 'underscore', 'common/context', 'ckeditor-sharedspace', 'jqu
                     this.ckInstance.setData(text);
                 }
 
-                this.render(false);
+                this.editing = false;
+                this.view.trigger('cKEditorField:render');
+
                 this.trigger('cancel', [this]);
             }
 
-
         });
 
-        return CKEditorField;
+
+        return cKEditorField;
     });

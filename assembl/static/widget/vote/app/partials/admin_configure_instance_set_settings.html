@@ -52,7 +52,7 @@
         <br/>
 
         <span>Items displayed to the user:</span>
-        <div class="item" ng-repeat="item in widget.settings.items">
+        <div class="item" ng-repeat="item in widget.settings.items" ng-controller="adminConfigureInstanceSetSettingsItemCtl">
             <div class="item-title">
                 <strong>Item</strong>
                 <button ng-click="widget.settings.items.splice($index,1)">Delete this item</button>
@@ -91,7 +91,7 @@
                 <br/>
 
                 <span>Criteria associated to this item:</span>
-                <div class="item" ng-repeat="criterion in item.criteria">
+                <div class="item" ng-repeat="criterion in item.criteria" ng-controller="adminConfigureInstanceSetSettingsItemCriterionCtl">
                     <div class="item-title">
                         <strong>Criterion</strong>
                         <button ng-click="item.criteria.splice($index,1)">Delete this criterion</button>

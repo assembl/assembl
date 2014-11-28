@@ -215,6 +215,49 @@ voteApp.controller('adminConfigureInstanceSetVotableIdeasCtl',
   };
 }]);
 
+voteApp.controller('adminConfigureInstanceSetSettingsItemCtl', ['$scope', 'VoteWidgetService', function($scope, VoteWidgetService){
+  $scope.$watch('item.type', function (newValue, oldValue) {
+    if ( newValue != oldValue )
+    {
+      // create the necessary amount of criterion fields, depending on the item type chosen, and the minimum of criterion they require
+      if ( newValue == "vertical_gauge" )
+      {
+        if ( $scope.item.criteria.length < 1 )
+        {
+          var criterion = {};
+          VoteWidgetService.addDefaultFields(criterion, VoteWidgetService.mandatory_criterion_fields);
+          $scope.widget.settings.items[$scope.item_index].criteria.push(criterion);
+        }
+        // here we could also remove the remaining criteria if there are more than 1, or show them in red
+      }
+      else if ( newValue == "2_axes" )
+      {
+        while ( $scope.item.criteria.length < 2 )
+        {
+          var criterion = {};
+          VoteWidgetService.addDefaultFields(criterion, VoteWidgetService.mandatory_criterion_fields);
+          $scope.widget.settings.items[$scope.item_index].criteria.push(criterion);
+        }
+        // here we could also remove the remaining criteria if there are more than 2, or show them in red
+      }
+    }
+  });
+}]);
+
+voteApp.controller('adminConfigureInstanceSetSettingsItemCriterionCtl', ['$scope', function($scope){
+  // pre-fill "name" field: if the user selects a criterion for a voting item (or sets the currently selected criterion to another one), set its "pretty" name to the criterion shortTitle
+  $scope.$watch('criterion.entity_id', function (newValue, oldValue) {
+    if ( newValue != oldValue ) // && !$scope.criterion.name
+    {
+      var criterionWithDetails = _.find($scope.criteria, function(criterion){
+        return criterion["@id"] == newValue;
+      });
+      if ( criterionWithDetails && criterionWithDetails.shortTitle )
+        $scope.criterion.name = criterionWithDetails.shortTitle;
+    }
+  });
+}]);
+
 
 voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService', 

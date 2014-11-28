@@ -1,0 +1,27 @@
+<div class="gr mvxl">
+  <div class="gu gu-1of2">
+    <div class="block-content">
+      <% if(synthesis.get('empty')) { %>
+        <h2 class="lastSynthesisTitle">
+          {{ gettext('Synthesis') }}
+        </h2>
+        <p> <%= synthesis.get('empty') %> </p>
+      <% } else { %>
+        <h2 class="lastSynthesisTitle">
+          <span>{{ gettext('Last synthesis') }}</span>
+          <span class='message-date vam mlxs'>
+            <time title=<%= ctx.getReadableDateTime(synthesis.get('creation_date')) %> >
+            <%= ctx.getNiceDateTime(synthesis.get('creation_date')) %>
+            </time>
+          </span>
+        </h2>
+        <p class="lastSynthesis mbs">
+          <%= synthesis.get('introduction') %>
+        </p>
+        <button class="btn btn-secondary btn-sm fr js_readSynthesis">{{ gettext('Read the synthesis') }}</button>
+      <% } %>
+    </div>
+  </div>
+  <div class="gu gu-last">
+  </div>
+</div>

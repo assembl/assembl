@@ -14,8 +14,7 @@
       <div class="js_defaultMessageView-dropdown dropdown"></div>
 
       <div class="dropdown">
-        <span class="dropdown-label">{{ gettext('Add filter') }}</span>
-        <i class="icon-arrowdown"></i>
+        <span class="dropdown-label">{{ gettext('Add filter') }}<i class="icon-arrowdown"></i></span>
         <ul class="dropdown-list">
           <li class="js_messageList-onlyorphan dropdown-listitem">{{ gettext('Orphan messages') }}</li>
           <li class="js_messageList-onlysynthesis dropdown-listitem">{{ gettext('Synthesis messages') }}</li>
@@ -39,7 +38,7 @@
   <div class="messageList-list idealist <%= currentViewStyle.id %> pal"></div>
 
   <div class="js_messageList-bottomarea messageList-bottomarea tac hidden">
-    <a class="js_messageList-morebutton btn btn-default btn-xs">{{ gettext('Load more messages') }}</a>
+    <a class="js_messageList-morebutton btn btn-sm btn-secondary">{{ gettext('Load more messages') }}</a>
   </div>
 
   <% if (canPost) { %>

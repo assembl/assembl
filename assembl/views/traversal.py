@@ -113,6 +113,7 @@ def process_args(args, cls):
             yield (key, value)
             continue
 
+
 class ClassContext(object):
     def __init__(self, parent, cls):
         # permission on class context are quite restrictive. review.
@@ -129,7 +130,7 @@ class ClassContext(object):
             raise KeyError()
         return InstanceContext(self, instance)
 
-    def decorate_query(self, query, last_alias, ctx):
+    def decorate_query(self, query, last_alias, ctx, tombstones=False):
         # The buck stops here
         return query
 
@@ -143,17 +144,17 @@ class ClassContext(object):
         # and here
         pass
 
-    def create_query(self, id_only=True):
+    def create_query(self, id_only=True, tombstones=False):
+        from assembl.models import Tombstonable
         cls = self._class
         self.class_alias = alias = aliased(cls)
         if id_only:
             query = cls.db().query(alias.id)
         else:
             query = cls.db().query(alias)
-        # TODO: Make this optional. We need tombstones for synthesis history.
-        # cond = cls.base_condition(alias)
-        # if cond is not None:
-        #     query = query.filter(cond)
+        # TODO: Distinguish tombstone condition from other base_conditions
+        if issubclass(cls, Tombstonable) and not tombstones:
+            query = query.filter(cls.base_condition(alias))
         return query
 
     def get_class(self, typename=None):
@@ -251,9 +252,10 @@ class InstanceContext(object):
             raise KeyError()
         return CollectionContext(self, collection, self._instance)
 
-    def decorate_query(self, query, last_alias, ctx):
+    def decorate_query(self, query, last_alias, ctx, tombstones=False):
         # Leave that work to the collection
-        return self.__parent__.decorate_query(query, last_alias, ctx)
+        return self.__parent__.decorate_query(
+            query, last_alias, ctx, tombstones)
 
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         # if one of the objects has a non-list relation to this class, add it
@@ -348,30 +350,32 @@ class CollectionContext(object):
         else:
             return self.collection_class
 
-    def create_query(self, id_only=True):
+    def create_query(self, id_only=True, tombstones=False):
         cls = self.collection_class
         alias = aliased(cls)
         if id_only:
             query = cls.db().query(alias.id)
-            return self.decorate_query(query, alias, self).distinct()
+            return self.decorate_query(
+                query, alias, self, tombstones).distinct()
         else:
             # There will be duplicates. But sqla takes care of them,
             # virtuoso won't allow distinct on full query,
             # and a distinct subquery takes forever.
             # Oh, and quietcast loses the distinct. Just great.
             query = cls.db().query(alias)
-            return self.decorate_query(query, alias, self)
+            return self.decorate_query(query, alias, self, tombstones)
 
-    def decorate_query(self, query, last_alias, ctx):
+    def decorate_query(self, query, last_alias, ctx, tombstones=False):
         # This will decorate a query with a join on the relation.
+        from assembl.models import Tombstonable
         self.collection_class_alias = last_alias
         query = self.collection.decorate_query(
             query, last_alias, self.parent_instance, ctx)
-        # TODO: Make this optional. We need tombstones for synthesis history.
-        # cond = self.collection_class.base_condition(last_alias)
-        # if cond is not None:
-        #     query = query.filter(cond)
-        return self.__parent__.decorate_query(query, self.collection.owner_alias, ctx)
+        cls = self.collection_class
+        if issubclass(cls, Tombstonable) and not tombstones:
+            query = query.filter(cls.tombstone_condition(last_alias))
+        return self.__parent__.decorate_query(
+            query, self.collection.owner_alias, ctx, tombstones)
 
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         self.collection.decorate_instance(
