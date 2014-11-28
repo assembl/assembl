@@ -247,11 +247,7 @@ define(['app',
                         if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
                             console.log("executeRequest fired, unregistering worker from collection Manager");
                         }
-                        //TODO:  If another request arrives while this one is executing,
-                        //an extra request will eventually fire.  (The time window is the entire
-                        //server interaction, which is significant.
-                        //We should remember previous
-                        //workers and look into them before creating a new request.
+
                         this.collectionManager._waitingWorker = undefined;
                         allMessageStructureCollectionPromise.done(function (allMessageStructureCollection) {
                             var PostQuery = require('views/messageListPostQuery'),
@@ -284,6 +280,9 @@ define(['app',
                                             deferred.resolve(structureModel);
                                         });
                                         delete that.requests[id];
+                                      }
+                                      else {
+                                        console.log("WARNING: collectionManager::executeRequest() received data for "+id+", but there is no matching request.  Race condition?");
                                       }
                                   });
                               });
