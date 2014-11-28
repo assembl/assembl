@@ -265,6 +265,12 @@ level = INFO
 handlers = console
 qualname = alembic, alembic.env
 
+[logger_sentry]
+level = WARN
+handlers = console
+qualname = sentry.errors
+propagate = 0
+
 [handler_console]
 class = StreamHandler
 args = (sys.stderr,)
