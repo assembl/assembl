@@ -31,7 +31,7 @@ def main():
     parser.add_argument("command", help="command",  choices=['bootstrap', 'backup', 'alembic'])
     parser.add_argument('alembic_args', nargs='*')
     args = parser.parse_args()
-    settings = get_appsettings(args.configuration)
+    settings = get_appsettings(args.configuration, 'assembl')
     set_config(settings)
     configure_zmq(settings['changes.socket'], False)
     engine = configure_engine(settings, True)

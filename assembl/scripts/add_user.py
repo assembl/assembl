@@ -141,7 +141,7 @@ def main():
                         help="slug of discussion context for local user role")
     args = parser.parse_args()
     env = bootstrap(args.configuration)
-    settings = get_appsettings(args.configuration)
+    settings = get_appsettings(args.configuration, 'assembl')
     set_config(settings)
     configure_zmq(settings['changes.socket'], False)
     configure_model_watcher(env['registry'], 'assembl')
