@@ -1,6 +1,6 @@
 {% set userName = "<%= creator.get('name') %>" %}
 {% set precise_date = "<%= ctx.getReadableDateTime(date) %>" %}
-{% set nice_date = "<%= ctx.getNiceDate(date) %>" %}
+{% set nice_date = "<%= ctx.getNiceDate(date, false) %>" %}
 {% macro readUnreadIndicator() -%}
   <% if ( user_is_connected ){ %>{# Strip whitespace ...
       #}<span class="readUnreadIndicator indice 
