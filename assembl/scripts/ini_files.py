@@ -7,6 +7,9 @@ from os.path import exists, join, dirname, abspath
 from ConfigParser import ConfigParser, NoSectionError
 
 
+SECTION = 'app:assembl'
+
+
 def main():
     if len(sys.argv) < 2:
         sys.stderr.write('Usage: %s CONFIG_URI\n'
@@ -60,18 +63,18 @@ def main():
         metrics_code_dir = ''
     vars = {
         'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
-        'VIRTUOSO_HOSTNAME': config.get('app:main', 'public_hostname'),
+        'VIRTUOSO_HOSTNAME': config.get(SECTION, 'public_hostname'),
         'VIRTUOSO_PORT': config.getint('virtuoso', 'port'),
         'VIRTUOSO_ROOT': vroot,
         'VIRTUOSO_ROOT_VAR': vroot_var,
         'VIRTUOSO_ROOT_LIB': vroot_lib,
         'VIRTUOSO_SUBDIR_NAME': vname,
         'IMAP_CELERY_BROKER': config.get(
-            'app:main', 'celery_tasks.imap.broker'),
+            SECTION, 'celery_tasks.imap.broker'),
         'NOTIF_DISPATCH_CELERY_BROKER': config.get(
-            'app:main', 'celery_tasks.notification_dispatch.broker'),
+            SECTION, 'celery_tasks.notification_dispatch.broker'),
         'NOTIFY_CELERY_BROKER': config.get(
-            'app:main', 'celery_tasks.notify.broker'),
+            SECTION, 'celery_tasks.notify.broker'),
         'here': dirname(abspath('supervisord.conf')),
         'CONFIG_FILE': config_uri,
         'has_metrics_server': 'true' if has_metrics_server else 'false',

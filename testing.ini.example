@@ -1,4 +1,8 @@
-[app:main]
+[pipeline:main]
+pipeline =
+    assembl
+
+[app:assembl]
 use = egg:assembl
 
 pyramid.reload_templates = true
@@ -260,6 +264,12 @@ qualname = sqlalchemy.engine, sqlalchemy.orm, sqlalchemy.pool, sqlalchemy.dialec
 level = INFO
 handlers = console
 qualname = alembic, alembic.env
+
+[logger_sentry]
+level = WARN
+handlers = console
+qualname = sentry.errors
+propagate = 0
 
 [handler_console]
 class = StreamHandler

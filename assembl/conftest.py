@@ -31,7 +31,7 @@ def pytest_configure(config):
     global engine
     log.setLevel(config.getoption('logging_level'))
     app_settings_file = config.getoption('test_settings_file')
-    app_settings = get_appsettings(app_settings_file)
+    app_settings = get_appsettings(app_settings_file, 'assembl')
     with_zope = as_boolean(app_settings.get('test_with_zope'))
     engine = configure_engine(app_settings, with_zope)
     from .lib.zmqlib import configure_zmq

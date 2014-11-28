@@ -59,9 +59,9 @@ def init_task_config(celery_app):
         return
     rootdir = dirname(dirname(dirname(realpath(__file__))))
     if exists(join(rootdir, 'local.ini')):
-        settings = get_appsettings(join(rootdir, 'local.ini'))
+        settings = get_appsettings(join(rootdir, 'local.ini'), 'assembl')
     else:
-        settings = get_appsettings(join(rootdir, 'development.ini'))
+        settings = get_appsettings(join(rootdir, 'development.ini'), 'assembl')
     registry = getGlobalSiteManager()
     registry.settings = settings
     set_config(settings)

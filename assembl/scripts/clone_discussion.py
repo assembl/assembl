@@ -446,7 +446,7 @@ if __name__ == '__main__':
     parser.add_argument("discussion", help="original discussion slug")
     args = parser.parse_args()
     env = bootstrap(args.configuration)
-    settings = get_appsettings(args.configuration)
+    settings = get_appsettings(args.configuration, 'assembl')
     set_config(settings)
     configure_zmq(settings['changes.socket'], False)
     configure_model_watcher(env['registry'], 'assembl')
