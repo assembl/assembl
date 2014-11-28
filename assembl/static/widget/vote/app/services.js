@@ -136,11 +136,9 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     }
   ];
 
-
-
   this.addDefaultFields = function(obj, default_fields){
     var sz = default_fields.length;
-    for ( var i = 0; i < default_fields.length; ++i )
+    for ( var i = 0; i < sz; ++i )
     {
       var field = default_fields[i];
       if ( !obj.hasOwnProperty(field.key)
