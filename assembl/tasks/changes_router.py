@@ -23,15 +23,17 @@ if len(sys.argv) != 2:
     exit()
 
 
+SECTION = 'app:assembl'
+
 settings = ConfigParser({'changes.prefix': ''})
 settings.read(sys.argv[-1])
-CHANGES_SOCKET = settings.get('app:main', 'changes.socket')
-CHANGES_PREFIX = settings.get('app:main', 'changes.prefix')
-TOKEN_SECRET = settings.get('app:main', 'session.secret')
-WEBSERVER_PORT = settings.getint('app:main', 'changes.websocket.port')
+CHANGES_SOCKET = settings.get(SECTION, 'changes.socket')
+CHANGES_PREFIX = settings.get(SECTION, 'changes.prefix')
+TOKEN_SECRET = settings.get(SECTION, 'session.secret')
+WEBSERVER_PORT = settings.getint(SECTION, 'changes.websocket.port')
 # NOTE: Not sure those are always what we want.
-SERVER_HOST = settings.get('app:main', 'public_hostname')
-SERVER_PORT = settings.getint('app:main', 'public_port')
+SERVER_HOST = settings.get(SECTION, 'public_hostname')
+SERVER_PORT = settings.getint(SECTION, 'public_port')
 
 context = zmq.Context.instance()
 ioloop.install()
