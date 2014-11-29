@@ -208,7 +208,7 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                         return filterDef;
                     }
                 }
-                console.log("ERROR: getFilterDefById(): No filter definition with id " + filterDefId);
+                console.error("getFilterDefById(): No filter definition with id " + filterDefId);
                 return null;
             }
 
@@ -252,11 +252,11 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                 // Validate values
                 if (filterDef._value_is_boolean) {
                     if (!(value === true || value === false)) {
-                        console.log("ERROR:  filter " + filterDef.name + " expects a boolean value and received value " + value);
+                        console.error(" filter " + filterDef.name + " expects a boolean value and received value " + value);
                         return false;
                     }
                     if (filterDef._can_be_reversed === false && value === false) {
-                        console.log("ERROR:  filter " + filterDef.name + " cannot be reversed, but received value " + value);
+                        console.error(" filter " + filterDef.name + " cannot be reversed, but received value " + value);
                         return false;
                     }
                 }
@@ -367,7 +367,7 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                     retval = true;
                 }
                 else {
-                    console.log("ERROR:  setView() view is empty");
+                    console.error(" setView() view is empty");
                 }
                 return retval;
             };
@@ -386,7 +386,7 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                     retval = true;
                 }
                 else {
-                    console.log("ERROR:  setViewDef() viewDef is empty");
+                    console.error(" setViewDef() viewDef is empty");
                 }
                 return retval;
             };

@@ -358,7 +358,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         function (allExtractsCollection, allIdeasCollection) {
                             var segment = allExtractsCollection.getByAnnotation(annotation);
                             if (!segment) {
-                                console.log("message::showSegmentByAnnotation() ERROR, the extract doesn't exist")
+                                console.error("message::showSegmentByAnnotation(): the extract doesn't exist")
                                 return;
                             }
                             if (segment.get('idIdea')) {

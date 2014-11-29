@@ -535,7 +535,7 @@ define(['app',
                     if (data !== undefined) {
                         collection = new groupSpec.Collection(data, {'parse': true, 'viewsFactory': viewsFactory});
                         if (!collection.validate()) {
-                            console.log("getGroupSpecsCollectionPromise():  ERROR: Collection in local storage is invalid, will return a new one");
+                            console.error("getGroupSpecsCollectionPromise(): Collection in local storage is invalid, will return a new one");
                             collection = undefined;
                         }
                     }

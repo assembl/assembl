@@ -68,7 +68,7 @@ define(['models/base', 'models/panelSpec', 'utils/panelSpecTypes'],
                 //Ensure it's a real panelSpecType
                 var validPanelSpecType = PanelSpecTypes.validate(panelSpecType);
                 if (validPanelSpecType === undefined) {
-                    console.log("getPanelSpecByType: ERROR: the panelSpecType provided isn't valid panelSpecType:", panelSpecType);
+                    console.error("getPanelSpecByType: the panelSpecType provided isn't valid panelSpecType:", panelSpecType);
                     throw "invalid panelSpecType";
                 }
                 return _.find(this.get('panels').models, function (el) {
@@ -92,7 +92,7 @@ define(['models/base', 'models/panelSpec', 'utils/panelSpecTypes'],
                 if (_.any(list_of_options, function (el) {
                     return !(PanelSpecTypes.validate(el))
                 })) {
-                    console.log("ERROR: One of the panelSpecTypes in the following options isn't valid: ", list_of_options);
+                    console.error("One of the panelSpecTypes in the following options isn't valid: ", list_of_options);
                     throw "One of the panelSpecTypes in the option isn't valid"
                 }
                 var that = this;
