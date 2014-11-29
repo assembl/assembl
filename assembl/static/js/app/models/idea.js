@@ -441,7 +441,7 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                     _.forEach(this.models, function (model) {
                         console.log(model.get('@type'));
                     })
-                    console.log("ERROR: getRootIdea() failed!");
+                    console.error("getRootIdea() failed!");
                     console.log(this);
                 }
                 return retval;

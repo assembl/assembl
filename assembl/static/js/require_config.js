@@ -24,6 +24,10 @@ var requirejs_config = {
         'ckeditor-sharedspace': '../lib/ckeditor-sharedcontainer/plugin',
 
         'moment': '../bower/momentjs/min/moment-with-locales.min',
+        'raven': '../bower/raven-js/dist/raven.min',
+        'raven.backbone': '../bower/raven-js/plugins/backbone',
+        'raven.console': '../bower/raven-js/plugins/console',
+        'raven.require': '../bower/raven-js/plugins/require',
         'zeroclipboard': '../bower/zeroclipboard/ZeroClipboard',
         'sockjs': '../bower/sockjs/sockjs',
         'cytoscape': '../bower/cytoscape/dist/cytoscape',
@@ -99,6 +103,15 @@ var requirejs_config = {
         },
         'bootstrap': {
             deps: ['jquery']
+        },
+        'raven.console': {
+            deps: ['raven']
+        },
+        'raven.backbone': {
+            deps: ['raven', 'backbone']
+        },
+        'raven.require': {
+            deps: ['raven']
         },
         'jquery-autosize': {
             deps: ['jquery']

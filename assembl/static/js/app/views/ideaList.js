@@ -227,7 +227,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 if (parent) {
                     parent.get('children').remove(idea);
                 } else {
-                    console.log("ERROR:  This shouldn't happen, only th root idea has no parent");
+                    console.error(" This shouldn't happen, only th root idea has no parent");
                 }
             },
 

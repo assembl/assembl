@@ -684,7 +684,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     if (model) {
                         toReturn.push(model);
                     } else {
-                        console.log('ERROR:  getAllMessageStructureModelsToDisplay():  Message with id ' + id + ' not found!');
+                        console.error('getAllMessageStructureModelsToDisplay():  Message with id ' + id + ' not found!');
                     }
                 });
 
@@ -1744,7 +1744,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
                     (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
                     if (!this.visitorViewData[messageId]) {
-                        console.log("getMessageOffset: ERROR; visitor data for message " + messageId + " isn't in: ", this.visitorViewData);
+                        console.error("getMessageOffset: visitor data for message " + messageId + " isn't in: ", this.visitorViewData);
                         // this is bound to cause more issues later,
                         // but it's impossible to trace through code with the exception that occurs otherwise.
                         // TODO benoitg repair this.
@@ -1847,13 +1847,13 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     // Trigerring showBody above requires the message to
                     // re-render. WE may have to give it time
                       if(recursionDepth <= MAX_RETRIES){
-                        console.log("scrollToMessage(): ERROR:  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
+                        console.error("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
                         setTimeout(function () {
                           that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1);
                         }, RETRY_INTERVAL);
                       }
                       else {
-                        console.log("scrollToMessage(): ERROR: MAX_RETRIES has been reached: ", recursionDepth);
+                        console.error("scrollToMessage(): MAX_RETRIES has been reached: ", recursionDepth);
                       }
                   }
 
@@ -1889,7 +1889,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes);
 
                 if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
-                  console.log("showMessageById():  ERROR:  a showMessageById was already in progress, aborting");
+                  console.error("showMessageById():   a showMessageById was already in progress, aborting");
                   return;
                 }
                 else if (shouldRecurseMaxMoreTimes === undefined) {
@@ -1935,7 +1935,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                                 that.showMessages(requestedOffsets);
                             }
                             else {
-                                console.log("showMessageById: ERROR:  Message is in query results but not in current page, and we are not allowed to recurse");
+                                console.error("showMessageById:  Message is in query results but not in current page, and we are not allowed to recurse");
                             }
                             return;
                         }
@@ -1950,7 +1950,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                                 that.listenToOnce(that, "messageList:render_complete", success);
                             }
                             else {
-                                console.log("showMessageById: ERROR:  Message is in query results but not in current page, and we are not allowed to recurse");
+                                console.error("showMessageById:  Message is in query results but not in current page, and we are not allowed to recurse");
                             }
                             return;
                         }
