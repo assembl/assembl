@@ -9,22 +9,28 @@
     <% } %>
   <% } else { %>
     <div class="view-config pll ptxs">
-      <div class="js_messageListViewStyle-dropdown dropdown"></div>
+      <ul class="pan man">
+        <li class="dropdown fl mtxs mrs js_messageListViewStyle-dropdown"></li>
+        <li class="dropdown fl mtxs mrs js_defaultMessageView-dropdown"></li>
 
-      <div class="js_defaultMessageView-dropdown dropdown"></div>
+      	<li class="dropdown fl mtxs mrs">
+      		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						{{ gettext('Add filter') }}
+						<span class="icon-arrowdown"></span>
+      		</a>
+      		<ul class="dropdown-menu">
+      			<li><a class="js_messageList-onlyorphan" href="#">{{ gettext('Orphan messages') }}</a></li>
+      			<li><a class="js_messageList-onlysynthesis" href="#">{{ gettext('Synthesis messages') }}</a></li>
+      			<li><a class="js_messageList-isunread" href="#">{{ gettext('Unread messages') }}</a></li>
+      			{#
+						<li><a href="#">{{ gettext('Uncaught') }}</a></li>
+						<li><a href="#">{{ gettext('Followed') }}</a></li>
+						#}
+      		</ul>
+      	</li>
+      </ul>
 
-      <div class="dropdown">
-        <span class="dropdown-label">{{ gettext('Add filter') }}<i class="icon-arrowdown"></i></span>
-        <ul class="dropdown-list">
-          <li class="js_messageList-onlyorphan dropdown-listitem">{{ gettext('Orphan messages') }}</li>
-          <li class="js_messageList-onlysynthesis dropdown-listitem">{{ gettext('Synthesis messages') }}</li>
-          <li class="js_messageList-isunread dropdown-listitem">{{ gettext('Unread messages') }}</li>
-          {#
-          <li class="dropdown-listitem">{{ gettext('Uncaught') }}</li>
-          <li class="dropdown-listitem">{{ gettext('Followed') }}</li>
-          #}
-        </ul>
-      </div>
+
     </div>
   <% } %>
 

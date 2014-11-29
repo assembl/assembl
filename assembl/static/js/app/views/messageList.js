@@ -61,7 +61,11 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
                 this.panelWrapper = options.panelWrapper;
-                
+
+                this.requestMessages({
+                    offsetStart: 0,
+                    offsetEnd: MORE_PAGES_NUMBER
+                });
                 /**
                  * @ghourlier
                  * TODO: Usually it would necessary to push notification rather than fetch every time the model change
@@ -105,6 +109,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
 
                 collectionManager.getAllExtractsCollectionPromise().done(
                     function (allExtractsCollection) {
+                        //that.initAnnotator();//Not sure if this is necessary anymore - benoitg-2014-07-29
                         that.listenTo(allExtractsCollection, 'add remove reset', that.initAnnotator);
                     }
                 );
@@ -182,6 +187,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 var that = this,
                     data = {
                         'click .post-query-filter-info .js_deleteFilter ': 'onFilterDeleteClick',
+                        'click .js_messageList-collapseButton': 'toggleMessageView',
 
                         'click .js_messageList-allmessages': 'showAllMessages',
                         'click .js_messageList-onlyorphan': 'addFilterIsOrphanMessage',
@@ -465,6 +471,14 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
              */
             currentQuery: new PostQuery(),
 
+            /**
+             * Reset the offset values to initial values
+             */
+            resetOffsets: function () {
+                this.offsetStart = 0;
+                this.offsetEnd = MORE_PAGES_NUMBER;
+            },
+
             getPreviousScrollTarget: function () {
                 var panelOffset = null,
                     panelScrollTop = 0,
@@ -673,7 +687,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     if (model) {
                         toReturn.push(model);
                     } else {
-                        console.error('getAllMessageStructureModelsToDisplay():  Message with id ' + id + ' not found!');
+                        console.log('ERROR:  getAllMessageStructureModelsToDisplay():  Message with id ' + id + ' not found!');
                     }
                 });
 
@@ -753,8 +767,8 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     views_promise = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
                 }
 
-                this._offsetStart = returnedOffsets['offsetStart']
-                this._offsetEnd = returnedOffsets['offsetEnd']
+                this.offsetStart = returnedOffsets['offsetStart']
+                this.offsetEnd = returnedOffsets['offsetEnd']
                 
                 $.when(views_promise).done(function (views) {
                     if (that.debugPaging) {
@@ -768,13 +782,13 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                         that.ui.messageList.html(views);
                     }
                     that.scrollToPreviousScrollTarget();
-                    if (that._offsetStart <= 0) {
+                    if (that.offsetStart <= 0) {
                         that.ui.topArea.addClass('hidden');
                     } else {
                         that.ui.topArea.removeClass('hidden');
                     }
 
-                    if (that._offsetEnd >= (numMessages - 1)) {
+                    if (that.offsetEnd >= (numMessages - 1)) {
                         that.ui.bottomArea.addClass('hidden');
                     } else {
                         that.ui.bottomArea.removeClass('hidden');
@@ -908,15 +922,15 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
             getNextMessagesRequestedOffsets: function () {
                 var retval = {};
 
-                retval['offsetEnd'] = this._offsetEnd + MORE_PAGES_NUMBER;
+                retval['offsetEnd'] = this.offsetEnd + MORE_PAGES_NUMBER;
 
-                if ((retval['offsetEnd'] - this._offsetStart) > MAX_MESSAGES_IN_DISPLAY) {
-                    retval['offsetStart'] = this._offsetStart + ((retval['offsetEnd'] - this._offsetStart) - MAX_MESSAGES_IN_DISPLAY)
+                if ((retval['offsetEnd'] - this.offsetStart) > MAX_MESSAGES_IN_DISPLAY) {
+                    retval['offsetStart'] = this.offsetStart + ((retval['offsetEnd'] - this.offsetStart) - MAX_MESSAGES_IN_DISPLAY)
                 }
                 else {
-                    retval['offsetStart'] = this._offsetStart;
+                    retval['offsetStart'] = this.offsetStart;
                 }
-                retval['scrollTransitionWasAtOffset'] = this._offsetEnd;
+                retval['scrollTransitionWasAtOffset'] = this.offsetEnd;
                 return retval;
             },
 
@@ -928,19 +942,19 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 var messagesInDisplay,
                     retval = {};
 
-                retval['offsetStart'] = this._offsetStart - MORE_PAGES_NUMBER;
+                retval['offsetStart'] = this.offsetStart - MORE_PAGES_NUMBER;
                 if (retval['offsetStart'] < 0) {
                     retval['offsetStart'] = 0;
                 }
 
 
-                if (this._offsetEnd - retval['offsetStart'] > MAX_MESSAGES_IN_DISPLAY) {
-                    retval['offsetEnd'] = this._offsetEnd - ((this._offsetEnd - retval['offsetStart']) - MAX_MESSAGES_IN_DISPLAY)
+                if (this.offsetEnd - retval['offsetStart'] > MAX_MESSAGES_IN_DISPLAY) {
+                    retval['offsetEnd'] = this.offsetEnd - ((this.offsetEnd - retval['offsetStart']) - MAX_MESSAGES_IN_DISPLAY)
                 }
                 else {
-                    retval['offsetEnd'] = this._offsetEnd;
+                    retval['offsetEnd'] = this.offsetEnd;
                 }
-                retval['scrollTransitionWasAtOffset'] = this._offsetStart;
+                retval['scrollTransitionWasAtOffset'] = this.offsetStart;
                 return retval;
             },
 
@@ -1205,12 +1219,12 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 var that = this,
                     html = "";
 
-                html += '<span class="dropdown-label">';
+                html += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">';
                 html += this.defaultMessageStyle.label;
-                html += '<i class="icon-arrowdown"></i></span>';
-                html += '<ul class="dropdown-list">';
+                html += '<span class="icon-arrowdown"></span></a>';
+                html += '<ul class="dropdown-menu">';
                 _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function (messageViewStyle) {
-                    html += '<li class="' + that.getMessageViewStyleCssClass(messageViewStyle) + ' dropdown-listitem">' + messageViewStyle.label + '</li>';
+                    html += '<li><a class="' + that.getMessageViewStyleCssClass(messageViewStyle) + '">' + messageViewStyle.label + '</a></li>';
                 });
                 html += '</ul>';
                 this.ui.defaultMessageViewDropdown.html(html);
@@ -1223,12 +1237,12 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 var that = this,
                     html = "";
 
-                html += '<span class="dropdown-label">';
+                html += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">';
                 html += this.currentViewStyle.label;
-                html += '<i class="icon-arrowdown"></i></span>';
-                html += '<ul class="dropdown-list">';
+                html += '<span class="icon-arrowdown"></span></a>';
+                html += '<ul class="dropdown-menu">';
                 _.each(this.ViewStyles, function (messageListViewStyle) {
-                    html += '<li class="' + messageListViewStyle.css_class + ' dropdown-listitem">' + messageListViewStyle.label + '</li>';
+                    html += '<li><a class="' + messageListViewStyle.css_class + '">' + messageListViewStyle.label + '</a></li>';
                 });
                 html += '</ul>';
                 this.ui.viewStyleDropdown.html(html);
@@ -1318,7 +1332,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     current_message_info,
                     defer = $.Deferred(),
                     collectionManager = new CollectionManager(),
-                    debug=false;
+                    debug = false;
                 if (debug) {
                     console.log("getRenderedMessagesThreaded() num sibblings:", _.size(sibblings), "level:", level, "offsets", offsets);
                 }

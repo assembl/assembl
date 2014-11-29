@@ -29,33 +29,37 @@
 
 {% macro menuAction() -%}
    <div class="message-menu">
-     <div class="dropdown mrxl mtxs">
-       <span class="dropdown-label">{{ gettext('More options') }}&nbsp;<i class="icon-arrowdown"></i></span>
-       <ul class="dropdown-list dropdown-list--bottomright">
-         <% if (user_is_connected){ %>
-           <% if (read){ %>
-             <li class="js_message-markasunread dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as unread') }}</li>
-           <% } else { %>
-             <li class="js_message-markasread dropdown-listitem"><a class="iconbutton"></a> {{ gettext('Mark as read') }}</li>
-           <% } %>
-         <% } %>
+     <ul class="pan man">
+			<li class="dropdown mrxl mtxs">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					{{ gettext('More options') }}
+					<span class="icon-arrowdown"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<% if (user_is_connected){ %>
+						 <% if (read){ %>
+							 <li><a href="#" class="js_message-markasunread dropdown-listitem">{{ gettext('Mark as unread') }}</a></li>
+						 <% } else { %>
+							 <li><a href="#" class="js_message-markasread dropdown-listitem">{{ gettext('Mark as read') }}</a></li>
+						 <% } %>
+					<% } %>
 
-         <% if( isHoisted == true ){ %>
-           <li class="dropdown-listitem message-hoistbtn" data-id="<%= escape(id) %>"><a class="iconbutton icon-upload"></a> {{gettext('Go back to the entire topic thread')}}</li>
-         <% } else { %>
-           <li class="dropdown-listitem message-hoistbtn" data-id="<%= escape(id) %>"><a class="iconbutton icon-download"></a> {{gettext('Show only this message and its replies')}}</li>
-         <% } %>
+          <% if( isHoisted == true ){ %>
+            <li><a href="#" class="message-hoistbtn" data-id="<%= escape(id) %>">{{gettext('Go back to the entire topic thread')}}</a></li>
+          <% } else { %>
+            <li><a href="#" class="message-hoistbtn" data-id="<%= escape(id) %>">{{gettext('Show only this message and its replies')}}</a></li>
+          <% } %>
 
-         <li class="dropdown-listitem message-linkbutton" data-copy-text="/posts/<%= escape(id) %>"><a class="iconbutton icon-link"></a> {{gettext('Copy the link to share this message')}}</li>
+          <li><a href="#" class="message-linkbutton" data-copy-text="/posts/<%= escape(id) %>">{{gettext('Copy the link to share this message')}}</a></li>
 
-         <% if (creator.get('email')) { %>
-         <li class="dropdown-listitem">
-           <a title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>"><i class="iconbutton icon-mail"></i>
-           {{gettext('Send an email to this user')}}</a>
-         </li>
-         <% } %>
-       </ul>
-     </div>
+					<% if (creator.get('email')) { %>
+					<li><a title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>">{{gettext('Send an email to this user')}}</a></li>
+					<% } %>
+				</ul>
+			</li>
+		 </ul>
+
+
    </div>
 {%- endmacro %}
 

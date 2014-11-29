@@ -10,10 +10,10 @@
 </div>
 <div class="navbar-left">
     <a href="/" class="assembl-logo" class="sign-in">Assembl <i class="icon-infinite"></i></a>
-    <!--<span id="onlinedot">
+    <span id="onlinedot" class="onlinedot">
         <small class="dot-offline">&nbsp;&nbsp;&nbsp;{{ gettext('Connecting...') }}</small>
         <span class="dot-online theme_navbarDebateName"><span class="breadcrumb-level-indicator"></span> <span class="debate-icon icon-discuss"></span> {{ discussion.topic }}</span>
-    </span>-->
+    </span>
 </div>
 <div class="navbar-right">
   <div>
@@ -31,75 +31,63 @@
       {% endif %}
     </div>
     <div class="dispib">
-      <div class="connexion">
-        {% if user %}
-          
-          <div class="dropdown vam" style="height: 22px; /* why do I have to do this? */">
-              <div class="dropdown-label">
-                  <span class="avatar img-rounded fl">
-                    <img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
-                  </span>
-                  <span class="mlxs">{{ user.display_name() }}</span>
-                  <span class="dropdown-arrow icon-arrowdown"></span>
-              </div>
-              <ul class="dropdown-list dropdown-list--bottomright">
-                  {% if user_profile_edit_url %}
-                      <li class="dropdown-listitem">
-                          <a href="{{ user_profile_edit_url }}"><span class="icon-options mrs"></span>{{ gettext('Edit your profile') }}</a>
-                      </li>
-                  {% endif %}
-                  <li class="dropdown-listitem">
-                      <a href="<%= urlNotifications() %>"><i class="icon-bell mrs"></i>{{ gettext('notifications') }}</a>
-                  </li>
-                  <li class="dropdown-listitem">
-                      <a href="<%= urlLogOut() %>" class="sign-out"><span class="icon-logout mrs"></span>{{ gettext('Sign out') }}</a>
-                  </li>
-              </ul>
-          </div>
-          <div class="nav-notification dispib mhxs">
-            <div class="dropdown">
-                <div class="dropdown-label">
-                    <span class="dropdown-arrow icon-bell"></span>
-                    <span class="ui-label-content hidden">
-                      <span class="ui-label">10</span>
-                    </span>
-                </div>
-                <ul class="dropdown-list dropdown-list--bottomright">
-                    <li class="dropdown-listitem">
-                         <!-- TODO: loop in notifications array -->
-                    </li>
-                    <li class="dropdown-listitem">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </li>
-                    <li class="dropdown-listitem">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </li>
-                </ul>
-            </div>
-          </div>
-          {% else %}
-              {% if request.current_route_path() != "/login" %}
-                  {% if request.current_route_path() != "/register" %}
-                      <a href="/login?next_view={{request.current_route_path()}}" class="btn btn-default btn-xs">{{ gettext('Sign in') }}</a>
-                  {% endif %}
-              {% endif %}
-          {% endif %}
+      <ul class="connexion">
+      {% if user %}
+      	<li class="dropdown fl mll">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <span class="avatar img-rounded fl mtxs">
+							<img height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
+						</span>
+						<span class="mlxs">{{ user.display_name() }}</span>
+						<span class="icon-arrowdown"></span>
+					</a>
+					<ul class="dropdown-menu">
+						{% if user_profile_edit_url %}
+					    <li><a href="{{ user_profile_edit_url }}">{{ gettext('Edit your profile') }}</a></li>
+						{% endif %}
+						<li><a href="<%= urlNotifications() %>">{{ gettext('notifications') }}</a></li>
+            <li><a href="<%= urlLogOut() %>" class="sign-out">{{ gettext('Sign out') }}</a></li>
+					</ul>
+      	</li>
+      	{# User notifications
+      	<li class="dropdown fl mll">
+      	  <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      	  	<span class="dropdown-arrow icon-bell"></span>
+						<span class="icon-arrowdown"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="#">Notification 1</a></li>
+						<li><a href="#">Notification 2</a></li>
+						<li><a href="#">Notification 3</a></li>
+					</ul>
+      	</li>
+      	#}
+			{% else %}
+			  {% if request.current_route_path() != "/login" %}
+          {% if request.current_route_path() != "/register" %}
+					<li class="fl mll">
+						<a href="/login?next_view={{request.current_route_path()}}" class="btn btn-default btn-xs">{{ gettext('Sign in') }}</a>
+					</li>
+					{% endif %}
+				{% endif %}
+			{% endif %}
+      	<li class="dropdown fl mll">
           {% if locales.__len__ > 1 %}
-              <div class="dropdown mlxs">
-                  <div class="dropdown-label">{{locale | upper}} <span class="dropdown-arrow icon-arrowdown"></span></div>
-                  <ul class="dropdown-list dropdown-list--bottomright locales">
-                      {% for loc in locales %}
-                          {% if (loc != locale) %}
-                              <li class="dropdown-listitem lang js_setLocale" data-locale='{{loc}}'>
-                              {{loc | upper}}
-                              </li>
-                          {% endif %}
-                      {% endfor %}
-                  </ul>
-              </div>
-          {% endif %}
-        </div>
-      </div>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+							{{locale | upper}}
+							<span class="icon-arrowdown"></span>
+						</a>
+						<ul class="dropdown-menu">
+							{% for loc in locales %}
+								{% if (loc != locale) %}
+								<li><a tabindex="-1" href="#" class="lang js_setLocale" data-locale='{{loc}}'>{{loc | upper}}</a></li>
+								{% endif %}
+							{% endfor %}
+						</ul>
+					{% endif %}
+      	</li>
+      </ul>
+    </div>
   </div>
 </div>
 

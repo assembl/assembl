@@ -34,7 +34,8 @@ var requirejs_config = {
         'jit': '../bower/jit/Jit/jit',
         'jed': '../bower/jed/jed',
         'd3': '../bower/d3/d3.min',
-        'bootstrap': '../lib/bootstrap'
+        'bootstrap': '../lib/bootstrap',
+        'dropdown': '../lib/dropdown'
     },
     shim: {
         'underscore': {
@@ -114,6 +115,9 @@ var requirejs_config = {
             deps: ['raven']
         },
         'jquery-autosize': {
+            deps: ['jquery']
+        },
+        'dropdown': {
             deps: ['jquery']
         }
     }
