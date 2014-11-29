@@ -449,6 +449,10 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                 }
 
             };
+
+            /**
+             * Returns a promise that will resolve to a list of id's
+             */
             this.getResultMessageIdCollectionPromise = function () {
                 var that = this,
                     deferred = $.Deferred();

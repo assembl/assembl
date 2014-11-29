@@ -75,7 +75,7 @@ define(['backbone.marionette', 'app', 'common/context', 'models/user', 'objects/
                     //We really need to address panels explicitely
                     Assembl.vent.trigger("navigation:selected", 'debate');
                     Assembl.vent.trigger('messageList:showMessageById', id);
-                }, 1000);
+                }, 0);
                 //TODO: fix this horrible hack that prevents calling
                 //showMessageById over and over.
                 window.history.pushState('object or string', 'Title', '../');
