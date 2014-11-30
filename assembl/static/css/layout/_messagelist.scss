@@ -70,7 +70,7 @@
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
     background-color: $white;
     .config {
-      li {
+      > li {
         list-style: none;
         a {
           text-decoration: none;
