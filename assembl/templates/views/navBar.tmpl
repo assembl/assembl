@@ -16,7 +16,6 @@
     </span>
 </div>
 <div class="navbar-right">
-  <div>
     <div class="dispib vat">
       {% if user %}
         <% if( _.isEmpty(Roles) && canSubscribeToDiscussion ){ %>
@@ -43,10 +42,10 @@
 					</a>
 					<ul class="dropdown-menu">
 						{% if user_profile_edit_url %}
-					    <li><a href="{{ user_profile_edit_url }}">{{ gettext('Edit your profile') }}</a></li>
+					    <li><a href="{{ user_profile_edit_url }}"><i class="icon-options"></i>{{ gettext('Edit your profile') }}</a></li>
 						{% endif %}
-						<li><a href="<%= urlNotifications() %>">{{ gettext('notifications') }}</a></li>
-            <li><a href="<%= urlLogOut() %>" class="sign-out">{{ gettext('Sign out') }}</a></li>
+						<li><a href="<%= urlNotifications() %>"><i class="icon-bell"></i>{{ gettext('notifications') }}</a></li>
+            <li><a href="<%= urlLogOut() %>" class="sign-out"><i class="icon-logout"></i>{{ gettext('Sign out') }}</a></li>
 					</ul>
       	</li>
       	{# User notifications
@@ -90,6 +89,5 @@
       	</li>
       </ul>
     </div>
-  </div>
 </div>
 
