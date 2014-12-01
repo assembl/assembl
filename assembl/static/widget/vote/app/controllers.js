@@ -815,6 +815,12 @@ voteApp.controller('indexCtl',
     };
 
     $scope.drawUI = function(){
+      // set a background color
+      if ( $scope.settings.background )
+      {
+        $("body").css("background", $scope.settings.background);
+      }
+
       // display the UI in a table of classic way depending on the settings
 
       if ( $scope.settings.displayStyle && $scope.settings.displayStyle == "table" )
@@ -825,6 +831,8 @@ voteApp.controller('indexCtl',
       {
         $scope.drawUIWithoutTable();
       }
+      if ( window.parent && window.parent.resizeIframe )
+        window.parent.resizeIframe();
     };
 
     $scope.computeMyVotes = function(){

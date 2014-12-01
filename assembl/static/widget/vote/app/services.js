@@ -36,6 +36,12 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
         "classic": "classic",
         "table": "table"
       }
+    },
+    {
+      "key": "background",
+      "type": "text",
+      "description": "Color or effect (CSS style) for the background of the page",
+      "defaultAdmin":"#F2ECF8"
     }
   ];
 

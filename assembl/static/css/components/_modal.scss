@@ -12,6 +12,10 @@
   overflow-y: scroll;
 }
 
+.popin-without-footer .popin-footer {
+  display: none;
+}
+
 .popin-wrapper * {
   @include box-sizing(border-box);
 }
