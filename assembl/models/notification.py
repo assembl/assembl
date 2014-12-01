@@ -298,6 +298,10 @@ class NotificationSubscriptionGlobal(NotificationSubscription):
         'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_DISCUSSION
     }
 
+    def wouldCreateNotification(self, discussion_id, verb, object):
+        discussion = Discussion.get(object.get_discussion_id())
+        return discussion_id == object.get_discussion_id() and discussion in self.user.participant_in_discussion
+    
     def followed_object(self):
         pass
 
@@ -444,7 +448,8 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
         return gettext("A periodic synthesis of the discussion is posted by the moderator")
 
     def wouldCreateNotification(self, discussion_id, verb, object):
-        return (verb == CrudVerbs.CREATE) and isinstance(object, SynthesisPost) and discussion_id == object.get_discussion_id()
+        parentWouldCreate = super(NotificationSubscriptionFollowSyntheses, self).wouldCreateNotification(discussion_id, verb, object)
+        return parentWouldCreate and (verb == CrudVerbs.CREATE) and isinstance(object, SynthesisPost) and discussion_id == object.get_discussion_id()
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         from ..tasks.notify import notify
@@ -471,7 +476,8 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
         return _("Any message is posted to the discussion")
     
     def wouldCreateNotification(self, discussion_id, verb, object):
-        return (verb == CrudVerbs.CREATE) and isinstance(object, Post) and discussion_id == object.get_discussion_id()
+        parentWouldCreate = super(NotificationSubscriptionFollowAllMessages, self).wouldCreateNotification(discussion_id, verb, object)
+        return parentWouldCreate and (verb == CrudVerbs.CREATE) and isinstance(object, Post) and discussion_id == object.get_discussion_id()
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
@@ -499,7 +505,9 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
         return _("Someone directly responds to any message you posted")
     
     def wouldCreateNotification(self, discussion_id, verb, object):
-        return ( (verb == CrudVerbs.CREATE)
+        parentWouldCreate = super(NotificationSubscriptionFollowOwnMessageDirectReplies, self).wouldCreateNotification(discussion_id, verb, object)
+        return ( parentWouldCreate
+                 and (verb == CrudVerbs.CREATE)
                  and isinstance(object, Post)
                  and discussion_id == object.get_discussion_id()
                  and object.parent is not None

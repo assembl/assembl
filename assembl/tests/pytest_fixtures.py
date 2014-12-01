@@ -181,13 +181,14 @@ def test_server(request, test_app):
 
 
 @pytest.fixture(scope="function")
-def participant1_user(request, test_session):
+def participant1_user(request, test_session, discussion):
     from assembl.models import User, UserRole, Role
     u = User(name=u"A. Barking Loon", type="user")
     test_session.add(u)
     r = Role.get_role(test_session, R_PARTICIPANT)
     ur = UserRole(user=u, role=r)
     test_session.add(ur)
+    u.subscribe(discussion)
     test_session.flush()
 
     def fin():

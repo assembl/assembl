@@ -523,8 +523,11 @@ class User(AgentProfile):
             LocalUserRole.user_id == self.id,
             Role.name == role,
             LocalUserRole.discussion_id == discussion.id).all()
+        print "ZZZZ"
+        print repr(existing)
         if existing:
             for lur in existing:
+                print "deleting" + repr(lur)
                 self.db.delete(lur)
 
     @classmethod
