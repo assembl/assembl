@@ -752,7 +752,7 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
 
             // we assume that server datetimes are given in UTC format
             // (Right now, the server gives UTC datetimes but is not explicit enough because it does not append "+0000". So Moment thinks that the date is not in UTC but in user's timezone. So we have to tell it explicitly, using .utc())
-            var momentDate = moment.utc(date);
+            var momentDate = Moment.utc(date);
             momentDate.local(); // switch off UTC mode, which had been activated using .utc()
 
             if (momentDate) {
@@ -762,7 +762,7 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
                     else
                         return momentDate.format('LL');
                 }
-                var one_year_ago = moment().subtract('years', 1);
+                var one_year_ago = Moment().subtract(1, 'years');
                 if (momentDate.isBefore(one_year_ago)) { // show the exact date
                     return momentDate.format('L');
                 }
@@ -1102,7 +1102,7 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
          */
         init: function () {
             //this.loadCurrentUser();
-            Moment.lang(assembl_locale);
+            Moment.locale(assembl_locale);
 
             $(document.body).removeClass('preload');
             this.__createAnnotatorSelectionTooltipDiv();
