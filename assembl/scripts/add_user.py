@@ -10,7 +10,6 @@ from ..lib.sqla import configure_engine
 from ..lib.zmqlib import configure_zmq
 from ..lib.model_watcher import configure_model_watcher
 from ..lib.config import set_config
-from ..auth.util import add_user
 
 global all_roles
 
@@ -56,6 +55,7 @@ def main():
     configure_model_watcher(env['registry'], 'assembl')
     engine = configure_engine(settings, True)
     from assembl.models import Role
+    from assembl.auth.util import add_user
     all_roles = {r.name: r for r in Role.db.query(Role).all()}
     if args.f:
         userinfo = load(args.f)
