@@ -176,11 +176,11 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     return default_value;
   };
 
-  this.putJson = function(endpoint, post_data, result_holder){
+  this.sendJson = function(method, endpoint, post_data, result_holder){
     console.log("putJson()");
 
     $http({
-        method: 'PUT',
+        method: method,
         url: endpoint,
         data: post_data,
         //data: $.param(post_data),
@@ -207,6 +207,14 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
         console.log("headers:");
         console.log(headers);
     });
+  };
+
+  this.putJson = function(endpoint, post_data, result_holder){
+    this.sendJson('PUT', endpoint, post_data, result_holder);
+  };
+
+  this.postJson = function(endpoint, post_data, result_holder){
+    this.sendJson('POST', endpoint, post_data, result_holder);
   };
 
 }]);

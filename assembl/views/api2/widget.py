@@ -281,6 +281,21 @@ def delete_vote_votable(request):
     return HTTPOk()
 
 
+# Called using PUT http://localhost:6543/data/Discussion/1/widgets/45/targets/
+# So we have to PUT into "targets" instead of "votable_ideas"
+# (which is the collection used below) => FIXME: solve this strange thing
+@view_config(
+    context=CollectionContext, request_method="PUT", 
+    ctx_named_collection="VotableCollection.votable_ideas",
+    permission=P_ADMIN_DISC, header=JSON_HEADER)
+def set_vote_votables(request):
+    ctx = request.context
+    widget = ctx.parent_instance
+    ideas = [Idea.get_instance(idea['@id']) for idea in request.json]
+    widget.set_votables(ideas)
+    return HTTPOk()
+
+
 @view_config(
     context=CollectionContext, request_method="PUT", 
     ctx_named_collection="CriterionCollection.criteria",

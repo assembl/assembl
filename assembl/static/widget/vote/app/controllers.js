@@ -176,11 +176,7 @@ voteApp.controller('adminConfigureInstanceSetVotableIdeasCtl',
 
   $scope.updateOnceWidgetIsReceived = function(){
     $scope.discussion_uri = $scope.widget.discussion;
-
-    // FIXME: does not work => works on GET, but error 404 on PUT
     $scope.votable_ideas_url = $scope.widget.votables_url;
-    // does not work either
-    //$scope.votable_ideas_url = $scope.widget_endpoint + "/votable_ideas";
     
 
     console.log("$scope.widget.votable_ideas_url: ", $scope.widget.votable_ideas_url);
