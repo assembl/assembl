@@ -1,4 +1,6 @@
-import json
+import simplejson as json
+
+from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid
@@ -10,9 +12,14 @@ from assembl.models import (
 from .. import get_default_context
 from assembl.models.mail import IMAPMailbox, MailingList
 from assembl.auth import (
-    R_SYSADMIN, SYSTEM_ROLES, P_SYSADMIN, P_ADMIN_DISC, Everyone)
+    R_PARTICIPANT, R_SYSADMIN, R_ADMINISTRATOR, SYSTEM_ROLES,
+    P_SYSADMIN, P_ADMIN_DISC, Everyone)
+from assembl.auth.util import add_multiple_users_csv, user_has_permission
 from assembl.models.auth import (
     create_default_permissions, User, Username, AgentProfile)
+
+
+_ = TranslationStringFactory('assembl')
 
 
 @view_config(route_name='discussion_admin', permission=P_SYSADMIN)
@@ -119,6 +126,7 @@ def discussion_permissions(request):
     db = Discussion.db()
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
+    error=''
 
     if not discussion:
         raise HTTPNotFound("Discussion with id '%d' not found." % (
@@ -144,6 +152,7 @@ def discussion_permissions(request):
     local_roles_dict = {(lur.user.id, lur.role.name): lur
                         for lur in local_roles}
     users = set(lur.user for lur in local_roles)
+    num_users = ''
 
     if request.POST:
         if 'submit_role_permissions' in request.POST:
@@ -217,6 +226,20 @@ def discussion_permissions(request):
                 | Username.username.ilike(search_string)
                 | User.preferred_email.ilike(search_string)).all()
             users.update(other_users)
+        elif 'submit_user_file' in request.POST:
+            role = request.POST['add_with_role'] or R_PARTICIPANT
+            if role == R_SYSADMIN and not user_has_permission(
+                    discussion_id, user_id, P_SYSADMIN):
+                role = R_ADMINISTRATOR
+            if 'user_csvfile' in request.POST:
+                try:
+                    num_users = add_multiple_users_csv(
+                        request.POST['user_csvfile'].file, discussion_id, role,
+                        request.localizer)
+                except Exception as e:
+                    error = repr(e)
+            else:
+                error = request.localizer.translate(_('No file given.'))
 
     def allowed(role, permission):
         if role == R_SYSADMIN:
@@ -233,6 +256,8 @@ def discussion_permissions(request):
         roles=role_names,
         permissions=permission_names,
         users=users,
+        error=error,
+        num_users=num_users,
         has_local_role=has_local_role,
         is_system_role=lambda r: r in SYSTEM_ROLES
     )
