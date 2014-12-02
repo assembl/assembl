@@ -1120,7 +1120,10 @@ def ensure_virtuoso_not_running():
 def virtuoso_reconstruct_save_db():
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
-        run('%s +backup-dump +foreground' % (get_virtuoso_exec()))
+        backup = run('%s +backup-dump +foreground' % (get_virtuoso_exec(),), quiet=True)
+        if backup.failed:
+            print "ERROR: Normal backup failed."
+            run('%s +crash-dump +foreground' % (get_virtuoso_exec(),))
 
 
 @task
@@ -1130,7 +1133,7 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
         run('mv virtuoso.db virtuoso_backup.db')
     trflag = '+log6' if transition_6_to_7 else ''
     with cd(virtuoso_db_directory()):
-        r = run('%s +restore-crash-dump +foreground' % (
+        r = run('%s +restore-crash-dump +foreground %s' % (
                 get_virtuoso_exec(), trflag), timeout=30)
     execute(supervisor_process_start, 'virtuoso')
     with cd(virtuoso_db_directory()):
