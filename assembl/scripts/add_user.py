@@ -2,15 +2,15 @@ import argparse
 from getpass import getpass, getuser
 import re
 from json import load
-from datetime import datetime
 
 from pyramid.paster import get_appsettings, bootstrap
 import transaction
 
-from ..lib.sqla import configure_engine, mark_changed
+from ..lib.sqla import configure_engine
 from ..lib.zmqlib import configure_zmq
 from ..lib.model_watcher import configure_model_watcher
 from ..lib.config import set_config
+from ..auth.util import add_user
 
 global all_roles
 
@@ -26,97 +26,6 @@ def validate_dict(d):
     if 'localrole' in d:
         assert d['localrole'] in all_roles,\
             "Role %s does not exist" % (d['localrole'],)
-
-
-def add_user(name, email, password, role, force=False, username=None,
-             localrole=None, discussion=None, **kwargs):
-    from assembl.models import (
-        Role, UserRole, LocalUserRole, EmailAccount, Discussion, Username,
-        AgentProfile, User)
-    db = Discussion.db()
-    # refetch within transaction
-    all_roles = {r.name: r for r in Role.db.query(Role).all()}
-    user = None
-    if discussion and localrole:
-        discussion_ob = db.query(Discussion).filter_by(slug=discussion).first()
-        assert discussion_ob,\
-            "Discussion with slug %s does not exist" % (discussion,)
-        discussion = discussion_ob
-    existing_email = db.query(EmailAccount).filter(
-        EmailAccount.email == email).first()
-    assert force or not existing_email,\
-        "User with email %s already exists" % (email,)
-    if username:
-        existing_username = db.query(Username).filter_by(
-            username=username).first()
-        assert force or not existing_username,\
-            "User with username %s already exists" % (username,)
-        assert not existing_email or not existing_username or \
-            existing_username.user == existing_email.profile,\
-            "Two different users already exist with "\
-            "username %s and email %s." % (username, email)
-    if existing_email:
-        user = existing_email.profile
-    elif username and existing_username:
-        user = existing_username.user
-    old_user = isinstance(user, User)
-    if old_user:
-        user.preferred_email = email
-        user.name = name
-        user.verified = True
-        user.set_password(password)
-        if username:
-            if user.username:
-                user.username.username = username
-            else:
-                db.add(Username(username=username, user=user))
-    else:
-        if user:
-            # Profile may have come from userless existing AgentProfile
-            user = User(
-                    id = user.id,
-                    preferred_email=email,
-                    verified=True,
-                    password=password,
-                    creation_date=datetime.now())
-        else:
-            user = User(
-                name=name,
-                preferred_email=email,
-                verified=True,
-                password=password,
-                creation_date=datetime.now())
-        db.add(user)
-        if username:
-            db.add(Username(username=username, user=user))
-    for account in user.accounts:
-        if isinstance(account, EmailAccount) and account.email == email:
-            account.verified = True
-            account.preferred = True
-            break
-    else:
-        account = EmailAccount(
-            profile=user,
-            email=email,
-            preferred=True,
-            verified=True)
-        db.add(account)
-    if role:
-        role = all_roles[role]
-        ur = None
-        if old_user:
-            ur = db.query(UserRole).filter_by(user=user, role=role).first()
-        if not ur:
-            db.add(UserRole(user=user, role=role))
-    if localrole:
-        localrole = all_roles[localrole]
-        lur = None
-        if old_user:
-            lur = db.query(LocalUserRole).filter_by(
-                user=user, discussion=discussion, role=role).first()
-        if not lur:
-            db.add(LocalUserRole(
-                user=user, role=localrole, discussion=discussion))
 
 
 def main():

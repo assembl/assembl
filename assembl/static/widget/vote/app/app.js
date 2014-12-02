@@ -13,6 +13,10 @@ voteApp.config(['$routeProvider', function($routeProvider){
            templateUrl:'app/partials/voted.html',
            controller:'votedCtl'
         }).
+        when('/results', {
+           templateUrl:'app/partials/results.html',
+           controller:'resultsCtl'
+        }).
         when('/admin', {
            templateUrl:'app/partials/admin.html',
            controller:'adminCtl'

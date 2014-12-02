@@ -1128,32 +1128,32 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 var period_type = 'last week';
                 if (number_of_days <= 7) {
                     period_type = 'last week';
-                    date_min_moment = date_max_moment.subtract('days', 7);
+                    date_min_moment = date_max_moment.subtract(7, 'days');
                     date_min = date_min_moment.toDate();
                 }
                 if (number_of_days <= 14) {
                     period_type = 'last 2 weeks';
-                    date_min_moment = date_max_moment.subtract('days', 14);
+                    date_min_moment = date_max_moment.subtract(14, 'days');
                     date_min = date_min_moment.toDate();
                 }
                 else if (number_of_days <= 31) {
                     period_type = 'last month';
-                    date_min_moment = date_max_moment.subtract('months', 1);
+                    date_min_moment = date_max_moment.subtract(1, 'months');
                     date_min = date_min_moment.toDate();
                 }
                 else if (number_of_days <= (31 + 30 + 30)) {
                     period_type = 'last 3 months';
-                    date_min_moment = date_max_moment.subtract('months', 3);
+                    date_min_moment = date_max_moment.subtract(3, 'months');
                     date_min = date_min_moment.toDate();
                 }
                 else if (number_of_days <= (31 + 30) * 3) {
                     period_type = 'last 6 months';
-                    date_min_moment = date_max_moment.subtract('months', 6);
+                    date_min_moment = date_max_moment.subtract(6, 'months');
                     date_min = date_min_moment.toDate();
                 }
                 else {
                     period_type = 'last year';
-                    date_min_moment = date_max_moment.subtract('years', 1);
+                    date_min_moment = date_max_moment.subtract(1, 'years');
                     date_min = date_min_moment.toDate();
                 }
                 // console.log("period_type:");

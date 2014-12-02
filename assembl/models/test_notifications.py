@@ -74,7 +74,7 @@ def test_notification_follow_all_messages(test_session,
     dispatcher = ModelEventWatcherNotificationSubscriptionDispatcher()
     dispatcher.processPostCreated(reply_post_2.id)
     notification_count = test_session.query(Notification).count() 
-    assert notification_count == initial_notification_count + 1
+    assert notification_count == initial_notification_count + 1, "A new post should have been caught"
     
     #Check that subclasses are still caught
     dispatcher.processPostCreated(synthesis_post_1.id)
@@ -85,7 +85,34 @@ def test_notification_follow_all_messages(test_session,
     dispatcher.processPostCreated(discussion2_root_post_1.id)
     notification_count = test_session.query(Notification).count() 
     assert notification_count == initial_notification_count + 2, "A post from another discussion should NOT have been caught"
+
+#Tests in test_auth.py must be fixed first
+@pytest.mark.xfail
+def test_users_not_subscribed_to_discussion(test_session, 
+        discussion, participant1_user, reply_post_2, test_app, root_post_1, synthesis_post_1, discussion2_root_post_1):
     
+    test_session.flush()
+    subscription = NotificationSubscriptionFollowAllMessages(
+        discussion=discussion,
+        user=participant1_user,
+        creation_origin = NotificationCreationOrigin.USER_REQUESTED,
+       )
+    test_session.add(subscription)
+    
+    initial_notification_count = test_session.query(Notification).count() 
+    dispatcher = ModelEventWatcherNotificationSubscriptionDispatcher()
+    dispatcher.processPostCreated(reply_post_2.id)
+    notification_count = test_session.query(Notification).count() 
+    assert notification_count == initial_notification_count + 1, "A new post should have been caught"
+
+    #Smoke test that unsubscribing from a discussion does inhibit notifications
+    participant1_user.unsubscribe(discussion)
+    test_session.flush()
+    dispatcher.processPostCreated(reply_post_2.id)
+    notification_count = test_session.query(Notification).count() 
+    assert notification_count == initial_notification_count + 1, "The user should NOT receive notification if not subscribed to the discussion"
+    participant1_user.subscribe(discussion)
+
 def test_notification_follow_direct_replies(test_session, 
         discussion, participant1_user,  participant2_user, root_post_1, reply_post_1, reply_post_2, test_app):
     #Note:  

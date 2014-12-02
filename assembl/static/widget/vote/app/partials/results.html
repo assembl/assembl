@@ -1,0 +1,18 @@
+<!--
+In Firefox 29, when we make changes to this page and refresh, the old version is displayed in the browser.
+We have to clear the cache or force refresh of the exact URL of this template page in order to show it correctly.
+-->
+
+<div id="index" ng-controller="resultsCtl" ng-init="init()">
+    <h1>Vote results</h1>
+
+     <ul>
+        <li>
+            <a href="{{ vote_count_endpoint }}">Number of voters</a>
+        </li>
+        <li>
+            <a href="{{ vote_results_endpoint }}">Average grade for each criterion</a>
+        </li>
+    </ul>
+
+</div>

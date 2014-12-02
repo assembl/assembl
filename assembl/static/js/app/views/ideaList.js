@@ -8,26 +8,16 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
 
         var IdeaList = AssemblPanel.extend({
+            template: '#tmpl-ideaList',
             panelType: PanelSpecTypes.TABLE_OF_IDEAS,
             className: 'ideaList',
-            /**
-             * The filter applied to the idea list
-             * @type {string}
-             */
-            filter: null,
-
-            /**
-             * The collapse/expand flag
-             * @type {Boolean}
-             */
-            collapsed: false,
-
-            /**
-             * The tempate
-             * @type {_.template}
-             */
-            template: Ctx.loadTemplate('ideaList'),
-
+            regions: {
+                ideaView: '.ideaView',
+                otherView: '.otherView',
+                synthesisView: '.synthesisView',
+                orphanView: '.orphanView',
+                allMessagesView: '.allMessagesView'
+            },
             /**
              * .panel-body
              */
@@ -41,15 +31,11 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             minWidth: 320,
             gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
 
-            /**
-             * @init
-             */
             initialize: function (options) {
                 var that = this,
                     collectionManager = new CollectionManager();
 
                 this.groupContent = options.groupContent;
-                this.nav = options.nav;
 
                 collectionManager.getAllIdeasCollectionPromise().done(
                     function (allIdeasCollection) {
@@ -83,9 +69,6 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
             },
 
-            /**
-             * The events
-             */
             'events': {
                 'click .panel-body': 'onPanelBodyClick',
                 'dragover .panel-bodyabove': 'onAboveDragOver',
@@ -102,14 +85,17 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 'click #ideaList-filterByToc': 'clearFilter'
             },
 
+            serializeData: function () {
+                return {
+                    canAdd: Ctx.getCurrentUser().can(Permissions.ADD_IDEA)
+                }
+            },
+
             getTitle: function () {
                 return i18n.gettext('Debate');
             },
 
-            /**
-             * The render
-             */
-            render: function () {
+            onRender: function () {
                 if (Ctx.debugRender) {
                     console.log("ideaList:render() is firing");
                 }
@@ -169,52 +155,37 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                             }, view_data);
                             list.appendChild(ideaView.render().el);
                         });
+                        that.$('.ideaView').append(list);
 
                         //sub menu other
                         var OtherView = new OtherInIdeaListView({
                             model: rootIdea
                         });
-                        list.appendChild(OtherView.render().el);
+                        that.otherView.show(OtherView);
 
                         // Synthesis posts pseudo-idea
                         var synthesisView = new SynthesisInIdeaListView({
                             model: rootIdea, groupContent: that.groupContent
                         });
-                        list.appendChild(synthesisView.render().el);
+                        that.synthesisView.show(synthesisView);
 
                         // Orphan messages pseudo-idea
                         var orphanView = new OrphanMessagesInIdeaListView({
                             model: rootIdea, groupContent: that.groupContent
                         });
-                        list.appendChild(orphanView.render().el);
+                        that.orphanView.show(orphanView);
 
                         // All posts pseudo-idea
                         var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
                             model: rootIdea, groupContent: that.groupContent
                         });
-                        list.appendChild(allMessagesInIdeaListView.render().el);
+                        that.allMessagesView.show(allMessagesInIdeaListView);
 
-                        var data = {
-                            tocTotal: allIdeasCollection.length - 1,//We don't count the root idea
-                            featuredTotal: allIdeasCollection.where({featured: true}).length,
-                            synthesisTotal: allIdeasCollection.where({inNextSynthesis: true}).length,
-                            canAdd: Ctx.getCurrentUser().can(Permissions.ADD_IDEA)
-                        };
-
-                        data.title = data.tocTitle;
-                        data.collapsed = that.collapsed;
-                        data.nav = that.nav;
-
-                        data.filter = that.filter;
-                        that.$el.html(that.template(data));
                         Ctx.initTooltips(that.$el);
-
-                        that.$('.idealist').append(list);
 
                         that.body = that.$('.panel-body');
                         that.body.get(0).scrollTop = y;
                     });
-                return this;
             },
 
             /**

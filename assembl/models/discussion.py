@@ -322,6 +322,7 @@ class Discussion(DiscussionBoundBase):
             & (LocalUserRole.requested == 0)),
         backref="involved_in_discussion")
 
+    #The list of praticipants actually subscribed to the discussion
     simple_participants = relationship(
         User, viewonly=True,
         secondary=join(LocalUserRole, Role,

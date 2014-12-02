@@ -176,11 +176,7 @@ voteApp.controller('adminConfigureInstanceSetVotableIdeasCtl',
 
   $scope.updateOnceWidgetIsReceived = function(){
     $scope.discussion_uri = $scope.widget.discussion;
-
-    // FIXME: does not work => works on GET, but error 404 on PUT
     $scope.votable_ideas_url = $scope.widget.votables_url;
-    // does not work either
-    //$scope.votable_ideas_url = $scope.widget_endpoint + "/votable_ideas";
     
 
     console.log("$scope.widget.votable_ideas_url: ", $scope.widget.votable_ideas_url);
@@ -721,6 +717,44 @@ voteApp.controller('votedCtl',
 
 }]);
 
+voteApp.controller('resultsCtl',
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService){
+
+    // intialization code (constructor)
+
+    $scope.init = function(){
+      console.log("resultsCtl::init()");
+
+      console.log("configService:");
+      console.log(configService);
+      $scope.settings = configService.settings;
+      console.log("settings 0:");
+      console.log($scope.settings);
+
+
+      // check that the user is logged in
+      if ( !configService.user || !configService.user.verified )
+      {
+        alert('You have to be authenticated to vote. Please log in and try again.');
+        window.location.assign("/login");
+        return;
+      }
+      $scope.user = configService.user;
+      
+
+      // TODO (when the API is implemented): check that the user has the right to participate in this vote
+
+      $scope.vote_results_uri = configService.vote_results_url;
+      $scope.vote_count_uri = configService.vote_count_url;
+
+      $scope.vote_results_endpoint = AssemblToolsService.resourceToUrl($scope.vote_results_uri);
+      $scope.vote_count_endpoint = AssemblToolsService.resourceToUrl($scope.vote_count_uri);
+
+    };
+
+}]);
+
 voteApp.controller('indexCtl',
   ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService',
   function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService){
@@ -815,6 +849,12 @@ voteApp.controller('indexCtl',
     };
 
     $scope.drawUI = function(){
+      // set a background color
+      if ( $scope.settings.background )
+      {
+        $("body").css("background", $scope.settings.background);
+      }
+
       // display the UI in a table of classic way depending on the settings
 
       if ( $scope.settings.displayStyle && $scope.settings.displayStyle == "table" )
@@ -825,6 +865,8 @@ voteApp.controller('indexCtl',
       {
         $scope.drawUIWithoutTable();
       }
+      if ( window.parent && window.parent.resizeIframe )
+        window.parent.resizeIframe();
     };
 
     $scope.computeMyVotes = function(){

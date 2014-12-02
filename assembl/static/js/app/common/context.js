@@ -426,8 +426,9 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
             return this.openedPanels === 1;
         },
 
-        // TODO: set Modal dimensions dynamically
-        openTargetInModal: function (evt, onDestroyCallback) {
+        // Modal can be dynamically resized once the iframe is loaded, or on demand
+        // TODO: options to set modal size
+        openTargetInModal: function (evt, onDestroyCallback, options) {
             console.log("openInspireMeModal()");
             console.log("evt: ", evt);
 
@@ -446,13 +447,23 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
             if ( evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-title") )
                 modal_title = $(evt.currentTarget).attr("data-modal-title");
 
+            var resizeIframeOnLoad = false;
+            if ( evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-resize-on-load") )
+                resizeIframeOnLoad = $(evt.currentTarget).attr("data-modal-resize-on-load") != false &&$(evt.currentTarget).attr("data-modal-resize-on-load") != "false" ;
+
             var model = new Backbone.Model();
             model.set("iframe_url", target_url);
             model.set("modal_title", modal_title);
+            model.set("resizeIframe", resizeIframeOnLoad);
+
+            var className = 'group-modal popin-wrapper iframe-popin';
+            if ( options && options.footer === false )
+                className += " popin-without-footer";
+
 
             var Modal = Backbone.Modal.extend({
                 template: Ctx.loadTemplate('modalWithIframe'),
-                className: 'group-modal popin-wrapper iframe-popin',
+                className: className,
                 cancelEl: '.close',
                 keyControl: false,
                 model: model
@@ -463,6 +474,26 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
                 window.modal_instance.onDestroy = onDestroyCallback;
             window.exitModal = function(){
                 window.modal_instance.destroy();
+            };
+
+            window.resizeIframe = function (iframe, retry){
+                if ( !iframe )
+                    iframe = $(".iframe-popin iframe").get(0);
+                if ( !iframe )
+                    return;
+                var val = iframe.contentWindow.document.body.scrollHeight;
+                if ( val > 10 ){
+                    $(iframe).css("height", ""); // reset style which was originally calc(100vh - 100px);
+                    $(iframe).animate({"height": (val + 40) + "px"}, {complete: function(){
+                        $(this).css("display", "block"); // so that no white horizontal block is shown between iframe and footer or bottom limit of the modal
+                    }});
+                }
+                else if ( retry !== false )
+                {
+                    setTimeout(function(){
+                        window.resizeIframe(iframe, false);
+                    }, 1000);
+                }
             };
 
             Assembl.slider.show(window.modal_instance);
@@ -721,7 +752,7 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
 
             // we assume that server datetimes are given in UTC format
             // (Right now, the server gives UTC datetimes but is not explicit enough because it does not append "+0000". So Moment thinks that the date is not in UTC but in user's timezone. So we have to tell it explicitly, using .utc())
-            var momentDate = moment.utc(date);
+            var momentDate = Moment.utc(date);
             momentDate.local(); // switch off UTC mode, which had been activated using .utc()
 
             if (momentDate) {
@@ -731,7 +762,7 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
                     else
                         return momentDate.format('LL');
                 }
-                var one_year_ago = moment().subtract('years', 1);
+                var one_year_ago = Moment().subtract(1, 'years');
                 if (momentDate.isBefore(one_year_ago)) { // show the exact date
                     return momentDate.format('L');
                 }
@@ -1071,7 +1102,7 @@ define(['../app', 'jquery', '../utils/permissions', 'moment', '../utils/i18n', '
          */
         init: function () {
             //this.loadCurrentUser();
-            Moment.lang(assembl_locale);
+            Moment.locale(assembl_locale);
 
             $(document.body).removeClass('preload');
             this.__createAnnotatorSelectionTooltipDiv();

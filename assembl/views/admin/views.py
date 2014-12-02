@@ -1,19 +1,26 @@
-import transaction
-import json
+import simplejson as json
+
+from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid
-from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 
 from assembl.models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
-    LocalUserRole, PartnerOrganization)
+    LocalUserRole)
 from .. import get_default_context
 from assembl.models.mail import IMAPMailbox, MailingList
 from assembl.auth import (
-    R_SYSADMIN, SYSTEM_ROLES, P_SYSADMIN, P_ADMIN_DISC, Everyone)
+    R_PARTICIPANT, R_SYSADMIN, R_ADMINISTRATOR, SYSTEM_ROLES,
+    P_SYSADMIN, P_ADMIN_DISC, Everyone)
+from assembl.auth.util import add_multiple_users_csv, user_has_permission
 from assembl.models.auth import (
     create_default_permissions, User, Username, AgentProfile)
+
+
+_ = TranslationStringFactory('assembl')
+
 
 @view_config(route_name='discussion_admin', permission=P_SYSADMIN)
 def discussion_admin(request):
@@ -23,10 +30,10 @@ def discussion_admin(request):
         return HTTPFound('/login?next_view=/admin/discussions/')
 
     session = User.db
-    user = session.query(User).filter_by(id=user_id).one()
 
-    context = dict(get_default_context(request),
-        discussions = session.query(Discussion))
+    context = dict(
+        get_default_context(request),
+        discussions=session.query(Discussion))
 
     if request.method == 'POST':
 
@@ -34,15 +41,15 @@ def discussion_admin(request):
 
         (topic, slug, name, host, port,
             ssl, folder, password, username) = (
-                g('topic'),
-                g('slug'),
-                g('mbox_name'),
-                g('host'),
-                g('port'),
-                True if g('ssl') == 'on' else False,
-                g('folder'),
-                g('password'),
-                g('username'),
+            g('topic'),
+            g('slug'),
+            g('mbox_name'),
+            g('host'),
+            g('port'),
+            True if g('ssl') == 'on' else False,
+            g('folder'),
+            g('password'),
+            g('username'),
             )
 
         discussion = Discussion(
@@ -53,7 +60,8 @@ def discussion_admin(request):
         session.add(discussion)
 
         create_default_permissions(session, discussion)
-        mailbox_class = MailingList if g('mailing_list_address') else IMAPMailbox
+        mailbox_class = (
+            MailingList if g('mailing_list_address') else IMAPMailbox)
         mailbox = mailbox_class(
             name=name,
             host=host,
@@ -73,22 +81,22 @@ def discussion_admin(request):
         context,
         request=request)
 
+
 @view_config(route_name='discussion_edit', permission=P_ADMIN_DISC)
 def discussion_edit(request):
-    user_id = authenticated_userid(request)
-    db = Discussion.db()
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
-    partners = json.dumps([p.generic_json() for p in discussion.partner_organizations])
+    partners = json.dumps([
+        p.generic_json() for p in discussion.partner_organizations])
 
     if not discussion:
         raise HTTPNotFound("Discussion with id '%d' not found." % (
             discussion_id,))
 
-
-    context = dict(get_default_context(request),
+    context = dict(
+        get_default_context(request),
         discussion=discussion,
-        admin_discussion_permissions_url = request.route_url(
+        admin_discussion_permissions_url=request.route_url(
             'discussion_permissions', discussion_id=discussion.id),
         partners=partners)
 
@@ -106,12 +114,10 @@ def discussion_edit(request):
         discussion.slug = slug
         discussion.objectives = objectives
 
-
     return render_to_response(
         'admin/discussion_edit.jinja2',
         context,
         request=request)
-
 
 
 @view_config(route_name='discussion_permissions', permission=P_ADMIN_DISC)
@@ -120,6 +126,7 @@ def discussion_permissions(request):
     db = Discussion.db()
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
+    error=''
 
     if not discussion:
         raise HTTPNotFound("Discussion with id '%d' not found." % (
@@ -142,9 +149,10 @@ def discussion_permissions(request):
         discussion_id=discussion_id).join(Role, User).all()
     local_roles_as_set = set((lur.user.id, lur.role.name)
                              for lur in local_roles)
-    local_roles_dict = {(lur.user.id, lur.role.name):lur
+    local_roles_dict = {(lur.user.id, lur.role.name): lur
                         for lur in local_roles}
     users = set(lur.user for lur in local_roles)
+    num_users = ''
 
     if request.POST:
         if 'submit_role_permissions' in request.POST:
@@ -169,7 +177,7 @@ def discussion_permissions(request):
                         disc_perms_as_set.remove((role, permission))
                         db.delete(dp)
                 if not role in SYSTEM_ROLES and\
-                    'delete_'+role in request.POST:
+                        'delete_'+role in request.POST:
                     db.delete(roles_by_name[role])
                     del roles_by_name[role]
                     role_names.remove(role)
@@ -218,6 +226,20 @@ def discussion_permissions(request):
                 | Username.username.ilike(search_string)
                 | User.preferred_email.ilike(search_string)).all()
             users.update(other_users)
+        elif 'submit_user_file' in request.POST:
+            role = request.POST['add_with_role'] or R_PARTICIPANT
+            if role == R_SYSADMIN and not user_has_permission(
+                    discussion_id, user_id, P_SYSADMIN):
+                role = R_ADMINISTRATOR
+            if 'user_csvfile' in request.POST:
+                try:
+                    num_users = add_multiple_users_csv(
+                        request.POST['user_csvfile'].file, discussion_id, role,
+                        request.localizer)
+                except Exception as e:
+                    error = repr(e)
+            else:
+                error = request.localizer.translate(_('No file given.'))
 
     def allowed(role, permission):
         if role == R_SYSADMIN:
@@ -234,6 +256,8 @@ def discussion_permissions(request):
         roles=role_names,
         permissions=permission_names,
         users=users,
+        error=error,
+        num_users=num_users,
         has_local_role=has_local_role,
         is_system_role=lambda r: r in SYSTEM_ROLES
     )
@@ -253,14 +277,13 @@ def general_permissions(request):
     roles_by_name = {r.name: r for r in roles}
     role_names = [r.name for r in roles]
     permissions = db.query(Permission).all()
-    perms_by_name = {p.name: p for p in permissions}
     permission_names = [p.name for p in permissions]
 
     user_roles = db.query(UserRole).join(Role, User).all()
-    user_roles_as_set = set((lur.user.id, lur.role.name)
-                             for lur in user_roles)
-    user_roles_dict = {(lur.user.id, lur.role.name):lur
-                        for lur in user_roles}
+    user_roles_as_set = set(
+        (lur.user.id, lur.role.name) for lur in user_roles)
+    user_roles_dict = {
+        (lur.user.id, lur.role.name): lur for lur in user_roles}
     users = set(lur.user for lur in user_roles)
 
     if request.POST:

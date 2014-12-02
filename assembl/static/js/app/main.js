@@ -1,6 +1,6 @@
 requirejs.config(requirejs_config);
 
-require(["app", "common/context", "jquery", "router", "utils/socket"],
+require(["app", "common/context", "jquery", "router", "utils/socket", "dropdown"],
     function (Assembl, Ctx, $, Router, Socket) {
         'use strict';
         if (raven_url.length) {

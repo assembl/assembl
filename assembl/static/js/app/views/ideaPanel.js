@@ -280,10 +280,13 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                         that.render();
                     });
                 };
+                var options = {
+                    footer: false
+                };
                 if (evt && evt.currentTarget && $(evt.currentTarget).hasClass("js_clearWidgetDataAssociatedToIdea"))
-                    return Ctx.openTargetInModal(evt, onDestroyCallback);
+                    return Ctx.openTargetInModal(evt, onDestroyCallback, options);
                 else
-                    return Ctx.openTargetInModal(evt);
+                    return Ctx.openTargetInModal(evt, null, options);
             },
 
             getExtractslist: function () {

@@ -1,13 +1,22 @@
+from csv import reader
+from datetime import datetime
+
 from sqlalchemy.sql.expression import and_
 from pyramid.security import (
     authenticated_userid, Everyone, Authenticated)
 from pyramid.httpexceptions import HTTPNotFound
+from pyramid.i18n import TranslationStringFactory
+from pyisemail import is_email
 
 from ..lib.sqla import get_session_maker
 from . import R_SYSADMIN, P_READ, SYSTEM_ROLES
 from ..models.auth import (
     User, Role, UserRole, LocalUserRole, Permission,
-    DiscussionPermission, IdentityProvider, AgentProfile)
+    DiscussionPermission, IdentityProvider, AgentProfile,
+    EmailAccount)
+
+
+_ = TranslationStringFactory('assembl')
 
 
 def get_user(request):
@@ -208,3 +217,127 @@ def get_identity_provider(request, create=True):
             trust_emails=auth_context.provider_name in trusted)
         session.add(provider)
     return provider
+
+
+def add_user(name, email, password, role, force=False, username=None,
+             localrole=None, discussion=None, change_old_password=True,
+             **kwargs):
+    from assembl.models import Discussion, Username
+    db = Discussion.db()
+    # refetch within transaction
+    all_roles = {r.name: r for r in Role.db.query(Role).all()}
+    user = None
+    if discussion and localrole:
+        if isinstance(discussion, (str, unicode)):
+            discussion_ob = db.query(Discussion).filter_by(
+                slug=discussion).first()
+            assert discussion_ob,\
+                "Discussion with slug %s does not exist" % (discussion,)
+        elif isinstance(discussion, int):
+            discussion_ob = db.query(Discussion).get(discussion)
+        discussion = discussion_ob
+        assert discussion
+    existing_email = db.query(EmailAccount).filter(
+        EmailAccount.email == email).first()
+    assert force or not existing_email,\
+        "User with email %s already exists" % (email,)
+    if username:
+        existing_username = db.query(Username).filter_by(
+            username=username).first()
+        assert force or not existing_username,\
+            "User with username %s already exists" % (username,)
+        assert not existing_email or not existing_username or \
+            existing_username.user == existing_email.profile,\
+            "Two different users already exist with "\
+            "username %s and email %s." % (username, email)
+    if existing_email:
+        user = existing_email.profile
+    elif username and existing_username:
+        user = existing_username.user
+    old_user = isinstance(user, User)
+    if old_user:
+        user.preferred_email = email
+        user.name = name
+        user.verified = True
+        if password and change_old_password:
+            user.set_password(password)
+        if username:
+            if user.username:
+                user.username.username = username
+            else:
+                db.add(Username(username=username, user=user))
+    else:
+        if user:
+            # Profile may have come from userless existing AgentProfile
+            user = User(
+                id=user.id,
+                preferred_email=email,
+                verified=True,
+                password=password,
+                creation_date=datetime.now())
+        else:
+            user = User(
+                name=name,
+                preferred_email=email,
+                verified=True,
+                password=password,
+                creation_date=datetime.now())
+        db.add(user)
+        if username:
+            db.add(Username(username=username, user=user))
+    for account in user.accounts:
+        if isinstance(account, EmailAccount) and account.email == email:
+            account.verified = True
+            account.preferred = True
+            break
+    else:
+        account = EmailAccount(
+            profile=user,
+            email=email,
+            preferred=True,
+            verified=True)
+        db.add(account)
+    if role:
+        role = all_roles[role]
+        ur = None
+        if old_user:
+            ur = db.query(UserRole).filter_by(user=user, role=role).first()
+        if not ur:
+            db.add(UserRole(user=user, role=role))
+    if localrole:
+        localrole = all_roles[localrole]
+        lur = None
+        if old_user:
+            lur = db.query(LocalUserRole).filter_by(
+                user=user, discussion=discussion, role=role).first()
+        if not lur:
+            db.add(LocalUserRole(
+                user=user, role=localrole, discussion=discussion))
+
+
+def add_multiple_users_csv(csv_file, discussion_id, with_role, localizer):
+    r = reader(csv_file)
+    for i, l in enumerate(r):
+        if not len(l):
+            # tolerate empty lines
+            continue
+        if len(l) != 3:
+            raise RuntimeError(localizer.translate(_(
+                "The CSV file must have three columns")))
+        (name, email, password) = [x.decode('utf-8') for x in l]
+        if not is_email(email):
+            if i == 0:
+                # Header
+                continue
+            raise RuntimeError(localizer.translate(_(
+                "Not an email: <%s> at line %d")) % (email, i))
+        if len(name) < 5:
+            raise RuntimeError(localizer.translate(_(
+                "Name too short: <%s> at line %d")) % (name, i))
+        if len(password) < 4:
+            raise RuntimeError(localizer.translate(_(
+                "Password too short: <%s> at line %d")) % (password, i))
+        add_user(
+            name, email, password, None, True, localrole=with_role,
+            discussion=discussion_id, change_old_password=False)
+    return i
