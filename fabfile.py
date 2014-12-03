@@ -1007,7 +1007,7 @@ def caravan_stagenv():
 
 
 @task
-def coeus_stagenv():
+def coeus_prodenv():
     """
     [ENVIRONMENT] Staging
     """
@@ -1070,12 +1070,12 @@ def inm_prodenv():
 
 
 @task
-def ovh_prodenv():
+def bluenove_discussions_prodenv():
     """
     [ENVIRONMENT] OVH Server
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/var/www/assembl/"))
+    commonenv(normpath("/var/www/assembl_discussions_bluenove_com/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "ns239264.ip-192-99-37.net"
@@ -1087,7 +1087,7 @@ def ovh_prodenv():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "develop"
+    env.gitbranch = "master"
 
 
 @task
