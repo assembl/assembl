@@ -962,6 +962,7 @@ voteApp.controller('indexCtl',
             };
 
             // we will send votes for each criterion separated with a small delay, so that we avoid server saturation
+            // TODO: instead we could chain calls (send a call once the response of the previous one has been received)
 
             var sendVote = function(url, data_to_post, k, delay){
               setTimeout(function(){
