@@ -683,7 +683,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 if (user.can(Permissions.ADD_EXTRACT) && this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage) {
                     this.showAnnotatorSelectionSaveOptions(ev.clientX - 50, ev.clientY);
                 } else if (!user.can(Permissions.ADD_EXTRACT)) {
-                    console.warn('User cannot make extractions');
+                    console.warn('finishAnnotatorTextSelection() called but current user does not have Permissions.ADD_EXTRACT');
                 }
 
                 this.isSelecting = false;

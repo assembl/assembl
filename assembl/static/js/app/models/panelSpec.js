@@ -20,7 +20,7 @@ define(['models/base', 'utils/panelSpecTypes'],
             validate: function (attributes, options) {
                 var viewsFactory = require('objects/viewsFactory');
                 if (viewsFactory === undefined) {
-                    throw "You must define viewsFactory to run validation"
+                    throw new Error("You must define viewsFactory to run validation");
                 }
                 var view;
                 try {

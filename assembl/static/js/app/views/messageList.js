@@ -973,7 +973,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
 
             isMessageIdInResults: function (messageId, resultMessageIdList) {
                 if (!resultMessageIdList) {
-                    throw "isMessageIdInResults():  resultMessageIdList needs to be provided";
+                    throw new Error("isMessageIdInResults():  resultMessageIdList needs to be provided");
                 }
 
                 return false != _.find(resultMessageIdList, function (resultMessageId) {
@@ -1657,7 +1657,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     this.currentQuery.setView(this.currentQuery.availableViews.THREADED);
                 }
                 else {
-                    throw "Unsupported view style";
+                    throw new Error("Unsupported view style");
                 }
                 if (this.storedMessageListConfig.viewStyleId != viewStyle.id) {
                     this.storedMessageListConfig.viewStyleId = viewStyle.id;
@@ -1823,10 +1823,10 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 shouldOpenMessageSelected = (typeof shouldOpenMessageSelected === "undefined") ? true : shouldOpenMessageSelected;
 
                 if (!messageModel) {
-                    throw "scrollToMessage(): ERROR:  Message wasn't provided";
+                    throw new Error("scrollToMessage(): ERROR:  messageModel wasn't provided");
                 }
                 if (recursionDepth === 0 && this.scrollToMessageInProgress) {
-                    console.log("scrollToMessage():  WARNING:  a scrollToMessage was already in progress, aborting");
+                    console.error("scrollToMessage():  a scrollToMessage was already in progress, aborting");
                     if (_.isFunction(failedCallback)) {
                         failedCallback();
                     }
@@ -1867,7 +1867,9 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                         // Trigerring showBody above requires the message to
                         // re-render. We may have to give it time
                         if (recursionDepth <= MAX_RETRIES) {
-                            console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
+                            if(recursionDepth >= 2) {
+                              console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
+                            }
                             setTimeout(function () {
                                 that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1);
                             }, RETRY_INTERVAL);
