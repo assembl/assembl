@@ -1,6 +1,6 @@
 body {
   margin: 10px;
-  font: 10px sans-serif;
+  font: 12px "Open Sans",sans-serif;
 }
 
 
@@ -43,9 +43,11 @@ body {
 }
 
 
+/* graphical vote representation */
 
-
-
+.axis {
+  font-size: 10px;
+}
 
 .axis path,
 .axis line {
