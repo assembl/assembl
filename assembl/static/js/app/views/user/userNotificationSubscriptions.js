@@ -77,6 +77,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
             userNewSubscription: function (e) {
                 var elm = $(e.target);
+                var that=this;
 
                 var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
                 var notificationSubscriptionTemplateModel = this.notificationTemplates.get(elm.attr('id'));
@@ -88,7 +89,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                         discussion: notificationSubscriptionTemplateModel.get('discussion')
                     });
                 this.collection.add(notificationSubscriptionModel);
-                notificationSubscriptionModel.save()
+                notificationSubscriptionModel.save(undefined, {
+                    success: function(model, response, options) {
+                        that.collection.add(model);
+                        that.notificationTemplates.remove(notificationSubscriptionTemplateModel);
+                        that.render();
+                    }
+                })
             },
 
             userNotification: function (e) {
