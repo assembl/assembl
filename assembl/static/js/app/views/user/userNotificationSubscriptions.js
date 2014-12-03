@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager', 'common/context', 'models/notificationSubscription', 'models/roles', 'utils/i18n'],
-    function (Marionette, $, _, CollectionManager, Ctx, NotificationSubscription, RolesModel, i18n) {
+define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager', 'common/context', 'models/notificationSubscription', 'models/roles', 'utils/i18n', 'utils/roles'],
+    function (Marionette, $, _, CollectionManager, Ctx, NotificationSubscription, RolesModel, i18n, Roles) {
 
 
         var userNotificationSubscriptions = Marionette.LayoutView.extend({
@@ -114,7 +114,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                 this.roles.forEach(function (model) {
 
-                    if (model.get('role') === 'r:participant') {
+                    if (model.get('role') === Roles.PERMISSION) {
                         var roles = new RolesModel.Model({
                             id: model.get('@id')
                         });

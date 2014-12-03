@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'backbone.modal', 'backbone.marionette.modals'],
-    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions) {
+define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'utils/roles', 'backbone.modal', 'backbone.marionette.modals'],
+    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions, Roles) {
         var navBar = Marionette.LayoutView.extend({
             template: '#tmpl-navBar',
             tagName: 'nav',
@@ -204,7 +204,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                         if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
 
                             var LocalRolesUser = new RolesModel.Model({
-                                role: 'r:participant',
+                                role: Roles.PARTICIPANT,
                                 discussion: 'local:Discussion/' + Ctx.getDiscussionId()
                             });
 

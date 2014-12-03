@@ -1,9 +1,9 @@
-define(['jquery', 'models/base', 'common/context', 'utils/i18n'],
-    function ($, Base, Ctx, i18n) {
+define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
+    function ($, Base, Ctx, i18n, Roles) {
         'use strict';
 
         var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
-        var UNKNOWN_USER_ID = 'system.Everyone';
+        var UNKNOWN_USER_ID = Roles.EVERYONE;
 
         /**
          * @class UserModel
