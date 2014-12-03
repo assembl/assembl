@@ -278,7 +278,22 @@ class NotificationSubscription(DiscussionBoundBase):
             if status != self.status:
                 self.status = status
                 self.last_status_change_date = datetime.now()
+        if not self.check_unique():
+            print "Duplicate"
+            raise HTTPBadRequest("Duplicate")
         return self
+
+    def check_unique(self):
+        self.db.flush()
+        other = self.unique_query().first()
+        return other is None or other == self
+
+    def unique_query(self):
+        return self.db.query(self.__class__).filter_by(
+            user_id=self.user_id, discussion_id=self.discussion_id,
+            parent_subscription_id = self.parent_subscription_id,
+            type=self.type)
+
 
     def get_owners(self):
         return (self.user, )
@@ -337,6 +352,10 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
     def followed_object(self):
         return self.post
 
+    def unique_query(self):
+        return super(NotificationSubscriptionOnPost, self).unique_query(
+            ).filter_by(post_id=self.post_id)
+
     def update_json(self, json, user_id=Everyone):
         updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
         if updated == self:
@@ -366,6 +385,10 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     def followed_object(self):
         return self.idea
+
+    def unique_query(self):
+        return super(NotificationSubscriptionOnPost, self).unique_query(
+            ).filter_by(idea_id=self.idea_id)
 
     def update_json(self, json, user_id=Everyone):
         updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
@@ -397,6 +420,10 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
     def followed_object(self):
         return self.extract
 
+    def unique_query(self):
+        return super(NotificationSubscriptionOnPost, self).unique_query(
+            ).filter_by(extract_id=self.extract_id)
+
     def update_json(self, json, user_id=Everyone):
         updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
         if updated == self:
@@ -426,6 +453,10 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     def followed_object(self):
         return self.user
+
+    def unique_query(self):
+        return super(NotificationSubscriptionOnPost, self).unique_query(
+            ).filter_by(on_user_id=self.on_user_id)
 
     def update_json(self, json, user_id=Everyone):
         updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
