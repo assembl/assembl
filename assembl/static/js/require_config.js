@@ -14,7 +14,7 @@ var requirejs_config = {
         'backbone.modal': '../bower/backbone-modal/backbone.modal',
         'backbone.marionette': '../bower/marionette/lib/backbone.marionette',
 
-        'annotator': '../lib/annotator/annotator-full.min',
+        'annotator': '../lib/annotator/annotator-full',
 
         'jasmine': '../bower/jasmine/lib/jasmine-core/jasmine',
         'jasmine-html': '../bower/jasmine/lib/jasmine-core/jasmine-html',
