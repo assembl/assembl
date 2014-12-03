@@ -352,28 +352,7 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
              * it if absent
              * @params list of PanelSpecTypes
              */
-            /*ensurePanelsVisible: function () {
-             var that = this;
-             var args = Array.prototype.slice.call(arguments);
-             var panels = this.model.get('panels');
-             //console.log("ensurePanelsVisible called with", args);
-             // add missing panels
-             this.model.ensurePanelsAt(args, 1);
-             // show and hide panels
-             _.each(this.model.get('panels').models, function (aPanelSpec) {
-             var panelSpecType = PanelSpecTypes.getById(aPanelSpec.get('type'));
-             if (panelSpecType === PanelSpecTypes.NAV_SIDEBAR)
-             return;
-             var shouldBeVisible = _.find(args, function(arg) {return panelSpecType === arg}) !== undefined;
-             if (shouldBeVisible) {
-             aPanelSpec.set('hidden', false);
-             }
-             else {
-             console.log()
-             throw "Unable to find panel type "+panelSpecType.id+" to change visibility";
-             }
-             });
-             },*/
+
             ensurePanelsVisible: function () {
                 var that = this;
                 var args = Array.prototype.slice.call(arguments);
@@ -388,7 +367,7 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                 });
                 if (_.size(args) !== _.size(panelSpecsToMakeVisible)) {
                     console.log(args, panelSpecsToMakeVisible);
-                    throw "Error, unable to find all panels to make visible";
+                    throw new Error("Error, unable to find all panels to make visible");
                 }
                 _.each(panelSpecsToMakeVisible, function (aPanelSpec) {
                     aPanelSpec.set('hidden', false);

@@ -32,7 +32,7 @@ define(function () {
         getById: function (id) {
             var panelSpec = _.findWhere(this, {id: id});
             if (panelSpec === undefined) {
-                throw "No panelSpecType with id=" + id;
+                throw new Error("No panelSpecType with the requested id");
             }
             return panelSpec
         },

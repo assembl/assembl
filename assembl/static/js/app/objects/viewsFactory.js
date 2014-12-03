@@ -33,18 +33,18 @@ define(['views/assemblPanel', 'underscore', 'views/navigation/home', 'views/cont
                     panelClass = panelTypeRegistry[id];
                 }
                 else {
-                    throw "panelSpecModel.get('type') was empty";
+                    throw new Error("panelSpecModel.get('type') was empty");
                 }
 
                 if (!panelClass instanceof AssemblPanel) {
-                    throw "panelClass isn't an instance of AssemblPanel";
+                    throw new Error("panelClass isn't an instance of AssemblPanel");
                 }
                 //console.log("panelViewByPanelSpec() returning ",panelClass, "for",panelSpecModel)
                 return panelClass;
             }
             catch (err) {
-                console.log('invalid spec:', panelSpecModel, "error was", err);
-                throw "invalidPanelSpecModel";
+                //console.log('invalid spec:', panelSpecModel, "error was", err);
+                throw new Error("invalidPanelSpecModel");
             }
         }
 
