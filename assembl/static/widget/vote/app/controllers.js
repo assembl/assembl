@@ -875,6 +875,7 @@ voteApp.controller('indexCtl',
       $scope.myVotes = {};
       // once serialized by $.param(), this will give "rentabilite=10&risque=0&investissement=22222&difficulte_mise_en_oeuvre=50"
       $("#d3_container g.criterion").each(function(index) {
+        //console.log("current criterion:", $(this).attr("data-criterion-id"));
         var valueMin = parseFloat($(this).attr("data-criterion-value-min"));
         var valueMax = parseFloat($(this).attr("data-criterion-value-max"));
         var value = parseFloat($(this).attr("data-criterion-value"));
@@ -895,6 +896,7 @@ voteApp.controller('indexCtl',
       vote_result_holder.empty();
 
       var voting_urls = configService.voting_urls;
+      var counter = 0;
       for ( var k in $scope.myVotes )
       {
         if ( $scope.myVotes.hasOwnProperty(k) )
@@ -959,15 +961,24 @@ voteApp.controller('indexCtl',
               }
             };
 
-            // POST to this URL
-            $http({
-              method: "POST",
-              url: url,
-              data: $.param(data_to_post),
-              //data: data_to_post,
-              headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-              //headers: {'Content-Type': 'application/json'}
-            }).success(successForK(k)).error(errorForK(k));
+            // we will send votes for each criterion separated with a small delay, so that we avoid server saturation
+
+            var sendVote = function(url, data_to_post, k, delay){
+              setTimeout(function(){
+                // POST to this URL
+                $http({
+                  method: "POST",
+                  url: url,
+                  data: $.param(data_to_post),
+                  //data: data_to_post,
+                  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                  //headers: {'Content-Type': 'application/json'}
+                }).success(successForK(k)).error(errorForK(k));
+              }, delay);
+            };
+              
+            sendVote(url, data_to_post, k, (counter++)*300);
+            
           }
         }
       }
