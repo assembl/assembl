@@ -42,6 +42,17 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "type": "text",
       "description": "Color or effect (CSS style) for the background of the page",
       "defaultAdmin":"#F2ECF8"
+    },
+    {
+      "key": "showVoter",
+      "type": "select",
+      "description": "Display 'You will be voting as \"name\".', and place it at the top or at the bottom of the screen",
+      "default":"false",
+      "options": {
+        "false": "false",
+        "top": "top",
+        "bottom": "bottom"
+      }
     }
   ];
 

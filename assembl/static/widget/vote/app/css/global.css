@@ -1,6 +1,52 @@
 body {
   margin: 10px;
-  font: 10px sans-serif;
+  font: 12px "Open Sans",sans-serif;
+}
+
+
+/* button */
+
+.btn-sm {
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 5px 10px;
+}
+
+.btn-primary {
+    background-color: #b36fe0;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+  opacity: 0.8;
+  text-decoration: none;
+}
+
+.btn {
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Open Sans",sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+
+/* graphical vote representation */
+
+.axis {
+  font-size: 10px;
 }
 
 .axis path,

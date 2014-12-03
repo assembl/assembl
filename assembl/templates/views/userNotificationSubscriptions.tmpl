@@ -46,7 +46,7 @@
                   <label for="<%= subscription.get('@id') %>" class="control-label"></label>
                   <div class="controls">
                     <label class="checkbox">
-                      <input type="checkbox" class="js_userNewNotification" value="<%= subscription.get('@type') %>" <%= subscription.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= subscription.get('@id') %>">
+                      <input type="checkbox" class="js_userNewNotification" value="<%= subscription.get('@type') %>" id="<%= subscription.get('@id') %>">
                       <%= subscription.get('human_readable_description') %>
                     </label>
                   </div>

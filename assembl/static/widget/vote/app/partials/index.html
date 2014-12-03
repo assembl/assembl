@@ -6,9 +6,11 @@ We have to clear the cache or force refresh of the exact URL of this template pa
 <div id="index" ng-controller="indexCtl" ng-init="init()">
     <h1>Vote</h1>
 
-    <p>
-        You will be voting as "{{ user.name }}".
-    </p>
+    <div ng-show="settings.showVoter && settings.showVoter == 'top'" >
+        <p>
+            You will be voting as "{{ user.name }}".
+        </p>
+    </div>
 
     <!-- we disable text selection in this div, to avoid ugly effects when the mouse interacts with the d3 graph -->
     <div 
@@ -19,7 +21,13 @@ We have to clear the cache or force refresh of the exact URL of this template pa
      onmousedown='return false;'>
     </div>
 
-    <button id="vote_submit" ng-click="submitVote()">Submit your vote</button>
+    <div ng-show="settings.showVoter && settings.showVoter == 'bottom'" >
+        <p>
+            You will be voting as "{{ user.name }}".
+        </p>
+    </div>
+
+    <button id="vote_submit" ng-click="submitVote()" class="btn btn-primary btn-sm">Submit your vote</button>
     <div id="vote_submit_result_holder"></div>
 
 </div>

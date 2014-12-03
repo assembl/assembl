@@ -313,6 +313,8 @@ def add_user(name, email, password, role, force=False, username=None,
         if not lur:
             db.add(LocalUserRole(
                 user=user, role=localrole, discussion=discussion))
+    if discussion:
+        user.get_notification_subscriptions(discussion.id)
 
 
 def add_multiple_users_csv(csv_file, discussion_id, with_role, localizer):
