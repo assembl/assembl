@@ -88,7 +88,7 @@
 <div class="admin-permissions">
 <form method="POST" action="#" enctype="multipart/form-data" accept-charset="utf-8">
 <h3>{% trans %}Add users with a CSV file{% endtrans %}</h3>
-<p>{% trans %}The CSV file should have three fields: full name, email, and password.{% endtrans %}</p>
+<p>{% trans %}The CSV file should have three fields, in this order: full name, email, and password.  If it has a header, it MUST be on the first line.  Imported user's email will be considered validated.{% endtrans %}</p>
 <p><label>{% trans %}Role{% endtrans %}:</label>
 <select name="add_with_role" id="add_with_role">
     {% for role in roles %}

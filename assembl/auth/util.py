@@ -332,7 +332,7 @@ def add_multiple_users_csv(csv_file, discussion_id, with_role, localizer):
         if len(l) != 3:
             raise RuntimeError(localizer.translate(_(
                 "The CSV file must have three columns")))
-        (name, email, password) = [x.decode('utf-8') for x in l]
+        (name, email, password) = [x.decode('utf-8').strip() for x in l]
         if not is_email(email):
             if i == 0:
                 # Header
