@@ -92,6 +92,12 @@ def authentication_callback(user_id, request):
             if not discussion:
                 raise HTTPNotFound("No discussion named %s" % (slug,))
             discussion_id = discussion.id
+    if (not discussion_id) and request.context:
+        if getattr(request.context, 'get_instance_of_class', None) is not None:
+            discussion = request.context.get_instance_of_class(Discussion)
+            if discussion:
+                discussion_id = discussion.id
+
     return get_roles(user_id, discussion_id)
 
 

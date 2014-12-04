@@ -27,6 +27,20 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "description": "Empty space (in pixels) between the border of the votable item and its axis"
     },
     {
+      "key": "minWidth",
+      "type": "integer",
+      "label": "Minimum width",
+      "defaultAdmin": 600,
+      "description": "Minimum width of the total voting area, in pixels (CSS property)"
+    },
+    {
+      "key": "minHeight",
+      "type": "integer",
+      "label": "Minimum height",
+      "defaultAdmin": 600,
+      "description": "Minimum height of the total voting area, in pixels (CSS property)"
+    },
+    {
       "key": "displayStyle",
       "type": "select",
       "label": "Display style",
@@ -45,6 +59,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     },
     {
       "key": "showVoter",
+      "label": "Show voter",
       "type": "select",
       "description": "Display 'You will be voting as \"name\".', and place it at the top or at the bottom of the screen",
       "default":"false",
@@ -52,6 +67,18 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
         "false": "false",
         "top": "top",
         "bottom": "bottom"
+      }
+    },
+    {
+      "key": "showCriterionDescription",
+      "label": "Show criterion description",
+      "type": "select",
+      "description": "Different ways of displaying the description associated to each criterion",
+      "default":"tooltip",
+      "options": {
+        "false": "false",
+        "tooltip": "tooltip",
+        "text": "text"
       }
     }
   ];

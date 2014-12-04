@@ -64,9 +64,6 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                         addableGlobalSubscriptions.push(template)
                     }
                 })
-                console.log(addableGlobalSubscriptions);
-
-                console.log(this.collection.models);
 
                 return {
                     UserNotifications: this.collection.models,
@@ -89,11 +86,15 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                         discussion: notificationSubscriptionTemplateModel.get('discussion')
                     });
                 this.collection.add(notificationSubscriptionModel);
-                notificationSubscriptionModel.save(undefined, {
+
+                notificationSubscriptionModel.save(null, {
                     success: function(model, response, options) {
                         that.collection.add(model);
                         that.notificationTemplates.remove(notificationSubscriptionTemplateModel);
                         that.render();
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: userNewSubscription', resp)
                     }
                 })
             },
@@ -113,7 +114,14 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                 var notificationSubscriptionModel = this.collection.get(elm.attr('id'));
                 notificationSubscriptionModel.set("status", status);
-                notificationSubscriptionModel.save();
+
+                notificationSubscriptionModel.save(null, {
+                    success: function (model, resp) {
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: userNotification', resp)
+                    }
+                });
             },
 
             unSubscription: function () {
@@ -121,7 +129,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                 this.roles.forEach(function (model) {
 
-                    if (model.get('role') === Roles.PERMISSION) {
+                    if (model.get('role') === Roles.PARTICIPANT) {
                         var roles = new RolesModel.Model({
                             id: model.get('@id')
                         });
@@ -131,7 +139,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                                 that.ui.unSubscription.addClass('hidden');
                             },
                             error: function (model, resp) {
-                                console.error(resp);
+                                console.error('ERROR: unSubscription', resp);
                             }
                         });
 

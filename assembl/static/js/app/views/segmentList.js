@@ -74,10 +74,21 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
             onCloseButtonClick: function (ev) {
                 var cid = ev.currentTarget.getAttribute('data-segmentid');
                 if (this.closeDeletes) {
-                    this.model.destroy();
+                    this.model.destroy({
+                        success: function (model, resp) {
+                        },
+                        error: function (model, resp) {
+                            console.error('ERROR: onCloseButtonClick', resp);
+                        }
+                    });
                 } else {
-                    this.model.set('idIdea', null);
-                    this.model.save('idIdea', null);
+                    this.model.save('idIdea', null, {
+                        success: function (model, resp) {
+                        },
+                        error: function (model, resp) {
+                            console.error('ERROR: onCloseButtonClick', resp);
+                        }
+                    });
                 }
             },
 
@@ -91,13 +102,16 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                     this.model.set('important', false);
                 }
 
-                this.model.save({}, {
-                    success: function (m) {
-                        if (m.get('important')) {
+                this.model.save(null, {
+                    success: function (model, resp) {
+                        if (model.get('important')) {
                             that.$('.nugget-indice .nugget').addClass('isSelected');
                         } else {
                             that.$('.nugget-indice .nugget').removeClass('isSelected');
                         }
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: selectAsNugget', resp);
                     }
                 });
             }
@@ -293,7 +307,14 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
 
                 if (segment.isValid()) {
                     this.addSegment(segment);
-                    segment.save();
+
+                    segment.save(null, {
+                        success: function (model, resp) {
+                        },
+                        error: function (model, resp) {
+                            console.error('ERROR: addTextAsSegment', resp);
+                        }
+                    });
                 }
             },
 
@@ -401,7 +422,14 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                             that.clipboard.filter(function (s) {
                                 return s.get('idCreator') == user_id
                             }).map(function (segment) {
-                                segment.destroy();
+
+                                segment.destroy({
+                                    success: function (model, resp) {
+                                    },
+                                    error: function (model, resp) {
+                                        console.error('ERROR: onClearButtonClick', resp)
+                                    }
+                                });
                             });
                         });
                 }

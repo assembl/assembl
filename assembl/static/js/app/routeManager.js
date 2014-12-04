@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'app', 'common/context', 'models/user', 'objects/storage', 'views/navBar', 'views/groups/groupContainer', 'common/collectionManager', 'objects/viewsFactory', 'views/admin/adminDiscussion', 'views/admin/adminNotificationSubscriptions', 'views/admin/adminPartners', 'views/user/userNotificationSubscriptions', 'views/user/profile', 'views/authorization'],
-    function (Marionette, Assembl, Ctx, User, storage, navBar, GroupContainer, CollectionManager, viewsFactory, adminDiscussion, adminNotificationSubscriptions, adminPartners, userNotificationSubscriptions, userProfile, Authorization) {
+define(['backbone.marionette', 'app', 'common/context', 'models/user', 'objects/storage', 'views/navBar', 'views/groups/groupContainer', 'common/collectionManager', 'objects/viewsFactory', 'views/admin/adminDiscussion', 'views/admin/adminNotificationSubscriptions', 'views/admin/adminPartners', 'views/user/userNotificationSubscriptions', 'views/user/profile', 'views/authorization', 'utils/permissions'],
+    function (Marionette, Assembl, Ctx, User, storage, navBar, GroupContainer, CollectionManager, viewsFactory, adminDiscussion, adminNotificationSubscriptions, adminPartners, userNotificationSubscriptions, userProfile, Authorization, Permissions) {
 
         var routeManager = Marionette.Controller.extend({
 
@@ -22,6 +22,8 @@ define(['backbone.marionette', 'app', 'common/context', 'models/user', 'objects/
             },
 
             home: function () {
+                this.isAuthenticated();
+
                 Ctx.isNewUser();
                 this.restoreViews();
             },
@@ -129,14 +131,24 @@ define(['backbone.marionette', 'app', 'common/context', 'models/user', 'objects/
             },
 
             isAuthenticated: function () {
-                if (!Ctx.getCurrentUserId()) {
+                /**
+                 * TODO: backend api know private discussion and can redirect to login
+                 * add this method to home page route
+                 * */
+                if (Ctx.getCurrentUserId()) {
+                    if (Ctx.getCurrentUser().can(Permissions.READ)) {
+                        return true;
+                    } else {
+                        var authorization = new Authorization();
+                        Assembl.groupContainer.show(authorization);
+                        return false;
+                    }
+                } else {
                     var authorization = new Authorization();
                     Assembl.groupContainer.show(authorization);
                     return false;
                 }
-                else {
-                    return true;
-                }
+
             }
 
         });

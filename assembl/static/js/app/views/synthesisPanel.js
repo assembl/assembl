@@ -217,8 +217,10 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
                         subject: "Not used",
                         message: "Not used"
                     };
-
-                    // Sending the synthesis
+                    /**
+                     * TODO: need to be backbone sync
+                     * */
+                        // Sending the synthesis
                     $.ajax({
                         type: "post",
                         data: JSON.stringify(data),

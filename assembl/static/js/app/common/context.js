@@ -451,15 +451,20 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             if ( evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-resize-on-load") )
                 resizeIframeOnLoad = $(evt.currentTarget).attr("data-modal-resize-on-load") != false &&$(evt.currentTarget).attr("data-modal-resize-on-load") != "false" ;
 
+            var resizable = false;
+            if ( evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-resizable") )
+                resizable = $(evt.currentTarget).attr("data-modal-resizable") != false &&$(evt.currentTarget).attr("data-modal-resizable") != "false" ;
+
             var model = new Backbone.Model();
             model.set("iframe_url", target_url);
             model.set("modal_title", modal_title);
-            model.set("resizeIframe", resizeIframeOnLoad);
+            model.set("resizeIframeOnLoad", resizeIframeOnLoad);
 
             var className = 'group-modal popin-wrapper iframe-popin';
             if ( options && options.footer === false )
                 className += " popin-without-footer";
-
+            if ( !resizable )
+                className += " popin-fixed-size";
 
             var Modal = Backbone.Modal.extend({
                 template: Ctx.loadTemplate('modalWithIframe'),
@@ -481,12 +486,33 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                     iframe = $(".iframe-popin iframe").get(0);
                 if ( !iframe )
                     return;
-                var val = iframe.contentWindow.document.body.scrollHeight;
-                if ( val > 10 ){
+                var modal = $(iframe).parents(".bbm-modal");
+                if ( !modal )
+                    return;
+                console.log("modal: ", modal);
+                var targetHeight = iframe.contentWindow.document.body.scrollHeight; // margins are not included (but paddings are)
+                var targetWidth = iframe.contentWindow.document.body.scrollWidth;
+                console.log("targetWidth: ", targetWidth);
+                if ( targetHeight > 10 ){
                     $(iframe).css("height", ""); // reset style which was originally calc(100vh - 100px);
-                    $(iframe).animate({"height": (val + 40) + "px"}, {complete: function(){
-                        $(this).css("display", "block"); // so that no white horizontal block is shown between iframe and footer or bottom limit of the modal
-                    }});
+                    var addPixelsToCompensateMargins = 40;
+                    var animatingProperties = {
+                        "height": (targetHeight + addPixelsToCompensateMargins) + "px"
+                    };
+                    if ( targetWidth > 10 ){
+                        modal.css("min-width","initial");
+                        $(iframe).css("width", ""); // reset style
+                        animatingProperties.width = (targetWidth + addPixelsToCompensateMargins) + "px";
+                    }
+                    
+                    $(iframe).animate(
+                        animatingProperties,
+                        {
+                            complete: function(){
+                                $(this).css("display", "block"); // so that no white horizontal block is shown between iframe and footer or bottom limit of the modal
+                            }
+                        }
+                    );
                 }
                 else if ( retry !== false )
                 {

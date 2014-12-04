@@ -144,7 +144,12 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
 
                 idea.save({
                     'order': this.getOrderForNewChild(),
-                    'parentId': this.getId()
+                    'parentId': this.getId()}, {
+                    success: function (model, resp) {
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: addChild', resp);
+                    }
                 });
             },
 
@@ -327,8 +332,13 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
              * @param  {Segment} segment
              */
             addSegment: function (segment) {
-                segment.set('idIdea', this.getId());
-                segment.save();
+                segment.save('idIdea', this.getId(), {
+                    success: function (model, resp) {
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: addSegment', resp);
+                    }
+                });
             },
 
             /**
@@ -365,7 +375,13 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                     currentOrder = 1;
 
                 _.each(children, function (child) {
-                    child.save('order', currentOrder);
+                    child.save('order', currentOrder, {
+                        success: function (model, resp) {
+                        },
+                        error: function (model, resp) {
+                            console.error('ERROR: updateChildrenOrder', resp);
+                        }
+                    });
                     currentOrder += 1;
                 });
             },
@@ -464,8 +480,13 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                     currentOrder = 1;
 
                 _.each(children, function (child) {
-                    child.set('order', currentOrder);
-                    child.save();
+                    child.save('order', currentOrder, {
+                        success: function (model, resp) {
+                        },
+                        error: function (model, resp) {
+                            console.error('ERROR: updateRootIdeasOrder', resp);
+                        }
+                    });
                     currentOrder += 1;
                 });
             }

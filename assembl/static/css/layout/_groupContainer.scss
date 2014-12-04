@@ -259,17 +259,38 @@
 
 .iframe-popin {
   .popin, .bbm-modal {
-    min-width: 1020px;
+    min-width: initial;
     max-width: 1400px;
+    display: table;
+    width: initial;
+
+    .popin-header {
+      display: block;
+    }
+
     .popin-body {
       padding: 0;
+      display: inline-block;
+      width: 100%;
+
       iframe {
         width: 100%;
-        height: calc(100vh - 100px);
+        height: 50px;
       }
     }
     .popin-footer {
       padding: 3px;
+    }
+  }
+}
+
+.popin-fixed-size {
+  .popin, .bbm-modal {
+    min-width: 1020px !important;
+    .popin-body {
+      iframe {
+        height: calc(100vh - 150px);
+      }
     }
   }
 }

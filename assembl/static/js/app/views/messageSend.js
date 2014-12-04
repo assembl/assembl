@@ -134,40 +134,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                 }
                 this.savePartialMessage();
                 btn.text(i18n.gettext('Sending...'));
-
-                /*success_callback = function (data, textStatus, jqXHR) {
-                 btn.text(i18n.gettext('Message posted!'));
-                    if (that.messageList) {
-                        that.listenToOnce(that.messageList, "messageList:render_complete", function () {
-                            if (_.isFunction(that.options.send_callback)) {
-                                that.options.send_callback();
-                            }
-                            // clear on success... so not lost in case of failure.
-                            MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
-                            var el = that.ui.messageBody;
-                            if (el.length > 0)
-                                el[0].text = '';
-                            el = that.ui.messageSubject;
-                            if (el.length > 0)
-                                el[0].text = '';
-
-                            setTimeout(function () {
-                                //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
-                                //console.log("Calling showMessageById for "+data['@id']);
-                                Assembl.vent.trigger('messageList:showMessageById', data['@id']);
-
-                            }, 1000);
-                        });
-                    }
-                    setTimeout(function () {
-                        btn.text(btn_original_text);
-                        that.$('.messageSend-cancelbtn').trigger('click');
-                    }, 5000);
-                 }; */
                 // This is not too good, but it allows the next render to come.
                 message_subject_field.value = "";
-                //message_body_field.addClass("text-muted");
-                //this.sendPostToServer(message_body, message_subject, reply_message_id, reply_idea_id, success_callback);
 
                 var model = new Messages.Model({
                     subject: message_subject,
@@ -211,7 +179,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         }, 5000);
                     },
                     error: function (model, resp) {
-                        console.debug('error', model, resp)
+                        console.error('ERROR: onSendMessageButtonClick', model, resp);
                     }
                 })
 

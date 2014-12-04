@@ -112,7 +112,7 @@
       _.each(votable_widgets, function(votable_widget, i){
         var url = votable_widget.widget_url+encodeURIComponent("?target="+idea.getId());
         print("<div class=\"dispb mls mts\">");
-        print("<a href=\""+url+"\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Vote on this idea')}}\">{{gettext('Vote on this idea')}}</a>");
+        print("<a href=\""+url+"\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Vote on this idea')}}\" data-modal-resizable=\"true\">{{gettext('Vote on this idea')}}</a>");
         if ( canCreateWidgets ) {
             var configure_url = "/static/widget/vote/?admin=1#/admin/configure_instance?widget_uri="+votable_widget.widget_uri+"&target="+idea.getId();
             print(" - <a href=\""+configure_url+"\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Configure this vote widget')}}\">{{gettext('Configure this vote widget')}}</a>");

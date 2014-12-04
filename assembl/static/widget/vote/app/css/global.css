@@ -49,6 +49,11 @@ body {
   font-size: 10px;
 }
 
+.axis-label {
+  font-weight: bold;
+  text-anchor: middle;
+}
+
 .axis path,
 .axis line {
   fill: none;

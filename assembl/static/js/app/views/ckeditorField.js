@@ -94,8 +94,8 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
                 var editingArea = this.$('#' + this.fieldId).get(0);
 
                 var config = _.extend({}, this.CKEDITOR_CONFIG, {
-                        sharedSpaces: { top: this.topId, bottom: this.bottomId }
-                    });
+                    sharedSpaces: { top: this.topId, bottom: this.bottomId }
+                });
 
                 this.ckInstance = ckeditor.inline(editingArea, config);
                 window.setTimeout(function () {
@@ -171,11 +171,10 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
                          * if the value didn't change from the model
                          */
                         this.model.save(this.modelProp, text, {
-                            success: function () {
-
+                            success: function (model, resp) {
                             },
-                            error: function () {
-
+                            error: function (model, resp) {
+                                console.error('ERROR: saveEdition', resp);
                             }
                         });
                         this.trigger('save', [this]);

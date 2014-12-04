@@ -850,9 +850,21 @@ voteApp.controller('indexCtl',
 
     $scope.drawUI = function(){
       // set a background color
+
       if ( $scope.settings.background )
       {
         $("body").css("background", $scope.settings.background);
+      }
+
+      // set min width and min height
+      
+      if ( $scope.settings.minWidth )
+      {
+        $("body").css("min-width", $scope.settings.minWidth + "px");
+      }
+      if ( $scope.settings.minHeight )
+      {
+        $("body").css("min-height", $scope.settings.minHeight + "px");
       }
 
       // display the UI in a table of classic way depending on the settings
@@ -962,6 +974,7 @@ voteApp.controller('indexCtl',
             };
 
             // we will send votes for each criterion separated with a small delay, so that we avoid server saturation
+            // TODO: instead we could chain calls (send a call once the response of the previous one has been received)
 
             var sendVote = function(url, data_to_post, k, delay){
               setTimeout(function(){
@@ -1141,24 +1154,51 @@ voteApp.controller('indexCtl',
       var axisLabel = g.append("text")
         .attr("y", item_data.height - config.padding*0.3 )
         .attr("x", xPosCenter )
-        .style("text-anchor", "middle")
+        .attr("class", "axis-label")
         .text(criterion.name);
 
       // make the axis label interactive (mouse hover) to show the description text of the criterion
       // possibility of improvement: maybe instead of an HTML "title" attribute, we could use tipsy, as on http://bl.ocks.org/ilyabo/1373263
-      if ( criterion.description && criterion.description.length > 0 )
+      if ( !config.showCriterionDescription || config.showCriterionDescription == "tooltip" )
       {
-        var f = function(){
-          // prevent the other click() function to get called
-          d3.event.stopPropagation();
-          
-          // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
+        if ( criterion.description && criterion.description.length > 0 )
+        {
+          var f = function(){
+            // prevent the other click() function to get called
+            d3.event.stopPropagation();
+            
+            // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
+          }
+          axisLabel
+            .style("cursor","help")
+            .attr("title", criterion.description)
+            .on("click", f)
+          ;
         }
-        axisLabel
-          .style("cursor","help")
-          .attr("title", criterion.description)
-          .on("click", f)
-        ;
+      }
+      else if ( config.showCriterionDescription && config.showCriterionDescription == "text" )
+      {
+        if ( criterion.description && criterion.description.length > 0 )
+        {
+          // There is no automatic word wrapping in SVG
+          // So we create an HTML element
+          var elParent = $("#d3_container");
+          var elOrigin = $(svg[0]);
+          console.log("svg: ", svg);
+          var text = document.createTextNode(criterion.description);
+          var node = document.createElement("span");
+          node.appendChild(text);
+          var descriptionWidth = item_data.width;
+
+          $(node).css("position", "absolute");
+          $(node).css("width", descriptionWidth + "px");
+          $(node).css("top", elOrigin.offset().top + (item_data.height - config.padding*0.25) + "px");
+          $(node).css("left", (elOrigin.offset().left + xPosCenter - descriptionWidth/2) + "px");
+          $(node).css("text-align", "center");
+
+
+          elParent.append(node);
+        }
       }
 
       
@@ -1349,44 +1389,88 @@ voteApp.controller('indexCtl',
         .call(yAxis);
 
       // show X axis label
-      g.append("text")
+      var xAxisLabel = g.append("text")
         //.attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
         .attr("y", (item_data.height - config.padding * 0.45) )
         .attr("x", (item_data.width / 2) )
         .attr("dy", "1em")
-        .style("text-anchor", "middle")
+        .attr("class", "axis-label")
         .text(criteria[0].name);
 
       // show Y axis label
-      g.append("text")
+      var yAxisLabel = g.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", (0) )
         .attr("x", (0 - item_data.height/2) )
         .attr("dy", config.padding/3 + "px")
         .attr("dx", "-2em") // reposition center to integrate text length
-        .style("text-anchor", "middle")
+        .attr("class", "axis-label")
         .text(criteria[1].name);
 
+
+      // make the axis labels interactive (mouse hover) to show the description text of the criterion
+      if ( !config.showCriterionDescription || config.showCriterionDescription == "tooltip" )
+      {
+        var onClickDoNothing = function(){
+          // prevent the other click() function to get called
+          d3.event.stopPropagation();
+          
+          // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
+        };
+        if ( criteria[0].description && criteria[0].description.length > 0 )
+        {
+          xAxisLabel
+            .style("cursor","help")
+            .attr("title", criteria[0].description)
+            .on("click", onClickDoNothing)
+          ;
+        }
+        if ( criteria[1].description && criteria[1].description.length > 0 )
+        {
+          yAxisLabel
+            .style("cursor","help")
+            .attr("title", criteria[1].description)
+            .on("click", onClickDoNothing)
+          ;
+        }
+      }
+      else if ( config.showCriterionDescription && config.showCriterionDescription == "text" )
+      {
+        for ( var i = 0; i < 2; ++i )
+        {
+          if ( criteria[i].description && criteria[i].description.length > 0 )
+          {
+            // There is no automatic word wrapping in SVG
+            // So we create an HTML element
+            var elParent = $("#d3_container");
+            var elOrigin = $(svg[0]);
+            console.log("svg: ", svg);
+            var text = document.createTextNode(criteria[i].description);
+            var node = document.createElement("span");
+            node.appendChild(text);
+            var descriptionWidth = item_data.width;
+            if ( i == 1 )
+              descriptionWidth = item_data.height;
+
+            $(node).css("position", "absolute");
+            $(node).css("width", descriptionWidth + "px");
+            $(node).css("top", (elOrigin.offset().top + (item_data.height - config.padding*0.25)) + "px");
+            $(node).css("left", (elOrigin.offset().left + xPosCenter - descriptionWidth/2) + "px");
+            $(node).css("text-align", "center");
+
+            if ( i == 1 )
+            {
+              $(node).css("top", (elOrigin.offset().top + (item_data.height/2)) + "px");
+              $(node).css("left", (elOrigin.offset().left - descriptionWidth/2) + "px");
+              $(node).css("transform", "rotate(-90deg)");
+            }
+
+            elParent.append(node);
+          }
+        }
+      }
+
       
-        /* TODO
-      // show descriptions of the minimum and maximum values
-      if ( criterion.descriptionMin )
-      {
-        g.append("text")
-          .attr("y", config.height - config.padding*0.7 )
-          .attr("x", xPosCenter )
-          .style("text-anchor", "middle")
-          .text(criterion.descriptionMin);
-      }
-      if ( criterion.descriptionMax )
-      {
-        g.append("text")
-          .attr("y", config.padding*0.7 )
-          .attr("x", xPosCenter )
-          .style("text-anchor", "middle")
-          .text(criterion.descriptionMax);
-      }
-      */
 
       // show descriptions of the minimum and maximum values on X axis
       if ( criteria[0].descriptionMin && criteria[0].descriptionMin.length > 0 )

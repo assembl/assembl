@@ -151,7 +151,13 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
              * @event
              */
             onAttrChange: function () {
-                this.save();
+                this.save(null, {
+                    success: function (model, resp) {
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: onAttrChange', resp);
+                    }
+                });
             },
 
             /**

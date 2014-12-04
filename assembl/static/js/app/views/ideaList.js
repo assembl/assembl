@@ -344,7 +344,14 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         } else {
                             newIdea.set('order', allIdeasCollection.getOrderForNewRootIdea());
                             allIdeasCollection.add(newIdea);
-                            newIdea.save();
+
+                            newIdea.save(null, {
+                                success: function (model, resp) {
+                                },
+                                error: function (model, resp) {
+                                    console.error('ERROR: addChildToSelected', resp);
+                                }
+                            });
                         }
                         Ctx.setCurrentIdea(newIdea);
                     });

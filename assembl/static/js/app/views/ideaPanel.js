@@ -368,7 +368,13 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 delete segment.attributes.highlights;
 
                 var id = this.model.getId();
-                segment.save('idIdea', id);
+                segment.save('idIdea', id, {
+                    success: function (model, reps) {
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: addSegment', resp);
+                    }
+                });
             },
 
             /**
@@ -489,10 +495,15 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                             var ok = confirm(i18n.gettext('Confirm that you want to delete this idea.'));
 
                             if (ok) {
-                                that.model.destroy({ success: function () {
-                                    that.unblockPanel();
-                                    Ctx.setCurrentIdea(null);
-                                }});
+                                that.model.destroy({
+                                    success: function () {
+                                        that.unblockPanel();
+                                        Ctx.setCurrentIdea(null);
+                                    },
+                                    error: function (model, resp) {
+                                        console.error('ERROR: deleteCurrentIdea', resp);
+                                    }
+                                });
                             }
                             else {
                                 that.unblockPanel();
