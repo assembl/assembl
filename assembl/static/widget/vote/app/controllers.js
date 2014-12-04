@@ -1362,7 +1362,7 @@ voteApp.controller('indexCtl',
         .call(yAxis);
 
       // show X axis label
-      g.append("text")
+      var xAxisLabel = g.append("text")
         //.attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
         .attr("y", (item_data.height - config.padding * 0.45) )
         .attr("x", (item_data.width / 2) )
@@ -1371,7 +1371,7 @@ voteApp.controller('indexCtl',
         .text(criteria[0].name);
 
       // show Y axis label
-      g.append("text")
+      var yAxisLabel = g.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", (0) )
         .attr("x", (0 - item_data.height/2) )
@@ -1380,26 +1380,34 @@ voteApp.controller('indexCtl',
         .style("text-anchor", "middle")
         .text(criteria[1].name);
 
+
+      // make the axis labels interactive (mouse hover) to show the description text of the criterion
+      var onClickDoNothing = function(){
+        // prevent the other click() function to get called
+        d3.event.stopPropagation();
+        
+        // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
+      };
+      if ( criteria[0].description && criteria[0].description.length > 0 )
+      {
+        
+        xAxisLabel
+          .style("cursor","help")
+          .attr("title", criteria[0].description)
+          .on("click", onClickDoNothing)
+        ;
+      }
+      if ( criteria[1].description && criteria[1].description.length > 0 )
+      {
+        
+        yAxisLabel
+          .style("cursor","help")
+          .attr("title", criteria[1].description)
+          .on("click", onClickDoNothing)
+        ;
+      }
+
       
-        /* TODO
-      // show descriptions of the minimum and maximum values
-      if ( criterion.descriptionMin )
-      {
-        g.append("text")
-          .attr("y", config.height - config.padding*0.7 )
-          .attr("x", xPosCenter )
-          .style("text-anchor", "middle")
-          .text(criterion.descriptionMin);
-      }
-      if ( criterion.descriptionMax )
-      {
-        g.append("text")
-          .attr("y", config.padding*0.7 )
-          .attr("x", xPosCenter )
-          .style("text-anchor", "middle")
-          .text(criterion.descriptionMax);
-      }
-      */
 
       // show descriptions of the minimum and maximum values on X axis
       if ( criteria[0].descriptionMin && criteria[0].descriptionMin.length > 0 )
