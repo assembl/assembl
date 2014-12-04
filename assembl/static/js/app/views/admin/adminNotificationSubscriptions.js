@@ -51,7 +51,13 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
 
                 var notificationSubscriptionModel = this.collection.get(elm.attr('id'));
                 notificationSubscriptionModel.set("status", status);
-                notificationSubscriptionModel.save();
+                notificationSubscriptionModel.save(null, {
+                    success: function (model, resp) {
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: discussionNotification', resp);
+                    }
+                });
             }
 
 

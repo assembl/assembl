@@ -143,7 +143,13 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
              */
             onCheckboxChange: function (ev) {
                 ev.stopPropagation();
-                this.model.save({'inNextSynthesis': ev.currentTarget.checked});
+                this.model.save({'inNextSynthesis': ev.currentTarget.checked}, {
+                    success: function (model, resp) {
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: onCheckboxChange', resp);
+                    }
+                });
                 //Optimisation.  It would self render once the socket propagates,
                 //but this gives better responsiveness.
                 Assembl.commands.execute('synthesisPanel:render');

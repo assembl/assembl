@@ -368,7 +368,13 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 delete segment.attributes.highlights;
 
                 var id = this.model.getId();
-                segment.save('idIdea', id);
+                segment.save('idIdea', id, {
+                    success: function (model, reps) {
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: addSegment', resp);
+                    }
+                });
             },
 
             /**

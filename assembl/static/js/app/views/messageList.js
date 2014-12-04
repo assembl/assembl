@@ -1459,7 +1459,13 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                                 Ctx.setCurrentIdea(newIdea);
                             }
                             else {
-                                segment.save();
+                                segment.save(null, {
+                                    success: function (model, resp) {
+                                    },
+                                    error: function (model, resp) {
+                                        console.error('ERROR: initAnnotator', resp);
+                                    }
+                                });
                             }
                             Ctx.currentAnnotationNewIdeaParentIdea = null;
                             Ctx.currentAnnotationIdIdea = null;

@@ -76,8 +76,13 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 if (this.closeDeletes) {
                     this.model.destroy();
                 } else {
-                    this.model.set('idIdea', null);
-                    this.model.save('idIdea', null);
+                    this.model.save('idIdea', null, {
+                        success: function (model, resp) {
+                        },
+                        error: function (model, resp) {
+                            console.error('ERROR: onCloseButtonClick', resp);
+                        }
+                    });
                 }
             },
 
@@ -91,13 +96,16 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                     this.model.set('important', false);
                 }
 
-                this.model.save({}, {
-                    success: function (m) {
-                        if (m.get('important')) {
+                this.model.save(null, {
+                    success: function (model, resp) {
+                        if (model.get('important')) {
                             that.$('.nugget-indice .nugget').addClass('isSelected');
                         } else {
                             that.$('.nugget-indice .nugget').removeClass('isSelected');
                         }
+                    },
+                    error: function (model, resp) {
+                        console.error('ERROR: selectAsNugget', resp);
                     }
                 });
             }

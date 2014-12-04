@@ -346,7 +346,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                             allIdeasCollection.add(newIdea);
 
                             newIdea.save(null, {
-                                success: function () {
+                                success: function (model, resp) {
                                 },
                                 error: function (model, resp) {
                                     console.error('ERROR: addChildToSelected', resp);
