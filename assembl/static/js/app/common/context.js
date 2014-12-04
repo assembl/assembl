@@ -495,14 +495,27 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 console.log("targetWidth: ", targetWidth);
                 if ( targetHeight > 10 ){
                     $(iframe).css("height", ""); // reset style which was originally calc(100vh - 100px);
-                    $(iframe).animate({"height": (targetHeight + 40) + "px"}, {complete: function(){
-                        $(this).css("display", "block"); // so that no white horizontal block is shown between iframe and footer or bottom limit of the modal
-                    }});
                     if ( targetWidth > 10 ){
                         modal.css("min-width","initial");
                         console.log("min w after: ", modal.css("min-width"));
                         $(iframe).css("width", ""); // reset style
-                        $(iframe).animate({"width": (targetWidth + 40) + "px"}, {complete: function(){
+                        $(iframe).animate(
+                            {
+                                "width": (targetWidth + 5) + "px",
+                                "height": (targetHeight + 5) + "px"
+                            },
+                            {
+                                complete: function(){
+                                    $(this).css("display", "block"); // so that no white horizontal block is shown between iframe and footer or bottom limit of the modal
+                                }
+                            }
+                        );
+                    }
+                    else
+                    {
+                        $(iframe).animate(
+                            {"height": (targetHeight + 5) + "px"},
+                            {complete: function(){
                             $(this).css("display", "block"); // so that no white horizontal block is shown between iframe and footer or bottom limit of the modal
                         }});
                     }

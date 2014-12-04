@@ -275,7 +275,7 @@
 
       iframe {
         width: 100%;
-        height: calc(100vh - 150px);
+        height: 50px;
       }
     }
     .popin-footer {
@@ -287,6 +287,11 @@
 .popin-fixed-size {
   .popin, .bbm-modal {
     min-width: 1020px !important;
+    .popin-body {
+      iframe {
+        height: calc(100vh - 150px);
+      }
+    }
   }
 }
 
