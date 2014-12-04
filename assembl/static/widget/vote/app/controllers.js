@@ -1154,24 +1154,51 @@ voteApp.controller('indexCtl',
       var axisLabel = g.append("text")
         .attr("y", item_data.height - config.padding*0.3 )
         .attr("x", xPosCenter )
-        .style("text-anchor", "middle")
+        .attr("class", "axis-label")
         .text(criterion.name);
 
       // make the axis label interactive (mouse hover) to show the description text of the criterion
       // possibility of improvement: maybe instead of an HTML "title" attribute, we could use tipsy, as on http://bl.ocks.org/ilyabo/1373263
-      if ( criterion.description && criterion.description.length > 0 )
+      if ( !config.showCriterionDescription || config.showCriterionDescription == "tooltip" )
       {
-        var f = function(){
-          // prevent the other click() function to get called
-          d3.event.stopPropagation();
-          
-          // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
+        if ( criterion.description && criterion.description.length > 0 )
+        {
+          var f = function(){
+            // prevent the other click() function to get called
+            d3.event.stopPropagation();
+            
+            // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
+          }
+          axisLabel
+            .style("cursor","help")
+            .attr("title", criterion.description)
+            .on("click", f)
+          ;
         }
-        axisLabel
-          .style("cursor","help")
-          .attr("title", criterion.description)
-          .on("click", f)
-        ;
+      }
+      else if ( config.showCriterionDescription && config.showCriterionDescription == "text" )
+      {
+        if ( criterion.description && criterion.description.length > 0 )
+        {
+          // There is no automatic word wrapping in SVG
+          // So we create an HTML element
+          var elParent = $("#d3_container");
+          var elOrigin = $(svg[0]);
+          console.log("svg: ", svg);
+          var text = document.createTextNode(criterion.description);
+          var node = document.createElement("span");
+          node.appendChild(text);
+          var descriptionWidth = item_data.width;
+
+          $(node).css("position", "absolute");
+          $(node).css("width", descriptionWidth + "px");
+          $(node).css("top", elOrigin.offset().top + (item_data.height - config.padding*0.25) + "px");
+          $(node).css("left", (elOrigin.offset().left + xPosCenter - descriptionWidth/2) + "px");
+          $(node).css("text-align", "center");
+
+
+          elParent.append(node);
+        }
       }
 
       
@@ -1367,7 +1394,7 @@ voteApp.controller('indexCtl',
         .attr("y", (item_data.height - config.padding * 0.45) )
         .attr("x", (item_data.width / 2) )
         .attr("dy", "1em")
-        .style("text-anchor", "middle")
+        .attr("class", "axis-label")
         .text(criteria[0].name);
 
       // show Y axis label
@@ -1377,34 +1404,70 @@ voteApp.controller('indexCtl',
         .attr("x", (0 - item_data.height/2) )
         .attr("dy", config.padding/3 + "px")
         .attr("dx", "-2em") // reposition center to integrate text length
-        .style("text-anchor", "middle")
+        .attr("class", "axis-label")
         .text(criteria[1].name);
 
 
       // make the axis labels interactive (mouse hover) to show the description text of the criterion
-      var onClickDoNothing = function(){
-        // prevent the other click() function to get called
-        d3.event.stopPropagation();
-        
-        // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
-      };
-      if ( criteria[0].description && criteria[0].description.length > 0 )
+      if ( !config.showCriterionDescription || config.showCriterionDescription == "tooltip" )
       {
-        
-        xAxisLabel
-          .style("cursor","help")
-          .attr("title", criteria[0].description)
-          .on("click", onClickDoNothing)
-        ;
+        var onClickDoNothing = function(){
+          // prevent the other click() function to get called
+          d3.event.stopPropagation();
+          
+          // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
+        };
+        if ( criteria[0].description && criteria[0].description.length > 0 )
+        {
+          xAxisLabel
+            .style("cursor","help")
+            .attr("title", criteria[0].description)
+            .on("click", onClickDoNothing)
+          ;
+        }
+        if ( criteria[1].description && criteria[1].description.length > 0 )
+        {
+          yAxisLabel
+            .style("cursor","help")
+            .attr("title", criteria[1].description)
+            .on("click", onClickDoNothing)
+          ;
+        }
       }
-      if ( criteria[1].description && criteria[1].description.length > 0 )
+      else if ( config.showCriterionDescription && config.showCriterionDescription == "text" )
       {
-        
-        yAxisLabel
-          .style("cursor","help")
-          .attr("title", criteria[1].description)
-          .on("click", onClickDoNothing)
-        ;
+        for ( var i = 0; i < 2; ++i )
+        {
+          if ( criteria[i].description && criteria[i].description.length > 0 )
+          {
+            // There is no automatic word wrapping in SVG
+            // So we create an HTML element
+            var elParent = $("#d3_container");
+            var elOrigin = $(svg[0]);
+            console.log("svg: ", svg);
+            var text = document.createTextNode(criteria[i].description);
+            var node = document.createElement("span");
+            node.appendChild(text);
+            var descriptionWidth = item_data.width;
+            if ( i == 1 )
+              descriptionWidth = item_data.height;
+
+            $(node).css("position", "absolute");
+            $(node).css("width", descriptionWidth + "px");
+            $(node).css("top", (elOrigin.offset().top + (item_data.height - config.padding*0.25)) + "px");
+            $(node).css("left", (elOrigin.offset().left + xPosCenter - descriptionWidth/2) + "px");
+            $(node).css("text-align", "center");
+
+            if ( i == 1 )
+            {
+              $(node).css("top", (elOrigin.offset().top + (item_data.height/2)) + "px");
+              $(node).css("left", (elOrigin.offset().left - descriptionWidth/2) + "px");
+              $(node).css("transform", "rotate(-90deg)");
+            }
+
+            elParent.append(node);
+          }
+        }
       }
 
       

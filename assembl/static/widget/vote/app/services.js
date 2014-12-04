@@ -59,6 +59,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     },
     {
       "key": "showVoter",
+      "label": "Show voter",
       "type": "select",
       "description": "Display 'You will be voting as \"name\".', and place it at the top or at the bottom of the screen",
       "default":"false",
@@ -66,6 +67,18 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
         "false": "false",
         "top": "top",
         "bottom": "bottom"
+      }
+    },
+    {
+      "key": "showCriterionDescription",
+      "label": "Show criterion description",
+      "type": "select",
+      "description": "Different ways of displaying the description associated to each criterion",
+      "default":"tooltip",
+      "options": {
+        "false": "false",
+        "tooltip": "tooltip",
+        "text": "text"
       }
     }
   ];
