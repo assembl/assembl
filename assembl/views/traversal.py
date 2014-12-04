@@ -9,7 +9,7 @@ from pyramid.settings import asbool
 from pyramid.httpexceptions import HTTPNotFound
 from abc import ABCMeta, abstractmethod
 
-from assembl.auth import P_READ, R_SYSADMIN, R_PARTICIPANT
+from assembl.auth import P_READ, R_SYSADMIN
 from assembl.lib.sqla import *
 from assembl.lib.decl_enums import DeclEnumType
 
@@ -30,9 +30,7 @@ class AppRoot(DictContext):
     def __init__(self):
         readable = [(Allow, R_SYSADMIN, ALL_PERMISSIONS),
                     (Allow, Everyone, P_READ), DENY_ALL]
-        restrictive = [(Allow, R_SYSADMIN, ALL_PERMISSIONS),
-                       (Allow, R_PARTICIPANT, P_READ),
-                       DENY_ALL]
+        restrictive = [(Allow, R_SYSADMIN, ALL_PERMISSIONS), DENY_ALL]
         super(AppRoot, self).__init__(readable, {
             'data': Api2Context(self, restrictive),
             'admin': DictContext(restrictive, {
