@@ -129,7 +129,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                 this.roles.forEach(function (model) {
 
-                    if (model.get('role') === Roles.PERMISSION) {
+                    if (model.get('role') === Roles.PARTICIPANT) {
                         var roles = new RolesModel.Model({
                             id: model.get('@id')
                         });
