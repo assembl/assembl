@@ -89,11 +89,17 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                         discussion: notificationSubscriptionTemplateModel.get('discussion')
                     });
                 this.collection.add(notificationSubscriptionModel);
-                notificationSubscriptionModel.save(undefined, {
+                /**
+                 * TODO: need to send errors to sentry
+                 * */
+                notificationSubscriptionModel.save(null, {
                     success: function(model, response, options) {
                         that.collection.add(model);
                         that.notificationTemplates.remove(notificationSubscriptionTemplateModel);
                         that.render();
+                    },
+                    error: function () {
+
                     }
                 })
             },
@@ -113,7 +119,17 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                 var notificationSubscriptionModel = this.collection.get(elm.attr('id'));
                 notificationSubscriptionModel.set("status", status);
-                notificationSubscriptionModel.save();
+                /**
+                 * TODO: need to send errors to sentry
+                 * */
+                notificationSubscriptionModel.save(null, {
+                    success: function () {
+
+                    },
+                    error: function () {
+
+                    }
+                });
             },
 
             unSubscription: function () {
