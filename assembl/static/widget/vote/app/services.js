@@ -27,6 +27,20 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "description": "Empty space (in pixels) between the border of the votable item and its axis"
     },
     {
+      "key": "minWidth",
+      "type": "integer",
+      "label": "Minimum width",
+      "defaultAdmin": 600,
+      "description": "Minimum width of the total voting area, in pixels (CSS property)"
+    },
+    {
+      "key": "minHeight",
+      "type": "integer",
+      "label": "Minimum height",
+      "defaultAdmin": 600,
+      "description": "Minimum height of the total voting area, in pixels (CSS property)"
+    },
+    {
       "key": "displayStyle",
       "type": "select",
       "label": "Display style",

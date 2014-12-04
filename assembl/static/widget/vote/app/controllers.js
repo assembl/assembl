@@ -850,9 +850,21 @@ voteApp.controller('indexCtl',
 
     $scope.drawUI = function(){
       // set a background color
+
       if ( $scope.settings.background )
       {
         $("body").css("background", $scope.settings.background);
+      }
+
+      // set min width and min height
+      
+      if ( $scope.settings.minWidth )
+      {
+        $("body").css("min-width", $scope.settings.minWidth + "px");
+      }
+      if ( $scope.settings.minHeight )
+      {
+        $("body").css("min-height", $scope.settings.minHeight + "px");
       }
 
       // display the UI in a table of classic way depending on the settings
