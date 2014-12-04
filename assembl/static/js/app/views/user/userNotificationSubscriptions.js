@@ -64,9 +64,6 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                         addableGlobalSubscriptions.push(template)
                     }
                 })
-                console.log(addableGlobalSubscriptions);
-
-                console.log(this.collection.models);
 
                 return {
                     UserNotifications: this.collection.models,
@@ -89,17 +86,15 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                         discussion: notificationSubscriptionTemplateModel.get('discussion')
                     });
                 this.collection.add(notificationSubscriptionModel);
-                /**
-                 * TODO: need to send errors to sentry
-                 * */
+
                 notificationSubscriptionModel.save(null, {
                     success: function(model, response, options) {
                         that.collection.add(model);
                         that.notificationTemplates.remove(notificationSubscriptionTemplateModel);
                         that.render();
                     },
-                    error: function () {
-
+                    error: function (model, resp) {
+                        console.error('ERROR: userNewSubscription', resp)
                     }
                 })
             },
@@ -119,15 +114,12 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                 var notificationSubscriptionModel = this.collection.get(elm.attr('id'));
                 notificationSubscriptionModel.set("status", status);
-                /**
-                 * TODO: need to send errors to sentry
-                 * */
+
                 notificationSubscriptionModel.save(null, {
-                    success: function () {
-
+                    success: function (model, resp) {
                     },
-                    error: function () {
-
+                    error: function (model, resp) {
+                        console.error('ERROR: userNotification', resp)
                     }
                 });
             },
@@ -141,15 +133,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                         var roles = new RolesModel.Model({
                             id: model.get('@id')
                         });
-                        /**
-                         * TODO: need to send errors to sentry
-                         * */
+
                         roles.destroy({
                             success: function (model, resp) {
                                 that.ui.unSubscription.addClass('hidden');
                             },
                             error: function (model, resp) {
-                                console.error(resp);
+                                console.error('ERROR: unSubscription', resp);
                             }
                         });
 

@@ -207,9 +207,6 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                 role: Roles.PARTICIPANT,
                                 discussion: 'local:Discussion/' + Ctx.getDiscussionId()
                             });
-                            /**
-                             * TODO: need to send errors to sentry
-                             * */
                             LocalRolesUser.save(null, {
                                 success: function (model, resp) {
                                     self.ui.joinDiscussion.css('visibility', 'hidden');
@@ -217,7 +214,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                     that.triggerSubmit();
                                 },
                                 error: function (model, resp) {
-                                    console.log('error', resp);
+                                    console.error('ERROR: joinDiscussion->subscription', resp);
                                 }
                             })
                         }

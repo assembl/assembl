@@ -344,15 +344,12 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         } else {
                             newIdea.set('order', allIdeasCollection.getOrderForNewRootIdea());
                             allIdeasCollection.add(newIdea);
-                            /**
-                             * TODO: need to send errors to sentry
-                             * */
+
                             newIdea.save(null, {
                                 success: function () {
-
                                 },
-                                error: function () {
-
+                                error: function (model, resp) {
+                                    console.error('ERROR: addChildToSelected', resp);
                                 }
                             });
                         }
