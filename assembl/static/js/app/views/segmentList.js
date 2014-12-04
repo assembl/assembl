@@ -293,7 +293,17 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
 
                 if (segment.isValid()) {
                     this.addSegment(segment);
-                    segment.save();
+                    /**
+                     * TODO: need to send errors to sentry
+                     * */
+                    segment.save(null, {
+                        success: function (model, resp) {
+
+                        },
+                        error: function (model, resp) {
+
+                        }
+                    });
                 }
             },
 
@@ -401,7 +411,17 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                             that.clipboard.filter(function (s) {
                                 return s.get('idCreator') == user_id
                             }).map(function (segment) {
-                                segment.destroy();
+                                /**
+                                 * TODO: need to send errors to sentry
+                                 * */
+                                segment.destroy({
+                                    success: function () {
+
+                                    },
+                                    error: function () {
+
+                                    }
+                                });
                             });
                         });
                 }

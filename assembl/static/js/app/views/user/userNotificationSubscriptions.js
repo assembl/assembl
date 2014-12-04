@@ -125,7 +125,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                         var roles = new RolesModel.Model({
                             id: model.get('@id')
                         });
-
+                        /**
+                         * TODO: need to send errors to sentry
+                         * */
                         roles.destroy({
                             success: function (model, resp) {
                                 that.ui.unSubscription.addClass('hidden');

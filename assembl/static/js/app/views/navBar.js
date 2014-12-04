@@ -207,7 +207,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                 role: Roles.PARTICIPANT,
                                 discussion: 'local:Discussion/' + Ctx.getDiscussionId()
                             });
-
+                            /**
+                             * TODO: need to send errors to sentry
+                             * */
                             LocalRolesUser.save(null, {
                                 success: function (model, resp) {
                                     self.ui.joinDiscussion.css('visibility', 'hidden');

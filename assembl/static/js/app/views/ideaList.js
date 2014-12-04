@@ -344,7 +344,17 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         } else {
                             newIdea.set('order', allIdeasCollection.getOrderForNewRootIdea());
                             allIdeasCollection.add(newIdea);
-                            newIdea.save();
+                            /**
+                             * TODO: need to send errors to sentry
+                             * */
+                            newIdea.save(null, {
+                                success: function () {
+
+                                },
+                                error: function () {
+
+                                }
+                            });
                         }
                         Ctx.setCurrentIdea(newIdea);
                     });
