@@ -21,7 +21,7 @@ define(['models/base', 'models/panelSpec', 'utils/panelSpecTypes'],
                 var args = Array.prototype.slice.call(arguments);
                 var panels = this.get('panels');
                 var panelsToRemove = _.filter(panels.models, function (el) {
-                    return _.contains(args, PanelSpecTypes.getById(el.get('type')));
+                    return _.contains(args, el.getPanelSpecType());
                 });
                 if (_.size(args) !== _.size(panelsToRemove)) {
                     //console.log("WARNING: groupSpec.Model.removePanels(): " + _.size(args) + " arguments, but found only " + _.size(panelsToRemove) + " panels to remove.");
@@ -72,7 +72,7 @@ define(['models/base', 'models/panelSpec', 'utils/panelSpecTypes'],
                     throw new Error("invalid panelSpecType");
                 }
                 return _.find(this.get('panels').models, function (el) {
-                    return el.get('type') == validPanelSpecType.id;
+                    return el.getPanelSpecType() === validPanelSpecType;
                 });
             },
 

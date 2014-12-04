@@ -73,7 +73,7 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                     if (!include_embedded_idea_panel
                         && panelWrapper.model.get('minimized')
                         && that.groupContainer.isOneNavigationGroup()
-                        && panelWrapper.model.get('type') == 'idea') {
+                        && panelWrapper.model.getPanelSpecType() === PanelSpecTypes.IDEA_PANEL) {
                         return;
                     }
                     extraPixels += that.panel_borders_size + panelWrapper.getExtraPixels();
@@ -332,7 +332,7 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                 this.model.ensurePanelsAt(args, 1);
                 // show and hide panels
                 _.each(this.model.get('panels').models, function (aPanelSpec) {
-                    var panelSpecType = PanelSpecTypes.getById(aPanelSpec.get('type'));
+                    var panelSpecType = aPanelSpec.getPanelSpecType();
                     if (panelSpecType === PanelSpecTypes.NAV_SIDEBAR)
                         return;
                     var view = that.children.findByModel(aPanelSpec);
@@ -362,7 +362,7 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                 this.model.ensurePanelsAt(args, 1);
                 // show and hide panels
                 var panelSpecsToMakeVisible = this.model.get('panels').models.filter(function (aPanelSpec) {
-                    var panelSpecType = PanelSpecTypes.getById(aPanelSpec.get('type'));
+                    var panelSpecType = aPanelSpec.getPanelSpecType();
                     return _.contains(args, panelSpecType);
                 });
                 if (_.size(args) !== _.size(panelSpecsToMakeVisible)) {
@@ -385,7 +385,7 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                 var panels = this.model.get('panels');
                 // show and hide panels
                 _.each(this.model.get('panels').models, function (aPanelSpec) {
-                    var panelSpecType = PanelSpecTypes.getById(aPanelSpec.get('type'));
+                    var panelSpecType = aPanelSpec.getPanelSpecType();
                     if (panelSpecType === PanelSpecTypes.NAV_SIDEBAR) {
                         return;
                     }

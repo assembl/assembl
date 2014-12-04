@@ -35,8 +35,15 @@ define(['models/base', 'utils/panelSpecTypes'],
                 //Everything ok
             },
 
+            /** 
+             @return an instance of PanelSpecType, or throws an exception
+             */
+            getPanelSpecType: function (psType) {
+              return PanelSpecTypes.getByRawId(this.get('type'));
+            },
+            
             isOfType: function (psType) {
-                return PanelSpecTypes.getById(this.get('type')) == psType;
+              return PanelSpecTypes.getByRawId(this.get('type')) == psType;
             }
         });
 

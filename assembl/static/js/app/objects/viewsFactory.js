@@ -28,13 +28,8 @@ define(['views/assemblPanel', 'underscore', 'views/navigation/home', 'views/cont
                 id;
             //console.log("panelViewByPanelSpec() called with ",panelSpecModel);
             try {
-                id = panelSpecModel.get('type');
-                if (id) {
-                    panelClass = panelTypeRegistry[id];
-                }
-                else {
-                    throw new Error("panelSpecModel.get('type') was empty");
-                }
+                id = panelSpecModel.getPanelSpecType().id;
+                panelClass = panelTypeRegistry[id];
 
                 if (!panelClass instanceof AssemblPanel) {
                     throw new Error("panelClass isn't an instance of AssemblPanel");

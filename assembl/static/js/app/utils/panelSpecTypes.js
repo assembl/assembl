@@ -29,7 +29,7 @@ define(function () {
         DISCUSSION_CONTEXT: {id: 'homePanel'
         },//implemented in views/contextPage.js
 
-        getById: function (id) {
+        getByRawId: function (id) {
             var panelSpec = _.findWhere(this, {id: id});
             if (panelSpec === undefined) {
                 throw new Error("No panelSpecType with the requested id");

@@ -77,10 +77,10 @@ define(['backbone.marionette', 'app', 'views/groups/groupContent', 'views/assemb
                     var group1 = this.collection.first();
                     var panel_types = group1.get('panels').pluck('type');
                     if (panel_types.length == 3
-                        && (PanelSpecTypes.getById(panel_types[0]) === PanelSpecTypes.NAV_SIDEBAR
-                            || PanelSpecTypes.getById(panel_types[0]) === PanelSpecTypes.TABLE_OF_IDEAS)
-                        && PanelSpecTypes.getById(panel_types[1]) === PanelSpecTypes.IDEA_PANEL
-                        && PanelSpecTypes.getById(panel_types[2]) === PanelSpecTypes.MESSAGE_LIST)
+                        && (PanelSpecTypes.getByRawId(panel_types[0]) === PanelSpecTypes.NAV_SIDEBAR
+                            || PanelSpecTypes.getByRawId(panel_types[0]) === PanelSpecTypes.TABLE_OF_IDEAS)
+                        && PanelSpecTypes.getByRawId(panel_types[1]) === PanelSpecTypes.IDEA_PANEL
+                        && PanelSpecTypes.getByRawId(panel_types[2]) === PanelSpecTypes.MESSAGE_LIST)
                         return true;
                 }
                 return false;
