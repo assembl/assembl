@@ -533,17 +533,15 @@ def user_confirm_email(request):
     userid = user.id
     # We do not know from which discussion the user started to log in...
     # We have to think about this. Maybe put in the token?
-    # Send to discussion if there happens to be only one.
+    # Send to login, then discussion if there happens to be only one.
     discussions = user.involved_in_discussion
+    location = 'login'
     if len(discussions) == 1:
-        location = 'home'
-        location_params = dict(discussion_slug=discussions[0].slug)
+        location_params = dict(next_view='/'+discussions[0].slug)
     else:
-        location = 'discussion_list'
         location_params = dict()
 
     if email.verified:
-        location
         raise HTTPFound(location=request.route_url(
             location, **dict(location_params,
             _query=dict(message=localizer.translate(_(
