@@ -74,7 +74,13 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
             onCloseButtonClick: function (ev) {
                 var cid = ev.currentTarget.getAttribute('data-segmentid');
                 if (this.closeDeletes) {
-                    this.model.destroy();
+                    this.model.destroy({
+                        success: function (model, resp) {
+                        },
+                        error: function (model, resp) {
+                            console.error('ERROR: onCloseButtonClick', resp);
+                        }
+                    });
                 } else {
                     this.model.save('idIdea', null, {
                         success: function (model, resp) {
