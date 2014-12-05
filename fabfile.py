@@ -137,9 +137,9 @@ def supervisor_process_stop(process_name):
             exit()
 
 @task
-def reloadapp():
+def app_reload():
     """
-    Touch the wsgi
+    Restart all necessary processes after an update
     """
     if env.uses_global_supervisor:
         print(cyan('Asking supervisor to restart %(projectname)s' % env))
@@ -307,7 +307,7 @@ def tests():
 @task
 def bootstrap():
     """
-    Create the virtualenv and install the app
+    Creates the virtualenv and install the app from env URL
     """
     execute(clone_repository)
     execute(bootstrap_from_checkout)
@@ -316,20 +316,19 @@ def bootstrap():
 @task
 def bootstrap_from_checkout():
     """
-    Create the virtualenv and install the app
+    Creates the virtualenv and install the app from git checkout
     """
     execute(updatemaincode)
     execute(build_virtualenv)
     execute(app_compile_nodbupdate)
     execute(app_db_install)
-    execute(reloadapp)
+    execute(app_reload)
     execute(webservers_reload)
 
 
-@task
 def clone_repository():
     """
-    Clone repository and remove the exsiting one if necessary
+    Clone repository
     """
     print(cyan('Cloning Git repository'))
 
@@ -384,6 +383,9 @@ def app_update():
 
 @task
 def app_update_dependencies():
+    """
+    Updates all python and javascript dependencies
+    """
     execute(update_requirements, force=False)
     execute(update_compass)
     execute(update_bower)
@@ -406,13 +408,13 @@ def app_compile():
 @task
 def app_compile_noupdate():
     """
-    Fast Update: don't touch git state, don't update requirements, and rebuild
+    Fast Update: Doesn't touch git state, don't update requirements, and rebuild
     all generated files. You normally do not need to have internet connectivity.
     """
     execute(app_compile_nodbupdate)
     execute(app_db_update)
     # tests()
-    execute(reloadapp)
+    execute(app_reload)
     execute(webservers_reload)
 
 
@@ -424,27 +426,6 @@ def app_compile_nodbupdate():
     execute(compile_stylesheets)
     execute(compile_messages)
     execute(minify_javascript_maybe)
-
-
-## Webserver
-def configure_webservers():
-    """
-    Configure the webserver stack.
-    """
-    # apache
-    print(cyan('Configuring Apache'))
-    sudo('cp %sapache/%s /etc/apache2/sites-available/%s' % (env.projectpath, env.urlhost, env.urlhost))
-    sudo('a2ensite %s' % env.urlhost)
-
-    # nginx
-    # TODO: Mac
-    print(cyan('Configuring Nginx'))
-    sudo('cp %snginx/%s /etc/nginx/sites-available/%s' % (env.projectpath, env.urlhost, env.urlhost))
-    with cd('/etc/nginx/sites-enabled/'):
-        sudo('ln -sf ../sites-available/%s .' % env.urlhost)
-
-    # Fix log dir
-    execute(check_or_install_logdir)
 
 
 @task
@@ -509,24 +490,6 @@ def webservers_start():
             sudo('/usr/local/nginx/sbin/nginx')
 
 
-def check_or_install_logdir():
-    """
-    Make sure the log directory exists and has right mode and ownership
-    """
-    print(cyan('Installing a log dir'))
-    with cd(env.venvpath + '/'):
-        sudo('mkdir -p logs/ ; chown www-data logs; chmod o+rwx logs ; pwd')
-
-
-def create_database_user():
-    """
-    Create a user and a DB for the project
-    """
-    # FIXME: pg_hba has to be changed by hand (see doc)
-    # FIXME: Password has to be set by hand (see doc)
-    sudo('createuser %s -D -R -S' % env.projectname, user='postgres')
-
-
 ## Server packages
 def install_basetools():
     """
@@ -543,13 +506,11 @@ def install_basetools():
         #sudo('apt-get install -y gettext')
 
 
-@task
 def install_bower():
     with cd(env.projectpath):
         run('npm install bower po2json requirejs')
 
 
-@task
 def update_bower():
     with cd(env.projectpath):
         run('npm update bower po2json requirejs')
@@ -572,8 +533,9 @@ def bower_cmd(cmd, relative_path='.'):
             run(' '.join((node_cmd, bower_cmd, cmd)))
 
 
-@task
+
 def bower_install():
+    """ Normally not called manually """
     bower_cmd('install')
     bower_cmd('install', 'assembl/static/widget/card')
     bower_cmd('install', 'assembl/static/widget/session')
@@ -917,179 +879,6 @@ def get_virtuoso_src():
     return vsrc
 
 
-## Server scenarios
-def commonenv(projectpath, venvpath=None):
-    """
-    Base environment
-    """
-    env.projectname = "assembl"
-    env.projectpath = projectpath
-    assert env.ini_file, "Define env.ini_file before calling common_env"
-    #Production env will be protected from accidental database restores
-    env.is_production_env = False
-    if venvpath:
-        env.venvpath = venvpath
-    else:
-        env.venvpath = join(projectpath,"venv")
-
-    env.db_user = 'assembl'
-    env.db_name = 'assembl'
-    #It is recommended you keep localhost even if you have access to
-    # unix domain sockets, it's more portable across different pg_hba configurations.
-    env.db_host = 'localhost'
-    env.dbdumps_dir = join(projectpath, '%s_dumps' % env.projectname)
-    env.gitrepo = "https://github.com/ImaginationForPeople/assembl.git"
-    env.gitbranch = "master"
-
-    env.uses_memcache = True
-    env.uses_uwsgi = False
-    env.uses_apache = False
-    env.uses_ngnix = False
-    #Where do we find the virtuoso binaries
-    env.uses_global_supervisor = False
-    env.mac = False
-
-    #Minimal dependencies versions
-
-    #Note to maintainers:  If you upgrade ruby, make sure you check that the
-    # ruby_build version below supports it...
-    env.ruby_version = "2.0.0-p481"
-    env.ruby_build_min_version = 20130628
-
-# Specific environments
-
-
-@task
-def devenv(projectpath=None):
-    """
-    [ENVIRONMENT] Developpement (must be run from the project path:
-    the one where the fabfile is)
-    """
-    if not projectpath:
-        # Legitimate os.path
-        projectpath = dirname(os.path.realpath(__file__))
-    env.host_string = 'localhost'
-    if exists(join(projectpath, 'local.ini')):
-        env.ini_file = 'local.ini'
-    else:
-        env.ini_file = 'development.ini'
-    env.pop('host_string')
-    commonenv(projectpath, getenv('VIRTUAL_ENV', None))
-    env.wsginame = "dev.wsgi"
-    env.urlhost = "localhost"
-    #env.user = "webapp"
-    #env.home = "webapp"
-    require('projectname', provided_by=('commonenv',))
-    env.mac = system().startswith('Darwin')
-    env.uses_apache = False
-    env.uses_ngnix = False
-    env.hosts = ['localhost']
-    env.gitbranch = "develop"
-
-
-@task
-def caravan_stagenv():
-    """
-    [ENVIRONMENT] Staging
-    """
-    env.ini_file = 'local.ini'
-    commonenv(normpath("/sites/assembl/"))
-    env.urlhost = "assembl.caravan.coop"
-    env.user = "www-data"
-    env.home = "www-data"
-    require('projectname', provided_by=('commonenv',))
-    env.hosts = ['assembl.caravan.coop']
-
-    env.uses_apache = False
-    env.uses_ngnix = True
-    env.uses_global_supervisor = True
-    env.gitbranch = "develop"
-
-
-@task
-def coeus_prodenv():
-    """
-    [ENVIRONMENT] Staging
-    """
-    env.ini_file = 'local.ini'
-    commonenv(normpath("/var/www/assembl/"))
-    env.is_production_env = True
-    env.wsginame = "staging.wsgi"
-    env.urlhost = "assembl.coeus.ca"
-    env.user = "www-data"
-    env.home = "www-data"
-    require('projectname', provided_by=('commonenv',))
-    env.hosts = ['coeus.ca']
-
-    env.uses_apache = False
-    env.uses_ngnix = True
-    env.uses_uwsgi = True
-    env.gitbranch = "master"
-
-
-@task
-def coeus_stagenv2():
-    """
-    [ENVIRONMENT] Staging
-    """
-    env.ini_file = 'local.ini'
-    commonenv(normpath("/var/www/assembl2/"))
-    env.is_production_env = False
-    env.wsginame = "staging.wsgi"
-    env.urlhost = "assembl2.coeus.ca"
-    env.user = "www-data"
-    env.home = "www-data"
-    require('projectname', provided_by=('commonenv',))
-    env.hosts = ['coeus.ca']
-
-    env.uses_apache = False
-    env.uses_ngnix = True
-    env.uses_uwsgi = True
-    env.gitbranch = "develop"
-
-
-@task
-def inm_prodenv():
-    """
-    [ENVIRONMENT] INM
-    """
-    env.ini_file = 'local.ini'
-    commonenv(normpath("/var/www/assembl_inm/"))
-    env.is_production_env = True
-    env.wsginame = "prod.wsgi"
-    env.urlhost = "agora.inm.qc.ca"
-    env.user = "www-data"
-    env.home = "www-data"
-    require('projectname', provided_by=('commonenv',))
-    env.hosts = ['coeus.ca']
-
-    env.uses_apache = False
-    env.uses_ngnix = True
-    env.uses_uwsgi = True
-    env.gitbranch = "master"
-
-
-@task
-def bluenove_discussions_prodenv():
-    """
-    [ENVIRONMENT] OVH Server
-    """
-    env.ini_file = 'local.ini'
-    commonenv(normpath("/var/www/assembl_discussions_bluenove_com/"))
-    env.is_production_env = True
-    env.wsginame = "prod.wsgi"
-    env.urlhost = "ns239264.ip-192-99-37.net"
-    env.user = "www-data"
-    env.home = "www-data"
-    require('projectname', provided_by=('commonenv',))
-    env.hosts = ['ns239264.ip-192-99-37.net']
-
-    env.uses_apache = False
-    env.uses_ngnix = True
-    env.uses_uwsgi = True
-    env.gitbranch = "master"
-
-
 @task
 def flushmemcache():
     """
@@ -1101,7 +890,6 @@ def flushmemcache():
         run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
 
 
-@task
 def ensure_virtuoso_not_running():
     # We do not want to start supervisord if not already running
     pidfile = join(env.projectpath, 'var/run/supervisord.pid')
@@ -1198,3 +986,167 @@ def virtuoso_source_install():
         # Make sure the virtuoso.ini and supervisor.ini reflects the changes
         execute(app_setup)
         execute(supervisor_restart)
+
+
+## Server scenarios
+def commonenv(projectpath, venvpath=None):
+    """
+    Base environment
+    """
+    env.projectname = "assembl"
+    env.projectpath = projectpath
+    assert env.ini_file, "Define env.ini_file before calling common_env"
+    #Production env will be protected from accidental database restores
+    env.is_production_env = False
+    if venvpath:
+        env.venvpath = venvpath
+    else:
+        env.venvpath = join(projectpath,"venv")
+
+    env.db_user = 'assembl'
+    env.db_name = 'assembl'
+    #It is recommended you keep localhost even if you have access to
+    # unix domain sockets, it's more portable across different pg_hba configurations.
+    env.db_host = 'localhost'
+    env.dbdumps_dir = join(projectpath, '%s_dumps' % env.projectname)
+    env.gitrepo = "https://github.com/ImaginationForPeople/assembl.git"
+    env.gitbranch = "master"
+
+    env.uses_memcache = True
+    env.uses_uwsgi = False
+    env.uses_apache = False
+    env.uses_ngnix = False
+    #Where do we find the virtuoso binaries
+    env.uses_global_supervisor = False
+    env.mac = False
+
+    #Minimal dependencies versions
+
+    #Note to maintainers:  If you upgrade ruby, make sure you check that the
+    # ruby_build version below supports it...
+    env.ruby_version = "2.0.0-p481"
+    env.ruby_build_min_version = 20130628
+
+
+# Specific environments
+
+@task
+def devenv(projectpath=None):
+    "Alias of env_dev for backward compatibility"
+    execute(env_dev, projectpath)
+
+@task
+def env_dev(projectpath=None):
+    """
+    [ENVIRONMENT] Local developpement environment
+    (must be run from the project path: the one where the fabfile is)
+    """
+    if not projectpath:
+        # Legitimate os.path
+        projectpath = dirname(os.path.realpath(__file__))
+    env.host_string = 'localhost'
+    if exists(join(projectpath, 'local.ini')):
+        env.ini_file = 'local.ini'
+    else:
+        env.ini_file = 'development.ini'
+    env.pop('host_string')
+    commonenv(projectpath, getenv('VIRTUAL_ENV', None))
+    env.wsginame = "dev.wsgi"
+    env.urlhost = "localhost"
+    #env.user = "webapp"
+    #env.home = "webapp"
+    require('projectname', provided_by=('commonenv',))
+    env.mac = system().startswith('Darwin')
+    env.uses_apache = False
+    env.uses_ngnix = False
+    env.hosts = ['localhost']
+    env.gitbranch = "develop"
+
+
+@task
+def env_coeus_assembl():
+    """
+    [ENVIRONMENT] Production on http://assembl.coeus.ca/
+    Production environment for Bluenove and Imagination for People projects
+    """
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/var/www/assembl/"))
+    env.is_production_env = True
+    env.wsginame = "staging.wsgi"
+    env.urlhost = "assembl.coeus.ca"
+    env.user = "www-data"
+    env.home = "www-data"
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['coeus.ca']
+
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.gitbranch = "master"
+
+
+@task
+def env_coeus_assembl2():
+    """
+    [ENVIRONMENT] Staging on http://assembl2.coeus.ca/
+    Main staging environment
+    """
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/var/www/assembl2/"))
+    env.is_production_env = False
+    env.wsginame = "staging.wsgi"
+    env.urlhost = "assembl2.coeus.ca"
+    env.user = "www-data"
+    env.home = "www-data"
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['coeus.ca']
+
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.gitbranch = "develop"
+
+
+@task
+def env_inm_agora():
+    """
+    [ENVIRONMENT] Production on http://agora.inm.qc.ca/
+    INM (Institut du nouveau monde) dedicated environment
+    """
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/var/www/assembl_inm/"))
+    env.is_production_env = True
+    env.wsginame = "prod.wsgi"
+    env.urlhost = "agora.inm.qc.ca"
+    env.user = "www-data"
+    env.home = "www-data"
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['coeus.ca']
+
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.gitbranch = "master"
+
+
+@task
+def env_bluenove_discussions():
+    """
+    [ENVIRONMENT] Production on http://agora.inm.qc.ca/
+    Common environment for Bluenove clients
+    """
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/var/www/assembl_discussions_bluenove_com/"))
+    env.is_production_env = True
+    env.wsginame = "prod.wsgi"
+    env.urlhost = "ns239264.ip-192-99-37.net"
+    env.user = "www-data"
+    env.home = "www-data"
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['ns239264.ip-192-99-37.net']
+
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.gitbranch = "master"
+
