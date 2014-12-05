@@ -7,5 +7,8 @@
     "vote":"Vote",
     "title":"title",
     "cancel":"Cancel",
-    "validVote":"Valid your votes"
+    "validVote":"Valid your votes",
+
+    "voteSubmit":"Submit your vote",
+    "voteAsUser":"You will be voting as \"{{username}}\"."
 }

@@ -7,5 +7,8 @@
     "vote":"Votez",
     "title":"titre",
     "cancel":"Annuler",
-    "validVote":"Validez vos votes"
+    "validVote":"Validez vos votes",
+
+    "voteSubmit":"Validez votre vote",
+    "voteAsUser":"Vous votez en tant que \"{{username}}\"."
 }

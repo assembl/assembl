@@ -7,7 +7,7 @@ We have to clear the cache or force refresh of the exact URL of this template pa
 
     <div ng-show="settings.showVoter && settings.showVoter == 'top'" >
         <p>
-            You will be voting as "{{ user.name }}".
+            {{ 'voteAsUser' | translate: { username: user.name} }}
         </p>
     </div>
 
@@ -24,11 +24,11 @@ We have to clear the cache or force refresh of the exact URL of this template pa
 
     <div ng-show="settings.showVoter && settings.showVoter == 'bottom'" >
         <p>
-            You will be voting as "{{ user.name }}".
+            {{ 'voteAsUser' | translate: { username: user.name} }}
         </p>
     </div>
 
-    <button id="vote_submit" ng-click="submitVote()" class="btn btn-primary btn-sm">Submit your vote</button>
+    <button id="vote_submit" ng-click="submitVote()" class="btn btn-primary btn-sm">{{ 'voteSubmit' | translate }}</button>
     <div id="vote_submit_result_holder"></div>
 
 </div>
