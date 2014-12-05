@@ -1403,7 +1403,6 @@ voteApp.controller('indexCtl',
         .attr("y", (0) )
         .attr("x", (0 - item_data.height/2) )
         .attr("dy", config.padding/3 + "px")
-        .attr("dx", "-2em") // reposition center to integrate text length
         .attr("class", "axis-label")
         .text(criteria[1].name);
 
