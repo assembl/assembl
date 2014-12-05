@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFamily', 'underscore', 'jquery', 'app', 'common/context', 'models/message', 'utils/i18n', 'views/messageListPostQuery', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'utils/panelSpecTypes', 'views/assemblPanel', 'common/collectionManager'],
-    function (Backbone, objectTreeRenderVisitor, MessageFamilyView, _, $, Assembl, Ctx, Message, i18n, PostQuery, Permissions, MessageSendView, MessagesInProgress, PanelSpecTypes, AssemblPanel, CollectionManager) {
+define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/messageFamily', 'underscore', 'jquery', 'app', 'common/context', 'models/message', 'utils/i18n', 'views/messageListPostQuery', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'utils/panelSpecTypes', 'views/assemblPanel', 'common/collectionManager'],
+    function (Backbone, Raven, objectTreeRenderVisitor, MessageFamilyView, _, $, Assembl, Ctx, Message, i18n, PostQuery, Permissions, MessageSendView, MessagesInProgress, PanelSpecTypes, AssemblPanel, CollectionManager) {
 
         /**
          * Constants
@@ -461,23 +461,33 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
              */
             currentQuery: new PostQuery(),
 
+            /** 
+             * Note:  this.renderedMEssageViewsCurrent must not have been 
+             * for this function to work.
+             */
             getPreviousScrollTarget: function () {
                 var panelOffset = null,
                     panelScrollTop = 0,
                     messageViewScrolledInto = null,
                     messageViewScrolledIntoOffset = -Number.MAX_VALUE,
-                    retval = null;
+                    retval = null,
+                    debug = false;
                 //We may have been called on the first render, so we have to check
-                if (this.ui.panelBody.size > 0 && (this.ui.panelBody.offset() !== undefined)) {
+                if (_.isFunction(this.ui.panelBody.size) && (this.ui.panelBody.offset() !== undefined)) {
                     panelOffset = this.ui.panelBody.offset().top;
                     panelScrollTop = this.ui.panelBody.scrollTop();
-                    //console.log("this.ui.panelBody", this.ui.panelBody, "panelScrollTop", panelScrollTop);
+                    if(debug) {
+                      console.log("this.ui.panelBody", this.ui.panelBody, "panelScrollTop", panelScrollTop);
+                    }
                     if (panelScrollTop !== 0) {
                         // Scrolling to the element
                         //var target = offset - panelOffset + panelBody.scrollTop();
                         //console.log("panelOffset", panelOffset);
                         var selector = $('.message');
-                        _.every(this.renderedMessageViewsCurrent, function (view) {
+                        if(this.renderedMessageViewsCurrent=== undefined) {
+                          throw new Error("this.renderedMessageViewsCurrent is undefined");
+                        }
+                        _.each(this.renderedMessageViewsCurrent, function (view) {
                             var retval = true;
                             //console.log("view",view);
                             var collection = view.$el.find(selector).addBack(selector);
@@ -498,9 +508,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                                     // scroll position, break out of the loop
                                     // retval = false;
                                 }
-                                return retval;
                             });
-                            return retval;
                         });
                         if (messageViewScrolledInto) {
                             //console.log("message in partial view has subject:", messageViewScrolledInto.model.get('subject'));
@@ -510,37 +518,33 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                         }
                     }
                 }
+                if(debug) {
+                  console.log("getPreviousScrollTarget returning: ", retval);
+                }
                 return retval;
             },
 
             scrollToPreviousScrollTarget: function () {
-                var panelOffset = null,
-                    panelScrollTop = 0,
-                    previousScrollTarget = this.previousScrollTarget;
+              var previousScrollTarget = this._previousScrollTarget,
+              debug = false;
 
-                if (previousScrollTarget) {
-                    //console.log("scrollToPreviousScrollTarget(): Trying to scroll to:", previousScrollTarget)
-                    //We may have been called on the first render, so we have to check
-                    if (this.ui.panelBody.offset() !== undefined) {
-                        //console.log("panelBody", panelBody);
-                        panelOffset = this.ui.panelBody.offset().top;
-                        panelScrollTop = this.ui.panelBody.scrollTop();
-                        //console.log("panelScrollTop", panelScrollTop, "panelOffset", panelOffset);
-                        var selector = Ctx.format('[id="{0}"]', previousScrollTarget.messageHtmlId);
-                        var message = this.$(selector);
-                        if (!_.size(message)) {
-                            //console.log("scrollToPreviousScrollTarget() can't find element with id:",previousScrollTarget.messageHtmlId);
-                            return;
-                        }
-                        var messageCurrentOffset = message.offset().top;
-                        //console.log("messageCurrentOffset", messageCurrentOffset);
-
-                        // Scrolling to the element
-                        var target = messageCurrentOffset - panelOffset - previousScrollTarget.innerOffset;
-                        //console.log("target",target);
-                        this.ui.panelBody.animate({ scrollTop: target });
-                    }
+              if (previousScrollTarget) {
+                if(debug){
+                  console.log("scrollToPreviousScrollTarget(): Trying to scroll to:", previousScrollTarget)
                 }
+                //We may have been called on the first render, so we have to check
+                if (this.ui.panelBody.offset() !== undefined) {
+                    var selector = Ctx.format('[id="{0}"]', previousScrollTarget.messageHtmlId);
+                    var message = this.$(selector);
+                    if (!_.size(message)) {
+                        //console.log("scrollToPreviousScrollTarget() can't find element with id:",previousScrollTarget.messageHtmlId);
+                        return;
+                    }
+
+                  // Scrolling to the element
+                  this.scrollToElement(message, undefined, previousScrollTarget.innerOffset, false)
+                }
+              }
             },
 
             /**
@@ -696,7 +700,8 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     numMessages,
                     returnedOffsets = {},
                     messageIdsToShow = [],
-                    messageFullModelsToShowPromise;
+                    messageFullModelsToShowPromise,
+                    previousScrollTarget;
 
                 this.renderIsComplete = false;//Because of a hack to call showMessageById from render_real
 
@@ -725,13 +730,20 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     this._requestedOffsets = requestedOffsets;
                 }
 
-
+                previousScrollTarget = this.getPreviousScrollTarget();
+                if(previousScrollTarget) {
+                  //The above will only succeed if we are paging.
+                  //But the previousScrollTarget MAY have been set successfully 
+                  //in onBeforeRender (if this isn't the first render), so we
+                  //only overwrite it if it actually succeeded
+                  this._previousScrollTarget = previousScrollTarget;
+                }
+                
                 /* The MessageFamilyView will re-fill the renderedMessageViewsCurrent
                  * array with the newly calculated rendered MessageViews.
                  */
                 this.renderedMessageViewsCurrent = {};
                 this.suspendAnnotatorRefresh();
-                this.previousScrollTarget = this.getPreviousScrollTarget();
 
                 if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
                     (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
@@ -1049,7 +1061,10 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                     function (allMessageStructureCollection, resultMessageIdCollection) {
                         that.allMessageStructureCollection = allMessageStructureCollection;
                         var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, that.allMessageStructureCollection, resultMessageIdCollection);
-                        if (that.showMessageByIdInProgress === false && that.currentViewStyle === that.ViewStyles.NEW_MESSAGES && first_unread_id) {
+                        if (that.showMessageByIdInProgress === false 
+                            && that.currentViewStyle === that.ViewStyles.NEW_MESSAGES 
+                            && first_unread_id
+                            && !that._previousScrollTarget) {
                             that.renderIsComplete = true;//showMessageById will call showMessages and actually finish the render
                             //We do not trigger the render_complete event here, the line above is just to un-inhibit showMessageById
                             if (this.debugPaging) {
@@ -1085,6 +1100,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                 this.saveMessagesInProgress();
                 this._clearPostRenderSlowCallbacksCallbackProcessing();
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+                this._previousScrollTarget = this.getPreviousScrollTarget();
             },
 
             /**
@@ -1761,21 +1777,27 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
              * @return {Integer} [callback] The message offest if message is found
              */
             getMessageOffset: function (messageId) {
-                var messageOffset;
-                if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
-                    (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
-                    if (!this.visitorViewData[messageId]) {
-                        console.error("getMessageOffset: visitor data for message " + messageId + " isn't in: ", this.visitorViewData);
-                        // this is bound to cause more issues later,
-                        // but it's impossible to trace through code with the exception that occurs otherwise.
-                        // TODO benoitg repair this.
-                        return -1;
-                    }
-                    messageOffset = this.visitorViewData[messageId].traversal_order;
-                } else {
-                    messageOffset = this.DEPRECATEDmessageIdsToDisplay.indexOf(messageId);
+              var messageOffset;
+              if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
+                  (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
+                try {
+                  if (!this.visitorViewData[messageId]) {
+                    throw new Error("visitor data for message is missing");
+                    
+                  }
+                } catch(e) {
+                  Raven.captureException(e,
+                      { messageId: messageId,
+                        visitorViewData: this.visitorViewData
+                      }
+                  );
                 }
-                return messageOffset;
+                
+                  messageOffset = this.visitorViewData[messageId].traversal_order;
+              } else {
+                  messageOffset = this.DEPRECATEDmessageIdsToDisplay.indexOf(messageId);
+              }
+              return messageOffset;
             },
 
             /**
@@ -1803,16 +1825,31 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
              * This is also called by views/message.js
              *
              * @param callback:  will be called once animation is complete
+             * @param margin:  How much to scroll up or down from the top of the
+             * element.  Default is 30px for historical reasons
+             * @param animate:  Should the scroll be smooth
              */
-            scrollToElement: function (el, callback) {
+            scrollToElement: function (el, callback, margin, animate) {
                 if (this.ui.panelBody.offset() !== undefined) {
                     var panelOffset = this.ui.panelBody.offset().top,
                         panelScrollTop = this.ui.panelBody.scrollTop(),
                         elOffset = el.offset().top,
-                        margin = 30,
-                        target = elOffset - panelOffset + panelScrollTop - margin;
-
-                    this.ui.panelBody.animate({ scrollTop: target }, { complete: callback });
+                        target;
+                    margin = margin || 30;
+                    if (animate === undefined) {
+                      animate = true;
+                    }
+                    target = elOffset - panelOffset + panelScrollTop - margin;
+                    //console.log(elOffset, panelOffset, panelScrollTop, margin, target);
+                    if(animate) {
+                      this.ui.panelBody.animate({ scrollTop: target }, { complete: callback });
+                    }
+                    else {
+                      this.ui.panelBody.scrollTop(target);
+                      if(_.isFunction(callback)) {
+                        callback();
+                      }
+                    }
                 }
             },
 
@@ -1822,7 +1859,8 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
             scrollToMessage: function (messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth) {
                 var that = this,
                     RETRY_INTERVAL = 100,  //10 times per second
-                    MAX_RETRIES = 300 //Stop after 30 seconds
+                    MAX_RETRIES = 300, //Stop after 30 seconds
+                    debug = false;
 
                 recursionDepth = recursionDepth || 0;
                 shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
@@ -1854,8 +1892,10 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                             // then if it's not re-render message and wait
                             message.trigger('showBody');
                             setTimeout(function () {
-                                console.log("scrollToMessage(): INFO:  shouldOpenMessageSelected is true, calling recursively after a delay");
-                                that.scrollToMessage(messageModel, shouldHighlightMessageSelected, false, callback, failedCallback, recursionDepth + 1);
+                                if(debug) {
+                                  console.log("scrollToMessage(): INFO:  shouldOpenMessageSelected is true, calling recursively after a delay with same recursion depth");
+                                }
+                                that.scrollToMessage(messageModel, shouldHighlightMessageSelected, false, callback, failedCallback, recursionDepth);
                             }, 1000); //Add a delay if we had to open the message
                         }
                         else {
@@ -1873,7 +1913,7 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                         // Trigerring showBody above requires the message to
                         // re-render. We may have to give it time
                         if (recursionDepth <= MAX_RETRIES) {
-                            if(recursionDepth >= 2) {
+                            if(debug || recursionDepth >= 2) {
                               console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
                             }
                             setTimeout(function () {
@@ -1913,9 +1953,12 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
             showMessageById: function (id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes) {
                 var that = this,
                     collectionManager = new CollectionManager(),
-                    shouldRecurse;
+                    shouldRecurse,
+                    debug=false;
 
-                //console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes);
+                if(debug) {
+                  console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes);
+                }
 
                 if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
                     console.error("showMessageById():   a showMessageById was already in progress, aborting");
@@ -1948,12 +1991,16 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                         if (messageIsInFilter && !that.isMessageOnscreen(id)) {
                             if (shouldRecurse) {
                                 var success = function () {
-                                    //console.log("showMessageById(): INFO: message " + id + " was in query results but not onscreen, we requested a page change and now call showMessageById() recursively after waiting for render to complete");
-                                    that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, 0);
+                                  if(debug) {
+                                    console.log("showMessageById(): INFO: message " + id + " was in query results but not onscreen, we requested a page change and now call showMessageById() recursively after waiting for render to complete");
+                                  }
+                                  that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, 0);
                                 };
                                 requestedOffsets = that.calculateRequestedOffsetToShowMessage(id);
                                 that.requestMessages(requestedOffsets); //It may be that a render in progress will actually use it
-                                //console.log("showMessageById() requesting page change with requestedOffset:", requestedOffsets);
+                                if(debug) {
+                                  console.log("showMessageById() requesting page change with requestedOffset:", requestedOffsets);
+                                }
                                 that.listenToOnce(that, "messageList:render_complete", success);
                                 that.showMessages(requestedOffsets);
                             }
@@ -1982,12 +2029,16 @@ define(['backbone', 'views/visitors/objectTreeRenderVisitor', 'views/messageFami
                             if (_.isFunction(callback)) {
                                 callback();
                             }
-                            //console.log("success callback setting showMessageByIdInProgress = false");
+                            if(debug) {
+                              console.log("success callback setting showMessageByIdInProgress = false");
+                            }
                             that.showMessageByIdInProgress = false;
                         };
                         var failed_callback = function () {
-                            //console.log("error callback setting showMessageByIdInProgress = false");
-                            that.showMessageByIdInProgress = false;
+                          if(debug) {
+                            console.log("error callback setting showMessageByIdInProgress = false");
+                          }
+                          that.showMessageByIdInProgress = false;
                         };
                         //console.log("showMessageById: DEBUG:  handing off to scrollToMessage");
                         that.scrollToMessage(message, shouldHighlightMessageSelected, shouldOpenMessageSelected, real_callback, failed_callback);

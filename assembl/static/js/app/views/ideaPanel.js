@@ -48,7 +48,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 'click .js_closeExtract': 'onSegmentCloseButtonClick',
                 'click .js_ideaPanel-clearBtn': 'onClearAllClick',
                 'click .js_ideaPanel-deleteBtn': 'onDeleteButtonClick',
-                'click .segment-link': "onSegmentLinkClick",
                 'click .js_seeMore': 'seeMoreOrLess',
                 'click .js_seeLess': 'seeMoreOrLess',
                 'click .js_edit-definition': 'editDefinition',
@@ -596,17 +595,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
             onDeleteButtonClick: function () {
                 this.deleteCurrentIdea();
-            },
-
-            onSegmentLinkClick: function (ev) {
-                var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                    collectionManager = new CollectionManager();
-
-                collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
-                        var segment = allExtractsCollection.get(cid);
-                        Ctx.showTargetBySegment(segment);
-                    });
             },
 
             seeMoreOrLess: function (e) {
