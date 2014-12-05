@@ -287,6 +287,7 @@
 .popin-fixed-size {
   .popin, .bbm-modal {
     min-width: 1020px !important;
+    width: 100%;
     .popin-body {
       iframe {
         height: calc(100vh - 150px);
