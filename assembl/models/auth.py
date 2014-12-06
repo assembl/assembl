@@ -12,7 +12,6 @@ from sqlalchemy import (
     String,
     ForeignKey,
     Integer,
-    Unicode,
     UnicodeText,
     DateTime,
     Time,
@@ -30,6 +29,7 @@ from sqlalchemy.schema import Index
 from sqlalchemy.orm.attributes import NO_VALUE
 from pyramid.security import Everyone, Authenticated
 from virtuoso.vmapping import IriClass
+from virtuoso.alchemy import CoerceUnicode
 
 from ..lib import config
 from ..lib.sqla import (UPDATE_OP, INSERT_OP, get_model_watcher)
@@ -52,7 +52,7 @@ class AgentProfile(Base):
 
     id = Column(Integer, primary_key=True,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
-    name = Column(Unicode(1024),
+    name = Column(CoerceUnicode(1024),
         info={'rdf': QuadMapPatternS(None, FOAF.name)})
     description = Column(UnicodeText,
         info= {'rdf': QuadMapPatternS(None, DCTERMS.description)})
@@ -396,7 +396,7 @@ class User(AgentProfile):
         primary_key=True
     )
 
-    preferred_email = Column(Unicode(50),
+    preferred_email = Column(CoerceUnicode(50),
         info={'rdf': QuadMapPatternS(None, FOAF.mbox)})
     verified = Column(Boolean(), default=False)
     password = deferred(Column(Binary(115)))
@@ -677,7 +677,7 @@ class Username(Base):
     user_id = Column(Integer,
                      ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
                      unique=True)
-    username = Column(Unicode(20), primary_key=True)
+    username = Column(CoerceUnicode(20), primary_key=True)
     user = relationship(User, backref=backref('username', uselist=False, lazy="joined"))
 
     def get_id_as_str(self):
@@ -987,7 +987,7 @@ class PartnerOrganization(DiscussionBoundBase):
         'Discussion', backref=backref(
             'partner_organizations', cascade="all, delete-orphan"))
 
-    name = Column(Unicode(256),
+    name = Column(CoerceUnicode(256),
         info={'rdf': QuadMapPatternS(None, FOAF.name)})
 
     description = Column(UnicodeText,
