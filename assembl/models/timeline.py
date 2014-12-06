@@ -5,7 +5,6 @@ from sqlalchemy import (
     Column,
     Integer,
     Boolean,
-    Unicode,
     UnicodeText,
     String,
     DateTime,
@@ -18,6 +17,7 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
     P_EDIT_POST, P_ADMIN_DISC)
+from virtuoso.alchemy import CoerceUnicode
 from ..semantic.namespaces import TIME, DCTERMS, ASSEMBL
 from .discussion import Discussion
 
@@ -42,7 +42,7 @@ class TimelineEvent(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
-    title = Column(Unicode(), nullable=False,
+    title = Column(CoerceUnicode(), nullable=False,
         info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
 
     description = Column(UnicodeText,

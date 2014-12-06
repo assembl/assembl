@@ -26,7 +26,6 @@ from sqlalchemy import (
     Integer,
     ForeignKey,
     String,
-    Unicode,
     Binary,
     UnicodeText,
     Boolean,
@@ -37,6 +36,7 @@ from .post import ImportedPost
 from .auth import EmailAccount
 from assembl.tasks.imap import import_mails
 from assembl.lib.sqla import mark_changed
+from virtuoso.alchemy import CoerceUnicode
 
 
 class AbstractMailbox(PostSource):
@@ -897,7 +897,7 @@ class AbstractFilesystemMailbox(AbstractMailbox):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    filesystem_path = Column(Unicode(), nullable=False)
+    filesystem_path = Column(CoerceUnicode(), nullable=False)
     
     __mapper_args__ = {
         'polymorphic_identity': 'source_filesystemmailbox',
@@ -984,11 +984,11 @@ class Email(ImportedPost):
 
     # in virtuoso, varchar is 1024 bytes and sizeof(wchar)==4, so varchar is 256 chars
     recipients = deferred(Column(UnicodeText, nullable=False), group='raw_details')
-    sender = Column(Unicode(), nullable=False)
+    sender = Column(CoerceUnicode(), nullable=False)
 
     full_message = deferred(Column(Binary), group='raw_details')
 
-    in_reply_to = Column(Unicode())
+    in_reply_to = Column(CoerceUnicode())
 
     __mapper_args__ = {
         'polymorphic_identity': 'email',
