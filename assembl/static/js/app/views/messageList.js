@@ -128,7 +128,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 });
 
                 this.listenTo(Assembl.vent, 'messageList:showMessageById', function (id, callback) {
-                    that.showMessageById(id, callback);
+                  //console.log("Calling showMessageById from messageList:showMessageById with params:", id, callback);
+                  that.showMessageById(id, callback);
                 });
 
                 this.listenTo(Assembl.vent, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
@@ -610,8 +611,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @param messageId of the message that we want onscreen
              * @return {} requetedOffset structure
              */
-            calculateRequestedOffsetToShowMessage: function (messageId) {
-                return this.calculateRequestedOffsetToShowOffset(this.getMessageOffset(messageId));
+            calculateRequestedOffsetToShowMessage: function (messageId, visitorOrderLookupTable, resultMessageIdCollection) {
+                return this.calculateRequestedOffsetToShowOffset(this.getMessageOffset(messageId, visitorOrderLookupTable, resultMessageIdCollection));
             },
 
             /**
@@ -1061,6 +1062,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     function (allMessageStructureCollection, resultMessageIdCollection) {
                         that.allMessageStructureCollection = allMessageStructureCollection;
                         var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, that.allMessageStructureCollection, resultMessageIdCollection);
+                        //console.log("that.showMessageByIdInProgress", that.showMessageByIdInProgress);
                         if (that.showMessageByIdInProgress === false 
                             && that.currentViewStyle === that.ViewStyles.NEW_MESSAGES 
                             && first_unread_id
@@ -1111,6 +1113,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 var that = this,
                     collectionManager = new CollectionManager();
                 this.renderIsComplete = false;  //only showMessages should set this false
+
                 var successCallback = function (messageStructureCollection, resultMessageIdCollection) {
                     that = that.render_real();
                     that.unblockPanel();
@@ -1771,19 +1774,44 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
                 }
             },
+            
+            /** Returns a list of message id in order of traversal.
+             * Return -1 if message not found */
+            getResultThreadedTraversalOrder: function (messageId, visitorOrderLookupTable, resultMessageIdCollection) {
+              var that = this,
+                  retval = -1;
+              _.every(visitorOrderLookupTable, function (visitorMessageId) {
+                  if(that.isMessageIdInResults(visitorMessageId, resultMessageIdCollection)) {
+                    retval++;
+                  }
+                  if(messageId === visitorMessageId) {
+                    //Break the loop
+                    return false;
+                  }
+                  else {
+                    return true
+                  }
+              });
+              return retval;
+          },
             /** Return the message offset in the current view, in the set of filtered
              * messages
              * @param {String} messageId
              * @return {Integer} [callback] The message offest if message is found
              */
-            getMessageOffset: function (messageId) {
+            getMessageOffset: function (messageId, visitorOrderLookupTable, resultMessageIdCollection) {
               var messageOffset;
               if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
                   (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
                 try {
                   if (!this.visitorViewData[messageId]) {
                     throw new Error("visitor data for message is missing");
-                    
+                  }
+                  if (visitorOrderLookupTable === undefined) {
+                    throw new Error("visitorOrderLookupTable message is missing");
+                  }
+                  if (resultMessageIdCollection === undefined) {
+                    throw new Error("resultMessageIdCollection is missing");
                   }
                 } catch(e) {
                   Raven.captureException(e,
@@ -1791,12 +1819,15 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         visitorViewData: this.visitorViewData
                       }
                   );
+                  //TO REPRODUCE, USE THE SYNTHESIS SECTION IN NAVIGATION
+                  //return -1;
                 }
                 
-                  messageOffset = this.visitorViewData[messageId].traversal_order;
+                  messageOffset = this.getResultThreadedTraversalOrder(messageId, visitorOrderLookupTable, resultMessageIdCollection);
               } else {
                   messageOffset = this.DEPRECATEDmessageIdsToDisplay.indexOf(messageId);
               }
+              //console.log("getMessageOffset returning", messageOffset, " for message id", messageId);
               return messageOffset;
             },
 
@@ -1807,9 +1838,11 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @param {String} id
              * @return{Boolean} true or false
              */
-            isMessageOnscreen: function (id) {
-                var messageIndex = this.getMessageOffset(id);
-                //console.log("isMessageOnscreen", this._offsetStart, messageIndex, this._offsetEnd)
+            isMessageOnscreen: function (id, visitorOrderLookupTable, resultMessageIdCollection) {
+                var messageIndex = this.getMessageOffset(id, visitorOrderLookupTable, resultMessageIdCollection);
+                if (this.debugPaging) {
+                console.log("isMessageOnscreen(): ", this._offsetStart, messageIndex, this._offsetEnd)
+                }
                 if (this._offsetStart === undefined || this._offsetEnd === undefined) {
                     return false;
                 }
@@ -1951,99 +1984,105 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @param {Boolean} shouldHighlightMessageSelected, defaults to true
              */
             showMessageById: function (id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes) {
-                var that = this,
-                    collectionManager = new CollectionManager(),
-                    shouldRecurse,
-                    debug=false;
+              var that = this,
+                  collectionManager = new CollectionManager(),
+                  shouldRecurse,
+                  debug=false;
 
-                if(debug) {
-                  console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes);
+              if(debug) {
+                console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes);
+                console.log("this.showMessageByIdInProgress:",this.showMessageByIdInProgress);
+              }
+
+              if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
+                  console.error("showMessageById():   a showMessageById was already in progress, aborting for message", id);
+                  return;
+              }
+              else if (shouldRecurseMaxMoreTimes === undefined) {
+                  this.showMessageByIdInProgress = true;
+              }
+
+              shouldRecurseMaxMoreTimes = (typeof shouldRecurseMaxMoreTimes === "undefined") ? 3 : shouldRecurseMaxMoreTimes;
+              shouldRecurse = shouldRecurseMaxMoreTimes > 0;
+
+              if (!this.renderIsComplete) {
+                  // If there is already a render in progress, really weird things
+                  // can happen.  Wait untill things calm down.
+                if (debug) {
+                  console.log("showMessageById(): Render is in progress, setting up listener");
                 }
+                this.listenToOnce(that, "messageList:render_complete", function () {
+                  if (debug) {
+                    console.log("showMessageById(): calling recursively after waiting for render to complete");
+                  }
+                  that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes - 1);
+                });
+                return;
+              }
 
-                if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
-                    console.error("showMessageById():   a showMessageById was already in progress, aborting");
-                    return;
-                }
-                else if (shouldRecurseMaxMoreTimes === undefined) {
-                    this.showMessageByIdInProgress = true;
-                }
+              $.when(collectionManager.getAllMessageStructureCollectionPromise(),
+                  this.currentQuery.getResultMessageIdCollectionPromise()).done(
+                  function (allMessageStructureCollection, resultMessageIdCollection) {
+                      var message = allMessageStructureCollection.get(id),
+                          messageIsInFilter = that.isMessageIdInResults(id, resultMessageIdCollection),
+                          requestedOffsets;
 
-                shouldRecurseMaxMoreTimes = (typeof shouldRecurseMaxMoreTimes === "undefined") ? 3 : shouldRecurseMaxMoreTimes;
-                shouldRecurse = shouldRecurseMaxMoreTimes > 0;
-
-                if (!this.renderIsComplete) {
-                    // If there is already a render in progress, really weird things
-                    // can happen.  Wait untill things calm down.
-                    this.listenToOnce(that, "messageList:render_complete", function () {
-                        console.log("showMessageById(): calling recursively after waiting for render to complete");
-                        that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes - 1);
-                    });
-                    return;
-                }
-
-                $.when(collectionManager.getAllMessageStructureCollectionPromise(),
-                    this.currentQuery.getResultMessageIdCollectionPromise()).done(
-                    function (allMessageStructureCollection, resultMessageIdCollection) {
-                        var message = allMessageStructureCollection.get(id),
-                            messageIsInFilter = that.isMessageIdInResults(id, resultMessageIdCollection),
-                            requestedOffsets;
-
-                        if (messageIsInFilter && !that.isMessageOnscreen(id)) {
-                            if (shouldRecurse) {
-                                var success = function () {
-                                  if(debug) {
-                                    console.log("showMessageById(): INFO: message " + id + " was in query results but not onscreen, we requested a page change and now call showMessageById() recursively after waiting for render to complete");
-                                  }
-                                  that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, 0);
-                                };
-                                requestedOffsets = that.calculateRequestedOffsetToShowMessage(id);
-                                that.requestMessages(requestedOffsets); //It may be that a render in progress will actually use it
+                      if (messageIsInFilter && !that.isMessageOnscreen(id, that.visitorOrderLookupTable, resultMessageIdCollection)) {
+                          if (shouldRecurse) {
+                              var success = function () {
                                 if(debug) {
-                                  console.log("showMessageById() requesting page change with requestedOffset:", requestedOffsets);
+                                  console.log("showMessageById(): INFO: message " + id + " was in query results but not onscreen, we requested a page change and now call showMessageById() recursively after waiting for render to complete");
                                 }
-                                that.listenToOnce(that, "messageList:render_complete", success);
-                                that.showMessages(requestedOffsets);
-                            }
-                            else {
-                                console.error("showMessageById:  Message is in query results but not in current page, and we are not allowed to recurse");
-                            }
-                            return;
-                        }
-                        if (!messageIsInFilter) {
-                            //The current filters might not include the message
-                            if (shouldRecurse) {
-                                that.showAllMessages();
-                                var success = function () {
-                                    console.log("showMessageById(): WARNING: message " + id + " not in query results, calling showMessageById() recursively after clearing filters");
-                                    that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes - 1);
-                                };
-                                that.listenToOnce(that, "messageList:render_complete", success);
-                            }
-                            else {
-                                console.error("showMessageById:  Message is not in query results, and we are not allowed to recurse");
-                            }
-                            return;
-                        }
+                                that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, 0);
+                              };
+                              requestedOffsets = that.calculateRequestedOffsetToShowMessage(id, that.visitorOrderLookupTable, resultMessageIdCollection);
+                              that.requestMessages(requestedOffsets); //It may be that a render in progress will actually use it
+                              if(debug) {
+                                console.log("showMessageById() requesting page change with requestedOffset:", requestedOffsets);
+                              }
+                              that.listenToOnce(that, "messageList:render_complete", success);
+                              that.showMessages(requestedOffsets);
+                          }
+                          else {
+                              console.error("showMessageById:  Message is in query results but not in current page, and we are not allowed to recurse, aborting for message", id);
+                          }
+                          return;
+                      }
+                      if (!messageIsInFilter) {
+                          //The current filters might not include the message
+                          if (shouldRecurse) {
+                              that.showAllMessages();
+                              var success = function () {
+                                  console.log("showMessageById(): WARNING: message " + id + " not in query results, calling showMessageById() recursively after clearing filters");
+                                  that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes - 1);
+                              };
+                              that.listenToOnce(that, "messageList:render_complete", success);
+                          }
+                          else {
+                              console.error("showMessageById:  Message is not in query results, and we are not allowed to recurse");
+                          }
+                          return;
+                      }
 
-                        var real_callback = function () {
-                            if (_.isFunction(callback)) {
-                                callback();
-                            }
-                            if(debug) {
-                              console.log("success callback setting showMessageByIdInProgress = false");
-                            }
-                            that.showMessageByIdInProgress = false;
-                        };
-                        var failed_callback = function () {
+                      var real_callback = function () {
+                          if (_.isFunction(callback)) {
+                              callback();
+                          }
                           if(debug) {
-                            console.log("error callback setting showMessageByIdInProgress = false");
+                            console.log("success callback setting showMessageByIdInProgress = false");
                           }
                           that.showMessageByIdInProgress = false;
-                        };
-                        //console.log("showMessageById: DEBUG:  handing off to scrollToMessage");
-                        that.scrollToMessage(message, shouldHighlightMessageSelected, shouldOpenMessageSelected, real_callback, failed_callback);
+                      };
+                      var failed_callback = function () {
+                        if(debug) {
+                          console.log("error callback setting showMessageByIdInProgress = false");
+                        }
+                        that.showMessageByIdInProgress = false;
+                      };
+                      //console.log("showMessageById: DEBUG:  handing off to scrollToMessage");
+                      that.scrollToMessage(message, shouldHighlightMessageSelected, shouldOpenMessageSelected, real_callback, failed_callback);
 
-                    });
+                  });
 
             },
 

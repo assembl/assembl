@@ -48,8 +48,7 @@ define(['app', 'common/context', 'utils/panelSpecTypes', 'views/idea'],
                     messageListView.triggerMethod('messageList:clearAllFilters');
                     messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
                     Ctx.setCurrentIdea(null);
-                    //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.
-                    messageListView.render();
+
                     if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE)
                         this.groupContent.resetDebateState();
                 }
