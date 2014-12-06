@@ -12,7 +12,6 @@ from sqlalchemy import (
     DateTime,
     String,
     ForeignKey,
-    Unicode,
     UnicodeText,
     Text,
     or_,
@@ -20,6 +19,7 @@ from sqlalchemy import (
 )
 
 from ..semantic.virtuoso_mapping import QuadMapPatternS
+from virtuoso.alchemy import CoerceUnicode
 from .generic import Content, ContentSource
 from .auth import AgentProfile
 from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
@@ -47,7 +47,7 @@ class Post(Content):
         onupdate='CASCADE'
     ), primary_key=True)
     
-    message_id = Column(Unicode(),
+    message_id = Column(CoerceUnicode(),
                         nullable=False,
                         index=True,
                         doc="The email-compatible message-id for the post.",
@@ -81,7 +81,7 @@ class Post(Content):
         info= {'rdf': QuadMapPatternS(None, SIOC.has_creator)})
     creator = relationship(AgentProfile, backref="posts_created")
     
-    subject = Column(Unicode(), nullable=True,
+    subject = Column(CoerceUnicode(), nullable=True,
         info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
     # TODO: check HTML or text? SIOC.content should be text.
     # Do not give it for now, privacy reasons
@@ -371,7 +371,7 @@ class ImportedPost(Post):
 
     import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    source_post_id = Column(Unicode(),
+    source_post_id = Column(CoerceUnicode(),
                         nullable=False,
                         doc="The source-specific unique id of the imported post.  A listener keeps the message_id in the post class in sync")
     
@@ -383,7 +383,7 @@ class ImportedPost(Post):
         backref=backref('contents')
     )
     
-    body_mime_type = Column(Unicode(),
+    body_mime_type = Column(CoerceUnicode(),
                         nullable=False,
                         doc="The mime type of the body of the imported content.  See Content::get_body_mime_type() for allowed values.")
     

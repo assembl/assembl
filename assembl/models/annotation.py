@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, Unicode
+from sqlalchemy import Column, Integer, ForeignKey, DateTime
 
 from .generic import Content
+from virtuoso.alchemy import CoerceUnicode
 
 
 class Webpage(Content):
@@ -10,7 +11,7 @@ class Webpage(Content):
             'content.id',
             ondelete='CASCADE'
         ), primary_key=True)
-    url = Column(Unicode, unique=True)
+    url = Column(CoerceUnicode, unique=True)
     last_modified_date = Column(DateTime, nullable=True)
     # Should we cache the page content?
 

@@ -7,7 +7,6 @@ from pyramid.security import Allow, ALL_PERMISSIONS
 from sqlalchemy import (
     Column,
     Integer,
-    Unicode,
     UnicodeText,
     DateTime,
     event,
@@ -17,6 +16,7 @@ from sqlalchemy.orm import relationship, join
 
 from assembl.lib.utils import slugify
 from . import DiscussionBoundBase
+from virtuoso.alchemy import CoerceUnicode
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     P_READ, R_SYSADMIN, P_ADMIN_DISC, R_PARTICIPANT,
@@ -41,7 +41,7 @@ class Discussion(DiscussionBoundBase):
     topic = Column(UnicodeText, nullable=False,
                    info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
 
-    slug = Column(Unicode, nullable=False, unique=True, index=True)
+    slug = Column(CoerceUnicode, nullable=False, unique=True, index=True)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
                            info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
