@@ -113,8 +113,8 @@ class TimelineEvent(DiscussionBoundBase):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 

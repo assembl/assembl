@@ -43,14 +43,14 @@ class ContentSource(DiscussionBoundBase):
     ))
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def special_quad_patterns(cls, alias_maker, discussion_id):
         return [
             QuadMapPatternS(
                 Discussion.iri_class().apply(cls.discussion_id),
                 CATALYST.uses_source,
                 cls.iri_class().apply(cls.id),
                 name=QUADNAMES.uses_source,
-                condition=cls.discussion_id != None),
+                conditions=(cls.discussion_id != None,)),
         ]
 
     discussion = relationship(
@@ -85,8 +85,8 @@ class ContentSource(DiscussionBoundBase):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -130,8 +130,8 @@ class PostSource(ContentSource):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     def send_post(self, post):
         """ Send a new post in the discussion to the source. """
@@ -222,8 +222,8 @@ class Content(DiscussionBoundBase):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     widget_idea_links = relationship('IdeaContentWidgetLink')
 

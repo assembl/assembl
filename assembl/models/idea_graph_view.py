@@ -67,8 +67,8 @@ class IdeaGraphView(DiscussionBoundBase):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id, )
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -94,13 +94,13 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
             return IdeaGraphView.get(self.sub_graph_id).get_discussion_id()
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         from . import ExplicitSubGraphView
-        return (cls.sub_graph_id == IdeaGraphView.id) & \
-            (IdeaGraphView.discussion_id == discussion_id)
+        return ((cls.sub_graph_id == IdeaGraphView.id),
+                (IdeaGraphView.discussion_id == discussion_id))
 
     # @classmethod
-    # def special_quad_patterns(cls, alias_manager, discussion_id):
+    # def special_quad_patterns(cls, alias_maker, discussion_id):
     #     return [QuadMapPatternS(
     #         Idea.iri_class().apply(cls.source_id),
     #         IDEA.includes,
@@ -134,10 +134,9 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
             return IdeaGraphView.get(self.sub_graph_id).get_discussion_id()
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        from . import ExplicitSubGraphView
-        return (cls.sub_graph_id == IdeaGraphView.id) & \
-            (IdeaGraphView.discussion_id == discussion_id)
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.sub_graph_id == IdeaGraphView.id),
+                (IdeaGraphView.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -280,8 +279,8 @@ class TableOfContents(IdeaGraphView):
         return self.discussion.id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     def get_idea_links(self):
         return self.discussion.get_idea_links()
@@ -349,8 +348,8 @@ class Synthesis(ExplicitSubGraphView):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     def __repr__(self):
         return "<Synthesis %s>" % repr(self.subject)

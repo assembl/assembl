@@ -195,8 +195,8 @@ class NotificationSubscription(DiscussionBoundBase):
         pass
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     @abstractmethod
     def wouldCreateNotification(self, discussion_id, verb, object):

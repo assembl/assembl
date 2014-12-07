@@ -1,6 +1,6 @@
 from os import listdir
 from os.path import join, dirname
-from itertools import ifilter
+from inspect import isabstract
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -8,12 +8,10 @@ from rdflib import Graph, ConjunctiveGraph
 import simplejson as json
 
 from ..lib.sqla import class_registry, Base
-from .namespaces import (
-    namespace_manager as _nsm, ASSEMBL, QUADNAMES, RDF, OWL, CATALYST)
+from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST)
 from virtuoso.vmapping import (
-    PatternIriClass, QuadMapPattern, ClassPatternExtractor,
-    GraphQuadMapPattern, QuadStorage, ClassAliasManager,
-    PatternGraphQuadMapPattern)
+    QuadMapPattern, QuadStorage, GraphQuadMapPattern,
+    PatternGraphQuadMapPattern, ClassPatternExtractor)
 from virtuoso.vstore import Virtuoso
 
 
@@ -125,19 +123,19 @@ def load_ontologies(session, reload=None):
 class QuadMapPatternS(QuadMapPattern):
     def __init__(
             self, subject=None, predicate=None, obj=None, graph_name=None,
-            name=None, condition=None, nsm=None, section=None,
+            name=None, conditions=None, nsm=None, sections=None,
             exclude_base_condition=False):
         super(QuadMapPatternS, self).__init__(
-            subject, predicate, obj, graph_name, name, condition, nsm)
-        self.section = section
+            subject, predicate, obj, graph_name, name, conditions, nsm)
+        self.sections = sections
         self.exclude_base_condition = exclude_base_condition
 
     def clone_with_defaults(self, subject=None, obj=None, graph_name=None,
-                            name=None, condition=None, section=None,
+                            name=None, conditions=None, sections=None,
                             exclude_base_condition=False):
         qmp = super(QuadMapPatternS, self).clone_with_defaults(
-            subject, obj, graph_name, name, condition)
-        qmp.section = self.section or section
+            subject, obj, graph_name, name, conditions)
+        qmp.sections = self.sections or sections
         qmp.exclude_base_condition = (
             self.exclude_base_condition or exclude_base_condition)
         return qmp
@@ -145,18 +143,15 @@ class QuadMapPatternS(QuadMapPattern):
 
 def assembl_iri_accessor(cls):
     return cls.iri_class()
-    # TODO: Special case for special class accessors
+
 
 class AssemblClassPatternExtractor(ClassPatternExtractor):
 
-    def __init__(self, alias_manager, graph=None,
-                 section=None, discussion_id=None):
-        super(AssemblClassPatternExtractor, self).__init__(
-            alias_manager, assembl_iri_accessor, graph=graph)
-        self.section = section
-        self.discussion_id = discussion_id
+    def iri_accessor(self, sqla_cls):
+        return sqla_cls.iri_class()
+        # TODO: Special case for special class accessors
 
-    def get_subject_pattern(self, cls):
+    def get_subject_pattern(self, cls, alias_maker=None):
         iri_qmp = None
         try:
             iri_qmp = cls.iri_class()
@@ -165,100 +160,133 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         if iri_qmp:
             return iri_qmp.apply(cls.id)
         return super(AssemblClassPatternExtractor, self
-                     ).get_subject_pattern(cls)
+                     ).get_subject_pattern(cls, alias_maker)
 
-    def class_pattern_name(self, cls):
+    def class_pattern_name(self, cls, for_graph):
         clsname = cls.external_typename()
-        if self.discussion_id:
+        if for_graph.discussion_id:
             return getattr(QUADNAMES, 'class_pattern_d%s_%s' % (
-                self.discussion_id, clsname))
+                for_graph.discussion_id, clsname))
         else:
             return getattr(QUADNAMES, 'class_pattern_'+clsname)
 
-    def make_column_name(self, cls, column):
+    def make_column_name(self, cls, column, for_graph):
         clsname = cls.external_typename()
-        if self.discussion_id:
+        if for_graph.discussion_id:
             return getattr(QUADNAMES, 'col_pattern_d%s_%s_%s' % (
-                self.discussion_id, clsname, column.name))
+                for_graph.discussion_id, clsname, column.name))
         else:
             return getattr(QUADNAMES, 'col_pattern_%s_%s' % (
                 clsname, column.name))
 
-    def delayed_class(self, sqla_cls):
+    def include_foreign_conditions(self, dest_class_path):
+        from assembl.models import Discussion
+        return dest_class_path.final_class != Discussion
+
+    def delayed_class(self, sqla_cls, for_graph):
         from ..models import DiscussionBoundBase
-        return (
-            self.discussion_id
+        delayed = (
+            for_graph.discussion_id
             and issubclass(sqla_cls, DiscussionBoundBase)
-            and getattr(sqla_cls.get_discussion_condition,
+            and getattr(sqla_cls.get_discussion_conditions,
                         '__isabstractmethod__', None))
+        return delayed
 
-    def delayed_column(self, sqla_cls, column):
-        return self.delayed_class(sqla_cls.mro()[1])
+    def delayed_column(self, sqla_cls, column, for_graph):
+        return self.delayed_class(sqla_cls.mro()[1], for_graph)
 
-    def _extract_column_info(self, sqla_cls, subject_pattern):
+    def add_class(self, sqla_cls, for_graph):
+        if self.delayed_class(sqla_cls, for_graph):
+            return
+        super(AssemblClassPatternExtractor, self).add_class(
+            sqla_cls, for_graph)
+
+    def extract_qmps(self, sqla_cls, subject_pattern, alias_maker, for_graph):
         rdf_class = sqla_cls.__dict__.get('rdf_class', None)
-        rdf_section = getattr(sqla_cls, 'rdf_section', DISCUSSION_DATA_SECTION)
-        if rdf_class:
+        rdf_sections = getattr(
+            sqla_cls, 'rdf_sections', (DISCUSSION_DATA_SECTION,))
+        if rdf_class is not None and for_graph.section in rdf_sections:
             yield QuadMapPatternS(
-                subject_pattern, RDF.type, rdf_class, self.graph,
-                self.class_pattern_name(sqla_cls),
-                self.get_base_condition(sqla_cls), None, rdf_section)
-        for p in super(AssemblClassPatternExtractor, self).extract_column_info(
-                sqla_cls, subject_pattern):
-            yield p
+                subject_pattern, RDF.type, rdf_class, for_graph.name,
+                self.class_pattern_name(sqla_cls, for_graph),
+                self.get_base_conditions(alias_maker, sqla_cls, for_graph),
+                None, rdf_sections)
+        for qmp in super(AssemblClassPatternExtractor, self).extract_qmps(
+                sqla_cls, subject_pattern, alias_maker, for_graph):
+            if for_graph.section in qmp.sections:
+                yield qmp
         if 'special_quad_patterns' in sqla_cls.__dict__:
             # Only direct definition
+            # OK. I need to have one alias per column, with the possibility of
+            # creating more aliases for paths (multiple joins.)
+            # The paths can be expressed as sequences of properties, I guess.
+            # Maybe propose aliases?
             for qmp in sqla_cls.special_quad_patterns(
-                    self.alias_manager, self.discussion_id):
-                qmp = self.qmp_with_defaults(qmp, subject_pattern, sqla_cls)
-                if qmp.graph_name == self.graph.name:
+                    alias_maker, for_graph.discussion_id):
+                qmp = self.qmp_with_defaults(
+                    qmp, subject_pattern, sqla_cls, alias_maker, for_graph)
+                if qmp.graph_name == for_graph.name:
                     qmp.resolve(sqla_cls)
                     yield qmp
 
-    def get_base_condition(self, cls):
+    def get_base_conditions(self, alias_maker, cls, for_graph):
         from ..models import DiscussionBoundBase
-        condition = cls.base_condition()
-        if self.discussion_id and issubclass(cls, DiscussionBoundBase):
-            discussion_condition = cls.get_discussion_condition(self.discussion_id)
-            if discussion_condition is not None:
-                if condition is None:
-                    condition = discussion_condition
-                else:
-                    condition = condition & discussion_condition
-        return condition
+        conditions = super(
+            AssemblClassPatternExtractor, self).get_base_conditions(
+            alias_maker, cls, for_graph)
+        base_conds = cls.base_conditions(alias_maker=alias_maker)
+        if base_conds:
+            conditions.extend(base_conds)
+        if (for_graph.discussion_id and issubclass(cls, DiscussionBoundBase)
+                and not isabstract(cls)):
+            # TODO: update with conditionS.
+            conditions.extend(cls.get_discussion_conditions(
+                for_graph.discussion_id, alias_maker))
+        return [c for c in conditions if c is not None]
 
-    def qmp_with_defaults(self, qmp, subject_pattern, sqla_cls, column=None):
-        rdf_section = getattr(sqla_cls, 'rdf_section', DISCUSSION_DATA_SECTION)
+    def qmp_with_defaults(
+            self, qmp, subject_pattern, sqla_cls, alias_maker, for_graph,
+            column=None):
+        rdf_sections = getattr(
+            sqla_cls, 'rdf_sections', (DISCUSSION_DATA_SECTION,))
         name = None
         if column is not None:
-            name = self.make_column_name(sqla_cls, column)
+            name = self.make_column_name(sqla_cls, column, for_graph)
             if column.foreign_keys:
                 column = self.column_as_reference(column)
         qmp = qmp.clone_with_defaults(
-            subject_pattern, column, self.graph.name, name, None, rdf_section)
+            subject_pattern, column, for_graph.name, name, None, rdf_sections)
         if not qmp.exclude_base_condition:
-            condition = self.get_base_condition(sqla_cls)
-            if condition is not None:
-                qmp.and_condition(condition)
-        d_id = self.discussion_id
+            conditions = self.get_base_conditions(
+                alias_maker, sqla_cls, for_graph)
+            if conditions:
+                qmp.and_conditions(conditions)
+        d_id = for_graph.discussion_id
         if (d_id and qmp.name is not None
                 and "_d%d_" % (d_id,) not in qmp.name):
             # TODO: improve this
             qmp.name += "_d%d_" % (d_id,)
         return qmp
 
-    def extract_column_info(self, sqla_cls, subject_pattern):
-        gen = self._extract_column_info(sqla_cls, subject_pattern)
-        if self.section:
-            gen = ifilter(lambda q: q.section == self.section, gen)
-        return list(gen)
 
-    def extract_info(self, sqla_cls, subject_pattern=None):
-        from ..models import DiscussionBoundBase
-        if self.delayed_class(sqla_cls):
-            return ()
-        return super(AssemblClassPatternExtractor, self).extract_info(
-            sqla_cls, subject_pattern)
+class AssemblGraphQuadMapPattern(GraphQuadMapPattern):
+    def __init__(
+            self, graph_iri, storage, section, discussion_id,
+            name=None, option=None, nsm=None):
+        super(AssemblGraphQuadMapPattern, self).__init__(
+            graph_iri, storage, name, option, nsm)
+        self.discussion_id = discussion_id
+        self.section = section
+
+
+class AssemblPatternGraphQuadMapPattern(PatternGraphQuadMapPattern):
+    def __init__(
+            self, graph_iri_pattern, storage, alias_set, section,
+            discussion_id, name=None, option=None, nsm=None):
+        super(AssemblPatternGraphQuadMapPattern, self).__init__(
+            graph_iri_pattern, storage, alias_set, name, option, nsm)
+        self.discussion_id = discussion_id
+        self.section = section
 
 
 # QUESTION: 1 storage per discussion? I would say yes.
@@ -279,45 +307,46 @@ class AssemblQuadStorageManager(object):
         assert Base.metadata.schema.split('.')[1]
 
     def prepare_storage(self, quad_storage_name, imported=None):
-        alias_manager = ClassAliasManager(Base._decl_class_registry)
-        return QuadStorage(quad_storage_name, imported, alias_manager, False,
-                           nsm=self.nsm)
+        cpe = AssemblClassPatternExtractor(
+            Base._decl_class_registry)
+        qs = QuadStorage(
+            quad_storage_name, cpe, imported, False, nsm=self.nsm)
+        return qs, cpe
 
     def populate_storage(
-        self, qs, section, graph_name, graph_iri, discussion_id=None,
+        self, qs, cpe, section, graph_name, graph_iri, discussion_id=None,
             exclusive=True):
-        gqm = GraphQuadMapPattern(
-            graph_name, qs, graph_iri, 'exclusive' if exclusive else None)
-        cpe = AssemblClassPatternExtractor(
-            qs.alias_manager, gqm, section, discussion_id)
+        gqm = AssemblGraphQuadMapPattern(
+            graph_iri, qs, section, discussion_id, graph_name,
+            'exclusive' if exclusive else None)
         for cls in class_registry.itervalues():
             # TODO: Take pattern's graph into account!
-            gqm.add_patterns(cpe.extract_info(cls))
+            cpe.add_class(cls, gqm)
         return gqm
 
     def create_storage(self, session, quad_storage_name,
                        sections, discussion_id=None, exclusive=True,
                        imported=None):
-        qs = self.prepare_storage(quad_storage_name, imported or [])
+        qs, cpe = self.prepare_storage(quad_storage_name, imported or [])
         for section, graph_name, graph_iri, disc_id in sections:
             self.populate_storage(
-                qs, section, graph_name, graph_iri, disc_id, exclusive)
+                qs, cpe, section, graph_name, graph_iri, disc_id, exclusive)
         defn = qs.full_declaration_clause()
         return qs, list(session.execute(defn))
 
     def update_storage(
             self, session, quad_storage_name, sections, exclusive=True):
-        qs = self.prepare_storage(quad_storage_name)
+        qs, cpe = self.prepare_storage(quad_storage_name)
         results = []
         for section, graph_name, graph_iri, disc_id in sections:
             gqm = self.populate_storage(
-                qs, section, graph_name, graph_iri, disc_id)
+                qs, cpe, section, graph_name, graph_iri, disc_id)
             defn = qs.alter_clause_add_graph(gqm)
             results.extend(session.execute(defn))
         return qs, results
 
     def drop_storage(self, session, storage_name, force=False):
-        qs = QuadStorage(storage_name, nsm=self.nsm)
+        qs = QuadStorage(storage_name, None, nsm=self.nsm)
         try:
             qs.drop(session, force)
         except:
@@ -345,15 +374,17 @@ class AssemblQuadStorageManager(object):
 
     def create_discussion_storage(self, session, discussion, execute=True):
         id = discussion.id
-        qs = self.prepare_storage(self.discussion_storage_name(id))
+        qs, cpe = self.prepare_storage(self.discussion_storage_name(id))
         for s in (DISCUSSION_DATA_SECTION, ):  # DISCUSSION_HISTORY_SECTION
-            self.populate_storage(qs, s, self.discussion_graph_name(id, s),
-                                  self.discussion_graph_iri(id, s), id)
-        from ..models import Extract, Idea, TextFragmentIdentifier
+            gqm = self.populate_storage(
+                qs, cpe, s, self.discussion_graph_name(id, s),
+                self.discussion_graph_iri(id, s), id)
+        from ..models import Extract, Idea
         # Option 1: explicit graphs.
         # Fails because the extract.id in the condition is not part of
         # the compile, so we do not get explicit conditions.
         #
+        # from ..models import TextFragmentIdentifier
         # for extract in session.query(Extract).filter(
         #         (Extract.discussion==discussion) & (Extract.idea != None)):
         #     gqm = GraphQuadMapPattern(
@@ -367,12 +398,12 @@ class AssemblQuadStorageManager(object):
         #                      extract.id)),
         #         condition=(Extract.idea_id != None
         #                   ) & (Extract.id == extract.id),
-        #         section=EXTRACT_SECTION)
+        #         sections=(EXTRACT_SECTION,))
         #     gqm.add_patterns((qmp,))
         #
         # Option 2: use the usual mechanism. But interaction with alias_set is
         # hopelessly complicated
-        # self.populate_storage(qs, EXTRACT_SECTION,
+        # self.populate_storage(qs, cpe, EXTRACT_SECTION,
         #     Extract.graph_iri_class.apply(Extract.id),
         #     QUADNAMES.ExtractGraph_iri, id)
         #
@@ -381,8 +412,8 @@ class AssemblQuadStorageManager(object):
         # Sigh.
         qs2 = qs  # self.prepare_storage(self.discussion_storage_name(id))
         extract_graph_name = Extract.graph_iri_class.apply(Extract.id)
-        gqm = PatternGraphQuadMapPattern(
-            extract_graph_name, qs2, None,
+        gqm = AssemblPatternGraphQuadMapPattern(
+            extract_graph_name, qs2, cpe, EXTRACT_SECTION, id,
             getattr(QUADNAMES, "catalyst_ExtractGraph_d%d_iri" % (id,)),
             'exclusive')
         qmp = QuadMapPatternS(
@@ -391,9 +422,10 @@ class AssemblQuadStorageManager(object):
             Idea.iri_class().apply(Extract.idea_id),
             graph_name=extract_graph_name,
             name=getattr(QUADNAMES, "catalyst_expressesIdea_d%d_iri" % (id,)),
-            condition=((Extract.idea_id != None) & (Extract.discussion_id == id)),
-            section=EXTRACT_SECTION)
-        gqm.add_patterns((qmp,))
+            conditions=((Extract.idea_id != None),
+                        (Extract.discussion_id == id)),
+            sections=(EXTRACT_SECTION,))
+        cpe.add_pattern(Extract, qmp, gqm)
         defn = qs.full_declaration_clause()
         # After all these efforts, sparql seems to reject binding arguments!
         print defn.compile(session.bind)

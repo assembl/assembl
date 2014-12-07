@@ -9,6 +9,7 @@ from sqlalchemy.orm import class_mapper, undefer, with_polymorphic, sessionmaker
 from sqlalchemy.orm.properties import ColumnProperty
 import transaction
 from sqlalchemy.sql.visitors import ClauseVisitor
+from sqlalchemy.sql.expression import and_
 
 from assembl.lib.config import set_config
 from assembl.lib.sqla import configure_engine, get_session_maker
@@ -132,9 +133,9 @@ def prefetch(session, discussion_id):
             mapper = class_mapper(cls)
             undefers = [undefer(attr.key) for attr in mapper.iterate_properties
                         if getattr(attr, 'deferred', False)]
-            condition = cls.get_discussion_condition(discussion_id)
+            conditions = cls.get_discussion_conditions(discussion_id)
             session.query(with_polymorphic(cls, "*")).filter(
-                condition).options(*undefers).all()
+                and_(*conditions)).options(*undefers).all()
 
 
 def recursive_fetch(ob, visited=None):
@@ -282,8 +283,9 @@ def delete_discussion(session, discussion_id):
             continue
         print 'deleting', cls.__name__
         query = session.query(cls.id)
-        cond = cls.get_discussion_condition(discussion_id)
-        assert cond is not None
+        conds = cls.get_discussion_conditions(discussion_id)
+        assert conds
+        cond = and_(*conds)
         v = JoinColumnsVisitor(cls, query, classes_by_table)
         v.traverse(cond)
         query = v.final_query().filter(cond)
