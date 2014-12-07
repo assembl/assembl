@@ -32,8 +32,7 @@ class Action(DiscussionBoundBase):
     __tablename__ = 'action'
 
     id = Column(Integer, primary_key=True)
-    # TODO: Change that to a String ASAP.
-    type = Column(Unicode(255), nullable=False)
+    type = Column(String(255), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
         info = {'rdf': QuadMapPatternS(None, VERSION.when)})
 
