@@ -48,7 +48,7 @@ class AgentProfile(Base):
     """
     __tablename__ = "agent_profile"
     rdf_class = FOAF.Agent
-    rdf_section = USER_SECTION
+    rdf_sections = (USER_SECTION,)
 
     id = Column(Integer, primary_key=True,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
@@ -176,7 +176,7 @@ class AbstractAgentAccount(Base):
     """An abstract class for accounts that identify agents"""
     __tablename__ = "abstract_agent_account"
     rdf_class = SIOC.UserAccount
-    rdf_section = USER_SECTION
+    rdf_sections = (USER_SECTION,)
 
     id = Column(Integer, primary_key=True,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
@@ -274,7 +274,7 @@ class IdentityProvider(Base):
     """An identity provider (or sometimes a category of identity providers.)"""
     __tablename__ = "identity_provider"
     rdf_class = SIOC.Usergroup
-    rdf_section = USER_SECTION
+    rdf_sections = (USER_SECTION,)
 
     id = Column(Integer, primary_key=True)
     provider_type = Column(String(20), nullable=False)
@@ -684,17 +684,17 @@ class Username(Base):
         return str(self.user_id)
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def special_quad_patterns(cls, alias_maker, discussion_id):
         return [QuadMapPatternS(User.iri_class().apply(Username.user_id),
             SIOC.name, Username.username,
-            name=QUADNAMES.class_User_username, section=USER_SECTION)]
+            name=QUADNAMES.class_User_username, sections=(USER_SECTION,))]
 
 
 class Role(Base):
     """A role that a user may have in a discussion"""
     __tablename__ = 'role'
     rdf_class = SIOC.Role
-    rdf_section = USER_SECTION
+    rdf_sections = (USER_SECTION,)
 
     id = Column(Integer, primary_key=True,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
@@ -723,11 +723,11 @@ class UserRole(Base):
     role = relationship(Role)
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def special_quad_patterns(cls, alias_maker, discussion_id):
         return [
         QuadMapPatternS(User.iri_class().apply(UserRole.user_id),
             SIOC.has_function, Role.iri_class().apply(UserRole.role_id),
-            name=QUADNAMES.class_UserRole_global, section=USER_SECTION),
+            name=QUADNAMES.class_UserRole_global, sections=(USER_SECTION,)),
         QuadMapPatternS(User.iri_class().apply(UserRole.user_id),
                     SIOC.has_function, Role.iri_class().apply(UserRole.role_id),
                     name=QUADNAMES.class_UserRole_local)]
@@ -759,8 +759,8 @@ class LocalUserRole(DiscussionBoundBase):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.id == discussion_id,)
 
     def get_role_name(self):
         return self.role.name
@@ -802,15 +802,15 @@ class LocalUserRole(DiscussionBoundBase):
         return (self.user, )
 
     @classmethod
-    def base_condition(cls, alias=None):
+    def base_conditions(cls, alias=None, alias_maker=None):
         cls = alias or cls
-        return cls.requested == 0
+        return (cls.requested == 0,)
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def special_quad_patterns(cls, alias_maker, discussion_id):
         return [QuadMapPatternS(User.iri_class().apply(cls.user_id),
             SIOC.has_function, Role.iri_class().apply(cls.role_id),
-            condition=cls.requested == 0,
+            conditions=(cls.requested == 0,),
             name=QUADNAMES.class_LocalUserRole)]
 
     crud_permissions = CrudPermissions(
@@ -856,8 +856,8 @@ class DiscussionPermission(DiscussionBoundBase):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.id == discussion_id, )
 
 
 def create_default_permissions(session, discussion):
@@ -917,8 +917,8 @@ class UserTemplate(DiscussionBoundBase, User):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     @classmethod
     def get_applicable_notification_subscriptions_classes(cls):
@@ -1005,7 +1005,7 @@ class PartnerOrganization(DiscussionBoundBase):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)

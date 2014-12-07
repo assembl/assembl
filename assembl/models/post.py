@@ -66,7 +66,7 @@ class Post(Content):
     )
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def special_quad_patterns(cls, alias_maker, discussion_id):
         # Don't we need a recursive alias for this? It seems not.
         return [
             QuadMapPatternS(
@@ -74,7 +74,7 @@ class Post(Content):
                 SIOC.reply_of,
                 cls.iri_class().apply(cls.parent_id),
                 name=QUADNAMES.post_parent,
-                condition=(cls.parent_id != None)),
+                conditions=(cls.parent_id != None,)),
         ]
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),

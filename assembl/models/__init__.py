@@ -34,8 +34,8 @@ class DiscussionBoundBase(Base):
             self.get_discussion_id(), self)
 
     @abstractclassmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id, )
 
     def tombstone(self):
         return DiscussionBoundTombstone(self)
@@ -46,8 +46,8 @@ class Tombstonable(object):
     is_tombstone = Column(Boolean, server_default='0', default=False)
 
     @classmethod
-    def base_condition(cls, alias=None):
-        return cls.tombstone_condition(alias)
+    def base_conditions(cls, alias=None, alias_maker=None):
+        return (cls.tombstone_condition(alias),)
 
     @classmethod
     def tombstone_condition(cls, alias=None):

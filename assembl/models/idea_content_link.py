@@ -87,8 +87,20 @@ class IdeaContentLink(DiscussionBoundBase):
             return Idea.get(self.idea_id).get_discussion_id()
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return (cls.idea_id == Idea.id) & (Idea.discussion_id == discussion_id)
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.idea_id == Idea.id),
+                (Idea.discussion_id == discussion_id))
+
+    @classmethod
+    def base_conditions(cls, alias=None, alias_maker=None):
+        if alias_maker is None:
+            idea_content_link = alias or cls
+            idea = Idea
+        else:
+            idea_content_link = alias or alias_maker.alias_from_class(cls)
+            idea = alias_maker.alias_from_relns(idea_content_link.idea)
+        return ((idea_content_link.idea_id != None),
+                (idea.is_tombstone == 0))
 
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
@@ -141,13 +153,13 @@ class IdeaContentPositiveLink(IdeaContentLink):
     ), primary_key=True)
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def special_quad_patterns(cls, alias_maker, discussion_id):
         return [QuadMapPatternS(
             Content.iri_class().apply(cls.content_id),
             ASSEMBL.postLinkedToIdea,
             Idea.iri_class().apply(cls.idea_id),
             name=QUADNAMES.assembl_postLinkedToIdea,
-            condition=cls.idea_id != None)]
+            conditions=(cls.idea_id != None,))]
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postLinkedToIdea_abstract',
@@ -167,13 +179,13 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
     ), primary_key=True)
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def special_quad_patterns(cls, alias_maker, discussion_id):
         return [QuadMapPatternS(
             Content.iri_class().apply(cls.content_id),
             ASSEMBL.postRelatedToIdea,
             Idea.iri_class().apply(cls.idea_id),
             name=QUADNAMES.assembl_postRelatedToIdea,
-            condition=cls.idea_id != None)]
+            conditions=(cls.idea_id != None,))]
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postLinkedToIdea',
@@ -230,20 +242,26 @@ class Extract(IdeaContentPositiveLink):
         return getattr(QUADNAMES, 'extract_%d_iri' % self.id)
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def special_quad_patterns(cls, alias_maker, discussion_id):
         return [
             QuadMapPatternS(
                 None, OA.hasBody,
                 cls.graph_iri_class.apply(cls.id),
                 name=QUADNAMES.oa_hasBody,
-                condition=cls.idea_id != None),
+                conditions=((cls.idea_id != None),
+                            (Idea.is_tombstone == 0))),
             QuadMapPatternS(
                 #Content.iri_class().apply(cls.content_id),
                 cls.specific_resource_iri.apply(cls.id),
+                # It would be better to use CATALYST.expressesIdea,
+                # but Virtuoso hates the redundancy.
                 ASSEMBL.resourceExpressesIdea,
                 Idea.iri_class().apply(cls.idea_id),
                 name=QUADNAMES.assembl_postExtractRelatedToIdea,
-                condition=cls.idea_id != None),
+                conditions=((cls.idea_id != None),
+                            (Idea.is_tombstone == 0)
+                   # and it's a post extract... treat webpages separately.
+                )),
             QuadMapPatternS(
                 None, OA.hasTarget, cls.specific_resource_iri.apply(cls.id),
                 name=QUADNAMES.oa_hasTarget),
@@ -260,7 +278,7 @@ class Extract(IdeaContentPositiveLink):
             #     DCTERMS.contributor,
             #     Idea.iri_class().apply(cls.idea_id),
             #     name=QUADNAMES.assembl_idea_contributor,
-            #     condition=cls.idea_id != None),
+            #     conditions=(cls.idea_id != None,)),
             ]
 
 
@@ -378,8 +396,13 @@ class Extract(IdeaContentPositiveLink):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
+
+    @classmethod
+    def base_conditions(cls, alias=None, alias_maker=None):
+        # Allow idea-less extracts
+        return ()
 
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
@@ -436,14 +459,14 @@ class TextFragmentIdentifier(DiscussionBoundBase):
         'text_fragment_identifiers', cascade="all, delete-orphan"))
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def special_quad_patterns(cls, alias_maker, discussion_id):
         return [
             QuadMapPatternS(
                 Extract.specific_resource_iri.apply(cls.extract_id),
                 OA.hasSelector,
                 cls.iri_class().apply(cls.id),
                 name=QUADNAMES.oa_hasSelector,
-                condition=cls.extract_id != None),
+                conditions=(cls.extract_id != None,)),
             QuadMapPatternS(
                 None, DCTERMS.conformsTo,
                 URIRef("http://tools.ietf.org/rfc/rfc3023")),  # XPointer
@@ -495,9 +518,9 @@ class TextFragmentIdentifier(DiscussionBoundBase):
             return Extract.get(self.extract_id).get_discussion_id()
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return (cls.extract_id == Extract.id) & \
-            (Extract.discussion_id == discussion_id)
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.extract_id == Extract.id),
+                (Extract.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,

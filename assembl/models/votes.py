@@ -77,9 +77,9 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
         return self.idea.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return (cls.idea_id == Idea.id) & \
-            (Idea.discussion_id == discussion_id)
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.idea_id == Idea.id),
+                (Idea.discussion_id == discussion_id))
 
     @classmethod
     def external_typename(cls):

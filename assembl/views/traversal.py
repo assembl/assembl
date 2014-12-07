@@ -3,6 +3,7 @@ from traceback import print_exc
 from sqlalchemy import select
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.attributes import InstrumentedAttribute
+from sqlalchemy.sql.expression import and_
 from sqlalchemy.inspection import inspect as sqlainspect
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
 from pyramid.settings import asbool
@@ -154,7 +155,7 @@ class ClassContext(object):
             query = cls.db().query(alias)
         # TODO: Distinguish tombstone condition from other base_conditions
         if issubclass(cls, Tombstonable) and not tombstones:
-            query = query.filter(cls.base_condition(alias))
+            query = query.filter(and_(*cls.base_conditions(alias)))
         return query
 
     def get_class(self, typename=None):

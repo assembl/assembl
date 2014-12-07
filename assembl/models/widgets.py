@@ -67,8 +67,8 @@ class Widget(DiscussionBoundBase):
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     @classmethod
     def get_ui_endpoint_base(cls):
@@ -750,9 +750,9 @@ class WidgetUserConfig(DiscussionBoundBase):
         return self.widget.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return (cls.widget_id == Widget.id) & (
-            Widget.discussion_id == discussion_id)
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.widget_id == Widget.id),
+                (Widget.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(P_ADD_POST)  # all participants...
 
@@ -789,8 +789,9 @@ class IdeaWidgetLink(DiscussionBoundBase):
             return Idea.get(self.idea_id).get_discussion_id()
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return (cls.idea_id == Idea.id) & (Idea.discussion_id == discussion_id)
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.idea_id == Idea.id),
+                (Idea.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,

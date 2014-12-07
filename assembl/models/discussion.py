@@ -132,8 +132,8 @@ class Discussion(DiscussionBoundBase):
         return self.id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.id == discussion_id,)
 
     def get_next_synthesis(self):
         return self.next_synthesis

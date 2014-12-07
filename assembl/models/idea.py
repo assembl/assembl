@@ -132,7 +132,7 @@ class Idea(Tombstonable, DiscussionBoundBase):
     }
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def special_quad_patterns(cls, alias_maker, discussion_id):
         return [QuadMapPatternS(
             None, RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Idea.sqla_type),
             name=QUADNAMES.class_Idea_class)]
@@ -432,8 +432,8 @@ JOIN post AS family_posts ON (
         return self.discussion_id
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return cls.discussion_id == discussion_id
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
     def get_num_children(self):
         return len(self.children)
@@ -852,8 +852,8 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
     source_id = Column(
         Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, IDEA.target_idea)})
+        nullable=False, index=True)
+        #info={'rdf': QuadMapPatternS(None, IDEA.target_idea)})
     target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
@@ -882,19 +882,49 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
     }
 
     @classmethod
-    def special_quad_patterns(cls, alias_manager, discussion_id):
+    def base_conditions(cls, alias=None, alias_maker=None):
+        if alias_maker is None:
+            idea_link = alias or cls
+            source_idea = Idea
+        else:
+            idea_link = alias or alias_maker.alias_from_class(cls)
+            source_idea = alias_maker.alias_from_relns(idea_link.source)
+
+        # Assume tombstone status of target is similar to source, for now.
+        return ((idea_link.is_tombstone == 0),
+                (idea_link.source_id == source_idea.id),
+                (source_idea.is_tombstone == 0))
+
+    @classmethod
+    def special_quad_patterns(cls, alias_maker, discussion_id):
+        idea_link = alias_maker.alias_from_class(cls)
+        target_alias = alias_maker.alias_from_relns(cls.target)
+        source_alias = alias_maker.alias_from_relns(cls.source)
         return [
             QuadMapPatternS(
-                Idea.iri_class().apply(cls.source_id),
+                Idea.iri_class().apply(idea_link.source_id),
                 IDEA.includes,
-                Idea.iri_class().apply(cls.target_id),
+                Idea.iri_class().apply(idea_link.target_id),
+                conditions=((target_alias.discussion_id == discussion_id),
+                            (idea_link.target_id == target_alias.id),
+                            (target_alias.is_tombstone == 0)),
                 name=QUADNAMES.idea_inclusion_reln),
             QuadMapPatternS(
-                None, IDEA.source_idea,
-                Idea.iri_class().apply(cls.target_id),
-                condition=((cls.target_id == Idea.id)
-                & (Idea.discussion_id == discussion_id)),
-                exclude_base_condition=True)
+                cls.iri_class().apply(idea_link.id),
+                IDEA.source_idea,  # Note that RDF is inverted
+                Idea.iri_class().apply(idea_link.target_id),
+                conditions=((target_alias.discussion_id == discussion_id),
+                            (idea_link.target_id == target_alias.id),
+                            (target_alias.is_tombstone == 0)),
+                name=QUADNAMES.col_pattern_IdeaLink_target_id
+                #exclude_base_condition=True
+                ),
+            QuadMapPatternS(
+                cls.iri_class().apply(idea_link.id),
+                IDEA.target_idea,
+                Idea.iri_class().apply(idea_link.source_id),
+                name=QUADNAMES.col_pattern_IdeaLink_source_id
+                )
         ]
 
     def copy(self):
@@ -919,9 +949,15 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
             super(IdeaLink, self).send_to_changes(connection)
 
     @classmethod
-    def get_discussion_condition(cls, discussion_id):
-        return (cls.source_id == Idea.id) \
-            & (Idea.discussion_id == discussion_id)
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        if alias_maker is None:
+            idea_link = cls
+            source_idea = Idea
+        else:
+            idea_link = alias_maker.alias_from_class(cls)
+            source_idea = alias_maker.alias_from_relns(idea_link.source)
+        return ((idea_link.source_id == source_idea.id),
+                (source_idea.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA)
