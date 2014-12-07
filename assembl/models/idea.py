@@ -23,7 +23,6 @@ from sqlalchemy import (
     inspect,
 )
 from virtuoso.vmapping import IriClass
-from virtuoso.vmapping2 import DeferredPath
 
 from ..nlp.wordcounter import WordCounter
 from . import DiscussionBoundBase, Tombstonable
