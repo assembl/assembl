@@ -39,7 +39,11 @@ def bootstrap_db(config_uri=None, with_migration=True):
     # Clean up the sccoped session to allow a later app instantiation.
     if with_migration and heads:
         context = MigrationContext.configure(db().connection())
-        context._update_current_rev(db_version, heads[0])
+        context._ensure_version_table()
+        # The latter step seems optional?
+        # I am unclear as to why we'd migrate after creating tables
+        # on a clean database.
+        context.stamp(script_dir, heads[0])
     return db
 
 
