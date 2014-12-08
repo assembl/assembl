@@ -1947,7 +1947,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         // re-render. We may have to give it time
                         if (recursionDepth <= MAX_RETRIES) {
                             if(debug || recursionDepth >= 2) {
-                              console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
+                              Raven.captureMessage("scrollToMessage():  Message still not found in the DOM, calling recursively", 
+                                  { message_id: message.id,
+                                    selector: selector,
+                                    next_call_recursion_depth: recursionDepth + 1
+                                  })
+                              //console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
                             }
                             setTimeout(function () {
                                 that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1);
