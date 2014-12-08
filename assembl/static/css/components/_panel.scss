@@ -236,6 +236,11 @@ _:-ms-input-placeholder, :root .groupBody .groupPanel header ~ .panelContents {
   @include calc(height, "100vh - 76px");
 }
 
+/* IE10+ specific styles go here */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  @include calc(height, "100vh - 76px");
+}
+
 .groupBody.editable .groupPanel header ~ .panelContents {
   //@include calc(height, "100vh - 40px"); need hack safari
   @include calc(height, "100% - 40px"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
