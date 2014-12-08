@@ -267,7 +267,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 _.each(messageFields, function (f) {
                     var parent_messages = $(f).parents('.message');
                     if (parent_messages.length > 0) {
-                        var messageId = parent_messages[0].attributes.getNamedItem('id').textContent.substr(8);
+                        var messageId = parent_messages[0].attributes.getNamedItem('id').value.substr(8);
                         MessagesInProgress.saveMessage(messageId, f.value);
                     } else {
                         // this was the newTopicView
