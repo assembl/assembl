@@ -29,36 +29,33 @@
                <p class="mbl">
                  <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
                </p>
-             {% endif %}
-
-             <form class="core-form form-horizontal" method="post" action="#">
+           {% endif %}
+             <form class="core-form form-horizontal" id="adminDiscussion">
                <fieldset>
 
                  <div class="control-group">
                    <label for="topic" class="control-label">Topic</label>
                    <div class="controls">
-                     <input type="text" id="topic" name="topic" class="input-xlarge" {% if discussion.topic %}value="{{ discussion.topic }}"{% endif %} />
+                     <input type="text" id="topic" name="topic" class="input-xlarge" value="<%= discussion.get('topic') %>" />
                    </div>
                  </div>
 
                  <div class="control-group">
                    <label for="slug" class="control-label">Slug</label>
                    <div class="controls">
-                     <input type="text" id="slug" name="slug" class="input-xlarge" {% if discussion.slug %}value="{{ discussion.slug }}"{% endif %} />
+                     <input type="text" id="slug" name="slug" class="input-xlarge" value="<%= discussion.get('slug') %>" />
                    </div>
                  </div>
 
                  <div class="control-group">
                    <label for="objectives" class="control-label">Objectives</label>
                    <div class="controls">
-                     <textarea rows="3" id="objectives" name="objectives" class="input-xlarge">
-                       {% if discussion.objectives %}{{ discussion.objectives }}{% endif %}
-                     </textarea>
+                     <textarea rows="3" id="objectives" name="objectives" class="input-xlarge"><%= discussion.get('objectives') %></textarea>
                    </div>
                  </div>
 
                  <div class="form-actions ptm">
-                   <button class="btn btn-secondary" type="submit">Save changes</button>
+                   <button class="btn btn-secondary js_saveDiscussion" type="submit">Save changes</button>
                  </div>
 
                </fieldset>

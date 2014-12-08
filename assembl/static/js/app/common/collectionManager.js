@@ -15,8 +15,9 @@ define(['app',
         'objects/storage',
         'utils/types',
         'utils/i18n',
-        'models/roles'],
-    function (Assembl, Marionette, Message, groupSpec, Idea, IdeaLink, Segment, Synthesis, PartnerOrg, User, NotificationSubscription, $, Storage, Types, i18n, LocalRole) {
+        'models/roles',
+        'models/discussion'],
+    function (Assembl, Marionette, Message, groupSpec, Idea, IdeaLink, Segment, Synthesis, PartnerOrg, User, NotificationSubscription, $, Storage, Types, i18n, LocalRole, Discussion) {
 
         /**
          * @class CollectionManager
@@ -94,28 +95,34 @@ define(['app',
              * @type {PartnerOrganizationCollection}
              */
             _allPartnerOrganizationCollection: undefined,
-
             _allPartnerOrganizationCollectionPromise: undefined,
 
             /**
-             *
+             *  Collection from discussion notifications.
              * */
             _allNotificationsDiscussionCollection: undefined,
             _allNotificationsDiscussionCollectionPromise: undefined,
 
 
             /**
-             *
+             *  Collection from user notifications
              * */
             _allNotificationsUserCollection: undefined,
             _allNotificationsUserCollectionPromise: undefined,
 
 
             /**
-             *
+             *  Collection of user roles
              * */
             _allLocalRoleCollection: undefined,
             _allLocalRoleCollectionPromise: undefined,
+
+            /**
+             *  Collection from discussion
+             * */
+            _allDiscussionCollection: undefined,
+            _allDiscussionCollectionPromise: undefined,
+
 
             /**
              * Returns the collection from the giving object's @type .
@@ -206,17 +213,17 @@ define(['app',
             },
 
             _waitingWorker: undefined,
-            
+
             _messageFullModelRequests: {},
 
             getMessageFullModelRequestWorker: function (collectionManager) {
                 this.collectionManager = collectionManager,
-                this.requests = this.collectionManager._messageFullModelRequests,
-                
+                    this.requests = this.collectionManager._messageFullModelRequests,
+
                     this.addRequest = function (id, promise) {
                         if (this.requests[id] === undefined) {
                             this.requests[id] = {'promises': [],
-                                                 'serverRequestInProgress': false}
+                                'serverRequestInProgress': false}
                         }
                         this.requests[id]['promises'].push(promise);
                         if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
@@ -257,40 +264,40 @@ define(['app',
 
                             _.each(that.requests, function (request, id) {
                                 //var structureModel = allMessageStructureCollection.get(id);
-                                if(request['serverRequestInProgress'] === false) {
-                                  request['serverRequestInProgress'] = true;
-                                  ids.push(id);
+                                if (request['serverRequestInProgress'] === false) {
+                                    request['serverRequestInProgress'] = true;
+                                    ids.push(id);
                                 }
                             });
-                            if(_.size(ids) > 0) {
-                              postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
-                              postQuery.setViewDef(viewDef); //We want the full messages
-                              postQuery.getResultRawDataPromise().done(function (results) {
-                                  _.each(results, function (jsonData) {
-                                      var id = jsonData['@id'],
-                                          structureModel = allMessageStructureCollection.get(id),
-                                          deferredList = that.requests[id];
-                                      if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                          console.log("executeRequest resolving for id", id, deferredList['promises'].length, "deferred queued for that id");
-                                      }
-                                      structureModel.set(jsonData);
-                                      structureModel.viewDef = viewDef;
-                                      if (deferredList !== undefined) {
-                                        _.each(deferredList['promises'], function (deferred) {
-                                            deferred.resolve(structureModel);
-                                        });
-                                        delete that.requests[id];
-                                      }
-                                      else {
-                                        console.log("WARNING: collectionManager::executeRequest() received data for "+id+", but there is no matching request.  Race condition?");
-                                      }
-                                  });
-                              });
+                            if (_.size(ids) > 0) {
+                                postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
+                                postQuery.setViewDef(viewDef); //We want the full messages
+                                postQuery.getResultRawDataPromise().done(function (results) {
+                                    _.each(results, function (jsonData) {
+                                        var id = jsonData['@id'],
+                                            structureModel = allMessageStructureCollection.get(id),
+                                            deferredList = that.requests[id];
+                                        if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                                            console.log("executeRequest resolving for id", id, deferredList['promises'].length, "deferred queued for that id");
+                                        }
+                                        structureModel.set(jsonData);
+                                        structureModel.viewDef = viewDef;
+                                        if (deferredList !== undefined) {
+                                            _.each(deferredList['promises'], function (deferred) {
+                                                deferred.resolve(structureModel);
+                                            });
+                                            delete that.requests[id];
+                                        }
+                                        else {
+                                            console.log("WARNING: collectionManager::executeRequest() received data for " + id + ", but there is no matching request.  Race condition?");
+                                        }
+                                    });
+                                });
                             }
                             else {
-                              if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                console.log("executeRequest called, but no ids to request from the server out of the list of ", _.size(that.requests));
-                              }
+                                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                                    console.log("executeRequest called, but no ids to request from the server out of the list of ", _.size(that.requests));
+                                }
                             }
                         });
                     }
@@ -581,7 +588,29 @@ define(['app',
                     });
                 }
                 return deferred.promise();
+            },
+
+            getDiscussionCollectionPromise: function () {
+                var that = this,
+                    deferred = Marionette.Deferred();
+
+                if (this._allDiscussionCollectionPromise === undefined) {
+                    this._allDiscussionCollection = new Discussion.Collection();
+                    this._allDiscussionCollection.collectionManager = this;
+                    this._allDiscussionCollectionPromise = this._allDiscussionCollection.fetch();
+                    this._allDiscussionCollectionPromise.done(function () {
+                        deferred.resolve(that._allDiscussionCollection);
+                    });
+                }
+                else {
+                    this._allDiscussionCollectionPromise.done(function () {
+                        deferred.resolve(that._allDiscussionCollection);
+                    });
+                }
+                return deferred.promise();
+
             }
+
         });
 
         var _instance;
