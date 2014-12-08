@@ -1114,18 +1114,15 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     collectionManager = new CollectionManager();
                 this.renderIsComplete = false;  //only showMessages should set this false
 
-                var successCallback = function (messageStructureCollection, resultMessageIdCollection) {
-                    that = that.render_real();
-                    that.unblockPanel();
-                }
                 //Clear internal state
                 this._offsetStart = undefined;
                 this._offsetEnd = undefined;
 
-                /* TODO:  This should be a listen to the returned collection */
-                var changedDataCallback = function (messageStructureCollection, resultMessageIdCollection) {
-                    function inFilter(message) {
-                        return that.DEPRECATEDmessageIdsToDisplay.indexOf(message.getId()) >= 0;
+                /* TODO:  Most of this should be a listen to the returned collection */
+                var newDataCallback = function (messageStructureCollection, resultMessageIdCollection) {
+                  var resultMessageIdCollectionReference = resultMessageIdCollection;
+                  function inFilter(message) {
+                        return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
                     };
                     that.destroyAnnotator();
                     //Some messages may be present from before
@@ -1140,6 +1137,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     that.visitorOrderLookupTable = [];
                     that.visitorRootMessagesToDisplay = [];
                     messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
+                    that = that.render_real();
+                    that.unblockPanel();
                 }
 
 
@@ -1151,7 +1150,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                 $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                     this.currentQuery.getResultMessageIdCollectionPromise()).done(
-                    changedDataCallback, successCallback);
+                        newDataCallback);
 
                 this.ui.panelBody.scroll(function () {
 
@@ -1825,7 +1824,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 
                   messageOffset = this.getResultThreadedTraversalOrder(messageId, visitorOrderLookupTable, resultMessageIdCollection);
               } else {
-                  messageOffset = this.DEPRECATEDmessageIdsToDisplay.indexOf(messageId);
+                  messageOffset = this.resultMessageIdCollection.indexOf(messageId);
               }
               //console.log("getMessageOffset returning", messageOffset, " for message id", messageId);
               return messageOffset;
