@@ -10,5 +10,15 @@
     "validVote":"Valid your votes",
 
     "voteSubmit":"Submit your vote",
-    "voteAsUser":"You will be voting as \"{{username}}\"."
+    "voteAsUser":"You will be voting as \"{{username}}\".",
+    "adminConfigureInstanceDelete":"Delete this vote widget instance",
+    "adminConfigureInstanceTitle":"Configure a vote widget instance",
+    "adminConfigureInstanceCurrent": "Currently selected widget is",
+    "adminConfigureInstanceCurrentUse": "The URL for a user to vote on this widget (on one of its votable ideas) is",
+    "adminConfigureInstanceCurrentUseHere": "here",
+    "adminConfigureInstanceAvailableActions": "Available actions:",
+    "adminConfigureInstanceSetCriteria": "Set vote criteria",
+    "adminConfigureInstanceConfigureAppearance": "Configure appearance",
+    "adminConfigureInstanceSetVotableIdeas": "Set votable ideas",
+    "adminConfigureInstanceSeeVoteResults": "See vote results"
 }
