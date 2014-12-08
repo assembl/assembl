@@ -108,8 +108,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     }
                 );
 
-                this.listenTo(Assembl.vent, 'idea:selected', function (idea) {
-                    //console.log("vent.on idea:selected fired");
+                this.listenTo(Assembl.vent, 'DEPRECATEDidea:selected', function (idea) {
+                    //console.log("vent.on DEPRECATEDidea:selected fired");
                     if (idea) {
                         if (idea.id) {
                             if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
@@ -329,7 +329,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * Synchronizes the panel with the currently selected idea (possibly none)
              */
             syncWithCurrentIdea: function () {
-                var currentIdea = Ctx.getCurrentIdea(),
+                var currentIdea = Ctx.DEPRECATEDgetCurrentIdea(),
                     filterValue,
                     that = this;
 
@@ -1048,7 +1048,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     'messageList': that
                 };
 
-                var currentIdea = Ctx.getCurrentIdea();
+                var currentIdea = Ctx.DEPRECATEDgetCurrentIdea();
                 if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                     options.reply_idea_id = currentIdea.getId();
                 }
@@ -1474,7 +1474,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                                 //We asked to create a new idea from segment
                                 that.panelWrapper.lockPanel();
                                 var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
-                                Ctx.setCurrentIdea(newIdea);
+                                Ctx.DEPRECATEDsetCurrentIdea(newIdea);
                             }
                             else {
                                 segment.save(null, {

@@ -23,11 +23,11 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     this.model = null;
                 }
 
-                this.listenTo(Assembl.vent, "idea:selected", function (idea) {
+                this.listenTo(Assembl.vent, "DEPRECATEDidea:selected", function (idea) {
                     that.setIdeaModel(idea);
                 });
 
-                this.listenTo(Assembl.vent, 'ideaPanel:showSegment', function (segment) {
+                this.listenTo(Assembl.vent, 'DEPRECATEDideaPanel:showSegment', function (segment) {
                     that.showSegment(segment);
                 });
 
@@ -497,7 +497,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                                 that.model.destroy({
                                     success: function () {
                                         that.unblockPanel();
-                                        Ctx.setCurrentIdea(null);
+                                        Ctx.DEPRECATEDsetCurrentIdea(null);
                                     },
                                     error: function (model, resp) {
                                         console.error('ERROR: deleteCurrentIdea', resp);

@@ -47,7 +47,7 @@ define(['app', 'common/context', 'utils/panelSpecTypes', 'views/idea'],
 
                     messageListView.triggerMethod('messageList:clearAllFilters');
                     messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
-                    Ctx.setCurrentIdea(null);
+                    Ctx.DEPRECATEDsetCurrentIdea(null);
 
                     if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE)
                         this.groupContent.resetDebateState();

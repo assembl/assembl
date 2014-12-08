@@ -161,7 +161,7 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
             unminimizePanel: function (evt) {
                 if (!this.model.get('minimized'))
                     return;
-                if (this.model.isOfType(PanelSpecTypes.IDEA_PANEL) && Ctx.getCurrentIdea() == undefined && evt && evt.currentTarget) {
+                if (this.model.isOfType(PanelSpecTypes.IDEA_PANEL) && Ctx.DEPRECATEDgetCurrentIdea() == undefined && evt && evt.currentTarget) {
                     // do not accept to unminimize if no idea to show
                     var el = this.ui.minimizePanel;
                     el.attr("data-original-title", i18n.gettext('Please select an idea in the table of ideas to open the idea panel.'));

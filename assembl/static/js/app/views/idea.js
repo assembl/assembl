@@ -36,7 +36,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                 this.listenTo(this.model, 'change', this.render);
                 this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
-                this.listenTo(Assembl.vent, 'idea:selected', function (idea) {
+                this.listenTo(Assembl.vent, 'DEPRECATEDidea:selected', function (idea) {
                     that.onIsSelectedChange(idea);
                 });
             },
@@ -73,7 +73,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
 
                 this.$el.addClass('idealist-item');
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-                this.onIsSelectedChange(Ctx.getCurrentIdea());
+                this.onIsSelectedChange(Ctx.DEPRECATEDgetCurrentIdea());
 
                 if (data.isOpen === true) {
                     this.$el.addClass('is-open');
@@ -134,7 +134,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
             onReplaced: function (newObject) {
                 this.model = newObject;
                 //That makes no sense, there is no way to know it's the current idea
-                //app.setCurrentIdea(newObject);
+                //app.DEPRECATEDsetCurrentIdea(newObject);
             },
 
 
@@ -166,14 +166,14 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                     messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
                     messageListView.triggerMethod('messageList:clearAllFilters');
                 }
-                if (this.model === Ctx.getCurrentIdea()) {
+                if (this.model === Ctx.DEPRECATEDgetCurrentIdea()) {
                     // We want to avoid the "All messages" state,
                     // unless the user clicks explicitly on "All messages".
                     // TODO benoitg: Review this decision.
-                    //Ctx.setCurrentIdea(null);
+                    //Ctx.DEPRECATEDsetCurrentIdea(null);
                     //This is so the messageList refreshes.
                 } else {
-                    Ctx.setCurrentIdea(this.model);
+                    Ctx.DEPRECATEDsetCurrentIdea(this.model);
                 }
                 this.groupContent.resetDebateState(false);
             },
@@ -186,7 +186,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                 e.stopPropagation();
 
                 Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, true);
-                Ctx.setCurrentIdea(this.model);
+                Ctx.DEPRECATEDsetCurrentIdea(this.model);
             },
 
             /**
@@ -303,7 +303,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                     if (isDraggedBelow) {
                         // Add as a child idea
                         var newIdea = this.model.addSegmentAsChild(segment);
-                        Ctx.setCurrentIdea(newIdea);
+                        Ctx.DEPRECATEDsetCurrentIdea(newIdea);
                     } else {
                         // Add to the current idea
                         this.model.addSegment(segment);

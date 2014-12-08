@@ -44,7 +44,7 @@ define(['views/idea', 'common/context', 'utils/panelSpecTypes'],
             onTitleClick: function () {
                 var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
                 messageListView.triggerMethod('messageList:clearAllFilters');
-                Ctx.setCurrentIdea(null);
+                Ctx.DEPRECATEDsetCurrentIdea(null);
                 //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.
                 messageListView.render();
                 this.groupContent.resetDebateState(false);
