@@ -459,6 +459,16 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 this.hideAnnotatorSelectionTooltip();
 
                 var annotator = this.$el.closest('.messageList-list').data('annotator');
+
+                /*
+                Hack: Here we remove the input of the annotator editor, so then the onAdderClick
+                call will try to give focus to a field which does not exist.
+                So it will not force the browser to scroll the message list up to the top,
+                which is where the editor is initially placed (it is then moved to the cursor
+                position).
+                */
+                annotator.editor.element.find(":input:first").remove();
+
                 annotator.onAdderClick.call(annotator);
 
                 //The annotatorEditor is the actual currently active annotatorEditor
@@ -466,10 +476,11 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 //object from annotator
                 if (this.messageListView.annotatorEditor) {
                     this.messageListView.annotatorEditor.element.css({
-                        'top': y,
-                        'left': x
+                        'top': y+"px",
+                        'left': x+"px"
                     });
                 }
+                
             },
 
             /**
