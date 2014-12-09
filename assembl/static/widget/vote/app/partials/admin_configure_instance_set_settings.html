@@ -1,64 +1,64 @@
 
 <div id="admin" ng-controller="adminConfigureInstanceSetSettingsCtl" ng-init="init()">
 
-    <button onclick="window.history.back()">Back</button>
+    <button onclick="window.history.back()">{{'historyBack' | translate}}</button>
 
-    <h1>Configure a vote widget instance</h1>
+    <h1>{{'adminConfigureInstanceTitle' | translate}}</h1>
 
     <p>
-        Currently selected widget is <a href="{{ widget_endpoint }}">{{ widget_uri }}</a>. The URL to vote on this widget (on one of its votable ideas) is <a href="?config={{ widget_uri }}&target={{ widget.votable_ideas[0]['@id'] }}" target="_blank">here</a>.
+        {{'adminConfigureInstanceCurrent' | translate}} <a href="{{ widget_endpoint }}">{{ widget_uri }}</a>. {{'adminConfigureInstanceCurrentUse' | translate}} <a href="?config={{ widget_uri }}&target={{ widget.votable_ideas[0]['@id'] }}" target="_blank">{{'adminConfigureInstanceCurrentUseHere' | translate}}</a>.
     </p>
 
     <div id="step_get_data" ng-show="current_step == 1">
         <p>
-            Getting data from server about the widget instance "<strong>{{ widget_uri }}</strong>"...
+            {{'gettingDataFromServerWidgetInstance' | translate}} "<strong>{{ widget_uri }}</strong>"...
         </p>
     </div>
 
     <div id="step_criteria_groups_and_appearance" ng-show="current_step == 2">
-        <h2>Set criteria groups and their appearance</h2>
+        <h2>{{'adminConfigureInstanceSetAppearance' | translate}}</h2>
         <p>
-            Please add items (groups of criteria), and customize how they will be displayed to the user.
+            {{'adminConfigureInstanceSetAppearanceInfo' | translate}}
         </p>
         
         <br/>
 
-        <span>General settings:</span>
+        <span>{{'adminConfigureInstanceSetAppearanceGeneralSettings' | translate}}</span>
         <div ng-repeat="field in mandatory_settings_fields">
             <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
             <input type="text" ng-model="widget.settings[field.key]" value="{{ field.default }}" />
         </div>
 
         <fieldset>
-            <legend>Optional fields</legend>
+            <legend>{{'adminConfigureInstanceSetAppearanceOptionalFields' | translate}}</legend>
             <div ng-repeat="field in optional_settings_fields">
                 <div ng-if="widget.settings.hasOwnProperty(field.key)">
                     <div ng-switch on="field.type">
                         <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
                         <select ng-switch-when="select" ng-model="widget.settings[field.key]" ng-options="key as value for ( key, value ) in field.options"></select>
                         <input ng-switch-default type="text" ng-model="widget.settings[field.key]" />
-                        <button ng-click="deleteSettingsField(field.key);">Delete this field</button>
+                        <button ng-click="deleteSettingsField(field.key);">{{'adminConfigureInstanceSetAppearanceDeleteField' | translate}}</button>
                     </div>
                 </div>
             </div>
 
             <br/>
 
-            <span>Add an optional field:</span>
+            <span>{{'adminConfigureInstanceSetAppearanceAddOptionalField' | translate}}</span>
             <select ng-model="settings_current_selected_field" ng-options="field.key as field.key for field in optional_settings_fields"></select>
-            <button ng-click="addSettingsField(settings_current_selected_field);">Add</button>
+            <button ng-click="addSettingsField(settings_current_selected_field);">{{'Add' | translate}}</button>
         </fieldset>
 
         <br/>
 
-        <span>Items displayed to the user:</span>
+        <span>{{'adminConfigureInstanceSetAppearanceItems' | translate}}</span>
         <div class="item" ng-repeat="item in widget.settings.items" ng-controller="adminConfigureInstanceSetSettingsItemCtl">
             <div class="item-title">
-                <strong>Item</strong>
-                <button ng-click="widget.settings.items.splice($index,1)">Delete this item</button>
+                <strong>{{'adminConfigureInstanceSetAppearanceItem' | translate}}</strong>
+                <button ng-click="widget.settings.items.splice($index,1)">{{'adminConfigureInstanceSetAppearanceDeleteItem' | translate}}</button>
             </div>
             <div ng-init="item_index = $index" class="item-content">
-                <span>Item type: </span>
+                <span>{{'adminConfigureInstanceSetAppearanceItemType' | translate}} </span>
                 <select ng-model="item.type">
                     <option value="vertical_gauge">Vertical gauge (aka lickert), needs 1 criterion</option>
                     <option value="2_axes">Two axes graph, needs 2 criteria</option>
@@ -72,29 +72,29 @@
                 </div>
 
                 <fieldset>
-                    <legend>Optional fields</legend>
+                    <legend>{{'adminConfigureInstanceSetAppearanceOptionalFields' | translate}}</legend>
                     <div ng-repeat="field in optional_item_fields">
                         <div ng-if="item.hasOwnProperty(field.key)">
                             <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
                             <input type="text" ng-model="item[field.key]" />
-                            <button ng-click="deleteItemField(item_index, field.key);">Delete this field</button>
+                            <button ng-click="deleteItemField(item_index, field.key);">{{'adminConfigureInstanceSetAppearanceDeleteField' | translate}}</button>
                         </div>
                     </div>
 
                     <br/>
 
-                    <span>Add an optional field:</span>
+                    <span>{{'adminConfigureInstanceSetAppearanceAddOptionalField' | translate}}</span>
                     <select ng-model="item_current_selected_field" ng-options="field.key as field.key for field in optional_item_fields"></select>
-                    <button ng-click="addItemField(item_index, item_current_selected_field);">Add</button>
+                    <button ng-click="addItemField(item_index, item_current_selected_field);">{{'Add' | translate}}</button>
                 </fieldset>
 
                 <br/>
 
-                <span>Criteria associated to this item:</span>
+                <span>{{'adminConfigureInstanceSetAppearanceCriteriaAssociatedToItem' | translate}}</span>
                 <div class="item" ng-repeat="criterion in item.criteria" ng-controller="adminConfigureInstanceSetSettingsItemCriterionCtl">
                     <div class="item-title">
-                        <strong>Criterion</strong>
-                        <button ng-click="item.criteria.splice($index,1)">Delete this criterion</button>
+                        <strong>{{'adminConfigureInstanceSetAppearanceCriterion' | translate}}</strong>
+                        <button ng-click="item.criteria.splice($index,1)">{{'adminConfigureInstanceSetAppearanceDeleteCriterion' | translate}}</button>
                     </div>
                     <div ng-init="criterion_index = $index" class="item-content">
                         <!--
@@ -112,23 +112,23 @@
                         </fieldset>
                         -->
                         <fieldset>
-                            <legend>Optional fields</legend>
+                            <legend>{{'adminConfigureInstanceSetAppearanceOptionalFields' | translate}}</legend>
                             <div ng-repeat="field in optional_criterion_fields">
                                 <div ng-if="criterion.hasOwnProperty(field.key)">
                                     <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
                                     <input type="text" ng-model="criterion[field.key]" />
-                                    <button ng-click="deleteCriterionField(item_index, criterion_index, field.key);">Delete this field</button>
+                                    <button ng-click="deleteCriterionField(item_index, criterion_index, field.key);">{{'adminConfigureInstanceSetAppearanceDeleteField' | translate}}</button>
                                 </div>
                             </div>
 
                             <br/>
 
-                            <span>Add an optional field:</span>
+                            <span>{{'adminConfigureInstanceSetAppearanceAddOptionalField' | translate}}</span>
                             <select ng-model="criterion_current_selected_field" ng-options="field.key as field.key for field in optional_criterion_fields"></select>
                             <!--
                             <button ng-click="criterion[criterion_current_selected_field]='something';">Add</button>
                             -->
-                            <button ng-click="addCriterionField(item_index, criterion_index, criterion_current_selected_field);">Add</button>
+                            <button ng-click="addCriterionField(item_index, criterion_index, criterion_current_selected_field);">{{'Add' | translate}}</button>
                         </fieldset>
                     </div>
                 </div>
@@ -137,14 +137,14 @@
                 <!--
                 <button ng-click="item.criteria.push({});">Add a criterion</button>
                 -->
-                <button ng-click="addCriterion(item_index);">Add a criterion</button>
+                <button ng-click="addCriterion(item_index);">{{'adminConfigureInstanceSetAppearanceAddCriterion' | translate}}</button>
             </div>
         </div>
 
         <br/>
-        <button ng-click="addItem();">Add an item</button>
+        <button ng-click="addItem();">{{'adminConfigureInstanceSetAppearanceAddItem' | translate}}</button>
         <br/><br/>
-        <button ng-click="applyWidgetSettings();">Save widget configuration</button><span id="step_criteria_groups_and_appearance_result"></span>
+        <button ng-click="applyWidgetSettings();">{{'adminConfigureInstanceSetAppearanceSave' | translate}}</button><span id="step_criteria_groups_and_appearance_result"></span>
     </div>
 
 </div>
