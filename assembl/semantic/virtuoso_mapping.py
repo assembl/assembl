@@ -2,16 +2,17 @@ from os import listdir
 from os.path import join, dirname
 from inspect import isabstract
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from rdflib import Graph, ConjunctiveGraph
 import simplejson as json
 
+from ..lib.config import get_config
 from ..lib.sqla import class_registry, Base
 from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST)
 from virtuoso.vmapping import (
-    QuadMapPattern, QuadStorage, GraphQuadMapPattern,
-    PatternGraphQuadMapPattern, ClassPatternExtractor)
+    QuadMapPattern, QuadStorage, GraphQuadMapPattern, IriClass,
+    PatternGraphQuadMapPattern, ClassPatternExtractor, VirtRDF)
 from virtuoso.vstore import Virtuoso
 
 
@@ -49,34 +50,27 @@ formats = dict(
     trig='trig'
 )
 
-iri_function_definition_stmts = [
-    '''CREATE FUNCTION DB.DBA._ID_TO_IRI (in id IRI_ID)
-    returns IRI
+function_definition_stmts = {
+    "DB.DBA._ID_TO_IRI": '''CREATE FUNCTION DB.DBA._ID_TO_IRI (
+        in id IRI_ID) returns IRI
     {
         return id_to_iri(id);
     }''',
-    '''CREATE FUNCTION DB.DBA._ID_TO_IRI_INVERSE (in id_iri IRI)
-    returns IRI_ID
+    "DB.DBA._ID_TO_IRI_INVERSE": '''CREATE FUNCTION DB.DBA._ID_TO_IRI_INVERSE (
+        in id_iri IRI) returns IRI_ID
     {
         return iri_to_id(id_iri);
     }''',
-    '''SPARQL
-    create iri class virtrdf:iri_id using
-      function DB.DBA._ID_TO_IRI (in id varchar)
-        returns varchar,
-      function DB.DBA._ID_TO_IRI_INVERSE (in id_iri varchar)
-        returns varchar
-    ''',
-    """CREATE FUNCTION DB.DBA._EXPAND_QNAME (in qname varchar)
-    returns IRI
+    "DB.DBA._EXPAND_QNAME": """CREATE FUNCTION DB.DBA._EXPAND_QNAME (
+        in qname varchar) returns IRI
     {
         declare exit handler for sqlstate '22023' {
             return qname;
         };
         return __xml_nsexpand_iristr(qname);
     }""",
-    """CREATE FUNCTION DB.DBA._EXPAND_QNAME_INVERSE (in iri IRI)
-    returns varchar
+    "DB.DBA._EXPAND_QNAME_INVERSE": """CREATE FUNCTION
+        DB.DBA._EXPAND_QNAME_INVERSE (in iri IRI) returns varchar
     {
         declare prefix, abbrev, local varchar;
         prefix := iri_split(iri, local);
@@ -85,15 +79,25 @@ iri_function_definition_stmts = [
         return concat(abbrev, ':', local);
         }
         return iri;
-    }""",
-    """SPARQL create iri class virtrdf:QNAME_ID using
+    }"""
+}
+
+iri_definition_stmts = {
+    VirtRDF.iri_id: """SPARQL
+    create iri class virtrdf:iri_id using
+      function DB.DBA._ID_TO_IRI (in id varchar)
+        returns varchar,
+      function DB.DBA._ID_TO_IRI_INVERSE (in id_iri varchar)
+        returns varchar
+    """,
+    VirtRDF.QNAME_ID: """SPARQL
+    create iri class virtrdf:QNAME_ID using
       function DB.DBA._EXPAND_QNAME (in id varchar)
         returns varchar,
       function DB.DBA._EXPAND_QNAME_INVERSE (in id_iri varchar)
         returns varchar
     """
-]
-
+}
 
 def load_ontologies(session, reload=None):
     store = Virtuoso(connection=session.bind.connect())
@@ -300,9 +304,12 @@ class AssemblQuadStorageManager(object):
     main_quad_storage = QUADNAMES.main_storage
     main_graph = ASSEMBL.main_graph
     main_graph_iri = QUADNAMES.main_graph_iri
+    # TODO: Version mappings
+    current_discussion_storage_version = 0
 
-    def __init__(self, nsm):
-        self.nsm = nsm
+    def __init__(self, session=None, nsm=None):
+        self.session = session or get_session()
+        self.nsm = nsm or get_nsm(self.session)
         # Fails if not full schema
         assert Base.metadata.schema.split('.')[1]
 
@@ -324,7 +331,7 @@ class AssemblQuadStorageManager(object):
             cpe.add_class(cls, gqm)
         return gqm
 
-    def create_storage(self, session, quad_storage_name,
+    def create_storage(self, quad_storage_name,
                        sections, discussion_id=None, exclusive=True,
                        imported=None):
         qs, cpe = self.prepare_storage(quad_storage_name, imported or [])
@@ -332,29 +339,29 @@ class AssemblQuadStorageManager(object):
             self.populate_storage(
                 qs, cpe, section, graph_name, graph_iri, disc_id, exclusive)
         defn = qs.full_declaration_clause()
-        return qs, list(session.execute(defn))
+        return qs, list(self.session.execute(defn))
 
     def update_storage(
-            self, session, quad_storage_name, sections, exclusive=True):
+            self, quad_storage_name, sections, exclusive=True):
         qs, cpe = self.prepare_storage(quad_storage_name)
         results = []
         for section, graph_name, graph_iri, disc_id in sections:
             gqm = self.populate_storage(
                 qs, cpe, section, graph_name, graph_iri, disc_id)
             defn = qs.alter_clause_add_graph(gqm)
-            results.extend(session.execute(defn))
+            results.extend(self.session.execute(defn))
         return qs, results
 
-    def drop_storage(self, session, storage_name, force=False):
+    def drop_storage(self, storage_name, force=False):
         qs = QuadStorage(storage_name, None, nsm=self.nsm)
         try:
-            qs.drop(session, force)
+            qs.drop(self.session, force)
         except:
             pass
 
-    def drop_graph(self, session, graph_iri, force=False):
+    def drop_graph(self, graph_iri, force=False):
         gr = GraphQuadMapPattern(graph_iri, None, nsm=self.nsm)
-        gr.drop(session, force)
+        gr.drop(self.session, force)
 
     def discussion_storage_name(self, discussion_id):
         return getattr(QUADNAMES, 'discussion_%d_storage' % discussion_id)
@@ -368,11 +375,11 @@ class AssemblQuadStorageManager(object):
         return getattr(QUADNAMES, 'discussion_%d_%s_iri' % (
             discussion_id, section))
 
-    def create_main_storage(self, session):
-        return self.create_storage(session, self.main_quad_storage, [
+    def create_main_storage(self):
+        return self.create_storage(self.main_quad_storage, [
             (MAIN_SECTION, self.main_graph, self.main_graph_iri, None)])
 
-    def create_discussion_storage(self, session, discussion, execute=True):
+    def create_discussion_storage(self, discussion, execute=True):
         id = discussion.id
         qs, cpe = self.prepare_storage(self.discussion_storage_name(id))
         for s in (DISCUSSION_DATA_SECTION, ):  # DISCUSSION_HISTORY_SECTION
@@ -385,7 +392,7 @@ class AssemblQuadStorageManager(object):
         # the compile, so we do not get explicit conditions.
         #
         # from ..models import TextFragmentIdentifier
-        # for extract in session.query(Extract).filter(
+        # for extract in self.session.query(Extract).filter(
         #         (Extract.discussion==discussion) & (Extract.idea != None)):
         #     gqm = GraphQuadMapPattern(
         #         extract.extract_graph_name(), qs,
@@ -428,77 +435,115 @@ class AssemblQuadStorageManager(object):
         cpe.add_pattern(Extract, qmp, gqm)
         defn = qs.full_declaration_clause()
         # After all these efforts, sparql seems to reject binding arguments!
-        print defn.compile(session.bind)
+        print defn.compile(self.session.bind)
         result = None
         if execute:
-            result = list(session.execute(defn))
+            result = list(self.session.execute(defn))
         # defn2 = qs.alter_clause_add_graph(gqm)
-        # result.extend(session.execute(str(defn2.compile(session.bind))))
+        # result.extend(self.session.execute(str(defn2.compile(self.session.bind))))
+        # TODO: Store the current version number
         return qs, defn, result
 
-    def drop_discussion_storage(self, session, discussion, force=False):
-        self.drop_storage(
-            session, self.discussion_storage_name(discussion.id), force)
+    def discussion_storage_version(self, discussion):
+        name = self.discussion_storage_name(discussion.id)
+        exists = self.mapping_exists(name, QuadStorage.mapping_type)
+        if not exists:
+            return None
+        version = self.session.execute(
+            "SPARQL SELECT ?version WHERE { %s %s ?version }" % (
+                name.n3(self.nsm), ASSEMBL.mapping_version.n3(self.nsm))
+            ).first()
+        return version[0] if version else 0
 
-    def create_user_storage(self, session):
-        return self.create_storage(session, self.user_quad_storage, [
+    def ensure_discussion_storage(self, discussion):
+        self.declare_functions()
+        version = self.discussion_storage_version(discussion)
+        if (version is not None
+                and version < self.current_discussion_storage_version):
+            self.drop_discussion_storage(discussion, True)
+            version = None
+        if version is None:
+            self.create_discussion_storage(discussion)
+
+    def drop_discussion_storage(self, discussion, force=False):
+        self.drop_storage(
+            self.discussion_storage_name(discussion.id), force)
+
+    def create_user_storage(self):
+        return self.create_storage(self.user_quad_storage, [
             (USER_SECTION, self.user_graph, self.user_graph_iri, None)])
 
-    def create_extract_graph(self, session, extract):
+    def create_extract_graph(self, extract):
         discussion_id = extract.get_discussion_id()
-        return self.update_storage(session, self.discussion_storage(id), [
+        return self.update_storage(self.discussion_storage(id), [
             (EXTRACT_SECTION, extract.extract_graph_name(),
                 extract.extract_graph_iri(), discussion_id)])
 
-    def drop_extract_graph(self, session, extract, force=False):
+    def drop_extract_graph(self, extract, force=False):
         # why do I not need the discussion here?
-        self.drop_graph(session, self.extract_iri(extract.id), force)
+        self.drop_graph(self.extract_iri(extract.id), force)
 
-    def create_private_global_storage(self, session):
-        return self.create_storage(session, self.global_quad_storage, [
+    def create_private_global_storage(self):
+        return self.create_storage(self.global_quad_storage, [
             (None, self.global_graph, self.global_graph_iri, None)])
 
-    def drop_private_global_storage(self, session, force=False):
-        return self.drop_storage(session, self.global_quad_storage, force)
+    def drop_private_global_storage(self, force=False):
+        return self.drop_storage(self.global_quad_storage, force)
 
-    def declare_functions(self, session):
-        for stmt in iri_function_definition_stmts:
-            session.execute(stmt)
+    def mapping_exists(self, name, mapping_type):
+        return bool(self.session.execute(
+            """SPARQL ASK WHERE { GRAPH virtrdf: { %s a %s }}"""
+            % (name.n3(self.nsm), mapping_type.n3(self.nsm))
+            ).first())
 
-    def drop_all(self, session, force=False):
-        self.drop_storage(session, self.global_quad_storage, force)
-        self.drop_storage(session, self.main_quad_storage, force)
-        self.drop_storage(session, self.user_quad_storage, force)
+    def declare_functions(self):
+        for name, stmt in function_definition_stmts.iteritems():
+            exists = bool(self.session.execute(text(
+                "SELECT COUNT(*) FROM SYS_PROCEDURES WHERE P_NAME = :name"
+                ).bindparams(name=name)).first()[0])
+            if not exists:
+                self.session.execute(stmt)
+        for name, stmt in iri_definition_stmts.iteritems():
+            if not self.mapping_exists(name, IriClass.mapping_type):
+                self.session.execute(stmt)
+
+    def drop_all(self, force=False):
+        self.drop_storage(self.global_quad_storage, force)
+        self.drop_storage(self.main_quad_storage, force)
+        self.drop_storage(self.user_quad_storage, force)
         from ..models import Discussion
-        for (id,) in session.query(Discussion.id).all():
-            self.drop_storage(session, self.discussion_storage_name(id), force)
+        for (id,) in self.session.query(Discussion.id).all():
+            self.drop_storage(self.discussion_storage_name(id), force)
 
+    def as_quads(self, discussion_id):
+        d_storage_name = self.discussion_storage_name(discussion_id)
+        v = get_virtuoso(self.session, d_storage_name)
+        cg = ConjunctiveGraph(v, d_storage_name)
+        quads = cg.serialize(format='nquads')
+        for (g,) in v.query(
+                'SELECT ?g where {graph ?g {?s catalyst:expressesIdea ?o}}'):
+            ectx = cg.get_context(g)
+            for l in ectx.serialize(format='nt').split('\n'):
+                l = l.strip()
+                if not l:
+                    continue
+                l = l.rstrip('.')
+                l += ' ' + g.n3(self.nsm)
+                quads += l + ' .\n'
+        return quads
 
-def db_dump(session, discussion_id):
-    nsm = get_nsm(session)
-    aqsm = AssemblQuadStorageManager(nsm)
-    d_storage_name = aqsm.discussion_storage_name(discussion_id)
-    v = get_virtuoso(session, d_storage_name)
-    cg = ConjunctiveGraph(v, d_storage_name)
-    quads = cg.serialize(format='nquads')
-    for (g,) in v.query(
-            'SELECT ?g where {graph ?g {?s catalyst:expressesIdea ?o}}'):
-        ectx = cg.get_context(g)
-        for l in ectx.serialize(format='nt').split('\n'):
-            l = l.strip()
-            if not l:
-                continue
-            l = l.rstrip('.')
-            l += ' ' + g.n3(nsm)
-            quads += l + ' .\n'
-    return quads
+    def quads_to_jsonld(self, quads):
+        from pyld import jsonld
+        context = json.load(open(join(dirname(__file__), 'ontology',
+                                      'context.jsonld')))
+        server_uri = "http://%s/data/" % (get_config().get('public_hostname'))
+        context["@context"]['local'] = server_uri
+        jsonf = jsonld.from_rdf(quads)
+        jsonc = jsonld.compact(jsonf, context)
+        jsonc['@context'] = [
+            'http://purl.org/catalyst/jsonld', {'local': server_uri}]
+        return jsonc
 
-
-def quads_to_jsonld(quads):
-    from pyld import jsonld
-    context = json.load(open(join(dirname(__file__), 'ontology',
-                                  'context.jsonld')))
-    jsonf = jsonld.from_rdf(quads)
-    jsonc = jsonld.compact(jsonf, context)
-    jsonc['@context'] = 'http://purl.org/catalyst/jsonld'
-    return jsonc
+    def as_jsonld(self, discussion_id):
+        quads = self.as_quads(discussion_id)
+        return self.quads_to_jsonld(quads)
