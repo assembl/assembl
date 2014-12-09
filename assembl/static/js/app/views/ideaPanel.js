@@ -23,11 +23,11 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     this.model = null;
                 }
 
-                this.listenTo(Assembl.vent, "idea:selected", function (idea) {
+                this.listenTo(Assembl.vent, "DEPRECATEDidea:selected", function (idea) {
                     that.setIdeaModel(idea);
                 });
 
-                this.listenTo(Assembl.vent, 'ideaPanel:showSegment', function (segment) {
+                this.listenTo(Assembl.vent, 'DEPRECATEDideaPanel:showSegment', function (segment) {
                     that.showSegment(segment);
                 });
 
@@ -497,7 +497,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                                 that.model.destroy({
                                     success: function () {
                                         that.unblockPanel();
-                                        Ctx.setCurrentIdea(null);
+                                        Ctx.DEPRECATEDsetCurrentIdea(null);
                                     },
                                     error: function (model, resp) {
                                         console.error('ERROR: deleteCurrentIdea', resp);
@@ -603,18 +603,21 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 var elm = $(e.target),
                     seeMore = this.$('.seeMore'),
                     seeLess = this.$('.seeLess'),
+                    lessContent = this.$('.lesscontent'),
                     hideContent = this.$('.morecontent');
 
                 if (elm.hasClass('seeMore')) {
                     hideContent.removeClass('hidden');
                     seeMore.addClass('hidden');
                     seeLess.removeClass('hidden');
+                    lessContent.addClass('hidden');
                 }
 
                 if (elm.hasClass('seeLess')) {
                     hideContent.addClass('hidden');
                     seeMore.removeClass('hidden');
                     seeLess.addClass('hidden');
+                    lessContent.removeClass('hidden');
                 }
             },
 
@@ -623,11 +626,12 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 var definition = this.model.get('definition').length,
                     body = this.$('.ideaPanel-definition').text(),
                     seeMore = this.$('.seeMore'),
+
                     showChar = 300;
 
                 if (definition > showChar) {
 
-                    var content = body.substr(0, showChar),
+                    var content = body.substr(0, showChar) + '<span class="lesscontent">...</span>',
                         hiddenContent = body.substr(showChar, definition - showChar),
                         html = content + '<span class="morecontent hidden">' + hiddenContent + '</span>';
 

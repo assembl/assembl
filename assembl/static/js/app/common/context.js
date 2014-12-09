@@ -208,17 +208,17 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
          * Set the given Idea as the current one to be edited
          * @param  {Idea} [idea]
          */
-        setCurrentIdea: function (idea) {
-            //console.log("setCurrentIdea() fired", idea);
-            if (idea != this.getCurrentIdea()) {
+        DEPRECATEDsetCurrentIdea: function (idea) {
+            //console.log("DEPRECATEDsetCurrentIdea() fired", idea);
+            if (idea != this.DEPRECATEDgetCurrentIdea()) {
                 this.currentIdea = idea;
                 //TODO:  Remove this, it will not respect group separation of context
-                Assembl.vent.trigger("idea:selected", idea);
+                Assembl.vent.trigger("DEPRECATEDidea:selected", idea);
             }
 
         },
 
-        getCurrentIdea: function () {
+        DEPRECATEDgetCurrentIdea: function () {
             return this.currentIdea;
         },
 
@@ -953,7 +953,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 }
             });
 
-            this.setCurrentIdea(null);
+            this.DEPRECATEDsetCurrentIdea(null);
         },
 
         /**

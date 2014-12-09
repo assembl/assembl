@@ -65,10 +65,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                     }
                 })
 
+                var isSubscribed = (_.isEmpty(this.roles.models)) ? false : true;
+
                 return {
                     UserNotifications: this.collection.models,
                     addableGlobalSubscriptions: addableGlobalSubscriptions,
-                    Roles: this.roles
+                    Roles: this.roles,
+                    isSubscribed: isSubscribed
                 }
             },
 

@@ -108,8 +108,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     }
                 );
 
-                this.listenTo(Assembl.vent, 'idea:selected', function (idea) {
-                    //console.log("vent.on idea:selected fired");
+                this.listenTo(Assembl.vent, 'DEPRECATEDidea:selected', function (idea) {
+                    //console.log("vent.on DEPRECATEDidea:selected fired");
                     if (idea) {
                         if (idea.id) {
                             if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
@@ -267,7 +267,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 _.each(messageFields, function (f) {
                     var parent_messages = $(f).parents('.message');
                     if (parent_messages.length > 0) {
-                        var messageId = parent_messages[0].attributes.getNamedItem('id').textContent.substr(8);
+                        var messageId = parent_messages[0].attributes.getNamedItem('id').value.substr(8);
                         MessagesInProgress.saveMessage(messageId, f.value);
                     } else {
                         // this was the newTopicView
@@ -329,7 +329,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * Synchronizes the panel with the currently selected idea (possibly none)
              */
             syncWithCurrentIdea: function () {
-                var currentIdea = Ctx.getCurrentIdea(),
+                var currentIdea = Ctx.DEPRECATEDgetCurrentIdea(),
                     filterValue,
                     that = this;
 
@@ -1048,7 +1048,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     'messageList': that
                 };
 
-                var currentIdea = Ctx.getCurrentIdea();
+                var currentIdea = Ctx.DEPRECATEDgetCurrentIdea();
                 if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                     options.reply_idea_id = currentIdea.getId();
                 }
@@ -1114,18 +1114,15 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     collectionManager = new CollectionManager();
                 this.renderIsComplete = false;  //only showMessages should set this false
 
-                var successCallback = function (messageStructureCollection, resultMessageIdCollection) {
-                    that = that.render_real();
-                    that.unblockPanel();
-                }
                 //Clear internal state
                 this._offsetStart = undefined;
                 this._offsetEnd = undefined;
 
-                /* TODO:  This should be a listen to the returned collection */
-                var changedDataCallback = function (messageStructureCollection, resultMessageIdCollection) {
-                    function inFilter(message) {
-                        return that.DEPRECATEDmessageIdsToDisplay.indexOf(message.getId()) >= 0;
+                /* TODO:  Most of this should be a listen to the returned collection */
+                var newDataCallback = function (messageStructureCollection, resultMessageIdCollection) {
+                  var resultMessageIdCollectionReference = resultMessageIdCollection;
+                  function inFilter(message) {
+                        return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
                     };
                     that.destroyAnnotator();
                     //Some messages may be present from before
@@ -1140,6 +1137,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     that.visitorOrderLookupTable = [];
                     that.visitorRootMessagesToDisplay = [];
                     messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
+                    that = that.render_real();
+                    that.unblockPanel();
                 }
 
 
@@ -1151,7 +1150,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                 $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                     this.currentQuery.getResultMessageIdCollectionPromise()).done(
-                    changedDataCallback, successCallback);
+                        newDataCallback);
 
                 this.ui.panelBody.scroll(function () {
 
@@ -1475,7 +1474,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                                 //We asked to create a new idea from segment
                                 that.panelWrapper.lockPanel();
                                 var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
-                                Ctx.setCurrentIdea(newIdea);
+                                Ctx.DEPRECATEDsetCurrentIdea(newIdea);
                             }
                             else {
                                 segment.save(null, {
@@ -1825,7 +1824,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 
                   messageOffset = this.getResultThreadedTraversalOrder(messageId, visitorOrderLookupTable, resultMessageIdCollection);
               } else {
-                  messageOffset = this.DEPRECATEDmessageIdsToDisplay.indexOf(messageId);
+                  messageOffset = this.resultMessageIdCollection.indexOf(messageId);
               }
               //console.log("getMessageOffset returning", messageOffset, " for message id", messageId);
               return messageOffset;
@@ -1947,7 +1946,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         // re-render. We may have to give it time
                         if (recursionDepth <= MAX_RETRIES) {
                             if(debug || recursionDepth >= 2) {
-                              console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
+                              Raven.captureMessage("scrollToMessage():  Message still not found in the DOM, calling recursively", 
+                                  { message_id: message.id,
+                                    selector: selector,
+                                    next_call_recursion_depth: recursionDepth + 1
+                                  })
+                              //console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
                             }
                             setTimeout(function () {
                                 that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1);

@@ -336,7 +336,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              */
             showSegmentByAnnotation: function (annotation) {
                 var that = this,
-                    currentIdea = Ctx.getCurrentIdea(),
+                    currentIdea = Ctx.DEPRECATEDgetCurrentIdea(),
                     collectionManager = new CollectionManager(),
                     ok = true;
 
@@ -364,16 +364,18 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                             if (segment.get('idIdea')) {
                                 if (that.messageListView.panelWrapper.groupContent.findViewByType(PanelSpecTypes.IDEA_PANEL)) {
                                     //FIXME:  We don't want to affect every panel, only the one in the current group
-                                    Ctx.setCurrentIdea(allIdeasCollection.get(annotation.idIdea));
-                                    Assembl.vent.trigger('ideaPanel:showSegment', segment);
+                                    Ctx.DEPRECATEDsetCurrentIdea(allIdeasCollection.get(annotation.idIdea));
+                                    Assembl.vent.trigger('DEPRECATEDideaPanel:showSegment', segment);
                                 }
                                 else {
                                     console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
                                 }
                             } else {
                                 if (that.messageListView.panelWrapper.groupContent.findViewByType(PanelSpecTypes.CLIPBOARD)) {
-                                    //FIXME:  We don't want to affect every panel, only the one in the current group
-                                    Assembl.vent.trigger('segmentList:showSegment', segment);
+                                  //FIXME:  We don't want to affect every panel, only the one in the current group
+                                  //FIXME:  Nothing listens to this anymore
+                                  console.error("FIXME:  Nothing listens to DEPRECATEDsegmentList:showSegment anymore");
+                                  Assembl.vent.trigger('DEPRECATEDsegmentList:showSegment', segment);
                                 }
                                 else {
                                     console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
@@ -459,6 +461,16 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 this.hideAnnotatorSelectionTooltip();
 
                 var annotator = this.$el.closest('.messageList-list').data('annotator');
+
+                /*
+                Hack: Here we remove the input of the annotator editor, so then the onAdderClick
+                call will try to give focus to a field which does not exist.
+                So it will not force the browser to scroll the message list up to the top,
+                which is where the editor is initially placed (it is then moved to the cursor
+                position).
+                */
+                annotator.editor.element.find(":input:first").remove();
+
                 annotator.onAdderClick.call(annotator);
 
                 //The annotatorEditor is the actual currently active annotatorEditor
@@ -466,10 +478,11 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 //object from annotator
                 if (this.messageListView.annotatorEditor) {
                     this.messageListView.annotatorEditor.element.css({
-                        'top': y,
-                        'left': x
+                        'top': y+"px",
+                        'left': x+"px"
                     });
                 }
+                
             },
 
             /**

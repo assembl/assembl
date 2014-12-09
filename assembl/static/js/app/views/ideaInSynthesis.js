@@ -107,7 +107,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
                     partialMessage = MessagesInProgress.getMessage(partialCtx),
                     send_callback = function () {
                         Assembl.vent.trigger('messageList:currentQuery');
-                        Ctx.setCurrentIdea(that.model);
+                        Ctx.DEPRECATEDsetCurrentIdea(that.model);
                     };
 
                 this.replyView = new MessageSendView({

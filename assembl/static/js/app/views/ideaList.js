@@ -287,7 +287,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         console.log(ideaGraphLoader);
                         that.hypertree = ideaGraphLoader(that.graphData);
                         try {
-                            that.hypertree.onClick(Ctx.getCurrentIdea().getId(), {
+                            that.hypertree.onClick(Ctx.DEPRECATEDgetCurrentIdea().getId(), {
                                 // onComplete: function() {
                                 //     that.hypertree.controller.onComplete();
                                 // },
@@ -306,7 +306,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 if (this.show_graph && this.graphData !== undefined) {
                     try {
                         this.hypertree = ideaGraphLoader(this.graphData);
-                        this.hypertree.onClick(Ctx.getCurrentIdea().getId(), {
+                        this.hypertree.onClick(Ctx.DEPRECATEDgetCurrentIdea().getId(), {
                             duration: 0
                         });
                     } catch (Exception) {
@@ -322,7 +322,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     // We want to avoid the "All messages" state,
                     // unless the user clicks explicitly on "All messages".
                     // TODO benoitg: Review this decision.
-                    //Ctx.setCurrentIdea(null);
+                    //Ctx.DEPRECATEDsetCurrentIdea(null);
                 }
             },
 
@@ -331,7 +331,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
              * If no idea is selected, add it at the root level ( no parent )
              */
             addChildToSelected: function () {
-                var currentIdea = Ctx.getCurrentIdea(),
+                var currentIdea = Ctx.DEPRECATEDgetCurrentIdea(),
                     newIdea = new Idea.Model(),
                     that = this,
                     collectionManager = new CollectionManager();
@@ -353,7 +353,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                                 }
                             });
                         }
-                        Ctx.setCurrentIdea(newIdea);
+                        Ctx.DEPRECATEDsetCurrentIdea(newIdea);
                     });
             },
 

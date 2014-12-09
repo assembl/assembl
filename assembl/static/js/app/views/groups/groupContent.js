@@ -227,7 +227,7 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                     ideaPanel = this.findWrapperByType(PanelSpecTypes.IDEA_PANEL);
                 this.resetMessagePanelWidth();
                 if (ideaPanel != null && !ideaPanel.model.get('locked') && (!nav || this.model.get('navigationState') == 'debate')) {
-                    if (ctx.getCurrentIdea() == undefined) {
+                    if (ctx.DEPRECATEDgetCurrentIdea() == undefined) {
                         ideaPanel.minimizePanel();
                     } else {
                         ideaPanel.unminimizePanel();

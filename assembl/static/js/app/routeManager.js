@@ -22,8 +22,6 @@ define(['backbone.marionette', 'app', 'common/context', 'models/user', 'objects/
             },
 
             home: function () {
-                this.isAuthenticated();
-
                 Ctx.isNewUser();
                 this.restoreViews();
             },

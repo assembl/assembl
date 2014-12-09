@@ -4,7 +4,8 @@
   </div>
   <div class="gu gu-1of1">
     <div class="block-content">
-         <div class="gr">
+      <div class="gr">
+        <% if(_.size(organizations)) { %>
           <% _.each(organizations, function(organization) { %>
             <div class="gu gu-1of6">
               <a href="<%= organization.get('homepage') %>" class="popover-display" target="_blank">
@@ -18,7 +19,10 @@
               </a>
             </div>
           <% }) %>
-         </div>
+        <% } else { %>
+           <p>{{ gettext('there are no partners for this discussion') }}</p>
+        <% } %>
+      </div>
     </div>
   </div>
 </div>
