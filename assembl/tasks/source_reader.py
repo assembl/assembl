@@ -1,7 +1,6 @@
 import sys
 from threading import Thread, Event
 from datetime import datetime, timedelta
-import time
 from abc import ABCMeta, abstractmethod
 
 import imaplib2
@@ -53,14 +52,13 @@ class SourceReader(Thread):
         self.event = Event()
 
     def prod(self):
-        self.last_prod = datetime.now()
-        if self.status == WAITING and (
-                datetime.now() - self.last_prod) > MIN_TIME_BETWEEN_READS:
+        if self.status == WAITING and (datetime.now() - max(
+                self.last_prod, self.last_read) > MIN_TIME_BETWEEN_READS):
             self.event.set()
+            self.last_prod = datetime.now()
         else:
             pass
             # That prod is lost, maybe queue it?
-        self.last_prod = datetime.now()
 
     def run(self):
         self.setup()
@@ -126,14 +124,15 @@ class SourceReader(Thread):
 class IMAPReader(SourceReader):
     # TODO
     def do_read(self):
-        print "READING FROM IMAP"
+        print "READING FROM IMAP ", self.source.id
+        return True
 
     def setup(self):
-        print "SETTING UP IMAP"
+        print "SETTING UP IMAP ", self.source.id
         super(IMAPReader, self).setup()
 
     def do_close(self):
-        print "CLOSING IMAP"
+        print "CLOSING IMAP ", self.source.id
         super(IMAPReader, self).setup()
 
 # Kombu communication. Does not work yet.
