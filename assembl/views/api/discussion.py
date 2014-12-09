@@ -1,3 +1,5 @@
+import json
+
 from pyramid.httpexceptions import HTTPNotFound
 
 from cornice import Service
@@ -33,18 +35,17 @@ def post_discussion(request):
 	discussion_id = request.matchdict['discussion_id']
 	discussion = Discussion.get_instance(discussion_id)
 
-	if discussion:
-		g = lambda x: request.POST.get(x, None)
+	discussion_data = json.loads(request.body)
 
-		(topic, slug, objectives) = (
-			g('topic'),
-			g('slug'),
-			g('objectives'),
-		)
+	if not discussion:
+  		raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
 
-		discussion.topic = topic
-		discussion.slug = slug
-		discussion.objectives = objectives
+	discussion.topic = discussion_data.get('topic')
+	discussion.slug = discussion_data.get('slug')
+	discussion.objectives = discussion_data.get('objectives')
 
-	return {}
+	Discussion.db.add(discussion)
+	Discussion.db.flush()
+
+	return {'msg':'discussion updated'}
 
