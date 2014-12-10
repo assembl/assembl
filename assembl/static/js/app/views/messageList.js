@@ -1824,7 +1824,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 
                   messageOffset = this.getResultThreadedTraversalOrder(messageId, visitorOrderLookupTable, resultMessageIdCollection);
               } else {
-                  messageOffset = this.resultMessageIdCollection.indexOf(messageId);
+                  messageOffset = resultMessageIdCollection.indexOf(messageId);
               }
               //console.log("getMessageOffset returning", messageOffset, " for message id", messageId);
               return messageOffset;
