@@ -6,16 +6,16 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
         urlRoot: '/api/v1/discussion/' + Ctx.getDiscussionId(),
         idAttribute: "@id",
         defaults: {
-            //'instigator': null,
-            //'introduction': null,
+            'instigator': null,
+            'introduction': null,
             'objectives': null,
-            //'creation_date': null,
+            'creation_date': null,
             'topic': null,
-            //'sources': [],
-            //'@type': null,
-            //'widget_collection_url':null,
-            'slug': null
-            //'@view':null
+            'sources': [],
+            '@type': null,
+            'widget_collection_url': null,
+            'slug': null,
+            '@view': null
         }
 
     });

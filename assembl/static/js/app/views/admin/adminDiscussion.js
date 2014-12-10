@@ -48,13 +48,15 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
                     objectives = this.$('textarea[name=objectives]').val(),
                     that = this;
 
-                var discussion = new Discussion.Model({
+                this.model.url = '/api/v1/discussion/' + Ctx.getDiscussionId();
+
+                this.model.set({
                     topic: topic,
                     slug: slug,
                     objectives: objectives
                 });
 
-                discussion.save(null, {
+                this.model.save(null, {
                     success: function (model, resp) {
                         that.$('.bx-alert-success').removeClass('hidden');
                     },

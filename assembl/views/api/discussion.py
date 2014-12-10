@@ -33,7 +33,7 @@ def get_discussion(request):
 
 # This should be a PUT, but the backbone save method is confused by
 # discussion URLs.
-@discussion.post(permission=P_ADMIN_DISC)
+@discussion.put(permission=P_ADMIN_DISC)
 def post_discussion(request):
     discussion_id = request.matchdict['discussion_id']
     discussion = Discussion.get_instance(discussion_id)
