@@ -20,7 +20,7 @@
             </div>
           <% }) %>
         <% } else { %>
-           <p>{{ gettext('there are no partners for this discussion') }}</p>
+           <p>{{ gettext('there are no partners for this discussion') }} - <a href="<%= editUrl() %>"> {{ gettext('edit partners') }} </a></p>
         <% } %>
       </div>
     </div>

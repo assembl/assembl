@@ -18,6 +18,14 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     organizations: this.collection.models,
                     ctx: Ctx
                 }
+            },
+
+            templateHelpers: function () {
+                return {
+                    editUrl: function () {
+                        return '/' + Ctx.getDiscussionSlug() + '/partners';
+                    }
+                }
             }
 
         });
