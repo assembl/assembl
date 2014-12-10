@@ -26,7 +26,11 @@
     }
 
     .dot-online {
-        display: initial;
+      display: inline-block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      width: 300px;
     }
 
 }
