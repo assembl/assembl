@@ -39,7 +39,7 @@ import inspect as pyinspect
 from sqlalchemy import inspect
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
-    HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPOk)
+    HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPOk, HTTPNotFound)
 from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyramid.settings import asbool
@@ -51,7 +51,8 @@ from ..traversal import (
 from assembl.auth import P_READ, P_SYSADMIN, R_SYSADMIN, Everyone
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
-from assembl.models import AbstractIdeaVote, User, DiscussionBoundBase
+from assembl.models import (
+    AbstractIdeaVote, User, DiscussionBoundBase, Discussion)
 from assembl.lib.decl_enums import DeclEnumType
 
 FIXTURE_DIR = os.path.join(
@@ -80,21 +81,45 @@ def class_view(request):
         return [i.generic_json(view) for i in q.all()]
 
 
+@view_config(context=InstanceContext, renderer='json', name="jsonld",
+             request_method='GET', permission=P_READ,
+             accept="application/ld+json")
 @view_config(context=InstanceContext, renderer='json',
-             request_method='GET', permission=P_READ, accept="application/ld+json")
+             request_method='GET', permission=P_READ,
+             accept="application/ld+json")
 def instance_view_jsonld(request):
+    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
+    from rdflib import URIRef, ConjunctiveGraph
     instance = request.context._instance
-    uri = 'http://%s/data/%s' % (request.registry.settings['public_hostname'], instance.uri()[6:])
-    v = get_virtuoso(instance.db)
-    result = v.query('select ?p ?o ?g where {graph ?g {<%s> ?p ?o}}' % uri)
-    quads = '\n'.join([
-        '<%s> %s %s %s.' % (uri, p.n3() ,o.n3() ,g.n3() )
-        for (p,o,g) in result
+    discussion = request.context.get_instance_of_class(Discussion)
+    if not discussion:
+        raise HTTPNotFound()
+    aqsm = AssemblQuadStorageManager()
+    uri = URIRef(aqsm.local_uri() + instance.uri()[6:])
+    d_storage_name = aqsm.discussion_storage_name(discussion.id)
+    v = get_virtuoso(instance.db, d_storage_name)
+    cg = ConjunctiveGraph(v, d_storage_name)
+    result = cg.triples((uri, None, None))
+    #result = v.query('select ?p ?o ?g where {graph ?g {<%s> ?p ?o}}' % uri)
+    # Something is wrong here.
+    triples = '\n'.join([
+        '%s %s %s.' % (uri.n3(), p.n3(), o.n3())
+        for (s, p, o) in result
         if '_with_no_name_entry' not in o])
-    json_ex = jsonld.from_rdf(quads, {})
-    json = jsonld.compact(json_ex, 'http://localhost/catalyst_ontology/context.jsonld', {})
-    json['@context'] = 'http://purl.org/catalyst/jsonld'
-    return json
+    return aqsm.quads_to_jsonld(triples)
+
+
+@view_config(context=InstanceContext, renderer='json', name="jsonld",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_READ, accept="application/ld+json")
+@view_config(context=InstanceContext, renderer='json',
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_READ, accept="application/ld+json")
+def discussion_instance_view_jsonld(request):
+    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
+    aqsm = AssemblQuadStorageManager()
+    discussion = request.context._instance
+    return aqsm.as_jsonld(discussion.id)
 
 
 @view_config(context=InstanceContext, renderer='json',

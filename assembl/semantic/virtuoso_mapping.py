@@ -379,13 +379,12 @@ class AssemblQuadStorageManager(object):
         return self.create_storage(self.main_quad_storage, [
             (MAIN_SECTION, self.main_graph, self.main_graph_iri, None)])
 
-    def create_discussion_storage(self, discussion, execute=True):
-        id = discussion.id
-        qs, cpe = self.prepare_storage(self.discussion_storage_name(id))
+    def create_discussion_storage(self, discussion_id, execute=True):
+        qs, cpe = self.prepare_storage(self.discussion_storage_name(discussion_id))
         for s in (DISCUSSION_DATA_SECTION, ):  # DISCUSSION_HISTORY_SECTION
             gqm = self.populate_storage(
-                qs, cpe, s, self.discussion_graph_name(id, s),
-                self.discussion_graph_iri(id, s), id)
+                qs, cpe, s, self.discussion_graph_name(discussion_id, s),
+                self.discussion_graph_iri(discussion_id, s), discussion_id)
         from ..models import Extract, Idea
         # Option 1: explicit graphs.
         # Fails because the extract.id in the condition is not part of
@@ -393,7 +392,7 @@ class AssemblQuadStorageManager(object):
         #
         # from ..models import TextFragmentIdentifier
         # for extract in self.session.query(Extract).filter(
-        #         (Extract.discussion==discussion) & (Extract.idea != None)):
+        #         (Extract.discussion_id==discussion_id) & (Extract.idea != None)):
         #     gqm = GraphQuadMapPattern(
         #         extract.extract_graph_name(), qs,
         #         extract.extract_graph_iri())
@@ -412,25 +411,26 @@ class AssemblQuadStorageManager(object):
         # hopelessly complicated
         # self.populate_storage(qs, cpe, EXTRACT_SECTION,
         #     Extract.graph_iri_class.apply(Extract.id),
-        #     QUADNAMES.ExtractGraph_iri, id)
+        #     QUADNAMES.ExtractGraph_iri, discussion_id)
         #
         # So option 3: A lot of encapsulation breaks...
         # Which still does not quite work in practice, but it does in theory.
         # Sigh.
-        qs2 = qs  # self.prepare_storage(self.discussion_storage_name(id))
+        qs2 = qs  # self.prepare_storage(self.discussion_storage_name(discussion_id))
         extract_graph_name = Extract.graph_iri_class.apply(Extract.id)
         gqm = AssemblPatternGraphQuadMapPattern(
-            extract_graph_name, qs2, cpe, EXTRACT_SECTION, id,
-            getattr(QUADNAMES, "catalyst_ExtractGraph_d%d_iri" % (id,)),
-            'exclusive')
+            extract_graph_name, qs2, cpe, EXTRACT_SECTION, discussion_id,
+            getattr(QUADNAMES, "catalyst_ExtractGraph_d%d_iri" % (
+                discussion_id,)), 'exclusive')
         qmp = QuadMapPatternS(
             Extract.specific_resource_iri.apply(Extract.id),
             CATALYST.expressesIdea,
             Idea.iri_class().apply(Extract.idea_id),
             graph_name=extract_graph_name,
-            name=getattr(QUADNAMES, "catalyst_expressesIdea_d%d_iri" % (id,)),
+            name=getattr(QUADNAMES, "catalyst_expressesIdea_d%d_iri" % (
+                discussion_id,)),
             conditions=((Extract.idea_id != None),
-                        (Extract.discussion_id == id)),
+                        (Extract.discussion_id == discussion_id)),
             sections=(EXTRACT_SECTION,))
         cpe.add_pattern(Extract, qmp, gqm)
         defn = qs.full_declaration_clause()
@@ -444,8 +444,8 @@ class AssemblQuadStorageManager(object):
         # TODO: Store the current version number
         return qs, defn, result
 
-    def discussion_storage_version(self, discussion):
-        name = self.discussion_storage_name(discussion.id)
+    def discussion_storage_version(self, discussion_id):
+        name = self.discussion_storage_name(discussion_id)
         exists = self.mapping_exists(name, QuadStorage.mapping_type)
         if not exists:
             return None
@@ -455,19 +455,19 @@ class AssemblQuadStorageManager(object):
             ).first()
         return version[0] if version else 0
 
-    def ensure_discussion_storage(self, discussion):
+    def ensure_discussion_storage(self, discussion_id):
         self.declare_functions()
-        version = self.discussion_storage_version(discussion)
+        version = self.discussion_storage_version(discussion_id)
         if (version is not None
                 and version < self.current_discussion_storage_version):
-            self.drop_discussion_storage(discussion, True)
+            self.drop_discussion_storage(discussion_id, True)
             version = None
         if version is None:
-            self.create_discussion_storage(discussion)
+            self.create_discussion_storage(discussion_id)
 
-    def drop_discussion_storage(self, discussion, force=False):
+    def drop_discussion_storage(self, discussion_id, force=False):
         self.drop_storage(
-            self.discussion_storage_name(discussion.id), force)
+            self.discussion_storage_name(discussion_id), force)
 
     def create_user_storage(self):
         return self.create_storage(self.user_quad_storage, [
@@ -516,6 +516,7 @@ class AssemblQuadStorageManager(object):
             self.drop_storage(self.discussion_storage_name(id), force)
 
     def as_quads(self, discussion_id):
+        self.ensure_discussion_storage(discussion_id)
         d_storage_name = self.discussion_storage_name(discussion_id)
         v = get_virtuoso(self.session, d_storage_name)
         cg = ConjunctiveGraph(v, d_storage_name)
@@ -532,11 +533,14 @@ class AssemblQuadStorageManager(object):
                 quads += l + ' .\n'
         return quads
 
+    def local_uri(self):
+        return "http://%s/data/" % (get_config().get('public_hostname'))
+
     def quads_to_jsonld(self, quads):
         from pyld import jsonld
         context = json.load(open(join(dirname(__file__), 'ontology',
                                       'context.jsonld')))
-        server_uri = "http://%s/data/" % (get_config().get('public_hostname'))
+        server_uri = self.local_uri()
         context["@context"]['local'] = server_uri
         jsonf = jsonld.from_rdf(quads)
         jsonc = jsonld.compact(jsonf, context)
