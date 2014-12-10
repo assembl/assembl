@@ -9,6 +9,7 @@ from sqlalchemy import (
     Integer,
     UnicodeText,
     DateTime,
+    Text,
     event,
     and_,
 )
@@ -49,6 +50,7 @@ class Discussion(DiscussionBoundBase):
     instigator = Column(UnicodeText)
     introduction = Column(UnicodeText)
     introductionDetails = Column(UnicodeText)
+    settings = Column(Text())  # JSON blob
 
     @property
     def admin_source(self):
@@ -127,6 +129,17 @@ class Discussion(DiscussionBoundBase):
             "creation_date": self.creation_date.isoformat(),
             "root_idea": self.root_idea.uri()
         }
+
+    @property
+    def settings_json(self):
+        if self.settings:
+            return json.loads(self.settings)
+        return {}
+
+    @settings_json.setter
+    def settings_json(self, val):
+        self.settings = json.dumps(val)
+        self.interpret_settings(val)
 
     def get_discussion_id(self):
         return self.id

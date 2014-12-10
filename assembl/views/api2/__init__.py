@@ -109,19 +109,6 @@ def instance_view_jsonld(request):
     return aqsm.quads_to_jsonld(triples)
 
 
-@view_config(context=InstanceContext, renderer='json', name="jsonld",
-             ctx_instance_class=Discussion, request_method='GET',
-             permission=P_READ, accept="application/ld+json")
-@view_config(context=InstanceContext, renderer='json',
-             ctx_instance_class=Discussion, request_method='GET',
-             permission=P_READ, accept="application/ld+json")
-def discussion_instance_view_jsonld(request):
-    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
-    aqsm = AssemblQuadStorageManager()
-    discussion = request.context._instance
-    return aqsm.as_jsonld(discussion.id)
-
-
 @view_config(context=InstanceContext, renderer='json',
              request_method='GET', permission=P_READ, accept="application/json")
 def instance_view(request):
