@@ -121,7 +121,7 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
                         }
                         var body = that.$('.body-synthesis'),
                             y = body.get(0) ? body.get(0).scrollTop : 0,
-                            synthesis_is_published = that.model.get("published_in_post") != null,
+                            synthesis_is_published = that.model.get("is_next_synthesis"),
                             rootIdea = allIdeasCollection.getRootIdea();
 
                         Ctx.initTooltips(that.$el);
