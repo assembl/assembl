@@ -7,6 +7,7 @@ require(["app", "common/context", "jquery", "router", "utils/socket", "dropdown"
             require(['raven', 'raven.console', 'raven.backbone', 'raven.require'],
                 function (raven, rc, rb, rr) {
                     raven.config(raven_url).install();
+                    raven.setUserContext({id: Ctx.getCurrentUserId()});
                 });
         }
 
