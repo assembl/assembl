@@ -1999,8 +1999,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               }
 
               if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
-                  console.error("showMessageById():   a showMessageById was already in progress, aborting for message", id);
-                  return;
+                Raven.context(function() {
+                  throw new Error("showMessageById():   a showMessageById was already in progress, aborting")
+                },
+                {requestes_message_id: id});
               }
               else if (shouldRecurseMaxMoreTimes === undefined) {
                   this.showMessageByIdInProgress = true;
