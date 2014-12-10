@@ -102,17 +102,20 @@
     float: right;
     position: relative;
     left: $spacingL;
-    top: -17px;
+    top: -20px;
 
-    &:hover {
-
-    }
+    height: 2em;
+    font-size: 14px;
+    line-height: 2em;
+    color: $black;
+    opacity: 0.4;
   }
 
   &.bx-default {
     border: 1px solid $borderColor;
     box-shadow: none;
   }
+
 }
 
 .bx-empty {
@@ -147,3 +150,23 @@
     color: $yellow;
   }
 }
+
+.bx-alert-success {
+  background-color: #4bad00;
+  color: $white;
+
+  .bx-close {
+    background: transparent;
+  }
+}
+
+.bx-alert-error {
+  background-color: #d54243;
+  color: $white;
+
+  .bx-close {
+    background: transparent;
+  }
+}
+
+

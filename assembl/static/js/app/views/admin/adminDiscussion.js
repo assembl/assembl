@@ -7,7 +7,8 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
             template: '#tmpl-adminDiscussion',
             className: 'admin-notifications',
             ui: {
-                discussion: '.js_saveDiscussion'
+                discussion: '.js_saveDiscussion',
+                close: '.bx-alert-success .bx-close'
             },
             initialize: function () {
                 var that = this,
@@ -24,7 +25,8 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
             },
 
             events: {
-                'click @ui.discussion': 'saveDiscussion'
+                'click @ui.discussion': 'saveDiscussion',
+                'click @ui.close': 'close'
             },
 
             serializeData: function () {
@@ -34,12 +36,17 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
                 }
             },
 
+            close: function () {
+                this.$('.bx-alert-success').addClass('hidden');
+            },
+
             saveDiscussion: function (e) {
                 e.preventDefault();
 
                 var topic = this.$('input[name=topic]').val(),
                     slug = this.$('input[name=slug]').val(),
-                    objectives = this.$('textarea[name=objectives]').val();
+                    objectives = this.$('textarea[name=objectives]').val(),
+                    that = this;
 
                 var discussion = new Discussion.Model({
                     topic: topic,
@@ -49,10 +56,10 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
 
                 discussion.save(null, {
                     success: function (model, resp) {
-                        console.debug(model, resp)
+                        that.$('.bx-alert-success').removeClass('hidden');
                     },
                     error: function (model, resp) {
-                        console.debug(model, resp)
+                        console.debug(model, resp);
                     }
                 })
 
