@@ -8,7 +8,7 @@ from assembl.views.api import API_DISCUSSION_PREFIX
 
 from assembl.models import Discussion
 
-from ...auth import P_READ, P_SYSADMIN
+from ...auth import P_READ, P_ADMIN_DISC
 
 discussion = Service(
     name='discussion',
@@ -25,27 +25,28 @@ def get_discussion(request):
     view_def = request.GET.get('view') or 'default'
 
     if not discussion:
-        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+        raise HTTPNotFound(
+            "Discussion with id '%s' not found." % discussion_id)
 
     return discussion.generic_json(view_def)
 
 
-@discussion.post(permission=P_SYSADMIN)
+# This should be a PUT, but the backbone save method is confused by
+# discussion URLs.
+@discussion.post(permission=P_ADMIN_DISC)
 def post_discussion(request):
-	discussion_id = request.matchdict['discussion_id']
-	discussion = Discussion.get_instance(discussion_id)
+    discussion_id = request.matchdict['discussion_id']
+    discussion = Discussion.get_instance(discussion_id)
 
-	discussion_data = json.loads(request.body)
+    if not discussion:
+        raise HTTPNotFound(
+            "Discussion with id '%s' not found." % discussion_id)
 
-	if not discussion:
-  		raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+    discussion_data = json.loads(request.body)
 
-	discussion.topic = discussion_data.get('topic')
-	discussion.slug = discussion_data.get('slug')
-	discussion.objectives = discussion_data.get('objectives')
+    discussion.topic = discussion_data.get('topic', discussion.slug)
+    discussion.slug = discussion_data.get('slug', discussion.slug)
+    discussion.objectives = discussion_data.get(
+        'objectives', discussion.objectives)
 
-	Discussion.db.add(discussion)
-	Discussion.db.flush()
-
-	return {'msg':'discussion updated'}
-
+    return {'ok': True}
