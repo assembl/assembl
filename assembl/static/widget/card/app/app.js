@@ -14,7 +14,13 @@ appCards.config(['$routeProvider', '$translateProvider', '$locationProvider', 'g
                 controller: 'cardsCtl',
                 resolve: {
                     app: function ($route, configService) {
-                        return configService.getWidget($route.current.params.config);
+                        console.log("$route.current.params:", $route.current.params);
+                        if ( "idea" in $route.current.params )
+                            return configService.populateFromUrl($route.current.params.idea, 'idea');
+                        if ( "config" in $route.current.params )
+                            return configService.populateFromUrl($route.current.params.config, 'widget');
+                        console.log("Error: no 'config' or 'idea' URL parameter given");
+                        return null;
                     }
                 }
             });

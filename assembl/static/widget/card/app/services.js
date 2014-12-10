@@ -10,6 +10,15 @@ widgetServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', 
         }
         return str;
     };
+
+    this.urlToResource = function (str) {
+        var startSlash = "/data/";
+        var startUri = "local:";
+        if ( str && str.indexOf(startSlash) == 0 ) {
+            str = startUri + str.slice(startSlash.length);
+        }
+        return str;
+    };
 }]);
 
 widgetServices.factory('localConfig', function ($http) {
@@ -42,22 +51,26 @@ widgetServices.factory('cardGameService', function ($http) {
 widgetServices.factory('configService', function ($q, $http, utils, AssemblToolsService) {
     return {
         data: {},
-        getWidget: function (url) {
+        populateFromUrl: function (url, fieldname) {
             var defer = $q.defer(),
                 data = this.data;
 
             if (!url) defer.reject({message: 'invalid url configuration'});
 
-            //var urlRoot = utils.urlApi(url);
-            var urlRoot = AssemblToolsService.resourceToUrl(url);
+            var urlRoot = utils.urlApi(url);
 
             $http.get(urlRoot).success(function (response) {
-                data.widget = response;
+                if ( fieldname )
+                    data[fieldname] = response;
+                else
+                    data = response;
                 defer.resolve(data);
             }).error(function (data, status) {
-
-                if (status === 401) utils.notification();
-
+                console.log("error while accessing URL: ", data, status);
+                if (status === 401)
+                {
+                    utils.notification();
+                }
                 defer.reject({message: 'error to get widget information'});
             });
 

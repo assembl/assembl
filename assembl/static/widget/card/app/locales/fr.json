@@ -21,5 +21,9 @@
     "proposeIdea": "Proposez votre idée pour répondre à la question posée :",
     "validateChoose": "Valider votre choix",
     "session_question": "Cette question sera visible au dessus de la carte",
-    "session_jeton": "Nombre de jetons"
+    "session_jeton": "Nombre de jetons",
+    "messageSuccessfullyPosted": "Votre message a été posté avec succès.",
+    "resumeInspirationButton": "Continuer à chercher l'inspiration",
+    "exitButton": "Retourner au débat",
+    "doesThisCardInspireYou": "Cette carte vous inspire ? Écrivez votre idée ci-dessous."
 }

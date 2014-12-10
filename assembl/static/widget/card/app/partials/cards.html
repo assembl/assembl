@@ -1,4 +1,4 @@
-<div class="cards">
+<div class="cards" ng-init="init()">
     <div id="cards-container">
         <div class="card-browser">
             <div class="inspire-card">
@@ -24,16 +24,24 @@
         </div>-->
     </div>
     <div class="card-comment">
-        <form role="form" ng-submit="sendIdea()">
+        <form role="form" ng-submit="sendIdea()" ng-hide="message_is_sent">
+            <p>
+                {{ 'doesThisCardInspireYou' | translate }}
+            </p>
             <div class="form-group">
-                <input type="text" ng-model="formData.title" class="form-control" id="inputEmail1"
+                <input type="text" ng-model="formData.title" class="form-control" id="messageTitle"
                        placeholder="{{'title' | translate}}" required>
             </div>
             <div class="form-group">
-                <textarea ng-model="formData.description" class="form-control" rows="3" placeholder="description"
+                <textarea id="messageContent" ng-model="formData.description" class="form-control" rows="3" placeholder="description"
                           required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">{{'send' | translate}}</button>
         </form>
+        <div ng-show="message_is_sent">
+            <p>{{ 'messageSuccessfullyPosted' | translate }}</p>
+            <button type="submit" class="btn btn-primary mhl" ng-click="resumeInspiration()">{{ 'resumeInspirationButton' | translate }}</button>
+            <button type="submit" class="btn btn-secondary mhl" ng-click="exit()">{{ 'exitButton' | translate }}</button>
+        </div>
     </div>
 </div>

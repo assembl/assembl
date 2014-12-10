@@ -21,5 +21,9 @@
     "proposeIdea": "Submit your idea to answer the question above :",
     "validateChoose": "Validate your choice",
     "session_question": "This issue will be visible above the card",
-    "session_jeton": "Number of token"
+    "session_jeton": "Number of token",
+    "messageSuccessfullyPosted": "Your message has been successfully posted.",
+    "resumeInspirationButton": "Continue searching for inspiration",
+    "exitButton": "Return to the debate",
+    "doesThisCardInspireYou": "Does this card inspire you? Write your idea below."
 }
