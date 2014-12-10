@@ -236,8 +236,7 @@ _:-ms-input-placeholder, :root .groupBody .groupPanel header ~ .panelContents {
   @include calc(height, "100vh - 76px");
 }
 
-/* IE10+ specific styles go here */
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+_:-ms-input-placeholder, :root .editable.groupBody .groupPanel header ~ .panelContents {
   @include calc(height, "100vh - 76px");
 }
 
