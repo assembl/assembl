@@ -13,6 +13,8 @@
     <link type="text/css" rel="stylesheet" href="/static/css/themes/{{theme}}/theme.css" />
 
     {% block extra_css %}{% endblock extra_css %}
+    {% include 'includes/feature_detection.jinja2' %}
+
 </head>
 <body class="preload">
     <div id="wrapper">
@@ -31,6 +33,7 @@
     </div>
 
     {% include 'includes/javascript.jinja2' %}
+		{% include 'includes/updatebrowser.jinja2' %}
 
     {% block extra_js %}{% endblock %}
     {% block main_js %}{% endblock %}

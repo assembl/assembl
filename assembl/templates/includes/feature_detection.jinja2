@@ -5,7 +5,7 @@ to make easy creating the fallbacks in css.
 As long as this code is included directly in the html, we minify it by hand.
 So, if you're going to change it, please change FIRST the commented code
 and then minify it using http://marijnhaverbeke.nl/uglifyjs
-
+ #}
 <script>
 !function(documentElement, documentMode, window){
 
@@ -22,5 +22,5 @@ and then minify it using http://marijnhaverbeke.nl/uglifyjs
 }(document.documentElement, document.documentMode, window)
 </script>
 
-#}
+
 <script>!function(a,b){a.className=a.className.replace(/\bno-js\b/,"has-js")+(b?" ie ie"+b:" no-ie")}(document.documentElement,document.documentMode);</script>
