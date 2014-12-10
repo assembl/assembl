@@ -50,6 +50,16 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 }
             },
 
+            onRender: function () {
+                var that = this;
+                Assembl.commands.setHandler('socket:open', function () {
+                    that.$('#onlinedot').addClass('is-online');
+                });
+                Assembl.commands.setHandler('socket:close', function () {
+                    that.$('#onlinedot').removeClass('is-online');
+                });
+            },
+
             templateHelpers: function () {
                 return {
                     urlNotifications: function () {
@@ -65,12 +75,15 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 var lang = $(e.target).attr('data-locale');
                 Ctx.setLocale(lang);
             },
+
             switchToExpertInterface: function (e) {
                 Ctx.setInterfaceType(Ctx.InterfaceTypes.EXPERT);
             },
+
             switchToSimpleInterface: function (e) {
                 Ctx.setInterfaceType(Ctx.InterfaceTypes.SIMPLE);
             },
+
             addGroup: function () {
                 var collectionManager = new CollectionManager(),
                     groupSpecsP = collectionManager.getGroupSpecsCollectionPromise(viewsFactory);
