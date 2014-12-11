@@ -35,10 +35,9 @@
 
 #ideaPanel-shorttitle {
   color: $white;
-  .panel-editablearea {
-    font-size: 20px;
-    font-style: italic;
-  }
+  font-size: 20px;
+  font-style: italic;
+
   .panel-editablearea, div {
     @extend %icon;
     &:before, &:after {
