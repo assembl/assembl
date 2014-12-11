@@ -66,7 +66,8 @@
   .options-filter,
   .view-config {
     @include box-sizing(border-box);
-    height: 36px;
+    height: auto;
+    max-height: 60px;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
     background-color: $white;
     .config {
