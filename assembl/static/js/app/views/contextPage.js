@@ -54,7 +54,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                                     var all = allSynthesisCollection.get(message.get('publishes_synthesis'));
 
                                     that.model.set({
-                                        creation_date: all.get('creation_date'),
+                                        creation_date: message.get('date'),
                                         introduction: all.get('introduction')
                                     })
                                 }
@@ -75,7 +75,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             modelEvents: {
-                'add change': 'render'
+                'change': 'render'
             },
 
             serializeData: function () {
