@@ -43,9 +43,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             },
 
             serializeData: function () {
+
+                var isRole = _.isEmpty(this.roles);
+
                 return {
                     Ctx: Ctx,
                     Roles: this.roles,
+                    isRole: isRole,
                     canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER)
                 }
             },

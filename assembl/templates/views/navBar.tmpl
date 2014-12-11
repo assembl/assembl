@@ -21,7 +21,7 @@
 <div class="navbar-right">
     <div class="dispib vat">
       {% if user %}
-        <% if( _.isEmpty(Roles) && canSubscribeToDiscussion ){ %>
+        <% if( isRole && canSubscribeToDiscussion ){ %>
           <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
         <% } %>
       {% else %}
