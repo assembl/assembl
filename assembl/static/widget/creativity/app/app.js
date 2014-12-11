@@ -42,7 +42,37 @@ creativityApp.config(['$translateProvider', function ($translateProvider) {
         suffix: '.json'
     });
 
-    $translateProvider.preferredLanguage('fr');
+    // language detection and fallbacks
+
+    $translateProvider.fallbackLanguage('en');
+    $translateProvider.registerAvailableLanguageKeys(['en','fr'], {
+        'en_US': 'en',
+        'en_UK': 'en',
+        'de_DE': 'en',
+        'de': 'en',
+        'de_CH': 'en',
+        'en-US': 'en',
+        'en-UK': 'en',
+        'de-DE': 'en',
+        'de-CH': 'en',
+        'fr_FR': 'fr',
+        'fr-fr': 'fr',
+    });
+
+    //$translateProvider.preferredLanguage('fr'); // no, we want to use one of the available languages
+    //$translateProvider.determinePreferredLanguage(); // not enough: any language not listed in registerAvailableLanguageKeys() won't use fallback, resulting in translation keys appearing on the page
+    var getLocale = function () {
+      var nav = window.navigator;
+      return (nav.language || nav.browserLanguage || nav.systemLanguage || nav.userLanguage || '').split('-').join('_');
+    };
+    $translateProvider.determinePreferredLanguage(function(){
+        var locale = getLocale();
+        if(locale && locale.length && locale.length > 2)
+            locale = locale.substring(0, 2);
+        if ( locale != 'fr' && locale != 'FR')
+            locale = 'en';
+        return locale;
+    });
 
 }]);
 
