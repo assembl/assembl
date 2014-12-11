@@ -1889,95 +1889,111 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * are complete
              */
             scrollToMessage: function (messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth) {
-                var that = this,
-                    RETRY_INTERVAL = 100,  //10 times per second
-                    MAX_RETRIES = 300, //Stop after 30 seconds
-                    debug = false;
+              var that = this,
+              RETRY_INTERVAL = 100,  //10 times per second
+              MAX_RETRIES = 300, //Stop after 30 seconds
+              debug = false;
 
-                recursionDepth = recursionDepth || 0;
-                shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
-                shouldOpenMessageSelected = (typeof shouldOpenMessageSelected === "undefined") ? true : shouldOpenMessageSelected;
+              recursionDepth = recursionDepth || 0;
+              shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
+              shouldOpenMessageSelected = (typeof shouldOpenMessageSelected === "undefined") ? true : shouldOpenMessageSelected;
 
-                if (!messageModel) {
-                    throw new Error("scrollToMessage(): ERROR:  messageModel wasn't provided");
+              if (!messageModel) {
+                throw new Error("scrollToMessage(): ERROR:  messageModel wasn't provided");
+              }
+              if (recursionDepth === 0 && this.scrollToMessageInProgress) {
+                console.log("scrollToMessage():  a scrollToMessage was already in progress, aborting for ", messageModel.id);
+                Raven.captureMessage("scrollToMessage():  a scrollToMessage was already in progress, aborting", {message_id: messageModel.id})
+                if (_.isFunction(failedCallback)) {
+                  failedCallback();
                 }
-                if (recursionDepth === 0 && this.scrollToMessageInProgress) {
-                    console.error("scrollToMessage():  a scrollToMessage was already in progress, aborting");
+                return;
+              }
+              else {
+                this.scrollToMessageInProgress = true;
+              }
+              var animate_message = function (message) {
+                var selector = Ctx.format('[id="message-{0}"]', message.id),
+                el = $(selector);
+
+                if (el[0]) {
+                  if (shouldOpenMessageSelected) {
+                    // console.log("showMessageById(): sending showBody
+                    // to message", message.id);
+                    //TODO:  This is horrible, we need to get the reference,
+                    // check that it's not already open,
+                    // then if it's not re-render message and wait
+                    message.trigger('showBody');
+                    setTimeout(function () {
+                      if(debug) {
+                        console.log("scrollToMessage(): INFO:  shouldOpenMessageSelected is true, calling recursively after a delay with same recursion depth");
+                      }
+                      that.scrollToMessage(messageModel, shouldHighlightMessageSelected, false, callback, failedCallback, recursionDepth);
+                    }, 1000); //Add a delay if we had to open the message
+                  }
+                  else {
+                    var real_callback = function () {
+                      if (shouldHighlightMessageSelected) {
+                        $(selector).highlight();
+                      }
+                      if (_.isFunction(callback)) {
+                        callback();
+                      }
+                    };
+                    that.scrollToElement(el, real_callback);
+                  }
+                }
+                else {
+                  // Trigerring showBody above requires the message to
+                  // re-render. We may have to give it time
+                  if (recursionDepth <= MAX_RETRIES) {
+                    if(debug || recursionDepth >= 2) {
+                      Raven.captureMessage(
+                        "scrollToMessage():  Message still not found in the DOM, calling recursively", 
+                        { message_id: message.id,
+                          selector: selector,
+                          next_call_recursion_depth: recursionDepth + 1
+                        }
+                      );
+                      //console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
+                    }
+                    setTimeout(function () {
+                      that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1);
+                    }, RETRY_INTERVAL);
+                  }
+                  else {
+                    console.log("scrollToMessage(): MAX_RETRIES has been reached: ", recursionDepth);
+                    this.scrollToMessageInProgress = false;
+                    Raven.captureMessage(
+                      "scrollToMessage():  scrollToMessage(): MAX_RETRIES has been reached",
+                      { message_id: messageModel.id,
+                        recursionDepth: recursionDepth}
+                      );
                     if (_.isFunction(failedCallback)) {
-                        failedCallback();
+                      failedCallback();
                     }
                     return;
+                  }
                 }
-                else {
-                    this.scrollToMessageInProgress = true;
-                }
-                var animate_message = function (message) {
-                    var selector = Ctx.format('[id="message-{0}"]', message.id),
-                        el = $(selector);
 
-                    if (el[0]) {
-                        if (shouldOpenMessageSelected) {
-                            // console.log("showMessageById(): sending showBody
-                            // to message", message.id);
-                            //TODO:  This is horrible, we need to get the reference,
-                            // check that it's not already open,
-                            // then if it's not re-render message and wait
-                            message.trigger('showBody');
-                            setTimeout(function () {
-                                if(debug) {
-                                  console.log("scrollToMessage(): INFO:  shouldOpenMessageSelected is true, calling recursively after a delay with same recursion depth");
-                                }
-                                that.scrollToMessage(messageModel, shouldHighlightMessageSelected, false, callback, failedCallback, recursionDepth);
-                            }, 1000); //Add a delay if we had to open the message
-                        }
-                        else {
-                            var real_callback = function () {
-                                if (shouldHighlightMessageSelected) {
-                                    $(selector).highlight();
-                                }
-                                if (_.isFunction(callback)) {
-                                    callback();
-                                }
-                            };
-                            that.scrollToElement(el, real_callback);
-                        }
-                    } else {
-                        // Trigerring showBody above requires the message to
-                        // re-render. We may have to give it time
-                        if (recursionDepth <= MAX_RETRIES) {
-                            if(debug || recursionDepth >= 2) {
-                              Raven.captureMessage("scrollToMessage():  Message still not found in the DOM, calling recursively", 
-                                  { message_id: message.id,
-                                    selector: selector,
-                                    next_call_recursion_depth: recursionDepth + 1
-                                  })
-                              //console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
-                            }
-                            setTimeout(function () {
-                                that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1);
-                            }, RETRY_INTERVAL);
-                        }
-                        else {
-                            console.error("scrollToMessage(): MAX_RETRIES has been reached: ", recursionDepth);
-                            this.scrollToMessageInProgress = false;
-                            return;
-                        }
-                    }
+              };
 
-                };
-
-                if (that.renderIsComplete) {
-                    animate_message(messageModel);
-                    this.scrollToMessageInProgress = false;
+              if (that.renderIsComplete) {
+                animate_message(messageModel);
+                this.scrollToMessageInProgress = false;
+              }
+              else {
+                if (debug) {
+                  console.log("scrollToMessage(): waiting for render to complete");
                 }
-                else {
-                    console.log("scrollToMessage(): waiting for render to complete");
-                    that.listenToOnce(that, "messageList:render_complete", function () {
-                        console.log("scrollToMessage(): render has completed, animating");
-                        animate_message(messageModel);
-                        this.scrollToMessageInProgress = false;
-                    });
-                }
+                that.listenToOnce(that, "messageList:render_complete", function () {
+                  if (debug) {
+                    console.log("scrollToMessage(): render has completed, animating");
+                  }
+                  animate_message(messageModel);
+                  this.scrollToMessageInProgress = false;
+                });
+              }
 
             },
 
@@ -2050,7 +2066,11 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                               that.showMessages(requestedOffsets);
                           }
                           else {
-                              console.error("showMessageById:  Message is in query results but not in current page, and we are not allowed to recurse, aborting for message", id);
+                            Raven.context(function() {
+                              throw new Error("showMessageById():  Message is in query results but not in current page, and we are not allowed to recurse");
+                              },
+                              {requested_message_id: id}
+                            );
                           }
                           return;
                       }
@@ -2065,7 +2085,11 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                               that.listenToOnce(that, "messageList:render_complete", success);
                           }
                           else {
-                              console.error("showMessageById:  Message is not in query results, and we are not allowed to recurse");
+                            Raven.context(function() {
+                              throw new Error("showMessageById:  Message is not in query results, and we are not allowed to recurse");
+                              },
+                              {requested_message_id: id}
+                            );
                           }
                           return;
                       }
