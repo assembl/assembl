@@ -10,7 +10,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
             ui: {
                 currentSubscribeCheckbox: ".js_userNotification",
                 newSubscribeCheckbox: ".js_userNewNotification",
-                unSubscription: ".js_unSubscription"
+                unSubscription: ".js_unSubscription",
+                close: '.bx-alert-success .bx-close'
             },
 
             initialize: function () {
@@ -35,7 +36,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
             events: {
                 'click @ui.currentSubscribeCheckbox': 'userNotification',
                 'click @ui.newSubscribeCheckbox': 'userNewSubscription',
-                'click @ui.unSubscription': 'unSubscription'
+                'click @ui.unSubscription': 'unSubscription',
+                'click @ui.close': 'close'
             },
 
             onRender: function () {
@@ -139,7 +141,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                         roles.destroy({
                             success: function (model, resp) {
-                                that.ui.unSubscription.addClass('hidden');
+                                that.ui.unSubscription.fadeIn(2000).addClass('hidden');
+                                that.$('.bx-alert-success').removeClass('hidden');
                             },
                             error: function (model, resp) {
                                 console.error('ERROR: unSubscription', resp);
@@ -150,6 +153,10 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                 });
 
+            },
+
+            close: function () {
+                this.$('.bx-alert-success').addClass('hidden');
             }
 
         });
