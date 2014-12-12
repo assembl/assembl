@@ -36,7 +36,6 @@ creativityApp.config(['$routeProvider', function ($routeProvider) {
 }]);
 
 creativityApp.config(['$translateProvider', function ($translateProvider) {
-
     $translateProvider.useStaticFilesLoader({
         prefix: 'app/locales/',
         suffix: '.json'
@@ -65,12 +64,23 @@ creativityApp.config(['$translateProvider', function ($translateProvider) {
       var nav = window.navigator;
       return (nav.language || nav.browserLanguage || nav.systemLanguage || nav.userLanguage || '').split('-').join('_');
     };
-    $translateProvider.determinePreferredLanguage(function(){
-        var locale = getLocale();
+    var localeOrFallback = function (locale) {
         if(locale && locale.length && locale.length > 2)
             locale = locale.substring(0, 2);
-        if ( locale != 'fr' && locale != 'FR')
+        locale = locale.toLowerCase();
+        if ( locale != 'fr')
             locale = 'en';
+        return locale;
+    };
+    $translateProvider.determinePreferredLanguage(function(){
+        var locale;
+        var localeInUrl = getUrlVariableValue("locale");
+        console.log("localeInUrl: ", localeInUrl);
+        if ( localeInUrl )
+            locale = localeInUrl;
+        else
+            locale = getLocale();
+        locale = localeOrFallback(locale);
         return locale;
     });
 
@@ -93,24 +103,24 @@ creativityApp.run(['configTestingService', function (configTestingService) {
     //configTestingService.init();
 }]);
 
+// returns the value of a given parameter in the URL of the current page
+function getUrlVariableValue(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] == variable) {
+            return pair[1];
+        }
+    }
+    //alert('Query Variable ' + variable + ' not found');
+    return null;
+}
+
 // Before initializing manually Angular, we get the config of the widget, by accessing the "config" parameter of the current URL
 // For example: http://localhost:6543/widget/vote/?config=http://localhost:6543/data/Widget/19#/
 angular.element(document).ready(function () {
     console.log("angular.element(document).ready()");
-
-    // returns the value of a given parameter in the URL of the current page
-    function getUrlVariableValue(variable) {
-        var query = window.location.search.substring(1);
-        var vars = query.split("&");
-        for (var i = 0; i < vars.length; i++) {
-            var pair = vars[i].split("=");
-            if (pair[0] == variable) {
-                return pair[1];
-            }
-        }
-        //alert('Query Variable ' + variable + ' not found');
-        return null;
-    }
 
     function startAngularApplication() {
         angular.bootstrap('#creativityApp', ['creativityApp']);
@@ -141,6 +151,7 @@ angular.element(document).ready(function () {
     // this parameter is meant to contain the identifier of the item about which the user is voting
     var target = getUrlVariableValue("target");
     var config = getUrlVariableValue("config");
+    var locale = getUrlVariableValue("locale");
 
     var configFileDefault = "/data/Widget/19";
     var configFile = decodeURIComponent(config);
@@ -170,6 +181,9 @@ angular.element(document).ready(function () {
             // save (or override) the "target" URL parameter into the config
             if (target != null || !configServiceProvider.target) {
                 configServiceProvider.config({"target": target});
+            }
+            if (locale != null || !configServiceProvider.locale) {
+                configServiceProvider.config({"locale": locale});
             }
             console.log("config value:", config);
             if (config != null || !configServiceProvider.config) {

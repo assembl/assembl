@@ -571,6 +571,9 @@ creativityApp.controller('indexCtl',
                     console.log("Error: please provide a 'target' parameter");
                 }
 
+                $scope.locale = configService.locale; //$routeParams.locale;
+                $scope.localeAsParameter = $scope.locale ? "&locale=" + $scope.locale : "";
+
                 $scope.active_modules = {};
 
                 console.log("$scope.settings.active_modules: ", $scope.settings.active_modules);
@@ -587,7 +590,8 @@ creativityApp.controller('indexCtl',
                             $scope.active_modules.video.url += "#/?idea=" + $scope.target;
                         */
                        
-                        $scope.active_modules.video.url = "/static/widget/video/#/?";
+                        $scope.active_modules.video.url = "/static/widget/video/?"
+                            + $scope.localeAsParameter + "#/?";
                         if ($scope.config)
                             $scope.active_modules.video.url += "&config=" + $scope.config;
                         if ($scope.target)
@@ -603,7 +607,8 @@ creativityApp.controller('indexCtl',
                         $scope.active_modules.card.name = "creativityModuleTitleCards";
                         // TODO: verify URL format
                         
-                        $scope.active_modules.card.url = "/static/widget/card/#/?";
+                        $scope.active_modules.card.url = "/static/widget/card/?"
+                            + $scope.localeAsParameter + "#/?";
                         if ($scope.config)
                             $scope.active_modules.card.url += "&config=" + AssemblToolsService.resourceToUrl($scope.config);
                         if ($scope.target)

@@ -11,5 +11,6 @@
     "messageSuccessfullyPosted": "Your message has been successfully posted.",
     "resumeInspirationButton": "Continue searching for inspiration",
     "exitButton": "Return to the debate",
-    "videoNoSearchResults": "There are no results for this search query."
+    "videoNoSearchResults": "There are no results for this search query.",
+    "videoSearch": "Search"
 }

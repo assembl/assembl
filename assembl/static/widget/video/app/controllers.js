@@ -24,7 +24,7 @@ videosApp.controller('videosCtl',
 
 
                 // local config json
-
+                
                 $scope.localConfigPromise = localConfig.fetch();
                 $scope.localConfigPromise.success(function (data) {
                     console.log("localConfig received");
@@ -96,6 +96,7 @@ videosApp.controller('videosCtl',
                     Discussion = null,
                     discussionId = ( $scope.config.idea ) ? $scope.config.idea.discussion : $scope.config.widget.discussion;
                 discussionId = discussionId.split('/')[1];
+                console.log("A");
 
                 $scope.idea = Idea.get({}, function () { // this function is executed once the AJAX request is received and the variable is assigned
                     console.log("idea:");
@@ -116,16 +117,12 @@ videosApp.controller('videosCtl',
 
                     // fill the search bar with the 2 first keywords and submit the search
 
+                    console.log("E");
                     setFirstKeywordsAsQuery();
+                    console.log("F");
                     $scope.search();
 
                 });
-
-                /*
-                 $scope.discussion = Discussion.get({discussionId: 1}, function(discussion) {
-                 console.log(discussion);
-                 });
-                 */
 
 
                 // hide right panel
@@ -134,19 +131,25 @@ videosApp.controller('videosCtl',
 
 
                 // initialize the Select2 textfield
+                // If we do not encapsulate the following in a setTimeout(), we receive an AngularJS error: "Error: node[0] is undefined"
+                setTimeout( function(){
+                    $("#query").select2({
+                        tags: [], //$scope.inspiration_keywords, // not used anymore, because the dropdown is now hidden
+                        tokenSeparators: [",", " "],
+                        formatNoMatches: function (term) {
+                            return '';
+                        },
+                        //minimumResultsForSearch: -1
+                        selectOnBlur: true,
+                        minimumInputLength: 1,
+                        width: '70%'
+                    });
 
-                $("#query").select2({
-                    tags: [], //$scope.inspiration_keywords, // not used anymore, because the dropdown is now hidden
-                    tokenSeparators: [",", " "],
-                    formatNoMatches: function (term) {
-                        return '';
-                    },
-                    //minimumResultsForSearch: -1
-                    selectOnBlur: true,
-                    minimumInputLength: 1,
-                    width: '70%'
-                });
-                setFirstKeywordsAsQuery();
+                    setFirstKeywordsAsQuery();
+                }, 10);
+                
+
+                
 
 
                 // make recommended keywords re-appear on top when they are removed from the search field
@@ -180,12 +183,6 @@ videosApp.controller('videosCtl',
                         $scope.search();
                     }
                 });
-
-
-                // activate the right tab
-
-                $("ul.nav li").removeClass("active");
-                $("ul.nav li a[href=\"#videos\"]").closest("li").addClass("active");
 
 
                 // load youtube script

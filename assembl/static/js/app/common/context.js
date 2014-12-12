@@ -560,7 +560,9 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             var inspiration_widget_configure_url = null;
             var inspiration_widget_create_url = null;
 
-            inspiration_widget_create_url = "/static/widget/creativity/?admin=1#/admin/create_from_idea?idea="
+            var locale_parameter = "&locale=" + assembl_locale;
+
+            inspiration_widget_create_url = "/static/widget/creativity/?admin=1" + locale_parameter + "#/admin/create_from_idea?idea="
                 + encodeURIComponent( idea_id + "?view=creativity_widget" ); // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
             returned_data["inspiration_widget_create_url"] = inspiration_widget_create_url;
 
@@ -581,11 +583,14 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                     inspiration_widget_url = "/static/widget/creativity/?config="
                         + Ctx.getUrlFromUri(inspiration_widget_uri)
                         + "&target="
-                        + idea_id; // example: "http://localhost:6543/widget/creativity/?config=/data/Widget/43&target=local:Idea/3#/"
+                        + idea_id
+                        + locale_parameter; // example: "http://localhost:6543/widget/creativity/?config=/data/Widget/43&target=local:Idea/3#/"
                     //console.log("inspiration_widget_url: ", inspiration_widget_url);
                     returned_data["inspiration_widget_url"] = inspiration_widget_url;
 
-                    inspiration_widget_configure_url = "/static/widget/creativity/?admin=1#/admin/configure_instance?widget_uri="
+                    inspiration_widget_configure_url = "/static/widget/creativity/?admin=1"
+                        + locale_parameter
+                        + "#/admin/configure_instance?widget_uri="
                         + Ctx.getUrlFromUri(inspiration_widget_uri)
                         + "&target="
                         + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"

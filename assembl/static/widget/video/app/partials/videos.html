@@ -60,7 +60,7 @@
         <form id="search" data-ng-submit="search()">
             <input ng-model="query" id="query" class="select2-offscreen" type="hidden" value=""
                    placeholder="Entrez ici votre recherche..."/>
-            <input type="submit" id="search-button" value="Rechercher" class="btn btn-default"/>
+            <input type="submit" id="search-button" value="{{ 'videoSearch' | translate }}" class="btn btn-default"/>
         </form>
 
         <p ng-show="hasSearched && !results.length">{{ 'videoNoSearchResults' | translate: {query: query} }}</p>
