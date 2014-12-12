@@ -20,7 +20,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                 this.collection = new Backbone.Collection();
                 this.notificationTemplates = new Backbone.Collection();
-                this.roles = new Backbone.Model();
+                this.model = new Backbone.Model();
+                this.roles = new RolesModel.Model();
 
                 $.when(collectionManager.getNotificationsUserCollectionPromise(),
                     collectionManager.getNotificationsDiscussionCollectionPromise(),
@@ -28,7 +29,11 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                     function (NotificationsUser, notificationTemplates, allRole) {
                         that.collection = NotificationsUser;
                         that.notificationTemplates = notificationTemplates;
-                        that.roles = allRole;
+                        //FIXME: unduplicated models
+                        if (allRole.models.length) {
+                            that.model = allRole;
+                            that.roles = allRole.models[0];
+                        }
                         that.render();
                     });
 
@@ -42,9 +47,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
             onRender: function () {
                 //TODO: change this system when we will have many subscriptions
-                if (!_.isEmpty(this.roles.models)) {
-                    this.ui.unSubscription.removeClass('hidden');
-                } else {
+                if (!this.roles.isUserSubscribed()) {
                     this.ui.currentSubscribeCheckbox.attr('disabled', true);
                 }
             },
@@ -67,13 +70,10 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                     }
                 })
 
-                var isSubscribed = (_.isEmpty(this.roles.models)) ? false : true;
-
                 return {
                     UserNotifications: this.collection.models,
                     addableGlobalSubscriptions: addableGlobalSubscriptions,
-                    Roles: this.roles,
-                    isSubscribed: isSubscribed
+                    isUserSubscribed: this.roles.isUserSubscribed()
                 }
             },
 
@@ -132,7 +132,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
             unSubscription: function () {
                 var that = this;
 
-                this.roles.forEach(function (model) {
+                this.model.forEach(function (model) {
 
                     if (model.get('role') === Roles.PARTICIPANT) {
                         var roles = new RolesModel.Model({
@@ -141,7 +141,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
 
                         roles.destroy({
                             success: function (model, resp) {
-                                that.ui.unSubscription.fadeIn(2000).addClass('hidden');
+                                that.ui.unSubscription.addClass('hidden');
                                 that.$('.bx-alert-success').removeClass('hidden');
                             },
                             error: function (model, resp) {

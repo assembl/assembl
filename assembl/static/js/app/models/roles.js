@@ -13,6 +13,10 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
             '@id': null,
             '@type': null,
             '@view': null
+        },
+
+        isUserSubscribed: function () {
+            return (this.get('discussion') === null) ? false : true;
         }
 
     });

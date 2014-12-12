@@ -14,7 +14,7 @@
   <div class="gu gu-3of4 admin-section">
 
     <div class="admin-title">
-      <h3 class="h3">Notifications <%= isSubscribed %></h3>
+      <h3 class="h3">Notifications</h3>
     </div>
     <div id="content-container" class="content-container">
 			<div class="bx bx-alert-success hidden">
@@ -73,11 +73,13 @@
               <% }) %>
             </fieldset>
           </form>
-
         </div>
       </div>
     </div>
-      <button class="btn btn-primary mls js_unSubscription hidden">{{ gettext('unsubscribe') }}</button>
+    <% if(isUserSubscribed){ %>
+      <button class="btn btn-primary mls js_unSubscription">{{ gettext('unsubscribe') }}</button>
+    <% } %>
+
       <div class="mls mtxl"><h4 class="h4"><a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a></h4></div>
   </div>
 </div>

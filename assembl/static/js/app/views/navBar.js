@@ -13,11 +13,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                this.roles = new Backbone.Model();
+                this.roles = new RolesModel.Model();
                 if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
                     $.when(collectionManager.getLocalRoleCollectionPromise()).then(
                         function (allRole) {
-                            that.roles = allRole.models;
+                            if (allRole.models.length) {
+                                that.roles = allRole.models[0];
+                            }    
                             that.render();
                         });
                 }
@@ -43,13 +45,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             },
 
             serializeData: function () {
-
-                var isRole = _.isEmpty(this.roles);
-
                 return {
                     Ctx: Ctx,
-                    Roles: this.roles,
-                    isRole: isRole,
+                    isUserSubscribed: this.roles.isUserSubscribed(),
                     canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER)
                 }
             },
