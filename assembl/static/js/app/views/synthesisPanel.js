@@ -124,6 +124,8 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
                             synthesis_is_published = that.model.get("is_next_synthesis"),
                             rootIdea = allIdeasCollection.getRootIdea();
 
+                        (synthesis_is_published) ? that.$('.body-synthesis').addClass('synthesis_is_published') : '';
+
                         Ctx.initTooltips(that.$el);
                         function inSynthesis(idea) {
                             if (idea.hidden) {
@@ -145,8 +147,8 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
                             rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis));
                         }
                         _.each(roots, function append_recursive(idea) {
-                            var rendered_idea_view = new IdeaFamilyView(
-                                {model: idea,
+                            var rendered_idea_view = new IdeaFamilyView({
+                                    model: idea,
                                     innerViewClass: IdeaInSynthesisView,
                                     innerViewClassInitializeParams: {
                                         synthesis: that.model,
