@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-09 09:18-0500\n"
+"POT-Creation-Date: 2014-12-11 22:42-0500\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -125,95 +125,95 @@ msgstr ""
 msgid "Unknown user"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:57
+#: assembl/static/js/app/views/contextPage.js:65
 #: assembl/static/js/app/views/navigation/synthesisInNavigation.js:45
 msgid "No synthesis of the discussion has been published yet"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:113
+#: assembl/static/js/app/views/contextPage.js:121
 msgid "Evolution of the total number of messages"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:113
+#: assembl/static/js/app/views/contextPage.js:121
 msgid "Evolution of the number of messages posted"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:114
+#: assembl/static/js/app/views/contextPage.js:122
 #: assembl/templates/views/statistics.tmpl:5
 msgid "Statistics"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:411
+#: assembl/static/js/app/views/contextPage.js:419
 msgid "messages"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:639
-#: assembl/static/js/app/views/contextPage.js:651
+#: assembl/static/js/app/views/contextPage.js:647
+#: assembl/static/js/app/views/contextPage.js:659
 msgid "messages, posted by"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:805
+#: assembl/static/js/app/views/contextPage.js:813
 msgid "Not enough data yet."
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:865
+#: assembl/static/js/app/views/contextPage.js:873
 msgid "last week"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:868
+#: assembl/static/js/app/views/contextPage.js:876
 msgid "last 2 weeks"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:871
+#: assembl/static/js/app/views/contextPage.js:879
 msgid "last month"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:874
+#: assembl/static/js/app/views/contextPage.js:882
 msgid "last 3 months"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:877
+#: assembl/static/js/app/views/contextPage.js:885
 msgid "last 6 months"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:880
+#: assembl/static/js/app/views/contextPage.js:888
 msgid "last year"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1032
+#: assembl/static/js/app/views/contextPage.js:1040
 #, python-format
 msgid "%d participants have contributed in the %s"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1038
+#: assembl/static/js/app/views/contextPage.js:1046
 #, python-format
 msgid "%d new participants started contributing in the %s"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1045
+#: assembl/static/js/app/views/contextPage.js:1053
 #, python-format
 msgid "%d active participants had contributed before %s"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1054
+#: assembl/static/js/app/views/contextPage.js:1062
 #, python-format
 msgid "%d participants' last contribution was prior to %s"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1066
+#: assembl/static/js/app/views/contextPage.js:1074
 #, python-format
 msgid "%d participants have contributed since the beginning of the debate"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1075
+#: assembl/static/js/app/views/contextPage.js:1083
 msgid "Contributors active recently"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1079
+#: assembl/static/js/app/views/contextPage.js:1087
 msgid "Contributors inactive recently"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1184
+#: assembl/static/js/app/views/contextPage.js:1192
 #: assembl/templates/views/navigation.tmpl:3
 msgid "Home"
 msgstr ""
@@ -630,7 +630,7 @@ msgstr ""
 
 #: assembl/templates/discussion_list.jinja2:22
 #: assembl/templates/discussion_list.jinja2:29
-#: assembl/templates/views/navBar.tmpl:68
+#: assembl/templates/views/navBar.tmpl:71
 msgid "Sign in"
 msgstr ""
 
@@ -937,6 +937,7 @@ msgstr ""
 #: assembl/templates/views/adminDiscussion.tmpl:12
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:12
 #: assembl/templates/views/adminPartners.tmpl:12
+#: assembl/templates/views/partnersOrganizations.tmpl:23
 msgid "edit partners"
 msgstr ""
 
@@ -944,16 +945,20 @@ msgstr ""
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:15
 #: assembl/templates/views/adminPartners.tmpl:15
 #: assembl/templates/views/profile.tmpl:12
-#: assembl/templates/views/userNotificationSubscriptions.tmpl:75
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:81
 msgid "back to discussion"
 msgstr ""
 
 #: assembl/templates/views/adminDiscussion.tmpl:30
+msgid "Your settings were saved"
+msgstr ""
+
+#: assembl/templates/views/adminDiscussion.tmpl:36
 msgid "Edit discussion permissions"
 msgstr ""
 
-#: assembl/templates/views/adminDiscussion.tmpl:58
-msgid "save change"
+#: assembl/templates/views/adminDiscussion.tmpl:64
+msgid "Save changes"
 msgstr ""
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:47
@@ -1355,20 +1360,20 @@ msgstr ""
 msgid "Unread messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:41
+#: assembl/templates/views/messageList.tmpl:42
 msgid "Load previous messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:47
+#: assembl/templates/views/messageList.tmpl:48
 msgid "Load more messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:53
-#: assembl/templates/views/messageList.tmpl:63
+#: assembl/templates/views/messageList.tmpl:54
+#: assembl/templates/views/messageList.tmpl:64
 msgid "Inspire me!"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:61
+#: assembl/templates/views/messageList.tmpl:62
 msgid "React to the ongoing discussion"
 msgstr ""
 
@@ -1404,22 +1409,22 @@ msgstr ""
 msgid "Connecting..."
 msgstr ""
 
-#: assembl/templates/views/navBar.tmpl:22
-#: assembl/templates/views/navBar.tmpl:27
+#: assembl/templates/views/navBar.tmpl:25
+#: assembl/templates/views/navBar.tmpl:30
 msgid "subscribe to discussion"
 msgstr ""
 
-#: assembl/templates/views/navBar.tmpl:45
+#: assembl/templates/views/navBar.tmpl:48
 msgid "Edit your profile"
 msgstr ""
 
-#: assembl/templates/views/navBar.tmpl:47
+#: assembl/templates/views/navBar.tmpl:50
 #: assembl/templates/views/profile.tmpl:9
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:9
 msgid "notifications"
 msgstr ""
 
-#: assembl/templates/views/navBar.tmpl:48
+#: assembl/templates/views/navBar.tmpl:51
 msgid "Sign out"
 msgstr ""
 
@@ -1525,11 +1530,11 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-#: assembl/templates/views/synthesisContext.tmpl:11
+#: assembl/templates/views/synthesisContext.tmpl:10
 msgid "Last synthesis"
 msgstr ""
 
-#: assembl/templates/views/synthesisContext.tmpl:21
+#: assembl/templates/views/synthesisContext.tmpl:18
 msgid "Read the synthesis"
 msgstr ""
 
@@ -1564,11 +1569,15 @@ msgstr ""
 msgid "Publish"
 msgstr ""
 
-#: assembl/templates/views/userNotificationSubscriptions.tmpl:22
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:24
+msgid "You have been unsubscribed"
+msgstr ""
+
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:28
 msgid "Currently you will be informed when :"
 msgstr ""
 
-#: assembl/templates/views/userNotificationSubscriptions.tmpl:74
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:80
 msgid "unsubscribe"
 msgstr ""
 
@@ -2168,5 +2177,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Graph of ideas"
+#~ msgstr ""
+
+#~ msgid "save change"
 #~ msgstr ""
 
