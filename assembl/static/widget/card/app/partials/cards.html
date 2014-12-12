@@ -6,7 +6,7 @@
                 <div class="card-content" ng-bind-html="displayed_cards[displayed_card_index].body"></div>
                 <div class="card-bottom"></div>
             </div>
-            <div id="slot-machine" ng-class="{'pointer': cards.length > 0}" ng-click="shuffle()">
+            <div id="slot-machine" ng-class="{'pointer': cards.length > 0}" ng-click="pickNextCard()">
                 <img src="app/img/slot-machine.png">
             </div>
             <div id="card-bottom-control">
@@ -15,7 +15,7 @@
                 <a id="nextCardButton" class="glyphicon glyphicon-chevron-right pointer"
                    ng-class="{'inactive': displayed_card_index == displayed_cards.length-1}" ng-click="nextCard()"></a>
                 <!--
-                <a class="glyphicon glyphicon-random pointer" ng-click="shuffle()" ng-class="{'inactive': cards.length == 0}"></a>
+                <a class="glyphicon glyphicon-random pointer" ng-click="pickNextCard()" ng-class="{'inactive': cards.length == 0}"></a>
                 -->
             </div>
         </div>

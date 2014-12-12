@@ -37,7 +37,17 @@ appCards.controller('cardsCtl',
 
             cardGameService.getCards(1).success(function (data) {
                 $scope.cards = data.game;
-                $scope.shuffle();
+                //$scope.shuffle();
+                $scope.shuffledCards = angular.copy($scope.cards);
+                for ( var i = 0; i < $scope.shuffledCards.length; ++i )
+                {
+                    $scope.shuffledCards[i].originalIndex = i;
+                    $scope.shuffledCards[i].body = $sce.trustAsHtml($scope.shuffledCards[i].body);
+                }
+                //console.log("$scope.shuffledCards before: ", $scope.shuffledCards);
+                $scope.shuffleArray($scope.shuffledCards);
+                //console.log("$scope.shuffledCards after: ", $scope.shuffledCards);
+                $scope.pickNextCard();
             });
 
             // show previous and next card buttons when the mouse cursor is in the card zone
@@ -93,15 +103,23 @@ appCards.controller('cardsCtl',
             console.log("called exitModal");
         };
 
-        $scope.shuffle = function () {
+        //+ Jonas Raoni Soares Silva
+        //@ http://jsfromhell.com/array/shuffle [rev. #1]
+        $scope.shuffleArray = function(v){
+            for(var j, x, i = v.length; i; j = parseInt(Math.random() * i), x = v[--i], v[i] = v[j], v[j] = x);
+            return v;
+        };
+
+        $scope.pickNextCard = function () {
             var n_cards = $scope.cards.length;
             if (n_cards > 0) {
-                var random_index = Math.floor((Math.random() * n_cards));
-                $scope.displayed_cards.push($scope.cards[random_index]);
-                $scope.displayed_card_index = $scope.displayed_cards.length - 1;
-                $scope.displayed_cards[$scope.displayed_card_index].body = $sce.trustAsHtml($scope.cards[random_index].body);
-                $scope.cards.splice(random_index, 1);
+                $scope.cards.splice(0, 1);
+                $scope.displayed_card_index = $scope.displayed_cards.length;
+                $scope.displayed_cards.push($scope.shuffledCards[$scope.displayed_card_index]);
+                
             }
+            //console.log("$scope.displayed_cards: ", $scope.displayed_cards);
+            //console.log("$scope.displayed_card_index: ", $scope.displayed_card_index);
         }
 
         $scope.previousCard = function () {
@@ -114,23 +132,7 @@ appCards.controller('cardsCtl',
 
         /*
          * Comment an idea from inspire me
-         * TODO:  add rest api
          */
-        $scope.sendIdea = function () {
-            var send = new sendIdeaService();
-            //var url = $location.protocol()+'://'+$location.host()+':'+$location.port()
-
-            send.subject = $scope.formData.title;
-            send.message = $scope.formData.description;
-
-            //TODO : {discussionId} need to be dynamic
-            send.$save({discussionId: 3}, function success() {
-
-            }, function error() {
-
-            })
-        };
-
         $scope.sendIdea = function () {
             console.log("sendIdea()");
             try {
@@ -139,12 +141,12 @@ appCards.controller('cardsCtl',
                 if ( !messageSubject || !messageContent ){
                     return;
                 }
-                var inspirationSourceUrl = "http://TODO";
-                var inspirationSourceTitle = "TODO"; // TODO: use these last 2 pieces of info
+                var inspirationSourceUrl = "/static/widget/card/?#/card?card=" + $scope.displayed_cards[$scope.displayed_card_index].originalIndex;
+                //var inspirationSourceTitle = "TODO"; // TODO: use this piece of info
                 console.log("messageSubject: ", messageSubject);
                 console.log("messageContent: ", messageContent);
                 console.log("inspirationSourceUrl: ", inspirationSourceUrl);
-                console.log("inspirationSourceTitle: ", inspirationSourceTitle);
+                //console.log("inspirationSourceTitle: ", inspirationSourceTitle);
 
                 var message = {
                     "type": "PostWithMetadata",
@@ -192,6 +194,50 @@ appCards.controller('cardsCtl',
             {
                 console.log("Error:", err);
             }
+        };
+
+    }]);
+
+// display a single card (this page is referenced by the "inspiration source" link in a message)
+// for example: http://localhost:6543/static/widget/card/?&locale=fr#/card?card=50
+appCards.controller('cardCtl',
+    ['$scope', '$http', '$sce', '$route', 'cardGameService', 'sendIdeaService', 'configService', 'AssemblToolsService', function ($scope, $http, $sce, $route, cardGameService, sendIdeaService, configService, AssemblToolsService) {
+
+        // intialization code (constructor)
+
+        $scope.init = function () {
+
+            console.log("configService: ", configService);
+            console.log("configService.data: ", configService.data);
+
+            $scope.config = {};
+            $scope.config.widget = configService.data.widget;
+            $scope.config.idea = configService.data.idea;
+            console.log("$scope.config: ", $scope.config);
+            $scope.urlParameterConfig = $route.current.params.config; //$routeParams.config;
+            console.log("$scope.urlParameterConfig: ", $scope.urlParameterConfig);
+            if ( !$scope.config.widget && !$scope.config.idea )
+            {
+                console.log("Error: no config or idea given.");
+            }
+
+            // initialize empty stack (LIFO) of already displayed cards, so that the user can browse previously generated cards
+            $scope.displayed_cards = [];
+            $scope.displayed_card_index = 0;
+            if ( "card" in $route.current.params )
+            {
+                var param = parseInt($route.current.params.card);
+                if ( param !== NaN && param >= 0 )
+                    $scope.displayed_card_index = param;
+            }
+
+            cardGameService.getCards(1).success(function (data) {
+                $scope.cards = data.game;
+                if ( $scope.displayed_card_index >= $scope.cards.length )
+                    $scope.displayed_card_index = 0;
+                $scope.card = $scope.cards[$scope.displayed_card_index];
+                $scope.card.body = $sce.trustAsHtml($scope.card.body);
+            });
         };
 
     }]);

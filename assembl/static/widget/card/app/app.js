@@ -8,8 +8,8 @@ appCards.config(['$routeProvider', '$translateProvider', '$locationProvider', 'g
 
         $locationProvider.html5Mode(false);
 
-        $routeProvider.
-            when('/', {
+        $routeProvider
+            .when('/', {
                 templateUrl: 'app/partials/cards.html',
                 controller: 'cardsCtl',
                 resolve: {
@@ -23,6 +23,10 @@ appCards.config(['$routeProvider', '$translateProvider', '$locationProvider', 'g
                         return null;
                     }
                 }
+            })
+            .when('/card', {
+                templateUrl: 'app/partials/card.html',
+                controller: 'cardCtl'
             });
 
         /**
