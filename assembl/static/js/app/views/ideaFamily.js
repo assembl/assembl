@@ -68,7 +68,6 @@ define(['backbone', 'underscore', 'common/context'], function (Backbone, _, Ctx)
                 this.$el.addClass('skip_parent');
             }
             this.$el.addClass('level' + render_data['level']);
-            ;
 
             if (this.isOpen === true) {
                 this.$el.addClass('is-open');

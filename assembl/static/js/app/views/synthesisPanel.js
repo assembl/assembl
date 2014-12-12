@@ -121,10 +121,8 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
                         }
                         var body = that.$('.body-synthesis'),
                             y = body.get(0) ? body.get(0).scrollTop : 0,
-                            synthesis_is_published = that.model.get("is_next_synthesis"),
+                            synthesis_is_published = that.model.get("published_in_post"),
                             rootIdea = allIdeasCollection.getRootIdea();
-
-                        (synthesis_is_published) ? that.$('.body-synthesis').addClass('synthesis_is_published') : '';
 
                         Ctx.initTooltips(that.$el);
                         function inSynthesis(idea) {
