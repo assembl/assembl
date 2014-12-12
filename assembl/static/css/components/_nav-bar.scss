@@ -21,6 +21,12 @@
       top: -6px;
       color: $green;
     }
+    .logo-container {
+      width: 115px;
+    }
+    .socketIndicator {
+      line-height: 26px;
+    }
   }
 
   .navbar-center {
@@ -29,7 +35,6 @@
     top: 0;
     left: 0;
     right: 0;
-    //width: 40%;
     .add-group {
       text-decoration: none;
       cursor: pointer;
@@ -37,9 +42,6 @@
   }
 
   .navbar-right {
-    //width: 400px;
-    //min-width: 400px;
-    //float: right;
     position: absolute;
     right: 0;
     .connexion {

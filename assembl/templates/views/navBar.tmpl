@@ -9,14 +9,15 @@
 <% } %>
 </div>
 <div class="navbar-left">
-    <a href="/" class="assembl-logo" class="sign-in">Assembl<i class="icon-infinite"></i></a>
-    <span id="onlinedot" class="onlinedot mlxl">
+    <div class="fl logo-container"><a href="/" class="assembl-logo" class="sign-in">Assembl<i class="icon-infinite"></i></a></div>
+    <div id="onlinedot" class="onlinedot fl socketIndicator">
         <small class="dot-offline">{{ gettext('Connecting...') }}</small>
-        <span class="dot-online theme_navbarDebateName">
-        	<span class="debate-icon icon-discuss"></span>
-        	{{ discussion.topic }}
-       	</span>
-    </span>
+        <div class="dot-online theme_navbarDebateName">
+        	<i class="breadcrumb-level-indicator"></i>
+        	<i class="debate-icon icon-discuss"></i>
+        	<span>{{ discussion.topic }}</span>
+       	</div>
+    </div>
 </div>
 <div class="navbar-right">
     <div class="dispib vat">
