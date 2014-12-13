@@ -49,7 +49,7 @@
           <form class="core-form">
             <fieldset>
               <% _.each(addableGlobalSubscriptions, function(subscription, index, list){ %>
-               <% if(isSubscribed){ %>
+               <% if(isUserSubscribed){ %>
 									<div class="control-group">
 										<label for="<%= subscription.get('@id') %>" class="control-label"></label>
 										<div class="controls">
