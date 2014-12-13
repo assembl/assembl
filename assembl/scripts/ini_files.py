@@ -63,7 +63,7 @@ def main():
         metrics_code_dir = ''
     try:
         edgesense_code_dir = config.get('edgesense', 'edgesense_code_dir')
-        edgesense_vpython = config.get('metrics', 'vpython')
+        edgesense_vpython = config.get('edgesense', 'vpython')
         has_edgesense_server = (
             edgesense_code_dir and exists(edgesense_code_dir)
             and exists(edgesense_vpython))
