@@ -203,6 +203,18 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                 }
             },
 
+            resetVisualizationState: function (url) {
+                var nav = this.findNavigationSidebarPanelSpec();
+                if (nav) {
+                    this.groupContainer.suspendResize();
+                    this.model.set('navigationState', 'visualizations');
+                    this.ensureOnlyPanelsVisible(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
+                    var vizPanel = this.findViewByType(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
+                    vizPanel.setUrl(url);
+                    this.groupContainer.resumeResize();
+                }
+            },
+
             resetMessagePanelWidth: function () {
                 var messagePanel = this.findWrapperByType(PanelSpecTypes.MESSAGE_LIST);
                 if (this.groupContainer.isOneNavigationGroup()) {

@@ -28,6 +28,8 @@ define(function () {
         },//implemented in views/synthesisPanel.js
         DISCUSSION_CONTEXT: {id: 'homePanel'
         },//implemented in views/contextPage.js
+        EXTERNAL_VISUALIZATION_CONTEXT: {id: 'externalVisualizationPanel'
+        },//implemented in views/externalVisualization.js
 
         getByRawId: function (id) {
             var panelSpec = _.findWhere(this, {id: id});

@@ -75,7 +75,6 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         that.num_items = 4;
                         that.ui.visualization_tab.show();
                         that.setSideBarHeight();
-                        console.log(that.visualizationItems.models);
                     } catch (e) {
                         console.log(e);
                     }
