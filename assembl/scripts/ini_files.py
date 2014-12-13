@@ -61,6 +61,16 @@ def main():
         has_metrics_server = False
         metrics_cl = '/bin/ls'  # innocuous
         metrics_code_dir = ''
+    try:
+        edgesense_code_dir = config.get('edgesense', 'edgesense_code_dir')
+        edgesense_vpython = config.get('metrics', 'vpython')
+        has_edgesense_server = (
+            edgesense_code_dir and exists(edgesense_code_dir)
+            and exists(edgesense_vpython))
+    except NoSectionError:
+        has_edgesense_server = False
+        edgesense_vpython = '/bin/ls'  # innocuous
+        edgesense_code_dir = ''
     vars = {
         'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
         'VIRTUOSO_HOSTNAME': config.get(SECTION, 'public_hostname'),
@@ -79,7 +89,10 @@ def main():
         'CONFIG_FILE': config_uri,
         'has_metrics_server': 'true' if has_metrics_server else 'false',
         'metrics_code_dir': metrics_code_dir,
-        'metrics_cl': metrics_cl
+        'metrics_cl': metrics_cl,
+        'has_edgesense_server': 'true' if has_edgesense_server else 'false',
+        'edgesense_vpython': edgesense_vpython,
+        'edgesense_code_dir': edgesense_code_dir,
     }
     for fname in ('var/db/virtuoso.ini', 'odbc.ini', 'supervisord.conf',):
         tmpl = open(fname+'.tmpl').read()

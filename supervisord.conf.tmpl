@@ -99,3 +99,8 @@ command= %(metrics_code_dir)s/startup.py
 autostart = %(has_metrics_server)s
 autorestart = %(has_metrics_server)s
 
+[program:edgesense]
+directory = %(edgesense_code_dir)s
+command=%(edgesense_vpython)s -l %(edgesense_code_dir)s/python/catalyst_server.py
+autostart = %(has_edgesense_server)s
+autorestart = %(has_edgesense_server)s
