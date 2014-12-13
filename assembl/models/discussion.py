@@ -139,7 +139,6 @@ class Discussion(DiscussionBoundBase):
     @settings_json.setter
     def settings_json(self, val):
         self.settings = json.dumps(val)
-        self.interpret_settings(val)
 
     def get_discussion_id(self):
         return self.id
