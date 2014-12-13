@@ -18,7 +18,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 debate: '.debate',
                 synthesis: '.synthesis',
                 notification: '.navNotification',
-                visualizations: '.visualizations'
+                visualizationList: '.visualization-list'
             },
             ui: {
                 navigation: '.js_navigation',
@@ -50,7 +50,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                     try {
                         jed = new Jed(settings['translations'][assembl_locale]);
                     } catch (e) {
-                        console.error(e);
+                        // console.error(e);
                         jed = new Jed({});
                     }
                     try {
@@ -76,7 +76,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         that.ui.visualization_tab.show();
                         that.setSideBarHeight();
                     } catch (e) {
-                        console.log(e);
+                        // console.log(e);
                     }
                 });
                 this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
@@ -160,7 +160,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                             groupContent: this.groupContent,
                             collection: this.visualizationItems
                         });
-                        this.visualizations.show(visualizationListPanel);
+                        this.visualizationList.show(visualizationListPanel);
                         break;
                     default:
                         break
