@@ -168,7 +168,7 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                 if (this.findNavigationSidebarPanelSpec()) {
                     this.groupContainer.suspendResize();
                     this.model.set('navigationState', 'debate');
-                    this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT);
+                    this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
                     this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
                     this.resetMessagePanelState();
 
@@ -195,7 +195,7 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
             resetSynthesisMessagesState: function (synthesisInNavigationPanel) {
                 if (this.findNavigationSidebarPanelSpec()) {
                     this.groupContainer.suspendResize();
-                    this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT);
+                    this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
                     this.ensurePanelsVisible(PanelSpecTypes.MESSAGE_LIST);
                     this.ensurePanelsHidden(PanelSpecTypes.IDEA_PANEL);
                     this.resetMessagePanelWidth();
