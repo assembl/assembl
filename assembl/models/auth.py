@@ -947,7 +947,7 @@ class UserTemplate(DiscussionBoundBase, User):
             self.get_applicable_notification_subscriptions_classes()
         missing = set(needed_classes) - my_subscriptions_classes
         if not missing:
-            return my_subscriptions
+            return my_subscriptions, False
         # TODO: Fill from config.
         subscribed = defaultdict(bool)
         role_name = self.for_role.name.split(':')[-1]
