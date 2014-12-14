@@ -643,7 +643,7 @@ class User(AgentProfile):
                 role, role == R_PARTICIPANT)
             if template is None:
                 continue
-            template_subscriptions, missing = template.get_notification_subscriptions()
+            template_subscriptions = template.get_notification_subscriptions()
             for subscription in template_subscriptions:
                 subscribed[subscription.__class__] |= subscription.status == NotificationSubscriptionStatus.ACTIVE
         if reset_defaults:
@@ -934,6 +934,9 @@ class UserTemplate(DiscussionBoundBase, User):
         return get_concrete_subclasses_recursive(NotificationSubscriptionGlobal)
 
     def get_notification_subscriptions(self):
+        return self.get_notification_subscriptions_and_changed()[0]
+
+    def get_notification_subscriptions_and_changed(self):
         """the notification subscriptions for this template.
         Materializes applicable subscriptions.."""
         from .notification import (

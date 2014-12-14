@@ -289,7 +289,7 @@ class Discussion(DiscussionBoundBase):
             role = self.db.query(Role).filter_by(name=role_name).one()
             template = UserTemplate(for_role=role, discussion=self)
             self.db.add(template)
-            subs, changed = template.get_notification_subscriptions()
+            subs, changed = template.get_notification_subscriptions_and_changed()
             self.db.flush()
         return template, changed
 
