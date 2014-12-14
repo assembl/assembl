@@ -643,7 +643,8 @@ class User(AgentProfile):
                 role, role == R_PARTICIPANT)
             if template is None:
                 continue
-            for subscription in template.get_notification_subscriptions():
+            template_subscriptions, missing = template.get_notification_subscriptions()
+            for subscription in template_subscriptions:
                 subscribed[subscription.__class__] |= subscription.status == NotificationSubscriptionStatus.ACTIVE
         if reset_defaults:
             for sub in my_subscriptions[:]:
