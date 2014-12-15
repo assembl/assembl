@@ -996,7 +996,32 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             var message = i18n.gettext('ajax error message:');
             message = "url: " + settings.url + "\n" + message + "\n" + exception;
 
-            alert(message);
+            var model = new Backbone.Model({
+                msg: message
+            });
+
+            var Modal = Backbone.Modal.extend({
+                template: _.template($('#tmpl-ajaxError').html()),
+                className: 'group-modal popin-wrapper modal-ajaxError',
+                cancelEl: '.close, .btn-cancel',
+                model: model,
+                initialize: function () {
+                    this.$('.bbm-modal').addClass('popin');
+                },
+                events: {
+                    'click .js_reload': 'reload'
+                },
+
+                reload: function () {
+                    window.location.reload()
+                }
+
+            });
+
+            var modal = new Modal()
+
+            $('#slider').html(modal.render().el);
+            È
         },
 
         setLocale: function (locale) {
@@ -1141,6 +1166,9 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
 
             $(document).on('click', '.dropdown-label', this.onDropdownClick);
             $(document).on('ajaxError', this.onAjaxError);
+
+
+            $(document).trigger('ajaxError');
         }
     }
 

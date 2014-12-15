@@ -11,12 +11,14 @@
   height: 36px;
 }
 
-body.is-modal {
-  //overflow: hidden;
-}
-
 .authorization {
   width: 40%;
   margin: 6em auto 0 auto;
+}
+
+.modal-ajaxError {
+  .popin-header {
+    background-color: $gray1;
+  }
 }
 
