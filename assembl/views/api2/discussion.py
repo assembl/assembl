@@ -1,5 +1,6 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import (HTTPOk)
+from pyramid_dogpile_cache import get_region
 
 from assembl.auth import (P_READ, P_ADMIN_DISC)
 from assembl.models import (Discussion)
@@ -23,6 +24,16 @@ def discussion_settings_put(request):
     return HTTPOk()
 
 
+jsonld_cache = get_region('jsonld')
+
+
+@jsonld_cache.cache_on_arguments()
+def create_jsonld(discussion_id):
+    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
+    aqsm = AssemblQuadStorageManager()
+    return aqsm.as_jsonld(discussion_id)
+
+
 @view_config(context=InstanceContext, renderer='json', name="jsonld",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_READ, accept="application/ld+json")
@@ -30,7 +41,5 @@ def discussion_settings_put(request):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_READ, accept="application/ld+json")
 def discussion_instance_view_jsonld(request):
-    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
-    aqsm = AssemblQuadStorageManager()
     discussion = request.context._instance
-    return aqsm.as_jsonld(discussion.id)
+    return create_jsonld(discussion.id)

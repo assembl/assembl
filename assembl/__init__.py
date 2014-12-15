@@ -52,6 +52,7 @@ def main(global_config, **settings):
     # Tasks first, because it includes ZCA registration (for now)
     config.include('.tasks')
 
+    config.include('pyramid_dogpile_cache')
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)
     config.set_session_factory(session_factory)
