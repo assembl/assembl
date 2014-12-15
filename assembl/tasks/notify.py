@@ -24,7 +24,7 @@ watcher = None
 
 def process_notification(notification):
     from ..models.notification import (
-        NotificationDeliveryStateType, UnverifiedEmailException)
+        NotificationDeliveryStateType, UnverifiedEmailException, MissingEmailException)
     import smtplib
     import socket
     from assembl.lib import config
@@ -66,6 +66,9 @@ def process_notification(notification):
     except UnverifiedEmailException as e:
         sys.stderr.write("Not sending to unverified email: "+repr(e))
         notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
+    except MissingEmailException as e:
+        notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
+        sys.stderr.write("Missing email! :"+repr(e))
     except (smtplib.SMTPConnectError,
             socket.timeout, socket.error,
             smtplib.SMTPHeloError) as e:
