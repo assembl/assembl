@@ -3,12 +3,9 @@
 define(['backbone.marionette', 'models/user', 'common/context'],
     function (Marionette, User, Ctx) {
 
-        var userProfile = Marionette.LayoutView.extend({
+        var userProfile = Marionette.ItemView.extend({
             template: '#tmpl-profile',
             className: 'admin-profile',
-            regions: {
-
-            },
             initialize: function () {
 
                 this.model = new User.Model();
@@ -16,24 +13,16 @@ define(['backbone.marionette', 'models/user', 'common/context'],
                 this.model.fetch();
 
             },
+
             modelEvents: {
                 'sync': 'render'
-            },
-
-            events: {
-
             },
 
             serializeData: function () {
                 return {
                     profile: this.model
                 }
-            },
-
-            onRender: function () {
-
             }
-
         });
 
         return userProfile;

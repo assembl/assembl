@@ -26,14 +26,14 @@
               <div class="control-group">
                 <label for="username" class="control-label">{{ gettext('Username') }}</label>
                 <div class="controls">
-                    <input class="input-xlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" />
+                    <input class="input-xlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" value="<%= profile.get('name') %>" />
                 </div>
               </div>
 
               <div class="control-group">
                 <label for="name" class="control-label">{{ gettext('Name') }}</label>
                 <div class="controls">
-                    <input class="input-xlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('name') %>" />
+                    <input class="input-xlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('real_name') %>" />
                 </div>
               </div>
 
@@ -54,7 +54,8 @@
               <div class="control-group">
                 <label for="#" class="control-label">{{ gettext('Emails') }}</label>
                 <div class="controls">
-                  <input class="input-xlarge" type="text" name="email" placeholder="{{ gettext('Email') }}" value="<%= profile.get('preferred_email') %>" />
+                {# usually it\'s a loop #}
+                <span class="ui-label"><%= profile.get('preferred_email') %></span>
                 </div>
               </div>
 
