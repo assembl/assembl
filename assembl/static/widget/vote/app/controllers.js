@@ -780,8 +780,8 @@ voteApp.controller('resultsCtl',
 }]);
 
 voteApp.controller('indexCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService',
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService){
+  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService',
+  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService){
 
     // intialization code (constructor)
 
@@ -966,6 +966,7 @@ voteApp.controller('indexCtl',
                 console.log("k: " + vk);
                 var criterion_tag = $("svg g[data-criterion-id=\"" + vk + "\"]");
                 var svg = criterion_tag.parent("svg");
+                var criterion_name = criterion_tag.attr("data-criterion-name");
 
                 /*
                 //svg.css("background","#00ff00").fadeOut();
@@ -973,7 +974,9 @@ voteApp.controller('indexCtl',
                 setTimeout(function(){svg.css("background","none");}, 1000);
                 */
 
-                vote_result_holder.append($("<p class='success'>Your vote on criterion '" + criterion_tag.attr("data-criterion-name") + "' has been successfully submitted!</p>"));
+                $translate('voteSubmitSuccessForCriterion', {'criterion': criterion_name}).then(function (translation) {
+                  vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
+                });
               };          
             };
 
@@ -993,7 +996,9 @@ voteApp.controller('indexCtl',
                 svg.css("background","#ff0000");
                 setTimeout(function(){svg.css("background","none");}, 1000);
 
-                vote_result_holder.append($("<p class='failure'>Your vote on criterion '" + criterion_tag.attr("data-criterion-name") + "' has NOT been successfully submitted!</p>"));
+                $translate('voteSubmitSuccessForCriterion', {'criterion': criterion_name}).then(function (translation) {
+                  vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
+                });
               }
             };
 
@@ -1016,6 +1021,13 @@ voteApp.controller('indexCtl',
               
             sendVote(url, data_to_post, k, (counter++)*300);
             
+          }
+          else
+          {
+            var error = "Error: No voting_urls endpoint associated to criterion " + k;
+            console.error(error);
+            alert(error);
+            // what else should we do?
           }
         }
       }

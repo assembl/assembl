@@ -3,6 +3,8 @@
 
     "historyBack":"Back",
     "voteSubmit":"Submit your vote",
+    "voteSubmitSuccessForCriterion":"Your vote on criterion \"{{criterion}}\" has been successfully submitted!",
+    "voteSubmitFailureForCriterion":"There was an error during the submission of your vote on criterion \"{{criterion}}\"! It has NOT be counted, please retry.",
     "voteAsUser":"You will be voting as \"{{username}}\".",
     "adminConfigureInstanceDelete":"Delete this vote widget instance",
     "adminConfigureInstanceTitle":"Configure a vote widget instance",
