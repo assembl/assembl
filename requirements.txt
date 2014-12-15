@@ -67,7 +67,7 @@ pyramid==1.5.2
 pyramid-beaker==0.8
 pyramid-debugtoolbar==2.2.2
 -e git+https://github.com/jvanasco/pyramid_debugtoolbar_ajax.git#egg=pyramid-debugtoolbar-ajax
-pyramid_dogpile_cache-0.0.4
+pyramid_dogpile_cache==0.0.4
 pyramid-jinja2==2.3.3
 pyramid-mailer==0.13
 pyramid-mako==1.0.2
