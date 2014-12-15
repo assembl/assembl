@@ -33,7 +33,7 @@
               <div class="control-group">
                 <label for="name" class="control-label">{{ gettext('Name') }}</label>
                 <div class="controls">
-                    <input class="input-xlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" />
+                    <input class="input-xlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('name') %>" />
                 </div>
               </div>
 
@@ -54,8 +54,7 @@
               <div class="control-group">
                 <label for="#" class="control-label">{{ gettext('Emails') }}</label>
                 <div class="controls">
-                  <input class="input-xlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
-
+                  <input class="input-xlarge" type="text" name="email" placeholder="{{ gettext('Email') }}" value="<%= profile.get('preferred_email') %>" />
                 </div>
               </div>
 

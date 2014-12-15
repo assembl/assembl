@@ -9,7 +9,7 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
          * @class UserModel
          */
         var UserModel = Base.Model.extend({
-
+            idAttribute: '@id',
             /**
              * @type {String}
              */
@@ -20,9 +20,15 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
              * @type {Object}
              */
             defaults: {
-                name: '',
-                description: '',
-                avatarUrl: ''
+                username: null,
+                name: null,
+                preferred_email: null,
+                verified: false,
+                avatar_url_base: null,
+                creation_date: null,
+                real_name: null,
+                '@type': null,
+                '@view': null
             },
 
             /**

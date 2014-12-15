@@ -11,7 +11,6 @@ define(['backbone.marionette', 'routeManager'],
                 "partners": "partners",
                 "notifications": "notifications",
                 "users/notifications": "userNotifications",
-                "test2": "userNotifications",
                 "users/edit": "profile",
                 "posts/:id": "post",
                 "*actions": "defaults"
