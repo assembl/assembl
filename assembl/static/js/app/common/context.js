@@ -1013,7 +1013,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
 
                 });
 
-                var modal = new Modal()
+                var modal = new Modal();
 
                 $('#slider').html(modal.render().el);
             },
@@ -1160,9 +1160,6 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
 
                 $(document).on('click', '.dropdown-label', this.onDropdownClick);
                 $(document).on('ajaxError', this.onAjaxError);
-
-
-                $(document).trigger('ajaxError');
             }
         }
 
