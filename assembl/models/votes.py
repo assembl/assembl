@@ -8,6 +8,7 @@ from sqlalchemy.orm import relationship, backref
 from . import (Base, DiscussionBoundBase, Tombstonable)
 from .idea import Idea
 from .auth import User
+from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC
 from .widgets import MultiCriterionVotingWidget
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
@@ -62,6 +63,10 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     )
     voter = relationship(User, backref="votes")
 
+    def get_owners(self):
+        "List of User objects that can be considered owners of this instance"
+        return (self.voter, )
+
     widget_id = Column(
         Integer,
         ForeignKey(MultiCriterionVotingWidget.id,
@@ -88,6 +93,9 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     @abstractproperty
     def value(self):
         pass
+
+    crud_permissions = CrudPermissions(
+        P_VOTE, P_ADMIN_DISC, P_SYSADMIN, P_SYSADMIN, P_VOTE, P_VOTE)
 
 
 class LickertRange(Base):

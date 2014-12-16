@@ -7,6 +7,7 @@ define(function () {
         SELF_REGISTER: "self_register",
         ADD_POST: "add_post",
         EDIT_POST: "edit_post",
+        VOTE: "vote",
         ADD_EXTRACT: "add_extract",
         EDIT_EXTRACT: "edit_extract",
         EDIT_MY_EXTRACT: "edit_my_extract",

@@ -48,7 +48,7 @@ from simplejson import dumps
 
 from ..traversal import (
     InstanceContext, CollectionContext, ClassContext, Api2Context)
-from assembl.auth import P_READ, P_SYSADMIN, R_SYSADMIN, Everyone
+from assembl.auth import P_READ, P_SYSADMIN, R_SYSADMIN, P_ADD_POST, Everyone
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
