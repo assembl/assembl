@@ -15,7 +15,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 segmentList: "#idea-container"
             },
             initialize: function (options) {
-                this.editing = false;
+                this.editingDefinition = false;
+                this.editingTitle = false;
 
                 var that = this;
 
@@ -33,7 +34,15 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
             },
             ui: {
-                'postIt': '.postitlist'
+                'postIt': '.postitlist',
+                'definition': '.js_editDefinition',
+                'longTitle': '.js_editLongTitle',
+                'seeMore': '.js_seeMore',
+                'seeLess': '.js_seeLess',
+                'modal': '.js_openTargetInModal',
+                'deleteIdea': '.js_ideaPanel-deleteBtn',
+                'clearIdea': '.js_ideaPanel-clearBtn',
+                'closeExtract': '.js_closeExtract'
             },
             modelEvents: {
                 'change': 'render',
@@ -45,13 +54,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 'dragover': 'onDragOver',
                 'dragleave': 'onDragLeave',
                 'drop': 'onDrop',
-                'click .js_closeExtract': 'onSegmentCloseButtonClick',
-                'click .js_ideaPanel-clearBtn': 'onClearAllClick',
-                'click .js_ideaPanel-deleteBtn': 'onDeleteButtonClick',
-                'click .js_seeMore': 'seeMoreOrLess',
-                'click .js_seeLess': 'seeMoreOrLess',
-                'click .js_edit-definition': 'editDefinition',
-                'click .js_openTargetInModal': 'openTargetInModal'
+                'click @ui.closeExtract': 'onSegmentCloseButtonClick',
+                'click @ui.clearIdea': 'onClearAllClick',
+                'click @ui.deleteIdea': 'onDeleteButtonClick',
+                'click @ui.seeMore': 'seeMoreOrLess',
+                'click @ui.seeLess': 'seeMoreOrLess',
+                'click @ui.definition': 'editDefinition',
+                'click @ui.longTitle': 'editTitle',
+                'click @ui.modal': 'openTargetInModal'
             },
 
             getTitle: function () {
@@ -160,7 +170,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     canCreateWidgets: currentUser.can(Permissions.ADMIN_DISCUSSION),
                     canUseWidget: currentUser.can(Permissions.ADD_POST),
                     Ctx: Ctx,
-                    editing: this.editing
+                    editingDefinition: this.editingDefinition,
+                    editingTitle: this.editingTitle
                 }
             },
 
@@ -262,8 +273,12 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                     this.onTruncate();
 
-                    if (this.editing) {
+                    if (this.editingDefinition) {
                         this.renderCKEditor();
+                    }
+
+                    if (this.editingTitle) {
+                        this.renderCKEditorLongTitle();
                     }
                 }
 
@@ -643,7 +658,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
             editDefinition: function () {
                 if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
-                    this.editing = true;
+                    this.editingDefinition = true;
+                    this.render();
+                }
+            },
+
+            editTitle: function () {
+                if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
+                    this.editingTitle = true;
                     this.render();
                 }
             },
@@ -663,12 +685,35 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 }
 
                 this.ckeditor.on('save cancel', function () {
-                    that.editing = false;
+                    that.editingDefinition = false;
                     that.render();
                 });
 
                 this.ckeditor.renderTo(area);
                 this.ckeditor.changeToEditMode();
+            },
+
+            renderCKEditorLongTitle: function () {
+                var that = this,
+                    area = this.$('.ideaPanel-longtitle-editor');
+
+                var longTitle = this.model.getLongTitleDisplayText();
+
+                if (longTitle.length > 0) {
+
+                    this.shortTitle = new CKEditorField({
+                        'model': this.model,
+                        'modelProp': 'longTitle'
+                    });
+                }
+
+                this.shortTitle.on('save cancel', function () {
+                    that.editingTitle = false;
+                    that.render();
+                });
+
+                this.shortTitle.renderTo(area);
+                this.shortTitle.changeToEditMode();
             }
 
         });

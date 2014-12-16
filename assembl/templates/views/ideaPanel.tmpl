@@ -1,11 +1,18 @@
 <div class="panel-body">
     <% if( idea ) { %>
     <fieldset id="ideaPanel-section-summary" class="panel-section mtn">
-        <div id="ideaPanel-shorttitle" class="text-bold mbs" data-toggle="tooltip" title="{{gettext('The name of this idea in the table of ideas')}}"></div>
+        <div id="ideaPanel-shorttitle" class="js_editLongTitle" class="mbs" data-toggle="tooltip" title="{{gettext('The name of this idea in the table of ideas')}}"></div>
+
         <% if (canEditNextSynthesis) { %>
           <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
             <span class="ideaPanel-legend legend">{{ gettext('Expression in next synthesis') }}</span>
-            <div class="ideaPanel-longtitle" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}"></div>
+
+           <% if( editingTitle ) { %>
+						 <div class="ideaPanel-longtitle-editor"></div>
+					 <% } else { %>
+            <div class="ideaPanel-longtitle js_editLongTitle" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}"></div>
+         	 <% } %>
+
           <% } %>
         <% } %>
 
@@ -13,16 +20,16 @@
           <span class="ideaPanel-legend legend">{{ gettext('Description of this idea') }}</span>
         <% } %>
 
-        <% if( editing ) { %>
+        <% if( editingDefinition ) { %>
             <div class="ideaPanel-definition-editor"></div>
         <% } else { %>
             <% if (canEdit) { %>
                <% if(idea.get('definition').length){ %>
-                 <div class="ideaPanel-definition js_edit-definition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
+                 <div class="ideaPanel-definition js_editDefinition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
                    <%= idea.get('definition') %>
                  </div>
                <% } else { %>
-                 <div class="add-description js_edit-definition">
+                 <div class="add-description js_editDefinition">
                    <i class="icon-add"></i> {{ gettext('Add a description') }}
                  </div>
                <% } %>
