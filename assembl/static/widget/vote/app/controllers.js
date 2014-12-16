@@ -992,11 +992,12 @@ voteApp.controller('indexCtl',
                 console.log("k: " + vk);
                 var criterion_tag = $("svg g[data-criterion-id=\"" + vk + "\"]");
                 var svg = criterion_tag.parent("svg");
+                var criterion_name = criterion_tag.attr("data-criterion-name");
 
                 svg.css("background","#ff0000");
                 setTimeout(function(){svg.css("background","none");}, 1000);
 
-                $translate('voteSubmitSuccessForCriterion', {'criterion': criterion_name}).then(function (translation) {
+                $translate('voteSubmitFailureForCriterion', {'criterion': criterion_name}).then(function (translation) {
                   vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
                 });
               }
