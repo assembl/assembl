@@ -102,7 +102,6 @@
   .sticky-box {
     height: 45px;
     box-shadow: 0px -3px 1px rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid #ccc;
     @include box-sizing(border-box);
     background-color: $white;
     position: absolute;
@@ -111,7 +110,7 @@
     left: 0;
     line-height: 35px;
 
-    i.icon-comment {
+    .icon-comment {
       font-size: 22px;
       vertical-align: sub;
     }
