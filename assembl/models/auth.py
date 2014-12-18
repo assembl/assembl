@@ -691,7 +691,11 @@ class User(AgentProfile):
 
 
 class Username(Base):
-    "Optional usernames for users"
+    """Optional usernames for users
+    This is in one-one relationships to users.
+    Usernames are unique, and in one-one relationships to users.
+    It exists because we cannot have a unique index on a nullable property in virtuoso.
+    """
     __tablename__ = 'username'
     user_id = Column(Integer,
                      ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
