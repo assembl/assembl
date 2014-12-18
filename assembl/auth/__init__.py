@@ -37,12 +37,13 @@ ASSEMBL_PERMISSIONS = set((
 
 class CrudPermissions(object):
     __slots__=('create', 'read', 'update', 'delete',
-               'update_owned', 'delete_owned')
+               'read_owned', 'update_owned', 'delete_owned')
     def __init__(self, create=None, read=None, update=None, delete=None,
-                 update_owned=None, delete_owned=None):
+                 update_owned=None, delete_owned=None, read_owned=None):
         self.create = create or P_SYSADMIN
         self.read = read or P_READ
         self.update = update or create or P_SYSADMIN
         self.delete = delete or P_SYSADMIN
+        self.read_owned = read_owned or self.read
         self.update_owned = update_owned or self.update
         self.delete_owned = delete_owned or self.delete

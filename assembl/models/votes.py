@@ -95,7 +95,7 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
         pass
 
     crud_permissions = CrudPermissions(
-        P_VOTE, P_ADMIN_DISC, P_SYSADMIN, P_SYSADMIN, P_VOTE, P_VOTE)
+        P_VOTE, P_ADMIN_DISC, P_SYSADMIN, P_SYSADMIN, P_VOTE, P_VOTE, P_READ)
 
 
 class LickertRange(Base):

@@ -192,26 +192,38 @@ class AbstractAgentAccount(Base):
     rdf_sections = (USER_SECTION,)
 
     id = Column(Integer, primary_key=True,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+
     type = Column(String(60))
+
     profile_id = Column(
         Integer,
         ForeignKey('agent_profile.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False,
         info={'rdf': QuadMapPatternS(None, SIOC.account_of)})
-    profile = relationship('AgentProfile',
-        backref=backref('accounts', cascade="all, delete-orphan"))
+
+    profile = relationship('AgentProfile', backref=backref(
+        'accounts', cascade="all, delete-orphan"))
 
     def signature(self):
         "Identity of signature implies identity of underlying account"
         return ('abstract_agent_account', self.id)
+
     def merge(self, other):
         pass
+
+    def get_owners(self):
+        return (profile, )
+
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_agent_account',
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
+
+    crud_permissions = CrudPermissions(
+        P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
+        P_READ, P_READ, P_READ)
 
 
 class EmailAccount(AbstractAgentAccount):
