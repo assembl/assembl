@@ -27,19 +27,19 @@
 			</div>
       <div class="gr">
         <div class="gu gu-1of2">
-          <form class="core-form form-horizontal" method="POST">
+          <form class="core-form form-horizontal">
             <fieldset>
               <div class="control-group">
                 <label for="username" class="control-label">{{ gettext('Username') }}</label>
                 <div class="controls">
-                    <input class="input-xlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" value="<%= profile.get('name') %>" />
+                    <input class="input-xlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" value="<%= profile.get('username') %>" />
                 </div>
               </div>
 
               <div class="control-group">
                 <label for="name" class="control-label">{{ gettext('Name') }}</label>
                 <div class="controls">
-                    <input class="input-xlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('real_name') %>" />
+                    <input class="input-xlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('name') %>" />
                 </div>
               </div>
 
@@ -77,6 +77,22 @@
               </div>
             </fieldset>
           </form>
+
+          {% if providers %}
+					<p>{{ gettext("Connect other accounts to Assembl")|safe }}</p>
+					{% endif %}
+
+					{#{{form('google', gettext('Login with Google'), true)}}
+					{{form('twitter', gettext('Login with Twitter'), true)}}
+					{{form('facebook', gettext('Login with Facebook'), true)}}
+					{{form('yahoo', gettext('Login with Yahoo'), true,
+									oauth='true', openid_identifier='yahoo.com')}}
+					{{form('live', gettext('Login with Windows Live'), false)}}
+					{{form('github', gettext('Login with Github'), false)}}
+					{{form('bitbucket', gettext('Login with Bitbucket'), false)}}
+					{{form('openid', gettext('Login with OpenID'), true)}} #}
+					<div class="spacer spacer--huge"></div>
+
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
             /**
              * @type {String}
              */
-            url: Ctx.getApiUrl('agents/'),
+            urlRoot: Ctx.getApiUrl('agents/'),
 
             /**
              * Defaults
@@ -101,6 +101,10 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
              */
             isUnknownUser: function () {
                 return this.getId() == UNKNOWN_USER_ID;
+            },
+
+            getSingleUser: function () {
+                this.urlRoot = Ctx.getApiUrl('agents/') + Ctx.getCurrentUserId();
             }
 
         });
