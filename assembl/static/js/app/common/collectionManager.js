@@ -9,7 +9,7 @@ define(['app',
         'models/segment',
         'models/synthesis',
         'models/partner_organization',
-        'models/user',
+        'models/agents',
         'models/notificationSubscription',
         'jquery',
         'objects/storage',
@@ -17,7 +17,7 @@ define(['app',
         'utils/i18n',
         'models/roles',
         'models/discussion'],
-    function (Assembl, Marionette, Message, groupSpec, Idea, IdeaLink, Segment, Synthesis, PartnerOrg, User, NotificationSubscription, $, Storage, Types, i18n, LocalRole, Discussion) {
+    function (Assembl, Marionette, Message, groupSpec, Idea, IdeaLink, Segment, Synthesis, PartnerOrg, Agents, NotificationSubscription, $, Storage, Types, i18n, LocalRole, Discussion) {
 
         /**
          * @class CollectionManager
@@ -176,7 +176,7 @@ define(['app',
                     deferred = $.Deferred();
 
                 if (this._allUsersCollectionPromise === undefined) {
-                    this._allUsersCollection = new User.Collection();
+                    this._allUsersCollection = new Agents.Collection();
                     this._allUsersCollection.collectionManager = this;
                     this._allUsersCollectionPromise = this._allUsersCollection.fetchFromScriptTag('users-json');
                     this._allUsersCollectionPromise.done(function () {

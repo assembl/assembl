@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/user', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot'],
-    function (Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, User, CollectionManager, PanelSpecTypes, $) {
+define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/agents', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot'],
+    function (Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, Agents, CollectionManager, PanelSpecTypes, $) {
 
         var MIN_TEXT_TO_TOOLTIP = 5,
             TOOLTIP_TEXT_LENGTH = 10;
@@ -372,10 +372,10 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                 }
                             } else {
                                 if (that.messageListView.panelWrapper.groupContent.findViewByType(PanelSpecTypes.CLIPBOARD)) {
-                                  //FIXME:  We don't want to affect every panel, only the one in the current group
-                                  //FIXME:  Nothing listens to this anymore
-                                  console.error("FIXME:  Nothing listens to DEPRECATEDsegmentList:showSegment anymore");
-                                  Assembl.vent.trigger('DEPRECATEDsegmentList:showSegment', segment);
+                                    //FIXME:  We don't want to affect every panel, only the one in the current group
+                                    //FIXME:  Nothing listens to this anymore
+                                    console.error("FIXME:  Nothing listens to DEPRECATEDsegmentList:showSegment anymore");
+                                    Assembl.vent.trigger('DEPRECATEDsegmentList:showSegment', segment);
                                 }
                                 else {
                                     console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
@@ -463,12 +463,12 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 var annotator = this.$el.closest('.messageList-list').data('annotator');
 
                 /*
-                Hack: Here we remove the input of the annotator editor, so then the onAdderClick
-                call will try to give focus to a field which does not exist.
-                So it will not force the browser to scroll the message list up to the top,
-                which is where the editor is initially placed (it is then moved to the cursor
-                position).
-                */
+                 Hack: Here we remove the input of the annotator editor, so then the onAdderClick
+                 call will try to give focus to a field which does not exist.
+                 So it will not force the browser to scroll the message list up to the top,
+                 which is where the editor is initially placed (it is then moved to the cursor
+                 position).
+                 */
                 annotator.editor.element.find(":input:first").remove();
 
                 annotator.onAdderClick.call(annotator);
@@ -478,11 +478,11 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 //object from annotator
                 if (this.messageListView.annotatorEditor) {
                     this.messageListView.annotatorEditor.element.css({
-                        'top': y+"px",
-                        'left': x+"px"
+                        'top': y + "px",
+                        'left': x + "px"
                     });
                 }
-                
+
             },
 
             /**
