@@ -171,6 +171,22 @@ class AgentProfile(Base):
             result = self.serializable()
         return json.dumps(result)
 
+    def count_posts_in_discussion(self, discussion_id):
+        from .post import Post
+        return self.db.query(Post).filter_by(
+            creator_id=self.id, discussion_id=discussion_id).count()
+
+    def count_posts_in_current_discussion(self):
+        "CAN ONLY BE CALLED FROM API V2"
+        from pyramid.threadlocal import get_current_request
+        from .discussion import Discussion
+        r = get_current_request()
+        assert r and r.context
+        discussion = r.context.get_instance_of_class(Discussion)
+        if discussion is None:
+            return 0
+        return self.count_posts_in_discussion(discussion.id)
+
 
 class AbstractAgentAccount(Base):
     """An abstract class for accounts that identify agents"""

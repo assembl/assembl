@@ -15,6 +15,7 @@
         "avatar_url_base": "&external_avatar_url",
         "name": "&display_name",
         "real_name": "&real_name",
+        "post_count": "&count_posts_in_current_discussion",
         "preferred_email": false
     },
     "User": {
