@@ -180,7 +180,7 @@ def instance_post(request):
 
 
 @view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER,
-    renderer='json')
+             renderer='json')
 def instance_put_json(request):
     ctx = request.context
     user_id = authenticated_userid(request)
@@ -189,10 +189,10 @@ def instance_put_json(request):
     instance = ctx._instance
     if P_SYSADMIN not in permissions:
         required = instance.crud_permissions
-        if required.update not in permissions:
-            if required.update_owned not in permissions or\
-                    User.get(user_id) not in ctx._instance.get_owners():
-                raise HTTPUnauthorized()
+        if not (required.update in permissions or (
+                required.update_owned in permissions and
+                instance.is_owner(User.get(user_id)))):
+            raise HTTPUnauthorized()
     try:
         updated = instance.update_json(request.json_body, user_id)
         view = request.GET.get('view', None) or 'default'
@@ -201,12 +201,12 @@ def instance_put_json(request):
         else:
             return updated.generic_json(view)
 
-    except NotImplemented as err:
+    except NotImplemented:
         raise HTTPNotImplemented()
 
 
 @view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER,
-    renderer='json')
+             renderer='json')
 def instance_put(request):
     user_id = authenticated_userid(request)
     context = request.context
@@ -221,10 +221,10 @@ def instance_put(request):
     instance = context._instance
     if P_SYSADMIN not in permissions:
         required = instance.crud_permissions
-        if required.update not in permissions:
-            if required.update_owned not in permissions or\
-                    User.get(user_id) not in context._instance.get_owners():
-                raise HTTPUnauthorized()
+        if not (required.update in permissions or (
+                required.update_owned in permissions and
+                instance.is_owner(User.get(user_id)))):
+            raise HTTPUnauthorized()
     mapper = inspect(instance.__class__)
     cols = {c.key: c for c in mapper.columns if not c.foreign_keys}
     setables = dict(pyinspect.getmembers(
@@ -289,10 +289,10 @@ def instance_del(request):
         user_id, ctx.get_discussion_id())
     if P_SYSADMIN not in permissions:
         required = instance.crud_permissions
-        if required.delete not in permissions:
-            if required.delete_owned not in permissions or\
-                    User.get(user_id) not in instance.get_owners():
-                raise HTTPUnauthorized()
+        if not (required.delete in permissions or (
+                required.delete_owned in permissions and
+                instance.is_owner(User.get(user_id)))):
+            raise HTTPUnauthorized()
     instance.db.delete(instance)
     return {}
 

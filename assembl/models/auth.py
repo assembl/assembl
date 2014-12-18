@@ -212,8 +212,8 @@ class AbstractAgentAccount(Base):
     def merge(self, other):
         pass
 
-    def get_owners(self):
-        return (profile, )
+    def is_owner(self, user):
+        return self.profile_id == user.id
 
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_agent_account',
@@ -826,8 +826,8 @@ class LocalUserRole(DiscussionBoundBase):
                 raise HTTPBadRequest()
         return self
 
-    def get_owners(self):
-        return (self.user, )
+    def is_owner(self, user):
+        return self.user_id == user.id
 
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):

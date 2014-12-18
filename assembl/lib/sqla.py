@@ -611,9 +611,9 @@ class BaseOps(object):
     def extra_collections(cls):
         return {}
 
-    def get_owners(self):
-        "List of User objects that can be considered owners of this instance"
-        return ()
+    def is_owner(self, user):
+        "The user owns this ressource, and has more permissions."
+        return False
 
     """The permissions to create, read, update, delete an object of this class.
     Also separate permissions for the owners to update or delete."""

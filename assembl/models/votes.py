@@ -63,9 +63,8 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     )
     voter = relationship(User, backref="votes")
 
-    def get_owners(self):
-        "List of User objects that can be considered owners of this instance"
-        return (self.voter, )
+    def is_owner(self, user):
+        return self.voter_id == user.id
 
     widget_id = Column(
         Integer,

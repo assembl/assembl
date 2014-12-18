@@ -294,9 +294,8 @@ class NotificationSubscription(DiscussionBoundBase):
             parent_subscription_id = self.parent_subscription_id,
             type=self.type)
 
-
-    def get_owners(self):
-        return (self.user, )
+    def is_owner(self, user):
+        return self.user_id == user.id
 
     crud_permissions = CrudPermissions(
         P_READ, P_READ, P_ADMIN_DISC, P_ADMIN_DISC,
