@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship, backref
 from . import (Base, DiscussionBoundBase, Tombstonable)
 from .idea import Idea
 from .auth import User
-from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC
+from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
 from .widgets import MultiCriterionVotingWidget
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
