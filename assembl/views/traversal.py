@@ -65,12 +65,35 @@ class DiscussionsContext(object):
         return discussion
 
 
-class Api2Context(object):
-    def __init__(self, parent, acl):
-        self.__parent__ = parent
-        self.__acl__ = acl
+class TraversalContext(object):
 
+    def __init__(self, parent, acl=None):
+        self.__parent__ = parent
+        self.__acl__ = acl or parent.__acl__
+
+    def find_collection(self, collection_class_name):
+        return None
+
+    def get_discussion_id(self):
+        return None
+
+    def get_instance_of_class(self, cls):
+        return None
+
+    def decorate_query(self, query, last_alias, ctx, tombstones=False):
+        # The buck stops here
+        return query
+
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
+        # and here
+        pass
+
+
+class Api2Context(TraversalContext):
     _class_cache = {}
+
+    def __init__(self, parent, acl=None):
+        super(Api2Context, self).__init__(parent, acl)
 
     def get_default_view(self):
         pass
@@ -115,11 +138,10 @@ def process_args(args, cls):
             continue
 
 
-class ClassContext(object):
+class ClassContext(TraversalContext):
     def __init__(self, parent, cls):
         # permission on class context are quite restrictive. review.
-        self.__acl__ = parent.__acl__
-        self.__parent__ = parent
+        super(ClassContext, self).__init__(parent)
         self._class = cls
 
     def __getitem__(self, key):
@@ -131,19 +153,11 @@ class ClassContext(object):
             raise KeyError()
         return InstanceContext(self, instance)
 
-    def decorate_query(self, query, last_alias, ctx, tombstones=False):
-        # The buck stops here
-        return query
-
     def get_default_view(self):
         my_default = getattr(self._class, 'default_view', None)
         if my_default:
             return my_default
         return self.__parent__.get_default_view()
-
-    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
-        # and here
-        pass
 
     def create_query(self, id_only=True, tombstones=False):
         from assembl.models import Tombstonable
@@ -181,15 +195,6 @@ class ClassContext(object):
             else:
                 return [cls.from_json(json, user_id)]
 
-    def find_collection(self, collection_class_name):
-        return None
-
-    def get_discussion_id(self):
-        return None
-
-    def get_instance_of_class(self, cls):
-        return None
-
 
 class ClassContextPredicate(object):
     def __init__(self, val, config):
@@ -204,8 +209,9 @@ class ClassContextPredicate(object):
         return isinstance(context, ClassContext) and context._class == self.val
 
 
-class InstanceContext(object):
+class InstanceContext(TraversalContext):
     def __init__(self, parent, instance):
+        # Do not call super, because it will set the acl.
         self._instance = instance
         self.__parent__ = parent
         #relations = instance.__class__.__mapper__.relationships
@@ -322,13 +328,12 @@ class InstanceContextPredicateWithExceptions(object):
             not isinstance(context._instance, self.cls_exceptions)
 
 
-class CollectionContext(object):
+class CollectionContext(TraversalContext):
     def __init__(self, parent, collection, instance):
+        super(CollectionContext, self).__init__(parent)
         if isinstance(collection, InstrumentedAttribute):
             collection = collection.property
         # permission on class context are quite restrictive. review.
-        self.__acl__ = parent.__acl__
-        self.__parent__ = parent
         self.collection = collection
         self.parent_instance = instance
         self.collection_class = self.collection.collection_class

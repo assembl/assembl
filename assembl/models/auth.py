@@ -178,15 +178,10 @@ class AgentProfile(Base):
 
     def count_posts_in_current_discussion(self):
         "CAN ONLY BE CALLED FROM API V2"
-        from pyramid.threadlocal import get_current_request
-        from .discussion import Discussion
-        r = get_current_request()
-        assert r
-        if not r.context:
-            return
-        discussion = r.context.get_instance_of_class(Discussion)
+        from ..auth.util import get_current_discussion
+        discussion = get_current_discussion()
         if discussion is None:
-            return
+            return None
         return self.count_posts_in_discussion(discussion.id)
 
 
@@ -629,16 +624,14 @@ class User(AgentProfile):
 
     def get_notification_subscriptions_for_current_discussion(self):
         "CAN ONLY BE CALLED FROM API V2"
-        from pyramid.threadlocal import get_current_request
-        from .discussion import Discussion
-        r = get_current_request()
-        assert r
-        discussion = r.context.get_instance_of_class(Discussion)
+        from ..auth.util import get_current_discussion
+        discussion = get_current_discussion()
         if discussion is None:
             return []
         return self.get_notification_subscriptions(discussion.id)
 
-    def get_notification_subscriptions(self, discussion_id, reset_defaults=False):
+    def get_notification_subscriptions(
+            self, discussion_id, reset_defaults=False):
         """the notification subscriptions for this user and discussion.
         Includes materialized subscriptions from the template."""
         from .notification import (
