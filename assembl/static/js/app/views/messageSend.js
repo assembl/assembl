@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'common/context', 'utils/permissions', 'objects/messagesInProgress', 'utils/i18n', 'jquery-autosize', 'models/message', 'models/posts', 'models/roles', 'utils/roles', 'backbone.modal', 'backbone.marionette.modals'],
-    function (Backbone, Marionette, Assembl, _, $, Ctx, Permissions, MessagesInProgress, i18n, autosize, Messages, Posts, RolesModel, Roles) {
+define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'common/context', 'utils/permissions', 'objects/messagesInProgress', 'utils/i18n', 'jquery-autosize', 'models/message', 'models/agents', 'models/roles', 'utils/roles', 'backbone.modal', 'backbone.marionette.modals'],
+    function (Backbone, Marionette, Assembl, _, $, Ctx, Permissions, MessagesInProgress, i18n, autosize, Messages, Agents, RolesModel, Roles) {
 
         /**
          * @init
@@ -178,9 +178,11 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                             that.ui.cancelButton.trigger('click');
 
                             //TODO: check if it's the first post from an user
-                            var posts = new Posts.Collection();
+                            var agent = new Agents.Model();
+                            agent.getSingleUser();
+                            agent.fetch();
 
-                            if (posts.isFirsPostFromUser()) {
+                            if (agent.get('post_count') < 2) {
                                 that.showPopInFirstPost();
                             }
 
