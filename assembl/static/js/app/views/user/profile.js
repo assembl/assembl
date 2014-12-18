@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'models/user'],
-    function (Marionette, User) {
+define(['backbone.marionette', 'models/agents'],
+    function (Marionette, Agents) {
 
         var userProfile = Marionette.ItemView.extend({
             template: '#tmpl-profile',
@@ -13,7 +13,7 @@ define(['backbone.marionette', 'models/user'],
             },
 
             initialize: function () {
-                this.model = new User.Model();
+                this.model = new Agents.Model();
                 this.model.getSingleUser();
               this.model.fetch();
             },
