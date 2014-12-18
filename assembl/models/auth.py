@@ -181,10 +181,12 @@ class AgentProfile(Base):
         from pyramid.threadlocal import get_current_request
         from .discussion import Discussion
         r = get_current_request()
-        assert r and r.context
+        assert r
+        if not r.context:
+            return
         discussion = r.context.get_instance_of_class(Discussion)
         if discussion is None:
-            return 0
+            return
         return self.count_posts_in_discussion(discussion.id)
 
 
