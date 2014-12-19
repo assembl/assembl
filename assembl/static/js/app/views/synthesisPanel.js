@@ -234,15 +234,6 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
                         }
                     });
                 };
-
-                // getting the most_common_recipient_address
-                $.ajax({
-                    type: 'get',
-                    url: Ctx.getApiUrl('sources/'),
-                    contentType: 'application/json',
-                    success: onSuccess
-                });
-
                 that.blockPanel();
             }
 
