@@ -88,6 +88,9 @@ class TraversalContext(object):
         # and here
         pass
 
+    def get_target_class(self):
+        return None
+
 
 class Api2Context(TraversalContext):
     _class_cache = {}
@@ -177,6 +180,9 @@ class ClassContext(TraversalContext):
             return get_named_class(typename)
         else:
             return self.collection.collection_class
+
+    def get_target_class(self):
+        return self._class
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_class(typename)
@@ -295,6 +301,9 @@ class InstanceContext(TraversalContext):
             return self._instance
         return self.__parent__.get_instance_of_class(cls)
 
+    def get_target_class(self):
+        return self._instance.__class__
+
 
 class InstanceContextPredicate(object):
     def __init__(self, val, config):
@@ -355,6 +364,9 @@ class CollectionContext(TraversalContext):
             return get_named_class(typename)
         else:
             return self.collection_class
+
+    def get_target_class(self):
+        return self.collection_class
 
     def create_query(self, id_only=True, tombstones=False):
         cls = self.collection_class
