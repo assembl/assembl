@@ -89,8 +89,7 @@ def check_permissions(request, operation, allow_admin_disc=False):
         if user_id == Everyone:
             raise HTTPUnauthorized()
         return IF_OWNED
-    if cls.crud_permissions.create not in permissions:
-        raise HTTPUnauthorized()
+    raise HTTPUnauthorized()
 
 
 @view_config(context=ClassContext, renderer='json',

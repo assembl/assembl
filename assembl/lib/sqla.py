@@ -615,7 +615,8 @@ class BaseOps(object):
         "The user owns this ressource, and has more permissions."
         return False
 
-    def restrict_to_owner(self, query, user_id=None):
+    @classmethod
+    def restrict_to_owners(cls, query, user_id=None):
         "filter query according to object owners"
         return query
 
