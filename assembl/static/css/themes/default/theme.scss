@@ -25,15 +25,9 @@
     vertical-align: top;
     position: relative;
   }
-  .breadcrumb-level-indicator {
-    font-family: 'Comic Sans MS';
-    color: #ccc;
-    margin: 0 2px 0 6px;
-    font-size: 110%;
-  }
-
-  .breadcrumb-level-indicator:before {
-    content: ">";
+  .icon-arrowright {
+    color: #cccccc;
+    font-size: 80%;
   }
 }
 
