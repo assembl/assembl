@@ -215,6 +215,11 @@ class AbstractAgentAccount(Base):
     def is_owner(self, user):
         return self.profile_id == user.id
 
+    def restrict_to_owner(self, query, user_id=None):
+        "filter query according to object owners"
+        user_id = user_id or self.profile_id
+        return query.filter(self.__class__.profile_id == user_id)
+
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_agent_account',
         'polymorphic_on': type,
@@ -828,6 +833,11 @@ class LocalUserRole(DiscussionBoundBase):
 
     def is_owner(self, user):
         return self.user_id == user.id
+
+    def restrict_to_owner(self, query, user_id=None):
+        "filter query according to object owners"
+        user_id = user_id or self.user_id
+        return query.filter(self.__class__.user_id == user_id)
 
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):

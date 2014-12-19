@@ -66,6 +66,11 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     def is_owner(self, user):
         return self.voter_id == user.id
 
+    def restrict_to_owner(self, query, user_id=None):
+        "filter query according to object owners"
+        user_id = user_id or self.voter_id
+        return query.filter(self.__class__.voter_id == user_id)
+
     widget_id = Column(
         Integer,
         ForeignKey(MultiCriterionVotingWidget.id,
