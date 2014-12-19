@@ -308,7 +308,7 @@ def instance_put(request):
 def instance_del(request):
     check = check_permissions(request, CrudPermissions.DELETE)
     ctx = request.context
-    instance = context._instance
+    instance = ctx._instance
     if check == IF_OWNED:
         user_id = authenticated_userid(request)
         if not instance.is_owner(User.get(user_id)):
