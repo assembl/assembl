@@ -124,7 +124,7 @@
         print("<a href=\""+url+"\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\""+voteTitle+"\" data-modal-resizable=\"true\">{{gettext('Vote on this idea')}}</a>");
         if ( canCreateWidgets ) {
             var configure_url = "/static/widget/vote/?admin=1#/admin/configure_instance?widget_uri="+votable_widget.widget_uri+"&target="+idea.getId();
-            print(" - <a href=\""+configure_url+"\" target=\"_blank\" class=\"js_openTargetInModal\" data-modal-title=\"{{gettext('Configure this vote widget')}}\">{{gettext('Configure this vote widget')}}</a>");
+            print(" - <a href=\""+configure_url+"\" target=\"_blank\" class=\"js_openTargetInModal js_clearWidgetDataAssociatedToIdea\" data-modal-title=\"{{gettext('Configure this vote widget')}}\">{{gettext('Configure this vote widget')}}</a>");
         }
         print("</div>");
       });
@@ -158,7 +158,7 @@
     <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE){
       if ( canCreateWidgets ) {
           var create_vote_widget_url = "/static/widget/vote/?admin=1#/admin/create_from_idea?idea="+encodeURIComponent(idea.getId()+"?view=creativity_widget");
-          print("<a href=\""+create_vote_widget_url+"\" target=\"_blank\" class='dispb mls mts js_openTargetInModal' data-modal-title=\"{{gettext('Create a vote widget on this idea')}}\">{{gettext('Create a vote widget on this idea')}}</a>");
+          print("<a href=\""+create_vote_widget_url+"\" target=\"_blank\" class='dispb mls mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title=\"{{gettext('Create a vote widget on this idea')}}\">{{gettext('Create a vote widget on this idea')}}</a>");
 
           if ( inspiration_widget_create_url ) {
             print("<a href=\"" + inspiration_widget_create_url + "\" target=\"_blank\" class='dispb mls mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title=\"{{gettext('Create a creativity widget on this idea')}}\">{{gettext('Create a creativity widget on this idea')}}</a>");

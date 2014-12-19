@@ -533,6 +533,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                     this.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = null;
             },
 
+            // TODO: do it also for the vote widgets (not only the creativity widgets), and use this promise where we need vote widgets
             getWidgetDataAssociatedToIdeaPromise: function (idea_id) {
                 //console.log("getWidgetDataAssociatedToIdeaPromise()");
                 var returned_data = {};

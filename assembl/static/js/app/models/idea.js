@@ -420,14 +420,15 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                 });
                 return widgets;
             },
-
+            // TODO: use something like Context::getWidgetDataAssociatedToIdeaPromise() instead
             getVotableOnWhichWidgets: function () {
                 return this.getWidgetsOfType("votable");
             },
-
+            /* not used, because we are using Context::getWidgetDataAssociatedToIdeaPromise() instead
             getInspirationWidgets: function () {
                 return this.getWidgetsOfType("inspiration");
             },
+            */
 
         });
 
