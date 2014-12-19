@@ -40,6 +40,12 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
             replyBoxShown: false,
 
             /**
+             * does the reply box currently have the focus
+             * @type {Boolean}
+             */
+            replyBoxHasFocus: false,
+
+            /**
              * @init
              * @param {MessageModel} obj the model
              */
@@ -211,6 +217,8 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
 
                         if (that.replyBoxShown) {
                             that.openReplyBox();
+                            if ( that.replyBoxHasFocus )
+                                that.focusReplyBox();
                         }
                         else {
                             that.closeReplyBox();
@@ -489,22 +497,34 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              *  Focus on the reply box, and open it if closed
              **/
             focusReplyBox: function () {
-
+                var that = this;
+                var onReplyBoxBlur = function(){
+                    that.replyBoxHasFocus = false;
+                };
+                var waitAndFocus = function(){
+                    // we can't execute this immediately because the opening of the message triggers a setRead(true) which triggers a redraw which looses the focus
+                    window.setTimeout(function () {
+                        var el = that.$('.messageSend-body');
+                        if ( el.length )
+                        {
+                            el.focus();
+                            that.replyBoxHasFocus = true;
+                            el.on("blur", onReplyBoxBlur);
+                        }
+                        else { // if the .messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
+                            that.messageListView.scrollToElement(that.$(".message-replybox"));
+                        }
+                    }, 100);
+                };
+                
                 if (this.viewStyle.id === 'viewStylePreview') {
                     this.onMessageTitleClick();
-                    if (this.$('.messageSend-body').length)
-                        this.$('.messageSend-body').focus();
-                    else { // if the .messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
-                        this.messageListView.scrollToElement(this.$(".message-replybox"));
-                    }
+                    waitAndFocus();
                     return;
                 }
 
                 this.openReplyBox();
-                var that = this;
-                window.setTimeout(function () {
-                    that.$('.messageSend-body').focus();
-                }, 100);
+                waitAndFocus();
             },
 
             /**
