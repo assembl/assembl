@@ -35,9 +35,17 @@ ASSEMBL_PERMISSIONS = set((
     P_SEND_SYNTHESIS, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
     P_ADMIN_DISC, P_SYSADMIN))
 
+
 class CrudPermissions(object):
-    __slots__=('create', 'read', 'update', 'delete',
-               'read_owned', 'update_owned', 'delete_owned')
+
+    __slots__ = ('create', 'read', 'update', 'delete',
+                 'read_owned', 'update_owned', 'delete_owned')
+
+    CREATE = 1
+    READ = 2
+    UPDATE = 3
+    DELETE = 4
+
     def __init__(self, create=None, read=None, update=None, delete=None,
                  update_owned=None, delete_owned=None, read_owned=None):
         self.create = create or P_SYSADMIN
@@ -47,3 +55,15 @@ class CrudPermissions(object):
         self.read_owned = read_owned or self.read
         self.update_owned = update_owned or self.update
         self.delete_owned = delete_owned or self.delete
+
+    def can(self, operation):
+        if operation == self.CREATE:
+            return (self.create, self.create)
+        elif operation == self.READ:
+            return (self.read, self.read_owned)
+        elif operation == self.UPDATE:
+            return (self.update, self.update_owned)
+        elif operation == self.DELETE:
+            return (self.delete, self.delete_owned)
+        else:
+            raise ValueError()
