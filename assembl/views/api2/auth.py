@@ -10,9 +10,10 @@ from assembl.auth import (
     P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST, P_READ,
     R_PARTICIPANT)
 from assembl.models import (User, Discussion, LocalUserRole)
+from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
 from ..traversal import (CollectionContext, InstanceContext)
-from . import (FORM_HEADER, JSON_HEADER, collection_view)
+from . import (FORM_HEADER, JSON_HEADER, collection_view, check_permissions)
 
 
 @view_config(
@@ -20,6 +21,7 @@ from . import (FORM_HEADER, JSON_HEADER, collection_view)
     ctx_named_collection="Discussion.local_user_roles",
     header=JSON_HEADER, renderer='json')
 def add_local_role(request):
+    # Do not use check_permissions, this is a special case
     ctx = request.context
     user_id = authenticated_userid(request)
     discussion_id = ctx.get_discussion_id()
@@ -69,6 +71,7 @@ def add_local_role(request):
     ctx_named_collection_instance="Discussion.local_user_roles",
     header=JSON_HEADER, renderer='json')
 def set_local_role(request):
+    # Do not use check_permissions, this is a special case
     ctx = request.context
     instance = ctx._instance
     user_id = authenticated_userid(request)

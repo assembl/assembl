@@ -10,10 +10,11 @@ from assembl.auth import (
     P_READ, P_SYSADMIN, P_ADMIN_DISC)
 from assembl.models import (
     NotificationSubscription, Notification, Discussion)
+from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
 from ..traversal import CollectionContext, InstanceContext, ClassContext
-from . import JSON_HEADER, instance_put_json, collection_view
-
+from . import (
+    JSON_HEADER, instance_put_json, collection_view, check_permissions)
 
 @view_config(context=CollectionContext, renderer='json', request_method='GET',
              ctx_collection_class=Notification, permission=P_READ,
@@ -38,17 +39,12 @@ def view_notification_subscription_collection(request):
              header=JSON_HEADER,
              ctx_collection_class=NotificationSubscription)
 def notif_collection_add_json(request):
+    check_permissions(request, CrudPermissions.CREATE)
     ctx = request.context
     typename = ctx.collection_class.external_typename()
     user_id = authenticated_userid(request)
     typename = request.json_body.get(
         '@type', ctx.collection_class.external_typename())
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
-    if P_SYSADMIN not in permissions:
-        cls = ctx.get_collection_class(typename)
-        if cls.crud_permissions.create not in permissions:
-            raise HTTPUnauthorized()
     json = request.json_body
     try:
         instances = ctx.create_object(typename, json, user_id)
