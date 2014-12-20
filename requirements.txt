@@ -4,19 +4,19 @@ Chameleon==2.18
 Chroma==0.2.0
 ColanderAlchemy==0.3.1
 DateTime==4.0.1
-Fabric==1.10.0
+Fabric==1.10.1
 Jinja2==2.7.3
 Mako==1.0.0
 MarkupSafe==0.23
 PasteDeploy==1.5.2
-PyJWT==0.3.1
+PyJWT==0.3.2
 PyLD==0.6.6
 PyStemmer==1.3.0
 Pygments==2.0.1
 SPARQLWrapper==1.6.4
 SQLAlchemy==0.9.8
 Sphinx==1.2.3
-Unidecode==0.04.16
+Unidecode==0.04.17
 WebOb==1.4
 WebTest==2.0.16
 Werkzeug==0.9.6
@@ -24,6 +24,7 @@ Werkzeug==0.9.6
 amqp==1.4.6
 anyjson==0.3.3
 anykeystore==0.2
+argparse==1.2.2
 backports.ssl-match-hostname==3.4.0.2
 beautifulsoup4==4.3.2
 billiard==3.3.0.19
@@ -33,12 +34,13 @@ colander==1.0
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 cov-core==1.15.0
 coverage==3.7.1
-cryptography==0.6.1
+cryptography==0.7
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 dogpile.cache==0.5.4
 dogpile.core==0.4.1
 dnspython==1.12.0
 ecdsa==0.11
+enum34==1.0.4
 greenlet==0.4.5
 html5lib==0.999
 imaplib2==2.37.4
@@ -47,12 +49,12 @@ iso8601==0.1.10
 -e git+https://github.com/maparent/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.24
-lingua==3.6.1
+lingua==3.7
 lxml==3.4.1
 meld3==1.0.0
 mock==1.0.1
 oauthlib==0.7.2
-paramiko==1.15.1
+paramiko==1.15.2
 pinocchio==0.4.2
 polib==1.0.5
 premailer==2.8.0
@@ -61,7 +63,7 @@ pyOpenSSL==0.14
 pycparser==2.10
 pycrypto==2.6.1
 pyIsEmail==1.1.0
-pylibmc==1.3.0
+pylibmc==1.4.1
 pyparsing==2.0.3
 pyramid==1.5.2
 pyramid-beaker==0.8
@@ -76,7 +78,7 @@ pytest==2.6.4
 pytest-cov==1.8.1
 pytest-localserver==0.3.3
 pytest-mock==0.4.0
-pytest-splinter==1.2.4
+pytest-splinter==1.2.7
 python-memcached==1.53
 python-openid==2.2.5
 pytz==2014.10
