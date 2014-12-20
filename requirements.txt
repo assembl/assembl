@@ -24,7 +24,8 @@ Werkzeug==0.9.6
 amqp==1.4.6
 anyjson==0.3.3
 anykeystore==0.2
-argparse==1.2.2
+# Do not specify argparse, jenkins chokes on system version.
+# argparse==1.2.2
 backports.ssl-match-hostname==3.4.0.2
 beautifulsoup4==4.3.2
 billiard==3.3.0.19
