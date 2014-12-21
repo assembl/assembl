@@ -604,7 +604,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             onClearAllClick: function (ev) {
                 var ok = confirm(i18n.gettext('Confirm that you want to send all extracts back to the clipboard.'));
                 if (ok) {
-                    this.model.get('segments').reset();
+                    // Clone first, because the operation removes extracts from the subset.
+                    var models = _.clone(this.extractList.models)
+                    _.each(models, function(extract) {
+                        extract.set('idIdea', null);
+                    });
+                    _.each(models, function(extract) {
+                        extract.save();
+                    });
                 }
             },
 
