@@ -32,10 +32,9 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
 
             initialize: function (options) {
+                Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options);
                 var that = this,
                     collectionManager = new CollectionManager();
-
-                this.groupContent = options.groupContent;
 
                 collectionManager.getAllIdeasCollectionPromise().done(
                     function (allIdeasCollection) {
@@ -151,7 +150,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
                         _.each(roots, function (idea) {
                             var ideaView = new IdeaView({
-                                model: idea, groupContent: that.groupContent
+                                model: idea, 
+                                groupContent: that.getContainingGroup()
                             }, view_data);
                             list.appendChild(ideaView.render().el);
                         });
@@ -165,19 +165,22 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
                         // Synthesis posts pseudo-idea
                         var synthesisView = new SynthesisInIdeaListView({
-                            model: rootIdea, groupContent: that.groupContent
+                            model: rootIdea, 
+                            groupContent: that.getContainingGroup()
                         });
                         that.synthesisView.show(synthesisView);
 
                         // Orphan messages pseudo-idea
                         var orphanView = new OrphanMessagesInIdeaListView({
-                            model: rootIdea, groupContent: that.groupContent
+                            model: rootIdea,
+                            groupContent: that.getContainingGroup()
                         });
                         that.orphanView.show(orphanView);
 
                         // All posts pseudo-idea
                         var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
-                            model: rootIdea, groupContent: that.groupContent
+                            model: rootIdea,
+                            groupContent: that.getContainingGroup()
                         });
                         that.allMessagesView.show(allMessagesInIdeaListView);
 

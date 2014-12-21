@@ -370,7 +370,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                 return;
                             }
                             if (segment.get('idIdea')) {
-                                if (that.messageListView.panelWrapper.groupContent.findViewByType(PanelSpecTypes.IDEA_PANEL)) {
+                                if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.IDEA_PANEL)) {
                                     //FIXME:  We don't want to affect every panel, only the one in the current group
                                     Ctx.DEPRECATEDsetCurrentIdea(allIdeasCollection.get(annotation.idIdea));
                                     Assembl.vent.trigger('DEPRECATEDideaPanel:showSegment', segment);
@@ -379,11 +379,11 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                     console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
                                 }
                             } else {
-                                if (that.messageListView.panelWrapper.groupContent.findViewByType(PanelSpecTypes.CLIPBOARD)) {
-                                    //FIXME:  We don't want to affect every panel, only the one in the current group
-                                    //FIXME:  Nothing listens to this anymore
-                                    console.error("FIXME:  Nothing listens to DEPRECATEDsegmentList:showSegment anymore");
-                                    Assembl.vent.trigger('DEPRECATEDsegmentList:showSegment', segment);
+                                if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.CLIPBOARD)) {
+                                  //FIXME:  We don't want to affect every panel, only the one in the current group
+                                  //FIXME:  Nothing listens to this anymore
+                                  console.error("FIXME:  Nothing listens to DEPRECATEDsegmentList:showSegment anymore");
+                                  Assembl.vent.trigger('DEPRECATEDsegmentList:showSegment', segment);
                                 }
                                 else {
                                     console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")

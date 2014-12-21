@@ -41,7 +41,7 @@ define(['app', 'common/context', 'utils/panelSpecTypes', 'views/idea'],
              * @event
              */
             onTitleClick: function (e) {
-                var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
                 if (messageListView) {
                     e.stopPropagation();
 
@@ -50,7 +50,7 @@ define(['app', 'common/context', 'utils/panelSpecTypes', 'views/idea'],
                     Ctx.DEPRECATEDsetCurrentIdea(null);
 
                     if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE)
-                        this.groupContent.resetDebateState();
+                      this.getContainingGroup().resetDebateState();
                 }
             }
         });

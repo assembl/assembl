@@ -150,7 +150,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
             }
         });
 
-        var IdeaSegmentList = Backbone.Subset.extend({
+        var IdeaSegmentListSubset = Backbone.Subset.extend({
             beforeInitialize: function (models, options) {
                 this.ideaId = options.ideaId;
             },
@@ -179,9 +179,9 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
             },
 
             initialize: function (options) {
+                Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options);
                 var that = this,
                     collectionManager = new CollectionManager();
-                this.panelWrapper = options.panelWrapper;
 
                 $.when(collectionManager.getAllExtractsCollectionPromise()).then(
                     function (allExtractsCollection) {
@@ -259,10 +259,10 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 if (this.clipboard) {
                     var numExtracts = this.clipboard.models.length;
                     this.ui.clipboardCount.html("(" + numExtracts + ")");
-                    this.panelWrapper.resetTitle("<i class='icon-clipboard'></i> " + i18n.gettext('Clipboard') + " (" + numExtracts + ")");
+                    this.getPanelWrapper().resetTitle("<i class='icon-clipboard'></i> " + i18n.gettext('Clipboard') + " (" + numExtracts + ")");
                 } else {
                     this.ui.clipboardCount.html("");
-                    this.panelWrapper.resetTitle(i18n.gettext('Clipboard') + " (" + i18n.gettext('empty') + ")");
+                    this.getPanelWrapper().resetTitle(i18n.gettext('Clipboard') + " (" + i18n.gettext('empty') + ")");
                 }
             },
 
@@ -451,7 +451,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
 
         return {
             Clipboard: Clipboard,
-            IdeaSegmentList: IdeaSegmentList,
+            IdeaSegmentListSubset: IdeaSegmentListSubset,
             SegmentView: SegmentView,
             SegmentListView: SegmentListView,
             SegmentListPanel: SegmentListPanel

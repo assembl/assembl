@@ -3,7 +3,13 @@
 define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/assemblPanel', 'utils/i18n', 'models/panelSpec', 'utils/panelSpecTypes'],
     function (Marionette, panelViewByPanelSpec, Ctx, AssemblPanel, i18n, panelSpec, PanelSpecTypes) {
         /**
-         * A wrapper for a panel, used anywhere in a panelGroup
+         * A wrapper for a panel, used anywhere in a groupContent.
+         * 
+         * It's a shim to allow the parent view to have uniform objects to manage
+         * (it only has to manager panelWrappers)
+         * 
+         * The actual panels hold a reference to the panelWrapper in their view 
+         * (someview.panelWrapper
          */
         var PanelWrapper = Marionette.LayoutView.extend({
             template: "#tmpl-panelWrapper",
@@ -34,8 +40,10 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
             initialize: function (options) {
                 var contentClass = panelViewByPanelSpec(options.contentSpec);
                 this.groupContent = options.groupContent;
+                if (!this.groupContent) {
+                  throw new Error("The groupContent wasn't passed in the options");
+                }
                 this.contentsView = new contentClass({
-                    groupContent: options.groupContent,
                     panelWrapper: this
                 });
                 this.gridSize = this.contentsView.gridSize || AssemblPanel.prototype.DEFAULT_GRID_SIZE;

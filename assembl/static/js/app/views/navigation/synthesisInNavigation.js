@@ -14,7 +14,7 @@ define(['views/assemblPanel', 'common/collectionManager', 'utils/types', 'common
             },
 
             initialize: function (options) {
-                this.groupContent = options.groupContent;
+              Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options);
             },
 
             events: {
@@ -24,7 +24,7 @@ define(['views/assemblPanel', 'common/collectionManager', 'utils/types', 'common
             onRender: function () {
                 var that = this,
                     collectionManager = new CollectionManager();
-                //console.log(this.groupContent.model);
+
                 $.when(collectionManager.getAllMessageStructureCollectionPromise(), collectionManager.getAllSynthesisCollectionPromise()).done(
                     function (allMessageStructureCollection, allSynthesisCollection) {
                         var synthesisMessages = allMessageStructureCollection.where({'@type': Types.SYNTHESIS_POST}),
@@ -53,7 +53,7 @@ define(['views/assemblPanel', 'common/collectionManager', 'utils/types', 'common
                 this.displaySynthesis(messageId);
             },
             displaySynthesis: function (messageId) {
-                var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
                 messageListView.currentQuery.clearAllFilters();
                 messageListView.toggleFilterByPostId(messageId);
                 messageListView.showMessageById(messageId, undefined, false);

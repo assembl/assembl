@@ -3,7 +3,7 @@
 define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/assemblPanel', 'views/groups/panelWrapper', 'utils/panelSpecTypes'],
     function (Marionette, ctx, panelSpec, AssemblPanel, PanelWrapper, PanelSpecTypes) {
 
-        /** Reprents the content of an entire group */
+        /** Represents the entire content of a single group */
         var groupContent = Marionette.CompositeView.extend({
             template: "#tmpl-groupContent",
             className: "groupContent",

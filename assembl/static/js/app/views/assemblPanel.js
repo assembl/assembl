@@ -22,6 +22,43 @@ define(['backbone.marionette', 'underscore'], function (Marionette, _) {
         CONTEXT_PANEL_GRID_SIZE: 8, //MESSAGE_PANEL_GRID_SIZE + IDEA_PANEL_GRID_SIZE
         SYNTHESIS_PANEL_GRID_SIZE: 8,
         minimized_size: 40,
+
+        /** Subclasses need to call this first, with
+         * Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options) */
+        initialize:  function (options) {
+          this._panelWrapper = options.panelWrapper;
+          if (!this._panelWrapper) {
+            debugger;
+            throw new Error("The panelWrapper wasn't passed in the options");
+          }
+        },
+        
+        
+        /**
+         * Only to instanciate other objects.  You should NEVER hold a reference to this,
+         * you should chain method calls.
+         * @return a panelWrapper object
+         */
+        
+        getPanelWrapper: function () {
+          return this._panelWrapper;
+        },
+        
+        /**
+         * Get the current group.  You should NEVER hold a reference to this,
+         * you should chain method calls.
+         * @return a groupContent object, or throws an exception.
+         */
+        
+        getContainingGroup: function () {
+          if(this._panelWrapper.groupContent) { //Not using  instanceof GroupContent here to avoid requirejs circular dependency.
+            return this._panelWrapper.groupContent;
+          }
+          else {
+            throw new Error("The panel wasn't initialized properly (most likely initialize wasn't called by the extended class");
+          }
+        },
+        
         /**
          * Show the panel is currently loading data
          */
@@ -34,6 +71,10 @@ define(['backbone.marionette', 'underscore'], function (Marionette, _) {
          */
         unblockPanel: function () {
             this.$el.removeClass('is-loading');
+        },
+        
+        getParentGroup: function () {
+          throw new Error("Unimplemented");
         }
     });
     return AssemblPanel;

@@ -13,7 +13,9 @@ define(['app', 'views/assemblPanel', 'utils/panelSpecTypes'],
             events: {
                 'click @ui.debate': 'goToDebate'
             },
-
+            initialize: function (options) {
+              Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options);
+            },
             goToDebate: function () {
                 Assembl.vent.trigger("navigation:selected", "debate");
             }

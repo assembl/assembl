@@ -42,13 +42,13 @@ define(['common/context', 'app', 'utils/panelSpecTypes', 'views/idea'],
              * @event
              */
             onTitleClick: function () {
-                var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
                 messageListView.triggerMethod('messageList:clearAllFilters');
                 messageListView.triggerMethod('messageList:addFilterIsSynthesisMessage');
 
                 Ctx.DEPRECATEDsetCurrentIdea(null);
 
-                this.groupContent.resetDebateState();
+                this.getContainingGroup().resetDebateState();
             }
         });
 

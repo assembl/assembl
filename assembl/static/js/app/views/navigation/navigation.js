@@ -31,9 +31,8 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 'click @ui.ideaFromIdealist': 'addIdeaFromIdeaList'
             },
             initialize: function (options) {
+                Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options);
                 var that = this;
-
-                this.groupContent = options.groupContent;
 
                 $(window).resize(function () {
                     that.setSideBarHeight();
@@ -117,9 +116,9 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             },
             loadView: function (view) {
                 // clear aspects of current state
-                switch (this.groupContent.model.get('navigationState')) {
+                switch (this.getContainingGroup().model.get('navigationState')) {
                     case 'synthesis':
-                        var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                        var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
                         if (messageListView) {
                             messageListView.currentQuery.clearAllFilters();
                             if (view == 'debate') {
@@ -130,34 +129,37 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         }
                         break;
                 }
-                this.groupContent.model.set('navigationState', view);
+                this.getContainingGroup().model.set('navigationState', view);
                 // set new state
                 switch (view) {
                     case 'home':
                         var homePanel = new HomePanel({
-                            groupContent: this.groupContent
+                            groupContent: this.getContainingGroup(),
+                            panelWrapper: this.getPanelWrapper()
                         });
                         this.home.show(homePanel);
-                        this.groupContent.resetContextState();
+                        this.getContainingGroup().resetContextState();
                         break;
                     case 'debate':
                         var idealist = new IdeaList({
-                            groupContent: this.groupContent,
+                            groupContent: this.getContainingGroup(),
+                            panelWrapper: this.getPanelWrapper(),
                             nav: true
                         });
                         this.debate.show(idealist);
-                        this.groupContent.resetDebateState();
+                        this.getContainingGroup().resetDebateState();
                         break;
                     case 'synthesis':
                         var synthesisInNavigationPanel = new SynthesisInNavigationPanel({
-                            groupContent: this.groupContent
+                            groupContent: this.getContainingGroup(),
+                            panelWrapper: this.getPanelWrapper()
                         });
                         this.synthesis.show(synthesisInNavigationPanel);
-                        this.groupContent.resetSynthesisMessagesState(synthesisInNavigationPanel);
+                        this.getContainingGroup().resetSynthesisMessagesState(synthesisInNavigationPanel);
                         break;
                     case 'visualizations':
                         var visualizationListPanel = new LinkListView({
-                            groupContent: this.groupContent,
+                            groupContent: this.getContainingGroup(),
                             collection: this.visualizationItems
                         });
                         this.visualizationList.show(visualizationListPanel);

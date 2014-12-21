@@ -12,6 +12,7 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
              * @init
              */
             initialize: function (obj) {
+                Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options);
                 var that = this,
                     collectionManager = new CollectionManager();
 

@@ -42,6 +42,5 @@ define(['views/assemblPanel', 'underscore', 'views/navigation/home', 'views/cont
                 throw new Error("invalidPanelSpecModel");
             }
         }
-
         return panelViewByPanelSpec;
     });
