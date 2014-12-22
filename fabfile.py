@@ -200,7 +200,7 @@ def update_requirements(force=False):
     update external dependencies on remote host
     """
     print(cyan('Updating requirements using PIP'))
-    venvcmd('pip install -U "pip>=1.5.1" --download-cache ~/.pip/cache')
+    venvcmd('pip install -U "pip>=1.5.1,<6" --download-cache ~/.pip/cache')
 
     if force:
         cmd = "%(venvpath)s/bin/pip install -I -r %(projectpath)s/requirements.txt --download-cache ~/.pip/cache" % env
@@ -355,7 +355,7 @@ def updatemaincode():
 
 
 def app_setup():
-     venvcmd('pip install -U "pip>=1.5.1" --download-cache ~/.pip/cache')
+     venvcmd('pip install -U "pip>=1.5.1,<6" --download-cache ~/.pip/cache')
      venvcmd('pip install -e ./')
      venvcmd('assembl-ini-files %s' % (env.ini_file))
 
