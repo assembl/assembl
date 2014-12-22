@@ -36,8 +36,8 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     )
     idea = relationship(
         Idea,
-        primaryjoin="and_(Idea.id==AbstractIdeaVote.idea_id, "
-                    "Idea.is_tombstone==False)",
+        primaryjoin=and_(Idea.id == idea_id,
+                         Idea.is_tombstone == False),
         backref=backref("votes", cascade="all, delete-orphan"))
 
     criterion_id = Column(
@@ -48,8 +48,8 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     )
     criterion = relationship(
         Idea,
-        primaryjoin="and_(Idea.id==AbstractIdeaVote.criterion_id, "
-                    "Idea.is_tombstone==False)",
+        primaryjoin=and_(Idea.id == criterion_id,
+                         Idea.is_tombstone == False),
         backref="votes_using_this_criterion")
 
     vote_date = Column(DateTime, default=datetime.utcnow,
@@ -61,7 +61,8 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
         nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.voter)}
     )
-    voter = relationship(User, backref="votes")
+    voter = relationship(
+        User, backref=backref("votes", cascade="all, delete-orphan"))
 
     def is_owner(self, user):
         return self.voter_id == user.id
@@ -81,7 +82,7 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
         MultiCriterionVotingWidget,
         primaryjoin="and_(MultiCriterionVotingWidget.id==AbstractIdeaVote.widget_id, "
                          "AbstractIdeaVote.is_tombstone==False)",
-        backref="votes")
+        backref=backref("votes", cascade="all, delete-orphan"))
 
     def get_discussion_id(self):
         return self.idea.discussion_id
