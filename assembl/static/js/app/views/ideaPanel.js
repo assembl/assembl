@@ -15,7 +15,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 //segmentList: ".postitlist"
             },
             initialize: function (options) {
-                Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options);
+                Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
                 var that = this;
 
                 this.editingDefinition = false;
@@ -25,7 +25,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     this.model = null;
                 }
 
-                this.listenTo(Assembl.vent, "DEPRECATEDidea:selected", function (idea) {
+                this.listenTo(this.getContainingGroup(), "idea:set", function (idea) {
                     that.setIdeaModel(idea);
                 });
 
@@ -77,7 +77,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             inspiration_widget_configure_url: null,
 
             resetView: function () {
-              console.log("ideaPanel::resetView called");
               if(this.segmentList !== undefined) {
                 this.segmentList.reset();
               }
@@ -195,7 +194,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             clearWidgetDataAssociatedToIdea: function () {
-                console.log("clearWidgetDataAssociatedToIdea()");
+                // console.log("clearWidgetDataAssociatedToIdea()");
                 /* In case once the admin deletes the widget after having opened the configuration modal,
                  we have to invalidate widget data for this idea and all its sub-ideas recursively.
                  So to make it more simple we invalidate all widget data. */
@@ -263,7 +262,9 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 Ctx.initClipboard();
 
-                if (this.model && this.model.id) { //Only fetch extracts if idea already has an id
+                if (this.model && this.model.id  && this.extractListSubset) { 
+                  //Only fetch extracts if idea already has an id.
+                  //console.log(this.extractListSubset);
                     // display only important extract for simple user
                     if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
                         this.extractListSubset.models = _.filter(this.extractListSubset.models, function (model) {
@@ -291,7 +292,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             openTargetInModal: function (evt) {
                 var that = this;
                 var onDestroyCallback = function () {
-                    console.log("onDestroyCallback()");
+                    // console.log("onDestroyCallback()");
                     setTimeout(function () {
                         //Ctx.invalidateWidgetDataAssociatedToIdea("all");
                         that.clearWidgetDataAssociatedToIdea();
@@ -485,7 +486,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                                     //console.log("The region:", that.segmentList);
                                     that.render();
                                     that.listenTo(that.model, 'change', function (m) {
-                                      console.log("ideaPanel::change callback about to call render");
+                                      // console.log("ideaPanel::change callback about to call render");
                                       that.render();
                                     });
                                 });
@@ -528,7 +529,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                                 that.model.destroy({
                                     success: function () {
                                         that.unblockPanel();
-                                        Ctx.DEPRECATEDsetCurrentIdea(null);
+                                        that.getContainingGroup().setCurrentIdea(null);
                                     },
                                     error: function (model, resp) {
                                         console.error('ERROR: deleteCurrentIdea', resp);
@@ -553,7 +554,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                             var cid = ev.currentTarget.getAttribute('data-segmentid'),
                                 segment = allExtractsCollection.getByCid(cid);
-                            console.log(cid);
                             Ctx.showDragbox(ev, segment.getQuote());
                             Ctx.draggedSegment = segment;
                         }
@@ -567,7 +567,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             onDragOver: function (ev) {
-                console.log("ideaPanel:onDragOver() fired");
+                // console.log("ideaPanel:onDragOver() fired");
                 ev.preventDefault();
                 if (Ctx.draggedSegment !== null || Ctx.getDraggedAnnotation() !== null) {
                     this.$el.addClass("is-dragover");

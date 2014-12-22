@@ -46,9 +46,9 @@ define(['common/context', 'app', 'utils/panelSpecTypes', 'views/idea'],
                 messageListView.triggerMethod('messageList:clearAllFilters');
                 messageListView.triggerMethod('messageList:addFilterIsSynthesisMessage');
 
-                Ctx.DEPRECATEDsetCurrentIdea(null);
+                this._groupContent.setCurrentIdea(null);
 
-                this.getContainingGroup().resetDebateState();
+                this._groupContent.resetDebateState();
             }
         });
 

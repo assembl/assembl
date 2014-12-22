@@ -14,7 +14,7 @@ define(['views/assemblPanel', 'common/collectionManager', 'utils/types', 'common
             },
 
             initialize: function (options) {
-              Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options);
+              Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
             },
 
             events: {

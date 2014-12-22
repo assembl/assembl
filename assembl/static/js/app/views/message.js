@@ -344,7 +344,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              */
             showSegmentByAnnotation: function (annotation) {
                 var that = this,
-                    currentIdea = Ctx.DEPRECATEDgetCurrentIdea(),
+                    currentIdea = this.messageListView.getContainingGroup().getCurrentIdea(),
                     collectionManager = new CollectionManager(),
                     ok = true;
 
@@ -371,8 +371,8 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                             }
                             if (segment.get('idIdea')) {
                                 if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.IDEA_PANEL)) {
-                                    //FIXME:  We don't want to affect every panel, only the one in the current group
-                                    Ctx.DEPRECATEDsetCurrentIdea(allIdeasCollection.get(annotation.idIdea));
+                                  //FIXME:  Even this isn't proper behaviour.  Maybe we should just pop a panel systematically in this case.
+                                    that.messageListView.getContainingGroup().setCurrentIdea(allIdeasCollection.get(annotation.idIdea));
                                     Assembl.vent.trigger('DEPRECATEDideaPanel:showSegment', segment);
                                 }
                                 else {

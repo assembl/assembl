@@ -47,10 +47,10 @@ define(['app', 'common/context', 'utils/panelSpecTypes', 'views/idea'],
 
                     messageListView.triggerMethod('messageList:clearAllFilters');
                     messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
-                    Ctx.DEPRECATEDsetCurrentIdea(null);
+                    this._groupContent.setCurrentIdea(null);
 
                     if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE)
-                      this.getContainingGroup().resetDebateState();
+                      this._groupContent.resetDebateState();
                 }
             }
         });

@@ -31,12 +31,17 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
             initialize: function (options, view_data) {
                 var that = this;
                 this.view_data = view_data;
-                this.groupContent = options.groupContent;
+                if(options.groupContent) {
+                  this._groupContent = options.groupContent;
+                }
+                else {
+                  throw new Error("groupContent must be passes in constructor options");
+                }
 
                 this.listenTo(this.model, 'change', this.render);
                 this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
-                this.listenTo(Assembl.vent, 'DEPRECATEDidea:selected', function (idea) {
+                this.listenTo(this._groupContent, 'idea:set', function (idea) {
                     that.onIsSelectedChange(idea);
                 });
             },
@@ -73,7 +78,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
 
                 this.$el.addClass('idealist-item');
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-                this.onIsSelectedChange(Ctx.DEPRECATEDgetCurrentIdea());
+                this.onIsSelectedChange(this._groupContent.getCurrentIdea());
 
                 if (data.isOpen === true) {
                     this.$el.addClass('is-open');
@@ -92,7 +97,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                 Ctx.initTooltips(this.$el);
                 var rendered_children = [];
                 _.each(data['children'], function (idea, i) {
-                    var ideaView = new IdeaView({model: idea, groupContent: that.groupContent}, view_data);
+                    var ideaView = new IdeaView({model: idea, groupContent: that._groupContent}, view_data);
                     rendered_children.push(ideaView.render().el);
                 });
                 this.$('.idealist-children').append(rendered_children);
@@ -133,8 +138,6 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
              */
             onReplaced: function (newObject) {
                 this.model = newObject;
-                //That makes no sense, there is no way to know it's the current idea
-                //app.DEPRECATEDsetCurrentIdea(newObject);
             },
 
 
@@ -162,20 +165,21 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
             onTitleClick: function (e) {
                 var messageListView;
                 e.stopPropagation();
+                console.log("idea::onTitleClick with groupcontent",this._groupContent.cid);
                 if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-                    messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                    messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
                     messageListView.triggerMethod('messageList:clearAllFilters');
                 }
-                if (this.model === Ctx.DEPRECATEDgetCurrentIdea()) {
+                if (this.model === this._groupContent.getCurrentIdea()) {
                     // We want to avoid the "All messages" state,
                     // unless the user clicks explicitly on "All messages".
                     // TODO benoitg: Review this decision.
-                    //Ctx.DEPRECATEDsetCurrentIdea(null);
+                    //this._groupContent.setCurrentIdea(null);
                     //This is so the messageList refreshes.
                 } else {
-                    Ctx.DEPRECATEDsetCurrentIdea(this.model);
+                  this._groupContent.setCurrentIdea(this.model);
                 }
-                this.groupContent.resetDebateState(false);
+                this._groupContent.resetDebateState(false);
             },
 
             /**
@@ -186,7 +190,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                 e.stopPropagation();
 
                 Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, true);
-                Ctx.DEPRECATEDsetCurrentIdea(this.model);
+                this._groupContent.setCurrentIdea(this.model);
             },
 
             /**
@@ -303,7 +307,8 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                     if (isDraggedBelow) {
                         // Add as a child idea
                         var newIdea = this.model.addSegmentAsChild(segment);
-                        Ctx.DEPRECATEDsetCurrentIdea(newIdea);
+                        this._groupContent.setCurrentIdea(newIdea);
+                        this._groupContent.resetDebateState(false);
                     } else {
                         // Add to the current idea
                         this.model.addSegment(segment);
@@ -319,6 +324,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                         Ctx.currentAnnotationIdIdea = null;
                         Ctx.currentAnnotationNewIdeaParentIdea = this.model;
                         Ctx.saveCurrentAnnotationAsExtract();
+                        this._groupContent.resetDebateState(false);
                     } else {
                         // Add as a segment
                         Ctx.currentAnnotationIdIdea = this.model.getId();

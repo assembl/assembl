@@ -24,7 +24,7 @@ define(['backbone.marionette', 'underscore'], function (Marionette, _) {
         minimized_size: 40,
 
         /** Subclasses need to call this first, with
-         * Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options) */
+         * Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments) */
         initialize:  function (options) {
           this._panelWrapper = options.panelWrapper;
           if (!this._panelWrapper) {

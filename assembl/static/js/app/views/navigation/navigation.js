@@ -31,7 +31,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 'click @ui.ideaFromIdealist': 'addIdeaFromIdeaList'
             },
             initialize: function (options) {
-                Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options);
+                Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
                 var that = this;
 
                 $(window).resize(function () {

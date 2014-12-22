@@ -205,24 +205,6 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             },
 
             /**
-             * Set the given Idea as the current one to be edited
-             * @param  {Idea} [idea]
-             */
-            DEPRECATEDsetCurrentIdea: function (idea) {
-                //console.log("DEPRECATEDsetCurrentIdea() fired", idea);
-                if (idea != this.DEPRECATEDgetCurrentIdea()) {
-                    this.currentIdea = idea;
-                    //TODO:  Remove this, it will not respect group separation of context
-                    Assembl.vent.trigger("DEPRECATEDidea:selected", idea);
-                }
-
-            },
-
-            DEPRECATEDgetCurrentIdea: function () {
-                return this.currentIdea;
-            },
-
-            /**
              * Returns a template from an script tag
              * @param {string} id The id of the script tag
              * @return {function} The Underscore.js _.template return
@@ -757,17 +739,6 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             },
 
             /**
-             * Format date time
-             * @param {Date|timestamp} date
-             * @param {String} [format=app.datetimeFormat] The format
-             * @return {string}
-             */
-            //FIXME: this method never use in app
-            /*formatDatetime: function(date, format){
-             return this.formatDate(date, format || this.datetimeFormat);
-             },*/
-
-            /**
              * Returns a fancy date (ex: a few seconds ago), or a formatted precise date if precise is true
              * @return {String}
              */
@@ -953,8 +924,6 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                         $(document.body).addClass('is-fullscreen');
                     }
                 });
-
-                this.DEPRECATEDsetCurrentIdea(null);
             },
 
             /**

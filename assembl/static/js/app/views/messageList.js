@@ -51,7 +51,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             initialize: function (options) {
-              Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize(options);
+              Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
               var that = this,
                   collectionManager = new CollectionManager();
               that.renderIsComplete = false;
@@ -99,14 +99,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               collectionManager.getAllExtractsCollectionPromise().done(
                   function (allExtractsCollection) {
                       that.listenTo(allExtractsCollection, 'add remove reset', function(eventName) {
-                        console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
+                          // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
                           that.initAnnotator;
                         });
                       }
                   );
 
-              this.listenTo(Assembl.vent, 'DEPRECATEDidea:selected', function (idea) {
-                  //console.log("vent.on DEPRECATEDidea:selected fired");
+              this.listenTo(this.getContainingGroup(), 'idea:set', function (idea) {
                   if (idea) {
                       if (idea.id) {
                           if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
@@ -115,7 +114,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                               return;
                           }
                       } else {
-                          this.listenToOnce(idea, "acquiredId", function () {
+                          that.listenToOnce(idea, "acquiredId", function () {
                               that.ideaChanged();
                           });
                           return;
@@ -130,7 +129,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               });
 
               this.listenTo(Assembl.vent, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
-                  that.panelWrapper.filterThroughPanelLock(
+                  that.getPanelWrapper().filterThroughPanelLock(
                       function () {
                           that.addFilterIsRelatedToIdea(idea, only_unread)
                       }, 'syncWithCurrentIdea');
@@ -144,28 +143,28 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               });
 
               this.listenTo(this, 'messageList:addFilterIsOrphanMessage', function () {
-                  that.panelWrapper.filterThroughPanelLock(
+                  that.getPanelWrapper().filterThroughPanelLock(
                       function () {
                           that.addFilterIsOrphanMessage();
                       }, 'syncWithCurrentIdea');
               });
 
               this.listenTo(this, 'messageList:addFilterIsSynthesisMessage', function () {
-                  that.panelWrapper.filterThroughPanelLock(
+                  that.getPanelWrapper().filterThroughPanelLock(
                       function () {
                           that.addFilterIsSynthesMessage();
                       }, 'syncWithCurrentIdea');
               });
 
               this.listenTo(Assembl.vent, 'messageList:showAllMessages', function () {
-                  that.panelWrapper.filterThroughPanelLock(
+                  that.getPanelWrapper().filterThroughPanelLock(
                       function () {
                           that.showAllMessages();
                       }, 'syncWithCurrentIdea');
               });
 
               this.listenTo(Assembl.vent, 'messageList:currentQuery', function () {
-                  if (!that.panelWrapper.isPanelLocked()) {
+                  if (!that.getPanelWrapper().isPanelLocked()) {
                       that.currentQuery.clearAllFilters();
                   }
               });
@@ -326,7 +325,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * Synchronizes the panel with the currently selected idea (possibly none)
              */
             syncWithCurrentIdea: function () {
-                var currentIdea = Ctx.DEPRECATEDgetCurrentIdea(),
+                var currentIdea = this.getContainingGroup().getCurrentIdea(),
                     filterValue,
                     that = this;
 
@@ -1046,7 +1045,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     'messageList': that
                 };
 
-                var currentIdea = Ctx.DEPRECATEDgetCurrentIdea();
+                var currentIdea = this.getContainingGroup().getCurrentIdea();
                 if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                     options.reply_idea_id = currentIdea.getId();
                 }
@@ -1470,9 +1469,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                                 annotator.deleteAnnotation(annotation);
                             } else if (Ctx.currentAnnotationNewIdeaParentIdea) {
                                 //We asked to create a new idea from segment
-                                that.panelWrapper.lockPanel();
+                              console.log("FIXME:  What's the proper behaviour here now that groups are separated?  We should probably find out if the group is the same as the origin, and lock ONLY in that case");
+                                that.getPanelWrapper().lockPanel();
                                 var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
-                                Ctx.DEPRECATEDsetCurrentIdea(newIdea);
+                                that.getContainingGroup().setCurrentIdea(newIdea);
                             }
                             else {
                                 segment.save(null, {
