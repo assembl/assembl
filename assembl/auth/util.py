@@ -105,10 +105,19 @@ def get_current_discussion():
 
 
 def authentication_callback(user_id, request):
+    "This is how pyramid knows the user's permissions"
     connection = User.db().connection()
     connection.info['userid'] = user_id
     discussion = discussion_from_request(request)
     discussion_id = discussion.id if discussion else None
+    # this is a good time to tell raven about the user
+    from raven.base import Raven
+    if Raven:
+        if user_id:
+            Raven.user_context({'user_id': user_id})
+        if discussion_id:
+            Raven.context.merge({'discussion_id': discussion_id})
+
     return get_roles(user_id, discussion_id)
 
 
