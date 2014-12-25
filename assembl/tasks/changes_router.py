@@ -3,7 +3,7 @@ import time
 import sys
 from os import makedirs
 from os.path import exists, dirname
-from ConfigParser import ConfigParser
+import ConfigParser
 
 import zmq
 from zmq.eventloop import ioloop
@@ -25,7 +25,7 @@ if len(sys.argv) != 2:
 
 SECTION = 'app:assembl'
 
-settings = ConfigParser({'changes.prefix': ''})
+settings = ConfigParser.ConfigParser({'changes.prefix': ''})
 settings.read(sys.argv[-1])
 CHANGES_SOCKET = settings.get(SECTION, 'changes.socket')
 CHANGES_PREFIX = settings.get(SECTION, 'changes.prefix')
@@ -34,6 +34,15 @@ WEBSERVER_PORT = settings.getint(SECTION, 'changes.websocket.port')
 # NOTE: Not sure those are always what we want.
 SERVER_HOST = settings.get(SECTION, 'public_hostname')
 SERVER_PORT = settings.getint(SECTION, 'public_port')
+raven_client = None
+try:
+    pipeline = settings.get('pipeline:main', 'pipeline').split()
+    if 'raven' in pipeline:
+        raven_dsn = settings.get('filter:raven', 'dsn')
+        from raven import Client
+        raven_client = Client(raven_dsn)
+except ConfigParser.Error:
+    pass
 
 context = zmq.Context.instance()
 ioloop.install()
@@ -61,46 +70,63 @@ class ZMQRouter(SockJSConnection):
         self.valid = True
 
     def on_recv(self, data):
-        self.send(data[-1])
+        try:
+            self.send(data[-1])
+        except Exception:
+            if raven_client:
+                raven_client.captureException()
+            raise
 
     def on_message(self, msg):
-        if getattr(self, 'socket', None):
-            print "closing old socket"
+        try:
+            if getattr(self, 'socket', None):
+                print "closing old socket"
+                self.loop.stop_on_recv()
+                self.loop.close()
+                self.socket = None
+                self.loop = None
+            if msg.startswith('discussion:') and self.valid:
+                self.discussion = msg.split(':', 1)[1]
+            if msg.startswith('token:') and self.valid:
+                try:
+                    self.token = decode_token(
+                        msg.split(':', 1)[1], TOKEN_SECRET)
+                except TokenInvalid:
+                    pass
+            if self.token and self.discussion:
+                # Check if token authorizes discussion
+                r = requests.get(
+                    'http://%s:%d/api/v1/discussion/%s/permissions/read/u/%s' %
+                    (SERVER_HOST, SERVER_PORT, self.discussion,
+                        self.token['userId']))
+                print r.text
+                if r.text != 'true':
+                    return
+                self.socket = context.socket(zmq.SUB)
+                self.socket.connect(INTERNAL_SOCKET)
+                self.socket.setsockopt(zmq.SUBSCRIBE, '*')
+                self.socket.setsockopt(zmq.SUBSCRIBE, str(self.discussion))
+                self.loop = zmqstream.ZMQStream(self.socket, io_loop=io_loop)
+                self.loop.on_recv(self.on_recv)
+                print "connected"
+                self.send('[{"@type":"Connection"}]')
+        except Exception:
+            if raven_client:
+                raven_client.captureException()
+            raise
+
+
+    def on_close(self):
+        try:
             self.loop.stop_on_recv()
             self.loop.close()
             self.socket = None
             self.loop = None
-        if msg.startswith('discussion:') and self.valid:
-            self.discussion = msg.split(':', 1)[1]
-        if msg.startswith('token:') and self.valid:
-            try:
-                self.token = decode_token(msg.split(':', 1)[1], TOKEN_SECRET)
-            except TokenInvalid:
-                pass
-        if self.token and self.discussion:
-            # Check if token authorizes discussion
-            r = requests.get(
-                'http://%s:%d/api/v1/discussion/%s/permissions/read/u/%s' %
-                (SERVER_HOST, SERVER_PORT, self.discussion,
-                    self.token['userId']))
-            print r.text
-            if r.text != 'true':
-                return
-            self.socket = context.socket(zmq.SUB)
-            self.socket.connect(INTERNAL_SOCKET)
-            self.socket.setsockopt(zmq.SUBSCRIBE, '*')
-            self.socket.setsockopt(zmq.SUBSCRIBE, str(self.discussion))
-            self.loop = zmqstream.ZMQStream(self.socket, io_loop=io_loop)
-            self.loop.on_recv(self.on_recv)
-            print "connected"
-            self.send('[{"@type":"Connection"}]')
-
-    def on_close(self):
-        self.loop.stop_on_recv()
-        self.loop.close()
-        self.socket = None
-        self.loop = None
-        print "closing"
+            print "closing"
+        except Exception:
+            if raven_client:
+                raven_client.captureException()
+            raise
 
 
 def logger(msg):
@@ -135,3 +161,7 @@ try:
     io_loop.start()
 except KeyboardInterrupt:
     term()
+except Exception:
+    if raven_client:
+        raven_client.captureException()
+    raise
