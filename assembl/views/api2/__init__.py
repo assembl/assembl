@@ -223,8 +223,8 @@ def instance_put_json(request):
     check = check_permissions(request, CrudPermissions.UPDATE)
     ctx = request.context
     instance = ctx._instance
+    user_id = authenticated_userid(request)
     if check == IF_OWNED:
-        user_id = authenticated_userid(request)
         if not instance.is_owner(User.get(user_id)):
             return HTTPUnauthorized()
     try:
