@@ -63,13 +63,14 @@ def main():
         metrics_code_dir = ''
     try:
         edgesense_code_dir = config.get('edgesense', 'edgesense_code_dir')
-        edgesense_vpython = config.get('edgesense', 'vpython')
+        edgesense_venv = config.get('edgesense', 'venv')
         has_edgesense_server = (
             edgesense_code_dir and exists(edgesense_code_dir)
-            and exists(edgesense_vpython))
+            and exists(join(
+                edgesense_venv, 'bin', 'edgesense_catalyst_server')))
     except NoSectionError:
         has_edgesense_server = False
-        edgesense_vpython = '/bin/ls'  # innocuous
+        edgesense_venv = '/tmp'  # innocuous
         edgesense_code_dir = ''
     vars = {
         'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
@@ -91,7 +92,7 @@ def main():
         'metrics_code_dir': metrics_code_dir,
         'metrics_cl': metrics_cl,
         'has_edgesense_server': 'true' if has_edgesense_server else 'false',
-        'edgesense_vpython': edgesense_vpython,
+        'edgesense_venv': edgesense_venv,
         'edgesense_code_dir': edgesense_code_dir,
     }
     for fname in ('var/db/virtuoso.ini', 'odbc.ini', 'supervisord.conf',):
