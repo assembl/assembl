@@ -101,6 +101,6 @@ autorestart = %(has_metrics_server)s
 
 [program:edgesense]
 directory = %(edgesense_code_dir)s
-command=%(edgesense_vpython)s %(edgesense_code_dir)s/python/catalyst_server.py
+command=%(edgesense_venv)s/bin/edgesense_catalyst_server
 autostart = %(has_edgesense_server)s
 autorestart = %(has_edgesense_server)s
