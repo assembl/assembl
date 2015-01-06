@@ -160,9 +160,14 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                             if (bodyFormat == "text/html") {
                                 //Strip HTML from preview
                                 bodyFormat = "text/plain";
+
                                 // The div is just there in case there actually isn't any html
                                 // in which case jquery would crash without it
-                                data['body'] = $("<div>" + data['body'] + "</div>").text();
+                                var bodyWithoutNewLine = $("<div>" + String(data['body']) + "</div>");
+                                bodyWithoutNewLine.find("p").after(" ");
+                                bodyWithoutNewLine.find("br").replaceWith(" ");
+                                data['body'] = bodyWithoutNewLine.text().replace(/\s{2,}/g, ' ');
+                                
                             }
                         }
                         if (bodyFormat !== null) {
