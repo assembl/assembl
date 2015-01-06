@@ -86,6 +86,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 //
                 'click .message-replybox-openbtn': 'focusReplyBox',
                 'click .messageSend-cancelbtn': 'closeReplyBox',
+                'focus .messageSend-body': 'onTextboxFocus',
                 //
                 'mousedown .js_messageBodyAnnotatorSelectionAllowed': 'startAnnotatorTextSelection',
                 'mousemove .js_messageBodyAnnotatorSelectionAllowed': 'updateAnnotatorTextSelection',
@@ -749,6 +750,11 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 ev.stopPropagation();
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
                 this.model.setRead(true);
+            },
+
+            onTextboxFocus: function(){
+                this.model.setRead(true); // we do not call markAsRead on purpose
+                this.focusReplyBox();
             },
 
             /**
