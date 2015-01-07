@@ -71,8 +71,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             events: {
                 'click @ui.sendButton': 'onSendMessageButtonClick',
                 'click @ui.cancelButton': 'onCancelMessageButtonClick',
-                'blur @ui.messageBody': 'onBlurMessage',
-                'keyup @ui.messageBody': 'onChangeBody'
+                'blur @ui.messageBody': 'onBlurMessage'
+                //'keyup @ui.messageBody': 'onChangeBody'
             },
 
             serializeData: function () {
@@ -218,7 +218,10 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                 MessagesInProgress.clearMessage(this.msg_in_progress_ctx);
             },
 
-            onChangeBody: function () {
+            /**
+             * Demand from @François, always display call action
+             *
+             * onChangeBody: function () {
                 var message_body = this.ui.messageBody.val();
                 this.ui.messageBody.autosize();
 
@@ -230,7 +233,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     this.ui.sendButton.addClass("hidden");
                     this.ui.cancelButton.addClass("hidden");
                 }
-            },
+            },*/
 
             showPopInFirstPost: function () {
 
