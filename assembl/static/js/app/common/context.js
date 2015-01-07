@@ -1045,7 +1045,9 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
              */
             initTooltips: function (elm) {
                 elm.find('[data-toggle="tooltip"]').tooltip({
-                    container: 'body'
+                    animation: true,
+                    container: 'body',
+                    delay: {"show": 500, "hide": 100}
                 });
             },
 
@@ -1060,7 +1062,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 //Should be fast, they are at the top level and there is only
                 //a few of them.  Maybe it can be more specific to be faster
                 // ex: html > .tipsy I don't know jquery enough to know
-                $('.tooltip').remove();
+                $('[data-toggle="tooltip"]').remove();
             },
 
             /**
