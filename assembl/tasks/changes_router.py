@@ -151,7 +151,6 @@ web_app = web.Application(routes, debug=False)
 def term(*_ignore):
     web_server.stop()
     io_loop.add_timeout(time.time() + 0.3, io_loop.stop)
-    io_loop.start()  # Let the IO loop finish its work
 
 signal.signal(signal.SIGTERM, term)
 
