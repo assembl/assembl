@@ -10,7 +10,7 @@ require(['jquery', 'jasmine-boot'],
         jasmineEnv.updateInterval = 1000;
 
         require([
-            'app.spec',
+            //'app.spec',
             'routes.spec',
             'context.spec'
             //'models.spec'

@@ -1,5 +1,9 @@
 define(['jasmine', 'jquery', '../app/common/context'], function (jasmine, $, Ctx) {
 
+    // Fixtures
+    var txt = '<script id="tmpl-test" type="text/template">test something</script>';
+    $('body').append(txt);
+
     return describe('Context module', function () {
 
         it('getDiscussionSlug should return the name of discussion', function () {
@@ -17,6 +21,15 @@ define(['jasmine', 'jquery', '../app/common/context'], function (jasmine, $, Ctx
         it('getCurrentUserId should return the user id', function () {
             expect(Ctx.getCurrentUserId()).not.toBe(null);
         });
+
+        it('getCurrentUser should not return the user', function () {
+            expect(Ctx.getCurrentUser()).toBe(null);
+        });
+
+        it('loadTemplate must load a template by id', function () {
+            expect(typeof Ctx.loadTemplate('test')).toBe('function');
+        });
+
 
     });
 
