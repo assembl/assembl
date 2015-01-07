@@ -11,8 +11,7 @@
         {{ gettext('By') }}
     <% } %>
     <% _.each(authors, function(author, index, list) { %>
-        <!--<img src="<%= author.getAvatarUrl(20) %>" alt="{{ gettext('Avatar for') }} <%= author.get('name') %>"  class="image-rounded" width="20" height="20" />-->
-        <a href="#" style='font-style: italic;font-size:80%;'><%= author.get('name') %></a><% if( index < list.length-1 ) { %>,<% } %>
+        <a href="#" class="authors"><%= author.get('name') %></a><% if( index < list.length-1 ) { %>,<% } %>
     <% }) %>
     <a href="#" class="synthesisIdea-replybox-openbtn icon-comment fr mrs"></a> {#{{ gettext('comment') }}#}
     <span class="synthesisIdea-replybox hidden"></span>
