@@ -1062,7 +1062,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 //Should be fast, they are at the top level and there is only
                 //a few of them.  Maybe it can be more specific to be faster
                 // ex: html > .tipsy I don't know jquery enough to know
-                $('[data-toggle="tooltip"]').remove();
+                $('.tooltip').remove();
             },
 
             /**
