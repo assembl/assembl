@@ -1298,11 +1298,13 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                         return true;
                     };
 
-                    // FIXME: here we try to apply the dots again after text has been edited but it does not seem to work
+                    // apply the dots again after text has been edited
                     var onCKEditorChange = function () {
                         console.log("Updating dotdotdot");
-                        that.$(".introduction .ckeditorField-mainfield").trigger('update.dot');
-                        that.$(".introduction .ckeditorField-mainfield").trigger('update');
+                        // FIXME: I don't know why these events do not work, we instead have to re-build the ellpisis manually
+                        //that.$(".introduction .ckeditorField-mainfield").trigger('update.dot');
+                        //that.$(".introduction .ckeditorField-mainfield").trigger('update');
+                        that.applyEllipsisToIntroduction();
                     };
                     that.listenTo(that.introductionField, "save", onCKEditorChange);
                     that.listenTo(that.introductionField, "cancel", onCKEditorChange);
@@ -1322,9 +1324,18 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                         that.introductionField.delegateEvents();
                     }
 
-                    /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
-                     * Read More links for introduction preview
-                     */
+                    that.applyEllipsisToIntroduction();
+
+                });
+
+            },
+
+            applyEllipsisToIntroduction: function(){
+                /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
+                 * Read More links for introduction preview
+                 */
+                var that = this;
+                setTimeout(function(){
                     that.$(".introduction .ckeditorField-mainfield").dotdotdot({
                         after: "#introduction-button-see-more",
                         height: 70,
@@ -1339,9 +1350,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                         },
                         watch: "window"
                     });
-
-                });
-
+                }, 10);
             }
 
         });
