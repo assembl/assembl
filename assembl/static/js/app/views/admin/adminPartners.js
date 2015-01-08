@@ -36,21 +36,46 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
                 }
             },
 
+            onRender: function () {
+                Ctx.initTooltips(this.$el);
+            },
+
             addPartner: function (e) {
                 e.preventDefault();
 
                 var inputs = this.$('input[required=required]'),
                     dataPartner = this.$('#form-partner').serialize(),
-                    urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/';
+                    urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/',
+                    regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
 
                 inputs.each(function (index) {
                     var parent = $(this).parent().parent();
 
-                    if ($(this).val() === '') {
+                    if (!$(this).val()) {
                         parent.addClass('error');
-
                         return false;
-                    } else {
+
+                    } else if ($(this).val()) {
+
+                        if ($(this).hasClass('partner-homepage')) {
+                            if (!regexUrl.test($(this).val())) {
+                                parent.addClass('error');
+                                return false;
+                            } else {
+                                parent.removeClass('error');
+                                return true;
+                            }
+                        }
+                        if ($(this).hasClass('partner-logo')) {
+                            if (!regexUrl.test($(this).val())) {
+                                parent.addClass('error');
+                                return false;
+                            } else {
+                                parent.removeClass('error');
+                                return true;
+                            }
+                        }
+
                         parent.removeClass('error');
                     }
 
