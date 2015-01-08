@@ -539,6 +539,12 @@
             ]
         },
         {
+            "uid": "17ebadd1e3f274ff0205601eef7b9cc4",
+            "css": "help",
+            "code": 59440,
+            "src": "fontawesome"
+        },
+        {
             "uid": "5408be43f7c42bccee419c6be53fdef5",
             "css": "doc",
             "code": 59430,
