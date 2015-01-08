@@ -908,9 +908,12 @@ def ensure_virtuoso_not_running():
 def virtuoso_reconstruct_save_db():
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
-        backup = run('%s +backup-dump +foreground' % (get_virtuoso_exec(),), quiet=True)
+        backup = run('%s +backup-dump +foreground' % (
+            get_virtuoso_exec(),), quiet=True)
         if backup.failed:
             print "ERROR: Normal backup failed."
+            # these were created by previous attempt
+            run('rm virtuoso-temp.db virtuoso.pxa virtuoso.trx virtuoso.lck')
             run('%s +crash-dump +foreground' % (get_virtuoso_exec(),))
 
 
