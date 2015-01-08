@@ -119,7 +119,7 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
                     this.model.set('locked', false);
                     this._stateButton
                         .addClass('icon-lock-open')
-                        .removeClass('icon-lock')
+                        .removeClass('icon-lock lockedGlow')
                         .attr('data-original-title', i18n.gettext('Lock panel'));
 
                     if (_.size(this._unlockCallbackQueue) > 0) {
@@ -389,8 +389,12 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
             filterThroughPanelLock: function (callback, queueWithId) {
                 if (!this.model.get('locked')) {
                     callback();
+                    this.ui.lockPanel.children().removeClass('lockedGlow');
 
                 } else {
+
+                    this.ui.lockPanel.children().addClass('lockedGlow');
+
                     if (queueWithId) {
                         if (this._unlockCallbackQueue[queueWithId] !== undefined) {
                         }

@@ -38,33 +38,15 @@
   height: 3px;
   background-color: $gray1;
   position: relative;
-  .close-group,
-  .lock-group {
+  .close-group {
     cursor: pointer;
     position: absolute;
     text-decoration: none;
-    top: 3px;
-    color: $white;
-  }
-  .close-group {
     right: 12px;
     font-size: 14px;
     opacity: 0.8;
     top: 5px;
-    &:hover {
-      opacity: 1;
-    }
-  }
-  .lock-group {
-    margin-left: auto;
-    margin-right: auto;
-    right: 30px;
-    opacity: 0.8;
-    top: 5px;
-    i {
-      vertical-align: text-bottom;
-      font-size: 14px;
-    }
+    color: $white;
     &:hover {
       opacity: 1;
     }
@@ -93,6 +75,22 @@
         width: 40px;
         text-align: center;
         padding-top: 2px;
+      }
+    }
+    .lock-group {
+      margin-left: auto;
+      margin-right: auto;
+      right: 30px;
+      opacity: 0.8;
+      top: 5px;
+
+      .lockedGlow {
+        -webkit-animation-name: glowlock;
+        -webkit-animation-duration: 2s;
+        -webkit-animation-iteration-count: infinite;
+      }
+      &:hover {
+        opacity: 1;
       }
     }
   }
@@ -377,3 +375,22 @@
     }
   }
 }
+
+@-webkit-keyframes glowlock {
+  from {
+    color: $white;
+    text-shadow: -1px 1px 8px #ffc, 1px -1px 8px $white;
+    opacity: 0.4;
+  }
+  50% {
+    color: $white;
+    text-shadow: -1px 1px 8px #ffc, 1px -1px 8px $white;
+    opacity: 0.8;
+  }
+  to {
+    color: $white;
+    text-shadow: -1px 1px 8px #ffc, 1px -1px 8px $white;
+    opacity: 1;
+  }
+}
+
