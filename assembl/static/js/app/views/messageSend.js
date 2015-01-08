@@ -94,7 +94,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
 
                 if (this.options.msg_in_progress_body
                     || this.options.msg_in_progress_title) {
-                    this.onChangeBody();
+                    // no need anymore
+                    //this.onChangeBody();
                 }
             },
 
