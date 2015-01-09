@@ -56,7 +56,8 @@ define(['ckeditor', 'common/context', 'views/message', 'models/synthesis', 'view
                         that.$('.message-subject').html(synthesis.get('subject'));
                         that.synthesisPanel = new SynthesisPanel({
                             model: synthesis,
-                            messageListView: that.messageListView
+                            messageListView: that.messageListView,
+                            panelWrapper: that.messageListView.getPanelWrapper()
                         });
                         that.synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
                         that.synthesisPanel.render();
