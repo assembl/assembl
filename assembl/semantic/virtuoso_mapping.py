@@ -1,6 +1,7 @@
 from os import listdir
 from os.path import join, dirname
 from inspect import isabstract
+from threading import Lock
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
@@ -306,6 +307,8 @@ class AssemblQuadStorageManager(object):
     main_graph_iri = QUADNAMES.main_graph_iri
     # TODO: Version mappings
     current_discussion_storage_version = 0
+    # Temporary fix for Virtuoso issue 285
+    quadstore_lock = Lock()
 
     def __init__(self, session=None, nsm=None):
         self.session = session or get_session()
@@ -543,6 +546,7 @@ class AssemblQuadStorageManager(object):
             self.drop_storage(self.discussion_storage_name(id), force)
 
     def as_quads(self, discussion_id):
+        self.quadstore_lock.acquire()
         self.ensure_discussion_storage(discussion_id)
         d_storage_name = self.discussion_storage_name(discussion_id)
         v = get_virtuoso(self.session, d_storage_name)
@@ -558,6 +562,7 @@ class AssemblQuadStorageManager(object):
                 l = l.rstrip('.')
                 l += ' ' + g.n3(self.nsm)
                 quads += l + ' .\n'
+        self.quadstore_lock.release()
         return quads
 
     def local_uri(self):
