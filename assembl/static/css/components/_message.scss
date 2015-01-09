@@ -349,6 +349,7 @@ $previewNumLines: 4;
       }
       .synthesis-idea {
         min-height: 40px;
+        /* commenting on an idea of a synthesis is temporary disabled
         &:hover {
           .comment {
             .synthesisIdea-replybox-openbtn {
@@ -357,6 +358,7 @@ $previewNumLines: 4;
             }
           }
         }
+        */
         .panel-editablearea {
           width: 100%;
         }
