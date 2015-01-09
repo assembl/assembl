@@ -1,15 +1,16 @@
 Babel==1.3
 Beaker==1.6.4
-Chameleon==2.18
+Chameleon==2.19
 Chroma==0.2.0
 ColanderAlchemy==0.3.1
 DateTime==4.0.1
 Fabric==1.10.1
+IMAPClient==0.11
 Jinja2==2.7.3
 Mako==1.0.0
 MarkupSafe==0.23
 PasteDeploy==1.5.2
-PyJWT==0.4.0
+PyJWT==0.4.1
 PyLD==0.6.6
 PyStemmer==1.3.0
 Pygments==2.0.1
@@ -57,7 +58,7 @@ mock==1.0.1
 oauthlib==0.7.2
 paramiko==1.15.2
 pinocchio==0.4.2
-polib==1.0.5
+polib==1.0.6
 premailer==2.8.1
 py==1.4.26
 pyOpenSSL==0.14
@@ -68,13 +69,13 @@ pylibmc==1.4.1
 pyparsing==2.0.3
 pyramid==1.5.2
 pyramid-beaker==0.8
-pyramid-debugtoolbar==2.2.2
+pyramid-debugtoolbar==2.3
 -e git+https://github.com/jvanasco/pyramid_debugtoolbar_ajax.git#egg=pyramid-debugtoolbar-ajax
 pyramid_dogpile_cache==0.0.4
 pyramid-jinja2==2.3.3
-pyramid-mailer==0.13
+pyramid-mailer==0.14
 pyramid-mako==1.0.2
-pyramid-tm==0.8
+pyramid-tm==0.10
 pytest==2.6.4
 pytest-cov==1.8.1
 pytest-localserver==0.3.3
@@ -89,12 +90,13 @@ redis==2.10.3
 docutils==0.12
 raven==5.1.1
 repoze.lru==0.6
+# Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1
 requests==2.5.1
 requests-oauthlib==0.4.2
 selenium==2.44.0
 simplejson==3.6.5
-six==1.8.0
+six==1.9.0
 -e git+https://github.com/maparent/sockjs-tornado.git@master#egg=sockjs_tornado
 sockjsproxy==0.7.1
 sphinx-bootstrap-theme==0.4.5
