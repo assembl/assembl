@@ -46,6 +46,12 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
             replyBoxHasFocus: false,
 
             /**
+             * how many times the message has been re-rendered
+             * @type {Number}
+             */
+            reRendered: 0,
+
+            /**
              * @init
              * @param {MessageModel} obj the model
              */
@@ -238,25 +244,61 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY && that.messageListView.defaultMessageStyle != that.availableMessageViewStyles.FULL_BODY) {
                             that.showReadLess();
                         }
+
                         if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
-                            that.messageListView.requestPostRenderSlowCallback(function () {
+
+                            var applyEllipsis = function()
+                            {
                                 /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
                                  * Read More links for message previews
                                  */
-                                //console.log("Initializing dotdotdot on message", that.model.id);
                                 that.$(".ellipsis").dotdotdot({
                                     after: "a.readMore",
                                     callback: function (isTruncated, orgContent) {
+                                        //console.log("dotdotdot initialized on message", that.model.id);
                                         //console.log(isTruncated, orgContent);
-                                        if (isTruncated) {
+                                        if (isTruncated)
+                                        {
                                             that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
                                         }
-                                        else {
+                                        else
+                                        {
                                             that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
+                                            if ( data['body'].length > 610 ) // approximate string length for text which uses 4 full lines
+                                            {
+                                                console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
+                                                if ( ++that.reRendered < 5 ) // we use this to avoid infinite loop of render() calls
+                                                {
+                                                    console.log("yes, we will re-render => tries: ", that.reRendered);
+                                                    setTimeout(function(){
+                                                        that.render();
+                                                    }, 500);
+                                                }
+                                                else
+                                                {
+                                                    console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
+                                                }
+                                            }
                                         }
                                     },
                                     watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
-                                })
+                                });
+                            };
+
+                            that.messageListView.requestPostRenderSlowCallback(function () {
+
+                                setTimeout(function(){
+                                    //console.log("Initializing ellipsis on message", that.model.id);
+                                    var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+                                    //console.log("current_navigation_state:", current_navigation_state);
+                                    if ( current_navigation_state == 'home' )
+                                    {
+                                        that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
+                                        return;
+                                    }
+                                    applyEllipsis();
+                                }, 100);
+                                
 
                                 /* We no longer need this, but probably now need to
                                  * update when the panels change size with the
