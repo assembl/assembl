@@ -183,9 +183,11 @@ from .notification import (
     NotificationSubscriptionFollowSyntheses,
     NotificationSubscriptionFollowAllMessages,
     NotificationSubscriptionFollowOwnMessageDirectReplies,
+    NotificationSubscriptionStatus,
     Notification,
     NotificationCreationOrigin,
-    NotificationSubscriptionStatus
-    )
+    NotificationOnPost,
+    NotificationOnPostCreated,
+)
 
 declare_history_mappers()
