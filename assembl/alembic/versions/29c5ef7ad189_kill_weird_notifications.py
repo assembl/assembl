@@ -17,8 +17,8 @@ def upgrade(pyramid_env):
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
-        db.query(m.NotificationOnPost).filter(m.NotificationOnPost.id.in_(
-            db.query(m.Notification.id).join(
+        db.query(m.Notification).filter(m.Notification.id.in_(
+            db.query(m.NotificationOnPost.id).join(
                 m.NotificationSubscription).join(
                 m.Post, m.Post.id == m.NotificationOnPost.post_id).filter(
                 m.Post.discussion_id != m.NotificationSubscription.discussion_id
