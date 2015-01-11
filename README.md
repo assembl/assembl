@@ -95,7 +95,9 @@ running the above)
 On subsequent runs, just make sure supervisord is running.
 
 Then, start the development server and compass with this command:
+``` sh
 supervisorctl start dev:
+```
 
 
 **Multiple environments**
