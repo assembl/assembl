@@ -84,7 +84,7 @@ supervisord
 Creating a user the first time you run assembl (so you have a superuser):
 
 ``` sh
-assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword
+assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword development.ini
 ```
 
 (NOTE: Just running $venv/bin/supervisord will NOT work,
