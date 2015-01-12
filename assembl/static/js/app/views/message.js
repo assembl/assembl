@@ -800,8 +800,11 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
             },
 
             onTextboxFocus: function(){
-                this.model.setRead(true); // we do not call markAsRead on purpose
-                this.focusReplyBox();
+                if ( !this.model.get('read') )
+                {
+                    this.model.setRead(true); // we do not call markAsRead on purpose
+                    this.focusReplyBox();
+                }
             },
 
             /**
