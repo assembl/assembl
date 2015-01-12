@@ -190,6 +190,11 @@ def build_virtualenv():
     """
     print(cyan('Creating a fresh virtualenv'))
     require('venvpath', provided_by=('commonenv'))
+    import sys
+    if hasattr(sys, 'real_prefix'):
+        print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
+        print(cyan('(otherwise the virtualenv command would produce an error)'))
+        return
     run('virtualenv --no-site-packages --distribute %(venvpath)s' % env)
     run('rm /tmp/distribute* || echo "ok"') # clean after myself
 
