@@ -28,7 +28,6 @@ define(['backbone.marionette', 'underscore'], function (Marionette, _) {
         initialize:  function (options) {
           this._panelWrapper = options.panelWrapper;
           if (!this._panelWrapper) {
-            debugger;
             throw new Error("The panelWrapper wasn't passed in the options");
           }
         },
