@@ -3,6 +3,162 @@
 define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/ckeditorField', 'utils/permissions', 'utils/panelSpecTypes', 'views/messageSend', 'objects/messagesInProgress', 'views/notification', 'views/segmentList', 'common/collectionManager', 'views/assemblPanel', 'backbone.marionette', 'backbone.modal', 'backbone.marionette.modals', 'jquery', 'underscore'],
     function (Assembl, Ctx, i18n, EditableField, CKEditorField, Permissions, PanelSpecTypes, MessageSendView, MessagesInProgress, Notification, SegmentList, CollectionManager, AssemblPanel, Marionette, backboneModal, marionetteModal, $, _) {
 
+        var IdeaPanelWidgets = Marionette.ItemView.extend({
+
+            // custom properties
+
+            inspiration_widget_create_url: null,
+            inspiration_widgets: null,
+            inspiration_widget_url: null,
+            inspiration_widget_configure_url: null,
+
+
+            // overwritten properties and methods
+
+            template: '#tmpl-ideaPanelWidgets',
+            initialize: function (options) {
+                if (!this.model) {
+                    this.model = null;
+                }
+            },
+
+            modelEvents: {
+                'change': 'render'
+            },
+            ui: {
+                'modal': '.js_openTargetInModal',
+            },
+            events: {
+                'click @ui.modal': 'openTargetInModal'
+            },
+
+            serializeData: function () {
+                var votable_widgets = [],
+                    currentUser = Ctx.getCurrentUser(),
+                    idea = null;
+
+                if (this.model) {
+                    //console.log("there is a model");
+                    votable_widgets = this.model.getVotableOnWhichWidgets();
+                    //console.log("votable_widgets:", votable_widgets);
+                    idea = this.model;
+                }
+
+                return {
+                    ctx: Ctx,
+                    i18n: i18n,
+                    idea: idea,
+                    canUseWidget: currentUser.can(Permissions.ADD_POST),
+                    canCreateWidgets: currentUser.can(Permissions.ADMIN_DISCUSSION),
+                    votable_widgets: votable_widgets,
+                    inspiration_widget_create_url: this.inspiration_widget_create_url,
+                    inspiration_widgets: this.inspiration_widgets,
+                    inspiration_widget_url: this.inspiration_widget_url,
+                    inspiration_widget_configure_url: this.inspiration_widget_configure_url
+                };
+            },
+
+            onRender: function(){
+                this.populateAssociatedWidgetData();
+            },
+
+
+            // custom methods
+
+            clearWidgetDataAssociatedToIdea: function () {
+                // console.log("clearWidgetDataAssociatedToIdea()");
+                this.resetAssociatedWidgetData();
+                /* In case once the admin deletes the widget after having opened the configuration modal,
+                 we have to invalidate widget data for this idea and all its sub-ideas recursively.
+                 So to make it more simple we invalidate all widget data. */
+                Ctx.invalidateWidgetDataAssociatedToIdea("all");
+            },
+
+            resetAssociatedWidgetData: function() {
+                this.inspiration_widget_create_url = null;
+                this.inspiration_widgets = null;
+                this.inspiration_widget_url = null;
+                this.inspiration_widget_configure_url = null;
+            },
+
+            populateAssociatedWidgetData: function () {
+                if (this.model) {
+                    var that = this;
+                    var previous = {};
+                    previous.inspiration_widget_create_url = that.inspiration_widget_create_url;
+                    previous.inspiration_widgets = that.inspiration_widgets;
+                    previous.inspiration_widget_url = that.inspiration_widget_url;
+                    previous.inspiration_widget_configure_url = that.inspiration_widget_configure_url;
+                    var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(this.model.getId());
+                    promise.done(
+                        function (data) {
+                            //console.log("populateAssociatedWidgetData received data: ", data);
+
+                            that.resetAssociatedWidgetData();
+
+                            if ("inspiration_widget_create_url" in data) {
+                                // that.model.set("inspiration_widget_create_url", data.inspiration_widget_create_url);
+                                that.inspiration_widget_create_url = data.inspiration_widget_create_url;
+                            }
+
+                            if ("inspiration_widgets" in data) {
+                                // that.model.set("inspiration_widgets", data.inspiration_widgets);
+                                that.inspiration_widgets = data.inspiration_widgets;
+                            }
+
+                            if ("inspiration_widget_url" in data) {
+                                // that.model.set("inspiration_widget_url", data.inspiration_widget_url);
+                                that.inspiration_widget_url = data.inspiration_widget_url;
+                            }
+
+                            if ("inspiration_widget_configure_url" in data) {
+                                // that.model.set("inspiration_widget_configure_url", data.inspiration_widget_configure_url);
+                                that.inspiration_widget_configure_url = data.inspiration_widget_configure_url;
+                                //console.log("inspiration_widget_configure_url: ", data.inspiration_widget_configure_url);
+                            }
+                            if (previous.inspiration_widget_create_url != that.inspiration_widget_create_url
+                                || previous.inspiration_widgets != that.inspiration_widgets
+                                || previous.inspiration_widget_url != that.inspiration_widget_url
+                                || previous.inspiration_widget_configure_url != that.inspiration_widget_configure_url) {
+
+                                that.render();
+                            }
+                        }
+                    );
+                }
+
+            },
+
+            openTargetInModal: function (evt) {
+                var that = this;
+                var onDestroyCallback = function () {
+                    //console.log("openTargetInModal onDestroyCallback()");
+                    setTimeout(function () {
+                        //Ctx.invalidateWidgetDataAssociatedToIdea("all");
+                        that.clearWidgetDataAssociatedToIdea();
+                        //that.fetchModelAndRender();
+                        that.render();
+                    }, 0);
+                };
+                var options = {
+                    footer: false
+                };
+                if (evt && evt.currentTarget && $(evt.currentTarget).hasClass("js_clearWidgetDataAssociatedToIdea"))
+                {
+                    //console.log("openTargetInModal has js_clearWidgetDataAssociatedToIdea");
+                    return Ctx.openTargetInModal(evt, onDestroyCallback, options);
+                }
+                else
+                {
+                    //console.log("openTargetInModal has not js_clearWidgetDataAssociatedToIdea");
+                    return Ctx.openTargetInModal(evt, null, options);
+                }
+            }
+
+        });
+
+
+
         var IdeaPanel = AssemblPanel.extend({
             template: '#tmpl-ideaPanel',
             panelType: PanelSpecTypes.IDEA_PANEL,
@@ -13,6 +169,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             minWidth: 270,
             regions: {
                 //segmentList: ".postitlist"
+                widgetsInteraction: ".ideaPanel-section-widgets"
             },
             initialize: function (options) {
                 Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
@@ -40,7 +197,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 'longTitle': '.js_editLongTitle',
                 'seeMore': '.js_seeMore',
                 'seeLess': '.js_seeLess',
-                'modal': '.js_openTargetInModal',
                 'deleteIdea': '.js_ideaPanel-deleteBtn',
                 'clearIdea': '.js_ideaPanel-clearBtn',
                 'closeExtract': '.js_closeExtract'
@@ -62,7 +218,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 'click @ui.seeLess': 'seeMoreOrLess',
                 'click @ui.definition': 'editDefinition',
                 'click @ui.longTitle': 'editTitle',
-                'click @ui.modal': 'openTargetInModal'
             },
 
             getTitle: function () {
@@ -70,11 +225,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             tooltip: i18n.gettext('Detailled information about the currently selected idea in the Table of ideas'),
-
-            inspiration_widget_create_url: null,
-            inspiration_widgets: null,
-            inspiration_widget_url: null,
-            inspiration_widget_configure_url: null,
 
             resetView: function () {
               if(this.segmentList !== undefined) {
@@ -139,31 +289,25 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     currentUser = Ctx.getCurrentUser(),
                     canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
                     canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
-                    contributors = null,
-                    inspiration_widget_create_url = null,
-                    inspiration_widgets = null,
-                    inspiration_widget_url = null,
-                    inspiration_widget_configure_url = null;
+                    contributors = null;
 
                 if (this.model) {
+                    //console.log("there is a model");
                     subIdeas = this.model.getChildren();
                     votable_widgets = this.model.getVotableOnWhichWidgets();
+                    //console.log("votable_widgets:", votable_widgets);
                     contributors = this.model.get('contributors');
-                    inspiration_widget_create_url = this.inspiration_widget_create_url;
-                    inspiration_widgets = this.inspiration_widgets;
-                    inspiration_widget_url = this.inspiration_widget_url;
-                    inspiration_widget_configure_url = this.inspiration_widget_configure_url;
+                }
+                else
+                {
+                    console.log("there is no model");
                 }
 
-                return {
+                var dataset = {
                     idea: this.model,
                     contributors: contributors,
                     subIdeas: subIdeas,
                     votable_widgets: votable_widgets,
-                    inspiration_widget_create_url: inspiration_widget_create_url,
-                    inspiration_widgets: inspiration_widgets,
-                    inspiration_widget_url: inspiration_widget_url,
-                    inspiration_widget_configure_url: inspiration_widget_configure_url,
                     canEdit: canEdit,
                     i18n: i18n,
                     getExtractsLabel: this.getExtractsLabel,
@@ -173,12 +317,13 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
                     canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
                     canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT), //TODO: This is a bit too coarse
-                    canCreateWidgets: currentUser.can(Permissions.ADMIN_DISCUSSION),
-                    canUseWidget: currentUser.can(Permissions.ADD_POST),
                     Ctx: Ctx,
                     editingDefinition: this.editingDefinition,
                     editingTitle: this.editingTitle
-                }
+                };
+                //console.log("dataset: ", dataset);
+
+                return dataset;
             },
 
             onBeforeRender: function () {
@@ -193,64 +338,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
               }
             },
 
-            clearWidgetDataAssociatedToIdea: function () {
-                // console.log("clearWidgetDataAssociatedToIdea()");
-                /* In case once the admin deletes the widget after having opened the configuration modal,
-                 we have to invalidate widget data for this idea and all its sub-ideas recursively.
-                 So to make it more simple we invalidate all widget data. */
-                Ctx.invalidateWidgetDataAssociatedToIdea("all");
-            },
-
-            populateAssociatedWidgetData: function () {
-                if (this.model) {
-                    var that = this;
-                    var previous = {};
-                    previous.inspiration_widget_create_url = that.inspiration_widget_create_url;
-                    previous.inspiration_widgets = that.inspiration_widgets;
-                    previous.inspiration_widget_url = that.inspiration_widget_url;
-                    previous.inspiration_widget_configure_url = that.inspiration_widget_configure_url;
-                    var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(this.model.getId());
-                    promise.done(
-                        function (data) {
-                            //console.log("populateAssociatedWidgetData received data: ", data);
-
-                            that.inspiration_widget_create_url = null;
-                            that.inspiration_widgets = null;
-                            that.inspiration_widget_url = null;
-                            that.inspiration_widget_configure_url = null;
-
-                            if ("inspiration_widget_create_url" in data) {
-                                // that.model.set("inspiration_widget_create_url", data.inspiration_widget_create_url);
-                                that.inspiration_widget_create_url = data.inspiration_widget_create_url;
-                            }
-
-                            if ("inspiration_widgets" in data) {
-                                // that.model.set("inspiration_widgets", data.inspiration_widgets);
-                                that.inspiration_widgets = data.inspiration_widgets;
-                            }
-
-                            if ("inspiration_widget_url" in data) {
-                                // that.model.set("inspiration_widget_url", data.inspiration_widget_url);
-                                that.inspiration_widget_url = data.inspiration_widget_url;
-                            }
-
-                            if ("inspiration_widget_configure_url" in data) {
-                                // that.model.set("inspiration_widget_configure_url", data.inspiration_widget_configure_url);
-                                that.inspiration_widget_configure_url = data.inspiration_widget_configure_url;
-                            }
-                            if (previous.inspiration_widget_create_url != that.inspiration_widget_create_url
-                                || previous.inspiration_widgets != that.inspiration_widgets
-                                || previous.inspiration_widget_url != that.inspiration_widget_url
-                                || previous.inspiration_widget_configure_url != that.inspiration_widget_configure_url) {
-
-                                console.log("FIXME, populateAssociatedWidgetData about to re-render whole panel.  This should render in it's own region, or at least it's own elements.  Otherwise focus can be lost, etc.");
-                                that.render();
-                            }
-                        }
-                    );
-                }
-
-            },
+            
 
             onRender: function () {
                 if (Ctx.debugRender) {
@@ -285,27 +373,11 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     if (this.editingTitle) {
                         this.renderCKEditorLongTitle();
                     }
+
+                    var ideaPanelWidgets = new IdeaPanelWidgets({model: this.model});
+                    this.widgetsInteraction.show(ideaPanelWidgets);
                 }
 
-            },
-
-            openTargetInModal: function (evt) {
-                var that = this;
-                var onDestroyCallback = function () {
-                    // console.log("onDestroyCallback()");
-                    setTimeout(function () {
-                        //Ctx.invalidateWidgetDataAssociatedToIdea("all");
-                        that.clearWidgetDataAssociatedToIdea();
-                        that.render();
-                    });
-                };
-                var options = {
-                    footer: false
-                };
-                if (evt && evt.currentTarget && $(evt.currentTarget).hasClass("js_clearWidgetDataAssociatedToIdea"))
-                    return Ctx.openTargetInModal(evt, onDestroyCallback, options);
-                else
-                    return Ctx.openTargetInModal(evt, null, options);
             },
 
             getExtractslist: function () {
@@ -472,24 +544,9 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                         if (this.model.id) {
                             //Ctx.openPanel(assembl.ideaPanel);
                             //console.log("ideaPanel::setIdeaModel() fetching models");
-                            this.populateAssociatedWidgetData();
+                            //this.populateAssociatedWidgetData();
 
-                            var fetchPromise = this.model.fetch({ data: $.param({ view: 'contributors'}) });
-                            
-                            $.when(collectionManager.getAllExtractsCollectionPromise(), fetchPromise).then(
-                                function (allExtractsCollection, fetchedJQHR) {
-                                    that.extractListSubset = new SegmentList.IdeaSegmentListSubset([], {
-                                        parent: allExtractsCollection,
-                                        ideaId: that.model.id
-                                    });
-                                    that.listenTo(that.extractListSubset, "add remove reset change", that.renderTemplateGetExtractsLabel);
-                                    //console.log("The region:", that.segmentList);
-                                    that.render();
-                                    that.listenTo(that.model, 'change', function (m) {
-                                      // console.log("ideaPanel::change callback about to call render");
-                                      that.render();
-                                    });
-                                });
+                            this.fetchModelAndRender();
                         }
                     } else {
                         //TODO: More sophisticated behaviour here, depending
@@ -499,6 +556,28 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                         //this.render();
                     }
                 }
+            },
+
+            fetchModelAndRender: function(){
+                var that = this,
+                    collectionManager = new CollectionManager();
+                var fetchPromise = this.model.fetch({ data: $.param({ view: 'contributors'}) });
+                            
+                $.when(collectionManager.getAllExtractsCollectionPromise(), fetchPromise).then(
+                    function (allExtractsCollection, fetchedJQHR) {
+                        that.extractListSubset = new SegmentList.IdeaSegmentListSubset([], {
+                            parent: allExtractsCollection,
+                            ideaId: that.model.id
+                        });
+                        that.listenTo(that.extractListSubset, "add remove reset change", that.renderTemplateGetExtractsLabel);
+                        //console.log("The region:", that.segmentList);
+                        that.render();
+                        that.listenTo(that.model, 'change', function (m) {
+                          // console.log("ideaPanel::change callback about to call render");
+                          that.render();
+                        });
+                    }
+                );
             },
 
             deleteCurrentIdea: function () {
