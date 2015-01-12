@@ -2013,10 +2013,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               }
 
               if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
-                Raven.context(function() {
-                  throw new Error("showMessageById():   a showMessageById was already in progress, aborting")
-                },
-                {requestes_message_id: id});
+                try{
+                  throw new Error("showMessageById():   a showMessageById was already in progress, aborting");
+                }
+                catch(e){
+                  Raven.captureException(e, {extra: {requested_message_id: id}});
+                }
+                return;
               }
               else if (shouldRecurseMaxMoreTimes === undefined) {
                   this.showMessageByIdInProgress = true;
@@ -2064,11 +2067,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                               that.showMessages(requestedOffsets);
                           }
                           else {
-                            Raven.context(function() {
+                            try{
                               throw new Error("showMessageById():  Message is in query results but not in current page, and we are not allowed to recurse");
-                              },
-                              {requested_message_id: id}
-                            );
+                            }
+                            catch(e){
+                              Raven.captureException(e, {extra: {requested_message_id: id}});
+                            }
                           }
                           return;
                       }
@@ -2083,11 +2087,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                               that.listenToOnce(that, "messageList:render_complete", success);
                           }
                           else {
-                            Raven.context(function() {
+                            try{
                               throw new Error("showMessageById:  Message is not in query results, and we are not allowed to recurse");
-                              },
-                              {requested_message_id: id}
-                            );
+                            }
+                            catch(e){
+                              Raven.captureException(e, {extra: {requested_message_id: id}});
+                            }
+
                           }
                           return;
                       }
