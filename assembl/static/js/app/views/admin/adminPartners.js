@@ -40,10 +40,15 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
                 Ctx.initTooltips(this.$el);
             },
 
+            close: function () {
+                this.$('.bx-alert-success').addClass('hidden');
+            },
+
             addPartner: function (e) {
                 e.preventDefault();
 
-                var inputs = this.$('input[required=required]'),
+                var that = this,
+                    inputs = this.$('input[required=required]'),
                     dataPartner = this.$('#form-partner').serialize(),
                     urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/',
                     regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
@@ -85,7 +90,8 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
                         type: "post",
                         data: dataPartner,
                         success: function (response, text) {
-                            alert(i18n.gettext('your partners has been posted'));
+                          that.render();
+                          that.$('.bx-alert-success').removeClass('hidden');
                         },
                         error: function (request, status, error) {
                             alert(status + ': ' + error);
