@@ -46,43 +46,39 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
                 var inputs = this.$('input[required=required]'),
                     dataPartner = this.$('#form-partner').serialize(),
                     urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/',
-                    regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+                    regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                    controls = document.querySelectorAll('#form-partner .control-group');
 
-                inputs.each(function (index) {
+                inputs.each(function () {
                     var parent = $(this).parent().parent();
 
                     if (!$(this).val()) {
                         parent.addClass('error');
-                        return false;
-
-                    } else if ($(this).val()) {
+                    }
+                    if ($(this).val()) {
+                        parent.removeClass('error').addClass('success');
 
                         if ($(this).hasClass('partner-homepage')) {
                             if (!regexUrl.test($(this).val())) {
-                                parent.addClass('error');
-                                return false;
+                                parent.addClass('error').removeClass('success');
                             } else {
-                                parent.removeClass('error');
-                                return true;
+                                parent.removeClass('error').addClass('success');
                             }
                         }
                         if ($(this).hasClass('partner-logo')) {
                             if (!regexUrl.test($(this).val())) {
-                                parent.addClass('error');
-                                return false;
+                                parent.addClass('error').removeClass('success');
                             } else {
-                                parent.removeClass('error');
-                                return true;
+                                parent.removeClass('error').addClass('success');
                             }
                         }
-
-                        parent.removeClass('error');
                     }
-
                 });
 
-                if (this.$('.partner-name').val() && this.$('.partner-description').val() &&
-                    this.$('.partner-homepage').val() && this.$('.partner-logo').val()) {
+                if(!$(controls).hasClass('error')){
+                    var inputs = document.querySelectorAll('#form-partner input[required=required]');
+                    $(controls).removeClass('success');
+                    $(inputs).val('');
 
                     $.ajax({
                         url: urlPartner,

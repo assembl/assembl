@@ -40,7 +40,7 @@
     </div>
 
       <div class="gr">
-        <div class="gu gu-1of2">
+        <div class="gu gu-1of1">
           <form class="core-form form-horizontal" id="form-partner">
             <fieldset>
 
@@ -48,6 +48,10 @@
                 <label for="name" class="control-label">{{ gettext('name of partner') }}</label>
                 <div class="controls">
                   <input type="text" class="partner-name" name="name" required="required">
+                  <span class="help-inline">
+                  	<p class="control-error">{{ gettext('please correct the error') }}</p>
+                  	<p class="control-success"><i class="icon-ok"></i></p>
+                  </span>
                 </div>
               </div>
 
@@ -55,6 +59,10 @@
                 <label for="description" class="control-label">{{ gettext('description') }}</label>
                 <div class="controls">
                   <input type="text" class="partner-description" name="description" required="required">
+                  <span class="help-inline">
+										<p class="control-error">{{ gettext('please correct the error') }}</p>
+										<p class="control-success"><i class="icon-ok"></i></p>
+									</span>
                 </div>
               </div>
 
@@ -62,7 +70,10 @@
                 <label for="homepage" class="control-label">{{ gettext('homepage partners') }}</label>
                 <div class="controls">
                   <input type="text" class="partner-homepage" name="homepage" required="required">
-                  <span data-toggle="tooltip" data-placement="right" title="{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}"><i class="icon-help"></i></span>
+                  <span class="help-inline">
+										<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
+										<p class="control-success"><i class="icon-ok"></i></p>
+									</span>
                 </div>
               </div>
 
@@ -70,14 +81,17 @@
                 <label for="logo" class="control-label">{{ gettext('url partner logo') }}</label>
                 <div class="controls">
                   <input type="text" class="partner-logo" name="logo" required="required">
-                  <span data-toggle="tooltip" data-placement="right" title="{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}"><i class="icon-help"></i></span>
+                  <span class="help-inline">
+										<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
+										<p class="control-success"><i class="icon-ok"></i></p>
+									</span>
                 </div>
               </div>
 
               <div class="control-group">
                 <label for="is_initiator" class="control-label">{{ gettext('is initiator') }}</label>
                 <div class="controls">
-                  <input type="checkbox" class="partner-initiator" name="is_initiator" required="required">
+                  <input type="checkbox" class="partner-initiator" name="is_initiator">
                 </div>
               </div>
 

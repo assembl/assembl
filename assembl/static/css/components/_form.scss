@@ -1,5 +1,6 @@
 $form-border-color: #dcdbd7;
 $text-muted: #999;
+$successText: $green;
 
 // Default form field
 .formfield {
@@ -430,12 +431,26 @@ $text-muted: #999;
   .control-group {
     .control-success {
       display: none;
-      //color: $successText;
     }
   }
 
   .control-group.success {
     .control-success {
+      display: block;
+      color: $successText;
+    }
+  }
+
+  // Error
+
+  .control-group {
+    .control-error {
+      display: none;
+    }
+  }
+
+  .control-group.error {
+    .control-error {
       display: block;
     }
   }
