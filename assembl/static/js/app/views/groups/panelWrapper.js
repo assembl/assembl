@@ -420,6 +420,7 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
                         break;
                     case PanelSpecTypes.CLIPBOARD:
                         // ne need because of resetTitle - segment
+                        icon = 'icon-clipboard';
                         break;
                     case PanelSpecTypes.SYNTHESIS_EDITOR:
                         icon = 'icon-doc';
