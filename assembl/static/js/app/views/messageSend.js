@@ -177,17 +177,19 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         setTimeout(function () {
                             btn.text(btn_original_text);
                             that.ui.cancelButton.trigger('click');
-
-                            //TODO: check if it's the first post from an user
-                            var agent = new Agents.Model();
-                            agent.getSingleUser();
-                            agent.fetch();
-
-                            if (agent.get('post_count') < 2) {
-                                that.showPopInFirstPost();
-                            }
-
                         }, 5000);
+
+                        /**
+                         * Check if the number of user's post is superior to 2
+                         * */
+                        var agent = new Agents.Model();
+                        agent.getSingleUser();
+                        agent.fetch();
+
+                        if (agent.get('post_count') < 2) {
+                            this.showPopInFirstPost();
+                        }
+
                     },
                     error: function (model, resp) {
                         console.error('ERROR: onSendMessageButtonClick', model, resp);
