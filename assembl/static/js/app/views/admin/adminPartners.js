@@ -48,7 +48,7 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
                 e.preventDefault();
 
                 var that = this,
-                    inputs = this.$('input[required=required]'),
+                    inputs = this.$('*[required=required]'),
                     dataPartner = this.$('#form-partner').serialize(),
                     urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/',
                     regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
