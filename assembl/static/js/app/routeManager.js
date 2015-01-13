@@ -81,6 +81,21 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
                 window.history.pushState('object or string', 'Title', '../');
             },
 
+            idea: function (id) {
+                //TODO: add new behavior to show messageList Panel
+                this.restoreViews();
+
+                setTimeout(function () {
+                    //TODO: fix this horrible hack
+                    //We really need to address panels explicitely
+                    Assembl.vent.trigger("navigation:selected", 'debate');
+                    Assembl.vent.trigger('ideaList:selectIdea', id);
+                }, 0);
+                //TODO: fix this horrible hack that prevents calling
+                //showMessageById over and over.
+                window.history.pushState('object or string', 'Title', '../');
+            },
+
             loadCurrentUser: function () {
                 if (Ctx.getCurrentUserId()) {
                     this.user = new Agents.Model();

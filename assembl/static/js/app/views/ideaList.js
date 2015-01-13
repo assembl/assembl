@@ -66,6 +66,16 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     that.addChildToSelected();
                 });
 
+                this.listenTo(Assembl.vent, 'ideaList:selectIdea', function (ideaId) {
+                    collectionManager.getAllIdeasCollectionPromise().done(
+                    function (allIdeasCollection) {
+                        var idea = allIdeasCollection.get(ideaId);
+                        if (idea) {
+                            that.getContainingGroup().setCurrentIdea(idea);
+                            that.getContainingGroup().resetDebateState();
+                        }
+                    });
+                });
             },
 
             'events': {

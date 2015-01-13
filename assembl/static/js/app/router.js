@@ -13,6 +13,7 @@ define(['backbone.marionette', 'routeManager'],
                 "users/notifications": "userNotifications",
                 "users/edit": "profile",
                 "posts/:id": "post",
+                "idea/:id": "idea",
                 "*actions": "defaults"
             }
 

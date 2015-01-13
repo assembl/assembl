@@ -89,6 +89,10 @@ def profile_view(request):
 def notifications_view(request):
     return home_view(request)
 
+@view_config(route_name='purl_idea', request_method='GET', http_cache=60)
+def idea_view(request):
+    return home_view(request)
+
 @view_config(route_name='purl_posts', request_method='GET', http_cache=60)
 def posts_view(request):
     return home_view(request)
