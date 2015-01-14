@@ -408,11 +408,14 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                 }
             },
 
+            /* not used anymore
             getWidgets: function () {
                 //console.log("idea widgets: ", this.get('widget_data'));
                 return this.get('widget_data');
             },
+            */
 
+            /* not used anymore
             getWidgetsOfType: function (type) {
                 var widget_data = this.getWidgets();
                 var widgets = _.filter(widget_data, function (o) {
@@ -420,11 +423,15 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                 });
                 return widgets;
             },
-            // TODO: use something like Context::getWidgetDataAssociatedToIdeaPromise() instead
+            */
+
+            /* not used anymore, because we are using Context::getWidgetDataAssociatedToIdeaPromise() instead
             getVotableOnWhichWidgets: function () {
                 return this.getWidgetsOfType("votable");
             },
-            /* not used, because we are using Context::getWidgetDataAssociatedToIdeaPromise() instead
+            */
+
+            /* not used anymore, because we are using Context::getWidgetDataAssociatedToIdeaPromise() instead
             getInspirationWidgets: function () {
                 return this.getWidgetsOfType("inspiration");
             },
