@@ -71,8 +71,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             events: {
                 'click @ui.sendButton': 'onSendMessageButtonClick',
                 'click @ui.cancelButton': 'onCancelMessageButtonClick',
-                'blur @ui.messageBody': 'onBlurMessage'
-                //'keyup @ui.messageBody': 'onChangeBody'
+                'blur @ui.messageBody': 'onBlurMessage',
+                'keyup @ui.messageBody': 'onChangeBody'
             },
 
             serializeData: function () {
@@ -221,13 +221,14 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                 MessagesInProgress.clearMessage(this.msg_in_progress_ctx);
             },
 
-            /**
-             * Demand from @François, always display call action
-             *
-             * onChangeBody: function () {
-                var message_body = this.ui.messageBody.val();
+            
+            onChangeBody: function () {
                 this.ui.messageBody.autosize();
 
+                /**
+                 * not necesary anymore 
+                 *
+                 var message_body = this.ui.messageBody.val();
                 if (message_body && message_body.length > 0) {
                     this.ui.sendButton.removeClass("hidden");
                     this.ui.cancelButton.removeClass("hidden");
@@ -235,8 +236,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                 else {
                     this.ui.sendButton.addClass("hidden");
                     this.ui.cancelButton.addClass("hidden");
-                }
-            },*/
+                }*/
+            },
 
             showPopInFirstPost: function () {
 
