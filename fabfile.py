@@ -190,6 +190,11 @@ def build_virtualenv():
     """
     print(cyan('Creating a fresh virtualenv'))
     require('venvpath', provided_by=('commonenv'))
+    import sys
+    if hasattr(sys, 'real_prefix'):
+        print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
+        print(cyan('(otherwise the virtualenv command would produce an error)'))
+        return
     run('virtualenv --no-site-packages --distribute %(venvpath)s' % env)
     run('rm /tmp/distribute* || echo "ok"') # clean after myself
 
@@ -200,7 +205,7 @@ def update_requirements(force=False):
     update external dependencies on remote host
     """
     print(cyan('Updating requirements using PIP'))
-    venvcmd('pip install -U "pip>=1.5.1" --download-cache ~/.pip/cache')
+    venvcmd('pip install -U "pip>=6" --download-cache ~/.pip/cache')
 
     if force:
         cmd = "%(venvpath)s/bin/pip install -I -r %(projectpath)s/requirements.txt --download-cache ~/.pip/cache" % env
@@ -355,7 +360,7 @@ def updatemaincode():
 
 
 def app_setup():
-     venvcmd('pip install -U "pip>=1.5.1" --download-cache ~/.pip/cache')
+     venvcmd('pip install -U "pip>=6" --download-cache ~/.pip/cache')
      venvcmd('pip install -e ./')
      venvcmd('assembl-ini-files %s' % (env.ini_file))
 
@@ -908,9 +913,12 @@ def ensure_virtuoso_not_running():
 def virtuoso_reconstruct_save_db():
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
-        backup = run('%s +backup-dump +foreground' % (get_virtuoso_exec(),), quiet=True)
+        backup = run('%s +backup-dump +foreground' % (
+            get_virtuoso_exec(),), quiet=True)
         if backup.failed:
             print "ERROR: Normal backup failed."
+            # these were created by previous attempt
+            run('rm virtuoso-temp.db virtuoso.pxa virtuoso.trx virtuoso.lck')
             run('%s +crash-dump +foreground' % (get_virtuoso_exec(),))
 
 

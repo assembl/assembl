@@ -32,7 +32,7 @@
         "underscore": "~1.7.0",
         "zeroclipboard": "~1.2.3",
         "jed": "~0.5.4",
-        "Backbone.Subset": "maparent/Backbone.Subset",
+        "Backbone.Subset": "maparent/Backbone.Subset#0.1.1",
         "d3": "~3.4.11",
         "backbone-modal": "~1.1.1",
         "ink": "1.0.5",

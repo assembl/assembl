@@ -51,127 +51,123 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             initialize: function (options) {
-                var that = this,
-                    collectionManager = new CollectionManager();
-                that.renderIsComplete = false;
-                that.showMessageByIdInProgress = false;
-                this.renderedMessageViewsCurrent = {};
+              Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
+              var that = this,
+                  collectionManager = new CollectionManager();
+              that.renderIsComplete = false;
+              that.showMessageByIdInProgress = false;
+              this.renderedMessageViewsCurrent = {};
 
-                this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
-                this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+              this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
+              this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
-                this.panelWrapper = options.panelWrapper;
-                /**
-                 * @ghourlier
-                 * TODO: Usually it would necessary to push notification rather than fetch every time the model change
-                 * Need to be a call to action
-                 * Benoitg:  Why?  There is no way to know if the message is, or isn't relevent to the user, and worthy
-                 * of notification.  Everything else updates realtime, why make an exception for messages?
-                 * */
-                /* TODO:  PORT THIS TO NEW SYSTEM - benoitg -2014-07-23
-                 *
-                 * this.listenTo(this.messages, 'add reset', function(){
-                 that.invalidateResultsAndRender();
-                 that.initAnnotator();
+              
+              /**
+               * @ghourlier
+               * TODO: Usually it would necessary to push notification rather than fetch every time the model change
+               * Need to be a call to action
+               * Benoitg:  Why?  There is no way to know if the message is, or isn't relevent to the user, and worthy
+               * of notification.  Everything else updates realtime, why make an exception for messages?
+               * */
+              collectionManager.getAllMessageStructureCollectionPromise().done(
+                  function (allMessageStructureCollection) {
+                      that.listenTo(allMessageStructureCollection, 'add reset', function () {
+                          /*
+                           Disable refresh if a message is being written.
+                           Not as necessary now that we save messages,
+                           but it prevents a jarring refresh, so keeping it as a comment.
 
-                 });*/
-                collectionManager.getAllMessageStructureCollectionPromise().done(
-                    function (allMessageStructureCollection) {
-                        that.listenTo(allMessageStructureCollection, 'add reset', function () {
-                            /*
-                             Disable refresh if a message is being written.
-                             Not as necessary now that we save messages,
-                             but it prevents a jarring refresh, so keeping it as a comment.
+                           var messageFields = that.$('.messageSend-body');
+                           function not_empty(b) {
+                           return b.value.length != 0;
+                           };
 
-                             var messageFields = that.$('.messageSend-body');
-                             function not_empty(b) {
-                             return b.value.length != 0;
-                             };
+                           if (_.any(messageFields, not_empty)) {
+                           return;
+                           }
+                           messageFields = that.$('.messageSend-subject');
+                           if (_.any(messageFields, not_empty)) {
+                           return;
+                           }
+                           */
+                          that.currentQuery.invalidateResults();
+                          that.render();
+                      });
+                  }
+              );
 
-                             if (_.any(messageFields, not_empty)) {
-                             return;
-                             }
-                             messageFields = that.$('.messageSend-subject');
-                             if (_.any(messageFields, not_empty)) {
-                             return;
-                             }
-                             */
-                            that.currentQuery.invalidateResults();
-                            that.render();
+              collectionManager.getAllExtractsCollectionPromise().done(
+                  function (allExtractsCollection) {
+                      that.listenTo(allExtractsCollection, 'add remove reset', function(eventName) {
+                          // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
+                          that.initAnnotator;
                         });
-                    }
-                );
+                      }
+                  );
 
-                collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
-                        that.listenTo(allExtractsCollection, 'add remove reset', that.initAnnotator);
-                    }
-                );
+              this.listenTo(this.getContainingGroup(), 'idea:set', function (idea) {
+                  if (idea) {
+                      if (idea.id) {
+                          if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
+                              //Filter is already in sync
+                              //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+                              return;
+                          }
+                      } else {
+                          that.listenToOnce(idea, "acquiredId", function () {
+                              that.ideaChanged();
+                          });
+                          return;
+                      }
+                  }
+                  this.ideaChanged();
+              });
 
-                this.listenTo(Assembl.vent, 'DEPRECATEDidea:selected', function (idea) {
-                    //console.log("vent.on DEPRECATEDidea:selected fired");
-                    if (idea) {
-                        if (idea.id) {
-                            if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
-                                //Filter is already in sync
-                                //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
-                                return;
-                            }
-                        } else {
-                            this.listenToOnce(idea, "acquiredId", function () {
-                                that.ideaChanged();
-                            });
-                            return;
-                        }
-                    }
-                    this.ideaChanged();
-                });
+              this.listenTo(Assembl.vent, 'messageList:showMessageById', function (id, callback) {
+                //console.log("Calling showMessageById from messageList:showMessageById with params:", id, callback);
+                that.showMessageById(id, callback);
+              });
 
-                this.listenTo(Assembl.vent, 'messageList:showMessageById', function (id, callback) {
-                  //console.log("Calling showMessageById from messageList:showMessageById with params:", id, callback);
-                  that.showMessageById(id, callback);
-                });
+              this.listenTo(Assembl.vent, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
+                  that.getPanelWrapper().filterThroughPanelLock(
+                      function () {
+                          that.addFilterIsRelatedToIdea(idea, only_unread)
+                      }, 'syncWithCurrentIdea');
+              });
 
-                this.listenTo(Assembl.vent, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
-                    that.panelWrapper.filterThroughPanelLock(
-                        function () {
-                            that.addFilterIsRelatedToIdea(idea, only_unread)
-                        }, 'syncWithCurrentIdea');
-                });
+              this.listenTo(this, 'messageList:clearAllFilters', function () {
+                  that.getPanelWrapper().filterThroughPanelLock(
+                      function () {
+                          that.currentQuery.clearAllFilters();
+                      }, 'clearAllFilters');
+              });
 
-                this.listenTo(this, 'messageList:clearAllFilters', function () {
-                    that.panelWrapper.filterThroughPanelLock(
-                        function () {
-                            that.currentQuery.clearAllFilters();
-                        }, 'clearAllFilters');
-                });
+              this.listenTo(this, 'messageList:addFilterIsOrphanMessage', function () {
+                  that.getPanelWrapper().filterThroughPanelLock(
+                      function () {
+                          that.addFilterIsOrphanMessage();
+                      }, 'syncWithCurrentIdea');
+              });
 
-                this.listenTo(this, 'messageList:addFilterIsOrphanMessage', function () {
-                    that.panelWrapper.filterThroughPanelLock(
-                        function () {
-                            that.addFilterIsOrphanMessage();
-                        }, 'syncWithCurrentIdea');
-                });
+              this.listenTo(this, 'messageList:addFilterIsSynthesisMessage', function () {
+                  that.getPanelWrapper().filterThroughPanelLock(
+                      function () {
+                          that.addFilterIsSynthesMessage();
+                      }, 'syncWithCurrentIdea');
+              });
 
-                this.listenTo(this, 'messageList:addFilterIsSynthesisMessage', function () {
-                    that.panelWrapper.filterThroughPanelLock(
-                        function () {
-                            that.addFilterIsSynthesMessage();
-                        }, 'syncWithCurrentIdea');
-                });
+              this.listenTo(Assembl.vent, 'messageList:showAllMessages', function () {
+                  that.getPanelWrapper().filterThroughPanelLock(
+                      function () {
+                          that.showAllMessages();
+                      }, 'syncWithCurrentIdea');
+              });
 
-                this.listenTo(Assembl.vent, 'messageList:showAllMessages', function () {
-                    that.panelWrapper.filterThroughPanelLock(
-                        function () {
-                            that.showAllMessages();
-                        }, 'syncWithCurrentIdea');
-                });
-
-                this.listenTo(Assembl.vent, 'messageList:currentQuery', function () {
-                    if (!that.panelWrapper.isPanelLocked()) {
-                        that.currentQuery.clearAllFilters();
-                    }
-                });
+              this.listenTo(Assembl.vent, 'messageList:currentQuery', function () {
+                  if (!that.getPanelWrapper().isPanelLocked()) {
+                      that.currentQuery.clearAllFilters();
+                  }
+              });
             },
 
             /**
@@ -319,7 +315,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
             ideaChanged: function () {
                 var that = this;
-                this.panelWrapper.filterThroughPanelLock(
+                this.getPanelWrapper().filterThroughPanelLock(
                     function () {
                         that.syncWithCurrentIdea();
                     }, 'syncWithCurrentIdea');
@@ -329,7 +325,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * Synchronizes the panel with the currently selected idea (possibly none)
              */
             syncWithCurrentIdea: function () {
-                var currentIdea = Ctx.DEPRECATEDgetCurrentIdea(),
+                var currentIdea = this.getContainingGroup().getCurrentIdea(),
                     filterValue,
                     that = this;
 
@@ -851,6 +847,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     console.log("messageList:doAnnotatorRefresh() called for " + _.size(this.renderedMessageViewsCurrent) + " messages");
                 }
                 this.annotatorRefreshRequested = false;
+                //console.log("doAnnotatorRefresh(): About to call initAnnotator");
                 this.initAnnotator();
                 _.each(this.renderedMessageViewsCurrent, function (messageView) {
                     messageView.loadAnnotations();
@@ -1048,7 +1045,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     'messageList': that
                 };
 
-                var currentIdea = Ctx.DEPRECATEDgetCurrentIdea();
+                var currentIdea = this.getContainingGroup().getCurrentIdea();
                 if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                     options.reply_idea_id = currentIdea.getId();
                 }
@@ -1460,7 +1457,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this.destroyAnnotator();
                 //console.log("initAnnotator called");
                 // Saving the annotator reference
-                this.annotator = this.$('.messageList-list').annotator().data('annotator');
+                this.annotator = this.ui.messageList.annotator().data('annotator');
 
                 // TODO: Re-render message in messagelist if an annotation was added...
                 this.annotator.subscribe('annotationCreated', function (annotation) {
@@ -1472,9 +1469,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                                 annotator.deleteAnnotation(annotation);
                             } else if (Ctx.currentAnnotationNewIdeaParentIdea) {
                                 //We asked to create a new idea from segment
-                                that.panelWrapper.lockPanel();
+                              console.log("FIXME:  What's the proper behaviour here now that groups are separated?  We should probably find out if the group is the same as the origin, and lock ONLY in that case");
+                                that.getPanelWrapper().lockPanel();
                                 var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
-                                Ctx.DEPRECATEDsetCurrentIdea(newIdea);
+                                that.getContainingGroup().setCurrentIdea(newIdea);
                             }
                             else {
                                 segment.save(null, {
@@ -2015,10 +2013,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               }
 
               if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
-                Raven.context(function() {
-                  throw new Error("showMessageById():   a showMessageById was already in progress, aborting")
-                },
-                {requestes_message_id: id});
+                try{
+                  throw new Error("showMessageById():   a showMessageById was already in progress, aborting");
+                }
+                catch(e){
+                  Raven.captureException(e, {extra: {requested_message_id: id}});
+                }
+                return;
               }
               else if (shouldRecurseMaxMoreTimes === undefined) {
                   this.showMessageByIdInProgress = true;
@@ -2066,11 +2067,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                               that.showMessages(requestedOffsets);
                           }
                           else {
-                            Raven.context(function() {
+                            try{
                               throw new Error("showMessageById():  Message is in query results but not in current page, and we are not allowed to recurse");
-                              },
-                              {requested_message_id: id}
-                            );
+                            }
+                            catch(e){
+                              Raven.captureException(e, {extra: {requested_message_id: id}});
+                            }
                           }
                           return;
                       }
@@ -2085,11 +2087,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                               that.listenToOnce(that, "messageList:render_complete", success);
                           }
                           else {
-                            Raven.context(function() {
+                            try{
                               throw new Error("showMessageById:  Message is not in query results, and we are not allowed to recurse");
-                              },
-                              {requested_message_id: id}
-                            );
+                            }
+                            catch(e){
+                              Raven.captureException(e, {extra: {requested_message_id: id}});
+                            }
+
                           }
                           return;
                       }

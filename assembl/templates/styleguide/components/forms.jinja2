@@ -55,14 +55,14 @@
 </form>
 
 
-<h3 class="h3">Inline form</h3>
+<h3 class="h3 mtl">Inline form</h3>
 <form class="core-form form-inline">
   <input type="text" placeholder="Email" class="input-small">
   <input type="password" placeholder="Password" class="input-small">
   <button class="btn btn-default" type="submit">Reset password</button>
 </form>
 
-<h3 class="h3">Horizontal form</h3>
+<h3 class="h3 mtl">Horizontal form</h3>
 <form class="core-form form-horizontal">
   <fieldset>
     <div class="control-group">
@@ -108,7 +108,7 @@
   </fieldset>
 </form>
 
-<h3 class="h3">Extending form</h3>
+<h3 class="h3 mtl">Extending form</h3>
 <form class="core-form form-horizontal">
   <fieldset>
     <div class="control-group">
@@ -133,7 +133,7 @@
   </fieldset>
 </form>
 
-<h3 class="h3">Custom radio & checkbox</h3>
+<h3 class="h3 mtl">Custom radio & checkbox</h3>
 
 <p class="mbs">Only works in modern browsers, falls back to standard radio buttons in legacy browsers.
 These custom radio buttons are pure CSS3, no JavaScript required.</p>
@@ -157,14 +157,14 @@ These custom radio buttons are pure CSS3, no JavaScript required.</p>
 </form>
 
 
-<h3 class="h3">Message Box</h3>
+<h3 class="h3 mtl">Message Box</h3>
 
 <div class="messageSend">
   <div class="rc rcss">
     <a class="img-left avatar img-rounded" href="#"><img src="/user/id/12/avatar/30" width="30" height="30"></a>
     <div class="bd">
       <div>
-        <div class="topic-subject">
+        <div class="topic-subject mbxs">
             <span class="topic-subject-input">
               <input type="text" class="messageSend-subject formfield text bras" placeholder="Titre du nouveau message">
             </span>
@@ -180,4 +180,39 @@ These custom radio buttons are pure CSS3, no JavaScript required.</p>
     </div>
   </div>
 </div>
+
+<h3 class="h3 mtl">States forms</h3>
+
+<form class="core-form form-horizontal" id="form-partner">
+<fieldset>
+
+	<div class="control-group error">
+		<label for="name" class="control-label">Input with error</label>
+		<div class="controls">
+			<input type="text" class="input-xlarge">
+			<span class="help-inline">
+				<p class="control-error">Please correct the error</p>
+			</span>
+		</div>
+	</div>
+
+	<div class="control-group success">
+		<label for="homepage" class="control-label">Input with success</label>
+		<div class="controls">
+			<input type="text" value="Valid input..." class="input-xlarge">
+			<span class="help-inline">
+				<p class="control-success"><i class="icon-ok"></i></p>
+			</span>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label for="homepage" class="control-label">Focus input</label>
+		<div class="controls">
+			<input type="text" value="This is focused…" class="input-xlarge">
+		</div>
+	</div>
+
+</fieldset>
+</form>
 

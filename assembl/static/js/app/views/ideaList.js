@@ -32,10 +32,9 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
 
             initialize: function (options) {
+                Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
                 var that = this,
                     collectionManager = new CollectionManager();
-
-                this.groupContent = options.groupContent;
 
                 collectionManager.getAllIdeasCollectionPromise().done(
                     function (allIdeasCollection) {
@@ -67,6 +66,16 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     that.addChildToSelected();
                 });
 
+                this.listenTo(Assembl.vent, 'ideaList:selectIdea', function (ideaId) {
+                    collectionManager.getAllIdeasCollectionPromise().done(
+                    function (allIdeasCollection) {
+                        var idea = allIdeasCollection.get(ideaId);
+                        if (idea) {
+                            that.getContainingGroup().setCurrentIdea(idea);
+                            that.getContainingGroup().resetDebateState();
+                        }
+                    });
+                });
             },
 
             'events': {
@@ -148,10 +157,11 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
                         rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
                         rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
-
+                        console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid)
                         _.each(roots, function (idea) {
                             var ideaView = new IdeaView({
-                                model: idea, groupContent: that.groupContent
+                                model: idea, 
+                                groupContent: that.getContainingGroup()
                             }, view_data);
                             list.appendChild(ideaView.render().el);
                         });
@@ -159,25 +169,29 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
                         //sub menu other
                         var OtherView = new OtherInIdeaListView({
-                            model: rootIdea
+                            model: rootIdea,
+                            groupContent: that.getContainingGroup()
                         });
                         that.otherView.show(OtherView);
 
                         // Synthesis posts pseudo-idea
                         var synthesisView = new SynthesisInIdeaListView({
-                            model: rootIdea, groupContent: that.groupContent
+                            model: rootIdea, 
+                            groupContent: that.getContainingGroup()
                         });
                         that.synthesisView.show(synthesisView);
 
                         // Orphan messages pseudo-idea
                         var orphanView = new OrphanMessagesInIdeaListView({
-                            model: rootIdea, groupContent: that.groupContent
+                            model: rootIdea,
+                            groupContent: that.getContainingGroup()
                         });
                         that.orphanView.show(orphanView);
 
                         // All posts pseudo-idea
                         var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
-                            model: rootIdea, groupContent: that.groupContent
+                            model: rootIdea,
+                            groupContent: that.getContainingGroup()
                         });
                         that.allMessagesView.show(allMessagesInIdeaListView);
 
@@ -287,7 +301,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         console.log(ideaGraphLoader);
                         that.hypertree = ideaGraphLoader(that.graphData);
                         try {
-                            that.hypertree.onClick(Ctx.DEPRECATEDgetCurrentIdea().getId(), {
+                            that.hypertree.onClick(that.getContainingGroup().getCurrentIdea().getId(), {
                                 // onComplete: function() {
                                 //     that.hypertree.controller.onComplete();
                                 // },
@@ -306,7 +320,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 if (this.show_graph && this.graphData !== undefined) {
                     try {
                         this.hypertree = ideaGraphLoader(this.graphData);
-                        this.hypertree.onClick(Ctx.DEPRECATEDgetCurrentIdea().getId(), {
+                        this.hypertree.onClick(that.getContainingGroup().getCurrentIdea().getId(), {
                             duration: 0
                         });
                     } catch (Exception) {
@@ -322,7 +336,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     // We want to avoid the "All messages" state,
                     // unless the user clicks explicitly on "All messages".
                     // TODO benoitg: Review this decision.
-                    //Ctx.DEPRECATEDsetCurrentIdea(null);
+                    //this.getContainingGroup().setCurrentIdea(null);
                 }
             },
 
@@ -331,7 +345,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
              * If no idea is selected, add it at the root level ( no parent )
              */
             addChildToSelected: function () {
-                var currentIdea = Ctx.DEPRECATEDgetCurrentIdea(),
+                var currentIdea = this.getContainingGroup().getCurrentIdea(),
                     newIdea = new Idea.Model(),
                     that = this,
                     collectionManager = new CollectionManager();
@@ -353,7 +367,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                                 }
                             });
                         }
-                        Ctx.DEPRECATEDsetCurrentIdea(newIdea);
+                        that.getContainingGroup().setCurrentIdea(newIdea);
                     });
             },
 

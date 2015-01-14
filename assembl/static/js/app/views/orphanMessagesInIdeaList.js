@@ -41,16 +41,16 @@ define(['app', 'common/context', 'utils/panelSpecTypes', 'views/idea'],
              * @event
              */
             onTitleClick: function (e) {
-                var messageListView = this.groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
                 if (messageListView) {
                     e.stopPropagation();
 
                     messageListView.triggerMethod('messageList:clearAllFilters');
                     messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
-                    Ctx.DEPRECATEDsetCurrentIdea(null);
+                    this._groupContent.setCurrentIdea(null);
 
                     if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE)
-                        this.groupContent.resetDebateState();
+                      this._groupContent.resetDebateState();
                 }
             }
         });

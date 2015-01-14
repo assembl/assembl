@@ -349,7 +349,7 @@ $previewNumLines: 4;
       }
       .synthesis-idea {
         min-height: 40px;
-        //padding-top: 10px;
+        /* commenting on an idea of a synthesis is temporary disabled
         &:hover {
           .comment {
             .synthesisIdea-replybox-openbtn {
@@ -358,6 +358,7 @@ $previewNumLines: 4;
             }
           }
         }
+        */
         .panel-editablearea {
           width: 100%;
         }
@@ -373,12 +374,17 @@ $previewNumLines: 4;
           }
         }
         .comment {
-          font-size: 11px;
           .synthesisIdea-replybox-openbtn {
             text-decoration: none;
             font-size: 20px;
             visibility: hidden;
             opacity: 0;
+          }
+          .authors {
+            font-size: 11px;
+            font-style: italic;
+            text-decoration: none;
+            cursor: default;
           }
         }
       }

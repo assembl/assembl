@@ -19,12 +19,12 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                         function (allRole) {
                             if (allRole.models.length) {
                                 that.roles = allRole.models[0];
-                            }    
+                            }
                             that.render();
                         });
                 }
 
-                this.initPopinDiscussion();
+                this.showPopInDiscussion();
 
             },
             ui: {
@@ -244,7 +244,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
             },
 
-            initPopinDiscussion: function () {
+            showPopInDiscussion: function () {
                 var needPopIn = this._store.getItem('needJoinDiscussion');
 
                 if (needPopIn && _.isEmpty(this.roles.attributes)) {

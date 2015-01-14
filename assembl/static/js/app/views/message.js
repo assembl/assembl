@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/user', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot'],
-    function (Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, User, CollectionManager, PanelSpecTypes, $) {
+define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/agents', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot'],
+    function (Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, Agents, CollectionManager, PanelSpecTypes, $) {
 
         var MIN_TEXT_TO_TOOLTIP = 5,
             TOOLTIP_TEXT_LENGTH = 10;
@@ -38,6 +38,18 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              * @type {Boolean}
              */
             replyBoxShown: false,
+
+            /**
+             * does the reply box currently have the focus
+             * @type {Boolean}
+             */
+            replyBoxHasFocus: false,
+
+            /**
+             * how many times the message has been re-rendered
+             * @type {Number}
+             */
+            reRendered: 0,
 
             /**
              * @init
@@ -80,6 +92,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 //
                 'click .message-replybox-openbtn': 'focusReplyBox',
                 'click .messageSend-cancelbtn': 'closeReplyBox',
+                'focus .messageSend-body': 'onTextboxFocus',
                 //
                 'mousedown .js_messageBodyAnnotatorSelectionAllowed': 'startAnnotatorTextSelection',
                 'mousemove .js_messageBodyAnnotatorSelectionAllowed': 'updateAnnotatorTextSelection',
@@ -153,9 +166,14 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                             if (bodyFormat == "text/html") {
                                 //Strip HTML from preview
                                 bodyFormat = "text/plain";
+
                                 // The div is just there in case there actually isn't any html
                                 // in which case jquery would crash without it
-                                data['body'] = $("<div>" + data['body'] + "</div>").text();
+                                var bodyWithoutNewLine = $("<div>" + String(data['body']) + "</div>");
+                                bodyWithoutNewLine.find("p").after(" ");
+                                bodyWithoutNewLine.find("br").replaceWith(" ");
+                                data['body'] = bodyWithoutNewLine.text().replace(/\s{2,}/g, ' ');
+                                
                             }
                         }
                         if (bodyFormat !== null) {
@@ -211,6 +229,8 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
 
                         if (that.replyBoxShown) {
                             that.openReplyBox();
+                            if ( that.replyBoxHasFocus )
+                                that.focusReplyBox();
                         }
                         else {
                             that.closeReplyBox();
@@ -224,25 +244,61 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY && that.messageListView.defaultMessageStyle != that.availableMessageViewStyles.FULL_BODY) {
                             that.showReadLess();
                         }
+
                         if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
-                            that.messageListView.requestPostRenderSlowCallback(function () {
+
+                            var applyEllipsis = function()
+                            {
                                 /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
                                  * Read More links for message previews
                                  */
-                                //console.log("Initializing dotdotdot on message", that.model.id);
                                 that.$(".ellipsis").dotdotdot({
                                     after: "a.readMore",
                                     callback: function (isTruncated, orgContent) {
+                                        //console.log("dotdotdot initialized on message", that.model.id);
                                         //console.log(isTruncated, orgContent);
-                                        if (isTruncated) {
+                                        if (isTruncated)
+                                        {
                                             that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
                                         }
-                                        else {
+                                        else
+                                        {
                                             that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
+                                            if ( data['body'].length > 610 ) // approximate string length for text which uses 4 full lines
+                                            {
+                                                console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
+                                                if ( ++that.reRendered < 5 ) // we use this to avoid infinite loop of render() calls
+                                                {
+                                                    console.log("yes, we will re-render => tries: ", that.reRendered);
+                                                    setTimeout(function(){
+                                                        that.render();
+                                                    }, 500);
+                                                }
+                                                else
+                                                {
+                                                    console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
+                                                }
+                                            }
                                         }
                                     },
                                     watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
-                                })
+                                });
+                            };
+
+                            that.messageListView.requestPostRenderSlowCallback(function () {
+
+                                setTimeout(function(){
+                                    //console.log("Initializing ellipsis on message", that.model.id);
+                                    var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+                                    //console.log("current_navigation_state:", current_navigation_state);
+                                    if ( current_navigation_state == 'home' )
+                                    {
+                                        that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
+                                        return;
+                                    }
+                                    applyEllipsis();
+                                }, 100);
+                                
 
                                 /* We no longer need this, but probably now need to
                                  * update when the panels change size with the
@@ -336,7 +392,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              */
             showSegmentByAnnotation: function (annotation) {
                 var that = this,
-                    currentIdea = Ctx.DEPRECATEDgetCurrentIdea(),
+                    currentIdea = this.messageListView.getContainingGroup().getCurrentIdea(),
                     collectionManager = new CollectionManager(),
                     ok = true;
 
@@ -362,16 +418,16 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                 return;
                             }
                             if (segment.get('idIdea')) {
-                                if (that.messageListView.panelWrapper.groupContent.findViewByType(PanelSpecTypes.IDEA_PANEL)) {
-                                    //FIXME:  We don't want to affect every panel, only the one in the current group
-                                    Ctx.DEPRECATEDsetCurrentIdea(allIdeasCollection.get(annotation.idIdea));
+                                if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.IDEA_PANEL)) {
+                                  //FIXME:  Even this isn't proper behaviour.  Maybe we should just pop a panel systematically in this case.
+                                    that.messageListView.getContainingGroup().setCurrentIdea(allIdeasCollection.get(annotation.idIdea));
                                     Assembl.vent.trigger('DEPRECATEDideaPanel:showSegment', segment);
                                 }
                                 else {
                                     console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
                                 }
                             } else {
-                                if (that.messageListView.panelWrapper.groupContent.findViewByType(PanelSpecTypes.CLIPBOARD)) {
+                                if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.CLIPBOARD)) {
                                   //FIXME:  We don't want to affect every panel, only the one in the current group
                                   //FIXME:  Nothing listens to this anymore
                                   console.error("FIXME:  Nothing listens to DEPRECATEDsegmentList:showSegment anymore");
@@ -463,12 +519,12 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 var annotator = this.$el.closest('.messageList-list').data('annotator');
 
                 /*
-                Hack: Here we remove the input of the annotator editor, so then the onAdderClick
-                call will try to give focus to a field which does not exist.
-                So it will not force the browser to scroll the message list up to the top,
-                which is where the editor is initially placed (it is then moved to the cursor
-                position).
-                */
+                 Hack: Here we remove the input of the annotator editor, so then the onAdderClick
+                 call will try to give focus to a field which does not exist.
+                 So it will not force the browser to scroll the message list up to the top,
+                 which is where the editor is initially placed (it is then moved to the cursor
+                 position).
+                 */
                 annotator.editor.element.find(":input:first").remove();
 
                 annotator.onAdderClick.call(annotator);
@@ -478,33 +534,45 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 //object from annotator
                 if (this.messageListView.annotatorEditor) {
                     this.messageListView.annotatorEditor.element.css({
-                        'top': y+"px",
-                        'left': x+"px"
+                        'top': y + "px",
+                        'left': x + "px"
                     });
                 }
-                
+
             },
 
             /**
              *  Focus on the reply box, and open it if closed
              **/
             focusReplyBox: function () {
-
+                var that = this;
+                var onReplyBoxBlur = function(){
+                    that.replyBoxHasFocus = false;
+                };
+                var waitAndFocus = function(){
+                    // we can't execute this immediately because the opening of the message triggers a setRead(true) which triggers a redraw which looses the focus
+                    window.setTimeout(function () {
+                        var el = that.$('.messageSend-body');
+                        if ( el.length )
+                        {
+                            el.focus();
+                            that.replyBoxHasFocus = true;
+                            el.on("blur", onReplyBoxBlur);
+                        }
+                        else { // if the .messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
+                            that.messageListView.scrollToElement(that.$(".message-replybox"));
+                        }
+                    }, 100);
+                };
+                
                 if (this.viewStyle.id === 'viewStylePreview') {
                     this.onMessageTitleClick();
-                    if (this.$('.messageSend-body').length)
-                        this.$('.messageSend-body').focus();
-                    else { // if the .messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
-                        this.messageListView.scrollToElement(this.$(".message-replybox"));
-                    }
+                    waitAndFocus();
                     return;
                 }
 
                 this.openReplyBox();
-                var that = this;
-                window.setTimeout(function () {
-                    that.$('.messageSend-body').focus();
-                }, 100);
+                waitAndFocus();
             },
 
             /**
@@ -729,6 +797,14 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 ev.stopPropagation();
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
                 this.model.setRead(true);
+            },
+
+            onTextboxFocus: function(){
+                if ( !this.model.get('read') )
+                {
+                    this.model.setRead(true); // we do not call markAsRead on purpose
+                    this.focusReplyBox();
+                }
             },
 
             /**

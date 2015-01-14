@@ -3,7 +3,13 @@
 define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/assemblPanel', 'utils/i18n', 'models/panelSpec', 'utils/panelSpecTypes'],
     function (Marionette, panelViewByPanelSpec, Ctx, AssemblPanel, i18n, panelSpec, PanelSpecTypes) {
         /**
-         * A wrapper for a panel, used anywhere in a panelGroup
+         * A wrapper for a panel, used anywhere in a groupContent.
+         * 
+         * It's a shim to allow the parent view to have uniform objects to manage
+         * (it only has to manager panelWrappers)
+         * 
+         * The actual panels hold a reference to the panelWrapper in their view 
+         * (someview.panelWrapper
          */
         var PanelWrapper = Marionette.LayoutView.extend({
             template: "#tmpl-panelWrapper",
@@ -34,8 +40,10 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
             initialize: function (options) {
                 var contentClass = panelViewByPanelSpec(options.contentSpec);
                 this.groupContent = options.groupContent;
+                if (!this.groupContent) {
+                  throw new Error("The groupContent wasn't passed in the options");
+                }
                 this.contentsView = new contentClass({
-                    groupContent: options.groupContent,
                     panelWrapper: this
                 });
                 this.gridSize = this.contentsView.gridSize || AssemblPanel.prototype.DEFAULT_GRID_SIZE;
@@ -111,7 +119,7 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
                     this.model.set('locked', false);
                     this._stateButton
                         .addClass('icon-lock-open')
-                        .removeClass('icon-lock')
+                        .removeClass('icon-lock lockedGlow')
                         .attr('data-original-title', i18n.gettext('Lock panel'));
 
                     if (_.size(this._unlockCallbackQueue) > 0) {
@@ -161,7 +169,7 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
             unminimizePanel: function (evt) {
                 if (!this.model.get('minimized'))
                     return;
-                if (this.model.isOfType(PanelSpecTypes.IDEA_PANEL) && Ctx.DEPRECATEDgetCurrentIdea() == undefined && evt && evt.currentTarget) {
+                if (this.model.isOfType(PanelSpecTypes.IDEA_PANEL) && !this.groupContent.getCurrentIdea() && evt && evt.currentTarget) {
                     // do not accept to unminimize if no idea to show
                     var el = this.ui.minimizePanel;
                     el.attr("data-original-title", i18n.gettext('Please select an idea in the table of ideas to open the idea panel.'));
@@ -381,8 +389,12 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
             filterThroughPanelLock: function (callback, queueWithId) {
                 if (!this.model.get('locked')) {
                     callback();
+                    this.ui.lockPanel.children().removeClass('lockedGlow');
 
                 } else {
+
+                    this.ui.lockPanel.children().addClass('lockedGlow');
+
                     if (queueWithId) {
                         if (this._unlockCallbackQueue[queueWithId] !== undefined) {
                         }
@@ -408,6 +420,7 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
                         break;
                     case PanelSpecTypes.CLIPBOARD:
                         // ne need because of resetTitle - segment
+                        icon = 'icon-clipboard';
                         break;
                     case PanelSpecTypes.SYNTHESIS_EDITOR:
                         icon = 'icon-doc';

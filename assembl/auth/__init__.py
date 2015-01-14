@@ -16,6 +16,7 @@ SYSTEM_ROLES = set(
 P_READ = 'read'
 P_ADD_POST = 'add_post'
 P_EDIT_POST = 'edit_post'
+P_VOTE = 'vote'
 P_ADD_EXTRACT = 'add_extract'
 P_EDIT_EXTRACT = 'edit_extract'
 P_EDIT_MY_EXTRACT = 'edit_my_extract'
@@ -29,19 +30,40 @@ P_ADMIN_DISC = 'admin_discussion'
 P_SYSADMIN = 'sysadmin'
 
 ASSEMBL_PERMISSIONS = set((
-    P_READ, P_ADD_POST, P_EDIT_POST, P_ADD_EXTRACT, P_EDIT_EXTRACT,
+    P_READ, P_ADD_POST, P_EDIT_POST, P_VOTE, P_ADD_EXTRACT, P_EDIT_EXTRACT,
     P_EDIT_MY_EXTRACT, P_ADD_IDEA, P_EDIT_IDEA, P_EDIT_SYNTHESIS,
     P_SEND_SYNTHESIS, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
     P_ADMIN_DISC, P_SYSADMIN))
 
+
 class CrudPermissions(object):
-    __slots__=('create', 'read', 'update', 'delete',
-               'update_owned', 'delete_owned')
+
+    __slots__ = ('create', 'read', 'update', 'delete',
+                 'read_owned', 'update_owned', 'delete_owned')
+
+    CREATE = 1
+    READ = 2
+    UPDATE = 3
+    DELETE = 4
+
     def __init__(self, create=None, read=None, update=None, delete=None,
-                 update_owned=None, delete_owned=None):
+                 update_owned=None, delete_owned=None, read_owned=None):
         self.create = create or P_SYSADMIN
         self.read = read or P_READ
         self.update = update or create or P_SYSADMIN
         self.delete = delete or P_SYSADMIN
+        self.read_owned = read_owned or self.read
         self.update_owned = update_owned or self.update
         self.delete_owned = delete_owned or self.delete
+
+    def can(self, operation):
+        if operation == self.CREATE:
+            return (self.create, self.create)
+        elif operation == self.READ:
+            return (self.read, self.read_owned)
+        elif operation == self.UPDATE:
+            return (self.update, self.update_owned)
+        elif operation == self.DELETE:
+            return (self.delete, self.delete_owned)
+        else:
+            raise ValueError()

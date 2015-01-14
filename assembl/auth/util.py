@@ -73,17 +73,16 @@ def get_permissions(user_id, discussion_id):
     return [x[0] for x in permissions.distinct()]
 
 
-def authentication_callback(user_id, request):
+def discussion_from_request(request):
     from ..models import Discussion
-    discussion_id = None
-    connection = Discussion.db().connection()
-    connection.info['userid'] = user_id
+    from assembl.views.traversal import TraversalContext
     if request.matchdict:
         if 'discussion_id' in request.matchdict:
             discussion_id = int(request.matchdict['discussion_id'])
             discussion = Discussion.get_instance(discussion_id)
             if not discussion:
                 raise HTTPNotFound("No discussion ID %d" % (discussion_id,))
+            return discussion
         elif 'discussion_slug' in request.matchdict:
             slug = request.matchdict['discussion_slug']
             session = get_session_maker()()
@@ -91,12 +90,33 @@ def authentication_callback(user_id, request):
                 slug=slug).first()
             if not discussion:
                 raise HTTPNotFound("No discussion named %s" % (slug,))
-            discussion_id = discussion.id
-    if (not discussion_id) and request.context:
+            return discussion
+    if request.context and isinstance(request.context, TraversalContext):
         if getattr(request.context, 'get_instance_of_class', None) is not None:
-            discussion = request.context.get_instance_of_class(Discussion)
-            if discussion:
-                discussion_id = discussion.id
+            return request.context.get_instance_of_class(Discussion)
+
+
+def get_current_discussion():
+    from pyramid.threadlocal import get_current_request
+    r = get_current_request()
+    # CAN ONLY BE CALLED IF THERE IS A CURRENT REQUEST.
+    assert r
+    return discussion_from_request(r)
+
+
+def authentication_callback(user_id, request):
+    "This is how pyramid knows the user's permissions"
+    connection = User.db().connection()
+    connection.info['userid'] = user_id
+    discussion = discussion_from_request(request)
+    discussion_id = discussion.id if discussion else None
+    # this is a good time to tell raven about the user
+    from raven.base import Raven
+    if Raven:
+        if user_id:
+            Raven.user_context({'user_id': user_id})
+        if discussion_id:
+            Raven.context.merge({'discussion_id': discussion_id})
 
     return get_roles(user_id, discussion_id)
 

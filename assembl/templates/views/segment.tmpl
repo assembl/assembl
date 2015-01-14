@@ -13,6 +13,7 @@
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
 {% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('Show in original text')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
 
+
 {#<div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
 
   <% if (canEditExtracts || (canEditMyExtracts && harvester == ctx.getCurrentUser())) { %>
@@ -60,6 +61,9 @@
   <div class="postit-footer">
     <p class="text-quotation"><%= segment.getQuote() %></p>
 
+		{% set nuggetTooltip = gettext('marked as a nugget')  %}
+		{% set nuggets = '<a href="#" class="nugget js_selectAsNugget <%= segment.get("important") ? "isSelected":"" %>" data-toggle="tooltip" title="<%= segment.get("important") ? "":"'+ nuggetTooltip +'" %>" data-placement="left"><i class="icon-diamond"></i></a>' %}
+
     <% if(canAddExtracts) { %>
       <div class="segment-harvester tac">
         <div class="avatar img-rounded">
@@ -69,7 +73,7 @@
 
         <% if(canAddExtracts) { %>
           <div class="nugget-indice">
-            <a href="#" class="nugget js_selectAsNugget <%= segment.get('important') ? 'isSelected':'' %>"><i class="icon-diamond"></i></a>
+          	{{ nuggets|safe }}
           </div>
         <% } %>
       </div>

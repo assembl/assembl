@@ -12,6 +12,7 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
              * @init
              */
             initialize: function (obj) {
+                Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
                 var that = this,
                     collectionManager = new CollectionManager();
 
@@ -234,15 +235,6 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
                         }
                     });
                 };
-
-                // getting the most_common_recipient_address
-                $.ajax({
-                    type: 'get',
-                    url: Ctx.getApiUrl('sources/'),
-                    contentType: 'application/json',
-                    success: onSuccess
-                });
-
                 that.blockPanel();
             }
 

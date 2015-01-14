@@ -48,7 +48,9 @@ from simplejson import dumps
 
 from ..traversal import (
     InstanceContext, CollectionContext, ClassContext, Api2Context)
-from assembl.auth import P_READ, P_SYSADMIN, R_SYSADMIN, Everyone
+from assembl.auth import (
+    P_READ, P_SYSADMIN, P_ADMIN_DISC, R_SYSADMIN, P_ADD_POST,
+    Everyone, CrudPermissions)
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
@@ -68,13 +70,39 @@ def includeme(config):
     config.add_route('csrf_token2', 'Token')
 
 
+IF_OWNED = object()
+
+
+def check_permissions(request, operation, allow_admin_disc=False):
+    ctx = request.context
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    if P_SYSADMIN in permissions or (
+            allow_admin_disc and P_ADMIN_DISC in permissions):
+        return True
+    cls = ctx.get_target_class()
+    (needed, needed_owned) = cls.crud_permissions.can(operation)
+    if needed in permissions:
+        return True
+    if needed_owned in permissions:
+        if user_id == Everyone:
+            raise HTTPUnauthorized()
+        return IF_OWNED
+    raise HTTPUnauthorized()
+
+
 @view_config(context=ClassContext, renderer='json',
              request_method='GET', permission=P_READ)
 def class_view(request):
+    check = check_permissions(request, CrudPermissions.READ)
     ctx = request.context
     view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
     tombstones = asbool(request.GET.get('tombstones', False))
     q = ctx.create_query(view == 'id_only', tombstones)
+    if check == IF_OWNED:
+        q = ctx.get_target_class().restrict_to_owners(
+            q, authenticated_userid(request))
     if view == 'id_only':
         return [ctx._class.uri_generic(x) for (x,) in q.all()]
     else:
@@ -90,7 +118,12 @@ def class_view(request):
 def instance_view_jsonld(request):
     from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
     from rdflib import URIRef, ConjunctiveGraph
+    check = check_permissions(request, CrudPermissions.READ)
     instance = request.context._instance
+    if check == IF_OWNED:
+        user_id = authenticated_userid(request)
+        if not instance.is_owner(User.get(user_id)):
+            return HTTPUnauthorized()
     discussion = request.context.get_instance_of_class(Discussion)
     if not discussion:
         raise HTTPNotFound()
@@ -112,19 +145,29 @@ def instance_view_jsonld(request):
 @view_config(context=InstanceContext, renderer='json',
              request_method='GET', permission=P_READ, accept="application/json")
 def instance_view(request):
+    check = check_permissions(request, CrudPermissions.READ)
+    instance = request.context._instance
+    if check == IF_OWNED:
+        user_id = authenticated_userid(request)
+        if not instance.is_owner(User.get(user_id)):
+            return HTTPUnauthorized()
     ctx = request.context
     view = ctx.get_default_view() or 'default'
     view = request.GET.get('view', view)
-    return ctx._instance.generic_json(view)
+    return instance.generic_json(view)
 
 
 @view_config(context=CollectionContext, renderer='json',
              request_method='GET', permission=P_READ)
 def collection_view(request, default_view='id_only'):
+    check = check_permissions(request, CrudPermissions.READ)
     ctx = request.context
     view = request.GET.get('view', None) or ctx.get_default_view() or default_view
     tombstones = asbool(request.GET.get('tombstones', False))
     q = ctx.create_query(view == 'id_only', tombstones)
+    if check == IF_OWNED:
+        q = ctx.get_target_class().restrict_to_owners(
+            q, authenticated_userid(request))
     if view == 'id_only':
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
     else:
@@ -132,6 +175,7 @@ def collection_view(request, default_view='id_only'):
 
 
 def collection_add(request, args):
+    check_permissions(request, CrudPermissions.CREATE)
     ctx = request.context
     user_id = authenticated_userid(request)
     if 'type' in args:
@@ -140,12 +184,6 @@ def collection_add(request, args):
         del args['type']
     else:
         typename = ctx.collection_class.external_typename()
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
-    if P_SYSADMIN not in permissions:
-        cls = ctx.get_collection_class(typename)
-        if cls.crud_permissions.create not in permissions:
-            raise HTTPUnauthorized()
     session = User.db
     old_autoflush = session.autoflush
     session.autoflush = False
@@ -180,19 +218,15 @@ def instance_post(request):
 
 
 @view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER,
-    renderer='json')
+             renderer='json')
 def instance_put_json(request):
+    check = check_permissions(request, CrudPermissions.UPDATE)
     ctx = request.context
-    user_id = authenticated_userid(request)
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
     instance = ctx._instance
-    if P_SYSADMIN not in permissions:
-        required = instance.crud_permissions
-        if required.update not in permissions:
-            if required.update_owned not in permissions or\
-                    User.get(user_id) not in ctx._instance.get_owners():
-                raise HTTPUnauthorized()
+    user_id = authenticated_userid(request)
+    if check == IF_OWNED:
+        if not instance.is_owner(User.get(user_id)):
+            return HTTPUnauthorized()
     try:
         updated = instance.update_json(request.json_body, user_id)
         view = request.GET.get('view', None) or 'default'
@@ -201,30 +235,20 @@ def instance_put_json(request):
         else:
             return updated.generic_json(view)
 
-    except NotImplemented as err:
+    except NotImplemented:
         raise HTTPNotImplemented()
 
 
 @view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER,
-    renderer='json')
+             renderer='json')
 def instance_put(request):
-    user_id = authenticated_userid(request)
+    check = check_permissions(request, CrudPermissions.UPDATE)
     context = request.context
-    discussion_id = None
-    if isinstance(context._instance, DiscussionBoundBase):
-        discussion_id = context.get_discussion_id()
-    else:
-        parent = getattr(context.__parent__, 'parent_instance', None)
-        if parent and isinstance(parent, DiscussionBoundBase):
-            discussion_id = context.get_discussion_id()
-    permissions = get_permissions(user_id, discussion_id)
     instance = context._instance
-    if P_SYSADMIN not in permissions:
-        required = instance.crud_permissions
-        if required.update not in permissions:
-            if required.update_owned not in permissions or\
-                    User.get(user_id) not in context._instance.get_owners():
-                raise HTTPUnauthorized()
+    if check == IF_OWNED:
+        user_id = authenticated_userid(request)
+        if not instance.is_owner(User.get(user_id)):
+            return HTTPUnauthorized()
     mapper = inspect(instance.__class__)
     cols = {c.key: c for c in mapper.columns if not c.foreign_keys}
     setables = dict(pyinspect.getmembers(
@@ -282,17 +306,13 @@ def instance_put(request):
 
 @view_config(context=InstanceContext, request_method='DELETE', renderer='json')
 def instance_del(request):
+    check = check_permissions(request, CrudPermissions.DELETE)
     ctx = request.context
-    user_id = authenticated_userid(request)
     instance = ctx._instance
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
-    if P_SYSADMIN not in permissions:
-        required = instance.crud_permissions
-        if required.delete not in permissions:
-            if required.delete_owned not in permissions or\
-                    User.get(user_id) not in instance.get_owners():
-                raise HTTPUnauthorized()
+    if check == IF_OWNED:
+        user_id = authenticated_userid(request)
+        if not instance.is_owner(User.get(user_id)):
+            return HTTPUnauthorized()
     instance.db.delete(instance)
     return {}
 
@@ -311,6 +331,7 @@ def show_class_names(request):
 
 @view_config(context=ClassContext, request_method='POST', header=FORM_HEADER)
 def class_add(request):
+    check_permissions(request, CrudPermissions.CREATE)
     ctx = request.context
     args = request.params
     typename = args.get('type', None)
@@ -320,9 +341,6 @@ def class_add(request):
         cls = request.context._class
         typename = cls.external_typename()
     user_id = authenticated_userid(request)
-    # In this case, no discussion context, so only sysadmin.
-    if R_SYSADMIN not in get_roles(user_id):
-        raise HTTPUnauthorized()
     try:
         instances = ctx.create_object(typename, None, user_id, **args)
     except Exception as e:
@@ -343,16 +361,12 @@ def class_add(request):
 @view_config(context=CollectionContext, request_method='POST',
              header=JSON_HEADER)
 def collection_add_json(request):
+    check_permissions(request, CrudPermissions.CREATE)
     ctx = request.context
     typename = ctx.collection_class.external_typename()
     user_id = authenticated_userid(request)
-    typename = request.json_body.get('@type', ctx.collection_class.external_typename())
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
-    if P_SYSADMIN not in permissions:
-        cls = ctx.get_collection_class(typename)
-        if cls.crud_permissions.create not in permissions:
-            raise HTTPUnauthorized()
+    typename = request.json_body.get(
+        '@type', ctx.collection_class.external_typename())
     try:
         instances = ctx.create_object(typename, request.json_body, user_id)
     except Exception as e:
@@ -371,38 +385,34 @@ def collection_add_json(request):
 
 
 # Votes are private
-@view_config(context=CollectionContext, renderer='json',
-             request_method='GET', permission=P_READ,
-             ctx_collection_class=AbstractIdeaVote)
-def votes_collection_view(request):
-    ctx = request.context
-    user_id = authenticated_userid(request)
-    if user_id == Everyone:
-        raise HTTPUnauthorized
-    view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
-    tombstones = asbool(request.GET.get('tombstones', False))
-    q = ctx.create_query(view == 'id_only', tombstones).join(
-        User).filter(User.id==user_id)
-    if view == 'id_only':
-        return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
-    else:
-        return [i.generic_json(view) for i in q.all()]
+# @view_config(context=CollectionContext, renderer='json',
+#              request_method='GET', permission=P_READ,
+#              ctx_collection_class=AbstractIdeaVote)
+# def votes_collection_view(request):
+#     ctx = request.context
+#     user_id = authenticated_userid(request)
+#     if user_id == Everyone:
+#         raise HTTPUnauthorized
+#     view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
+#     tombstones = asbool(request.GET.get('tombstones', False))
+#     q = ctx.create_query(view == 'id_only', tombstones).join(
+#         User).filter(User.id==user_id)
+#     if view == 'id_only':
+#         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
+#     else:
+#         return [i.generic_json(view) for i in q.all()]
 
 
 @view_config(context=CollectionContext, request_method='POST',
-             header=JSON_HEADER, #permission=P_ADD_VOTE?,
+             header=JSON_HEADER,  # permission=P_ADD_VOTE?,
              ctx_collection_class=AbstractIdeaVote)
 def votes_collection_add_json(request):
+    check_permissions(request, CrudPermissions.CREATE)
     ctx = request.context
     typename = ctx.collection_class.external_typename()
     user_id = authenticated_userid(request)
-    typename = request.json_body.get('@type', ctx.collection_class.external_typename())
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
-    if P_SYSADMIN not in permissions:
-        cls = ctx.get_collection_class(typename)
-        if cls.crud_permissions.create not in permissions:
-            raise HTTPUnauthorized()
+    typename = request.json_body.get(
+        '@type', ctx.collection_class.external_typename())
     json = request.json_body
     json['voter_id'] = user_id
     try:
@@ -425,6 +435,7 @@ def votes_collection_add_json(request):
 @view_config(context=CollectionContext, request_method='POST',
              header=FORM_HEADER, ctx_collection_class=AbstractIdeaVote)
 def votes_collection_add(request):
+    check_permissions(request, CrudPermissions.CREATE)
     ctx = request.context
     args = request.params
     user_id = authenticated_userid(request)
@@ -434,12 +445,6 @@ def votes_collection_add(request):
         del args['type']
     else:
         typename = ctx.collection_class.external_typename()
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
-    if P_SYSADMIN not in permissions:
-        cls = ctx.get_collection_class(typename)
-        if cls.crud_permissions.create not in permissions:
-            raise HTTPUnauthorized()
     args['voter_id'] = user_id
     try:
         instances = ctx.create_object(typename, None, user_id, **args)

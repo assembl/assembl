@@ -1,6 +1,6 @@
 from os.path import join, dirname, realpath, exists
+import ConfigParser
 
-from celery import current_app
 from pyramid.paster import get_appsettings
 from pyramid.path import DottedNameResolver
 
@@ -58,10 +58,24 @@ def init_task_config(celery_app):
     if _inited:
         return
     rootdir = dirname(dirname(dirname(realpath(__file__))))
-    if exists(join(rootdir, 'local.ini')):
-        settings = get_appsettings(join(rootdir, 'local.ini'), 'assembl')
-    else:
-        settings = get_appsettings(join(rootdir, 'development.ini'), 'assembl')
+    settings_file = join(rootdir, 'local.ini')
+    if not exists(settings_file):
+        settings_file = join(rootdir, 'development.ini')
+    settings = get_appsettings(settings_file, 'assembl')
+    config = ConfigParser.SafeConfigParser()
+    config.read(settings_file)
+    try:
+        pipeline = config.get('pipeline:main', 'pipeline').split()
+        if 'raven' in pipeline:
+            raven_dsn = config.get('filter:raven', 'dsn')
+            from raven import Client
+            from raven.contrib.celery import (
+                register_signal, register_logger_signal)
+            client = Client(raven_dsn)
+            register_logger_signal(client)
+            register_signal(client)
+    except ConfigParser.Error:
+        pass
     registry = getGlobalSiteManager()
     registry.settings = settings
     set_config(settings)

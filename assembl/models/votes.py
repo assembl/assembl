@@ -8,6 +8,7 @@ from sqlalchemy.orm import relationship, backref
 from . import (Base, DiscussionBoundBase, Tombstonable)
 from .idea import Idea
 from .auth import User
+from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
 from .widgets import MultiCriterionVotingWidget
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
@@ -35,8 +36,8 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     )
     idea = relationship(
         Idea,
-        primaryjoin="and_(Idea.id==AbstractIdeaVote.idea_id, "
-                    "Idea.is_tombstone==False)",
+        primaryjoin=and_(Idea.id == idea_id,
+                         Idea.is_tombstone == False),
         backref=backref("votes", cascade="all, delete-orphan"))
 
     criterion_id = Column(
@@ -47,8 +48,8 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     )
     criterion = relationship(
         Idea,
-        primaryjoin="and_(Idea.id==AbstractIdeaVote.criterion_id, "
-                    "Idea.is_tombstone==False)",
+        primaryjoin=and_(Idea.id == criterion_id,
+                         Idea.is_tombstone == False),
         backref="votes_using_this_criterion")
 
     vote_date = Column(DateTime, default=datetime.utcnow,
@@ -60,7 +61,17 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
         nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.voter)}
     )
-    voter = relationship(User, backref="votes")
+    voter = relationship(
+        User, backref=backref("votes", cascade="all, delete-orphan"))
+
+    def is_owner(self, user):
+        return self.voter_id == user.id
+
+    @classmethod
+    def restrict_to_owners(cls, query, user_id=None):
+        "filter query according to object owners"
+        user_id = user_id or self.voter_id
+        return query.filter(cls.voter_id == user_id)
 
     widget_id = Column(
         Integer,
@@ -71,7 +82,7 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
         MultiCriterionVotingWidget,
         primaryjoin="and_(MultiCriterionVotingWidget.id==AbstractIdeaVote.widget_id, "
                          "AbstractIdeaVote.is_tombstone==False)",
-        backref="votes")
+        backref=backref("votes", cascade="all, delete-orphan"))
 
     def get_discussion_id(self):
         return self.idea.discussion_id
@@ -88,6 +99,9 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     @abstractproperty
     def value(self):
         pass
+
+    crud_permissions = CrudPermissions(
+        P_VOTE, P_ADMIN_DISC, P_SYSADMIN, P_SYSADMIN, P_VOTE, P_VOTE, P_READ)
 
 
 class LickertRange(Base):

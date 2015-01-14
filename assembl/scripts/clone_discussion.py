@@ -11,6 +11,7 @@ import transaction
 from sqlalchemy.sql.visitors import ClauseVisitor
 from sqlalchemy.sql.expression import and_
 
+from assembl.auth import SYSTEM_ROLES, ASSEMBL_PERMISSIONS
 from assembl.lib.config import set_config
 from assembl.lib.sqla import configure_engine, get_session_maker
 from assembl.lib.zmqlib import configure_zmq
@@ -271,7 +272,8 @@ def delete_discussion(session, discussion_id):
         cls.__dict__.get('__table__', None): cls for cls in classes }
     # Only direct subclass of abstract
     concrete_classes = set(filter(lambda cls:
-        issubclass(cls, DiscussionBoundBase) and (not isabstract(cls)) and isabstract(cls.mro()[1]),
+        issubclass(cls, DiscussionBoundBase) and (not isabstract(cls))
+        and isabstract(cls.mro()[1]),
         classes_by_table.values()))
     tables = DiscussionBoundBase.metadata.sorted_tables
     tables.reverse()
@@ -313,7 +315,7 @@ def clone_discussion(
     def resolve_promises(ob, copy):
         if ob in promises:
             for (o, reln) in promises[ob]:
-                print 'fullfilling', o.__class__, o.id, k
+                print 'fullfilling', o.__class__, o.id
                 assign_ob(o, reln, copy)
             del promises[ob]
 
@@ -345,6 +347,17 @@ def clone_discussion(
         in_process.add(ob)
         for r in non_nullable_reln:
             subob = getattr(ob, r.key, None)
+            if subob is None:
+                from assembl.models import Idea, IdeaLink
+                # Those might be None because the underlying idea is tombstoned
+                if isinstance(ob, IdeaLink):
+                    subob_id = None
+                    if r.key == 'source':
+                        subob_id = ob.source_id
+                    elif r.key == 'target':
+                        subob_id = ob.target_id
+                    if subob_id:
+                        subob = ob.db.query(Idea).get(subob_id)
             assert subob is not None
             assert subob not in in_process
             print 'recurse ^0', r.key
@@ -412,7 +425,9 @@ def clone_discussion(
             resolve_promises(ob, copy)
         treating.add(copy)
         mapper = class_mapper(ob.__class__)
-        (direct_reln, copy_col_props, nullable_relns, non_nullable_reln) = get_mapper_info(mapper)
+        (
+            direct_reln, copy_col_props, nullable_relns, non_nullable_reln
+        ) = get_mapper_info(mapper)
         for r in mapper.relationships:
             if r in direct_reln:
                 continue
@@ -432,6 +447,7 @@ def clone_discussion(
             discussion=copy, parent_id=None).all():
         p._set_ancestry('')
     to_session.flush()
+    return copy
 
 
 if __name__ == '__main__':
@@ -446,6 +462,8 @@ if __name__ == '__main__':
         "-c", "--connection_string",
         help="connection string of source database if different")
     parser.add_argument("discussion", help="original discussion slug")
+    parser.add_argument("-p", "--permissions", action="append",
+                        help="Add a role+permission pair to the copy (eg ")
     args = parser.parse_args()
     env = bootstrap(args.configuration)
     settings = get_appsettings(args.configuration, 'assembl')
@@ -457,7 +475,7 @@ if __name__ == '__main__':
     new_slug = args.new_name or (args.discussion + "_copy")
     if args.connection_string:
         from_engine = configure_engine(args.connection)
-        from_session = session_maker(from_engine)()
+        from_session = sessionmaker(from_engine)()
     else:
         from_engine = to_engine
         from_session = to_session
@@ -465,6 +483,10 @@ if __name__ == '__main__':
     discussion = from_session.query(Discussion).filter_by(
         slug=args.discussion).one()
     assert discussion, "No discussion named " + args.discussion
+    permissions = [x.split('+') for x in args.permissions]
+    for (role, permission) in permissions:
+        assert role in SYSTEM_ROLES
+        assert permission in ASSEMBL_PERMISSIONS
     existing = to_session.query(Discussion).filter_by(slug=new_slug).first()
     if existing:
         if args.delete:
@@ -476,6 +498,13 @@ if __name__ == '__main__':
             print "already exists! Add -d to delete it."
             exit(0)
     with transaction.manager:
-        clone_discussion(from_session, discussion.id, to_session, new_slug)
-    # TODO: Options to clone participant permissions into 
-    # Authenticated permissions. Maybe also to make globally readable.
+        from assembl.models import Role, Permission, DiscussionPermission
+        copy = clone_discussion(
+            from_session, discussion.id, to_session, new_slug)
+        for (role, permission) in permissions:
+            role = to_session.query(Role).filter_by(name=role).one()
+            permission = to_session.query(Permission).filter_by(
+                name=permission).one()
+            # assumption: Not already defined.
+            to_session.add(DiscussionPermission(
+                discussion=copy, role=role, permission=permission))

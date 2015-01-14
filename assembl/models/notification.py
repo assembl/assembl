@@ -294,13 +294,18 @@ class NotificationSubscription(DiscussionBoundBase):
             parent_subscription_id = self.parent_subscription_id,
             type=self.type)
 
+    def is_owner(self, user):
+        return self.user_id == user.id
 
-    def get_owners(self):
-        return (self.user, )
+    @classmethod
+    def restrict_to_owners(cls, query, user_id=None):
+        "filter query according to object owners"
+        user_id = user_id or self.user_id
+        return query.filter(cls.user_id == user_id)
 
     crud_permissions = CrudPermissions(
-        P_READ, P_READ, P_ADMIN_DISC, P_ADMIN_DISC,
-        P_READ, P_READ)
+        P_READ, P_ADMIN_DISC, P_ADMIN_DISC, P_ADMIN_DISC,
+        P_READ, P_READ, P_READ)
 
 
 @event.listens_for(NotificationSubscription.status, 'set', propagate=True)

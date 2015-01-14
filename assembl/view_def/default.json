@@ -15,6 +15,7 @@
         "avatar_url_base": "&external_avatar_url",
         "name": "&display_name",
         "real_name": "&real_name",
+        "post_count": "&count_posts_in_current_discussion",
         "preferred_email": false
     },
     "User": {
@@ -24,7 +25,8 @@
         "login_failures": false,
         "password": false,
         "verified": true,
-        "permissions": "&get_all_permissions"
+        "permissions": "&get_all_permissions",
+        "username": true
     },
     "UserTemplate": {
         "@extends": "User",
@@ -37,7 +39,7 @@
         "name": true,
         "provider_type": true,
         "trust_emails": true
-        },
+    },
     "ContentSource": {
         "discussion_id": "discussion",
         "name": true,

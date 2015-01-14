@@ -6,10 +6,11 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
+from pip.download import PipSession
 from pip.req import parse_requirements
 
 # parse_requirements() returns generator of pip.req.InstallRequirement objects
-install_reqs = parse_requirements('requirements.txt')
+install_reqs = parse_requirements('requirements.txt', session=PipSession())
 
 # requires is a list of requirement
 # e.g. ['django==1.5.1', 'mezzanine==1.4.6']
@@ -37,7 +38,7 @@ setup(name='assembl',
       include_package_data=True,
       zip_safe=False,
       test_suite='assembl',
-      setup_requires = ['pip>=1.4.1'],
+      setup_requires = ['pip>=6'],
       install_requires=requires,
       tests_require=tests_require,
       extras_require=dict(test=tests_require),

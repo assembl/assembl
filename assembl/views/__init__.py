@@ -26,6 +26,7 @@ def backbone_include(config):
     config.add_route('profile', '/users/edit')
     config.add_route('user_notifications', '/users/notifications')
     config.add_route('purl_posts', '/posts*remainder')
+    config.add_route('purl_idea', '/idea*remainder')
 
     config.add_route('nodetest', '/nodetest')
     config.add_route('styleguide', '/styleguide')

@@ -24,6 +24,13 @@
     </div>
     <div id="content-container" class="content-container">
 
+    <div class="bx bx-alert-success hidden">
+			<button class="btn btn-cancel btn-xs bx-close" type="button">
+				<i class="icon-delete"></i>
+			</button>
+			{{ gettext("partners added") }}
+		</div>
+
     <div class="gr mbxl">
       <% _.each(partners, function(partner){ %>
       <div class="gu gu-1of5">
@@ -40,42 +47,58 @@
     </div>
 
       <div class="gr">
-        <div class="gu gu-1of2">
+        <div class="gu gu-1of1">
           <form class="core-form form-horizontal" id="form-partner">
             <fieldset>
 
               <div class="control-group">
-                <label for="name" class="control-label">Name of partner</label>
+                <label for="name" class="control-label">{{ gettext('name of partner') }}</label>
                 <div class="controls">
                   <input type="text" class="partner-name" name="name" required="required">
+                  <span class="help-inline">
+                  	<p class="control-error">{{ gettext('please correct the error') }}</p>
+                  	<p class="control-success"><i class="icon-ok"></i></p>
+                  </span>
                 </div>
               </div>
 
               <div class="control-group">
-                <label for="description" class="control-label">Description</label>
+                <label for="description" class="control-label">{{ gettext('description') }}</label>
                 <div class="controls">
-                  <input type="text" class="partner-description" name="description" required="required">
+                	<textarea rows="3" class="partner-description input-large" name="description" required="required"></textarea>
+                  <span class="help-inline">
+										<p class="control-error">{{ gettext('please correct the error') }}</p>
+										<p class="control-success"><i class="icon-ok"></i></p>
+									</span>
                 </div>
               </div>
 
               <div class="control-group">
-                <label for="homepage" class="control-label">Home page</label>
+                <label for="homepage" class="control-label">{{ gettext('homepage partners') }}</label>
                 <div class="controls">
                   <input type="text" class="partner-homepage" name="homepage" required="required">
+                  <span class="help-inline">
+										<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
+										<p class="control-success"><i class="icon-ok"></i></p>
+									</span>
                 </div>
               </div>
 
               <div class="control-group">
-                <label for="logo" class="control-label">Url logo</label>
+                <label for="logo" class="control-label">{{ gettext('url partner logo') }}</label>
                 <div class="controls">
                   <input type="text" class="partner-logo" name="logo" required="required">
+                  <span class="help-inline">
+										<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
+										<p class="control-success"><i class="icon-ok"></i></p>
+									</span>
                 </div>
               </div>
 
               <div class="control-group">
-                <label for="is_initiator" class="control-label">is initiator</label>
+                <label for="is_initiator" class="control-label">{{ gettext('is initiator') }}</label>
                 <div class="controls">
-                  <input type="checkbox" class="partner-initiator" name="is_initiator" required="required">
+                  <input type="checkbox" class="partner-initiator" name="is_initiator">
                 </div>
               </div>
 

@@ -171,6 +171,19 @@ class AgentProfile(Base):
             result = self.serializable()
         return json.dumps(result)
 
+    def count_posts_in_discussion(self, discussion_id):
+        from .post import Post
+        return self.db.query(Post).filter_by(
+            creator_id=self.id, discussion_id=discussion_id).count()
+
+    def count_posts_in_current_discussion(self):
+        "CAN ONLY BE CALLED FROM API V2"
+        from ..auth.util import get_current_discussion
+        discussion = get_current_discussion()
+        if discussion is None:
+            return None
+        return self.count_posts_in_discussion(discussion.id)
+
 
 class AbstractAgentAccount(Base):
     """An abstract class for accounts that identify agents"""
@@ -179,26 +192,44 @@ class AbstractAgentAccount(Base):
     rdf_sections = (USER_SECTION,)
 
     id = Column(Integer, primary_key=True,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+
     type = Column(String(60))
+
     profile_id = Column(
         Integer,
         ForeignKey('agent_profile.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False,
         info={'rdf': QuadMapPatternS(None, SIOC.account_of)})
-    profile = relationship('AgentProfile',
-        backref=backref('accounts', cascade="all, delete-orphan"))
+
+    profile = relationship('AgentProfile', backref=backref(
+        'accounts', cascade="all, delete-orphan"))
 
     def signature(self):
         "Identity of signature implies identity of underlying account"
         return ('abstract_agent_account', self.id)
+
     def merge(self, other):
         pass
+
+    def is_owner(self, user):
+        return self.profile_id == user.id
+
+    @classmethod
+    def restrict_to_owners(cls, query, user_id=None):
+        "filter query according to object owners"
+        user_id = user_id or self.profile_id
+        return query.filter(cls.profile_id == user_id)
+
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_agent_account',
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
+
+    crud_permissions = CrudPermissions(
+        P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
+        P_READ, P_READ, P_READ)
 
 
 class EmailAccount(AbstractAgentAccount):
@@ -611,16 +642,14 @@ class User(AgentProfile):
 
     def get_notification_subscriptions_for_current_discussion(self):
         "CAN ONLY BE CALLED FROM API V2"
-        from pyramid.threadlocal import get_current_request
-        from .discussion import Discussion
-        r = get_current_request()
-        assert r
-        discussion = r.context.get_instance_of_class(Discussion)
+        from ..auth.util import get_current_discussion
+        discussion = get_current_discussion()
         if discussion is None:
             return []
         return self.get_notification_subscriptions(discussion.id)
 
-    def get_notification_subscriptions(self, discussion_id, reset_defaults=False):
+    def get_notification_subscriptions(
+            self, discussion_id, reset_defaults=False):
         """the notification subscriptions for this user and discussion.
         Includes materialized subscriptions from the template."""
         from .notification import (
@@ -673,7 +702,11 @@ class User(AgentProfile):
 
 
 class Username(Base):
-    "Optional usernames for users"
+    """Optional usernames for users
+    This is in one-one relationships to users.
+    Usernames are unique, and in one-one relationships to users.
+    It exists because we cannot have a unique index on a nullable property in virtuoso.
+    """
     __tablename__ = 'username'
     user_id = Column(Integer,
                      ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
@@ -799,8 +832,14 @@ class LocalUserRole(DiscussionBoundBase):
                 raise HTTPBadRequest()
         return self
 
-    def get_owners(self):
-        return (self.user, )
+    def is_owner(self, user):
+        return self.user_id == user.id
+
+    @classmethod
+    def restrict_to_owners(cls, query, user_id=None):
+        "filter query according to object owners"
+        user_id = user_id or self.user_id
+        return query.filter(cls.user_id == user_id)
 
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):

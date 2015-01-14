@@ -3,8 +3,8 @@
   <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>
     <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
       <div class="options-filter">
-        <span class="messageListViewStyleUserHighlightNew <%= availableViewStyles.NEW_MESSAGES.css_class %> option dispb fl tac pts"></span>
-        <span class="messageListViewStyleUserThreaded <%= availableViewStyles.THREADED.css_class %> option dispb fl tac pts"></span>
+        <span class="messageListViewStyleUserHighlightNew <%= availableViewStyles.NEW_MESSAGES.css_class %> option dispb fl tac pas mbs"></span>
+        <span class="messageListViewStyleUserThreaded <%= availableViewStyles.THREADED.css_class %> option dispb fl tac pas mbs"></span>
       </div>
     <% } %>
   <% } else { %>
@@ -45,7 +45,7 @@
   <div class="messageList-list idealist <%= currentViewStyle.id %> pal"></div>
 
   <div class="js_messageList-bottomarea messageList-bottomarea tac hidden">
-    <a class="js_messageList-morebutton btn btn-sm btn-secondary">{{ gettext('Load more messages') }}</a>
+    <a class="js_messageList-morebutton btn btn-sm btn-secondary mbs">{{ gettext('Load more messages') }}</a>
   </div>
 
   <% if (canPost) { %>

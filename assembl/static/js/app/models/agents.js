@@ -8,21 +8,28 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
         /**
          * @class UserModel
          */
-        var UserModel = Base.Model.extend({
-
+        var AgentModel = Base.Model.extend({
+            idAttribute: '@id',
             /**
              * @type {String}
              */
-            url: Ctx.getApiUrl('agents/'),
+            urlRoot: Ctx.getApiUrl('agents/'),
 
             /**
              * Defaults
              * @type {Object}
              */
             defaults: {
-                name: '',
-                description: '',
-                avatarUrl: ''
+                username: null,
+                name: null,
+                post_count: 0,
+                preferred_email: null,
+                verified: false,
+                avatar_url_base: null,
+                creation_date: null,
+                real_name: null,
+                '@type': null,
+                '@view': null
             },
 
             /**
@@ -95,6 +102,14 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
              */
             isUnknownUser: function () {
                 return this.getId() == UNKNOWN_USER_ID;
+            },
+
+            getSingleAgent: function () {
+                this.urlRoot = Ctx.getApiUrl('agents/') + Ctx.getCurrentUserId();
+            },
+
+            getSingleUser: function () {
+                this.urlRoot = Ctx.getApiV2DiscussionUrl('all_users/') + Ctx.getCurrentUserId();
             }
 
         });
@@ -103,7 +118,7 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
         /**
          * @class UserCollection
          */
-        var UserCollection = Base.Collection.extend({
+        var AgentCollection = Base.Collection.extend({
             /**
              * @type {String}
              */
@@ -113,7 +128,7 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
              * The model
              * @type {UserModel}
              */
-            model: UserModel,
+            model: AgentModel,
 
             /**
              * Returns the user by his/her id, or return the unknown user
@@ -138,15 +153,15 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
          * The unknown User
          * @type {UserModel}
          */
-        var UNKNOWN_USER = new UserModel({
+        var UNKNOWN_USER = new AgentModel({
             '@id': UNKNOWN_USER_ID,
             name: i18n.gettext('Unknown user')
         });
 
 
         return {
-            Model: UserModel,
-            Collection: UserCollection
+            Model: AgentModel,
+            Collection: AgentCollection
         };
 
     });

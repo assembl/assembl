@@ -11,8 +11,10 @@ from assembl.models import (
     Widget, User, Discussion, Idea, Criterion, IdeaCreatingWidget,
     MultiCriterionVotingWidget)
 from assembl.auth.util import get_permissions
+from assembl.auth import CrudPermissions
 from ..traversal import InstanceContext, CollectionContext
-from . import FORM_HEADER, JSON_HEADER, instance_put, collection_add
+from . import (
+    FORM_HEADER, JSON_HEADER, instance_put, collection_add, check_permissions)
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
@@ -20,6 +22,8 @@ from . import FORM_HEADER, JSON_HEADER, instance_put, collection_add
              Widget, (MultiCriterionVotingWidget,)),
              permission=P_READ, accept="application/json")
 def widget_view(request):
+    # IF_OWNED not applicable for widgets... so far
+    check_permissions(request, CrudPermissions.READ)
     user_id = authenticated_userid(request) or Everyone
     if user_id == Everyone:
         return HTTPUnauthorized()
@@ -46,10 +50,10 @@ def widget_view(request):
 
 
 @view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER,
-             ctx_instance_class=Widget, permission=P_READ,
-             accept="application/json")
+             ctx_instance_class=Widget, accept="application/json")
 def widget_instance_put(request):
-    # Deprecated
+    # IF_OWNED not applicable for widgets... so far
+    check_permissions(request, CrudPermissions.UPDATE)
     user_state = request.POST.get('user_state')
     if user_state:
         del request.POST['user_state']
@@ -77,6 +81,7 @@ def widget_userstate_get(request):
              # TODO @maparent: with permission=P_ADD_POST we had problems
              header=JSON_HEADER, name="user_state")
 def widget_userstate_put(request):
+    # No further permission check for user_state
     user_state = request.json_body
     if user_state:
         user_id = authenticated_userid(request) or Everyone

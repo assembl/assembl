@@ -24,9 +24,9 @@ def upgrade(pyramid_env):
     with context.begin_transaction():
             #No clean way to address constraints, and I didn't find a way to add JUST the constraint from sqlalchemy data structures
             constraintNameOld = "ck_"+config.get('db_schema')+"_"+config.get('db_user')+"_notification_subscription_notification_status"
-            op.execute("""ALTER TABLE assembl.assembl.notification_subscription DROP CONSTRAINT """+constraintNameOld)
+            op.execute("""ALTER TABLE notification_subscription DROP CONSTRAINT """+constraintNameOld)
             constraintNameNew = "ck_"+config.get('db_schema')+"_"+config.get('db_user')+"_notification_subscription_notification_subscription_status"
-            op.execute("""ALTER TABLE assembl.assembl.notification_subscription ADD CONSTRAINT """+constraintNameNew+"""
+            op.execute("""ALTER TABLE notification_subscription ADD CONSTRAINT """+constraintNameNew+"""
              CHECK (status IN ('ACTIVE', 'INACTIVE_DFT', 'UNSUBSCRIBED'))""")
 
 
@@ -53,7 +53,7 @@ def upgrade(pyramid_env):
                     schema=schema)
                 op.execute("""UPDATE notification_subscription SET 
                             status = status_temp""")
-                op.execute("""ALTER TABLE assembl.assembl.notification_subscription 
+                op.execute("""ALTER TABLE notification_subscription 
                 MODIFY status varchar(256) NOT NULL""")
                 op.drop_column('notification_subscription', 'status_temp')
 

@@ -27,8 +27,14 @@ def upgrade(pyramid_env):
     # Do stuff with the app's models here.
     from assembl import models as m
     db = m.get_session_maker()()
-    admin_email = context.config.get_section_option(
-        'app:main', 'assembl.admin_email')
+    admin_email = None
+    for section in ('app:main', 'app:assembl'):
+        try:
+            admin_email = context.config.get_section_option(
+                section, 'assembl.admin_email')
+        except:
+            pass
+    assert admin_email
     with transaction.manager:
         for s in db.query(m.AbstractMailbox):
             s.admin_sender = admin_email

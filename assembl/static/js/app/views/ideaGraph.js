@@ -103,7 +103,8 @@ define(['jit', 'common/context'], function ($jit, Ctx) {
                         var idea = allIdeasCollection.get(node.id);
                         var suffix = "";
                         if (idea !== undefined) {
-                            Ctx.DEPRECATEDsetCurrentIdea(idea);
+                            //Ctx.DEPRECATEDsetCurrentIdea(idea);
+                            throw new Error("I didn't port this to the new group separation");
                             var num_posts = idea.get('num_posts'),
                                 num_read_posts = idea.get('num_read_posts');
                             if (num_read_posts == num_posts) {

@@ -3,7 +3,7 @@
 define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/assemblPanel', 'views/groups/panelWrapper', 'utils/panelSpecTypes'],
     function (Marionette, ctx, panelSpec, AssemblPanel, PanelWrapper, PanelSpecTypes) {
 
-        /** Reprents the content of an entire group */
+        /** Represents the entire content of a single group */
         var groupContent = Marionette.CompositeView.extend({
             template: "#tmpl-groupContent",
             className: "groupContent",
@@ -34,6 +34,32 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                 return {
                     "Ctx": ctx
                 };
+            },
+
+            /**
+             * Set the given Idea as the current one to be edited
+             * @param  {Idea} [idea]
+             */
+            setCurrentIdea: function (idea) {
+              //console.log("setCurrentIdea() fired", idea);
+              if (idea === undefined) {
+                throw new Error("Setting the idea undefined isn't allowed.  Perhaps you meant null?");
+              }
+              if (idea != this.getCurrentIdea()) {
+                // console.log("About to set current idea on group:", this.cid);
+                this._currentIdea = idea;
+                this.trigger("idea:set", idea);
+              }
+
+            },
+
+            /**
+             * @return: undefined if not idea was set yet.  
+             * null if it was explicitely set to no idea.
+             * 
+             */
+            getCurrentIdea: function () {
+              return this._currentIdea;
             },
 
             closeGroup: function () {
@@ -165,6 +191,7 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
             },
 
             resetDebateState: function (skip_animation) {
+                // Ensure that the simple view is in debate state, and coherent.
                 if (this.findNavigationSidebarPanelSpec()) {
                     this.groupContainer.suspendResize();
                     this.model.set('navigationState', 'debate');
@@ -239,11 +266,11 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                     ideaPanel = this.findWrapperByType(PanelSpecTypes.IDEA_PANEL);
                 this.resetMessagePanelWidth();
                 if (ideaPanel != null && !ideaPanel.model.get('locked') && (!nav || this.model.get('navigationState') == 'debate')) {
-                    if (ctx.DEPRECATEDgetCurrentIdea() == undefined) {
-                        ideaPanel.minimizePanel();
-                    } else {
-                        ideaPanel.unminimizePanel();
-                    }
+                  if (this.getCurrentIdea()) {
+                    ideaPanel.unminimizePanel();
+                  } else {
+                    ideaPanel.minimizePanel();
+                  }
                 }
             },
 

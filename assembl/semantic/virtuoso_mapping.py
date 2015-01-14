@@ -1,6 +1,7 @@
 from os import listdir
 from os.path import join, dirname
 from inspect import isabstract
+from threading import Lock
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
@@ -306,6 +307,8 @@ class AssemblQuadStorageManager(object):
     main_graph_iri = QUADNAMES.main_graph_iri
     # TODO: Version mappings
     current_discussion_storage_version = 0
+    # Temporary fix for Virtuoso issue 285
+    quadstore_lock = Lock()
 
     def __init__(self, session=None, nsm=None):
         self.session = session or get_session()
@@ -455,8 +458,35 @@ class AssemblQuadStorageManager(object):
             ).first()
         return version[0] if version else 0
 
+    def drop_all_discussion_storages_but(self, discussion_id):
+        # This to get around virtuoso issue 285
+        # TODO: Make sure this is called by only one thread
+        config = get_config()
+        from assembl.models import Discussion
+        discussion_full_name = '.'.join((
+            config.get('db_schema'), config.get('db_user'),
+            Discussion.__tablename__))
+        storages = list(self.session.execute("""
+            SPARQL SELECT distinct ?s where {
+                graph virtrdf: {
+                ?s a virtrdf:QuadStorage .
+                ?s virtrdf:qsUserMaps ?um .
+                ?um ?pn ?gm .
+                ?gm a virtrdf:QuadMap .
+                ?gm virtrdf:qmUserSubMaps ?usm .
+                ?usm ?pm ?m .
+                ?m a virtrdf:QuadMap ;
+                   virtrdf:qmTableName "%s"  }}""" % (discussion_full_name, )))
+        # storage names take the form quadnames:discussion_14_storage
+        storage_nums = [int(s[0].split('_')[-2]) for s in storages]
+        for storage_num in storage_nums:
+            if storage_num == discussion_id:
+                continue
+            self.drop_discussion_storage(storage_num, True)
+
     def ensure_discussion_storage(self, discussion_id):
         self.declare_functions()
+        self.drop_all_discussion_storages_but(discussion_id)
         version = self.discussion_storage_version(discussion_id)
         if (version is not None
                 and version < self.current_discussion_storage_version):
@@ -516,6 +546,7 @@ class AssemblQuadStorageManager(object):
             self.drop_storage(self.discussion_storage_name(id), force)
 
     def as_quads(self, discussion_id):
+        self.quadstore_lock.acquire()
         self.ensure_discussion_storage(discussion_id)
         d_storage_name = self.discussion_storage_name(discussion_id)
         v = get_virtuoso(self.session, d_storage_name)
@@ -531,6 +562,7 @@ class AssemblQuadStorageManager(object):
                 l = l.rstrip('.')
                 l += ' ' + g.n3(self.nsm)
                 quads += l + ' .\n'
+        self.quadstore_lock.release()
         return quads
 
     def local_uri(self):

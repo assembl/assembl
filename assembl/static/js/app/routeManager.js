@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'app', 'common/context', 'models/user', 'objects/storage', 'views/navBar', 'views/groups/groupContainer', 'common/collectionManager', 'objects/viewsFactory', 'views/admin/adminDiscussion', 'views/admin/adminNotificationSubscriptions', 'views/admin/adminPartners', 'views/user/userNotificationSubscriptions', 'views/user/profile', 'views/authorization', 'utils/permissions'],
-    function (Marionette, Assembl, Ctx, User, storage, navBar, GroupContainer, CollectionManager, viewsFactory, adminDiscussion, adminNotificationSubscriptions, adminPartners, userNotificationSubscriptions, userProfile, Authorization, Permissions) {
+define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'objects/storage', 'views/navBar', 'views/groups/groupContainer', 'common/collectionManager', 'objects/viewsFactory', 'views/admin/adminDiscussion', 'views/admin/adminNotificationSubscriptions', 'views/admin/adminPartners', 'views/user/userNotificationSubscriptions', 'views/user/profile', 'views/authorization', 'utils/permissions'],
+    function (Marionette, Assembl, Ctx, Agents, storage, navBar, GroupContainer, CollectionManager, viewsFactory, adminDiscussion, adminNotificationSubscriptions, adminPartners, userNotificationSubscriptions, userProfile, Authorization, Permissions) {
 
         var routeManager = Marionette.Controller.extend({
 
@@ -81,13 +81,28 @@ define(['backbone.marionette', 'app', 'common/context', 'models/user', 'objects/
                 window.history.pushState('object or string', 'Title', '../');
             },
 
+            idea: function (id) {
+                //TODO: add new behavior to show messageList Panel
+                this.restoreViews();
+
+                setTimeout(function () {
+                    //TODO: fix this horrible hack
+                    //We really need to address panels explicitely
+                    Assembl.vent.trigger("navigation:selected", 'debate');
+                    Assembl.vent.trigger('ideaList:selectIdea', id);
+                }, 0);
+                //TODO: fix this horrible hack that prevents calling
+                //showMessageById over and over.
+                window.history.pushState('object or string', 'Title', '../');
+            },
+
             loadCurrentUser: function () {
                 if (Ctx.getCurrentUserId()) {
-                    this.user = new User.Model();
+                    this.user = new Agents.Model();
                     this.user.fetchFromScriptTag('current-user-json');
                 }
                 else {
-                    this.user = new User.Collection().getUnknownUser();
+                    this.user = new Agents.Collection().getUnknownUser();
                 }
                 this.user.fetchPermissionsFromScripTag();
                 Ctx.setCurrentUser(this.user);
