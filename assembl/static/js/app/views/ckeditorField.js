@@ -12,7 +12,8 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
              */
             CKEDITOR_CONFIG: {
                 toolbar: [
-                    ['Bold', 'Italic', 'Outdent', 'Indent', 'NumberedList', 'BulletedList']
+                    ['Bold', 'Italic', 'Outdent', 'Indent', 'NumberedList', 'BulletedList'],
+                    [ 'Link', 'Unlink', 'Anchor' ]
                 ],
                 extraPlugins: 'sharedspace',
                 removePlugins: 'floatingspace,resize',
