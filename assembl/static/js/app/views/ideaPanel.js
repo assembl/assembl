@@ -285,7 +285,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     console.log("ideaPanel::serializeData()");
                 }
                 var subIdeas = {},
-                    votable_widgets = [],
                     currentUser = Ctx.getCurrentUser(),
                     canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
                     canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
@@ -294,8 +293,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 if (this.model) {
                     //console.log("there is a model");
                     subIdeas = this.model.getChildren();
-                    votable_widgets = this.model.getVotableOnWhichWidgets();
-                    //console.log("votable_widgets:", votable_widgets);
                     contributors = this.model.get('contributors');
                 }
                 else
@@ -307,7 +304,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     idea: this.model,
                     contributors: contributors,
                     subIdeas: subIdeas,
-                    votable_widgets: votable_widgets,
                     canEdit: canEdit,
                     i18n: i18n,
                     getExtractsLabel: this.getExtractsLabel,
