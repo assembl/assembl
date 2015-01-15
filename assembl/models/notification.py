@@ -801,7 +801,7 @@ class Notification(Base):
         """
         prefered_email_account = self.first_matching_subscription.user.get_preferred_email_account()
         if not prefered_email_account:
-            raise MissingEmailException("Missing email account for account "+ self.first_matching_subscription.user.id)
+            raise MissingEmailException("Missing email account for account "+ str(self.first_matching_subscription.user.id))
         if not prefered_email_account.verified:
             raise UnverifiedEmailException("Email account for email "+ prefered_email_account.email +"is not verified")
         to_email = prefered_email_account.email

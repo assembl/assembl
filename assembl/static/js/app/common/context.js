@@ -537,17 +537,25 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 var inspiration_widgets = null;
                 var inspiration_widget_url = null;
                 var inspiration_widget_configure_url = null;
-                var inspiration_widget_create_url = null;
+                var vote_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/votable_by_widget");
 
                 var locale_parameter = "&locale=" + assembl_locale;
 
-                inspiration_widget_create_url = "/static/widget/creativity/?admin=1" + locale_parameter + "#/admin/create_from_idea?idea="
+                var inspiration_widget_create_url = "/static/widget/creativity/?admin=1" + locale_parameter + "#/admin/create_from_idea?idea="
                     + encodeURIComponent(idea_id + "?view=creativity_widget"); // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
                 returned_data["inspiration_widget_create_url"] = inspiration_widget_create_url;
 
+                var vote_widget_create_url = "/static/widget/vote/?admin=1#/admin/create_from_idea?idea=" + encodeURIComponent(idea_id + "?view=creativity_widget"); //TODO: add locale_parameter?
+                returned_data["vote_widget_create_url"] = vote_widget_create_url;
 
-                $.getJSON(inspiration_widgets_url, function (data) {
-                    //console.log("ancestor_inspiration_widgets data: ", data);
+
+                $.when(
+                    $.getJSON(inspiration_widgets_url),
+                    $.getJSON(vote_widgets_url)
+                ).done(function(result, result2){
+                    // done() callback parameters are [data, textStatus, jqXHR], so we extract data
+                    var data = result[0];
+                    var data2 = result2[0];
 
                     if (data
                         && data instanceof Array
@@ -574,7 +582,25 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                             + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
                         returned_data["inspiration_widget_configure_url"] = inspiration_widget_configure_url;
                     }
-                    //that.cachedWidgetDataAssociatedToIdeas[idea_id] = returned_data;
+
+                    if (data2
+                        && data2 instanceof Array
+                        && data2.length > 0
+                        ) {
+                        var vote_widgets = [];
+                        for ( var i = 0; i < data2.length; ++i )
+                        {
+                            vote_widgets.push({
+                                widget_uri: data2[i],
+                                vote_url: "/static/widget/vote/?config=" + data2[i] +encodeURIComponent("?target="+idea_id),
+                                configure_url: "/static/widget/vote/?admin=1#/admin/configure_instance?widget_uri=" +data2[i] + "&target=" + idea_id
+                            });
+                        }
+                        returned_data["vote_widgets"] = vote_widgets;
+                    }
+                    
+                    //deferred.resolve(returned_data); // we rather resolve even if a request failed, so that we still get the widget instanciation links
+                }).always(function(){
                     deferred.resolve(returned_data);
                 });
 

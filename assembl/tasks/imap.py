@@ -4,6 +4,7 @@ from . import init_task_config, config_celery_app
 
 # broker specified
 imap_celery_app = Celery('celery_tasks.imap')
+imap_celery_app._preconf = {"CELERY_DEFAULT_QUEUE": 'imap'}
 
 
 @imap_celery_app.task(ignore_result=True)

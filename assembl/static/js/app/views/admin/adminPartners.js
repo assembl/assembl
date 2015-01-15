@@ -7,7 +7,8 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
             template: '#tmpl-adminPartners',
             className: 'admin-notifications',
             ui: {
-                partners: '.js_add-partner'
+                partners: '.js_add-partner',
+                close: '.bx-alert-success .bx-close'
             },
             initialize: function () {
                 var that = this,
@@ -26,7 +27,8 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
             },
 
             events: {
-                'click @ui.partners': 'addPartner'
+                'click @ui.partners': 'addPartner',
+                'click @ui.close': 'close'
             },
 
             serializeData: function () {
@@ -81,7 +83,7 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
                 });
 
                 if(!$(controls).hasClass('error')){
-                    var inputs = document.querySelectorAll('#form-partner input[required=required]');
+                    var inputs = document.querySelectorAll('#form-partner *[required=required]');
                     $(controls).removeClass('success');
                     $(inputs).val('');
 

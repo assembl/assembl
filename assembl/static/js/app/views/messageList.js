@@ -358,14 +358,20 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     //console.log("messageList:syncWithCurrentIdea(): Query is now: ",this.currentQuery._query);
                     this.render();
                 }
+            },
 
+            showInspireMeIfAvailable: function(){
+                var currentIdea = this.getContainingGroup().getCurrentIdea();
+                if ( !currentIdea )
+                  return;
+                var that = this;
 
                 var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(currentIdea.getId());
                 that.ui.inspireMe.addClass('hidden');
                 //that.ui.inspireMe.hide();
                 promise.done(
                     function (data) {
-                        //console.log("syncWithCurrentIdea getWidgetDataAssociatedToIdeaPromise received data: ", data);
+                        //console.log("showInspireMeIfAvailable getWidgetDataAssociatedToIdeaPromise received data: ", data);
                         if ("inspiration_widget_url" in data && data.inspiration_widget_url) {
                             that.inspireMeLink = data.inspiration_widget_url;
                             //console.log("change the href of the inspireMe link");
@@ -385,7 +391,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         }
                     }
                 );
-
             },
 
             /**
@@ -1161,7 +1166,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         that.ui.stickyBar.fadeIn();
                     }
 
-                })
+                });
+
+                this.showInspireMeIfAvailable();
 
             },
             /**

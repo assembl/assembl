@@ -11,6 +11,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             inspiration_widgets: null,
             inspiration_widget_url: null,
             inspiration_widget_configure_url: null,
+            vote_widget_create_url: null,
+            vote_widgets: null,
 
 
             // overwritten properties and methods
@@ -33,14 +35,11 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             serializeData: function () {
-                var votable_widgets = [],
-                    currentUser = Ctx.getCurrentUser(),
+                var currentUser = Ctx.getCurrentUser(),
                     idea = null;
 
                 if (this.model) {
                     //console.log("there is a model");
-                    votable_widgets = this.model.getVotableOnWhichWidgets();
-                    //console.log("votable_widgets:", votable_widgets);
                     idea = this.model;
                 }
 
@@ -50,11 +49,12 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     idea: idea,
                     canUseWidget: currentUser.can(Permissions.ADD_POST),
                     canCreateWidgets: currentUser.can(Permissions.ADMIN_DISCUSSION),
-                    votable_widgets: votable_widgets,
                     inspiration_widget_create_url: this.inspiration_widget_create_url,
                     inspiration_widgets: this.inspiration_widgets,
                     inspiration_widget_url: this.inspiration_widget_url,
-                    inspiration_widget_configure_url: this.inspiration_widget_configure_url
+                    inspiration_widget_configure_url: this.inspiration_widget_configure_url,
+                    vote_widget_create_url: this.vote_widget_create_url,
+                    vote_widgets: this.vote_widgets
                 };
             },
 
@@ -79,6 +79,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 this.inspiration_widgets = null;
                 this.inspiration_widget_url = null;
                 this.inspiration_widget_configure_url = null;
+                this.vote_widget_create_url = null;
+                this.vote_widgets = null;
             },
 
             populateAssociatedWidgetData: function () {
@@ -89,6 +91,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     previous.inspiration_widgets = that.inspiration_widgets;
                     previous.inspiration_widget_url = that.inspiration_widget_url;
                     previous.inspiration_widget_configure_url = that.inspiration_widget_configure_url;
+                    previous.vote_widget_create_url = that.vote_widget_create_url;
+                    previous.vote_widgets = that.vote_widgets;
                     var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(this.model.getId());
                     promise.done(
                         function (data) {
@@ -97,29 +101,40 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                             that.resetAssociatedWidgetData();
 
                             if ("inspiration_widget_create_url" in data) {
-                                // that.model.set("inspiration_widget_create_url", data.inspiration_widget_create_url);
                                 that.inspiration_widget_create_url = data.inspiration_widget_create_url;
                             }
 
                             if ("inspiration_widgets" in data) {
-                                // that.model.set("inspiration_widgets", data.inspiration_widgets);
                                 that.inspiration_widgets = data.inspiration_widgets;
                             }
 
                             if ("inspiration_widget_url" in data) {
-                                // that.model.set("inspiration_widget_url", data.inspiration_widget_url);
                                 that.inspiration_widget_url = data.inspiration_widget_url;
                             }
 
                             if ("inspiration_widget_configure_url" in data) {
-                                // that.model.set("inspiration_widget_configure_url", data.inspiration_widget_configure_url);
                                 that.inspiration_widget_configure_url = data.inspiration_widget_configure_url;
                                 //console.log("inspiration_widget_configure_url: ", data.inspiration_widget_configure_url);
                             }
-                            if (previous.inspiration_widget_create_url != that.inspiration_widget_create_url
+
+                            if ("vote_widget_create_url" in data) {
+                                that.vote_widget_create_url = data.vote_widget_create_url;
+                                //console.log("vote_widget_create_url: ", data.vote_widget_create_url);
+                            }
+
+                            if ("vote_widgets" in data) {
+                                that.vote_widgets = data.vote_widgets;
+                                //console.log("vote_widgets: ", data.vote_widgets);
+                            }
+
+                            if (
+                                previous.inspiration_widget_create_url != that.inspiration_widget_create_url
                                 || previous.inspiration_widgets != that.inspiration_widgets
                                 || previous.inspiration_widget_url != that.inspiration_widget_url
-                                || previous.inspiration_widget_configure_url != that.inspiration_widget_configure_url) {
+                                || previous.inspiration_widget_configure_url != that.inspiration_widget_configure_url
+                                || previous.vote_widget_create_url != that.vote_widget_create_url
+                                || previous.vote_widgets != that.vote_widgets
+                            ) {
 
                                 that.render();
                             }
@@ -285,7 +300,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     console.log("ideaPanel::serializeData()");
                 }
                 var subIdeas = {},
-                    votable_widgets = [],
                     currentUser = Ctx.getCurrentUser(),
                     canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
                     canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
@@ -294,8 +308,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 if (this.model) {
                     //console.log("there is a model");
                     subIdeas = this.model.getChildren();
-                    votable_widgets = this.model.getVotableOnWhichWidgets();
-                    //console.log("votable_widgets:", votable_widgets);
                     contributors = this.model.get('contributors');
                 }
                 else
@@ -307,7 +319,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     idea: this.model,
                     contributors: contributors,
                     subIdeas: subIdeas,
-                    votable_widgets: votable_widgets,
                     canEdit: canEdit,
                     i18n: i18n,
                     getExtractsLabel: this.getExtractsLabel,

@@ -49,7 +49,8 @@ def config_celery_app(celery_app, settings):
             'assembl.tasks.notification_dispatch.processPostCreatedTask': {
                 'queue': 'notification_dispatch'},
             'assembl.tasks.notify.notify': {'queue': 'notify'},
-            'process_pending_notifications': {'queue': 'notify'},
+            'assembl.tasks.notify.process_pending_notifications': {
+                'queue': 'notify'},
         }})
 
 
@@ -102,3 +103,4 @@ def includeme(config):
     config.include('.imap')
     config.include('.notification_dispatch')
     config.include('.notify')
+    config.include('.source_reader')
