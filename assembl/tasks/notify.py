@@ -17,7 +17,9 @@ CELERYBEAT_SCHEDULE = {
 
 # broker specified
 notify_celery_app = Celery('celery_tasks.notify')
-notify_celery_app._preconf = {"CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE}
+notify_celery_app._preconf = {
+    "CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE,
+    "CELERY_DEFAULT_QUEUE": 'notify'}
 
 watcher = None
 
