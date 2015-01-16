@@ -386,7 +386,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
 
                 this.$el.trigger('dragleave');
 
-                var idea = Ctx.getDraggedIdea();
+                var idea = Ctx.popDraggedIdea();
                 if (idea) {
                     return; // Do nothing
                 }

@@ -283,34 +283,6 @@ _:-ms-input-placeholder, :root .editable.groupBody .groupPanel header ~ .panelCo
   bottom: 2px !important;
 }
 
-// dropzone above the panel-body
-// -------
-.panel-bodyabove {
-  //Currently non-functionnal, disabling: benoitg-2014-05-14
-  display: none;
-  @include z-index("float");
-
-  position: absolute;
-  top: 30px;
-  right: 0;
-  left: 0;
-  height: 10px;
-}
-
-// dropzone below the panel-body
-// -------
-.panel-bodybelow {
-  //Currently non-functionnal, disabling: benoitg-2014-05-14
-  display: none;
-  @include z-index("float");
-
-  position: absolute;
-  bottom: 30px;
-  right: 0;
-  left: 0;
-  height: 15px;
-}
-
 // The footer
 // ----------
 .panel-footer {

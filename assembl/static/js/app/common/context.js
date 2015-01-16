@@ -627,7 +627,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             /**
              * @return {Idea}
              */
-            getDraggedIdea: function () {
+            popDraggedIdea: function () {
                 if (this.ideaList && this.draggedIdea) {
 
                     Assembl.vent.trigger('ideaList:removeIdea', this.draggedIdea);
