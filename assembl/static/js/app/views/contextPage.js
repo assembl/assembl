@@ -14,6 +14,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 'add change': 'render'
             },
             serializeData: function () {
+
+                this.collection.models = _.reject(this.collection.models, function(model){
+                    return model.get('is_initiator') === true
+                });
+
                 return {
                     organizations: this.collection.models,
                     ctx: Ctx
@@ -1182,6 +1187,82 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
         });
 
+        var Instigator = Marionette.ItemView.extend({
+            template: '#tmpl-instigator',
+            initialize: function(){
+                var that = this,
+                    collectionManager = new CollectionManager();
+
+                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(function(partners){
+                    that.instigator = _.find(partners.models, function(partner){
+                        return partner.get('is_initiator')
+                    });
+                    that.render();
+                });
+
+                this.editInstigator = false;
+            },
+
+            ui: {
+              editDescription: '.js_editDescription'
+            },
+
+            events: {
+              'click @ui.editDescription': 'editDescription'
+            },
+
+            collectionEvents: {
+                'add change': 'render'
+            },
+
+            serializeData: function () {
+                return {
+                   instigator: this.instigator,
+                   editInstigator: this.editInstigator
+                }
+            },
+
+            onRender: function(){
+                if(this.editInstigator){
+                  this.renderCKEditorInstigator();
+                }
+            },
+
+            renderCKEditorInstigator: function () {
+                var that = this,
+                    area = this.$('.instigator-editor');
+
+                var uri = this.instigator.id.split('/')[1];
+                this.instigator.url = Ctx.getApiV2DiscussionUrl('partner_organizations/') + uri;
+
+                var descriptionText = this.instigator.get('description');
+
+                if (descriptionText.length > 0) {
+
+                    this.description = new CKEditorField({
+                        'model': this.instigator,
+                        'modelProp': 'description'
+                    });
+                }
+
+                this.description.on('save cancel', function () {
+                    that.editInstigator = false;
+                    that.render();
+                });
+
+                this.description.renderTo(area);
+                this.description.changeToEditMode();
+            },
+
+            editDescription: function(){
+              if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
+                this.editInstigator = true;
+                this.render();
+              }
+            }
+
+        });
+
         var contextPage = Marionette.LayoutView.extend({
             template: '#tmpl-contextPage',
             panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
@@ -1194,7 +1275,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             regions: {
                 organizations: '#context-partners',
                 synthesis: '#context-synthesis',
-                statistics: '#context-statistics'
+                statistics: '#context-statistics',
+                instigator: '#context-instigator'
             },
 
             events: {
@@ -1231,8 +1313,10 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             onRender: function () {
                 var partners = new Partners(),
                     synthesis = new Synthesis(),
-                    statistics = new Statistics();
+                    statistics = new Statistics(),
+                    instigator = new Instigator();
 
+                this.instigator.show(instigator);
                 this.statistics.show(statistics);
                 this.synthesis.show(synthesis);
                 this.organizations.show(partners);
@@ -1246,19 +1330,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
 
                 $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
-                    //console.log("discussion successfully loaded: ", discussion);
 
                     that.objectivesField = new CKEditorField({
                         'model': discussion,
                         'modelProp': 'objectives',
                         'placeholder': 'Objectives',
-                        'canEdit': canEdit
-                    });
-                    // add editable "instigator" field
-                    that.instigatorField = new CKEditorField({
-                        'model': discussion,
-                        'modelProp': 'instigator',
-                        'placeholder': 'Instigator',
                         'canEdit': canEdit
                     });
                     // add editable "introduction" field
@@ -1270,7 +1346,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     });
 
                     that.$('.objectives').empty();
-                    that.$('.instigator').empty();
                     that.$('.introduction').empty();
 
                     // we implement here get() and save() methods (needed by CKEditor), so we mock a model instance
@@ -1314,13 +1389,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     that.$(".js_discussionTitle").html(discussion.topic);
 
                     that.objectivesField.renderTo(that.$('.objectives'));
-                    that.instigatorField.renderTo(that.$('.instigator'));
                     that.introductionField.renderTo(that.$('.introduction'));
 
                     if (canEdit) {
                         // Not clear why this is necessary.
                         that.objectivesField.delegateEvents();
-                        that.instigatorField.delegateEvents();
                         that.introductionField.delegateEvents();
                     }
 

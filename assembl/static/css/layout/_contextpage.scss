@@ -178,3 +178,15 @@
   }
 
 }
+
+#context-instigator {
+  .instigator{
+    font-weight: 400;
+    border: 1px solid transparent;
+    overflow-y: hidden;
+    &:hover{
+      @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
+      border: 1px solid #cccccc;
+    }
+  }
+}
