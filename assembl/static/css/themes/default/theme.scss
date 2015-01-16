@@ -31,22 +31,43 @@
   }
 }
 
-.homePanel .theme_homePanelTitleZone {
-  background: url(img/crowd.jpg) center center no-repeat;
-  background-size: auto;
-  height: 227px;
-  display: table;
-  width: 100%;
-  padding: 0;
-  > * {
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
+body.default{
+  .white-mark {
+    background: url(img/crowd.jpg) center center no-repeat;
+    background-size: cover;
+    height: 227px;
+    display: table;
+    width: 100%;
+    padding: 0;
+    > * {
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .white-mark-title {
+      text-align: center;
+      font-size: 50px;
+      color: #ffffff;
+      margin: 0;
+      line-height: 227px;
+    }
   }
-  .theme_homePanelDiscussionTitle {
-    margin: 0;
-    text-align: center;
-    font-size: 50px;
-    color: white;
+}
+
+body.bluenove{
+  .white-mark {
+    background: url(img/background.jpg) center center no-repeat;
+    background-size: cover;
+    height: 227px;
+    display: table;
+    width: 100%;
+    padding: 0;
+    .white-mark-title {
+      text-align: center;
+      font-size: 50px;
+      color: #484848;
+      margin: 0;
+      line-height: 227px;
+    }
   }
 }
