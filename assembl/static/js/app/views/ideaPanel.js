@@ -216,7 +216,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
             modelEvents: {
                 //Do NOT listen to change here
-                'replacedBy': 'onReplaced',
+                //'replacedBy': 'onReplaced',
                 'change': 'render'
             },
             events: {
@@ -331,7 +331,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     editingDefinition: this.editingDefinition,
                     editingTitle: this.editingTitle
                 };
-                //console.log("dataset: ", dataset);
 
                 return dataset;
             },
@@ -422,13 +421,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 });
                 shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
 
-                this.longTitleField = new CKEditorField({
+                // the content is replace by CKEditorField not necessary to init with
+                /*this.longTitleField = new CKEditorField({
                     'model': this.model,
                     'modelProp': 'longTitle',
                     'placeholder': this.model.getLongTitleDisplayText(),
                     'canEdit': canEditNextSynthesis,
                     'showPlaceholderOnEditIfEmpty': true
-                });
+                });*/
                 //this.longTitleField.renderTo(this.$('.ideaPanel-longtitle'));
 
                 this.commentView = new MessageSendView({
