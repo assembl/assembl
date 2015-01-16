@@ -10,6 +10,9 @@ def is_js(msg):
     for (filename, lineno) in msg.locations:
         if filename.endswith('.js'):
             return True
+        # Also send notification data
+        if filename == "assembl/models/notification.py":
+            return True
 
 po2json_script = join(dirname(dirname(dirname(__file__))),
                       'node_modules', '.bin', 'po2json')
