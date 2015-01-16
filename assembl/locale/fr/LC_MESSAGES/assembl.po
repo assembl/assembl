@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-01-16 17:03-0500\n"
+"POT-Creation-Date: 2015-01-16 17:18-0500\n"
 "PO-Revision-Date: 2015-01-16 21:16+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: French "
@@ -49,6 +49,22 @@ msgstr "${val} ne peut être sérialisé: ${err}"
 #: assembl/lib/types.py:80
 msgid "${val} is not a string: ${err}"
 msgstr "${val} n'est pas une chaîne: ${err}"
+
+#: assembl/models/notification.py:484
+msgid "A periodic synthesis of the discussion is posted by the moderator"
+msgstr "Une synthèse périodique de la discussion a été envoyée par le modérateur"
+
+#: assembl/models/notification.py:512
+msgid "Any message is posted to the discussion"
+msgstr "N'importe quel message est envoyé à la discussion"
+
+#: assembl/models/notification.py:541
+msgid "Someone directly responds to any message you posted"
+msgstr "Quelqu'un répond directement à un de vos messages"
+
+#: assembl/models/notification.py:895
+msgid "SYNTHESIS: "
+msgstr "SYNTHÈSE: "
 
 #: assembl/static/js/app/common/context.js:106
 msgid "Message titles"

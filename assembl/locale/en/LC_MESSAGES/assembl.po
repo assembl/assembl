@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-01-16 17:03-0500\n"
+"POT-Creation-Date: 2015-01-16 17:18-0500\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -42,6 +42,22 @@ msgstr ""
 
 #: assembl/lib/types.py:80
 msgid "${val} is not a string: ${err}"
+msgstr ""
+
+#: assembl/models/notification.py:484
+msgid "A periodic synthesis of the discussion is posted by the moderator"
+msgstr ""
+
+#: assembl/models/notification.py:512
+msgid "Any message is posted to the discussion"
+msgstr ""
+
+#: assembl/models/notification.py:541
+msgid "Someone directly responds to any message you posted"
+msgstr ""
+
+#: assembl/models/notification.py:895
+msgid "SYNTHESIS: "
 msgstr ""
 
 #: assembl/static/js/app/common/context.js:106
@@ -2314,19 +2330,7 @@ msgstr ""
 #~ msgid "marked as a nugget"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Assembl a problem that requires "
-#~ "recharging. Do not worry, your writing"
-#~ " current messages will not be lost."
-#~ msgstr ""
-
 #~ msgid "see you in a minute on Assembl!"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you are in contact with the "
-#~ "technical team, please tell them the "
-#~ "following message:"
 #~ msgstr ""
 
 #~ msgid "dismiss"

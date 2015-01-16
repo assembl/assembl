@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-01-16 17:03-0500\n"
+"POT-Creation-Date: 2015-01-16 17:18-0500\n"
 "PO-Revision-Date: 2015-01-09 22:35+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: English (Canada) "
@@ -47,6 +47,24 @@ msgstr ""
 #: assembl/lib/types.py:80
 msgid "${val} is not a string: ${err}"
 msgstr ""
+
+#: assembl/models/notification.py:484
+msgid "A periodic synthesis of the discussion is posted by the moderator"
+msgstr ""
+
+#: assembl/models/notification.py:512
+msgid "Any message is posted to the discussion"
+msgstr ""
+
+#: assembl/models/notification.py:541
+msgid "Someone directly responds to any message you posted"
+msgstr ""
+
+#: assembl/models/notification.py:895
+#, fuzzy
+#| msgid "Are a synthesis"
+msgid "SYNTHESIS: "
+msgstr "Write a synthesis"
 
 #: assembl/static/js/app/common/context.js:106
 msgid "Message titles"
@@ -1912,18 +1930,9 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ""
-#~ "Assembl a problem that requires "
-#~ "recharging. Do not worry, your writing"
-#~ " current messages will not be lost."
 #~ msgstr ""
 
 #~ msgid "see you in a minute on Assembl!"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you are in contact with the "
-#~ "technical team, please tell them the "
-#~ "following message:"
 #~ msgstr ""
 
 #~ msgid "dismiss"
