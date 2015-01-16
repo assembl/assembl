@@ -71,6 +71,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'common/collectionManager
                 })
 
                 return {
+                    i18n: i18n,
                     UserNotifications: this.collection.models,
                     addableGlobalSubscriptions: addableGlobalSubscriptions,
                     isUserSubscribed: this.roles.isUserSubscribed()
