@@ -140,6 +140,9 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                 this.model = newObject;
             },
 
+            getContainingGroup: function () {
+                return this._groupContent;
+            },
 
             /**
              * @event
