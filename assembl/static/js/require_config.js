@@ -23,8 +23,8 @@ var requirejs_config = {
         'ckeditor': '../bower/ckeditor/ckeditor',
         'ckeditor-sharedspace': '../lib/ckeditor-sharedcontainer/plugin',
 
-        'moment': '../bower/momentjs/min/moment-with-locales.min',
-        'raven': '../bower/raven-js/dist/raven.min',
+        'moment': '../bower/momentjs/min/moment-with-locales',
+        'raven': '../bower/raven-js/dist/raven',
         'raven.backbone': '../bower/raven-js/plugins/backbone',
         'raven.console': '../bower/raven-js/plugins/console',
         'raven.require': '../bower/raven-js/plugins/require',
@@ -33,7 +33,7 @@ var requirejs_config = {
         'cytoscape': '../bower/cytoscape/dist/cytoscape',
         'jit': '../bower/jit/Jit/jit',
         'jed': '../bower/jed/jed',
-        'd3': '../bower/d3/d3.min',
+        'd3': '../bower/d3/d3',
         'bootstrap': '../lib/bootstrap',
         'dropdown': '../lib/dropdown'
     },
