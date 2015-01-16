@@ -1,4 +1,21 @@
-/* ASSEMBL THEME */
+/* BLUENOVE THEME */
+body.bluenove{
+  .white-mark {
+    background: url(img/background.jpg) center center no-repeat;
+    background-size: cover;
+    height: 227px;
+    display: table;
+    width: 100%;
+    padding: 0;
+    .white-mark-title {
+      text-align: center;
+      font-size: 50px;
+      color: #484848;
+      margin: 0;
+      line-height: 227px;
+    }
+  }
+}
 
 .assembl-logo {
   font-size: 18px;
@@ -31,22 +48,3 @@
     font-size: 80%;
   }
 }
-
-body.default{
-  .white-mark {
-    background: url(img/crowd.jpg) center center no-repeat;
-    background-size: cover;
-    height: 227px;
-    display: table;
-    width: 100%;
-    padding: 0;
-    .white-mark-title {
-      text-align: center;
-      font-size: 50px;
-      color: #FFFFFF;
-      margin: 0;
-      line-height: 227px;;
-    }
-  }
-}
-
