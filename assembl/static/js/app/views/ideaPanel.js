@@ -429,7 +429,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     'canEdit': canEditNextSynthesis,
                     'showPlaceholderOnEditIfEmpty': true
                 });
-                this.longTitleField.renderTo(this.$('.ideaPanel-longtitle'));
+                //this.longTitleField.renderTo(this.$('.ideaPanel-longtitle'));
 
                 this.commentView = new MessageSendView({
                     'allow_setting_subject': false,

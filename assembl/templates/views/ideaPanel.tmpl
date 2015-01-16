@@ -10,7 +10,9 @@
            <% if( editingTitle ) { %>
 						 <div class="ideaPanel-longtitle-editor"></div>
 					 <% } else { %>
-            <div class="ideaPanel-longtitle js_editLongTitle" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}"></div>
+            <div class="ideaPanel-longtitle js_editLongTitle" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}">
+            	<%= idea.getLongTitleDisplayText() %>
+            </div>
          	 <% } %>
 
           <% } %>
