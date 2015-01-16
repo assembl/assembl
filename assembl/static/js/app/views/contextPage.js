@@ -1259,6 +1259,14 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 this.editInstigator = true;
                 this.render();
               }
+            },
+
+            templateHelpers: function(){
+                return {
+                    editInstigator: function(){
+                      return '/' + Ctx.getDiscussionSlug() + '/partners';
+                    }
+                }
             }
 
         });

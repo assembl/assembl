@@ -8,6 +8,8 @@
     	<% }else{ %>
     		<div class="instigator js_editDescription"><%= instigator.get('description') %></div>
     	<% } %>
+    <% }else{ %>
+       <p>{{ gettext('there are no instigator for this discussion') }} - <a href="<%= editInstigator() %>"> {{ gettext('edit instigator') }} </a></p>
     <% } %>
   </div>
  </div>
