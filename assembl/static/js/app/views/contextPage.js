@@ -1042,20 +1042,30 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                             "",
                             {
                                 "active_authors_during_current_period": [
-                                    i18n.sprintf(i18n.gettext('%d participants have contributed in the %s'), authors_in_period_total, statsPeriodName),
+                                    i18n.sprintf(i18n.ngettext(
+                                        '%d participant has contributed in the %s',
+                                        '%d participants have contributed in the %s',
+                                        authors_in_period_total), authors_in_period_total, statsPeriodName),
                                     authors_in_period_total,
                                     messages_in_period_total,
                                     "#FFA700",
                                     {
                                         "new_authors": [
-                                            i18n.sprintf(i18n.gettext("%d new participants started contributing in the %s"), new_authors_in_period_total, statsPeriodName),
+                                            i18n.sprintf(i18n.ngettext(
+                                                "%d new participant started contributing in the %s",
+                                                "%d new participants started contributing in the %s",
+                                                new_authors_in_period_total), new_authors_in_period_total, statsPeriodName),
                                             new_authors_in_period_total,
                                             messages_in_period_by_new_authors_total,
                                             "#FFBD40",
                                             {}
                                         ],
                                         "still_active_authors": [
-                                            i18n.sprintf(i18n.gettext("%d active participants had contributed before %s"), authors_in_period_total - new_authors_in_period_total, statsPeriodName),
+                                            i18n.sprintf(i18n.ngettext(
+                                                "%d active participant had contributed before %s",
+                                                "%d active participants had contributed before %s",
+                                                    authors_in_period_total - new_authors_in_period_total),
+                                                authors_in_period_total - new_authors_in_period_total, statsPeriodName),
                                                 authors_in_period_total - new_authors_in_period_total,
                                                 messages_in_period_total - messages_in_period_by_new_authors_total,
                                             "#FFD37F",
@@ -1064,7 +1074,10 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                                     }
                                 ],
                                 "inactive_authors_during_current_period": [
-                                    i18n.sprintf(i18n.gettext("%d participants' last contribution was prior to %s"), authors_except_those_in_period_total, statsPeriodName),
+                                    i18n.sprintf(i18n.ngettext(
+                                        "%d participant's last contribution was prior to %s",
+                                        "%d participants' last contribution was prior to %s",
+                                        authors_except_those_in_period_total), authors_except_those_in_period_total, statsPeriodName),
                                     authors_except_those_in_period_total,
                                     0, // not needed now
                                     "#9A3FD5",
@@ -1076,7 +1089,10 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                         var pie_chart_default_legend_data = [
                             null,
                             null,
-                            i18n.sprintf(i18n.gettext("%d participants have contributed since the beginning of the debate"), authors_total),
+                            i18n.sprintf(i18n.ngettext(
+                                "%d participant has contributed since the beginning of the debate",
+                                "%d participants have contributed since the beginning of the debate",
+                                authors_total), authors_total),
                             null,
                             authors_total,
                             messages_total

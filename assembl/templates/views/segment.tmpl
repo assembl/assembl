@@ -11,7 +11,7 @@
 
 {% set segmentCreatorAvatarImg = '<img src="<%= harvester.getAvatarUrl(24) %>" class="image-rounded" alt="" width="24" height="24" data-toggle="tooltip" data-placement="left" title="'+harverterTooltip+'"/>' %}
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
-{% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('Show in original text')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
+{% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('Show in original context')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
 
 
 {#<div class="box postit" draggable="true" data-segmentid="<%= segment.cid %>">
@@ -61,7 +61,7 @@
   <div class="postit-footer">
     <p class="text-quotation"><%= segment.getQuote() %></p>
 
-		{% set nuggetTooltip = gettext('marked as a nugget')  %}
+		{% set nuggetTooltip = gettext('Show or hide this extract to participants')  %}
 		{% set nuggets = '<a href="#" class="nugget js_selectAsNugget <%= segment.get("important") ? "isSelected":"" %>" data-toggle="tooltip" title="<%= segment.get("important") ? "":"'+ nuggetTooltip +'" %>" data-placement="left"><i class="icon-diamond"></i></a>' %}
 
     <% if(canAddExtracts) { %>
