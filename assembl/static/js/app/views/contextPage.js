@@ -1263,7 +1263,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
             templateHelpers: function(){
                 return {
-                    editInstigator: function(){
+                    editInstigatorUrl: function(){
                       return '/' + Ctx.getDiscussionSlug() + '/partners';
                     }
                 }
