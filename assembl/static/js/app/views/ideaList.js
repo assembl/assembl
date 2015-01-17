@@ -28,6 +28,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             scrollableElementHeight: null,
             lastScrollTime: null,
             scrollInterval: null,
+            scrollLastSpeed: null,
 
             /**
              * Are we showing the graph or the list?
@@ -77,6 +78,10 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 });
                 this.listenTo(Assembl.vent, 'idea:dragStart', function (idea) {
                     that.lastScrollTime = new Date().getTime();
+                    that.scrollLastSpeed = 0;
+                    that.scrollableElement = that.$('.panel-body');
+                    //console.log("that.scrollableElement: ", that.scrollableElement);
+                    that.scrollableElementHeight = that.$('.panel-body').outerHeight();
                     that.scrollInterval = setInterval(function(){
                         that.scrollTowardsMouseIfNecessary();
                     }, 10);
@@ -222,12 +227,6 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         that.body = that.$('.panel-body');
                         that.body.get(0).scrollTop = y;
                     });
-
-                setTimeout(function(){
-                    that.scrollableElement = that.$('.panel-body');
-                    //console.log("that.scrollableElement: ", that.scrollableElement);
-                    that.scrollableElementHeight = that.$('.panel-body').outerHeight();
-                }, 500);
             },
 
             /**
@@ -437,8 +436,13 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
             scrollTowardsMouseIfNecessary: function() {
                 //console.log("scrollTowardsMouseIfNecessary");
-                if ( !Ctx.draggedIdea || !this.mouseIsOutside || !this.scrollableElement )
+                if ( !Ctx.draggedIdea || !this.scrollableElement )
                     return;
+                if ( !this.mouseIsOutside )
+                {
+                    this.scrollLastSpeed = 0;
+                    return;
+                }
                 //console.log("scrollTowardsMouseIfNecessary has enough info");
                 var scrollDirectionIsDown = (this.mouseRelativeY > this.scrollableElementHeight);
                 //console.log("scrollDirectionIsDown: ", scrollDirectionIsDown);
@@ -458,6 +462,9 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 //console.log("speed: ", speed);
                 if ( !scrollDirectionIsDown )
                   speed = -speed;
+                if ( (speed > 0 && this.scrollLastSpeed >= 0) || (speed < 0 && this.scrollLastSpeed <= 0) )
+                    speed = this.scrollLastSpeed * 0.8 + speed * 0.2;
+                this.scrollLastSpeed = speed;
                 this.scrollableElement.scrollTop(this.scrollableElement.scrollTop()+(speed*deltaTime));
             }
 
