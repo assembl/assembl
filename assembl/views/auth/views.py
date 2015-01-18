@@ -57,7 +57,7 @@ def handle_next_view(request, consume=False, default=None):
     if consume and 'next_view' in request.session:
         request.session.pop('next_view')
     elif not consume and 'next_view' not in request.session:
-        request.session[next_view] = next_view
+        request.session["next_view"] = next_view
     return next_view
 
 
