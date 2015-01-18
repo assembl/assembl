@@ -40,7 +40,7 @@ def get_login_context(request):
     slug = request.matchdict.get('discussion_slug', None)
     return dict(get_default_context(request), **{
         'login_url': login_url,
-        'slug': "/"+slug,
+        'slug': "/"+(slug or ""),
         'providers': request.registry.settings['login_providers'],
         'google_consumer_key': request.registry.settings.get(
             'google.consumer_key', ''),
