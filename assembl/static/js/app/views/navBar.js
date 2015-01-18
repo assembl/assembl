@@ -68,7 +68,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                         return '/' + Ctx.getDiscussionSlug() + '/users/notifications';
                     },
                     urlLogOut: function () {
-                        return '/logout?next_view=/' + Ctx.getDiscussionSlug() + '/';
+                        return '/' + Ctx.getDiscussionSlug() + '/logout';
                     }
                 }
             },

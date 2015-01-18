@@ -26,10 +26,8 @@
           <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
         <% } %>
       {% else %}
-        {% if request.current_route_path() != "/login" %}
-            {% if request.current_route_path() != "/register" %}
-                <a href="/login?next_view={{request.current_route_path()}}" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
-            {% endif %}
+        {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
+          <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/users/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
         {% endif %}
       {% endif %}
     </div>
@@ -66,12 +64,10 @@
       	</li>
       	#}
 			{% else %}
-			  {% if request.current_route_path() != "/login" %}
-          {% if request.current_route_path() != "/register" %}
+        {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
 					<li class="fl mll">
-						<a href="/login?next_view={{request.current_route_path()}}" class="btn btn-default btn-xs">{{ gettext('Sign in') }}</a>
+						<a href="/{{discussion.slug}}/login?next_view={{request.current_route_path()}}" class="btn btn-default btn-xs">{{ gettext('Sign in') }}</a>
 					</li>
-					{% endif %}
 				{% endif %}
 			{% endif %}
       	<li class="dropdown fl mll">
