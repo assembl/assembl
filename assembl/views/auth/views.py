@@ -607,14 +607,14 @@ def user_confirm_email(request):
             userid = user.id
         if username:
             return HTTPFound(location=request.route_url(
-                location, **dict(location_params,
+                location, discussion_slug=slug,
                 _query=dict(message=localizer.translate(_(
-                    "Email <%s> confirmed")) % (email.email,)))))
+                    "Email <%s> confirmed")) % (email.email,))))
         elif userid:
             return HTTPFound(location=request.route_url(
-                location, **dict(location_params,
+                location, discussion_slug=slug,
                 _query=dict(message=localizer.translate(_(
-                    "Email <%s> confirmed")) % (email.email,)))))
+                    "Email <%s> confirmed")) % (email.email,))))
         else:
             # we confirmed a profile without a user? Now what?
             raise HTTPServerError()
