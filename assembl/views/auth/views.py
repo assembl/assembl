@@ -53,7 +53,7 @@ def handle_next_view(request, consume=False, default=None):
     next_view = request.params.get('next_view', None)\
         or request.session.get('next_view', None)\
         or default\
-        or ("/%s/" % (slug,) if slug else None)
+        or ("/%s/" % (slug,) if slug else "/")
     if consume and 'next_view' in request.session:
         request.session.pop('next_view')
     elif not consume and 'next_view' not in request.session:
