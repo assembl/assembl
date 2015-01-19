@@ -50,7 +50,7 @@
             <li><a href="#" class="message-hoistbtn" data-id="<%= escape(id) %>">{{gettext('Show only this message and its replies')}}</a></li>
           <% } %>
 
-          <li><a href="#" class="message-linkbutton" data-copy-text="/posts/<%= escape(id) %>">{{gettext('Copy the link to share this message')}}</a></li>
+          <li><a href="#" class="message-linkbutton" data-copy-text="<%= direct_link_url %>">{{gettext('Copy the link to share this message')}}</a></li>
 
 					<% if (creator.get('email')) { %>
 					<li><a title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>">{{gettext('Send an email to this user')}}</a></li>
