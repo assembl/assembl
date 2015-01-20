@@ -128,7 +128,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             },
 
             getTitle: function () {
-                return i18n.gettext('Debate');
+                return i18n.gettext('Table of ideas');
             },
 
             onRender: function () {
