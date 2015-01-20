@@ -60,6 +60,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 Assembl.commands.setHandler('socket:close', function () {
                     that.$('#onlinedot').removeClass('is-online');
                 });
+
             },
 
             templateHelpers: function () {
@@ -246,8 +247,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
             showPopInDiscussion: function () {
                 var needPopIn = this._store.getItem('needJoinDiscussion');
-
-                if (needPopIn && _.isEmpty(this.roles.attributes)) {
+                if (needPopIn && this.roles.get('role') === null) {
                     this.joinDiscussion();
                 } else {
                     this._store.removeItem('needJoinDiscussion');
