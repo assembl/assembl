@@ -1895,11 +1895,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              */
             scrollToMessage: function (messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth) {
               var that = this,
-              RETRY_INTERVAL = 250,  // 4 times per second
-              MAX_RETRIES = 25, //Stop after 5 seconds
+              MAX_RETRIES = 15, //Stop after ~30 seconds
               debug = false;
 
               recursionDepth = recursionDepth || 0;
+              var RETRY_INTERVAL = Math.floor(1000 * Math.log(2 + recursionDepth));  // increasing interval
+
               shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
               shouldOpenMessageSelected = (typeof shouldOpenMessageSelected === "undefined") ? true : shouldOpenMessageSelected;
 
