@@ -59,7 +59,7 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                     var closeBtn = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></a>\n';
 
                     if (value === true) {
-                        retval += i18n.sprintf(i18n.gettext("%s %s"), "You haven't read yet", closeBtn);
+                        retval += i18n.sprintf("%s %s", i18n.gettext("You haven't read yet"), closeBtn);
                     } else {
                         retval += i18n.gettext("You've already read");
                     }
@@ -123,8 +123,8 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                 },
                 POST_IS_SYNTHESIS: {
                     id: 'only_synthesis_posts',
-                    name: i18n.gettext('Publish a synthesis of the discussion'),
-                    help_text: i18n.gettext('Only include messages that publish a synthesis of a discussion.'),
+                    name: i18n.gettext('Are a synthesis'),
+                    help_text: i18n.gettext('Only include messages that represent a synthesis of the discussion.'),
                     _value_is_boolean: true,
                     _can_be_reversed: false,
                     _server_param: 'only_synthesis',
@@ -534,7 +534,7 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                     retval += '<div class="post-query-results-info">';
                     if (this.getResultNumTotal() == 0) {
                         if (numActiveFilters > 0) {
-                            retval += i18n.gettext("Found no message in the discussion that:");
+                            retval += i18n.gettext("There is no message to display with those filters:");
                         }
                         else {
                             retval += i18n.gettext("There are no messages in the discussion.");
@@ -543,13 +543,23 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                     else {
                         var unreadText = '';
                         if (this.getResultNumUnread() > 0) {
-                            unreadText = i18n.sprintf(i18n.gettext("(%d unread)"), this.getResultNumUnread());
+                            if (this.getResultNumUnread() == this.getResultNumTotal()) {
+                                if (this.getResultNumTotal() == 1) {
+                                    unreadText = i18n.gettext(" (unread)");
+                                } else {
+                                    unreadText = i18n.gettext(" (all unread)");
+                                }
+                            } else {
+                                unreadText = i18n.sprintf(
+                                    i18n.ngettext(" (%d unread)", " (%d unread)", this.getResultNumUnread()),
+                                    this.getResultNumUnread());
+                            }
                         }
                         if (numActiveFilters > 0) {
-                            retval += i18n.sprintf(i18n.gettext("Found %d messages %s that:"), this.getResultNumTotal(), unreadText);
+                            retval += i18n.sprintf(i18n.gettext("Found %d messages%s that:"), this.getResultNumTotal(), unreadText);
                         }
                         else {
-                            retval += i18n.sprintf(i18n.gettext("Found %d messages %s:"), this.getResultNumTotal(), unreadText);
+                            retval += i18n.sprintf(i18n.gettext("Found %d messages%s:"), this.getResultNumTotal(), unreadText);
                         }
                     }
 

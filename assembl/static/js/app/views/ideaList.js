@@ -1,7 +1,7 @@
 'use strict';
 
-define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'utils/permissions', 'views/visitors/objectTreeRenderVisitor', 'views/visitors/ideaSiblingChainVisitor', 'backbone', 'app', 'common/context', 'models/idea', 'views/idea', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ideaGraph', 'underscore', 'common/collectionManager', 'utils/i18n', 'views/otherInIdeaList'],
-    function (AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, objectTreeRenderVisitor, ideaSiblingChainVisitor, Backbone, Assembl, Ctx, Idea, IdeaView, PanelSpecTypes, AssemblPanel, ideaGraphLoader, _, CollectionManager, i18n, OtherInIdeaListView) {
+define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/synthesisInIdeaList', 'utils/permissions', 'views/visitors/objectTreeRenderVisitor', 'views/visitors/ideaSiblingChainVisitor', 'backbone', 'app', 'common/context', 'models/idea', 'views/idea', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ideaGraph', 'underscore', 'common/collectionManager', 'utils/i18n', 'views/otherInIdeaList', 'jquery'],
+    function (AllMessagesInIdeaListView, OrphanMessagesInIdeaListView, SynthesisInIdeaListView, Permissions, objectTreeRenderVisitor, ideaSiblingChainVisitor, Backbone, Assembl, Ctx, Idea, IdeaView, PanelSpecTypes, AssemblPanel, ideaGraphLoader, _, CollectionManager, i18n, OtherInIdeaListView, $) {
 
         var FEATURED = 'featured',
             IN_SYNTHESIS = 'inNextSynthesis';
@@ -22,6 +22,13 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
              * .panel-body
              */
             body: null,
+            mouseRelativeY: null,
+            mouseIsOutside: null,
+            scrollableElement: null,
+            scrollableElementHeight: null,
+            lastScrollTime: null,
+            scrollInterval: null,
+            scrollLastSpeed: null,
 
             /**
              * Are we showing the graph or the list?
@@ -66,6 +73,24 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     that.addChildToSelected();
                 });
 
+                this.listenTo(Assembl.vent, 'idea:dragOver', function (idea) {
+                    that.mouseIsOutside = false;
+                });
+                this.listenTo(Assembl.vent, 'idea:dragStart', function (idea) {
+                    that.lastScrollTime = new Date().getTime();
+                    that.scrollLastSpeed = 0;
+                    that.scrollableElement = that.$('.panel-body');
+                    //console.log("that.scrollableElement: ", that.scrollableElement);
+                    that.scrollableElementHeight = that.$('.panel-body').outerHeight();
+                    that.scrollInterval = setInterval(function(){
+                        that.scrollTowardsMouseIfNecessary();
+                    }, 10);
+                });
+                this.listenTo(Assembl.vent, 'idea:dragEnd', function (idea) {
+                    clearInterval(that.scrollInterval);
+                    that.scrollInterval = null;
+                });
+
                 this.listenTo(Assembl.vent, 'ideaList:selectIdea', function (ideaId) {
                     collectionManager.getAllIdeasCollectionPromise().done(
                     function (allIdeasCollection) {
@@ -76,12 +101,14 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         }
                     });
                 });
+
+                $('html').on('dragover', function(e){
+                    that.onDocumentDragOver(e);
+                });
             },
 
             'events': {
                 'click .panel-body': 'onPanelBodyClick',
-                'dragover .panel-bodyabove': 'onAboveDragOver',
-                'dragover .panel-bodybelow': 'onBelowDragOver',
 
                 'click .js_ideaList-addbutton': 'addChildToSelected',
                 'click #ideaList-collapseButton': 'toggleIdeas',
@@ -101,7 +128,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             },
 
             getTitle: function () {
-                return i18n.gettext('Debate');
+                return i18n.gettext('Table of ideas');
             },
 
             onRender: function () {
@@ -391,24 +418,54 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 }
             },
 
-            /**
-             * @event
-             */
-            onAboveDragOver: function (ev) {
-                var y = this.body.get(0).scrollTop;
-
-                if (y === 0) {
+            onDocumentDragOver: function (e) {
+                //console.log("onDocumentDragOver");
+                if ( !Ctx.draggedIdea || !this.scrollableElement )
                     return;
-                }
+                this.mouseRelativeY = e.originalEvent.pageY - this.scrollableElement.offset().top;
+                //console.log("this.mouseRelativeY: ", this.mouseRelativeY);
+                //console.log("scrollableElementHeight: ", this.scrollableElementHeight);
 
-                this.body.get(0).scrollTop -= 1;
+                // the detection of mouseIsOutside is needed to be done by document also, because when the user is dragging, the mouseleave event is not fired (as the mouse is still on a child)
+                if ( this.mouseRelativeY >= 0 && this.mouseRelativeY <= this.scrollableElementHeight ) // cursor is not outside the block
+                    this.mouseIsOutside = false;
+                else
+                    this.mouseIsOutside = true;
+                //console.log("isOutside: ", this.mouseIsOutside);
             },
 
-            /**
-             * @event
-             */
-            onBelowDragOver: function (ev) {
-                this.body.get(0).scrollTop += 1;
+            scrollTowardsMouseIfNecessary: function() {
+                //console.log("scrollTowardsMouseIfNecessary");
+                if ( !Ctx.draggedIdea || !this.scrollableElement )
+                    return;
+                if ( !this.mouseIsOutside )
+                {
+                    this.scrollLastSpeed = 0;
+                    return;
+                }
+                //console.log("scrollTowardsMouseIfNecessary has enough info");
+                var scrollDirectionIsDown = (this.mouseRelativeY > this.scrollableElementHeight);
+                //console.log("scrollDirectionIsDown: ", scrollDirectionIsDown);
+                
+                var d, deltaTime;
+                d = deltaTime = new Date().getTime();
+                if ( this.lastScrollTime )
+                    deltaTime -= this.lastScrollTime;
+                else
+                    deltaTime = 10;
+                this.lastScrollTime = d;
+
+                var mYn = this.mouseRelativeY;
+                if ( scrollDirectionIsDown )
+                  mYn -= this.scrollableElementHeight;
+                var speed = Math.max(0.2, Math.min(40.0, Math.abs(mYn)*1.0)) * 0.01;
+                //console.log("speed: ", speed);
+                if ( !scrollDirectionIsDown )
+                  speed = -speed;
+                if ( (speed > 0 && this.scrollLastSpeed >= 0) || (speed < 0 && this.scrollLastSpeed <= 0) )
+                    speed = this.scrollLastSpeed * 0.8 + speed * 0.2;
+                this.scrollLastSpeed = speed;
+                this.scrollableElement.scrollTop(this.scrollableElement.scrollTop()+(speed*deltaTime));
             }
 
         });

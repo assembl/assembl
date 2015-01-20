@@ -140,6 +140,9 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                 this.model = newObject;
             },
 
+            getContainingGroup: function () {
+                return this._groupContent;
+            },
 
             /**
              * @event
@@ -199,6 +202,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
             onDragStart: function (ev) {
                 if (ev) {
                     ev.stopPropagation();
+                    Assembl.vent.trigger('idea:dragStart', this.model);
                 }
                 if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
                     ev.currentTarget.style.opacity = 0.4;
@@ -217,9 +221,11 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                 if (ev) {
                     ev.preventDefault();
                     ev.stopPropagation();
+                    Assembl.vent.trigger('idea:dragEnd', this.model);
                 }
                 ev.currentTarget.style.opacity = '';
                 Ctx.draggedSegment = null;
+                Ctx.draggedIdea = null;
             },
 
             /**
@@ -229,6 +235,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                 if (ev) {
                     ev.preventDefault();
                     ev.stopPropagation();
+                    Assembl.vent.trigger('idea:dragOver', this.model);
                 }
 
                 if (ev.originalEvent) {
@@ -254,6 +261,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                         ev.dataTransfer.dropEffect = 'none';
                         return;
                     }
+
 
                     if (ev.target.classList.contains('idealist-abovedropzone')) {
                         this.$el.addClass('is-dragover-above');
@@ -335,23 +343,23 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                     return;
                 }
 
-                if (Ctx.draggedIdea && Ctx.draggedIdea.cid !== this.model.cid) {
+                if (Ctx.draggedIdea ){
+                    var idea = Ctx.popDraggedIdea();
+                    if ( idea.cid !== this.model.cid) {
 
-                    var idea = Ctx.getDraggedIdea();
+                        // If it is a descendent, do nothing
+                        if (this.model.isDescendantOf(idea)) {
+                            return;
+                        }
 
-                    // If it is a descendent, do nothing
-                    if (this.model.isDescendantOf(idea)) {
-                        return;
+                        if (isDraggedAbove) {
+                            this.model.addSiblingAbove(idea);
+                        } else if (isDraggedBelow) {
+                            this.model.addSiblingBelow(idea);
+                        } else {
+                            this.model.addChild(idea);
+                        }
                     }
-
-                    if (isDraggedAbove) {
-                        this.model.addSiblingAbove(idea);
-                    } else if (isDraggedBelow) {
-                        this.model.addSiblingBelow(idea);
-                    } else {
-                        this.model.addChild(idea);
-                    }
-
                 }
             },
 

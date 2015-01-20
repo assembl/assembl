@@ -203,6 +203,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         }
 
                         data['nuggets'] = _.size(data['extracts']);
+                        data['direct_link_url'] = "/posts/" + encodeURIComponent(data['@id']);
 
                         data = that.transformDataBeforeRender(data);
                         that.$el.html(that.template(data));

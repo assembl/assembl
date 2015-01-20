@@ -20,6 +20,14 @@
   .popin-header {
     background-color: $gray1;
   }
+  .content-ajaxError{
+    .msg-error {
+      color: $txtGray1;
+    }
+  }
+  .error-close {
+    color: $txtGray1;
+  }
 }
 
 .modal-firstPost {

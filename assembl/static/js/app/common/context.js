@@ -627,7 +627,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             /**
              * @return {Idea}
              */
-            getDraggedIdea: function () {
+            popDraggedIdea: function () {
                 if (this.ideaList && this.draggedIdea) {
 
                     Assembl.vent.trigger('ideaList:removeIdea', this.draggedIdea);
@@ -994,7 +994,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 var Modal = Backbone.Modal.extend({
                     template: _.template($('#tmpl-ajaxError').html()),
                     className: 'group-modal popin-wrapper modal-ajaxError',
-                    cancelEl: '.close, .btn-cancel',
+                    cancelEl: '.close, .js_close',
                     model: model,
                     initialize: function () {
                         this.$('.bbm-modal').addClass('popin');

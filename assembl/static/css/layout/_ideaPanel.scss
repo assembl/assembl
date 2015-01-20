@@ -52,8 +52,14 @@
 }
 
 .ideaPanel-longtitle {
-  .panel-editablearea > * {
-    font-weight: 400;
+  color: $white;
+  padding: 3px 0 6px 6px;
+  font-weight: 400;
+  border: 1px solid transparent;
+  overflow-y: hidden;
+  &:hover{
+    @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
+    border: 1px solid #cccccc;
   }
 }
 
@@ -63,6 +69,10 @@
   border: 1px solid transparent;
   padding: 0px 0px 9px 6px;
   overflow-y: hidden;
+  word-break: break-all;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
   &:hover {
     @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
     border: 1px solid #cccccc;

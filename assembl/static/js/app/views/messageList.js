@@ -1895,11 +1895,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              */
             scrollToMessage: function (messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth) {
               var that = this,
-              RETRY_INTERVAL = 100,  //10 times per second
-              MAX_RETRIES = 300, //Stop after 30 seconds
+              MAX_RETRIES = 50, //Stop after ~30 seconds
               debug = false;
 
               recursionDepth = recursionDepth || 0;
+              var RETRY_INTERVAL = Math.floor(200 * Math.log(2 + recursionDepth));  // increasing interval
+
               shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
               shouldOpenMessageSelected = (typeof shouldOpenMessageSelected === "undefined") ? true : shouldOpenMessageSelected;
 
@@ -1968,7 +1969,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   }
                   else {
                     console.log("scrollToMessage(): MAX_RETRIES has been reached: ", recursionDepth);
-                    this.scrollToMessageInProgress = false;
+                    that.scrollToMessageInProgress = false;
                     Raven.captureMessage(
                       "scrollToMessage():  scrollToMessage(): MAX_RETRIES has been reached",
                       { message_id: messageModel.id,
@@ -1983,7 +1984,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
               };
 
-              if (that.renderIsComplete) {
+              if (this.renderIsComplete) {
                 animate_message(messageModel);
                 this.scrollToMessageInProgress = false;
               }
@@ -1991,7 +1992,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 if (debug) {
                   console.log("scrollToMessage(): waiting for render to complete");
                 }
-                that.listenToOnce(that, "messageList:render_complete", function () {
+                this.listenToOnce(this, "messageList:render_complete", function () {
                   if (debug) {
                     console.log("scrollToMessage(): render has completed, animating");
                   }

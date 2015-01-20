@@ -1,15 +1,18 @@
 <div class="popin-header">
-	<h1 class="h1"><i class="icon-reload"></i> {{ gettext('assembl need to be reload') }}</h1>
+	<h3 class="h3"><i class="icon-reload"></i> {{ gettext('assembl need to be reload') }}</h3>
 </div>
 
 <div class="popin-body">
-  <div class="content">
-  	<p><%= msg %></p>
+  <div class="content-ajaxError">
+    <p class="mbm">{{ gettext('Assembl has encountered a problem and needs to be refreshed. Do not worry, any messages that are in the process of being composed will not be lost.') }}</p>
+    <p class="mbm">{{ gettext('See you in a minute on Assembl!') }}</p>
+    <p class="mbxs msg-error">{{ gettext('If you are in contact with the technical team, please let them know about the following message:') }}</p>
+    <p class="msg-error"><%= msg %></p>
   </div>
   <div class="clr"></div>
 </div>
 
 <div class="popin-footer">
-	<button class="btn btn-cancel btn-sm fl js_close">{{ gettext('dismiss') }}</button>
-  <button class="btn btn-third btn-sm fr js_reload">{{ gettext('reload') }}</button>
+	<a href="#" class="error-close fl js_close">{{ gettext('Not now') }}</a>
+  <button class="btn btn-third btn-sm fr js_reload">{{ gettext('Reload') }}</button>
 </div>

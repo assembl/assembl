@@ -37,23 +37,42 @@ _ = TranslationStringFactory('assembl')
 
 
 def get_login_context(request):
+    slug = request.matchdict.get('discussion_slug', None)
     return dict(get_default_context(request), **{
         'login_url': login_url,
+        'slug': "/"+(slug or ""),
         'providers': request.registry.settings['login_providers'],
         'google_consumer_key': request.registry.settings.get(
             'google.consumer_key', ''),
-        'next_view': request.params.get('next_view', '/')
+        'next_view': handle_next_view(request)
     })
+
+
+def handle_next_view(request, consume=False, default=None):
+    slug = request.matchdict.get('discussion_slug', None)
+    next_view = request.params.get('next_view', None)\
+        or request.session.get('next_view', None)\
+        or default\
+        or ("/%s/" % (slug,) if slug else "/")
+    if consume and 'next_view' in request.session:
+        request.session.pop('next_view')
+    elif not consume and 'next_view' not in request.session:
+        request.session["next_view"] = next_view
+    return next_view
 
 
 @view_config(
     route_name='logout',
     renderer='assembl:templates/login.jinja2',
 )
+@view_config(
+    route_name='contextual_logout',
+    renderer='assembl:templates/login.jinja2',
+)
 def logout(request):
     forget(request)
-    next_view = request.params.get('next_view', '/')
-    return HTTPFound(next_view)
+    next_view = handle_next_view(request, True)
+    return HTTPFound(location=next_view)
 
 
 @view_config(
@@ -61,19 +80,12 @@ def logout(request):
     request_method='GET', http_cache=60,
     renderer='assembl:templates/login.jinja2',
 )
-#The following was executed when calls to the frontend api calls were
-#made.  I don't know how to avoid this registration of the api paths.
-#It returns a 200 status code which breaks the API
-#@view_config(
-#    renderer='assembl:templates/login.jinja2',
-#    context='pyramid.exceptions.Forbidden',
-#    permission=NO_PERMISSION_REQUIRED
-#)
+@view_config(
+    route_name='contextual_login',
+    request_method='GET', http_cache=60,
+    renderer='assembl:templates/login.jinja2',
+)
 def login_view(request):
-    # TODO: In case of forbidden, get the URL and pass it along.
-    if request.params.get('next_view', None):
-        request.session['next_view'] = request.params['next_view']
-    localizer = request.localizer
     return get_login_context(request)
 
 
@@ -133,7 +145,7 @@ def assembl_profile(request):
 
     confirm_email = request.params.get('confirm_email', None)
     if confirm_email:
-        return HTTPFound(request.route_url(
+        return HTTPFound(location=request.route_url(
             'confirm_emailid_sent', email_account_id=int(confirm_email)))
 
     errors = []
@@ -216,12 +228,18 @@ def avatar(request):
     permission=NO_PERMISSION_REQUIRED,
     renderer='assembl:templates/register.jinja2'
 )
+@view_config(
+    route_name='contextual_register',
+    permission=NO_PERMISSION_REQUIRED,
+    renderer='assembl:templates/register.jinja2'
+)
 def assembl_register_view(request):
-    if request.params.get('next_view', None):
-        request.session['next_view'] = request.params['next_view']
+    slug = request.matchdict.get('discussion_slug', "")
+    slug = "/" + slug
+    next_view = handle_next_view(request)
     if not request.params.get('email'):
         return dict(get_default_context(request),
-                    next_view=request.params.get('next_view', '/'))
+                    slug=slug)
     forget(request)
     session = AgentProfile.db
     localizer = request.localizer
@@ -231,16 +249,19 @@ def assembl_register_view(request):
     email = request.params.get('email', '').strip()
     if not is_email(email):
         return dict(get_default_context(request),
+                    slug=slug,
                     error=localizer.translate(_(
                         "This is not a valid email")))
     # Find agent account to avoid duplicates!
     if session.query(EmailAccount).filter_by(
             email=email, verified=True).count():
         return dict(get_default_context(request),
+                    slug=slug,
                     error=localizer.translate(_(
                         "We already have a user with this email.")))
     if password != password2:
         return dict(get_default_context(request),
+                    slug=slug,
                     error=localizer.translate(_(
                         "The passwords should be identical")))
 
@@ -272,8 +293,7 @@ def assembl_register_view(request):
         headers = remember(request, user.id, tokens=format_token(user))
         request.response.headerlist.extend(headers)
         # TODO: Tell them to expect an email.
-        next_view = request.session.pop('next_view') or \
-            request.params.get('next_view', '/register')
+        request.session.pop('next_view')
         return HTTPFound(location=next_view)
     return HTTPFound(location=request.route_url(
         'confirm_emailid_sent', email_account_id=email_account.id))
@@ -301,13 +321,20 @@ def from_identifier(identifier):
     permission=NO_PERMISSION_REQUIRED,
     renderer='assembl:templates/login.jinja2'
 )
+@view_config(
+    route_name='contextual_login',
+    request_method='POST',
+    permission=NO_PERMISSION_REQUIRED,
+    renderer='assembl:templates/login.jinja2'
+)
 def assembl_login_complete_view(request):
+    slug = request.matchdict.get('discussion_slug', None)
     # Check if proper authorization. Otherwise send to another page.
     session = AgentProfile.db
     identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
-    next_view = request.params.get('next_view') or \
-        request.session.pop('next_view') or '/register'
+    next_view = handle_next_view(
+        request, True, '/%s/register' % (slug,) if slug else '/register')
     logged_in = authenticated_userid(request)
     localizer = request.localizer
     user = None
@@ -316,8 +343,7 @@ def assembl_login_complete_view(request):
     if not user:
         request.session['next_view'] = next_view
         return dict(get_login_context(request),
-                    error=localizer.translate(_("This user cannot be found")),
-                    next_view=next_view)
+                    error=localizer.translate(_("This user cannot be found")))
     if account and not account.verified:
         return HTTPFound(location=request.route_url(
             'confirm_emailid_sent',
@@ -348,7 +374,7 @@ def velruse_login_complete_view(request):
     session = AgentProfile.db
     context = request.context
     velruse_profile = context.profile
-    next_view = request.session.pop('next_view') or '/'
+    next_view = handle_next_view(request, True)
     logged_in = authenticated_userid(request)
     provider = get_identity_provider(request)
     # find or create IDP_Accounts
@@ -519,6 +545,10 @@ def confirm_emailid_sent(request):
     route_name='user_confirm_email',
     permission=NO_PERMISSION_REQUIRED
 )
+@view_config(
+    route_name='contextual_user_confirm_email',
+    permission=NO_PERMISSION_REQUIRED
+)
 def user_confirm_email(request):
     token = request.matchdict.get('ticket')
     email = verify_email_token(token)
@@ -531,21 +561,26 @@ def user_confirm_email(request):
     user = email.profile
     username = user.username.username if user.username else None
     userid = user.id
-    # We do not know from which discussion the user started to log in...
-    # We have to think about this. Maybe put in the token?
-    # Send to login, then discussion if there happens to be only one.
-    discussions = user.involved_in_discussion
-    location = 'login'
-    if len(discussions) == 1:
-        location_params = dict(next_view='/'+discussions[0].slug)
+    slug = request.matchdict.get('discussion_slug', None)
+    if not slug:
+        # We do not know from which discussion the user started to log in;
+        # See if only involved in one discussion
+        discussions = user.involved_in_discussion
+        if len(discussions) == 1:
+            slug = discussions[0].slug
+    if slug:
+        location = 'contextual_login'
+        next_view = '/%s/' % (slug,)
     else:
-        location_params = dict()
+        location = 'login'
+        next_view = '/'
+    next_view = handle_next_view(request, False, next_view)
 
     if email.verified:
         raise HTTPFound(location=request.route_url(
-            location, **dict(location_params,
-            _query=dict(message=localizer.translate(_(
-                "Email <%s> already confirmed")) % (email.email,)))))
+            location, discussion_slug=slug, _query=dict(
+                message=localizer.translate(
+                    _("Email <%s> already confirmed")) % (email.email,))))
     else:
         # maybe another profile already verified that email
         other_email_account = session.query(EmailAccount).filter_by(
@@ -572,14 +607,14 @@ def user_confirm_email(request):
             userid = user.id
         if username:
             return HTTPFound(location=request.route_url(
-                location, **dict(location_params,
+                location, discussion_slug=slug,
                 _query=dict(message=localizer.translate(_(
-                    "Email <%s> confirmed")) % (email.email,)))))
+                    "Email <%s> confirmed")) % (email.email,))))
         elif userid:
             return HTTPFound(location=request.route_url(
-                location, **dict(location_params,
+                location, discussion_slug=slug,
                 _query=dict(message=localizer.translate(_(
-                    "Email <%s> confirmed")) % (email.email,)))))
+                    "Email <%s> confirmed")) % (email.email,))))
         else:
             # we confirmed a profile without a user? Now what?
             raise HTTPServerError()
@@ -704,7 +739,7 @@ def do_password_change(request):
             raise HTTPBadRequest(localizer.translate(_(
                 "Wrong password token.")))
         else:
-            return HTTPFound(request.route_url(
+            return HTTPFound(location=request.route_url(
                 'password_change_sent', profile_id=user_id, _query=dict(
                     sent=True, error=localizer.translate(_(
                         "This token is expired. "
@@ -736,7 +771,7 @@ def finish_password_change(request):
         error = localizer.translate(_('The passwords are not identical'))
     elif p1:
         user.set_password(p1)
-        return HTTPFound(request.route_url(
+        return HTTPFound(location=request.route_url(
             'discussion_list', _query=dict(
                 message=localizer.translate(_(
                     "Password changed")))))
@@ -751,13 +786,20 @@ def send_confirmation_email(request, email):
     if isinstance(email.profile, User) and not email.profile.verified:
         confirm_what = _('account')
     from assembl.auth.password import email_token
+    slug = request.matchdict.get('discussion_slug', None)
+    if slug:
+        confirm_url = request.route_url(
+            'contextual_user_confirm_email',
+            slug=slug, ticket=email_token(email))
+    else:
+        confirm_url = request.route_url(
+            'user_confirm_email', ticket=email_token(email))
     data = {
         'name': email.profile.name,
         'email': email.email,
         'assembl': "Assembl",
         'confirm_what': localizer.translate(confirm_what),
-        'confirm_url': request.route_url('user_confirm_email',
-                                         ticket=email_token(email))
+        'confirm_url': confirm_url
     }
     message = Message(
         subject=localizer.translate(_("Please confirm your ${confirm_what} with <${assembl}>"), mapping=data),

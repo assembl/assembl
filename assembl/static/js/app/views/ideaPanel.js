@@ -28,7 +28,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 'change': 'render'
             },
             ui: {
-                'modal': '.js_openTargetInModal',
+                'modal': '.js_openTargetInModal'
             },
             events: {
                 'click @ui.modal': 'openTargetInModal'
@@ -172,8 +172,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
         });
 
-
-
         var IdeaPanel = AssemblPanel.extend({
             template: '#tmpl-ideaPanel',
             panelType: PanelSpecTypes.IDEA_PANEL,
@@ -218,7 +216,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
             modelEvents: {
                 //Do NOT listen to change here
-                'replacedBy': 'onReplaced'
+                //'replacedBy': 'onReplaced',
+                'change': 'render'
             },
             events: {
                 'dragstart .bx': 'onDragStart',
@@ -232,7 +231,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 'click @ui.seeMore': 'seeMoreOrLess',
                 'click @ui.seeLess': 'seeMoreOrLess',
                 'click @ui.definition': 'editDefinition',
-                'click @ui.longTitle': 'editTitle',
+                'click @ui.longTitle': 'editTitle'
             },
 
             getTitle: function () {
@@ -332,24 +331,9 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     editingDefinition: this.editingDefinition,
                     editingTitle: this.editingTitle
                 };
-                //console.log("dataset: ", dataset);
 
                 return dataset;
             },
-
-            onBeforeRender: function () {
-              if (Ctx.debugRender) {
-                //console.log("ideaPanel::onBeforeRender() called");
-              }
-            },
-            
-            onAfterRender: function () {
-              if (Ctx.debugRender) {
-                //console.log("onAfterRender called");
-              }
-            },
-
-            
 
             onRender: function () {
                 if (Ctx.debugRender) {
@@ -378,7 +362,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     this.onTruncate();
 
                     if (this.editingDefinition) {
-                        this.renderCKEditor();
+                        this.renderCKEditorDefinition();
                     }
 
                     if (this.editingTitle) {
@@ -437,14 +421,15 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 });
                 shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
 
-                this.longTitleField = new CKEditorField({
+                // the content is replace by CKEditorField not necessary to init with
+                /*this.longTitleField = new CKEditorField({
                     'model': this.model,
                     'modelProp': 'longTitle',
                     'placeholder': this.model.getLongTitleDisplayText(),
                     'canEdit': canEditNextSynthesis,
                     'showPlaceholderOnEditIfEmpty': true
-                });
-                this.longTitleField.renderTo(this.$('.ideaPanel-longtitle'));
+                });*/
+                //this.longTitleField.renderTo(this.$('.ideaPanel-longtitle'));
 
                 this.commentView = new MessageSendView({
                     'allow_setting_subject': false,
@@ -583,10 +568,10 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                         that.listenTo(that.extractListSubset, "add remove reset change", that.renderTemplateGetExtractsLabel);
                         //console.log("The region:", that.segmentList);
                         that.render();
-                        that.listenTo(that.model, 'change', function (m) {
+                        /*that.listenTo(that.model, 'change', function (m) {
                           // console.log("ideaPanel::change callback about to call render");
                           that.render();
-                        });
+                        });*/
                     }
                 );
             },
@@ -783,7 +768,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 }
             },
 
-            renderCKEditor: function () {
+            renderCKEditorDefinition: function () {
                 var that = this,
                     area = this.$('.ideaPanel-definition-editor');
 
@@ -791,19 +776,19 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 if (definitionText.length > 0) {
 
-                    this.ckeditor = new CKEditorField({
+                    this.definition = new CKEditorField({
                         'model': this.model,
                         'modelProp': 'definition'
                     });
                 }
 
-                this.ckeditor.on('save cancel', function () {
+                this.definition.on('save cancel', function () {
                     that.editingDefinition = false;
                     that.render();
                 });
 
-                this.ckeditor.renderTo(area);
-                this.ckeditor.changeToEditMode();
+                this.definition.renderTo(area);
+                this.definition.changeToEditMode();
             },
 
             renderCKEditorLongTitle: function () {

@@ -33,6 +33,11 @@
   .panel-editablebox.is-editing {
     .panel-editablearea {
       color: $black;
+      word-break: break-all;
+      -ms-word-break: break-all;
+      -webkit-hyphens: auto;
+      -moz-hyphens: auto;
+      hyphens: auto;
     }
   }
 
@@ -159,6 +164,7 @@
     i {
       font-size: 22px;
       color: $green;
+      margin-right: 2px;
     }
   }
 }
@@ -276,34 +282,6 @@ _:-ms-input-placeholder, :root .editable.groupBody .groupPanel header ~ .panelCo
 
 .panel-body--has-footer {
   bottom: 2px !important;
-}
-
-// dropzone above the panel-body
-// -------
-.panel-bodyabove {
-  //Currently non-functionnal, disabling: benoitg-2014-05-14
-  display: none;
-  @include z-index("float");
-
-  position: absolute;
-  top: 30px;
-  right: 0;
-  left: 0;
-  height: 10px;
-}
-
-// dropzone below the panel-body
-// -------
-.panel-bodybelow {
-  //Currently non-functionnal, disabling: benoitg-2014-05-14
-  display: none;
-  @include z-index("float");
-
-  position: absolute;
-  bottom: 30px;
-  right: 0;
-  left: 0;
-  height: 15px;
 }
 
 // The footer

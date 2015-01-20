@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 'common/context'],
-    function (Marionette, CollectionManager, Permissions, Ctx) {
+define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 'common/context', 'utils/i18n'],
+    function (Marionette, CollectionManager, Permissions, Ctx, i18n) {
 
         var adminNotificationSubscriptions = Marionette.LayoutView.extend({
             template: '#tmpl-adminNotificationSubscriptions',
@@ -40,6 +40,7 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                 });
 
                 return {
+                    i18n: i18n,
                     DiscussionNotifications: discussionNotifications
                 }
             },
