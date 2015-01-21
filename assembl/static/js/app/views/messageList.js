@@ -1116,6 +1116,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     collectionManager = new CollectionManager();
                 this.renderIsComplete = false;  //only showMessages should set this false
 
+                if (Ctx.debugRender) {
+                    console.log("messageList:render() is firing");
+                }
+
                 //Clear internal state
                 this._offsetStart = undefined;
                 this._offsetEnd = undefined;
@@ -1141,11 +1145,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
                     that = that.render_real();
                     that.unblockPanel();
-                }
-
-
-                if (Ctx.debugRender) {
-                    console.log("messageList:render() is firing");
                 }
 
                 this.blockPanel();
@@ -1961,7 +1960,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                           next_call_recursion_depth: recursionDepth + 1
                         }
                       );
-                      //console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
+                      console.log("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
                     }
                     setTimeout(function () {
                       that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1);

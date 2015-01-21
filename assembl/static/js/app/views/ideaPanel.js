@@ -311,7 +311,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 }
                 else
                 {
-                    console.log("there is no model");
+                    //console.log("there is no model");
                 }
 
                 var dataset = {
