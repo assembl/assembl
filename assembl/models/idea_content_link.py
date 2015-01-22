@@ -91,6 +91,10 @@ class IdeaContentLink(DiscussionBoundBase):
         return ((cls.idea_id == Idea.id),
                 (Idea.discussion_id == discussion_id))
 
+    discussion = relationship(
+        Discussion, viewonly=True, uselist=False, secondary=Idea.__table__)
+
+
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
         if alias_maker is None:
@@ -521,6 +525,9 @@ class TextFragmentIdentifier(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return ((cls.extract_id == Extract.id),
                 (Extract.discussion_id == discussion_id))
+
+    discussion = relationship(
+        Discussion, viewonly=True, uselist=False, secondary=Extract.__table__)
 
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,

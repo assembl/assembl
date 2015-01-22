@@ -25,7 +25,6 @@ from ..auth import (
 from .auth import (
     DiscussionPermission, Role, Permission, User, UserRole, LocalUserRole,
     UserTemplate)
-from .action import ViewPost
 from ..semantic.namespaces import (CATALYST, ASSEMBL, DCTERMS)
 
 
@@ -65,6 +64,7 @@ class Discussion(DiscussionBoundBase):
 
     def read_post_ids(self, user_id):
         from .post import Post
+        from .action import ViewPost
         return (x[0] for x in self.db.query(Post.id).join(
             ViewPost
         ).filter(

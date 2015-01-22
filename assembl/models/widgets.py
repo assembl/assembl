@@ -754,6 +754,9 @@ class WidgetUserConfig(DiscussionBoundBase):
         return ((cls.widget_id == Widget.id),
                 (Widget.discussion_id == discussion_id))
 
+    discussion = relationship(
+        Discussion, viewonly=True, uselist=False, secondary=Widget.__table__)
+
     crud_permissions = CrudPermissions(P_ADD_POST)  # all participants...
 
 
@@ -792,6 +795,9 @@ class IdeaWidgetLink(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return ((cls.idea_id == Idea.id),
                 (Idea.discussion_id == discussion_id))
+
+    discussion = relationship(
+        Discussion, viewonly=True, uselist=False, secondary=Idea.__table__)
 
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,

@@ -12,6 +12,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import join
 
 from . import DiscussionBoundBase
 from .discussion import Discussion
@@ -99,6 +100,9 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
         return ((cls.sub_graph_id == IdeaGraphView.id),
                 (IdeaGraphView.discussion_id == discussion_id))
 
+    discussion = relationship(
+        Discussion, viewonly=True, uselist=False, secondary=Idea.__table__)
+
     # @classmethod
     # def special_quad_patterns(cls, alias_maker, discussion_id):
     #     return [QuadMapPatternS(
@@ -108,6 +112,7 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
     #         name=QUADNAMES.idea_inclusion_reln)]
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
 
 class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
     __tablename__ = 'sub_graph_idea_link_association'
@@ -139,6 +144,7 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
                 (IdeaGraphView.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
 
 class ExplicitSubGraphView(IdeaGraphView):
     """
@@ -241,6 +247,14 @@ class ExplicitSubGraphView(IdeaGraphView):
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
+
+SubGraphIdeaLinkAssociation.discussion = relationship(
+        Discussion, viewonly=True, uselist=False,
+        secondary=join(
+            ExplicitSubGraphView, IdeaGraphView,
+            ExplicitSubGraphView.id == IdeaGraphView.id))
+
+
 class TableOfContents(IdeaGraphView):
     """
     Represents a Table of Ideas.
@@ -342,7 +356,7 @@ class Synthesis(ExplicitSubGraphView):
 
     @property
     def is_next_synthesis(self):
-        return self.discussion.get_next_synthesis() == self;
+        return self.discussion.get_next_synthesis() == self
 
     def get_discussion_id(self):
         return self.discussion_id
@@ -355,4 +369,3 @@ class Synthesis(ExplicitSubGraphView):
         return "<Synthesis %s>" % repr(self.subject)
 
     crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
-

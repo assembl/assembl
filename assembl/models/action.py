@@ -24,6 +24,8 @@ from ..semantic.namespaces import (
     SIOC, ASSEMBL, CATALYST, QUADNAMES, VERSION, FOAF, DCTERMS, RDF, VirtRDF)
 from ..semantic.virtuoso_mapping import QuadMapPatternS, USER_SECTION
 from .auth import User
+from .generic import Content
+from .discussion import Discussion
 
 class Action(DiscussionBoundBase):
     """
@@ -114,6 +116,9 @@ class ActionOnPost(Action):
         return ((cls.id == Action.id),
                 (cls.post_id == Content.id),
                 (Content.discussion_id == discussion_id))
+
+    discussion = relationship(
+        Discussion, viewonly=True, secondary=Content.__table__, uselist=False)
 
 
 class ViewPost(ActionOnPost):

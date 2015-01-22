@@ -962,6 +962,10 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA)
 
+    discussion = relationship(
+        Discussion, viewonly=True, uselist=False,
+        secondary=Idea.__table__, primaryjoin=(source_id == Idea.id))
+
 
 class PositionRespondsToIssue(IdeaLink):
     __mapper_args__ = {
