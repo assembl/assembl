@@ -117,7 +117,8 @@ class Idea(Tombstonable, DiscussionBoundBase):
         Discussion,
         backref=backref(
             'ideas', order_by=creation_date,
-            cascade="all, delete-orphan")
+            cascade="all, delete-orphan"),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
     )
 
     #widget_id = deferred(Column(Integer, ForeignKey('widget.id')))
@@ -964,7 +965,8 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
 
     discussion = relationship(
         Discussion, viewonly=True, uselist=False,
-        secondary=Idea.__table__, primaryjoin=(source_id == Idea.id))
+        secondary=Idea.__table__, primaryjoin=(source_id == Idea.id),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
 
 class PositionRespondsToIssue(IdeaLink):

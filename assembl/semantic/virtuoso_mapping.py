@@ -5,6 +5,7 @@ from threading import Lock
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.properties import RelationshipProperty
 from rdflib import Graph, ConjunctiveGraph
 import simplejson as json
 
@@ -179,10 +180,10 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         clsname = cls.external_typename()
         if for_graph.discussion_id:
             return getattr(QUADNAMES, 'col_pattern_d%s_%s_%s' % (
-                for_graph.discussion_id, clsname, column.name))
+                for_graph.discussion_id, clsname, column.key))
         else:
             return getattr(QUADNAMES, 'col_pattern_%s_%s' % (
-                clsname, column.name))
+                clsname, column.key))
 
     def include_foreign_conditions(self, dest_class_path):
         from assembl.models import Discussion
@@ -257,7 +258,9 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
         name = None
         if column is not None:
             name = self.make_column_name(sqla_cls, column, for_graph)
-            if column.foreign_keys:
+            if isinstance(column, RelationshipProperty):
+                column = self.property_as_reference(column, alias_maker)
+            elif column.foreign_keys:
                 column = self.column_as_reference(column)
         qmp = qmp.clone_with_defaults(
             subject_pattern, column, for_graph.name, name, None, rdf_sections)

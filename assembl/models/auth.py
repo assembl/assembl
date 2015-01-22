@@ -55,7 +55,7 @@ class AgentProfile(Base):
     name = Column(CoerceUnicode(1024),
         info={'rdf': QuadMapPatternS(None, FOAF.name)})
     description = Column(UnicodeText,
-        info= {'rdf': QuadMapPatternS(None, DCTERMS.description)})
+        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
     type = Column(String(60))
 
     __mapper_args__ = {
@@ -777,7 +777,8 @@ class LocalUserRole(DiscussionBoundBase):
         'discussion.id', ondelete='CASCADE'))
     discussion = relationship(
         'Discussion', backref=backref(
-            "local_user_roles", cascade="all, delete-orphan"))
+            "local_user_roles", cascade="all, delete-orphan"),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
     role = relationship(Role)
     requested = Column(Boolean, server_default='0', default='0')
@@ -879,7 +880,8 @@ class DiscussionPermission(DiscussionBoundBase):
         'discussion.id', ondelete='CASCADE', onupdate='CASCADE'))
     discussion = relationship(
         'Discussion', backref=backref(
-            "acls", cascade="all, delete-orphan"))
+            "acls", cascade="all, delete-orphan"),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
     role = relationship(Role)
     permission_id = Column(Integer, ForeignKey(
@@ -945,7 +947,8 @@ class UserTemplate(DiscussionBoundBase, User):
         "discussion.id", ondelete='CASCADE', onupdate='CASCADE'))
     discussion = relationship(
         "Discussion", backref=backref(
-            "user_templates", cascade="all, delete-orphan"))
+            "user_templates", cascade="all, delete-orphan"),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     role_id = Column(Integer, ForeignKey(
         Role.id, ondelete='CASCADE', onupdate='CASCADE'))
@@ -1028,7 +1031,8 @@ class PartnerOrganization(DiscussionBoundBase):
         info={'rdf': QuadMapPatternS(None, DCTERMS.contributor)})
     discussion = relationship(
         'Discussion', backref=backref(
-            'partner_organizations', cascade="all, delete-orphan"))
+            'partner_organizations', cascade="all, delete-orphan"),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     name = Column(CoerceUnicode(256),
         info={'rdf': QuadMapPatternS(None, FOAF.name)})

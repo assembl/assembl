@@ -36,7 +36,7 @@ class Action(DiscussionBoundBase):
     id = Column(Integer, primary_key=True)
     type = Column(String(255), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info = {'rdf': QuadMapPatternS(None, VERSION.when)})
+        info={'rdf': QuadMapPatternS(None, VERSION.when)})
 
     __mapper_args__ = {
         'polymorphic_identity': 'action',
@@ -48,7 +48,7 @@ class Action(DiscussionBoundBase):
         Integer,
         ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False,
-        info = {'rdf': QuadMapPatternS(None, VERSION.who)}
+        info={'rdf': QuadMapPatternS(None, VERSION.who)}
     )
 
     actor = relationship(
@@ -91,7 +91,7 @@ class ActionOnPost(Action):
         Integer,
         ForeignKey('content.id', ondelete="CASCADE", onupdate='CASCADE'),
         nullable=False,
-        info = {'rdf': QuadMapPatternS(None, VERSION.what)}
+        info={'rdf': QuadMapPatternS(None, VERSION.what)}
     )
 
     post = relationship(
@@ -118,7 +118,8 @@ class ActionOnPost(Action):
                 (Content.discussion_id == discussion_id))
 
     discussion = relationship(
-        Discussion, viewonly=True, secondary=Content.__table__, uselist=False)
+        Discussion, viewonly=True, secondary=Content.__table__, uselist=False,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
 
 class ViewPost(ActionOnPost):

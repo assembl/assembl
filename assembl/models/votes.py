@@ -95,7 +95,8 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
 
     discussion = relationship(
         Discussion, viewonly=True, uselist=False,
-        secondary=Idea.__table__, primaryjoin=(idea_id == Idea.id))
+        secondary=Idea.__table__, primaryjoin=(idea_id == Idea.id),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     @classmethod
     def external_typename(cls):

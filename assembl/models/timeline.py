@@ -26,7 +26,7 @@ class TimelineEvent(DiscussionBoundBase):
     __tablename__ = 'timeline_event'
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -43,17 +43,17 @@ class TimelineEvent(DiscussionBoundBase):
     }
 
     title = Column(CoerceUnicode(), nullable=False,
-        info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
+        info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
 
     description = Column(UnicodeText,
-        info= {'rdf': QuadMapPatternS(None, DCTERMS.description)})
+        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
 
     start = Column(DateTime,
         # Formally, TIME.hasBeginning o TIME.inXSDDateTime
-        info= {'rdf': QuadMapPatternS(None, TIME.hasBeginning)})
+        info={'rdf': QuadMapPatternS(None, TIME.hasBeginning)})
 
     end = Column(DateTime,
-        info= {'rdf': QuadMapPatternS(None, TIME.hasEnd)})
+        info={'rdf': QuadMapPatternS(None, TIME.hasEnd)})
 
     # Since dates are optional, the previous event pointer allows
     # dateless events to form a linked list.
@@ -86,7 +86,8 @@ class TimelineEvent(DiscussionBoundBase):
         Discussion,
         backref=backref(
             'timeline_events', order_by=start,
-            cascade="all, delete-orphan")
+            cascade="all, delete-orphan"),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
     )
 
     def set_previous_event(self, previous_event):
