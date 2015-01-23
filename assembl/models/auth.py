@@ -277,7 +277,7 @@ class EmailAccount(AbstractAgentAccount):
         args = {'s': str(size)}
         if default:
             args['d'] = default
-        return "http://www.gravatar.com/avatar/%s?%s" % (
+        return "//www.gravatar.com/avatar/%s?%s" % (
             hashlib.md5(email.lower()).hexdigest(), urllib.urlencode(args))
 
     @staticmethod
