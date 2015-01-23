@@ -38,9 +38,10 @@ _ = TranslationStringFactory('assembl')
 
 def get_login_context(request):
     slug = request.matchdict.get('discussion_slug', None)
+    p_slug = "/" + slug if slug else ""
     return dict(get_default_context(request), **{
         'login_url': login_url,
-        'slug': (("/"+slug) if slug else ""),
+        'slug': p_slug,
         'providers': request.registry.settings['login_providers'],
         'google_consumer_key': request.registry.settings.get(
             'google.consumer_key', ''),
@@ -235,11 +236,11 @@ def avatar(request):
 )
 def assembl_register_view(request):
     slug = request.matchdict.get('discussion_slug', "")
-    slug = "/" + slug
+    p_slug = "/" + slug if slug else ""
     next_view = handle_next_view(request)
     if not request.params.get('email'):
         return dict(get_default_context(request),
-                    slug=slug)
+                    slug=p_slug)
     forget(request)
     session = AgentProfile.db
     localizer = request.localizer
@@ -249,19 +250,19 @@ def assembl_register_view(request):
     email = request.params.get('email', '').strip()
     if not is_email(email):
         return dict(get_default_context(request),
-                    slug=slug,
+                    slug=p_slug,
                     error=localizer.translate(_(
                         "This is not a valid email")))
     # Find agent account to avoid duplicates!
     if session.query(EmailAccount).filter_by(
             email=email, verified=True).count():
         return dict(get_default_context(request),
-                    slug=slug,
+                    slug=p_slug,
                     error=localizer.translate(_(
                         "We already have a user with this email.")))
     if password != password2:
         return dict(get_default_context(request),
-                    slug=slug,
+                    slug=p_slug,
                     error=localizer.translate(_(
                         "The passwords should be identical")))
 
@@ -329,12 +330,13 @@ def from_identifier(identifier):
 )
 def assembl_login_complete_view(request):
     slug = request.matchdict.get('discussion_slug', None)
+    p_slug = "/" + slug if slug else ""
     # Check if proper authorization. Otherwise send to another page.
     session = AgentProfile.db
     identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
     next_view = handle_next_view(
-        request, True, '/%s/register' % (slug,) if slug else '/register')
+        request, True, p_slug + '/register')
     logged_in = authenticated_userid(request)
     localizer = request.localizer
     user = None
@@ -568,12 +570,12 @@ def user_confirm_email(request):
         discussions = user.involved_in_discussion
         if len(discussions) == 1:
             slug = discussions[0].slug
+    p_slug = "/" + slug if slug else ""
     if slug:
         location = 'contextual_login'
-        next_view = '/%s/' % (slug,)
     else:
         location = 'login'
-        next_view = '/'
+    next_view = p_slug + '/'
     next_view = handle_next_view(request, False, next_view)
 
     if email.verified:
