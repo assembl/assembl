@@ -1,3 +1,4 @@
+from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import (HTTPOk)
 from pyramid_dogpile_cache import get_region
@@ -34,12 +35,14 @@ def create_jsonld(discussion_id):
     return aqsm.as_jsonld(discussion_id)
 
 
-@view_config(context=InstanceContext, renderer='json', name="jsonld",
+@view_config(context=InstanceContext, name="jsonld",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_READ, accept="application/ld+json")
-@view_config(context=InstanceContext, renderer='json',
+@view_config(context=InstanceContext,
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_READ, accept="application/ld+json")
 def discussion_instance_view_jsonld(request):
     discussion = request.context._instance
-    return create_jsonld(discussion.id)
+    json = create_jsonld(discussion.id)
+    # TODO: Add age
+    return Response(body=json, content_type="application/ld+json")
