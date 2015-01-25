@@ -278,8 +278,7 @@ class TableOfContents(IdeaGraphView):
     }
 
     discussion = relationship(
-        Discussion, backref=backref("table_of_contents", uselist=False),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        Discussion, backref=backref("table_of_contents", uselist=False))
 
     def serializable(self):
         return {

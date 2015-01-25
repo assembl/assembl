@@ -901,22 +901,23 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
         idea_link = alias_maker.alias_from_class(cls)
         target_alias = alias_maker.alias_from_relns(cls.target)
         source_alias = alias_maker.alias_from_relns(cls.source)
+        # Assume tombstone status of target is similar to source, for now.
+        conditions = [(idea_link.target_id == target_alias.id),
+                      (target_alias.is_tombstone == 0)]
+        if discussion_id:
+            conditions.append((target_alias.discussion_id == discussion_id))
         return [
             QuadMapPatternS(
                 Idea.iri_class().apply(idea_link.source_id),
                 IDEA.includes,
                 Idea.iri_class().apply(idea_link.target_id),
-                conditions=((target_alias.discussion_id == discussion_id),
-                            (idea_link.target_id == target_alias.id),
-                            (target_alias.is_tombstone == 0)),
+                conditions=conditions,
                 name=QUADNAMES.idea_inclusion_reln),
             QuadMapPatternS(
                 cls.iri_class().apply(idea_link.id),
                 IDEA.source_idea,  # Note that RDF is inverted
                 Idea.iri_class().apply(idea_link.target_id),
-                conditions=((target_alias.discussion_id == discussion_id),
-                            (idea_link.target_id == target_alias.id),
-                            (target_alias.is_tombstone == 0)),
+                conditions=conditions,
                 name=QUADNAMES.col_pattern_IdeaLink_target_id
                 #exclude_base_condition=True
                 ),

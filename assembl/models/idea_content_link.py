@@ -273,8 +273,14 @@ class Extract(IdeaContentPositiveLink):
                 None, OA.hasTarget, cls.specific_resource_iri.apply(cls.id),
                 name=QUADNAMES.oa_hasTarget),
             QuadMapPatternS(
-                cls.specific_resource_iri.apply(cls.id), RDF.type, OA.SpecificResource,
+                cls.specific_resource_iri.apply(cls.id),
+                RDF.type, OA.SpecificResource,
                 name=QUADNAMES.oa_SpecificResource_type),
+            QuadMapPatternS(
+                cls.specific_resource_iri.apply(cls.id),
+                ASSEMBL.in_conversation,
+                Discussion.iri_class().apply(cls.discussion_id),
+                name=QUADNAMES.oa_SpecificResource_in_conversation),
             QuadMapPatternS(
                 cls.specific_resource_iri.apply(cls.id), OA.hasSource,
                 Content.iri_class().apply(cls.content_id),
