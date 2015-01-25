@@ -636,7 +636,7 @@ class AssemblQuadStorageManager(object):
         cg = self.as_graph(discussion_id)
         context = [
             context_url, {'local': self.local_uri()}]
-        jsonld = cg.serialize(format='json-ld', context=context)
+        jsonld = cg.serialize(format='json-ld', context=context, indent=None)
         # json-ld serializer does strict CURIES, ie only one segment after
         # the prefix. We use local:Classname/ID, so do this by hand.
         # Make sure not to change the one in the context.
