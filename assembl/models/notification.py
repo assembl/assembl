@@ -34,6 +34,8 @@ from .post import Post, SynthesisPost
 from jinja2 import Environment, PackageLoader
 from email import (charset as Charset)
 from email.mime.text import MIMEText
+from assembl.semantic.virtuoso_mapping import QuadMapPatternS
+from assembl.semantic.namespaces import ASSEMBL
 from gettext import gettext, ngettext
 _ = gettext
 
@@ -129,7 +131,8 @@ class NotificationSubscription(DiscussionBoundBase):
     discussion = relationship(
         Discussion,
         backref=backref('notificationSubscriptions',
-                        cascade="all, delete-orphan")
+                        cascade="all, delete-orphan"),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
     )
     creation_date = Column(
         DateTime,

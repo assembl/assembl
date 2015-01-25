@@ -43,7 +43,7 @@ class IdeaContentLink(DiscussionBoundBase):
     # TODO: How to express the implied link as RDF? Remember not reified, unless extract.
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     type = Column(String(60))
 
     # This is nullable, because in the case of extracts, the idea can be
@@ -61,13 +61,13 @@ class IdeaContentLink(DiscussionBoundBase):
     order = Column(Float, nullable=False, default=0.0)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': QuadMapPatternS(None, DCTERMS.created)})
+        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     creator_id = Column(
         Integer,
         ForeignKey('agent_profile.id'),
         nullable=False,
-        info= {'rdf': QuadMapPatternS(None, SIOC.has_creator)}
+        info={'rdf': QuadMapPatternS(None, SIOC.has_creator)}
     )
 
     creator = relationship(
@@ -90,6 +90,11 @@ class IdeaContentLink(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return ((cls.idea_id == Idea.id),
                 (Idea.discussion_id == discussion_id))
+
+    discussion = relationship(
+        Discussion, viewonly=True, uselist=False, secondary=Idea.__table__,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+
 
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
@@ -222,13 +227,15 @@ class Extract(IdeaContentPositiveLink):
     # whereas it was meant to be a comment on the extract
     # if used from the Web annotator. I'll have to migrate it.
     body = Column(UnicodeText, nullable=False)
-    # info= {'rdf': QuadMapPatternS(None, OA.hasBody)})
+    # info={'rdf': QuadMapPatternS(None, OA.hasBody)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True,
-        info = {'rdf': QuadMapPatternS(None, CATALYST.relevantToConversation)})
-    discussion = relationship(Discussion, backref='extracts')
+        info={'rdf': QuadMapPatternS(None, CATALYST.relevantToConversation)})
+    discussion = relationship(
+        Discussion, backref='extracts',
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     important = Column('important', Boolean, server_default='0')
 
@@ -266,8 +273,14 @@ class Extract(IdeaContentPositiveLink):
                 None, OA.hasTarget, cls.specific_resource_iri.apply(cls.id),
                 name=QUADNAMES.oa_hasTarget),
             QuadMapPatternS(
-                cls.specific_resource_iri.apply(cls.id), RDF.type, OA.SpecificResource,
+                cls.specific_resource_iri.apply(cls.id),
+                RDF.type, OA.SpecificResource,
                 name=QUADNAMES.oa_SpecificResource_type),
+            QuadMapPatternS(
+                cls.specific_resource_iri.apply(cls.id),
+                ASSEMBL.in_conversation,
+                Discussion.iri_class().apply(cls.discussion_id),
+                name=QUADNAMES.oa_SpecificResource_in_conversation),
             QuadMapPatternS(
                 cls.specific_resource_iri.apply(cls.id), OA.hasSource,
                 Content.iri_class().apply(cls.content_id),
@@ -448,7 +461,7 @@ class TextFragmentIdentifier(DiscussionBoundBase):
     rdf_class = OA.FragmentSelector
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     extract_id = Column(Integer, ForeignKey(
         Extract.id, ondelete="CASCADE"), index=True)
     xpath_start = Column(String)
@@ -521,6 +534,10 @@ class TextFragmentIdentifier(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return ((cls.extract_id == Extract.id),
                 (Extract.discussion_id == discussion_id))
+
+    discussion = relationship(
+        Discussion, viewonly=True, uselist=False, secondary=Extract.__table__,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,

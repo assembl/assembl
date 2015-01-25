@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'utils/roles', 'backbone.modal', 'backbone.marionette.modals'],
-    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions, Roles) {
+define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'utils/i18n', 'utils/roles', 'backbone.modal', 'backbone.marionette.modals'],
+    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions, i18n, Roles) {
         var navBar = Marionette.LayoutView.extend({
             template: '#tmpl-navBar',
             tagName: 'nav',
@@ -201,18 +201,43 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
             joinDiscussion: function () {
 
-                var self = this;
+                var self = this,
+                    collectionManager = new CollectionManager();
+
+                var model = new Backbone.Model({
+                    notificationsToShow: null,
+                });
 
                 var Modal = Backbone.Modal.extend({
                     template: _.template($('#tmpl-joinDiscussion').html()),
                     className: 'group-modal popin-wrapper modal-joinDiscussion',
                     cancelEl: '.close, .btn-cancel',
+
+                    model: model,
                     initialize: function () {
+                        var that = this;
                         this.$('.bbm-modal').addClass('popin');
+
+                        $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then
+                        (
+                            function (discussionNotifications) {
+                                that.model.notificationsToShow = _.filter(discussionNotifications.models, function (m) {
+                                    // keep only the list of notifications which become active when a user follows a discussion
+                                    return (m.get('creation_origin') === 'DISCUSSION_DEFAULT') && (m.get('status') === 'ACTIVE');
+                                });
+                                that.render();
+                            }
+                        );
                     },
                     events: {
                         'click .js_subscribe': 'subscription',
                         'click .js_close': 'closeModal'
+                    },
+                    serializeData: function () {
+                        return {
+                            i18n: i18n,
+                            notificationsToShow: model.notificationsToShow
+                        }
                     },
                     subscription: function () {
                         var that = this;

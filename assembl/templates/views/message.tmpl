@@ -70,7 +70,7 @@
     </div><span class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
   </div>
   <div class="rightSection">
-    <span class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }} {{ showInspirationSource() }}</span>
+    <span class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</span>
     {# Strip whitespace ...#}{{ readUnreadIndicator() }}{# Strip whitespace ...#}
   </div>
   <div class="centerSection">

@@ -6,6 +6,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 from . import (Base, DiscussionBoundBase, Tombstonable)
+from .discussion import Discussion
 from .idea import Idea
 from .auth import User
 from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
@@ -91,6 +92,11 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return ((cls.idea_id == Idea.id),
                 (Idea.discussion_id == discussion_id))
+
+    discussion = relationship(
+        Discussion, viewonly=True, uselist=False,
+        secondary=Idea.__table__, primaryjoin=(idea_id == Idea.id),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     @classmethod
     def external_typename(cls):

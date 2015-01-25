@@ -51,7 +51,7 @@ class Post(Content):
                         nullable=False,
                         index=True,
                         doc="The email-compatible message-id for the post.",
-                        info= {'rdf': QuadMapPatternS(None, SIOC.id)})
+                        info={'rdf': QuadMapPatternS(None, SIOC.id)})
 
     ancestry = Column(String, default="")
 
@@ -78,15 +78,15 @@ class Post(Content):
         ]
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),
-        info= {'rdf': QuadMapPatternS(None, SIOC.has_creator)})
+        info={'rdf': QuadMapPatternS(None, SIOC.has_creator)})
     creator = relationship(AgentProfile, backref="posts_created")
     
     subject = Column(CoerceUnicode(), nullable=True,
-        info= {'rdf': QuadMapPatternS(None, DCTERMS.title)})
+        info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
     # TODO: check HTML or text? SIOC.content should be text.
     # Do not give it for now, privacy reasons
     body = Column(UnicodeText, nullable=False)
-    #    info= {'rdf': QuadMapPatternS(None, SIOC.content)})
+    #    info={'rdf': QuadMapPatternS(None, SIOC.content)})
 
     __mapper_args__ = {
         'polymorphic_identity': 'post',
@@ -376,7 +376,7 @@ class ImportedPost(Post):
                         doc="The source-specific unique id of the imported post.  A listener keeps the message_id in the post class in sync")
     
     source_id = Column('source_id', Integer, ForeignKey('post_source.id', ondelete='CASCADE'),
-        info= {'rdf': QuadMapPatternS(None, ASSEMBL.has_origin)})
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.has_origin)})
     
     source = relationship(
         "PostSource",

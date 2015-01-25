@@ -4,8 +4,12 @@
 
 <div class="popin-body">
   <div class="content">
-    <h1 class="h1">{{ gettext('follow the discussion') }}</h1>
-    <h5 class="h5">{{ gettext('Receive notifications when participants respond to your messages') }}</h5>
+    <h1 class="h1">{{ gettext('Subscribe to discussion') }}</h1>
+    <h5 class="h5 tal">{{ gettext('By subscribing to this discussion, you will receive a notification when:') }}</h5>
+    <ul class="tal"><% console.log("notificationsToShow in template: ", notificationsToShow); _.each(notificationsToShow, function(notification, i){ %>
+    	<li><%= i18n.gettext(notification.get('human_readable_description')) %></li>
+    <% }); %></ul>
+    <h5 class="h5 tal">{{ gettext('You can then edit your subscriptions at anytime in the "Notifications" section of your profile.') }}</h5>
   </div>
   <div class="clr"></div>
 </div>

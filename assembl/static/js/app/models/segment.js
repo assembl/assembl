@@ -93,9 +93,18 @@ define(['underscore', 'models/base', 'common/context', 'models/agents', 'models/
                     return i18n.gettext('You must be logged in to create segments');
                 }
 
+                /* 
+                 * Extracts CAN have a null idPost: it is the case for extracts harvested from a distant webpage.
+                 * But if the extract has no idPost field, then it must have an uri field.
                 if (attrs.idPost === null || typeof attrs.idPost !== 'string') {
                     return i18n.gettext('invalid idPost: ' + attrs.idPost);
                 }
+                */
+                if ( (attrs.idPost === null || typeof attrs.idPost !== 'string') && (attrs.uri === null || typeof attrs.uri !== 'string') ) {
+                    return i18n.gettext('invalid extract: the extract must have a valid idPost (here ' + attrs.idPost + ') or a valid uri (here ' + attrs.uri + ')' );
+                }
+
+
                 if (attrs.creationDate === null) {
                     return i18n.gettext('invalid creationDate: ' + attrs.creationDate);
                 }

@@ -7,14 +7,14 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
 # François Burra <francoisburra@imaginationforpeople.org>, 2014
 # Marc-Antoine Parent <maparent@acm.org>, 2014-2015
-# Quentin Grimaud <quentin.grimaud@gmail.com>, 2014
+# Quentin Grimaud <quentin.grimaud@gmail.com>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-01-16 17:18-0500\n"
-"PO-Revision-Date: 2015-01-16 21:16+0000\n"
-"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
+"POT-Creation-Date: 2015-01-23 17:56+0100\n"
+"PO-Revision-Date: 2015-01-23 16:54+0000\n"
+"Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -50,19 +50,19 @@ msgstr "${val} ne peut être sérialisé: ${err}"
 msgid "${val} is not a string: ${err}"
 msgstr "${val} n'est pas une chaîne: ${err}"
 
-#: assembl/models/notification.py:484
+#: assembl/models/notification.py:487
 msgid "A periodic synthesis of the discussion is posted by the moderator"
 msgstr "Une synthèse périodique de la discussion a été envoyée par le modérateur"
 
-#: assembl/models/notification.py:512
+#: assembl/models/notification.py:515
 msgid "Any message is posted to the discussion"
 msgstr "N'importe quel message est envoyé à la discussion"
 
-#: assembl/models/notification.py:541
+#: assembl/models/notification.py:544
 msgid "Someone directly responds to any message you posted"
 msgstr "Quelqu'un répond directement à un de vos messages"
 
-#: assembl/models/notification.py:895
+#: assembl/models/notification.py:898
 msgid "SYNTHESIS: "
 msgstr "SYNTHÈSE: "
 
@@ -227,8 +227,8 @@ msgstr[1] "%d contributeurs avaient contribué lors %s et demeurent toujours act
 #, python-format
 msgid "%d participant's last contribution was prior to %s"
 msgid_plural "%d participants' last contribution was prior to %s"
-msgstr[0] "La dernière contribution de %d participants date %s"
-msgstr[1] "La dernière contribution de %d participant date %s"
+msgstr[0] "La dernière contribution de %d participant date %s"
+msgstr[1] "La dernière contribution de %d participants date %s"
 
 #: assembl/static/js/app/views/contextPage.js:1092
 #, python-format
@@ -255,24 +255,24 @@ msgid "Dashboard"
 msgstr "Tableau de bord"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:117
-#: assembl/static/js/app/views/message.js:216
+#: assembl/static/js/app/views/message.js:217
 msgid "Type your response here..."
 msgstr "Écrivez votre réponse ici..."
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:119
-#: assembl/static/js/app/views/message.js:218
+#: assembl/static/js/app/views/message.js:219
 msgid "Send your reply"
 msgstr "Envoyez votre réponse"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:122
-#: assembl/static/js/app/views/message.js:220
+#: assembl/static/js/app/views/message.js:221
 msgid "You did not type a response yet..."
 msgstr "Vous n'avez pas encore écrit de réponse"
 
-#: assembl/static/js/app/views/ideaList.js:104
-#: assembl/templates/views/navigation.tmpl:11
-msgid "Debate"
-msgstr "Débat"
+#: assembl/static/js/app/views/ideaList.js:131
+#: assembl/templates/views/create-group.tmpl:42
+msgid "Table of ideas"
+msgstr "Table des idées"
 
 #: assembl/static/js/app/views/ideaPanel.js:238
 #: assembl/static/js/app/views/messageListPostQuery.js:95
@@ -353,7 +353,7 @@ msgstr "Confirmez que vous souhaitez supprimer cette idée."
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr "Confirmez que vous souhaitez renvoyer tous les extraits au presse-papier."
 
-#: assembl/static/js/app/views/message.js:401
+#: assembl/static/js/app/views/message.js:402
 msgid ""
 "You will be redirected to another idea in connection with the nugget on "
 "which you clicked."
@@ -688,7 +688,7 @@ msgstr "Permissions"
 
 #: assembl/templates/discussion_list.jinja2:22
 #: assembl/templates/discussion_list.jinja2:29
-#: assembl/templates/views/navBar.tmpl:72
+#: assembl/templates/views/navBar.tmpl:69
 msgid "Sign in"
 msgstr "Connectez-vous"
 
@@ -714,7 +714,7 @@ msgid "Change global permissions"
 msgstr "Changer les permissions globales"
 
 #: assembl/templates/do_password_change.jinja2:16
-#: assembl/templates/login.jinja2:68 assembl/templates/register.jinja2:25
+#: assembl/templates/login.jinja2:65 assembl/templates/register.jinja2:25
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -725,68 +725,68 @@ msgstr "Mot de passe"
 msgid "Repeat password"
 msgstr "Répéter le mot de passe"
 
-#: assembl/templates/login.jinja2:34
+#: assembl/templates/login.jinja2:31
 msgid "Log in to Assembl"
 msgstr "Se connecter sur Assembl"
 
-#: assembl/templates/login.jinja2:40
+#: assembl/templates/login.jinja2:37
 msgid "Log in using one of these social networks"
 msgstr "Connectez-vous à l’aide d’un des réseaux sociaux suivants"
 
-#: assembl/templates/login.jinja2:44 assembl/templates/profile.jinja2:227
+#: assembl/templates/login.jinja2:41 assembl/templates/profile.jinja2:227
 msgid "Login with Google"
 msgstr "Se connecter avec Google"
 
-#: assembl/templates/login.jinja2:45 assembl/templates/profile.jinja2:228
+#: assembl/templates/login.jinja2:42 assembl/templates/profile.jinja2:228
 msgid "Login with Twitter"
 msgstr "Se connecter avec Twitter"
 
-#: assembl/templates/login.jinja2:46 assembl/templates/profile.jinja2:229
+#: assembl/templates/login.jinja2:43 assembl/templates/profile.jinja2:229
 msgid "Login with Facebook"
 msgstr "Se connecter avec Facebook"
 
-#: assembl/templates/login.jinja2:47 assembl/templates/profile.jinja2:230
+#: assembl/templates/login.jinja2:44 assembl/templates/profile.jinja2:230
 msgid "Login with Yahoo"
 msgstr "Se connecter avec Yahoo"
 
-#: assembl/templates/login.jinja2:48 assembl/templates/profile.jinja2:232
+#: assembl/templates/login.jinja2:45 assembl/templates/profile.jinja2:232
 msgid "Login with Windows Live"
 msgstr "Se connecter avec Windows Live"
 
-#: assembl/templates/login.jinja2:49 assembl/templates/profile.jinja2:233
+#: assembl/templates/login.jinja2:46 assembl/templates/profile.jinja2:233
 msgid "Login with Github"
 msgstr "Se connecter avec Github"
 
-#: assembl/templates/login.jinja2:50 assembl/templates/profile.jinja2:234
+#: assembl/templates/login.jinja2:47 assembl/templates/profile.jinja2:234
 msgid "Login with Bitbucket"
 msgstr "Se connecter avec Bitbucket"
 
-#: assembl/templates/login.jinja2:51 assembl/templates/profile.jinja2:235
+#: assembl/templates/login.jinja2:48 assembl/templates/profile.jinja2:235
 msgid "Login with OpenID"
 msgstr "Se connecter avec un OpenID"
 
-#: assembl/templates/login.jinja2:63
+#: assembl/templates/login.jinja2:60
 msgid "Already have an account?"
 msgstr "Vous avez déjà un compte ?"
 
-#: assembl/templates/login.jinja2:67 assembl/templates/profile.jinja2:102
+#: assembl/templates/login.jinja2:64 assembl/templates/profile.jinja2:102
 #: assembl/templates/register.jinja2:24 assembl/templates/views/profile.tmpl:71
 msgid "Email"
 msgstr "Courriel"
 
-#: assembl/templates/login.jinja2:72
+#: assembl/templates/login.jinja2:69
 msgid "Log in"
 msgstr "Se connecter"
 
-#: assembl/templates/login.jinja2:74
+#: assembl/templates/login.jinja2:71
 msgid "Forgot your password?"
 msgstr "Mot de passe oublié ?"
 
-#: assembl/templates/login.jinja2:77
+#: assembl/templates/login.jinja2:74
 msgid "No account yet?"
 msgstr "Vous n'avez pas encore de compte ?"
 
-#: assembl/templates/login.jinja2:78 assembl/templates/register.jinja2:27
+#: assembl/templates/login.jinja2:75 assembl/templates/register.jinja2:27
 msgid "Sign up"
 msgstr "Créer un compte"
 
@@ -956,7 +956,7 @@ msgstr ""
 "Pour une expérience optimale, veuillez <span style=\"text-decoration: "
 "underline;\">mettre votre fureteur à jour</span>."
 
-#: assembl/templates/notifications/html_mail.jinja2:82
+#: assembl/templates/notifications/html_mail.jinja2:87
 #, python-format
 msgid ""
 "You are receiving this because you are %(notificationConfigLink)s to "
@@ -967,11 +967,12 @@ msgstr ""
 "discussion %(discussionLink)s. Vous recevez actuellement une notification"
 " lorsque :"
 
-#: assembl/templates/notifications/html_mail.jinja2:84
+#: assembl/templates/notifications/html_mail.jinja2:89
 msgid "subscribed"
 msgstr "abonné"
 
-#: assembl/templates/notifications/html_mail.jinja2:91
+#: assembl/templates/notifications/html_mail.jinja2:96
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:78
 msgid "Unsubscribe"
 msgstr "Se désabonner"
 
@@ -1011,7 +1012,6 @@ msgstr "Éditer les partenaires"
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:15
 #: assembl/templates/views/adminPartners.tmpl:15
 #: assembl/templates/views/profile.tmpl:12
-#: assembl/templates/views/userNotificationSubscriptions.tmpl:83
 msgid "back to discussion"
 msgstr "Revenir à la discussion"
 
@@ -1221,10 +1221,6 @@ msgstr "Vue classique"
 msgid "Create a synthesis"
 msgstr "Créer une synthèse"
 
-#: assembl/templates/views/create-group.tmpl:42
-msgid "Table of ideas"
-msgstr "Table des idées"
-
 #: assembl/templates/views/create-group.tmpl:51
 msgid "Others:"
 msgstr "Autres panneaux :"
@@ -1252,12 +1248,12 @@ msgstr ""
 "semaine, ne vous inquiétez pas !)."
 
 #: assembl/templates/views/firstPost.tmpl:14
-#: assembl/templates/views/joinDiscussion.tmpl:14
+#: assembl/templates/views/joinDiscussion.tmpl:18
 msgid "not now"
 msgstr "Pas maintenant"
 
 #: assembl/templates/views/firstPost.tmpl:15
-#: assembl/templates/views/joinDiscussion.tmpl:15
+#: assembl/templates/views/joinDiscussion.tmpl:19
 msgid "yes, thanks"
 msgstr "Oui, s'il vous plaît"
 
@@ -1462,12 +1458,22 @@ msgid "edit instigator"
 msgstr "éditer l'initiateur"
 
 #: assembl/templates/views/joinDiscussion.tmpl:7
-msgid "follow the discussion"
-msgstr "Suivre la discussion"
+msgid "Subscribe to discussion"
+msgstr "S'abonner à la discussion"
 
 #: assembl/templates/views/joinDiscussion.tmpl:8
-msgid "Receive notifications when participants respond to your messages"
-msgstr "Recevoir des notifications quand les participants répondent à vos messages"
+msgid "By subscribing to this discussion, you will receive a notification when:"
+msgstr ""
+"En vous abonnant à cette discussion, vous recevrez une notification quand"
+" :"
+
+#: assembl/templates/views/joinDiscussion.tmpl:12
+msgid ""
+"You can then edit your subscriptions at anytime in the \"Notifications\" "
+"section of your profile."
+msgstr ""
+"Vous pouvez modifier vos abonnements à tout moment dans la section "
+"\"Notifications\" de votre profil."
 
 #: assembl/templates/views/message.tmpl:14
 #: assembl/templates/views/message.tmpl:41
@@ -1602,23 +1608,26 @@ msgid "Connecting..."
 msgstr "Connexion en cours..."
 
 #: assembl/templates/views/navBar.tmpl:26
-#: assembl/templates/views/navBar.tmpl:31
+#: assembl/templates/views/navBar.tmpl:30
 msgid "subscribe to discussion"
 msgstr "S'abonner à la discussion"
 
-#: assembl/templates/views/navBar.tmpl:49
+#: assembl/templates/views/navBar.tmpl:47
 msgid "Edit your profile"
 msgstr "Modifier votre profil"
 
-#: assembl/templates/views/navBar.tmpl:51
+#: assembl/templates/views/navBar.tmpl:49
 #: assembl/templates/views/profile.tmpl:9
-#: assembl/templates/views/userNotificationSubscriptions.tmpl:9
 msgid "notifications"
 msgstr "Notifications"
 
-#: assembl/templates/views/navBar.tmpl:52
+#: assembl/templates/views/navBar.tmpl:50
 msgid "Sign out"
 msgstr "Déconnexion"
+
+#: assembl/templates/views/navigation.tmpl:11
+msgid "Debate"
+msgstr "Débat"
 
 #: assembl/templates/views/navigation.tmpl:27
 msgid "Discussion dashboard"
@@ -1776,34 +1785,39 @@ msgstr "Conclusion"
 msgid "Publish"
 msgstr "Publier"
 
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:9
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:17
+msgid "Notifications"
+msgstr "Notifications"
+
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:24
 msgid "You have been unsubscribed"
 msgstr "Vous avez été désinscrit"
 
-#: assembl/templates/views/userNotificationSubscriptions.tmpl:28
-msgid "Currently you will be informed when :"
-msgstr "Vous recevrez des notifications lorsque :"
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:27
+msgid "Currently you will be informed when:"
+msgstr "Actuellement, vous recevez une notification quand :"
 
-#: assembl/templates/views/userNotificationSubscriptions.tmpl:80
-msgid "unsubscribe"
-msgstr "Se désinscrire"
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:81
+msgid "Back to discussion"
+msgstr "Revenir à la discussion"
 
 #: assembl/views/admin/views.py:242
 msgid "No file given."
 msgstr "Pas de fichier envoyé."
 
-#: assembl/views/api/agent.py:79 assembl/views/auth/views.py:165
+#: assembl/views/api/agent.py:79 assembl/views/auth/views.py:160
 #, python-format
 msgid "The username %s is already used"
 msgstr "Le nom d'utilisateur %s est déjà pris"
 
-#: assembl/views/api/agent.py:97 assembl/views/auth/views.py:184
-#: assembl/views/auth/views.py:778
+#: assembl/views/api/agent.py:97 assembl/views/auth/views.py:179
+#: assembl/views/auth/views.py:771
 msgid "The passwords are not identical"
 msgstr "Les mots de passe ne correspondent pas"
 
-#: assembl/views/api/agent.py:105 assembl/views/auth/views.py:192
-#: assembl/views/auth/views.py:263
+#: assembl/views/api/agent.py:105 assembl/views/auth/views.py:187
+#: assembl/views/auth/views.py:253
 msgid "This is not a valid email"
 msgstr "Ce n'est pas une adresse de courriel valide"
 
@@ -1830,27 +1844,27 @@ msgstr "Vous devez être connecté pour voir quels messages ont été lus"
 msgid "Your message is empty"
 msgstr "Votre message est vide"
 
-#: assembl/views/auth/views.py:270
+#: assembl/views/auth/views.py:260
 msgid "We already have a user with this email."
 msgstr "Nous avons déjà un utilisateur ayant ce courriel."
 
-#: assembl/views/auth/views.py:275
+#: assembl/views/auth/views.py:265
 msgid "The passwords should be identical"
 msgstr "Les mots de passe doivent correspondre"
 
-#: assembl/views/auth/views.py:362 assembl/views/auth/views.py:705
+#: assembl/views/auth/views.py:346 assembl/views/auth/views.py:698
 msgid "This user cannot be found"
 msgstr "Cet utilisateur n'a pas été trouvé"
 
-#: assembl/views/auth/views.py:380
+#: assembl/views/auth/views.py:364
 msgid "Invalid user and password"
 msgstr "Utilisateur et mot de passe invalides."
 
-#: assembl/views/auth/views.py:554 assembl/views/auth/views.py:678
+#: assembl/views/auth/views.py:538 assembl/views/auth/views.py:671
 msgid "Confirmation requested"
 msgstr "Confirmation requise"
 
-#: assembl/views/auth/views.py:555 assembl/views/auth/views.py:679
+#: assembl/views/auth/views.py:539 assembl/views/auth/views.py:672
 msgid ""
 "We have sent you a confirmation email. Please use the link to confirm "
 "your email to Assembl"
@@ -1858,37 +1872,37 @@ msgstr ""
 "Nous vous avons envoyé un courriel de confirmation. Veuillez utiliser le "
 "lien pour confirmer votre courriel auprès de Assembl."
 
-#: assembl/views/auth/views.py:571
+#: assembl/views/auth/views.py:559
 msgid "Wrong email token."
 msgstr "Mauvais jeton de courriel."
 
-#: assembl/views/auth/views.py:589
+#: assembl/views/auth/views.py:583
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr "L'adresse email <%s> est déjà confirmée"
 
-#: assembl/views/auth/views.py:618 assembl/views/auth/views.py:623
+#: assembl/views/auth/views.py:611 assembl/views/auth/views.py:616
 #, python-format
 msgid "Email <%s> confirmed"
 msgstr "L'adresse email <%s> est confirmée"
 
-#: assembl/views/auth/views.py:637
+#: assembl/views/auth/views.py:630
 msgid "Login failed, try again"
 msgstr "Échec de connexion, veuillez réessayer."
 
-#: assembl/views/auth/views.py:686
+#: assembl/views/auth/views.py:679
 msgid "We do not know about this email."
 msgstr "Nous ne connaissons pas ce courriel."
 
-#: assembl/views/auth/views.py:700 assembl/views/auth/views.py:706
+#: assembl/views/auth/views.py:693 assembl/views/auth/views.py:699
 msgid "I forgot my password"
 msgstr "Mot de passe oublié ?"
 
-#: assembl/views/auth/views.py:728
+#: assembl/views/auth/views.py:721
 msgid "Password change requested"
 msgstr "Changement de mot de passe requis"
 
-#: assembl/views/auth/views.py:729
+#: assembl/views/auth/views.py:722
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
@@ -1897,29 +1911,29 @@ msgstr ""
 " Veuillez utiliser ce lien pour vous connecter et changer votre mot de "
 "passe."
 
-#: assembl/views/auth/views.py:746
+#: assembl/views/auth/views.py:739
 msgid "Wrong password token."
 msgstr "Jeton invalide"
 
-#: assembl/views/auth/views.py:751
+#: assembl/views/auth/views.py:744
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 "Ce jeton n'est plus valide. Voulez-vous que nous vous en renvoyons un "
 "autre?"
 
-#: assembl/views/auth/views.py:760
+#: assembl/views/auth/views.py:753
 msgid "Change your password"
 msgstr "Changer votre mot de passe"
 
-#: assembl/views/auth/views.py:783
+#: assembl/views/auth/views.py:776
 msgid "Password changed"
 msgstr "Mot de passe modifié"
 
-#: assembl/views/auth/views.py:792
+#: assembl/views/auth/views.py:785
 msgid "email"
 msgstr "courriel"
 
-#: assembl/views/auth/views.py:794
+#: assembl/views/auth/views.py:787
 msgid "account"
 msgstr "compte"
 
@@ -1980,22 +1994,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
-
-#~ msgid "Publish a synthesis of the discussion"
-#~ msgstr "Publie une synthèse de la discussion"
-
-#~ msgid "Found no message in the discussion that:"
-#~ msgstr "Aucun message trouvé dans la discussion tel que:"
-
-#~ msgid "your partners has been posted"
-#~ msgstr "Votre partenaire a été posté."
-
-#~ msgid "Publish a synthesis"
-#~ msgstr "Rédiger une synthèse"
-
-#~ msgid "marked as a nugget"
-#~ msgstr "marqué comme pépite"
-
-#~ msgid "Dismiss"
-#~ msgstr "Continuer sans recharger"
 

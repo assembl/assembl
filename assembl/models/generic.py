@@ -29,7 +29,7 @@ class ContentSource(DiscussionBoundBase):
     rdf_class = SIOC.Container
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     name = Column(UnicodeText, nullable=False)
     type = Column(String(60), nullable=False)
 
@@ -57,8 +57,8 @@ class ContentSource(DiscussionBoundBase):
         "Discussion",
         backref=backref(
             'sources', order_by=creation_date,
-            cascade="all, delete-orphan")
-    )
+            cascade="all, delete-orphan"),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     __mapper_args__ = {
         'polymorphic_identity': 'content_source',
@@ -165,10 +165,10 @@ class Content(DiscussionBoundBase):
     rdf_class = SIOC.Post
 
     id = Column(Integer, primary_key=True,
-                info= {'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     type = Column(String(60), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info= {'rdf': QuadMapPatternS(None, DCTERMS.created)})
+        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -181,7 +181,8 @@ class Content(DiscussionBoundBase):
         "Discussion",
         backref=backref(
             'posts', order_by=creation_date,
-            cascade="all, delete-orphan")
+            cascade="all, delete-orphan"),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
     )
 
     hidden = Column(Boolean, server_default='0')
