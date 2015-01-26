@@ -28,13 +28,6 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX = "message-body-";
 
             /**
-             * The a cache for posts linked by segments
-             * FIXME:  Remove once lazy loading is implemented
-             * @type {string}
-             */
-            this.segmentPostCache = {};
-
-            /**
              * Current user
              * @type {User}
              */
