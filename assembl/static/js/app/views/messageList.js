@@ -30,6 +30,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             gridSize: AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE,
             minWidth: 400, // basic, may receive idea offset.
             debugPaging: false,
+            _renderId: 0,
 
             ui: {
                 panelBody: ".panel-body",
@@ -1021,6 +1022,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     partialMessageContext = "new-topic-" + Ctx.getDiscussionId(),
                     partialMessage = MessagesInProgress.getMessage(partialMessageContext);
 
+                if (Ctx.debugRender) {
+                  console.log("messageList:render_real() is firing for render id:", this._renderId);
+                }
+
                 if (!(Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))) {
                     $("body").addClass("js_annotatorUserCannotAddExtract");
                 }
@@ -1057,7 +1062,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                 this.newTopicView = new MessageSendView(options);
                 this.$('.messagelist-replybox').html(this.newTopicView.render().el);
-
+                
                 var collectionManager = new CollectionManager();
                 $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                     this.currentQuery.getResultMessageIdCollectionPromise()).done(
@@ -1071,21 +1076,21 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                             && !that._previousScrollTarget) {
                             that.renderIsComplete = true;//showMessageById will call showMessages and actually finish the render
                             //We do not trigger the render_complete event here, the line above is just to un-inhibit showMessageById
-                            if (this.debugPaging) {
+                            if (that.debugPaging) {
                                 console.info("render_real: calling showMessageById to display the first unread message");
                             }
                             that.showMessageById(first_unread_id, undefined, undefined, false);
                         }
-                        else if (that.showMessageByIdInProgress === false && (this._offsetStart === undefined || this._offsetEnd === undefined)) {
+                        else if (that.showMessageByIdInProgress === false && (that._offsetStart === undefined || that._offsetEnd === undefined)) {
                             //If there is nothing currently onscreen
                             //Would avoid rendering twice, and would allow showMessageById to just request showing messages systematically
-                            if (this.debugPaging) {
+                            if (that.debugPaging) {
                                 console.info("render_real: calling showMessages");
                             }
                             that.showMessages();
                         }
                         else {
-                            if (this.debugPaging) {
+                            if (that.debugPaging) {
                                 console.info("render_real: Already running showMessageById will finish the job");
                             }
                             that.renderIsComplete = true;
@@ -1115,9 +1120,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 var that = this,
                     collectionManager = new CollectionManager();
                 this.renderIsComplete = false;  //only showMessages should set this false
-
+                this._renderId++;
                 if (Ctx.debugRender) {
-                    console.log("messageList:render() is firing");
+                    console.log("messageList:onRender() is firing for render id:", this._renderId);
                 }
 
                 //Clear internal state
@@ -1892,12 +1897,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             /** Scrools to a specific message, retrying untill relevent renders
              * are complete
              */
-            scrollToMessage: function (messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth) {
+            scrollToMessage: function (messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth, originalRenderId) {
               var that = this,
               MAX_RETRIES = 50, //Stop after ~30 seconds
               debug = false;
 
               recursionDepth = recursionDepth || 0;
+              originalRenderId = originalRenderId || _.clone(this._renderId);
               var RETRY_INTERVAL = Math.floor(200 * Math.log(2 + recursionDepth));  // increasing interval
 
               shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
@@ -1906,7 +1912,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               if (!messageModel) {
                 throw new Error("scrollToMessage(): ERROR:  messageModel wasn't provided");
               }
-              if (recursionDepth === 0 && this.scrollToMessageInProgress) {
+              if (recursionDepth === 0 && this._scrollToMessageInProgressId) {
                 console.log("scrollToMessage():  a scrollToMessage was already in progress, aborting for ", messageModel.id);
                 Raven.captureMessage("scrollToMessage():  a scrollToMessage was already in progress, aborting", {message_id: messageModel.id})
                 if (_.isFunction(failedCallback)) {
@@ -1914,8 +1920,20 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 }
                 return;
               }
+              else if (originalRenderId !== this._renderId) {
+                //This is a normal condition now
+                //console.log("scrollToMessage():  obsolete render, aborting for ", messageModel.id);
+                //Raven.captureMessage("scrollToMessage():  obsolete render, aborting", {message_id: messageModel.id})
+                if(this._scrollToMessageInProgressId === originalRenderId) {
+                  this._scrollToMessageInProgressId = false;
+                }
+                if (_.isFunction(failedCallback)) {
+                  failedCallback();
+                }
+                return;
+              }
               else {
-                this.scrollToMessageInProgress = true;
+                this._scrollToMessageInProgressId = originalRenderId;
               }
               var animate_message = function (message) {
                 var selector = Ctx.format('[id="message-{0}"]', message.id),
@@ -1933,7 +1951,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                       if(debug) {
                         console.log("scrollToMessage(): INFO:  shouldOpenMessageSelected is true, calling recursively after a delay with same recursion depth");
                       }
-                      that.scrollToMessage(messageModel, shouldHighlightMessageSelected, false, callback, failedCallback, recursionDepth);
+                      that.scrollToMessage(messageModel, shouldHighlightMessageSelected, false, callback, failedCallback, recursionDepth, originalRenderId);
                     }, 1000); //Add a delay if we had to open the message
                   }
                   else {
@@ -1963,12 +1981,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                       console.log("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
                     }
                     setTimeout(function () {
-                      that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1);
+                      that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1, originalRenderId);
                     }, RETRY_INTERVAL);
                   }
                   else {
                     console.log("scrollToMessage(): MAX_RETRIES has been reached: ", recursionDepth);
-                    that.scrollToMessageInProgress = false;
+                    that._scrollToMessageInProgressId = false;
                     Raven.captureMessage(
                       "scrollToMessage():  scrollToMessage(): MAX_RETRIES has been reached",
                       { message_id: messageModel.id,
@@ -1985,7 +2003,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
               if (this.renderIsComplete) {
                 animate_message(messageModel);
-                this.scrollToMessageInProgress = false;
+                this._scrollToMessageInProgressId = false;
               }
               else {
                 if (debug) {
@@ -1996,7 +2014,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     console.log("scrollToMessage(): render has completed, animating");
                   }
                   animate_message(messageModel);
-                  this.scrollToMessageInProgress = false;
+                  this._scrollToMessageInProgressId = false;
                 });
               }
 
@@ -2103,20 +2121,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                           if (_.isFunction(callback)) {
                               callback();
                           }
-                          if(debug) {
-                            console.log("success callback setting showMessageByIdInProgress = false");
-                          }
-                          that.showMessageByIdInProgress = false;
-                      };
-                      var failed_callback = function () {
-                        if(debug) {
-                          console.log("error callback setting showMessageByIdInProgress = false");
-                        }
-                        that.showMessageByIdInProgress = false;
                       };
                       //console.log("showMessageById: DEBUG:  handing off to scrollToMessage");
-                      that.scrollToMessage(message, shouldHighlightMessageSelected, shouldOpenMessageSelected, real_callback, failed_callback);
-
+                      that.scrollToMessage(message, shouldHighlightMessageSelected, shouldOpenMessageSelected, real_callback);
+                      that.showMessageByIdInProgress = false;
                   });
 
             },
