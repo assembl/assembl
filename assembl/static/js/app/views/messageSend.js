@@ -182,11 +182,11 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         /**
                          * Check if the number of user's post is superior to 2
                          * */
-                        var agent = new Agents.Model();
+                         var agent = new Agents.Model();
                         agent.getSingleUser();
                         agent.fetch();
 
-                        if (agent.get('post_count') < 2) {
+                        if (agent.get('post_count') === 0 || agent.get('post_count') < 2) {
                             this.showPopInFirstPost();
                         }
 
