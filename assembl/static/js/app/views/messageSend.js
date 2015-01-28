@@ -160,7 +160,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         agent.fetch();
 
                         if (agent.get('post_count') === 0 || agent.get('post_count') < 2) {
-                            this.showPopInFirstPost();
+                            that.showPopInFirstPost();
                         }
 
                         // clear on success... so not lost in case of failure.
