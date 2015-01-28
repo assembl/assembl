@@ -163,13 +163,18 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
                     createGroup: function () {
                         var items = [],
-                            that = this;
+                            that = this,
+                            hasNavSide = false;
 
                         if ($('.itemGroup').hasClass('is-selected')) {
 
                             $('.itemGroup.is-selected').each(function () {
                                 var item = $(this).attr('data-view');
                                 items.push({type: item});
+
+                                if(item === 'navSidebar'){
+                                  hasNavSide = true;
+                                }
                             });
                             console.log(items);
                             groupSpecsP.done(function (groupSpecs) {
@@ -180,6 +185,10 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
                             setTimeout(function () {
                                 that.scrollToRight();
+
+                                if(hasNavSide){
+                                    Assembl.vent.trigger('navigation:selected', 'home');
+                                }
 
                                 that.$el.unbind();
                                 that.$el.remove();
@@ -205,7 +214,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     collectionManager = new CollectionManager();
 
                 var model = new Backbone.Model({
-                    notificationsToShow: null,
+                    notificationsToShow: null
                 });
 
                 var Modal = Backbone.Modal.extend({
