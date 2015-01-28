@@ -2,23 +2,15 @@
 {% set precise_date = "<%= ctx.getReadableDateTime(date) %>" %}
 {% set nice_date = "<%= ctx.getNiceDate(date, false) %>" %}
 {% macro readUnreadIndicator() -%}
-  <% if ( user_is_connected ){ %>{# Strip whitespace ...
-      #}<span class="readUnreadIndicator indice 
-      <% if (read){ %>
-        js_message-markasunread
-      <% } else { %>
-        js_message-markasread
-      <% } %>"
-      data-toggle="tooltip" title="
-      <% if (read){ %>
-        {{ gettext('Mark as unread') }}
-      <% } else { %>
-        {{ gettext('Mark as read') }}
-      <% } %>"
-      data-placement="left"
-      >
-      </span>{# Strip whitespace ...
-      #}<% } %>
+  
+  <% if ( user_is_connected ){
+    if ( read ){ %>{# Strip whitespace ...
+      #}<div class="readUnreadIndicatorClickZone js_message-markasunread" data-toggle="tooltip" title="{{ gettext('Mark as unread') }}" data-placement="left"><span class="readUnreadIndicator indice" ></span></div>{# Strip whitespace ...
+    #}<% } else { %>{# Strip whitespace ...
+        #}<div class="readUnreadIndicatorClickZone js_message-markasread" data-toggle="tooltip" title="{{ gettext('Mark as read') }}" data-placement="left"><span class="readUnreadIndicator indice"></span></div>{# Strip whitespace ...
+    #}<% }
+  } %>
+  </div>
 {%- endmacro %}
 
 {% macro showInspirationSource() -%}
@@ -30,7 +22,7 @@
 {% macro menuAction() -%}
    <div class="message-menu">
      <ul class="pan man">
-			<li class="dropdown mrxl mtxs">
+			<li class="dropdown mrxl mts">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 					{{ gettext('More options') }}
 					<span class="icon-arrowdown"></span>
@@ -58,8 +50,6 @@
 				</ul>
 			</li>
 		 </ul>
-
-
    </div>
 {%- endmacro %}
 
@@ -74,7 +64,7 @@
     {# Strip whitespace ...#}{{ readUnreadIndicator() }}{# Strip whitespace ...#}
   </div>
   <div class="centerSection">
-    <div class="message-subject js_messageHeader">
+    <div class="message-subject js_messageTitle">
       <span class="message-title"><%= subject %></span>
       <span class="message-body <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></span>
     </div>
@@ -101,13 +91,13 @@
       Note:  bodyFormatClass can currently have values body_format_text_plain or  body_format_text_html 
   #}
   <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
-    <h4 class="message-subject js_messageHeader h4"><%= subject %></h4>
+    <h4 class="message-subject js_messageTitle h4"><%= subject %></h4>
     <div class="message-body <%= bodyFormatClass %> ellipsis" id="<%= messageBodyId %>">
       <p><%= body %></p>{# Do NOT introduce whitespace within this div #}
       <a class="readMore readMoreOrLess js_readMore hidden" href="#" alt="{{ gettext('Read more') }}"><i class="icon-arrowdown"></i> {{ gettext('Read more') }}</a>
     </div>
   <% } else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
-    <h4 class="message-subject js_messageHeader h4"><%= subject %></h4>
+    <h4 class="message-subject js_messageTitle h4"><%= subject %></h4>
     <div class="message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></div>
     <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>
     <div class="message-replybox"></div>

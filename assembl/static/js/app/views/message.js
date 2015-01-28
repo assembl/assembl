@@ -84,7 +84,8 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              */
             events: {
 
-                'click .js_messageHeader': 'onMessageTitleClick',
+                //'click .js_messageHeader': 'onMessageTitleClick',
+                'click .js_messageTitle': 'onMessageTitleClick',
                 'click .js_readMore': 'onMessageTitleClick',
                 'click .js_readLess': 'onMessageTitleClick',
                 'click .message-hoistbtn': 'onMessageHoistClick',
