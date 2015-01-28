@@ -1016,89 +1016,97 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @return {views.Message}
              */
             render_real: function () {
-                var that = this,
-                    views = [],
-                // We could distinguish on current idea, but I think that would be confusing.
-                    partialMessageContext = "new-topic-" + Ctx.getDiscussionId(),
-                    partialMessage = MessagesInProgress.getMessage(partialMessageContext);
+              var that = this,
+                  views = [],
+                  renderId = _.clone(this._renderId),
+              // We could distinguish on current idea, but I think that would be confusing.
+                  partialMessageContext = "new-topic-" + Ctx.getDiscussionId(),
+                  partialMessage = MessagesInProgress.getMessage(partialMessageContext);
 
-                if (Ctx.debugRender) {
-                  console.log("messageList:render_real() is firing for render id:", this._renderId);
-                }
+              if (Ctx.debugRender) {
+                console.log("messageList:render_real() is firing for render id:", renderId);
+              }
 
-                if (!(Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))) {
-                    $("body").addClass("js_annotatorUserCannotAddExtract");
-                }
+              if (!(Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))) {
+                  $("body").addClass("js_annotatorUserCannotAddExtract");
+              }
 
-                Ctx.initTooltips(this.$el);
+              Ctx.initTooltips(this.$el);
 
-                if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-                    this.renderUserViewButtons();
-                } else {
-                    this.renderQueryInfo();
-                }
+              if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
+                  this.renderUserViewButtons();
+              } else {
+                  this.renderQueryInfo();
+              }
 
-                this.renderCollapseButton();
-                this.renderDefaultMessageViewDropdown();
-                this.renderMessageListViewStyleDropdown();
+              this.renderCollapseButton();
+              this.renderDefaultMessageViewDropdown();
+              this.renderMessageListViewStyleDropdown();
 
-                var options = {
-                    'allow_setting_subject': true,
-                    'send_button_label': i18n.gettext('Send'),
-                    'subject_label': i18n.gettext('Subject'),
-                    'body_help_message': i18n.gettext('Add a subject above and start a new topic here'),
-                    'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-                    'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
-                    'msg_in_progress_ctx': partialMessageContext,
-                    'msg_in_progress_title': partialMessage['title'],
-                    'msg_in_progress_body': partialMessage['body'],
-                    'messageList': that
-                };
+              var options = {
+                'allow_setting_subject': true,
+                'send_button_label': i18n.gettext('Send'),
+                'subject_label': i18n.gettext('Subject'),
+                'body_help_message': i18n.gettext('Add a subject above and start a new topic here'),
+                'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
+                'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
+                'msg_in_progress_ctx': partialMessageContext,
+                'msg_in_progress_title': partialMessage['title'],
+                'msg_in_progress_body': partialMessage['body'],
+                'messageList': that
+              };
 
-                var currentIdea = this.getContainingGroup().getCurrentIdea();
-                if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
-                    options.reply_idea_id = currentIdea.getId();
-                }
+              var currentIdea = this.getContainingGroup().getCurrentIdea();
+              if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
+                options.reply_idea_id = currentIdea.getId();
+              }
 
-                this.newTopicView = new MessageSendView(options);
-                this.$('.messagelist-replybox').html(this.newTopicView.render().el);
-                
-                var collectionManager = new CollectionManager();
-                $.when(collectionManager.getAllMessageStructureCollectionPromise(),
-                    this.currentQuery.getResultMessageIdCollectionPromise()).done(
-                    function (allMessageStructureCollection, resultMessageIdCollection) {
-                        that.allMessageStructureCollection = allMessageStructureCollection;
-                        var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, that.allMessageStructureCollection, resultMessageIdCollection);
-                        //console.log("that.showMessageByIdInProgress", that.showMessageByIdInProgress);
-                        if (that.showMessageByIdInProgress === false 
-                            && that.currentViewStyle === that.ViewStyles.NEW_MESSAGES 
-                            && first_unread_id
-                            && !that._previousScrollTarget) {
-                            that.renderIsComplete = true;//showMessageById will call showMessages and actually finish the render
-                            //We do not trigger the render_complete event here, the line above is just to un-inhibit showMessageById
-                            if (that.debugPaging) {
-                                console.info("render_real: calling showMessageById to display the first unread message");
-                            }
-                            that.showMessageById(first_unread_id, undefined, undefined, false);
-                        }
-                        else if (that.showMessageByIdInProgress === false && (that._offsetStart === undefined || that._offsetEnd === undefined)) {
-                            //If there is nothing currently onscreen
-                            //Would avoid rendering twice, and would allow showMessageById to just request showing messages systematically
-                            if (that.debugPaging) {
-                                console.info("render_real: calling showMessages");
-                            }
-                            that.showMessages();
-                        }
-                        else {
-                            if (that.debugPaging) {
-                                console.info("render_real: Already running showMessageById will finish the job");
-                            }
-                            that.renderIsComplete = true;
-                            that.trigger("messageList:render_complete", "Render complete");
-                        }
-                        that._startPostRenderSlowCallbackProcessing();
-                    })
-                return this;
+              this.newTopicView = new MessageSendView(options);
+              this.$('.messagelist-replybox').html(this.newTopicView.render().el);
+              
+              var collectionManager = new CollectionManager();
+              $.when(collectionManager.getAllMessageStructureCollectionPromise(),
+                this.currentQuery.getResultMessageIdCollectionPromise()).done(
+                function (allMessageStructureCollection, resultMessageIdCollection) {
+                  if (Ctx.debugRender) {
+                    console.log("messageList:render_real() collection ready, processing for render id:", renderId);
+                  }
+                  if (renderId != that._renderId) {
+                    console.log("messageList:render_real() collections arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
+                    return;
+                  }
+                  that.allMessageStructureCollection = allMessageStructureCollection;
+                  var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, that.allMessageStructureCollection, resultMessageIdCollection);
+                  //console.log("that.showMessageByIdInProgress", that.showMessageByIdInProgress);
+                  if (that.showMessageByIdInProgress === false 
+                      && that.currentViewStyle === that.ViewStyles.NEW_MESSAGES 
+                      && first_unread_id
+                      && !that._previousScrollTarget) {
+                    that.renderIsComplete = true;//showMessageById will call showMessages and actually finish the render
+                    //We do not trigger the render_complete event here, the line above is just to un-inhibit showMessageById
+                    if (that.debugPaging) {
+                      console.info("render_real: calling showMessageById to display the first unread message");
+                    }
+                    that.showMessageById(first_unread_id, undefined, undefined, false);
+                  }
+                  else if (that.showMessageByIdInProgress === false && (that._offsetStart === undefined || that._offsetEnd === undefined)) {
+                    //If there is nothing currently onscreen
+                    //Would avoid rendering twice, and would allow showMessageById to just request showing messages systematically
+                    if (that.debugPaging) {
+                      console.info("render_real: calling showMessages");
+                    }
+                    that.showMessages();
+                  }
+                  else {
+                    if (that.debugPaging) {
+                      console.info("render_real: Already running showMessageById will finish the job");
+                    }
+                    that.renderIsComplete = true;
+                    that.trigger("messageList:render_complete", "Render complete");
+                  }
+                  that._startPostRenderSlowCallbackProcessing();
+                })
+              return this;
             },
 
             onBeforeDestroy: function () {
@@ -1121,8 +1129,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     collectionManager = new CollectionManager();
                 this.renderIsComplete = false;  //only showMessages should set this false
                 this._renderId++;
+                var renderId = _.clone(this._renderId);
                 if (Ctx.debugRender) {
-                    console.log("messageList:onRender() is firing for render id:", this._renderId);
+                    console.log("messageList:onRender() is firing for render id:", renderId);
                 }
 
                 //Clear internal state
@@ -1135,21 +1144,28 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   function inFilter(message) {
                         return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
                     };
-                    that.destroyAnnotator();
-                    //Some messages may be present from before
-                    that.ui.messageList.empty();
-                    // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
-                    // In particular, message.loadAnnotations gets called with different views on the same model,
-                    // including zombie views, and we get nested annotator tags as a result.
-                    // (Annotator looks at fresh DOM every time).  Is that still the case?  Benoitg - 2014-09-19
-                    // TODO long term: Keep them with a real CompositeView.
-                    that.DEPRECATEDmessageIdsToDisplay = resultMessageIdCollection;
-                    that.visitorViewData = {};
-                    that.visitorOrderLookupTable = [];
-                    that.visitorRootMessagesToDisplay = [];
-                    messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
-                    that = that.render_real();
-                    that.unblockPanel();
+                  if (Ctx.debugRender) {
+                      console.log("messageList:onRender() structure collection ready for render id:", renderId);
+                  }
+                  if (renderId != that._renderId) {
+                    console.log("messageList:onRender() structure collection arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
+                    return;
+                  }
+                  that.destroyAnnotator();
+                  //Some messages may be present from before
+                  that.ui.messageList.empty();
+                  // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
+                  // In particular, message.loadAnnotations gets called with different views on the same model,
+                  // including zombie views, and we get nested annotator tags as a result.
+                  // (Annotator looks at fresh DOM every time).  Is that still the case?  Benoitg - 2014-09-19
+                  // TODO long term: Keep them with a real CompositeView.
+                  that.DEPRECATEDmessageIdsToDisplay = resultMessageIdCollection;
+                  that.visitorViewData = {};
+                  that.visitorOrderLookupTable = [];
+                  that.visitorRootMessagesToDisplay = [];
+                  messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
+                  that = that.render_real();
+                  that.unblockPanel();
                 }
 
                 this.blockPanel();
@@ -1158,6 +1174,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     this.currentQuery.getResultMessageIdCollectionPromise()).done(
                         newDataCallback);
 
+                //Why isn't this within the when() above?  benoitg 2015-01-28
                 this.ui.panelBody.scroll(function () {
 
                     var msgBox = that.$('.messagelist-replybox').height(),
