@@ -152,6 +152,17 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         that.ui.messageBody.val('');
                         that.ui.topicSubject.val('');
 
+                        /**
+                         * Check if the number of user's post is superior to 2
+                         * */
+                        var agent = new Agents.Model();
+                        agent.getSingleUser();
+                        agent.fetch();
+
+                        if (agent.get('post_count') === 0 || agent.get('post_count') < 2) {
+                            this.showPopInFirstPost();
+                        }
+
                         // clear on success... so not lost in case of failure.
                         MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
                         if (that.messageList) {
@@ -178,18 +189,6 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                             btn.text(btn_original_text);
                             that.ui.cancelButton.trigger('click');
                         }, 5000);
-
-                        /**
-                         * Check if the number of user's post is superior to 2
-                         * */
-                         var agent = new Agents.Model();
-                        agent.getSingleUser();
-                        agent.fetch();
-
-                        if (agent.get('post_count') === 0 || agent.get('post_count') < 2) {
-                            this.showPopInFirstPost();
-                        }
-
                     },
                     error: function (model, resp) {
                         console.error('ERROR: onSendMessageButtonClick', model, resp);
