@@ -1,4 +1,4 @@
-define(['jasmine', 'underscore'], function (jasmine, _) {
+define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agent) {
 
     /*function getNewModel() {
         var m = new Idea.Model();
@@ -87,9 +87,26 @@ define(['jasmine', 'underscore'], function (jasmine, _) {
     return describe('Models', function () {
 
         describe('Agents model', function(){
+            var agent = undefined;
 
-            it('model should', function () {
-                expect(true).toBe(true);
+            beforeEach(function() {
+                agent = new Agent.Model();
+            });
+
+            it('fetchFromScriptTag method should return the current user', function () {
+                agent.fetchFromScriptTag('current-user-json');
+                agent.fetchPermissionsFromScripTag();
+                expect(agent).not.toBeUndefined();
+            });
+
+            it('getAvatarUrl method should return the avatar url as string', function(){
+                var avatar = agent.getAvatarUrl('32');
+                expect(typeof avatar).toBe('string');
+            });
+
+            it('getAvatarColor method should return the avatar hsl color as string', function(){
+               var avatarColor = agent.getAvatarColor();
+               expect(typeof avatarColor).toBe('string');
             });
 
         });

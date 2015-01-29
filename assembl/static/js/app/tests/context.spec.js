@@ -1,4 +1,4 @@
-define(['jasmine', 'jquery', '../app/common/context'], function (jasmine, $, Ctx) {
+define(['jasmine', 'jquery', '../common/context'], function (jasmine, $, Ctx) {
 
     // Fixtures
     var txt = '<script id="tmpl-test" type="text/template">test something</script>';

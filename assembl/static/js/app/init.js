@@ -1,7 +1,6 @@
 requirejs.config(requirejs_config);
 
-require(['jquery', 'jasmine-boot'],
-    function ($, jasmine_boot) {
+require(['jquery', 'jasmine-boot'], function ($, jasmine_boot) {
         'use strict';
 
         $('#wrapper').hide();
@@ -11,10 +10,10 @@ require(['jquery', 'jasmine-boot'],
 
         require([
             //'app.spec',
-            'views.spec',
-            'routes.spec',
-            'context.spec',
-            'models.spec'
+            //'tests/views.spec',
+            //'tests/routes.spec',
+            //'tests/context.spec',
+            'tests/models.spec'
         ], function () {
             // Initialize the HTML Reporter and execute the environment (setup by `boot.js`)
             window.onload();

@@ -1,4 +1,4 @@
-define(['jasmine', 'jquery', '../app/common/context'], function (jasmine, $, ctx) {
+define(['jasmine', 'jquery', '../common/context'], function (jasmine, $, ctx) {
 
     return describe('Routes', function () {
 
