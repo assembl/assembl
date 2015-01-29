@@ -1,6 +1,6 @@
-define(['jasmine', 'underscore', '../app/models/idea'], function (jasmine, _, Idea) {
+define(['jasmine', 'underscore'], function (jasmine, _) {
 
-    function getNewModel() {
+    /*function getNewModel() {
         var m = new Idea.Model();
         m.set('id', m.cid);
         return m;
@@ -80,6 +80,114 @@ define(['jasmine', 'underscore', '../app/models/idea'], function (jasmine, _, Id
             idea.addSegment({ title: 'something'});
 
             expect(idea.attributes.segments.length).toBe(1);
+        });
+
+    });  */
+
+    return describe('Models', function () {
+
+        describe('Agents model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('Base model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('Discussion model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('GroupSpec model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('Idea model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('IdeaLink model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('Message model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('NotificationSubscription model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('PanelSpec model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('Partner model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('Roles model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('Segment model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
+        });
+
+        describe('Synthesis model', function(){
+
+            it('model should', function () {
+                expect(true).toBe(true);
+            });
+
         });
 
     });

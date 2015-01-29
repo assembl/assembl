@@ -11,9 +11,10 @@ require(['jquery', 'jasmine-boot'],
 
         require([
             //'app.spec',
+            'views.spec',
             'routes.spec',
-            'context.spec'
-            //'models.spec'
+            'context.spec',
+            'models.spec'
         ], function () {
             // Initialize the HTML Reporter and execute the environment (setup by `boot.js`)
             window.onload();
