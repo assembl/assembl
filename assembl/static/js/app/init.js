@@ -9,10 +9,10 @@ require(['jquery', 'jasmine-boot'], function ($, jasmine_boot) {
         jasmineEnv.updateInterval = 1000;
 
         require([
-            //'app.spec',
-            //'tests/views.spec',
-            //'tests/routes.spec',
-            //'tests/context.spec',
+            'tests/app.spec',
+            'tests/views.spec',
+            'tests/routes.spec',
+            'tests/context.spec',
             'tests/models.spec'
         ], function () {
             // Initialize the HTML Reporter and execute the environment (setup by `boot.js`)

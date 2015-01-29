@@ -1,41 +1,48 @@
-define(['jasmine', 'jquery', '../common/context'], function (jasmine, $, ctx) {
+define(['router'], function (Router) {
 
     return describe('Routes', function () {
 
+        var route = undefined;
+
+        beforeEach(function(){
+           route = new Router();
+           route = route.appRoutes;
+        });
+
         it('Home route should exist', function () {
-            expect(true).toBe(true);
+            expect(route['']).toEqual('home');
         });
 
         it('Edition route should exist', function () {
-            expect(true).toBe(true);
+            expect(route['edition']).toEqual('edition');
         });
 
         it('Partners route should exist', function () {
-            expect(true).toBe(true);
+            expect(route['partners']).toEqual('partners');
         });
 
         it('Notifications route should exist', function () {
-            expect(true).toBe(true);
+            expect(route['notifications']).toEqual('notifications');
         });
 
         it('Users notifications route should exist', function () {
-            expect(true).toBe(true);
+            expect(route['users/notifications']).toEqual('userNotifications');
         });
 
         it('Users edit route should exist', function () {
-            expect(true).toBe(true);
+            expect(route['users/edit']).toEqual('profile');
         });
 
         it('Posts id route should exist', function () {
-            expect(true).toBe(true);
+            expect(route['posts/:id']).toEqual('post');
         });
 
         it('Idea id route should exist', function () {
-            expect(true).toBe(true);
+            expect(route['idea/:id']).toEqual('idea');
         });
 
         it('Defaults route should exist', function () {
-            expect(true).toBe(true);
+            expect(route['*actions']).toEqual('defaults');
         });
 
     });

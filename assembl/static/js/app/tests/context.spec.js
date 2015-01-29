@@ -25,7 +25,7 @@ define(['jasmine', 'jquery', '../common/context'], function (jasmine, $, Ctx) {
             });
 
             it('getCurrentUser should not return the user', function () {
-                expect(Ctx.getCurrentUser()).toBe(null);
+                expect(Ctx.getCurrentUser()).not.toBe(null);
             });
 
             it('loadTemplate must load a template by id', function () {
@@ -33,9 +33,6 @@ define(['jasmine', 'jquery', '../common/context'], function (jasmine, $, Ctx) {
             });
 
         })
-
-
-
 
     });
 
