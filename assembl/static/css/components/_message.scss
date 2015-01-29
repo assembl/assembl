@@ -72,6 +72,10 @@ $previewNumLines: 4;
     cursor: pointer;
   }
 
+  .message-body.ellipsis {
+    cursor: pointer;
+  }
+
   .header-separator-bullet {
     margin-left: $separatorBulletMargin;
     &:before {
