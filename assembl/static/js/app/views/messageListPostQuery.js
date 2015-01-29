@@ -531,7 +531,7 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                     retval += '</span>';
                 }
                 else if (this._resultsAreValid) {
-                    retval += '<span class="ui-label-info post-query-results-info">';
+                    retval += '<span class="post-query-results-info">';
                     if (this.getResultNumTotal() == 0) {
                         if (numActiveFilters > 0) {
                             retval += i18n.gettext("There is no message to display with those filters:");
