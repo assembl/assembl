@@ -5,7 +5,8 @@ import argparse
 from inspect import isabstract
 
 from pyramid.paster import get_appsettings, bootstrap
-from sqlalchemy.orm import class_mapper, undefer, with_polymorphic, sessionmaker
+from sqlalchemy.orm import (
+    class_mapper, undefer, with_polymorphic, sessionmaker)
 from sqlalchemy.orm.properties import ColumnProperty
 import transaction
 from sqlalchemy.sql.visitors import ClauseVisitor
@@ -52,18 +53,20 @@ def find_or_create_webpage(db, page):
 def find_or_create_identity_provider(db, provider):
     from assembl.models import IdentityProvider
     assert isinstance(provider, IdentityProvider)
-    return find_or_create_object_by_keys(db, obj, ['provider_type', 'name'])
+    return find_or_create_object_by_keys(
+        db, provider, ['provider_type', 'name'])
 
 
 def find_or_create_email_account(db, account):
     from assembl.models import EmailAccount
     assert isinstance(account, EmailAccount)
-    return find_or_create_object_by_keys(db, obj, ['email'], ['preferred'])
+    return find_or_create_object_by_keys(db, account, ['email'], ['preferred'])
 
 
 def find_or_create_provider_account(db, account):
-    from assembl.models import IdentityProviderAccount
-    assert isinstance(account, IdentityProviderAccount, IdentityProvider)
+    from assembl.models import IdentityProvider, IdentityProviderAccount
+    assert isinstance(account, (
+        IdentityProviderAccount, IdentityProvider))
     provider = find_or_create_identity_provider(account.provider)
     args = {
         "provider": provider,
@@ -176,7 +179,8 @@ def get_mapper_info(mapper):
                           if isinstance(a, ColumnProperty)
                           and not avoid_columns.intersection(set(a.columns))}
 
-        non_nullable_reln = {r for r in direct_reln
+        non_nullable_reln = {
+            r for r in direct_reln
             if any([not c.nullable for c in r.local_columns])}
         nullable_relns = direct_reln - non_nullable_reln
         class_info[mapper] = (
@@ -231,9 +235,10 @@ class JoinColumnsVisitor(ClauseVisitor):
             dest_cls = self.classes_by_table[foreign_key.column.table]
             if not self.is_known_class(dest_cls):
                 orm_reln = filter(
-                    lambda r: column in r.local_columns,
+                    lambda r: column in r.local_columns and r.secondary is None,
                     source_cls.__mapper__.relationships)
-                assert len(orm_reln) == 1
+                assert len(orm_reln) == 1, "wrong orm_reln for %s.%s : %s" % (
+                    column.table.name, column.name, str(orm_reln))
                 rattrib = getattr(source_cls, orm_reln[0].key)
                 self.query = self.query.join(dest_cls, rattrib)
                 self.classes.add(dest_cls)
@@ -269,7 +274,7 @@ def delete_discussion(session, discussion_id):
     # See if anything is left...
     classes = DiscussionBoundBase._decl_class_registry.itervalues()
     classes_by_table = {
-        cls.__dict__.get('__table__', None): cls for cls in classes }
+        cls.__dict__.get('__table__', None): cls for cls in classes}
     # Only direct subclass of abstract
     concrete_classes = set(filter(lambda cls:
         issubclass(cls, DiscussionBoundBase) and (not isabstract(cls))
@@ -293,7 +298,8 @@ def delete_discussion(session, discussion_id):
         query = v.final_query().filter(cond)
         if query.count():
             print "*" * 20, "Not all deleted!"
-            session.query(cls).filter(cls.id.in_(query.subquery())).delete(False)
+            session.query(cls).filter(
+                cls.id.in_(query.subquery())).delete(False)
 
 
 def clone_discussion(
@@ -340,7 +346,8 @@ def clone_discussion(
         print_path(path)
 
         mapper = class_mapper(ob.__class__)
-        (direct_reln, copy_col_props, nullable_relns, non_nullable_reln) = get_mapper_info(mapper)
+        (direct_reln, copy_col_props, nullable_relns, non_nullable_reln
+         ) = get_mapper_info(mapper)
         values = {r.key: getattr(ob, r.key, None) for r in copy_col_props}
 
         print "->", ob.__class__, ob.id
@@ -463,7 +470,8 @@ if __name__ == '__main__':
         help="connection string of source database if different")
     parser.add_argument("discussion", help="original discussion slug")
     parser.add_argument("-p", "--permissions", action="append",
-                        help="Add a role+permission pair to the copy (eg ")
+                        help="Add a role+permission pair to the copy "
+                        "(eg system.Authenticated+admin_discussion)")
     args = parser.parse_args()
     env = bootstrap(args.configuration)
     settings = get_appsettings(args.configuration, 'assembl')
