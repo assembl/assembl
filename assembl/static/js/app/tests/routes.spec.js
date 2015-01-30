@@ -1,6 +1,6 @@
 define(['router'], function (Router) {
 
-    return describe('Routes', function () {
+    return describe('Routes Specs', function () {
 
         var route = undefined;
 

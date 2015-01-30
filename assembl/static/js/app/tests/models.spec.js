@@ -84,7 +84,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
     });  */
 
-    return describe('Models', function () {
+    return describe('Models Specs', function () {
 
         describe('Agents model', function(){
             var agent = undefined;
@@ -113,7 +113,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('Base model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -121,7 +121,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('Discussion model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -129,7 +129,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('GroupSpec model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -137,7 +137,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('Idea model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -145,7 +145,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('IdeaLink model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -153,7 +153,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('Message model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -161,7 +161,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('NotificationSubscription model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -169,7 +169,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('PanelSpec model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -177,7 +177,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('Partner model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -185,7 +185,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('Roles model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -193,7 +193,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('Segment model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 
@@ -201,7 +201,7 @@ define(['jasmine', 'underscore', '../models/agents'], function (jasmine, _, Agen
 
         describe('Synthesis model', function(){
 
-            it('model should', function () {
+            it('need spec', function () {
                 expect(true).toBe(true);
             });
 

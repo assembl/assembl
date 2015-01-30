@@ -4,7 +4,7 @@ define(['jasmine', 'jquery', '../common/context'], function (jasmine, $, Ctx) {
     var txt = '<script id="tmpl-test" type="text/template">test something</script>';
     $('body').append(txt);
 
-    return describe('Modules', function () {
+    return describe('Modules Specs', function () {
 
         describe('Context', function () {
 
