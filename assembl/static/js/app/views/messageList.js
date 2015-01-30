@@ -1498,7 +1498,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                             } else if (Ctx.currentAnnotationNewIdeaParentIdea) {
                                 //We asked to create a new idea from segment
                               console.log("FIXME:  What's the proper behaviour here now that groups are separated?  We should probably find out if the group is the same as the origin, and lock ONLY in that case");
-                                that.getPanelWrapper().lockPanel();
+                                that.getPanelWrapper().autoLockPanel();
+
                                 var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
                                 that.getContainingGroup().setCurrentIdea(newIdea);
                             }
