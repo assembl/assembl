@@ -31,11 +31,76 @@
 			{{ gettext("partners added") }}
 		</div>
 
-    <div class="gr mbxl">
-      <% _.each(partners, function(partner){ %>
-      <div class="gu gu-1of5">
+		<div class="gr">
+			<div class="gu gu-1of1">
+				<form class="core-form form-horizontal" id="form-partner">
+					<fieldset>
 
-        <div class="bx mll">
+						<div class="control-group">
+							<label for="name" class="control-label">{{ gettext('name of partner') }}</label>
+							<div class="controls">
+								<input type="text" class="partner-name" name="name" required="required">
+								<span class="help-inline">
+									<p class="control-error">{{ gettext('please correct the error') }}</p>
+									<p class="control-success"><i class="icon-ok"></i></p>
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label for="description" class="control-label">{{ gettext('description') }}</label>
+							<div class="controls">
+								<textarea rows="3" class="partner-description input-large" name="description" required="required"></textarea>
+								<span class="help-inline">
+									<p class="control-error">{{ gettext('please correct the error') }}</p>
+									<p class="control-success"><i class="icon-ok"></i></p>
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label for="homepage" class="control-label">{{ gettext('homepage partners') }}</label>
+							<div class="controls">
+								<input type="text" class="partner-homepage" name="homepage" required="required">
+								<span class="help-inline">
+									<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
+									<p class="control-success"><i class="icon-ok"></i></p>
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label for="logo" class="control-label">{{ gettext('url partner logo') }}</label>
+							<div class="controls">
+								<input type="text" class="partner-logo" name="logo" required="required">
+								<span class="help-inline">
+									<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
+									<p class="control-success"><i class="icon-ok"></i></p>
+								</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label for="is_initiator" class="control-label">{{ gettext('is initiator') }}</label>
+							<div class="controls">
+								<input type="checkbox" class="partner-initiator" name="is_initiator">
+							</div>
+						</div>
+
+						<div class="form-actions ptm">
+							<button class="btn btn-secondary js_add-partner" type="submit">Add partner</button>
+						</div>
+
+					</fieldset>
+				</form>
+			</div>
+		</div>
+
+    <div class="gr">
+      <% _.each(partners, function(partner){ %>
+      <div class="gu gu-1of1">
+
+        <div class="bx">
           <div class="tac mbl"><img src="<%= partner.get('logo')%>" width="100"></div>
           <span class="mbs dispb"><%= partner.get('name') %></span>
           <span class="mbs dispb"><%= partner.get('description') %></span>
@@ -45,71 +110,6 @@
       </div>
       <% }) %>
     </div>
-
-      <div class="gr">
-        <div class="gu gu-1of1">
-          <form class="core-form form-horizontal" id="form-partner">
-            <fieldset>
-
-              <div class="control-group">
-                <label for="name" class="control-label">{{ gettext('name of partner') }}</label>
-                <div class="controls">
-                  <input type="text" class="partner-name" name="name" required="required">
-                  <span class="help-inline">
-                  	<p class="control-error">{{ gettext('please correct the error') }}</p>
-                  	<p class="control-success"><i class="icon-ok"></i></p>
-                  </span>
-                </div>
-              </div>
-
-              <div class="control-group">
-                <label for="description" class="control-label">{{ gettext('description') }}</label>
-                <div class="controls">
-                	<textarea rows="3" class="partner-description input-large" name="description" required="required"></textarea>
-                  <span class="help-inline">
-										<p class="control-error">{{ gettext('please correct the error') }}</p>
-										<p class="control-success"><i class="icon-ok"></i></p>
-									</span>
-                </div>
-              </div>
-
-              <div class="control-group">
-                <label for="homepage" class="control-label">{{ gettext('homepage partners') }}</label>
-                <div class="controls">
-                  <input type="text" class="partner-homepage" name="homepage" required="required">
-                  <span class="help-inline">
-										<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
-										<p class="control-success"><i class="icon-ok"></i></p>
-									</span>
-                </div>
-              </div>
-
-              <div class="control-group">
-                <label for="logo" class="control-label">{{ gettext('url partner logo') }}</label>
-                <div class="controls">
-                  <input type="text" class="partner-logo" name="logo" required="required">
-                  <span class="help-inline">
-										<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
-										<p class="control-success"><i class="icon-ok"></i></p>
-									</span>
-                </div>
-              </div>
-
-              <div class="control-group">
-                <label for="is_initiator" class="control-label">{{ gettext('is initiator') }}</label>
-                <div class="controls">
-                  <input type="checkbox" class="partner-initiator" name="is_initiator">
-                </div>
-              </div>
-
-              <div class="form-actions ptm">
-                <button class="btn btn-secondary js_add-partner" type="submit">Add partner</button>
-              </div>
-
-            </fieldset>
-          </form>
-        </div>
-      </div>
     </div>
   </div>
 </div>
