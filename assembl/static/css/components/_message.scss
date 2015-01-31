@@ -8,6 +8,7 @@ $mesageBodyLineHeight: $baseLineHeight;
 $ten: 10px;
 $separatorBulletMargin: 0.6em;
 $previewNumLines: 4;
+$message-body: #999999;
 
 // A message block
 // ================
@@ -207,6 +208,7 @@ $previewNumLines: 4;
       padding: 0px;
       max-height: $previewNumLines * $mesageBodyLineHeight * $messageBodyFontSize;
       overflow: hidden;
+      color: $message-body;
     }
 
     .message-body.body_format_text_plain > .elipsis > div {
