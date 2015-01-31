@@ -3,7 +3,6 @@
   position: relative;
   height: 100vh;
   min-width: $small_screen;
-  background-color: #EEEEEE;
   @include transform(translateX(0));
 }
 
