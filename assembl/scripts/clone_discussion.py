@@ -476,43 +476,56 @@ if __name__ == '__main__':
     env = bootstrap(args.configuration)
     settings = get_appsettings(args.configuration, 'assembl')
     set_config(settings)
-    configure_zmq(settings['changes.socket'], False)
-    configure_model_watcher(env['registry'], 'assembl')
-    to_engine = configure_engine(settings, True)
-    to_session = get_session_maker()
-    new_slug = args.new_name or (args.discussion + "_copy")
-    if args.connection_string:
-        from_engine = configure_engine(args.connection)
-        from_session = sessionmaker(from_engine)()
-    else:
-        from_engine = to_engine
-        from_session = to_session
-    from assembl.models import Discussion
-    discussion = from_session.query(Discussion).filter_by(
-        slug=args.discussion).one()
-    assert discussion, "No discussion named " + args.discussion
-    permissions = [x.split('+') for x in args.permissions]
-    for (role, permission) in permissions:
-        assert role in SYSTEM_ROLES
-        assert permission in ASSEMBL_PERMISSIONS
-    existing = to_session.query(Discussion).filter_by(slug=new_slug).first()
-    if existing:
-        if args.delete:
-            print "deleting", new_slug
-            with transaction.manager:
-                delete_discussion(to_session, existing.id)
+    raven_client = None
+    try:
+        pipeline = settings.get('pipeline:main', 'pipeline').split()
+        if 'raven' in pipeline:
+            raven_dsn = settings.get('filter:raven', 'dsn')
+            from raven import Client
+            raven_client = Client(raven_dsn)
+    except Exception:
+        pass
+    try:
+        configure_zmq(settings['changes.socket'], False)
+        configure_model_watcher(env['registry'], 'assembl')
+        to_engine = configure_engine(settings, True)
+        to_session = get_session_maker()
+        new_slug = args.new_name or (args.discussion + "_copy")
+        if args.connection_string:
+            from_engine = configure_engine(args.connection)
+            from_session = sessionmaker(from_engine)()
         else:
-            print "Discussion", new_slug,
-            print "already exists! Add -d to delete it."
-            exit(0)
-    with transaction.manager:
-        from assembl.models import Role, Permission, DiscussionPermission
-        copy = clone_discussion(
-            from_session, discussion.id, to_session, new_slug)
+            from_engine = to_engine
+            from_session = to_session
+        from assembl.models import Discussion
+        discussion = from_session.query(Discussion).filter_by(
+            slug=args.discussion).one()
+        assert discussion, "No discussion named " + args.discussion
+        permissions = [x.split('+') for x in args.permissions]
         for (role, permission) in permissions:
-            role = to_session.query(Role).filter_by(name=role).one()
-            permission = to_session.query(Permission).filter_by(
-                name=permission).one()
-            # assumption: Not already defined.
-            to_session.add(DiscussionPermission(
-                discussion=copy, role=role, permission=permission))
+            assert role in SYSTEM_ROLES
+            assert permission in ASSEMBL_PERMISSIONS
+        existing = to_session.query(Discussion).filter_by(slug=new_slug).first()
+        if existing:
+            if args.delete:
+                print "deleting", new_slug
+                with transaction.manager:
+                    delete_discussion(to_session, existing.id)
+            else:
+                print "Discussion", new_slug,
+                print "already exists! Add -d to delete it."
+                exit(0)
+        with transaction.manager:
+            from assembl.models import Role, Permission, DiscussionPermission
+            copy = clone_discussion(
+                from_session, discussion.id, to_session, new_slug)
+            for (role, permission) in permissions:
+                role = to_session.query(Role).filter_by(name=role).one()
+                permission = to_session.query(Permission).filter_by(
+                    name=permission).one()
+                # assumption: Not already defined.
+                to_session.add(DiscussionPermission(
+                    discussion=copy, role=role, permission=permission))
+    except Exception:
+        if raven_client:
+            raven_client.captureException()
