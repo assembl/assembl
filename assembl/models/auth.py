@@ -781,7 +781,7 @@ class LocalUserRole(DiscussionBoundBase):
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
     role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
     role = relationship(Role)
-    requested = Column(Boolean, server_default='0', default='0')
+    requested = Column(Boolean, server_default='0', default=False)
     # BUG in virtuoso: It will often refuse to create an index
     # whose name exists in another schema. So having this index in
     # schemas assembl and assembl_test always fails.
