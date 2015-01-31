@@ -624,7 +624,9 @@ class CollectionDefinition(AbstractCollectionDefinition):
         return instance
 
     def name(self):
-        return ".".join((self.owner_class.__name__, self.property.key))
+        cls = self.owner_class if (
+            self.__class__ == CollectionDefinition) else self.__class__
+        return ".".join((cls.__name__, self.property.key))
 
     def __repr__(self):
         return "<%s %s -(%s/%s)-> %s>" % (

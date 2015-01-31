@@ -29,7 +29,7 @@ def view_notification_collection(request):
 def view_notification_subscription_collection(request):
     ctx = request.context
     templates = ctx.find_collection(
-        'CollectionDefinition.user_templates')
+        'NotificationSubscription.user_templates')
     if templates:
         templates.parent_instance.reset_participant_default_subscriptions(False)
     return collection_view(request, 'default')
@@ -114,7 +114,7 @@ def process_all_now(request):
 def put_notification_request(request):
     result = instance_put_json(request)
     templates = request.context.find_collection(
-        'CollectionDefinition.user_templates')
+        'NotificationSubscription.user_templates')
     if templates:
         templates.parent_instance.reset_participant_default_subscriptions()
     return result
