@@ -2,7 +2,7 @@ from simplejson import dumps
 
 from pyramid.response import Response
 from pyramid.view import view_config
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError)
 
@@ -20,10 +20,16 @@ from . import (FORM_HEADER, JSON_HEADER, collection_view, check_permissions)
     context=CollectionContext, request_method="POST",
     ctx_named_collection="Discussion.local_user_roles",
     header=JSON_HEADER, renderer='json')
+@view_config(
+    context=CollectionContext, request_method="POST",
+    ctx_named_collection="User.local_roles",
+    header=JSON_HEADER, renderer='json')
 def add_local_role(request):
     # Do not use check_permissions, this is a special case
     ctx = request.context
     user_id = authenticated_userid(request)
+    if user_id == Everyone:
+        raise HTTPUnauthorized()
     discussion_id = ctx.get_discussion_id()
     user_uri = User.uri_generic(user_id)
     if discussion_id is None:
@@ -46,7 +52,7 @@ def add_local_role(request):
         else:
             raise HTTPUnauthorized()
     try:
-        instances = ctx.create_object("DiscussionLocalRole", json, user_id)
+        instances = ctx.create_object("LocalUserRole", json, user_id)
     except HTTPClientError as e:
         raise e
     except Exception as e:
@@ -57,8 +63,11 @@ def add_local_role(request):
         for instance in instances:
             db.add(instance)
         db.flush()
+        # Side effect: materialize subscriptions.
         if not first.requested:
-            first.user.get_notification_subscriptions(discussion_id, True)
+            # relationship may not be initialized
+            user = first.user or User.get(first.user_id)
+            user.get_notification_subscriptions(discussion_id, True)
         view = request.GET.get('view', None) or 'default'
         return Response(
             dumps(first.generic_json(view)),
@@ -70,11 +79,17 @@ def add_local_role(request):
     context=InstanceContext, request_method="PUT",
     ctx_named_collection_instance="Discussion.local_user_roles",
     header=JSON_HEADER, renderer='json')
+@view_config(
+    context=InstanceContext, request_method="PUT",
+    ctx_named_collection_instance="User.local_roles",
+    header=JSON_HEADER, renderer='json')
 def set_local_role(request):
     # Do not use check_permissions, this is a special case
     ctx = request.context
     instance = ctx._instance
     user_id = authenticated_userid(request)
+    if user_id == Everyone:
+        raise HTTPUnauthorized()
     discussion_id = ctx.get_discussion_id()
     user_uri = User.uri_generic(user_id)
     if discussion_id is None:
@@ -106,6 +121,10 @@ def set_local_role(request):
     context=CollectionContext, request_method="POST",
     ctx_named_collection="Discussion.local_user_roles",
     header=FORM_HEADER)
+@view_config(
+    context=CollectionContext, request_method="POST",
+    ctx_named_collection="User.local_roles",
+    header=FORM_HEADER)
 def use_json_header_for_LocalUserRole_POST(request):
     raise HTTPNotFound()
 
@@ -113,6 +132,10 @@ def use_json_header_for_LocalUserRole_POST(request):
 @view_config(
     context=CollectionContext, request_method="PUT",
     ctx_named_collection="Discussion.local_user_roles",
+    header=FORM_HEADER)
+@view_config(
+    context=CollectionContext, request_method="PUT",
+    ctx_named_collection="User.local_roles",
     header=FORM_HEADER)
 def use_json_header_for_LocalUserRole_PUT(request):
     raise HTTPNotFound()
