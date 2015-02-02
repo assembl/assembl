@@ -26,7 +26,7 @@
 				{{ gettext("Your settings were saved") }}
 			</div>
       <div class="gr">
-        <div class="gu gu-1of2">
+        <div class="gu gu-1of1">
           <form class="core-form form-horizontal">
             <fieldset>
               <div class="control-group">
@@ -77,6 +77,17 @@
               </div>
             </fieldset>
           </form>
+
+					<div class="gr">
+						<div class="gu gu-1of5">
+						<p>link your email account</p>
+						</div>
+						<div class="gu gu-last pvs">
+							<div class="mbxs"><div class="fb-icon-bg"></div><input type="submit" class="fb-bg" value="sign in with facebook"></div>
+							<div class="mbxs"><div class="twi-icon-bg"></div><input type="submit" class="twi-bg" value="sign in with twitter"></div>
+							<div class="mbxs"><div class="g-icon-bg"></div><input type="submit" class="g-bg" value="sign in with google+"></div>
+						</div>
+					</div>
 
           {% if providers %}
 					<p>{{ gettext("Connect other accounts to Assembl")|safe }}</p>

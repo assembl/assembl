@@ -39,7 +39,7 @@
 						<div class="control-group">
 							<label for="name" class="control-label">{{ gettext('name of partner') }}</label>
 							<div class="controls">
-								<input type="text" class="partner-name" name="name" required="required">
+								<input type="text" class="partner-name input-xlarge" name="name" required="required">
 								<span class="help-inline">
 									<p class="control-error">{{ gettext('please correct the error') }}</p>
 									<p class="control-success"><i class="icon-ok"></i></p>
@@ -50,7 +50,7 @@
 						<div class="control-group">
 							<label for="description" class="control-label">{{ gettext('description') }}</label>
 							<div class="controls">
-								<textarea rows="3" class="partner-description input-large" name="description" required="required"></textarea>
+								<textarea rows="3" class="partner-description input-xlarge" name="description" required="required"></textarea>
 								<span class="help-inline">
 									<p class="control-error">{{ gettext('please correct the error') }}</p>
 									<p class="control-success"><i class="icon-ok"></i></p>
@@ -61,7 +61,7 @@
 						<div class="control-group">
 							<label for="homepage" class="control-label">{{ gettext('homepage partners') }}</label>
 							<div class="controls">
-								<input type="text" class="partner-homepage" name="homepage" required="required">
+								<input type="text" class="partner-homepage input-xlarge" name="homepage" required="required">
 								<span class="help-inline">
 									<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
 									<p class="control-success"><i class="icon-ok"></i></p>
@@ -72,7 +72,7 @@
 						<div class="control-group">
 							<label for="logo" class="control-label">{{ gettext('url partner logo') }}</label>
 							<div class="controls">
-								<input type="text" class="partner-logo" name="logo" required="required">
+								<input type="text" class="partner-logo input-xlarge" name="logo" required="required">
 								<span class="help-inline">
 									<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
 									<p class="control-success"><i class="icon-ok"></i></p>
@@ -87,7 +87,7 @@
 							</div>
 						</div>
 
-						<div class="form-actions ptm">
+						<div class="form-actions mvn">
 							<button class="btn btn-secondary js_add-partner" type="submit">Add partner</button>
 						</div>
 
@@ -100,7 +100,7 @@
       <% _.each(partners, function(partner){ %>
       <div class="gu gu-1of1">
 
-        <div class="bx">
+        <div class="bx bx-default">
           <div class="tac mbl"><img src="<%= partner.get('logo')%>" width="100"></div>
           <span class="mbs dispb"><%= partner.get('name') %></span>
           <span class="mbs dispb"><%= partner.get('description') %></span>
