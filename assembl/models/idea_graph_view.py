@@ -164,20 +164,14 @@ class ExplicitSubGraphView(IdeaGraphView):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    ideas_associations = relationship(SubGraphIdeaAssociation,
-                                      cascade="all, delete-orphan")
-
-    # proxy the 'idea' attribute from the 'ideas_associations' relationship
+    # proxy the 'idea' attribute from the 'idea_assocs' relationship
     # for direct access
-    ideas = association_proxy('ideas_associations', 'idea',
+    ideas = association_proxy('idea_assocs', 'idea',
         creator=lambda idea: SubGraphIdeaAssociation(idea=idea))
 
-    idea_links_associations = relationship(SubGraphIdeaLinkAssociation,
-                                           cascade="all, delete-orphan")
-
-    # proxy the 'idea_link' attribute from the 'idea_links_associations'
+    # proxy the 'idea_link' attribute from the 'idealink_assocs'
     # relationship for direct access
-    idea_links = association_proxy('idea_links_associations', 'idea_link',
+    idea_links = association_proxy('idealink_assocs', 'idea_link',
         creator=lambda idea_link: SubGraphIdeaLinkAssociation(idea_link=idea_link))
 
     __mapper_args__ = {
