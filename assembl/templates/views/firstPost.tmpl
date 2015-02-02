@@ -5,7 +5,11 @@
 <div class="popin-body">
   <div class="content">
     <h1 class="h1">{{ gettext('Congratulations for your first contribution!') }}</h1>
-    <h5 class="h5">{{ gettext('You could receive notifications when participants respond to your messages, and when a synthesis is published (usually once a week, don\'t worry!).') }}</h5>
+    <h5 class="h5 tal">{{ gettext('Now that you have contributed to the debate, maybe you want to be informed of its evolution. Would you like to subscribe to the debate? You would receive notifications when:') }}</h5>
+    <ul class="tal"><% console.log("notificationsToShow in template: ", notificationsToShow); _.each(notificationsToShow, function(notification, i){ %>
+    	<li><%= i18n.gettext(notification.get('human_readable_description')) %></li>
+    <% }); %></ul>
+    <h5 class="h5 tal">{{ gettext('You can then edit your subscriptions at anytime in the "Notifications" section of your profile.') }}</h5>
   </div>
   <div class="clr"></div>
 </div>

@@ -239,41 +239,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             },
 
             showPopInFirstPost: function () {
-
-                var Modal = Backbone.Modal.extend({
-                    template: _.template($('#tmpl-firstPost').html()),
-                    className: 'group-modal popin-wrapper modal-firstPost',
-                    cancelEl: '.close, .btn-cancel',
-                    initialize: function () {
-                        this.$('.bbm-modal').addClass('popin');
-                    },
-                    events: {
-                        'click .js_subscribe': 'subscription'
-                    },
-                    subscription: function () {
-                        var that = this;
-
-                        if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-
-                            var LocalRolesUser = new RolesModel.Model({
-                                role: Roles.PARTICIPANT,
-                                discussion: 'local:Discussion/' + Ctx.getDiscussionId()
-                            });
-                            LocalRolesUser.save(null, {
-                                success: function (model, resp) {
-                                    //TODO: need to hide the header button to subscribe  ?
-                                    that.triggerSubmit();
-                                },
-                                error: function (model, resp) {
-                                    console.error('ERROR: showPopInFirstPost->subscription', resp);
-                                }
-                            })
-                        }
-                    }
-                });
-
-                Assembl.slider.show(new Modal());
-
+                Assembl.vent.trigger('navBar:subscribeOnFirstPost');
             }
 
         });

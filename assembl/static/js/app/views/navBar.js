@@ -25,6 +25,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 }
 
                 this.showPopInDiscussion();
+                this.listenTo(Assembl.vent, 'navBar:subscribeOnFirstPost', this.showPopInOnFirstPost);
 
             },
             ui: {
@@ -208,7 +209,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 Assembl.slider.show(new Modal());
             },
 
-            joinDiscussion: function () {
+            joinDiscussion: function (firstPost) {
 
                 var self = this,
                     collectionManager = new CollectionManager();
@@ -217,9 +218,18 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     notificationsToShow: null
                 });
 
+                var modalClassName = 'group-modal popin-wrapper modal-joinDiscussion';
+                var modalTemplate = _.template($('#tmpl-joinDiscussion').html());
+
+                if ( firstPost )
+                {
+                    modalClassName = 'group-modal popin-wrapper modal-firstPost';
+                    modalTemplate = _.template($('#tmpl-firstPost').html());
+                }
+
                 var Modal = Backbone.Modal.extend({
-                    template: _.template($('#tmpl-joinDiscussion').html()),
-                    className: 'group-modal popin-wrapper modal-joinDiscussion',
+                    template: modalTemplate,
+                    className: modalClassName,
                     cancelEl: '.close, .btn-cancel',
 
                     model: model,
@@ -277,6 +287,10 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
                 Assembl.slider.show(new Modal());
 
+            },
+
+            showPopInOnFirstPost: function(){
+                this.joinDiscussion(true);
             },
 
             showPopInDiscussion: function () {
