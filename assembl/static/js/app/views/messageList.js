@@ -330,7 +330,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     filterValue,
                     that = this;
 
-                Ctx.openPanel(this);
+                //Ctx.openPanel(this);
                 //!currentIdea?filterValue=null:filterValue=currentIdea.getId();
                 //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea, this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, filterValue));
                 //TODO benoitg - this logic should really be in postQuery, not here - 2014-07-29

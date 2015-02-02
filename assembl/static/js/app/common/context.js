@@ -322,7 +322,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
              * Open the given panel
              * @param {backbone.View} panel
              */
-            openPanel: function (panel) {
+            /*openPanel: function (panel) {
                 if (panel.$el.hasClass('is-visible')) {
                     return false;
                 }
@@ -337,7 +337,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                     panel.button.addClass('active');
                 }
                 Assembl.vent.trigger("panel:open", [panel]);
-            },
+            },*/
 
             /**
              * @return {Object} The Object with all panels in the localStorage
@@ -352,13 +352,13 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
              * @param {string} panelId
              * @return {Object} The current object
              */
-            addPanelToStorage: function (panelId) {
+            /*addPanelToStorage: function (panelId) {
                 var panels = this.getPanelsFromStorage();
                 panels[panelId] = 'open';
                 localStorage.setItem('panels', JSON.stringify(panels));
 
                 return panels;
-            },
+            },*/
 
             /**
              * Remove a panel from the localStorage by its id
