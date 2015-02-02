@@ -22,6 +22,7 @@ from sqlalchemy import (
     ForeignKey,
     inspect,
 )
+from sqlalchemy.ext.associationproxy import association_proxy
 from virtuoso.vmapping import IriClass
 
 from ..nlp.wordcounter import WordCounter
@@ -138,13 +139,13 @@ class Idea(Tombstonable, DiscussionBoundBase):
             None, RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Idea.sqla_type),
             name=QUADNAMES.class_Idea_class)]
 
-    @property
-    def children(self):
-        return [cl.target for cl in self.target_links]
+    parents = association_proxy(
+        'source_links', 'source',
+        creator=lambda idea: IdeaLink(source=idea))
 
-    @property
-    def parents(self):
-        return [cl.source for cl in self.source_links]
+    children = association_proxy(
+        'target_links', 'target',
+        creator=lambda idea: IdeaLink(target=idea))
 
     @property
     def widget_add_post_endpoint(self):
