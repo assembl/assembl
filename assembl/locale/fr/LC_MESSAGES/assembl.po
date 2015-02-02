@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-01-23 17:56+0100\n"
-"PO-Revision-Date: 2015-01-23 16:54+0000\n"
+"POT-Creation-Date: 2015-02-02 16:38-0500\n"
+"PO-Revision-Date: 2015-02-02 21:37+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
@@ -66,23 +66,23 @@ msgstr "Quelqu'un répond directement à un de vos messages"
 msgid "SYNTHESIS: "
 msgstr "SYNTHÈSE: "
 
-#: assembl/static/js/app/common/context.js:106
+#: assembl/static/js/app/common/context.js:99
 msgid "Message titles"
 msgstr "Titres seulement"
 
-#: assembl/static/js/app/common/context.js:110
+#: assembl/static/js/app/common/context.js:103
 msgid "Message previews"
 msgstr "Aperçu des messages"
 
-#: assembl/static/js/app/common/context.js:114
+#: assembl/static/js/app/common/context.js:107
 msgid "Complete messages"
 msgstr "Messages complets"
 
-#: assembl/static/js/app/common/context.js:709
+#: assembl/static/js/app/common/context.js:702
 msgid "Extract"
 msgstr "Extrait"
 
-#: assembl/static/js/app/common/context.js:987
+#: assembl/static/js/app/common/context.js:980
 msgid "ajax error message:"
 msgstr "Message d'erreur ajax:"
 
@@ -119,19 +119,23 @@ msgstr "Ajouter une idée"
 msgid "You must be logged in to create segments"
 msgstr "Vous devez être connecté pour créer des extraits"
 
-#: assembl/static/js/app/models/segment.js:97
-msgid "invalid idPost: "
-msgstr "idPost est invalide :"
+#: assembl/static/js/app/models/segment.js:104
+msgid ""
+"invalid extract: the extract must have a valid idPost (here ) or a valid "
+"uri (here )"
+msgstr ""
+"Extrait invalide : l'extrait doit avoir un idPost valide (ici %s) ou une "
+"uri valide (ici %s)"
 
-#: assembl/static/js/app/models/segment.js:100
+#: assembl/static/js/app/models/segment.js:109
 msgid "invalid creationDate: "
 msgstr "creationDate est invalide :"
 
-#: assembl/static/js/app/models/segment.js:103
+#: assembl/static/js/app/models/segment.js:112
 msgid "invalid idIdea: "
 msgstr "idIdea est invalide :"
 
-#: assembl/static/js/app/models/segment.js:106
+#: assembl/static/js/app/models/segment.js:115
 msgid "invalid idCreator: "
 msgstr "idCreator est invalide :"
 
@@ -180,55 +184,55 @@ msgstr "Pas encore de données disponibles."
 
 #: assembl/static/js/app/views/contextPage.js:878
 msgid "last week"
-msgstr "de la semaine dernière"
+msgstr "la semaine dernière"
 
 #: assembl/static/js/app/views/contextPage.js:881
 msgid "last 2 weeks"
-msgstr "des 2 dernières semaines"
+msgstr "les 2 dernières semaines"
 
 #: assembl/static/js/app/views/contextPage.js:884
 msgid "last month"
-msgstr "du mois dernier"
+msgstr "le mois dernier"
 
 #: assembl/static/js/app/views/contextPage.js:887
 msgid "last 3 months"
-msgstr "des 3 derniers mois"
+msgstr "les 3 derniers mois"
 
 #: assembl/static/js/app/views/contextPage.js:890
 msgid "last 6 months"
-msgstr "des 6 derniers mois"
+msgstr "les 6 derniers mois"
 
 #: assembl/static/js/app/views/contextPage.js:893
 msgid "last year"
-msgstr "de l'année dernière"
+msgstr "l'année dernière"
 
 #: assembl/static/js/app/views/contextPage.js:1045
 #, python-format
 msgid "%d participant has contributed in the %s"
 msgid_plural "%d participants have contributed in the %s"
-msgstr[0] "%d participant a contribué lors %s"
-msgstr[1] "%d participants ont contribué lors %s"
+msgstr[0] "%d participant a contribué pendant %s"
+msgstr[1] "%d participants ont contribué pendant %s"
 
 #: assembl/static/js/app/views/contextPage.js:1054
 #, python-format
 msgid "%d new participant started contributing in the %s"
 msgid_plural "%d new participants started contributing in the %s"
-msgstr[0] "%d nouveau participant a contribué lors %s"
-msgstr[1] "%d nouveaux participants ont contribué lors %s"
+msgstr[0] "%d nouveau participant a commencé à contribuer pendant %s"
+msgstr[1] "%d nouveaux participants ont commencé à contribuer pendant %s"
 
 #: assembl/static/js/app/views/contextPage.js:1064
 #, python-format
 msgid "%d active participant had contributed before %s"
 msgid_plural "%d active participants had contributed before %s"
 msgstr[0] "%d contributeur avait contribué lors %s et demeure toujours actif."
-msgstr[1] "%d contributeurs avaient contribué lors %s et demeurent toujours actifs."
+msgstr[1] "%d contributeurs avaient contribué avant %s et demeurent toujours actifs."
 
 #: assembl/static/js/app/views/contextPage.js:1077
 #, python-format
 msgid "%d participant's last contribution was prior to %s"
 msgid_plural "%d participants' last contribution was prior to %s"
-msgstr[0] "La dernière contribution de %d participant date %s"
-msgstr[1] "La dernière contribution de %d participants date %s"
+msgstr[0] "La dernière contribution de %d participant date d'avant %s"
+msgstr[1] "La dernière contribution de %d participants date d'avant %s"
 
 #: assembl/static/js/app/views/contextPage.js:1092
 #, python-format
@@ -255,17 +259,17 @@ msgid "Dashboard"
 msgstr "Tableau de bord"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:117
-#: assembl/static/js/app/views/message.js:217
+#: assembl/static/js/app/views/message.js:218
 msgid "Type your response here..."
 msgstr "Écrivez votre réponse ici..."
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:119
-#: assembl/static/js/app/views/message.js:219
+#: assembl/static/js/app/views/message.js:220
 msgid "Send your reply"
 msgstr "Envoyez votre réponse"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:122
-#: assembl/static/js/app/views/message.js:221
+#: assembl/static/js/app/views/message.js:222
 msgid "You did not type a response yet..."
 msgstr "Vous n'avez pas encore écrit de réponse"
 
@@ -333,7 +337,7 @@ msgid "Send your comment"
 msgstr "Envoyez votre commentaire"
 
 #: assembl/static/js/app/views/ideaPanel.js:442
-#: assembl/static/js/app/views/messageList.js:1045
+#: assembl/static/js/app/views/messageList.js:1051
 msgid "You need to type a comment first..."
 msgstr "Vous devez d'abord écrire un commentaire..."
 
@@ -353,7 +357,7 @@ msgstr "Confirmez que vous souhaitez supprimer cette idée."
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr "Confirmez que vous souhaitez renvoyer tous les extraits au presse-papier."
 
-#: assembl/static/js/app/views/message.js:402
+#: assembl/static/js/app/views/message.js:403
 msgid ""
 "You will be redirected to another idea in connection with the nugget on "
 "which you clicked."
@@ -365,69 +369,69 @@ msgstr ""
 msgid "You can drag the segment above directly to the table of ideas"
 msgstr "Vous pouvez glisser l'extrait ci-dessus directement sur la table des idées"
 
-#: assembl/static/js/app/views/messageList.js:211
+#: assembl/static/js/app/views/messageList.js:212
 msgid "Conversations"
 msgstr "Conversations"
 
-#: assembl/static/js/app/views/messageList.js:218
+#: assembl/static/js/app/views/messageList.js:219
 msgid "Threaded"
 msgstr "Enfilades"
 
-#: assembl/static/js/app/views/messageList.js:223
+#: assembl/static/js/app/views/messageList.js:224
 #: assembl/static/js/app/views/messageListPostQuery.js:167
 msgid "Chronological"
 msgstr "Chronologique"
 
-#: assembl/static/js/app/views/messageList.js:228
+#: assembl/static/js/app/views/messageList.js:229
 msgid "Reverse-Chronological"
 msgstr "Chronologique-inverse"
 
-#: assembl/static/js/app/views/messageList.js:233
+#: assembl/static/js/app/views/messageList.js:234
 msgid "New Messages"
 msgstr "Nouveaux Messages"
 
-#: assembl/static/js/app/views/messageList.js:776
+#: assembl/static/js/app/views/messageList.js:777
 msgid "No messages"
 msgstr "Pas de messages"
 
-#: assembl/static/js/app/views/messageList.js:1042
+#: assembl/static/js/app/views/messageList.js:1048
 #: assembl/static/js/app/views/messageSend.js:83
 #: assembl/templates/do_password_change.jinja2:18
 #: assembl/templates/request_password_change.jinja2:26
 msgid "Send"
 msgstr "Envoyer"
 
-#: assembl/static/js/app/views/messageList.js:1043
+#: assembl/static/js/app/views/messageList.js:1049
 msgid "Subject"
 msgstr "Sujet"
 
-#: assembl/static/js/app/views/messageList.js:1044
+#: assembl/static/js/app/views/messageList.js:1050
 msgid "Add a subject above and start a new topic here"
 msgstr "Rédigez le contenu de votre nouveau message"
 
-#: assembl/static/js/app/views/messageList.js:1046
+#: assembl/static/js/app/views/messageList.js:1052
 msgid "You need to set a subject to add a new topic..."
 msgstr "Vous devez ajouter un titre pour lancer un sujet de discussion..."
 
-#: assembl/static/js/app/views/messageList.js:1200
+#: assembl/static/js/app/views/messageList.js:1221
 #, python-format
 msgid "All %s"
 msgstr "Tous %s"
 
-#: assembl/static/js/app/views/messageList.js:1202
+#: assembl/static/js/app/views/messageList.js:1223
 #, python-format
 msgid "Unread %s"
 msgstr "Non-lus %s"
 
-#: assembl/static/js/app/views/messageList.js:1211
+#: assembl/static/js/app/views/messageList.js:1232
 msgid "Expand all"
 msgstr "Tout déployer"
 
-#: assembl/static/js/app/views/messageList.js:1214
+#: assembl/static/js/app/views/messageList.js:1235
 msgid "Collapse all"
 msgstr "Tout replier"
 
-#: assembl/static/js/app/views/messageList.js:1501
+#: assembl/static/js/app/views/messageList.js:1523
 msgid "Send to clipboard"
 msgstr "Ajouter au presse-papier"
 
@@ -640,34 +644,40 @@ msgstr "Voulez-vous publier la synthèse?"
 msgid "Synthesis published!"
 msgstr "Synthèse publiée!"
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:110
+#: assembl/static/js/app/views/groups/panelWrapper.js:118
 msgid "Unlock panel"
 msgstr "Déverrouiller le panneau"
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:123
+#: assembl/static/js/app/views/groups/panelWrapper.js:131
+msgid "We have locked the panel for you. Click here to unlock"
+msgstr ""
+"Nous avons verrouillé ce panneau pour vous. Cliquez ici pour le "
+"déverrouiller"
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:153
 #: assembl/templates/views/panelWrapper.tmpl:9
 msgid "Lock panel"
 msgstr "Verrouiller le panneau"
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:175
+#: assembl/static/js/app/views/groups/panelWrapper.js:205
 msgid "Please select an idea in the table of ideas to open the idea panel."
 msgstr ""
 "Veuillez sélectionner une idée dans la table des idées pour ouvrir le "
 "panneau idée."
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:197
+#: assembl/static/js/app/views/groups/panelWrapper.js:227
 msgid "Need more room for messages? Click here to minimize the Idea panel."
 msgstr ""
 "Besoin d'espace pour plus de messages ? Cliquez ici pour minimiser le "
 "panneau idée."
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:264
+#: assembl/static/js/app/views/groups/panelWrapper.js:290
 #: assembl/templates/views/panelWrapper.tmpl:35
 msgid "Maximize panel"
 msgstr "Maximiser le panneau"
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:327
-#: assembl/static/js/app/views/groups/panelWrapper.js:348
+#: assembl/static/js/app/views/groups/panelWrapper.js:353
+#: assembl/static/js/app/views/groups/panelWrapper.js:374
 #: assembl/templates/views/navigation.tmpl:5
 #: assembl/templates/views/panelWrapper.tmpl:20
 msgid "Minimize panel"
@@ -712,6 +722,11 @@ msgstr "Créer une nouvelle discussion"
 #: assembl/templates/discussion_list.jinja2:38
 msgid "Change global permissions"
 msgstr "Changer les permissions globales"
+
+#: assembl/templates/discussion_list.jinja2:41
+#: assembl/templates/views/navBar.tmpl:50
+msgid "Sign out"
+msgstr "Déconnexion"
 
 #: assembl/templates/do_password_change.jinja2:16
 #: assembl/templates/login.jinja2:65 assembl/templates/register.jinja2:25
@@ -853,7 +868,7 @@ msgstr "Ajouter une adresse de courriel"
 msgid "Save"
 msgstr "Enregister"
 
-#: assembl/templates/profile.jinja2:224 assembl/templates/views/profile.tmpl:82
+#: assembl/templates/profile.jinja2:224 assembl/templates/views/profile.tmpl:93
 msgid "Connect other accounts to Assembl"
 msgstr "Connecter d'autres comptes à Assembl"
 
@@ -1040,39 +1055,39 @@ msgstr "partenaires"
 msgid "partners added"
 msgstr "partenaires ajoutés"
 
-#: assembl/templates/views/adminPartners.tmpl:42
-msgid "link"
-msgstr "lien"
-
-#: assembl/templates/views/adminPartners.tmpl:55
+#: assembl/templates/views/adminPartners.tmpl:40
 msgid "name of partner"
 msgstr "Nom du partenaire"
 
-#: assembl/templates/views/adminPartners.tmpl:59
-#: assembl/templates/views/adminPartners.tmpl:70
+#: assembl/templates/views/adminPartners.tmpl:44
+#: assembl/templates/views/adminPartners.tmpl:55
 msgid "please correct the error"
 msgstr "veuillez corriger l'erreur"
 
-#: assembl/templates/views/adminPartners.tmpl:66
+#: assembl/templates/views/adminPartners.tmpl:51
 msgid "description"
 msgstr "description"
 
-#: assembl/templates/views/adminPartners.tmpl:77
+#: assembl/templates/views/adminPartners.tmpl:62
 msgid "homepage partners"
 msgstr "partenaires de la page d'accueil"
 
-#: assembl/templates/views/adminPartners.tmpl:81
-#: assembl/templates/views/adminPartners.tmpl:92
+#: assembl/templates/views/adminPartners.tmpl:66
+#: assembl/templates/views/adminPartners.tmpl:77
 msgid "authorized url syntax: http://hompage.com or http://www.hompage.com"
 msgstr "syntaxe d'URL autorisée: http://hompage.com ou http://www.hompage.com"
 
-#: assembl/templates/views/adminPartners.tmpl:88
+#: assembl/templates/views/adminPartners.tmpl:73
 msgid "url partner logo"
 msgstr "URL du logo du partenaire"
 
-#: assembl/templates/views/adminPartners.tmpl:99
+#: assembl/templates/views/adminPartners.tmpl:84
 msgid "is initiator"
 msgstr "est initiateur"
+
+#: assembl/templates/views/adminPartners.tmpl:107
+msgid "link"
+msgstr "lien"
 
 #: assembl/templates/views/ajaxError.tmpl:2
 msgid "assembl need to be reload"
@@ -1191,17 +1206,17 @@ msgstr ""
 msgid "I understand"
 msgstr "Je comprends"
 
-#: assembl/templates/views/contextPage.tmpl:16
+#: assembl/templates/views/contextPage.tmpl:20
 #: assembl/templates/views/homeIntroductionDetail.tmpl:3
 msgid "Context"
 msgstr "Contexte"
 
-#: assembl/templates/views/contextPage.tmpl:18
+#: assembl/templates/views/contextPage.tmpl:22
 #: assembl/templates/views/ideaPanel.tmpl:46
 msgid "See more"
 msgstr "Voir plus"
 
-#: assembl/templates/views/contextPage.tmpl:23
+#: assembl/templates/views/contextPage.tmpl:27
 msgid "Debate objectives"
 msgstr "Objectifs du débat"
 
@@ -1239,20 +1254,29 @@ msgstr "Félicitations pour votre première contribution!"
 
 #: assembl/templates/views/firstPost.tmpl:8
 msgid ""
-"You could receive notifications when participants respond to your "
-"messages, and when a synthesis is published (usually once a week, don't "
-"worry!)."
+"Now that you have contributed to the debate, maybe you want to be "
+"informed of its evolution. Would you like to subscribe to the debate? You"
+" would receive notifications when:"
 msgstr ""
-"Recevez des notifications dès que des participants réagissent à vos "
-"messages, et lorsqu’une synthèse est publiée (généralement une par "
-"semaine, ne vous inquiétez pas !)."
+"Maintenant que vous avez contribué au débat, peut-être voulez-vous être "
+"informé.e de son évolution. Voulez-vous vous abonner au débat ? Vous "
+"recevrez alors des notifications lorsque :"
 
-#: assembl/templates/views/firstPost.tmpl:14
+#: assembl/templates/views/firstPost.tmpl:12
+#: assembl/templates/views/joinDiscussion.tmpl:12
+msgid ""
+"You can then edit your subscriptions at anytime in the \"Notifications\" "
+"section of your profile."
+msgstr ""
+"Vous pouvez modifier vos abonnements à tout moment dans la section "
+"\"Notifications\" de votre profil."
+
+#: assembl/templates/views/firstPost.tmpl:18
 #: assembl/templates/views/joinDiscussion.tmpl:18
 msgid "not now"
 msgstr "Pas maintenant"
 
-#: assembl/templates/views/firstPost.tmpl:15
+#: assembl/templates/views/firstPost.tmpl:19
 #: assembl/templates/views/joinDiscussion.tmpl:19
 msgid "yes, thanks"
 msgstr "Oui, s'il vous plaît"
@@ -1467,78 +1491,70 @@ msgstr ""
 "En vous abonnant à cette discussion, vous recevrez une notification quand"
 " :"
 
-#: assembl/templates/views/joinDiscussion.tmpl:12
-msgid ""
-"You can then edit your subscriptions at anytime in the \"Notifications\" "
-"section of your profile."
-msgstr ""
-"Vous pouvez modifier vos abonnements à tout moment dans la section "
-"\"Notifications\" de votre profil."
-
-#: assembl/templates/views/message.tmpl:14
-#: assembl/templates/views/message.tmpl:41
+#: assembl/templates/views/message.tmpl:8
+#: assembl/templates/views/message.tmpl:33
 msgid "Mark as unread"
 msgstr "Marquer comme non-lu"
 
-#: assembl/templates/views/message.tmpl:16
-#: assembl/templates/views/message.tmpl:43
+#: assembl/templates/views/message.tmpl:10
+#: assembl/templates/views/message.tmpl:35
 msgid "Mark as read"
 msgstr "Marquer lu"
 
-#: assembl/templates/views/message.tmpl:26
+#: assembl/templates/views/message.tmpl:18
 msgid "This link inspired the author to write this message"
 msgstr "Ce lien a inspiré l'auteur lors de la rédaction de ce message"
 
-#: assembl/templates/views/message.tmpl:26
+#: assembl/templates/views/message.tmpl:18
 msgid "Inspiration source"
 msgstr "Source d'inspiration"
 
-#: assembl/templates/views/message.tmpl:35
+#: assembl/templates/views/message.tmpl:27
 msgid "More options"
 msgstr "Plus d'options"
 
-#: assembl/templates/views/message.tmpl:48
+#: assembl/templates/views/message.tmpl:40
 msgid "Go back to the entire topic thread"
 msgstr "Retourner à l'enfilade complète de ce sujet"
 
-#: assembl/templates/views/message.tmpl:50
+#: assembl/templates/views/message.tmpl:42
 msgid "Show only this message and its replies"
 msgstr "Afficher seulement ce message et ses réponses"
 
-#: assembl/templates/views/message.tmpl:53
+#: assembl/templates/views/message.tmpl:45
 msgid "Copy the link to share this message"
 msgstr "Copier le lien pour partager ce message"
 
-#: assembl/templates/views/message.tmpl:56
+#: assembl/templates/views/message.tmpl:48
 msgid "Send an email to this user"
 msgstr "Envoyez un courriel à cet utilisateur"
 
-#: assembl/templates/views/message.tmpl:69
-#: assembl/templates/views/message.tmpl:86
+#: assembl/templates/views/message.tmpl:59
+#: assembl/templates/views/message.tmpl:76
 msgid "User"
 msgstr "Utilisateur"
 
-#: assembl/templates/views/message.tmpl:70
-#: assembl/templates/views/message.tmpl:88
+#: assembl/templates/views/message.tmpl:60
+#: assembl/templates/views/message.tmpl:78
 #, python-format
 msgid "%(user)s"
 msgstr "%(user)s"
 
-#: assembl/templates/views/message.tmpl:73
-#: assembl/templates/views/message.tmpl:89
+#: assembl/templates/views/message.tmpl:63
+#: assembl/templates/views/message.tmpl:79
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 msgstr "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 
-#: assembl/templates/views/message.tmpl:107
+#: assembl/templates/views/message.tmpl:97
 msgid "Read more"
 msgstr "Lire plus"
 
-#: assembl/templates/views/message.tmpl:112
+#: assembl/templates/views/message.tmpl:102
 msgid "Read less"
 msgstr "Lire moins"
 
-#: assembl/templates/views/message.tmpl:125
+#: assembl/templates/views/message.tmpl:115
 msgid "Reply"
 msgstr "Répondre"
 
@@ -1620,10 +1636,6 @@ msgstr "Modifier votre profil"
 #: assembl/templates/views/profile.tmpl:9
 msgid "notifications"
 msgstr "Notifications"
-
-#: assembl/templates/views/navBar.tmpl:50
-msgid "Sign out"
-msgstr "Déconnexion"
 
 #: assembl/templates/views/navigation.tmpl:11
 msgid "Debate"
@@ -1806,18 +1818,18 @@ msgstr "Revenir à la discussion"
 msgid "No file given."
 msgstr "Pas de fichier envoyé."
 
-#: assembl/views/api/agent.py:79 assembl/views/auth/views.py:160
+#: assembl/views/api/agent.py:79 assembl/views/auth/views.py:161
 #, python-format
 msgid "The username %s is already used"
 msgstr "Le nom d'utilisateur %s est déjà pris"
 
-#: assembl/views/api/agent.py:97 assembl/views/auth/views.py:179
-#: assembl/views/auth/views.py:771
+#: assembl/views/api/agent.py:97 assembl/views/auth/views.py:180
+#: assembl/views/auth/views.py:773
 msgid "The passwords are not identical"
 msgstr "Les mots de passe ne correspondent pas"
 
-#: assembl/views/api/agent.py:105 assembl/views/auth/views.py:187
-#: assembl/views/auth/views.py:253
+#: assembl/views/api/agent.py:105 assembl/views/auth/views.py:188
+#: assembl/views/auth/views.py:254
 msgid "This is not a valid email"
 msgstr "Ce n'est pas une adresse de courriel valide"
 
@@ -1844,27 +1856,27 @@ msgstr "Vous devez être connecté pour voir quels messages ont été lus"
 msgid "Your message is empty"
 msgstr "Votre message est vide"
 
-#: assembl/views/auth/views.py:260
+#: assembl/views/auth/views.py:261
 msgid "We already have a user with this email."
 msgstr "Nous avons déjà un utilisateur ayant ce courriel."
 
-#: assembl/views/auth/views.py:265
+#: assembl/views/auth/views.py:266
 msgid "The passwords should be identical"
 msgstr "Les mots de passe doivent correspondre"
 
-#: assembl/views/auth/views.py:346 assembl/views/auth/views.py:698
+#: assembl/views/auth/views.py:348 assembl/views/auth/views.py:700
 msgid "This user cannot be found"
 msgstr "Cet utilisateur n'a pas été trouvé"
 
-#: assembl/views/auth/views.py:364
+#: assembl/views/auth/views.py:366
 msgid "Invalid user and password"
 msgstr "Utilisateur et mot de passe invalides."
 
-#: assembl/views/auth/views.py:538 assembl/views/auth/views.py:671
+#: assembl/views/auth/views.py:540 assembl/views/auth/views.py:673
 msgid "Confirmation requested"
 msgstr "Confirmation requise"
 
-#: assembl/views/auth/views.py:539 assembl/views/auth/views.py:672
+#: assembl/views/auth/views.py:541 assembl/views/auth/views.py:674
 msgid ""
 "We have sent you a confirmation email. Please use the link to confirm "
 "your email to Assembl"
@@ -1872,37 +1884,37 @@ msgstr ""
 "Nous vous avons envoyé un courriel de confirmation. Veuillez utiliser le "
 "lien pour confirmer votre courriel auprès de Assembl."
 
-#: assembl/views/auth/views.py:559
+#: assembl/views/auth/views.py:561
 msgid "Wrong email token."
 msgstr "Mauvais jeton de courriel."
 
-#: assembl/views/auth/views.py:583
+#: assembl/views/auth/views.py:585
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr "L'adresse email <%s> est déjà confirmée"
 
-#: assembl/views/auth/views.py:611 assembl/views/auth/views.py:616
+#: assembl/views/auth/views.py:613 assembl/views/auth/views.py:618
 #, python-format
 msgid "Email <%s> confirmed"
 msgstr "L'adresse email <%s> est confirmée"
 
-#: assembl/views/auth/views.py:630
+#: assembl/views/auth/views.py:632
 msgid "Login failed, try again"
 msgstr "Échec de connexion, veuillez réessayer."
 
-#: assembl/views/auth/views.py:679
+#: assembl/views/auth/views.py:681
 msgid "We do not know about this email."
 msgstr "Nous ne connaissons pas ce courriel."
 
-#: assembl/views/auth/views.py:693 assembl/views/auth/views.py:699
+#: assembl/views/auth/views.py:695 assembl/views/auth/views.py:701
 msgid "I forgot my password"
 msgstr "Mot de passe oublié ?"
 
-#: assembl/views/auth/views.py:721
+#: assembl/views/auth/views.py:723
 msgid "Password change requested"
 msgstr "Changement de mot de passe requis"
 
-#: assembl/views/auth/views.py:722
+#: assembl/views/auth/views.py:724
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
@@ -1911,37 +1923,37 @@ msgstr ""
 " Veuillez utiliser ce lien pour vous connecter et changer votre mot de "
 "passe."
 
-#: assembl/views/auth/views.py:739
+#: assembl/views/auth/views.py:741
 msgid "Wrong password token."
 msgstr "Jeton invalide"
 
-#: assembl/views/auth/views.py:744
+#: assembl/views/auth/views.py:746
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 "Ce jeton n'est plus valide. Voulez-vous que nous vous en renvoyons un "
 "autre?"
 
-#: assembl/views/auth/views.py:753
+#: assembl/views/auth/views.py:755
 msgid "Change your password"
 msgstr "Changer votre mot de passe"
 
-#: assembl/views/auth/views.py:776
+#: assembl/views/auth/views.py:778
 msgid "Password changed"
 msgstr "Mot de passe modifié"
 
-#: assembl/views/auth/views.py:785
+#: assembl/views/auth/views.py:787
 msgid "email"
 msgstr "courriel"
 
-#: assembl/views/auth/views.py:787
+#: assembl/views/auth/views.py:789
 msgid "account"
 msgstr "compte"
 
-#: assembl/views/auth/views.py:805
+#: assembl/views/auth/views.py:807
 msgid "Please confirm your ${confirm_what} with <${assembl}>"
 msgstr "Veuillez confirmer votre ${confirm_what} auprès de ${assembl}"
 
-#: assembl/views/auth/views.py:808
+#: assembl/views/auth/views.py:810
 msgid ""
 "Hello, ${name}!\n"
 "Please confirm your ${confirm_what} <${email}> with ${assembl} by "
@@ -1953,7 +1965,7 @@ msgstr ""
 "${assembl} en suivant le lien ci-dessous:\n"
 "<${confirm_url}>\n"
 
-#: assembl/views/auth/views.py:812
+#: assembl/views/auth/views.py:814
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">confirm your ${confirm_what}</a> "
@@ -1963,11 +1975,11 @@ msgstr ""
 "<p>Veuillez <a href=\"${confirm_url}\">confirmer votre "
 "${confirm_what}</a> &lt;${email}&gt; auprès de ${assembl}.</p>\n"
 
-#: assembl/views/auth/views.py:829
+#: assembl/views/auth/views.py:831
 msgid "Request for password change"
 msgstr "Requête de changement de mot de passe"
 
-#: assembl/views/auth/views.py:832
+#: assembl/views/auth/views.py:834
 msgid ""
 "Hello, ${name}!\n"
 "You asked to change your password on <${assembl}>. (We hope it was you!)\n"
@@ -1980,7 +1992,7 @@ msgstr ""
 " bien vous, suivez le lien ci-dessous:\n"
 "<${confirm_url}>\n"
 
-#: assembl/views/auth/views.py:837
+#: assembl/views/auth/views.py:839
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>You asked to <a href=\"${confirm_url}\">change your password</a> on "
