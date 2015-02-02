@@ -139,7 +139,7 @@
         "hidden": true,
         "parents": true,
         "parentId": "&get_first_parent_uri",
-        "inNextSynthesis": "&is_in_next_synthesis",
+        "inNextSynthesis": "is_in_next_synthesis",
         "numChildIdea": "&get_num_children",
         "creation_ctx_url": "&get_widget_creation_urls",
         "num_posts": true,

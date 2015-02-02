@@ -439,11 +439,24 @@ JOIN post AS family_posts ON (
     def get_num_children(self):
         return len(self.children)
 
+    @property
     def is_in_next_synthesis(self):
         next_synthesis = self.discussion.get_next_synthesis()
         if not next_synthesis:
             return False
         return True if self in next_synthesis.ideas else False
+
+    @is_in_next_synthesis.setter
+    def is_in_next_synthesis(self, val):
+        next_synthesis = self.discussion.get_next_synthesis()
+        assert next_synthesis
+        is_there = self in next_synthesis.ideas
+        if val and not is_there:
+            next_synthesis.ideas.append(self)
+            next_synthesis.send_to_changes()
+        elif is_there and not val:
+            next_synthesis.ideas.remove(self)
+            next_synthesis.send_to_changes()
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP):
         connection = connection or self.db().connection()
