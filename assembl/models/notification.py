@@ -28,7 +28,8 @@ from . import  Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
 from ..lib.frontend_urls import FrontendUrls
-from .auth import (User, Everyone, P_ADMIN_DISC, CrudPermissions, P_READ)
+from .auth import (
+    User, Everyone, P_ADMIN_DISC, CrudPermissions, P_READ, UserTemplate)
 from .discussion import Discussion
 from .post import Post, SynthesisPost
 from jinja2 import Environment, PackageLoader
@@ -302,9 +303,22 @@ class NotificationSubscription(DiscussionBoundBase):
 
     @classmethod
     def restrict_to_owners(cls, query, user_id=None):
-        "filter query according to object owners"
-        user_id = user_id or self.user_id
-        return query.filter(cls.user_id == user_id)
+        """Filter query according to object owners.
+        Also allow to read subscriptions of templates."""
+        # optimize the join on a single table
+        utt = inspect(UserTemplate).tables[0]
+        # Find the alias for this class with black magic
+        alias = None
+        for aipaths in query._joinpath.keys():
+            for ainsp in aipaths:
+                if getattr(ainsp, '_target', None) == cls:
+                    alias = ainsp.entity
+                    break
+            if alias:
+                break
+        assert alias
+        return query.outerjoin(utt, alias.user_id == utt.c.id).filter(
+            (cls.user_id == user_id) | (utt.c.id != None))
 
     crud_permissions = CrudPermissions(
         P_READ, P_ADMIN_DISC, P_ADMIN_DISC, P_ADMIN_DISC,
