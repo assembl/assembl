@@ -5,15 +5,15 @@
 # Translators:
 # Benoit Grégoire <benoitg@coeus.ca>, 2014
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
-# François Burra <francoisburra@imaginationforpeople.org>, 2014
+# François Burra <francoisburra@imaginationforpeople.org>, 2014-2015
 # Marc-Antoine Parent <maparent@acm.org>, 2014-2015
 # Quentin Grimaud <quentin.grimaud@gmail.com>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-02 16:38-0500\n"
-"PO-Revision-Date: 2015-02-02 21:37+0000\n"
+"POT-Creation-Date: 2015-02-04 12:40-0500\n"
+"PO-Revision-Date: 2015-02-04 17:40+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
@@ -50,19 +50,19 @@ msgstr "${val} ne peut être sérialisé: ${err}"
 msgid "${val} is not a string: ${err}"
 msgstr "${val} n'est pas une chaîne: ${err}"
 
-#: assembl/models/notification.py:487
-msgid "A periodic synthesis of the discussion is posted by the moderator"
-msgstr "Une synthèse périodique de la discussion a été envoyée par le modérateur"
+#: assembl/models/notification.py:501
+msgid "A periodic synthesis of the discussion is posted"
+msgstr "Une synthèse périodique de la discussion est publiée"
 
-#: assembl/models/notification.py:515
+#: assembl/models/notification.py:529
 msgid "Any message is posted to the discussion"
 msgstr "N'importe quel message est envoyé à la discussion"
 
-#: assembl/models/notification.py:544
-msgid "Someone directly responds to any message you posted"
+#: assembl/models/notification.py:558
+msgid "Someone directly responds to one of your messages"
 msgstr "Quelqu'un répond directement à un de vos messages"
 
-#: assembl/models/notification.py:898
+#: assembl/models/notification.py:912
 msgid "SYNTHESIS: "
 msgstr "SYNTHÈSE: "
 
@@ -275,6 +275,7 @@ msgstr "Vous n'avez pas encore écrit de réponse"
 
 #: assembl/static/js/app/views/ideaList.js:131
 #: assembl/templates/views/create-group.tmpl:42
+#: assembl/templates/views/ideaList.tmpl:7
 msgid "Table of ideas"
 msgstr "Table des idées"
 
@@ -1115,6 +1116,8 @@ msgstr ""
 "parvenir le message suivant:"
 
 #: assembl/templates/views/ajaxError.tmpl:16
+#: assembl/templates/views/firstPost.tmpl:18
+#: assembl/templates/views/joinDiscussion.tmpl:18
 msgid "Not now"
 msgstr "Pas maintenant"
 
@@ -1249,37 +1252,31 @@ msgid "Conversation"
 msgstr "Conversations"
 
 #: assembl/templates/views/firstPost.tmpl:7
-msgid "Congratulations for your first contribution!"
-msgstr "Félicitations pour votre première contribution!"
+msgid "Congratulations on making your first contribution!"
+msgstr "Félicitations pour votre première contribution !"
 
 #: assembl/templates/views/firstPost.tmpl:8
+#: assembl/templates/views/joinDiscussion.tmpl:8
 msgid ""
-"Now that you have contributed to the debate, maybe you want to be "
-"informed of its evolution. Would you like to subscribe to the debate? You"
-" would receive notifications when:"
+"Stay informed and up to date with the evolution of the discussion and "
+"receive notifications when:"
 msgstr ""
-"Maintenant que vous avez contribué au débat, peut-être voulez-vous être "
-"informé.e de son évolution. Voulez-vous vous abonner au débat ? Vous "
-"recevrez alors des notifications lorsque :"
+"Tenez-vous informé de l'évolution de la discussion en recevant des "
+"notifications lorsque :"
 
 #: assembl/templates/views/firstPost.tmpl:12
 #: assembl/templates/views/joinDiscussion.tmpl:12
 msgid ""
-"You can then edit your subscriptions at anytime in the \"Notifications\" "
-"section of your profile."
+"You can modify at anytime the type of notification you receive by "
+"clicking on the ‘Notifications’ section of your profile."
 msgstr ""
-"Vous pouvez modifier vos abonnements à tout moment dans la section "
-"\"Notifications\" de votre profil."
-
-#: assembl/templates/views/firstPost.tmpl:18
-#: assembl/templates/views/joinDiscussion.tmpl:18
-msgid "not now"
-msgstr "Pas maintenant"
+"Vous pouvez modifier vos abonnements à tout moment en cliquant sur la "
+"section ‘‘Notifications’’ de votre profil."
 
 #: assembl/templates/views/firstPost.tmpl:19
 #: assembl/templates/views/joinDiscussion.tmpl:19
-msgid "yes, thanks"
-msgstr "Oui, s'il vous plaît"
+msgid "Receive notifications"
+msgstr "Recevoir des notifications"
 
 #: assembl/templates/views/home.tmpl:2
 msgid "How it works"
@@ -1317,7 +1314,7 @@ msgstr ""
 "</ul>\n"
 "<p>Comment ça fonctionne:</p>\n"
 "\t<ol>\n"
-"\t\t<li>Au fur et à mesure que vous contribuez, des attrapeurs vont "
+"\t\t<li>Au fur et à mesure que vous contribuez, des animateurs vont "
 "sélectionner les idées clés de vos messages – Ils sont là pour s'assurer "
 "que vos contributions sont remarquées</li>\n"
 "\t\t<li>À partir de ces idées, ils vont réorganiser ces idées dans une "
@@ -1359,10 +1356,6 @@ msgstr ""
 #: assembl/templates/views/ideaInSynthesis.tmpl:11
 msgid "By"
 msgstr "Par"
-
-#: assembl/templates/views/ideaList.tmpl:7
-msgid "Table of idea"
-msgstr "Table des idées"
 
 #: assembl/templates/views/ideaList.tmpl:11
 msgid "Add idea"
@@ -1482,14 +1475,8 @@ msgid "edit instigator"
 msgstr "éditer l'initiateur"
 
 #: assembl/templates/views/joinDiscussion.tmpl:7
-msgid "Subscribe to discussion"
-msgstr "S'abonner à la discussion"
-
-#: assembl/templates/views/joinDiscussion.tmpl:8
-msgid "By subscribing to this discussion, you will receive a notification when:"
-msgstr ""
-"En vous abonnant à cette discussion, vous recevrez une notification quand"
-" :"
+msgid "Keep up with the evolution of the discussion"
+msgstr "Suivez l'évolution de la discussion"
 
 #: assembl/templates/views/message.tmpl:8
 #: assembl/templates/views/message.tmpl:33
