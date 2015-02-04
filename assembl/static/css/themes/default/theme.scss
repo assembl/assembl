@@ -1,7 +1,40 @@
 /* ASSEMBL THEME */
 
-/* Theme variable definitions */
-//TODO
+/*
+
+Global:
+Fond de boutons et header de dialogue, et couleur de texte de bouton
+Activelink color
+
+Contexte:
+Hauteur du header
+police et couleur et affichage ou non du titre de la discussion
+Cacher ou non les stats
+
+Header/Navigation :
+Logo se change
+Couleur du texte:  Se change (Attention au bouton subscribe qui est l’inverse)
+Hauteur du panneau:  Très problématique, investiguer (Ben)
+Nom du débat se cache
+
+Navigation:
+Fond d’extrait et de table des idées
+Highlight d’idée active (2 couleurs différentes)
+Fond de header de panneau
+Couleur de l’icone sur header de panneau
+Couleur de texte de header de panneau
+Fond de titre d’accordéon actif et inactif
+
+Idée:
+Fond du haut du panneau idée
+
+*/
+
+
+$theme_logo_color: #513850;
+$theme_debate_title_color: #B36FE0;
+$theme_activelink_color: #B36FE0;
+$theme_background_context: '../img/crowd.jpg';
 
 /* Theme standard CSS definitions (mainly logos and images).
    Maybe we don't need this at all, and could    use variables only */
@@ -10,63 +43,3 @@
 /* Import main assembl sass.  This must be after variable definitions, but
    before any custom CSS overrides .*/
 @import "../../assembl_base_styles.scss";
-
-/* Theme custom CSS overrides.  Normally there shouldn't be any! */
-.assembl-logo {
-  font-size: 18px;
-  font-weight: bold;
-  text-decoration: none;
-  line-height: 35px;
-  margin-left: 10px;
-  color: #513850;
-}
-
-.navbar {
-  &.navbar-default {
-    background-color: #FFFFFF;
-    color: #484848;
-    height: 36px;
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
-  }
-}
-
-.debate-title {
-  font-size: 14px;
-  color: #B36FE0;
-  .debate-icon {
-    font-size: 145%;
-    vertical-align: top;
-    position: relative;
-  }
-  .icon-arrowright {
-    color: #cccccc;
-    font-size: 80%;
-  }
-}
-
-body.default{
-  .white-mark {
-    background: url(img/crowd.jpg) center center no-repeat;
-    background-size: cover;
-    height: 227px;
-    display: table;
-    width: 100%;
-    padding: 0;
-    .white-mark-content {
-      display: table;
-      width: 100%;
-      height: 222px;
-      .white-mark-title {
-        display: table-cell;
-        vertical-align: middle;
-        > * {
-          text-align: center;
-          font-size: 50px;
-          color: #FFFFFF;
-          margin: 0;
-        }
-      }
-    }
-  }
-}
-
