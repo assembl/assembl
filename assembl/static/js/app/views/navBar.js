@@ -209,8 +209,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 Assembl.slider.show(new Modal());
             },
 
-            joinDiscussion: function (firstPost) {
-
+            joinDiscussion: function (evt, firstPost) {
                 var self = this,
                     collectionManager = new CollectionManager();
 
@@ -290,7 +289,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             },
 
             showPopInOnFirstPost: function(){
-                this.joinDiscussion(true);
+                this.joinDiscussion(null, true);
             },
 
             showPopInDiscussion: function () {
