@@ -1,40 +1,40 @@
 /* ASSEMBL THEME */
 
-/*
-
-Global:
-Fond de boutons et header de dialogue, et couleur de texte de bouton
-Activelink color
-
-Contexte:
-Hauteur du header
-police et couleur et affichage ou non du titre de la discussion
-Cacher ou non les stats
-
-Header/Navigation :
-Logo se change
-Couleur du texte:  Se change (Attention au bouton subscribe qui est l’inverse)
-Hauteur du panneau:  Très problématique, investiguer (Ben)
-Nom du débat se cache
-
-Navigation:
-Fond d’extrait et de table des idées
-Highlight d’idée active (2 couleurs différentes)
-Fond de header de panneau
-Couleur de l’icone sur header de panneau
-Couleur de texte de header de panneau
-Fond de titre d’accordéon actif et inactif
-
-Idée:
-Fond du haut du panneau idée
-
-*/
+//variable
+$th_white: #FFFFFF;
+$th_purple: #B36FE0;
+$th_purple1: #513850;
+$th_gray: #7F8C8D;
 
 
-$theme_logo_color: #513850;
-$theme_debate_title_color: #B36FE0;
-$theme_activelink_color: #B36FE0;
-$theme_background_context: '../img/crowd.jpg';
+//Global
+$theme_activelink_color: $th_purple;
+
+$theme_btn_primary_text_color: $th_white;
+$theme_btn_primary_bg_color: $th_purple;
+
+$theme_btn_secondary_text_color: $th_purple;
+$theme_btn_secondary_bg_color: $th_white;
+$theme_btn_secondary_border_color: $th_purple;
+
+$theme_btn_cancel_text_color: $th_gray;
+$theme_btn_default_text_color: $th_purple;
+
+$theme_popin_header_bg: $th_purple;
+$theme_popin_header_text_color: $th_white;
+
+//Header
+$theme_header_logo_color: $th_purple1;
+$theme_header_debate_title_color: $th_purple;
+$theme_header_height: 36px;
+$theme_header_text_color: #484848;
+$theme_header_bg_color: $th_white;
+$theme_header_logo: '../default/img/logo.png';
+
+//Context
+$theme_context_bg: '../default/img/crowd.jpg';
+$theme_context_page_header_height: 227px;
+$theme_context_title_color: #FFFFFF;
 
 /* Theme standard CSS definitions (mainly logos and images).
    Maybe we don't need this at all, and could    use variables only */

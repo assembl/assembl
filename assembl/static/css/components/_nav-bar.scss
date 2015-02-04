@@ -5,7 +5,6 @@ $textProfile: #515151;
 .navbar {
   @include no-selection;
   @include box-sizing(border-box);
-  //@include transform(translateZ(0));
   display: block;
   position: relative;
   z-index: 100; /* for dropdowns */
