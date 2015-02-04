@@ -1,5 +1,17 @@
 /* ASSEMBL THEME */
 
+/* Theme variable definitions */
+//TODO
+
+/* Theme standard CSS definitions (mainly logos and images).
+   Maybe we don't need this at all, and could    use variables only */
+//TODO
+
+/* Import main assembl sass.  This must be after variable definitions, but
+   before any custom CSS overrides .*/
+@import "../../assembl_base_styles.scss";
+
+/* Theme custom CSS overrides.  Normally there shouldn't be any! */
 .assembl-logo {
   font-size: 18px;
   font-weight: bold;
