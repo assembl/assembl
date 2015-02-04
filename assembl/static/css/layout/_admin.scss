@@ -60,4 +60,18 @@ table {
     background-color: $white;
     min-height: 400px;
   }
+
+  #profile-form {
+    .control-label {
+      width: auto;
+    }
+    .controls {
+      margin-left: 20px;
+      .fb-bg, .twi-bg ,.g-bg{
+        box-sizing: border-box;
+        text-align: center;
+        padding-top: 10px;
+      }
+    }
+  }
 }

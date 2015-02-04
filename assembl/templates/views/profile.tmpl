@@ -27,67 +27,73 @@
 			</div>
       <div class="gr">
         <div class="gu gu-1of1">
-          <form class="core-form form-horizontal">
+          <form class="core-form form-horizontal" id="profile-form">
             <fieldset>
-              <div class="control-group">
-                <label for="username" class="control-label">{{ gettext('Username') }}</label>
-                <div class="controls">
-                    <input class="input-xlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" value="<%= profile.get('username') %>" />
+              <div class="control-group fr">
+                <label for="username" class="control-label fl">{{ gettext('Username') }}</label>
+                <div class="controls fl">
+                    <input class="input-xxlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" value="<%= profile.get('username') %>" />
                 </div>
               </div>
 
-              <div class="control-group">
-                <label for="name" class="control-label">{{ gettext('Name') }}</label>
-                <div class="controls">
-                    <input class="input-xlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('name') %>" />
+              <div class="control-group fr">
+                <label for="name" class="control-label fl">{{ gettext('Name') }}</label>
+                <div class="controls fl">
+                    <input class="input-xxlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('name') %>" />
                 </div>
               </div>
 
-              <div class="control-group">
-                <label for="password1" class="control-label">{{ gettext('Change password') }}</label>
-                <div class="controls">
-                  <input class="input-xlarge" type="password" name="password1" placeholder="{{ gettext('New Password') }}" />
+              <div class="control-group fr">
+                <label for="password1" class="control-label fl">{{ gettext('Change password') }}</label>
+                <div class="controls fl">
+                  <input class="input-xxlarge" type="password" name="password1" placeholder="{{ gettext('New Password') }}" />
                 </div>
               </div>
 
-              <div class="control-group">
-                <label for="password2" class="control-label">{{ gettext('Repeat password') }}</label>
-                <div class="controls">
-                  <input class="input-xlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
+              <div class="control-group fr">
+                <label for="password2" class="control-label fl">{{ gettext('Repeat password') }}</label>
+                <div class="controls fl">
+                  <input class="input-xxlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
                 </div>
               </div>
 
-              <div class="control-group">
-                <label for="#" class="control-label">{{ gettext('Emails') }}</label>
-                <div class="controls">
+              <!-- <div class="control-group fr">
+                <label for="#" class="control-label fl">{{ gettext('Emails') }}</label>
+                <div class="controls fl">
                 {# usually it\'s a loop #}
                 <span class="ui-label"><%= profile.get('preferred_email') %></span>
                 </div>
-              </div>
+              </div> -->
 
-              <div class="control-group">
-                <label for="add_email" class="control-label">{{ gettext('Add an email account') }}</label>
-                <div class="controls">
-                   <input class="input-xlarge" type="email" name="add_email" placeholder="{{ gettext('Email') }}" />
+              <div class="control-group fr">
+                <label for="add_email" class="control-label fl">{{ gettext('Emails') }}</label>
+                <div class="controls fl">
+                   <input class="input-xxlarge" type="email" name="add_email" placeholder="{{ gettext('Email') }}" />
+                   <div class="mts"><a href="#"><i class="icon-add"></i>{{ gettext('Add an email account') }}</a></div>
                 </div>
               </div>
 
-              <div class="form-actions ptm">
-                <button class="btn btn-secondary js_saveProfile" type="submit">{{ gettext('Save') }}</button>
-              </div>
+
+              <div class="control-group">
+								<label for="add_email" class="control-label">{{ gettext('link your email account') }}</label>
+								<div class="controls">
+									<div class="gr">
+										<div class="gu gu-1of2 pvs">
+											<div class="mbxs"><div class="fb-icon-bg"></div><div class="fb-bg"><span>sign in with facebook</span></div>
+											<div class="mbxs"><div class="twi-icon-bg"></div><div class="twi-bg"><span>sign in with twitter</span></div>
+											<div class="mbxs"><div class="g-icon-bg"></div><div class="g-bg"><span>sign in with google+</span></div>
+										</div>
+									</div>
+								</div>
+							</div>
             </fieldset>
+
+						<div class="form-actions ptm fl">
+							<button class="btn btn-secondary js_saveProfile" type="submit">{{ gettext('Save') }}</button>
+						</div>
           </form>
 
-					<div class="gr">
-						<div class="gu gu-1of5">
-						<p>link your email account</p>
-						</div>
-						<div class="gu gu-last pvs">
-							<div class="mbxs"><div class="fb-icon-bg"></div><input type="submit" class="fb-bg" value="sign in with facebook"></div>
-							<div class="mbxs"><div class="twi-icon-bg"></div><input type="submit" class="twi-bg" value="sign in with twitter"></div>
-							<div class="mbxs"><div class="g-icon-bg"></div><input type="submit" class="g-bg" value="sign in with google+"></div>
-						</div>
-					</div>
+
 
           {% if providers %}
 					<p>{{ gettext("Connect other accounts to Assembl")|safe }}</p>
