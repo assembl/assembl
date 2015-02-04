@@ -526,12 +526,12 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                     valuesText = [],
                     numActiveFilters = _.keys(this._query).length;
                 if (this._queryResultInfo == null) {
-                    retval += '<div class="post-query-results-info">';
+                    retval += '<span class="post-query-results-info">';
                     retval += i18n.gettext("No query has been executed yet");
-                    retval += '</div>';
+                    retval += '</span>';
                 }
                 else if (this._resultsAreValid) {
-                    retval += '<div class="post-query-results-info">';
+                    retval += '<span class="post-query-results-info">';
                     if (this.getResultNumTotal() == 0) {
                         if (numActiveFilters > 0) {
                             retval += i18n.gettext("There is no message to display with those filters:");
@@ -563,7 +563,7 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                         }
                     }
 
-                    retval += '</div>';
+                    retval += '</span>';
                     retval += '<ul class="post-query-filter-info pan">';
 
                     var nActiveFilters = 0;

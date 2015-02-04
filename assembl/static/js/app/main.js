@@ -10,6 +10,14 @@ require(["app", "common/context", "jquery", "router", "utils/socket", "dropdown"
                     raven.setUserContext({id: Ctx.getCurrentUserId()});
                 });
         }
+        else {
+          //Disables raven for development
+          require(['raven'],
+              function (raven) {
+                  raven.config(false);
+                  raven.debug=false;
+              });
+        }
 
         var router = new Router();
 

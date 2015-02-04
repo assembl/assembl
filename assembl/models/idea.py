@@ -22,6 +22,7 @@ from sqlalchemy import (
     ForeignKey,
     inspect,
 )
+from sqlalchemy.ext.associationproxy import association_proxy
 from virtuoso.vmapping import IriClass
 
 from ..nlp.wordcounter import WordCounter
@@ -138,13 +139,13 @@ class Idea(Tombstonable, DiscussionBoundBase):
             None, RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Idea.sqla_type),
             name=QUADNAMES.class_Idea_class)]
 
-    @property
-    def children(self):
-        return [cl.target for cl in self.target_links]
+    parents = association_proxy(
+        'source_links', 'source',
+        creator=lambda idea: IdeaLink(source=idea))
 
-    @property
-    def parents(self):
-        return [cl.source for cl in self.source_links]
+    children = association_proxy(
+        'target_links', 'target',
+        creator=lambda idea: IdeaLink(target=idea))
 
     @property
     def widget_add_post_endpoint(self):
@@ -439,11 +440,24 @@ JOIN post AS family_posts ON (
     def get_num_children(self):
         return len(self.children)
 
+    @property
     def is_in_next_synthesis(self):
         next_synthesis = self.discussion.get_next_synthesis()
         if not next_synthesis:
             return False
         return True if self in next_synthesis.ideas else False
+
+    @is_in_next_synthesis.setter
+    def is_in_next_synthesis(self, val):
+        next_synthesis = self.discussion.get_next_synthesis()
+        assert next_synthesis
+        is_there = self in next_synthesis.ideas
+        if val and not is_there:
+            next_synthesis.ideas.append(self)
+            next_synthesis.send_to_changes()
+        elif is_there and not val:
+            next_synthesis.ideas.remove(self)
+            next_synthesis.send_to_changes()
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP):
         connection = connection or self.db().connection()

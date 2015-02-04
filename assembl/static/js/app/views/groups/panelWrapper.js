@@ -23,7 +23,8 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
             },
             ui: {
                 title: ".panel-header-title",
-                lockPanel: '.js_lockPanel',
+                lockPanel: '.js_lockPanel', // clickable zone, which is bigger than just the following icon
+                lockPanelIcon: '.js_lockPanel i',
                 minimizePanel: '.js_minimizePanel',
                 closePanel: '.js_panel-closeButton'
             },
@@ -34,7 +35,6 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
             },
 
             _unlockCallbackQueue: {},
-            _stateButton: null,
             _minimizedStateButton: null,
 
             initialize: function (options) {
@@ -82,9 +82,17 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
                 this.contents.show(this.contentsView);
                 this.setHidden();
                 Ctx.initTooltips(this.$el);
-                this._stateButton = this.$('.lock-group i');
                 this._minimizedStateButton = this.$('.panel-header-minimize');
                 this._minimizedStateIcon = this.$('.panel-header-minimize i');
+
+                if ( this.model.get('locked') )
+                {
+                    this.lockPanel(true);
+                }
+                else
+                {
+                    this.unlockPanel(true);
+                }
             },
             setHidden: function () {
                 if (this.model.get('hidden')) {
@@ -101,23 +109,45 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
             /**
              * lock the panel if unlocked
              */
-            lockPanel: function () {
-                if (!this.model.get('locked')) {
+            lockPanel: function (force) {
+                if (force || !this.model.get('locked')) {
                     this.model.set('locked', true);
-                    this._stateButton
+                    this.ui.lockPanelIcon
                         .addClass('icon-lock')
                         .removeClass('icon-lock-open')
                         .attr('data-original-title', i18n.gettext('Unlock panel'));
                 }
             },
 
+            autoLockPanel: function() {
+                if (!this.model.get('locked')) {
+                    this.lockPanel();
+                    var that = this;
+
+                    // show a special tooltip
+                    setTimeout(function(){
+                        var el = that.ui.lockPanelIcon;
+                        var initialTitle = el.attr("data-original-title");
+                        el.attr("data-original-title", i18n.gettext('We have locked the panel for you. Click here to unlock'));
+                        el.tooltip('destroy');
+                        el.tooltip({container: 'body', placement: 'left'});
+                        el.tooltip('show');
+                        setTimeout(function () {
+                            el.attr("data-original-title", initialTitle);
+                            el.tooltip('destroy');
+                            el.tooltip({container: 'body'});
+                        }, 7000);
+                    }, 5000); // FIXME: if we set this timer lower than this, the tooltip shows and immediately disappears. Why?
+                }
+            },
+
             /**
              * unlock the panel if locked
              */
-            unlockPanel: function () {
-                if (this.model.get('locked')) {
+            unlockPanel: function (force) {
+                if (force || this.model.get('locked')) {
                     this.model.set('locked', false);
-                    this._stateButton
+                    this.ui.lockPanelIcon
                         .addClass('icon-lock-open')
                         .removeClass('icon-lock lockedGlow')
                         .attr('data-original-title', i18n.gettext('Lock panel'));
@@ -188,7 +218,7 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
                     this.groupContent.resetMessagePanelWidth();
                     var _store = window.localStorage;
                     //_store.removeItem('ideaPanelHelpShown'); // uncomment this to test
-                    if (!_store.getItem('ideaPanelHelpShown')) {
+                    if (!_store.getItem('ideaPanelHelpShown') || Math.random() < 0.1 ) {
                         _store.setItem('ideaPanelHelpShown', true);
                         var that = this;
                         setTimeout(function () {
@@ -223,10 +253,6 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
                 }
 
                 this.groupContent.groupContainer.resizeAllPanels();
-            },
-
-            setButtonState: function (dom) {
-                this._stateButton = dom;
             },
 
             getExtraPixels: function () {

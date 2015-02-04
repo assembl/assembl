@@ -136,7 +136,7 @@
 /************************/
 
 .btn-cancel {
-  color: $gray;
+  color: $theme_btn_cancel_text_color;
   background-color: transparent;
 }
 
@@ -156,16 +156,12 @@
 
 /**********************/
 .btn-default, .btn-bright {
-  color: $purple1;
+  color: $theme_btn_default_text_color;
   background-color: transparent;
 }
 
-.btn-bright {
-  color: $purple2;
-}
-
 .btn-default:hover, .btn-bright:hover {
-  text-decoration: none;
+  //text-decoration: none;
 }
 
 .btn-default:focus, .btn-bright:focus {
@@ -182,8 +178,8 @@
 
 /*********************/
 .btn-primary {
-  color: $white;
-  background-color: $purple1;
+  color: $theme_btn_primary_text_color;
+  background-color: $theme_btn_primary_bg_color;
 }
 
 .btn-primary:hover {
@@ -203,14 +199,14 @@
 
 /*********************/
 .btn-secondary {
-  color: $purple1;
-  background-color: $white;
-  border: 1px solid $purple1;
+  color: $theme_btn_secondary_text_color;
+  background-color: $theme_btn_secondary_bg_color;
+  border: 1px solid $theme_btn_secondary_border_color;
 }
 
 .btn-secondary:hover {
-  color: $white;
-  background-color: $purple1;
+  color: $theme_btn_secondary_bg_color;
+  background-color: $theme_btn_secondary_text_color;
   text-decoration: none;
 }
 
@@ -221,8 +217,8 @@
 .btn-secondary:active,
 .btn-secondary.active {
   opacity: 0.8;
-  background-color: $purple1;
-  color: $white;
+  background-color: $theme_btn_secondary_text_color;
+  color: $theme_btn_secondary_bg_color;
   outline: 0;
 }
 

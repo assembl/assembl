@@ -83,8 +83,12 @@
       right: 30px;
       opacity: 0.8;
       top: 5px;
+      padding-top: 4px;
 
       .lockedGlow {
+        animation-name: glowlock;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
         -webkit-animation-name: glowlock;
         -webkit-animation-duration: 2s;
         -webkit-animation-iteration-count: infinite;
@@ -377,6 +381,24 @@
 }
 
 @-webkit-keyframes glowlock {
+  from {
+    color: $white;
+    text-shadow: -1px 1px 8px #ffc, 1px -1px 8px $white;
+    opacity: 0.4;
+  }
+  50% {
+    color: $white;
+    text-shadow: -1px 1px 8px #ffc, 1px -1px 8px $white;
+    opacity: 0.8;
+  }
+  to {
+    color: $white;
+    text-shadow: -1px 1px 8px #ffc, 1px -1px 8px $white;
+    opacity: 1;
+  }
+}
+
+@keyframes glowlock {
   from {
     color: $white;
     text-shadow: -1px 1px 8px #ffc, 1px -1px 8px $white;

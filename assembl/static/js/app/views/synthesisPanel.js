@@ -1,7 +1,7 @@
 'use strict';
 
-define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app', 'common/context', 'models/synthesis', 'models/idea', 'utils/permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'utils/panelSpecTypes', 'views/assemblPanel', 'utils/i18n', 'views/editableField', 'views/ckeditorField', 'common/collectionManager'],
-    function (objectTreeRenderVisitor, _, $, Assembl, Ctx, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, PanelSpecTypes, AssemblPanel, i18n, EditableField, CKEditorField, CollectionManager) {
+define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery', 'app', 'common/context', 'models/synthesis', 'models/idea', 'utils/permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'utils/panelSpecTypes', 'views/assemblPanel', 'utils/i18n', 'views/editableField', 'views/ckeditorField', 'common/collectionManager'],
+    function (objectTreeRenderVisitor, Raven, _, $, Assembl, Ctx, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, PanelSpecTypes, AssemblPanel, i18n, EditableField, CKEditorField, CollectionManager) {
 
         var SynthesisPanel = AssemblPanel.extend({
             template: '#tmpl-synthesisPanel',
@@ -212,7 +212,7 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
                     url = Ctx.getApiUrl('posts'),
                     that = this;
 
-                var onSuccess = function (resp) {
+                var doPublish = function () {
                     var data = {
                         publishes_synthesis_id: publishes_synthesis_id,
                         subject: "Not used",
@@ -227,15 +227,24 @@ define(['views/visitors/objectTreeRenderVisitor', 'underscore', 'jquery', 'app',
                         data: JSON.stringify(data),
                         contentType: 'application/json',
                         url: url,
-                        success: function () {
+                        done: function () {
                             alert(i18n.gettext("Synthesis published!"));
-                            that.unblockPanel();
                             that.model = new Synthesis.Model({'@id': 'next_synthesis'});
                             that.model.fetch();
-                        }
+                            that.unblockPanel();
+                        },
+                        fail: function () {
+                          Raven.captureMessage('Broken!')
+                          alert(i18n.gettext("Failed publishing synthesis!"));
+                          that.model = new Synthesis.Model({'@id': 'next_synthesis'});
+                          that.model.fetch();
+                          that.unblockPanel();
+                      },
                     });
                 };
+
                 that.blockPanel();
+                doPublish();
             }
 
         });
