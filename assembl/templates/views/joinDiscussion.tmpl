@@ -1,20 +1,20 @@
-<div class="popin-header empty">
+<div class="popin-header pbxs background-grey">
   <i class="icon-discuss"></i>
 </div>
 
-<div class="popin-body">
+<div class="popin-body ptxs background-grey">
   <div class="content">
-    <h1 class="h1">{{ gettext('Subscribe to discussion') }}</h1>
-    <h5 class="h5 tal">{{ gettext('By subscribing to this discussion, you will receive a notification when:') }}</h5>
+    <h1 class="h1 pbs">{{ gettext('Keep up with the evolution of the discussion') }}</h1>
+    <h6 class="h6 tal">{{ gettext('Stay informed and up to date with the evolution of the discussion and receive notifications when:') }}</h6>
     <ul class="tal"><% console.log("notificationsToShow in template: ", notificationsToShow); _.each(notificationsToShow, function(notification, i){ %>
-    	<li><%= i18n.gettext(notification.get('human_readable_description')) %></li>
+    	<li class="h6"><%= i18n.gettext(notification.get('human_readable_description')) %></li>
     <% }); %></ul>
-    <h5 class="h5 tal">{{ gettext('You can then edit your subscriptions at anytime in the "Notifications" section of your profile.') }}</h5>
+    <h6 class="h6 tal">{{ gettext('You can modify at anytime the type of notification you receive by clicking on the ‘Notifications’ section of your profile.') }}</h6>
   </div>
   <div class="clr"></div>
 </div>
 
-<div class="popin-footer">
-  <button class="btn btn-cancel btn-sm fl js_close">{{ gettext('not now') }}</button>
-  <button class="btn btn-third btn-sm fr js_subscribe">{{ gettext('yes, thanks') }}</button>
+<div class="popin-footer background-lightgrey">
+  <button class="btn btn-cancel btn-sm fl js_close">{{ gettext('Not now') }}</button>
+  <button class="btn btn-third btn-sm fr js_subscribe">{{ gettext('Receive notifications') }}</button>
 </div>

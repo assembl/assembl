@@ -35,6 +35,14 @@
   animation: popin-fadein 0.15s;
   @include border-radius($borderRadiusM);
 
+  .background-grey {
+    background: #ececec !important;
+  }
+
+  .background-lightgrey {
+    background: #f4f4f4 !important;
+  }
+
   .popin-header {
     position: relative;
     padding: 15px;
