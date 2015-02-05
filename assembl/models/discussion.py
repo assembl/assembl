@@ -20,8 +20,8 @@ from . import DiscussionBoundBase
 from virtuoso.alchemy import CoerceUnicode
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
-    P_READ, R_SYSADMIN, P_ADMIN_DISC, R_PARTICIPANT,
-    Authenticated, Everyone)
+    P_READ, R_SYSADMIN, P_ADMIN_DISC, R_PARTICIPANT, P_SYSADMIN,
+    CrudPermissions, Authenticated, Everyone)
 from .auth import (
     DiscussionPermission, Role, Permission, User, UserRole, LocalUserRole,
     UserTemplate)
@@ -353,6 +353,10 @@ class Discussion(DiscussionBoundBase):
         port = config.get('public_port')
         portString = (':'+port) if port != 80 else ''
         return 'http://'+config.get('public_hostname')+portString
+
+    crud_permissions = CrudPermissions(
+        P_SYSADMIN, P_READ, P_ADMIN_DISC, P_SYSADMIN)
+
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
     """
