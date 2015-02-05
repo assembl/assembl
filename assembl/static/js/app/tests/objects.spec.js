@@ -1,4 +1,6 @@
-define(['objects/viewsFactory'], function(panelViewByPanelSpec){
+define(['objects/viewsFactory', 'chai'], function(panelViewByPanelSpec, chai){
+
+    var expect = chai.expect;
 
     return describe('Objects Specs', function () {
 
@@ -17,7 +19,7 @@ define(['objects/viewsFactory'], function(panelViewByPanelSpec){
                 var panel = function(){
                   return panelViewByPanelSpec(model);
                 }
-                expect(panel).toThrow();
+                expect(panel).to.throw();
             });
 
         });

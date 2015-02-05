@@ -40,7 +40,12 @@ require(['mocha', 'chai'], function(mocha, chai){
     //mocha.bail(false);
 
     require([
-        'tests/context.spec'
+        'tests/views.spec',
+        'tests/routes.spec',
+        'tests/context.spec',
+        'tests/models.spec',
+        'tests/utils.spec',
+        'tests/objects.spec'
     ], function(require) {
         mocha.run();
     });
