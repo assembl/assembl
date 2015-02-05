@@ -38,6 +38,7 @@
     "ink": "1.0.5",
     "jquery-autosize": "~1.18.15",
     "chai": "~1.10.0",
-    "mocha": "~2.1.0"
+    "mocha": "~2.1.0",
+    "jQuery-linkify": "https://github.com/SoapBox/jQuery-linkify.git#~1.1.7"
   }
 }

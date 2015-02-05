@@ -42,7 +42,8 @@
         'jit': '../bower/jit/Jit/jit',
         'jed': '../bower/jed/jed',
         'd3': '../bower/d3/d3.min',
-        'bootstrap': '../lib/bootstrap'
+        'bootstrap': '../lib/bootstrap',
+        'linkify': '../bower/jQuery-linkify/dist/jquery.linkify.min'
     },
     shim: {
         'underscore': {

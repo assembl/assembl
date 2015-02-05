@@ -38,7 +38,8 @@ var requirejs_config = {
         'jed': '../bower/jed/jed',
         'd3': '../bower/d3/d3',
         'bootstrap': '../lib/bootstrap',
-        'dropdown': '../lib/dropdown'
+        'dropdown': '../lib/dropdown',
+        'linkify': '../bower/jQuery-linkify/dist/jquery.linkify.min'
     },
     shim: {
         'underscore': {

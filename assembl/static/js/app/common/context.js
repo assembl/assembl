@@ -1,7 +1,7 @@
 'use strict';
 
-define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap'],
-    function (Assembl, $, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap) {
+define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'linkify'],
+    function (Assembl, $, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify) {
 
         var Context = function () {
 
@@ -1057,6 +1057,11 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                     }
                 }
                 return interfaceType;
+            },
+
+            makeLinksClickable: function(el) {
+                console.log("makeLinksClickable");
+                el.linkify();
             },
 
             /**
