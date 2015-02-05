@@ -1,0 +1,159 @@
+{
+    "_default": {
+        "id": false,
+        "type": false,
+        "@id": false,
+        "@type": false,
+        "@view": false,
+        "_default": false
+    },
+    "AgentProfile": {
+        "avatar_url_base": false,
+        "name": false,
+        "real_name": false,
+        "post_count": false,
+        "preferred_email": false
+    },
+    "User": {
+        "@extends": "AgentProfile",
+        "login_failures": false,
+        "password": false,
+        "permissions": false
+    },
+    "EmailAccount": false,
+    "IdentityProviderAccount": false,
+    "ContentSource": {
+        "discussion_id": "discussion"
+    },
+    "PostSource": {
+        "@extends": "ContentSource"
+    },
+    "AnnotatorSource": {
+        "@extends": "ContentSource"
+    },
+    "AbstractMailbox": {
+        "@extends": "PostSource"
+    },
+    "IMAPMailbox": {
+        "@extends": "AbstractMailbox",
+        "username": false,
+        "password": false,
+        "last_imported_email_uid": false,
+        "subject_mangling_regex": false,
+        "subject_mangling_replacement": false,
+        "most_common_recipient_address": "&most_common_recipient_address"
+    },
+    "Content": {
+        "date": "creation_date",
+        "bodyMimeType": false,
+        "widget_ideas": false
+    },
+    "Post": {
+        "@extends": "Content",
+        "message_id": false,
+        "ancestry": false,
+        "parentId": "parent",
+        "idCreator": "creator"
+    },
+    "ImportedPost": {
+        "@extends": "Post",
+        "import_date": false,
+        "bodyMimeType": "bodyMimeType"
+    },
+    "Email": {
+        "@extends": "ImportedPost",
+        "full_message": false,
+        "in_reply_to": false
+    },
+    "Discussion": {
+        "settings": "settings_json",
+        "permissions": false,
+        "widget_collection_url": false
+    },
+    "Idea": {
+        "longTitle": "long_title",
+        "shortTitle": "short_title",
+        "creationDate": "creation_date",
+        "discussion": false,
+        "inNextSynthesis": "is_in_next_synthesis",
+        "numChildIdea": false,
+        "num_posts": false,
+        "num_read_posts": false,
+        "widget_add_post_endpoint": false,
+        "notifications": false,
+        "order": false,
+        "parentId": false,
+        "parents": false
+    },
+    "RootIdea": {
+        "@extends": "Idea",
+        "root": "'true",
+        "parentId": false
+    },
+    "IdeaGraphView": {
+        "discussion": false
+    },
+    "ExplicitSubGraphView": {
+        "@extends": "IdeaGraphView"
+    },
+    "TableOfContents": {
+        "@extends": "IdeaGraphView",
+        "ideas": ["&get_ideas"],
+        "idea_links": ["&get_idea_links"]
+    },
+    "Synthesis": {
+        "@extends": "ExplicitSubGraphView"
+    },
+    "Extract": {
+        "idIdea": "idea",
+        "idPost": "content",
+        "created": "creation_date",
+        "idCreator": "creator",
+        "annotator_schema_version": "'\"v1.0\"",
+        "quote": "body",
+        "discussion": false,
+        "ranges": ["text_fragment_identifiers"],
+        "text": "annotation_text"
+    },
+    "TextFragmentIdentifier": {
+        "end": "xpath_end",
+        "endOffset": "offset_end",
+        "extract_id": false,
+        "start": "xpath_start",
+        "startOffset": "offset_start"
+    },
+    "DiscussionPermission": {
+        "permission": "&permission_name",
+        "role": "&role_name"
+    },
+    "Widget": {
+        "settings": "settings_json",
+        "state": "state_json",
+        "user_states_url": "&get_user_states_url",
+        "user_state_url": "&get_user_state_url",
+        "widget_settings_url": "&get_settings_url",
+        "widget_state_url": "&get_state_url"
+    },
+    "BaseIdeaWidget": {
+        "@extends": "Widget",
+        "ideas_url": "&get_ideas_url",
+        "messages_url": "&get_messages_url"
+    },
+    "IdeaCreatingWidget": {
+        "@extends": "BaseIdeaWidget",
+        "ideas_hiding_url": "&get_ideas_hiding_url",
+        "confirm_ideas_url": "&get_confirm_ideas_url",
+        "confirm_messages_url": "&get_confirm_messages_url"
+    },
+    "NotificationSubscription": {
+        "followed_object": "&followed_object",
+        "human_readable_description": "&get_human_readable_description"
+    },
+    "Notification": {
+        "event_source_object": "&event_source_object",
+        "event_source_type": "&event_source_type"
+    },
+    "LocalUserRole": {
+        "role": "&get_role_name"
+    }
+}
