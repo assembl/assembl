@@ -1,7 +1,8 @@
 {% extends 'base.jinja2' %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine.css" />
+    <!--<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine.css" />-->
+    <link rel="stylesheet" type="text/css" href="http://mochajs.org/example/mocha.css" />
 {% endblock extra_css %}
 
 {% block content %}
@@ -13,6 +14,10 @@
     <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />
     <input type="hidden" name="user-displayname" id="user-displayname" value="{{ user.display_name() }}" />
 {% endif %}
+
+ <div id="mocha"></div>
+ <div id="messages"></div>
+ <div id="fixtures"></div>
 
 {% endblock %}
 
@@ -37,7 +42,9 @@
 <script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine.js"></script>
 <script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine-html.js"></script>
 <script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/boot.js"></script>
-<script src="{{ STATIC_URL }}/js/bower/jasmine-jquery/lib/jasmine-jquery.js"></script>
 
 <script data-main="{{ STATIC_URL }}/js/app/init.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
 {% endblock main_js %}
+
+
+

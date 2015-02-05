@@ -1,6 +1,6 @@
 requirejs.config(requirejs_config);
 
-require(['jquery', 'jasmine-boot'], function ($, jasmine_boot) {
+/*require(['jquery', 'jasmine-boot'], function ($, jasmine_boot) {
         'use strict';
 
         $('#wrapper').hide();
@@ -20,4 +20,20 @@ require(['jquery', 'jasmine-boot'], function ($, jasmine_boot) {
             window.onload();
 
         });
+    });*/
+
+require(['mocha', 'chai'], function(mocha, chai){
+    // Chai
+    //var should = chai.should();
+    //chai.use(chaiJquery);
+
+    //mocha.setup('bdd');
+    //mocha.bail(false);
+
+    require([
+        'tests/context.spec'
+    ], function(require) {
+        mocha.run();
     });
+
+});

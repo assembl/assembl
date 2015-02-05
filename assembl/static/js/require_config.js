@@ -19,8 +19,9 @@ var requirejs_config = {
         'jasmine': '../bower/jasmine/lib/jasmine-core/jasmine',
         'jasmine-html': '../bower/jasmine/lib/jasmine-core/jasmine-html',
         'jasmine-boot': '../bower/jasmine/lib/jasmine-core/boot',
-        'jasmine-ajax':'../bower/jasmine-ajax/lib/mock-ajax',
-        'jasmine-jquery':'../bower/jasmine-jquery/lib/jasmine-jquery',
+
+        'chai':'../bower/chai/chai',
+        'mocha':'../bower/mocha/mocha',
 
         'ckeditor': '../bower/ckeditor/ckeditor',
         'ckeditor-sharedspace': '../lib/ckeditor-sharedcontainer/plugin',
@@ -126,6 +127,12 @@ var requirejs_config = {
         },
         'dropdown': {
             deps: ['jquery']
+        },
+        'mocha': {
+            init: function () {
+                this.mocha.setup('bdd');
+                return this.mocha;
+            }
         }
     }
 };
