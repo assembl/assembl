@@ -115,19 +115,19 @@
           display: block;
           height: 40px;
           text-decoration: none;
-          background-color: $purple3;
-          color: $white;
+          background-color: $theme_navigation_menu_bg;
+          color: $theme_navigation_text_color;
           padding-left: 10px;
           font-size: $smallFontSize;
           &.active {
-            background-color: $purple5;
+            background-color: $theme_navigation_menu_bg_active;
             i:not(.icon-arrowleft) {
-              color: $white;
+              color: $theme_navigation_icon_color_active;
             }
           }
           i {
             font-size: 22px;
-            color: $green;
+            color: $theme_navigation_icon_color;
             vertical-align: sub;
           }
           i.icon-add-2 {
@@ -152,7 +152,7 @@
         .second-level.debate,
         .second-level.visualizations,
         .second-level.home {
-          background-color: $purple4;
+          background-color: $theme_navigation_bg;
         }
       }
       .debate {

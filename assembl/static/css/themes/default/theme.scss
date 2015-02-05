@@ -4,7 +4,11 @@
 $th_white: #FFFFFF;
 $th_purple: #B36FE0;
 $th_purple1: #513850;
+$th_purple2: #f2ecf8;
+$th_purple3: #88698e;
+$th_purple4: #432b42;
 $th_gray: #7F8C8D;
+$th_green: #4ac780;
 
 
 //Global
@@ -34,7 +38,18 @@ $theme_header_logo: '../default/img/logo.png';
 //Context
 $theme_context_bg: '../default/img/crowd.jpg';
 $theme_context_page_header_height: 227px;
-$theme_context_title_color: #FFFFFF;
+$theme_context_title_color: $th_white;
+
+//Navigation
+$theme_navigation_bg: $th_purple2;
+$theme_navigation_menu_bg: $th_purple4;
+$theme_navigation_menu_bg_active: $th_purple3;
+$theme_navigation_icon_color_active: $th_white;
+$theme_navigation_icon_color: $th_green;
+$theme_navigation_text_color: $th_white;
+
+//extract
+$theme_extract_bg: $theme_navigation_bg;
 
 /* Theme standard CSS definitions (mainly logos and images).
    Maybe we don't need this at all, and could    use variables only */

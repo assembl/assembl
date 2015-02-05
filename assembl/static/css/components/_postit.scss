@@ -15,7 +15,7 @@ $harvesterAvatarSize: 24px;
     font-size: 13px; //This should be rem or something - benoitg
     position: relative;
     display: block;
-    background-color: $purple4;
+    background-color: $theme_extract_bg;
     margin: 1em 0;
     &:hover {
       a.segment-link {
