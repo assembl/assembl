@@ -800,7 +800,7 @@ class LocalUserRole(DiscussionBoundBase):
     def get_role_name(self):
         return self.role.name
 
-    def update_json(self, json, user_id=Everyone):
+    def update_from_json(self, json, user_id=Everyone, ctx=None):
         # TODO: Verify uniqueness
         json_user_id = json.get('user', None)
         if json_user_id is None:
@@ -1048,7 +1048,7 @@ class PartnerOrganization(DiscussionBoundBase):
 
     is_initiator = Column(Boolean)
 
-    def update_json(self, json, user_id=Everyone):
+    def update_from_json(self, json, user_id=Everyone, ctx=None):
         from ..auth.util import user_has_permission
         if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
             raise HTTPUnauthorized()

@@ -199,7 +199,7 @@ class ClassContext(TraversalContext):
                     print_exc()
                     raise e
             else:
-                return [cls.from_json(json, user_id)]
+                return [cls.create_from_json(json, user_id, self)]
 
 
 class ClassContextPredicate(object):
@@ -412,7 +412,7 @@ class CollectionContext(TraversalContext):
                             break
                     inst = cls(**dict(process_args(kwargs, cls)))
                 else:
-                    inst = cls.from_json(json, user_id)
+                    inst = cls.create_from_json(json, user_id, self)
             except Exception as e:
                 print_exc()
                 raise e

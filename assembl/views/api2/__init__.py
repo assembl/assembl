@@ -228,7 +228,7 @@ def instance_put_json(request):
         if not instance.is_owner(User.get(user_id)):
             return HTTPUnauthorized()
     try:
-        updated = instance.update_json(request.json_body, user_id)
+        updated = instance.update_from_json(request.json_body, user_id, ctx)
         view = request.GET.get('view', None) or 'default'
         if view == 'id_only':
             return [updated.uri()]

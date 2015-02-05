@@ -109,7 +109,7 @@ def set_local_role(request):
             json['requested'] = True
         else:
             raise HTTPUnauthorized()
-    updated = instance.update_json(json, user_id)
+    updated = instance.update_from_json(json, user_id, ctx)
     view = request.GET.get('view', None) or 'default'
     if view == 'id_only':
         return [updated.uri()]
