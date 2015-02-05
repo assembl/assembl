@@ -45,7 +45,7 @@ def get_permissions(user_id, discussion_id):
     session = get_session_maker()()
     if user_id in (Everyone, Authenticated):
         if not discussion_id:
-            return None
+            return []
         permissions = session.query(Permission.name).join(
             DiscussionPermission, Role).filter(
                 (DiscussionPermission.discussion_id == discussion_id)
