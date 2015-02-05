@@ -33,7 +33,7 @@ define(['jquery', '../common/context', 'chai'], function ($, Ctx, chai) {
                 //assert.isNotNull(Ctx.getCurrentUser());
             });
 
-            it('loadTemplate must load a template by id', function () {
+            it('loadTemplate should be a function', function () {
                 assert.isFunction(Ctx.loadTemplate('test'));
             });
 

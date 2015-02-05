@@ -22,6 +22,15 @@ requirejs.config(requirejs_config);
         });
     });*/
 
+/**
+ * BDD & TDD testing
+ *
+ * http://mochajs.org/
+ *
+ * http://chaijs.com/api/
+ *
+ * */
+
 require(['mocha', 'chai'], function(mocha, chai){
     // Chai
     //var should = chai.should();
