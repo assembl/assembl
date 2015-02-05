@@ -8,6 +8,7 @@ $mesageBodyLineHeight: $baseLineHeight;
 $ten: 10px;
 $separatorBulletMargin: 0.6em;
 $previewNumLines: 4;
+$message-body: #999999;
 
 // A message block
 // ================
@@ -46,9 +47,12 @@ $previewNumLines: 4;
   // A message block Header
   // --------------------
 
+  .head {
+    position: relative; /* needed for the absolute positionning of readUnreadIndicatorClickZone */
+  }
+
   .header_item_template {
     font-size: 12px; //This should be rem or something - benoitg
-    cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -66,6 +70,11 @@ $previewNumLines: 4;
 
   .message-subject {
     @extend .header_item_template;
+    cursor: pointer;
+  }
+
+  .message-body.ellipsis {
+    cursor: pointer;
   }
 
   .header-separator-bullet {
@@ -199,6 +208,7 @@ $previewNumLines: 4;
       padding: 0px;
       max-height: $previewNumLines * $mesageBodyLineHeight * $messageBodyFontSize;
       overflow: hidden;
+      color: $message-body;
     }
 
     .message-body.body_format_text_plain > .elipsis > div {
@@ -226,6 +236,7 @@ $previewNumLines: 4;
       max-width: 100%;
       max-height: $avatarSize;
       line-height: $avatarSize; //So text doesn't wrap even if avatar is bigish
+      position: relative; /* needed for the absolute positionning of readUnreadIndicatorClickZone */
     }
     > * {
       vertical-align: middle;
@@ -241,9 +252,6 @@ $previewNumLines: 4;
     .rightSection {
       float: right;
       margin: 0px;
-      .readUnreadIndicator {
-        margin-top: 10px;
-      }
     }
     .centerSection {
       margin: 0px;
@@ -293,24 +301,39 @@ $previewNumLines: 4;
       white-space: nowrap;
       margin: 0px $mesageSpacing 0 $mesageSpacing;
     }
+
+    .readUnreadIndicatorClickZone {
+      right: -10px;
+      top: 8px;
+    }
+  }
+
+  .readUnreadIndicatorClickZone {
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px;
+    position: absolute;
+    z-index: 1000;
+    right: 0;
   }
 
   .readUnreadIndicator {
     display: inline-block;
-    cursor: pointer;
     box-sizing: border-box;
     width: $readUnreadIndicatorSize;
     height: $readUnreadIndicatorSize;
-    margin: $mesageSpacing 0 0 $mesageSpacing*2;
     vertical-align: middle;
     border: 1px solid $gray;
     float: right;
     @include border-radius(50px);
-    &:hover {
+  }
+
+  &.read {
+    .readUnreadIndicatorClickZone:hover .readUnreadIndicator {
       background-color: $gray;
     }
-
   }
+
 
   &.unread {
     .message-author {
@@ -319,6 +342,11 @@ $previewNumLines: 4;
     }
     .message-subject {
       font-weight: 600;
+    }
+
+    .readUnreadIndicatorClickZone:hover .readUnreadIndicator {
+      background: none;
+      border: 1px solid $gray;
     }
 
     .readUnreadIndicator {

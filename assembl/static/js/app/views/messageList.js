@@ -30,6 +30,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             gridSize: AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE,
             minWidth: 400, // basic, may receive idea offset.
             debugPaging: false,
+            _renderId: 0,
 
             ui: {
                 panelBody: ".panel-body",
@@ -329,7 +330,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     filterValue,
                     that = this;
 
-                Ctx.openPanel(this);
+                //Ctx.openPanel(this);
                 //!currentIdea?filterValue=null:filterValue=currentIdea.getId();
                 //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea, this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, filterValue));
                 //TODO benoitg - this logic should really be in postQuery, not here - 2014-07-29
@@ -1015,85 +1016,97 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @return {views.Message}
              */
             render_real: function () {
-                var that = this,
-                    views = [],
-                // We could distinguish on current idea, but I think that would be confusing.
-                    partialMessageContext = "new-topic-" + Ctx.getDiscussionId(),
-                    partialMessage = MessagesInProgress.getMessage(partialMessageContext);
+              var that = this,
+                  views = [],
+                  renderId = _.clone(this._renderId),
+              // We could distinguish on current idea, but I think that would be confusing.
+                  partialMessageContext = "new-topic-" + Ctx.getDiscussionId(),
+                  partialMessage = MessagesInProgress.getMessage(partialMessageContext);
 
-                if (!(Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))) {
-                    $("body").addClass("js_annotatorUserCannotAddExtract");
-                }
+              if (Ctx.debugRender) {
+                console.log("messageList:render_real() is firing for render id:", renderId);
+              }
 
-                Ctx.initTooltips(this.$el);
+              if (!(Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))) {
+                  $("body").addClass("js_annotatorUserCannotAddExtract");
+              }
 
-                if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-                    this.renderUserViewButtons();
-                } else {
-                    this.renderQueryInfo();
-                }
+              Ctx.initTooltips(this.$el);
 
-                this.renderCollapseButton();
-                this.renderDefaultMessageViewDropdown();
-                this.renderMessageListViewStyleDropdown();
+              if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
+                  this.renderUserViewButtons();
+              } else {
+                  this.renderQueryInfo();
+              }
 
-                var options = {
-                    'allow_setting_subject': true,
-                    'send_button_label': i18n.gettext('Send'),
-                    'subject_label': i18n.gettext('Subject'),
-                    'body_help_message': i18n.gettext('Add a subject above and start a new topic here'),
-                    'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-                    'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
-                    'msg_in_progress_ctx': partialMessageContext,
-                    'msg_in_progress_title': partialMessage['title'],
-                    'msg_in_progress_body': partialMessage['body'],
-                    'messageList': that
-                };
+              this.renderCollapseButton();
+              this.renderDefaultMessageViewDropdown();
+              this.renderMessageListViewStyleDropdown();
 
-                var currentIdea = this.getContainingGroup().getCurrentIdea();
-                if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
-                    options.reply_idea_id = currentIdea.getId();
-                }
+              var options = {
+                'allow_setting_subject': true,
+                'send_button_label': i18n.gettext('Send'),
+                'subject_label': i18n.gettext('Subject'),
+                'body_help_message': i18n.gettext('Add a subject above and start a new topic here'),
+                'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
+                'mandatory_subject_missing_msg': i18n.gettext('You need to set a subject to add a new topic...'),
+                'msg_in_progress_ctx': partialMessageContext,
+                'msg_in_progress_title': partialMessage['title'],
+                'msg_in_progress_body': partialMessage['body'],
+                'messageList': that
+              };
 
-                this.newTopicView = new MessageSendView(options);
-                this.$('.messagelist-replybox').html(this.newTopicView.render().el);
+              var currentIdea = this.getContainingGroup().getCurrentIdea();
+              if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
+                options.reply_idea_id = currentIdea.getId();
+              }
 
-                var collectionManager = new CollectionManager();
-                $.when(collectionManager.getAllMessageStructureCollectionPromise(),
-                    this.currentQuery.getResultMessageIdCollectionPromise()).done(
-                    function (allMessageStructureCollection, resultMessageIdCollection) {
-                        that.allMessageStructureCollection = allMessageStructureCollection;
-                        var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, that.allMessageStructureCollection, resultMessageIdCollection);
-                        //console.log("that.showMessageByIdInProgress", that.showMessageByIdInProgress);
-                        if (that.showMessageByIdInProgress === false 
-                            && that.currentViewStyle === that.ViewStyles.NEW_MESSAGES 
-                            && first_unread_id
-                            && !that._previousScrollTarget) {
-                            that.renderIsComplete = true;//showMessageById will call showMessages and actually finish the render
-                            //We do not trigger the render_complete event here, the line above is just to un-inhibit showMessageById
-                            if (this.debugPaging) {
-                                console.info("render_real: calling showMessageById to display the first unread message");
-                            }
-                            that.showMessageById(first_unread_id, undefined, undefined, false);
-                        }
-                        else if (that.showMessageByIdInProgress === false && (this._offsetStart === undefined || this._offsetEnd === undefined)) {
-                            //If there is nothing currently onscreen
-                            //Would avoid rendering twice, and would allow showMessageById to just request showing messages systematically
-                            if (this.debugPaging) {
-                                console.info("render_real: calling showMessages");
-                            }
-                            that.showMessages();
-                        }
-                        else {
-                            if (this.debugPaging) {
-                                console.info("render_real: Already running showMessageById will finish the job");
-                            }
-                            that.renderIsComplete = true;
-                            that.trigger("messageList:render_complete", "Render complete");
-                        }
-                        that._startPostRenderSlowCallbackProcessing();
-                    })
-                return this;
+              this.newTopicView = new MessageSendView(options);
+              this.$('.messagelist-replybox').html(this.newTopicView.render().el);
+              
+              var collectionManager = new CollectionManager();
+              $.when(collectionManager.getAllMessageStructureCollectionPromise(),
+                this.currentQuery.getResultMessageIdCollectionPromise()).done(
+                function (allMessageStructureCollection, resultMessageIdCollection) {
+                  if (Ctx.debugRender) {
+                    console.log("messageList:render_real() collection ready, processing for render id:", renderId);
+                  }
+                  if (renderId != that._renderId) {
+                    console.log("messageList:render_real() collections arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
+                    return;
+                  }
+                  that.allMessageStructureCollection = allMessageStructureCollection;
+                  var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, that.allMessageStructureCollection, resultMessageIdCollection);
+                  //console.log("that.showMessageByIdInProgress", that.showMessageByIdInProgress);
+                  if (that.showMessageByIdInProgress === false 
+                      && that.currentViewStyle === that.ViewStyles.NEW_MESSAGES 
+                      && first_unread_id
+                      && !that._previousScrollTarget) {
+                    that.renderIsComplete = true;//showMessageById will call showMessages and actually finish the render
+                    //We do not trigger the render_complete event here, the line above is just to un-inhibit showMessageById
+                    if (that.debugPaging) {
+                      console.info("render_real: calling showMessageById to display the first unread message");
+                    }
+                    that.showMessageById(first_unread_id, undefined, undefined, false);
+                  }
+                  else if (that.showMessageByIdInProgress === false && (that._offsetStart === undefined || that._offsetEnd === undefined)) {
+                    //If there is nothing currently onscreen
+                    //Would avoid rendering twice, and would allow showMessageById to just request showing messages systematically
+                    if (that.debugPaging) {
+                      console.info("render_real: calling showMessages");
+                    }
+                    that.showMessages();
+                  }
+                  else {
+                    if (that.debugPaging) {
+                      console.info("render_real: Already running showMessageById will finish the job");
+                    }
+                    that.renderIsComplete = true;
+                    that.trigger("messageList:render_complete", "Render complete");
+                  }
+                  that._startPostRenderSlowCallbackProcessing();
+                })
+              return this;
             },
 
             onBeforeDestroy: function () {
@@ -1115,6 +1128,11 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 var that = this,
                     collectionManager = new CollectionManager();
                 this.renderIsComplete = false;  //only showMessages should set this false
+                this._renderId++;
+                var renderId = _.clone(this._renderId);
+                if (Ctx.debugRender) {
+                    console.log("messageList:onRender() is firing for render id:", renderId);
+                }
 
                 //Clear internal state
                 this._offsetStart = undefined;
@@ -1126,26 +1144,28 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   function inFilter(message) {
                         return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
                     };
-                    that.destroyAnnotator();
-                    //Some messages may be present from before
-                    that.ui.messageList.empty();
-                    // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
-                    // In particular, message.loadAnnotations gets called with different views on the same model,
-                    // including zombie views, and we get nested annotator tags as a result.
-                    // (Annotator looks at fresh DOM every time).  Is that still the case?  Benoitg - 2014-09-19
-                    // TODO long term: Keep them with a real CompositeView.
-                    that.DEPRECATEDmessageIdsToDisplay = resultMessageIdCollection;
-                    that.visitorViewData = {};
-                    that.visitorOrderLookupTable = [];
-                    that.visitorRootMessagesToDisplay = [];
-                    messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
-                    that = that.render_real();
-                    that.unblockPanel();
-                }
-
-
-                if (Ctx.debugRender) {
-                    console.log("messageList:render() is firing");
+                  if (Ctx.debugRender) {
+                      console.log("messageList:onRender() structure collection ready for render id:", renderId);
+                  }
+                  if (renderId != that._renderId) {
+                    console.log("messageList:onRender() structure collection arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
+                    return;
+                  }
+                  that.destroyAnnotator();
+                  //Some messages may be present from before
+                  that.ui.messageList.empty();
+                  // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
+                  // In particular, message.loadAnnotations gets called with different views on the same model,
+                  // including zombie views, and we get nested annotator tags as a result.
+                  // (Annotator looks at fresh DOM every time).  Is that still the case?  Benoitg - 2014-09-19
+                  // TODO long term: Keep them with a real CompositeView.
+                  that.DEPRECATEDmessageIdsToDisplay = resultMessageIdCollection;
+                  that.visitorViewData = {};
+                  that.visitorOrderLookupTable = [];
+                  that.visitorRootMessagesToDisplay = [];
+                  messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
+                  that = that.render_real();
+                  that.unblockPanel();
                 }
 
                 this.blockPanel();
@@ -1154,6 +1174,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     this.currentQuery.getResultMessageIdCollectionPromise()).done(
                         newDataCallback);
 
+                //Why isn't this within the when() above?  benoitg 2015-01-28
                 this.ui.panelBody.scroll(function () {
 
                     var msgBox = that.$('.messagelist-replybox').height(),
@@ -1477,7 +1498,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                             } else if (Ctx.currentAnnotationNewIdeaParentIdea) {
                                 //We asked to create a new idea from segment
                               console.log("FIXME:  What's the proper behaviour here now that groups are separated?  We should probably find out if the group is the same as the origin, and lock ONLY in that case");
-                                that.getPanelWrapper().lockPanel();
+                                that.getPanelWrapper().autoLockPanel();
+
                                 var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
                                 that.getContainingGroup().setCurrentIdea(newIdea);
                             }
@@ -1893,12 +1915,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             /** Scrools to a specific message, retrying untill relevent renders
              * are complete
              */
-            scrollToMessage: function (messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth) {
+            scrollToMessage: function (messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth, originalRenderId) {
               var that = this,
               MAX_RETRIES = 50, //Stop after ~30 seconds
               debug = false;
 
               recursionDepth = recursionDepth || 0;
+              originalRenderId = originalRenderId || _.clone(this._renderId);
               var RETRY_INTERVAL = Math.floor(200 * Math.log(2 + recursionDepth));  // increasing interval
 
               shouldHighlightMessageSelected = (typeof shouldHighlightMessageSelected === "undefined") ? true : shouldHighlightMessageSelected;
@@ -1907,7 +1930,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               if (!messageModel) {
                 throw new Error("scrollToMessage(): ERROR:  messageModel wasn't provided");
               }
-              if (recursionDepth === 0 && this.scrollToMessageInProgress) {
+              if (recursionDepth === 0 && this._scrollToMessageInProgressId) {
                 console.log("scrollToMessage():  a scrollToMessage was already in progress, aborting for ", messageModel.id);
                 Raven.captureMessage("scrollToMessage():  a scrollToMessage was already in progress, aborting", {message_id: messageModel.id})
                 if (_.isFunction(failedCallback)) {
@@ -1915,8 +1938,20 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 }
                 return;
               }
+              else if (originalRenderId !== this._renderId) {
+                //This is a normal condition now
+                //console.log("scrollToMessage():  obsolete render, aborting for ", messageModel.id);
+                //Raven.captureMessage("scrollToMessage():  obsolete render, aborting", {message_id: messageModel.id})
+                if(this._scrollToMessageInProgressId === originalRenderId) {
+                  this._scrollToMessageInProgressId = false;
+                }
+                if (_.isFunction(failedCallback)) {
+                  failedCallback();
+                }
+                return;
+              }
               else {
-                this.scrollToMessageInProgress = true;
+                this._scrollToMessageInProgressId = originalRenderId;
               }
               var animate_message = function (message) {
                 var selector = Ctx.format('[id="message-{0}"]', message.id),
@@ -1934,7 +1969,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                       if(debug) {
                         console.log("scrollToMessage(): INFO:  shouldOpenMessageSelected is true, calling recursively after a delay with same recursion depth");
                       }
-                      that.scrollToMessage(messageModel, shouldHighlightMessageSelected, false, callback, failedCallback, recursionDepth);
+                      that.scrollToMessage(messageModel, shouldHighlightMessageSelected, false, callback, failedCallback, recursionDepth, originalRenderId);
                     }, 1000); //Add a delay if we had to open the message
                   }
                   else {
@@ -1961,15 +1996,15 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                           next_call_recursion_depth: recursionDepth + 1
                         }
                       );
-                      //console.info("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
+                      console.log("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
                     }
                     setTimeout(function () {
-                      that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1);
+                      that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1, originalRenderId);
                     }, RETRY_INTERVAL);
                   }
                   else {
                     console.log("scrollToMessage(): MAX_RETRIES has been reached: ", recursionDepth);
-                    that.scrollToMessageInProgress = false;
+                    that._scrollToMessageInProgressId = false;
                     Raven.captureMessage(
                       "scrollToMessage():  scrollToMessage(): MAX_RETRIES has been reached",
                       { message_id: messageModel.id,
@@ -1986,7 +2021,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
               if (this.renderIsComplete) {
                 animate_message(messageModel);
-                this.scrollToMessageInProgress = false;
+                this._scrollToMessageInProgressId = false;
               }
               else {
                 if (debug) {
@@ -1997,7 +2032,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     console.log("scrollToMessage(): render has completed, animating");
                   }
                   animate_message(messageModel);
-                  this.scrollToMessageInProgress = false;
+                  this._scrollToMessageInProgressId = false;
                 });
               }
 
@@ -2021,13 +2056,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               }
 
               if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
-                try{
-                  throw new Error("showMessageById():   a showMessageById was already in progress, aborting");
-                }
-                catch(e){
-                  Raven.captureException(e, {extra: {requested_message_id: id}});
-                }
-                return;
+                Raven.context(function() {
+                  throw new Error("showMessageById():   a showMessageById was already in progress, aborting")
+                },
+                {requestes_message_id: id});
               }
               else if (shouldRecurseMaxMoreTimes === undefined) {
                   this.showMessageByIdInProgress = true;
@@ -2075,12 +2107,11 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                               that.showMessages(requestedOffsets);
                           }
                           else {
-                            try{
+                            Raven.context(function() {
                               throw new Error("showMessageById():  Message is in query results but not in current page, and we are not allowed to recurse");
-                            }
-                            catch(e){
-                              Raven.captureException(e, {extra: {requested_message_id: id}});
-                            }
+                              },
+                              {requested_message_id: id}
+                            );
                           }
                           return;
                       }
@@ -2095,13 +2126,11 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                               that.listenToOnce(that, "messageList:render_complete", success);
                           }
                           else {
-                            try{
+                            Raven.context(function() {
                               throw new Error("showMessageById:  Message is not in query results, and we are not allowed to recurse");
-                            }
-                            catch(e){
-                              Raven.captureException(e, {extra: {requested_message_id: id}});
-                            }
-
+                              },
+                              {requested_message_id: id}
+                            );
                           }
                           return;
                       }
@@ -2110,20 +2139,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                           if (_.isFunction(callback)) {
                               callback();
                           }
-                          if(debug) {
-                            console.log("success callback setting showMessageByIdInProgress = false");
-                          }
-                          that.showMessageByIdInProgress = false;
-                      };
-                      var failed_callback = function () {
-                        if(debug) {
-                          console.log("error callback setting showMessageByIdInProgress = false");
-                        }
-                        that.showMessageByIdInProgress = false;
                       };
                       //console.log("showMessageById: DEBUG:  handing off to scrollToMessage");
-                      that.scrollToMessage(message, shouldHighlightMessageSelected, shouldOpenMessageSelected, real_callback, failed_callback);
-
+                      that.scrollToMessage(message, shouldHighlightMessageSelected, shouldOpenMessageSelected, real_callback);
+                      that.showMessageByIdInProgress = false;
                   });
 
             },

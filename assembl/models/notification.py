@@ -498,7 +498,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
     unsubscribe_allowed = True
 
     def get_human_readable_description(self):
-        return gettext("A periodic synthesis of the discussion is posted by the moderator")
+        return gettext("A periodic synthesis of the discussion is posted")
 
     def wouldCreateNotification(self, discussion_id, verb, object):
         parentWouldCreate = super(NotificationSubscriptionFollowSyntheses, self).wouldCreateNotification(discussion_id, verb, object)
@@ -555,7 +555,7 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
     unsubscribe_allowed = True
 
     def get_human_readable_description(self):
-        return _("Someone directly responds to any message you posted")
+        return _("Someone directly responds to one of your messages")
     
     def wouldCreateNotification(self, discussion_id, verb, object):
         parentWouldCreate = super(NotificationSubscriptionFollowOwnMessageDirectReplies, self).wouldCreateNotification(discussion_id, verb, object)

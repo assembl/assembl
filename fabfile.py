@@ -538,7 +538,7 @@ def bower_cmd(cmd, relative_path='.'):
             run(' '.join((node_cmd, bower_cmd, cmd)))
 
 
-
+@task
 def bower_install():
     """ Normally not called manually """
     bower_cmd('install')

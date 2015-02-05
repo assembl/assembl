@@ -197,16 +197,8 @@ def save_idea(request):
                 if ancestor in new_ancestors:
                     break
                 ancestor.send_to_changes()
-        
-    next_synthesis = discussion.get_next_synthesis()
-    if idea_data['inNextSynthesis']:
-        if idea not in next_synthesis.ideas:
-            next_synthesis.ideas.append(idea)
-            next_synthesis.send_to_changes()
-    else:
-        if idea in next_synthesis.ideas:
-            next_synthesis.ideas.remove(idea)
-            next_synthesis.send_to_changes()
+
+    idea.is_in_next_synthesis = idea_data.get('inNextSynthesis', False)
     idea.send_to_changes()
 
     return {'ok': True, 'id': idea.uri() }

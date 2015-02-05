@@ -81,12 +81,18 @@
   background: $green;
   border: 1px solid $gray3;
   border-radius: 12px;
+}
 
-  /*.vicon {
-    margin-right: -9px;
-    color: $borderColor;
-    font-size: 8px;
-  }*/
+.ui-label-info {
+  display: inline-block;
+  margin: 0 1px $spacingXs 0;
+  padding: 2px 6px;
+  font-size: 11px;
+  color: $white;
+  //background: #007bc2;
+  background: #42a2d6;
+  border: 1px solid $gray3;
+  border-radius: 12px;
 }
 
 /*.ui-label-premium {

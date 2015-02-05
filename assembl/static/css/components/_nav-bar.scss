@@ -1,9 +1,10 @@
 // Navigation bar
 
+$textProfile: #515151;
+
 .navbar {
   @include no-selection;
   @include box-sizing(border-box);
-  //@include transform(translateZ(0));
   display: block;
   position: relative;
   z-index: 100; /* for dropdowns */
@@ -45,11 +46,11 @@
     position: absolute;
     right: 0;
     .connexion {
+      margin: 0;
+      padding: 4px 10px 0 10px;
       li {
         list-style: none;
       }
-      margin: 0;
-      padding: 8px 10px 0 10px;
       .lang {
         cursor: pointer;
       }
@@ -60,9 +61,14 @@
       a {
         text-decoration: none;
       }
-      .icon-arrowdown {
-        font-size: 110%;
-        color: $green;
+      .user-profile{
+        color: $textProfile;
+        .icon-arrowdown {
+          font-size: 110%;
+        }
+      }
+      .user-lang{
+        color: $textProfile;
       }
     }
     .nav-notification {
@@ -132,5 +138,13 @@
   .icon-discuss {
     color: $green;
     font-size: 400%;
+  }
+
+  h1 {
+    font-weight: bold;
+  }
+
+  ul {
+    padding-left: 20px;
   }
 }

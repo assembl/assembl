@@ -1,9 +1,12 @@
-
 html, body {
   font-family: $baseFontFamily;
   font-size: $smallFontSize;
   -webkit-font-smoothing: subpixel-antialiased;
   line-height: $baseLineHeight;
+}
+
+body{
+  background-color: $gray3;
 }
 
 @include selection {
