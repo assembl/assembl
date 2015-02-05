@@ -4,37 +4,38 @@ define(['jquery', '../common/context', 'chai'], function ($, Ctx, chai) {
     var txt = '<script id="tmpl-test" type="text/template">test something</script>';
     $('body').append(txt);
 
-    var assert = chai.assert;
+    var expect = chai.expect;
 
     return describe('Modules Specs', function () {
 
         describe('Context', function () {
 
             it('getDiscussionSlug should return the name of discussion', function () {
-                assert.isNotNull(Ctx.getDiscussionSlug());
+                expect(Ctx.getDiscussionSlug()).not.to.be.null;
+                expect(Ctx.getDiscussionSlug()).to.be.a('string');
             });
 
             it('getSocketUrl should return the socket url', function () {
-                assert.isNotNull(Ctx.getSocketUrl());
+                expect(Ctx.getSocketUrl()).not.to.be.null;
+                expect(Ctx.getSocketUrl()).to.be.a('string');
             });
 
             it('getDiscussionId should return the discussion id', function () {
-                assert.isNotNull(Ctx.getDiscussionId());
+                expect(Ctx.getDiscussionId()).not.to.be.null;
+                expect(Ctx.getDiscussionId()).to.be.a('string');
             });
 
             it('getCurrentUserId should return the user id', function () {
-                assert.isNotNull(Ctx.getCurrentUserId());
+                expect(Ctx.getCurrentUserId()).not.to.be.null;
+                expect(Ctx.getCurrentUserId()).to.be.a('string');
             });
 
             it('getCurrentUser should not return the user', function () {
-
-                //console.debug(Ctx.getCurrentUser())
-
                 //assert.isNotNull(Ctx.getCurrentUser());
             });
 
             it('loadTemplate should be a function', function () {
-                assert.isFunction(Ctx.loadTemplate('test'));
+                expect(Ctx.loadTemplate('test')).to.be.a('function');
             });
 
         })
