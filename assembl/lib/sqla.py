@@ -695,7 +695,7 @@ class BaseOps(object):
             cls, json, user_id=None, context=None,
             parse_def_name='default_reverse'):
         from ..auth.util import get_permissions
-        parse_def = get_view_def(view_def_name)
+        parse_def = get_view_def(parse_def_name)
         context = context or self.dummy_context
         user_id = user_id or Everyone
         from assembl.models import Discussion

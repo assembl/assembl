@@ -800,7 +800,9 @@ class LocalUserRole(DiscussionBoundBase):
     def get_role_name(self):
         return self.role.name
 
-    def update_from_json(self, json, user_id=Everyone, ctx=None):
+    def _do_update_from_json(
+            self, json, parse_def, aliases, ctx, permissions,
+            user_id, duplicate_error=True):
         # TODO: Verify uniqueness
         json_user_id = json.get('user', None)
         if json_user_id is None:
@@ -1048,7 +1050,9 @@ class PartnerOrganization(DiscussionBoundBase):
 
     is_initiator = Column(Boolean)
 
-    def update_from_json(self, json, user_id=Everyone, ctx=None):
+    def _do_update_from_json(
+            self, json, parse_def, aliases, ctx, permissions,
+            user_id, duplicate_error=True):
         from ..auth.util import user_has_permission
         if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
             raise HTTPUnauthorized()
