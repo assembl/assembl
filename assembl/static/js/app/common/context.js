@@ -1060,7 +1060,6 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             },
 
             makeLinksClickable: function(el) {
-                console.log("makeLinksClickable");
                 el.linkify();
             },
 

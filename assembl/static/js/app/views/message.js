@@ -209,7 +209,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         data = that.transformDataBeforeRender(data);
                         that.$el.html(that.template(data));
                         Ctx.initTooltips(that.$el);
-                        Ctx.makeLinksClickable(that.$el); // maybe we should instead target only the body part of the message?
+                        Ctx.makeLinksClickable(that.$el.children('.message-body')); // we target only the body part of the message, not the title
                         Ctx.initClipboard();
                         var partialMessage = MessagesInProgress.getMessage(modelId);
 
