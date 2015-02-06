@@ -365,7 +365,7 @@ $message-body: #999999;
 
   &.SynthesisPost {
     .message-subject {
-      background-color: $green;
+      background-color: $theme_synthesis_header_bg;
       margin: 0;
       padding: 10px;
       color: $white;
