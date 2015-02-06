@@ -37,6 +37,7 @@ $textProfile: #515151;
     top: 0;
     left: 0;
     right: 0;
+    line-height: $theme_header_height;
     .add-group {
       text-decoration: none;
       cursor: pointer;
@@ -46,6 +47,7 @@ $textProfile: #515151;
   .navbar-right {
     position: absolute;
     right: 0;
+    line-height: $theme_header_height;
     .connexion {
       margin: 0;
       padding: 4px 10px 0 10px;
@@ -63,9 +65,14 @@ $textProfile: #515151;
         text-decoration: none;
       }
       .user-profile{
+        height: $theme_header_height;
         color: $textProfile;
         .icon-arrowdown {
           font-size: 110%;
+        }
+        .user-picture {
+            vertical-align: middle;
+            display: inline-block;
         }
       }
       .user-lang{

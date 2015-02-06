@@ -31,7 +31,7 @@
       text-overflow: ellipsis;
       overflow: hidden;
       width: 300px;
-      line-height: 35px;
+      line-height: $theme_header_height;
     }
 
 }
