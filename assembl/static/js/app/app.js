@@ -34,5 +34,10 @@ define(['backbone.marionette', 'jquery'], function (Marionette, $) {
         }
     });
 
+    App.on('start', function(){
+        document.title = document.querySelector('#discussion-slug').value;
+    });
+
+
     return App;
 });
