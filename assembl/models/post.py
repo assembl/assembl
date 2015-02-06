@@ -298,6 +298,9 @@ class SynthesisPost(AssemblPost):
 
     def get_body_mime_type(self):
         return "text/html"
+    
+    def get_title(self):
+        return self.publishes_synthesis.subject
 
 
 class PostWithMetadata(AssemblPost):
