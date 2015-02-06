@@ -51,7 +51,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
 
             onRender: function () {
                 Ctx.initTooltips(this.$el);
-                Ctx.makeLinksClickable(this.ui.body); // maybe we should instead target only the body part of the extract?
+                Ctx.makeLinksClickable(this.ui.body);
             },
 
             onDragStart: function (ev) {
