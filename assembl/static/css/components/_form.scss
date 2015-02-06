@@ -27,7 +27,7 @@ $successText: $green;
 
   &:focus {
     outline: 0;
-    border: 1px solid $purple;
+    border: 1px solid $theme_form_field_active_border_color;
   }
 }
 
@@ -48,7 +48,7 @@ $successText: $green;
   //border: $form-border-color; //border: solid 1px #468847;
 
   &:focus {
-    border: 1px solid #B978E4;
+    border: 1px solid $theme_form_field_active_border_color;
   }
 }
 
@@ -72,7 +72,7 @@ $successText: $green;
   border: 1px solid $gray3;
   &:focus {
     outline: 0;
-    border: 1px solid $purple;
+    border: 1px solid $theme_form_field_active_border_color;
     @include transition(border-color ease-in-out .15s);
   }
 }

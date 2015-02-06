@@ -4,9 +4,10 @@
   text-decoration: none;
   //color: $theme_header_logo_color;
   background: url(#{$theme_header_logo}) center center no-repeat;
+  background-size: contain;
   display: block;
-  height: 35px;
-  width: 115px;
+  height: 100%;
+  max-width: 100%;
 }
 
 .white-mark {

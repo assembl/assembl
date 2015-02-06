@@ -156,14 +156,14 @@
   .panel-header-title,
   .panel-header-close {
     line-height: 40px;
-    color: $theme_header_panel_icon_color;
+    color: $theme_header_panel_text_color;
   }
 
   .panel-header-title {
     padding: 0 0 0 10px;
     i {
       font-size: 22px;
-      color: $theme_header_panel_text_color;
+      color: $theme_header_panel_icon_color;
       margin-right: 2px;
     }
   }

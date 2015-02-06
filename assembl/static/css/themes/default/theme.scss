@@ -8,11 +8,16 @@ $th_purple2: #f2ecf8;
 $th_purple3: #88698e;
 $th_purple4: #432b42;
 $th_gray: #7F8C8D;
+$th_gray1: #888888;
 $th_green: #4ac780;
 
 
 //Global
 $theme_activelink_color: $th_purple;
+$theme_checkbox_color: $th_purple;
+$theme_form_field_active_border_color: $th_purple;
+
+$theme_person_name_color: $th_purple3;
 
 $theme_btn_primary_text_color: $th_white;
 $theme_btn_primary_bg_color: $th_purple;
@@ -51,12 +56,16 @@ $theme_navigation_icon_color_active: $th_white;
 $theme_navigation_icon_color: $th_green;
 $theme_navigation_text_color: $th_white;
 
+//Panel groups
+$theme_panel_group_header_bg_color: th_gray1;
+
 //extract
 $theme_extract_bg: $theme_navigation_bg;
 
 //idea panel
 $theme_idea_header_bg: $th_green;
 
+$theme_synthesis_header_bg: $th_green;
 
 /* Theme standard CSS definitions (mainly logos and images).
    Maybe we don't need this at all, and could    use variables only */

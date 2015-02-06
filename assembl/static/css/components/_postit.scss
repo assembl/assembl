@@ -45,7 +45,7 @@ $harvesterAvatarSize: 24px;
 
     a {
       font-style: normal;
-      color: $purple1;
+      color: $theme_activelink_color;
       text-decoration: none;
       &:hover {
         text-decoration: underline;
@@ -62,7 +62,7 @@ $harvesterAvatarSize: 24px;
           font-size: 12px;
         }
         .creatorName {
-          color: $purple6;
+          color: $theme_person_name_color;
           font-size: 11px;
           vertical-align: text-bottom;
         }

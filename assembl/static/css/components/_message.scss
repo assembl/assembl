@@ -57,7 +57,7 @@ $message-body: #999999;
     text-overflow: ellipsis;
   }
   .message-author {
-    color: $purple5;
+    color: $theme_person_name_color;
     @extend .header_item_template
   }
 
@@ -338,7 +338,7 @@ $message-body: #999999;
   &.unread {
     .message-author {
       font-weight: bold;
-      color: $purple5;
+      color: $theme_person_name_color;
     }
     .message-subject {
       font-weight: 600;

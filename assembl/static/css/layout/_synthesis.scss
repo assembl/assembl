@@ -33,26 +33,26 @@
     color: $white;
   }
   .introduction {
-    background-color: $green;
+    background-color: $theme_synthesis_header_bg;
     padding: 10px;
     .text-muted {
       color: $white;
     }
     .panel-editablearea {
-      background-color: $green;
+      background-color: $theme_synthesis_header_bg;
       border-radius: 0px;
       margin: 0;
     }
   }
   .conclusion {
-    background-color: $green;
+    background-color: $theme_synthesis_header_bg;
     padding: 10px;
     .text-muted {
       color: $white;
     }
     .panel-editablearea {
       margin: 0;
-      background-color: $green;
+      background-color: $theme_synthesis_header_bg;
       border-radius: 0px;
     }
   }
