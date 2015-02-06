@@ -41,6 +41,7 @@
         "mocha": "~2.1.0",
         "jQuery-linkify": "https://github.com/SoapBox/jQuery-linkify.git#~1.1.7",
         "chai-jquery": "~2.0.0",
-        "fixtures": "~1.5.3"
+        "fixtures": "~1.5.3",
+        "jquery-oembed-all": "https://github.com/swergas/jquery-oembed-all.git#initially-visible-option"
     }
 }

@@ -51,7 +51,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
 
             onRender: function () {
                 Ctx.initTooltips(this.$el);
-                Ctx.makeLinksClickable(this.ui.body);
+                Ctx.convertUrlsToLinks(this.ui.body);
             },
 
             onDragStart: function (ev) {

@@ -43,7 +43,8 @@
         'jed': '../bower/jed/jed',
         'd3': '../bower/d3/d3.min',
         'bootstrap': '../lib/bootstrap',
-        'linkify': '../bower/jQuery-linkify/dist/jquery.linkify.min'
+        'linkify': '../bower/jQuery-linkify/dist/jquery.linkify.min',
+        'jquery-oembed-all': '../bower/bower/jquery-oembed-all/jquery.oembed'
     },
     shim: {
         'underscore': {
@@ -113,6 +114,12 @@
         },
         'backbone.subset': {
             deps: ['backbone']
+        },
+        'jquery-linkify': {
+            deps: ['jquery']
+        },
+        'jquery-oembed-all': {
+            deps: ['jquery']
         },
         'bootstrap': {
             deps: ['jquery']

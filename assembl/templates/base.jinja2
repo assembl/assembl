@@ -11,6 +11,7 @@
 		<link rel="icon" href="/static/img/icon/favicon.ico" type="image/x-icon">
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
     <link type="text/css" rel="stylesheet" href="/static/css/themes/{{theme}}/theme.css" />
+    <link type="text/css" rel="stylesheet" href="/static/js/bower/jquery-oembed-all/jquery.oembed.css" />
 
     {% block extra_css %}{% endblock extra_css %}
     {% include 'includes/feature_detection.jinja2' %}
@@ -39,5 +40,6 @@
     {% block main_js %}{% endblock %}
 
     <div id="slider"></div>
+    <div id="popover-oembed"></div>
 </body>
 </html>

@@ -41,7 +41,8 @@ var requirejs_config = {
         'd3': '../bower/d3/d3',
         'bootstrap': '../lib/bootstrap',
         'dropdown': '../lib/dropdown',
-        'linkify': '../bower/jQuery-linkify/dist/jquery.linkify.min'
+        'jquery-linkify': '../bower/jQuery-linkify/dist/jquery.linkify.min',
+        'jquery-oembed-all': '../bower/jquery-oembed-all/jquery.oembed'
     },
     shim: {
         'underscore': {
@@ -129,6 +130,12 @@ var requirejs_config = {
             deps: ['jquery']
         },
         'dropdown': {
+            deps: ['jquery']
+        },
+        'jquery-linkify': {
+            deps: ['jquery']
+        },
+        'jquery-oembed-all': {
             deps: ['jquery']
         },
         'mocha': {

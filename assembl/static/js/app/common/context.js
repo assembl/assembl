@@ -1,7 +1,7 @@
 'use strict';
 
-define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'linkify'],
-    function (Assembl, $, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify) {
+define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all'],
+    function (Assembl, $, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed) {
 
         var Context = function () {
 
@@ -1059,8 +1059,70 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 return interfaceType;
             },
 
-            makeLinksClickable: function(el) {
+            convertUrlsToLinks: function(el) {
                 el.linkify();
+            },
+
+            makeLinksShowOembedOnHover: function(el) {
+                var popover = $("#popover-oembed");
+                el.find("a").mouseenter(function(evt){
+                    console.log("evt: ", evt);
+
+                    popover.css('position','fixed');
+                    popover.css('top', (evt.pageY+2) + 'px');
+                    popover.css('left', evt.pageX + 'px');
+                    //popover.css('padding', '25px 50px');
+                    popover.show();
+
+                    popover.oembed($(this).attr("href"),{
+                        //initiallyVisible: false,
+                        embedMethod: "fill",
+                        //apikeys: {
+                            //etsy : 'd0jq4lmfi5bjbrxq2etulmjr',
+                        //},
+                        //maxHeight: 200, maxWidth:300
+                        onError: function(){
+                            popover.hide();
+                        },
+                        afterEmbed: function(){
+                            console.log("this: ", this);
+                            var screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                            var screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                            var popoverWidth = $(this).outerWidth();
+                            var popoverHeight = $(this).outerHeight();
+                            var positionLeft = parseInt($(this).css('left'));
+                            var positionTop = parseInt($(this).css('top'));
+                            //console.log("screenWidth: ", screenWidth);
+                            //console.log("screenHeight: ", screenHeight);
+                            //console.log("popoverWidth: ", popoverWidth);
+                            //console.log("popoverHeight: ", popoverHeight);
+                            //console.log("positionLeft: ", positionLeft);
+                            //console.log("positionTop: ", positionTop);
+                            var newPositionLeft = positionLeft - popoverWidth/2;
+                            if ( newPositionLeft + popoverWidth > screenWidth )
+                                newPositionLeft = screenWidth - popoverWidth;
+                            if ( newPositionLeft < 0 )
+                                newPositionLeft = 0;
+                            var newPositionTop = positionTop;
+                            if ( newPositionTop + popoverHeight > screenHeight )
+                                newPositionTop = screenHeight - popoverHeight;
+                            if ( newPositionTop < 0 )
+                                newPositionTop = 0;
+                            //console.log("newPositionLeft: ", newPositionLeft);
+                            //console.log("newPositionTop: ", newPositionTop);
+                            $(this).css('left', newPositionLeft + 'px' );
+                            $(this).css('top', newPositionTop + 'px' );
+                        }
+                    });
+                });
+
+                popover.mouseleave(function(evt){
+                    console.log("popover.mouseleave");
+                    var that = this;
+                    setTimeout(function(){
+                        $(that).hide();
+                    }, 10);
+                });
             },
 
             /**
