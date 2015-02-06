@@ -988,7 +988,7 @@ class UserTemplate(DiscussionBoundBase, User):
             NotificationSubscriptionStatus,
             NotificationCreationOrigin)
         # self.id may not be defined
-        db.flush()
+        self.db.flush()
         needed_classes = \
             self.get_applicable_notification_subscriptions_classes()
         # We need to materialize missing NotificationSubscriptions,
