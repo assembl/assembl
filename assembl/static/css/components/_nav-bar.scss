@@ -27,7 +27,7 @@ $textProfile: #515151;
       width: 115px;
     }
     .socketIndicator {
-      line-height: 26px;
+      line-height: $theme_header_height;
     }
   }
 
@@ -37,7 +37,7 @@ $textProfile: #515151;
     top: 0;
     left: 0;
     right: 0;
-    line-height: $theme_header_height;
+    line-height: $theme_header_height - 5;
     .add-group {
       text-decoration: none;
       cursor: pointer;
@@ -47,7 +47,7 @@ $textProfile: #515151;
   .navbar-right {
     position: absolute;
     right: 0;
-    line-height: $theme_header_height;
+    line-height: $theme_header_height - 5;
     .connexion {
       margin: 0;
       padding: 4px 10px 0 10px;
