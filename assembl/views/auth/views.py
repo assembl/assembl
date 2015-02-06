@@ -546,8 +546,12 @@ def confirm_emailid_sent(request):
         pass
     send_confirmation_email(request, email)
     localizer = request.localizer
+    slug = request.matchdict.get('discussion_slug', None)
+    slug_prefix = "/" + slug if slug else ""
     return dict(
         get_default_context(request),
+        slug_prefix=slug_prefix,
+        profile_id=email.profile_id,
         email_account_id=request.matchdict.get('email_account_id'),
         title=localizer.translate(_('Confirmation requested')),
         description=localizer.translate(_(
@@ -739,9 +743,12 @@ def password_change_sent(request):
         send_change_password_email(
             request, profile,
             request.params.get('email', None))
+    slug = request.matchdict.get('discussion_slug', None)
+    slug_prefix = "/" + slug if slug else ""
     return dict(
         get_default_context(request),
         profile_id=request.matchdict.get('profile_id'),
+        slug_prefix=slug_prefix,
         error=request.params.get('error'),
         title=localizer.translate(_('Password change requested')),
         description=localizer.translate(_(
@@ -778,8 +785,11 @@ def do_password_change(request):
     headers = remember(request, user_id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     user.last_login = datetime.now()
+    slug = request.matchdict.get('discussion_slug', None)
+    slug_prefix = "/" + slug if slug else ""
     return dict(
         get_default_context(request),
+        slug_prefix=slug_prefix,
         title=localizer.translate(_('Change your password')))
 
 
@@ -799,6 +809,7 @@ def finish_password_change(request):
         raise HTTPUnauthorized()
     user = User.get(logged_in)
     localizer = request.localizer
+    discussion_slug = request.matchdict.get('discussion_slug', None)
     error = None
     p1, p2 = (request.params.get('password1', '').strip(),
               request.params.get('password2', '').strip())
@@ -807,11 +818,16 @@ def finish_password_change(request):
     elif p1:
         user.set_password(p1)
         return HTTPFound(location=request.route_url(
-            'discussion_list', _query=dict(
+            'home' if discussion_slug else 'discussion_list',
+            discussion_slug=discussion_slug,
+            _query=dict(
                 message=localizer.translate(_(
                     "Password changed")))))
 
-    return dict(get_default_context(request), error=error)
+    slug_prefix = "/" + discussion_slug if discussion_slug else ""
+    return dict(
+        get_default_context(request),
+        slug_prefix=slug_prefix, error=error)
 
 
 def send_confirmation_email(request, email):
