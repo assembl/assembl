@@ -54,7 +54,7 @@
 {%- endmacro %}
 
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
-  <div class="leftSection">
+  <div class="leftSection js_messageTitle">
     <div class="avatar img-rounded">
       <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
     </div><span class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
