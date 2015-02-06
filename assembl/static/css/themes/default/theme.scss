@@ -27,6 +27,10 @@ $theme_btn_default_text_color: $th_purple;
 $theme_popin_header_bg: $th_purple;
 $theme_popin_header_text_color: $th_white;
 
+$theme_header_panel: $th_purple4;
+$theme_header_panel_text_color: $th_green;
+$theme_header_panel_icon_color: $th_white;
+
 //Header
 $theme_header_debate_title_color: $th_purple;
 $theme_header_height: 36px;
@@ -52,6 +56,7 @@ $theme_extract_bg: $theme_navigation_bg;
 
 //idea panel
 $theme_idea_header_bg: $th_green;
+
 
 /* Theme standard CSS definitions (mainly logos and images).
    Maybe we don't need this at all, and could    use variables only */

@@ -149,21 +149,21 @@
   height: 40px;
   padding: 0; /* required for minimized state */
   position: relative;
-  background-color: $purple3;
+  background-color: $theme_header_panel;
   color: $white;
   border-right: 1px solid $purple5;
 
   .panel-header-title,
   .panel-header-close {
     line-height: 40px;
-    color: $white;
+    color: $theme_header_panel_icon_color;
   }
 
   .panel-header-title {
     padding: 0 0 0 10px;
     i {
       font-size: 22px;
-      color: $green;
+      color: $theme_header_panel_text_color;
       margin-right: 2px;
     }
   }
