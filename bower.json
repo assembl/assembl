@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "name": "assembl",
   "version": "0.0.9",
   "homepage": "https://github.com/ImaginationForPeople/assembl",
@@ -43,4 +44,85 @@
     "chai-jquery": "~2.0.0",
     "fixtures": "~1.5.3"
   }
+||||||| merged common ancestors
+    "name": "assembl",
+    "version": "0.0.9",
+    "homepage": "https://github.com/ImaginationForPeople/assembl",
+    "authors": [
+        "Andre Farzat <andrefarzat@gmail.com>",
+        "Gaby Hourlier <gaby.hourlier@gmail.com>"
+    ],
+    "description": "I4P online debate and synthesis platform",
+    "license": "MIT",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery": "~2.0.3",
+        "jquery.dotdotdot": "~1.6.16",
+        "backbone": "~1.1.2",
+        "ckeditor": "*",
+        "cytoscape": "*",
+        "jit": "~2.0.2",
+        "jasmine": "2.0.3",
+        "marionette": "~2.2.1",
+        "momentjs": "~2.8.3",
+        "raven-js": "https://github.com/benoitg/raven-js.git#f9f5993cb63879137385b3a546a675a04a490b71",
+        "requirejs": "~2.1.15",
+        "sockjs": "~0.3.4",
+        "underscore": "~1.7.0",
+        "zeroclipboard": "~1.2.3",
+        "jed": "~0.5.4",
+        "Backbone.Subset": "maparent/Backbone.Subset#0.1.1",
+        "d3": "~3.4.11",
+        "backbone-modal": "~1.1.1",
+        "ink": "1.0.5",
+        "jquery-autosize": "~1.18.15"
+    }
+=======
+  "name": "assembl",
+  "version": "0.0.9",
+  "homepage": "https://github.com/ImaginationForPeople/assembl",
+  "authors": [
+    "Andre Farzat <andrefarzat@gmail.com>",
+    "Gaby Hourlier <gaby.hourlier@gmail.com>"
+  ],
+  "description": "I4P online debate and synthesis platform",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "jquery.dotdotdot": "~1.6.16",
+    "backbone": "~1.1.2",
+    "ckeditor": "*",
+    "cytoscape": "*",
+    "jit": "~2.0.2",
+    "jasmine": "2.0.3",
+    "marionette": "~2.2.1",
+    "momentjs": "~2.8.3",
+    "raven-js": "https://github.com/benoitg/raven-js.git#f9f5993cb63879137385b3a546a675a04a490b71",
+    "requirejs": "~2.1.15",
+    "sockjs": "~0.3.4",
+    "underscore": "~1.7.0",
+    "zeroclipboard": "~1.2.3",
+    "jed": "~0.5.4",
+    "Backbone.Subset": "maparent/Backbone.Subset#0.1.1",
+    "d3": "~3.4.11",
+    "backbone-modal": "~1.1.1",
+    "ink": "1.0.5",
+    "jquery-autosize": "~1.18.15"
+  }
+>>>>>>> Stashed changes
 }
