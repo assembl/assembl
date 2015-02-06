@@ -1340,9 +1340,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
             serializeData: function () {
 
-                this.model.set('introduction', '');
-                this.model.set('objectives', '');
-
                 return {
                     ctx: Ctx,
                     context: this.model,
