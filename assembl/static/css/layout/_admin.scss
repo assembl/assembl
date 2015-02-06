@@ -77,5 +77,13 @@ table {
         width: 540px;
       }
     }
+    .email-helper,
+    .social-helper {
+      width: 540px;
+      color: $gray1;
+    }
+    .form-actions {
+      margin-left: 210px;
+    }
   }
 }
