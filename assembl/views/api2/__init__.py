@@ -159,7 +159,7 @@ def instance_view(request):
 
 @view_config(context=CollectionContext, renderer='json',
              request_method='GET', permission=P_READ)
-def collection_view(request, default_view='id_only'):
+def collection_view(request, default_view='default'):
     check = check_permissions(request, CrudPermissions.READ)
     ctx = request.context
     view = request.GET.get('view', None) or ctx.get_default_view() or default_view
