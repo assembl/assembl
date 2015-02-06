@@ -21,7 +21,9 @@ var requirejs_config = {
         'jasmine-boot': '../bower/jasmine/lib/jasmine-core/boot',
 
         'chai':'../bower/chai/chai',
+        'chai-jquery':'../bower/chai-jquery/chai-jquery',
         'mocha':'../bower/mocha/mocha',
+        'fixtures': '../bower/fixtures/fixtures',
 
         'ckeditor': '../bower/ckeditor/ckeditor',
         'ckeditor-sharedspace': '../lib/ckeditor-sharedcontainer/plugin',
