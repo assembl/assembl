@@ -1065,7 +1065,8 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
 
             makeLinksShowOembedOnHover: function(el) {
                 var popover = $("#popover-oembed");
-                el.find("a").mouseenter(function(evt){
+                
+                var triggerHover = function(evt){
                     console.log("evt: ", evt);
 
                     popover.css('position','fixed');
@@ -1114,10 +1115,20 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                             $(this).css('top', newPositionTop + 'px' );
                         }
                     });
+                };
+
+                el.find("a").mouseenter(function(evt){
+                    var timeoutId = null;
+                    var that = this;
+                    timeoutId = window.setTimeout(function(){
+                        triggerHover.call(that, evt);
+                    }, 500); // => this is how much time the mouse has to stay on the link in order to trigger the popover
+                    $(this).mouseout(function(){
+                        window.clearTimeout(timeoutId);
+                    });
                 });
 
                 popover.mouseleave(function(evt){
-                    console.log("popover.mouseleave");
                     var that = this;
                     setTimeout(function(){
                         $(that).hide();
