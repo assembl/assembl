@@ -1384,7 +1384,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                   this.renderCKEditorObjective();
                 }
 
-                //this.displayFieldsContext();
+                this.applyEllipsisToIntroduction();
             },
 
             editIntroduction: function(){
@@ -1531,7 +1531,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                  */
                 var that = this;
                 setTimeout(function(){
-                    that.$(".introduction .ckeditorField-mainfield").dotdotdot({
+                    that.$(".context-introduction").dotdotdot({
                         after: "#introduction-button-see-more",
                         height: 70,
                         callback: function (isTruncated, orgContent) {
