@@ -120,8 +120,8 @@ define(['app',
             /**
              *  Collection from discussion
              * */
-            _allDiscussionCollection: undefined,
-            _allDiscussionCollectionPromise: undefined,
+            _allDiscussionModel: undefined,
+            _allDiscussionModelPromise: undefined,
 
 
             /**
@@ -590,21 +590,21 @@ define(['app',
                 return deferred.promise();
             },
 
-            getDiscussionCollectionPromise: function () {
+            getDiscussionModelPromise: function () {
                 var that = this,
                     deferred = Marionette.Deferred();
 
-                if (this._allDiscussionCollectionPromise === undefined) {
-                    this._allDiscussionCollection = new Discussion.Collection();
-                    this._allDiscussionCollection.collectionManager = this;
-                    this._allDiscussionCollectionPromise = this._allDiscussionCollection.fetch();
-                    this._allDiscussionCollectionPromise.done(function () {
-                        deferred.resolve(that._allDiscussionCollection);
+                if (this._allDiscussionModelPromise === undefined) {
+                    this._allDiscussionModel = new Discussion.Model();
+                    this._allDiscussionModel.collectionManager = this;
+                    this._allDiscussionModelPromise = this._allDiscussionModel.fetch();
+                    this._allDiscussionModelPromise.done(function () {
+                        deferred.resolve(that._allDiscussionModel);
                     });
                 }
                 else {
-                    this._allDiscussionCollectionPromise.done(function () {
-                        deferred.resolve(that._allDiscussionCollection);
+                    this._allDiscussionModelPromise.done(function () {
+                        deferred.resolve(that._allDiscussionModel);
                     });
                 }
                 return deferred.promise();

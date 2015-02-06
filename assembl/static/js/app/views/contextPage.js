@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'backbone.modal', 'backbone.marionette.modals', 'models/partner_organization'],
-    function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types, backboneModal, marionetteModals, organization) {
+define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'backbone.modal', 'backbone.marionette.modals', 'models/partner_organization', 'models/discussion'],
+    function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types, backboneModal, marionetteModals, organization, Discussion) {
 
 
         var Partners = Marionette.ItemView.extend({
@@ -15,13 +15,16 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
             serializeData: function () {
 
+                var isConnected = (Ctx.getCurrentUserId()) ? true : false;
+
                 this.collection.models = _.reject(this.collection.models, function(model){
                     return model.get('is_initiator') === true
                 });
 
                 return {
                     organizations: this.collection.models,
-                    ctx: Ctx
+                    ctx: Ctx,
+                    isConnected: isConnected
                 }
             },
 
@@ -1213,7 +1216,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     that.instigator = _.find(partners.models, function(partner){
                         return partner.get('is_initiator')
                     });
-                    that.render();
+                    //that.render();
                 });
 
                 this.editInstigator = false;
@@ -1232,9 +1235,14 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             serializeData: function () {
+
+                var isConnected = (Ctx.getCurrentUserId()) ? true : false;
+
                 return {
                    instigator: this.instigator,
-                   editInstigator: this.editInstigator
+                   editInstigator: this.editInstigator,
+                   Ctx: Ctx,
+                   isConnected: isConnected
                 }
             },
 
@@ -1296,6 +1304,10 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             getTitle: function () {
                 return i18n.gettext('Home'); // unused
             },
+            ui: {
+              introduction: '.js_editIntroduction',
+              objective: '.js_editObjective'
+            },
             regions: {
                 organizations: '#context-partners',
                 synthesis: '#context-synthesis',
@@ -1304,16 +1316,38 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             events: {
-                'click #js_introductionSeeMore': 'introductionSeeMore'
+                'click #js_introductionSeeMore': 'introductionSeeMore',
+                'click @ui.introduction': 'editIntroduction',
+                'click @ui.objective':'editObjective'
             },
 
             initialize: function (options) {
                 this.listenTo(this, 'contextPage:render', this.render);
+
+                this.editingIntroduction = false;
+                this.editingObjective = false;
+
+                this.model = new Discussion.Model();
+
+                var that = this,
+                    collectionManager = new CollectionManager();
+
+                $.when(collectionManager.getDiscussionModelPromise()).then(function (DiscussionModel) {
+                    _.extend(that.model.attributes, DiscussionModel.attributes);
+                   that.render();
+                });
             },
 
             serializeData: function () {
+
+                this.model.set('introduction', '');
+                this.model.set('objectives', '');
+
                 return {
-                    ctx: Ctx
+                    ctx: Ctx,
+                    context: this.model,
+                    editingIntroduction: this.editingIntroduction,
+                    editingObjective: this.editingObjective
                 }
             },
 
@@ -1345,7 +1379,74 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 this.synthesis.show(synthesis);
                 this.organizations.show(partners);
 
-                this.displayFieldsContext();
+                if (this.editingIntroduction) {
+                  this.renderCKEditorIntroduction();
+                }
+
+                if (this.editingObjective) {
+                  this.renderCKEditorObjective();
+                }
+
+                //this.displayFieldsContext();
+            },
+
+            editIntroduction: function(){
+                if (Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
+                    this.editingIntroduction = true;
+                    this.render();
+                }
+            },
+
+            editObjective: function(){
+                if (Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
+                    this.editingObjective = true;
+                    this.render();
+                }
+            },
+
+            renderCKEditorIntroduction: function () {
+                var that = this,
+                    area = this.$('.context-introduction-editor');
+
+                var introduction = this.model.get('introduction');
+
+                if (introduction.length > 0) {
+
+                    this.introField = new CKEditorField({
+                        'model': this.model,
+                        'modelProp': 'introduction'
+                    });
+                }
+
+                this.introField.on('save cancel', function () {
+                    that.editingIntroduction = false;
+                    that.render();
+                });
+
+                this.introField.renderTo(area);
+                this.introField.changeToEditMode();
+            },
+
+            renderCKEditorObjective: function () {
+                var that = this,
+                    area = this.$('.context-objective-editor');
+
+                var objective = this.model.get('objectives');
+
+                if (objective.length > 0) {
+                    this.objectiveField = new CKEditorField({
+                        'model': this.model,
+                        'modelProp': 'objectives'
+                    });
+                }
+
+                this.objectiveField.on('save cancel', function () {
+                    that.editingObjective = false;
+                    that.render();
+                });
+
+                this.objectiveField.renderTo(area);
+                this.objectiveField.changeToEditMode();
             },
 
             displayFieldsContext: function () {

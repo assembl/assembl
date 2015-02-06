@@ -5,7 +5,7 @@
         <div class="block-content">
           <div class="white-mark-content">
           	<div class="white-mark-title">
-          		 <h3 class="h3 js_discussionTitle"></h3>
+          		 <h3 class="h3 js_discussionTitle"><%= context.get('slug') %></h3>
           	</div>
           </div>
         </div>
@@ -17,15 +17,32 @@
 <div class="gr">
   <div class="gu gu-1of2">
     <div class="block-content">
-      <h2>{{ gettext('Context') }}</h2>
-      <div class="introduction"></div>
-      <a href="#" id="js_introductionSeeMore">{{ gettext('See more') }}</a>
+      <% if( _.size(context.get('introduction')) ){ %>
+        <h2>{{ gettext('Context') }}</h2>
+
+        <% if( editingIntroduction ) { %>
+				  <div class="context-introduction-editor"></div>
+			  <% } else { %>
+				  <div class="context-introduction js_editIntroduction"><%= context.get('introduction') %></div>
+			  <% } %>
+
+        <!--<div class="introduction"></div>-->
+        <a href="#" id="js_introductionSeeMore">{{ gettext('See more') }}</a>
+      <% } %>
     </div>
   </div>
   <div class="gu gu-last">
    <div class="block-content">
+   <% if( _.size(context.get('objectives')) ){ %>
      <h2>{{ gettext('Debate objectives') }}</h2>
-     <div class="objectives"></div>
+
+     <% if( editingObjective ) { %>
+				 <div class="context-objective-editor"></div>
+			 <% } else { %>
+				<div class="context-objective js_editObjective"><%= context.get('objectives') %></div>
+		 <% } %>
+   <% } %>
+     <!--<div class="objectives"></div>-->
    </div>
   </div>
 </div>
