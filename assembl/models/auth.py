@@ -987,12 +987,29 @@ class UserTemplate(DiscussionBoundBase, User):
             NotificationSubscription,
             NotificationSubscriptionStatus,
             NotificationCreationOrigin)
-        my_subscriptions = self.db.query(NotificationSubscription).filter_by(
-            discussion_id=self.discussion_id, user_id=self.id).all()
-        my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
+        # self.id may not be defined
+        db.flush()
         needed_classes = \
             self.get_applicable_notification_subscriptions_classes()
-        missing = set(needed_classes) - my_subscriptions_classes
+        # We need to materialize missing NotificationSubscriptions,
+        # But have duplication issues, probably due to calls on multiple
+        # threads.
+        # TEMPORARY: We will apply a write lock selectively.
+        # LONG TERM: We will only materialize subscriptions when selected.
+
+        def get_subcriptions(lock):
+            query = self.db.query(NotificationSubscription).filter_by(
+                discussion_id=self.discussion_id, user_id=self.id)
+            if lock:
+                query = query.with_for_update()
+            my_subscriptions = query.all()
+            my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
+            missing = set(needed_classes) - my_subscriptions_classes
+            return my_subscriptions, missing
+        my_subscriptions, missing = get_subcriptions(False)
+        if not missing:
+            return my_subscriptions, False
+        my_subscriptions, missing = get_subcriptions(True)
         if not missing:
             return my_subscriptions, False
         # TODO: Fill from config.
@@ -1016,7 +1033,7 @@ class UserTemplate(DiscussionBoundBase, User):
         for d in defaults:
             self.db.add(d)
         self.db.flush()
-        return chain(my_subscriptions, defaults), bool(missing)
+        return chain(my_subscriptions, defaults), True
 
 
 Index("user_template", "discussion_id", "role_id")
