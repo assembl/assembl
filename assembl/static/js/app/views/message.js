@@ -209,8 +209,11 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         data = that.transformDataBeforeRender(data);
                         that.$el.html(that.template(data));
                         Ctx.initTooltips(that.$el);
-                        Ctx.convertUrlsToLinks(that.$el.children('.message-body')); // we target only the body part of the message, not the title
-                        Ctx.makeLinksShowOembedOnHover(that.$el.children('.message-body'));
+                        if ( that.viewStyle == that.availableMessageViewStyles.FULL_BODY )
+                        {
+                            Ctx.convertUrlsToLinks(that.$el.children('.message-body')); // we target only the body part of the message, not the title
+                            Ctx.makeLinksShowOembedOnHover(that.$el.children('.message-body'));
+                        }
                         Ctx.initClipboard();
                         var partialMessage = MessagesInProgress.getMessage(modelId);
 
