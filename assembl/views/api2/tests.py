@@ -32,12 +32,12 @@ def test_get_ideas(discussion, test_app, synthesis_1,
     all_ideas = test_app.get('/data/Idea')
     assert all_ideas.status_code == 200
     all_ideas = all_ideas.json
-    disc_ideas = test_app.get('/data/Discussion/%d/ideas' % (discussion.id,))
+    disc_ideas = test_app.get('/data/Discussion/%d/ideas?view=id_only' % (discussion.id,))
     assert disc_ideas.status_code == 200
     disc_ideas = disc_ideas.json
     assert set(all_ideas) == set(disc_ideas)
     synthesis_ideasassocs = test_app.get(
-        '/data/Discussion/%d/views/%d/idea_assocs' % (
+        '/data/Discussion/%d/views/%d/idea_assocs?view=id_only' % (
             discussion.id, synthesis_1.id))
     assert synthesis_ideasassocs.status_code == 200
     synthesis_ideasassocs = synthesis_ideasassocs.json
@@ -50,7 +50,7 @@ def test_get_ideas(discussion, test_app, synthesis_1,
     assert subidea_1_1_1_id in disc_ideas
     assert subidea_1_1_1_id not in syn_ideas
     syn_ideas = test_app.get(
-        '/data/Discussion/%d/views/%d/ideas' % (
+        '/data/Discussion/%d/views/%d/ideas?view=id_only' % (
             discussion.id, synthesis_1.id))
     assert syn_ideas.status_code == 200
     syn_ideas = syn_ideas.json
