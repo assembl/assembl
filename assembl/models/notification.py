@@ -302,8 +302,8 @@ class NotificationSubscription(DiscussionBoundBase):
             parent_subscription_id = self.parent_subscription_id,
             type=self.type)
 
-    def is_owner(self, user):
-        return self.user_id == user.id
+    def is_owner(self, user_id):
+        return self.user_id == user_id
 
     @classmethod
     def restrict_to_owners(cls, query, user_id=None):

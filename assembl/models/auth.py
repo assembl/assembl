@@ -212,8 +212,8 @@ class AbstractAgentAccount(Base):
     def merge(self, other):
         pass
 
-    def is_owner(self, user):
-        return self.profile_id == user.id
+    def is_owner(self, user_id):
+        return self.profile_id == user_id
 
     @classmethod
     def restrict_to_owners(cls, query, user_id=None):
@@ -835,8 +835,8 @@ class LocalUserRole(DiscussionBoundBase):
                 raise HTTPBadRequest()
         return self
 
-    def is_owner(self, user):
-        return self.user_id == user.id
+    def is_owner(self, user_id):
+        return self.user_id == user_id
 
     @classmethod
     def restrict_to_owners(cls, query, user_id=None):

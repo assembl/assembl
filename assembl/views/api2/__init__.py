@@ -50,7 +50,7 @@ from ..traversal import (
     InstanceContext, CollectionContext, ClassContext, Api2Context)
 from assembl.auth import (
     P_READ, P_SYSADMIN, P_ADMIN_DISC, R_SYSADMIN, P_ADD_POST,
-    Everyone, CrudPermissions)
+    IF_OWNED, Everyone, CrudPermissions)
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
@@ -70,26 +70,18 @@ def includeme(config):
     config.add_route('csrf_token2', 'Token')
 
 
-IF_OWNED = object()
-
-
 def check_permissions(request, operation, allow_admin_disc=False):
     ctx = request.context
     user_id = authenticated_userid(request)
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
-    if P_SYSADMIN in permissions or (
-            allow_admin_disc and P_ADMIN_DISC in permissions):
+    if allow_admin_disc and P_ADMIN_DISC in permissions:
         return True
     cls = ctx.get_target_class()
-    (needed, needed_owned) = cls.crud_permissions.can(operation)
-    if needed in permissions:
-        return True
-    if needed_owned in permissions:
-        if user_id == Everyone:
-            raise HTTPUnauthorized()
-        return IF_OWNED
-    raise HTTPUnauthorized()
+    allowed = cls.crud_permissions.can(operation, permissions)
+    if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+        raise HTTPUnauthorized()
+    return allowed
 
 
 @view_config(context=ClassContext, renderer='json',
@@ -122,7 +114,7 @@ def instance_view_jsonld(request):
     instance = request.context._instance
     if check == IF_OWNED:
         user_id = authenticated_userid(request)
-        if not instance.is_owner(User.get(user_id)):
+        if not instance.is_owner(user_id):
             return HTTPUnauthorized()
     discussion = request.context.get_instance_of_class(Discussion)
     if not discussion:
@@ -149,7 +141,7 @@ def instance_view(request):
     instance = request.context._instance
     if check == IF_OWNED:
         user_id = authenticated_userid(request)
-        if not instance.is_owner(User.get(user_id)):
+        if not instance.is_owner(user_id):
             return HTTPUnauthorized()
     ctx = request.context
     view = ctx.get_default_view() or 'default'
@@ -225,7 +217,7 @@ def instance_put_json(request):
     instance = ctx._instance
     user_id = authenticated_userid(request)
     if check == IF_OWNED:
-        if not instance.is_owner(User.get(user_id)):
+        if not instance.is_owner(user_id):
             return HTTPUnauthorized()
     try:
         updated = instance.update_from_json(request.json_body, user_id, ctx)
@@ -247,7 +239,7 @@ def instance_put(request):
     instance = context._instance
     if check == IF_OWNED:
         user_id = authenticated_userid(request)
-        if not instance.is_owner(User.get(user_id)):
+        if not instance.is_owner(user_id):
             return HTTPUnauthorized()
     mapper = inspect(instance.__class__)
     cols = {c.key: c for c in mapper.columns if not c.foreign_keys}
@@ -311,7 +303,7 @@ def instance_del(request):
     instance = ctx._instance
     if check == IF_OWNED:
         user_id = authenticated_userid(request)
-        if not instance.is_owner(User.get(user_id)):
+        if not instance.is_owner(user_id):
             return HTTPUnauthorized()
     instance.db.delete(instance)
     return {}

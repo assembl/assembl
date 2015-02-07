@@ -65,8 +65,8 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     voter = relationship(
         User, backref=backref("votes", cascade="all, delete-orphan"))
 
-    def is_owner(self, user):
-        return self.voter_id == user.id
+    def is_owner(self, user_id):
+        return self.voter_id == user_id
 
     @classmethod
     def restrict_to_owners(cls, query, user_id=None):

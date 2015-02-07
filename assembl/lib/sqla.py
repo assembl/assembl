@@ -44,6 +44,7 @@ DELETE_OP = -1
 UPDATE_OP = 0
 INSERT_OP = 1
 
+
 class CleanupStrategy(strategies.PlainEngineStrategy):
     name = 'atexit_cleanup'
 
@@ -711,11 +712,9 @@ class BaseOps(object):
     def _do_create_from_json(
             cls, json, parse_def, aliases, context, permissions,
             user_id, duplicate_error=True):
-        needed_create, _ = cls.crud_permissions.can(
-                CrudPermissions.CREATE)
-        needed_update, needed_update_owned = cls.crud_permissions.can(
-                CrudPermissions.UPDATE)
-        if duplicate_error and needed_create not in permissions:
+        can_create = cls.crud_permissions.can(
+            CrudPermissions.CREATE, permissions)
+        if duplicate_error and not can_create:
             raise HTTPUnauthorized(
                 "User id <%s> cannot create a <%s> object" % (
                     user_id, cls.__name__))
@@ -724,15 +723,14 @@ class BaseOps(object):
         result = inst._do_update_from_json(
             json, parse_def, aliases, context, permissions,
             user_id, duplicate_error)
-        if result is inst and needed_create not in permissions:
+        if result is inst and not can_create:
             raise HTTPUnauthorized(
                 "User id <%s> cannot create a <%s> object" % (
                     user_id, cls.__name__))
         elif result is not inst and \
-            not (needed_update in permissions
-                 or (needed_update_owned in permissions
-                     and result.is_owner(user_id))
-                 ) and cls.db.is_modified(result, False):
+            not result.user_can(
+                user_id, CrudPermissions.UPDATE, permissions
+                ) and cls.db.is_modified(result, False):
             raise HTTPUnauthorized(
                 "User id <%s> cannot modify a <%s> object" % (
                     user_id, cls.__name__))
@@ -754,11 +752,9 @@ class BaseOps(object):
         discussion = context.get_instance_of_class(Discussion)
         permissions = get_permissions(
             user_id, discussion.id if discussion else None)
-        needed_update, needed_update_owned = self.crud_permissions.can(
-                CrudPermissions.UPDATE)
-        if not (needed_update in permissions or (
-                needed_update_owned in permissions
-                and result.is_owner(user_id))):
+        if not self.user_can(
+                user_id, CrudPermissions.UPDATE, permissions
+                ) and result.is_owner(user_id):
             raise HTTPUnauthorized(
                 "User id <%s> cannot modify a <%s> object" % (
                     user_id, self.__class__.__name__))
@@ -967,7 +963,7 @@ class BaseOps(object):
                         current_instances = getattr(self, accessor_name)
                         missing = set(instances) - set(current_instances)
                         assert not missing, "what's wrong with back_populates?"
-                        extra =  set(current_instances) - set(instances)
+                        extra = set(current_instances) - set(instances)
                         if extra:
                             assert len(accessor.remote_side) == 1
                             remote = iter(next(accessor.remote_side))
@@ -976,17 +972,18 @@ class BaseOps(object):
                                 for inst in missing:
                                     setattr(inst, remote.key, None)
                             else:
-                                needed, needed_owned = inst.crud_permissions.can(CrudPermissions.DELETE)
-                                if not (needed in permissions or (
-                                        needed_owned in permissions
-                                        and result.is_owner(user_id))):
-                                    raise HTTPUnauthorized("Cannot delete object %s", inst.uri())
+                                if not inst.user_can(
+                                        user_id, CrudPermissions.DELETE,
+                                        permissions):
+                                    raise HTTPUnauthorized(
+                                        "Cannot delete object %s", inst.uri())
                                 else:
                                     db.delete(inst)
                 elif isinstance(accessor, property):
                     setattr(self, accessor_name, instances)
                 elif isinstance(accessor, Column):
-                    raise HTTPBadRequest("%s cannot have multiple values" % (key, ))
+                    raise HTTPBadRequest(
+                        "%s cannot have multiple values" % (key, ))
                 elif isinstance(accessor, AssociationProxy):
                     current_instances = getattr(self, accessor_name)
                     missing = set(instances) - set(current_instances)
@@ -1087,7 +1084,7 @@ class BaseOps(object):
     def extra_collections(cls):
         return {}
 
-    def is_owner(self, user):
+    def is_owner(self, user_id):
         "The user owns this ressource, and has more permissions."
         return False
 
@@ -1099,6 +1096,14 @@ class BaseOps(object):
     """The permissions to create, read, update, delete an object of this class.
     Also separate permissions for the owners to update or delete."""
     crud_permissions = CrudPermissions()
+
+    def user_can(self, user_id, operation, permissions):
+        perm = self.crud_permissions.can(operation, permissions)
+        if perm != IF_OWNED:
+            return perm
+        if user == Everyone:
+            return False
+        return self.is_owner(user_id)
 
 
 class Timestamped(BaseOps):

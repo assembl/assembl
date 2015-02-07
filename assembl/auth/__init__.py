@@ -29,6 +29,8 @@ P_SELF_REGISTER_REQUEST = 'self_register_req'
 P_ADMIN_DISC = 'admin_discussion'
 P_SYSADMIN = 'sysadmin'
 
+IF_OWNED = "IF_OWNED"
+
 ASSEMBL_PERMISSIONS = set((
     P_READ, P_ADD_POST, P_EDIT_POST, P_VOTE, P_ADD_EXTRACT, P_EDIT_EXTRACT,
     P_EDIT_MY_EXTRACT, P_ADD_IDEA, P_EDIT_IDEA, P_EDIT_SYNTHESIS,
@@ -56,7 +58,17 @@ class CrudPermissions(object):
         self.update_owned = update_owned or self.update
         self.delete_owned = delete_owned or self.delete
 
-    def can(self, operation):
+    def can(self, operation, permissions):
+        if P_SYSADMIN in permissions:
+            return True
+        needed, needed_owned = self.crud_permissions(operation)
+        if needed in permissions:
+            return True
+        elif needed_owned in permissions:
+            return IF_OWNED
+        return False
+
+    def crud_permissions(self, operation):
         if operation == self.CREATE:
             return (self.create, self.create)
         elif operation == self.READ:
