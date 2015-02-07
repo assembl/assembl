@@ -415,7 +415,7 @@ class BaseOps(object):
             self, view_def_name='default', user_id=Everyone,
             permissions=(P_READ), base_uri='local:'):
         if not self.user_can(user_id, CrudPermissions.READ, permissions):
-            raise HTTPUnauthorized()
+            pass
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         result = {}
