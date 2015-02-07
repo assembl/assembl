@@ -411,8 +411,11 @@ class BaseOps(object):
             view_def[my_typename] = local_view
         return local_view
 
-    def generic_json(self, view_def_name='default',
-                     base_uri='local:', use_dumps=False):
+    def generic_json(
+            self, view_def_name='default', user_id=Everyone,
+            permissions=(P_READ), base_uri='local:'):
+        if not self.user_can(user_id, CrudPermissions.READ, permissions):
+            raise HTTPUnauthorized()
         view_def = get_view_def(view_def_name)
         my_typename = self.external_typename()
         result = {}
@@ -487,7 +490,7 @@ class BaseOps(object):
             def translate_to_json(v):
                 if isinstance(v, Base):
                     if view_name:
-                        return v.generic_json(view_name)
+                        return v.generic_json(view_name, base_uri=base_uri)
                     else:
                         return v.uri(base_uri)
                 elif isinstance(v, (
@@ -507,7 +510,8 @@ class BaseOps(object):
 
             if prop_name == 'self':
                 if view_name:
-                    result[name] = self.generic_json(view_name, base_uri)
+                    result[name] = self.generic_json(
+                        view_name, base_uri=base_uri)
                 else:
                     result[name] = self.uri()
                 continue
@@ -564,11 +568,11 @@ class BaseOps(object):
                     if isinstance(spec, dict):
                         result[name] = {
                             ob.uri(base_uri):
-                            ob.generic_json(view_name, base_uri)
+                            ob.generic_json(view_name, base_uri=base_uri)
                             for ob in vals}
                     else:
                         result[name] = [
-                            ob.generic_json(view_name, base_uri)
+                            ob.generic_json(view_name, base_uri=base_uri)
                             for ob in vals]
                 else:
                     assert not isinstance(spec, dict),\
@@ -582,7 +586,7 @@ class BaseOps(object):
             if view_name:
                 ob = getattr(self, prop_name)
                 if ob:
-                    val = ob.generic_json(view_name, base_uri)
+                    val = ob.generic_json(view_name, base_uri=base_uri)
                     if isinstance(spec, list):
                         result[name] = [val]
                     else:
@@ -641,8 +645,6 @@ class BaseOps(object):
                         result[name] = ob
                     else:
                         result[name] = None
-        if use_dumps:
-            return dumps(result)
         return result
 
     dummy_context = DummyContext()
@@ -1101,7 +1103,7 @@ class BaseOps(object):
         perm = self.crud_permissions.can(operation, permissions)
         if perm != IF_OWNED:
             return perm
-        if user == Everyone:
+        if user_id == Everyone:
             return False
         return self.is_owner(user_id)
 
