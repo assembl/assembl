@@ -1344,7 +1344,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     ctx: Ctx,
                     context: this.model,
                     editingIntroduction: this.editingIntroduction,
-                    editingObjective: this.editingObjective
+                    editingObjective: this.editingObjective,
+                    userCanEditDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
                 }
             },
 
@@ -1407,13 +1408,10 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
                 var introduction = this.model.get('introduction');
 
-                if (introduction.length > 0) {
-
-                    this.introField = new CKEditorField({
-                        'model': this.model,
-                        'modelProp': 'introduction'
-                    });
-                }
+                  this.introField = new CKEditorField({
+                      'model': this.model,
+                      'modelProp': 'introduction'
+                  });
 
                 this.introField.on('save cancel', function () {
                     that.editingIntroduction = false;
@@ -1430,12 +1428,10 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
                 var objective = this.model.get('objectives');
 
-                if (objective.length > 0) {
-                    this.objectiveField = new CKEditorField({
-                        'model': this.model,
-                        'modelProp': 'objectives'
-                    });
-                }
+                this.objectiveField = new CKEditorField({
+                    'model': this.model,
+                    'modelProp': 'objectives'
+                });
 
                 this.objectiveField.on('save cancel', function () {
                     that.editingObjective = false;
