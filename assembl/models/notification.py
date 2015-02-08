@@ -418,14 +418,14 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
         return self.idea
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnPost, self).unique_query(
+        return super(NotificationSubscriptionOnIdea, self).unique_query(
             ).filter_by(idea_id=self.idea_id)
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
             user_id, duplicate_error=True):
         updated = super(
-            NotificationSubscriptionOnPost, self)._do_update_from_json(
+            NotificationSubscriptionOnIdea, self)._do_update_from_json(
                 json, parse_def, aliases, ctx, permissions,
                 user_id, duplicate_error)
         if updated == self:
@@ -457,14 +457,14 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
         return self.extract
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnPost, self).unique_query(
+        return super(NotificationSubscriptionOnExtract, self).unique_query(
             ).filter_by(extract_id=self.extract_id)
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
             user_id, duplicate_error=True):
         updated = super(
-            NotificationSubscriptionOnPost, self)._do_update_from_json(
+            NotificationSubscriptionOnExtract, self)._do_update_from_json(
                 json, parse_def, aliases, ctx, permissions,
                 user_id, duplicate_error)
         if updated == self:
@@ -496,14 +496,14 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
         return self.user
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnPost, self).unique_query(
+        return super(NotificationSubscriptionOnUserAccount, self).unique_query(
             ).filter_by(on_user_id=self.on_user_id)
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
             user_id, duplicate_error=True):
         updated = super(
-            NotificationSubscriptionOnPost, self)._do_update_from_json(
+            NotificationSubscriptionOnUserAccount, self)._do_update_from_json(
                 json, parse_def, aliases, ctx, permissions,
                 user_id, duplicate_error)
         if updated == self:
