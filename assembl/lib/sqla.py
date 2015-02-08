@@ -526,7 +526,10 @@ class BaseOps(object):
                         view_def_name, my_typename, name, prop_name)
                 # Function call. PLEASE RETURN JSON or Base object.
                 val = getattr(self, prop_name)()
-                result[name] = translate_to_json(val)
+                p = getattr(val, 'user_can', None)
+                if not p or val.user_can(
+                        user_id, CrudPermissions.READ, permissions):
+                    result[name] = translate_to_json(val)
                 continue
             elif prop_name in cols:
                 assert not view_name,\
@@ -541,7 +544,10 @@ class BaseOps(object):
                 known.add(prop_name)
                 val = getattr(self, prop_name)
                 if val is not None:
-                    result[name] = translate_to_json(val)
+                    p = getattr(val, 'user_can', None)
+                    if not p or val.user_can(
+                            user_id, CrudPermissions.READ, permissions):
+                        result[name] = translate_to_json(val)
                 continue
             elif prop_name in properties:
                 known.add(prop_name)
@@ -549,13 +555,17 @@ class BaseOps(object):
                         relns[prop_name].direction != MANYTOONE):
                     val = getattr(self, prop_name)
                     if val is not None:
-                        result[name] = translate_to_json(val)
+                        p = getattr(val, 'user_can', None)
+                        if not p or val.user_can(
+                                user_id, CrudPermissions.READ, permissions):
+                            result[name] = translate_to_json(val)
                 else:
                     fkeys = list(fkey_of_reln[prop_name])
                     assert(len(fkeys) == 1)
                     fkey = fkeys[0]
                     result[name] = relns[prop_name].mapper.class_.uri_generic(
                         getattr(self, fkey.key))
+
                 continue
             assert prop_name in relns,\
                     "in viewdef %s, class %s, prop_name %s not a column, property or relation" % (
@@ -571,24 +581,32 @@ class BaseOps(object):
                             ob.uri(base_uri):
                             ob.generic_json(
                                 view_name, user_id, permissions, base_uri)
-                            for ob in vals}
+                            for ob in vals
+                            if ob.user_can(
+                                user_id, CrudPermissions.READ, permissions)}
                     else:
                         result[name] = [
                             ob.generic_json(
                                 view_name, user_id, permissions, base_uri)
-                            for ob in vals]
+                            for ob in vals
+                            if ob.user_can(
+                                user_id, CrudPermissions.READ, permissions)]
                 else:
                     assert not isinstance(spec, dict),\
                         "in viewdef %s, class %s, dict without viewname for %s" % (
                             view_def_name, my_typename, name)
-                    result[name] = [ob.uri(base_uri) for ob in vals]
+                    result[name] = [
+                        ob.uri(base_uri) for ob in vals
+                        if ob.user_can(
+                            user_id, CrudPermissions.READ, permissions)]
                 continue
             assert not isinstance(spec, dict),\
                 "in viewdef %s, class %s, dict for non-list relation %s" % (
                     view_def_name, my_typename, prop_name)
             if view_name:
                 ob = getattr(self, prop_name)
-                if ob:
+                if ob and ob.user_can(
+                        user_id, CrudPermissions.READ, permissions):
                     val = ob.generic_json(
                         view_name, user_id, permissions, base_uri)
                     if isinstance(spec, list):
