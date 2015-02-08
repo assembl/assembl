@@ -56,17 +56,21 @@ def get_extract(request):
     extract_id = request.matchdict['id']
     extract = Extract.get_instance(extract_id)
     view_def = request.GET.get('view')
+    discussion_id = request.matchdict['discussion_id']
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
     if extract is None:
         raise HTTPNotFound(
             "Extract with id '%s' not found." % extract_id)
 
     if view_def:
-        return extract.generic_json(view_def)
+        return extract.generic_json(view_def, user_id, permissions)
     else:
         return extract.serializable()
 
-def _get_extracts_real(discussion, view_def=None, ids=None):
+
+def _get_extracts_real(discussion, view_def=None, ids=None, user_id=Everyone):
     all_extracts = Extract.db.query(Extract).filter(
         Extract.discussion_id == discussion.id
     )
@@ -76,22 +80,27 @@ def _get_extracts_real(discussion, view_def=None, ids=None):
 
     all_extracts = all_extracts.options(joinedload_all(
         Extract.creator))
+    permissions = get_permissions(user_id, discussion.id)
 
     if view_def:
-        return [extract.generic_json(view_def) for extract in all_extracts]
+        return [extract.generic_json(view_def, user_id, permissions)
+                for extract in all_extracts]
     else:
         return [extract.serializable() for extract in all_extracts]
+
 
 @extracts.get(permission=P_READ)
 def get_extracts(request):
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(int(discussion_id))
     if not discussion:
-        raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+        raise HTTPNotFound(
+            "Discussion with id '%s' not found." % discussion_id)
     view_def = request.GET.get('view')
     ids = request.GET.getall('ids')
 
-    return _get_extracts_real(discussion=discussion, view_def=view_def, ids=ids)
+    return _get_extracts_real(
+        discussion, view_def, ids, authenticated_userid(request))
 
 
 @extracts.post()
@@ -277,6 +286,9 @@ def delete_extract(request):
 def do_search_extracts(request):
     uri = request.GET['uri']
     view_def = request.GET.get('view')
+    discussion_id = request.matchdict['discussion_id']
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
     if not uri:
         return HTTPClientError("Please specify a search uri")
@@ -284,7 +296,9 @@ def do_search_extracts(request):
     if content:
         extracts = Extract.db.query(Extract).filter_by(content=content).all()
         if view_def:
-            rows = [extract.generic_json(view_def) for extract in extracts]
+            rows = [
+                extract.generic_json(view_def, user_id, permissions)
+                for extract in extracts]
         else:
             rows = [extract.serializable() for extract in extracts]
         return {"total": len(extracts), "rows": rows}

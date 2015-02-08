@@ -413,10 +413,10 @@ class BaseOps(object):
 
     def generic_json(
             self, view_def_name='default', user_id=Everyone,
-            permissions=(P_READ), base_uri='local:'):
+            permissions=(P_READ, ), base_uri='local:'):
         if not self.user_can(user_id, CrudPermissions.READ, permissions):
-            pass
-        view_def = get_view_def(view_def_name)
+            return self.uri(base_uri)
+        view_def = get_view_def(view_def_name or 'default')
         my_typename = self.external_typename()
         result = {}
         local_view = self.expand_view_def(view_def)
@@ -490,7 +490,8 @@ class BaseOps(object):
             def translate_to_json(v):
                 if isinstance(v, Base):
                     if view_name:
-                        return v.generic_json(view_name, base_uri=base_uri)
+                        return v.generic_json(
+                            view_name, user_id, permissions, base_uri)
                     else:
                         return v.uri(base_uri)
                 elif isinstance(v, (
@@ -511,7 +512,7 @@ class BaseOps(object):
             if prop_name == 'self':
                 if view_name:
                     result[name] = self.generic_json(
-                        view_name, base_uri=base_uri)
+                        view_name, user_id, permissions, base_uri)
                 else:
                     result[name] = self.uri()
                 continue
@@ -568,11 +569,13 @@ class BaseOps(object):
                     if isinstance(spec, dict):
                         result[name] = {
                             ob.uri(base_uri):
-                            ob.generic_json(view_name, base_uri=base_uri)
+                            ob.generic_json(
+                                view_name, user_id, permissions, base_uri)
                             for ob in vals}
                     else:
                         result[name] = [
-                            ob.generic_json(view_name, base_uri=base_uri)
+                            ob.generic_json(
+                                view_name, user_id, permissions, base_uri)
                             for ob in vals]
                 else:
                     assert not isinstance(spec, dict),\
@@ -586,7 +589,8 @@ class BaseOps(object):
             if view_name:
                 ob = getattr(self, prop_name)
                 if ob:
-                    val = ob.generic_json(view_name, base_uri=base_uri)
+                    val = ob.generic_json(
+                        view_name, user_id, permissions, base_uri)
                     if isinstance(spec, list):
                         result[name] = [val]
                     else:
@@ -699,7 +703,7 @@ class BaseOps(object):
             parse_def_name='default_reverse'):
         from ..auth.util import get_permissions
         parse_def = get_view_def(parse_def_name)
-        context = context or self.dummy_context
+        context = context or cls.dummy_context
         user_id = user_id or Everyone
         from assembl.models import Discussion
         discussion = context.get_instance_of_class(Discussion)
@@ -755,8 +759,7 @@ class BaseOps(object):
         permissions = get_permissions(
             user_id, discussion.id if discussion else None)
         if not self.user_can(
-                user_id, CrudPermissions.UPDATE, permissions
-                ) and result.is_owner(user_id):
+                user_id, CrudPermissions.UPDATE, permissions):
             raise HTTPUnauthorized(
                 "User id <%s> cannot modify a <%s> object" % (
                     user_id, self.__class__.__name__))
@@ -980,7 +983,7 @@ class BaseOps(object):
                                     raise HTTPUnauthorized(
                                         "Cannot delete object %s", inst.uri())
                                 else:
-                                    db.delete(inst)
+                                    self.db.delete(inst)
                 elif isinstance(accessor, property):
                     setattr(self, accessor_name, instances)
                 elif isinstance(accessor, Column):
@@ -1027,7 +1030,7 @@ class BaseOps(object):
                     fk = next(iter(accessor.foreign_keys))
                     instance_key = getattr(instance, fk.column.key)
                     if instance_key is not None:
-                        setattr(self, c.key, instance_key)
+                        setattr(self, accessor_name, instance_key)
                     else:
                         # Maybe delay and flush after identity check?
                         raise NotImplementedError()
@@ -1098,6 +1101,13 @@ class BaseOps(object):
     """The permissions to create, read, update, delete an object of this class.
     Also separate permissions for the owners to update or delete."""
     crud_permissions = CrudPermissions()
+
+    @classmethod
+    def user_can_cls(cls, user_id, operation, permissions):
+        perm = cls.crud_permissions.can(operation, permissions)
+        if perm == IF_OWNED and user_id == Everyone:
+            return False
+        return perm
 
     def user_can(self, user_id, operation, permissions):
         perm = self.crud_permissions.can(operation, permissions)

@@ -1,12 +1,19 @@
-from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized
+from pyisemail import is_email
+from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized, HTTPFound
 from pyramid.security import authenticated_userid
+from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm import joinedload
 from cornice import Service
 
 from assembl.views.api import API_DISCUSSION_PREFIX
-from assembl.auth import P_READ
-from assembl.models import (Discussion, AgentProfile, EmailAccount, User, Username)
+from assembl.auth import (P_READ, Everyone, P_SYSADMIN, P_ADMIN_DISC)
+from assembl.auth.util import get_permissions
+from assembl.models import (
+    Discussion, AgentProfile, EmailAccount, User, Username)
 
+from .. import get_default_context
+
+_ = TranslationStringFactory('assembl')
 
 agents = Service(
     name='agents',
@@ -18,21 +25,26 @@ agent = Service(
     name='agent', path=API_DISCUSSION_PREFIX + '/agents/{id:.+}',
     description="Retrieve a single agent", renderer='json')
 
-def _get_agents_real(discussion, view_def=None, include_email=False):
+
+def _get_agents_real(discussion, user_id=Everyone, view_def=None):
     agents = AgentProfile.db().query(AgentProfile)
-    if include_email:
+    permissions = get_permissions(user_id, discussion.id)
+    include_emails = P_ADMIN_DISC in permissions or P_SYSADMIN in permissions
+    if include_emails:
         agents = agents.options(joinedload(AgentProfile.email_accounts))
     # TODO: Only those in the discussion...
     # look at permissions, posts, extracts... argh!
+
     def view(agent):
         if view_def:
-            result = agent.generic_json(view_def)
+            result = agent.generic_json(view_def, user_id, permissions)
         else:
             result = agent.serializable()
-        if include_email:
-            result['email'] = agent.get_preferred_email()
+        if include_emails or agent.id == user_id:
+            result['preferred_email'] = agent.get_preferred_email()
         return result
     return [view(agent) for agent in agents]
+
 
 @agents.get(permission=P_READ)
 def get_agents(request, discussion_only=False):
@@ -41,7 +53,9 @@ def get_agents(request, discussion_only=False):
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
     view_def = request.GET.get('view')
-    return _get_agents_real(discussion=discussion, view_def=view_def)
+    return _get_agents_real(
+        discussion, authenticated_userid(request), view_def)
+
 
 @agent.get(permission=P_READ)
 def get_agent(request):
@@ -51,13 +65,17 @@ def get_agent(request):
 
     if not agent:
       raise HTTPNotFound("Agent with id '%s' not found." % agent_id)
+    discussion_id = int(request.matchdict['discussion_id'])
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
-    agent_json = agent.generic_json(view_def)
+    agent_json = agent.generic_json(view_def, user_id, permissions)
     current_user = authenticated_userid(request)
     if current_user == agent.id:
         # We probably should add all profile info here.
         agent_json['preferred_email'] = agent.get_preferred_email()
     return agent_json
+
 
 @agent.put()
 def post_agent(request):
@@ -71,6 +89,7 @@ def post_agent(request):
     username = request.params.get('username', '').strip()
     session = AgentProfile.db
     localizer = request.localizer
+    errors = []
 
     if username and (
             agent.username is None or username != agent.username):

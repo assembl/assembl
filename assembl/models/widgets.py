@@ -523,7 +523,8 @@ class MultiCriterionVotingWidget(Widget):
                 yield {
                     'idea': Idea.uri_generic(link.idea_id),
                     '@type': 'voted',
-                    'state': vote_idea_ids[link.idea_id].generic_json()
+                    'state': vote_idea_ids[link.idea_id].generic_json(
+                        user_id=user_id)
                 }
             else:
                 yield {
@@ -553,6 +554,7 @@ class MultiCriterionVotingWidget(Widget):
                     settings['votable_root_id'])
             except Exception as e:
                 print "Cannot find votable root.", settings['votable_root_id']
+                return
             if len(votable_root_idea.children):
                 for child in votable_root_idea.children:
                     self.add_votable(child)

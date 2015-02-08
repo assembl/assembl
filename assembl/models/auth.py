@@ -166,7 +166,7 @@ class AgentProfile(Base):
 
     def get_agent_preload(self, view_def=None):
         if view_def:
-            result = self.generic_json(view_def)
+            result = self.generic_json(view_def, user_id=self.id)
         else:
             result = self.serializable()
         return json.dumps(result)

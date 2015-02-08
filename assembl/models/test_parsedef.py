@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from pyramid.threadlocal import manager
-import pytest
+from ..auth import P_SYSADMIN
 
 
 def _test_load_fixture(request, discussion, admin, fixture):
     manager.push({'request': request})
     request.matchdict = {'discussion_slug': discussion.slug}
-    json = fixture.generic_json()
+    json = fixture.generic_json(permissions=(P_SYSADMIN, ))
     print fixture.__dict__
     fixture.update_from_json(json, admin.id)
     print fixture.__dict__

@@ -96,7 +96,7 @@ class Discussion(DiscussionBoundBase):
         if 'root_idea' in kwargs:
             root_idea = kwargs.get('root_idea')
             if root_idea:
-                root_idea.discussion = this
+                root_idea.discussion = self
         else:
             from .idea import RootIdea
             self.root_idea = RootIdea(discussion=self)
@@ -104,14 +104,14 @@ class Discussion(DiscussionBoundBase):
         if 'table_of_contents' in kwargs:
             table_of_contents = kwargs.get('table_of_contents')
             if table_of_contents:
-                table_of_contents.discussion = this
+                table_of_contents.discussion = self
         else:
             from .idea_graph_view import TableOfContents
             self.table_of_contents = TableOfContents(discussion=self)
         if 'next_synthesis' in kwargs:
             next_synthesis = kwargs.get('next_synthesis')
             if next_synthesis:
-                next_synthesis.discussion = this
+                next_synthesis.discussion = self
         else:
             from .idea_graph_view import Synthesis
             synthesis = Synthesis(discussion=self)
@@ -214,11 +214,8 @@ class Discussion(DiscussionBoundBase):
 
     def get_all_agents_preload(self, user=None):
         from assembl.views.api.agent import _get_agents_real
-        from ..auth.util import user_has_permission
         return json.dumps(_get_agents_real(
-            discussion=self,
-            include_email=user and user_has_permission(
-                self.id, user.id, P_ADMIN_DISC)))
+            self, user.id if user else Everyone))
 
     def get_readers_preload(self):
         return json.dumps([user.serializable() for user in self.get_readers()])

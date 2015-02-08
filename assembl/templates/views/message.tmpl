@@ -44,8 +44,8 @@
 
           <li><a href="#" class="message-linkbutton" data-copy-text="<%= direct_link_url %>">{{gettext('Copy the link to share this message')}}</a></li>
 
-					<% if (creator.get('email')) { %>
-					<li><a title="<%= creator.get('email') %>" href="mailto:<%= creator.get('email') %>">{{gettext('Send an email to this user')}}</a></li>
+					<% if (creator.get('preferred_email')) { %>
+					<li><a title="<%= creator.get('preferred_email') %>" href="mailto:<%= creator.get('preferred_email') %>">{{gettext('Send an email to this user')}}</a></li>
 					<% } %>
 				</ul>
 			</li>

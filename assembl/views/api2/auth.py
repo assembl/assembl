@@ -69,8 +69,10 @@ def add_local_role(request):
             user = first.user or User.get(first.user_id)
             user.get_notification_subscriptions(discussion_id, True)
         view = request.GET.get('view', None) or 'default'
+        permissions = get_permissions(
+            user_id, ctx.get_discussion_id())
         return Response(
-            dumps(first.generic_json(view)),
+            dumps(first.generic_json(view, user_id, permissions)),
             location=first.uri_generic(first.id),
             status_code=201)
 
@@ -114,7 +116,7 @@ def set_local_role(request):
     if view == 'id_only':
         return [updated.uri()]
     else:
-        return updated.generic_json(view)
+        return updated.generic_json(view, user_id, permissions)
 
 
 @view_config(

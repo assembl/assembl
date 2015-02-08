@@ -739,7 +739,7 @@ def password_change_sent(request):
         profile_id = int(request.matchdict.get('profile_id'))
         profile = AgentProfile.get(profile_id)
         if not profile:
-            raise HTTPNotFound("No profile"+id)
+            raise HTTPNotFound("No profile "+profile_id)
         send_change_password_email(
             request, profile,
             request.params.get('email', None))

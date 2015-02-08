@@ -327,7 +327,9 @@ JOIN post AS family_posts ON (
             child._visit_ideas_breadth_first(idea_visitor, visited)
 
     def most_common_words(self, lang=None, num=8):
-        if not lang:
+        if lang:
+            langs = (lang,)
+        else:
             # TODO: Is there a better way to do this than get_current_registry?
             from pyramid.threadlocal import get_current_registry
             langs = get_current_registry().settings.get(

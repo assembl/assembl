@@ -1,4 +1,3 @@
-import transaction
 from collections import defaultdict
 
 import simplejson as json
@@ -6,13 +5,13 @@ from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from pyramid.security import authenticated_userid
 from sqlalchemy import and_
-from sqlalchemy.orm import joinedload
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
-    get_named_object, get_database_id, Idea, RootIdea, IdeaLink, Discussion,
+    get_database_id, Idea, RootIdea, IdeaLink, Discussion,
     Extract, SubGraphIdeaAssociation)
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
+from assembl.auth.util import get_permissions
 
 ideas = Service(name='ideas', path=API_DISCUSSION_PREFIX + '/ideas',
                 description="",
@@ -59,14 +58,15 @@ def get_idea(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view')
+    discussion_id = request.matchdict['discussion_id']
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
 
-    if view_def:
-        return idea.generic_json(view_def)
-    else:
-        return idea.generic_json()
+    return idea.generic_json(view_def, user_id, permissions)
+
 
 def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     next_synthesis = discussion.get_next_synthesis()
@@ -87,14 +87,10 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     if ids:
         ids = [get_database_id("Idea", id) for id in ids]
         ideas = ideas.filter(Idea.id.in_(ids))
-    
-    retval = []
-    for idea in ideas:
-        if view_def:
-            serialized_idea = idea.generic_json(view_def)
-        else:
-            serialized_idea = idea.generic_json()
-        retval.append(serialized_idea)
+
+    permissions = get_permissions(user_id, discussion.id)
+    retval = [idea.generic_json(view_def, user_id, permissions)
+              for idea in ideas]
     widget_data = defaultdict(list)
     for widget in discussion.widgets:
         url = widget.get_ui_endpoint()
@@ -230,6 +226,9 @@ def get_idea_extracts(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view')
+    discussion_id = request.matchdict['discussion_id']
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
@@ -239,6 +238,7 @@ def get_idea_extracts(request):
     ).order_by(Extract.order.desc())
 
     if view_def:
-        return [extract.generic_json(view_def) for extract in extracts]
+        return [extract.generic_json(view_def, user_id, permissions)
+                for extract in extracts]
     else:
         return [extract.serializable() for extract in extracts]
