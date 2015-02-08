@@ -184,6 +184,10 @@ class AgentProfile(Base):
             return None
         return self.count_posts_in_discussion(discussion.id)
 
+    def get_preferred_locale(self):
+        # TODO: per-user preferred locale
+        return None
+
 
 class AbstractAgentAccount(Base):
     """An abstract class for accounts that identify agents"""

@@ -330,10 +330,7 @@ JOIN post AS family_posts ON (
         if lang:
             langs = (lang,)
         else:
-            # TODO: Is there a better way to do this than get_current_registry?
-            from pyramid.threadlocal import get_current_registry
-            langs = get_current_registry().settings.get(
-                'available_languages', 'fr en').split()
+            langs = self.discussion.get_discussion_locales()
         word_counter = WordCountVisitor(langs)
         self.visit_ideas_depth_first(word_counter)
         return word_counter.best(num)

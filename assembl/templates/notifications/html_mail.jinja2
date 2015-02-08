@@ -92,7 +92,7 @@ ink_css
                               
                               {% for applicableSubscription in notification.get_applicable_subscriptions() %}
                                 <li>
-                                  {{ applicableSubscription.get_human_readable_description() }}
+                                  {{ gettext(applicableSubscription.get_human_readable_description()) }}
                                   <a href="{{ frontendUrls.getUserNotificationSubscriptionUnsubscribeUrl(applicableSubscription) }}">{{ gettext('Unsubscribe') }}</a>
                                 </li>
                               {% endfor %}

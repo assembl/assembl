@@ -5,7 +5,13 @@ from abc import abstractmethod
 from time import sleep
 import transaction
 import os
+from os.path import join, dirname
 import email
+from email import (charset as Charset)
+from email.mime.text import MIMEText
+from functools import partial
+
+
 from sqlalchemy import (
     Column,
     Boolean,
@@ -22,9 +28,11 @@ from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload)
 from zope import interface
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
+from pyramid.i18n import TranslationStringFactory, make_localizer
 from celery import current_task
+from jinja2 import Environment, PackageLoader
 
-from . import  Base, DiscussionBoundBase
+from . import Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
 from ..lib.frontend_urls import FrontendUrls
@@ -32,16 +40,13 @@ from .auth import (
     User, Everyone, P_ADMIN_DISC, CrudPermissions, P_READ, UserTemplate)
 from .discussion import Discussion
 from .post import Post, SynthesisPost
-from jinja2 import Environment, PackageLoader
-from email import (charset as Charset)
-from email.mime.text import MIMEText
 from assembl.semantic.virtuoso_mapping import QuadMapPatternS
 from assembl.semantic.namespaces import ASSEMBL
-from gettext import gettext, ngettext
-_ = gettext
+
+
+_ = TranslationStringFactory('assembl')
 
 jinja_env = Environment(loader=PackageLoader('assembl', 'templates'), extensions=['jinja2.ext.i18n'])
-jinja_env.install_gettext_callables(gettext, ngettext, newstyle=True)
 
 # Don't BASE64-encode UTF-8 messages so that we avoid unwanted attention from
 # some spam filters.
@@ -522,7 +527,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
     unsubscribe_allowed = True
 
     def get_human_readable_description(self):
-        return gettext("A periodic synthesis of the discussion is posted")
+        return _("A periodic synthesis of the discussion is posted")
 
     def wouldCreateNotification(self, discussion_id, verb, object):
         parentWouldCreate = super(NotificationSubscriptionFollowSyntheses, self).wouldCreateNotification(discussion_id, verb, object)
@@ -831,6 +836,20 @@ class Notification(Base):
     def get_notification_subject(self):
         """Typically for email"""
 
+    def get_localizer(self):
+        locale = self.first_matching_subscription.user.get_preferred_locale()
+        if not locale:
+            locale = self.first_matching_subscription.discussion.get_discussion_locales()[0]
+        return make_localizer(locale, [
+            join(dirname(dirname(__file__)), 'locale')])
+
+    def setup_localizer(self):
+        localizer = self.get_localizer()
+        jinja_env.install_gettext_callables(
+            partial(localizer.translate, domain='assembl'),
+            partial(localizer.pluralize, domain='assembl'),
+            newstyle=True)
+
     def get_from_email_address(self):
         from_email = self.first_matching_subscription.discussion.admin_source.admin_sender
         assert from_email
@@ -931,9 +950,11 @@ class NotificationOnPostCreated(NotificationOnPost):
         return NotificationOnPost.event_source_object(self)
     
     def get_notification_subject(self):
+        loc = self.get_localizer()
         subject = "[" + self.first_matching_subscription.discussion.topic + "] "
         if isinstance(self.post, SynthesisPost):
-            subject += _("SYNTHESIS: ") + self.post.publishes_synthesis.subject
+            subject += loc.translate(_("SYNTHESIS: ")) \
+                + self.post.publishes_synthesis.subject
         else:
             subject += self.post.subject
         return subject
@@ -953,6 +974,6 @@ class NotificationOnPostCreated(NotificationOnPost):
             template_data['synthesis'] = self.post.publishes_synthesis
         else:
             template = jinja_env.get_template('notifications/html_mail_post.jinja2')
-            
+        self.setup_localizer()
         html = template.render(**template_data)
         return Premailer(html).transform()
