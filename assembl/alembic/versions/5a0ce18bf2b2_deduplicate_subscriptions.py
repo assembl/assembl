@@ -13,6 +13,7 @@ down_revision = 'bb43cdb36f5'
 from itertools import chain, groupby
 
 import transaction
+from alembic import context
 
 
 def notification_key(notif):
