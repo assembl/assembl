@@ -10,6 +10,7 @@ import email
 from email import (charset as Charset)
 from email.mime.text import MIMEText
 from functools import partial
+import threading
 
 
 from sqlalchemy import (
@@ -45,8 +46,6 @@ from assembl.semantic.namespaces import ASSEMBL
 
 
 _ = TranslationStringFactory('assembl')
-
-jinja_env = Environment(loader=PackageLoader('assembl', 'templates'), extensions=['jinja2.ext.i18n'])
 
 # Don't BASE64-encode UTF-8 messages so that we avoid unwanted attention from
 # some spam filters.
@@ -796,7 +795,9 @@ class Notification(Base):
         DateTime,
         nullable = True,
         default = datetime.utcnow)
-    
+
+    threadlocals = threading.local()
+
     @abstractmethod
     def event_source_object(self):
         pass
@@ -836,6 +837,19 @@ class Notification(Base):
     def get_notification_subject(self):
         """Typically for email"""
 
+    def get_unlocalized_jinja_env(self):
+        threadlocals = self.threadlocals
+        if getattr(threadlocals, 'jinja_env', None) is None:
+            threadlocals.jinja_env = Environment(
+                loader=PackageLoader('assembl', 'templates'),
+                extensions=['jinja2.ext.i18n'])
+        return threadlocals.jinja_env
+
+    def get_jinja_env(self):
+        jinja_env = self.get_unlocalized_jinja_env()
+        self.setup_localizer(jinja_env)
+        return jinja_env
+
     def get_localizer(self):
         locale = self.first_matching_subscription.user.get_preferred_locale()
         if not locale:
@@ -843,8 +857,9 @@ class Notification(Base):
         return make_localizer(locale, [
             join(dirname(dirname(__file__)), 'locale')])
 
-    def setup_localizer(self):
+    def setup_localizer(self, jinja_env=None):
         localizer = self.get_localizer()
+        jinja_env = jinja_env or self.get_unlocalized_jinja_env()
         jinja_env.install_gettext_callables(
             partial(localizer.translate, domain='assembl'),
             partial(localizer.pluralize, domain='assembl'),
@@ -969,11 +984,11 @@ class NotificationOnPostCreated(NotificationOnPost):
                        'frontendUrls': FrontendUrls(self.first_matching_subscription.discussion),
                        'ink_css': ink_css.read()
                        }
+        jinja_env = self.get_jinja_env()
         if isinstance(self.post, SynthesisPost):
             template = jinja_env.get_template('notifications/html_mail_post_synthesis.jinja2')
             template_data['synthesis'] = self.post.publishes_synthesis
         else:
             template = jinja_env.get_template('notifications/html_mail_post.jinja2')
-        self.setup_localizer()
         html = template.render(**template_data)
         return Premailer(html).transform()
