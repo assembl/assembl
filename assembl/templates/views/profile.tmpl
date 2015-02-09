@@ -29,17 +29,18 @@
         <div class="gu gu-1of1">
           <form class="core-form form-horizontal" id="profile-form">
             <fieldset>
-              <div class="control-group fr">
+
+							<div class="control-group fr">
+								<label for="name" class="control-label fl">{{ gettext('Name') }}</label>
+								<div class="controls fl">
+										<input class="input-xxlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('name') %>" />
+								</div>
+							</div>
+
+              <div class="control-group fr mbxl">
                 <label for="username" class="control-label fl">{{ gettext('Username') }}</label>
                 <div class="controls fl">
                     <input class="input-xxlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" value="<%= profile.get('username') %>" />
-                </div>
-              </div>
-
-              <div class="control-group fr">
-                <label for="name" class="control-label fl">{{ gettext('Name') }}</label>
-                <div class="controls fl">
-                    <input class="input-xxlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('name') %>" />
                 </div>
               </div>
 
@@ -50,7 +51,7 @@
                 </div>
               </div>
 
-              <div class="control-group fr">
+              <div class="control-group fr mbxl">
                 <label for="password2" class="control-label fl">{{ gettext('Repeat password') }}</label>
                 <div class="controls fl">
                   <input class="input-xxlarge" type="password" name="password2" placeholder="{{ gettext('Repeat password') }}" />
