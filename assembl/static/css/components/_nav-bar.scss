@@ -10,13 +10,21 @@ $textProfile: #515151;
   z-index: 100; /* for dropdowns */
   background-color: $white;
 
-  &.navbar-default {
-    //This is set in the theme
-  }
-
   .navbar-left {
+    height: $theme_header_height;
     float: left;
     position: relative;
+
+    ul > li{
+      list-style: none;
+    }
+
+    ul{
+      .sub {
+        height: $theme_header_height;
+      }
+    }
+
     .icon-infinite {
       position: absolute;
       top: -6px;
@@ -32,12 +40,13 @@ $textProfile: #515151;
   }
 
   .navbar-center {
-    margin: 3px auto;
+    height: $theme_header_height;
+    margin: 0 auto;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    line-height: $theme_header_height - 5;
+    line-height: $theme_header_height;
     .add-group {
       text-decoration: none;
       cursor: pointer;
@@ -45,10 +54,37 @@ $textProfile: #515151;
   }
 
   .navbar-right {
+    height: $theme_header_height;
     position: absolute;
     right: 0;
-    line-height: $theme_header_height - 5;
-    .connexion {
+    line-height: $theme_header_height;
+
+    ul > li{
+      list-style: none;
+    }
+
+    ul{
+      .sub {
+        height: $theme_header_height;
+      }
+    }
+
+    .user-picture {
+      display: inline-block;
+    }
+
+    .username, .user-lang {
+      color: #515151;
+      text-decoration: none;
+    }
+
+    .username:after {
+      @extend %icon;
+      content: '\e814';
+      color: #515151;
+    }
+
+    /*.connexion {
       margin: 0;
       padding: 4px 10px 0 10px;
       li {
@@ -78,7 +114,8 @@ $textProfile: #515151;
       .user-lang{
         color: $textProfile;
       }
-    }
+    }*/
+
     .nav-notification {
       position: relative;
       display: none;
