@@ -136,7 +136,7 @@ $successText: $green;
   label {
     display: block;
     margin-bottom: 5px;
-    color: $gray;
+    color: #CCCCCC;
   }
 
   // Inputs, Textareas, Selects
@@ -146,7 +146,7 @@ $successText: $green;
   .uneditable-input {
     display: inline-block;
     width: 210px;
-    height: $inputBaseLineHeight;
+    height: em(30);
     padding: 4px;
     margin-bottom: 9px;
     font-size: $smallFontSize;
@@ -671,7 +671,7 @@ $successText: $green;
 .form-horizontal {
   // Increase spacing between groups
   .control-group {
-    margin-bottom: $inputBaseLineHeight;
+    margin-bottom: em(20);
     @include clearfixHack();
   }
   // Float the labels left
