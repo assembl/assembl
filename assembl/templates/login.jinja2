@@ -8,16 +8,17 @@
   {% endfor %}
 
   {% if name == "openid" %}
-       <div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />
+  		<!-- Need to be refactored -->
+      <!--<div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />-->
   {% endif %}
   {% if name == "google" %}
-     <div class="g-icon-bg"></div><input type="submit" class="g-bg" value="{{title}}"></input>
+     <button type="submit" class="g-bg mbs">{{title}}</button>
   {% endif %}
   {% if name == "twitter" %}
-     <div class="twi-icon-bg"></div><input type="submit" class="twi-bg" value="{{title}}"></input>
+     <button type="submit" class="twi-bg mbs">{{title}}</button>
   {% endif %}
   {% if name == "facebook" %}
-     <div class="fb-icon-bg"></div><input type="submit" class="fb-bg" value="{{title}}"></input>
+     <button type="submit" class="fb-bg mbs">{{title}}</button>
   {% endif %}
 
   </form>
