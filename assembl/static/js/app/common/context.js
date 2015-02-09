@@ -1130,7 +1130,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                     var that = this;
                     timeoutId = window.setTimeout(function(){
                         triggerHover.call(that, evt);
-                    }, 500); // => this is how much time the mouse has to stay on the link in order to trigger the popover
+                    }, 800); // => this is how much time the mouse has to stay on the link in order to trigger the popover
                     $(this).mouseout(function(){
                         window.clearTimeout(timeoutId);
                     });
