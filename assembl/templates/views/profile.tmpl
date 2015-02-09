@@ -1,3 +1,29 @@
+{% macro form(name, title, image) %}
+  {% if name in providers %}
+  <form id="{{name}}" class="mts" method="post" action="/login/{{name}}">
+  {% for k,v in kwargs.items() %}
+      <input type="hidden" name="{{ k }}" value="{{ v }}" />
+  {% endfor %}
+
+  {% if name == "openid" %}
+  		{# Need to be refactored #}
+      {#<div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />#}
+  {% endif %}
+  {% if name == "google" %}
+     <button type="submit" class="g-bg mbs">{{title}}</button>
+  {% endif %}
+  {% if name == "twitter" %}
+     <button type="submit" class="twi-bg mbs">{{title}}</button>
+  {% endif %}
+  {% if name == "facebook" %}
+     <button type="submit" class="fb-bg mbs">{{title}}</button>
+  {% endif %}
+
+  </form>
+  {% endif %}
+{% endmacro %}
+
+
 <div class="gr">
   <div class="gu gu-1of5">
     <nav class="sidebar-nav">
@@ -58,14 +84,6 @@
                 </div>
               </div>
 
-              <!-- <div class="control-group fr">
-                <label for="#" class="control-label fl">{{ gettext('Emails') }}</label>
-                <div class="controls fl">
-                {# usually it\'s a loop #}
-                <span class="ui-label"><%= profile.get('preferred_email') %></span>
-                </div>
-              </div> -->
-
               <div class="control-group fr">
                 <label for="add_email" class="control-label fl">{{ gettext('Emails') }}</label>
                 <div class="controls fl">
@@ -75,14 +93,22 @@
                 </div>
               </div>
 
-
               <div class="control-group fr mtl">
 								<label for="add_email" class="control-label">{{ gettext('link your email account') }}</label>
 								<div class="controls fl">
                    <div class="social-content">
-                     <button class="dispb mbs">Facebook</button>
-                     <button class="dispb mbs">Twitter</button>
-                     <button class="dispb mbs">Google +</button>
+                     <button class="fb-bg mbs">{{ gettext('sign in with facebook') }}</button>
+                   	 <button class="twi-bg mbs">{{ gettext('sign in with twitter') }}</button>
+                   	 <button class="g-bg mbs">{{ gettext('sign in with google+') }}</button>
+
+                   	 {#{{form('google', gettext('Login with Google'), true)}}
+										 {{form('twitter', gettext('Login with Twitter'), true)}}
+										 {{form('facebook', gettext('Login with Facebook'), true)}}
+										 {{form('yahoo', gettext('Login with Yahoo'), true, oauth='true', openid_identifier='yahoo.com')}}
+										 {{form('live', gettext('Login with Windows Live'), false)}}
+										 {{form('github', gettext('Login with Github'), false)}}
+										 {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
+										 {{form('openid', gettext('Login with OpenID'), true)}}#}
 
                      <p class="social-helper mts">{{ gettext('Add a new e-mail address used to connect and contribute with the same account from multiple emails') }}</p>
                    </div>
@@ -95,8 +121,6 @@
 						</div>
           </form>
 
-
-
           {% if providers %}
 					<p>{{ gettext("Connect other accounts to Assembl")|safe }}</p>
 					{% endif %}
@@ -104,8 +128,7 @@
 					{#{{form('google', gettext('Login with Google'), true)}}
 					{{form('twitter', gettext('Login with Twitter'), true)}}
 					{{form('facebook', gettext('Login with Facebook'), true)}}
-					{{form('yahoo', gettext('Login with Yahoo'), true,
-									oauth='true', openid_identifier='yahoo.com')}}
+					{{form('yahoo', gettext('Login with Yahoo'), true, oauth='true', openid_identifier='yahoo.com')}}
 					{{form('live', gettext('Login with Windows Live'), false)}}
 					{{form('github', gettext('Login with Github'), false)}}
 					{{form('bitbucket', gettext('Login with Bitbucket'), false)}}

@@ -67,14 +67,12 @@ table {
     }
     .controls {
       margin-left: 20px;
-      .fb-bg, .twi-bg ,.g-bg{
-        box-sizing: border-box;
-        text-align: center;
-        padding-top: 10px;
-      }
 
       .social-content {
         width: 540px;
+        .fb-bg, .twi-bg ,.g-bg{
+          line-height: 37px;
+        }
       }
     }
     .email-helper,
