@@ -223,7 +223,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
 
             getUrlFromUri: function (str) {
                 var start = "local:";
-                if (str.indexOf(start) == 0) {
+                if (str && str.length && str.indexOf(start) == 0) {
                     str = "/data/" + str.slice(start.length);
                 }
                 return str;
@@ -403,9 +403,6 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             // Modal can be dynamically resized once the iframe is loaded, or on demand
             // TODO: options to set modal size
             openTargetInModal: function (evt, onDestroyCallback, options) {
-                console.log("openInspireMeModal()");
-                console.log("evt: ", evt);
-
                 var target_url = null;
                 if (evt && evt.currentTarget) {
                     if ($(evt.currentTarget).attr("data-href"))
@@ -977,6 +974,20 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
              * @event
              */
             onAjaxError: function (ev, jqxhr, settings, exception) {
+
+                // ignore Ajax errors which come from outside (sub-)domains. This is useful for oembed related errors
+                var url_domain = function(data) {
+                    var a = document.createElement('a');
+                    a.href = data;
+                    return a.hostname;
+                };
+                if ( settings && "url" in settings && window.location.host != url_domain(settings.url) )
+                {
+                    console.log("ignoring Ajax error from outside domain: ", settings.url);
+                    return;
+                }
+
+
                 var message = i18n.gettext('ajax error message:');
                 message = "url: " + settings.url + "\n" + message + "\n" + exception;
 
@@ -1067,8 +1078,6 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 var popover = $("#popover-oembed");
                 
                 var triggerHover = function(evt){
-                    console.log("evt: ", evt);
-
                     popover.css('position','fixed');
                     popover.css('top', (evt.pageY+2) + 'px');
                     popover.css('left', evt.pageX + 'px');
@@ -1086,7 +1095,6 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                             popover.hide();
                         },
                         afterEmbed: function(){
-                            console.log("this: ", this);
                             var screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
                             var screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
                             var popoverWidth = $(this).outerWidth();
