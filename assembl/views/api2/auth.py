@@ -5,7 +5,7 @@ from pyramid.view import view_config
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
-    HTTPOk)
+    HTTPOk, HTTPAccepted)
 
 from assembl.auth import (
     P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST, P_READ,
@@ -168,4 +168,4 @@ def send_account_verification(request):
     from assembl.views.auth.views import send_confirmation_email
     request.matchdict = {}
     send_confirmation_email(request, instance)
-    return HTTPOk()
+    return HTTPAccepted()
