@@ -451,6 +451,22 @@ class User(AgentProfile):
 
         super(User, self).__init__(**kwargs)
 
+    @property
+    def username_p(self):
+        return self.username.username
+
+    @username_p.setter
+    def username_p(self, name):
+        if self.username:
+            self.username.username = name
+        else:
+            self.username = Username(username=name)
+
+    @username_p.deleter
+    def username_p(self):
+        if self.username:
+            self.db.delete(self.username)
+
     def set_password(self, password):
         from ..auth.password import hash_password
         self.password = hash_password(password)
