@@ -1349,7 +1349,9 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 }
             },
 
-            introductionSeeMore: function () {
+            introductionSeeMore: function (e) {
+                e.stopPropagation();
+
                 $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
                     var model = new Backbone.Model({
                         introduction: discussion.introduction
