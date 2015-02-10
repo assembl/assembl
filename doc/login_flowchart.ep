@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Document xmlns="http://www.evolus.vn/Namespace/Pencil"><Properties/><Pages><Page><Properties><Property name="name">Untitled Page</Property><Property name="id">1423148556225_9371</Property><Property name="width">1183</Property><Property name="height">1422</Property><Property name="dimBackground"/><Property name="transparentBackground"/><Property name="backgroundColor">#ffffff</Property></Properties><Content><g xmlns="http://www.w3.org/2000/svg" p:type="Shape" xmlns:p="http://www.evolus.vn/Namespace/Pencil" p:def="Evolus.Flowchart:Decision" id="ec44be7f42a4481792b3f3fdc98ff534" transform="matrix(1,0,0,1,147,175)"><p:metadata><p:property name="box"><![CDATA[100,80]]></p:property><p:property name="outputPin1Origin"><![CDATA[50,0]]></p:property><p:property name="outputPin1"><![CDATA[50,0]]></p:property><p:property name="outputPin2Origin"><![CDATA[100,40]]></p:property><p:property name="outputPin2"><![CDATA[100,40]]></p:property><p:property name="outputPin3Origin"><![CDATA[50,80]]></p:property><p:property name="outputPin3"><![CDATA[50,80]]></p:property><p:property name="outputPin4Origin"><![CDATA[0,40]]></p:property><p:property name="outputPin4"><![CDATA[0,40]]></p:property><p:property name="fillColor"><![CDATA[#BDDFFFFF]]></p:property><p:property name="strokeColor"><![CDATA[#666666FF]]></p:property><p:property name="strokeStyle"><![CDATA[2|]]></p:property><p:property name="textContent"><![CDATA[Connected?]]></p:property><p:property name="textFont"><![CDATA[Helvetica|normal|normal|12px|none]]></p:property><p:property name="textColor"><![CDATA[#000000FF]]></p:property><p:property name="textAlign"><![CDATA[1,1]]></p:property><p:property name="optionText1"><![CDATA[Option]]></p:property><p:property name="optionText2"><![CDATA[Yes]]></p:property><p:property name="optionText3"><![CDATA[No]]></p:property><p:property name="optionText4"><![CDATA[Option]]></p:property><p:property name="optionTextFont"><![CDATA[Helvetica|normal|normal|12px|none]]></p:property><p:property name="optionTextColor"><![CDATA[#666666FF]]></p:property></p:metadata>
+<Document xmlns="http://www.evolus.vn/Namespace/Pencil"><Properties/><Pages><Page><Properties><Property name="name">Login and account flowchart</Property><Property name="id">1423148556225_9371</Property><Property name="width">1183</Property><Property name="height">1422</Property><Property name="dimBackground"/><Property name="transparentBackground">true</Property><Property name="backgroundColor">#FFFFFFFF</Property><Property name="background">transparent</Property><Property name="fid">login_and_account_flowchart</Property></Properties><Content><g xmlns="http://www.w3.org/2000/svg" p:type="Shape" xmlns:p="http://www.evolus.vn/Namespace/Pencil" p:def="Evolus.Flowchart:Decision" id="ec44be7f42a4481792b3f3fdc98ff534" transform="matrix(1,0,0,1,147,175)"><p:metadata><p:property name="box"><![CDATA[100,80]]></p:property><p:property name="outputPin1Origin"><![CDATA[50,0]]></p:property><p:property name="outputPin1"><![CDATA[50,0]]></p:property><p:property name="outputPin2Origin"><![CDATA[100,40]]></p:property><p:property name="outputPin2"><![CDATA[100,40]]></p:property><p:property name="outputPin3Origin"><![CDATA[50,80]]></p:property><p:property name="outputPin3"><![CDATA[50,80]]></p:property><p:property name="outputPin4Origin"><![CDATA[0,40]]></p:property><p:property name="outputPin4"><![CDATA[0,40]]></p:property><p:property name="fillColor"><![CDATA[#BDDFFFFF]]></p:property><p:property name="strokeColor"><![CDATA[#666666FF]]></p:property><p:property name="strokeStyle"><![CDATA[2|]]></p:property><p:property name="textContent"><![CDATA[Connected?]]></p:property><p:property name="textFont"><![CDATA[Helvetica|normal|normal|12px|none]]></p:property><p:property name="textColor"><![CDATA[#000000FF]]></p:property><p:property name="textAlign"><![CDATA[1,1]]></p:property><p:property name="optionText1"><![CDATA[Option]]></p:property><p:property name="optionText2"><![CDATA[Yes]]></p:property><p:property name="optionText3"><![CDATA[No]]></p:property><p:property name="optionText4"><![CDATA[Option]]></p:property><p:property name="optionTextFont"><![CDATA[Helvetica|normal|normal|12px|none]]></p:property><p:property name="optionTextColor"><![CDATA[#666666FF]]></p:property></p:metadata>
             <path style="stroke-linejoin: round; stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2; fill: rgb(189, 223, 255); fill-opacity: 1;" p:name="path" id="dc136625c1f2431897de3a2ceb6026be" transform="translate(0,0)" d="M 50 0 L 100 40 L 50 80 L 0 40 z"/>
             
             <text p:name="text1" id="aad38f402e3344bbab008b490703beb5" style="font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none; fill: rgb(102, 102, 102); fill-opacity: 1; visibility: hidden; display: none;" transform="translate(54,-7)">Option</text>
@@ -33,7 +33,7 @@
             <use xlink:href="#5bfc5b9672954222a6dba5c5bf7f3519" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="9c5676b74cd24794be70ebf0d0de35d6" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="4566751cec8e4dd4b74d4e7b1cae7839" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#5bfc5b9672954222a6dba5c5bf7f3519" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="a5ac370887ef4fe2990a5fa7556ca54d" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="a5ac370887ef4fe2990a5fa7556ca54d" dx="-16"/>
                 </textPath>
             </text>
 
@@ -102,7 +102,7 @@
             <use xlink:href="#e71448e9b71842979b90e4bf82468326" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="52431ac6382544b5aad1efbeda029cef" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="b52342d97d1a4768ae29805ff746250d" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#e71448e9b71842979b90e4bf82468326" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="9e73ea1353b146d0abe27239c2387cdd" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="9e73ea1353b146d0abe27239c2387cdd" dx="-16"/>
                 </textPath>
             </text>
 
@@ -312,7 +312,7 @@
             <use xlink:href="#5cee5e341a81441e9ebc76fb81773497" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="fd7b49e0797a47139f74a07e635be75f" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="eba0d4a1a3e24a11a4fcd196becbee34" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#5cee5e341a81441e9ebc76fb81773497" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="eebb5837e427449b9a9cc5763a121beb" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="eebb5837e427449b9a9cc5763a121beb" dx="-16"/>
                 </textPath>
             </text>
 
@@ -366,7 +366,7 @@
             <use xlink:href="#c1ec6595a7cb4d28a39bc1aaa2cdaa11" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="85a40aa1b94741009dbab5f90bba807a" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="8f0ac516c9474ff6bdd6177d856115d0" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#c1ec6595a7cb4d28a39bc1aaa2cdaa11" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="0a17eab1121940c18fac95038963adf9" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="0a17eab1121940c18fac95038963adf9" dx="-16"/>
                 </textPath>
             </text>
 
@@ -393,7 +393,7 @@
             <use xlink:href="#5d8b1b342e3447cb9e835bd7592c77b3" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="af1ac2f345c242c5aa3a466bed28c285" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="d13328cecfe544d6b6a3fe8b4db6c9f7" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#5d8b1b342e3447cb9e835bd7592c77b3" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="971b10123b8f4851bcdc6fac18da177f" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="971b10123b8f4851bcdc6fac18da177f" dx="-16"/>
                 </textPath>
             </text>
 
@@ -442,7 +442,7 @@
             <use xlink:href="#b56250c8c23b489ba732e2f31f9be61d" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="2bb89f61a7df43d3bfedc61110715890" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="bb71c3401bd5479f88071b41a16eea67" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#b56250c8c23b489ba732e2f31f9be61d" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="0e6b7282940a4bfcb0616d130fdd9ff3" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="0e6b7282940a4bfcb0616d130fdd9ff3" dx="-16"/>
                 </textPath>
             </text>
 
@@ -473,7 +473,7 @@
             <use xlink:href="#0fd92c4dd1374013ae74912b02c73b85" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="98bbc0a0b1c244029a474d9542b06f6d" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="1f32de6db60a48a29dc826b8370f7ff2" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#0fd92c4dd1374013ae74912b02c73b85" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="c2974f73c89e4b9994facf4986f07d28" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="c2974f73c89e4b9994facf4986f07d28" dx="-16"/>
                 </textPath>
             </text>
 
@@ -485,7 +485,7 @@
             <use xlink:href="#c50b698b403344a78e7f2e7c3e439185" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="6a5b10d41b8b4ab090372a0ba993544f" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="6df70a9d3319408fbe9cad9434532c16" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#c50b698b403344a78e7f2e7c3e439185" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="68a200dd0658400a863d5e653e667dc6" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="68a200dd0658400a863d5e653e667dc6" dx="-16"/>
                 </textPath>
             </text>
 
@@ -530,7 +530,7 @@
             <use xlink:href="#59f2b61f25fc44bbb1853513ed2a71c7" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="7b4f1b2eb1f445a8a3862fd1addab2ce" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="f3bcf890c5d94affa858a1d9106036ab" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#59f2b61f25fc44bbb1853513ed2a71c7" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="c0b5b30e9c694925aa80f8d567c3e32f" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="c0b5b30e9c694925aa80f8d567c3e32f" dx="-16"/>
                 </textPath>
             </text>
 
@@ -566,7 +566,7 @@
             <use xlink:href="#8edfbdd8a38644b3b7a57d29a0322c27" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="1dfe31dcc5944ec88bbc6e28776250e0" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="d0cd709bdd1d423fa150df5022158cdf" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#8edfbdd8a38644b3b7a57d29a0322c27" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="bcc0b5ff21934cf98ccc527a22efcbe5" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="bcc0b5ff21934cf98ccc527a22efcbe5" dx="-16"/>
                 </textPath>
             </text>
 
@@ -585,7 +585,7 @@
             <use xlink:href="#005ba24e7394458c8208a2cf47490e90" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="b91077d4c3fb47ccab3df48635bbc76a" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="6568c4c5c6ea42b58dd7e4eaa6283148" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#005ba24e7394458c8208a2cf47490e90" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="1a983196e534449b94dd9161d0a9a5de" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="1a983196e534449b94dd9161d0a9a5de" dx="-16"/>
                 </textPath>
             </text>
 
@@ -623,7 +623,7 @@
             <use xlink:href="#d82a5d09dcc9497e8565214a86414b97" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="88d4d3af06fa4f51a3d587e62520af34" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="ed7d5c0bab0246f1859ae61227eba8fd" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#d82a5d09dcc9497e8565214a86414b97" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="0b2bf60397b241909db8257c4dfe65c6" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="0b2bf60397b241909db8257c4dfe65c6" dx="-16"/>
                 </textPath>
             </text>
 
@@ -649,7 +649,7 @@
             <use xlink:href="#7861bfe117644c6b92b7526f898b567a" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="860081c90f3d4aee9f6b2f8d400bb39f" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="bc0ed389ad4a45c78ba6450ad2e17204" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#7861bfe117644c6b92b7526f898b567a" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="23a2d80ae25f4816be9bf5132d8770c5" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="23a2d80ae25f4816be9bf5132d8770c5" dx="-16"/>
                 </textPath>
             </text>
 
@@ -661,7 +661,7 @@
             <use xlink:href="#f2ba2902eab14ecfb2de0919f65e410d" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="bfe871e7288b468b8dd82fb0714a4da2" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="84c0df639e254569be6b407c7181324b" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#f2ba2902eab14ecfb2de0919f65e410d" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="c151a5a760e942c1afe19041fa9b38ba" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="c151a5a760e942c1afe19041fa9b38ba" dx="-16"/>
                 </textPath>
             </text>
 
@@ -689,7 +689,7 @@
             <use xlink:href="#fd5ada02d79443d7918eaa2b061ff56b" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="0befe1d3a4844c16b91af0059a2584be" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="0d29ea7f2c9a4dec9bd709f907ca0074" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#fd5ada02d79443d7918eaa2b061ff56b" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="b2deb50d291c4e398dc4c2462b34e6ac" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="b2deb50d291c4e398dc4c2462b34e6ac" dx="-16"/>
                 </textPath>
             </text>
 
@@ -701,7 +701,7 @@
             <use xlink:href="#76f319ceae7e4764a72eeb652d7712c8" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="9d6de1157a12462ebbf86b4de5a13322" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
             <text p:name="text" id="982215e2f99945e9b1d7439b615df9ca" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
                 <textPath xlink:href="#76f319ceae7e4764a72eeb652d7712c8" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="e9989766f953422b8d0385c25e08d563" dx="-16"></tspan>
+                    <tspan dy="-4" p:name="textSpan" id="e9989766f953422b8d0385c25e08d563" dx="-16"/>
                 </textPath>
             </text>
 
