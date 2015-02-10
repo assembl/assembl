@@ -12,16 +12,33 @@
         "name": false,
         "real_name": false,
         "post_count": false,
+        "email_accounts": false,
+        "identity_accounts": false,
         "preferred_email": false
     },
     "User": {
         "@extends": "AgentProfile",
         "login_failures": false,
         "password": false,
-        "permissions": false
+        "permissions": false,
+        "username": "username_p"
     },
-    "EmailAccount": false,
-    "IdentityProviderAccount": false,
+    "AbstractAgentAccount": {
+        "profile_id": false
+    },
+    "EmailAccount": {
+        "@extends": "AbstractAgentAccount",
+        "email": false,
+        "preferred": true,
+        "verified": false,
+        "will_merge_if_validated": false
+    },
+    "IdentityProviderAccount": {
+        "@extends": "AbstractAgentAccount",
+        "provider": false,
+        "username": false,
+        "picture_url": false
+    },
     "ContentSource": {
         "discussion_id": "discussion"
     },
