@@ -1306,7 +1306,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
             ui: {
               introduction: '.js_editIntroduction',
-              objective: '.js_editObjective'
+              objective: '.js_editObjective',
+              seeMoreIntro: '.js_introductionSeeMore'
             },
             regions: {
                 organizations: '#context-partners',
@@ -1316,7 +1317,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             events: {
-                'click #js_introductionSeeMore': 'introductionSeeMore',
+                'click @ui.seeMoreIntro': 'introductionSeeMore',
                 'click @ui.introduction': 'editIntroduction',
                 'click @ui.objective':'editObjective'
             },
@@ -1339,7 +1340,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             serializeData: function () {
-
                 return {
                     ctx: Ctx,
                     context: this.model,
@@ -1449,15 +1449,15 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 var that = this;
                 setTimeout(function(){
                     that.$(".context-introduction").dotdotdot({
-                        after: "#introduction-button-see-more",
+                        after: that.ui.seeMoreIntro,
                         height: 70,
                         callback: function (isTruncated, orgContent) {
                             //console.log("dotdotdot callback: ", isTruncated, orgContent);
                             if (isTruncated) {
-                                that.$('#introduction-button-see-more').show();
+                                that.ui.seeMoreIntro.show();
                             }
                             else {
-                                that.$('#introduction-button-see-more').hide();
+                                that.ui.seeMoreIntro.hide();
                             }
                         },
                         watch: "window"
