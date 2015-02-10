@@ -976,14 +976,15 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             onAjaxError: function (ev, jqxhr, settings, exception) {
 
                 // ignore Ajax errors which come from outside (sub-)domains. This is useful for oembed related errors
-                var url_domain = function(data) {
+                var getHostnameFromUrl = function(data) { // hostname examples: "localhost", "localhost:4321"
                     var a = document.createElement('a');
                     a.href = data;
                     return a.hostname;
                 };
-                if ( settings && "url" in settings && window.location.host != url_domain(settings.url) )
+                if ( settings && "url" in settings && window.location.hostname != getHostnameFromUrl(settings.url) )
                 {
-                    console.log("ignoring Ajax error from outside domain: ", settings.url);
+                    console.log("ignoring Ajax error from outside domain: ", getHostnameFromUrl(settings.url));
+                    console.log("the URL which return an error was: ", settings.url);
                     return;
                 }
 
