@@ -22,13 +22,11 @@
 
         <% if( editingIntroduction ) { %>
 				  <div class="context-introduction-editor"></div>
-			  <% } else if (_.size(context.get('introduction')) == 0) { %>
+			  <% } else if (_.size(context.get('introduction')) === 0) { %>
 			    <div class="context-introduction js_editIntroduction">{{ gettext('You probably want to add a context for this discussion') }}</div>
         <% } else { %>
 				  <div class="context-introduction js_editIntroduction"><%= context.get('introduction') %></div>
 			  <% } %>
-
-        <!--<div class="introduction"></div>-->
         <a href="#" id="js_introductionSeeMore">{{ gettext('See more') }}</a>
       <% } %>
     </div>
@@ -37,16 +35,14 @@
    <div class="block-content">
    <% if( _.size(context.get('objectives')) || userCanEditDiscussion){ %>
      <h2>{{ gettext('Debate objectives') }}</h2>
-
       <% if( editingObjective ) { %>
 				 <div class="context-objective-editor"></div>
-      <% } else if (_.size(context.get('objectives')) == 0) { %>
+      <% } else if (_.size(context.get('objectives')) === 0) { %>
           <div class="context-objective js_editObjective">{{ gettext('You probably want to add some discussion objectives') }}</div>
 			 <% } else { %>
 				<div class="context-objective js_editObjective"><%= context.get('objectives') %></div>
 		 <% } %>
    <% } %>
-     <!--<div class="objectives"></div>-->
    </div>
   </div>
 </div>
