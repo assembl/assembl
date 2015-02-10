@@ -134,7 +134,7 @@ def instance_view_jsonld(request):
 
 
 @view_config(context=InstanceContext, renderer='json',
-             request_method='GET', permission=P_READ, accept="application/json")
+             request_method='GET', accept="application/json")
 def instance_view(request):
     ctx = request.context
     user_id = authenticated_userid(request)

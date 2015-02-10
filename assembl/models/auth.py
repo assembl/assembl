@@ -235,6 +235,13 @@ class AbstractAgentAccount(Base):
         P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
         P_READ, P_READ, P_READ)
 
+    def user_can(self, user_id, operation, permissions):
+        # bypass for permission-less new users
+        if user_id == self.id:
+            return True
+        return super(AbstractAgentAccount, self).user_can(
+            user_id, operation, permissions)
+
 
 class EmailAccount(AbstractAgentAccount):
     """An email account"""
@@ -723,6 +730,13 @@ class User(AgentProfile):
                 self.db.add(sub)
         self.db.flush()
         return chain(my_subscriptions, defaults)
+
+    def user_can(self, user_id, operation, permissions):
+        # bypass for permission-less new users
+        if user_id == self.id:
+            return True
+        return super(User, self).user_can(user_id, operation, permissions)
+
 
 
 class Username(Base):
