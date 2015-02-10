@@ -16,8 +16,9 @@ define(['app',
         'utils/types',
         'utils/i18n',
         'models/roles',
-        'models/discussion'],
-    function (Assembl, Marionette, Message, groupSpec, Idea, IdeaLink, Segment, Synthesis, PartnerOrg, Agents, NotificationSubscription, $, Storage, Types, i18n, LocalRole, Discussion) {
+        'models/discussion',
+        'models/discussionSource'],
+    function (Assembl, Marionette, Message, groupSpec, Idea, IdeaLink, Segment, Synthesis, PartnerOrg, Agents, NotificationSubscription, $, Storage, Types, i18n, LocalRole, Discussion, DiscussionSource) {
 
         /**
          * @class CollectionManager
@@ -123,6 +124,8 @@ define(['app',
             _allDiscussionModel: undefined,
             _allDiscussionModelPromise: undefined,
 
+            _allDiscussionSourceCollection: undefined,
+            _allDiscussionSourceCollectionPromise: undefined,
 
             /**
              * Returns the collection from the giving object's @type .
@@ -609,7 +612,30 @@ define(['app',
                 }
                 return deferred.promise();
 
+            },
+
+            getDiscussionSourceCollectionPromise: function () {
+                var that = this,
+                    deferred = Marionette.Deferred();
+
+                if (this._allDiscussionSourceCollectionPromise === undefined) {
+                    this._allDiscussionSourceCollection = new DiscussionSource.Collection();
+                    this._allDiscussionSourceCollection.collectionManager = this;
+                    this._allDiscussionSourceCollectionPromise = this._allDiscussionSourceCollection.fetch();
+                    this._allDiscussionSourceCollectionPromise.done(function () {
+                        deferred.resolve(that._allDiscussionSourceCollection);
+                    });
+                }
+                else {
+                    this._allDiscussionSourceCollectionPromise.done(function () {
+                        deferred.resolve(that._allDiscussionSourceCollection);
+                    });
+                }
+                return deferred.promise();
+
             }
+
+
 
         });
 

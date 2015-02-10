@@ -10,7 +10,6 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
             'objectives': null,
             'creation_date': null,
             'topic': null,
-            'sources': [],
             'introductionDetails': null,
             '@type': null,
             'widget_collection_url': null,

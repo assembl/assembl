@@ -20,7 +20,7 @@
   <div class="gu gu-3of4 admin-section">
 
     <div class="admin-title">
-      <h3 class="h3">Edition - {{discussion.topic}}</h3>
+      <h3 class="h3">Edition</h3>
     </div>
     <div id="content-container" class="content-container">
     	<div class="bx bx-alert-success hidden">
@@ -30,7 +30,7 @@
     		{{ gettext("Your settings were saved") }}
     	</div>
       <div class="gr">
-        <div class="gu gu-1of2">
+        <div class="gu gu-1of1">
            {% if admin_discussion_permissions_url %}
                <p class="mbl">
                  <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
@@ -66,6 +66,12 @@
 
                </fieldset>
              </form>
+
+						 <div class="admin-title mbl">
+							 <h3 class="h3">{{ gettext("email sender") }}</h3>
+						 </div>
+
+						<div id="emailSender-container"></div>
         </div>
       </div>
     </div>
