@@ -357,6 +357,9 @@ class IdentityProviderAccount(AbstractAgentAccount):
             name = self.userid
         return ":".join((self.provider.provider_type, name))
 
+    def get_provider_name(self):
+        return self.provider.name
+
     def real_name(self):
         info = self.profile_info_json
         name = info['name']
@@ -753,6 +756,7 @@ def populate_default_roles(session):
 class UserRole(Base):
     """roles that a user has globally (eg admin.)"""
     __tablename__ = 'user_role'
+    rdf_sections = (USER_SECTION,)
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
                      index=True)
