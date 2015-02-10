@@ -70,7 +70,8 @@
         "@extends": "ContentSource"
     },
     "AbstractMailbox": {
-        "@extends": "PostSource"
+        "@extends": "PostSource",
+        "admin_sender": true
     },
     "IMAPMailbox": {
         "@extends": "AbstractMailbox",
