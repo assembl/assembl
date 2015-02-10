@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/context', 'models/discussion'],
-    function (Marionette, $, CollectionManager, Ctx, Discussion) {
+define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager', 'common/context', 'models/discussion'],
+    function (Marionette, $, _, CollectionManager, Ctx, Discussion) {
 
         var adminDiscussion = Marionette.LayoutView.extend({
             template: '#tmpl-adminDiscussion',
@@ -16,9 +16,9 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
 
                 this.model = new Backbone.Model();
 
-                $.when(collectionManager.getDiscussionCollectionPromise()).then(
+                $.when(collectionManager.getDiscussionModelPromise()).then(
                     function (Discussion) {
-                        that.model = Discussion.models[0];
+                        _.extend(that.model.attributes, Discussion.attributes);
                         that.render();
                     });
 
