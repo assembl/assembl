@@ -1134,7 +1134,7 @@ def env_inm_agora():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "master"
+    env.gitbranch = "develop"
 
 
 @task
