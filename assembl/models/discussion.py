@@ -358,10 +358,8 @@ class Discussion(DiscussionBoundBase):
         # TODO: Notion of active locales per discussion.
         # Use installation settings for now.
         # Ordered list, not empty.
-        # TODO: Is there a better way to do this than get_current_registry?
-        from pyramid.threadlocal import get_current_registry
-        return get_current_registry().settings.get(
-            'available_languages', 'fr en').split()
+        from assembl.lib.config import get_config
+        return get_config().get('available_languages', 'fr en').split()
 
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
