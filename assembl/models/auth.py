@@ -453,7 +453,8 @@ class User(AgentProfile):
 
     @property
     def username_p(self):
-        return self.username.username
+        if self.username:
+            return self.username.username
 
     @username_p.setter
     def username_p(self, name):
