@@ -54,12 +54,15 @@
     },
     "IMAPMailbox": {
         "@extends": "AbstractMailbox",
-        "username": false,
-        "password": false,
+        "host": true,
+        "port": true,
+        "use_ssl": true,
+        "username": true,
+        "password": true,
         "last_imported_email_uid": false,
         "subject_mangling_regex": false,
         "subject_mangling_replacement": false,
-        "most_common_recipient_address": "&most_common_recipient_address"
+        "most_common_recipient_address": false
     },
     "Content": {
         "date": "creation_date",
