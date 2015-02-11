@@ -1,10 +1,10 @@
 'use strict';
 
-define(['backbone.marionette', 'models/agents'],
-    function (Marionette, Agents) {
+define(['backbone.marionette', 'models/userProfile'],
+    function (Marionette, userProfile) {
 
-        var userProfile = Marionette.ItemView.extend({
-            template: '#tmpl-profile',
+        var profile = Marionette.ItemView.extend({
+            template: '#tmpl-userProfile',
             className: 'admin-profile',
             ui: {
                 close: '.bx-alert-success .bx-close',
@@ -13,9 +13,8 @@ define(['backbone.marionette', 'models/agents'],
             },
 
             initialize: function () {
-                this.model = new Agents.Model();
-                this.model.getSingleUser();
-              this.model.fetch();
+                this.model = new userProfile.Model();
+                this.model.fetch();
             },
 
             modelEvents: {
@@ -66,5 +65,5 @@ define(['backbone.marionette', 'models/agents'],
 
         });
 
-        return userProfile;
+        return profile;
     });

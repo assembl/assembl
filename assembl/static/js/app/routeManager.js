@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'objects/storage', 'views/navBar', 'views/groups/groupContainer', 'common/collectionManager', 'objects/viewsFactory', 'views/admin/adminDiscussion', 'views/admin/adminNotificationSubscriptions', 'views/admin/adminPartners', 'views/user/userNotificationSubscriptions', 'views/user/profile', 'views/authorization', 'utils/permissions'],
-    function (Marionette, Assembl, Ctx, Agents, storage, navBar, GroupContainer, CollectionManager, viewsFactory, adminDiscussion, adminNotificationSubscriptions, adminPartners, userNotificationSubscriptions, userProfile, Authorization, Permissions) {
+define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'objects/storage', 'views/navBar', 'views/groups/groupContainer', 'common/collectionManager', 'objects/viewsFactory', 'views/admin/adminDiscussion', 'views/admin/adminNotificationSubscriptions', 'views/admin/adminPartners', 'views/user/userNotificationSubscriptions', 'views/user/profile', 'views/authorization', 'utils/permissions', 'views/user/account'],
+    function (Marionette, Assembl, Ctx, Agents, storage, navBar, GroupContainer, CollectionManager, viewsFactory, adminDiscussion, adminNotificationSubscriptions, adminPartners, userNotificationSubscriptions, userProfile, Authorization, Permissions, userAccount) {
 
         var routeManager = Marionette.Controller.extend({
 
@@ -63,6 +63,14 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
                 if (this.isAuthenticated()) {
                     var profile = new userProfile();
                     Assembl.groupContainer.show(profile);
+                }
+            },
+
+            account: function(){
+                Assembl.headerRegions.show(new navBar());
+                if (this.isAuthenticated()) {
+                    var account = new userAccount();
+                    Assembl.groupContainer.show(account);
                 }
             },
 

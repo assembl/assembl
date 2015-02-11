@@ -1,0 +1,38 @@
+<div class="gr">
+  <div class="gu gu-1of5">
+    <nav class="sidebar-nav">
+        <ul class="man pan adminMenu">
+          <li>
+            <a href="#user/profile" class="menu">{{ gettext('profile') }}</a>
+          </li>
+          <li class="active">
+						<a href="#user/account" class="menu">{{ gettext('account') }}</a>
+					</li>
+          <li>
+            <a href="#user/notifications" class="menu">{{ gettext('notifications') }}</a>
+          </li>
+          <li class="mtxl">
+            <a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a>
+          </li>
+        </ul>
+    </nav>
+  </div>
+  <div class="gu gu-3of4 admin-section">
+    <div class="admin-title">
+      <h3 class="h3">Account</h3>
+    </div>
+    <div id="content-container" class="content-container">
+      <div class="bx bx-alert-success hidden">
+				<button class="btn btn-cancel btn-xs bx-close" type="button">
+					<i class="icon-delete"></i>
+				</button>
+				{{ gettext("Your settings were saved") }}
+			</div>
+      <div class="gr">
+        <div id="account-content" class="gu gu-1of1">
+           <h2>user account</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
