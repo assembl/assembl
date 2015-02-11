@@ -32,7 +32,7 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
 
                 $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
                     function (allPartnerOrganization) {
-                        that.collection = allPartnerOrganization;
+                        that.partnerOrganization = allPartnerOrganization;
                         that.render();
                     });
             },
@@ -52,7 +52,7 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
                 Ctx.initTooltips(this.$el);
 
                 var parnerList = new ParnerList({
-                    collection: this.collection
+                    collection: this.partnerOrganization
                 });
 
                 this.partners.show(parnerList);
