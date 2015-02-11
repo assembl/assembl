@@ -36,7 +36,7 @@
         "for_role": ":"
     },
     "AbstractAgentAccount": {
-        "profile_id": true
+        "profile": true
     },
     "EmailAccount": {
         "@extends": "AbstractAgentAccount",

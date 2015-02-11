@@ -24,7 +24,7 @@
         "username": "username_p"
     },
     "AbstractAgentAccount": {
-        "profile_id": false
+        "profile": false
     },
     "EmailAccount": {
         "@extends": "AbstractAgentAccount",
