@@ -6,7 +6,6 @@
         <% if (canEditNextSynthesis) { %>
           <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
             <span class="ideaPanel-legend legend">{{ gettext('Expression in next synthesis') }}</span>
-
            <% if( editingTitle ) { %>
 						 <div class="ideaPanel-longtitle-editor"></div>
 					 <% } else { %>
@@ -14,7 +13,6 @@
             	<%= idea.getLongTitleDisplayText() %>
             </div>
          	 <% } %>
-
           <% } %>
         <% } %>
 
@@ -36,7 +34,7 @@
                  </div>
                <% } %>
             <% } else { %>
-              <div class="ideaPanel-definition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
+              <div class="ideaPanel-definition disconnected" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
                  <%= idea.get('definition') %>
               </div>
             <% } %>
