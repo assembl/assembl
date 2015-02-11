@@ -18,34 +18,12 @@
     </nav>
   </div>
   <div class="gu gu-3of4 admin-section">
-
     <div class="admin-title">
       <h3 class="h3">Notifications - {{discussion.topic}}</h3>
     </div>
     <div id="content-container" class="content-container">
       <div class="gr">
-        <div class="gu gu-1of2">
-          <% if(DiscussionNotifications.length) { %>
-          <form class="core-form">
-            <fieldset>
-              <% _.each(DiscussionNotifications, function(notification, index, list){ %>
-
-                <div class="control-group">
-                  <label for="<%= notification.get('@id') %>" class="control-label"></label>
-                  <div class="controls">
-                    <label class="checkbox">
-                      <input type="checkbox" class="js_adminNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= notification.get('@id') %>">
-                      <%= i18n.gettext(notification.get('human_readable_description')) %>
-                    </label>
-                  </div>
-                </div>
-
-              <% }) %>
-            </fieldset>
-          </form>
-          <% } else { %>
-            <h4 class="h4">{{ gettext('no notifications') }}</h4>
-          <% } %>
+        <div id="notification-content" class="gu gu-1of2">
         </div>
       </div>
     </div>
