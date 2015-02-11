@@ -20,7 +20,7 @@
   <div class="gu gu-3of4 admin-section">
 
     <div class="admin-title">
-      <h3 class="h3">Edition</h3>
+      <h3 class="h3">Edition - <%= Ctx.getNiceDateTime(discussion.get('creation_date'), true) %></h3>
     </div>
     <div id="content-container" class="content-container">
     	<div class="bx bx-alert-success hidden">
@@ -39,24 +39,31 @@
              <form class="core-form form-horizontal" id="adminDiscussion">
                <fieldset>
 
-                 <div class="control-group">
-                   <label for="topic" class="control-label">Topic</label>
-                   <div class="controls">
-                     <input type="text" id="topic" name="topic" class="input-xlarge" value="<%= discussion.get('topic') %>" />
+								<div class="control-group fr">
+									 <label for="introduction" class="control-label fl">Introduction</label>
+									 <div class="controls fl">
+									 	 <textarea rows="10" id="introduction" name="introduction" class="input-xxlarge"><%= discussion.get('introduction') %></textarea>
+									 </div>
+								 </div>
+
+								 <div class="control-group fr">
+										<label for="objectives" class="control-label fl">Objectives</label>
+										<div class="controls fl">
+											<textarea rows="3" id="objectives" name="objectives" class="input-xxlarge"><%= discussion.get('objectives') %></textarea>
+										</div>
+									</div>
+
+                 <div class="control-group fr">
+                   <label for="topic" class="control-label fl">Topic</label>
+                   <div class="controls fl">
+                     <input type="text" id="topic" name="topic" class="input-xxlarge" value="<%= discussion.get('topic') %>" />
                    </div>
                  </div>
 
-                 <div class="control-group">
-                   <label for="slug" class="control-label">Slug</label>
-                   <div class="controls">
-                     <input type="text" id="slug" name="slug" class="input-xlarge" value="<%= discussion.get('slug') %>" />
-                   </div>
-                 </div>
-
-                 <div class="control-group">
-                   <label for="objectives" class="control-label">Objectives</label>
-                   <div class="controls">
-                     <textarea rows="3" id="objectives" name="objectives" class="input-xlarge"><%= discussion.get('objectives') %></textarea>
+                 <div class="control-group fr">
+                   <label for="slug" class="control-label fl">Slug</label>
+                   <div class="controls fl">
+                     <input type="text" id="slug" name="slug" class="input-xxlarge" value="<%= discussion.get('slug') %>" />
                    </div>
                  </div>
 

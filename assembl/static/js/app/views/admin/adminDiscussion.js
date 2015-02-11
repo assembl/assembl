@@ -75,7 +75,7 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
             serializeData: function () {
                 return {
                     discussion: this.model,
-                    ctx: Ctx
+                    Ctx: Ctx
                 }
             },
 
