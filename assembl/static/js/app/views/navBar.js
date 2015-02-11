@@ -67,7 +67,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             templateHelpers: function () {
                 return {
                     urlNotifications: function () {
-                        return '/' + Ctx.getDiscussionSlug() + '/users/notifications';
+                        return '/' + Ctx.getDiscussionSlug() + '/user/notifications';
                     },
                     urlLogOut: function () {
                         return '/' + Ctx.getDiscussionSlug() + '/logout';
