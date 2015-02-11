@@ -1114,7 +1114,7 @@ class BaseOps(object):
         return False
 
     @classmethod
-    def restrict_to_owners(cls, query, user_id=None):
+    def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
         return query
 

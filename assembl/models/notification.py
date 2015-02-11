@@ -310,7 +310,7 @@ class NotificationSubscription(DiscussionBoundBase):
         return self.user_id == user_id
 
     @classmethod
-    def restrict_to_owners(cls, query, user_id=None):
+    def restrict_to_owners(cls, query, user_id):
         """Filter query according to object owners.
         Also allow to read subscriptions of templates."""
         # optimize the join on a single table

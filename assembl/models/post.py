@@ -230,6 +230,11 @@ class Post(Content):
             return self != self.parent.children[-1]
         return False
 
+    @classmethod
+    def restrict_to_owners(cls, query, user_id):
+        "filter query according to object owners"
+        return query.filter(cls.creator_id == user_id)
+
     def __repr__(self):
         return "<Post %s '%s'>" % (
             self.id,

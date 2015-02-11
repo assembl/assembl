@@ -91,8 +91,9 @@ def class_view(request):
     tombstones = asbool(request.GET.get('tombstones', False))
     q = ctx.create_query(view == 'id_only', tombstones)
     if check == IF_OWNED:
-        q = ctx.get_target_class().restrict_to_owners(
-            q, authenticated_userid(request))
+        if not user_id:
+            raise HTTPUnauthorized()
+        q = ctx.get_target_class().restrict_to_owners(q, user_id)
     if view == 'id_only':
         return [ctx._class.uri_generic(x) for (x,) in q.all()]
     else:
@@ -160,8 +161,9 @@ def collection_view(request, default_view='default'):
     tombstones = asbool(request.GET.get('tombstones', False))
     q = ctx.create_query(view == 'id_only', tombstones)
     if check == IF_OWNED:
-        q = ctx.get_target_class().restrict_to_owners(
-            q, authenticated_userid(request))
+        if not user_id:
+            raise HTTPUnauthorized()
+        q = ctx.get_target_class().restrict_to_owners(q, user_id)
     if view == 'id_only':
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
     else:

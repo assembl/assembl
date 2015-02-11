@@ -220,9 +220,8 @@ class AbstractAgentAccount(Base):
         return self.profile_id == user_id
 
     @classmethod
-    def restrict_to_owners(cls, query, user_id=None):
+    def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
-        user_id = user_id or self.profile_id
         return query.filter(cls.profile_id == user_id)
 
     __mapper_args__ = {
@@ -878,9 +877,8 @@ class LocalUserRole(DiscussionBoundBase):
         return self.user_id == user_id
 
     @classmethod
-    def restrict_to_owners(cls, query, user_id=None):
+    def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
-        user_id = user_id or self.user_id
         return query.filter(cls.user_id == user_id)
 
     @classmethod

@@ -417,6 +417,11 @@ class Extract(IdeaContentPositiveLink):
         # Allow idea-less extracts
         return ()
 
+    @classmethod
+    def restrict_to_owners(cls, query, user_id):
+        "filter query according to object owners"
+        return query.filter(cls.owner_id == user_id)
+
     crud_permissions = CrudPermissions(
             P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
             P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)
