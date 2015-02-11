@@ -808,6 +808,8 @@ class BaseOps(object):
                 if parse_instruction is False:
                     # Ignore
                     continue
+                elif parse_instruction is True:
+                    pass
                 elif isinstance(parse_instruction, list):
                     # List specification is redundant in parse_defs.
                     # These cases should always be handled as relations.
