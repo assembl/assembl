@@ -50,3 +50,7 @@ def _test_load_extract_post_1_to_subidea_1_1(
         request, discussion, admin_user, extract_post_1_to_subidea_1_1)
 
 
+def test_load_mailbox(
+        request, discussion, admin_user, jack_layton_mailbox):
+    _test_load_fixture(
+        request, discussion, admin_user, jack_layton_mailbox)

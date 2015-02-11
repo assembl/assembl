@@ -219,8 +219,9 @@ def participant2_user(request, test_session):
 
 @pytest.fixture(scope="function")
 def mailbox(request, discussion, test_session):
-    from assembl.models import Mailbox
-    m = Mailbox(discussion=discussion)
+    from assembl.models import AbstractMailbox
+    m = AbstractMailbox(
+        discussion=discussion, name='mailbox')
     test_session.add(m)
     test_session.flush()
 
