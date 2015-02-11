@@ -3,27 +3,38 @@
 define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/context', 'utils/i18n'],
     function (Marionette, $, CollectionManager, Ctx, i18n) {
 
+        var Partners = Marionette.ItemView.extend({
+            template: '#tmpl-partnersInAdmin',
+            serializeData: function(){
+                return {
+                    partner: this.model
+                }
+            }
+        });
+
+        var ParnerList = Marionette.CollectionView.extend({
+            childView: Partners
+        });
+
         var adminPartners = Marionette.LayoutView.extend({
             template: '#tmpl-adminPartners',
             className: 'admin-notifications',
             ui: {
-                partners: '.js_add-partner',
-                close: '.bx-alert-success .bx-close'
+              partners: '.js_add-partner',
+              close: '.bx-alert-success .bx-close'
+            },
+            regions: {
+              partners: '#partner-content'
             },
             initialize: function () {
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                this.collection = new Backbone.Collection();
-
                 $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
                     function (allPartnerOrganization) {
-                        that.collection.add(allPartnerOrganization.models)
+                        that.collection = allPartnerOrganization;
+                        that.render();
                     });
-            },
-
-            collectionEvents: {
-                'add': 'render'
             },
 
             events: {
@@ -33,13 +44,18 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
 
             serializeData: function () {
                 return {
-                    partners: this.collection.models,
                     Ctx: Ctx
                 }
             },
 
             onRender: function () {
                 Ctx.initTooltips(this.$el);
+
+                var parnerList = new ParnerList({
+                    collection: this.collection
+                });
+
+                this.partners.show(parnerList);
             },
 
             close: function () {

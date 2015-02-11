@@ -31,10 +31,10 @@ requirejs.config(requirejs_config);
  *
  * */
 
-require(['mocha', 'chai'], function(mocha, chai){
+require(['mocha', 'chai', 'chai-jquery'], function(mocha, chai, chaiJquery){
     // Chai
     //var should = chai.should();
-    //chai.use(chaiJquery);
+    chai.use(chaiJquery);
 
     //mocha.setup('bdd');
     //mocha.bail(false);
