@@ -236,7 +236,7 @@ class AbstractAgentAccount(Base):
 
     def user_can(self, user_id, operation, permissions):
         # bypass for permission-less new users
-        if user_id == self.id:
+        if user_id == self.profile_id:
             return True
         return super(AbstractAgentAccount, self).user_can(
             user_id, operation, permissions)
