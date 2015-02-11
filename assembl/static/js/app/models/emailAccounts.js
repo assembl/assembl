@@ -3,12 +3,12 @@
 define(['models/base', 'common/context'], function (Base, Ctx) {
 
     var emailAccount = Base.Model.extend({
-        urlRoot: '/data/User/'+ Ctx.getCurrentUserId() +'/email_accounts',
+        urlRoot: '/data/User/'+ Ctx.getCurrentUserId() +'/accounts',
         idAttribute:'@id',
         defaults: {
           will_merge_if_validated: false,
           verified: false,
-          profile_id: 0,
+          profile: 0,
           preferred: false,
           '@type': '',
           '@id': '',
