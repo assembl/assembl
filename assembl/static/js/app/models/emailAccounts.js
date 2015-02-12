@@ -19,7 +19,7 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
     });
 
     var emailAccounts = Base.Collection.extend({
-        url: '/data/User/'+ Ctx.getCurrentUserId() +'/email_accounts',
+        url: '/data/User/'+ Ctx.getCurrentUserId() +'/accounts',
         model: emailAccount
     });
 

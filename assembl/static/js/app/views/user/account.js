@@ -9,7 +9,6 @@ define(['backbone.marionette', 'models/emailAccounts'], function (Marionette, em
               email: this.model
             }
         }
-
     });
 
     var emailList = Marionette.CollectionView.extend({
@@ -30,9 +29,10 @@ define(['backbone.marionette', 'models/emailAccounts'], function (Marionette, em
             var account = new emailList({
                 collection: emailCollection
             });
-            emailCollection.fetch();
 
-            this.accounts.show(account);
+            //FIXME: 403 on this model
+            //emailCollection.fetch();
+            //this.accounts.show(account);
         }
 
     });
