@@ -1307,7 +1307,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             ui: {
               introduction: '.js_editIntroduction',
               objective: '.js_editObjective',
-              seeMoreIntro: '.js_introductionSeeMore'
+              seeMoreIntro: '.js_introductionSeeMore',
+              seeMoreObjectives: '.js_objectivesSeeMore'
             },
             regions: {
                 organizations: '#context-partners',
@@ -1317,7 +1318,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             events: {
-                'click @ui.seeMoreIntro': 'introductionSeeMore',
+                'click @ui.seeMoreIntro': 'seeMore',
+                'click @ui.seeMoreObjectives': 'seeMore',
                 'click @ui.introduction': 'editIntroduction',
                 'click @ui.objective':'editObjective'
             },
@@ -1349,23 +1351,34 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 }
             },
 
-            introductionSeeMore: function (e) {
-                e.stopPropagation();
+            seeMore: function (e) {
+              e.stopPropagation();
+              $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
+                if($(event.target).hasClass('js_introductionSeeMore')) {
+                  var model = new Backbone.Model({
+                    content: discussion.introduction,
+                    title: i18n.gettext('Context')
+                  });
+                }
+                else if($(event.target).hasClass('js_objectivesSeeMore')) {
+                  var model = new Backbone.Model({
+                    content: discussion.objectives,
+                    title: i18n.gettext('Objectives')
+                  });
+                }
+                else {
+                  throw new Exception("Unknown event source");
+                }
 
-                $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
-                    var model = new Backbone.Model({
-                        introduction: discussion.introduction
-                    });
-
-                    var Modal = Backbone.Modal.extend({
-                        template: _.template($('#tmpl-homeIntroductionDetail').html()),
-                        className: 'group-modal popin-wrapper',
-                        model: model,
-                        cancelEl: '.close'
-                    });
-
-                    Assembl.slider.show(new Modal())
+                var Modal = Backbone.Modal.extend({
+                    template: _.template($('#tmpl-homeIntroductionDetail').html()),
+                    className: 'group-modal popin-wrapper',
+                    model: model,
+                    cancelEl: '.close'
                 });
+
+                Assembl.slider.show(new Modal())
+              });
             },
 
             onRender: function () {
@@ -1387,7 +1400,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                   this.renderCKEditorObjective();
                 }
 
-                this.applyEllipsisToIntroduction();
+                this.applyEllipsisToSection(".context-introduction", this.ui.seeMoreIntro);
+                this.applyEllipsisToSection(".context-objective", this.ui.seeMoreObjectives);
             },
 
             editIntroduction: function(){
@@ -1444,22 +1458,22 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 this.objectiveField.changeToEditMode();
             },
 
-            applyEllipsisToIntroduction: function(){
+            applyEllipsisToSection: function(sectionSelector, seemoreUi){
                 /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
                  * Read More links for introduction preview
                  */
                 var that = this;
                 setTimeout(function(){
-                    that.$(".context-introduction").dotdotdot({
-                        after: that.ui.seeMoreIntro,
-                        height: 70,
+                    that.$(sectionSelector).dotdotdot({
+                        after: seemoreUi,
+                        height: 170,
                         callback: function (isTruncated, orgContent) {
                             //console.log("dotdotdot callback: ", isTruncated, orgContent);
                             if (isTruncated) {
-                                that.ui.seeMoreIntro.show();
+                              seemoreUi.show();
                             }
                             else {
-                                that.ui.seeMoreIntro.hide();
+                              seemoreUi.hide();
                             }
                         },
                         watch: "window"

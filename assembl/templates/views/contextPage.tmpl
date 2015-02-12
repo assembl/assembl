@@ -40,6 +40,7 @@
           <div class="context-objective ctx_edit js_editObjective"><i class="icon-add"></i> {{ gettext('You probably want to add some discussion objectives') }}</div>
 			 <% } else { %>
 				<div class="context-objective ctx_edit js_editObjective"><%= context.get('objectives') %></div>
+				<a href="#" class="js_objectivesSeeMore">{{ gettext('See more') }}</a>
 		 <% } %>
    <% } %>
    </div>
