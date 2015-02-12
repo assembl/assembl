@@ -8,6 +8,7 @@ from sqlalchemy import (
     Column,
     Integer,
     UnicodeText,
+    SmallInteger,
     DateTime,
     Text,
     event,
@@ -50,6 +51,7 @@ class Discussion(DiscussionBoundBase):
     introduction = Column(UnicodeText)
     introductionDetails = Column(UnicodeText)
     settings = Column(Text())  # JSON blob
+    subscribe_to_notifications_on_signup = Column(SmallInteger) # SmallInteger is used for Boolean because of Virtuoso
 
     @property
     def admin_source(self):

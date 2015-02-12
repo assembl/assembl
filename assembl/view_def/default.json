@@ -150,7 +150,8 @@
         "instigator": true,
         "introduction": true,
         "introductionDetails": true,
-        "sources": [":partial"]
+        "sources": [":partial"],
+        "subscribe_to_notifications_on_signup": true
     },
     "Idea": {
         "longTitle": "long_title",

@@ -1,11 +1,11 @@
 discussion default = les notifications auxquelles ça nous abonne quand on clique sur s'abonner
 
 états possibles d'une notification pour un user :
-- 1. abonné car l'utilisateur l'a demandé explicitement
-- 2. abonné de manière implicite
-- 3. pas abonné (désabonné) de manière implicite
-- 4. pas abonné car l'utilisateur l'a demandé explicitement
-- 5. n'a jamais été abonné (état utilisé lorsque l'utilisateur ne s'est jamais abonné ni désabonné à cette notification). Produit le même effet que "pas abonné de manière implicite"
+- 1. abonné car l'utilisateur l'a demandé explicitement (USER_REQUESTED && ACTIVE)
+- 2. abonné de manière implicite (DISCUSSION_DEFAULT && ACTIVE)
+- 3. pas abonné (désabonné) de manière implicite (DISCUSSION_DEFAULT && INACTIVE_DFT)
+- 4. pas abonné car l'utilisateur l'a demandé explicitement (USER_REQUESTED && UNSUBSCRIBED)
+- 5. n'a jamais été abonné (quelle combinaison ?). C'est l'état utilisé lorsque l'utilisateur ne s'est jamais abonné ni désabonné à cette notification. Ça produit le même effet que "pas abonné de manière implicite"
 
 Si un administrateur modifie les abonnements par défaut de la discussion en ajoutant des abonnements, les abonnements de tous les utilisateurs seront parcourus et les abonnements ajoutés passeront à l'état 2 s'ils étaient à l'état 3.
 

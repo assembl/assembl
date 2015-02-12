@@ -15,7 +15,8 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
             'widget_collection_url': null,
             'slug': null,
             '@view': null,
-            'permissions': {}
+            'permissions': {},
+            'subscribe_to_notifications_on_signup': null
         }
 
     });

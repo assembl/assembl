@@ -24,6 +24,7 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                 this.model.set("status", status);
                 this.model.save(null, {
                     success: function (model, resp) {
+                        $('.bx-alert-success').removeClass('hidden');
                     },
                     error: function (model, resp) {
                         console.error('ERROR: discussionNotification', resp);
@@ -46,6 +47,14 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
             regions: {
               notification:'#notification-content'
             },
+            ui: {
+                autoSubscribeCheckbox: ".js_adminAutoSubscribe",
+                close: '.bx-alert-success .bx-close'
+            },
+            events: {
+               'click @ui.autoSubscribeCheckbox': 'updateAutoSubscribe',
+               'click @ui.close': 'close'
+            },
             initialize: function () {
                 var collectionManager = new CollectionManager(),
                     that = this;
@@ -56,17 +65,44 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                     return;
                 }
 
-                $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then(
-                    function (NotificationsDiscussion) {
+                $.when(collectionManager.getNotificationsDiscussionCollectionPromise(),
+                    collectionManager.getDiscussionModelPromise()).then(
+                    function (NotificationsDiscussion, Discussion) {
                         that.notifications = NotificationsDiscussion;
+                        that.discussion = Discussion;
                         that.render();
                     });
+            },
+            serializeData: function () {
+                return {
+                    discussion: this.discussion
+                }
             },
             onRender: function(){
                 var notif = new notificationList({
                     collection: this.notifications
                 });
-                this.notification.show(notif)
+                this.notification.show(notif);
+            },
+
+            close: function () {
+                this.$('.bx-alert-success').addClass('hidden');
+            },
+
+            updateAutoSubscribe: function(e){
+                var that = this;
+                var val = this.$('#notification-auto-subscribe input').is(':checked');
+
+                this.discussion.set('subscribe_to_notifications_on_signup', val);
+
+                this.discussion.save(null, {
+                    success: function (model, resp) {
+                        that.$('.bx-alert-success').removeClass('hidden');
+                    },
+                    error: function (model, resp) {
+                        console.debug(model, resp);
+                    }
+                })
             }
 
         });
