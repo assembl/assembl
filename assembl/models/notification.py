@@ -328,6 +328,15 @@ class NotificationSubscription(DiscussionBoundBase):
         return query.outerjoin(utt, alias.user_id == utt.c.id).filter(
             (cls.user_id == user_id) | (utt.c.id != None))
 
+    def user_can(self, user_id, operation, permissions):
+        # special case: If you can read the discussion, you can read
+        # the template's notification.
+        if (operation == CrudPermissions.READ
+                and isinstance(self.user, UserTemplate)):
+            return self.discussion.user_can(user_id, operation, permissions)
+        return super(NotificationSubscription, self).user_can(
+            user_id, operation, permissions)
+
     crud_permissions = CrudPermissions(
         P_READ, P_ADMIN_DISC, P_ADMIN_DISC, P_ADMIN_DISC,
         P_READ, P_READ, P_READ)
