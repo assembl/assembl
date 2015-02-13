@@ -1,0 +1,20 @@
+<form class="core-form form-horizontal phl">
+	<fieldset>
+		<div class="control-group">
+			<label for="input01" class="control-label">{{ gettext('Subscription settings') }}</label>
+			<div class="controls">
+
+			<% if(role.get('discussion')){ %>
+				<div class="btnSubscription">
+					<span class="mrl"><i class="icon-checkbox"></i>{{ gettext('subscribed') }}</span> <a class="btn btn-cancel js_unSubscription">{{ gettext('Unsubscribe') }}</a>
+				</div>
+			<% } else { %>
+				<div class="btnUnsubscription">
+					<span class="mrl">{{ gettext('unsubscribed') }}</span> <a class="btn btn-primary js_subscription">{{ gettext('subscribe to discussion') }}</a>
+				</div>
+			<% } %>
+
+			</div>
+		</div>
+	</fieldset>
+</form>

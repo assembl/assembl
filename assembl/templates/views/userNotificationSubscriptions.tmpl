@@ -3,10 +3,10 @@
     <nav class="sidebar-nav">
         <ul class="man pan adminMenu">
           <li>
-           	<a href="#user/profile" class="menu">{{ gettext('profile') }}</a>
+           	<a href="#user/profile" class="menu">{{ gettext('Modify your profile') }}</a>
           </li>
           <li>
-						<a href="#user/account" class="menu">{{ gettext('account') }}</a>
+						<a href="#user/account" class="menu">{{ gettext('Account settings') }}</a>
 					</li>
           <li class="active">
             <a href="#user/notifications" class="menu">{{ gettext('Notifications') }}</a>
@@ -26,19 +26,41 @@
 				</button>
 				{{ gettext("You have been unsubscribed") }}
 			</div>
-      <div class="gr">
-        <h4>{{ gettext('Currently you will be informed when:') }}</h4>
+      <div class="gr mtl">
 
-        <div id="userNotifications"></div>
+				<div id="subscriber"></div>
 
-				<div id="globalSubscriptions"></div>
+				<form class="core-form form-horizontal phl">
+					<fieldset>
+						<div class="control-group">
+							<label for="optionsCheckboxList" class="control-label">{{ gettext('Notifiy me when') }}</label>
+							<div class="controls">
+								<div id="userNotifications"></div>
+                <div id="templateSubscriptions"></div>
+							</div>
+						</div>
+          </fieldset>
+				</form>
+
+				<form class="core-form form-horizontal phl">
+					<fieldset>
+						<div class="control-group">
+						<label class="control-label">Receive notifications on</label>
+						<div class="controls">
+							<label class="radio">
+								<input type="radio" checked="checked" value="option1" id="optionsRadios1" name="optionsRadios">
+								test@test.com
+							</label>
+							<label class="radio">
+								<input type="radio" value="option2" id="optionsRadios2" name="optionsRadios">
+								test2@test.com
+							</label>
+						</div>
+					</div>
+					</fieldset>
+				</form>
 
       </div>
     </div>
-    <% if(isUserSubscribed){ %>
-      <button class="btn btn-primary mls js_unSubscription">{{ gettext('Unsubscribe') }}</button>
-    <% } %>
-
-    <div class="mls mtxl"><h4 class="h4"><a href="/{{ discussion.slug }}/">{{ gettext('Back to discussion') }}</a></h4></div>
   </div>
 </div>

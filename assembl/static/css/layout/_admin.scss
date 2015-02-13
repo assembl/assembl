@@ -53,18 +53,40 @@ table {
 
   .content-container {
     @include box-sizing(border-box);
-    padding: $spacingS;
   }
 
   .admin-section {
     border: 1px solid #dce0e0;
     background-color: $white;
-    min-height: 400px;
+    width: 740px;
   }
 
   #profile-form {
     .control-label {
       width: auto;
+    }
+    .form-actions{
+      padding: 15px 20px 15px 0px;
+      margin: 0;
+      border-top: 1px solid #dce0e0;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .social-photo {
+      width: 595px;
+      .custom-radio {
+        height: 30px;
+        input[type=radio] {
+          margin-top: 8px;
+        }
+        .sc, .sc-name {
+          line-height: 30px;
+        }
+      }
+    }
+
+    .user-lang {
+      margin-left: 115px;
     }
     .controls {
       margin-left: 20px;
