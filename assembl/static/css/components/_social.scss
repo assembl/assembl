@@ -10,6 +10,7 @@
   border: none;
   padding: 0px;
   line-height: 37px;
+  @include border-radius(3px);
 
   &:before{
     @extend %icon;
@@ -44,6 +45,7 @@
   border: none;
   padding: 0px;
   line-height: 37px;
+  @include border-radius(3px);
 
   &:before{
     @extend %icon;
@@ -78,6 +80,7 @@
   border: none;
   padding: 0px;
   line-height: 37px;
+  @include border-radius(3px);
 
   &:before{
     @extend %icon;

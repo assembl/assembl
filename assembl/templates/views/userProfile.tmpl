@@ -3,13 +3,13 @@
     <nav class="sidebar-nav">
         <ul class="man pan adminMenu">
           <li class="active">
-            <a href="#user/profile" class="menu">{{ gettext('profile') }}</a>
+            <a href="#user/profile" class="menu">{{ gettext('Modify your profile') }}</a>
           </li>
           <li>
-						<a href="#user/account" class="menu">{{ gettext('account') }}</a>
+						<a href="#user/account" class="menu">{{ gettext('Account settings') }}</a>
 					</li>
           <li>
-            <a href="#user/notifications" class="menu">{{ gettext('notifications') }}</a>
+            <a href="#user/notifications" class="menu">{{ gettext('Notifications') }}</a>
           </li>
           <li class="mtxl">
             <a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a>
@@ -28,10 +28,10 @@
 				</button>
 				{{ gettext("Your settings were saved") }}
 			</div>
-      <div class="gr">
+      <div class="gr mtl">
         <div class="gu gu-1of1">
           <form class="core-form form-horizontal" id="profile-form">
-            <fieldset>
+            <fieldset class="prl">
 							<div class="control-group fr">
 								<label for="name" class="control-label fl">{{ gettext('Name') }}</label>
 								<div class="controls fl">
@@ -39,24 +39,63 @@
 								</div>
 							</div>
 
-              <div class="control-group fr mbxl">
-                <label for="username" class="control-label fl">{{ gettext('Username') }}</label>
-                <div class="controls fl">
-                    <input class="input-xxlarge" type="text" name="username" placeholder="{{ gettext('Desired username') }}" value="<%= profile.get('username') %>" />
-                </div>
-              </div>
+              <div class="control-group fr social-photo">
+								<label class="control-label">{{ gettext('photo') }}</label>
+								<div class="controls fl">
 
-              <div class="control-group fr mbxl">
+									<label class="radio custom-radio">
+										<input type="radio" checked="checked" name="customRadioButtons1">
+										<span class="custom-radio-element"></span>
+										<div>
+											<span class="fl mrs avatar img-rounded"><img src="/user/id/12/avatar/25" width="25" height="25"></span>
+											<span class="fl sc mrs"><i class="icon-gplus"></i></span>
+											<span class="fl sc-name">Julien</span>
+										</div>
+									</label>
+
+									<label class="radio custom-radio">
+										<input type="radio" checked="checked" name="customRadioButtons1">
+										<span class="custom-radio-element"></span>
+										<div>
+											<span class="fl mrs avatar img-rounded"><img src="/user/id/12/avatar/25" width="25" height="25"></span>
+											<span class="fl sc mrs"><i class="icon-gplus"></i></span>
+											<span class="fl sc-name">Julien</span>
+										</div>
+									</label>
+									<p class="help-block">{{ gettext('Lorem ipsum dolor sit amet, consectetur adipiscing elit') }}</p>
+								</div>
+							</div>
+
+              <div class="control-group fr">
 								<label for="description" class="control-label fl">{{ gettext('description') }}</label>
 								<div class="controls fl">
 								  <textarea rows="5" id="textarea" class="input-xxlarge" name="description" placeholder="{{ gettext('description') }}" value=""></textarea>
 								</div>
 							</div>
 
-            </fieldset>
+							{# user language future
+							<div class="control-group fl user-lang">
+								<label for="select01" class="control-label fl">{{ gettext('langues') }}</label>
+								<div class="controls fl">
+									<div>
+										<select id="lang" class="mbs">
+											<option>Français</option>
+											<option>Anglais</option>
+										</select>
+									</div>
+									<div>
+										<select id="lang2">
+											<option>Français</option>
+											<option>Anglais</option>
+										</select>
+									</div>
+								</div>
+							</div>#}
 
-						<div class="form-actions pan man fr">
-							<button class="btn btn-secondary js_saveProfile" type="submit">{{ gettext('save the changes') }}</button>
+            </fieldset>
+						<div class="form-actions fr">
+							<button class="btn btn-primary fr js_saveProfile" type="submit">{{ gettext('save the changes') }}</button>
+							<a href="/{{ discussion.slug }}/" class="btn btn-cancel btn-sm fr mrxl">{{ gettext('back to discussion') }}</a>
 						</div>
           </form>
         </div>
