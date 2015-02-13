@@ -1299,8 +1299,8 @@ def session_rollback_listener(session):
 
 
 def engine_rollback_listener(connection):
-    info = connection.info
-    if 'cdict' in connection.info:
+    info = getattr(connection, 'info', None)
+    if info and 'cdict' in info:
         del info['cdict']
 
 
