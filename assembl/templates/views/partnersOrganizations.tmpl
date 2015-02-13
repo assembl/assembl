@@ -8,7 +8,7 @@
       <div class="gr">
         <% if(_.size(organizations)) { %>
           <% _.each(organizations, function(organization) { %>
-            <div class="gu gu-1of6">
+            <div class="gu gu-1of6 mrl">
               <a href="<%= organization.get('homepage') %>" class="popover-display" target="_blank">
                 <img width="200" src="<%= organization.get('logo')  %>" />
                 <span class="popover">
