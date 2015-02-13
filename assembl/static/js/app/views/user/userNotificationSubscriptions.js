@@ -1,8 +1,11 @@
 'use strict';
 
-define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionManager', 'common/context', 'models/notificationSubscription', 'models/roles', 'utils/i18n', 'utils/roles'],
-    function (Marionette, Assembl, $, _, CollectionManager, Ctx, NotificationSubscription, RolesModel, i18n, Roles) {
+define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionManager', 'common/context', 'models/notificationSubscription', 'models/roles', 'utils/i18n', 'utils/roles', 'models/emailAccounts'],
+    function (Marionette, Assembl, $, _, CollectionManager, Ctx, NotificationSubscription, RolesModel, i18n, Roles, emailAccounts) {
 
+        /**
+         * User notification
+         * */
         var Notification = Marionette.ItemView.extend({
             template:'#tmpl-userSubscriptions',
             tagName:'label',
@@ -47,6 +50,9 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             }
         });
 
+        /**
+         * Notification template
+         * */
         var TemplateSubscription = Marionette.ItemView.extend({
             template: '#tmpl-templateSubscription',
             tagName:'label',
@@ -133,6 +139,30 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             }
         });
 
+        /**
+         *
+         * */
+        var NotificationByEmail = Marionette.ItemView.extend({
+            template: '#tmpl-notificationByEmail',
+            tagName: 'label',
+            className: 'radio',
+            serializeData: function(){
+                return {
+                    account: this.model
+                }
+            }
+        });
+
+        var NotificationByEmails = Marionette.CompositeView.extend({
+            template: '#tmpl-notificationByEmails',
+            childView: NotificationByEmail,
+            childViewContainer:'.controls'
+        })
+
+
+        /**
+         * Subscripbe / Unsubscribe action
+         * */
         var Subscriber = Marionette.ItemView.extend({
             template:'#tmpl-userSubscriber',
             ui: {
@@ -206,7 +236,8 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             regions: {
               userNotifications:'#userNotifications',
               templateSubscription: '#templateSubscriptions',
-              userSubscriber: '#subscriber'
+              userSubscriber: '#subscriber',
+              notifByEmail: '#notifByEmail'
             },
             initialize: function () {
                 var collectionManager = new CollectionManager(),
@@ -237,6 +268,11 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
             onRender: function () {
 
+               var subscriber = new Subscriber({
+                   model: this.roles
+               })
+               this.userSubscriber.show(subscriber);
+
                var userNotification = new Notifications({
                    collection: this.notificationsUser,
                    isUserSubscribed: this.roles.isUserSubscribed()
@@ -250,10 +286,14 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                });
                this.templateSubscription.show(templateSubscriptions);
 
-               var subscriber = new Subscriber({
-                    model: this.roles
-               })
-               this.userSubscriber.show(subscriber);
+                var emailAccount = new emailAccounts.Collection();
+                var notificationByEmails = new NotificationByEmails({
+                    collection: emailAccount
+                });
+                emailAccount.fetch();
+
+               this.notifByEmail.show(notificationByEmails);
+
 
             },
 

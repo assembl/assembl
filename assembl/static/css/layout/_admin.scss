@@ -111,12 +111,18 @@ table {
   }
 
   #adminDiscussion {
-    .form-actions {
-
-    }
     .controls {
       margin-left: 20px;
     }
   }
 
+}
+
+#associate-account{
+  .associate-email {
+    .icon-checkbox{
+      font-size: 20px;
+      vertical-align: middle;
+    }
+  }
 }
