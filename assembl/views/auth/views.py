@@ -411,6 +411,8 @@ def velruse_login_complete_view(request):
     if idp_accounts:
         for account in idp_accounts:
             account.profile_info_json = velruse_profile
+            # Make it reset the picture
+            account.picture_url = None
     else:
         idp_account = IdentityProviderAccount(
             provider=provider,
