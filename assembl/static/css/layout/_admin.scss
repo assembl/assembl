@@ -16,6 +16,20 @@ table {
   }
 }
 
+.admin-section {
+  .is-loading{
+    cursor: wait;
+    &:after {
+      @include z-index("float");
+      display: block;
+      content: "";
+      background: rgba(255, 255, 255, 0.10) url(#{$img-dir}/panel/loading.gif) no-repeat center center;
+      width: 100%;
+      height: 20px;
+    }
+  }
+}
+
 .admin-notifications,
 .admin-profile,
 .admin-account{

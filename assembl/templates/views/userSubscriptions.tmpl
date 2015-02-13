@@ -1,4 +1,4 @@
-<% if(isUserSubscribed){ %>
+<% if(role.isUserSubscribed()){ %>
 	<input type="checkbox" class="js_userNotification" value="<%= subscription.get('@type') %>" id="<%= subscription.get('@id') %>" <%= subscription.get('status') === 'ACTIVE' ? 'checked' : '' %> >
 	<%= i18n.gettext(subscription.get('human_readable_description')) %>
 <% } else { %>
