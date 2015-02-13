@@ -36,12 +36,12 @@
         "for_role": ":"
     },
     "AbstractAgentAccount": {
+        "preferred": true,
         "profile": true
     },
     "EmailAccount": {
         "@extends": "AbstractAgentAccount",
         "email": true,
-        "preferred": true,
         "verified": true,
         "will_merge_if_validated": "'false"
     },

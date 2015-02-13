@@ -24,12 +24,12 @@
         "username": "username_p"
     },
     "AbstractAgentAccount": {
+        "preferred": true,
         "profile": false
     },
     "EmailAccount": {
         "@extends": "AbstractAgentAccount",
         "email": false,
-        "preferred": true,
         "verified": false,
         "will_merge_if_validated": false
     },

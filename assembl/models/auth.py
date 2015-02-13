@@ -209,6 +209,8 @@ class AbstractAgentAccount(Base):
     profile = relationship('AgentProfile', backref=backref(
         'accounts', cascade="all, delete-orphan"))
 
+    preferred = Column(Boolean(), default=False, server_default='0')
+
     def signature(self):
         "Identity of signature implies identity of underlying account"
         return ('abstract_agent_account', self.id)
@@ -255,7 +257,9 @@ class EmailAccount(AbstractAgentAccount):
     email = Column(String(100), nullable=False, index=True)
         # info={'rdf': QuadMapPatternS(None, SIOC.email)} private
     verified = Column(Boolean(), default=False)
-    preferred = Column(Boolean(), default=False)
+    # THIS WILL NOT EXIST, But we need it to exist for the migration.
+    # Solution: Defer first, remove afterwards
+    preferred = deferred(Column(Boolean(), default=False))
     active = Column(Boolean(), default=True)
     profile_e = relationship(AgentProfile, backref=backref('email_accounts'))
 
