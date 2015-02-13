@@ -4,8 +4,8 @@
 			<label for="input01" class="control-label">{{ gettext('Subscription settings') }}</label>
 			<div class="controls">
 
-			<% if(role.get('discussion')){ %>
-				<div class="btnSubscription">
+			<% if(role) { %>
+        <div class="btnSubscription">
 					<span class="mrl"><i class="icon-checkbox"></i>{{ gettext('subscribed') }}</span> <a class="btn btn-cancel js_unSubscription">{{ gettext('Unsubscribe') }}</a>
 				</div>
 			<% } else { %>

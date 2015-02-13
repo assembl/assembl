@@ -195,14 +195,6 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                 'click @ui.unSubscription': 'unSubscription',
                 'click @ui.subscription': 'subscription'
             },
-            initialize: function(){
-
-               if(this.model === undefined){
-                 this.template = _.template('<div class="is-loading"></div>');
-               }
-
-            },
-
             serializeData: function(){
                 return {
                     role: this.model
