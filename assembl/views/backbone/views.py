@@ -51,15 +51,18 @@ def get_styleguide_components():
 def home_view(request):
     user_id = authenticated_userid(request) or Everyone
     context = get_default_context(request)
-    canRead = user_has_permission(context["discussion"].id, user_id, P_READ)
+    discussion = context["discussion"]
+    canRead = user_has_permission(discussion.id, user_id, P_READ)
     if not canRead and user_id == Everyone:
-        #User isn't logged-in and discussion isn't public, redirect to login page
-        login_url = request.route_url('login',_query={'next_view':request.current_route_path()})
+        # User isn't logged-in and discussion isn't public:
+        # redirect to login page
+        login_url = request.route_url(
+            'contextual_login', discussion_slug=discussion.slug)
         return HTTPSeeOther(login_url)
     elif not canRead:
-        #User is logged-in but doesn't have access to the discussion
+        # User is logged-in but doesn't have access to the discussion
         return HTTPUnauthorized()
-    
+
     canAddExtract = user_has_permission(context["discussion"].id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract
     context['canDisplayTabs'] = True
