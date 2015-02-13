@@ -24,12 +24,14 @@ from pyisemail import is_email
 
 from assembl.models import (
     EmailAccount, IdentityProvider, IdentityProviderAccount,
-    AgentProfile, User, Username)
-from assembl.auth import P_READ
+    AgentProfile, User, Username, Role, LocalUserRole)
+from assembl.auth import (
+    P_READ, R_PARTICIPANT)
 from assembl.auth.password import (
     format_token, verify_email_token, verify_password_change_token,
     password_token)
-from assembl.auth.util import get_identity_provider
+from assembl.auth.util import (
+    get_identity_provider, discussion_from_request)
 from ...lib import config
 from .. import get_default_context
 
@@ -560,13 +562,14 @@ def confirm_emailid_sent(request):
             'We have sent you a confirmation email. '
             'Please use the link to confirm your email to Assembl')))
 
-
 @view_config(
     route_name='user_confirm_email',
+    renderer='assembl:templates/email_confirmed.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
     route_name='contextual_user_confirm_email',
+    renderer='assembl:templates/email_confirmed.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 def user_confirm_email(request):
@@ -619,10 +622,27 @@ def user_confirm_email(request):
                 username = user.username.username
             userid = user.id
         if username or userid:
-            return HTTPFound(location=maybe_contextual_route(
-                request, 'login',
-                _query=dict(message=localizer.translate(_(
-                    "Email <%s> confirmed")) % (email.email,))))
+            # if option is active in discussion, auto-subscribe user to discussion's default notifications
+            discussion = discussion_from_request(request)
+            custom_message = localizer.translate(_(
+                "Your email address %s has been confirmed, you can now log in.")) % (email.email,)
+            if ( discussion and discussion.subscribe_to_notifications_on_signup ):
+                # really auto-subscribe user
+                role = session.query(Role).filter_by(name=R_PARTICIPANT).first()
+                session.add(LocalUserRole(
+                    user_id=userid, role=role, discussion_id=discussion.id))
+                user.get_notification_subscriptions(discussion.id) # applies new notifications
+                custom_message = localizer.translate(_(
+                    "Your email address %s has been confirmed, and you are now subscribed to discussion's default notifications.")) % (email.email,)
+            slug_prefix = "/" + slug if slug else ""
+            return dict(
+                get_default_context(request),
+                button_url=slug_prefix+"/login",
+                button_label=localizer.translate(_('Log in')),
+                profile_id=email.profile_id, # still necessary?
+                email_account_id=request.matchdict.get('email_account_id'), # still necessary?
+                title=localizer.translate(_('Your account is now active!')),
+                description=custom_message)
         else:
             # we confirmed a profile without a user? Now what?
             raise HTTPServerError()
