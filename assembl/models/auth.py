@@ -69,7 +69,7 @@ class AgentProfile(Base):
             account = self.db.query(EmailAccount).filter_by(
                 profile_id=self.id).order_by(
                 EmailAccount.verified.desc(),
-                EmailAccount.preferred.desc()).first()
+                AbstractAgentAccount.preferred.desc()).first()
             if account:
                 return account
         elif self.email_accounts:
@@ -257,9 +257,6 @@ class EmailAccount(AbstractAgentAccount):
     email = Column(String(100), nullable=False, index=True)
         # info={'rdf': QuadMapPatternS(None, SIOC.email)} private
     verified = Column(Boolean(), default=False)
-    # THIS WILL NOT EXIST, But we need it to exist for the migration.
-    # Solution: Defer first, remove afterwards
-    preferred = deferred(Column(Boolean(), default=False))
     active = Column(Boolean(), default=True)
     profile_e = relationship(AgentProfile, backref=backref('email_accounts'))
 

@@ -26,18 +26,16 @@ def upgrade(pyramid_env):
     # Do stuff with the app's models here.
     from assembl import models as m
     db = m.get_session_maker()()
-    aaat = m.AbstractAgentAccount.__mapper__.local_table
-    emt = m.EmailAccount.__mapper__.local_table
 
     with transaction.manager:
         # Start with a blanket 0
-        db.execute(aaat.update().values(
-            preferred=0))
+        db.execute("UPDATE abstract_agent_account SET preferred=0")
         # get from previous values
-        stmt = sa.select([emt.c.preferred]).where(
-            aaat.c.id == emt.c.id)
-        db.execute(aaat.update().where(
-            aaat.c.type == 'agent_email_account').values(preferred=stmt))
+        db.execute("""UPDATE abstract_agent_account SET preferred=(
+                SELECT agent_email_account.preferred
+                FROM agent_email_account
+                WHERE abstract_agent_account.id = agent_email_account.id)
+            WHERE abstract_agent_account."type" = 'agent_email_account'""")
         # Force update, transaction manager saw nothing
         aaa = db.query(m.AbstractAgentAccount).first()
         flag_modified(aaa, 'profile_id')
@@ -57,15 +55,14 @@ def downgrade(pyramid_env):
     # Do stuff with the app's models here.
     from assembl import models as m
     db = m.get_session_maker()()
-    aaat = m.AbstractAgentAccount.__mapper__.local_table
-    emt = m.EmailAccount.__mapper__.local_table
 
     with transaction.manager:
         # get from previous values
-        stmt = sa.select([aaat.c.preferred]).where(
-            (aaat.c.id == emt.c.id) &
-            (aaat.c.type == 'agent_email_account'))
-        db.execute(emt.update().values(preferred=stmt))
+        db.execute("""UPDATE agent_email_account SET preferred=(
+            SELECT abstract_agent_account.preferred
+            FROM abstract_agent_account
+            WHERE abstract_agent_account.id = agent_email_account.id
+            AND abstract_agent_account."type" = 'agent_email_account')""")
         # Force update, transaction manager saw nothing
         aaa = db.query(m.AbstractAgentAccount).first()
         flag_modified(aaa, 'profile_id')
