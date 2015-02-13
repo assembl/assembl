@@ -157,11 +157,11 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                          * */
                         var agent = new Agents.Model();
                         agent.getSingleUser();
-                        agent.fetch();
-
-                        if (agent.get('post_count') === 0 || agent.get('post_count') < 2) {
-                            that.showPopInFirstPost();
-                        }
+                        agent.fetch({'success': function(agent, response, options) {
+                            if (agent.get('post_count') === 0 || agent.get('post_count') < 2) {
+                                that.showPopInFirstPost();
+                            }
+                        }});
 
                         // clear on success... so not lost in case of failure.
                         MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
