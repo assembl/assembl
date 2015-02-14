@@ -1,10 +1,11 @@
 'use strict';
 
-define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 'common/context', 'utils/i18n'],
-    function (Marionette, CollectionManager, Permissions, Ctx, i18n) {
+define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 'common/context', 'utils/i18n', 'jquery'],
+    function (Marionette, CollectionManager, Permissions, Ctx, i18n, $) {
 
         var notifications = Marionette.ItemView.extend({
             template: '#tmpl-adminNotification',
+            className: 'controls',
             ui: {
                subscribeCheckbox: ".js_adminNotification"
             },
@@ -33,69 +34,56 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
             }
         });
 
-        var notificationList = Marionette.CollectionView.extend({
+        var notificationList = Marionette.CompositeView.extend({
+            template: '#tmpl-adminNotificationList',
             childView: notifications,
-            collectionEvents: {
-                "reset": "render", // equivalent to view.listenTo(view.collection, "reset", view.render, view)
-                "sync": "render"
-            }
-        });
-
-        var adminNotificationSubscriptions = Marionette.LayoutView.extend({
-            template: '#tmpl-adminNotificationSubscriptions',
-            className: 'admin-notifications',
-            regions: {
-              notification:'#notification-content'
-            },
-            ui: {
-                autoSubscribeCheckbox: ".js_adminAutoSubscribe",
-                close: '.bx-alert-success .bx-close'
-            },
-            events: {
-               'click @ui.autoSubscribeCheckbox': 'updateAutoSubscribe',
-               'click @ui.close': 'close'
-            },
-            initialize: function () {
+            childViewContainer: '.control-group',
+            className:'mtl',
+            initialize: function(){
                 var collectionManager = new CollectionManager(),
                     that = this;
 
-                if (!Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
-                    // TODO ghourlier: Éviter que les gens n'ayant pas l'autorisation accèdent à cet écran.
-                    alert("This is an administration screen.");
-                    return;
-                }
+                this.collection = undefined;
 
-                $.when(collectionManager.getNotificationsDiscussionCollectionPromise(),
-                    collectionManager.getDiscussionModelPromise()).then(
-                    function (NotificationsDiscussion, Discussion) {
-                        that.notifications = NotificationsDiscussion;
-                        that.discussion = Discussion;
+                $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then(
+                    function (NotificationsDiscussion) {
+                        that.collection = NotificationsDiscussion;
                         that.render();
                     });
+            }
+        });
+
+        var defaultNotification = Marionette.ItemView.extend({
+            template: '#tmpl-defaultNotification',
+            initialize: function(){
+                var collectionManager = new CollectionManager(),
+                    that = this;
+
+                this.model = undefined;
+
+                $.when(collectionManager.getDiscussionModelPromise()).then(function (Discussion) {
+                    that.model = Discussion;
+                    that.render();
+                });
+            },
+            ui: {
+                autoSubscribeCheckbox: ".js_adminAutoSubscribe"
+            },
+            events: {
+                'click @ui.autoSubscribeCheckbox': 'updateAutoSubscribe'
             },
             serializeData: function () {
                 return {
-                    discussion: this.discussion
+                    discussion: this.model
                 }
             },
-            onRender: function(){
-                var notif = new notificationList({
-                    collection: this.notifications
-                });
-                this.notification.show(notif);
-            },
-
-            close: function () {
-                this.$('.bx-alert-success').addClass('hidden');
-            },
-
-            updateAutoSubscribe: function(e){
+            updateAutoSubscribe: function(){
                 var that = this;
                 var val = this.$('#notification-auto-subscribe input').is(':checked');
 
-                this.discussion.set('subscribe_to_notifications_on_signup', val);
+                this.model.set('subscribe_to_notifications_on_signup', val);
 
-                this.discussion.save(null, {
+                this.model.save(null, {
                     success: function (model, resp) {
                         that.$('.bx-alert-success').removeClass('hidden');
                     },
@@ -103,6 +91,42 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                         console.debug(model, resp);
                     }
                 })
+            }
+        });
+
+
+        var adminNotificationSubscriptions = Marionette.LayoutView.extend({
+            template: '#tmpl-adminNotificationSubscriptions',
+            className: 'admin-notifications',
+            regions: {
+              notification:'#notification-content',
+              autoSubscribe:'#notification-auto-subscribe'
+            },
+            ui: {
+                close: '.bx-alert-success .bx-close'
+            },
+            events: {
+               'click @ui.close': 'close'
+            },
+            initialize: function () {
+
+                if (!Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
+                    // TODO ghourlier: Éviter que les gens n'ayant pas l'autorisation accèdent à cet écran.
+                    alert("This is an administration screen.");
+                    return;
+                }
+            },
+
+            onRender: function(){
+                var notif = new notificationList();
+                this.notification.show(notif);
+
+                var defaultNotif = new defaultNotification();
+                this.autoSubscribe.show(defaultNotif);
+            },
+
+            close: function () {
+                this.$('.bx-alert-success').addClass('hidden');
             }
 
         });

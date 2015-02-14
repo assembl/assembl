@@ -21,7 +21,7 @@
     <div class="admin-title">
       <h3 class="h3">{{ gettext('edit notifications') }} - {{discussion.topic}}</h3>
     </div>
-    <div id="content-container" class="content-container">
+    <div id="content-container" class="content-container phl ptl">
       <div class="bx bx-alert-success hidden">
         <button class="btn btn-cancel btn-xs bx-close" type="button">
           <i class="icon-delete"></i>
@@ -32,24 +32,10 @@
       <div class="gr">
         <h3>{{ gettext('Default notifications') }}</h3>
         <p>{{ gettext('These are the notifications which a user gets subscribed to when one of these conditions is matched: 1. The user clicks on the "Subscribe to discussion" button. 2. The user posts his/her first message, Assembl shows a subscription pop-in, and the user accepts subscribing. 3. The discussion parameter "Auto-subscribe users to default notifications when they register" is active and the user confirms their account.') }}</p>
-        <div id="notification-content" class="mbs">
-        </div>
+        <div id="notification-content" class="mbs"></div>
 
         <h3>{{ gettext('Auto-subscribe users to default notifications') }}</h3>
-        <div id="notification-auto-subscribe" class="mbs">
-          <form class="core-form mbn">
-            <fieldset>
-                <div class="control-group">
-                  <div class="controls">
-                    <label class="checkbox">
-                      <input type="checkbox" class="js_adminAutoSubscribe" value="1" <%= discussion && (discussion.get('subscribe_to_notifications_on_signup') === true || discussion.get('subscribe_to_notifications_on_signup') === 1 || discussion.get('subscribe_to_notifications_on_signup') === '1') ? 'checked':'' %> >
-                      {{ gettext('Auto-subscribe users to default notifications when they register') }}
-                    </label>
-                  </div>
-                </div>
-            </fieldset>
-          </form>
-        </div>
+        <div id="notification-auto-subscribe" class="mbs"></div>
 
       </div>
     </div>
