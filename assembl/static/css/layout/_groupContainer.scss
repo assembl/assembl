@@ -260,6 +260,12 @@
   }
 }
 
+.partner-modal {
+  .popin, .bbm-modal {
+    max-width: 550px;
+  }
+}
+
 .iframe-popin {
   .popin, .bbm-modal {
     min-width: initial;
