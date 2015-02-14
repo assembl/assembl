@@ -10,6 +10,13 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 return {
                     organization: this.model
                 }
+            },
+            templateHelpers: function () {
+                return {
+                    htmlEntities: function(str){
+                        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                    }
+                };
             }
 
         });
@@ -17,7 +24,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
         var PartnerList = Marionette.CompositeView.extend({
             template: '#tmpl-partnerList',
             childView: Partner,
-            childViewContainer: '.gr',
+            childViewContainer: '.partnersList',
             initialize: function(){
                 var that = this,
                     collectionManager = new CollectionManager();
@@ -1223,11 +1230,13 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 var that = this,
                     collectionManager = new CollectionManager();
 
+                this.instigator = undefined;
+
                 $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(function(partners){
                     that.instigator = _.find(partners.models, function(partner){
-                        return partner.get('is_initiator')
+                        return partner.get('is_initiator');
                     });
-                    //that.render();
+                    that.render();
                 });
 
                 this.editInstigator = false;
@@ -1246,7 +1255,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             serializeData: function () {
-
                 var isConnected = (Ctx.getCurrentUserId()) ? true : false;
 
                 return {
@@ -1468,7 +1476,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
         });
 
-        var contextPage = Marionette.LayoutView.extend({
+        var ContextPage = Marionette.LayoutView.extend({
             template: '#tmpl-contextPage',
             panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
             className: 'homePanel',
@@ -1502,6 +1510,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
         });
 
-        return contextPage;
+        return ContextPage;
 
     });

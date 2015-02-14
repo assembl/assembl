@@ -1,14 +1,13 @@
 <div class="gr mvxl">
 <% if(isConnected){ %>
-  <div class="block-content">
-    <h2>{{ gettext('Partners') }}</h2>
-  </div>
   <div class="gu gu-1of1">
     <div class="block-content">
-      <div class="gr">
-        <% if(nbOrganisations === 0) { %>
-           <p>{{ gettext('there are no partners for this discussion') }} - <a href="<%= urlEdit %>"> {{ gettext('edit partners') }} </a></p>
-        <% } %>
+			<h2>{{ gettext('Partners') }}</h2>
+			<% if(nbOrganisations === 0) { %>
+				 <p>{{ gettext('there are no partners for this discussion') }} - <a href="<%= urlEdit %>"> {{ gettext('edit partners') }} </a></p>
+			<% } %>
+      <div class="partnersList gr">
+
       </div>
     </div>
   </div>

@@ -1,25 +1,25 @@
 <div class="gr mts">
 <% if(isConnected){ %>
- <div class="gu gu-1of2">
-  <div class="block-content">
-    <h2>{{ gettext('Instigated by') }}</h2>
-    <% if(instigator){ %>
-    	<% if(editInstigator){ %>
-    	  <div class="instigator-editor"></div>
-    	<% }else{ %>
-    		<div class="instigator js_editDescription"><%= instigator.get('description') %></div>
-    	<% } %>
-    <% }else{ %>
-       <p>{{ gettext('there are no instigator for this discussion') }} - <a href="<%= editInstigatorUrl() %>"> {{ gettext('edit instigator') }} </a></p>
-    <% } %>
-  </div>
- </div>
- <div class="gu gu-last">
-  <div class="block-content">
-  	<% if(instigator){ %>
+	<% if(instigator){ %>
+   <div class="gu gu-1of2">
+    <div class="block-content">
+      <h2>{{ gettext('Instigated by') }}</h2>
+      	<% if(editInstigator){ %>
+      	  <div class="instigator-editor"></div>
+      	<% }else{ %>
+      		<div class="instigator js_editDescription"><%= instigator.get('description') %></div>
+      	<% } %>
+    </div>
+   </div>
+   <div class="gu gu-last">
+    <div class="block-content">
       <div class="tac"><img src="<%= instigator.get('logo') %>" height="51" ></div>
-    <% } %>
-  </div>
- </div>
+    </div>
+   </div>
+	<% }else{ %>
+   <div class="gu gu-1of1">
+     <p>{{ gettext('there are no instigator for this discussion') }} - <a href="<%= editInstigatorUrl() %>"> {{ gettext('edit instigator') }} </a></p>
+   </div>
+  <% } %>
 <% } %>
 </div>

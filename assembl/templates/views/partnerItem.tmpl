@@ -2,8 +2,6 @@
 	<img width="200" src="<%= organization.get('logo')  %>" />
 	<span class="popover">
 		<span class="popover-header"><%= organization.get('name') %></span>
-		<span class="popover-content">
-			<%= organization.get('description') %>
-		</span>
+		<span class="popover-content"><%= htmlEntities(organization.get('description')) %></span>
 	</span>
 </a>
