@@ -62,7 +62,12 @@
         "last_imported_email_uid": false,
         "subject_mangling_regex": false,
         "subject_mangling_replacement": false,
+        "post_email_address": false,
         "most_common_recipient_address": false
+    },
+    "MailingList": {
+        "@extends": "IMAPMailbox",
+        "post_email_address": true
     },
     "Content": {
         "date": "creation_date",
