@@ -3,36 +3,47 @@
 define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'backbone.modal', 'backbone.marionette.modals', 'models/partners', 'models/discussion'],
     function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types, backboneModal, marionetteModals, organization, Discussion) {
 
-
-        var Partners = Marionette.ItemView.extend({
-            template: '#tmpl-partnersOrganizations',
-            initialize: function () {
-                this.collection = new organization.Collection();
-                this.collection.fetch();
-            },
-            collectionEvents: {
-                'add change': 'render'
-            },
+        var Partner = Marionette.ItemView.extend({
+            template: '#tmpl-partnerItem',
+            className: 'gu gu-2of7 mrl',
             serializeData: function () {
+                return {
+                    organization: this.model
+                }
+            }
 
+        });
+
+        var PartnerList = Marionette.CompositeView.extend({
+            template: '#tmpl-partnerList',
+            childView: Partner,
+            childViewContainer: '.gr',
+            initialize: function(){
+                var that = this,
+                    collectionManager = new CollectionManager();
+
+                this.collection = undefined;
+                this.nbOrganisations = 0;
+
+                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).
+                    then(function (DiscussionModel) {
+                        /*DiscussionModel.models = _.reject(DiscussionModel.models, function(model){
+                            return model.get('is_initiator') === true
+                        });*/
+
+                        that.nbOrganisations = DiscussionModel.models.length;
+                        that.collection = DiscussionModel;
+                        that.render();
+                    });
+            },
+
+            serializeData: function(){
                 var isConnected = (Ctx.getCurrentUserId()) ? true : false;
 
-                this.collection.models = _.reject(this.collection.models, function(model){
-                    return model.get('is_initiator') === true
-                });
-
                 return {
-                    organizations: this.collection.models,
-                    ctx: Ctx,
-                    isConnected: isConnected
-                }
-            },
-
-            templateHelpers: function () {
-                return {
-                    editUrl: function () {
-                        return '/' + Ctx.getDiscussionSlug() + '/partners';
-                    }
+                    isConnected: isConnected,
+                    nbOrganisations: this.nbOrganisations,
+                    urlEdit: '/'+ Ctx.getDiscussionSlug() +'/partners'
                 }
             }
 
@@ -1295,26 +1306,28 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
         });
 
-        var contextPage = Marionette.LayoutView.extend({
-            template: '#tmpl-contextPage',
-            panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
-            className: 'homePanel',
-            gridSize: AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE,
-            hideHeader: true,
-            getTitle: function () {
-                return i18n.gettext('Home'); // unused
+        var Introduction = Marionette.ItemView.extend({
+            template: '#tmpl-introductions',
+            initialize: function(){
+                this.editingIntroduction = false;
+                this.editingObjective = false;
+
+                this.model = undefined;
+
+                var that = this,
+                    collectionManager = new CollectionManager();
+
+                $.when(collectionManager.getDiscussionModelPromise()).then(function (DiscussionModel) {
+                    that.model = DiscussionModel;
+                    that.render();
+                });
             },
+
             ui: {
-              introduction: '.js_editIntroduction',
-              objective: '.js_editObjective',
-              seeMoreIntro: '.js_introductionSeeMore',
-              seeMoreObjectives: '.js_objectivesSeeMore'
-            },
-            regions: {
-                organizations: '#context-partners',
-                synthesis: '#context-synthesis',
-                statistics: '#context-statistics',
-                instigator: '#context-instigator'
+                introduction: '.js_editIntroduction',
+                objective: '.js_editObjective',
+                seeMoreIntro: '.js_introductionSeeMore',
+                seeMoreObjectives: '.js_objectivesSeeMore'
             },
 
             events: {
@@ -1324,26 +1337,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 'click @ui.objective':'editObjective'
             },
 
-            initialize: function (options) {
-                this.listenTo(this, 'contextPage:render', this.render);
-
-                this.editingIntroduction = false;
-                this.editingObjective = false;
-
-                this.model = new Discussion.Model();
-
-                var that = this,
-                    collectionManager = new CollectionManager();
-
-                $.when(collectionManager.getDiscussionModelPromise()).then(function (DiscussionModel) {
-                    _.extend(that.model.attributes, DiscussionModel.attributes);
-                   that.render();
-                });
-            },
-
             serializeData: function () {
                 return {
-                    ctx: Ctx,
                     context: this.model,
                     editingIntroduction: this.editingIntroduction,
                     editingObjective: this.editingObjective,
@@ -1351,57 +1346,47 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 }
             },
 
-            seeMore: function (e) {
-              e.stopPropagation();
-              $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
-                if($(event.target).hasClass('js_introductionSeeMore')) {
-                  var model = new Backbone.Model({
-                    content: discussion.introduction,
-                    title: i18n.gettext('Context')
-                  });
-                }
-                else if($(event.target).hasClass('js_objectivesSeeMore')) {
-                  var model = new Backbone.Model({
-                    content: discussion.objectives,
-                    title: i18n.gettext('Objectives')
-                  });
-                }
-                else {
-                  throw new Exception("Unknown event source");
-                }
-
-                var Modal = Backbone.Modal.extend({
-                    template: _.template($('#tmpl-homeIntroductionDetail').html()),
-                    className: 'group-modal popin-wrapper',
-                    model: model,
-                    cancelEl: '.close'
-                });
-
-                Assembl.slider.show(new Modal())
-              });
-            },
-
-            onRender: function () {
-                var partners = new Partners(),
-                    synthesis = new Synthesis(),
-                    statistics = new Statistics(),
-                    instigator = new Instigator();
-
-                this.instigator.show(instigator);
-                this.statistics.show(statistics);
-                this.synthesis.show(synthesis);
-                this.organizations.show(partners);
-
+            onRender: function(){
                 if (this.editingIntroduction) {
-                  this.renderCKEditorIntroduction();
+                    this.renderCKEditorIntroduction();
                 }
 
                 if (this.editingObjective) {
-                  this.renderCKEditorObjective();
+                    this.renderCKEditorObjective();
                 }
 
                 this.applyEllipsisToSection(".context-introduction", this.ui.seeMoreIntro);
                 this.applyEllipsisToSection(".context-objective", this.ui.seeMoreObjectives);
+            },
+
+            seeMore: function (e) {
+                e.stopPropagation();
+                $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
+                    if($(event.target).hasClass('js_introductionSeeMore')) {
+                        var model = new Backbone.Model({
+                            content: discussion.introduction,
+                            title: i18n.gettext('Context')
+                        });
+                    }
+                    else if($(event.target).hasClass('js_objectivesSeeMore')) {
+                        var model = new Backbone.Model({
+                            content: discussion.objectives,
+                            title: i18n.gettext('Objectives')
+                        });
+                    }
+                    else {
+                        throw new Exception("Unknown event source");
+                    }
+
+                    var Modal = Backbone.Modal.extend({
+                        template: _.template($('#tmpl-homeIntroductionDetail').html()),
+                        className: 'group-modal popin-wrapper',
+                        model: model,
+                        cancelEl: '.close'
+                    });
+
+                    Assembl.slider.show(new Modal())
+                });
             },
 
             editIntroduction: function(){
@@ -1424,10 +1409,10 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
                 var introduction = this.model.get('introduction');
 
-                  this.introField = new CKEditorField({
-                      'model': this.model,
-                      'modelProp': 'introduction'
-                  });
+                this.introField = new CKEditorField({
+                    'model': this.model,
+                    'modelProp': 'introduction'
+                });
 
                 this.introField.on('save cancel', function () {
                     that.editingIntroduction = false;
@@ -1470,15 +1455,49 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                         callback: function (isTruncated, orgContent) {
                             //console.log("dotdotdot callback: ", isTruncated, orgContent);
                             if (isTruncated) {
-                              seemoreUi.show();
+                                seemoreUi.show();
                             }
                             else {
-                              seemoreUi.hide();
+                                seemoreUi.hide();
                             }
                         },
                         watch: "window"
                     });
                 }, 10);
+            }
+
+        });
+
+        var contextPage = Marionette.LayoutView.extend({
+            template: '#tmpl-contextPage',
+            panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
+            className: 'homePanel',
+            gridSize: AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE,
+            hideHeader: true,
+            getTitle: function () {
+                return i18n.gettext('Home'); // unused
+            },
+
+            regions: {
+                organizations: '#context-partners',
+                synthesis: '#context-synthesis',
+                statistics: '#context-statistics',
+                instigator: '#context-instigator',
+                introductions: '#context-introduction'
+            },
+
+            onRender: function () {
+                var partners = new PartnerList(),
+                    synthesis = new Synthesis(),
+                    statistics = new Statistics(),
+                    instigator = new Instigator(),
+                    introduction = new Introduction();
+
+                this.introductions.show(introduction);
+                this.instigator.show(instigator);
+                this.statistics.show(statistics);
+                this.synthesis.show(synthesis);
+                this.organizations.show(partners);
             }
 
         });
