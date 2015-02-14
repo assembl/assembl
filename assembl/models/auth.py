@@ -505,10 +505,11 @@ class User(AgentProfile):
             self.creation_date = min(
                 self.creation_date, other_user.creation_date)
             if other_user.password and not self.password:
-                self.password = other_user.password
-                # NOTE: The user may be confused by the implicit change of password
-                # when we destroy the second account.
-                # Maybe check latest login on either account?
+                # NOTE: The user may be confused by the implicit change of
+                # password when we destroy the second account.
+                # Use most recent login
+                if other_user.last_login > self.last_login:
+                    self.password = other_user.password
             for extract in other_user.extracts_created:
                 extract.creator = self
             for extract in other_user.extracts_owned:
@@ -521,6 +522,11 @@ class User(AgentProfile):
                 role.user = self
             if other_user.username and not self.username:
                 self.username = other_user.username
+            for notification_subscription in \
+                    other_user.notification_subscriptions:
+                notification_subscription.user = self
+                if not notification_subscription.check_unique():
+                    self.db.delete(notification_subscription)
 
     def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')
