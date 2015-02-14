@@ -212,6 +212,8 @@ class BaseOps(object):
     def find(cls, **criteria):
         return _session_maker.query(cls).filter_by(**criteria).all()
 
+    retypeable_as = ()
+
     def delete(self):
         _session_maker.delete(self)
 
@@ -335,7 +337,7 @@ class BaseOps(object):
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
-    def change_class(self, newclass, **kwargs):
+    def change_class(self, newclass, json=None, **kwargs):
         def table_list(cls):
             tables = []
             for cls in cls.mro():
@@ -365,11 +367,12 @@ class BaseOps(object):
         db.expunge(self)
         for table in oldclass_tables:
             db.execute(table.delete().where(table.c.id == id))
+        json = json or {}
 
         for table in newclass_tables:
-            col_names = {c.key for c in table.c}
-            local_kwargs = {k: v for (k, v) in kwargs.iteritems()
-                            if k in col_names and k != 'id'}
+            col_names = {c.key for c in table.c if not c.primary_key}
+            local_kwargs = {k: kwargs.get(k, json.get(k, None))
+                            for k in col_names}
             db.execute(table.insert().values(id=id, **local_kwargs))
 
         new_object = db.query(newclass).get(id)
@@ -792,6 +795,15 @@ class BaseOps(object):
             self, json, parse_def, aliases, context, permissions,
             user_id, duplicate_error=True):
         assert isinstance(json, dict)
+        typename = json.get("@type", None)
+        if typename and typename != self.external_typename() and \
+                typename in self.retypeable_as:
+            new_cls = get_named_class(typename)
+            assert new_cls
+            recast = self.change_class(new_cls, json)
+            return recast._do_update_from_json(
+                json, parse_def, aliases, context, permissions,
+                user_id, duplicate_error)
         local_view = self.expand_view_def(parse_def)
         # False means it's illegal to get this.
         assert local_view is not False

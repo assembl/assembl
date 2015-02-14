@@ -66,6 +66,8 @@ class ContentSource(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
+    retypeable_as = ("IMAPMailbox", "MailingList", "AbstractMailbox")
+
     def serializable(self):
         return {
             "@id": self.uri_generic(self.id),
