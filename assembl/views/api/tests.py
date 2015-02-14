@@ -224,7 +224,8 @@ def test_api_register(discussion, test_app):
         assert token
         # Confirm token
         r = test_app.get("/users/email_confirm/"+token)
-        assert r.status_code == 302
+        assert r.status_code == 200
+
 
 #@pytest.mark.xfail
 def test_api_get_posts_from_idea(

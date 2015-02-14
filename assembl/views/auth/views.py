@@ -474,6 +474,7 @@ def velruse_login_complete_view(request):
             creation_date=datetime.now(),
             #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
         )
+        # TODO: auto-subscribe.
 
         session.add(profile)
         usernames = set((a['preferredUsername'] for a in velruse_accounts
@@ -622,25 +623,30 @@ def user_confirm_email(request):
                 username = user.username.username
             userid = user.id
         if username or userid:
-            # if option is active in discussion, auto-subscribe user to discussion's default notifications
+            # if option is active in discussion, auto-subscribe
+            # user to discussion's default notifications
             discussion = discussion_from_request(request)
             custom_message = localizer.translate(_(
-                "Your email address %s has been confirmed, you can now log in.")) % (email.email,)
-            if ( discussion and discussion.subscribe_to_notifications_on_signup ):
+                "Your email address %s has been confirmed,"
+                " you can now log in.")) % (email.email,)
+            if (discussion and
+                    discussion.subscribe_to_notifications_on_signup):
                 # really auto-subscribe user
-                role = session.query(Role).filter_by(name=R_PARTICIPANT).first()
+                role = session.query(Role).filter_by(
+                    name=R_PARTICIPANT).first()
                 session.add(LocalUserRole(
-                    user_id=userid, role=role, discussion_id=discussion.id))
-                user.get_notification_subscriptions(discussion.id) # applies new notifications
+                    user_id=userid, role=role,
+                    discussion_id=discussion.id))
+                user.get_notification_subscriptions(
+                    discussion.id)  # applies new notifications
                 custom_message = localizer.translate(_(
-                    "Your email address %s has been confirmed, and you are now subscribed to discussion's default notifications.")) % (email.email,)
-            slug_prefix = "/" + slug if slug else ""
+                    "Your email address %s has been confirmed, "
+                    "and you are now subscribed to discussion's "
+                    "default notifications.")) % (email.email,)
             return dict(
                 get_default_context(request),
-                button_url=slug_prefix+"/login",
+                button_url=maybe_contextual_route(request, 'login'),
                 button_label=localizer.translate(_('Log in')),
-                profile_id=email.profile_id, # still necessary?
-                email_account_id=request.matchdict.get('email_account_id'), # still necessary?
                 title=localizer.translate(_('Your account is now active!')),
                 description=custom_message)
         else:
