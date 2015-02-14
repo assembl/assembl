@@ -21,6 +21,7 @@ def backbone_include(config):
 
     config.add_route('edition', '/edition')
     config.add_route('partners', '/partners')
+    config.add_route('settings', '/settings')
     config.add_route('slug_notifications', '/notifications')
 
     config.add_route('profile', '/user/profile')

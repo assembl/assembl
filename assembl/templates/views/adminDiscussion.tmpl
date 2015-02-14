@@ -6,6 +6,9 @@
             <a href="#edition" class="menu">{{ gettext('edit discussion') }}</a>
           </li>
           <li>
+						<a href="#settings" class="menu">{{ gettext('discussion settings') }}</a>
+					</li>
+          <li>
             <a href="#notifications" class="menu">{{ gettext('edit notifications') }}</a>
           </li>
           <li>
@@ -20,7 +23,7 @@
   <div class="gu gu-3of4 admin-section">
 
     <div class="admin-title">
-      <h3 class="h3">Edition - <%= Ctx.getNiceDateTime(discussion.get('creation_date'), true) %></h3>
+      <h3 class="h3">Edition</h3>
     </div>
     <div id="content-container" class="content-container">
     	<div class="bx bx-alert-success hidden">
@@ -36,8 +39,8 @@
                  <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
                </p>
            {% endif %}
-             <form class="core-form form-horizontal" id="adminDiscussion">
-               <fieldset>
+             <form class="core-form form-horizontal mtl" id="adminDiscussion">
+               <fieldset class="phl">
 
 								<div class="control-group fr">
 									 <label for="introduction" class="control-label fl">Introduction</label>
@@ -67,16 +70,10 @@
                    </div>
                  </div>
                </fieldset>
-								<div class="form-actions pan man fr">
-									<button class="btn btn-secondary js_saveDiscussion" type="submit">{{ gettext("Save changes") }}</button>
+								<div class="form-actions man fr">
+									<button class="btn btn-primary js_saveDiscussion" type="submit">{{ gettext("Save changes") }}</button>
 								</div>
              </form>
-
-						 <div class="admin-title mbl">
-							 <h3 class="h3">{{ gettext("email sender") }}</h3>
-						 </div>
-
-						<div id="emailSender-container"></div>
         </div>
       </div>
     </div>
