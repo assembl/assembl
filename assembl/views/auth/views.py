@@ -412,8 +412,8 @@ def velruse_login_complete_view(request):
         else:
             raise HTTPServerError()
     if idp_accounts:
-        for account in idp_accounts:
-            account.profile_info_json = velruse_profile
+        for idp_account in idp_accounts:
+            idp_account.profile_info_json = velruse_profile
     else:
         idp_account = IdentityProviderAccount(
             provider=provider,
