@@ -24,7 +24,8 @@ from pyisemail import is_email
 
 from assembl.models import (
     EmailAccount, IdentityProvider, IdentityProviderAccount,
-    AgentProfile, User, Username, Role, LocalUserRole)
+    AgentProfile, User, Username, Role, LocalUserRole,
+    AbstractAgentAccount)
 from assembl.auth import (
     P_READ, R_PARTICIPANT)
 from assembl.auth.password import (
@@ -413,12 +414,10 @@ def velruse_login_complete_view(request):
     if idp_accounts:
         for account in idp_accounts:
             account.profile_info_json = velruse_profile
-            # Make it reset the picture
-            account.picture_url = None
     else:
         idp_account = IdentityProviderAccount(
             provider=provider,
-            profile_info=json.dumps(velruse_profile),
+            profile_info_json=velruse_profile,
             domain=velruse_account.get('domain'),
             userid=velruse_account.get('userid'),
             username=velruse_account.get('username'))
@@ -430,13 +429,13 @@ def velruse_login_complete_view(request):
     user = None
     profiles = [a.profile for a in idp_accounts if a.profile]
     # Maybe we already have a profile based on email
-    if provider.trust_emails and 'verifiedEmail' in velruse_profile:
-        email = velruse_profile['verifiedEmail']
-        email_account = session.query(EmailAccount).filter_by(
+    if idp_account.email and idp_account.verified:
+        email = idp_account.email
+        other_account = session.query(AbstractAgentAccount).filter_by(
             email=email, verified=True).first()
-        if email_account and email_account.profile \
-                and email_account.profile not in profiles:
-            profiles.append(email_account.profile)
+        if other_account and other_account.profile \
+                and other_account.profile not in profiles:
+            profiles.append(other_account.profile)
     profiles = list(set(profiles))
     # prefer profiles with verified users, then users, then oldest profiles
     profiles.sort(key=lambda p: (

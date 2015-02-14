@@ -210,6 +210,11 @@ class AbstractAgentAccount(Base):
         'accounts', cascade="all, delete-orphan"))
 
     preferred = Column(Boolean(), default=False, server_default='0')
+    verified = Column(Boolean(), default=False, server_default='0')
+    # Note some social accounts don't disclose email (eg twitter), so nullable
+    # Virtuoso + nullable -> no unique index (sigh)
+    email = Column(String(100), index=True)
+    #    info={'rdf': QuadMapPatternS(None, SIOC.email)} private
 
     def signature(self):
         "Identity of signature implies identity of underlying account"
@@ -246,18 +251,9 @@ class AbstractAgentAccount(Base):
 
 class EmailAccount(AbstractAgentAccount):
     """An email account"""
-    __tablename__ = "agent_email_account"
     __mapper_args__ = {
         'polymorphic_identity': 'agent_email_account',
     }
-    id = Column(Integer, ForeignKey(
-        'abstract_agent_account.id',
-        ondelete='CASCADE', onupdate='CASCADE'
-    ), primary_key=True)
-    email = Column(String(100), nullable=False, index=True)
-        # info={'rdf': QuadMapPatternS(None, SIOC.email)} private
-    verified = Column(Boolean(), default=False)
-    active = Column(Boolean(), default=True)
     profile_e = relationship(AgentProfile, backref=backref('email_accounts'))
 
     def display_name(self):
@@ -352,9 +348,25 @@ class IdentityProviderAccount(AbstractAgentAccount):
         info={'rdf': QuadMapPatternS(None, FOAF.img)})
     profile_i = relationship(AgentProfile, backref='identity_accounts')
 
+    def __init__(self, profile_info_json=None, **kwargs):
+        if profile_info_json is not None:
+            kwargs['profile_info'] = json.dumps(profile_info_json)
+        super(IdentityProviderAccount, self).__init__(**kwargs)
+        self.interpret_profile(self.profile_info_json)
+
     def signature(self):
         return ('idprovider_agent_account', self.provider_id, self.username,
                 self.domain, self.userid)
+
+    def interpret_profile(self, profile=None):
+        profile = profile or self.profile_info_json
+        if not profile:
+            return
+        self.populate_picture(profile)
+        email = profile.get('verifiedEmail', self.email)
+        if email and email != self.email:
+            self.email = email
+            self.verified = self.provider.trust_emails
 
     def display_name(self):
         # TODO: format according to provider, ie @ for twitter.
@@ -375,12 +387,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
         if 'givenName' in name and 'familyName' in name:
             return ' '.join((name['givenName'], name['familyName']))
 
-    def populate_picture(self, profile=None):
-        if self.picture_url:
-            return
-        profile = profile or self.profile_info_json
-        if not profile:
-            return
+    def populate_picture(self, profile):
         if 'photos' in profile:  # google, facebook
             photos = [x.get('value', None) for x in profile['photos']]
             photos = [x for x in photos if x]
@@ -397,8 +404,6 @@ class IdentityProviderAccount(AbstractAgentAccount):
     twitter_sizes = (('_mini', 25), ('_normal', 48), ('_bigger', 73), ('', 1000))
 
     def avatar_url(self, size=32):
-        if not self.picture_url:
-            self.populate_picture()
         if not self.picture_url:
             return
         if self.provider.provider_type == 'google_oauth2':
@@ -423,6 +428,8 @@ class IdentityProviderAccount(AbstractAgentAccount):
     @profile_info_json.setter
     def profile_info_json(self, val):
         self.profile_info = json.dumps(val)
+        self.interpret_profile(val)
+
 
 
 class User(AgentProfile):

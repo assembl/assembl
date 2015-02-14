@@ -25,12 +25,12 @@
     },
     "AbstractAgentAccount": {
         "preferred": true,
+        "email": false,
+        "verified": false,
         "profile": false
     },
     "EmailAccount": {
         "@extends": "AbstractAgentAccount",
-        "email": false,
-        "verified": false,
         "will_merge_if_validated": false
     },
     "IdentityProviderAccount": {
