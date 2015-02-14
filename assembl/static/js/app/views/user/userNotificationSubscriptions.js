@@ -64,7 +64,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             tagName:'label',
             className:'checkbox dispb',
             initialize: function(options){
-              this.isUserSubscribed = options.isUserSubscribed;
+              this.roles = options.roles;
               this.notificationsUser = options.notificationsUser;
               this.notificationTemplates = options.notificationTemplates;
             },
@@ -77,7 +77,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             serializeData: function () {
               return {
                 subscription: this.model,
-                isUserSubscribed: this.isUserSubscribed,
+                roles: this.roles,
                 i18n: i18n
               }
             },
@@ -121,12 +121,11 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                 var addableGlobalSubscriptions = new Backbone.Collection();
 
-                if(this.notificationTemplates === undefined ||
+                if(this.notificationsUser === undefined ||
                     this.notificationTemplates === undefined){
                     console.log('notificationTemplates or notificationTemplates is undefined');
                     return;
                 }
-
 
                 this.notificationTemplates.each(function (template) {
                     var alreadyPresent = options.notificationsUser.find(function (subscription) {
