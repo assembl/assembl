@@ -936,6 +936,11 @@ class BaseOps(object):
                 accessor = getattr(self.__class__, key)
                 # Target_cls?
                 can_be_list = must_be_list = True
+            elif not value:
+                print "Ignoring unknown empty value for "\
+                    "attribute %s in json id %s (type %s)" % (
+                        key, json.get('@id', '?'), json.get('@type', '?'))
+                continue
             else:
                 raise HTTPBadRequest(
                     "Unknown attribute %s in json id %s (type %s)" % (
