@@ -48,9 +48,14 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
         });
 
         var Notifications = Marionette.CollectionView.extend({
+            template: '',
             childView: Notification,
             initialize: function(options){
-               this.childViewOptions = {
+                if(!options.roles){
+                    $('#empty-field').html(i18n.gettext('You are not subscribed to this discussion'));
+                }
+
+                this.childViewOptions = {
                    roles: options.roles
                }
             }
