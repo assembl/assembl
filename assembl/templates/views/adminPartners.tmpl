@@ -31,72 +31,11 @@
 			{{ gettext("partners added") }}
 		</div>
 
-		<div class="gr">
-			<div class="gu gu-1of1">
-				<form class="core-form form-horizontal" id="form-partner">
-					<fieldset>
-
-						<div class="control-group">
-							<label for="name" class="control-label">{{ gettext('name of partner') }}</label>
-							<div class="controls">
-								<input type="text" class="partner-name input-xlarge" name="name" required="required">
-								<span class="help-inline">
-									<p class="control-error">{{ gettext('please correct the error') }}</p>
-									<p class="control-success"><i class="icon-ok"></i></p>
-								</span>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label for="description" class="control-label">{{ gettext('description') }}</label>
-							<div class="controls">
-								<textarea rows="3" class="partner-description input-xlarge" name="description" required="required"></textarea>
-								<span class="help-inline">
-									<p class="control-error">{{ gettext('please correct the error') }}</p>
-									<p class="control-success"><i class="icon-ok"></i></p>
-								</span>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label for="homepage" class="control-label">{{ gettext('homepage partners') }}</label>
-							<div class="controls">
-								<input type="text" class="partner-homepage input-xlarge" name="homepage" required="required">
-								<span class="help-inline">
-									<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
-									<p class="control-success"><i class="icon-ok"></i></p>
-								</span>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label for="logo" class="control-label">{{ gettext('url partner logo') }}</label>
-							<div class="controls">
-								<input type="text" class="partner-logo input-xlarge" name="logo" required="required">
-								<span class="help-inline">
-									<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
-									<p class="control-success"><i class="icon-ok"></i></p>
-								</span>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label for="is_initiator" class="control-label">{{ gettext('is initiator') }}</label>
-							<div class="controls">
-								<input type="checkbox" class="partner-initiator" name="is_initiator">
-							</div>
-						</div>
-
-						<div class="form-actions mvn">
-							<button class="btn btn-secondary js_add-partner" type="submit">Add partner</button>
-						</div>
-
-					</fieldset>
-				</form>
-			</div>
+		<div class="mal tar">
+			<a href="#" class="js_addPartner"><i class="icon-add"></i>&nbsp; {{ gettext("add partner") }}</a>
 		</div>
 
-	  <div id="partner-content"></div>
+	  <div id="partner-content" class="phl"></div>
 
     </div>
   </div>
