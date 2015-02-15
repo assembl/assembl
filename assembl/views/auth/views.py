@@ -506,33 +506,30 @@ def velruse_login_complete_view(request):
     session.autoflush = old_autoflush
     email_accounts = {ea.email: ea for ea in profile.email_accounts}
     # There may be new emails in the accounts
+    verified_email = None
     if 'verifiedEmail' in velruse_profile:
-        email = velruse_profile['verifiedEmail']
-        if email in email_accounts:
-            email_account = email_accounts[email]
-            if provider.trust_emails and not email_account.verified:
-                email_account.verified = True
-                session.add(email_account)
-        else:
-            email_account = EmailAccount(
-                email=email,
-                verified=provider.trust_emails,
-                profile=profile
-            )
-            email_accounts[email] = email_account
-            session.add(email_account)
-    for email in velruse_profile.get('emails', []):
-        preferred = False
-        if isinstance(email, dict):
-            preferred = email.get('preferred', False)
-            email = email['value']
-        if email not in email_accounts:
-            email = EmailAccount(
-                email=email,
-                preferred=preferred,
-                profile=profile
-            )
-            session.add(email)
+        verified_email = velruse_profile['verifiedEmail']
+        if verified_email in email_accounts and provider.trust_emails:
+            email_account = email_accounts[verified_email]
+            if email_account.preferred:
+                idp_account.preferred = True
+            email_account.delete()
+    for email_d in velruse_profile.get('emails', []):
+        if isinstance(email_d, dict):
+            email = email_d['value']
+            if verified_email != email:
+                # create an unverified email account.
+                email = EmailAccount(
+                    email=email,
+                    profile=profile
+                )
+                session.add(email)
+            else:
+                if email_d.get('preferred', False):
+                    # maybe TODO: make the idp_account preferred,
+                    # if no other account is preferred?
+                    pass
+
     # Note that if an IdP account stops claiming an email, it "leaks".
     session.flush()
 
