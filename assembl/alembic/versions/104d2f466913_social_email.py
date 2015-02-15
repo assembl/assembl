@@ -51,6 +51,7 @@ def upgrade(pyramid_env):
                     idprovider_agent_account.provider_id = identity_provider.id)
                 WHERE abstract_agent_account.id = idprovider_agent_account.id)
             WHERE abstract_agent_account."type" = 'idprovider_agent_account'""")
+        db.flush()
         ipaccounts = db.query(m.IdentityProviderAccount).all()
         for ipaccount in ipaccounts:
             ipaccount.interpret_profile()
