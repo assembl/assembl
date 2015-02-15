@@ -739,8 +739,8 @@ class BaseOps(object):
     def _do_create_from_json(
             cls, json, parse_def, aliases, context, permissions,
             user_id, duplicate_error=True):
-        can_create = cls.crud_permissions.can(
-            CrudPermissions.CREATE, permissions)
+        can_create = cls.user_can_cls(
+            user_id, CrudPermissions.CREATE, permissions)
         if duplicate_error and not can_create:
             raise HTTPUnauthorized(
                 "User id <%s> cannot create a <%s> object" % (
