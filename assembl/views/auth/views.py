@@ -25,7 +25,7 @@ from pyisemail import is_email
 from assembl.models import (
     EmailAccount, IdentityProvider, IdentityProviderAccount,
     AgentProfile, User, Username, Role, LocalUserRole,
-    AbstractAgentAccount)
+    AbstractAgentAccount, Discussion)
 from assembl.auth import (
     P_READ, R_PARTICIPANT)
 from assembl.auth.password import (
@@ -397,6 +397,11 @@ def velruse_login_complete_view(request):
     session = AgentProfile.db
     context = request.context
     velruse_profile = context.profile
+    discussion = None
+    slug = request.session.get('discussion', None)
+    if slug:
+        discussion = session.query(Discussion).filter_by(
+            slug=slug).first()
     next_view = handle_next_view(request, True)
     logged_in = authenticated_userid(request)
     provider = get_identity_provider(request)
@@ -484,7 +489,6 @@ def velruse_login_complete_view(request):
             creation_date=datetime.now(),
             #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
         )
-        # TODO: auto-subscribe.
 
         session.add(profile)
         usernames = set((a['preferredUsername'] for a in velruse_accounts
@@ -495,6 +499,7 @@ def velruse_login_complete_view(request):
                 break
         if username:
             session.add(Username(username=username, user=profile))
+        maybe_auto_subscribe(profile, discussion)
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
     # Now all accounts have a profile
@@ -573,6 +578,21 @@ def confirm_emailid_sent(request):
             'We have sent you a confirmation email. '
             'Please use the link to confirm your email to Assembl')))
 
+
+def maybe_auto_subscribe(user, discussion):
+    if (not discussion
+            or not discussion.subscribe_to_notifications_on_signup):
+        return False
+    # really auto-subscribe user
+    role = User.db.query(Role).filter_by(name=R_PARTICIPANT).first()
+    User.db.add(LocalUserRole(
+        user_id=user.id, role=role,
+        discussion_id=discussion.id))
+    # apply new notifications
+    user.get_notification_subscriptions(discussion.id)
+    return True
+
+
 @view_config(
     route_name='user_confirm_email',
     renderer='assembl:templates/email_confirmed.jinja2',
@@ -632,27 +652,22 @@ def user_confirm_email(request):
             if user.username:
                 username = user.username.username
             userid = user.id
-        if username or userid:
+        if user:
             # if option is active in discussion, auto-subscribe
             # user to discussion's default notifications
-            discussion = discussion_from_request(request)
-            custom_message = localizer.translate(_(
-                "Your email address %s has been confirmed,"
-                " you can now log in.")) % (email.email,)
-            if (discussion and
-                    discussion.subscribe_to_notifications_on_signup):
-                # really auto-subscribe user
-                role = session.query(Role).filter_by(
-                    name=R_PARTICIPANT).first()
-                session.add(LocalUserRole(
-                    user_id=userid, role=role,
-                    discussion_id=discussion.id))
-                user.get_notification_subscriptions(
-                    discussion.id)  # applies new notifications
+            discussion = None
+            if slug:
+                discussion = session.query(Discussion).filter_by(
+                    slug=slug).first()
+            if maybe_auto_subscribe(user, discussion):
                 custom_message = localizer.translate(_(
                     "Your email address %s has been confirmed, "
                     "and you are now subscribed to discussion's "
                     "default notifications.")) % (email.email,)
+            else:
+                custom_message = localizer.translate(_(
+                    "Your email address %s has been confirmed,"
+                    " you can now log in.")) % (email.email,)
             return dict(
                 get_default_context(request),
                 button_url=maybe_contextual_route(request, 'login'),
