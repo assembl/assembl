@@ -65,15 +65,16 @@ class AgentProfile(Base):
     }
 
     def get_preferred_email_account(self):
-        if inspect(self).attrs.email_accounts.loaded_value is NO_VALUE:
-            account = self.db.query(EmailAccount).filter_by(
-                profile_id=self.id).order_by(
-                EmailAccount.verified.desc(),
+        if inspect(self).attrs.accounts.loaded_value is NO_VALUE:
+            account = self.db.query(AbstractAgentAccount).filter(
+                (AbstractAgentAccount.profile_id == self.id)
+                & (AbstractAgentAccount.email != None)).order_by(
+                AbstractAgentAccount.verified.desc(),
                 AbstractAgentAccount.preferred.desc()).first()
             if account:
                 return account
-        elif self.email_accounts:
-            accounts = self.email_accounts[:]
+        elif self.accounts:
+            accounts = [a for a in self.accounts if a.email]
             accounts.sort(key=lambda e: (not e.verified, not e.preferred))
             return accounts[0]
 
