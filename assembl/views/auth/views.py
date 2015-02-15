@@ -41,7 +41,12 @@ _ = TranslationStringFactory('assembl')
 
 def get_login_context(request):
     slug = request.matchdict.get('discussion_slug', None)
-    p_slug = "/" + slug if slug else ""
+    if slug:
+        p_slug = "/" + slug
+        request.session['discussion'] = slug
+    else:
+        p_slug = ""
+        request.session.pop('discussion')
     return dict(get_default_context(request), **{
         'login_url': login_url,
         'slug_prefix': p_slug,
@@ -58,8 +63,14 @@ def handle_next_view(request, consume=False, default_suffix=''):
                         if x is not None))
     next_view = request.params.get('next_view', None)\
         or request.session.get('next_view', None) or default
+    discussion_slug = request.session.get('discussion', None)
+    if discussion_slug:
+        p_slug = '/' + discussion_slug
+        if not next_view.startswith(p_slug):
+            next_view = p_slug + next_view
     if consume and 'next_view' in request.session:
         request.session.pop('next_view')
+        request.session.pop('discussion')
     elif not consume and 'next_view' not in request.session:
         request.session["next_view"] = next_view
     return next_view
