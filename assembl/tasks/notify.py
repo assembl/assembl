@@ -1,10 +1,12 @@
 import sys
 import transaction
 from datetime import timedelta
-from ..lib.sqla import mark_changed
+from traceback import print_exc
 from celery import Celery
 
-from . import init_task_config, config_celery_app
+from ..lib.sqla import mark_changed
+
+from . import (init_task_config, config_celery_app, raven_client)
 
 
 CELERYBEAT_SCHEDULE = {
@@ -114,7 +116,13 @@ def process_pending_notifications():
             Notification.delivery_state not in
             NotificationDeliveryStateType.getNonRetryableDeliveryStates())
         for notification in retryable_notifications:
-            process_notification(notification)
+            try:
+                process_notification(notification)
+            except:
+                if raven_client:
+                    raven_client.client.captureException()
+                else:
+                    print_exc()
 
 
 def includeme(config):

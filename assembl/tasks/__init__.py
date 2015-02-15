@@ -13,6 +13,7 @@ from ..lib.model_watcher import configure_model_watcher
 _inited = False
 
 resolver = DottedNameResolver(__package__)
+raven_client = None
 
 
 def configure(registry, task_name):
@@ -68,13 +69,14 @@ def init_task_config(celery_app):
     try:
         pipeline = config.get('pipeline:main', 'pipeline').split()
         if 'raven' in pipeline:
+            global raven_client
             raven_dsn = config.get('filter:raven', 'dsn')
             from raven import Client
             from raven.contrib.celery import (
                 register_signal, register_logger_signal)
-            client = Client(raven_dsn)
-            register_logger_signal(client)
-            register_signal(client)
+            raven_client = Client(raven_dsn)
+            register_logger_signal(raven_client)
+            register_signal(raven_client)
     except ConfigParser.Error:
         pass
     registry = getGlobalSiteManager()
