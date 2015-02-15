@@ -916,6 +916,16 @@ class LocalUserRole(DiscussionBoundBase):
         P_SELF_REGISTER, P_READ, P_ADMIN_DISC, P_ADMIN_DISC,
         P_SELF_REGISTER, P_SELF_REGISTER)
 
+    @classmethod
+    def user_can_cls(cls, user_id, operation, permissions):
+        # bypass... more checks are required upstream,
+        # see assembl.views.api2.auth.add_local_role
+        if operation == CrudPermissions.CREATE \
+                and P_SELF_REGISTER_REQUEST in permissions:
+            return True
+        return DiscussionBoundBase.user_can_cls(
+            user_id, operation, permissions)
+
 
 class Permission(Base):
     """A permission that a user may have"""
