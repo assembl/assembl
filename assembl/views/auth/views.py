@@ -499,6 +499,7 @@ def velruse_login_complete_view(request):
                 break
         if username:
             session.add(Username(username=username, user=profile))
+        session.flush()
         maybe_auto_subscribe(profile, discussion)
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
