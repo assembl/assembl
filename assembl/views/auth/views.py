@@ -399,7 +399,11 @@ def velruse_login_complete_view(request):
     velruse_profile = context.profile
     discussion = None
     slug = request.session.get('discussion', None)
-    if slug:
+    if not slug:
+        discussion = discussion_from_request(request)
+        if discussion:
+            slug = discussion.slug
+    if slug and not discussion:
         discussion = session.query(Discussion).filter_by(
             slug=slug).first()
     next_view = handle_next_view(request, True)
