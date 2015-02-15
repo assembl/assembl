@@ -501,7 +501,7 @@ def velruse_login_complete_view(request):
             session.add(Username(username=username, user=profile))
         session.flush()
         if maybe_auto_subscribe(profile, discussion):
-            next_view = "/%s/user/notifications"
+            next_view = "/%s/user/notifications" % (slug,)
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
     # Now all accounts have a profile
