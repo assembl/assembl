@@ -245,7 +245,8 @@ class AbstractAgentAccount(Base):
 
     @classmethod
     def user_can_cls(cls, user_id, operation, permissions):
-        s = Base.user_can_cls(user_id, operation, permissions)
+        s = super(AbstractAgentAccount, cls).user_can_cls(
+            user_id, operation, permissions)
         return IF_OWNED if s is False else s
 
     def user_can(self, user_id, operation, permissions):
@@ -933,7 +934,7 @@ class LocalUserRole(DiscussionBoundBase):
         if operation == CrudPermissions.CREATE \
                 and P_SELF_REGISTER_REQUEST in permissions:
             return True
-        return DiscussionBoundBase.user_can_cls(
+        return super(LocalUserRole, cls).user_can_cls(
             user_id, operation, permissions)
 
 
