@@ -73,16 +73,13 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                 'click @ui.autoSubscribeCheckbox': 'updateAutoSubscribe'
             },
             serializeData: function () {
-
-                console.debug(this.model);
-
                 return {
                     discussion: this.model
                 }
             },
             updateAutoSubscribe: function(){
                 var that = this,
-                    val = this.$('#notification-auto-subscribe input').is(':checked');
+                    val = (this.$('.autoSubscribe:checked').val()) ? true : false;
 
                 this.model.set('subscribe_to_notifications_on_signup', val);
 
