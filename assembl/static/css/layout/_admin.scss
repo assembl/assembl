@@ -76,16 +76,21 @@ table {
     width: 740px;
   }
 
+  #discussion-settings,
   #profile-form {
-    .control-label {
-      width: auto;
-    }
     .form-actions{
       padding: 15px 20px 15px 0px;
       margin: 0;
       border-top: 1px solid #dce0e0;
       box-sizing: border-box;
       width: 100%;
+    }
+
+  }
+
+  #profile-form {
+    .control-label {
+      width: auto;
     }
     .social-photo {
       width: 595px;

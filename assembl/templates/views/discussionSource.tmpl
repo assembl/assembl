@@ -1,57 +1,57 @@
-<form class="core-form form-horizontal">
-  <fieldset>
+<form class="core-form form-horizontal" id="discussion-settings">
+  <fieldset class="prl">
 
-    <div class="control-group">
+    <div class="control-group fr">
       <label for="name" class="control-label">name</label>
       <div class="controls">
-        <input type="text" id="name" class="input-xlarge" value="<%= source.get('name') %>">
+        <input type="text" id="name" class="input-xxlarge" value="<%= source.get('name') %>">
       </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group fr">
 			<label for="admin_sender" class="control-label">admin sender</label>
 			<div class="controls">
-				<input type="text" id="admin_sender" class="input-xlarge" value="<%= source.get('admin_sender') %>">
+				<input type="text" id="admin_sender" class="input-xxlarge" value="<%= source.get('admin_sender') %>">
 			</div>
 		</div>
 
-     <div class="control-group">
+     <div class="control-group fr">
 			 <label for="post_email_address" class="control-label">post email address</label>
 			 <div class="controls">
-				 <input type="text" id="post_email_address" class="input-xlarge" value="<%= source.get('post_email_address') %>">
+				 <input type="text" id="post_email_address" class="input-xxlarge" value="<%= source.get('post_email_address') %>">
 			 </div>
 		 </div>
 
-			<div class="control-group">
+			<div class="control-group fr">
 				<label for="host" class="control-label">host</label>
 				<div class="controls">
-					<input type="text" id="host" class="input-xlarge" value="<%= source.get('host') %>">
+					<input type="text" id="host" class="input-xxlarge" value="<%= source.get('host') %>">
 				</div>
 			</div>
 
-			<div class="control-group">
+			<div class="control-group fr">
 				<label for="most_common_recipient_address" class="control-label">most common recipient address</label>
 				<div class="controls">
-					<input type="text" id="most_common_recipient_address" class="input-xlarge" value="<%= source.get('most_common_recipient_address') %>">
+					<input type="text" id="most_common_recipient_address" class="input-xxlarge" value="<%= source.get('most_common_recipient_address') %>">
 				</div>
 			</div>
 
-			<div class="control-group">
+			<div class="control-group fr">
 				<label for="discussion_id" class="control-label">discussion id</label>
 				<div class="controls">
-					<input type="text" id="discussion_id" class="input-xlarge" value="<%= source.get('discussion_id') %>">
+					<input type="text" id="discussion_id" class="input-xxlarge" value="<%= source.get('discussion_id') %>">
 				</div>
 			</div>
 
-			<div class="control-group">
+			<div class="control-group fr">
 				<label class="control-label">use ssl</label>
 				<div class="controls">
-					<label class="radio custom-radio">
+					<label class="radio custom-radio input-xxlarge">
 						<input type="radio" id="use_ssl" <%= source.get('use_ssl') ? 'checked': '' %> name="use_ssl" value="true">
 						<span class="custom-radio-element"></span>
 						true
 					</label>
-					<label class="radio custom-radio">
+					<label class="radio custom-radio input-xxlarge">
 						<input type="radio" id="use_ssl" <%= source.get('use_ssl') ? '': 'checked' %> name="use_ssl" value="false">
 						<span class="custom-radio-element"></span>
 						false
@@ -59,22 +59,21 @@
 				</div>
 			</div>
 
-			<div class="control-group">
+			<div class="control-group fr">
 				<label for="folder" class="control-label">folder</label>
 				<div class="controls">
-					<input type="text" id="folder" class="input-xlarge" value="<%= source.get('folder') %>">
+					<input type="text" id="folder" class="input-xxlarge" value="<%= source.get('folder') %>">
 				</div>
 			</div>
 
-			<div class="control-group">
+			<div class="control-group fr">
 				<label for="port" class="control-label">port</label>
 				<div class="controls">
-					<input type="text" id="port" class="input-xlarge" value="<%= source.get('port') %>">
+					<input type="text" id="port" class="input-xxlarge" value="<%= source.get('port') %>">
 				</div>
 			</div>
-
-    <div class="form-actions ptm">
-      <button class="btn btn-primary js_saveSource" type="submit">Save changes</button>
-    </div>
   </fieldset>
+	<div class="form-actions fr">
+		<button class="btn btn-primary js_saveSource fr" type="submit">{{ gettext("Save changes") }}</button>
+	</div>
 </form>
