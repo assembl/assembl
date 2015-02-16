@@ -122,6 +122,10 @@ class Discussion(DiscussionBoundBase):
         participant_template = UserTemplate(discussion=self, for_role=participant)
         self.db.add(participant_template)
 
+    def unique_query(self, query):
+        # Skip Discussion_bound_base
+        return super(DiscussionBoundBase, self).unique_query(query)
+
     def serializable(self):
         return {
             "@id": self.uri(),
