@@ -179,6 +179,13 @@
         "event_source_object": "&event_source_object",
         "event_source_type": "&event_source_type"
     },
+    "PartnerOrganization": {
+        "name": true,
+        "description": true,
+        "homepage": true,
+        "logo": true,
+        "is_initiator": true
+    },
     "LocalUserRole": {
         "role": "&get_role_name"
     }
