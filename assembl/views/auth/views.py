@@ -57,6 +57,16 @@ def get_login_context(request):
     })
 
 
+def _get_route_from_path(request, path):
+    from pyramid.urldispatch import IRoutesMapper
+    rm = request.registry.getUtility(IRoutesMapper)
+    for route in rm.routelist:
+        match = route.match(path)
+        if match is not None:
+            return route, match
+    return None, {}
+
+
 def handle_next_view(request, consume=False, default_suffix=''):
     slug = request.matchdict.get('discussion_slug', None)
     default = "/".join((x for x in ('', slug, default_suffix)
@@ -67,7 +77,10 @@ def handle_next_view(request, consume=False, default_suffix=''):
     if discussion_slug:
         p_slug = '/' + discussion_slug
         if not next_view.startswith(p_slug):
-            next_view = p_slug + next_view
+            # Maybe the route already has a different slug...
+            route, match = _get_route_from_path(request, next_view)
+            if 'discussion_slug' not in match:
+                next_view = p_slug + next_view
     if consume and 'next_view' in request.session:
         request.session.pop('next_view')
         request.session.pop('discussion')
