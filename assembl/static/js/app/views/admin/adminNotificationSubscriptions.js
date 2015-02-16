@@ -73,19 +73,22 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                 'click @ui.autoSubscribeCheckbox': 'updateAutoSubscribe'
             },
             serializeData: function () {
+
+                console.debug(this.model);
+
                 return {
                     discussion: this.model
                 }
             },
             updateAutoSubscribe: function(){
-                var that = this;
-                var val = this.$('#notification-auto-subscribe input').is(':checked');
+                var that = this,
+                    val = this.$('#notification-auto-subscribe input').is(':checked');
 
                 this.model.set('subscribe_to_notifications_on_signup', val);
 
                 this.model.save(null, {
                     success: function (model, resp) {
-                        that.$('.bx-alert-success').removeClass('hidden');
+
                     },
                     error: function (model, resp) {
                         console.debug(model, resp);
@@ -93,7 +96,6 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                 })
             }
         });
-
 
         var adminNotificationSubscriptions = Marionette.LayoutView.extend({
             template: '#tmpl-adminNotificationSubscriptions',

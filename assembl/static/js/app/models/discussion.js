@@ -6,17 +6,17 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
         url: Ctx.getApiV2DiscussionUrl(),
         defaults: {
             'settings': {},
-            'introduction': null,
-            'objectives': null,
-            'creation_date': null,
-            'topic': null,
-            'introductionDetails': null,
-            '@type': null,
-            'widget_collection_url': null,
-            'slug': null,
-            '@view': null,
+            'introduction': '',
+            'objectives': '',
+            'creation_date': '',
+            'topic': '',
+            'introductionDetails': '',
+            '@type': '',
+            'widget_collection_url': '',
+            'slug': '',
+            '@view': '',
             'permissions': {},
-            'subscribe_to_notifications_on_signup': null
+            'subscribe_to_notifications_on_signup': false
         }
 
     });

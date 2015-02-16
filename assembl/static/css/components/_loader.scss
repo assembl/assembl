@@ -2,6 +2,7 @@
 // ****************
 .loader-wrapper {
   position: relative;
+  min-height: em(20);
 }
 .is-loading {
   cursor: wait;
