@@ -21,7 +21,7 @@ from ..auth import (
     CrudPermissions, P_ADMIN_DISC, P_EDIT_SYNTHESIS)
 from .idea import Idea, IdeaLink
 from ..semantic.namespaces import (
-    SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS)
+    SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES)
 from assembl.views.traversal import AbstractCollectionDefinition
 
 
@@ -89,6 +89,24 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
     # reference to the "Idea" object for proxying
     idea = relationship("Idea")
 
+    @classmethod
+    def special_quad_patterns(cls, alias_maker, discussion_id):
+        idea_assoc = alias_maker.alias_from_class(cls)
+        idea_alias = alias_maker.alias_from_relns(cls.idea)
+        # Assume tombstone status of target is similar to source, for now.
+        conditions = [(idea_assoc.idea_id == idea_alias.id),
+                      (idea_alias.is_tombstone == 0)]
+        if discussion_id:
+            conditions.append((idea_alias.discussion_id == discussion_id))
+        return [
+            QuadMapPatternS(
+                Idea.iri_class().apply(idea_assoc.idea_id),
+                IDEA.inMap,
+                IdeaGraphView.iri_class().apply(idea_assoc.sub_graph_id),
+                conditions=conditions,
+                name=QUADNAMES.sub_graph_idea_assoc_reln)
+        ]
+
     def get_discussion_id(self):
         if self.sub_graph:
             return self.sub_graph.get_discussion_id()
@@ -97,9 +115,8 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        from . import ExplicitSubGraphView
-        return ((cls.sub_graph_id == IdeaGraphView.id),
-                (IdeaGraphView.discussion_id == discussion_id))
+        return ((cls.sub_graph_id == ExplicitSubGraphView.id),
+                (ExplicitSubGraphView.discussion_id == discussion_id))
 
     discussion = relationship(
         Discussion, viewonly=True, uselist=False, secondary=Idea.__table__,
@@ -134,6 +151,26 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
     # reference to the "IdeaLink" object for proxying
     idea_link = relationship("IdeaLink")
 
+    @classmethod
+    def special_quad_patterns(cls, alias_maker, discussion_id):
+        idea_link_assoc = alias_maker.alias_from_class(cls)
+        idea_link_alias = alias_maker.alias_from_relns(cls.idea_link)
+        # Assume tombstone status of target is similar to source, for now.
+        conditions = [(idea_link_assoc.idea_link_id == idea_link_alias.id),
+                      (idea_link_alias.is_tombstone == 0)]
+        if discussion_id:
+            conditions.extend(cls.get_discussion_conditions(
+                discussion_id, alias_maker))
+
+        return [
+            QuadMapPatternS(
+                IdeaLink.iri_class().apply(idea_link_assoc.idea_link_id),
+                IDEA.inMap,
+                IdeaGraphView.iri_class().apply(idea_link_assoc.sub_graph_id),
+                conditions=conditions,
+                name=QUADNAMES.sub_graph_idea_link_assoc_reln)
+        ]
+
     def get_discussion_id(self):
         if self.sub_graph:
             return self.sub_graph.get_discussion_id()
@@ -142,8 +179,12 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        return ((cls.sub_graph_id == IdeaGraphView.id),
-                (IdeaGraphView.discussion_id == discussion_id))
+        if alias_maker:
+            subgraph_alias = alias_maker.alias_from_relns(cls.sub_graph)
+            return ((subgraph_alias.discussion_id == discussion_id))
+        else:
+            return ((cls.sub_graph_id == ExplicitSubGraphView.id),
+                    (ExplicitSubGraphView.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
