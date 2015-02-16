@@ -238,6 +238,7 @@ $successText: $green;
   // Make textarea height behave
   textarea {
     height: auto;
+    resize: vertical;
   }
 
   // Hidden inputs

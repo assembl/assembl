@@ -1,14 +1,13 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager', 'common/context', 'models/discussion', 'models/discussionSource'],
-    function (Marionette, $, _, CollectionManager, Ctx, Discussion, DiscussionSource) {
+define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager', 'common/context', 'models/discussion', 'models/discussionSource', 'utils/i18n'],
+    function (Marionette, $, _, CollectionManager, Ctx, Discussion, DiscussionSource, i18n) {
 
         var adminDiscussion = Marionette.LayoutView.extend({
             template: '#tmpl-adminDiscussion',
             className: 'admin-notifications',
             ui: {
-              discussion: '.js_saveDiscussion',
-              close: '.bx-alert-success .bx-close'
+              discussion: '.js_saveDiscussion'
             },
             initialize: function () {
                 var that = this,
@@ -22,12 +21,10 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
                         that.render();
                     });
 
-                console.debug(this.model);
             },
 
             events: {
-              'click @ui.discussion': 'saveDiscussion',
-              'click @ui.close': 'close'
+              'click @ui.discussion': 'saveDiscussion'
             },
 
             serializeData: function () {
@@ -37,18 +34,13 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
                 }
             },
 
-            close: function () {
-                this.$('.bx-alert-success').addClass('hidden');
-            },
-
             saveDiscussion: function (e) {
                 e.preventDefault();
 
                 var introduction = this.$('textarea[name=introduction]').val(),
                     topic = this.$('input[name=topic]').val(),
                     slug = this.$('input[name=slug]').val(),
-                    objectives = this.$('textarea[name=objectives]').val(),
-                    that = this;
+                    objectives = this.$('textarea[name=objectives]').val();
 
                 this.model.set({
                     introduction:introduction,
@@ -59,10 +51,26 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
 
                 this.model.save(null, {
                     success: function (model, resp) {
-                        that.$('.bx-alert-success').removeClass('hidden');
+                        $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
+                            ele: 'body',
+                            type: 'success',
+                            offset: {from: 'bottom', amount:20},
+                            align: 'left',
+                            delay: 4000,
+                            allow_dismiss: true,
+                            stackup_spacing: 10
+                        });
                     },
                     error: function (model, resp) {
-                        console.debug(model, resp);
+                        $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
+                            ele: 'body',
+                            type: 'error',
+                            offset: {from: 'bottom', amount:20},
+                            align: 'left',
+                            delay: 4000,
+                            allow_dismiss: true,
+                            stackup_spacing: 10
+                        });
                     }
                 })
 

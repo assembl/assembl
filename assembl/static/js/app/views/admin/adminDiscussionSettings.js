@@ -1,6 +1,7 @@
 "use strict";
 
-define(['backbone.marionette', 'models/discussionSource'], function (Marionette, DiscussionSource) {
+define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-growl', 'utils/i18n'],
+    function (Marionette, DiscussionSource, bootstrapGrowl, i18n) {
 
     var EmailSender = Marionette.ItemView.extend({
         template: '#tmpl-discussionSource',
@@ -44,12 +45,28 @@ define(['backbone.marionette', 'models/discussionSource'], function (Marionette,
             this.model.save(null, {
                 success: function(model, resp){
 
-                    console.debug('success');
+                    $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
+                       ele: 'body',
+                       type: 'success',
+                       offset: {from: 'bottom', amount:20},
+                       align: 'left',
+                       delay: 4000,
+                       allow_dismiss: true,
+                       stackup_spacing: 10
+                    });
 
                 },
                 error: function(model, resp){
 
-                    console.debug('error');
+                    $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
+                        ele: 'body',
+                        type: 'error',
+                        offset: {from: 'bottom', amount:20},
+                        align: 'left',
+                        delay: 4000,
+                        allow_dismiss: true,
+                        stackup_spacing: 10
+                    });
 
                 }
             });

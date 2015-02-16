@@ -79,9 +79,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                         });
 
                         if(!$(controls).hasClass('error')){
-                            var inputs = document.querySelectorAll('#partner-form *[required=required]');
                             $(controls).removeClass('success');
-                            $(inputs).val('');
 
                             self.model.set({
                                 description: this.$('.partner-description').val(),
@@ -113,7 +111,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
             }
         });
 
-        var ParnerList = Marionette.CollectionView.extend({
+        var PartnerList = Marionette.CollectionView.extend({
             childView: Partners,
             initialize: function(){
                 var that = this,
@@ -155,9 +153,9 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
             onRender: function () {
                 Ctx.initTooltips(this.$el);
 
-                var parnerList = new ParnerList();
+                var partnerList = new PartnerList();
 
-                this.partner.show(parnerList);
+                this.partner.show(partnerList);
             },
 
             close: function () {

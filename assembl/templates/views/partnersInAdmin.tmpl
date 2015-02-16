@@ -2,15 +2,18 @@
 	<div class="bx bx-default">
 		<div class="gr">
 			<div class="gu gu-1of2 description">
-				<h4 class="h4 mbs dispb"><%= partner.get('name') %></h4>
-				<span class="mbs dispb"><%= partner.get('description') %></span>
+				<h2 class="h2 mbxl dispb mtxs"><%= partner.get('name') %></h2>
+				<span class="mbxl dispb"><%= partner.get('description') %></span>
 				<a class="dispb" href="<%= partner.get('homepage') %>">{{ gettext('link') }}</a>
-				<div class="mtl">
+				<div class="mtxl">
 					<a class="js_editPartner" href="#">{{ gettext('edit partner') }}</a>&nbsp;&nbsp;
 					<a class="js_deletePartner" href="#">{{ gettext('delete partner') }}</a>
 				</div>
 			</div>
 			<div class="gu gu-last">
+			<% if(partner.get('is_initiator')){ %>
+				<div class="tar mbxl">{{ gettext('is initiator') }}</div>
+			<% } %>
 				<div class="partner-img-content">
 					<div class="partner-img">
              <img src="<%= partner.get('logo')%>" width="200">
