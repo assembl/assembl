@@ -1,13 +1,21 @@
 <div class="gu gu-1of1">
 	<div class="bx bx-default">
+		<button class="btn btn-cancel btn-xs bx-close js_deletePartner" type="button">
+			<i class="icon-delete"></i>
+		</button>
 		<div class="gr">
 			<div class="gu gu-1of2 description">
-				<span class="mbs dispb"><%= partner.get('name') %></span>
+				<h4 class="h4 mbs dispb"><%= partner.get('name') %></h4>
 				<span class="mbs dispb"><%= partner.get('description') %></span>
 				<a class="dispb" href="<%= partner.get('homepage') %>">{{ gettext('link') }}</a>
+				<a class="js_editPartner mtl" href="#">{{ gettext('edit') }}</a>
 			</div>
 			<div class="gu gu-last">
-			<div class="tac mbl"><img src="<%= partner.get('logo')%>" width="200"></div>
+				<div class="partner-img-content">
+					<div class="partner-img">
+             <img src="<%= partner.get('logo')%>" width="200">
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
