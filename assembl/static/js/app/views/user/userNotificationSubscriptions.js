@@ -12,7 +12,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             className:'checkbox dispb',
             initialize: function(options){
 
-              if(this.model === undefined){
+              if(this.model === 'undefined'){
                 this.template = "#tmpl-loader";
               }
 
@@ -47,15 +47,30 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
         });
 
         var Notifications = Marionette.CollectionView.extend({
-            template: '',
             childView: Notification,
             initialize: function(options){
-                if(!options.roles){
-                    $('#empty-field').html(i18n.gettext('You are not subscribed to this discussion'));
-                }
+                var collectionManager = new CollectionManager(),
+                    that = this;
+
+                this.notificationsUser = undefined;
+                this.roles = undefined;
+
+                $.when(collectionManager.getNotificationsUserCollectionPromise(),
+                    collectionManager.getLocalRoleCollectionPromise()).then(
+                    function (NotificationsUser, allRole) {
+                        that.notificationsUser = NotificationsUser;
+
+                        if(allRole.length){
+                            that.roles = allRole.at(0);
+                        }else {
+                            that.roles = null;
+                        }
+
+                        that.render();
+                    });
 
                 this.childViewOptions = {
-                   roles: options.roles
+                   roles: this.roles
                }
             }
         });
@@ -68,7 +83,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             tagName:'label',
             className:'checkbox dispb',
             initialize: function(options){
-              this.roles = options.roles;
+              this.roles = options.roles
               this.notificationsUser = options.notificationsUser;
               this.notificationTemplates = options.notificationTemplates;
             },
@@ -118,40 +133,53 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
         var TemplateSubscriptions = Marionette.CollectionView.extend({
             childView: TemplateSubscription,
-            initialize: function(options){
-                this.roles = options.roles;
-                this.notificationTemplates = options.notificationTemplates;
-                this.notificationsUser = options.notificationsUser;
+            initialize: function(){
+                var that = this,
+                    collectionManager = new CollectionManager(),
+                    addableGlobalSubscriptions = new Backbone.Collection();
 
-                var addableGlobalSubscriptions = new Backbone.Collection();
+                this.notificationTemplates = undefined;
+                this.notificationsUser = undefined;
+                this.roles = undefined;
 
-                if(this.notificationsUser === undefined ||
-                    this.notificationTemplates === undefined){
-                    console.log('notificationTemplates or notificationTemplates is undefined');
-                    return;
-                }
+                $.when(collectionManager.getNotificationsUserCollectionPromise(),
+                    collectionManager.getNotificationsDiscussionCollectionPromise(),
+                    collectionManager.getLocalRoleCollectionPromise()).then(
+                    function (NotificationsUser, notificationTemplates, allRole) {
+                        that.notificationsUser = NotificationsUser;
+                        that.notificationTemplates = notificationTemplates;
 
-                this.notificationTemplates.each(function (template) {
-                    var alreadyPresent = options.notificationsUser.find(function (subscription) {
-                        if (subscription.get('@type') === template.get('@type')) {
-                            return true;
+                        if(allRole.length){
+                            that.roles = allRole.at(0);
+                        }else {
+                            that.roles = null;
                         }
-                        else {
-                            return false
+
+                        that.notificationTemplates.each(function (template) {
+                            var alreadyPresent = that.notificationsUser.find(function (subscription) {
+                                if (subscription.get('@type') === template.get('@type')) {
+                                    return true;
+                                }
+                                else {
+                                    return false
+                                }
+                            });
+                            if (alreadyPresent === undefined) {
+                                addableGlobalSubscriptions.add(template)
+                            }
+                        });
+
+                        that.collection = addableGlobalSubscriptions;
+
+                        that.childViewOptions = {
+                            roles: that.roles,
+                            notificationsUser: that.notificationsUser,
+                            notificationTemplates: that.notificationTemplates
                         }
+
+                        that.render();
                     });
-                    if (alreadyPresent === undefined) {
-                        addableGlobalSubscriptions.add(template)
-                    }
-                });
 
-                this.collection = addableGlobalSubscriptions;
-
-                this.childViewOptions = {
-                  roles: this.roles,
-                  notificationsUser: this.notificationsUser,
-                  notificationTemplates: this.notificationTemplates
-                }
             }
         });
 
@@ -201,7 +229,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                 var collectionManager = new CollectionManager(),
                     that = this;
 
-                this.model === undefined;
+                this.model = undefined;
 
                 $.when(collectionManager.getLocalRoleCollectionPromise()).then(
                     function (allRole) {
@@ -211,16 +239,8 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                         }else {
                             that.model = null;
                         }
-
                         that.render();
                     });
-
-               if(this.model === undefined){
-                   this.template = "#tmpl-loader";
-               }
-
-
-               console.debug(this.model);
 
             },
 
@@ -240,7 +260,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                     roles.destroy({
                         success: function (model, resp) {
-                            that.render();
+
                         },
                         error: function (model, resp) {
                             console.error('ERROR: unSubscription', resp);
@@ -263,7 +283,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                     LocalRolesUser.save(null, {
                         success: function (model, resp) {
-                            that.render();
+
                         },
                         error: function (model, resp) {
                             console.error('ERROR: joinDiscussion->subscription', resp);
@@ -277,80 +297,36 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
         var userNotificationSubscriptions = Marionette.LayoutView.extend({
             template: '#tmpl-userNotificationSubscriptions',
             className: 'admin-notifications',
-            ui: {
-              close: '.bx-alert-success .bx-close'
-            },
             regions: {
               userNotifications:'#userNotifications',
               templateSubscription: '#templateSubscriptions',
               userSubscriber: '#subscriber',
               notifByEmail: '#notifByEmail'
             },
-            initialize: function () {
-                var collectionManager = new CollectionManager(),
-                    that = this;
-
-                this.notificationTemplates = undefined;
-                this.notificationsUser = undefined;
-                this.roles = undefined;
-
-                $.when(collectionManager.getNotificationsUserCollectionPromise(),
-                    collectionManager.getNotificationsDiscussionCollectionPromise(),
-                    collectionManager.getLocalRoleCollectionPromise()).then(
-                    function (NotificationsUser, notificationTemplates, allRole) {
-                        that.notificationsUser = NotificationsUser;
-                        that.notificationTemplates = notificationTemplates;
-
-                        if(allRole.length){
-                            that.roles = allRole.at(0);
-                        }else {
-                            that.roles = null;
-                        }
-
-                        that.render();
-                    });
-
-            },
-            events: {
-                'click @ui.close': 'close'
-            },
-
             onRender: function () {
 
                var subscriber = new Subscriber();
                this.userSubscriber.show(subscriber);
 
-               var userNotification = new Notifications({
-                   collection: this.notificationsUser,
-                   roles: this.roles
-               });
+               var userNotification = new Notifications();
                this.userNotifications.show(userNotification);
 
-               var templateSubscriptions = new TemplateSubscriptions({
-                    notificationTemplates: this.notificationTemplates,
-                    notificationsUser: this.notificationsUser,
-                    roles: this.roles
-               });
+               var templateSubscriptions = new TemplateSubscriptions();
                this.templateSubscription.show(templateSubscriptions);
 
-                var emailAccount = new emailAccounts.Collection();
-                var notificationByEmails = new NotificationByEmails({
-                    collection: emailAccount
-                });
-                emailAccount.fetch();
+               var emailAccount = new emailAccounts.Collection();
+               var notificationByEmails = new NotificationByEmails({
+                   collection: emailAccount
+               });
+               emailAccount.fetch();
 
-                this.notifByEmail.show(notificationByEmails);
+               this.notifByEmail.show(notificationByEmails);
             },
 
             serializeData: function () {
                 return {
-                    i18n: i18n,
-                    roles: this.roles
+                    i18n: i18n
                 }
-            },
-
-            close: function () {
-                this.$('.bx-alert-success').addClass('hidden');
             }
 
         });
