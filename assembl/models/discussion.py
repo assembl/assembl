@@ -123,8 +123,7 @@ class Discussion(DiscussionBoundBase):
         self.db.add(participant_template)
 
     def unique_query(self, query):
-        # Skip Discussion_bound_base
-        return super(DiscussionBoundBase, self).unique_query(query)
+        return query.filter_by(slug=self.slug), True
 
     def serializable(self):
         return {

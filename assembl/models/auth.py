@@ -866,7 +866,7 @@ class LocalUserRole(DiscussionBoundBase):
         role_id = self.role_id or self.role.id
         discussion_id = self.discussion_id or self.discussion.id
         return query.filter_by(
-            user_id=user_id, role_id=role_id, discussion_id=discussion_id)
+            user_id=user_id, role_id=role_id, discussion_id=discussion_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -1146,7 +1146,7 @@ class PartnerOrganization(DiscussionBoundBase):
 
     def unique_query(self, query):
         query = super(PartnerOrganization, self).unique_query(query)
-        return query.filter_by(name=self.name)
+        return query.filter_by(name=self.name), True
 
     def get_discussion_id(self):
         return self.discussion_id

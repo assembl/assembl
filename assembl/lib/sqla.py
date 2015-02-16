@@ -1112,25 +1112,27 @@ class BaseOps(object):
         # But without the flush, some relations will not be interpreted
         # correctly. Strive to avoid the flush in most cases.
         unique_query = self.db.query(self.__class__)
-        other = self.unique_query(unique_query).first()
-        if other and other is not self:
-            if duplicate_error:
-                raise HTTPBadRequest("Duplicate object created")
-            else:
-                # Presumably not necessary as never added.
-                # db.delete(self)
-                # TODO: Check if there's a risk of infinite recursion here?
-                return other._do_update_from_json(
-                    json, parse_def, aliases, context, permissions,
-                    user_id, duplicate_error)
+        unique_query, usable = self.unique_query(unique_query)
+        if usable:
+            other = unique_query.first()
+            if other and other is not self:
+                if duplicate_error:
+                    raise HTTPBadRequest("Duplicate object created")
+                else:
+                    # Presumably not necessary as never added.
+                    # db.delete(self)
+                    # TODO: Check if there's a risk of infinite recursion here?
+                    return other._do_update_from_json(
+                        json, parse_def, aliases, context, permissions,
+                        user_id, duplicate_error)
         return self
 
     def unique_query(self, query):
         # To be reimplemented in subclasses with a more intelligent check.
         # See notification for example.
         if self.id is None:
-            return query
-        return query.filter_by(id=self.id)
+            return (query, False)
+        return (query.filter_by(id=self.id), True)
 
     @classmethod
     def extra_collections(cls):

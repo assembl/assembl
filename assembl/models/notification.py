@@ -297,14 +297,15 @@ class NotificationSubscription(DiscussionBoundBase):
 
     def check_unique(self):
         self.db.flush()
-        other = self.unique_query().first()
+        query, usable = self.unique_query()
+        other = query.first()
         return other is None or other == self
 
     def unique_query(self):
         return self.db.query(self.__class__).filter_by(
             user_id=self.user_id, discussion_id=self.discussion_id,
             parent_subscription_id = self.parent_subscription_id,
-            type=self.type)
+            type=self.type), True
 
     def is_owner(self, user_id):
         return self.user_id == user_id
@@ -393,7 +394,7 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         return super(NotificationSubscriptionOnPost, self).unique_query(
-            ).filter_by(post_id=self.post_id)
+            ).filter_by(post_id=self.post_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -432,7 +433,7 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         return super(NotificationSubscriptionOnIdea, self).unique_query(
-            ).filter_by(idea_id=self.idea_id)
+            ).filter_by(idea_id=self.idea_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -471,7 +472,7 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         return super(NotificationSubscriptionOnExtract, self).unique_query(
-            ).filter_by(extract_id=self.extract_id)
+            ).filter_by(extract_id=self.extract_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -510,7 +511,7 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         return super(NotificationSubscriptionOnUserAccount, self).unique_query(
-            ).filter_by(on_user_id=self.on_user_id)
+            ).filter_by(on_user_id=self.on_user_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
