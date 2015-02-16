@@ -22,7 +22,8 @@ from sqlalchemy import (
 
 from pyramid.httpexceptions import (
     HTTPUnauthorized, HTTPBadRequest)
-from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy.orm import (
+    relationship, backref, deferred, with_polymorphic)
 from sqlalchemy import inspect
 from sqlalchemy.types import Text
 from sqlalchemy.schema import Index
@@ -66,7 +67,6 @@ class AgentProfile(Base):
 
     def get_preferred_email_account(self):
         if inspect(self).attrs.accounts.loaded_value is NO_VALUE:
-            # TODO: remove polymorphism
             account = self.db.query(AbstractAgentAccount).filter(
                 (AbstractAgentAccount.profile_id == self.id)
                 & (AbstractAgentAccount.email != None)).order_by(
@@ -77,7 +77,8 @@ class AgentProfile(Base):
         elif self.accounts:
             accounts = [a for a in self.accounts if a.email]
             accounts.sort(key=lambda e: (not e.verified, not e.preferred))
-            return accounts[0]
+            if accounts:
+                return accounts[0]
 
     def get_preferred_email(self):
         if self.get_preferred_email_account() is not None:
