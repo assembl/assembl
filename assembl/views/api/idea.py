@@ -91,6 +91,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     permissions = get_permissions(user_id, discussion.id)
     retval = [idea.generic_json(view_def, user_id, permissions)
               for idea in ideas]
+    retval = [x for x in retval if x is not None]
     widget_data = defaultdict(list)
     for widget in discussion.widgets:
         url = widget.get_ui_endpoint()
