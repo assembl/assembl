@@ -1371,13 +1371,13 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             seeMore: function (e) {
                 e.stopPropagation();
                 $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
-                    if($(event.target).hasClass('js_introductionSeeMore')) {
+                    if($(e.target).hasClass('js_introductionSeeMore')) {
                         var model = new Backbone.Model({
                             content: discussion.introduction,
                             title: i18n.gettext('Context')
                         });
                     }
-                    else if($(event.target).hasClass('js_objectivesSeeMore')) {
+                    else if($(e.target).hasClass('js_objectivesSeeMore')) {
                         var model = new Backbone.Model({
                             content: discussion.objectives,
                             title: i18n.gettext('Objectives')
