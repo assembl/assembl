@@ -42,7 +42,8 @@ var requirejs_config = {
         'bootstrap': '../lib/bootstrap',
         'dropdown': '../lib/dropdown',
         'jquery-linkify': '../bower/jQuery-linkify/dist/jquery.linkify.min',
-        'jquery-oembed-all': '../bower/jquery-oembed-all/jquery.oembed'
+        'jquery-oembed-all': '../bower/jquery-oembed-all/jquery.oembed',
+        'jquery.bootstrap-growl':'../bower/bootstrap-growl/jquery.bootstrap-growl'
     },
     shim: {
         'underscore': {
@@ -143,6 +144,9 @@ var requirejs_config = {
                 this.mocha.setup('bdd');
                 return this.mocha;
             }
+        },
+        'jquery.bootstrap-growl':{
+            deps: ['jquery']
         }
     }
 };
