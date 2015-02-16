@@ -393,8 +393,8 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
         return self.post
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnPost, self).unique_query(
-            ).filter_by(post_id=self.post_id), True
+        query, _ = super(NotificationSubscriptionOnPost, self)
+        return query.filter_by(post_id=self.post_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -432,8 +432,8 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
         return self.idea
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnIdea, self).unique_query(
-            ).filter_by(idea_id=self.idea_id), True
+        query, _ = super(NotificationSubscriptionOnIdea, self)
+        return query.filter_by(idea_id=self.idea_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -471,8 +471,8 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
         return self.extract
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnExtract, self).unique_query(
-            ).filter_by(extract_id=self.extract_id), True
+        query, _ = super(NotificationSubscriptionOnExtract, self)
+        return query.filter_by(extract_id=self.extract_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -510,8 +510,8 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
         return self.user
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnUserAccount, self).unique_query(
-            ).filter_by(on_user_id=self.on_user_id), True
+        query, _ = super(NotificationSubscriptionOnUserAccount, self)
+        return query.filter_by(on_user_id=self.on_user_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,

@@ -862,7 +862,7 @@ class LocalUserRole(DiscussionBoundBase):
         return self.role.name
 
     def unique_query(self, query):
-        query = super(LocalUserRole, self).unique_query(query)
+        query, _ = super(LocalUserRole, self).unique_query(query)
         user_id = self.user_id or self.user.id
         role_id = self.role_id or self.role.id
         discussion_id = self.discussion_id or self.discussion.id
@@ -1146,7 +1146,7 @@ class PartnerOrganization(DiscussionBoundBase):
     is_initiator = Column(Boolean)
 
     def unique_query(self, query):
-        query = super(PartnerOrganization, self).unique_query(query)
+        query, _ = super(PartnerOrganization, self).unique_query(query)
         return query.filter_by(name=self.name), True
 
     def get_discussion_id(self):
