@@ -66,6 +66,7 @@ class AgentProfile(Base):
 
     def get_preferred_email_account(self):
         if inspect(self).attrs.accounts.loaded_value is NO_VALUE:
+            # TODO: remove polymorphism
             account = self.db.query(AbstractAgentAccount).filter(
                 (AbstractAgentAccount.profile_id == self.id)
                 & (AbstractAgentAccount.email != None)).order_by(
@@ -857,6 +858,14 @@ class LocalUserRole(DiscussionBoundBase):
 
     def get_role_name(self):
         return self.role.name
+
+    def unique_query(self, query):
+        query = super(LocalUserRole, self).unique_query(query)
+        user_id = self.user_id or self.user.id
+        role_id = self.role_id or self.role.id
+        discussion_id = self.discussion_id or self.discussion.id
+        return query.filter_by(
+            user_id=user_id, role_id=role_id, discussion_id=discussion_id)
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
