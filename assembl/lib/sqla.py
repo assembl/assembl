@@ -880,6 +880,10 @@ class BaseOps(object):
                         elif col.type.python_type is str \
                                 and isinstance(value, unicode):
                             setattr(self, key, value.encode('ascii'))  # or utf-8?
+                        elif col.type.python_type is bool \
+                                and value.lower() in ("true", "false"):
+                            # common error... tolerate.
+                            setattr(self, key, value.lower() == "true")
                         elif col.type.python_type in (str, unicode):
                             setattr(self, key, value)
                         else:
