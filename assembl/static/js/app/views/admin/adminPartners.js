@@ -34,7 +34,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                 var self = this;
 
                 var Modal = Backbone.Modal.extend({
-                    template: _.template($('#tmpl-adminPartnerForm').html()),
+                    template: _.template($('#tmpl-adminPartnerEditForm').html()),
                     className: 'partner-modal popin-wrapper',
                     cancelEl: '.close, .js_close',
                     keyControl: false,
@@ -49,8 +49,6 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
 
                         var that = this,
                             inputs = this.$('*[required=required]'),
-                            dataPartner = this.$('#partner-form').serialize(),
-                            urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/',
                             regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
                             controls = document.querySelectorAll('#partner-form .control-group');
 
@@ -85,18 +83,23 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             $(controls).removeClass('success');
                             $(inputs).val('');
 
-                            $.ajax({
-                                url: urlPartner,
-                                type: "post",
-                                data: dataPartner,
-                                success: function (response, text) {
+                            self.model.set({
+                                description: this.$('.partner-description').val(),
+                                homepage: this.$('.partner-homepage').val(),
+                                logo: this.$('.partner-logo').val(),
+                                name: this.$('.partner-name').val(),
+                                is_initiator: (this.$('.partner-initiator:checked').val()) ? true : false
+                            });
+
+                            self.model.save(null, {
+                                success: function(model, resp){
                                     self.render();
                                     that.triggerSubmit();
                                 },
-                                error: function (request, status, error) {
-                                    alert(status + ': ' + error);
+                                error: function(model, resp){
+                                    console.log(resp)
                                 }
-                            });
+                            })
 
                         }
 
