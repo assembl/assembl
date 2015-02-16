@@ -1134,27 +1134,9 @@ class PartnerOrganization(DiscussionBoundBase):
 
     is_initiator = Column(Boolean)
 
-    def _do_update_from_json(
-            self, json, parse_def, aliases, ctx, permissions,
-            user_id, duplicate_error=True):
-        from ..auth.util import user_has_permission
-        from .discussion import Discussion
-        if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
-            raise HTTPUnauthorized()
-        if self.discussion_id:
-            if 'discussion_id' in json and Discussion.get_database_id(json['discussion_id']) != self.discussion_id:
-                raise HTTPBadRequest()
-        else:
-            discussion_id = json.get('discussion', ctx.get_discussion_id())
-            if discussion_id is None:
-                raise HTTPBadRequest()
-            self.discussion_id = Discussion.get_database_id(discussion_id)
-        self.name = json.get('name', self.name)
-        self.description = json.get('description', self.description)
-        self.is_initiator = json.get('is_initiator', self.is_initiator)
-        self.logo = json.get('logo', self.logo)
-        self.homepage = json.get('homepage', self.homepage)
-        return self
+    def unique_query(self, query):
+        query = super(PartnerOrganization, self).unique_query(query)
+        return query.filter_by(name=self.name)
 
     def get_discussion_id(self):
         return self.discussion_id

@@ -37,6 +37,15 @@ class DiscussionBoundBase(Base):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id, )
 
+    def unique_query(self, query):
+        query = super(DiscussionBoundBase, self).unique_query(query)
+        discussion_id = self.discussion_id
+        if not discussion_id and self.discussion:
+            discussion_id = self.discussion.id
+        if not discussion_id:
+            return query
+        return query.filter_by(discussion_id=discussion_id)
+
     def tombstone(self):
         return DiscussionBoundTombstone(self)
 

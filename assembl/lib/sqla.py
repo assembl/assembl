@@ -1094,7 +1094,7 @@ class BaseOps(object):
             if all((col in treated_foreign_keys
                     for col in reln.local_columns)):
                 continue
-            if reln.direction.name != MANYTOONE:
+            if reln.direction != MANYTOONE:
                 # only direct relations
                 continue
             if getattr(self, reln.key, None) is None:
