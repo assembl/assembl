@@ -145,7 +145,7 @@ def use_json_header_for_LocalUserRole_PUT(request):
 
 
 @view_config(context=CollectionContext, renderer='json', request_method='GET',
-             ctx_collection_class=LocalUserRole, permission=P_READ,
+             ctx_collection_class=LocalUserRole,
              accept="application/json")
 def view_localuserrole_collection(request):
     return collection_view(request, 'default')
