@@ -216,8 +216,8 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                                 description: this.$('.partner-description').val(),
                                 homepage: this.$('.partner-homepage').val(),
                                 logo: this.$('.partner-logo').val(),
-                                name: this.$('.partner-name').val() ,
-                                is_initiator: this.$('.partner-initiator').val()
+                                name: this.$('.partner-name').val(),
+                                is_initiator: (this.$('.partner-initiator:checked').val()) ? true : false
                             });
 
                             partner.save(null, {
@@ -227,7 +227,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                                     that.triggerSubmit();
                                 },
                                 error: function(model, resp){
-                                    alert(resp);
+                                    console.log(resp)
                                 }
                             })
 
