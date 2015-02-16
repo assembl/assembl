@@ -28,8 +28,9 @@ def get_syntheses(request):
     permissions = get_permissions(user_id, discussion_id)
     syntheses = discussion.get_all_syntheses()
     view_def = request.GET.get('view') or 'default'
-    return [synthesis.generic_json(view_def, user_id, permissions)
-            for synthesis in syntheses]
+    res = [synthesis.generic_json(view_def, user_id, permissions)
+           for synthesis in syntheses]
+    return [x for x in res if x is not None]
 
 
 @synthesis.get(permission=P_READ)

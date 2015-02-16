@@ -418,7 +418,7 @@ class BaseOps(object):
             self, view_def_name='default', user_id=Everyone,
             permissions=(P_READ, ), base_uri='local:'):
         if not self.user_can(user_id, CrudPermissions.READ, permissions):
-            return self.uri(base_uri)
+            return None
         view_def = get_view_def(view_def_name or 'default')
         my_typename = self.external_typename()
         result = {}
@@ -505,17 +505,22 @@ class BaseOps(object):
                 elif isinstance(v, datetime):
                     return v.isoformat()
                 elif isinstance(v, dict):
-                    return {translate_to_json(k): translate_to_json(v)
-                            for k, v in v.items()}
+                    v = {translate_to_json(k): translate_to_json(val)
+                         for k, val in v.items()}
+                    return {k: val for (k, val) in v.items()
+                            if val is not None}
                 elif isinstance(v, Iterable):
-                    return [translate_to_json(i) for i in v]
+                    v = [translate_to_json(i) for i in v]
+                    return [x for x in v if x is not None]
                 else:
                     raise NotImplementedError("Cannot translate", v)
 
             if prop_name == 'self':
                 if view_name:
-                    result[name] = self.generic_json(
+                    r = self.generic_json(
                         view_name, user_id, permissions, base_uri)
+                    if r is not None:
+                        result[name] = r
                 else:
                     result[name] = self.uri()
                 continue
@@ -612,10 +617,11 @@ class BaseOps(object):
                         user_id, CrudPermissions.READ, permissions):
                     val = ob.generic_json(
                         view_name, user_id, permissions, base_uri)
-                    if isinstance(spec, list):
-                        result[name] = [val]
-                    else:
-                        result[name] = val
+                    if val is not None:
+                        if isinstance(spec, list):
+                            result[name] = [val]
+                        else:
+                            result[name] = val
                 else:
                     if isinstance(spec, list):
                         result[name] = []

@@ -40,10 +40,12 @@ def _get_agents_real(discussion, user_id=Everyone, view_def=None):
             result = agent.generic_json(view_def, user_id, permissions)
         else:
             result = agent.serializable()
+        if result is None:
+            return
         if include_emails or agent.id == user_id:
             result['preferred_email'] = agent.get_preferred_email()
         return result
-    return [view(agent) for agent in agents]
+    return [view(agent) for agent in agents if agent is not None]
 
 
 @agents.get(permission=P_READ)

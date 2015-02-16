@@ -97,7 +97,8 @@ def class_view(request):
     if view == 'id_only':
         return [ctx._class.uri_generic(x) for (x,) in q.all()]
     else:
-        return [i.generic_json(view, user_id, permissions) for i in q.all()]
+        r = [i.generic_json(view, user_id, permissions) for i in q.all()]
+        return [x for x in r if x is not None]
 
 
 @view_config(context=InstanceContext, renderer='json', name="jsonld",
@@ -167,7 +168,8 @@ def collection_view(request, default_view='default'):
     if view == 'id_only':
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
     else:
-        return [i.generic_json(view, user_id, permissions) for i in q.all()]
+        res = [i.generic_json(view, user_id, permissions) for i in q.all()]
+        return [x for x in res if x is not None]
 
 
 def collection_add(request, args):
