@@ -47,12 +47,12 @@
 				<label class="control-label">use ssl</label>
 				<div class="controls">
 					<label class="radio custom-radio">
-						<input type="radio" checked="checked" name="use_ssl">
+						<input type="radio" id="use_ssl" <%= source.get('use_ssl') ? 'checked': '' %> name="use_ssl" value="true">
 						<span class="custom-radio-element"></span>
 						true
 					</label>
 					<label class="radio custom-radio">
-						<input type="radio" name="use_ssl">
+						<input type="radio" id="use_ssl" <%= source.get('use_ssl') ? '': 'checked' %> name="use_ssl" value="false">
 						<span class="custom-radio-element"></span>
 						false
 					</label>
@@ -60,24 +60,21 @@
 			</div>
 
 			<div class="control-group">
-				<label for="folder" class="control-label"><%= source.get('folder') %></label>
+				<label for="folder" class="control-label">folder</label>
 				<div class="controls">
-					<input type="text" id="folder" class="input-xlarge">
-					<p class="help-block">Lorem iptsum</p>
+					<input type="text" id="folder" class="input-xlarge" value="<%= source.get('folder') %>">
 				</div>
 			</div>
 
 			<div class="control-group">
-				<label for="port" class="control-label"><%= source.get('port') %></label>
+				<label for="port" class="control-label">port</label>
 				<div class="controls">
-					<input type="text" id="port" class="input-xlarge">
-					<p class="help-block">Lorem iptsum</p>
+					<input type="text" id="port" class="input-xlarge" value="<%= source.get('port') %>">
 				</div>
 			</div>
 
     <div class="form-actions ptm">
-      <button class="btn btn-primary" type="submit">Save changes</button>
-      <button class="btn btn-cancel">Cancel</button>
+      <button class="btn btn-primary js_saveSource" type="submit">Save changes</button>
     </div>
   </fieldset>
 </form>

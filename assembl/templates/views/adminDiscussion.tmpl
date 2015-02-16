@@ -33,6 +33,7 @@
     		{{ gettext("Your settings were saved") }}
     	</div>
       <div class="gr">
+      <% if(discussion){ %>
         <div class="gu gu-1of1">
            {% if admin_discussion_permissions_url %}
                <p class="mbl">
@@ -75,6 +76,7 @@
 								</div>
              </form>
         </div>
+        <% } %>
       </div>
     </div>
   </div>

@@ -146,4 +146,12 @@ table {
   .description {
     word-wrap: break-word;
   }
+  .partner-img-content {
+    display: table;
+    width: 100%;
+    .partner-img {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
 }

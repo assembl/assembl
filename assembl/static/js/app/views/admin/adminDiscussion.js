@@ -14,13 +14,15 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                this.model = new Discussion.Model();
+                this.model = undefined;
 
                 $.when(collectionManager.getDiscussionModelPromise()).then(
                     function (Discussion) {
-                        _.extend(that.model.attributes, Discussion.attributes);
+                        that.model =  Discussion;
                         that.render();
                     });
+
+                console.debug(this.model);
             },
 
             events: {
@@ -42,14 +44,14 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
             saveDiscussion: function (e) {
                 e.preventDefault();
 
-                var topic = this.$('input[name=topic]').val(),
+                var introduction = this.$('textarea[name=introduction]').val(),
+                    topic = this.$('input[name=topic]').val(),
                     slug = this.$('input[name=slug]').val(),
                     objectives = this.$('textarea[name=objectives]').val(),
                     that = this;
 
-                this.model.url = '/api/v1/discussion/' + Ctx.getDiscussionId();
-
                 this.model.set({
+                    introduction:introduction,
                     topic: topic,
                     slug: slug,
                     objectives: objectives
