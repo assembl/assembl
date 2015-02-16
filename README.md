@@ -11,40 +11,50 @@ apt-add-repository ppa:chris-lea/uwsgi
 
 - Ruby does not like libreadline6, which comes on newer Ubuntus. Make sure you have libreadline-gplv2-dev instead of libreadline6-dev.
 
-## Installing Virtuoso
-
-Mac
-
-Download **[Virtuoso](http://sourceforge.net/projects/virtuoso/files/virtuoso/6.1.8/virtuoso-opensource-6.1.8.tar.gz/download)**
-
-``` sh
-tar -zxvf virtuoso-opensource-6.1.8.tar.gz
-cd virtuoso-opensource-6.1.8
-./confugure
-make install
-
-
-#On OS X, if you have MacPorts, you would sudo port install virtuoso
-From source: http://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSDownload
-```
-
-Linux
-
-``` sh
-sudo apt-get install virtuoso-server virtuoso-vad-conductor
-```
-
 ### Setup a development environment:
 
 You need fabric 1.5.1 and a ssh server installed:
 
-On mac:  If you have Homebrew installed, pip installs with python:
+#### On Mac
+
+The system python has an old but serviceable pip version. It can be updated with 
+
+``` sh
+sudo pip install -U pip
+```
+
+If you have Homebrew installed, and you want to use the Homebrew python, pip installs with python:
 
 ``` sh
 brew install python
 ```
 
-On ubuntuL you can get all that you need to bootstrap with:
+Either way, you should use pip to install fabric:
+
+``` sh
+pip install -U fabric
+```
+
+##### iODBC on Mac
+
+Then, you need to install libiodbc. You can get it from [MacPorts](https://www.macports.org/), or we maintain [a package](http://assembl.coeus.ca/static/wheelhouse/iodbc.pkg) that you can install directly. That package was built on Yosemite; on an older system you way want to build [from source](http://www.iodbc.org/dataspace/iodbc/wiki/iODBC/Downloads). We are using version 3.52.9, with this MacPorts patch applied:
+
+```patch
+--- iodbcinst/unicode.h.orig
++++ iodbcinst/unicode.h
+@@ -77,6 +77,7 @@
+ #ifndef _UNICODE_H
+ #define _UNICODE_H
+
++#include <sys/types.h>
+
+ #if defined (__APPLE__) && !defined (MACOSX102) && !defined (HAVE_CONFIG_H)
+ #define HAVE_WCHAR_H
+```
+
+#### On Ubuntu
+
+You can get all that you need to bootstrap with:
 ``` sh
 apt-get install fabric git openssh-server
 ```
@@ -66,6 +76,7 @@ cd assembl
 fab devenv install_builddeps
 fab devenv bootstrap_from_checkout
 ```
+
 **Running**
 
 Note:  memcached and redis must be running already.
