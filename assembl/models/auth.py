@@ -1138,13 +1138,14 @@ class PartnerOrganization(DiscussionBoundBase):
             self, json, parse_def, aliases, ctx, permissions,
             user_id, duplicate_error=True):
         from ..auth.util import user_has_permission
+        from .discussion import Discussion
         if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
             raise HTTPUnauthorized()
         if self.discussion_id:
             if 'discussion_id' in json and Discussion.get_database_id(json['discussion_id']) != self.discussion_id:
                 raise HTTPBadRequest()
         else:
-            discussion_id = json.get('discussion', None)
+            discussion_id = json.get('discussion', ctx.get_discussion_id())
             if discussion_id is None:
                 raise HTTPBadRequest()
             self.discussion_id = Discussion.get_database_id(discussion_id)
