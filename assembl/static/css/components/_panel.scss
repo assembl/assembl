@@ -48,25 +48,6 @@
 .panel.is-dragover {
 }
 
-// blocked and with a loading message
-// ****************
-.panel.is-loading {
-  cursor: wait;
-
-  &:after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    @include z-index("float");
-
-    display: block;
-    content: "";
-    background: rgba(0, 0, 0, .15) url(#{$img-dir}/panel/loading.gif) no-repeat center center;
-  }
-}
-
 /* Animations */
 @include keyframes(spin) {
   from {

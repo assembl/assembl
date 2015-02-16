@@ -1225,7 +1225,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
         });
 
         var Instigator = Marionette.ItemView.extend({
-            template: '#tmpl-instigator',
+            template: '#tmpl-loader',
             initialize: function(){
                 var that = this,
                     collectionManager = new CollectionManager();
@@ -1236,6 +1236,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     that.instigator = _.find(partners.models, function(partner){
                         return partner.get('is_initiator');
                     });
+                    that.template = '#tmpl-instigator';
                     that.render();
                 });
 
