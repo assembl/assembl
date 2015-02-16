@@ -94,7 +94,14 @@
     "Discussion": {
         "settings": "settings_json",
         "permissions": false,
-        "widget_collection_url": false
+        "widget_collection_url": false,
+        "creation_date": false,
+        "slug": true,
+        "topic": true,
+        "objectives": true,
+        "introduction": true,
+        "introductionDetails": true,
+        "subscribe_to_notifications_on_signup": true
     },
     "Idea": {
         "longTitle": "long_title",
