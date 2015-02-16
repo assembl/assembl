@@ -56,7 +56,7 @@ def get_extract(request):
     extract_id = request.matchdict['id']
     extract = Extract.get_instance(extract_id)
     view_def = request.GET.get('view')
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     user_id = authenticated_userid(request)
     permissions = get_permissions(user_id, discussion_id)
 
@@ -286,7 +286,7 @@ def delete_extract(request):
 def do_search_extracts(request):
     uri = request.GET['uri']
     view_def = request.GET.get('view')
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     user_id = authenticated_userid(request)
     permissions = get_permissions(user_id, discussion_id)
 

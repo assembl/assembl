@@ -29,7 +29,7 @@ idea_extracts = Service(
 # Create
 @ideas.post(permission=P_ADD_IDEA)
 def create_idea(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     session = Discussion.db()
     discussion = session.query(Discussion).get(int(discussion_id))
     idea_data = json.loads(request.body)
@@ -58,7 +58,7 @@ def get_idea(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view')
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     user_id = authenticated_userid(request)
     permissions = get_permissions(user_id, discussion_id)
 
@@ -112,7 +112,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
 @ideas.get(permission=P_READ)
 def get_ideas(request):
     user_id = authenticated_userid(request)
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
@@ -124,7 +124,7 @@ def get_ideas(request):
 # Update
 @idea.put(permission=P_EDIT_IDEA)
 def save_idea(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)
     #Idea.db.execute('set transaction isolation level read committed')
@@ -226,7 +226,7 @@ def get_idea_extracts(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view')
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     user_id = authenticated_userid(request)
     permissions = get_permissions(user_id, discussion_id)
 

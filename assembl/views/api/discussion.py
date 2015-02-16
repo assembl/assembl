@@ -22,7 +22,7 @@ discussion = Service(
 
 @discussion.get(permission=P_READ)
 def get_discussion(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
     view_def = request.GET.get('view') or 'default'
     user_id = authenticated_userid(request)
@@ -39,7 +39,7 @@ def get_discussion(request):
 # discussion URLs.
 @discussion.put(permission=P_ADMIN_DISC)
 def post_discussion(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
 
     if not discussion:

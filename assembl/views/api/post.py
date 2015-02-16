@@ -246,7 +246,7 @@ def get_post(request):
 
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     user_id = authenticated_userid(request)
     permissions = get_permissions(user_id, discussion_id)
 
@@ -325,12 +325,12 @@ def create_post(request):
     else:
         in_reply_to_post = None
     
-    if idea_id:        
+    if idea_id:
         in_reply_to_idea = Idea.get_instance(idea_id)
     else:
         in_reply_to_idea = None
-    
-    discussion_id = request.matchdict['discussion_id']
+
+    discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
 
     if not discussion:
@@ -379,7 +379,6 @@ def create_post(request):
             idea=in_reply_to_idea
         )
         IdeaRelatedPostLink.db.add(idea_post_link)
-
     for source in discussion.sources:
         source.send_post(new_post)
     permissions = get_permissions(user_id, discussion_id)

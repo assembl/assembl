@@ -803,7 +803,7 @@ def password_change_sent(request):
     slug_prefix = "/" + slug if slug else ""
     return dict(
         get_default_context(request),
-        profile_id=request.matchdict.get('profile_id'),
+        profile_id=int(request.matchdict.get('profile_id')),
         slug_prefix=slug_prefix,
         error=request.params.get('error'),
         title=localizer.translate(_('Password change requested')),
