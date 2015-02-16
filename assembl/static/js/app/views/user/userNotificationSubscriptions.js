@@ -12,9 +12,8 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             className:'checkbox dispb',
             initialize: function(options){
 
-              //FIXME: globale loader
               if(this.model === undefined){
-                this.template = _.template('<div class="is-loading"></div>');
+                this.template = "#tmpl-loader";
               }
 
               this.role = options.roles;
@@ -165,9 +164,8 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             className: 'radio',
             initialize: function(){
 
-                //FIXME: globale loader
                 if(!this.model){
-                    this.template = _.template('<div class="is-loading"></div>');
+                    this.template = "#tmpl-loader";
                 }
             },
             serializeData: function(){
@@ -200,10 +198,29 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                 'click @ui.subscription': 'subscription'
             },
             initialize: function(){
+                var collectionManager = new CollectionManager(),
+                    that = this;
+
+                this.model === undefined;
+
+                $.when(collectionManager.getLocalRoleCollectionPromise()).then(
+                    function (allRole) {
+
+                        if(allRole.length){
+                            that.model = allRole.at(0);
+                        }else {
+                            that.model = null;
+                        }
+
+                        that.render();
+                    });
 
                if(this.model === undefined){
-                   this.template = _.template('<div class="is-loading"></div>');
+                   this.template = "#tmpl-loader";
                }
+
+
+               console.debug(this.model);
 
             },
 
@@ -223,7 +240,6 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                     roles.destroy({
                         success: function (model, resp) {
-                            that.$('.bx-alert-success').removeClass('hidden');
                             that.render();
                         },
                         error: function (model, resp) {
@@ -301,9 +317,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
             onRender: function () {
 
-               var subscriber = new Subscriber({
-                   model: this.roles
-               });
+               var subscriber = new Subscriber();
                this.userSubscriber.show(subscriber);
 
                var userNotification = new Notifications({

@@ -20,14 +20,9 @@
       <h3 class="h3">{{ gettext('Notifications') }}</h3>
     </div>
     <div id="content-container" class="content-container">
-			<div class="bx bx-alert-success hidden">
-				<button class="btn btn-cancel btn-xs bx-close" type="button">
-					<i class="icon-delete"></i>
-				</button>
-				{{ gettext("You have been unsubscribed") }}
-			</div>
       <div class="gr mtl">
 
+				<!-- region button subscriber -->
 				<div id="subscriber"></div>
 
 				<form class="core-form form-horizontal phl">
@@ -43,6 +38,7 @@
           </fieldset>
 				</form>
 
+				<!-- region receive notifications by email -->
 				<div id="notifByEmail"></div>
 
       </div>
