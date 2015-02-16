@@ -53,29 +53,6 @@ define(['backbone.marionette', 'models/discussionSource'], function (Marionette,
 
                 }
             });
-        },
-
-        emailSender: function(e){
-            var email = document.querySelector('#email_sender');
-
-            if(email.validity.valid){
-                e.preventDefault();
-
-                this.model.set({
-                    admin_sender: email.value
-                });
-
-                this.model.save(null, {
-                    success: function(model, resp){
-
-                    },
-                    error: function(model, resp){
-
-                    }
-                });
-
-
-            }
         }
     });
 

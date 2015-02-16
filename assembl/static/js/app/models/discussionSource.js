@@ -14,16 +14,8 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
             'discussion_id': '',
             '@type': '',
             'folder': '',
-            '@id': '',
+            'use_ssl': false,
             'port': 0
-        },
-        validate: function(attrs, options) {
-
-            console.debug(attrs.port, typeof attrs.port);
-
-            if (attrs.port) {
-                return parseInt(port);
-            }
         }
 
     });
