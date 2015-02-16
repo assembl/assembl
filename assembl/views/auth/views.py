@@ -604,7 +604,7 @@ def maybe_auto_subscribe(user, discussion):
     User.db.add(LocalUserRole(
         user_id=user.id, role=role,
         discussion_id=discussion.id))
-    db.flush()
+    User.db.flush()
     # apply new notifications
     user.get_notification_subscriptions(discussion.id)
     return True
