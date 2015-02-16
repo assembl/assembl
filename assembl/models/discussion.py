@@ -11,6 +11,7 @@ from sqlalchemy import (
     SmallInteger,
     DateTime,
     Text,
+    Boolean,
     event,
     and_,
 )
@@ -51,7 +52,7 @@ class Discussion(DiscussionBoundBase):
     introduction = Column(UnicodeText)
     introductionDetails = Column(UnicodeText)
     settings = Column(Text())  # JSON blob
-    subscribe_to_notifications_on_signup = Column(SmallInteger) # SmallInteger is used for Boolean because of Virtuoso
+    subscribe_to_notifications_on_signup = Column(Boolean, default=False)
 
     @property
     def admin_source(self):
