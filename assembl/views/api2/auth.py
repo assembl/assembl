@@ -14,7 +14,7 @@ from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount)
 from assembl.auth.util import get_permissions
 from ..traversal import (CollectionContext, InstanceContext)
-from . import (FORM_HEADER, JSON_HEADER, collection_view)
+from . import (FORM_HEADER, JSON_HEADER, collection_view, instance_put_json)
 
 
 @view_config(
@@ -188,3 +188,22 @@ def delete_abstract_agent_account(request):
                 raise HTTPForbidden("This is the last verified account")
     instance.db.delete(instance)
     return {}
+
+
+@view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER,
+             ctx_instance_class=AbstractAgentAccount, renderer='json')
+def put_abstract_agent_account(request):
+    instance = request.context._instance
+    old_preferred = instance.preferred
+    new_preferred = request.json_body.get('preferred', False)
+    if new_preferred and not instance.email:
+        raise HTTPForbidden("Cannot prefer an account without email")
+    if new_preferred and not instance.verified:
+        raise HTTPForbidden("Cannot set a non-verified email as preferred")
+    result = instance_put_json(request)
+    assert instance.preferred == new_preferred
+    if new_preferred and not old_preferred:
+        for account in instance.profile.accounts:
+            if account != instance:
+                account.preferred = False
+    return result
