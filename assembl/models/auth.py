@@ -482,11 +482,12 @@ class User(AgentProfile):
     @username_p.setter
     def username_p(self, name):
         if self.username:
-            self.username.username = name
+            if name:
+                self.username.username = name
+            else:
+                self.db.delete(self.username)
         elif name:
             self.username = Username(username=name)
-        elif self.username:
-            self.db.delete(self.username)
 
     @username_p.deleter
     def username_p(self):
