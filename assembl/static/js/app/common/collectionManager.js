@@ -236,9 +236,11 @@ define(['app',
                         // the 2048 characters unofficial limit for GET URLs,
                         // (IE and others), we only request up to do up to:
                         // 2000/40 ~= 50 id's at a time
-                        if (_.size(this.requests) >= 50) {
+                        var unservicedRequests = _.filter(this.requests, function(request){ return request['serverRequestInProgress'] === false; });
+                        var numUnservicedRequests = _.size(unservicedRequests)
+                        if (numUnservicedRequests >= 50) {
                             if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                console.log("Executing request immediately, queue size is now:" + _.size(this.requests));
+                                console.log("Executing unserviced request immediately, unserviced queue size is now:", numUnservicedRequests);
                             }
                             //TODO:  This is suboptimal, as the server can be hammered
                             //with concurrent requests for the same data, causing
@@ -253,28 +255,31 @@ define(['app',
 
                     this.executeRequest = function () {
                         var that = this,
-                            allMessageStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise();
+                            allMessageStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise(),
+                            ids = [];
                         if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
                             console.log("executeRequest fired, unregistering worker from collection Manager");
                         }
 
                         this.collectionManager._waitingWorker = undefined;
+                        _.each(that.requests, function (request, id) {
+                          //var structureModel = allMessageStructureCollection.get(id);
+                          if (request['serverRequestInProgress'] === false) {
+                              request['serverRequestInProgress'] = true;
+                              ids.push(id);
+                          }
+                        });
                         allMessageStructureCollectionPromise.done(function (allMessageStructureCollection) {
                             var PostQuery = require('views/messageListPostQuery'),
                                 postQuery = new PostQuery(),
-                                ids = [],
                                 viewDef = 'default';
 
-                            _.each(that.requests, function (request, id) {
-                                //var structureModel = allMessageStructureCollection.get(id);
-                                if (request['serverRequestInProgress'] === false) {
-                                    request['serverRequestInProgress'] = true;
-                                    ids.push(id);
-                                }
-                            });
                             if (_.size(ids) > 0) {
                                 postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
                                 postQuery.setViewDef(viewDef); //We want the full messages
+                                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                                  console.log("requesting message data from server for "+ _.size(ids) + " messages");
+                                }
                                 postQuery.getResultRawDataPromise().done(function (results) {
                                     _.each(results, function (jsonData) {
                                         var id = jsonData['@id'],
@@ -307,11 +312,14 @@ define(['app',
 
                 //Constructor
                 if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                    console.log("Spawning new _getMessageFullModelsRequestWorker");
+                  console.log("Spawning new _getMessageFullModelsRequestWorker");
                 }
                 var that = this;
                 this.executeTimeout = setTimeout(function () {
-                    that.executeRequest();
+                  if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                    console.log("Executing unserviced request immediately (timeaout reached)");
+                  }
+                  that.executeRequest();
                 }, collectionManager.FETCH_WORKERS_LIFETIME);
             },
 
