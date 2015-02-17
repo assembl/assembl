@@ -35,10 +35,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
                 $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).
                     then(function (DiscussionModel) {
-                        /*DiscussionModel.models = _.reject(DiscussionModel.models, function(model){
-                            return model.get('is_initiator') === true
-                        });*/
-
                         that.nbOrganisations = DiscussionModel.models.length;
                         that.collection = DiscussionModel;
                         that.template = '#tmpl-partnerList';
@@ -50,10 +46,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             serializeData: function(){
-                var isConnected = (Ctx.getCurrentUserId()) ? true : false;
-
                 return {
-                    isConnected: isConnected,
                     nbOrganisations: this.nbOrganisations,
                     urlEdit: '/'+ Ctx.getDiscussionSlug() +'/partners'
                 }
@@ -1256,10 +1249,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
               'click @ui.editDescription': 'editDescription'
             },
 
-            collectionEvents: {
-                'add change': 'render'
-            },
-
             serializeData: function () {
                 var isConnected = (Ctx.getCurrentUserId()) ? true : false;
 
@@ -1267,7 +1256,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                    instigator: this.instigator,
                    editInstigator: this.editInstigator,
                    Ctx: Ctx,
-                   isConnected: isConnected
+                   userCanEditDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
                 }
             },
 
