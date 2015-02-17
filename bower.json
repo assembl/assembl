@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "jquery": "~2.0.3",
-    "jquery.dotdotdot": "~1.7.2",
+    "jquery.dotdotdot": "https://github.com/swergas/jQuery.dotdotdot.git#fix-paragraph-and-read-more-not-showing",
     "backbone": "~1.1.2",
     "ckeditor": "*",
     "cytoscape": "*",

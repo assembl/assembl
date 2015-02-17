@@ -17,7 +17,7 @@
 
         'jquery': "../bower/jquery/jquery",
         'jquery-highlight': '../lib/jquery-highlight/jquery.highlight',
-        'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
+        'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot',
 
         'backbone': '../bower/backbone/backbone',
         'backbone.subset': '../bower/Backbone.Subset/backbone.subset',

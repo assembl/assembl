@@ -4,7 +4,7 @@ var requirejs_config = {
     paths: {
         'jquery': "../bower/jquery/jquery",
         'jquery-highlight': '../lib/jquery-highlight/jquery.highlight',
-        'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
+        'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot',
         'jquery-autosize': '../bower/jquery-autosize/jquery.autosize',
 
         'backbone': '../bower/backbone/backbone',
