@@ -3,8 +3,18 @@
 		<div class="gr">
 			<div class="gu gu-1of2 description">
 				<h2 class="h2 mbxl dispb mtxs"><%= partner.get('name') %></h2>
-				<span class="mbxl dispb"><%= partner.get('description') %></span>
-				<a class="dispb" href="<%= partner.get('homepage') %>">{{ gettext('link') }}</a>
+				<% if(partner.get('description').length){ %>
+					<span class="mbxl dispb"><%= partner.get('description') %></span>
+				<% }else{ %>
+				  <span class="mbxl dispb">{{ gettext('What is the organisation about?') }}</span>
+				<% } %>
+
+				<% if(partner.get('homepage').length){ %>
+					<a class="dispb" href="<%= partner.get('homepage') %>">{{ gettext('link') }}</a>
+        <% }else{ %>
+          <span class="dispb">{{ gettext('What is their website?') }}</span>
+        <% } %>
+
 				<div class="mtxl">
 					<a class="js_editPartner" href="#">{{ gettext('edit partner') }}</a>&nbsp;&nbsp;
 					<a class="js_deletePartner" href="#">{{ gettext('delete partner') }}</a>
@@ -16,7 +26,11 @@
 			<% } %>
 				<div class="partner-img-content">
 					<div class="partner-img">
-             <img src="<%= partner.get('logo')%>" width="200">
+						<% if(partner.get('logo').length){ %>
+             	<img src="<%= partner.get('logo') %>" width="200">
+            <% }else{ %>
+              <span class="dispb">{{ gettext('What is their logo?') }}</span>
+            <% } %>
 					</div>
 				</div>
 			</div>
