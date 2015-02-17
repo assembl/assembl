@@ -5,13 +5,13 @@ from pyramid.view import view_config
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
-    HTTPOk, HTTPAccepted)
+    HTTPOk, HTTPAccepted, HTTPNoContent)
 
 from assembl.auth import (
     P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST, P_READ,
     R_PARTICIPANT)
 from assembl.models import (
-    User, Discussion, LocalUserRole, EmailAccount)
+    User, Discussion, LocalUserRole, AbstractAgentAccount)
 from assembl.auth.util import get_permissions
 from ..traversal import (CollectionContext, InstanceContext)
 from . import (FORM_HEADER, JSON_HEADER, collection_view)
@@ -152,20 +152,15 @@ def view_localuserrole_collection(request):
 
 
 @view_config(
-    context=InstanceContext, ctx_instance_class=EmailAccount,
-    request_method='POST', header=FORM_HEADER)
+    context=InstanceContext, ctx_instance_class=AbstractAgentAccount,
+    request_method='POST', name="verify")
 def send_account_verification(request):
-    # TODO: This should be in the route conditions
-    if not request.POST.get('send_verification_email', False):
-        raise HTTPBadRequest(
-            "Please send send_verification_email in the form parameters")
     ctx = request.context
     instance = ctx._instance
     if instance.verified:
-        # TODO: redirect to profile?
-        return HTTPOk(
+        return HTTPNoContent(
             "No need to verify email <%s>" % (instance.email))
     from assembl.views.auth.views import send_confirmation_email
     request.matchdict = {}
     send_confirmation_email(request, instance)
-    return HTTPAccepted()
+    return HTTPOk()
