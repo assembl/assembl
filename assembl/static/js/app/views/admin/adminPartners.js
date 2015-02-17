@@ -69,7 +69,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             parent.removeClass('error');
                         }
 
-                        if(p_description_mandatory.val() === ''){
+                        if(description_mandatory.val() === ''){
                             validForm = false;
                             p_description_mandatory.addClass('error');
                             return false;
