@@ -58,14 +58,17 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                 $.when(collectionManager.getNotificationsUserCollectionPromise(),
                     collectionManager.getLocalRoleCollectionPromise()).then(
                     function (NotificationsUser, allRole) {
-                        that.notificationsUser = NotificationsUser;
+                        that.collection = NotificationsUser;
+                        that._initialEvents();
 
                         if(allRole.length){
                             that.roles = allRole.at(0);
                         }else {
                             that.roles = null;
                         }
-
+                        that.childViewOptions = {
+                            roles: that.roles
+                        }
                         that.render();
                     });
 
@@ -119,11 +122,10 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                 notificationSubscriptionModel.save(null, {
                     success: function(model, response, options) {
-                        that.notificationsUser.add(model);
                         that.notificationTemplates.remove(notificationSubscriptionTemplateModel);
-                        that.render();
                     },
                     error: function (model, resp) {
+                        that.notificationsUser.remove(notificationSubscriptionModel);
                         console.error('ERROR: userNewSubscription', resp)
                     }
                 })
@@ -170,11 +172,12 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                         });
 
                         that.collection = addableGlobalSubscriptions;
+                        that._initialEvents();
 
                         that.childViewOptions = {
                             roles: that.roles,
                             notificationsUser: that.notificationsUser,
-                            notificationTemplates: that.notificationTemplates
+                            notificationTemplates: addableGlobalSubscriptions
                         }
 
                         that.render();
