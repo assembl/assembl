@@ -8,6 +8,26 @@ class FrontendUrls():
         assert isinstance(discussion, Discussion)
         self.discussion = discussion
 
+    frontend_routes = {
+        'edition': '/edition',
+        'partners': '/partners',
+        'settings': '/settings',
+        'user_notifications': '/user/notifications',
+        'profile': '/user/profile',
+        'account': '/user/account',
+        'purl_posts': '/posts*remainder',
+        'purl_idea': '/idea*remainder'
+    }
+
+    @classmethod
+    def register_frontend_routes(cls, config):
+        from assembl.views.backbone.views import home_view
+        for name, route in cls.frontend_routes.iteritems():
+            config.add_route(name, route)
+            config.add_view(
+                home_view, route_name=name, request_method='GET',
+                http_cache=60)
+
     def getDiscussionLogoUrl(self):
         return urljoin(
             self.discussion.get_base_url(), '/static/img/assembl.png')

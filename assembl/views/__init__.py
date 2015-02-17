@@ -18,19 +18,8 @@ default_context = {
 TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
 
 def backbone_include(config):
-
-    config.add_route('edition', '/edition')
-    config.add_route('partners', '/partners')
-    config.add_route('settings', '/settings')
-    config.add_route('slug_notifications', '/notifications')
-
-    config.add_route('profile', '/user/profile')
-    config.add_route('account', '/user/account')
-    config.add_route('user_notifications', '/user/notifications')
-    config.add_route('purl_posts', '/posts*remainder')
-    config.add_route('purl_idea', '/idea*remainder')
-
-    config.add_route('nodetest', '/nodetest')
+    from ..lib.frontend_urls import FrontendUrls
+    FrontendUrls.register_frontend_routes(config)
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
     config.add_route('graph_view', '/graph')
