@@ -21,9 +21,10 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
         });
 
-        var PartnerList = Marionette.CompositeView.extend({
+        var PartnerList = Marionette.CollectionView.extend({
             template: '#tmpl-partnerList',
             childView: Partner,
+            className:'gr mvxl',
             childViewContainer: '.partnersList',
             initialize: function(){
                 var that = this,
@@ -40,7 +41,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
                         that.nbOrganisations = DiscussionModel.models.length;
                         that.collection = DiscussionModel;
-                        that.render();
+
+                        if(that.childViewContainer){
+                            that.render();
+                        }
+
                     });
             },
 
