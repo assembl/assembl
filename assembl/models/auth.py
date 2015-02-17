@@ -494,7 +494,12 @@ class User(AgentProfile):
         if self.username:
             self.db.delete(self.username)
 
-    def set_password(self, password):
+    @property
+    def password_p(self):
+        return ""
+
+    @password_p.setter
+    def password_p(self, password):
         from ..auth.password import hash_password
         self.password = hash_password(password)
 

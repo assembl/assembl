@@ -218,7 +218,7 @@ def assembl_profile(request):
             errors.append(localizer.translate(_(
                 'The passwords are not identical')))
         elif p1:
-            profile.set_password(p1)
+            profile.password_p = p1
         add_email = request.params.get('add_email', '').strip()
         if add_email:
             if not is_email(add_email):
@@ -887,7 +887,7 @@ def finish_password_change(request):
     if p1 != p2:
         error = localizer.translate(_('The passwords are not identical'))
     elif p1:
-        user.set_password(p1)
+        user.password_p = p1
         return HTTPFound(location=request.route_url(
             'home' if discussion_slug else 'discussion_list',
             discussion_slug=discussion_slug,

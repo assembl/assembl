@@ -118,7 +118,7 @@ def post_agent(request):
         errors.append(localizer.translate(_(
             'The passwords are not identical')))
     elif p1:
-        agent.set_password(p1)
+        agent.password_p = p1
     add_email = request.params.get('add_email', '').strip()
     if add_email:
         if not is_email(add_email):

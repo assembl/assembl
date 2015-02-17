@@ -286,7 +286,7 @@ def add_user(name, email, password, role, force=False, username=None,
         user.name = name
         user.verified = True
         if password and change_old_password:
-            user.set_password(password)
+            user.password_p = password
         if username:
             if user.username:
                 user.username.username = username

@@ -19,7 +19,7 @@
     "User": {
         "@extends": "AgentProfile",
         "login_failures": false,
-        "password": false,
+        "password": "password_p",
         "permissions": false,
         "username": "username_p"
     },
