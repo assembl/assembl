@@ -28,7 +28,8 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
                 idCreator: null,
                 avatarUrl: null,
                 date: null,
-                bodyMimeType: null
+                bodyMimeType: null,
+                publishes_synthesis_id: null
             },
 
             /**

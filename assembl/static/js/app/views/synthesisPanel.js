@@ -1,7 +1,7 @@
 'use strict';
 
-define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery', 'app', 'common/context', 'models/synthesis', 'models/idea', 'utils/permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'utils/panelSpecTypes', 'views/assemblPanel', 'utils/i18n', 'views/editableField', 'views/ckeditorField', 'common/collectionManager'],
-    function (objectTreeRenderVisitor, Raven, _, $, Assembl, Ctx, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, PanelSpecTypes, AssemblPanel, i18n, EditableField, CKEditorField, CollectionManager) {
+define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery', 'app', 'common/context', 'models/message', 'models/synthesis', 'models/idea', 'utils/permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'utils/panelSpecTypes', 'views/assemblPanel', 'utils/i18n', 'views/editableField', 'views/ckeditorField', 'common/collectionManager'],
+    function (objectTreeRenderVisitor, Raven, _, $, Assembl, Ctx, MessageModel, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, PanelSpecTypes, AssemblPanel, i18n, EditableField, CKEditorField, CollectionManager) {
 
         var SynthesisPanel = AssemblPanel.extend({
             template: '#tmpl-synthesisPanel',
@@ -218,28 +218,27 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
                         subject: "Not used",
                         message: "Not used"
                     };
-                    /**
-                     * TODO: need to be backbone sync
-                     * */
-                        // Sending the synthesis
-                    $.ajax({
-                        type: "post",
-                        data: JSON.stringify(data),
-                        contentType: 'application/json',
-                        url: url,
-                        done: function () {
-                            alert(i18n.gettext("Synthesis published!"));
+
+                    var synthesisMessage = new MessageModel.Model({
+                        publishes_synthesis_id: publishes_synthesis_id,
+                        subject: "Not used",
+                        message: "Not used"
+                    });
+
+                    synthesisMessage.save(null, {
+                        success: function (model, resp) {
+                            alert(i18n.gettext("Synthesis has been successfully published!"));
                             that.model = new Synthesis.Model({'@id': 'next_synthesis'});
                             that.model.fetch();
                             that.unblockPanel();
                         },
-                        fail: function () {
-                          Raven.captureMessage('Broken!')
-                          alert(i18n.gettext("Failed publishing synthesis!"));
-                          that.model = new Synthesis.Model({'@id': 'next_synthesis'});
-                          that.model.fetch();
-                          that.unblockPanel();
-                      },
+                        error: function (model, resp) {
+                            Raven.captureMessage('Failed publishing synthesis!');
+                            alert(i18n.gettext("Failed publishing synthesis!"));
+                            that.model = new Synthesis.Model({'@id': 'next_synthesis'});
+                            that.model.fetch();
+                            that.unblockPanel();
+                        }
                     });
                 };
 
