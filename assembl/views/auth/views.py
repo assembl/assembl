@@ -145,8 +145,9 @@ def get_profile(request):
         if not profile:
             raise HTTPNotFound()
     elif id_type == 'email':
-        account = session.query(EmailAccount).filter_by(
-            email=identifier).order_by(desc(EmailAccount.verified)).first()
+        account = session.query(AbstractAgentAccount).filter_by(
+            email=identifier).order_by(desc(
+                AbstractAgentAccount.verified)).first()
         if not account:
             raise HTTPNotFound()
         profile = account.profile
@@ -233,7 +234,7 @@ def assembl_profile(request):
                 'profile_user', type='u', identifier=username))
         profile = session.query(User).get(user_id)
     unverified_emails = [
-        (ea, session.query(EmailAccount).filter_by(
+        (ea, session.query(AbstractAgentAccount).filter_by(
             email=ea.email, verified=True).first())
         for ea in profile.email_accounts if not ea.verified]
     return render_to_response(
@@ -291,7 +292,7 @@ def assembl_register_view(request):
                     error=localizer.translate(_(
                         "This is not a valid email")))
     # Find agent account to avoid duplicates!
-    if session.query(EmailAccount).filter_by(
+    if session.query(AbstractAgentAccount).filter_by(
             email=email, verified=True).count():
         return dict(get_default_context(request),
                     slug_prefix=p_slug,
@@ -340,8 +341,8 @@ def assembl_register_view(request):
 def from_identifier(identifier):
     session = AgentProfile.db
     if '@' in identifier:
-        account = session.query(EmailAccount).filter_by(
-            email=identifier).order_by(EmailAccount.verified.desc()).first()
+        account = session.query(AbstractAgentAccount).filter_by(
+            email=identifier).order_by(AbstractAgentAccount.verified.desc()).first()
         if account:
             user = account.profile
             return (user, account)
@@ -573,7 +574,7 @@ def velruse_login_complete_view(request):
 def confirm_emailid_sent(request):
     # TODO: How to make this not become a spambot?
     id = int(request.matchdict.get('email_account_id'))
-    email = EmailAccount.get(id)
+    email = AbstractAgentAccount.get(id)
     if not email:
         raise HTTPNotFound()
     if email.verified:
@@ -623,7 +624,7 @@ def maybe_auto_subscribe(user, discussion):
 def user_confirm_email(request):
     token = request.matchdict.get('ticket')
     email = verify_email_token(token)
-    session = EmailAccount.db
+    session = AbstractAgentAccount.db
     # TODO: token expiry
     localizer = request.localizer
     if not email:
@@ -647,7 +648,7 @@ def user_confirm_email(request):
                 _("Email <%s> already confirmed")) % (email.email,))))
     else:
         # maybe another profile already verified that email
-        other_email_account = session.query(EmailAccount).filter_by(
+        other_email_account = session.query(AbstractAgentAccount).filter_by(
             email=email.email, verified=True).first()
         if other_email_account:
             profile = email.profile
@@ -724,7 +725,7 @@ def confirm_email_sent(request):
     email = request.matchdict.get('email')
     if not email:
         raise HTTPNotFound()
-    email_objects = EmailAccount.db.query(EmailAccount).filter_by(
+    email_objects = AbstractAgentAccount.db.query(AbstractAgentAccount).filter_by(
         email=email)
     verified_emails = [e for e in email_objects if e.verified]
     unverified_emails = [e for e in email_objects if not e.verified]
