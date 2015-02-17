@@ -1311,7 +1311,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
         });
 
         var Introduction = Marionette.ItemView.extend({
-            template: '#tmpl-introductions',
+            template: '#tmpl-loader',
             initialize: function(){
                 this.editingIntroduction = false;
                 this.editingObjective = false;
@@ -1323,6 +1323,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
                 $.when(collectionManager.getDiscussionModelPromise()).then(function (DiscussionModel) {
                     that.model = DiscussionModel;
+                    that.template = '#tmpl-introductions';
                     that.render();
                 });
             },
@@ -1351,6 +1352,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             onRender: function(){
+              if(this.model) {
                 if (this.editingIntroduction) {
                     this.renderCKEditorIntroduction();
                 }
@@ -1358,9 +1360,10 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 if (this.editingObjective) {
                     this.renderCKEditorObjective();
                 }
-
+                //console.log("Just rendered with model, aplying elipsis");
                 this.applyEllipsisToSection(".context-introduction", this.ui.seeMoreIntro);
                 this.applyEllipsisToSection(".context-objective", this.ui.seeMoreObjectives);
+              }
             },
 
             seeMore: function (e) {
