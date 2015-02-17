@@ -28,11 +28,11 @@ define(['router', 'chai'], function (Router, chai) {
         });
 
         it('Users notifications route should exist', function () {
-            expect(route['users/notifications']).to.equal('userNotifications');
+            expect(route['user/notifications']).to.equal('userNotifications');
         });
 
         it('Users edit route should exist', function () {
-            expect(route['users/edit']).to.equal('profile');
+            expect(route['user/profile']).to.equal('profile');
         });
 
         it('Posts id route should exist', function () {
