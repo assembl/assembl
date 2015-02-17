@@ -979,11 +979,11 @@ class NotificationOnPostCreated(NotificationOnPost):
         subject = "[" + self.first_matching_subscription.discussion.topic + "] "
         if isinstance(self.post, SynthesisPost):
             subject += loc.translate(_("SYNTHESIS: ")) \
-                + self.post.publishes_synthesis.subject
+                + (self.post.publishes_synthesis.subject or "")
         else:
-            subject += self.post.subject
+            subject += (self.post.subject or "")
         return subject
-    
+
     def render_to_email_html_part(self):
         from premailer import Premailer
         ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
