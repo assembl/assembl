@@ -12,7 +12,7 @@
 				<% } else if (_.size(instigator.get('description')) === 0) { %>
            <div>{{ gettext('there are no instigator for this discussion') }} - <a href="<%= editInstigatorUrl() %>"> {{ gettext('edit instigator') }} </a></div>
 				 <% } else { %>
-					<div class="instigator js_editDescription"><%= context.get('description') %></div>
+					<div class="instigator js_editDescription"><%= instigator.get('description') %></div>
 			 <% } %>
 		 <% } %>
     </div>
