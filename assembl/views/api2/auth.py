@@ -5,11 +5,11 @@ from pyramid.view import view_config
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
-    HTTPOk, HTTPAccepted, HTTPNoContent)
+    HTTPOk, HTTPNoContent, HTTPForbidden)
 
 from assembl.auth import (
-    P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST, P_READ,
-    R_PARTICIPANT)
+    P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
+    R_PARTICIPANT, CrudPermissions)
 from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount)
 from assembl.auth.util import get_permissions
@@ -164,3 +164,27 @@ def send_account_verification(request):
     request.matchdict = {}
     send_confirmation_email(request, instance)
     return HTTPOk()
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=AbstractAgentAccount,
+    request_method='DELETE', renderer='json')
+def delete_abstract_agent_account(request):
+    ctx = request.context
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    instance = ctx._instance
+    if not instance.user_can(user_id, CrudPermissions.DELETE, permissions):
+        return HTTPUnauthorized()
+    if instance.email:
+        accounts_with_mail = [a for a in instance.profile.accounts if a.email]
+        if len(accounts_with_mail) == 1:
+            raise HTTPForbidden("This is the last account")
+        if instance.verified:
+            verified_accounts_with_mail = [
+                a for a in accounts_with_mail if a.verified]
+            if len(verified_accounts_with_mail) == 1:
+                raise HTTPForbidden("This is the last verified account")
+    instance.db.delete(instance)
+    return {}
