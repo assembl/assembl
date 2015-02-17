@@ -519,6 +519,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                         this.stopListening(this.model);
                     }
                     this.model = idea;
+                    this.editingDefinition = false;
+                    this.editingTitle = false;
                     //console.log("this.extractListSubset before setIdea:", this.extractListSubset);
                     if (this.extractListSubset) {
                         this.stopListening(this.extractListSubset);
