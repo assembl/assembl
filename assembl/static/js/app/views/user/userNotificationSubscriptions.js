@@ -193,17 +193,41 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             template: '#tmpl-notificationByEmail',
             tagName: 'label',
             className: 'radio',
+            ui: {
+              preferredEmail: '.js_preferred'
+            },
             initialize: function(){
 
                 if(!this.model){
                     this.template = "#tmpl-loader";
                 }
             },
+            events: {
+              'click @ui.preferredEmail': 'preferredEmail'
+            },
             serializeData: function(){
                 return {
                     account: this.model
                 }
+            },
+            preferredEmail: function(){
+
+                var preferred = (this.$('input[name="email_account"]:checked').val()) ? true : false;
+
+                this.model.set('preferred', preferred);
+
+                this.model.save(null, {
+                    success: function(){
+
+                        console.debug('success');
+                    },
+                    error: function(){
+                        console.debug('error');
+                    }
+                })
+
             }
+
         });
 
         var NotificationByEmails = Marionette.CompositeView.extend({

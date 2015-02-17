@@ -15,33 +15,34 @@
     </nav>
   </div>
   <div class="gu gu-3of4 admin-section">
+    <section class="section">
+			<div class="admin-title">
+				<h3 class="h3">{{ gettext('Notifications') }}</h3>
+			</div>
+			<div id="content-container" class="content-container">
+				<div class="gr mtl">
 
-    <div class="admin-title">
-      <h3 class="h3">{{ gettext('Notifications') }}</h3>
-    </div>
-    <div id="content-container" class="content-container">
-      <div class="gr mtl">
+					<!-- region button subscriber -->
+					<div id="subscriber"></div>
 
-				<!-- region button subscriber -->
-				<div id="subscriber"></div>
-
-				<form class="core-form form-horizontal phl">
-					<fieldset>
-						<div class="control-group">
-							<label for="optionsCheckboxList" class="control-label">{{ gettext('Notifiy me when') }}</label>
-							<div class="controls">
-								<div id="empty-field"></div>
-								<div id="userNotifications"></div>
-                <div id="templateSubscriptions"></div>
+					<form class="core-form form-horizontal phl">
+						<fieldset>
+							<div class="control-group">
+								<label for="optionsCheckboxList" class="control-label">{{ gettext('Notifiy me when') }}</label>
+								<div class="controls">
+									<div id="empty-field"></div>
+									<div id="userNotifications"></div>
+									<div id="templateSubscriptions"></div>
+								</div>
 							</div>
-						</div>
-          </fieldset>
-				</form>
+						</fieldset>
+					</form>
 
-				<!-- region receive notifications by email -->
-				<div id="notifByEmail"></div>
+					<!-- region receive notifications by email -->
+					<div id="notifByEmail"></div>
 
-      </div>
-    </div>
+				</div>
+			</div>
+    </section>
   </div>
 </div>
