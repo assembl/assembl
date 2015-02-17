@@ -176,7 +176,6 @@
       padding-right: 0.3em;
     }
   }
-
 }
 
 #context-instigator {
@@ -192,6 +191,10 @@
       @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
       border: 1px solid #cccccc;
     }
+  }
+  .instigator-logo{
+    max-width: em(300);
+    max-height: em(120);
   }
 }
 
