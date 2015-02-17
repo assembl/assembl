@@ -245,3 +245,10 @@
   #{$property}: -moz-calc(#{$expression}) !important;
   #{$property}: calc(#{$expression}) !important;
 }
+
+@mixin word-wrap() {
+  word-break:     break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens:    auto;
+  hyphens:         auto;
+}
