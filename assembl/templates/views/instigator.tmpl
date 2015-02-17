@@ -2,9 +2,9 @@
    <div class="gu gu-1of2">
     <div class="block-content">
 		 <% if( _.size(instigator) || userCanEditDiscussion){ %>
-				<% if(userCanEditDiscussion && _.size(instigator) === 0){ %>
+				<% if(userCanEditDiscussion){ %>
 					<h2 class="dispib mrl">{{ gettext('Instigated by') }}</h2> <a href="<%= editInstigatorUrl() %>"> {{ gettext('edit instigator') }} </a>
-				<% }else{ %>
+				<% } else { %>
 					<h2>{{ gettext('Instigated by') }}</h2>
 				<% } %>
 				<% if( editInstigator ) { %>
@@ -20,7 +20,7 @@
    <div class="gu gu-last">
     <div class="block-content">
     	<% if( _.size(instigator) ){ %>
-      	<div class="tac"><img src="<%= instigator.get('logo') %>" height="51" ></div>
+      	<div class="tac"><img src="<%= instigator.get('logo') %>" height="120" ></div>
       <% } %>
     </div>
    </div>
