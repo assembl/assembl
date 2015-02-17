@@ -25,7 +25,7 @@
     },
     "AbstractAgentAccount": {
         "preferred": true,
-        "email": false,
+        "email": true,
         "verified": false,
         "profile": false
     },

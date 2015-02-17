@@ -257,6 +257,16 @@ class AbstractAgentAccount(Base):
         return super(AbstractAgentAccount, self).user_can(
             user_id, operation, permissions)
 
+    def update_from_json(
+            self, json, user_id=None, context=None,
+            parse_def_name='default_reverse'):
+        # DO NOT update email... but we still want
+        # to allow to set it on create.
+        if 'email' in json:
+            del json['email']
+        return super(AbstractAgentAccount, self).update_from_json(
+            json, user_id, context, parse_def_name)
+
 
 class EmailAccount(AbstractAgentAccount):
     """An email account"""
