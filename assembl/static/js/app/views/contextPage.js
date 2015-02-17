@@ -21,7 +21,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
         });
 
-        var PartnerList = Marionette.CollectionView.extend({
+        var PartnerList = Marionette.CompositeView.extend({
             template: '#tmpl-loader',
             childView: Partner,
             className:'gr mvxl',
@@ -47,6 +47,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
             serializeData: function(){
                 return {
+                    userCanEditDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
                     nbOrganisations: this.nbOrganisations,
                     urlEdit: '/'+ Ctx.getDiscussionSlug() +'/partners'
                 }
