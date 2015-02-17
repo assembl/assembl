@@ -72,6 +72,21 @@
 					<input type="text" id="port" class="input-xxlarge" value="<%= source.get('port') %>">
 				</div>
 			</div>
+
+			<div class="control-group fr">
+				<label for="port" class="control-label">username</label>
+				<div class="controls">
+					<input type="text" id="username" class="input-xxlarge" value="<%= source.get('username') %>">
+				</div>
+			</div>
+
+			<div class="control-group fr">
+				<label for="port" class="control-label">password</label>
+				<div class="controls">
+					<input type="password" id="password" class="input-xxlarge" value="<%= source.get('password') %>">
+				</div>
+			</div>
+
   </fieldset>
 	<div class="form-actions fr">
 		<button class="btn btn-primary js_saveSource fr" type="submit">{{ gettext("Save changes") }}</button>

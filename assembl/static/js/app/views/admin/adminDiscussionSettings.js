@@ -28,7 +28,9 @@ define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-grow
                 discussion_id = this.$('#discussion_id').val(),
                 use_ssl = this.$('#use_ssl:checked').val(),
                 folder = this.$('#folder').val(),
-                port = parseInt(this.$('#port').val());
+                port = parseInt(this.$('#port').val()),
+                username = this.$('#username').val(),
+                password = this.$('#password').val();
 
             this.model.set({
                 name : name,
@@ -39,7 +41,9 @@ define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-grow
                 discussion_id : discussion_id,
                 use_ssl : use_ssl,
                 folder : folder,
-                port : port
+                port : port,
+                username: username,
+                password: password
             });
 
             this.model.save(null, {
@@ -83,7 +87,7 @@ define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-grow
         regions: {
             source: "#source-container"
         },
-        onRender: function(){
+        onBeforeShow: function(){
             var discussionSource = new DiscussionSource.Collection();
 
             var emailSenderList = new EmailSenderList({
@@ -91,9 +95,8 @@ define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-grow
             });
             discussionSource.fetch();
 
-            this.source.show(emailSenderList);
+            this.getRegion('source').show(emailSenderList);
         }
-
     });
 
 
