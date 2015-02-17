@@ -961,15 +961,16 @@ class BaseOps(object):
             if isinstance(value, (str, unicode)):
                 assert not must_be_list
                 target_id = aliases.get(value, value)
-                if isinstance(target_id, (str, unicode)):
+                if target_cls is not None and \
+                        isinstance(target_id, (str, unicode)):
+                    # TODO: Keys spanning multiple columns
                     instance = get_named_object(
                         target_cls.external_typename(), target_id)
+                    if instance is None:
+                        raise HTTPBadRequest("Could not find object "+value)
                 else:
+                    # Possibly just a string
                     instance = target_id
-                if instance is None:
-                    raise HTTPBadRequest("Could not find object "+value)
-                # TODO: Keys spanning multiple columns
-                # setattr(self, accessor_name, instance)
             elif isinstance(value, dict):
                 assert not must_be_list
                 instance = self._create_subobject_from_json(
