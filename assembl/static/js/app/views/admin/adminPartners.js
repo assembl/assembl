@@ -48,37 +48,48 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                     validatePartner: function (e) {
 
                         var that = this,
-                            inputs = this.$('*[required=required]'),
+                            validForm = false,
+                            name_mandatory = this.$('.partner-name'),
+                            website = this.$('.partner-homepage'),
+                            url_logo = this.$('.partner-logo'),
                             regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                            parent = name_mandatory.parent().parent(),
+                            p_website = website.parent().parent(),
+                            p_url_logo = url_logo.parent().parent(),
                             controls = document.querySelectorAll('#partner-form .control-group');
 
-                        inputs.each(function () {
-                            var parent = $(this).parent().parent();
+                        if(name_mandatory.val() === ''){
+                            validForm = false;
+                            parent.addClass('error');
+                            return false;
+                        } else {
+                            validForm = true;
+                            parent.removeClass('error');
+                        }
 
-                            if (!$(this).val()) {
-                                parent.addClass('error');
+                        if(website.val()){
+                            if (!regexUrl.test(website.val())) {
+                                p_website.addClass('error');
+                                validForm = false;
+                                return false;
+                            } else {
+                                validForm = true;
+                                p_website.removeClass('error');
                             }
-                            if ($(this).val()) {
-                                parent.removeClass('error').addClass('success');
+                        }
 
-                                if ($(this).hasClass('partner-homepage')) {
-                                    if (!regexUrl.test($(this).val())) {
-                                        parent.addClass('error').removeClass('success');
-                                    } else {
-                                        parent.removeClass('error').addClass('success');
-                                    }
-                                }
-                                if ($(this).hasClass('partner-logo')) {
-                                    if (!regexUrl.test($(this).val())) {
-                                        parent.addClass('error').removeClass('success');
-                                    } else {
-                                        parent.removeClass('error').addClass('success');
-                                    }
-                                }
+                        if(url_logo.val()){
+                            if (!regexUrl.test(url_logo.val())) {
+                                p_url_logo.addClass('error');
+                                validForm = false;
+                                return false;
+                            } else {
+                                validForm = true;
+                                p_url_logo.removeClass('error');
                             }
-                        });
+                        }
 
-                        if(!$(controls).hasClass('error')){
+                        if(validForm){
                             $(controls).removeClass('success');
 
                             self.model.set({
@@ -179,37 +190,49 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                     validatePartner: function (e) {
 
                         var that = this,
-                            inputs = this.$('*[required=required]'),
+                            validForm = false,
+                            name_mandatory = this.$('.partner-name'),
+                            website = this.$('.partner-homepage'),
+                            url_logo = this.$('.partner-logo'),
                             regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                            parent = name_mandatory.parent().parent(),
+                            p_website = website.parent().parent(),
+                            p_url_logo = url_logo.parent().parent(),
                             controls = document.querySelectorAll('#partner-form .control-group');
 
-                        inputs.each(function () {
-                            var parent = $(this).parent().parent();
+                        if(name_mandatory.val() === ''){
+                            parent.addClass('error');
+                            validForm = false;
+                            return false;
+                        } else {
+                            validForm = true;
+                            parent.removeClass('error');
+                        }
 
-                            if (!$(this).val()) {
-                                parent.addClass('error');
+                        if(website.val()){
+                            if (!regexUrl.test(website.val())) {
+                                p_website.addClass('error');
+                                validForm = false;
+                                return false;
+                            } else {
+                                validForm = true;
+                                p_website.removeClass('error');
                             }
-                            if ($(this).val()) {
-                                parent.removeClass('error').addClass('success');
+                        }
 
-                                if ($(this).hasClass('partner-homepage')) {
-                                    if (!regexUrl.test($(this).val())) {
-                                        parent.addClass('error').removeClass('success');
-                                    } else {
-                                        parent.removeClass('error').addClass('success');
-                                    }
-                                }
-                                if ($(this).hasClass('partner-logo')) {
-                                    if (!regexUrl.test($(this).val())) {
-                                        parent.addClass('error').removeClass('success');
-                                    } else {
-                                        parent.removeClass('error').addClass('success');
-                                    }
-                                }
+                        if(url_logo.val()){
+                            if (!regexUrl.test(url_logo.val())) {
+                                p_url_logo.addClass('error');
+                                validForm = false;
+                                return false;
+                            } else {
+                                validForm = true;
+                                p_url_logo.removeClass('error');
                             }
-                        });
+                        }
 
-                        if(!$(controls).hasClass('error')){
+
+                        if(validForm){
                             var inputs = document.querySelectorAll('#partner-form *[required=required]');
                             $(controls).removeClass('success');
 
