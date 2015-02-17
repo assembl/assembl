@@ -90,7 +90,9 @@ class ContentSource(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
 
-    crud_permissions = CrudPermissions(P_ADMIN_DISC)
+    # Cannot be readable to all, because subclasses contain passwords
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_ADMIN_DISC)
+
 
 class PostSource(ContentSource):
     """
