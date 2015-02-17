@@ -10,7 +10,7 @@
     "AgentProfile": {
         "avatar_url_base": false,
         "name": true,
-        "real_name": true,
+        "real_name": false,
         "post_count": false,
         "email_accounts": false,
         "identity_accounts": false,
