@@ -5,7 +5,7 @@ define(['jquery', 'models/base', 'common/context'],
 
     var userProfile = Base.Model.extend({
         idAttribute: '@id',
-        url: Ctx.getApiV2DiscussionUrl()+'/all_users/'+Ctx.getCurrentUserId(),
+        url: Ctx.getApiV2DiscussionUrl()+'all_users/'+Ctx.getCurrentUserId(),
         defaults: {
             username: '',
             name: '',

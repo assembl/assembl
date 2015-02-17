@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'models/userProfile'],
-    function (Marionette, userProfile) {
+define(['backbone.marionette', 'models/userProfile', 'utils/i18n', 'jquery', 'common/context'],
+    function (Marionette, userProfile, i18n, $, Ctx) {
 
         var profile = Marionette.ItemView.extend({
             template: '#tmpl-userProfile',
@@ -18,7 +18,7 @@ define(['backbone.marionette', 'models/userProfile'],
             },
 
             modelEvents: {
-                'sync': 'render'
+                'change sync': 'render'
             },
 
             events: {
@@ -35,34 +35,43 @@ define(['backbone.marionette', 'models/userProfile'],
             saveProfile: function (e) {
                 e.preventDefault();
 
-                var username = this.$('input[name=username]').val(),
-                    name = this.$('input[name="name"]').val(),
-                    pass1 = this.$('input[name="password1"]').val(),
-                    pass2 = this.$('input[name="password2"]').val(),
-                    email = this.$('input[name="add_email"]').val();
+                var name = this.$('input[name="name"]').val();
 
-                this.model.set({
-                    username: username,
-                    name: name,
-                    password1: pass1,
-                    password2: pass2,
-                    add_email: email
-                });
+                this.model.set({ name: name});
 
                 this.model.save(null, {
                     success: function (model, resp) {
-                        console.debug('succes', model, resp)
+                        $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
+                            ele: 'body',
+                            type: 'success',
+                            offset: {from: 'bottom', amount:20},
+                            align: 'left',
+                            delay: 4000,
+                            allow_dismiss: true,
+                            stackup_spacing: 10
+                        });
                     },
                     error: function (model, resp) {
-                        console.debug('error', model, resp)
+                        $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
+                            ele: 'body',
+                            type: 'error',
+                            offset: {from: 'bottom', amount:20},
+                            align: 'left',
+                            delay: 4000,
+                            allow_dismiss: true,
+                            stackup_spacing: 10
+                        });
                     }
                 })
             },
 
-            close: function () {
-                this.$('.bx-alert-success').addClass('hidden');
+            templateHelpers: function(){
+                return {
+                    urlDiscussion: function(){
+                        return '/' + Ctx.getDiscussionSlug() + '/';
+                    }
+                }
             }
-
         });
 
         return profile;

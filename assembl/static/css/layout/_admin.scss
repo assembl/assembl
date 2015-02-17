@@ -71,14 +71,18 @@ table {
   }
 
   .admin-section {
-    border: 1px solid #dce0e0;
-    background-color: $white;
     width: 740px;
+
+    .section {
+      border: 1px solid #dce0e0;
+      background-color: $white;
+    }
   }
 
   #discussion-settings,
   #profile-form,
-  #adminDiscussion{
+  #adminDiscussion,
+  #account-form{
     .form-actions{
       padding: 15px 20px 15px 0px;
       margin: 0;

@@ -18,27 +18,22 @@
     </nav>
   </div>
   <div class="gu gu-3of4 admin-section">
+    <section class="section">
     <div class="admin-title">
       <h3 class="h3">Profile</h3>
     </div>
     <div id="content-container" class="content-container">
-      <div class="bx bx-alert-success hidden">
-				<button class="btn btn-cancel btn-xs bx-close" type="button">
-					<i class="icon-delete"></i>
-				</button>
-				{{ gettext("Your settings were saved") }}
-			</div>
       <div class="gr mtl">
         <div class="gu gu-1of1">
           <form class="core-form form-horizontal" id="profile-form">
             <fieldset class="prl">
 							<div class="control-group fr">
-								<label for="name" class="control-label fl">{{ gettext('Name') }}</label>
+								<label for="name" class="control-label fl">{{ gettext('Display name') }}</label>
 								<div class="controls fl">
 										<input class="input-xxlarge" type="text" name="name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('name') %>" />
 								</div>
 							</div>
-
+              {#
               <div class="control-group fr social-photo">
 								<label class="control-label">{{ gettext('photo') }}</label>
 								<div class="controls fl">
@@ -65,14 +60,15 @@
 									<p class="help-block">{{ gettext('Lorem ipsum dolor sit amet, consectetur adipiscing elit') }}</p>
 								</div>
 							</div>
-
+              #}
+              {#
               <div class="control-group fr">
 								<label for="description" class="control-label fl">{{ gettext('description') }}</label>
 								<div class="controls fl">
 								  <textarea rows="5" id="textarea" class="input-xxlarge" name="description" placeholder="{{ gettext('description') }}" value=""></textarea>
 								</div>
 							</div>
-
+              #}
 							{# user language future
 							<div class="control-group fl user-lang">
 								<label for="select01" class="control-label fl">{{ gettext('langues') }}</label>
@@ -94,12 +90,13 @@
 
             </fieldset>
 						<div class="form-actions fr">
-							<button class="btn btn-primary fr js_saveProfile" type="submit">{{ gettext('save the changes') }}</button>
-							<a href="/{{ discussion.slug }}/" class="btn btn-cancel btn-sm fr mrxl">{{ gettext('back to discussion') }}</a>
+							<button class="btn btn-primary fr js_saveProfile" type="submit">{{ gettext('Save changes') }}</button>
+							<a href="<%= urlDiscussion() %>" class="btn btn-cancel btn-sm fr mrxl">{{ gettext('Return to the discussion') }}</a>
 						</div>
           </form>
         </div>
       </div>
     </div>
+   </section>
   </div>
 </div>
