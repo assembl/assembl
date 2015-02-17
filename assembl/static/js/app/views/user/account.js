@@ -17,45 +17,24 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
         template: '#tmpl-associateAccounts',
         childView: email,
         childViewContainer:'.controls'
+
     });
 
-    var account = Marionette.LayoutView.extend({
-        template: '#tmpl-userAccount',
-        className: 'admin-account',
-        regions: {
-          'accounts':'#associate_account'
-        },
+    var userAccount =  Marionette.ItemView.extend({
+        template: '#tmpl-userAccountForm',
         ui: {
-          'account': '.js_saveAccount',
-          'addEmail': '.js_addEmail'
-        },
-        initialize: function(){
-            this.emailCollection = new emailAccounts.Collection();
-            this.emailCollection.fetch();
-
-            this.model = new userProfile.Model();
-            this.model.fetch();
+          'account': '.js_saveAccount'
         },
         events: {
-            'click @ui.account': 'saveAccount',
-            'click @ui.addEmail': 'addEmail'
+            'click @ui.account': 'saveAccount'
         },
-        modelEvents: {
-          'sync': 'render'
-        },
-        onBeforeShow: function(){
-            var account = new emailList({
-                collection: this.emailCollection
-            });
-            this.getRegion('accounts').show(account);
+        modelEvents:{
+          'sync':'render'
         },
         serializeData: function(){
-
-            console.debug(this.model);
-
-          return {
-              user: this.model
-          }
+            return {
+                user: this.model
+            }
         },
         templateHelpers: function(){
             return {
@@ -119,12 +98,81 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
                 }
             });
 
+        }
+    });
+
+
+    var account = Marionette.LayoutView.extend({
+        template: '#tmpl-userAccount',
+        className: 'admin-account',
+        regions: {
+          'accounts':'#associate_account',
+          'accountForm': '#userAccountForm'
+        },
+        ui: {
+          'addEmail': '.js_addEmail'
+        },
+        initialize: function(){
+            this.emailCollection = new emailAccounts.Collection();
+            this.userAcount = new userProfile.Model();
+        },
+        events: {
+            'click @ui.addEmail': 'addEmail'
+        },
+        onBeforeShow: function(){
+            var account = new emailList({
+                collection: this.emailCollection
+            });
+            this.emailCollection.fetch();
+            this.getRegion('accounts').show(account);
+
+            var userAccountForm = new userAccount({
+                model: this.userAcount
+            });
+            this.userAcount.fetch();
+            this.getRegion('accountForm').show(userAccountForm);
+
         },
 
         addEmail: function(e){
             e.preventDefault();
 
+            var email = this.$('input[name="new_email"]').val(),
+                emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+            if(email && emailRegex.test(email)){
+
+                var emailModel = new emailAccounts.Model({
+                    email: email,
+                    '@type': 'EmailAccount'
+                });
+
+                emailModel.save(null, {
+                    success:function(){
+                        this.emailCollection.fetch();
+                        $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
+                            ele: 'body',
+                            type: 'success',
+                            offset: {from: 'bottom', amount:20},
+                            align: 'left',
+                            delay: 4000,
+                            allow_dismiss: true,
+                            stackup_spacing: 10
+                        });
+                    },
+                    error: function(){
+                        $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
+                            ele: 'body',
+                            type: 'error',
+                            offset: {from: 'bottom', amount:20},
+                            align: 'left',
+                            delay: 4000,
+                            allow_dismiss: true,
+                            stackup_spacing: 10
+                        });
+                    }
+                })
+            }
 
         }
 
