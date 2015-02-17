@@ -14,7 +14,9 @@ from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount)
 from assembl.auth.util import get_permissions
 from ..traversal import (CollectionContext, InstanceContext)
-from . import (FORM_HEADER, JSON_HEADER, collection_view, instance_put_json)
+from . import (
+    FORM_HEADER, JSON_HEADER, collection_view, instance_put_json,
+    collection_add_json)
 
 
 @view_config(
@@ -207,3 +209,14 @@ def put_abstract_agent_account(request):
             if account != instance:
                 account.preferred = False
     return result
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             header=JSON_HEADER, ctx_collection_class=AbstractAgentAccount)
+def post_email_account(request):
+    from assembl.views.auth.views import send_confirmation_email
+    response = collection_add_json(request)
+    request.matchdict = {}
+    instance = request.context.collection_class.get_instance(response.location)
+    send_confirmation_email(request, instance)
+    return response
