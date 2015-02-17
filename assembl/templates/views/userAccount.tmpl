@@ -18,64 +18,96 @@
     </nav>
   </div>
   <div class="gu gu-3of4 admin-section">
-    <div class="admin-title">
-      <h3 class="h3">{{ gettext('Manage associated accounts') }}</h3>
-    </div>
-    <div id="content-container" class="content-container">
-      <div class="bx bx-alert-success hidden">
-				<button class="btn btn-cancel btn-xs bx-close" type="button">
-					<i class="icon-delete"></i>
-				</button>
-				{{ gettext("Your settings were saved") }}
+    <div class="gr">
+			<div class="gu gu-1of1 mbl">
+				<section class="section">
+				<div class="admin-title">
+					<h3 class="h3">{{ gettext('Assembl account settings') }}</h3>
+				</div>
+				<div id="content-container" class="content-container">
+					<div class="gr mtl">
+						<div id="account-content" class="gu gu-1of1">
+							<form class="core-form form-horizontal" id="account-form">
+									<fieldset class="phl">
+
+										<div class="control-group">
+											<label for="name" class="control-label">{{ gettext('Username') }}</label>
+											<div class="controls">
+												<input type="text" class="input-xlarge" name="username" value="<%= user.get('username') %>">
+												<p class="help-block">{{ gettext('Your username is used log in.') }}</p>
+											</div>
+										</div>
+
+										<div class="control-group">
+											<label for="name" class="control-label">{{ gettext('New password') }}</label>
+											<div class="controls">
+												<input type="password" class="input-xlarge" name="new_password">
+												<span class="help-inline">
+													<p class="control-error">{{ gettext('password 1 and 2 should be identical') }}</p>
+												</span>
+											</div>
+										</div>
+
+										<div class="control-group">
+											<label for="name" class="control-label">{{ gettext('Confirm password') }}</label>
+											<div class="controls">
+												<input type="password" class="input-xlarge" name="confirm_password">
+												<span class="help-inline">
+													<p class="control-error">{{ gettext('password 1 and 2 should be identical') }}</p>
+												</span>
+											</div>
+										</div>
+
+										</fieldset>
+										<div class="form-actions fr">
+											<button class="btn btn-primary fr js_saveAccount" type="submit">{{ gettext('Save changes') }}</button>
+											<a href="<%= urlDiscussion() %>" class="btn btn-cancel btn-sm fr mrxl">{{ gettext('Return to the discussion') }}</a>
+										</div>
+								</form>
+						</div>
+					</div>
+				</div>
+				</section>
 			</div>
-      <div class="gr mtl">
-        <div id="account-content" class="gu gu-1of1 phl">
 
-          <div id="associate_account"></div>
+    	<div class="gu gu-1of1">
+    		<section class="section">
+			 <div class="admin-title">
+				 <h3 class="h3">{{ gettext('Manage associated accounts') }}</h3>
+			 </div>
+			 <div id="content-container" class="content-container">
+				 <div class="gr mtl">
+					 <div id="account-content" class="gu gu-1of1 phl">
 
-          <form class="core-form form-horizontal">
-            <div class="control-group">
-							<label for="optionsCheckboxList" class="control-label">{{ gettext('Associated accounts') }}</label>
-							<div class="controls">
-								<label class="checkbox">
-									<input type="checkbox" value="option1" name="optionsCheckboxList1">
-									Option one is this and that - be sure to include why it's great
-								</label>
-								<label class="checkbox">
-									<input type="checkbox" value="option2" name="optionsCheckboxList2">
-									Option two can also be checked and included in form results
-								</label>
-								<label class="checkbox">
-									<input type="checkbox" value="option3" name="optionsCheckboxList3">
-									Option three can - yes, you guessed it - also be checked and included in form results
-								</label>
+						 <div id="associate_account"></div>
+						 {#
+						 <form class="core-form form-horizontal">
+							<div class="control-group">
+								<label for="optionsCheckboxList" class="control-label">{{ gettext('Add external account to login via social networks') }}</label>
+								<div class="controls">
+									<a href="#" class="fb-bg mbs">sign in with facebook</a>
+									 <a href="#" class="twi-bg mbs">sign in with twitter</a>
+									 <a href="#" class="g-bg mbs">sign in with google+</a>
+								</div>
 							</div>
-						</div>
-          </form>
+						</form>
+						 #}
 
-          <form class="core-form form-horizontal">
-						<div class="control-group">
-							<label for="optionsCheckboxList" class="control-label">{{ gettext('Add external account to login via social networks') }}</label>
-							<div class="controls">
-								<a href="#" class="fb-bg mbs">sign in with facebook</a>
-                <a href="#" class="twi-bg mbs">sign in with twitter</a>
-                <a href="#" class="g-bg mbs">sign in with google+</a>
+						<form class="core-form form-horizontal">
+							<div class="control-group">
+								<label for="optionsCheckboxList" class="control-label">{{ gettext('Add another email') }}</label>
+								<div class="controls">
+										<input type="text" id="new_email" class="input-xlarge">
+										<button class="btn btn-primary js_addEmail">{{ gettext('Save') }}</button>
+								</div>
 							</div>
-						</div>
-					</form>
+						</form>
 
-					<form class="core-form form-horizontal">
-						<div class="control-group">
-							<label for="optionsCheckboxList" class="control-label">{{ gettext('Add another email') }}</label>
-							<div class="controls">
-                 <input type="text" id="input01" class="input-xlarge">
-                 <button class="btn btn-primary">{{ gettext('valid') }}</button>
-							</div>
-						</div>
-					</form>
-
-        </div>
-      </div>
+					 </div>
+				 </div>
+			 </div>
+			 </section>
+    	</div>
     </div>
   </div>
 </div>

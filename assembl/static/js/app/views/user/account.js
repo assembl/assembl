@@ -1,6 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'models/emailAccounts'], function (Marionette, emailAccounts) {
+define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models/userProfile','jquery', 'utils/i18n'],
+    function (Marionette, emailAccounts, Ctx, userProfile, $, i18n) {
 
     var email = Marionette.ItemView.extend({
         template:'#tmpl-associateAccount',
@@ -9,78 +10,122 @@ define(['backbone.marionette', 'models/emailAccounts'], function (Marionette, em
             return {
               email: this.model
             }
-        },
-        templateHelpers: function () {
-            return {
-                social: function(){
-
-                }
-            }
         }
     });
 
     var emailList = Marionette.CompositeView.extend({
         template: '#tmpl-associateAccounts',
         childView: email,
-        childViewContainer:'.controls',
-        initialize: function(){
-
-            var tab = [
-                {
-                    profile: "local:AgentProfile/1",
-                    username: "maparent@gmail.com",
-                    picture_url: "https://lh4.googleusercontent.com/-TiKStAuP_Lo/AAAAAAAAAAI/AAAAAAAABJ8/Ix617kwUUPo/photo.jpg",
-                    provider: "google",
-                    '@id': "local:AbstractAgentAccount/187",
-                    '@type': "IdentityProviderAccount",
-                    email: "maparent@gmail.com",
-                    '@view': "default"
-                },
-                {
-                    profile: "local:AgentProfile/1",
-                    '@id': "local:AbstractAgentAccount/384",
-                    '@type': "IdentityProviderAccount",
-                    '@view': "default",
-                    email: "maparent@gmail.com",
-                    provider: "facebook"
-                },
-                {
-                    profile: "local:AgentProfile/1",
-                    will_merge_if_validated: false,
-                    verified: true,
-                    preferred: true,
-                    '@type': "EmailAccount",
-                    '@id': "local:AbstractAgentAccount/1",
-                    email: "maparent@gmail.com",
-                    '@view': "default"
-                }
-            ];
-
-            var toto = new Backbone.Collection();
-            toto.add(tab);
-
-            this.collection = toto;
-        }
+        childViewContainer:'.controls'
     });
 
     var account = Marionette.LayoutView.extend({
         template: '#tmpl-userAccount',
         className: 'admin-account',
-        ui: {
-          close: '.bx-alert-success .bx-close'
-        },
         regions: {
           'accounts':'#associate_account'
         },
-        onRender: function(){
-            var emailCollection = new emailAccounts.Collection();
+        ui: {
+          'account': '.js_saveAccount',
+          'addEmail': '.js_addEmail'
+        },
+        initialize: function(){
+            this.emailCollection = new emailAccounts.Collection();
+            this.emailCollection.fetch();
+
+            this.model = new userProfile.Model();
+            this.model.fetch();
+        },
+        events: {
+            'click @ui.account': 'saveAccount',
+            'click @ui.addEmail': 'addEmail'
+        },
+        modelEvents: {
+          'sync': 'render'
+        },
+        onBeforeShow: function(){
             var account = new emailList({
-                collection: emailCollection
+                collection: this.emailCollection
+            });
+            this.getRegion('accounts').show(account);
+        },
+        serializeData: function(){
+
+            console.debug(this.model);
+
+          return {
+              user: this.model
+          }
+        },
+        templateHelpers: function(){
+            return {
+                urlDiscussion: function(){
+                    return '/' + Ctx.getDiscussionSlug() + '/';
+                }
+            }
+        },
+        saveAccount: function(e){
+            e.preventDefault();
+
+            var pass1 = this.$('input[name="new_password"]'),
+                pass2 = this.$('input[name="confirm_password"]'),
+                user = this.$('input[name="username"]'),
+                p_pass1 = pass1.parent().parent(),
+                p_pass2 = pass2.parent().parent();
+
+            if(pass1.val() || pass2.val()){
+                if(pass1.val() !== pass2.val()){
+                    p_pass1.addClass('error');
+                    p_pass2.addClass('error');
+                    return false;
+
+                } else if(pass1.val() === pass2.val()) {
+                    p_pass1.addClass('error');
+                    p_pass2.addClass('error');
+
+                    this.model.set({
+                        username: user.val(),
+                        password: pass1.val()
+                    });
+                }
+            } else {
+                this.model.set({username: user.val()});
+            }
+
+            this.model.save(null,{
+                success: function(model, resp){
+
+                    $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
+                        ele: 'body',
+                        type: 'success',
+                        offset: {from: 'bottom', amount:20},
+                        align: 'left',
+                        delay: 4000,
+                        allow_dismiss: true,
+                        stackup_spacing: 10
+                    });
+                },
+                error: function(model, resp){
+
+                    $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
+                        ele: 'body',
+                        type: 'error',
+                        offset: {from: 'bottom', amount:20},
+                        align: 'left',
+                        delay: 4000,
+                        allow_dismiss: true,
+                        stackup_spacing: 10
+                    });
+                }
             });
 
-            //FIXME: 403 on this model
-            emailCollection.fetch();
-            this.accounts.show(account);
+        },
+
+        addEmail: function(e){
+            e.preventDefault();
+
+
+
         }
 
     });
