@@ -50,12 +50,14 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                         var that = this,
                             validForm = false,
                             name_mandatory = this.$('.partner-name'),
+                            description_mandatory = this.$('.partner-description'),
                             website = this.$('.partner-homepage'),
                             url_logo = this.$('.partner-logo'),
                             regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
                             parent = name_mandatory.parent().parent(),
                             p_website = website.parent().parent(),
                             p_url_logo = url_logo.parent().parent(),
+                            p_description_mandatory = description_mandatory.parent().parent(),
                             controls = document.querySelectorAll('#partner-form .control-group');
 
                         if(name_mandatory.val() === ''){
@@ -65,6 +67,15 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                         } else {
                             validForm = true;
                             parent.removeClass('error');
+                        }
+
+                        if(p_description_mandatory.val() === ''){
+                            validForm = false;
+                            p_description_mandatory.addClass('error');
+                            return false;
+                        } else {
+                            validForm = true;
+                            p_description_mandatory.removeClass('error');
                         }
 
                         if(website.val()){
@@ -192,12 +203,14 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                         var that = this,
                             validForm = false,
                             name_mandatory = this.$('.partner-name'),
+                            description_mandatory = this.$('.partner-description'),
                             website = this.$('.partner-homepage'),
                             url_logo = this.$('.partner-logo'),
                             regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
                             parent = name_mandatory.parent().parent(),
                             p_website = website.parent().parent(),
                             p_url_logo = url_logo.parent().parent(),
+                            p_description_mandatory = description_mandatory.parent().parent(),
                             controls = document.querySelectorAll('#partner-form .control-group');
 
                         if(name_mandatory.val() === ''){
@@ -207,6 +220,15 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                         } else {
                             validForm = true;
                             parent.removeClass('error');
+                        }
+
+                        if(p_description_mandatory.val() === ''){
+                            validForm = false;
+                            p_description_mandatory.addClass('error');
+                            return false;
+                        } else {
+                            validForm = true;
+                            p_description_mandatory.removeClass('error');
                         }
 
                         if(website.val()){
