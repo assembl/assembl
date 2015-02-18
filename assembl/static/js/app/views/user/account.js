@@ -51,7 +51,7 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
             'click @ui.account': 'saveAccount'
         },
         modelEvents:{
-          'sync':'render'
+          'add change':'render'
         },
         serializeData: function(){
             return {
