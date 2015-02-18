@@ -198,9 +198,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             },
             initialize: function(){
 
-                if(!this.model){
-                    this.template = "#tmpl-loader";
-                }
+
             },
             events: {
               'click @ui.preferredEmail': 'preferredEmail'
@@ -214,7 +212,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                 var preferred = (this.$('input[name="email_account"]:checked').val()) ? true : false;
 
-                this.model.set('preferred', preferred);
+                this.model.set({preferred: preferred});
 
                 this.model.save(null, {
                     success: function(){
