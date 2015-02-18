@@ -13,6 +13,9 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 'click .segment-link': "onSegmentLinkClick",
                 'click .js_selectAsNugget': 'selectAsNugget'
             },
+            ui: {
+                'body': '.postit-footer .text-quotation'
+            },
             initialize: function (options) {
                 this.allUsersCollection = options.allUsersCollection;
                 this.allMessagesCollection = options.allMessagesCollection;
@@ -48,6 +51,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
 
             onRender: function () {
                 Ctx.initTooltips(this.$el);
+                Ctx.convertUrlsToLinks(this.ui.body);
             },
 
             onDragStart: function (ev) {

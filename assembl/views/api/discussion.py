@@ -1,6 +1,7 @@
 import json
 
 from pyramid.httpexceptions import HTTPNotFound
+from pyramid.security import authenticated_userid
 
 from cornice import Service
 
@@ -9,6 +10,7 @@ from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import Discussion
 
 from ...auth import P_READ, P_ADMIN_DISC
+from ...auth.util import get_permissions
 
 discussion = Service(
     name='discussion',
@@ -20,22 +22,24 @@ discussion = Service(
 
 @discussion.get(permission=P_READ)
 def get_discussion(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
     view_def = request.GET.get('view') or 'default'
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
     if not discussion:
         raise HTTPNotFound(
             "Discussion with id '%s' not found." % discussion_id)
 
-    return discussion.generic_json(view_def)
+    return discussion.generic_json(view_def, user_id, permissions)
 
 
 # This should be a PUT, but the backbone save method is confused by
 # discussion URLs.
 @discussion.put(permission=P_ADMIN_DISC)
 def post_discussion(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
 
     if not discussion:

@@ -3,24 +3,27 @@
     <nav class="sidebar-nav">
         <ul class="man pan adminMenu">
           <li>
-            <a href="#edition" class="menu">{{ gettext('edit discussion') }}</a>
+            <a href="#edition" class="menu">{{ gettext('Edit discussion') }}</a>
           </li>
           <li>
-            <a href="#notifications" class="menu">{{ gettext('edit notifications') }}</a>
+            <a href="#settings" class="menu">{{ gettext('Discussion settings') }}</a>
+          </li>
+          <li>
+            <a href="#notifications" class="menu">{{ gettext('Edit notifications') }}</a>
           </li>
           <li class="active">
-            <a href="#partners" class="menu">{{ gettext('edit partners') }}</a>
+            <a href="#partners" class="menu">{{ gettext('Edit partners') }}</a>
           </li>
           <li class="mtxl">
-            <a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a>
+            <a href="/{{ discussion.slug }}/">{{ gettext('Back to discussion') }}</a>
           </li>
         </ul>
     </nav>
   </div>
   <div class="gu gu-3of4 admin-section">
-
+    <section class="section">
     <div class="admin-title">
-      <h3 class="h3">{{ gettext('partners') }}</h3>
+      <h3 class="h3">{{ gettext('Partners') }}</h3>
     </div>
     <div id="content-container" class="content-container">
 
@@ -28,89 +31,17 @@
 			<button class="btn btn-cancel btn-xs bx-close" type="button">
 				<i class="icon-delete"></i>
 			</button>
-			{{ gettext("partners added") }}
+			{{ gettext("Partner successfully added") }}
 		</div>
 
-		<div class="gr">
-			<div class="gu gu-1of1">
-				<form class="core-form form-horizontal" id="form-partner">
-					<fieldset>
-
-						<div class="control-group">
-							<label for="name" class="control-label">{{ gettext('name of partner') }}</label>
-							<div class="controls">
-								<input type="text" class="partner-name input-xlarge" name="name" required="required">
-								<span class="help-inline">
-									<p class="control-error">{{ gettext('please correct the error') }}</p>
-									<p class="control-success"><i class="icon-ok"></i></p>
-								</span>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label for="description" class="control-label">{{ gettext('description') }}</label>
-							<div class="controls">
-								<textarea rows="3" class="partner-description input-xlarge" name="description" required="required"></textarea>
-								<span class="help-inline">
-									<p class="control-error">{{ gettext('please correct the error') }}</p>
-									<p class="control-success"><i class="icon-ok"></i></p>
-								</span>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label for="homepage" class="control-label">{{ gettext('homepage partners') }}</label>
-							<div class="controls">
-								<input type="text" class="partner-homepage input-xlarge" name="homepage" required="required">
-								<span class="help-inline">
-									<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
-									<p class="control-success"><i class="icon-ok"></i></p>
-								</span>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label for="logo" class="control-label">{{ gettext('url partner logo') }}</label>
-							<div class="controls">
-								<input type="text" class="partner-logo input-xlarge" name="logo" required="required">
-								<span class="help-inline">
-									<p class="control-error">{{ gettext('authorized url syntax: http://hompage.com or http://www.hompage.com') }}</p>
-									<p class="control-success"><i class="icon-ok"></i></p>
-								</span>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label for="is_initiator" class="control-label">{{ gettext('is initiator') }}</label>
-							<div class="controls">
-								<input type="checkbox" class="partner-initiator" name="is_initiator">
-							</div>
-						</div>
-
-						<div class="form-actions mvn">
-							<button class="btn btn-secondary js_add-partner" type="submit">Add partner</button>
-						</div>
-
-					</fieldset>
-				</form>
-			</div>
+		<div class="mal tar">
+			<a href="#" class="js_addPartner"><i class="icon-add"></i>&nbsp; {{ gettext("Add partner") }}</a>
 		</div>
 
-    <div class="gr">
-      <% _.each(partners, function(partner){ %>
-      <div class="gu gu-1of1">
+	  <div id="partner-content" class="phl"></div>
 
-        <div class="bx bx-default">
-          <div class="tac mbl"><img src="<%= partner.get('logo')%>" width="100"></div>
-          <span class="mbs dispb"><%= partner.get('name') %></span>
-          <span class="mbs dispb"><%= partner.get('description') %></span>
-          <a class="dispb" href="<%= partner.get('homepage') %>">{{ gettext('link') }}</a>
-        </div>
-
-      </div>
-      <% }) %>
     </div>
-    </div>
+    </section>
   </div>
 </div>
 

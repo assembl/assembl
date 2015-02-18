@@ -67,10 +67,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             templateHelpers: function () {
                 return {
                     urlNotifications: function () {
-                        return '/' + Ctx.getDiscussionSlug() + '/users/notifications';
+                        return '/' + Ctx.getDiscussionSlug() + '/user/notifications';
                     },
                     urlLogOut: function () {
                         return '/' + Ctx.getDiscussionSlug() + '/logout';
+                    },
+                    userProfile: function(){
+                        return '/' + Ctx.getDiscussionSlug() + '/user/profile';
                     }
                 }
             },
@@ -294,7 +297,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
             showPopInDiscussion: function () {
                 var needPopIn = this._store.getItem('needJoinDiscussion');
-                if (needPopIn && this.roles.get('role') === null) {
+                if (needPopIn && Ctx.getCurrentUserId() && this.roles.get('role') === null) {
                     this.joinDiscussion();
                 } else {
                     this._store.removeItem('needJoinDiscussion');

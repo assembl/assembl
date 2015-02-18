@@ -1,19 +1,24 @@
 from simplejson import dumps
+from string import Template
 
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
-    HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError)
+    HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
+    HTTPOk, HTTPNoContent, HTTPForbidden)
 
 from assembl.auth import (
-    P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST, P_READ,
-    R_PARTICIPANT)
-from assembl.models import (User, Discussion, LocalUserRole)
-from assembl.auth import CrudPermissions
+    P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
+    R_PARTICIPANT, CrudPermissions)
+from assembl.models import (
+    User, Discussion, LocalUserRole, AbstractAgentAccount)
 from assembl.auth.util import get_permissions
 from ..traversal import (CollectionContext, InstanceContext)
-from . import (FORM_HEADER, JSON_HEADER, collection_view, check_permissions)
+from .. import JSONError
+from . import (
+    FORM_HEADER, JSON_HEADER, collection_view, instance_put_json,
+    collection_add_json)
 
 
 @view_config(
@@ -69,8 +74,10 @@ def add_local_role(request):
             user = first.user or User.get(first.user_id)
             user.get_notification_subscriptions(discussion_id, True)
         view = request.GET.get('view', None) or 'default'
+        permissions = get_permissions(
+            user_id, ctx.get_discussion_id())
         return Response(
-            dumps(first.generic_json(view)),
+            dumps(first.generic_json(view, user_id, permissions)),
             location=first.uri_generic(first.id),
             status_code=201)
 
@@ -109,12 +116,12 @@ def set_local_role(request):
             json['requested'] = True
         else:
             raise HTTPUnauthorized()
-    updated = instance.update_json(json, user_id)
+    updated = instance.update_from_json(json, user_id, ctx)
     view = request.GET.get('view', None) or 'default'
     if view == 'id_only':
         return [updated.uri()]
     else:
-        return updated.generic_json(view)
+        return updated.generic_json(view, user_id, permissions)
 
 
 @view_config(
@@ -142,7 +149,76 @@ def use_json_header_for_LocalUserRole_PUT(request):
 
 
 @view_config(context=CollectionContext, renderer='json', request_method='GET',
-             ctx_collection_class=LocalUserRole, permission=P_READ,
+             ctx_collection_class=LocalUserRole,
              accept="application/json")
 def view_localuserrole_collection(request):
     return collection_view(request, 'default')
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=AbstractAgentAccount,
+    request_method='POST', name="verify", renderer='json')
+def send_account_verification(request):
+    ctx = request.context
+    instance = ctx._instance
+    if instance.verified:
+        return HTTPNoContent(
+            "No need to verify email <%s>" % (instance.email))
+    from assembl.views.auth.views import send_confirmation_email
+    request.matchdict = {}
+    send_confirmation_email(request, instance)
+    return {}
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=AbstractAgentAccount,
+    request_method='DELETE', renderer='json')
+def delete_abstract_agent_account(request):
+    ctx = request.context
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    instance = ctx._instance
+    if not instance.user_can(user_id, CrudPermissions.DELETE, permissions):
+        return HTTPUnauthorized()
+    if instance.email:
+        accounts_with_mail = [a for a in instance.profile.accounts if a.email]
+        if len(accounts_with_mail) == 1:
+            raise JSONError(403, "This is the last account")
+        if instance.verified:
+            verified_accounts_with_mail = [
+                a for a in accounts_with_mail if a.verified]
+            if len(verified_accounts_with_mail) == 1:
+                raise JSONError(403, "This is the last verified account")
+    instance.db.delete(instance)
+    return {}
+
+
+@view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER,
+             ctx_instance_class=AbstractAgentAccount, renderer='json')
+def put_abstract_agent_account(request):
+    instance = request.context._instance
+    old_preferred = instance.preferred
+    new_preferred = request.json_body.get('preferred', False)
+    if new_preferred and not instance.email:
+        raise HTTPForbidden("Cannot prefer an account without email")
+    if new_preferred and not instance.verified:
+        raise HTTPForbidden("Cannot set a non-verified email as preferred")
+    result = instance_put_json(request)
+    assert instance.preferred == new_preferred
+    if new_preferred and not old_preferred:
+        for account in instance.profile.accounts:
+            if account != instance:
+                account.preferred = False
+    return result
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             header=JSON_HEADER, ctx_collection_class=AbstractAgentAccount)
+def post_email_account(request):
+    from assembl.views.auth.views import send_confirmation_email
+    response = collection_add_json(request)
+    request.matchdict = {}
+    instance = request.context.collection_class.get_instance(response.location)
+    send_confirmation_email(request, instance)
+    return response

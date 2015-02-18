@@ -1,106 +1,290 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/context', 'utils/i18n'],
-    function (Marionette, $, CollectionManager, Ctx, i18n) {
+define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'common/context', 'utils/i18n', 'backbone.modal', 'backbone.marionette.modals', 'models/partners'],
+    function (Marionette, Assembl, $, CollectionManager, Ctx, i18n, backboneModal, marionetteModal, partnerModel) {
+
+        var Partners = Marionette.ItemView.extend({
+            template: '#tmpl-partnersInAdmin',
+            className: 'gr',
+            ui: {
+              'partnerItem':'.js_deletePartner',
+              'partnerItemEdit': '.js_editPartner'
+            },
+            events: {
+                'click @ui.partnerItem':'deletePartner',
+                'click @ui.partnerItemEdit': 'editPartner'
+            },
+            serializeData: function(){
+                return {
+                    partner: this.model
+                }
+            },
+            deletePartner: function(){
+               var that = this;
+               this.model.destroy({
+                  success: function(){
+                     that.$el.fadeOut();
+                  },
+                  error: function(){
+
+                  }
+               });
+            },
+            editPartner: function(){
+                var self = this;
+
+                var Modal = Backbone.Modal.extend({
+                    template: _.template($('#tmpl-adminPartnerEditForm').html()),
+                    className: 'partner-modal popin-wrapper',
+                    cancelEl: '.close, .js_close',
+                    keyControl: false,
+                    model: self.model,
+                    initialize: function () {
+                        this.$('.bbm-modal').addClass('popin');
+                    },
+                    events: {
+                        'click .js_validatePartner' :'validatePartner'
+                    },
+                    validatePartner: function (e) {
+
+                        var that = this,
+                            validForm = false,
+                            name_mandatory = this.$('.partner-name'),
+                            description_mandatory = this.$('.partner-description'),
+                            website = this.$('.partner-homepage'),
+                            url_logo = this.$('.partner-logo'),
+                            regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                            parent = name_mandatory.parent().parent(),
+                            p_website = website.parent().parent(),
+                            p_url_logo = url_logo.parent().parent(),
+                            p_description_mandatory = description_mandatory.parent().parent(),
+                            controls = document.querySelectorAll('#partner-form .control-group');
+
+                        if(name_mandatory.val() === ''){
+                            validForm = false;
+                            parent.addClass('error');
+                            return false;
+                        } else {
+                            validForm = true;
+                            parent.removeClass('error');
+                        }
+
+                        if(description_mandatory.val() === ''){
+                            validForm = false;
+                            p_description_mandatory.addClass('error');
+                            return false;
+                        } else {
+                            validForm = true;
+                            p_description_mandatory.removeClass('error');
+                        }
+
+                        if(website.val()){
+                            if (!regexUrl.test(website.val())) {
+                                p_website.addClass('error');
+                                validForm = false;
+                                return false;
+                            } else {
+                                validForm = true;
+                                p_website.removeClass('error');
+                            }
+                        }
+
+                        if(url_logo.val()){
+                            if (!regexUrl.test(url_logo.val())) {
+                                p_url_logo.addClass('error');
+                                validForm = false;
+                                return false;
+                            } else {
+                                validForm = true;
+                                p_url_logo.removeClass('error');
+                            }
+                        }
+
+                        if(validForm){
+                            $(controls).removeClass('success');
+
+                            self.model.set({
+                                description: this.$('.partner-description').val(),
+                                homepage: this.$('.partner-homepage').val(),
+                                logo: this.$('.partner-logo').val(),
+                                name: this.$('.partner-name').val(),
+                                is_initiator: (this.$('.partner-initiator:checked').val()) ? true : false
+                            });
+
+                            self.model.save(null, {
+                                success: function(model, resp){
+                                    self.render();
+                                    that.triggerSubmit();
+                                },
+                                error: function(model, resp){
+                                    console.log(resp)
+                                }
+                            })
+
+                        }
+
+                    }
+                });
+
+                var modal = new Modal();
+
+                Assembl.slider.show(modal);
+
+            }
+        });
+
+        var PartnerList = Marionette.CollectionView.extend({
+            childView: Partners,
+            initialize: function(){
+                var that = this,
+                    collectionManager = new CollectionManager();
+
+                this.collection = undefined;
+
+                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
+                    function (allPartnerOrganization) {
+                        that.collection = allPartnerOrganization;
+                        that.render();
+                    });
+            }
+        });
 
         var adminPartners = Marionette.LayoutView.extend({
             template: '#tmpl-adminPartners',
             className: 'admin-notifications',
             ui: {
-                partners: '.js_add-partner',
-                close: '.bx-alert-success .bx-close'
-            },
-            initialize: function () {
-                var that = this,
-                    collectionManager = new CollectionManager();
-
-                this.collection = new Backbone.Collection();
-
-                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
-                    function (allPartnerOrganization) {
-                        that.collection.add(allPartnerOrganization.models)
-                    });
+              partners: '.js_addPartner',
+              close: '.bx-alert-success .bx-close'
             },
 
-            collectionEvents: {
-                'add': 'render'
+            regions: {
+              partner: '#partner-content'
             },
 
             events: {
-                'click @ui.partners': 'addPartner',
+                'click @ui.partners': 'addNewPartner',
                 'click @ui.close': 'close'
             },
 
             serializeData: function () {
                 return {
-                    partners: this.collection.models,
                     Ctx: Ctx
                 }
             },
 
             onRender: function () {
                 Ctx.initTooltips(this.$el);
+
+                var partnerList = new PartnerList();
+
+                this.partner.show(partnerList);
             },
 
             close: function () {
                 this.$('.bx-alert-success').addClass('hidden');
             },
 
-            addPartner: function (e) {
-                e.preventDefault();
+            addNewPartner: function(){
+                var self = this;
 
-                var that = this,
-                    inputs = this.$('*[required=required]'),
-                    dataPartner = this.$('#form-partner').serialize(),
-                    urlPartner = '/data/Discussion/' + Ctx.getDiscussionId() + '/partner_organizations/',
-                    regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
-                    controls = document.querySelectorAll('#form-partner .control-group');
+                var Modal = Backbone.Modal.extend({
+                    template: _.template($('#tmpl-adminPartnerForm').html()),
+                    className: 'partner-modal popin-wrapper',
+                    cancelEl: '.close, .js_close',
+                    keyControl: false,
+                    initialize: function () {
+                        this.$('.bbm-modal').addClass('popin');
+                    },
+                    events: {
+                     'click .js_validatePartner' :'validatePartner'
+                    },
+                    validatePartner: function (e) {
 
-                inputs.each(function () {
-                    var parent = $(this).parent().parent();
+                        var that = this,
+                            validForm = false,
+                            name_mandatory = this.$('.partner-name'),
+                            description_mandatory = this.$('.partner-description'),
+                            website = this.$('.partner-homepage'),
+                            url_logo = this.$('.partner-logo'),
+                            regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                            parent = name_mandatory.parent().parent(),
+                            p_website = website.parent().parent(),
+                            p_url_logo = url_logo.parent().parent(),
+                            p_description_mandatory = description_mandatory.parent().parent(),
+                            controls = document.querySelectorAll('#partner-form .control-group');
 
-                    if (!$(this).val()) {
-                        parent.addClass('error');
-                    }
-                    if ($(this).val()) {
-                        parent.removeClass('error').addClass('success');
+                        if(name_mandatory.val() === ''){
+                            parent.addClass('error');
+                            validForm = false;
+                            return false;
+                        } else {
+                            validForm = true;
+                            parent.removeClass('error');
+                        }
 
-                        if ($(this).hasClass('partner-homepage')) {
-                            if (!regexUrl.test($(this).val())) {
-                                parent.addClass('error').removeClass('success');
+                        if(description_mandatory.val() === ''){
+                            validForm = false;
+                            p_description_mandatory.addClass('error');
+                            return false;
+                        } else {
+                            validForm = true;
+                            p_description_mandatory.removeClass('error');
+                        }
+
+                        if(website.val()){
+                            if (!regexUrl.test(website.val())) {
+                                p_website.addClass('error');
+                                validForm = false;
+                                return false;
                             } else {
-                                parent.removeClass('error').addClass('success');
+                                validForm = true;
+                                p_website.removeClass('error');
                             }
                         }
-                        if ($(this).hasClass('partner-logo')) {
-                            if (!regexUrl.test($(this).val())) {
-                                parent.addClass('error').removeClass('success');
+
+                        if(url_logo.val()){
+                            if (!regexUrl.test(url_logo.val())) {
+                                p_url_logo.addClass('error');
+                                validForm = false;
+                                return false;
                             } else {
-                                parent.removeClass('error').addClass('success');
+                                validForm = true;
+                                p_url_logo.removeClass('error');
                             }
                         }
+
+
+                        if(validForm){
+                            var inputs = document.querySelectorAll('#partner-form *[required=required]');
+                            $(controls).removeClass('success');
+
+                            var partner = new partnerModel.Model({
+                                description: this.$('.partner-description').val(),
+                                homepage: this.$('.partner-homepage').val(),
+                                logo: this.$('.partner-logo').val(),
+                                name: this.$('.partner-name').val(),
+                                is_initiator: (this.$('.partner-initiator:checked').val()) ? true : false
+                            });
+
+                            partner.save(null, {
+                                success: function(model, resp){
+                                    $(inputs).val('');
+                                    self.render();
+                                    that.triggerSubmit();
+                                },
+                                error: function(model, resp){
+                                    console.log(resp)
+                                }
+                            })
+
+                        }
+
                     }
                 });
 
-                if(!$(controls).hasClass('error')){
-                    var inputs = document.querySelectorAll('#form-partner *[required=required]');
-                    $(controls).removeClass('success');
-                    $(inputs).val('');
+                var modal = new Modal();
 
-                    $.ajax({
-                        url: urlPartner,
-                        type: "post",
-                        data: dataPartner,
-                        success: function (response, text) {
-                          that.render();
-                          that.$('.bx-alert-success').removeClass('hidden');
-                        },
-                        error: function (request, status, error) {
-                            alert(status + ': ' + error);
-                        }
-                    });
-
-                }
+                Assembl.slider.show(modal);
 
             }
 

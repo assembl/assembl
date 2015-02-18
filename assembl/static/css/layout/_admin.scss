@@ -16,8 +16,24 @@ table {
   }
 }
 
+.admin-section {
+  .is-loading{
+    cursor: wait;
+    &:after {
+      @include z-index("float");
+      display: block;
+      content: "";
+      background: rgba(255, 255, 255, 0.10) url(#{$img-dir}/panel/loading.gif) no-repeat center center;
+      width: 100%;
+      height: 20px;
+    }
+  }
+}
+
 .admin-notifications,
-.admin-profile {
+.admin-profile,
+.admin-account,
+.admin-settings{
   width: 85%;
   margin: 30px auto 0 auto;
 
@@ -52,30 +68,110 @@ table {
 
   .content-container {
     @include box-sizing(border-box);
-    padding: $spacingS;
   }
 
   .admin-section {
-    border: 1px solid #dce0e0;
-    background-color: $white;
-    min-height: 400px;
+    width: 740px;
+
+    .section {
+      border: 1px solid #dce0e0;
+      background-color: $white;
+    }
+  }
+
+  #discussion-settings,
+  #profile-form,
+  #adminDiscussion,
+  #account-form{
+    .form-actions{
+      padding: 15px 20px 15px 0px;
+      margin: 0;
+      border-top: 1px solid #dce0e0;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+  }
+
+  #adminDiscussion {
+    .control-label {
+      width: auto;
+    }
   }
 
   #profile-form {
     .control-label {
       width: auto;
     }
+    .social-photo {
+      width: 595px;
+      .custom-radio {
+        height: 30px;
+        input[type=radio] {
+          margin-top: 8px;
+        }
+        .sc, .sc-name {
+          line-height: 30px;
+        }
+      }
+    }
+
+    .user-lang {
+      margin-left: 115px;
+    }
     .controls {
       margin-left: 20px;
-      .fb-bg, .twi-bg ,.g-bg{
-        box-sizing: border-box;
-        text-align: center;
-        padding-top: 10px;
-      }
 
       .social-content {
         width: 540px;
+        .fb-bg, .twi-bg ,.g-bg{
+          line-height: 37px;
+        }
       }
+    }
+    .email-helper,
+    .social-helper {
+      width: 540px;
+      color: $gray1;
+    }
+    .ac_add_email {
+      .icon-add {
+        margin-left: -7px;
+      }
+    }
+  }
+
+  #adminDiscussion {
+    .controls {
+      margin-left: 20px;
+    }
+    #introduction {
+      resize: vertical;
+    }
+  }
+
+}
+
+#associate-account{
+  .associate-email {
+    .icon-checkbox{
+      font-size: 20px;
+      vertical-align: middle;
+    }
+  }
+}
+
+#partner-content{
+  .description {
+    word-wrap: break-word;
+  }
+  .partner-img-content {
+    display: table;
+    width: 100%;
+    .partner-img {
+      text-align: center;
+      display: table-cell;
+      vertical-align: middle;
     }
   }
 }

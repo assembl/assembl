@@ -22,7 +22,8 @@ from sqlalchemy import (
 
 from pyramid.httpexceptions import (
     HTTPUnauthorized, HTTPBadRequest)
-from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy.orm import (
+    relationship, backref, deferred, with_polymorphic)
 from sqlalchemy import inspect
 from sqlalchemy.types import Text
 from sqlalchemy.schema import Index
@@ -65,17 +66,19 @@ class AgentProfile(Base):
     }
 
     def get_preferred_email_account(self):
-        if inspect(self).attrs.email_accounts.loaded_value is NO_VALUE:
-            account = self.db.query(EmailAccount).filter_by(
-                profile_id=self.id).order_by(
-                EmailAccount.verified.desc(),
-                EmailAccount.preferred.desc()).first()
+        if inspect(self).attrs.accounts.loaded_value is NO_VALUE:
+            account = self.db.query(AbstractAgentAccount).filter(
+                (AbstractAgentAccount.profile_id == self.id)
+                & (AbstractAgentAccount.email != None)).order_by(
+                AbstractAgentAccount.verified.desc(),
+                AbstractAgentAccount.preferred.desc()).first()
             if account:
                 return account
-        elif self.email_accounts:
-            accounts = self.email_accounts[:]
+        elif self.accounts:
+            accounts = [a for a in self.accounts if a.email]
             accounts.sort(key=lambda e: (not e.verified, not e.preferred))
-            return accounts[0]
+            if accounts:
+                return accounts[0]
 
     def get_preferred_email(self):
         if self.get_preferred_email_account() is not None:
@@ -166,7 +169,7 @@ class AgentProfile(Base):
 
     def get_agent_preload(self, view_def=None):
         if view_def:
-            result = self.generic_json(view_def)
+            result = self.generic_json(view_def, user_id=self.id)
         else:
             result = self.serializable()
         return json.dumps(result)
@@ -183,6 +186,10 @@ class AgentProfile(Base):
         if discussion is None:
             return None
         return self.count_posts_in_discussion(discussion.id)
+
+    def get_preferred_locale(self):
+        # TODO: per-user preferred locale
+        return None
 
 
 class AbstractAgentAccount(Base):
@@ -205,6 +212,13 @@ class AbstractAgentAccount(Base):
     profile = relationship('AgentProfile', backref=backref(
         'accounts', cascade="all, delete-orphan"))
 
+    preferred = Column(Boolean(), default=False, server_default='0')
+    verified = Column(Boolean(), default=False, server_default='0')
+    # Note some social accounts don't disclose email (eg twitter), so nullable
+    # Virtuoso + nullable -> no unique index (sigh)
+    email = Column(String(100), index=True)
+    #    info={'rdf': QuadMapPatternS(None, SIOC.email)} private
+
     def signature(self):
         "Identity of signature implies identity of underlying account"
         return ('abstract_agent_account', self.id)
@@ -212,13 +226,12 @@ class AbstractAgentAccount(Base):
     def merge(self, other):
         pass
 
-    def is_owner(self, user):
-        return self.profile_id == user.id
+    def is_owner(self, user_id):
+        return self.profile_id == user_id
 
     @classmethod
-    def restrict_to_owners(cls, query, user_id=None):
+    def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
-        user_id = user_id or self.profile_id
         return query.filter(cls.profile_id == user_id)
 
     __mapper_args__ = {
@@ -231,22 +244,35 @@ class AbstractAgentAccount(Base):
         P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
         P_READ, P_READ, P_READ)
 
+    @classmethod
+    def user_can_cls(cls, user_id, operation, permissions):
+        s = super(AbstractAgentAccount, cls).user_can_cls(
+            user_id, operation, permissions)
+        return IF_OWNED if s is False else s
+
+    def user_can(self, user_id, operation, permissions):
+        # bypass for permission-less new users
+        if user_id == self.profile_id:
+            return True
+        return super(AbstractAgentAccount, self).user_can(
+            user_id, operation, permissions)
+
+    def update_from_json(
+            self, json, user_id=None, context=None,
+            parse_def_name='default_reverse'):
+        # DO NOT update email... but we still want
+        # to allow to set it on create.
+        if 'email' in json:
+            del json['email']
+        return super(AbstractAgentAccount, self).update_from_json(
+            json, user_id, context, parse_def_name)
+
 
 class EmailAccount(AbstractAgentAccount):
     """An email account"""
-    __tablename__ = "agent_email_account"
     __mapper_args__ = {
         'polymorphic_identity': 'agent_email_account',
     }
-    id = Column(Integer, ForeignKey(
-        'abstract_agent_account.id',
-        ondelete='CASCADE', onupdate='CASCADE'
-    ), primary_key=True)
-    email = Column(String(100), nullable=False, index=True)
-        # info={'rdf': QuadMapPatternS(None, SIOC.email)} private
-    verified = Column(Boolean(), default=False)
-    preferred = Column(Boolean(), default=False)
-    active = Column(Boolean(), default=True)
     profile_e = relationship(AgentProfile, backref=backref('email_accounts'))
 
     def display_name(self):
@@ -341,9 +367,25 @@ class IdentityProviderAccount(AbstractAgentAccount):
         info={'rdf': QuadMapPatternS(None, FOAF.img)})
     profile_i = relationship(AgentProfile, backref='identity_accounts')
 
+    def __init__(self, profile_info_json=None, **kwargs):
+        if profile_info_json is not None:
+            kwargs['profile_info'] = json.dumps(profile_info_json)
+        super(IdentityProviderAccount, self).__init__(**kwargs)
+        self.interpret_profile(self.profile_info_json)
+
     def signature(self):
         return ('idprovider_agent_account', self.provider_id, self.username,
                 self.domain, self.userid)
+
+    def interpret_profile(self, profile=None):
+        profile = profile or self.profile_info_json
+        if not profile:
+            return
+        self.populate_picture(profile)
+        email = profile.get('verifiedEmail', self.email)
+        if email and email != self.email:
+            self.email = email
+            self.verified = self.provider.trust_emails
 
     def display_name(self):
         # TODO: format according to provider, ie @ for twitter.
@@ -353,6 +395,9 @@ class IdentityProviderAccount(AbstractAgentAccount):
             name = self.userid
         return ":".join((self.provider.provider_type, name))
 
+    def get_provider_name(self):
+        return self.provider.name
+
     def real_name(self):
         info = self.profile_info_json
         name = info['name']
@@ -361,12 +406,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
         if 'givenName' in name and 'familyName' in name:
             return ' '.join((name['givenName'], name['familyName']))
 
-    def populate_picture(self, profile=None):
-        if self.picture_url:
-            return
-        profile = profile or self.profile_info_json
-        if not profile:
-            return
+    def populate_picture(self, profile):
         if 'photos' in profile:  # google, facebook
             photos = [x.get('value', None) for x in profile['photos']]
             photos = [x for x in photos if x]
@@ -383,8 +423,6 @@ class IdentityProviderAccount(AbstractAgentAccount):
     twitter_sizes = (('_mini', 25), ('_normal', 48), ('_bigger', 73), ('', 1000))
 
     def avatar_url(self, size=32):
-        if not self.picture_url:
-            self.populate_picture()
         if not self.picture_url:
             return
         if self.provider.provider_type == 'google_oauth2':
@@ -409,6 +447,8 @@ class IdentityProviderAccount(AbstractAgentAccount):
     @profile_info_json.setter
     def profile_info_json(self, val):
         self.profile_info = json.dumps(val)
+        self.interpret_profile(val)
+
 
 
 class User(AgentProfile):
@@ -444,9 +484,35 @@ class User(AgentProfile):
 
         super(User, self).__init__(**kwargs)
 
-    def set_password(self, password):
+    @property
+    def username_p(self):
+        if self.username:
+            return self.username.username
+
+    @username_p.setter
+    def username_p(self, name):
+        if self.username:
+            if name:
+                self.username.username = name
+            else:
+                self.db.delete(self.username)
+        elif name:
+            self.username = Username(username=name)
+
+    @username_p.deleter
+    def username_p(self):
+        if self.username:
+            self.db.delete(self.username)
+
+    @property
+    def password_p(self):
+        return ""
+
+    @password_p.setter
+    def password_p(self, password):
         from ..auth.password import hash_password
-        self.password = hash_password(password)
+        if password:
+            self.password = hash_password(password)
 
     def check_password(self, password):
         if self.password:
@@ -474,10 +540,11 @@ class User(AgentProfile):
             self.creation_date = min(
                 self.creation_date, other_user.creation_date)
             if other_user.password and not self.password:
-                self.password = other_user.password
-                # NOTE: The user may be confused by the implicit change of password
-                # when we destroy the second account.
-                # Maybe check latest login on either account?
+                # NOTE: The user may be confused by the implicit change of
+                # password when we destroy the second account.
+                # Use most recent login
+                if other_user.last_login > self.last_login:
+                    self.password = other_user.password
             for extract in other_user.extracts_created:
                 extract.creator = self
             for extract in other_user.extracts_owned:
@@ -490,6 +557,11 @@ class User(AgentProfile):
                 role.user = self
             if other_user.username and not self.username:
                 self.username = other_user.username
+            for notification_subscription in \
+                    other_user.notification_subscriptions:
+                notification_subscription.user = self
+                if not notification_subscription.check_unique():
+                    self.db.delete(notification_subscription)
 
     def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')
@@ -700,6 +772,13 @@ class User(AgentProfile):
         self.db.flush()
         return chain(my_subscriptions, defaults)
 
+    def user_can(self, user_id, operation, permissions):
+        # bypass for permission-less new users
+        if user_id == self.id:
+            return True
+        return super(User, self).user_can(user_id, operation, permissions)
+
+
 
 class Username(Base):
     """Optional usernames for users
@@ -749,6 +828,7 @@ def populate_default_roles(session):
 class UserRole(Base):
     """roles that a user has globally (eg admin.)"""
     __tablename__ = 'user_role'
+    rdf_sections = (USER_SECTION,)
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
                      index=True)
@@ -800,7 +880,17 @@ class LocalUserRole(DiscussionBoundBase):
     def get_role_name(self):
         return self.role.name
 
-    def update_json(self, json, user_id=Everyone):
+    def unique_query(self, query):
+        query, _ = super(LocalUserRole, self).unique_query(query)
+        user_id = self.user_id or self.user.id
+        role_id = self.role_id or self.role.id
+        discussion_id = self.discussion_id or self.discussion.id
+        return query.filter_by(
+            user_id=user_id, role_id=role_id, discussion_id=discussion_id), True
+
+    def _do_update_from_json(
+            self, json, parse_def, aliases, ctx, permissions,
+            user_id, duplicate_error=True):
         # TODO: Verify uniqueness
         json_user_id = json.get('user', None)
         if json_user_id is None:
@@ -833,13 +923,12 @@ class LocalUserRole(DiscussionBoundBase):
                 raise HTTPBadRequest()
         return self
 
-    def is_owner(self, user):
-        return self.user_id == user.id
+    def is_owner(self, user_id):
+        return self.user_id == user_id
 
     @classmethod
-    def restrict_to_owners(cls, query, user_id=None):
+    def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
-        user_id = user_id or self.user_id
         return query.filter(cls.user_id == user_id)
 
     @classmethod
@@ -857,6 +946,16 @@ class LocalUserRole(DiscussionBoundBase):
     crud_permissions = CrudPermissions(
         P_SELF_REGISTER, P_READ, P_ADMIN_DISC, P_ADMIN_DISC,
         P_SELF_REGISTER, P_SELF_REGISTER)
+
+    @classmethod
+    def user_can_cls(cls, user_id, operation, permissions):
+        # bypass... more checks are required upstream,
+        # see assembl.views.api2.auth.add_local_role
+        if operation == CrudPermissions.CREATE \
+                and P_SELF_REGISTER_REQUEST in permissions:
+            return True
+        return super(LocalUserRole, cls).user_can_cls(
+            user_id, operation, permissions)
 
 
 class Permission(Base):
@@ -985,12 +1084,29 @@ class UserTemplate(DiscussionBoundBase, User):
             NotificationSubscription,
             NotificationSubscriptionStatus,
             NotificationCreationOrigin)
-        my_subscriptions = self.db.query(NotificationSubscription).filter_by(
-            discussion_id=self.discussion_id, user_id=self.id).all()
-        my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
+        # self.id may not be defined
+        self.db.flush()
         needed_classes = \
             self.get_applicable_notification_subscriptions_classes()
-        missing = set(needed_classes) - my_subscriptions_classes
+        # We need to materialize missing NotificationSubscriptions,
+        # But have duplication issues, probably due to calls on multiple
+        # threads.
+        # TEMPORARY: We will apply a write lock selectively.
+        # LONG TERM: We will only materialize subscriptions when selected.
+
+        def get_subcriptions(lock):
+            query = self.db.query(NotificationSubscription).filter_by(
+                discussion_id=self.discussion_id, user_id=self.id)
+            if lock:
+                query = query.with_for_update()
+            my_subscriptions = query.all()
+            my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
+            missing = set(needed_classes) - my_subscriptions_classes
+            return my_subscriptions, missing
+        my_subscriptions, missing = get_subcriptions(False)
+        if not missing:
+            return my_subscriptions, False
+        my_subscriptions, missing = get_subcriptions(True)
         if not missing:
             return my_subscriptions, False
         # TODO: Fill from config.
@@ -1014,7 +1130,7 @@ class UserTemplate(DiscussionBoundBase, User):
         for d in defaults:
             self.db.add(d)
         self.db.flush()
-        return chain(my_subscriptions, defaults), bool(missing)
+        return chain(my_subscriptions, defaults), True
 
 
 Index("user_template", "discussion_id", "role_id")
@@ -1048,24 +1164,9 @@ class PartnerOrganization(DiscussionBoundBase):
 
     is_initiator = Column(Boolean)
 
-    def update_json(self, json, user_id=Everyone):
-        from ..auth.util import user_has_permission
-        if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
-            raise HTTPUnauthorized()
-        if self.discussion_id:
-            if 'discussion_id' in json and Discussion.get_database_id(json['discussion_id']) != self.discussion_id:
-                raise HTTPBadRequest()
-        else:
-            discussion_id = json.get('discussion', None)
-            if discussion_id is None:
-                raise HTTPBadRequest()
-            self.discussion_id = Discussion.get_database_id(discussion_id)
-        self.name = json.get('name', self.name)
-        self.description = json.get('description', self.description)
-        self.is_initiator = json.get('is_initiator', self.is_initiator)
-        self.logo = json.get('logo', self.logo)
-        self.homepage = json.get('homepage', self.homepage)
-        return self
+    def unique_query(self, query):
+        query, _ = super(PartnerOrganization, self).unique_query(query)
+        return query.filter_by(name=self.name), True
 
     def get_discussion_id(self):
         return self.discussion_id

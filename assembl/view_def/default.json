@@ -16,7 +16,9 @@
         "name": "&display_name",
         "real_name": "&real_name",
         "post_count": "&count_posts_in_current_discussion",
-        "preferred_email": false
+        "preferred_email": false,
+        "email_accounts": [":default"],
+        "identity_accounts": [":default"]
     },
     "User": {
         "@extends": "AgentProfile",
@@ -26,15 +28,29 @@
         "password": false,
         "verified": true,
         "permissions": "&get_all_permissions",
-        "username": true
+        "username": "username_p"
     },
     "UserTemplate": {
         "@extends": "User",
         "discussion": true,
         "for_role": ":"
     },
-    "EmailAccount": false,
-    "IdentityProviderAccount": false,
+    "AbstractAgentAccount": {
+        "preferred": true,
+        "email": true,
+        "verified": true,
+        "profile": true
+    },
+    "EmailAccount": {
+        "@extends": "AbstractAgentAccount",
+        "will_merge_if_validated": "'false"
+    },
+    "IdentityProviderAccount": {
+        "@extends": "AbstractAgentAccount",
+        "provider": "&get_provider_name",
+        "username": true,
+        "picture_url": true
+    },
     "IdentityProvider": {
         "name": true,
         "provider_type": true,
@@ -43,8 +59,7 @@
     "ContentSource": {
         "discussion_id": "discussion",
         "name": true,
-        "creation_date": true,
-        "contents": [":partial"]
+        "creation_date": true
     },
     "PostSource": {
         "@extends": "ContentSource",
@@ -54,16 +69,17 @@
         "@extends": "ContentSource"
     },
     "AbstractMailbox": {
-        "@extends": "PostSource"
+        "@extends": "PostSource",
+        "admin_sender": true
     },
     "IMAPMailbox": {
         "@extends": "AbstractMailbox",
         "folder": true,
         "host": true,
         "port": true,
-        "username": false,
+        "username": true,
         "use_ssl": true,
-        "password": false,
+        "password": true,
         "last_imported_email_uid": false,
         "subject_mangling_regex": false,
         "subject_mangling_replacement": false,
@@ -134,7 +150,8 @@
         "instigator": true,
         "introduction": true,
         "introductionDetails": true,
-        "sources": [":partial"]
+        "sources": [":partial"],
+        "subscribe_to_notifications_on_signup": true
     },
     "Idea": {
         "longTitle": "long_title",

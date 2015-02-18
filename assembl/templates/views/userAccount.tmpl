@@ -1,0 +1,76 @@
+<div class="gr">
+  <div class="gu gu-1of5">
+    <nav class="sidebar-nav">
+        <ul class="man pan adminMenu">
+          <li>
+            <a href="#user/profile" class="menu">{{ gettext('Modify your profile') }}</a>
+          </li>
+          <li class="active">
+			<a href="#user/account" class="menu">{{ gettext('Account settings') }}</a>
+		  </li>
+          <li>
+            <a href="#user/notifications" class="menu">{{ gettext('Notifications') }}</a>
+          </li>
+          <li class="mtxl">
+            <a href="/{{ discussion.slug }}/">{{ gettext('Back to discussion') }}</a>
+          </li>
+        </ul>
+    </nav>
+  </div>
+  <div class="gu gu-3of4 admin-section">
+    <div class="gr">
+			<div class="gu gu-1of1 mbl">
+				<section class="section">
+				<div class="admin-title">
+					<h3 class="h3">{{ gettext('Assembl account settings') }}</h3>
+				</div>
+				<div id="content-container" class="content-container">
+
+					<div id="userAccountForm"></div>
+
+
+				</div>
+				</section>
+			</div>
+
+    	<div class="gu gu-1of1">
+    		<section class="section">
+			 <div class="admin-title">
+				 <h3 class="h3">{{ gettext('Manage associated accounts') }}</h3>
+			 </div>
+			 <div id="content-container" class="content-container">
+				 <div class="gr mtl">
+					 <div id="account-content" class="gu gu-1of1 phl">
+
+						 <div id="associate_account"></div>
+						 {#
+						 <form class="core-form form-horizontal">
+							<div class="control-group">
+								<label for="optionsCheckboxList" class="control-label">{{ gettext('Add external account to login via social networks') }}</label>
+								<div class="controls">
+									<a href="#" class="fb-bg mbs">sign in with facebook</a>
+									 <a href="#" class="twi-bg mbs">sign in with twitter</a>
+									 <a href="#" class="g-bg mbs">sign in with google+</a>
+								</div>
+							</div>
+						</form>
+						 #}
+
+						<form class="core-form form-horizontal">
+							<div class="control-group">
+								<label for="optionsCheckboxList" class="control-label">{{ gettext('Add another email') }}</label>
+								<div class="controls">
+										<input type="text" id="new_email" name="new_email" class="input-xlarge" autocomplete="off">
+										<button class="btn btn-primary js_addEmail">{{ gettext('Save') }}</button>
+								</div>
+							</div>
+						</form>
+
+					 </div>
+				 </div>
+			 </div>
+			 </section>
+    	</div>
+    </div>
+  </div>
+</div>

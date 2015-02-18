@@ -4,7 +4,7 @@ var requirejs_config = {
     paths: {
         'jquery': "../bower/jquery/jquery",
         'jquery-highlight': '../lib/jquery-highlight/jquery.highlight',
-        'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
+        'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot',
         'jquery-autosize': '../bower/jquery-autosize/jquery.autosize',
 
         'backbone': '../bower/backbone/backbone',
@@ -19,8 +19,11 @@ var requirejs_config = {
         'jasmine': '../bower/jasmine/lib/jasmine-core/jasmine',
         'jasmine-html': '../bower/jasmine/lib/jasmine-core/jasmine-html',
         'jasmine-boot': '../bower/jasmine/lib/jasmine-core/boot',
-        'jasmine-ajax':'../bower/jasmine-ajax/lib/mock-ajax',
-        'jasmine-jquery':'../bower/jasmine-jquery/lib/jasmine-jquery',
+
+        'chai':'../bower/chai/chai',
+        'chai-jquery':'../bower/chai-jquery/chai-jquery',
+        'mocha':'../bower/mocha/mocha',
+        'fixtures': '../bower/fixtures/fixtures',
 
         'ckeditor': '../bower/ckeditor/ckeditor',
         'ckeditor-sharedspace': '../lib/ckeditor-sharedcontainer/plugin',
@@ -37,7 +40,10 @@ var requirejs_config = {
         'jed': '../bower/jed/jed',
         'd3': '../bower/d3/d3',
         'bootstrap': '../lib/bootstrap',
-        'dropdown': '../lib/dropdown'
+        'dropdown': '../lib/dropdown',
+        'jquery-linkify': '../bower/jQuery-linkify/dist/jquery.linkify.min',
+        'jquery-oembed-all': '../bower/jquery-oembed-all/jquery.oembed',
+        'jquery.bootstrap-growl':'../bower/bootstrap-growl/jquery.bootstrap-growl'
     },
     shim: {
         'underscore': {
@@ -125,6 +131,21 @@ var requirejs_config = {
             deps: ['jquery']
         },
         'dropdown': {
+            deps: ['jquery']
+        },
+        'jquery-linkify': {
+            deps: ['jquery']
+        },
+        'jquery-oembed-all': {
+            deps: ['jquery']
+        },
+        'mocha': {
+            init: function () {
+                this.mocha.setup('bdd');
+                return this.mocha;
+            }
+        },
+        'jquery.bootstrap-growl':{
             deps: ['jquery']
         }
     }

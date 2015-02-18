@@ -1,10 +1,12 @@
 import json
 
-from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
+from pyramid.security import authenticated_userid
+from cornice import Service
 
 from . import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_EDIT_SYNTHESIS
+from assembl.auth.util import get_permissions
 from assembl.models import Discussion, Synthesis
 
 syntheses = Service(name='syntheses',
@@ -18,20 +20,24 @@ synthesis = Service(name='ExplicitSubgraphs',
 
 @syntheses.get(permission=P_READ)
 def get_syntheses(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
     syntheses = discussion.get_all_syntheses()
     view_def = request.GET.get('view') or 'default'
-    return [synthesis.generic_json(view_def) for synthesis in syntheses]
+    res = [synthesis.generic_json(view_def, user_id, permissions)
+           for synthesis in syntheses]
+    return [x for x in res if x is not None]
 
 
 @synthesis.get(permission=P_READ)
 def get_synthesis(request):
     synthesis_id = request.matchdict['id']
     if synthesis_id == 'next_synthesis':
-        discussion_id = request.matchdict['discussion_id']
+        discussion_id = int(request.matchdict['discussion_id'])
         discussion = Discussion.get_instance(discussion_id)
         synthesis = discussion.get_next_synthesis()
     else:
@@ -40,15 +46,19 @@ def get_synthesis(request):
         raise HTTPNotFound("Synthesis with id '%s' not found." % synthesis_id)
 
     view_def = request.GET.get('view') or 'default'
+    discussion_id = int(request.matchdict['discussion_id'])
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
-    return synthesis.generic_json(view_def)
+    return synthesis.generic_json(view_def, user_id, permissions)
+
 
 # Update
 @synthesis.put(permission=P_EDIT_SYNTHESIS)
 def save_synthesis(request):
     synthesis_id = request.matchdict['id']
     if synthesis_id == 'next_synthesis':
-        discussion_id = request.matchdict['discussion_id']
+        discussion_id = int(request.matchdict['discussion_id'])
         discussion = Discussion.get_instance(discussion_id)
         synthesis = discussion.get_next_synthesis()
     else:

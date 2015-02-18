@@ -53,6 +53,8 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
             events: {
                 'change input[type="checkbox"]': 'onCheckboxChange',
                 'click .idealist-title': 'onTitleClick',
+                'click .idealist-abovedropzone': 'onTitleClick',
+                'click .idealist-dropzone': 'onTitleClick',
                 'click .js_idealist-title-unread-count': 'onUnreadCountClick',
                 'click .idealist-arrow': 'toggle',
                 'dragstart .idealist-body': 'onDragStart',

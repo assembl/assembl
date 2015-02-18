@@ -1,4 +1,6 @@
-define(['router'], function (Router) {
+define(['router', 'chai'], function (Router, chai) {
+
+    var expect = chai.expect;
 
     return describe('Routes Specs', function () {
 
@@ -10,39 +12,39 @@ define(['router'], function (Router) {
         });
 
         it('Home route should exist', function () {
-            expect(route['']).toEqual('home');
+            expect(route['']).to.equal('home');
         });
 
         it('Edition route should exist', function () {
-            expect(route['edition']).toEqual('edition');
+            expect(route['edition']).to.equal('edition');
         });
 
         it('Partners route should exist', function () {
-            expect(route['partners']).toEqual('partners');
+            expect(route['partners']).to.equal('partners');
         });
 
         it('Notifications route should exist', function () {
-            expect(route['notifications']).toEqual('notifications');
+            expect(route['notifications']).to.equal('notifications');
         });
 
         it('Users notifications route should exist', function () {
-            expect(route['users/notifications']).toEqual('userNotifications');
+            expect(route['user/notifications']).to.equal('userNotifications');
         });
 
         it('Users edit route should exist', function () {
-            expect(route['users/edit']).toEqual('profile');
+            expect(route['user/profile']).to.equal('profile');
         });
 
         it('Posts id route should exist', function () {
-            expect(route['posts/:id']).toEqual('post');
+            expect(route['posts/:id']).to.equal('post');
         });
 
         it('Idea id route should exist', function () {
-            expect(route['idea/:id']).toEqual('idea');
+            expect(route['idea/:id']).to.equal('idea');
         });
 
         it('Defaults route should exist', function () {
-            expect(route['*actions']).toEqual('defaults');
+            expect(route['*actions']).to.equal('defaults');
         });
 
     });

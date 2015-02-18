@@ -3,72 +3,77 @@
     <nav class="sidebar-nav">
         <ul class="man pan adminMenu">
           <li class="active">
-            <a href="#edition" class="menu">{{ gettext('edit discussion') }}</a>
+            <a href="#edition" class="menu">{{ gettext('Edit discussion') }}</a>
           </li>
           <li>
-            <a href="#notifications" class="menu">{{ gettext('edit notifications') }}</a>
+						<a href="#settings" class="menu">{{ gettext('Discussion settings') }}</a>
+					</li>
+          <li>
+            <a href="#notifications" class="menu">{{ gettext('Edit notifications') }}</a>
           </li>
           <li>
-            <a href="#partners" class="menu">{{ gettext('edit partners') }}</a>
+            <a href="#partners" class="menu">{{ gettext('Edit partners') }}</a>
           </li>
           <li class="mtxl">
-            <a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a>
+            <a href="/{{ discussion.slug }}/">{{ gettext('Back to discussion') }}</a>
           </li>
         </ul>
     </nav>
   </div>
   <div class="gu gu-3of4 admin-section">
-
+    <section class="section">
     <div class="admin-title">
-      <h3 class="h3">Edition - {{discussion.topic}}</h3>
+      <h3 class="h3">Edition</h3>
     </div>
     <div id="content-container" class="content-container">
-    	<div class="bx bx-alert-success hidden">
-				<button class="btn btn-cancel btn-xs bx-close" type="button">
-					<i class="icon-delete"></i>
-				</button>
-    		{{ gettext("Your settings were saved") }}
-    	</div>
       <div class="gr">
-        <div class="gu gu-1of2">
+      <% if(discussion){ %>
+        <div class="gu gu-1of1">
            {% if admin_discussion_permissions_url %}
                <p class="mbl">
                  <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
                </p>
            {% endif %}
-             <form class="core-form form-horizontal" id="adminDiscussion">
-               <fieldset>
+             <form class="core-form form-horizontal mtl" id="adminDiscussion">
+               <fieldset class="phl">
 
-                 <div class="control-group">
-                   <label for="topic" class="control-label">Topic</label>
-                   <div class="controls">
-                     <input type="text" id="topic" name="topic" class="input-xlarge" value="<%= discussion.get('topic') %>" />
+								<div class="control-group fr">
+									 <label for="introduction" class="control-label fl">Introduction</label>
+									 <div class="controls fl">
+									 	 <textarea rows="10" id="introduction" name="introduction" class="input-xxlarge"><%= discussion.get('introduction') %></textarea>
+									 </div>
+								 </div>
+
+								 <div class="control-group fr">
+										<label for="objectives" class="control-label fl">Objectives</label>
+										<div class="controls fl">
+											<textarea rows="3" id="objectives" name="objectives" class="input-xxlarge"><%= discussion.get('objectives') %></textarea>
+										</div>
+									</div>
+
+                 <div class="control-group fr">
+                   <label for="topic" class="control-label fl">Topic</label>
+                   <div class="controls fl">
+                     <input type="text" id="topic" name="topic" class="input-xxlarge" value="<%= discussion.get('topic') %>" />
                    </div>
                  </div>
 
-                 <div class="control-group">
-                   <label for="slug" class="control-label">Slug</label>
-                   <div class="controls">
-                     <input type="text" id="slug" name="slug" class="input-xlarge" value="<%= discussion.get('slug') %>" />
+                 <div class="control-group fr">
+                   <label for="slug" class="control-label fl">Slug</label>
+                   <div class="controls fl">
+                     <input type="text" id="slug" name="slug" class="input-xxlarge" value="<%= discussion.get('slug') %>" />
                    </div>
                  </div>
-
-                 <div class="control-group">
-                   <label for="objectives" class="control-label">Objectives</label>
-                   <div class="controls">
-                     <textarea rows="3" id="objectives" name="objectives" class="input-xlarge"><%= discussion.get('objectives') %></textarea>
-                   </div>
-                 </div>
-
-                 <div class="form-actions ptm">
-                   <button class="btn btn-secondary js_saveDiscussion" type="submit">{{ gettext("Save changes") }}</button>
-                 </div>
-
                </fieldset>
+								<div class="form-actions fr">
+									<button class="btn btn-primary fr js_saveDiscussion" type="submit">{{ gettext("Save changes") }}</button>
+								</div>
              </form>
         </div>
+        <% } %>
       </div>
     </div>
+    </section>
   </div>
 </div>
 

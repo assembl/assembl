@@ -123,7 +123,7 @@ def put_permissions_for_role(request):
         raise HTTPBadRequest("Not a list")
     if data and frozenset((type(x) for x in data)) != frozenset((str,)):
         raise HTTPBadRequest("not strings")
-    permissions = set(session.query(Permission).filter(name in data).all())
+    permissions = set(session.query(Permission).filter(Permission.name.in_(data)).all())
     data = set(data)
     if len(permissions) != len(data):
         raise HTTPBadRequest("Not valid permissions: %s" % (repr(
@@ -131,7 +131,7 @@ def put_permissions_for_role(request):
     known_dp = session.query(DiscussionPermission).join(Permission).filter(
         role=role, discussion=discussion).all()
     dp_by_permission = {dp.permission.name: dp for dp in known_dp}
-    known_permissions = set(dp.keys())
+    known_permissions = set(dp_by_permission.keys())
     for permission in known_permissions - permissions:
         session.delete(dp_by_permission[permission])
     for permission in permissions - known_permissions:
@@ -179,7 +179,7 @@ def get_global_roles_for_user(request):
     user = User.get_instance(user_id)
     if not user:
         raise HTTPNotFound("User id %s does not exist" % (user_id,))
-    rolenames = session.query(Role.name).join(
+    rolenames = User.db.query(Role.name).join(
         UserRole).filter(UserRole.user == user)
     return [x[0] for x in rolenames]
 
@@ -199,7 +199,7 @@ def put_global_roles_for_user(request):
         raise HTTPBadRequest("Not a list")
     if data and frozenset((type(x) for x in data)) != frozenset((str,)):
         raise HTTPBadRequest("not strings")
-    roles = set(session.query(Role).filter(name in data).all())
+    roles = set(session.query(Role).filter(Role.name.in_(data)).all())
     data = set(data)
     if len(roles) != len(data):
         raise HTTPBadRequest("Not valid roles: %s" % (repr(
@@ -249,7 +249,7 @@ def put_discussion_roles_for_user(request):
         raise HTTPBadRequest("Not a list")
     if data and frozenset((type(x) for x in data)) != frozenset((str,)):
         raise HTTPBadRequest("not strings")
-    roles = set(session.query(Role).filter(name in data).all())
+    roles = set(session.query(Role).filter(Role.name.in_(data)).all())
     data = set(data)
     if len(roles) != len(data):
         raise HTTPBadRequest("Not valid roles: %s" % (repr(

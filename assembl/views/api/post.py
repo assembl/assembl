@@ -2,31 +2,31 @@ import json
 
 from math import ceil
 from cornice import Service
-from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized, HTTPBadRequest
+from pyramid.httpexceptions import (
+    HTTPNotFound, HTTPUnauthorized, HTTPBadRequest)
 from pyramid.i18n import TranslationStringFactory
 
 from pyramid.security import authenticated_userid
 
-from sqlalchemy import func, Integer, String, text, desc
-from sqlalchemy.dialects.postgresql.base import ARRAY
+from sqlalchemy import String, text
 
-from sqlalchemy.orm import (
-    aliased, joinedload, joinedload_all, contains_eager, defer, undefer)
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql.expression import literal_column, bindparam, and_
+from sqlalchemy.orm import (joinedload_all, undefer)
+from sqlalchemy.sql.expression import bindparam, and_
 from sqlalchemy.sql import cast, column
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 import transaction
 
 from assembl.auth import P_READ, P_ADD_POST
+from assembl.auth.util import get_permissions
 from assembl.models import (
-    get_database_id, get_named_object, AgentProfile, Post, AssemblPost, SynthesisPost,
-    Synthesis, Discussion, PostSource, Content, Idea, ViewPost, User, Action,
+    get_database_id, Post, AssemblPost, SynthesisPost,
+    Synthesis, Discussion, Content, Idea, ViewPost, User, Action,
     IdeaRelatedPostLink, Email)
 import uuid
 from assembl.lib import config
 from jwzthreading import restrip_pat
+
 
 posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",
@@ -40,6 +40,7 @@ post_read = Service(name='post_read', path=API_DISCUSSION_PREFIX + '/post_read/{
                renderer='json')
 
 _ = TranslationStringFactory('assembl')
+
 
 @posts.get(permission=P_READ)
 def get_posts(request):
@@ -61,6 +62,7 @@ def get_posts(request):
     discussion.import_from_sources()
 
     user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
     DEFAULT_PAGE_SIZE = 25
     page_size = DEFAULT_PAGE_SIZE
@@ -187,7 +189,8 @@ def get_posts(request):
         else:
             post, viewpost = query_result, None
         no_of_posts += 1
-        serializable_post = post.generic_json(view_def) or {}
+        serializable_post = post.generic_json(
+            view_def, user_id, permissions) or {}
 
         if viewpost:
             serializable_post['read'] = True
@@ -243,8 +246,11 @@ def get_post(request):
 
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
+    discussion_id = int(request.matchdict['discussion_id'])
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
-    return post.generic_json(view_def)
+    return post.generic_json(view_def, user_id, permissions)
 
 
 @post_read.put(permission=P_READ)
@@ -319,12 +325,12 @@ def create_post(request):
     else:
         in_reply_to_post = None
     
-    if idea_id:        
+    if idea_id:
         in_reply_to_idea = Idea.get_instance(idea_id)
     else:
         in_reply_to_idea = None
-    
-    discussion_id = request.matchdict['discussion_id']
+
+    discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
 
     if not discussion:
@@ -353,15 +359,14 @@ def create_post(request):
         'subject': subject,
         'body': html if html else message
         }
-    
-    
+
     if publishes_synthesis_id:
         published_synthesis = Synthesis.get_instance(publishes_synthesis_id)
         post_constructor_args['publishes_synthesis'] = published_synthesis
         new_post = SynthesisPost(**post_constructor_args)
     else:
         new_post = AssemblPost(**post_constructor_args)
-    
+
     new_post.db.add(new_post)
     new_post.db.flush()
 
@@ -374,8 +379,8 @@ def create_post(request):
             idea=in_reply_to_idea
         )
         IdeaRelatedPostLink.db.add(idea_post_link)
-        
     for source in discussion.sources:
         source.send_post(new_post)
+    permissions = get_permissions(user_id, discussion_id)
 
-    return new_post.generic_json('default')
+    return new_post.generic_json('default', user_id, permissions)

@@ -11,14 +11,17 @@ from collections import Iterable, defaultdict
 import atexit
 
 from anyjson import dumps, loads
+import iso8601
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
-    DateTime, MetaData, engine_from_config, event, Column, ForeignKey,
-    Integer, inspect)
+    DateTime, MetaData, engine_from_config, event, Column, Integer,
+    inspect)
 from sqlalchemy.exc import NoInspectionAvailable
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.associationproxy import AssociationProxy
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
-from sqlalchemy.orm.interfaces import MANYTOONE
+from sqlalchemy.orm.interfaces import MANYTOONE, ONETOMANY, MANYTOMANY
+from sqlalchemy.orm.properties import RelationshipProperty
 from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
@@ -27,18 +30,20 @@ from virtuoso.vmapping import PatternIriClass
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 from zope.component import getGlobalSiteManager
+from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 
 from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
 from ..semantic.namespaces import QUADNAMES
 from ..auth import *
-from .decl_enums import EnumSymbol
+from .decl_enums import EnumSymbol, DeclEnumType
 
 atexit_engines = []
 
 DELETE_OP = -1
 UPDATE_OP = 0
 INSERT_OP = 1
+
 
 class CleanupStrategy(strategies.PlainEngineStrategy):
     name = 'atexit_cleanup'
@@ -77,6 +82,32 @@ def declarative_bases(metadata, registry=None):
                              class_registry=registry),
             declarative_base(cls=Timestamped, metadata=metadata,
                              class_registry=registry))
+
+
+def get_target_class(column):
+    global class_registry
+    # There should be an easier way???
+    fk = next(iter(column.foreign_keys))
+    target_table = fk.column.table
+    for cls in class_registry.itervalues():
+        if cls.__mapper__.__table__ == target_table:
+            return cls
+
+
+class DummyContext(object):
+    def get_instance_of_class(self, cls):
+        return None
+
+
+class ChainingContext(object):
+    def __init__(self, context, instance):
+        self.context = context
+        self.instance = instance
+
+    def get_instance_of_class(self, cls):
+        if isinstance(self.instance, cls):
+            return self.instance
+        return self.context.get_instance_of_class(cls)
 
 
 class BaseOps(object):
@@ -180,6 +211,8 @@ class BaseOps(object):
     @classmethod
     def find(cls, **criteria):
         return _session_maker.query(cls).filter_by(**criteria).all()
+
+    retypeable_as = ()
 
     def delete(self):
         _session_maker.delete(self)
@@ -304,7 +337,7 @@ class BaseOps(object):
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
-    def change_class(self, newclass, **kwargs):
+    def change_class(self, newclass, json=None, **kwargs):
         def table_list(cls):
             tables = []
             for cls in cls.mro():
@@ -334,28 +367,36 @@ class BaseOps(object):
         db.expunge(self)
         for table in oldclass_tables:
             db.execute(table.delete().where(table.c.id == id))
+        json = json or {}
 
         for table in newclass_tables:
-            col_names = {c.key for c in table.c}
-            local_kwargs = {k: v for (k, v) in kwargs.iteritems()
-                            if k in col_names and k != 'id'}
+            col_names = {c.key for c in table.c if not c.primary_key}
+            local_kwargs = {k: kwargs.get(k, json.get(k, None))
+                            for k in col_names}
             db.execute(table.insert().values(id=id, **local_kwargs))
 
         new_object = db.query(newclass).get(id)
         new_object.send_to_changes()
         return new_object
 
-    def generic_json(self, view_def_name='default',
-                     base_uri='local:', use_dumps=False):
-        view_def = get_view_def(view_def_name)
-        my_typename = self.external_typename()
-        result = {}
-        local_view = view_def.get(my_typename, False)
-        if local_view is False:
+    @classmethod
+    def expand_view_def(cls, view_def):
+        local_view = None
+        for cls in cls.mro():
+            if cls.__name__ == 'Base':
+                return None
+            my_typename = cls.external_typename()
+            local_view = view_def.get(my_typename, None)
+            if local_view is False:
+                return False
+            if local_view is not None:
+                break
+        else:
+            # we never found a view
             return None
         assert isinstance(local_view, dict),\
-            "in viewdef %s, definition for class %s is not a dict" % (
-                view_def_name, my_typename)
+            "in viewdef, definition for class %s is not a dict" % (
+                my_typename)
         if '_default' not in local_view:
             view = local_view
             views = [view]
@@ -363,8 +404,7 @@ class BaseOps(object):
             while '@extends' in view:
                 ex = view['@extends']
                 assert ex in view_def,\
-                    "In viewdef %s, @extends reference to missing %s." % (
-                        view_def_name, ex)
+                    "In viewdef @extends reference to missing %s." % (ex,)
                 view = view_def[ex]
                 views.append(view)
             for view in reversed(views):
@@ -372,6 +412,19 @@ class BaseOps(object):
             if '@extends' in local_view:
                 del local_view['@extends']
             view_def[my_typename] = local_view
+        return local_view
+
+    def generic_json(
+            self, view_def_name='default', user_id=Everyone,
+            permissions=(P_READ, ), base_uri='local:'):
+        if not self.user_can(user_id, CrudPermissions.READ, permissions):
+            return None
+        view_def = get_view_def(view_def_name or 'default')
+        my_typename = self.external_typename()
+        result = {}
+        local_view = self.expand_view_def(view_def)
+        if not local_view:
+            return None
         mapper = self.__class__.__mapper__
         relns = {r.key: r for r in mapper.relationships}
         cols = {c.key: c for c in mapper.columns}
@@ -440,7 +493,8 @@ class BaseOps(object):
             def translate_to_json(v):
                 if isinstance(v, Base):
                     if view_name:
-                        return v.generic_json(view_name)
+                        return v.generic_json(
+                            view_name, user_id, permissions, base_uri)
                     else:
                         return v.uri(base_uri)
                 elif isinstance(v, (
@@ -451,16 +505,22 @@ class BaseOps(object):
                 elif isinstance(v, datetime):
                     return v.isoformat()
                 elif isinstance(v, dict):
-                    return {translate_to_json(k): translate_to_json(v)
-                            for k, v in v.items()}
+                    v = {translate_to_json(k): translate_to_json(val)
+                         for k, val in v.items()}
+                    return {k: val for (k, val) in v.items()
+                            if val is not None}
                 elif isinstance(v, Iterable):
-                    return [translate_to_json(i) for i in v]
+                    v = [translate_to_json(i) for i in v]
+                    return [x for x in v if x is not None]
                 else:
                     raise NotImplementedError("Cannot translate", v)
 
             if prop_name == 'self':
                 if view_name:
-                    result[name] = self.generic_json(view_name, base_uri)
+                    r = self.generic_json(
+                        view_name, user_id, permissions, base_uri)
+                    if r is not None:
+                        result[name] = r
                 else:
                     result[name] = self.uri()
                 continue
@@ -474,7 +534,10 @@ class BaseOps(object):
                         view_def_name, my_typename, name, prop_name)
                 # Function call. PLEASE RETURN JSON or Base object.
                 val = getattr(self, prop_name)()
-                result[name] = translate_to_json(val)
+                p = getattr(val, 'user_can', None)
+                if not p or val.user_can(
+                        user_id, CrudPermissions.READ, permissions):
+                    result[name] = translate_to_json(val)
                 continue
             elif prop_name in cols:
                 assert not view_name,\
@@ -489,7 +552,10 @@ class BaseOps(object):
                 known.add(prop_name)
                 val = getattr(self, prop_name)
                 if val is not None:
-                    result[name] = translate_to_json(val)
+                    p = getattr(val, 'user_can', None)
+                    if not p or val.user_can(
+                            user_id, CrudPermissions.READ, permissions):
+                        result[name] = translate_to_json(val)
                 continue
             elif prop_name in properties:
                 known.add(prop_name)
@@ -497,13 +563,17 @@ class BaseOps(object):
                         relns[prop_name].direction != MANYTOONE):
                     val = getattr(self, prop_name)
                     if val is not None:
-                        result[name] = translate_to_json(val)
+                        p = getattr(val, 'user_can', None)
+                        if not p or val.user_can(
+                                user_id, CrudPermissions.READ, permissions):
+                            result[name] = translate_to_json(val)
                 else:
                     fkeys = list(fkey_of_reln[prop_name])
                     assert(len(fkeys) == 1)
                     fkey = fkeys[0]
                     result[name] = relns[prop_name].mapper.class_.uri_generic(
                         getattr(self, fkey.key))
+
                 continue
             assert prop_name in relns,\
                     "in viewdef %s, class %s, prop_name %s not a column, property or relation" % (
@@ -517,29 +587,41 @@ class BaseOps(object):
                     if isinstance(spec, dict):
                         result[name] = {
                             ob.uri(base_uri):
-                            ob.generic_json(view_name, base_uri)
-                            for ob in vals}
+                            ob.generic_json(
+                                view_name, user_id, permissions, base_uri)
+                            for ob in vals
+                            if ob.user_can(
+                                user_id, CrudPermissions.READ, permissions)}
                     else:
                         result[name] = [
-                            ob.generic_json(view_name, base_uri)
-                            for ob in vals]
+                            ob.generic_json(
+                                view_name, user_id, permissions, base_uri)
+                            for ob in vals
+                            if ob.user_can(
+                                user_id, CrudPermissions.READ, permissions)]
                 else:
                     assert not isinstance(spec, dict),\
                         "in viewdef %s, class %s, dict without viewname for %s" % (
                             view_def_name, my_typename, name)
-                    result[name] = [ob.uri(base_uri) for ob in vals]
+                    result[name] = [
+                        ob.uri(base_uri) for ob in vals
+                        if ob.user_can(
+                            user_id, CrudPermissions.READ, permissions)]
                 continue
             assert not isinstance(spec, dict),\
                 "in viewdef %s, class %s, dict for non-list relation %s" % (
                     view_def_name, my_typename, prop_name)
             if view_name:
                 ob = getattr(self, prop_name)
-                if ob:
-                    val = ob.generic_json(view_name, base_uri)
-                    if isinstance(spec, list):
-                        result[name] = [val]
-                    else:
-                        result[name] = val
+                if ob and ob.user_can(
+                        user_id, CrudPermissions.READ, permissions):
+                    val = ob.generic_json(
+                        view_name, user_id, permissions, base_uri)
+                    if val is not None:
+                        if isinstance(spec, list):
+                            result[name] = [val]
+                        else:
+                            result[name] = val
                 else:
                     if isinstance(spec, list):
                         result[name] = []
@@ -594,35 +676,496 @@ class BaseOps(object):
                         result[name] = ob
                     else:
                         result[name] = None
-        if use_dumps:
-            return dumps(result)
         return result
 
-    @classmethod
-    def from_json(cls, json, user_id=None):
-        inst = cls()
-        inst.update_json(json, user_id)
-        return inst
+    dummy_context = DummyContext()
 
-    def update_json(self, json, user_id=None):
-        raise NotImplementedError()
+    def _create_subobject_from_json(
+            self, json, target_cls, parse_def, aliases,
+            context, user_id, accessor_name):
+        instance = None
+        target_type = json.get('@type', None)
+        if target_type:
+            new_target_cls = get_named_class(target_type)
+            if target_cls is not None and \
+                    not issubclass(new_target_cls, target_cls):
+                raise HTTPBadRequest(
+                    "Type %s was assigned to %s.%s" % (
+                        target_type, self.__class__.__name__,
+                        accessor_name))
+            target_cls = new_target_cls
+        if not target_cls:
+            # Not an instance
+            return None
+        target_id = json.get('@id', None)
+        if target_id is not None:
+            target_id = aliases.get(target_id, target_id)
+            if isinstance(target_id, (str, unicode)):
+                instance = get_named_object(
+                    target_cls.external_typename(), target_id)
+            else:
+                instance = target_id
+        if instance is not None:
+            instance._do_update_from_json(
+                json, parse_def, aliases, context,
+                user_id, False)
+        if instance is None:
+            instance = target_cls._do_create_from_json(
+                json, parse_def, aliases, context, user_id, False)
+        if instance is None:
+            raise HTTPBadRequest(
+                "Could not find or create object %s" % (
+                    dumps(json),))
+        if target_id is not None:
+            aliases[target_id] = instance
+        return instance
+
+    # Cases: Create -> no duplicate. Sub-elements are created or found.
+    # Update-> no duplicate. Sub-elements are created or found.
+    # do we store aliases? (not yet.)
+    # We need to give the parse_def (by name or by value?)
+    @classmethod
+    def create_from_json(
+            cls, json, user_id=None, context=None,
+            parse_def_name='default_reverse'):
+        from ..auth.util import get_permissions
+        parse_def = get_view_def(parse_def_name)
+        context = context or cls.dummy_context
+        user_id = user_id or Everyone
+        from assembl.models import Discussion
+        discussion = context.get_instance_of_class(Discussion)
+        permissions = get_permissions(
+            user_id, discussion.id if discussion else None)
+        with cls.db.no_autoflush:
+            # We need this to allow db.is_modified to work well
+            return cls._do_create_from_json(
+                json, parse_def, {}, context, permissions, user_id)
+
+    @classmethod
+    def _do_create_from_json(
+            cls, json, parse_def, aliases, context, permissions,
+            user_id, duplicate_error=True):
+        can_create = cls.user_can_cls(
+            user_id, CrudPermissions.CREATE, permissions)
+        if duplicate_error and not can_create:
+            raise HTTPUnauthorized(
+                "User id <%s> cannot create a <%s> object" % (
+                    user_id, cls.__name__))
+        # creating an object can be a weird way to find an object by attributes
+        inst = cls()
+        result = inst._do_update_from_json(
+            json, parse_def, aliases, context, permissions,
+            user_id, duplicate_error)
+        if result is inst and not can_create:
+            raise HTTPUnauthorized(
+                "User id <%s> cannot create a <%s> object" % (
+                    user_id, cls.__name__))
+        elif result is not inst and \
+            not result.user_can(
+                user_id, CrudPermissions.UPDATE, permissions
+                ) and cls.db.is_modified(result, False):
+            raise HTTPUnauthorized(
+                "User id <%s> cannot modify a <%s> object" % (
+                    user_id, cls.__name__))
+        if result is not inst:
+            cls.db.add(result)
+            result_id = result.uri()
+            if '@id' in json and result_id != json['@id']:
+                aliases[json['@id']] = result
+        return result
+
+    def update_from_json(
+                self, json, user_id=None, context=None,
+                parse_def_name='default_reverse'):
+        from ..auth.util import get_permissions
+        parse_def = get_view_def(parse_def_name)
+        context = context or self.dummy_context
+        user_id = user_id or Everyone
+        from assembl.models import Discussion
+        discussion = context.get_instance_of_class(Discussion)
+        permissions = get_permissions(
+            user_id, discussion.id if discussion else None)
+        if not self.user_can(
+                user_id, CrudPermissions.UPDATE, permissions):
+            raise HTTPUnauthorized(
+                "User id <%s> cannot modify a <%s> object" % (
+                    user_id, self.__class__.__name__))
+        with self.db.no_autoflush:
+            # We need this to allow db.is_modified to work well
+            return self._do_update_from_json(
+                json, parse_def, {}, context, permissions, user_id)
+
+    # TODO: Add security by attribute?
+    # Some attributes may be settable only on create.
+    def _do_update_from_json(
+            self, json, parse_def, aliases, context, permissions,
+            user_id, duplicate_error=True):
+        assert isinstance(json, dict)
+        typename = json.get("@type", None)
+        if typename and typename != self.external_typename() and \
+                typename in self.retypeable_as:
+            new_cls = get_named_class(typename)
+            assert new_cls
+            recast = self.change_class(new_cls, json)
+            return recast._do_update_from_json(
+                json, parse_def, aliases, context, permissions,
+                user_id, duplicate_error)
+        local_view = self.expand_view_def(parse_def)
+        # False means it's illegal to get this.
+        assert local_view is not False
+        # None means no specific instructions.
+        local_view = local_view or {}
+        mapper = inspect(self.__class__)
+        treated_foreign_keys = set()
+        treated_relns = set()
+        # Also: Pre-visit the json to associate @ids to dicts
+        # because the object may not be ready in the aliases yet
+        for key, value in json.iteritems():
+            if key in local_view:
+                parse_instruction = local_view[key]
+                if parse_instruction is False:
+                    # Ignore
+                    continue
+                elif parse_instruction is True:
+                    pass
+                elif isinstance(parse_instruction, list):
+                    # List specification is redundant in parse_defs.
+                    # These cases should always be handled as relations.
+                    raise NotImplementedError()
+                elif parse_instruction[0] == '&':
+                    setter = getattr(
+                        self.__class__, parse_instruction[1:], None)
+                    if not setter:
+                        raise HTTPBadRequest("No setter %s in class %s" % (
+                            parse_instruction[1:], self.__class__.__name__))
+                    if not pyinspect.ismethod(setter):
+                        raise HTTPBadRequest("Not a setter: %s in class %s" % (
+                            parse_instruction[1:], self.__class__.__name__))
+                    (args, varargs, keywords, defaults) = \
+                        pyinspect.getargspec(setter)
+                    if len(args) - len(defaults or ()) != 2:
+                        raise HTTPBadRequest(
+                            "Wrong number of args: %s(%d) in class %s" % (
+                                parse_instruction[1:], len(args),
+                                self.__class__.__name__))
+                    setter(self, value)
+                elif parse_instruction[0] == "'":
+                    if value != parse_instruction[1:]:
+                        raise HTTPBadRequest("%s should be %s'" % (
+                            key, parse_instruction))
+                else:
+                    key = parse_instruction
+            accessor = None
+            accessor_name = key
+            target_cls = None
+            can_be_list = False
+            must_be_list = False
+            instance = None
+            instances = []
+            # First treat scalars
+            if key in mapper.c:
+                col = mapper.c[key]
+                if value is None:
+                    if not col.nullable:
+                        raise HTTPBadRequest(
+                            "%s is not nullable" % (key,))
+                    setattr(self, key, value)
+                    continue
+                if not col.foreign_keys:
+                    if isinstance(value, (str, unicode)):
+                        target_type = col.type.__class__
+                        if col.type.__class__ == DateTime:
+                            value = iso8601.parse_date(value, None)
+                            assert value
+                            setattr(self, key, value)
+                        elif isinstance(col.type, DeclEnumType):
+                            setattr(self, key, col.type.enum.from_string(value))
+                        elif col.type.python_type is unicode \
+                                and isinstance(value, str):
+                            setattr(self, key, value.decode('utf-8'))
+                        elif col.type.python_type is str \
+                                and isinstance(value, unicode):
+                            setattr(self, key, value.encode('ascii'))  # or utf-8?
+                        elif col.type.python_type is bool \
+                                and value.lower() in ("true", "false"):
+                            # common error... tolerate.
+                            setattr(self, key, value.lower() == "true")
+                        elif col.type.python_type in (str, unicode):
+                            setattr(self, key, value)
+                        else:
+                            assert False, "can't assign json type %s"\
+                                " to column %s of class %s" % (
+                                    type(value).__name__, col.key,
+                                    self.__class__.__name__)
+                    elif isinstance(value, col.type.python_type):
+                        setattr(self, key, value)
+                    else:
+                        assert False, "can't assign json type %s"\
+                            " to column %s of class %s" % (
+                                type(value).__name__, col.key,
+                                self.__class__.__name__)
+                    continue
+                else:
+                    # Non-scalar
+                    # TODO: Keys spanning multiple columns
+                    fk = next(iter(col.foreign_keys))
+                    orm_relns = filter(
+                        lambda r: col in r.local_columns
+                        and r.secondary is None,
+                        mapper.relationships)
+                    assert(len(orm_relns) <= 1)
+                    if orm_relns:
+                        accessor = next(iter(orm_relns))
+                        accessor_name = accessor.key
+                        target_cls = accessor.mapper.class_
+                    else:
+                        accessor = col
+                        # Costly. TODO: Optimize.
+                        target_cls = get_target_class(col)
+            elif key in mapper.relationships:
+                accessor = mapper.relationships[key]
+                target_cls = accessor.mapper.class_
+                if accessor.direction == MANYTOMANY:
+                    raise NotImplementedError()
+                elif accessor.direction == ONETOMANY:
+                    can_be_list = must_be_list = True
+            elif getattr(self.__class__, key, None) is not None and\
+                    isinstance(getattr(self.__class__, key), property) and\
+                    getattr(getattr(
+                        self.__class__, key), 'fset', None) is None:
+                raise HTTPBadRequest(
+                    "No setter for property %s of type %s" % (
+                        key, json.get('@type', '?')))
+            elif getattr(self.__class__, key, None) is not None and\
+                    isinstance(getattr(self.__class__, key), property):
+                accessor = getattr(self.__class__, key)
+                can_be_list = True
+            elif getattr(self.__class__, key, None) is not None\
+                    and isinstance(getattr(self.__class__, key),
+                                   AssociationProxy):
+                accessor = getattr(self.__class__, key)
+                # Target_cls?
+                can_be_list = must_be_list = True
+            elif not value:
+                print "Ignoring unknown empty value for "\
+                    "attribute %s in json id %s (type %s)" % (
+                        key, json.get('@id', '?'), json.get('@type', '?'))
+                continue
+            else:
+                raise HTTPBadRequest(
+                    "Unknown attribute %s in json id %s (type %s)" % (
+                        key, json.get('@id', '?'), json.get('@type', '?')))
+
+            # We have an accessor, let's treat the value.
+            c_context = ChainingContext(context, self)
+            if isinstance(value, (str, unicode)):
+                assert not must_be_list
+                target_id = aliases.get(value, value)
+                if target_cls is not None and \
+                        isinstance(target_id, (str, unicode)):
+                    # TODO: Keys spanning multiple columns
+                    instance = get_named_object(
+                        target_cls.external_typename(), target_id)
+                    if instance is None:
+                        raise HTTPBadRequest("Could not find object "+value)
+                else:
+                    # Possibly just a string
+                    instance = target_id
+            elif isinstance(value, dict):
+                assert not must_be_list
+                instance = self._create_subobject_from_json(
+                    value, target_cls, parse_def, aliases,
+                    c_context, user_id, accessor_name)
+                if instance is None:
+                    if isinstance(accessor, property):
+                        # It may not be an object after all
+                        setattr(self, key, value)
+                        continue
+                    raise 
+            elif isinstance(value, list):
+                assert can_be_list
+                for subval in value:
+                    if isinstance(subval, (str, unicode)):
+                        subval = aliases.get(subval, subval)
+                        instance = get_named_object(
+                            target_cls.external_typename(), subval)
+                        if instance is None:
+                            raise HTTPBadRequest(
+                                "Could not find object %s" % (
+                                    subval,))
+                        # TODO: Keys spanning multiple columns
+                    elif isinstance(subval, dict):
+                        instance = self._create_subobject_from_json(
+                            subval, target_cls, parse_def, aliases,
+                            c_context, user_id, accessor_name)
+                        if instance is None:
+                            raise HTTPBadRequest("No @class in "+dumps(subval))
+                    else:
+                        raise
+                    instances.append(instance)
+                    if isinstance(accessor, RelationshipProperty) \
+                            and accessor.back_populates is not None:
+                        # TODO: check update permissions on that object.
+                        setattr(instance, accessor.back_populates, self)
+                # Deal with list case here.
+                if isinstance(accessor, RelationshipProperty):
+                    if not accessor.back_populates:
+                        # Try the brutal approach
+                        setattr(self, accessor_name, instances)
+                    else:
+                        current_instances = getattr(self, accessor_name)
+                        missing = set(instances) - set(current_instances)
+                        assert not missing, "what's wrong with back_populates?"
+                        extra = set(current_instances) - set(instances)
+                        if extra:
+                            assert len(accessor.remote_side) == 1
+                            remote = iter(next(accessor.remote_side))
+                            if remote.nullable:
+                                # TODO: check update permissions on that object.
+                                for inst in missing:
+                                    setattr(inst, remote.key, None)
+                            else:
+                                if not inst.user_can(
+                                        user_id, CrudPermissions.DELETE,
+                                        permissions):
+                                    raise HTTPUnauthorized(
+                                        "Cannot delete object %s", inst.uri())
+                                else:
+                                    self.db.delete(inst)
+                elif isinstance(accessor, property):
+                    setattr(self, accessor_name, instances)
+                elif isinstance(accessor, Column):
+                    raise HTTPBadRequest(
+                        "%s cannot have multiple values" % (key, ))
+                elif isinstance(accessor, AssociationProxy):
+                    current_instances = getattr(self, accessor_name)
+                    missing = set(instances) - set(current_instances)
+                    extra =  set(current_instances) - set(instances)
+                    for inst in missing:
+                        accessor.add(inst)
+                    for inst in extra:
+                        accessor.remove(inst)
+                continue
+            elif isinstance(accessor, property):
+                # Property can be any target type.
+                # Hence we do not handle well the case of simple
+                # string or dict properties
+                setattr(self, accessor_name, value)
+            elif value is None:
+                # TODO: if a 1-Many list, clear elements?
+                pass
+            else:
+                assert False, "can't assign json type %s"\
+                    " to relationship %s of class %s" % (
+                        type(value).__name__, accessor_name,
+                        self.__class__.__name__)
+
+            # Now we have an instance and an accessor, let's assign.
+            # Case of list taken care of.
+            if isinstance(accessor, RelationshipProperty):
+                # Let it throw an exception if reln not nullable?
+                # Or would that come too late?
+                setattr(self, accessor_name, instance)
+                treated_relns.add(accessor)
+            elif isinstance(accessor, property):
+                setattr(self, accessor_name, instance)
+            elif isinstance(accessor, Column):
+                if instance is None:
+                    if not accessor.nullable:
+                        raise HTTPBadRequest(
+                            "%s is not nullable" % (accessor_name,))
+                else:
+                    fk = next(iter(accessor.foreign_keys))
+                    instance_key = getattr(instance, fk.column.key)
+                    if instance_key is not None:
+                        setattr(self, accessor_name, instance_key)
+                    else:
+                        # Maybe delay and flush after identity check?
+                        raise NotImplementedError()
+            elif isinstance(accessor, AssociationProxy):
+                # only for lists, I think
+                assert False, "we should not get here"
+            else:
+                assert False, "we should not get here"
+
+        # Now look for missing relationships
+        for reln in mapper.relationships:
+            if reln in treated_relns:
+                continue
+            if all((col in treated_foreign_keys
+                    for col in reln.local_columns)):
+                continue
+            if reln.direction != MANYTOONE:
+                # only direct relations
+                continue
+            if getattr(self, reln.key, None) is None:
+                target_class = reln.mapper.class_
+                # TODO: Subclasses of user.
+                if target_class.__name__ == 'User' and user_id != Everyone:
+                    from assembl.models.auth import User
+                    instance = User.get(user_id)
+                else:
+                    instance = context.get_instance_of_class(target_class)
+                if instance is not None:
+                    setattr(self, reln.key, instance)
+        # Issue: unique_query MAY trigger a flush, which will
+        # trigger an error if columns are missing, including in a call above.
+        # But without the flush, some relations will not be interpreted
+        # correctly. Strive to avoid the flush in most cases.
+        unique_query = self.db.query(self.__class__)
+        unique_query, usable = self.unique_query(unique_query)
+        if usable:
+            other = unique_query.first()
+            if other and other is not self:
+                if duplicate_error:
+                    raise HTTPBadRequest("Duplicate object created")
+                else:
+                    # Presumably not necessary as never added.
+                    # db.delete(self)
+                    # TODO: Check if there's a risk of infinite recursion here?
+                    return other._do_update_from_json(
+                        json, parse_def, aliases, context, permissions,
+                        user_id, duplicate_error)
+        return self
+
+    def unique_query(self, query):
+        # To be reimplemented in subclasses with a more intelligent check.
+        # See notification for example.
+        if self.id is None:
+            return (query, False)
+        return (query.filter_by(id=self.id), True)
 
     @classmethod
     def extra_collections(cls):
         return {}
 
-    def is_owner(self, user):
+    def is_owner(self, user_id):
         "The user owns this ressource, and has more permissions."
         return False
 
     @classmethod
-    def restrict_to_owners(cls, query, user_id=None):
+    def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
         return query
 
     """The permissions to create, read, update, delete an object of this class.
     Also separate permissions for the owners to update or delete."""
     crud_permissions = CrudPermissions()
+
+    @classmethod
+    def user_can_cls(cls, user_id, operation, permissions):
+        perm = cls.crud_permissions.can(operation, permissions)
+        if perm == IF_OWNED and user_id == Everyone:
+            return False
+        return perm
+
+    def user_can(self, user_id, operation, permissions):
+        perm = self.crud_permissions.can(operation, permissions)
+        if perm != IF_OWNED:
+            return perm
+        if user_id == Everyone:
+            return False
+        return self.is_owner(user_id)
 
 
 class Timestamped(BaseOps):
@@ -786,8 +1329,8 @@ def session_rollback_listener(session):
 
 
 def engine_rollback_listener(connection):
-    info = connection.info
-    if 'cdict' in connection.info:
+    info = getattr(connection, 'info', None)
+    if info and 'cdict' in info:
         del info['cdict']
 
 

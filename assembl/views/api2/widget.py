@@ -23,17 +23,19 @@ from . import (
              permission=P_READ, accept="application/json")
 def widget_view(request):
     # IF_OWNED not applicable for widgets... so far
-    check_permissions(request, CrudPermissions.READ)
-    user_id = authenticated_userid(request) or Everyone
+    ctx = request.context
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    check_permissions(ctx, user_id, permissions, CrudPermissions.READ)
     if user_id == Everyone:
         return HTTPUnauthorized()
-    ctx = request.context
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
-    json = ctx._instance.generic_json(view)
+    json = ctx._instance.generic_json(view, user_id, permissions)
     user = User.get(user_id)
-    #json['discussion'] = ...
-    json['user'] = user.generic_json(view_def_name=view)
+    # json['discussion'] = ...
+    json['user'] = user.generic_json(view, user_id, permissions)
     json['user_permissions'] = get_permissions(
         user_id, ctx._instance.get_discussion_id())
     user_state = ctx._instance.get_user_state(user_id)
@@ -43,7 +45,7 @@ def widget_view(request):
     if target_id:
         idea = Idea.get_instance(target_id)
         if idea:
-            json['target'] = idea.generic_json(view_def_name=view)
+            json['target'] = idea.generic_json(view, user_id, permissions)
         else:
             return HTTPNotFound("No idea "+target_id)
     return json
@@ -53,7 +55,11 @@ def widget_view(request):
              ctx_instance_class=Widget, accept="application/json")
 def widget_instance_put(request):
     # IF_OWNED not applicable for widgets... so far
-    check_permissions(request, CrudPermissions.UPDATE)
+    ctx = request.context
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    check_permissions(ctx, user_id, permissions, CrudPermissions.UPDATE)
     user_state = request.POST.get('user_state')
     if user_state:
         del request.POST['user_state']
@@ -172,7 +178,10 @@ def get_idea_sibling_criteria(request):
     ctx = request.context
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
-    return [cr.generic_json(view) for cr in
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    return [cr.generic_json(view, user_id, permissions) for cr in
             ctx._instance.get_siblings_of_type(Criterion)]
 
 
@@ -211,10 +220,12 @@ def voting_widget_view(request):
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
     widget = ctx._instance
-    json = widget.generic_json(view)
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    json = widget.generic_json(view, user_id, permissions)
     user = User.get(user_id)
     #json['discussion'] = ...
-    json['user'] = user.generic_json(view_def_name=view)
+    json['user'] = user.generic_json(view, user_id, permissions)
     json['user_permissions'] = get_permissions(
         user_id, widget.get_discussion_id())
     user_state = widget.get_user_state(user_id)
@@ -226,7 +237,7 @@ def voting_widget_view(request):
         json['vote_results_url'] = widget.get_vote_results_url(target_id)
         json['vote_count_url'] = widget.get_vote_counts_url(target_id)
         json['voting_urls'] = widget.get_voting_urls(target_id)
-    json['criteria'] = [idea.generic_json(view_def_name=view)
+    json['criteria'] = [idea.generic_json(view, user_id, permissions)
                         for idea in widget.criteria]
     return json
 

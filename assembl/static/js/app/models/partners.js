@@ -11,14 +11,14 @@ define(['jquery', 'models/base', 'utils/i18n', 'common/context'],
             /**
              * @type {String}
              */
-            url: Ctx.getApiV2DiscussionUrl('partner_organizations/?view=default'),
+            urlRoot: Ctx.getApiV2DiscussionUrl('partner_organizations'),
 
             /**
              * Defaults
              * @type {Object}
              */
+            idAttribute: '@id',
             defaults: {
-                id: null,
                 name: '',
                 description: '',
                 homepage: '',
@@ -35,7 +35,7 @@ define(['jquery', 'models/base', 'utils/i18n', 'common/context'],
             /**
              * @type {String}
              */
-            url: Ctx.getApiV2DiscussionUrl('partner_organizations/?view=default'),
+            url: Ctx.getApiV2DiscussionUrl('partner_organizations'),
 
             /**
              * The model

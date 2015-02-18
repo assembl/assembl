@@ -17,7 +17,7 @@
 
         'jquery': "../bower/jquery/jquery",
         'jquery-highlight': '../lib/jquery-highlight/jquery.highlight',
-        'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min',
+        'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot',
 
         'backbone': '../bower/backbone/backbone',
         'backbone.subset': '../bower/Backbone.Subset/backbone.subset',
@@ -42,7 +42,9 @@
         'jit': '../bower/jit/Jit/jit',
         'jed': '../bower/jed/jed',
         'd3': '../bower/d3/d3.min',
-        'bootstrap': '../lib/bootstrap'
+        'bootstrap': '../lib/bootstrap',
+        'linkify': '../bower/jQuery-linkify/dist/jquery.linkify.min',
+        'jquery-oembed-all': '../bower/bower/jquery-oembed-all/jquery.oembed'
     },
     shim: {
         'underscore': {
@@ -112,6 +114,12 @@
         },
         'backbone.subset': {
             deps: ['backbone']
+        },
+        'jquery-linkify': {
+            deps: ['jquery']
+        },
+        'jquery-oembed-all': {
+            deps: ['jquery']
         },
         'bootstrap': {
             deps: ['jquery']

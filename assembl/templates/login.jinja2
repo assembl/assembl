@@ -8,16 +8,17 @@
   {% endfor %}
 
   {% if name == "openid" %}
-       <div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />
+  		{# Need to be refactored #}
+      {#<div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />#}
   {% endif %}
   {% if name == "google" %}
-     <div class="g-icon-bg"></div><input type="submit" class="g-bg" value="{{title}}"></input>
+     <button type="submit" class="g-bg mbs">{{title}}</button>
   {% endif %}
   {% if name == "twitter" %}
-     <div class="twi-icon-bg"></div><input type="submit" class="twi-bg" value="{{title}}"></input>
+     <button type="submit" class="twi-bg mbs">{{title}}</button>
   {% endif %}
   {% if name == "facebook" %}
-     <div class="fb-icon-bg"></div><input type="submit" class="fb-bg" value="{{title}}"></input>
+     <button type="submit" class="fb-bg mbs">{{title}}</button>
   {% endif %}
 
   </form>
@@ -61,18 +62,18 @@
             <div class="error-message">{{error}}</div>
             <form class="form" method="POST">
                 <input type="hidden" name="next_view" value="{{next_view}}" />
-                <input type="text" name="identifier" class="form-control mbs" placeholder="{{ gettext('Email') }}" autofocus required />
+                <input type="text" name="identifier" class="form-control mbs" placeholder="{{ gettext('Email or username') }}" autofocus required />
                 <input type="password" name="password" class="form-control mbs" placeholder="{{ gettext('Password') }}" required />
 
                 <table class="submitButtons">
                 <tr><td>
                     <input type="submit" name="login" value="{{ gettext('Log in') }}" class="btn btn-primary" />
                 </td><td>
-                    <a href="/req_password_change">{{ gettext('Forgot your password?') }}</a>
+                    <a href="{{ slug_prefix }}/req_password_change">{{ gettext('Forgot your password?') }}</a>
                 </td></tr></table>
             </form>
             <p class="login-box-title mtxl mbs">{{ gettext("No account yet?") }}</p>
-            <form class="form inline" method="GET" action="{{ slug }}/register"><input type="submit" value="{{ gettext('Sign up') }}" class="btn btn-secondary" /></form>
+            <form class="form inline" method="GET" action="{{ slug_prefix }}/register"><input type="submit" value="{{ gettext('Sign up') }}" class="btn btn-secondary" /></form>
         </div>
         
     </div>

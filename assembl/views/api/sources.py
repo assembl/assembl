@@ -1,4 +1,5 @@
 from pyramid.httpexceptions import HTTPNotFound
+from pyramid.security import authenticated_userid
 
 from cornice import Service
 
@@ -7,6 +8,7 @@ from . import API_DISCUSSION_PREFIX
 from assembl.models import Discussion
 
 from assembl.auth import P_READ
+from assembl.auth.util import get_permissions
 
 sources = Service(
     name='sources',
@@ -27,7 +29,11 @@ def get_sources(request):
             "Discussion with id '%s' not found." % discussion_id
         )
 
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
     if view_def:
-        return [source.generic_json(view_def) for source in discussion.sources]
+        res = [source.generic_json(view_def, user_id, permissions)
+               for source in discussion.sources]
+        return [x for x in res if x is not None]
     else:
         return [source.serializable() for source in discussion.sources]

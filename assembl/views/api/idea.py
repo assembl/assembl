@@ -1,4 +1,3 @@
-import transaction
 from collections import defaultdict
 
 import simplejson as json
@@ -6,13 +5,13 @@ from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from pyramid.security import authenticated_userid
 from sqlalchemy import and_
-from sqlalchemy.orm import joinedload
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
-    get_named_object, get_database_id, Idea, RootIdea, IdeaLink, Discussion,
+    get_database_id, Idea, RootIdea, IdeaLink, Discussion,
     Extract, SubGraphIdeaAssociation)
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
+from assembl.auth.util import get_permissions
 
 ideas = Service(name='ideas', path=API_DISCUSSION_PREFIX + '/ideas',
                 description="",
@@ -30,7 +29,7 @@ idea_extracts = Service(
 # Create
 @ideas.post(permission=P_ADD_IDEA)
 def create_idea(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     session = Discussion.db()
     discussion = session.query(Discussion).get(int(discussion_id))
     idea_data = json.loads(request.body)
@@ -59,14 +58,15 @@ def get_idea(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view')
+    discussion_id = int(request.matchdict['discussion_id'])
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
 
-    if view_def:
-        return idea.generic_json(view_def)
-    else:
-        return idea.generic_json()
+    return idea.generic_json(view_def, user_id, permissions)
+
 
 def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     next_synthesis = discussion.get_next_synthesis()
@@ -87,14 +87,11 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     if ids:
         ids = [get_database_id("Idea", id) for id in ids]
         ideas = ideas.filter(Idea.id.in_(ids))
-    
-    retval = []
-    for idea in ideas:
-        if view_def:
-            serialized_idea = idea.generic_json(view_def)
-        else:
-            serialized_idea = idea.generic_json()
-        retval.append(serialized_idea)
+
+    permissions = get_permissions(user_id, discussion.id)
+    retval = [idea.generic_json(view_def, user_id, permissions)
+              for idea in ideas]
+    retval = [x for x in retval if x is not None]
     widget_data = defaultdict(list)
     for widget in discussion.widgets:
         url = widget.get_ui_endpoint()
@@ -116,7 +113,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
 @ideas.get(permission=P_READ)
 def get_ideas(request):
     user_id = authenticated_userid(request)
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
@@ -128,7 +125,7 @@ def get_ideas(request):
 # Update
 @idea.put(permission=P_EDIT_IDEA)
 def save_idea(request):
-    discussion_id = request.matchdict['discussion_id']
+    discussion_id = int(request.matchdict['discussion_id'])
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)
     #Idea.db.execute('set transaction isolation level read committed')
@@ -230,6 +227,9 @@ def get_idea_extracts(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view')
+    discussion_id = int(request.matchdict['discussion_id'])
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
@@ -239,6 +239,7 @@ def get_idea_extracts(request):
     ).order_by(Extract.order.desc())
 
     if view_def:
-        return [extract.generic_json(view_def) for extract in extracts]
+        return [extract.generic_json(view_def, user_id, permissions)
+                for extract in extracts]
     else:
         return [extract.serializable() for extract in extracts]

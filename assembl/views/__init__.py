@@ -4,7 +4,8 @@ import os.path
 import json
 import codecs
 from pyramid.security import Allow, ALL_PERMISSIONS, DENY_ALL
-from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
+from pyramid.httpexceptions import (
+    HTTPException, HTTPNotFound, HTTPInternalServerError)
 from pyramid.i18n import TranslationStringFactory
 
 from ..lib.json import json_renderer_factory
@@ -18,17 +19,8 @@ default_context = {
 TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
 
 def backbone_include(config):
-
-    config.add_route('edition', '/edition')
-    config.add_route('partners', '/partners')
-    config.add_route('slug_notifications', '/notifications')
-
-    config.add_route('profile', '/users/edit')
-    config.add_route('user_notifications', '/users/notifications')
-    config.add_route('purl_posts', '/posts*remainder')
-    config.add_route('purl_idea', '/idea*remainder')
-
-    config.add_route('nodetest', '/nodetest')
+    from ..lib.frontend_urls import FrontendUrls
+    FrontendUrls.register_frontend_routes(config)
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
     config.add_route('graph_view', '/graph')
@@ -81,6 +73,23 @@ def get_template_views():
                 views.append(filename.split('.')[0])
 
     return views
+
+
+class JSONError(HTTPException):
+    content_type = 'text/plain'
+
+    def __init__(self, code, detail=None, headers=None, comment=None,
+                 body_template=None, **kw):
+        self.code = code
+        self.content_type = 'text/plain'
+        super(JSONError, self).__init__(
+            detail, headers, comment,
+            body='{"error":"%s", "status":%d}' % (detail, code), **kw)
+
+        def prepare(self, environ):
+            r = super(JSONError, self).prepare(environ)
+            self.content_type = 'text/plain'
+            return r
 
 
 def includeme(config):

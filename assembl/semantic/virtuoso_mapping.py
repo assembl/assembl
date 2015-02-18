@@ -235,7 +235,8 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
                     alias_maker, for_graph.discussion_id):
                 qmp = self.qmp_with_defaults(
                     qmp, subject_pattern, sqla_cls, alias_maker, for_graph)
-                if qmp.graph_name == for_graph.name:
+                if (qmp.graph_name == for_graph.name
+                        and for_graph.section in rdf_sections):
                     qmp.resolve(sqla_cls)
                     yield qmp
 
@@ -577,7 +578,7 @@ class AssemblQuadStorageManager(object):
         for (id,) in self.session.query(Discussion.id).all():
             self.drop_storage(self.discussion_storage_name(id), force)
 
-    def as_quads_old(self, discussion_id):
+    def discussion_as_quads_old(self, discussion_id):
         self.quadstore_lock.acquire()
         self.ensure_discussion_storage(discussion_id)
         d_storage_name = self.discussion_storage_name(discussion_id)
@@ -597,7 +598,17 @@ class AssemblQuadStorageManager(object):
         self.quadstore_lock.release()
         return quads
 
-    def as_graph(self, discussion_id):
+    def as_graph(self, d_storage_name, graphs=()):
+        v = get_virtuoso(self.session, d_storage_name)
+        if not graphs:
+            graphs = v.contexts()
+        cg = ConjunctiveGraph()
+        for ctx in graphs:
+            for ((s, p, o), g) in v.triples((None,None,None), ctx):
+                cg.add((s, p, o, ctx))
+        return cg
+
+    def discussion_as_graph(self, discussion_id):
         self.ensure_discussion_storage(None)
         from assembl.models import Discussion
         d_storage_name = self.discussion_storage_name()
@@ -628,12 +639,12 @@ class AssemblQuadStorageManager(object):
 
         return cg
 
-    def as_quads(self, discussion_id):
-        cg = self.as_graph(discussion_id)
+    def discussion_as_quads(self, discussion_id):
+        cg = self.discussion_as_graph(discussion_id)
         return cg.serialize(format='nquads')
 
     def as_jsonld(self, discussion_id):
-        cg = self.as_graph(discussion_id)
+        cg = self.discussion_as_graph(discussion_id)
         context = [
             context_url, {'local': self.local_uri()}]
         jsonld = cg.serialize(format='json-ld', context=context, indent=None)
@@ -656,5 +667,5 @@ class AssemblQuadStorageManager(object):
         return jsonc
 
     def as_jsonld_old(self, discussion_id):
-        quads = self.as_quads_old(discussion_id)
+        quads = self.discussion_as_quads_old(discussion_id)
         return self.quads_to_jsonld(quads)

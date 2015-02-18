@@ -3,27 +3,26 @@
 define(['models/base', 'common/context'], function (Base, Ctx) {
 
     var discussionModel = Base.Model.extend({
-        urlRoot: '/api/v1/discussion/' + Ctx.getDiscussionId(),
-        idAttribute: "@id",
+        url: Ctx.getApiV2DiscussionUrl(),
         defaults: {
             'settings': {},
-            'introduction': null,
-            'objectives': null,
-            'creation_date': null,
-            'topic': null,
-            'sources': [],
-            'introductionDetails': null,
-            '@type': null,
-            'widget_collection_url': null,
-            'slug': null,
-            '@view': null,
-            'permission': {}
+            'introduction': '',
+            'objectives': '',
+            'creation_date': '',
+            'topic': '',
+            'introductionDetails': '',
+            '@type': '',
+            'widget_collection_url': '',
+            'slug': '',
+            '@view': '',
+            'permissions': {},
+            'subscribe_to_notifications_on_signup': false
         }
 
     });
 
     var discussionCollection = Base.Collection.extend({
-        url: '/api/v1/discussion/' + Ctx.getDiscussionId(),
+        url: Ctx.getApiV2DiscussionUrl(),
         model: discussionModel
     });
 

@@ -1,7 +1,7 @@
 'use strict';
 
-define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap'],
-    function (Assembl, $, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap) {
+define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all'],
+    function (Assembl, $, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed) {
 
         var Context = function () {
 
@@ -223,7 +223,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
 
             getUrlFromUri: function (str) {
                 var start = "local:";
-                if (str.indexOf(start) == 0) {
+                if (str && str.length && str.indexOf(start) == 0) {
                     str = "/data/" + str.slice(start.length);
                 }
                 return str;
@@ -403,9 +403,6 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
             // Modal can be dynamically resized once the iframe is loaded, or on demand
             // TODO: options to set modal size
             openTargetInModal: function (evt, onDestroyCallback, options) {
-                console.log("openInspireMeModal()");
-                console.log("evt: ", evt);
-
                 var target_url = null;
                 if (evt && evt.currentTarget) {
                     if ($(evt.currentTarget).attr("data-href"))
@@ -977,6 +974,21 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
              * @event
              */
             onAjaxError: function (ev, jqxhr, settings, exception) {
+
+                // ignore Ajax errors which come from outside (sub-)domains. This is useful for oembed related errors
+                var getHostnameFromUrl = function(data) { // hostname examples: "localhost", "localhost:4321"
+                    var a = document.createElement('a');
+                    a.href = data;
+                    return a.hostname;
+                };
+                if ( settings && "url" in settings && window.location.hostname != getHostnameFromUrl(settings.url) )
+                {
+                    console.log("ignoring Ajax error from outside domain: ", getHostnameFromUrl(settings.url));
+                    console.log("the URL which return an error was: ", settings.url);
+                    return;
+                }
+
+
                 var message = i18n.gettext('ajax error message:');
                 message = "url: " + settings.url + "\n" + message + "\n" + exception;
 
@@ -1057,6 +1069,80 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                     }
                 }
                 return interfaceType;
+            },
+
+            convertUrlsToLinks: function(el) {
+                el.linkify();
+            },
+
+            makeLinksShowOembedOnHover: function(el) {
+                var popover = $("#popover-oembed");
+                
+                var triggerHover = function(evt){
+                    popover.css('position','fixed');
+                    popover.css('top', (evt.pageY+2) + 'px');
+                    popover.css('left', evt.pageX + 'px');
+                    //popover.css('padding', '25px 50px');
+                    popover.show();
+
+                    popover.oembed($(this).attr("href"),{
+                        //initiallyVisible: false,
+                        embedMethod: "fill",
+                        //apikeys: {
+                            //etsy : 'd0jq4lmfi5bjbrxq2etulmjr',
+                        //},
+                        //maxHeight: 200, maxWidth:300
+                        onError: function(){
+                            popover.hide();
+                        },
+                        afterEmbed: function(){
+                            var screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                            var screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                            var popoverWidth = $(this).outerWidth();
+                            var popoverHeight = $(this).outerHeight();
+                            var positionLeft = parseInt($(this).css('left'));
+                            var positionTop = parseInt($(this).css('top'));
+                            //console.log("screenWidth: ", screenWidth);
+                            //console.log("screenHeight: ", screenHeight);
+                            //console.log("popoverWidth: ", popoverWidth);
+                            //console.log("popoverHeight: ", popoverHeight);
+                            //console.log("positionLeft: ", positionLeft);
+                            //console.log("positionTop: ", positionTop);
+                            var newPositionLeft = positionLeft - popoverWidth/2;
+                            if ( newPositionLeft + popoverWidth > screenWidth )
+                                newPositionLeft = screenWidth - popoverWidth;
+                            if ( newPositionLeft < 0 )
+                                newPositionLeft = 0;
+                            var newPositionTop = positionTop;
+                            if ( newPositionTop + popoverHeight > screenHeight )
+                                newPositionTop = screenHeight - popoverHeight;
+                            if ( newPositionTop < 0 )
+                                newPositionTop = 0;
+                            //console.log("newPositionLeft: ", newPositionLeft);
+                            //console.log("newPositionTop: ", newPositionTop);
+                            $(this).css('left', newPositionLeft + 'px' );
+                            $(this).css('top', newPositionTop + 'px' );
+                        }
+                    });
+                };
+
+                el.find("a").mouseenter(function(evt){
+                    var timeoutId = null;
+                    var that = this;
+                    timeoutId = window.setTimeout(function(){
+                        triggerHover.call(that, evt);
+                    }, 800); // => this is how much time the mouse has to stay on the link in order to trigger the popover
+                    $(this).mouseout(function(){
+                        window.clearTimeout(timeoutId);
+                    });
+                });
+
+                popover.mouseleave(function(evt){
+                    var that = this;
+                    setTimeout(function(){
+                        $(that).hide();
+                    }, 10);
+                });
             },
 
             /**

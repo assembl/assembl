@@ -135,7 +135,7 @@
   margin: 0 $spacingXs $spacingXs 0;
   padding: $spacingXs $spacingXl $spacingXs $spacingS;
   border-radius: $borderRadiusS;
-  background: $green;
+  background: $gray1; 
   color: $white;
   white-space: nowrap;
 
@@ -144,7 +144,7 @@
     top: 0;
     right: 0;
     height: 100%;
-    background: mix(#000000, $green, 10%);
+    background: mix(#000000, $gray1, 10%);
     @include border-radius-right($borderRadiusS);
     padding: 0 ($spacingXs / 2);
     line-height: 2.1em;
@@ -156,7 +156,7 @@
 
     &:hover,
     &:focus {
-      background: mix(#000000, $green, 25%);
+      background: mix(#000000, $gray1, 25%);
     }
   }
 }

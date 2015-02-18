@@ -5,7 +5,14 @@ from abc import abstractmethod
 from time import sleep
 import transaction
 import os
+from os.path import join, dirname
 import email
+from email import (charset as Charset)
+from email.mime.text import MIMEText
+from functools import partial
+import threading
+
+
 from sqlalchemy import (
     Column,
     Boolean,
@@ -22,9 +29,11 @@ from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload)
 from zope import interface
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
+from pyramid.i18n import TranslationStringFactory, make_localizer
 from celery import current_task
+from jinja2 import Environment, PackageLoader
 
-from . import  Base, DiscussionBoundBase
+from . import Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
 from ..lib.frontend_urls import FrontendUrls
@@ -32,16 +41,11 @@ from .auth import (
     User, Everyone, P_ADMIN_DISC, CrudPermissions, P_READ, UserTemplate)
 from .discussion import Discussion
 from .post import Post, SynthesisPost
-from jinja2 import Environment, PackageLoader
-from email import (charset as Charset)
-from email.mime.text import MIMEText
 from assembl.semantic.virtuoso_mapping import QuadMapPatternS
 from assembl.semantic.namespaces import ASSEMBL
-from gettext import gettext, ngettext
-_ = gettext
 
-jinja_env = Environment(loader=PackageLoader('assembl', 'templates'), extensions=['jinja2.ext.i18n'])
-jinja_env.install_gettext_callables(gettext, ngettext, newstyle=True)
+
+_ = TranslationStringFactory('assembl')
 
 # Don't BASE64-encode UTF-8 messages so that we avoid unwanted attention from
 # some spam filters.
@@ -237,7 +241,9 @@ class NotificationSubscription(DiscussionBoundBase):
         Default implementation, expected to be overriden by child classes """
         return self.external_typename()
 
-    def update_json(self, json, user_id=Everyone):
+    def _do_update_from_json(
+                self, json, parse_def, aliases, ctx, permissions,
+                user_id, duplicate_error=True):
         from ..auth.util import user_has_permission
         if self.user_id:
             if user_id != self.user_id:
@@ -270,7 +276,9 @@ class NotificationSubscription(DiscussionBoundBase):
                 raise HTTPBadRequest()
             new_type = polymap[new_type].class_
             new_instance = self.change_class(new_type)
-            return new_instance.update_json(json)
+            return new_instance._do_update_from_json(
+                json, parse_def, aliases, ctx, permissions,
+                user_id)
         creation_origin = json.get('creation_origin', None)
         if creation_origin is not None:
             self.creation_origin = NotificationCreationOrigin.from_string(creation_origin)
@@ -289,20 +297,21 @@ class NotificationSubscription(DiscussionBoundBase):
 
     def check_unique(self):
         self.db.flush()
-        other = self.unique_query().first()
+        query, usable = self.unique_query()
+        other = query.first()
         return other is None or other == self
 
     def unique_query(self):
         return self.db.query(self.__class__).filter_by(
             user_id=self.user_id, discussion_id=self.discussion_id,
             parent_subscription_id = self.parent_subscription_id,
-            type=self.type)
+            type=self.type), True
 
-    def is_owner(self, user):
-        return self.user_id == user.id
+    def is_owner(self, user_id):
+        return self.user_id == user_id
 
     @classmethod
-    def restrict_to_owners(cls, query, user_id=None):
+    def restrict_to_owners(cls, query, user_id):
         """Filter query according to object owners.
         Also allow to read subscriptions of templates."""
         # optimize the join on a single table
@@ -319,6 +328,15 @@ class NotificationSubscription(DiscussionBoundBase):
         assert alias
         return query.outerjoin(utt, alias.user_id == utt.c.id).filter(
             (cls.user_id == user_id) | (utt.c.id != None))
+
+    def user_can(self, user_id, operation, permissions):
+        # special case: If you can read the discussion, you can read
+        # the template's notification.
+        if (operation == CrudPermissions.READ
+                and isinstance(self.user, UserTemplate)):
+            return self.discussion.user_can(user_id, operation, permissions)
+        return super(NotificationSubscription, self).user_can(
+            user_id, operation, permissions)
 
     crud_permissions = CrudPermissions(
         P_READ, P_ADMIN_DISC, P_ADMIN_DISC, P_ADMIN_DISC,
@@ -375,11 +393,16 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
         return self.post
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnPost, self).unique_query(
-            ).filter_by(post_id=self.post_id)
+        query, _ = super(NotificationSubscriptionOnPost, self)
+        return query.filter_by(post_id=self.post_id), True
 
-    def update_json(self, json, user_id=Everyone):
-        updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
+    def _do_update_from_json(
+            self, json, parse_def, aliases, ctx, permissions,
+            user_id, duplicate_error=True):
+        updated = super(
+            NotificationSubscriptionOnPost, self)._do_update_from_json(
+                json, parse_def, aliases, ctx, permissions,
+                user_id, duplicate_error)
         if updated == self:
             self.post_id = json.get('post_id', self.post_id)
         return updated
@@ -409,11 +432,16 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
         return self.idea
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnPost, self).unique_query(
-            ).filter_by(idea_id=self.idea_id)
+        query, _ = super(NotificationSubscriptionOnIdea, self)
+        return query.filter_by(idea_id=self.idea_id), True
 
-    def update_json(self, json, user_id=Everyone):
-        updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
+    def _do_update_from_json(
+            self, json, parse_def, aliases, ctx, permissions,
+            user_id, duplicate_error=True):
+        updated = super(
+            NotificationSubscriptionOnIdea, self)._do_update_from_json(
+                json, parse_def, aliases, ctx, permissions,
+                user_id, duplicate_error)
         if updated == self:
             self.idea_id = json.get('idea_id', self.idea_id)
         return updated
@@ -443,11 +471,16 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
         return self.extract
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnPost, self).unique_query(
-            ).filter_by(extract_id=self.extract_id)
+        query, _ = super(NotificationSubscriptionOnExtract, self)
+        return query.filter_by(extract_id=self.extract_id), True
 
-    def update_json(self, json, user_id=Everyone):
-        updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
+    def _do_update_from_json(
+            self, json, parse_def, aliases, ctx, permissions,
+            user_id, duplicate_error=True):
+        updated = super(
+            NotificationSubscriptionOnExtract, self)._do_update_from_json(
+                json, parse_def, aliases, ctx, permissions,
+                user_id, duplicate_error)
         if updated == self:
             self.extract_id = json.get('extract_id', self.extract_id)
         return updated
@@ -477,11 +510,16 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
         return self.user
 
     def unique_query(self):
-        return super(NotificationSubscriptionOnPost, self).unique_query(
-            ).filter_by(on_user_id=self.on_user_id)
+        query, _ = super(NotificationSubscriptionOnUserAccount, self)
+        return query.filter_by(on_user_id=self.on_user_id), True
 
-    def update_json(self, json, user_id=Everyone):
-        updated = super(NotificationSubscriptionOnPost, self).update_json(json, user_id)
+    def _do_update_from_json(
+            self, json, parse_def, aliases, ctx, permissions,
+            user_id, duplicate_error=True):
+        updated = super(
+            NotificationSubscriptionOnUserAccount, self)._do_update_from_json(
+                json, parse_def, aliases, ctx, permissions,
+                user_id, duplicate_error)
         if updated == self:
             self.on_user_id = json.get('on_user_id', self.on_user_id)
         return updated
@@ -498,7 +536,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
     unsubscribe_allowed = True
 
     def get_human_readable_description(self):
-        return gettext("A periodic synthesis of the discussion is posted")
+        return _("A synthesis is posted")
 
     def wouldCreateNotification(self, discussion_id, verb, object):
         parentWouldCreate = super(NotificationSubscriptionFollowSyntheses, self).wouldCreateNotification(discussion_id, verb, object)
@@ -767,7 +805,9 @@ class Notification(Base):
         DateTime,
         nullable = True,
         default = datetime.utcnow)
-    
+
+    threadlocals = threading.local()
+
     @abstractmethod
     def event_source_object(self):
         pass
@@ -806,6 +846,34 @@ class Notification(Base):
     @abstractmethod
     def get_notification_subject(self):
         """Typically for email"""
+
+    def get_unlocalized_jinja_env(self):
+        threadlocals = self.threadlocals
+        if getattr(threadlocals, 'jinja_env', None) is None:
+            threadlocals.jinja_env = Environment(
+                loader=PackageLoader('assembl', 'templates'),
+                extensions=['jinja2.ext.i18n'])
+        return threadlocals.jinja_env
+
+    def get_jinja_env(self):
+        jinja_env = self.get_unlocalized_jinja_env()
+        self.setup_localizer(jinja_env)
+        return jinja_env
+
+    def get_localizer(self):
+        locale = self.first_matching_subscription.user.get_preferred_locale()
+        if not locale:
+            locale = self.first_matching_subscription.discussion.get_discussion_locales()[0]
+        return make_localizer(locale, [
+            join(dirname(dirname(__file__)), 'locale')])
+
+    def setup_localizer(self, jinja_env=None):
+        localizer = self.get_localizer()
+        jinja_env = jinja_env or self.get_unlocalized_jinja_env()
+        jinja_env.install_gettext_callables(
+            partial(localizer.translate, domain='assembl'),
+            partial(localizer.pluralize, domain='assembl'),
+            newstyle=True)
 
     def get_from_email_address(self):
         from_email = self.first_matching_subscription.discussion.admin_source.admin_sender
@@ -907,13 +975,15 @@ class NotificationOnPostCreated(NotificationOnPost):
         return NotificationOnPost.event_source_object(self)
     
     def get_notification_subject(self):
+        loc = self.get_localizer()
         subject = "[" + self.first_matching_subscription.discussion.topic + "] "
         if isinstance(self.post, SynthesisPost):
-            subject += _("SYNTHESIS: ") + self.post.publishes_synthesis.subject
+            subject += loc.translate(_("SYNTHESIS: ")) \
+                + (self.post.publishes_synthesis.subject or "")
         else:
-            subject += self.post.subject
+            subject += (self.post.subject or "")
         return subject
-    
+
     def render_to_email_html_part(self):
         from premailer import Premailer
         ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
@@ -924,11 +994,11 @@ class NotificationOnPostCreated(NotificationOnPost):
                        'frontendUrls': FrontendUrls(self.first_matching_subscription.discussion),
                        'ink_css': ink_css.read()
                        }
+        jinja_env = self.get_jinja_env()
         if isinstance(self.post, SynthesisPost):
             template = jinja_env.get_template('notifications/html_mail_post_synthesis.jinja2')
             template_data['synthesis'] = self.post.publishes_synthesis
         else:
             template = jinja_env.get_template('notifications/html_mail_post.jinja2')
-            
         html = template.render(**template_data)
         return Premailer(html).transform()

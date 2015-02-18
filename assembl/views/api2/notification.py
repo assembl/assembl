@@ -39,10 +39,12 @@ def view_notification_subscription_collection(request):
              header=JSON_HEADER,
              ctx_collection_class=NotificationSubscription)
 def notif_collection_add_json(request):
-    check_permissions(request, CrudPermissions.CREATE)
     ctx = request.context
-    typename = ctx.collection_class.external_typename()
     user_id = authenticated_userid(request)
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
+    typename = ctx.collection_class.external_typename()
     typename = request.json_body.get(
         '@type', ctx.collection_class.external_typename())
     json = request.json_body
@@ -58,7 +60,7 @@ def notif_collection_add_json(request):
         db.flush()
         view = request.GET.get('view', None) or 'default'
         return Response(
-            dumps(first.generic_json(view)),
+            dumps(first.generic_json(view, user_id, permissions)),
             location=first.uri_generic(first.id),
             status_code=201)
 

@@ -19,17 +19,20 @@ from pyramid.httpexceptions import (
     HTTPServerError)
 from pyramid.settings import asbool
 from sqlalchemy import desc
-import transaction
 from velruse import login_url
 from pyisemail import is_email
 
 from assembl.models import (
     EmailAccount, IdentityProvider, IdentityProviderAccount,
-    AgentProfile, User, Username)
-from assembl.auth import P_READ
-from assembl.auth.password import (format_token, verify_email_token, 
-    verify_password_change_token, password_token)
-from assembl.auth.util import get_identity_provider
+    AgentProfile, User, Username, Role, LocalUserRole,
+    AbstractAgentAccount, Discussion)
+from assembl.auth import (
+    P_READ, R_PARTICIPANT)
+from assembl.auth.password import (
+    format_token, verify_email_token, verify_password_change_token,
+    password_token)
+from assembl.auth.util import (
+    get_identity_provider, discussion_from_request)
 from ...lib import config
 from .. import get_default_context
 
@@ -38,10 +41,15 @@ _ = TranslationStringFactory('assembl')
 
 def get_login_context(request):
     slug = request.matchdict.get('discussion_slug', None)
-    p_slug = "/" + slug if slug else ""
+    if slug:
+        p_slug = "/" + slug
+        request.session['discussion'] = slug
+    else:
+        p_slug = ""
+        request.session.pop('discussion')
     return dict(get_default_context(request), **{
         'login_url': login_url,
-        'slug': p_slug,
+        'slug_prefix': p_slug,
         'providers': request.registry.settings['login_providers'],
         'google_consumer_key': request.registry.settings.get(
             'google.consumer_key', ''),
@@ -49,17 +57,45 @@ def get_login_context(request):
     })
 
 
-def handle_next_view(request, consume=False, default=None):
+def _get_route_from_path(request, path):
+    from pyramid.urldispatch import IRoutesMapper
+    rm = request.registry.getUtility(IRoutesMapper)
+    for route in rm.routelist:
+        match = route.match(path)
+        if match is not None:
+            return route, match
+    return None, {}
+
+
+def handle_next_view(request, consume=False, default_suffix=''):
     slug = request.matchdict.get('discussion_slug', None)
+    default = "/".join((x for x in ('', slug, default_suffix)
+                        if x is not None))
     next_view = request.params.get('next_view', None)\
-        or request.session.get('next_view', None)\
-        or default\
-        or ("/%s/" % (slug,) if slug else "/")
+        or request.session.get('next_view', None) or default
+    discussion_slug = request.session.get('discussion', None)
+    if discussion_slug:
+        p_slug = '/' + discussion_slug
+        if not next_view.startswith(p_slug):
+            # Maybe the route already has a different slug...
+            route, match = _get_route_from_path(request, next_view)
+            if 'discussion_slug' not in match:
+                next_view = p_slug + next_view
     if consume and 'next_view' in request.session:
         request.session.pop('next_view')
+        request.session.pop('discussion')
     elif not consume and 'next_view' not in request.session:
         request.session["next_view"] = next_view
     return next_view
+
+
+def maybe_contextual_route(request, route_name, **args):
+    discussion_slug = request.matchdict.get('discussion_slug', None)
+    if discussion_slug is None:
+        return request.route_url(route_name, **args)
+    else:
+        return request.route_url(
+            'contextual_'+route_name, discussion_slug=discussion_slug, **args)
 
 
 @view_config(
@@ -109,8 +145,9 @@ def get_profile(request):
         if not profile:
             raise HTTPNotFound()
     elif id_type == 'email':
-        account = session.query(EmailAccount).filter_by(
-            email=identifier).order_by(desc(EmailAccount.verified)).first()
+        account = session.query(AbstractAgentAccount).filter_by(
+            email=identifier).order_by(desc(
+                AbstractAgentAccount.verified)).first()
         if not account:
             raise HTTPNotFound()
         profile = account.profile
@@ -155,7 +192,8 @@ def assembl_profile(request):
         redirect = False
         username = request.params.get('username', '').strip()
         if username and (
-                profile.username is None or username != profile.username.username):
+                profile.username is None
+                or username != profile.username.username):
             # check if exists
             if session.query(Username).filter_by(username=username).count():
                 errors.append(localizer.translate(_(
@@ -180,7 +218,7 @@ def assembl_profile(request):
             errors.append(localizer.translate(_(
                 'The passwords are not identical')))
         elif p1:
-            profile.set_password(p1)
+            profile.password_p = p1
         add_email = request.params.get('add_email', '').strip()
         if add_email:
             if not is_email(add_email):
@@ -196,7 +234,7 @@ def assembl_profile(request):
                 'profile_user', type='u', identifier=username))
         profile = session.query(User).get(user_id)
     unverified_emails = [
-        (ea, session.query(EmailAccount).filter_by(
+        (ea, session.query(AbstractAgentAccount).filter_by(
             email=ea.email, verified=True).first())
         for ea in profile.email_accounts if not ea.verified]
     return render_to_response(
@@ -240,7 +278,7 @@ def assembl_register_view(request):
     next_view = handle_next_view(request)
     if not request.params.get('email'):
         return dict(get_default_context(request),
-                    slug=p_slug)
+                    slug_prefix=p_slug)
     forget(request)
     session = AgentProfile.db
     localizer = request.localizer
@@ -250,23 +288,23 @@ def assembl_register_view(request):
     email = request.params.get('email', '').strip()
     if not is_email(email):
         return dict(get_default_context(request),
-                    slug=p_slug,
+                    slug_prefix=p_slug,
                     error=localizer.translate(_(
                         "This is not a valid email")))
     # Find agent account to avoid duplicates!
-    if session.query(EmailAccount).filter_by(
+    if session.query(AbstractAgentAccount).filter_by(
             email=email, verified=True).count():
         return dict(get_default_context(request),
-                    slug=p_slug,
+                    slug_prefix=p_slug,
                     error=localizer.translate(_(
                         "We already have a user with this email.")))
     if password != password2:
         return dict(get_default_context(request),
-                    slug=p_slug,
+                    slug_prefix=p_slug,
                     error=localizer.translate(_(
                         "The passwords should be identical")))
 
-    #TODO: Validate password quality
+    # TODO: Validate password quality
     # otherwise create.
     validate_registration = asbool(config.get(
         'assembl.validate_registration_emails'))
@@ -296,15 +334,15 @@ def assembl_register_view(request):
         # TODO: Tell them to expect an email.
         request.session.pop('next_view')
         return HTTPFound(location=next_view)
-    return HTTPFound(location=request.route_url(
-        'confirm_emailid_sent', email_account_id=email_account.id))
+    return HTTPFound(location=maybe_contextual_route(
+        request, 'confirm_emailid_sent', email_account_id=email_account.id))
 
 
 def from_identifier(identifier):
     session = AgentProfile.db
     if '@' in identifier:
-        account = session.query(EmailAccount).filter_by(
-            email=identifier).order_by(EmailAccount.verified.desc()).first()
+        account = session.query(AbstractAgentAccount).filter_by(
+            email=identifier).order_by(AbstractAgentAccount.verified.desc()).first()
         if account:
             user = account.profile
             return (user, account)
@@ -329,14 +367,12 @@ def from_identifier(identifier):
     renderer='assembl:templates/login.jinja2'
 )
 def assembl_login_complete_view(request):
-    slug = request.matchdict.get('discussion_slug', None)
-    p_slug = "/" + slug if slug else ""
     # Check if proper authorization. Otherwise send to another page.
     session = AgentProfile.db
     identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
     next_view = handle_next_view(
-        request, True, p_slug + '/register')
+        request, True, 'register')
     logged_in = authenticated_userid(request)
     localizer = request.localizer
     user = None
@@ -347,9 +383,8 @@ def assembl_login_complete_view(request):
         return dict(get_login_context(request),
                     error=localizer.translate(_("This user cannot be found")))
     if account and not account.verified:
-        return HTTPFound(location=request.route_url(
-            'confirm_emailid_sent',
-            email_account_id=account.id))
+        return HTTPFound(location=maybe_contextual_route(
+            request, 'confirm_emailid_sent', email_account_id=account.id))
     if logged_in:
         if user.id != logged_in:
             # logging in as a different user
@@ -360,7 +395,7 @@ def assembl_login_complete_view(request):
             return HTTPFound(location=next_view)
     if not user.check_password(password):
         user.login_failures += 1
-        #TODO: handle high failure count
+        # TODO: handle high failure count
         session.add(user)
         return dict(get_login_context(request),
                     error=localizer.translate(_("Invalid user and password")))
@@ -376,6 +411,15 @@ def velruse_login_complete_view(request):
     session = AgentProfile.db
     context = request.context
     velruse_profile = context.profile
+    discussion = None
+    slug = request.session.get('discussion', None)
+    if not slug:
+        discussion = discussion_from_request(request)
+        if discussion:
+            slug = discussion.slug
+    if slug and not discussion:
+        discussion = session.query(Discussion).filter_by(
+            slug=slug).first()
     next_view = handle_next_view(request, True)
     logged_in = authenticated_userid(request)
     provider = get_identity_provider(request)
@@ -402,12 +446,12 @@ def velruse_login_complete_view(request):
         else:
             raise HTTPServerError()
     if idp_accounts:
-        for account in idp_accounts:
-            account.profile_info_json = velruse_profile
+        for idp_account in idp_accounts:
+            idp_account.profile_info_json = velruse_profile
     else:
         idp_account = IdentityProviderAccount(
             provider=provider,
-            profile_info=json.dumps(velruse_profile),
+            profile_info_json=velruse_profile,
             domain=velruse_account.get('domain'),
             userid=velruse_account.get('userid'),
             username=velruse_account.get('username'))
@@ -419,13 +463,13 @@ def velruse_login_complete_view(request):
     user = None
     profiles = [a.profile for a in idp_accounts if a.profile]
     # Maybe we already have a profile based on email
-    if provider.trust_emails and 'verifiedEmail' in velruse_profile:
-        email = velruse_profile['verifiedEmail']
-        email_account = session.query(EmailAccount).filter_by(
+    if idp_account.email and idp_account.verified:
+        email = idp_account.email
+        other_account = session.query(AbstractAgentAccount).filter_by(
             email=email, verified=True).first()
-        if email_account and email_account.profile \
-                and email_account.profile not in profiles:
-            profiles.append(email_account.profile)
+        if other_account and other_account.profile \
+                and other_account.profile not in profiles:
+            profiles.append(other_account.profile)
     profiles = list(set(profiles))
     # prefer profiles with verified users, then users, then oldest profiles
     profiles.sort(key=lambda p: (
@@ -473,39 +517,39 @@ def velruse_login_complete_view(request):
                 break
         if username:
             session.add(Username(username=username, user=profile))
+        session.flush()
+        if maybe_auto_subscribe(profile, discussion):
+            next_view = "/%s/user/notifications" % (slug,)
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
     # Now all accounts have a profile
     session.autoflush = old_autoflush
     email_accounts = {ea.email: ea for ea in profile.email_accounts}
     # There may be new emails in the accounts
+    verified_email = None
     if 'verifiedEmail' in velruse_profile:
-        email = velruse_profile['verifiedEmail']
-        if email in email_accounts:
-            email_account = email_accounts[email]
-            if provider.trust_emails and not email_account.verified:
-                email_account.verified = True
-                session.add(email_account)
-        else:
-            email_account = EmailAccount(
-                email=email,
-                verified=provider.trust_emails,
-                profile=profile
-            )
-            email_accounts[email] = email_account
-            session.add(email_account)
-    for email in velruse_profile.get('emails', []):
-        preferred = False
-        if isinstance(email, dict):
-            preferred = email.get('preferred', False)
-            email = email['value']
-        if email not in email_accounts:
-            email = EmailAccount(
-                email=email,
-                preferred=preferred,
-                profile=profile
-            )
-            session.add(email)
+        verified_email = velruse_profile['verifiedEmail']
+        if verified_email in email_accounts and provider.trust_emails:
+            email_account = email_accounts[verified_email]
+            if email_account.preferred:
+                idp_account.preferred = True
+            email_account.delete()
+    for email_d in velruse_profile.get('emails', []):
+        if isinstance(email_d, dict):
+            email = email_d['value']
+            if verified_email != email:
+                # create an unverified email account.
+                email = EmailAccount(
+                    email=email,
+                    profile=profile
+                )
+                session.add(email)
+            else:
+                if email_d.get('preferred', False):
+                    # maybe TODO: make the idp_account preferred,
+                    # if no other account is preferred?
+                    pass
+
     # Note that if an IdP account stops claiming an email, it "leaks".
     session.flush()
 
@@ -522,10 +566,15 @@ def velruse_login_complete_view(request):
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
+@view_config(
+    route_name='contextual_confirm_emailid_sent',
+    renderer='assembl:templates/confirm.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+)
 def confirm_emailid_sent(request):
     # TODO: How to make this not become a spambot?
     id = int(request.matchdict.get('email_account_id'))
-    email = EmailAccount.get(id)
+    email = AbstractAgentAccount.get(id)
     if not email:
         raise HTTPNotFound()
     if email.verified:
@@ -534,8 +583,12 @@ def confirm_emailid_sent(request):
         pass
     send_confirmation_email(request, email)
     localizer = request.localizer
+    slug = request.matchdict.get('discussion_slug', None)
+    slug_prefix = "/" + slug if slug else ""
     return dict(
         get_default_context(request),
+        slug_prefix=slug_prefix,
+        profile_id=email.profile_id,
         email_account_id=request.matchdict.get('email_account_id'),
         title=localizer.translate(_('Confirmation requested')),
         description=localizer.translate(_(
@@ -543,18 +596,35 @@ def confirm_emailid_sent(request):
             'Please use the link to confirm your email to Assembl')))
 
 
+def maybe_auto_subscribe(user, discussion):
+    if (not discussion
+            or not discussion.subscribe_to_notifications_on_signup):
+        return False
+    # really auto-subscribe user
+    role = User.db.query(Role).filter_by(name=R_PARTICIPANT).first()
+    User.db.add(LocalUserRole(
+        user_id=user.id, role=role,
+        discussion_id=discussion.id))
+    User.db.flush()
+    # apply new notifications
+    user.get_notification_subscriptions(discussion.id)
+    return True
+
+
 @view_config(
     route_name='user_confirm_email',
+    renderer='assembl:templates/email_confirmed.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
     route_name='contextual_user_confirm_email',
+    renderer='assembl:templates/email_confirmed.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 def user_confirm_email(request):
     token = request.matchdict.get('ticket')
     email = verify_email_token(token)
-    session = EmailAccount.db
+    session = AbstractAgentAccount.db
     # TODO: token expiry
     localizer = request.localizer
     if not email:
@@ -570,22 +640,15 @@ def user_confirm_email(request):
         discussions = user.involved_in_discussion
         if len(discussions) == 1:
             slug = discussions[0].slug
-    p_slug = "/" + slug if slug else ""
-    if slug:
-        location = 'contextual_login'
-    else:
-        location = 'login'
-    next_view = p_slug + '/'
-    next_view = handle_next_view(request, False, next_view)
+    next_view = handle_next_view(request, False)
 
     if email.verified:
-        raise HTTPFound(location=request.route_url(
-            location, discussion_slug=slug, _query=dict(
-                message=localizer.translate(
-                    _("Email <%s> already confirmed")) % (email.email,))))
+        raise HTTPFound(location=maybe_contextual_route(
+            request, 'login', _query=dict(message=localizer.translate(
+                _("Email <%s> already confirmed")) % (email.email,))))
     else:
         # maybe another profile already verified that email
-        other_email_account = session.query(EmailAccount).filter_by(
+        other_email_account = session.query(AbstractAgentAccount).filter_by(
             email=email.email, verified=True).first()
         if other_email_account:
             profile = email.profile
@@ -607,16 +670,28 @@ def user_confirm_email(request):
             if user.username:
                 username = user.username.username
             userid = user.id
-        if username:
-            return HTTPFound(location=request.route_url(
-                location, discussion_slug=slug,
-                _query=dict(message=localizer.translate(_(
-                    "Email <%s> confirmed")) % (email.email,))))
-        elif userid:
-            return HTTPFound(location=request.route_url(
-                location, discussion_slug=slug,
-                _query=dict(message=localizer.translate(_(
-                    "Email <%s> confirmed")) % (email.email,))))
+        if user:
+            # if option is active in discussion, auto-subscribe
+            # user to discussion's default notifications
+            discussion = None
+            if slug:
+                discussion = session.query(Discussion).filter_by(
+                    slug=slug).first()
+            if maybe_auto_subscribe(user, discussion):
+                custom_message = localizer.translate(_(
+                    "Your email address %s has been confirmed, "
+                    "and you are now subscribed to discussion's "
+                    "default notifications.")) % (email.email,)
+            else:
+                custom_message = localizer.translate(_(
+                    "Your email address %s has been confirmed,"
+                    " you can now log in.")) % (email.email,)
+            return dict(
+                get_default_context(request),
+                button_url=maybe_contextual_route(request, 'login'),
+                button_label=localizer.translate(_('Log in')),
+                title=localizer.translate(_('Your account is now active!')),
+                description=custom_message)
         else:
             # we confirmed a profile without a user? Now what?
             raise HTTPServerError()
@@ -639,13 +714,18 @@ def login_denied_view(request):
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
+@view_config(
+    route_name='contextual_confirm_email_sent',
+    renderer='assembl:templates/confirm.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+)
 def confirm_email_sent(request):
     localizer = request.localizer
     # TODO: How to make this not become a spambot?
     email = request.matchdict.get('email')
     if not email:
         raise HTTPNotFound()
-    email_objects = EmailAccount.db.query(EmailAccount).filter_by(
+    email_objects = AbstractAgentAccount.db.query(AbstractAgentAccount).filter_by(
         email=email)
     verified_emails = [e for e in email_objects if e.verified]
     unverified_emails = [e for e in email_objects if not e.verified]
@@ -676,14 +756,19 @@ def confirm_email_sent(request):
                     'Please use the link to confirm your email to Assembl')))
         else:
             # We do not have an email to this name.
-            return HTTPFound(location=request.route_url(
-                'register', email=email, _query=dict(
+            return HTTPFound(location=maybe_contextual_route(
+                request, 'register', email=email, _query=dict(
                     error=localizer.translate(_(
                         "We do not know about this email.")))))
 
 
 @view_config(
     route_name='request_password_change',
+    renderer='assembl:templates/request_password_change.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+)
+@view_config(
+    route_name='contextual_request_password_change',
     renderer='assembl:templates/request_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
@@ -694,14 +779,19 @@ def request_password_change(request):
         return dict(get_default_context(request),
             title=localizer.translate(_('I forgot my password')))
     user, account = from_identifier(identifier)
+    discussion_slug = request.matchdict.get('discussion_slug', None)
+    route = 'password_change_sent'
+    if discussion_slug:
+        route = 'contextual_' + route
+
     if not user:
         return dict(get_default_context(request),
                     identifier=identifier,
                     error=localizer.translate(_("This user cannot be found")),
                     title=localizer.translate(_('I forgot my password')))
-    return HTTPFound(location=request.route_url(
-        'password_change_sent', profile_id=user.id, _query=dict(
-            email=identifier if '@' in identifier else '')))
+    return HTTPFound(location=maybe_contextual_route(
+        request, 'password_change_sent', profile_id=user.id,
+        _query=dict(email=identifier if '@' in identifier else '')))
 
 
 @view_config(
@@ -709,16 +799,27 @@ def request_password_change(request):
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
+@view_config(
+    route_name='contextual_password_change_sent',
+    renderer='assembl:templates/confirm.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+)
 def password_change_sent(request):
     localizer = request.localizer
     if not request.params.get('sent', False):
         profile_id = int(request.matchdict.get('profile_id'))
+        profile = AgentProfile.get(profile_id)
+        if not profile:
+            raise HTTPNotFound("No profile "+profile_id)
         send_change_password_email(
-            request, AgentProfile.get(profile_id),
+            request, profile,
             request.params.get('email', None))
+    slug = request.matchdict.get('discussion_slug', None)
+    slug_prefix = "/" + slug if slug else ""
     return dict(
         get_default_context(request),
-        profile_id=request.matchdict.get('profile_id'),
+        profile_id=int(request.matchdict.get('profile_id')),
+        slug_prefix=slug_prefix,
         error=request.params.get('error'),
         title=localizer.translate(_('Password change requested')),
         description=localizer.translate(_(
@@ -728,6 +829,11 @@ def password_change_sent(request):
 
 @view_config(
     route_name='do_password_change',
+    renderer='assembl:templates/do_password_change.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+)
+@view_config(
+    route_name='contextual_do_password_change',
     renderer='assembl:templates/do_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
@@ -741,8 +847,8 @@ def do_password_change(request):
             raise HTTPBadRequest(localizer.translate(_(
                 "Wrong password token.")))
         else:
-            return HTTPFound(location=request.route_url(
-                'password_change_sent', profile_id=user_id, _query=dict(
+            return HTTPFound(location=maybe_contextual_route(
+                request, 'password_change_sent', profile_id=user_id, _query=dict(
                     sent=True, error=localizer.translate(_(
                         "This token is expired. "
                         "Do you want us to send another?")))))
@@ -750,13 +856,21 @@ def do_password_change(request):
     headers = remember(request, user_id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     user.last_login = datetime.now()
+    slug = request.matchdict.get('discussion_slug', None)
+    slug_prefix = "/" + slug if slug else ""
     return dict(
         get_default_context(request),
+        slug_prefix=slug_prefix,
         title=localizer.translate(_('Change your password')))
 
 
 @view_config(
     route_name='finish_password_change',
+    renderer='assembl:templates/do_password_change.jinja2',
+    permission=P_READ
+)
+@view_config(
+    route_name='contextual_finish_password_change',
     renderer='assembl:templates/do_password_change.jinja2',
     permission=P_READ
 )
@@ -766,19 +880,25 @@ def finish_password_change(request):
         raise HTTPUnauthorized()
     user = User.get(logged_in)
     localizer = request.localizer
+    discussion_slug = request.matchdict.get('discussion_slug', None)
     error = None
     p1, p2 = (request.params.get('password1', '').strip(),
               request.params.get('password2', '').strip())
     if p1 != p2:
         error = localizer.translate(_('The passwords are not identical'))
     elif p1:
-        user.set_password(p1)
+        user.password_p = p1
         return HTTPFound(location=request.route_url(
-            'discussion_list', _query=dict(
+            'home' if discussion_slug else 'discussion_list',
+            discussion_slug=discussion_slug,
+            _query=dict(
                 message=localizer.translate(_(
                     "Password changed")))))
 
-    return dict(get_default_context(request), error=error)
+    slug_prefix = "/" + discussion_slug if discussion_slug else ""
+    return dict(
+        get_default_context(request),
+        slug_prefix=slug_prefix, error=error)
 
 
 def send_confirmation_email(request, email):
@@ -788,20 +908,14 @@ def send_confirmation_email(request, email):
     if isinstance(email.profile, User) and not email.profile.verified:
         confirm_what = _('account')
     from assembl.auth.password import email_token
-    slug = request.matchdict.get('discussion_slug', None)
-    if slug:
-        confirm_url = request.route_url(
-            'contextual_user_confirm_email',
-            slug=slug, ticket=email_token(email))
-    else:
-        confirm_url = request.route_url(
-            'user_confirm_email', ticket=email_token(email))
     data = {
         'name': email.profile.name,
         'email': email.email,
         'assembl': "Assembl",
         'confirm_what': localizer.translate(confirm_what),
-        'confirm_url': confirm_url
+        'confirm_url': maybe_contextual_route(
+            request, 'user_confirm_email',
+            ticket=email_token(email))
     }
     message = Message(
         subject=localizer.translate(_("Please confirm your ${confirm_what} with <${assembl}>"), mapping=data),
@@ -820,17 +934,21 @@ Please confirm your ${confirm_what} <${email}> with ${assembl} by clicking on th
     mailer.send(message)
 
 
-def send_change_password_email(request, profile, email=None):
+def send_change_password_email(
+        request, profile, email=None):
     mailer = get_mailer(request)
     localizer = request.localizer
     data = dict(
-        name=profile.name, confirm_url=request.route_url(
-            'do_password_change', ticket=password_token(profile)),
-        assembl="Assembl")
+        name=profile.name, assembl="Assembl",
+        confirm_url=maybe_contextual_route(
+            request, 'do_password_change',
+            ticket=password_token(profile)))
     message = Message(
-        subject=localizer.translate(_("Request for password change"), mapping=data),
+        subject=localizer.translate(
+            _("Request for password change"), mapping=data),
         sender=config.get('assembl.admin_email'),
-        recipients=["%s <%s>" % (profile.name, email or profile.get_preferred_email())],
+        recipients=["%s <%s>" % (
+            profile.name, email or profile.get_preferred_email())],
         body=localizer.translate(_(u"""Hello, ${name}!
 You asked to change your password on <${assembl}>. (We hope it was you!)\n
 You can do this by clicking on the link below.
@@ -839,7 +957,7 @@ You can do this by clicking on the link below.
         html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
 <p>You asked to <a href="${confirm_url}">change your password</a> on ${assembl} (We hope it was you!)</p>
 """), mapping=data))
-    #if deferred:
+    # if deferred:
     #    mailer.send_to_queue(message)
-    #else:
+    # else:
     mailer.send(message)

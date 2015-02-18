@@ -4,7 +4,8 @@
 #onlinedot {
 
     .dot-offline {
-        display: initial;
+      display: block;
+      line-height: $theme_header_height;
     }
 
     .dot-online {
@@ -30,8 +31,8 @@
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      width: 300px;
-      line-height: 35px;
+      width: 290px;
+      line-height: $theme_header_height;
     }
 
 }

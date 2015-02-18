@@ -5,6 +5,7 @@
 @import "base/variables.scss";
 @import "base/common.scss";
 @import "base/helpers.scss";
+@import "base/functions.scss";
 @import "lib/annotator.scss";
 @import "lib/ckeditor.scss";
 @import "lib/tipsy.scss";
@@ -25,6 +26,7 @@
 @import "components/idealist.scss";
 @import "components/image.scss";
 @import "components/link.scss";
+@import "components/loader.scss";
 @import "components/loginbox.scss";
 @import "components/media.scss";
 @import "components/message.scss";
@@ -41,6 +43,7 @@
 @import "components/patterns.scss";
 @import "components/avatars.scss";
 @import "components/social.scss";
+@import "components/growl.scss";
 @import "layout/segmentList.scss";
 @import "layout/content.scss";
 @import "layout/contextpage.scss";

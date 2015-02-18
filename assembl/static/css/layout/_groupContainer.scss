@@ -1,10 +1,10 @@
 #groupsContainer {
   position: absolute;
-  top: 36px;
+  top: $theme_header_height;
   right: 0;
   bottom: 0;
   left: 0;
-  @include calc(height, "100% - 36px");
+  @include calc(height, "100% - #{$theme_header_height}");
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
@@ -15,8 +15,8 @@
 
 #groupsContainer.hasNotification {
   position: absolute;
-  top: 75px;
-  @include calc(height, "100% - 75px");
+  top: $theme_header_height + 39px;
+  @include calc(height, "100% - #{$theme_header_height} - 39px");
 }
 
 .groupContent {
@@ -33,10 +33,10 @@
 
 .groupHeader {
   &.editable {
-    height: 25px;
+    height: $group_editable_header_height;
   }
-  height: 3px;
-  background-color: $gray1;
+  height: $group_header_height;
+  background-color: $theme_panel_group_header_bg_color;
   position: relative;
   .close-group {
     cursor: pointer;
@@ -55,10 +55,10 @@
 
 .groupBody {
   display: table;
-  height: calc(100% - 3px); /* retain the height of .groupHeader */
+  height: calc(100% - #{$group_header_height}); /* retain the height of .groupHeader */
   width: 100%;
   &.editable {
-    height: calc(100% - 25px); /* retain the height of .groupHeader */
+    height: calc(100% - #{$group_editable_header_height}); /* retain the height of .groupHeader */
   }
   table-layout: auto;
 
@@ -101,6 +101,7 @@
 
   .navSidebar {
     height: 100%;
+    padding: 0px;
     .side-menu {
       margin: 0;
       padding: 0;
@@ -108,26 +109,29 @@
       //height: 100vh; need hack safari
       height: 100%;
       display: block;
-      background-color: $purple3;
+      background-color: $theme_navigation_menu_bg;
       > li {
         position: relative;
         > a.nav {
           display: block;
           height: 40px;
           text-decoration: none;
-          background-color: $purple3;
-          color: $white;
+          background-color: $theme_navigation_menu_bg;
+          color: $theme_navigation_text_color;
           padding-left: 10px;
           font-size: $smallFontSize;
           &.active {
-            background-color: $purple5;
+            background-color: $theme_navigation_menu_bg_active;
             i:not(.icon-arrowleft) {
-              color: $white;
+              color: $theme_navigation_icon_color_active;
             }
+          }
+          &:hover {
+            background-color: $theme_navigation_menu_bg_active;
           }
           i {
             font-size: 22px;
-            color: $green;
+            color: $theme_navigation_icon_color;
             vertical-align: sub;
           }
           i.icon-add-2 {
@@ -152,7 +156,7 @@
         .second-level.debate,
         .second-level.visualizations,
         .second-level.home {
-          background-color: $purple4;
+          background-color: $theme_navigation_bg;
         }
       }
       .debate {
@@ -257,6 +261,12 @@
 .group-modal {
   .popin, .bbm-modal {
     max-width: 500px;
+  }
+}
+
+.partner-modal {
+  .popin, .bbm-modal {
+    max-width: 550px;
   }
 }
 

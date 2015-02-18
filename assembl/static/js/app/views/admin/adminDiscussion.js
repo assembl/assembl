@@ -1,56 +1,49 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/context', 'models/discussion'],
-    function (Marionette, $, CollectionManager, Ctx, Discussion) {
+define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager', 'common/context', 'models/discussion', 'models/discussionSource', 'utils/i18n'],
+    function (Marionette, $, _, CollectionManager, Ctx, Discussion, DiscussionSource, i18n) {
 
         var adminDiscussion = Marionette.LayoutView.extend({
             template: '#tmpl-adminDiscussion',
             className: 'admin-notifications',
             ui: {
-                discussion: '.js_saveDiscussion',
-                close: '.bx-alert-success .bx-close'
+              discussion: '.js_saveDiscussion'
             },
             initialize: function () {
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                this.model = new Backbone.Model();
+                this.model = undefined;
 
-                $.when(collectionManager.getDiscussionCollectionPromise()).then(
+                $.when(collectionManager.getDiscussionModelPromise()).then(
                     function (Discussion) {
-                        that.model = Discussion.models[0];
+                        that.model =  Discussion;
                         that.render();
                     });
 
             },
 
             events: {
-                'click @ui.discussion': 'saveDiscussion',
-                'click @ui.close': 'close'
+              'click @ui.discussion': 'saveDiscussion'
             },
 
             serializeData: function () {
                 return {
                     discussion: this.model,
-                    ctx: Ctx
+                    Ctx: Ctx
                 }
-            },
-
-            close: function () {
-                this.$('.bx-alert-success').addClass('hidden');
             },
 
             saveDiscussion: function (e) {
                 e.preventDefault();
 
-                var topic = this.$('input[name=topic]').val(),
+                var introduction = this.$('textarea[name=introduction]').val(),
+                    topic = this.$('input[name=topic]').val(),
                     slug = this.$('input[name=slug]').val(),
-                    objectives = this.$('textarea[name=objectives]').val(),
-                    that = this;
-
-                this.model.url = '/api/v1/discussion/' + Ctx.getDiscussionId();
+                    objectives = this.$('textarea[name=objectives]').val();
 
                 this.model.set({
+                    introduction:introduction,
                     topic: topic,
                     slug: slug,
                     objectives: objectives
@@ -58,10 +51,26 @@ define(['backbone.marionette', 'jquery', 'common/collectionManager', 'common/con
 
                 this.model.save(null, {
                     success: function (model, resp) {
-                        that.$('.bx-alert-success').removeClass('hidden');
+                        $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
+                            ele: 'body',
+                            type: 'success',
+                            offset: {from: 'bottom', amount:20},
+                            align: 'left',
+                            delay: 4000,
+                            allow_dismiss: true,
+                            stackup_spacing: 10
+                        });
                     },
                     error: function (model, resp) {
-                        console.debug(model, resp);
+                        $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
+                            ele: 'body',
+                            type: 'error',
+                            offset: {from: 'bottom', amount:20},
+                            align: 'left',
+                            delay: 4000,
+                            allow_dismiss: true,
+                            stackup_spacing: 10
+                        });
                     }
                 })
 

@@ -40,11 +40,20 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                         // TODO
                         console.log("BUG: could not find post", value);
                     } else {
-                        valuesText.push('"' + post.get('subject') + '"' + span);
+                      if(post.get('subject')) {
+                        //Best case, but unless the message is in cache we won have this data
+                        valuesText.push(i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject')) + span);
+                      }
+                      else if (post.get('@type') === "SynthesisPost"){
+                        valuesText.push(i18n.gettext('this synthesis') + span);
+                      }
+                      else {
+                        valuesText.push(i18n.sprintf(i18n.gettext('this %s'), post.get('@type')) + span);
+                      }
                     }
                 }
-                retval += i18n.sprintf(i18n.ngettext("Are in the conversation that follows post %s",
-                        "Are in the conversation that follows posts: %s",
+                retval += i18n.sprintf(i18n.ngettext("Is in the conversation that follows %s",
+                        "Are in the conversation that follows: %s",
                         valuesText.length),
                     valuesText.join(i18n.gettext(' AND ')));
                 return retval;
@@ -556,10 +565,10 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                             }
                         }
                         if (numActiveFilters > 0) {
-                            retval += i18n.sprintf(i18n.gettext("Found %d messages%s that:"), this.getResultNumTotal(), unreadText);
+                            retval += i18n.sprintf(i18n.ngettext("Found %d message%s that:", "Found %d messages%s that:", this.getResultNumTotal()), this.getResultNumTotal(), unreadText);
                         }
                         else {
-                            retval += i18n.sprintf(i18n.gettext("Found %d messages%s:"), this.getResultNumTotal(), unreadText);
+                            retval += i18n.sprintf(i18n.ngettext("Found %d message%s:", "Found %d messages%s:", this.getResultNumTotal()), this.getResultNumTotal(), unreadText);
                         }
                     }
 

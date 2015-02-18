@@ -57,7 +57,7 @@ $message-body: #999999;
     text-overflow: ellipsis;
   }
   .message-author {
-    color: $purple5;
+    color: $theme_person_name_color;
     @extend .header_item_template
   }
 
@@ -70,6 +70,10 @@ $message-body: #999999;
 
   .message-subject {
     @extend .header_item_template;
+    cursor: pointer;
+  }
+
+  .js_messageTitle {
     cursor: pointer;
   }
 
@@ -338,7 +342,7 @@ $message-body: #999999;
   &.unread {
     .message-author {
       font-weight: bold;
-      color: $purple5;
+      color: $theme_person_name_color;
     }
     .message-subject {
       font-weight: 600;
@@ -361,7 +365,7 @@ $message-body: #999999;
 
   &.SynthesisPost {
     .message-subject {
-      background-color: $green;
+      background-color: $theme_synthesis_header_bg;
       margin: 0;
       padding: 10px;
       color: $white;

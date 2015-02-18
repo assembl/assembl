@@ -135,6 +135,7 @@
 .idealist-abovedropzone {
   @include box-sizing(border-box);
   position: absolute;
+  cursor: pointer;
   top: 0px;
   right: 0;
   left: 0;
@@ -152,6 +153,7 @@
 .idealist-dropzone {
   @include box-sizing(border-box);
   position: absolute;
+  cursor: pointer;
   right: 0;
   bottom: -1px;
   left: 0;

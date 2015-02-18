@@ -74,6 +74,12 @@ $inputDisabledBackground: $gray3 !default;
 $inputSelectedControl: #344957 !default;
 $inputBaseLineHeight: 1.3em !default;
 
+// Shared variables for calculations
+// -------------------------
+//This MUST match the variables in navigation.js
+$group_header_height: 3px;
+$group_editable_header_height: 25px;
+
 // Form states and alerts
 // -------------------------
 $warningText: #c09853 !default;

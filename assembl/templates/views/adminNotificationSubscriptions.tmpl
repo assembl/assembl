@@ -3,52 +3,47 @@
     <nav class="sidebar-nav">
         <ul class="man pan adminMenu">
           <li>
-            <a href="#edition" class="menu">{{ gettext('edit discussion') }}</a>
-          </li>
-          <li class="active">
-            <a href="#notifications" class="menu">{{ gettext('edit notifications') }}</a>
+            <a href="#edition" class="menu">{{ gettext('Edit discussion') }}</a>
           </li>
           <li>
-            <a href="#partners" class="menu">{{ gettext('edit partners') }}</a>
+            <a href="#settings" class="menu">{{ gettext('Discussion settings') }}</a>
+          </li>
+          <li class="active">
+            <a href="#notifications" class="menu">{{ gettext('Edit notifications') }}</a>
+          </li>
+          <li>
+            <a href="#partners" class="menu">{{ gettext('Edit partners') }}</a>
           </li>
           <li class="mtxl">
-            <a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a>
+            <a href="/{{ discussion.slug }}/">{{ gettext('Back to discussion') }}</a>
           </li>
         </ul>
     </nav>
   </div>
   <div class="gu gu-3of4 admin-section">
-
+    <section class="section">
     <div class="admin-title">
-      <h3 class="h3">Notifications - {{discussion.topic}}</h3>
+      <h3 class="h3">{{ gettext('Edit notifications') }} - {{discussion.topic}}</h3>
     </div>
-    <div id="content-container" class="content-container">
+    <div id="content-container" class="content-container phl ptl">
+      <div class="bx bx-alert-success hidden">
+        <button class="btn btn-cancel btn-xs bx-close" type="button">
+          <i class="icon-delete"></i>
+        </button>
+        {{ gettext("Your change has been saved!") }}
+      </div>
+
       <div class="gr">
-        <div class="gu gu-1of2">
-          <% if(DiscussionNotifications.length) { %>
-          <form class="core-form">
-            <fieldset>
-              <% _.each(DiscussionNotifications, function(notification, index, list){ %>
+        <h3>{{ gettext('Default notifications') }}</h3>
+        <p>{{ gettext('These are the notifications which a user gets subscribed to when one of these conditions is matched: 1. The user clicks on the "Subscribe to discussion" button. 2. The user posts his/her first message, Assembl shows a subscription pop-in, and the user accepts subscribing. 3. The discussion parameter "Auto-subscribe users to default notifications when they register" is active and the user confirms their account.') }}</p>
+        <div id="notification-content" class="mbs"></div>
 
-                <div class="control-group">
-                  <label for="<%= notification.get('@id') %>" class="control-label"></label>
-                  <div class="controls">
-                    <label class="checkbox">
-                      <input type="checkbox" class="js_adminNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= notification.get('@id') %>">
-                      <%= i18n.gettext(notification.get('human_readable_description')) %>
-                    </label>
-                  </div>
-                </div>
+        <h3>{{ gettext('Auto-subscribe users to default notifications') }}</h3>
+        <div id="notification-auto-subscribe" class="mbs"></div>
 
-              <% }) %>
-            </fieldset>
-          </form>
-          <% } else { %>
-            <h4 class="h4">{{ gettext('no notifications') }}</h4>
-          <% } %>
-        </div>
       </div>
     </div>
+    </section>
   </div>
 </div>
 

@@ -57,7 +57,7 @@
 
   .chk-checkbox:checked ~ & {
     @extend .icon-check;
-    color: $purple;
+    color: $theme_checkbox_color;
   }
 
   .chk--muted .chk-checkbox:checked ~ & {
@@ -88,7 +88,7 @@
     &:checked + .custom-checkbox-element {
       @extend %icon;
       @extend .icon-check;
-      color: $purple;
+      color: $theme_checkbox_color;
     }
 
   }

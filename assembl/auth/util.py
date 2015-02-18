@@ -45,7 +45,7 @@ def get_permissions(user_id, discussion_id):
     session = get_session_maker()()
     if user_id in (Everyone, Authenticated):
         if not discussion_id:
-            return None
+            return []
         permissions = session.query(Permission.name).join(
             DiscussionPermission, Role).filter(
                 (DiscussionPermission.discussion_id == discussion_id)
@@ -286,7 +286,7 @@ def add_user(name, email, password, role, force=False, username=None,
         user.name = name
         user.verified = True
         if password and change_old_password:
-            user.set_password(password)
+            user.password_p = password
         if username:
             if user.username:
                 user.username.username = username

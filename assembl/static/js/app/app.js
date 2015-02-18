@@ -34,5 +34,20 @@ define(['backbone.marionette', 'jquery'], function (Marionette, $) {
         }
     });
 
+    App.on('start', function(){
+
+        // change dynamically tab title
+        document.title = document.querySelector('#discussion-topic').value;
+
+        // change dynamically favicon in tab
+        var link = document.createElement('link');
+        link.type = 'image/x-icon';
+        link.rel = 'shortcut icon';
+        link.href = '/static/img/icon/favicon.ico';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    });
+
+
     return App;
 });

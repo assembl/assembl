@@ -1,23 +1,27 @@
 <div class="gr mts">
- <div class="gu gu-1of2">
-  <div class="block-content">
-    <h2>{{ gettext('Instigated by') }}</h2>
-    <% if(instigator){ %>
-    	<% if(editInstigator){ %>
-    	  <div class="instigator-editor"></div>
-    	<% }else{ %>
-    		<div class="instigator js_editDescription"><%= instigator.get('description') %></div>
-    	<% } %>
-    <% }else{ %>
-       <p>{{ gettext('there are no instigator for this discussion') }} - <a href="<%= editInstigatorUrl() %>"> {{ gettext('edit instigator') }} </a></p>
-    <% } %>
-  </div>
- </div>
- <div class="gu gu-last">
-  <div class="block-content">
-  	<% if(instigator){ %>
-      <div class="tac"><img src="<%= instigator.get('logo') %>" height="51" ></div>
-    <% } %>
-  </div>
- </div>
+   <div class="gu gu-1of2">
+    <div class="block-content">
+		 <% if( _.size(instigator) || userCanEditDiscussion){ %>
+				<% if(userCanEditDiscussion){ %>
+					<h2 class="dispib mrl">{{ gettext('Instigated by') }}</h2> <a href="<%= editInstigatorUrl() %>"> {{ gettext('edit instigator') }} </a>
+				<% } else { %>
+					<h2>{{ gettext('Instigated by') }}</h2>
+				<% } %>
+				<% if( editInstigator ) { %>
+					 <div class="instigator-editor"></div>
+				 <% } else { %>
+				  <% if(_.size(instigator)){ %>
+					<div class="instigator js_editDescription"><%= instigator.get('description') %></div>
+					<% } %>
+			 <% } %>
+		 <% } %>
+    </div>
+   </div>
+   <div class="gu gu-last">
+    <div class="block-content">
+    	<% if( _.size(instigator) ){ %>
+      	<div class="tac"><img class="instigator-logo" src="<%= instigator.get('logo') %>"></div>
+      <% } %>
+    </div>
+   </div>
 </div>

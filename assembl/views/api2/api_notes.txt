@@ -1,0 +1,91 @@
+# New API plans
+
+To be more RESTful:
+
+We'll have identifiers (RDF and RESTful read endpoints) of the form
+
+http://<server>/data/<type name>/<numeric-id>/
+
+It is generally possible to GET/PUT/DELETE at those identifiers.
+
+(Note: "type name" refers to JSON-LD abbreviations of RDF class name, which will generally correspond with the python classname but maybe not. The correspondance will be guaranteed by `assembl.lib.sqla.get_named_class`.)
+However, though it MAY be possible to POST at http://server/data/<type name>/ positions, we will instead use traversal to give more information at one point.
+The general traversal pattern will be:
+
+http://<server>/data/<type name>/<numeric-id>/(<collection_name>/<numeric-id>/)*
+Where POSTS will generally happen at the <collection_name> positions.
+
+Example: 
+
+We will be able to get implicitly filtered results from such URLs as
+http://<server>/data/Discussion/1/ideas
+or
+http://<server>/data/Discussion/1/ideasets/1/ideas
+
+Similarly, if we POST to 
+http://<server>/data/Discussion/1/ideasets/1/ideas
+The new Idea will implicitly receive a SubGraphIdeaAssociation, and will be tied to the discussion even if that is not in the JSON.
+You will get back the new idea's ID in the form of http://<server>/data/Idea/<numericid>, and further PUT/GET/DELETEs should be to that address.
+
+This will be non-trivial to code, but adds a lot of RESTful value.
+So the widget interaction would look like:
+
+Widget receives an initial config URL, and gets it:
+
+GET /data/Config/1
+-> {
+    idea_url: local:Discussion/1/widgets/1/ideas/1/children
+    message_url = local:Discussion/1/widgets/1/messages
+    ...
+}
+(I will still use local: as a shortcut for the namespace http://<server>/data/, which will be specified in the jsonld @context.)
+It turns out that widgets will be a collection of widget objects, which will be a subclass of ExplicitSubGraphView... so the @id of local:Discussion/1/widgets/1 would be local:IdeaGraphView/1 but that is not something that the widget will need to know. Similarly, the @id of local:Discussion/1/widgets/1/ideas/1 will be local:Idea/1, but that is also opaque to the widget.
+
+So adding an idea will be as simple as
+
+POST http://<servername>/data/Discussion/1/widgets/1/ideas/1/children
+{ @type="Idea" ... } 
+-> local:Idea/10
+This will implicitly create:
+
+1. a sub-idea as a child of Idea/1
+2. a NonTraversableIdeaLink between local:Idea/1 and local:Idea/10 (that subtype of IdeaLink will be selected by the Widget subclass...)
+    (which would be at local:/IdeaLink/12)
+3. A SubGraphIdeaAssociation between local:IdeaGraphView/1 and local:Idea/10
+4. A SubGraphIdeaLinkAssociation between local:IdeaGraphView/1 and local:/IdeaLink/12
+
+Then, adding a message related to the idea would be
+
+POST http://<servername>/data/Discussion/1/widgets/1/messages
+{ @type="Message", idea="local:Idea/10" ...}
+-> local:Post/11
+
+Internally, the widget will affect the post to set a flag on the message so it is out of the main message panel.
+(We will retrieve the widget's messages through the message's ideas; eventually we may still define a ExplicitSubMessageView, comparable to the ExplicitSubGraphView... but that can wait.)
+
+next steps:
+voir comment cornice survit à traversal. Pas clair.
+Pas clair non plus ce que ça nous achète.
+Comprendre comment on obtient une vue.
+On aurait essentiellement une vue par individu/collection.
+Il faut que le RootFactory arrive à donner un wrapper qui donne la traversée des contextes. Sigh.
+Cacher l'infrastructure SQLAlchemy qui nous donne les collections?
+Même en ayant la traversée, comment affecte-t-elle les requêtes? distinguer soigneusement GET/POST!
+(GET sur un individu pourrait toujours rediriger sur l'identité canonique?)
+GET sur une collection pourrait nous donner la superclasse?
+
+Type-GET {?} -> ID de tous les objets disponibles?
+Type-POST -> créer un objet de type X
+Collection-GET -> ID de tous les objets de la collection. (ou objets eux-même.) Paramétrable. Joins automatiques.
+Collection-POST -> Ajouter un objet avec ce qui le fait lié à la collection.
+Individu-GET -> Objet
+Individu-PUT, DELETE, etc.
+
+Une collection a une classe de base, donc une query de base.
+Il devrait être possible de créer un query "enrichie" avec la traversée. 
+Note: Il me faudra l'équivalent de sqlalchemy pour sparql... un jour!
+Souvent, la query est enrichie par join+filtre sur les individus traversés.
+Si c'est possible! 
+eg idee + ideaset... il faut deux joins. En fait, il me faut du double dispatch.
+ou multiple, pcq l'étape suivante dépend de tout le trajet... ou non?
+(Note: c'est même pas le cas principal!)

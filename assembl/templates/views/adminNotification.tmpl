@@ -1,0 +1,5 @@
+<label class="checkbox">
+	<input type="checkbox" class="js_adminNotification" value="<%= notification.get('@type') %>" <%= notification.get('status') === 'ACTIVE' ? 'checked':'' %> id="<%= notification.get('@id') %>">
+	<%= i18n.gettext(notification.get('human_readable_description')) %>
+</label>
+

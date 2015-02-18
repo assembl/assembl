@@ -1521,6 +1521,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     $(document.body).append(annotatorEditor.element);
                     var save = $(annotatorEditor.element).find(".annotator-save");
                     save.text(i18n.gettext('Send to clipboard'));
+                    var cancel = $(annotatorEditor.element).find(".annotator-cancel");
+                    cancel.text(i18n.gettext('Cancel'));
                     var textarea = annotatorEditor.fields[0].element.firstChild,
                         div = $('<div>', { 'draggable': true, 'class': 'annotator-textarea' });
 

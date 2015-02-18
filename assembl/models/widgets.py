@@ -134,7 +134,7 @@ class Widget(DiscussionBoundBase):
             self.db.add(state)
         state.state_json = user_state
 
-    def update_json(self, json, user_id=Everyone):
+    def update_from_json(self, json, user_id=Everyone, ctx=None):
         from ..auth.util import user_has_permission
         if user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
             new_type = json.get('@type', self.type)
@@ -144,7 +144,7 @@ class Widget(DiscussionBoundBase):
                     return None
                 new_type = polymap[new_type].class_
                 new_instance = self.change_class(new_type)
-                return new_instance.update_json(json)
+                return new_instance.update_from_json(json, user_id, ctx)
             if 'settings' in json:
                 self.settings_json = json['settings']
             if 'discussion' in json:
@@ -523,7 +523,8 @@ class MultiCriterionVotingWidget(Widget):
                 yield {
                     'idea': Idea.uri_generic(link.idea_id),
                     '@type': 'voted',
-                    'state': vote_idea_ids[link.idea_id].generic_json()
+                    'state': vote_idea_ids[link.idea_id].generic_json(
+                        user_id=user_id)
                 }
             else:
                 yield {
@@ -553,6 +554,7 @@ class MultiCriterionVotingWidget(Widget):
                     settings['votable_root_id'])
             except Exception as e:
                 print "Cannot find votable root.", settings['votable_root_id']
+                return
             if len(votable_root_idea.children):
                 for child in votable_root_idea.children:
                     self.add_votable(child)

@@ -14,7 +14,8 @@ from assembl.models.mail import IMAPMailbox, MailingList
 from assembl.auth import (
     R_PARTICIPANT, R_SYSADMIN, R_ADMINISTRATOR, SYSTEM_ROLES,
     P_SYSADMIN, P_ADMIN_DISC, Everyone)
-from assembl.auth.util import add_multiple_users_csv, user_has_permission
+from assembl.auth.util import (
+    add_multiple_users_csv, user_has_permission, get_permissions)
 from assembl.models.auth import (
     create_default_permissions, User, Username, AgentProfile)
 
@@ -86,8 +87,11 @@ def discussion_admin(request):
 def discussion_edit(request):
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
-    partners = json.dumps([
-        p.generic_json() for p in discussion.partner_organizations])
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
+    partners = json.dumps([p.generic_json(
+        user_id=user_id, permissions=permissions
+        ) for p in discussion.partner_organizations])
 
     if not discussion:
         raise HTTPNotFound("Discussion with id '%d' not found." % (

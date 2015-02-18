@@ -1,10 +1,10 @@
 'use strict';
 
-define(['backbone.marionette', 'models/agents'],
-    function (Marionette, Agents) {
+define(['backbone.marionette', 'models/userProfile', 'utils/i18n', 'jquery', 'common/context'],
+    function (Marionette, userProfile, i18n, $, Ctx) {
 
-        var userProfile = Marionette.ItemView.extend({
-            template: '#tmpl-profile',
+        var profile = Marionette.ItemView.extend({
+            template: '#tmpl-userProfile',
             className: 'admin-profile',
             ui: {
                 close: '.bx-alert-success .bx-close',
@@ -13,13 +13,12 @@ define(['backbone.marionette', 'models/agents'],
             },
 
             initialize: function () {
-                this.model = new Agents.Model();
-                this.model.getSingleUser();
-              this.model.fetch();
+                this.model = new userProfile.Model();
+                this.model.fetch();
             },
 
             modelEvents: {
-                'sync': 'render'
+                'change sync': 'render'
             },
 
             events: {
@@ -36,35 +35,44 @@ define(['backbone.marionette', 'models/agents'],
             saveProfile: function (e) {
                 e.preventDefault();
 
-                var username = this.$('input[name=username]').val(),
-                    name = this.$('input[name="name"]').val(),
-                    pass1 = this.$('input[name="password1"]').val(),
-                    pass2 = this.$('input[name="password2"]').val(),
-                    email = this.$('input[name="add_email"]').val();
+                var real_name = this.$('input[name="real_name"]').val();
 
-                this.model.set({
-                    username: username,
-                    name: name,
-                    password1: pass1,
-                    password2: pass2,
-                    add_email: email
-                });
+                this.model.set({ real_name: real_name});
 
                 this.model.save(null, {
                     success: function (model, resp) {
-                        console.debug('succes', model, resp)
+                        $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
+                            ele: 'body',
+                            type: 'success',
+                            offset: {from: 'bottom', amount:20},
+                            align: 'left',
+                            delay: 4000,
+                            allow_dismiss: true,
+                            stackup_spacing: 10
+                        });
                     },
                     error: function (model, resp) {
-                        console.debug('error', model, resp)
+                        $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
+                            ele: 'body',
+                            type: 'error',
+                            offset: {from: 'bottom', amount:20},
+                            align: 'left',
+                            delay: 4000,
+                            allow_dismiss: true,
+                            stackup_spacing: 10
+                        });
                     }
                 })
             },
 
-            close: function () {
-                this.$('.bx-alert-success').addClass('hidden');
+            templateHelpers: function(){
+                return {
+                    urlDiscussion: function(){
+                        return '/' + Ctx.getDiscussionSlug() + '/';
+                    }
+                }
             }
-
         });
 
-        return userProfile;
+        return profile;
     });

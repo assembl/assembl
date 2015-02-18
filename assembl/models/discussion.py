@@ -8,8 +8,10 @@ from sqlalchemy import (
     Column,
     Integer,
     UnicodeText,
+    SmallInteger,
     DateTime,
     Text,
+    Boolean,
     event,
     and_,
 )
@@ -50,6 +52,7 @@ class Discussion(DiscussionBoundBase):
     introduction = Column(UnicodeText)
     introductionDetails = Column(UnicodeText)
     settings = Column(Text())  # JSON blob
+    subscribe_to_notifications_on_signup = Column(Boolean, default=False)
 
     @property
     def admin_source(self):
@@ -96,7 +99,7 @@ class Discussion(DiscussionBoundBase):
         if 'root_idea' in kwargs:
             root_idea = kwargs.get('root_idea')
             if root_idea:
-                root_idea.discussion = this
+                root_idea.discussion = self
         else:
             from .idea import RootIdea
             self.root_idea = RootIdea(discussion=self)
@@ -104,14 +107,14 @@ class Discussion(DiscussionBoundBase):
         if 'table_of_contents' in kwargs:
             table_of_contents = kwargs.get('table_of_contents')
             if table_of_contents:
-                table_of_contents.discussion = this
+                table_of_contents.discussion = self
         else:
             from .idea_graph_view import TableOfContents
             self.table_of_contents = TableOfContents(discussion=self)
         if 'next_synthesis' in kwargs:
             next_synthesis = kwargs.get('next_synthesis')
             if next_synthesis:
-                next_synthesis.discussion = this
+                next_synthesis.discussion = self
         else:
             from .idea_graph_view import Synthesis
             synthesis = Synthesis(discussion=self)
@@ -119,6 +122,9 @@ class Discussion(DiscussionBoundBase):
         participant = self.db.query(Role).filter_by(name=R_PARTICIPANT).one()
         participant_template = UserTemplate(discussion=self, for_role=participant)
         self.db.add(participant_template)
+
+    def unique_query(self, query):
+        return query.filter_by(slug=self.slug), True
 
     def serializable(self):
         return {
@@ -214,11 +220,8 @@ class Discussion(DiscussionBoundBase):
 
     def get_all_agents_preload(self, user=None):
         from assembl.views.api.agent import _get_agents_real
-        from ..auth.util import user_has_permission
         return json.dumps(_get_agents_real(
-            discussion=self,
-            include_email=user and user_has_permission(
-                self.id, user.id, P_ADMIN_DISC)))
+            self, user.id if user else Everyone))
 
     def get_readers_preload(self):
         return json.dumps([user.serializable() for user in self.get_readers()])
@@ -356,6 +359,13 @@ class Discussion(DiscussionBoundBase):
 
     crud_permissions = CrudPermissions(
         P_SYSADMIN, P_READ, P_ADMIN_DISC, P_SYSADMIN)
+
+    def get_discussion_locales(self):
+        # TODO: Notion of active locales per discussion.
+        # Use installation settings for now.
+        # Ordered list, not empty.
+        from assembl.lib.config import get_config
+        return get_config().get('available_languages', 'fr en').split()
 
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):

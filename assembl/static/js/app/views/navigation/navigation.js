@@ -10,6 +10,9 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             hideHeader: true,
             gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
             minWidth: 350,
+            //This MUST match the variables in _variables.scss
+            group_header_height: 3,
+            group_editable_header_height: 25,
             getTitle: function () {
                 return 'Navigation'; // unused
             },
@@ -176,7 +179,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 var _header = $('#header').height(),
                     _window = $(window).height(),
                     _li = 40 * this.num_items,
-                    _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader").first().hasClass('editable') ? 25 : 3 ),
+                    _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader").first().hasClass('editable') ? this.group_editable_header_height : this.group_header_height ),
                     _sideBarHeight = (_window - _header) - _headerGroup,
                     that = this;
 

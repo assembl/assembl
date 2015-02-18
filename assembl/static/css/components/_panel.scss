@@ -23,10 +23,10 @@
     }
   }
   .panel-section:first-child {
-    background-color: $green;
+    background-color: $theme_idea_header_bg;
     padding: 10px;
     .panel-editablearea {
-      background-color: $green;
+      background-color: $theme_idea_header_bg;
     }
   }
 
@@ -46,25 +46,6 @@
 // When is dragging something on
 // ****************
 .panel.is-dragover {
-}
-
-// blocked and with a loading message
-// ****************
-.panel.is-loading {
-  cursor: wait;
-
-  &:after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    @include z-index("float");
-
-    display: block;
-    content: "";
-    background: rgba(0, 0, 0, .15) url(#{$img-dir}/panel/loading.gif) no-repeat center center;
-  }
 }
 
 /* Animations */
@@ -149,21 +130,21 @@
   height: 40px;
   padding: 0; /* required for minimized state */
   position: relative;
-  background-color: $purple3;
+  background-color: $theme_header_panel;
   color: $white;
   border-right: 1px solid $purple5;
 
   .panel-header-title,
   .panel-header-close {
     line-height: 40px;
-    color: $white;
+    color: $theme_header_panel_text_color;
   }
 
   .panel-header-title {
     padding: 0 0 0 10px;
     i {
       font-size: 22px;
-      color: $green;
+      color: $theme_header_panel_icon_color;
       margin-right: 2px;
     }
   }
@@ -225,30 +206,30 @@
 .groupBody .groupPanel .panelContents {
   position: absolute;
   width: 100%;
-  @include calc(height, "100vh - 40px"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+  @include calc(height, "100vh - #{$theme_header_height} - #{$group_header_height}"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
 
 .groupBody.editable .groupPanel .panelContents {
-  @include calc(height, "100vh - 61px"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+  @include calc(height, "100vh - #{$theme_header_height} - #{$group_editable_header_height}"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
 
 .groupBody .groupPanel header ~ .panelContents {
-  //@include calc(height, "100vh - 40px");  need hack safari
-  @include calc(height, "100% - 40px"); /* retain the height of the header */
+  //@include calc(height, "100vh - $theme_header_height - #{$group_header_height}");  need hack safari
+  @include calc(height, "100% - #{$theme_header_height} - #{$group_header_height}"); /* retain the height of the header */
 }
 
 /* CSS hack to target specificly IE >= 10 (see browserhacks.com). IE uses wrong 100% value in previous rule */
 _:-ms-input-placeholder, :root .groupBody .groupPanel header ~ .panelContents {
-  @include calc(height, "100vh - 76px");
+  @include calc(height, "100vh - #{$theme_header_height} - #{$group_header_height} - 15px");
 }
 
 _:-ms-input-placeholder, :root .editable.groupBody .groupPanel header ~ .panelContents {
-  @include calc(height, "100vh - 76px");
+  @include calc(height, "100vh - #{$theme_header_height} - #{$group_editable_header_height} - 15px");
 }
 
 .groupBody.editable .groupPanel header ~ .panelContents {
-  //@include calc(height, "100vh - 40px"); need hack safari
-  @include calc(height, "100% - 40px"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+  //@include calc(height, "100vh - #{$theme_header_height} - #{$group_header_height}"); need hack safari
+  @include calc(height, "100% - #{$theme_header_height} - #{$group_header_height}"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
 
 .panelContents > div {

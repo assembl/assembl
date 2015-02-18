@@ -15,7 +15,7 @@ $harvesterAvatarSize: 24px;
     font-size: 13px; //This should be rem or something - benoitg
     position: relative;
     display: block;
-    background-color: $purple4;
+    background-color: $theme_extract_bg;
     margin: 1em 0;
     &:hover {
       a.segment-link {
@@ -29,6 +29,7 @@ $harvesterAvatarSize: 24px;
       @extend %icon;
       margin: 0 0 1em 0;
       font-style: italic;
+      @include word-wrap();
 
       &:before, &:after {
         content: '\e805';
@@ -45,7 +46,7 @@ $harvesterAvatarSize: 24px;
 
     a {
       font-style: normal;
-      color: $purple1;
+      color: $theme_activelink_color;
       text-decoration: none;
       &:hover {
         text-decoration: underline;
@@ -62,7 +63,7 @@ $harvesterAvatarSize: 24px;
           font-size: 12px;
         }
         .creatorName {
-          color: $purple6;
+          color: $theme_person_name_color;
           font-size: 11px;
           vertical-align: text-bottom;
         }

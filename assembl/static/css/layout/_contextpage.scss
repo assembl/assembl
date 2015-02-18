@@ -176,7 +176,6 @@
       padding-right: 0.3em;
     }
   }
-
 }
 
 #context-instigator {
@@ -193,4 +192,13 @@
       border: 1px solid #cccccc;
     }
   }
+  .instigator-logo{
+    max-width: em(300);
+    max-height: em(120);
+  }
+}
+
+.context-objective.ctx_edit, 
+.context-introduction.ctx_edit {
+  cursor: text;
 }

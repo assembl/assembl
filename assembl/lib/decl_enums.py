@@ -35,7 +35,7 @@ class EnumMeta(type):
             if isinstance(v, tuple):
                 sym = reg[v[0]] = EnumSymbol(cls, k, *v)
                 setattr(cls, k, sym)
-        return type.__init__(cls, classname, bases, dict_)
+        super(EnumMeta, cls).__init__(classname, bases, dict_)
 
     def __iter__(self):
         return iter(self._reg.values())

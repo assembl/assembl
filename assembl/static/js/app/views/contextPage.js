@@ -1,35 +1,55 @@
 'use strict';
 
-define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'backbone.modal', 'backbone.marionette.modals', 'models/partner_organization'],
-    function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types, backboneModal, marionetteModals, organization) {
+define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'backbone.modal', 'backbone.marionette.modals', 'models/partners', 'models/discussion'],
+    function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types, backboneModal, marionetteModals, organization, Discussion) {
 
-
-        var Partners = Marionette.ItemView.extend({
-            template: '#tmpl-partnersOrganizations',
-            initialize: function () {
-                this.collection = new organization.Collection();
-                this.collection.fetch();
-            },
-            collectionEvents: {
-                'add change': 'render'
-            },
+        var Partner = Marionette.ItemView.extend({
+            template: '#tmpl-partnerItem',
+            className: 'gu gu-2of7 mrl',
             serializeData: function () {
-
-                this.collection.models = _.reject(this.collection.models, function(model){
-                    return model.get('is_initiator') === true
-                });
-
                 return {
-                    organizations: this.collection.models,
-                    ctx: Ctx
+                    organization: this.model
                 }
             },
-
             templateHelpers: function () {
                 return {
-                    editUrl: function () {
-                        return '/' + Ctx.getDiscussionSlug() + '/partners';
+                    htmlEntities: function(str){
+                        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
                     }
+                };
+            }
+
+        });
+
+        var PartnerList = Marionette.CompositeView.extend({
+            template: '#tmpl-loader',
+            childView: Partner,
+            className:'gr mvxl',
+            childViewContainer: '.partnersList',
+            initialize: function(){
+                var that = this,
+                    collectionManager = new CollectionManager();
+
+                this.collection = undefined;
+                this.nbOrganisations = 0;
+
+                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).
+                    then(function (DiscussionModel) {
+                        that.nbOrganisations = DiscussionModel.models.length;
+                        that.collection = DiscussionModel;
+                        that.template = '#tmpl-partnerList';
+                        if(that.childViewContainer){
+                            that.render();
+                        }
+
+                    });
+            },
+
+            serializeData: function(){
+                return {
+                    userCanEditDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
+                    nbOrganisations: this.nbOrganisations,
+                    urlEdit: '/'+ Ctx.getDiscussionSlug() +'/partners'
                 }
             }
 
@@ -1204,15 +1224,18 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
         });
 
         var Instigator = Marionette.ItemView.extend({
-            template: '#tmpl-instigator',
+            template: '#tmpl-loader',
             initialize: function(){
                 var that = this,
                     collectionManager = new CollectionManager();
 
+                this.instigator = undefined;
+
                 $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(function(partners){
                     that.instigator = _.find(partners.models, function(partner){
-                        return partner.get('is_initiator')
+                        return partner.get('is_initiator');
                     });
+                    that.template = '#tmpl-instigator';
                     that.render();
                 });
 
@@ -1227,14 +1250,14 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
               'click @ui.editDescription': 'editDescription'
             },
 
-            collectionEvents: {
-                'add change': 'render'
-            },
-
             serializeData: function () {
+                var isConnected = (Ctx.getCurrentUserId()) ? true : false;
+
                 return {
                    instigator: this.instigator,
-                   editInstigator: this.editInstigator
+                   editInstigator: this.editInstigator,
+                   Ctx: Ctx,
+                   userCanEditDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
                 }
             },
 
@@ -1287,41 +1310,80 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
         });
 
-        var contextPage = Marionette.LayoutView.extend({
-            template: '#tmpl-contextPage',
-            panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
-            className: 'homePanel',
-            gridSize: AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE,
-            hideHeader: true,
-            getTitle: function () {
-                return i18n.gettext('Home'); // unused
+        var Introduction = Marionette.ItemView.extend({
+            template: '#tmpl-loader',
+            initialize: function(){
+                this.editingIntroduction = false;
+                this.editingObjective = false;
+
+                this.model = undefined;
+
+                var that = this,
+                    collectionManager = new CollectionManager();
+
+                $.when(collectionManager.getDiscussionModelPromise()).then(function (DiscussionModel) {
+                    that.model = DiscussionModel;
+                    that.template = '#tmpl-introductions';
+                    that.render();
+                });
             },
-            regions: {
-                organizations: '#context-partners',
-                synthesis: '#context-synthesis',
-                statistics: '#context-statistics',
-                instigator: '#context-instigator'
+
+            ui: {
+                introduction: '.js_editIntroduction',
+                objective: '.js_editObjective',
+                seeMoreIntro: '.js_introductionSeeMore',
+                seeMoreObjectives: '.js_objectivesSeeMore'
             },
 
             events: {
-                'click #js_introductionSeeMore': 'introductionSeeMore'
-            },
-
-            initialize: function (options) {
-                this.listenTo(this, 'contextPage:render', this.render);
+                'click @ui.seeMoreIntro': 'seeMore',
+                'click @ui.seeMoreObjectives': 'seeMore',
+                'click @ui.introduction': 'editIntroduction',
+                'click @ui.objective':'editObjective'
             },
 
             serializeData: function () {
                 return {
-                    ctx: Ctx
+                    context: this.model,
+                    editingIntroduction: this.editingIntroduction,
+                    editingObjective: this.editingObjective,
+                    userCanEditDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
                 }
             },
 
-            introductionSeeMore: function () {
+            onRender: function(){
+              if(this.model) {
+                if (this.editingIntroduction) {
+                    this.renderCKEditorIntroduction();
+                }
+
+                if (this.editingObjective) {
+                    this.renderCKEditorObjective();
+                }
+                //console.log("Just rendered with model, aplying elipsis");
+                this.applyEllipsisToSection(".context-introduction", this.ui.seeMoreIntro);
+                this.applyEllipsisToSection(".context-objective", this.ui.seeMoreObjectives);
+              }
+            },
+
+            seeMore: function (e) {
+                e.stopPropagation();
                 $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
-                    var model = new Backbone.Model({
-                        introduction: discussion.introduction
-                    });
+                    if($(e.target).hasClass('js_introductionSeeMore')) {
+                        var model = new Backbone.Model({
+                            content: discussion.introduction,
+                            title: i18n.gettext('Context')
+                        });
+                    }
+                    else if($(e.target).hasClass('js_objectivesSeeMore')) {
+                        var model = new Backbone.Model({
+                            content: discussion.objectives,
+                            title: i18n.gettext('Debate objectives')
+                        });
+                    }
+                    else {
+                        throw new Exception("Unknown event source");
+                    }
 
                     var Modal = Backbone.Modal.extend({
                         template: _.template($('#tmpl-homeIntroductionDetail').html()),
@@ -1334,115 +1396,76 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 });
             },
 
-            onRender: function () {
-                var partners = new Partners(),
-                    synthesis = new Synthesis(),
-                    statistics = new Statistics(),
-                    instigator = new Instigator();
-
-                this.instigator.show(instigator);
-                this.statistics.show(statistics);
-                this.synthesis.show(synthesis);
-                this.organizations.show(partners);
-
-                this.displayFieldsContext();
+            editIntroduction: function(){
+                if (Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
+                    this.editingIntroduction = true;
+                    this.render();
+                }
             },
 
-            displayFieldsContext: function () {
+            editObjective: function(){
+                if (Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
+                    this.editingObjective = true;
+                    this.render();
+                }
+            },
+
+            renderCKEditorIntroduction: function () {
                 var that = this,
-                    currentUser = Ctx.getCurrentUser(),
-                    canEdit = currentUser.can(Permissions.ADMIN_DISCUSSION) || false;
+                    area = this.$('.context-introduction-editor');
 
-                $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
+                var introduction = this.model.get('introduction');
 
-                    that.objectivesField = new CKEditorField({
-                        'model': discussion,
-                        'modelProp': 'objectives',
-                        'placeholder': 'Objectives',
-                        'canEdit': canEdit
-                    });
-                    // add editable "introduction" field
-                    that.introductionField = new CKEditorField({
-                        'model': discussion,
-                        'modelProp': 'introduction',
-                        'placeholder': 'Introduction',
-                        'canEdit': canEdit
-                    });
-
-                    that.$('.objectives').empty();
-                    that.$('.introduction').empty();
-
-                    // we implement here get() and save() methods (needed by CKEditor), so we mock a model instance
-                    // TODO: find a better solution, for example create and use a real Discussion model instead?
-                    discussion.get = function (field) {
-                        return this[field];
-                    };
-
-                    discussion.save = function (field, value) {
-                        this[field] = value;
-
-                        // PUT changed data to the discussion endpoint
-                        var endpoint_url = Ctx.getApiV2DiscussionUrl();
-                        var post_data = {};
-                        post_data[field] = value;
-                        $.ajax({
-                            method: 'PUT',
-                            url: endpoint_url,
-                            data: $.param(post_data),
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        }).success(function (data) {
-                            //console.log("discussion PUT success:", data);
-                        });
-
-                        return true;
-                    };
-
-                    // apply the dots again after text has been edited
-                    var onCKEditorChange = function () {
-                        console.log("Updating dotdotdot");
-                        // FIXME: I don't know why these events do not work, we instead have to re-build the ellpisis manually
-                        //that.$(".introduction .ckeditorField-mainfield").trigger('update.dot');
-                        //that.$(".introduction .ckeditorField-mainfield").trigger('update');
-                        that.applyEllipsisToIntroduction();
-                    };
-                    that.listenTo(that.introductionField, "save", onCKEditorChange);
-                    that.listenTo(that.introductionField, "cancel", onCKEditorChange);
-                    // end of FIXME
-
-                    // show discussion title
-                    that.$(".js_discussionTitle").html(discussion.topic);
-
-                    that.objectivesField.renderTo(that.$('.objectives'));
-                    that.introductionField.renderTo(that.$('.introduction'));
-
-                    if (canEdit) {
-                        // Not clear why this is necessary.
-                        that.objectivesField.delegateEvents();
-                        that.introductionField.delegateEvents();
-                    }
-
-                    that.applyEllipsisToIntroduction();
-
+                this.introField = new CKEditorField({
+                    'model': this.model,
+                    'modelProp': 'introduction'
                 });
 
+                this.introField.on('save cancel', function () {
+                    that.editingIntroduction = false;
+                    that.render();
+                });
+
+                this.introField.renderTo(area);
+                this.introField.changeToEditMode();
             },
 
-            applyEllipsisToIntroduction: function(){
+            renderCKEditorObjective: function () {
+                var that = this,
+                    area = this.$('.context-objective-editor');
+
+                var objective = this.model.get('objectives');
+
+                this.objectiveField = new CKEditorField({
+                    'model': this.model,
+                    'modelProp': 'objectives'
+                });
+
+                this.objectiveField.on('save cancel', function () {
+                    that.editingObjective = false;
+                    that.render();
+                });
+
+                this.objectiveField.renderTo(area);
+                this.objectiveField.changeToEditMode();
+            },
+
+            applyEllipsisToSection: function(sectionSelector, seemoreUi){
                 /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
                  * Read More links for introduction preview
                  */
                 var that = this;
                 setTimeout(function(){
-                    that.$(".introduction .ckeditorField-mainfield").dotdotdot({
-                        after: "#introduction-button-see-more",
-                        height: 70,
+                    that.$(sectionSelector).dotdotdot({
+                        after: seemoreUi,
+                        height: 170,
                         callback: function (isTruncated, orgContent) {
                             //console.log("dotdotdot callback: ", isTruncated, orgContent);
                             if (isTruncated) {
-                                that.$('#introduction-button-see-more').show();
+                                seemoreUi.show();
                             }
                             else {
-                                that.$('#introduction-button-see-more').hide();
+                                seemoreUi.hide();
                             }
                         },
                         watch: "window"
@@ -1452,6 +1475,40 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
         });
 
-        return contextPage;
+        var ContextPage = Marionette.LayoutView.extend({
+            template: '#tmpl-contextPage',
+            panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
+            className: 'homePanel',
+            gridSize: AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE,
+            hideHeader: true,
+            getTitle: function () {
+                return i18n.gettext('Home'); // unused
+            },
+
+            regions: {
+                organizations: '#context-partners',
+                synthesis: '#context-synthesis',
+                statistics: '#context-statistics',
+                instigator: '#context-instigator',
+                introductions: '#context-introduction'
+            },
+
+            onRender: function () {
+                var partners = new PartnerList(),
+                    synthesis = new Synthesis(),
+                    statistics = new Statistics(),
+                    instigator = new Instigator(),
+                    introduction = new Introduction();
+
+                this.introductions.show(introduction);
+                this.instigator.show(instigator);
+                this.statistics.show(statistics);
+                this.synthesis.show(synthesis);
+                this.organizations.show(partners);
+            }
+
+        });
+
+        return ContextPage;
 
     });
