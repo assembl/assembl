@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-17 18:48-0500\n"
+"POT-Creation-Date: 2015-02-17 19:21-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -247,7 +247,8 @@ msgid "Context"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:1381
-msgid "Objectives"
+#: assembl/templates/views/introductions.tmpl:37
+msgid "Debate objectives"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:1485
@@ -661,16 +662,16 @@ msgstr ""
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:54
 #: assembl/static/js/app/views/admin/adminDiscussionSettings.js:48
-#: assembl/static/js/app/views/user/account.js:77
-#: assembl/static/js/app/views/user/account.js:153
+#: assembl/static/js/app/views/user/account.js:99
+#: assembl/static/js/app/views/user/account.js:175
 #: assembl/static/js/app/views/user/profile.js:44
 msgid "Your settings were saved"
 msgstr ""
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:65
 #: assembl/static/js/app/views/admin/adminDiscussionSettings.js:61
-#: assembl/static/js/app/views/user/account.js:89
-#: assembl/static/js/app/views/user/account.js:164
+#: assembl/static/js/app/views/user/account.js:111
+#: assembl/static/js/app/views/user/account.js:186
 #: assembl/static/js/app/views/user/profile.js:55
 msgid "Your settings fail to update"
 msgstr ""
@@ -847,7 +848,8 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:61 assembl/templates/views/userProfile.tmpl:33
+#: assembl/templates/profile.jinja2:61 assembl/templates/views/userProfile.tmpl:31
+#: assembl/templates/views/userProfile.tmpl:33
 msgid "Your name"
 msgstr ""
 
@@ -1211,13 +1213,6 @@ msgstr ""
 msgid "Number of posts in the entire discussion"
 msgstr ""
 
-#: assembl/templates/views/associateAccount.tmpl:5
-#: assembl/templates/views/associateAccount.tmpl:11
-#: assembl/templates/views/associateAccount.tmpl:18
-#: assembl/templates/views/associateAccount.tmpl:23
-msgid "dissociate"
-msgstr ""
-
 #: assembl/templates/views/associateAccount.tmpl:22
 msgid "valided your account"
 msgstr ""
@@ -1517,10 +1512,6 @@ msgstr ""
 
 #: assembl/templates/views/introductions.tmpl:26
 msgid "You probably want to add a context for this discussion"
-msgstr ""
-
-#: assembl/templates/views/introductions.tmpl:37
-msgid "Debate objectives"
 msgstr ""
 
 #: assembl/templates/views/introductions.tmpl:41
@@ -1897,10 +1888,6 @@ msgstr ""
 
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:31
 msgid "Notifiy me when"
-msgstr ""
-
-#: assembl/templates/views/userProfile.tmpl:31
-msgid "Display name"
 msgstr ""
 
 #: assembl/templates/views/userSubscriber.tmpl:4

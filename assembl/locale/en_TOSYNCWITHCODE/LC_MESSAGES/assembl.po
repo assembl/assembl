@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-17 18:48-0500\n"
-"PO-Revision-Date: 2015-02-04 17:36+0000\n"
+"POT-Creation-Date: 2015-02-17 19:21-0500\n"
+"PO-Revision-Date: 2015-02-18 00:19+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language-Team: English (Canada) "
 "(http://www.transifex.com/projects/p/assembl/language/en_CA/)\n"
@@ -251,7 +251,8 @@ msgid "Context"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:1381
-msgid "Objectives"
+#: assembl/templates/views/introductions.tmpl:37
+msgid "Debate objectives"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:1485
@@ -464,9 +465,7 @@ msgid "this %s"
 msgstr ""
 
 #: assembl/static/js/app/views/messageListPostQuery.js:55
-#, fuzzy, python-format
-#| msgid "Are in the conversation that follows post %s"
-#| msgid_plural "Are in the conversation that follows posts: %s"
+#, python-format
 msgid "Is in the conversation that follows %s"
 msgid_plural "Are in the conversation that follows: %s"
 msgstr[0] ""
@@ -669,16 +668,16 @@ msgstr ""
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:54
 #: assembl/static/js/app/views/admin/adminDiscussionSettings.js:48
-#: assembl/static/js/app/views/user/account.js:77
-#: assembl/static/js/app/views/user/account.js:153
+#: assembl/static/js/app/views/user/account.js:99
+#: assembl/static/js/app/views/user/account.js:175
 #: assembl/static/js/app/views/user/profile.js:44
 msgid "Your settings were saved"
 msgstr ""
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:65
 #: assembl/static/js/app/views/admin/adminDiscussionSettings.js:61
-#: assembl/static/js/app/views/user/account.js:89
-#: assembl/static/js/app/views/user/account.js:164
+#: assembl/static/js/app/views/user/account.js:111
+#: assembl/static/js/app/views/user/account.js:186
 #: assembl/static/js/app/views/user/profile.js:55
 msgid "Your settings fail to update"
 msgstr ""
@@ -858,6 +857,7 @@ msgid "Name"
 msgstr ""
 
 #: assembl/templates/profile.jinja2:61
+#: assembl/templates/views/userProfile.tmpl:31
 #: assembl/templates/views/userProfile.tmpl:33
 msgid "Your name"
 msgstr ""
@@ -1223,13 +1223,6 @@ msgstr "All messages"
 msgid "Number of posts in the entire discussion"
 msgstr ""
 
-#: assembl/templates/views/associateAccount.tmpl:5
-#: assembl/templates/views/associateAccount.tmpl:11
-#: assembl/templates/views/associateAccount.tmpl:18
-#: assembl/templates/views/associateAccount.tmpl:23
-msgid "dissociate"
-msgstr ""
-
 #: assembl/templates/views/associateAccount.tmpl:22
 msgid "valided your account"
 msgstr ""
@@ -1531,10 +1524,6 @@ msgstr ""
 
 #: assembl/templates/views/introductions.tmpl:26
 msgid "You probably want to add a context for this discussion"
-msgstr ""
-
-#: assembl/templates/views/introductions.tmpl:37
-msgid "Debate objectives"
 msgstr ""
 
 #: assembl/templates/views/introductions.tmpl:41
@@ -1923,10 +1912,6 @@ msgstr ""
 msgid "Notifiy me when"
 msgstr ""
 
-#: assembl/templates/views/userProfile.tmpl:31
-msgid "Display name"
-msgstr ""
-
 #: assembl/templates/views/userSubscriber.tmpl:4
 msgid "Subscription settings"
 msgstr ""
@@ -2115,52 +2100,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
-
-#~ msgid "Found %d messages%s that:"
-#~ msgstr ""
-
-#~ msgid "Found %d messages%s:"
-#~ msgstr ""
-
-#~ msgid "Synthesis published!"
-#~ msgstr ""
-
-#~ msgid "no notifications"
-#~ msgstr ""
-
-#~ msgid "name of partner"
-#~ msgstr ""
-
-#~ msgid "description"
-#~ msgstr ""
-
-#~ msgid "homepage partners"
-#~ msgstr ""
-
-#~ msgid "authorized url syntax: http://hompage.com or http://www.hompage.com"
-#~ msgstr ""
-
-#~ msgid "url partner logo"
-#~ msgstr ""
-
-#~ msgid "there are no instigator for this discussion"
-#~ msgstr ""
-
-#~ msgid "there are no partners for this discussion"
-#~ msgstr ""
-
-#~ msgid "profile"
-#~ msgstr ""
-
-#~ msgid "You have been unsubscribed"
-#~ msgstr ""
-
-#~ msgid "Currently you will be informed when:"
-#~ msgstr ""
-
-#~ msgid "Back to discussion"
-#~ msgstr ""
-
-#~ msgid "Email <%s> confirmed"
-#~ msgstr ""
 

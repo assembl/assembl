@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-17 18:48-0500\n"
-"PO-Revision-Date: 2015-02-04 17:40+0000\n"
+"POT-Creation-Date: 2015-02-17 19:21-0500\n"
+"PO-Revision-Date: 2015-02-18 00:19+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
@@ -255,9 +255,8 @@ msgid "Context"
 msgstr "Contexte"
 
 #: assembl/static/js/app/views/contextPage.js:1381
-#, fuzzy
-#| msgid "Debate objectives"
-msgid "Objectives"
+#: assembl/templates/views/introductions.tmpl:37
+msgid "Debate objectives"
 msgstr "Objectifs du débat"
 
 #: assembl/static/js/app/views/contextPage.js:1485
@@ -460,31 +459,25 @@ msgid " AND "
 msgstr " ET "
 
 #: assembl/static/js/app/views/messageListPostQuery.js:45
-#, fuzzy, python-format
-#| msgid "messages"
+#, python-format
 msgid "message \"%s\""
-msgstr "messages"
+msgstr "message \"%s\""
 
 #: assembl/static/js/app/views/messageListPostQuery.js:48
-#, fuzzy
-#| msgid "Last synthesis"
 msgid "this synthesis"
-msgstr "Dernière synthèse"
+msgstr "cette synthèse"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:51
-#, fuzzy, python-format
-#| msgid "%s %s"
+#, python-format
 msgid "this %s"
-msgstr "%s %s"
+msgstr "ce %s"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:55
-#, fuzzy, python-format
-#| msgid "Are in the conversation that follows post %s"
-#| msgid_plural "Are in the conversation that follows posts: %s"
+#, python-format
 msgid "Is in the conversation that follows %s"
 msgid_plural "Are in the conversation that follows: %s"
-msgstr[0] "Sont dans la conversation qui suit le message %s"
-msgstr[1] "Sont dans la conversation qui suit les messages %s"
+msgstr[0] "Est dans la conversation qui suit : %s"
+msgstr[1] "Sont dans la conversation qui suit : %s"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:71
 msgid "You haven't read yet"
@@ -587,20 +580,18 @@ msgstr[0] " (dont %d non-lu)"
 msgstr[1] " (dont %d non-lus)"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:568
-#, fuzzy, python-format
-#| msgid "Found %d messages%s that:"
+#, python-format
 msgid "Found %d message%s that:"
 msgid_plural "Found %d messages%s that:"
-msgstr[0] "%d messages trouvés%s correspondant à ces filtres:"
-msgstr[1] ""
+msgstr[0] "%d message trouvé%s correspondant à ces filtres :"
+msgstr[1] "%d messages trouvés%s correspondant à ces filtres :"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:571
-#, fuzzy, python-format
-#| msgid "Found %d messages%s:"
+#, python-format
 msgid "Found %d message%s:"
 msgid_plural "Found %d messages%s:"
-msgstr[0] "%d messages%s trouvés:"
-msgstr[1] ""
+msgstr[0] "%d message%s trouvé :"
+msgstr[1] "%d messages%s trouvés :"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:592
 #, python-format
@@ -681,32 +672,28 @@ msgid "Do you want to publish the synthesis?"
 msgstr "Voulez-vous publier la synthèse?"
 
 #: assembl/static/js/app/views/synthesisPanel.js:230
-#, fuzzy
-#| msgid "Synthesis published!"
 msgid "Synthesis has been successfully published!"
-msgstr "Synthèse publiée!"
+msgstr "La synthèse a été publiée avec succès !"
 
 #: assembl/static/js/app/views/synthesisPanel.js:237
-#, fuzzy
-#| msgid "Read the synthesis"
 msgid "Failed publishing synthesis!"
-msgstr "Lire la synthèse"
+msgstr "Erreur lors de la publication de la synthèse !"
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:54
 #: assembl/static/js/app/views/admin/adminDiscussionSettings.js:48
-#: assembl/static/js/app/views/user/account.js:77
-#: assembl/static/js/app/views/user/account.js:153
+#: assembl/static/js/app/views/user/account.js:99
+#: assembl/static/js/app/views/user/account.js:175
 #: assembl/static/js/app/views/user/profile.js:44
 msgid "Your settings were saved"
 msgstr "Vos paramètres ont été sauvegardés"
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:65
 #: assembl/static/js/app/views/admin/adminDiscussionSettings.js:61
-#: assembl/static/js/app/views/user/account.js:89
-#: assembl/static/js/app/views/user/account.js:164
+#: assembl/static/js/app/views/user/account.js:111
+#: assembl/static/js/app/views/user/account.js:186
 #: assembl/static/js/app/views/user/profile.js:55
 msgid "Your settings fail to update"
-msgstr ""
+msgstr "Erreur lors de la mise à jour de vos paramètres"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:118
 msgid "Unlock panel"
@@ -889,6 +876,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: assembl/templates/profile.jinja2:61
+#: assembl/templates/views/userProfile.tmpl:31
 #: assembl/templates/views/userProfile.tmpl:33
 msgid "Your name"
 msgstr "Votre nom"
@@ -1083,10 +1071,8 @@ msgstr "Éditer une discussion"
 #: assembl/templates/views/adminDiscussionSettings.tmpl:26
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:9
 #: assembl/templates/views/adminPartners.tmpl:9
-#, fuzzy
-#| msgid "Discussion "
 msgid "discussion settings"
-msgstr "Discussion "
+msgstr "Paramètres de la discussion"
 
 #: assembl/templates/views/adminDiscussion.tmpl:12
 #: assembl/templates/views/adminDiscussionSettings.tmpl:12
@@ -1126,16 +1112,12 @@ msgid "Save changes"
 msgstr "Sauvegarder les modifications"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:33
-#, fuzzy
-#| msgid "Your settings were saved"
 msgid "Your change has been saved!"
-msgstr "Vos paramètres ont été sauvegardés"
+msgstr "Vos changements ont été sauvegardés !"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:37
-#, fuzzy
-#| msgid "edit notifications"
 msgid "Default notifications"
-msgstr "Configurer les notifications"
+msgstr "Notifications par défaut"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:38
 msgid ""
@@ -1146,41 +1128,43 @@ msgid ""
 "discussion parameter \"Auto-subscribe users to default notifications when"
 " they register\" is active and the user confirms their account."
 msgstr ""
+"Ce sont les notifications auxquelles un utilisateur est abonné quand "
+"l'une de ces conditions est vérifiée : 1. L'utilisateur clique sur le "
+"bouton \"S'abonner à la discussion\". 2. L'utilisateur poste son premier "
+"message, Assembl affiche alors une pop-in de proposition d'abonnement, et"
+" l'utilisateur accepte de s'abonner. 3. Le paramètre \"Abonner "
+"automatiquement les utilisateurs aux notifications lorsqu'ils "
+"s'inscrivent\" est actif et l'utilisateur confirme la création de son "
+"compte."
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:41
 msgid "Auto-subscribe users to default notifications"
-msgstr ""
+msgstr "Abonner automatiquement les utilisateurs aux notifications par défaut"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:2
 #: assembl/templates/views/partnersInAdmin.tmpl:19
-#, fuzzy
-#| msgid "edit partners"
 msgid "edit partner"
 msgstr "Éditer les partenaires"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:9
 #: assembl/templates/views/adminPartnerForm.tmpl:8
-#, fuzzy
-#| msgid "partners added"
 msgid "Partner name"
-msgstr "partenaires ajoutés"
+msgstr "Nom du partenaire"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:13
 #: assembl/templates/views/adminPartnerForm.tmpl:12
 msgid "This field is mandatory"
-msgstr ""
+msgstr "Ce champ est obligatoire"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:20
 #: assembl/templates/views/adminPartnerForm.tmpl:19
-#, fuzzy
-#| msgid "description"
 msgid "Description"
-msgstr "description"
+msgstr "Description"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:23
 #: assembl/templates/views/adminPartnerForm.tmpl:22
 msgid "Share what the organisation is all about"
-msgstr ""
+msgstr "Partagez des informations à propos de l'organisation."
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:25
 #: assembl/templates/views/adminPartnerForm.tmpl:24
@@ -1189,47 +1173,39 @@ msgstr "veuillez corriger l'erreur"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:32
 #: assembl/templates/views/adminPartnerForm.tmpl:31
-#, fuzzy
-#| msgid "Debate"
 msgid "Website"
-msgstr "Débat"
+msgstr "Site internet"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:35
 #: assembl/templates/views/adminPartnerForm.tmpl:34
-#, fuzzy
-#| msgid "authorized url syntax: http://hompage.com or http://www.hompage.com"
 msgid "Example : http://example.org/ or http://www.hompage.com/"
-msgstr "syntaxe d'URL autorisée: http://hompage.com ou http://www.hompage.com"
+msgstr "Exemple : http://exemple.org/ ou http://www.monsite.com/"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:37
 #: assembl/templates/views/adminPartnerEditForm.tmpl:49
 #: assembl/templates/views/adminPartnerForm.tmpl:36
 #: assembl/templates/views/adminPartnerForm.tmpl:48
 msgid "Invalid URL format"
-msgstr ""
+msgstr "Format d'URL invalide"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:44
 #: assembl/templates/views/adminPartnerForm.tmpl:43
 msgid "URL of logo image"
-msgstr ""
+msgstr "URL de l'image pour le logo"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:47
 #: assembl/templates/views/adminPartnerForm.tmpl:46
 msgid "Example : http://example.org/logo.jpg"
-msgstr ""
+msgstr "Exemple : http://example.org/logo.jpg"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:56
 #: assembl/templates/views/adminPartnerForm.tmpl:55
-#, fuzzy
-#| msgid "there are no instigator for this discussion"
 msgid "Is instigator of the discussion"
-msgstr "Il n'y a pas de d'initiateur pour cette discussion."
+msgstr "Est à l'initiative de la discussion"
 
 #: assembl/templates/views/adminPartnerForm.tmpl:2
-#, fuzzy
-#| msgid "Add a new panel group"
 msgid "add a new partner"
-msgstr "Ajouter un groupe de panneaux"
+msgstr "Ajouter un nouveau partenaire"
 
 #: assembl/templates/views/adminPartners.tmpl:26
 msgid "partners"
@@ -1240,10 +1216,8 @@ msgid "partners added"
 msgstr "partenaires ajoutés"
 
 #: assembl/templates/views/adminPartners.tmpl:38
-#, fuzzy
-#| msgid "edit partners"
 msgid "add partner"
-msgstr "Éditer les partenaires"
+msgstr "Ajouter le partenaire"
 
 #: assembl/templates/views/ajaxError.tmpl:2
 msgid "assembl need to be reload"
@@ -1289,22 +1263,13 @@ msgstr "Tous les messages"
 msgid "Number of posts in the entire discussion"
 msgstr "Nombre de messages dans toute la discussion"
 
-#: assembl/templates/views/associateAccount.tmpl:5
-#: assembl/templates/views/associateAccount.tmpl:11
-#: assembl/templates/views/associateAccount.tmpl:18
-#: assembl/templates/views/associateAccount.tmpl:23
-msgid "dissociate"
-msgstr ""
-
 #: assembl/templates/views/associateAccount.tmpl:22
-#, fuzzy
-#| msgid "Send your comment"
 msgid "valided your account"
-msgstr "Envoyez votre commentaire"
+msgstr "Validez votre compte"
 
 #: assembl/templates/views/associateAccounts.tmpl:3
 msgid "Associated accounts"
-msgstr ""
+msgstr "Comptes associés"
 
 #: assembl/templates/views/authorization.tmpl:3
 msgid "You must be logged in to access this page."
@@ -1412,6 +1377,8 @@ msgstr "Conversations"
 #: assembl/templates/views/defaultNotification.tmpl:7
 msgid "Auto-subscribe users to default notifications when they register"
 msgstr ""
+"Abonner automatiquement les utilisateurs aux notifications par défaut de "
+"la discussion lorsqu'ils s'inscrivent"
 
 #: assembl/templates/views/firstPost.tmpl:7
 msgid "Congratulations on making your first contribution!"
@@ -1641,15 +1608,11 @@ msgstr "éditer l'initiateur"
 
 #: assembl/templates/views/introductions.tmpl:26
 msgid "You probably want to add a context for this discussion"
-msgstr ""
-
-#: assembl/templates/views/introductions.tmpl:37
-msgid "Debate objectives"
-msgstr "Objectifs du débat"
+msgstr "Vous pouvez ajouter ici un contexte pour cette discussion"
 
 #: assembl/templates/views/introductions.tmpl:41
 msgid "You probably want to add some discussion objectives"
-msgstr ""
+msgstr "Vous pouvez décrire ici les objectifs de la discussion"
 
 #: assembl/templates/views/joinDiscussion.tmpl:7
 msgid "Keep up with the evolution of the discussion"
@@ -1853,7 +1816,7 @@ msgstr "Partenaires"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:9
 msgid "What is the organisation about?"
-msgstr ""
+msgstr "Que pouvez-vous dire à propos de cette organisation ?"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:13
 msgid "link"
@@ -1861,13 +1824,11 @@ msgstr "lien"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:15
 msgid "What is their website?"
-msgstr ""
+msgstr "Quel est leur site internet ?"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:20
-#, fuzzy
-#| msgid "edit partners"
 msgid "delete partner"
-msgstr "Éditer les partenaires"
+msgstr "Supprimer le partenaire"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:25
 msgid "is initiator"
@@ -1875,7 +1836,7 @@ msgstr "est initiateur"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:32
 msgid "What is their logo?"
-msgstr ""
+msgstr "Quel est leur logo ?"
 
 #: assembl/templates/views/segment.tmpl:10
 #, python-format
@@ -1988,18 +1949,14 @@ msgstr "Publier"
 #: assembl/templates/views/userAccount.tmpl:6
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:6
 #: assembl/templates/views/userProfile.tmpl:6
-#, fuzzy
-#| msgid "Edit your profile"
 msgid "Modify your profile"
 msgstr "Modifier votre profil"
 
 #: assembl/templates/views/userAccount.tmpl:9
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:9
 #: assembl/templates/views/userProfile.tmpl:9
-#, fuzzy
-#| msgid "No account yet?"
 msgid "Account settings"
-msgstr "Vous n'avez pas encore de compte ?"
+msgstr "Paramètres du compte"
 
 #: assembl/templates/views/userAccount.tmpl:12
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:12
@@ -2010,65 +1967,49 @@ msgstr "Notifications"
 
 #: assembl/templates/views/userAccount.tmpl:25
 msgid "Assembl account settings"
-msgstr ""
+msgstr "Paramètres du compte Assembl"
 
 #: assembl/templates/views/userAccount.tmpl:39
 msgid "Manage associated accounts"
-msgstr ""
+msgstr "Gérer les comptes associés"
 
 #: assembl/templates/views/userAccount.tmpl:61
-#, fuzzy
-#| msgid "Resend the email"
 msgid "Add another email"
-msgstr "Renvoyer le courriel"
+msgstr "Ajouter une adresse de courriel"
 
 #: assembl/templates/views/userAccountForm.tmpl:10
 msgid "Your username is used log in."
 msgstr ""
 
 #: assembl/templates/views/userAccountForm.tmpl:15
-#, fuzzy
-#| msgid "New Password"
 msgid "New password"
 msgstr "Nouveau mot de passe"
 
 #: assembl/templates/views/userAccountForm.tmpl:19
 #: assembl/templates/views/userAccountForm.tmpl:29
-#, fuzzy
-#| msgid "The passwords should be identical"
 msgid "password 1 and 2 should be identical"
 msgstr "Les mots de passe doivent correspondre"
 
 #: assembl/templates/views/userAccountForm.tmpl:25
-#, fuzzy
-#| msgid "I forgot my password"
 msgid "Confirm password"
-msgstr "Mot de passe oublié ?"
+msgstr "Confirmez votre mot de passe"
 
 #: assembl/templates/views/userAccountForm.tmpl:37
 #: assembl/templates/views/userProfile.tmpl:94
-#, fuzzy
-#| msgid "React to the ongoing discussion"
 msgid "Return to the discussion"
-msgstr "Réagir à la discussion en cours"
+msgstr "Revenir à la discussion"
 
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:31
 msgid "Notifiy me when"
-msgstr ""
-
-#: assembl/templates/views/userProfile.tmpl:31
-msgid "Display name"
-msgstr ""
+msgstr "Me notifier lorsque"
 
 #: assembl/templates/views/userSubscriber.tmpl:4
 msgid "Subscription settings"
-msgstr ""
+msgstr "Paramètres d'abonnement"
 
 #: assembl/templates/views/userSubscriber.tmpl:13
-#, fuzzy
-#| msgid "subscribed"
 msgid "unsubscribed"
-msgstr "abonné"
+msgstr "désabonné"
 
 #: assembl/views/admin/views.py:246
 msgid "No file given."
@@ -2155,15 +2096,19 @@ msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr ""
+"Votre adresse email %s a bien été confirmée, et vous êtes maintenant "
+"abonné(e) aux notifications par défaut de la discussion."
 
 #: assembl/views/auth/views.py:686
 #, python-format
 msgid "Your email address %s has been confirmed, you can now log in."
 msgstr ""
+"Votre adresse email %s a bien été confirmée, vous pouvez maintenant vous "
+"identifier."
 
 #: assembl/views/auth/views.py:693
 msgid "Your account is now active!"
-msgstr ""
+msgstr "Votre compte est maintenant actif !"
 
 #: assembl/views/auth/views.py:707
 msgid "Login failed, try again"
@@ -2273,34 +2218,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
-
-#~ msgid "no notifications"
-#~ msgstr "Pas de notifications"
-
-#~ msgid "name of partner"
-#~ msgstr "Nom du partenaire"
-
-#~ msgid "homepage partners"
-#~ msgstr "partenaires de la page d'accueil"
-
-#~ msgid "url partner logo"
-#~ msgstr "URL du logo du partenaire"
-
-#~ msgid "there are no partners for this discussion"
-#~ msgstr "Il n'y a pas de partenaire pour cette discussion."
-
-#~ msgid "profile"
-#~ msgstr "profil"
-
-#~ msgid "You have been unsubscribed"
-#~ msgstr "Vous avez été désinscrit"
-
-#~ msgid "Currently you will be informed when:"
-#~ msgstr "Actuellement, vous recevez une notification quand :"
-
-#~ msgid "Back to discussion"
-#~ msgstr "Revenir à la discussion"
-
-#~ msgid "Email <%s> confirmed"
-#~ msgstr "L'adresse email <%s> est confirmée"
 
