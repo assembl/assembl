@@ -255,10 +255,15 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                     that = this;
 
                 this.model = undefined;
+                this.role_collection = undefined;
 
                 $.when(collectionManager.getLocalRoleCollectionPromise()).then(
-                    function (allRole) {
-                        that.model = allRole.at(0);
+                    function (allRoles) {
+                        that.role_collection = allRoles;
+                        that.model = allRoles.find(
+                            function (local_role) {
+                                return local_role.get('role') == Roles.PARTICIPANT;
+                            });
                         that.render();
                     });
 
@@ -274,22 +279,18 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             unSubscription: function () {
                 var that = this;
 
-                if (this.model.get('role') === Roles.PARTICIPANT) {
-                    var roles = new RolesModel.Model({
-                        id: this.model.get('@id')
-                    });
-
-                    roles.destroy({
+                if (this.model !== undefined) {
+                    // I have no clue what's going on here. MAP
+                    this.model.set('id', this.model.get('@id'));
+                    this.model.destroy({
                         success: function (model, resp) {
+                            that.model = undefined;
                             that.trigger('renderView');
                         },
                         error: function (model, resp) {
-                            console.error('ERROR: unSubscription', resp);
-                        }
-                    });
-
+                            console.error('ERROR: unSubscription failed', resp);
+                        }});
                 }
-
             },
 
             subscription: function(){
@@ -299,11 +300,14 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                     var LocalRolesUser = new RolesModel.Model({
                         role: Roles.PARTICIPANT,
-                        discussion: 'local:Discussion/' + Ctx.getDiscussionId()
+                        discussion: 'local:Discussion/' + Ctx.getDiscussionId(),
+                        user_id: Ctx.getCurrentUserId()
                     });
+                    this.role_collection.add(LocalRolesUser);
 
                     LocalRolesUser.save(null, {
                         success: function (model, resp) {
+                            that.model = LocalRolesUser;
                             that.trigger('renderView');
                         },
                         error: function (model, resp) {
