@@ -35,9 +35,9 @@ define(['backbone.marionette', 'models/userProfile', 'utils/i18n', 'jquery', 'co
             saveProfile: function (e) {
                 e.preventDefault();
 
-                var name = this.$('input[name="name"]').val();
+                var real_name = this.$('input[name="real_name"]').val();
 
-                this.model.set({ name: name});
+                this.model.set({ real_name: real_name});
 
                 this.model.save(null, {
                     success: function (model, resp) {
