@@ -258,17 +258,13 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                 $.when(collectionManager.getLocalRoleCollectionPromise()).then(
                     function (allRole) {
-
-                        if(allRole.length){
-                            that.model = allRole.at(0);
-                        }else {
-                            that.model = null;
-                        }
+                        that.model = allRole.at(0);
                         that.render();
                     });
 
-            },
+                this.listenTo(this, 'renderView', this.render);
 
+            },
             serializeData: function(){
                 return {
                     role: this.model
@@ -285,7 +281,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                     roles.destroy({
                         success: function (model, resp) {
-
+                            that.trigger('renderView');
                         },
                         error: function (model, resp) {
                             console.error('ERROR: unSubscription', resp);
@@ -308,7 +304,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                     LocalRolesUser.save(null, {
                         success: function (model, resp) {
-
+                            that.trigger('renderView');
                         },
                         error: function (model, resp) {
                             console.error('ERROR: joinDiscussion->subscription', resp);
