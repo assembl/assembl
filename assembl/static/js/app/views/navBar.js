@@ -71,6 +71,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     },
                     urlLogOut: function () {
                         return '/' + Ctx.getDiscussionSlug() + '/logout';
+                    },
+                    userProfile: function(){
+                        return '/' + Ctx.getDiscussionSlug() + '/user/profile';
                     }
                 }
             },
