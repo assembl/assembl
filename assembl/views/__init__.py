@@ -4,7 +4,8 @@ import os.path
 import json
 import codecs
 from pyramid.security import Allow, ALL_PERMISSIONS, DENY_ALL
-from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
+from pyramid.httpexceptions import (
+    HTTPException, HTTPNotFound, HTTPInternalServerError)
 from pyramid.i18n import TranslationStringFactory
 
 from ..lib.json import json_renderer_factory
@@ -72,6 +73,23 @@ def get_template_views():
                 views.append(filename.split('.')[0])
 
     return views
+
+
+class JSONError(HTTPException):
+    content_type = 'text/plain'
+
+    def __init__(self, code, detail=None, headers=None, comment=None,
+                 body_template=None, **kw):
+        self.code = code
+        self.content_type = 'text/plain'
+        super(JSONError, self).__init__(
+            detail, headers, comment,
+            body='{"error":"%s", "status":%d}' % (detail, code), **kw)
+
+        def prepare(self, environ):
+            r = super(JSONError, self).prepare(environ)
+            self.content_type = 'text/plain'
+            return r
 
 
 def includeme(config):

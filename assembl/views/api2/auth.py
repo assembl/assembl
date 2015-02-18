@@ -1,4 +1,5 @@
 from simplejson import dumps
+from string import Template
 
 from pyramid.response import Response
 from pyramid.view import view_config
@@ -14,6 +15,7 @@ from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount)
 from assembl.auth.util import get_permissions
 from ..traversal import (CollectionContext, InstanceContext)
+from .. import JSONError
 from . import (
     FORM_HEADER, JSON_HEADER, collection_view, instance_put_json,
     collection_add_json)
@@ -182,12 +184,12 @@ def delete_abstract_agent_account(request):
     if instance.email:
         accounts_with_mail = [a for a in instance.profile.accounts if a.email]
         if len(accounts_with_mail) == 1:
-            raise HTTPForbidden("This is the last account")
+            raise JSONError(403, "This is the last account")
         if instance.verified:
             verified_accounts_with_mail = [
                 a for a in accounts_with_mail if a.verified]
             if len(verified_accounts_with_mail) == 1:
-                raise HTTPForbidden("This is the last verified account")
+                raise JSONError(403, "This is the last verified account")
     instance.db.delete(instance)
     return {}
 
