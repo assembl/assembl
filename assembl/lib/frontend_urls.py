@@ -42,7 +42,7 @@ class FrontendUrls():
 
     def getUserNotificationSubscriptionsConfigurationUrl(self):
         return urljoin(
-            self.getDiscussionUrl(), 'users/notifications')
+            self.getDiscussionUrl(), 'user/notifications')
 
     def getUserNotificationSubscriptionUnsubscribeUrl(self, subscription):
         """ TODO:  Give an actual subscription URL """

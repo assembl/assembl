@@ -50,7 +50,7 @@
 		 <% } %>
 	 {% else %}
 		 {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-			 <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/users/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
+			 <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
 		 {% endif %}
 	 {% endif %}
 	</li>
@@ -114,7 +114,7 @@
         <% } %>
       {% else %}
         {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-          <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/users/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
+          <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
         {% endif %}
       {% endif %}
     </div>
