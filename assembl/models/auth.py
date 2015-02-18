@@ -511,7 +511,8 @@ class User(AgentProfile):
     @password_p.setter
     def password_p(self, password):
         from ..auth.password import hash_password
-        self.password = hash_password(password)
+        if password:
+            self.password = hash_password(password)
 
     def check_password(self, password):
         if self.password:
