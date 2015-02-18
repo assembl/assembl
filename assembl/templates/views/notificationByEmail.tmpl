@@ -1,3 +1,4 @@
+<% if(account.get('verified')){ %>
 <input class="js_preferred" type="radio" <%= account.get('preferred') ? 'checked':'' %> id="<%= account.get('@id') %>" name="email_account">
 <%= account.get('email') %>
-
+<% } %>
