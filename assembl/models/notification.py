@@ -536,7 +536,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
     unsubscribe_allowed = True
 
     def get_human_readable_description(self):
-        return _("A periodic synthesis of the discussion is posted")
+        return _("A synthesis is posted")
 
     def wouldCreateNotification(self, discussion_id, verb, object):
         parentWouldCreate = super(NotificationSubscriptionFollowSyntheses, self).wouldCreateNotification(discussion_id, verb, object)

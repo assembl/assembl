@@ -6,13 +6,13 @@
             <a href="#user/profile" class="menu">{{ gettext('Modify your profile') }}</a>
           </li>
           <li>
-						<a href="#user/account" class="menu">{{ gettext('Account settings') }}</a>
-					</li>
+			<a href="#user/account" class="menu">{{ gettext('Account settings') }}</a>
+		  </li>
           <li>
             <a href="#user/notifications" class="menu">{{ gettext('Notifications') }}</a>
           </li>
           <li class="mtxl">
-            <a href="/{{ discussion.slug }}/">{{ gettext('back to discussion') }}</a>
+            <a href="/{{ discussion.slug }}/">{{ gettext('Back to discussion') }}</a>
           </li>
         </ul>
     </nav>
@@ -20,7 +20,7 @@
   <div class="gu gu-3of4 admin-section">
     <section class="section">
     <div class="admin-title">
-      <h3 class="h3">Profile</h3>
+      <h3 class="h3">{{ gettext('Profile') }}</h3>
     </div>
     <div id="content-container" class="content-container">
       <div class="gr mtl">
@@ -28,9 +28,9 @@
           <form class="core-form form-horizontal" id="profile-form">
             <fieldset class="prl">
 							<div class="control-group fr">
-								<label for="name" class="control-label fl">{{ gettext('Your name') }}</label>
+								<label for="name" class="control-label fl">{{ gettext('Display name') }}</label>
 								<div class="controls fl">
-										<input class="input-xxlarge" type="text" name="real_name" placeholder="{{ gettext('Your name') }}" value="<%= profile.get('real_name') %>" />
+										<input class="input-xxlarge" type="text" name="real_name" placeholder="{{ gettext('Display name') }}" value="<%= profile.get('real_name') %>" />
 								</div>
 							</div>
               {#
