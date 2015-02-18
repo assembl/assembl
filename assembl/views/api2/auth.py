@@ -155,7 +155,7 @@ def view_localuserrole_collection(request):
 
 @view_config(
     context=InstanceContext, ctx_instance_class=AbstractAgentAccount,
-    request_method='POST', name="verify")
+    request_method='POST', name="verify", renderer='json')
 def send_account_verification(request):
     ctx = request.context
     instance = ctx._instance
@@ -165,7 +165,7 @@ def send_account_verification(request):
     from assembl.views.auth.views import send_confirmation_email
     request.matchdict = {}
     send_confirmation_email(request, instance)
-    return HTTPOk()
+    return {}
 
 
 @view_config(
