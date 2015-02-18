@@ -6,10 +6,32 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
     var email = Marionette.ItemView.extend({
         template:'#tmpl-associateAccount',
         className:'associate-email mbs',
+        ui: {
+          verifyEmail: '.js_verifyEmail'
+        },
+        events: {
+          'click @ui.verifyEmail': 'verifyEmail'
+        },
         serializeData: function(){
             return {
               email: this.model
             }
+        },
+        verifyEmail: function(){
+            var uri = this.model.get('@id').split('/')[1]+'/verify';
+            var that = this;
+            this.model.url = this.model.url+'/'+ uri;
+
+            var verify = new Backbone.Model();
+            verify.url = this.model.url;
+
+            verify.save(null, {
+                success: function(model, resp){
+                },
+                error: function(model, resp){
+
+                }
+            })
         }
     });
 
