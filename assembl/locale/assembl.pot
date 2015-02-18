@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-17 19:21-0500\n"
+"POT-Creation-Date: 2015-02-18 12:00-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgid "${val} is not a string: ${err}"
 msgstr ""
 
 #: assembl/models/notification.py:539
-msgid "A periodic synthesis of the discussion is posted"
+msgid "A synthesis is posted"
 msgstr ""
 
 #: assembl/models/notification.py:567
@@ -831,6 +831,7 @@ msgid "Sign up"
 msgstr ""
 
 #: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
+#: assembl/templates/views/userProfile.tmpl:23
 msgid "Profile"
 msgstr ""
 
@@ -848,8 +849,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:61 assembl/templates/views/userProfile.tmpl:31
-#: assembl/templates/views/userProfile.tmpl:33
+#: assembl/templates/profile.jinja2:61
 msgid "Your name"
 msgstr ""
 
@@ -1026,7 +1026,7 @@ msgstr ""
 #: assembl/templates/views/adminDiscussionSettings.tmpl:6
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:6
 #: assembl/templates/views/adminPartners.tmpl:6
-msgid "edit discussion"
+msgid "Edit discussion"
 msgstr ""
 
 #: assembl/templates/views/adminDiscussion.tmpl:9
@@ -1034,7 +1034,7 @@ msgstr ""
 #: assembl/templates/views/adminDiscussionSettings.tmpl:26
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:9
 #: assembl/templates/views/adminPartners.tmpl:9
-msgid "discussion settings"
+msgid "Discussion settings"
 msgstr ""
 
 #: assembl/templates/views/adminDiscussion.tmpl:12
@@ -1042,16 +1042,14 @@ msgstr ""
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:12
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:26
 #: assembl/templates/views/adminPartners.tmpl:12
-msgid "edit notifications"
+msgid "Edit notifications"
 msgstr ""
 
 #: assembl/templates/views/adminDiscussion.tmpl:15
 #: assembl/templates/views/adminDiscussionSettings.tmpl:15
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:15
 #: assembl/templates/views/adminPartners.tmpl:15
-#: assembl/templates/views/partnerList.tmpl:6
-#: assembl/templates/views/partnerList.tmpl:10
-msgid "edit partners"
+msgid "Edit partners"
 msgstr ""
 
 #: assembl/templates/views/adminDiscussion.tmpl:18
@@ -1060,7 +1058,7 @@ msgstr ""
 #: assembl/templates/views/adminPartners.tmpl:18
 #: assembl/templates/views/userAccount.tmpl:15
 #: assembl/templates/views/userProfile.tmpl:15
-msgid "back to discussion"
+msgid "Back to discussion"
 msgstr ""
 
 #: assembl/templates/views/adminDiscussion.tmpl:34
@@ -1163,15 +1161,18 @@ msgid "add a new partner"
 msgstr ""
 
 #: assembl/templates/views/adminPartners.tmpl:26
-msgid "partners"
+#: assembl/templates/views/partnerList.tmpl:6
+#: assembl/templates/views/partnerList.tmpl:10
+#: assembl/templates/views/partnerList.tmpl:12
+msgid "Partners"
 msgstr ""
 
 #: assembl/templates/views/adminPartners.tmpl:34
-msgid "partners added"
+msgid "Partners added"
 msgstr ""
 
 #: assembl/templates/views/adminPartners.tmpl:38
-msgid "add partner"
+msgid "Add partner"
 msgstr ""
 
 #: assembl/templates/views/ajaxError.tmpl:2
@@ -1701,8 +1702,7 @@ msgstr ""
 
 #: assembl/templates/views/partnerList.tmpl:6
 #: assembl/templates/views/partnerList.tmpl:10
-#: assembl/templates/views/partnerList.tmpl:12
-msgid "Partners"
+msgid "edit partners"
 msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:9
@@ -1865,7 +1865,7 @@ msgid "Add another email"
 msgstr ""
 
 #: assembl/templates/views/userAccountForm.tmpl:10
-msgid "Your username is used log in."
+msgid "Your username is used to log in."
 msgstr ""
 
 #: assembl/templates/views/userAccountForm.tmpl:15
@@ -1888,6 +1888,11 @@ msgstr ""
 
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:31
 msgid "Notifiy me when"
+msgstr ""
+
+#: assembl/templates/views/userProfile.tmpl:31
+#: assembl/templates/views/userProfile.tmpl:33
+msgid "Display name"
 msgstr ""
 
 #: assembl/templates/views/userSubscriber.tmpl:4

@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-17 19:21-0500\n"
-"PO-Revision-Date: 2015-02-18 00:19+0000\n"
+"POT-Creation-Date: 2015-02-18 12:00-0500\n"
+"PO-Revision-Date: 2015-02-18 16:32+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
@@ -51,8 +51,10 @@ msgid "${val} is not a string: ${err}"
 msgstr "${val} n'est pas une chaîne: ${err}"
 
 #: assembl/models/notification.py:539
-msgid "A periodic synthesis of the discussion is posted"
-msgstr "Une synthèse périodique de la discussion est publiée"
+#, fuzzy
+#| msgid "Last synthesis"
+msgid "A synthesis is posted"
+msgstr "Dernière synthèse"
 
 #: assembl/models/notification.py:567
 msgid "Any message is posted to the discussion"
@@ -858,6 +860,7 @@ msgid "Sign up"
 msgstr "Créer un compte"
 
 #: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
+#: assembl/templates/views/userProfile.tmpl:23
 msgid "Profile"
 msgstr "Profil"
 
@@ -876,8 +879,6 @@ msgid "Name"
 msgstr "Nom"
 
 #: assembl/templates/profile.jinja2:61
-#: assembl/templates/views/userProfile.tmpl:31
-#: assembl/templates/views/userProfile.tmpl:33
 msgid "Your name"
 msgstr "Votre nom"
 
@@ -1063,7 +1064,9 @@ msgstr "Valider"
 #: assembl/templates/views/adminDiscussionSettings.tmpl:6
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:6
 #: assembl/templates/views/adminPartners.tmpl:6
-msgid "edit discussion"
+#, fuzzy
+#| msgid "edit discussion"
+msgid "Edit discussion"
 msgstr "Éditer une discussion"
 
 #: assembl/templates/views/adminDiscussion.tmpl:9
@@ -1071,7 +1074,9 @@ msgstr "Éditer une discussion"
 #: assembl/templates/views/adminDiscussionSettings.tmpl:26
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:9
 #: assembl/templates/views/adminPartners.tmpl:9
-msgid "discussion settings"
+#, fuzzy
+#| msgid "discussion settings"
+msgid "Discussion settings"
 msgstr "Paramètres de la discussion"
 
 #: assembl/templates/views/adminDiscussion.tmpl:12
@@ -1079,16 +1084,18 @@ msgstr "Paramètres de la discussion"
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:12
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:26
 #: assembl/templates/views/adminPartners.tmpl:12
-msgid "edit notifications"
+#, fuzzy
+#| msgid "edit notifications"
+msgid "Edit notifications"
 msgstr "Configurer les notifications"
 
 #: assembl/templates/views/adminDiscussion.tmpl:15
 #: assembl/templates/views/adminDiscussionSettings.tmpl:15
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:15
 #: assembl/templates/views/adminPartners.tmpl:15
-#: assembl/templates/views/partnerList.tmpl:6
-#: assembl/templates/views/partnerList.tmpl:10
-msgid "edit partners"
+#, fuzzy
+#| msgid "edit partners"
+msgid "Edit partners"
 msgstr "Éditer les partenaires"
 
 #: assembl/templates/views/adminDiscussion.tmpl:18
@@ -1097,7 +1104,9 @@ msgstr "Éditer les partenaires"
 #: assembl/templates/views/adminPartners.tmpl:18
 #: assembl/templates/views/userAccount.tmpl:15
 #: assembl/templates/views/userProfile.tmpl:15
-msgid "back to discussion"
+#, fuzzy
+#| msgid "back to discussion"
+msgid "Back to discussion"
 msgstr "Revenir à la discussion"
 
 #: assembl/templates/views/adminDiscussion.tmpl:34
@@ -1208,15 +1217,22 @@ msgid "add a new partner"
 msgstr "Ajouter un nouveau partenaire"
 
 #: assembl/templates/views/adminPartners.tmpl:26
-msgid "partners"
-msgstr "partenaires"
+#: assembl/templates/views/partnerList.tmpl:6
+#: assembl/templates/views/partnerList.tmpl:10
+#: assembl/templates/views/partnerList.tmpl:12
+msgid "Partners"
+msgstr "Partenaires"
 
 #: assembl/templates/views/adminPartners.tmpl:34
-msgid "partners added"
+#, fuzzy
+#| msgid "partners added"
+msgid "Partners added"
 msgstr "partenaires ajoutés"
 
 #: assembl/templates/views/adminPartners.tmpl:38
-msgid "add partner"
+#, fuzzy
+#| msgid "add partner"
+msgid "Add partner"
 msgstr "Ajouter le partenaire"
 
 #: assembl/templates/views/ajaxError.tmpl:2
@@ -1810,9 +1826,8 @@ msgstr "Fermer le panneau"
 
 #: assembl/templates/views/partnerList.tmpl:6
 #: assembl/templates/views/partnerList.tmpl:10
-#: assembl/templates/views/partnerList.tmpl:12
-msgid "Partners"
-msgstr "Partenaires"
+msgid "edit partners"
+msgstr "Éditer les partenaires"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:9
 msgid "What is the organisation about?"
@@ -1978,8 +1993,10 @@ msgid "Add another email"
 msgstr "Ajouter une adresse de courriel"
 
 #: assembl/templates/views/userAccountForm.tmpl:10
-msgid "Your username is used log in."
-msgstr ""
+#, fuzzy
+#| msgid "Your username is used log in."
+msgid "Your username is used to log in."
+msgstr "Votre identifiant vous permet de vous connecter."
 
 #: assembl/templates/views/userAccountForm.tmpl:15
 msgid "New password"
@@ -2002,6 +2019,11 @@ msgstr "Revenir à la discussion"
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:31
 msgid "Notifiy me when"
 msgstr "Me notifier lorsque"
+
+#: assembl/templates/views/userProfile.tmpl:31
+#: assembl/templates/views/userProfile.tmpl:33
+msgid "Display name"
+msgstr ""
 
 #: assembl/templates/views/userSubscriber.tmpl:4
 msgid "Subscription settings"
@@ -2218,4 +2240,10 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
+
+#~ msgid "A periodic synthesis of the discussion is posted"
+#~ msgstr "Une synthèse périodique de la discussion est publiée"
+
+#~ msgid "partners"
+#~ msgstr "partenaires"
 
