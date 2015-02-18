@@ -297,7 +297,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
             showPopInDiscussion: function () {
                 var needPopIn = this._store.getItem('needJoinDiscussion');
-                if (needPopIn && this.roles.get('role') === null) {
+                if (needPopIn && Ctx.getCurrentUserId() && this.roles.get('role') === null) {
                     this.joinDiscussion();
                 } else {
                     this._store.removeItem('needJoinDiscussion');
