@@ -72,10 +72,13 @@ def main(global_config, **settings):
         populate_default_roles(session)
         populate_default_permissions(session)
         from .lib.config import set_config
+        # aqsm needs config information
         set_config(settings)
         from .semantic.virtuoso_mapping import AssemblQuadStorageManager
         aqsm = AssemblQuadStorageManager()
         aqsm.ensure_discussion_storage(None)
+        # But we do want the registry settings later
+        set_config(None)
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('widget', 'widget', cache_max_age=3600)
