@@ -280,8 +280,6 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                 var that = this;
 
                 if (this.model !== undefined) {
-                    // I have no clue what's going on here. MAP
-                    this.model.set('id', this.model.get('@id'));
                     this.model.destroy({
                         success: function (model, resp) {
                             that.model = undefined;
