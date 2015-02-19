@@ -1119,6 +1119,7 @@ def env_coeus_assembl2():
 def env_inm_agora():
     """
     [ENVIRONMENT] Production on http://agora.inm.qc.ca/
+    hosted on coeus
     INM (Institut du nouveau monde) dedicated environment
     """
     env.ini_file = 'local.ini'
@@ -1134,7 +1135,7 @@ def env_inm_agora():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "develop"
+    env.gitbranch = "master"
 
 
 @task
@@ -1147,14 +1148,36 @@ def env_bluenove_discussions():
     commonenv(normpath("/var/www/assembl_discussions_bluenove_com/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
-    env.urlhost = "ns239264.ip-192-99-37.net"
+    env.urlhost = "discussions.bluenove.com"
     env.user = "www-data"
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
-    env.hosts = ['ns239264.ip-192-99-37.net']
+    env.hosts = ['discussions.bluenove.com']
 
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = "master"
 
+
+@task
+def env_inm_agora_ovh():
+    """
+    [ENVIRONMENT] Production on http://agora.inm.qc.ca/
+    hosted on bluenove OVH server
+    INM (Institut du nouveau monde) dedicated environment
+    """
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/var/www/assembl_inm/"))
+    env.is_production_env = False
+    env.wsginame = "prod.wsgi"
+    env.urlhost = "discussions.bluenove.com"
+    env.user = "www-data"
+    env.home = "www-data"
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['discussions.bluenove.com']
+
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.gitbranch = "master"
