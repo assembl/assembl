@@ -46,11 +46,11 @@
 	<li class="sub fl mrl">
 	 {% if user %}
 		 <% if(!isUserSubscribed && canSubscribeToDiscussion ){ %>
-			 <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
+			 <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('Subscribe to discussion') }}</a>
 		 <% } %>
 	 {% else %}
 		 {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-			 <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
+			 <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Subscribe to discussion') }}</a>
 		 {% endif %}
 	 {% endif %}
 	</li>
@@ -110,11 +110,11 @@
     <!--<div class="dispib vat">
       {% if user %}
         <% if(!isUserSubscribed && canSubscribeToDiscussion ){ %>
-          <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
+          <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('Subscribe to discussion') }}</a>
         <% } %>
       {% else %}
         {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-          <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
+          <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Subscribe to discussion') }}</a>
         {% endif %}
       {% endif %}
     </div>
