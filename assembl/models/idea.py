@@ -509,7 +509,7 @@ JOIN post AS family_posts ON (
             quad_storage=discussion_storage.n3()))]
 
     @classmethod
-    def idea_counts_sparql(cls, discussion_id, post_id, user_id):
+    def idea_read_counts_sparql(cls, discussion_id, post_id, user_id):
         """Given a post and a user, give the total and read count
          of posts for each affected idea
         This one is slower than the sql version below."""
@@ -521,28 +521,27 @@ JOIN post AS family_posts ON (
         user_uri = URIRef(AgentProfile.uri_generic(user_id, local_uri)).n3()
         results = []
         for idea_id in idea_ids:
-            ((count, read),) = list(cls.db.execute(SparqlClause(
-            """select count(distinct ?post) count(distinct ?change) where {
+            ((read,),) = list(cls.db.execute(SparqlClause(
+            """select count(distinct ?change) where {
             %s idea:includes* ?ideaF .
             ?fragment assembl:resourceExpressesIdea ?ideaF .
             ?fragment oa:hasSource ?postF .
             ?post sioc:reply_of* ?postF .
-            optional {
-                ?change a version:ReadStatusChange;
-                    version:who %s ;
-                    version:what ?post }}""" % (
+            ?change a version:ReadStatusChange;
+                version:who %s ;
+                version:what ?post }""" % (
                 URIRef(Idea.uri_generic(idea_id, local_uri)).n3(),
                 user_uri), quad_storage=discussion_storage.n3())))
-            results.append((idea_id, count, read))
+            results.append((idea_id, read))
         return results
 
     @classmethod
-    def idea_counts(cls, discussion_id, post_id, user_id):
+    def idea_read_counts(cls, discussion_id, post_id, user_id):
         """Given a post and a user, give the total and read count
             of posts for each affected idea"""
         idea_ids = cls.get_idea_ids_showing_post(post_id)
         ideas = cls.db.query(cls).filter(cls.id.in_(idea_ids))
-        return [(idea.id, idea.num_posts, idea.num_read_posts_for(user_id))
+        return [(idea.id, idea.num_read_posts_for(user_id))
                 for idea in ideas]
 
     def get_widget_creation_urls(self):
