@@ -569,6 +569,7 @@ class AssemblQuadStorageManager(object):
                 ).bindparams(name=name)).first()[0])
             if not exists:
                 self.session.execute(stmt)
+                self.session.execute('GRANT EXECUTE ON "%s" TO PUBLIC' % name)
         for name, stmt in iri_definition_stmts.iteritems():
             if not self.mapping_exists(name, IriClass.mapping_type):
                 self.session.execute(stmt)
