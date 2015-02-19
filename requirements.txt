@@ -1,5 +1,5 @@
 Babel==1.3
-Beaker==1.6.5-post1
+Beaker>=1.6.5
 Chameleon==2.22
 Chroma==0.2.0
 ColanderAlchemy==0.3.1
