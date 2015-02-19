@@ -49,8 +49,7 @@ define(['app', 'common/context', 'utils/panelSpecTypes', 'views/idea'],
                     messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
                     this._groupContent.setCurrentIdea(null);
 
-                    if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE)
-                      this._groupContent.resetDebateState();
+                    this._groupContent.resetDebateState();
                 }
             }
         });
