@@ -1,6 +1,11 @@
 server {
     server_name assembl.yourdomain.com;
 
+    location /something_or_other.html {
+        #This is for domain verification
+        alias /var/www/assembl/something_or_other.html;
+    }
+    
     location /socket {
         proxy_pass http://localhost:8090/socket;
         proxy_http_version 1.1;

@@ -52,7 +52,7 @@ def supervisor_restart():
     with hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl shutdown")
     #Another supervisor,upstart, etc may be watching it, give it a little while
-    sleep(2);
+    sleep(10);
     #If supervisor is already started, this will do nothing
     execute(supervisor_process_start, 'virtuoso')
 
@@ -976,14 +976,20 @@ def virtuoso_source_install():
     with cd(virtuoso_src):
         if not exists(join(virtuoso_src, 'configure')):
             run('./autogen.sh')
+        else:
+            #Otherwise, it simply doesn't always work...
+            run('make distclean')
         #This does not work if we change the path or anything else in local.ini
         #if exists(join(virtuoso_src, 'config.status')):
         #    run('./config.status --recheck')
         #else:
 
-        run('./configure --with-readline --prefix '+virtuoso_root)
+        run('./configure --with-readline --enable-maintainer-mode --prefix '+virtuoso_root)
 
-        run('make -j4')
+        run("""physicalCpuCount=$([[ $(uname) = 'Darwin' ]] && 
+                       sysctl -n hw.physicalcpu_max ||
+                       nproc)
+               make -j $(($physicalCpuCount + 1))""")
         need_sudo = False
         if not exists(virtuoso_root):
             if not run('mkdir -p ' + virtuoso_root, quiet=True).succeeded:
