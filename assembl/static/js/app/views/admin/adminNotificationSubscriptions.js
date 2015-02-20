@@ -38,34 +38,11 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
             template: '#tmpl-adminNotificationList',
             childView: notifications,
             childViewContainer: '.control-group',
-            className:'mtl',
-            initialize: function(){
-                var collectionManager = new CollectionManager(),
-                    that = this;
-
-                this.collection = undefined;
-
-                $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then(
-                    function (NotificationsDiscussion) {
-                        that.collection = NotificationsDiscussion;
-                        that.render();
-                    });
-            }
+            className:'mtl'
         });
 
         var defaultNotification = Marionette.ItemView.extend({
             template: '#tmpl-defaultNotification',
-            initialize: function(){
-                var collectionManager = new CollectionManager(),
-                    that = this;
-
-                this.model = undefined;
-
-                $.when(collectionManager.getDiscussionModelPromise()).then(function (Discussion) {
-                    that.model = Discussion;
-                    that.render();
-                });
-            },
             ui: {
                 autoSubscribeCheckbox: ".js_adminAutoSubscribe"
             },
@@ -108,6 +85,7 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                'click @ui.close': 'close'
             },
             initialize: function () {
+                this.collectionManager = new CollectionManager();
 
                 if (!Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
                     // TODO ghourlier: Éviter que les gens n'ayant pas l'autorisation accèdent à cet écran.
@@ -116,12 +94,25 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                 }
             },
 
-            onRender: function(){
-                var notif = new notificationList();
-                this.notification.show(notif);
+            onBeforeShow: function(){
+                var that = this;
 
-                var defaultNotif = new defaultNotification();
-                this.autoSubscribe.show(defaultNotif);
+                $.when(this.collectionManager.getDiscussionModelPromise(),
+                    this.collectionManager.getNotificationsDiscussionCollectionPromise())
+                    .then(function (Discussion, NotificationsDiscussion) {
+
+                        var defaultNotif = new defaultNotification({
+                            model: Discussion
+                        });
+                        that.getRegion('autoSubscribe').show(defaultNotif);
+
+                        var notif = new notificationList({
+                            collection: NotificationsDiscussion
+                        });
+                        that.getRegion('notification').show(notif);
+
+                    });
+
             },
 
             close: function () {

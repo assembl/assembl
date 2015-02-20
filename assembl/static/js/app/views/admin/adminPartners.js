@@ -134,19 +134,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
         });
 
         var PartnerList = Marionette.CollectionView.extend({
-            childView: Partners,
-            initialize: function(){
-                var that = this,
-                    collectionManager = new CollectionManager();
-
-                this.collection = undefined;
-
-                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
-                    function (allPartnerOrganization) {
-                        that.collection = allPartnerOrganization;
-                        that.render();
-                    });
-            }
+            childView: Partners
         });
 
         var adminPartners = Marionette.LayoutView.extend({
@@ -156,7 +144,9 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
               partners: '.js_addPartner',
               close: '.bx-alert-success .bx-close'
             },
-
+            initialize: function(){
+                this.collectionManager = new CollectionManager();
+            },
             regions: {
               partner: '#partner-content'
             },
@@ -172,12 +162,20 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                 }
             },
 
-            onRender: function () {
+            onBeforeShow: function(){
+                var that = this;
+
                 Ctx.initTooltips(this.$el);
 
-                var partnerList = new PartnerList();
+                $.when(this.collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
+                    function (allPartnerOrganization) {
+                        var partnerList = new PartnerList({
+                            collection: allPartnerOrganization
+                        });
 
-                this.partner.show(partnerList);
+                        that.getRegion('partner').show(partnerList);
+                    });
+
             },
 
             close: function () {
