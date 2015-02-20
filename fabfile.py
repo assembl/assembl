@@ -1,4 +1,4 @@
-#!/bin/env #!/bin/env
+#!/bin/env python
 # -*- coding:utf-8 -*-
 from __future__ import with_statement
 
@@ -1185,4 +1185,4 @@ def env_inm_agora_ovh():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "master"
+    env.gitbranch python
