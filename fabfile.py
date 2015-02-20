@@ -1185,4 +1185,4 @@ def env_inm_agora_ovh():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch python
+    env.gitbranch = "master"
