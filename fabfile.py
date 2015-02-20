@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env #!/bin/env
 # -*- coding:utf-8 -*-
 from __future__ import with_statement
 
@@ -429,6 +429,7 @@ def app_compile_nodbupdate():
     execute(virtuoso_install_if_absent)
     execute(app_setup)
     execute(compile_stylesheets)
+    execute(bower_install)
     execute(compile_messages)
     execute(minify_javascript_maybe)
 
@@ -559,7 +560,10 @@ def install_builddeps():
     if env.mac:
         if not exists('/usr/local/bin/brew'):
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
-        run('brew install memcached zeromq redis')
+        run('brew install libevent')
+        # may require a sudo
+        if not run('brew link libevent', quiet=True)           sudo('brew link libevent')
+        run('brew install memcached zeromq redis libtool libmemcached gawk')
         if not exists('/usr/local/bin/node'):
             run('brew install nodejs npm')
         if not exists('/usr/local/bin/autoconf'):
@@ -567,7 +571,8 @@ def install_builddeps():
         if not exists('/usr/local/bin/automake'):
             run('brew install automake')
         # glibtoolize, bison, flex, gperf are on osx by default.
-        # brew does not know aclocal, autoheader... They exist on macports, but do we want to install that?
+        # brew does not know aclocal, autoheader... 
+        # They exist on macports, but do we want to install that?
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs nodejs-legacy  npm')
