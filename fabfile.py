@@ -562,7 +562,8 @@ def install_builddeps():
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
         run('brew install libevent')
         # may require a sudo
-        if not run('brew link libevent', quiet=True)           sudo('brew link libevent')
+        if not run('brew link libevent', quiet=True):
+            sudo('brew link libevent')
         run('brew install memcached zeromq redis libtool libmemcached gawk')
         if not exists('/usr/local/bin/node'):
             run('brew install nodejs npm')
