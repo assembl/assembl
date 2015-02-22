@@ -14,11 +14,6 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                 'click @ui.partnerItem':'deletePartner',
                 'click @ui.partnerItemEdit': 'editPartner'
             },
-            serializeData: function(){
-                return {
-                    partner: this.model
-                }
-            },
             deletePartner: function(){
                var that = this;
                this.model.destroy({
@@ -144,9 +139,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
               partners: '.js_addPartner',
               close: '.bx-alert-success .bx-close'
             },
-            initialize: function(){
-                this.collectionManager = new CollectionManager();
-            },
+
             regions: {
               partner: '#partner-content'
             },
@@ -163,11 +156,12 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
             },
 
             onBeforeShow: function(){
-                var that = this;
+                var that = this,
+                    collectionManager = new CollectionManager();
 
                 Ctx.initTooltips(this.$el);
 
-                $.when(this.collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
+                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
                     function (allPartnerOrganization) {
                         var partnerList = new PartnerList({
                             collection: allPartnerOrganization
