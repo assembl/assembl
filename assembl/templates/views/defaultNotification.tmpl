@@ -3,7 +3,7 @@
 			<div class="control-group">
 				<div class="controls">
 					<label class="checkbox">
-						<input type="checkbox" class="js_adminAutoSubscribe autoSubscribe" <%= discussion && (discussion.get('subscribe_to_notifications_on_signup') === true || discussion.get('subscribe_to_notifications_on_signup') === 1 || discussion.get('subscribe_to_notifications_on_signup') === '1') ? 'checked':'' %> >
+						<input type="checkbox" class="js_adminAutoSubscribe autoSubscribe" <%= (subscribe_to_notifications_on_signup === true || subscribe_to_notifications_on_signup === 1 || subscribe_to_notifications_on_signup === '1') ? 'checked':'' %> >
 						{{ gettext('Auto-subscribe users to default notifications when they register') }}
 					</label>
 				</div>
