@@ -3,7 +3,7 @@
 define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-growl', 'utils/i18n'],
     function (Marionette, DiscussionSource, bootstrapGrowl, i18n) {
 
-    var EmailSender = Marionette.ItemView.extend({
+    var DiscussionSettings = Marionette.ItemView.extend({
         template: '#tmpl-discussionSource',
         ui: {
             source:'.js_saveSource'
@@ -11,12 +11,6 @@ define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-grow
         events: {
             'click @ui.source':'saveSource'
         },
-        serializeData: function(){
-            return {
-                source: this.model
-            }
-        },
-
         saveSource: function(e){
             e.preventDefault();
 
@@ -73,8 +67,8 @@ define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-grow
         }
     });
 
-    var EmailSenderList = Marionette.CollectionView.extend({
-        childView: EmailSender
+    var DiscussionSourceList = Marionette.CollectionView.extend({
+        childView: DiscussionSettings
     });
 
     var AdminDiscussionSettings = Marionette.LayoutView.extend({
@@ -84,14 +78,14 @@ define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-grow
             source: "#source-container"
         },
         onBeforeShow: function(){
-            var discussionSource = new DiscussionSource.Collection();
+            var source = new DiscussionSource.Collection();
 
-            var emailSenderList = new EmailSenderList({
-                collection: discussionSource
+            var discussionSourceList = new DiscussionSourceList({
+                collection: source
             });
-            discussionSource.fetch();
+            source.fetch();
 
-            this.getRegion('source').show(emailSenderList);
+            this.getRegion('source').show(discussionSourceList);
         }
     });
 

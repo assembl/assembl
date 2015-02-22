@@ -28,7 +28,7 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
 
             edition: function () {
                 Assembl.headerRegions.show(new navBar());
-                if (this.isAuthenticated()) {
+                if (this.isAuthenticated() && this.isAdmin()) {
                     var edition = new adminDiscussion();
                     Assembl.groupContainer.show(edition);
                 }
@@ -36,7 +36,7 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
 
             partners: function () {
                 Assembl.headerRegions.show(new navBar());
-                if (this.isAuthenticated()) {
+                if (this.isAuthenticated() && this.isAdmin()) {
                     var partners = new adminPartners();
                     Assembl.groupContainer.show(partners);
                 }
@@ -44,7 +44,7 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
 
             notifications: function () {
                 Assembl.headerRegions.show(new navBar());
-                if (this.isAuthenticated()) {
+                if (this.isAuthenticated() && this.isAdmin()) {
                     var notifications = new adminNotificationSubscriptions();
                     Assembl.groupContainer.show(notifications);
                 }
@@ -52,7 +52,7 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
 
             settings: function(){
                 Assembl.headerRegions.show(new navBar());
-                if (this.isAuthenticated()) {
+                if (this.isAuthenticated() && this.isAdmin()) {
                     var adminSetting = new adminSettings();
                     Assembl.groupContainer.show(adminSetting);
                 }
@@ -178,6 +178,10 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
                     return false;
                 }
 
+            },
+
+            isAdmin: function(){
+                return Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION);
             }
 
         });
