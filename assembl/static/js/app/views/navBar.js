@@ -34,7 +34,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             },
             events: {
                 'click @ui.currentLocal': 'setLocale',
-                'click @ui.joinDiscussion': 'joinDiscussion',
+                'click @ui.joinDiscussion': 'joinPopin',
                 'click @ui.needJoinDiscussion': 'needJoinDiscussion'
             },
             serializeData: function () {
@@ -65,6 +65,10 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 if (!this._store.getItem('needJoinDiscussion')) {
                     this._store.setItem('needJoinDiscussion', true);
                 }
+            },
+
+            joinPopin: function(){
+                Assembl.vent.trigger('navBar:joinDiscussion');
             }
         });
 
@@ -76,6 +80,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 this._store = window.localStorage;
                 this.showPopInDiscussion();
                 this.listenTo(Assembl.vent, 'navBar:subscribeOnFirstPost', this.showPopInOnFirstPost);
+                this.listenTo(Assembl.vent, 'navBar:joinDiscussion', this.joinDiscussion)
             },
             ui: {
                 groups: '.js_addGroup',
