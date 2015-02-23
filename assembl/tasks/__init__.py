@@ -30,29 +30,42 @@ def config_celery_app(celery_app, settings):
     celery_app.config_from_object({
         "BROKER_URL": settings['%s.broker' % (celery_app.main,)],
         "CELERY_ROUTES": {
-            'assembl.tasks.imap.import_mails': {'queue': 'imap'},
+            'assembl.tasks.imap.import_mails': {
+                'queue': 'imap',
+                "routing_key": "imap"},
             'assembl.tasks.notification_dispatch.processAccountCreatedTask': {
-                'queue': 'notification_dispatch'},
+                'queue': 'notification_dispatch',
+                "routing_key": "notification_dispatch"},
             'assembl.tasks.notification_dispatch.processAccountModifiedTask': {
-                'queue': 'notification_dispatch'},
+                'queue': 'notification_dispatch',
+                "routing_key": "notification_dispatch"},
             'assembl.tasks.notification_dispatch.processExtractCreatedTask': {
-                'queue': 'notification_dispatch'},
+                'queue': 'notification_dispatch',
+                "routing_key": "notification_dispatch"},
             'assembl.tasks.notification_dispatch.processExtractDeletedTask': {
-                'queue': 'notification_dispatch'},
+                'queue': 'notification_dispatch',
+                "routing_key": "notification_dispatch"},
             'assembl.tasks.notification_dispatch.processExtractModifiedTask': {
-                'queue': 'notification_dispatch'},
+                'queue': 'notification_dispatch',
+                "routing_key": "notification_dispatch"},
             'assembl.tasks.notification_dispatch.processIdeaCreatedTask': {
-                'queue': 'notification_dispatch'},
+                'queue': 'notification_dispatch',
+                "routing_key": "notification_dispatch"},
             'assembl.tasks.notification_dispatch.processIdeaDeletedTask': {
-                'queue': 'notification_dispatch'},
+                'queue': 'notification_dispatch',
+                "routing_key": "notification_dispatch"},
             'assembl.tasks.notification_dispatch.processIdeaModifiedTask': {
-                'queue': 'notification_dispatch'},
+                'queue': 'notification_dispatch',
+                "routing_key": "notification_dispatch"},
             'assembl.tasks.notification_dispatch.processPostCreatedTask': {
-                'queue': 'notification_dispatch'},
-            'assembl.tasks.notify.notify': {'queue': 'notify'},
+                'queue': 'notification_dispatch',
+                "routing_key": "notification_dispatch"},
+            'assembl.tasks.notify.notify': {
+                'queue': 'notify',
+                "routing_key": "notify"},
             'assembl.tasks.notify.process_pending_notifications': {
-                'queue': 'notify'},
-        }})
+                'queue': 'notify',
+                "routing_key": "notify"}}})
 
 
 def init_task_config(celery_app):
