@@ -12,7 +12,7 @@ notif_dispatch_celery_app = Celery('celery_tasks.notification_dispatch')
 notif_dispatch_celery_app._preconf = {
     "CELERY_DEFAULT_QUEUE": 'notification_dispatch',
     "CELERY_QUEUES": (Queue(
-        'notification_dispatch', Exchange('default'),
+        'notification_dispatch', Exchange('notification_dispatch'),
         routing_key='notification_dispatch'),)}
 
 
