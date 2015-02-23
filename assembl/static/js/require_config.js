@@ -43,7 +43,9 @@ var requirejs_config = {
         'dropdown': '../lib/dropdown',
         'jquery-linkify': '../bower/jQuery-linkify/dist/jquery.linkify.min',
         'jquery-oembed-all': '../bower/jquery-oembed-all/jquery.oembed',
-        'jquery.bootstrap-growl':'../bower/bootstrap-growl/jquery.bootstrap-growl'
+        'jquery.bootstrap-growl':'../bower/bootstrap-growl/jquery.bootstrap-growl',
+
+        'bluebird':'../bower/bluebird/js/browser/bluebird'
     },
     shim: {
         'underscore': {

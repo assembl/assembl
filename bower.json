@@ -43,6 +43,7 @@
     "chai-jquery": "~2.0.0",
     "fixtures": "~1.5.3",
     "jquery-oembed-all": "https://github.com/swergas/jquery-oembed-all.git#initially-visible-option",
-    "bootstrap-growl": "~1.1.0"
+    "bootstrap-growl": "~1.1.0",
+    "bluebird": "~2.9.12"
   }
 }
