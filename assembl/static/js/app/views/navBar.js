@@ -102,21 +102,29 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                $.when(collectionManager.getLocalRoleCollectionPromise()).then(
-                    function (allRole) {
+                if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
+                    $.when(collectionManager.getLocalRoleCollectionPromise()).then(
+                        function (allRole) {
 
-                        that.role =  allRole.find(function (local_role) {
-                            return local_role.get('role') === Roles.PARTICIPANT;
+                            that.role = allRole.find(function (local_role) {
+                                return local_role.get('role') === Roles.PARTICIPANT;
+                            });
+
+                            var navRight = new navBarRight({
+                                model: that.role
+                            });
+
+                            that.getRegion('navBarRight').show(navRight);
+
+                            that.getRegion('navBarLeft').show(new navBarLeft());
                         });
-
-                        var navRight = new navBarRight({
-                            model: that.role
-                        });
-
-                        that.getRegion('navBarRight').show(navRight);
-
-                        that.getRegion('navBarLeft').show(new navBarLeft());
+                } else {
+                    var navRight = new navBarRight({
+                        model: undefined
                     });
+                    this.getRegion('navBarRight').show(navRight);
+                    this.getRegion('navBarLeft').show(new navBarLeft());
+                }
             },
 
             switchToExpertInterface: function (e) {
