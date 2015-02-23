@@ -4,7 +4,6 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
 
     var sourceModel = Base.Model.extend({
         urlRoot: Ctx.getApiV2DiscussionUrl()+'sources',
-        idAttribute: '@id',
         defaults: {
             'name': '',
             'admin_sender': '',

@@ -9,7 +9,6 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
          * @class UserModel
          */
         var AgentModel = Base.Model.extend({
-            idAttribute: '@id',
             /**
              * @type {String}
              */

@@ -17,7 +17,7 @@ define(['jquery', 'models/base', 'utils/i18n', 'common/context'],
              * Defaults
              * @type {Object}
              */
-            idAttribute: '@id',
+
             defaults: {
                 name: '',
                 description: '',
