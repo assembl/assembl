@@ -9,11 +9,6 @@ from ..lib.sqla import get_model_watcher
 
 # broker specified
 notif_dispatch_celery_app = Celery('celery_tasks.notification_dispatch')
-notif_dispatch_celery_app._preconf = {
-    "CELERY_DEFAULT_QUEUE": 'notification_dispatch',
-    "CELERY_QUEUES": (Queue(
-        'notification_dispatch', Exchange('notification_dispatch'),
-        routing_key='notification_dispatch'),)}
 
 
 watcher = None

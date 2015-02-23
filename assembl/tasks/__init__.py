@@ -3,6 +3,7 @@ import ConfigParser
 
 from pyramid.paster import get_appsettings
 from pyramid.path import DottedNameResolver
+from kombu import Exchange, Queue
 
 from ..lib.sqla import configure_engine, get_session_maker
 from ..lib.zmqlib import configure_zmq
@@ -29,6 +30,15 @@ def config_celery_app(celery_app, settings):
     # TODO: automate this.
     celery_app.config_from_object({
         "BROKER_URL": settings['%s.broker' % (celery_app.main,)],
+        "CELERY_QUEUES": [
+            Queue(
+                'notification_dispatch', Exchange('notification_dispatch'),
+                routing_key='notification_dispatch'),
+            Queue(
+                'notify', Exchange('notify'), routing_key='notify'),
+            Queue(
+                'imap', Exchange('imap'), routing_key='imap'),
+        ],
         "CELERY_ROUTES": {
             'assembl.tasks.imap.import_mails': {
                 'queue': 'imap',
