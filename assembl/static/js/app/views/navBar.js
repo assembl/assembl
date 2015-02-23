@@ -2,58 +2,11 @@
 
 define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'utils/i18n', 'utils/roles', 'backbone.modal', 'backbone.marionette.modals'],
     function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions, i18n, Roles) {
-        var navBar = Marionette.LayoutView.extend({
-            template: '#tmpl-navBar',
-            tagName: 'nav',
-            className: 'navbar navbar-default',
-            initialize: function () {
 
-                this._store = window.localStorage;
-
-                var that = this,
-                    collectionManager = new CollectionManager();
-
-                this.roles = new RolesModel.Model();
-                if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-                    $.when(collectionManager.getLocalRoleCollectionPromise()).then(
-                        function (allRole) {
-                            if (allRole.models.length) {
-                                that.roles = allRole.models[0];
-                            }
-                            that.render();
-                        });
-                }
-
-                this.showPopInDiscussion();
-                this.listenTo(Assembl.vent, 'navBar:subscribeOnFirstPost', this.showPopInOnFirstPost);
-
-            },
-            ui: {
-                currentLocal: '.js_setLocale',
-                groups: '.js_addGroup',
-                expertInterface: '.js_switchToExpertInterface',
-                simpleInterface: '.js_switchToSimpleInterface',
-                joinDiscussion: '.js_joinDiscussion',
-                needJoinDiscussion: '.js_needJoinDiscussion'
-            },
-            events: {
-                'click @ui.currentLocal': 'setLocale',
-                'click @ui.groups': 'addGroup',
-                'click @ui.expertInterface': 'switchToExpertInterface',
-                'click @ui.simpleInterface': 'switchToSimpleInterface',
-                'click @ui.joinDiscussion': 'joinDiscussion',
-                'click @ui.needJoinDiscussion': 'needJoinDiscussion'
-            },
-
-            serializeData: function () {
-                return {
-                    Ctx: Ctx,
-                    isUserSubscribed: this.roles.isUserSubscribed(),
-                    canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER)
-                }
-            },
-
-            onRender: function () {
+        var navBarLeft = Marionette.ItemView.extend({
+            template: '#tmpl-navBarLeft',
+            className: 'navbar-left',
+            onRender: function(){
                 var that = this;
                 Assembl.commands.setHandler('socket:open', function () {
                     that.$('#onlinedot').addClass('is-online');
@@ -61,9 +14,29 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 Assembl.commands.setHandler('socket:close', function () {
                     that.$('#onlinedot').removeClass('is-online');
                 });
+            }
+        });
 
+        var navBarRight = Marionette.ItemView.extend({
+            template: '#tmpl-navBarRight',
+            className: 'navbar-right',
+            ui: {
+                currentLocal: '.js_setLocale',
+                joinDiscussion: '.js_joinDiscussion',
+                needJoinDiscussion: '.js_needJoinDiscussion'
             },
-
+            events: {
+                'click @ui.currentLocal': 'setLocale',
+                'click @ui.joinDiscussion': 'joinDiscussion',
+                'click @ui.needJoinDiscussion': 'needJoinDiscussion'
+            },
+            serializeData: function () {
+                return {
+                    Ctx: Ctx,
+                    role: this.model,
+                    canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER)
+                }
+            },
             templateHelpers: function () {
                 return {
                     urlNotifications: function () {
@@ -77,10 +50,66 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     }
                 }
             },
-
             setLocale: function (e) {
                 var lang = $(e.target).attr('data-locale');
                 Ctx.setLocale(lang);
+            },
+            needJoinDiscussion: function () {
+                if (!this._store.getItem('needJoinDiscussion')) {
+                    this._store.setItem('needJoinDiscussion', true);
+                }
+            }
+        });
+
+        var navBar = Marionette.LayoutView.extend({
+            template: '#tmpl-navBar',
+            tagName: 'nav',
+            className: 'navbar navbar-default',
+            initialize: function () {
+                this._store = window.localStorage;
+                this.showPopInDiscussion();
+                this.listenTo(Assembl.vent, 'navBar:subscribeOnFirstPost', this.showPopInOnFirstPost);
+            },
+            ui: {
+                groups: '.js_addGroup',
+                expertInterface: '.js_switchToExpertInterface',
+                simpleInterface: '.js_switchToSimpleInterface'
+            },
+            events: {
+                'click @ui.groups': 'addGroup',
+                'click @ui.expertInterface': 'switchToExpertInterface',
+                'click @ui.simpleInterface': 'switchToSimpleInterface'
+            },
+            regions: {
+              'navBarLeft':'#navBarLeft',
+              'navBarRight':'#navBarRight'
+            },
+
+            serializeData: function () {
+                return {
+                    Ctx: Ctx
+                }
+            },
+
+            onBeforeShow: function(){
+                var that = this,
+                    collectionManager = new CollectionManager();
+
+                $.when(collectionManager.getLocalRoleCollectionPromise()).then(
+                    function (allRole) {
+
+                        that.role =  allRole.find(function (local_role) {
+                            return local_role.get('role') === Roles.PARTICIPANT;
+                        });
+
+                        var navRight = new navBarRight({
+                            model: that.role
+                        })
+
+                        that.getRegion('navBarRight').show(navRight);
+
+                        that.getRegion('navBarLeft').show(new navBarLeft());
+                    });
             },
 
             switchToExpertInterface: function (e) {
@@ -223,8 +252,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 var modalClassName = 'group-modal popin-wrapper modal-joinDiscussion';
                 var modalTemplate = _.template($('#tmpl-joinDiscussion').html());
 
-                if ( firstPost )
-                {
+                if ( firstPost ){
                     modalClassName = 'group-modal popin-wrapper modal-firstPost';
                     modalTemplate = _.template($('#tmpl-firstPost').html());
                 }
@@ -301,12 +329,6 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     this.joinDiscussion();
                 } else {
                     this._store.removeItem('needJoinDiscussion');
-                }
-            },
-
-            needJoinDiscussion: function () {
-                if (!this._store.getItem('needJoinDiscussion')) {
-                    this._store.setItem('needJoinDiscussion', true);
                 }
             }
 
