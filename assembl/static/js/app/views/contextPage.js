@@ -1147,7 +1147,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 var count = 0;
                 var sz = messages.length;
                 var date_threshold_min = messages[0].date;
-                var date_threshold_max = messages[sz - 1].date; // or we could want it to be today
+                // date_threshold_max could be set to:
+                // - messages[sz - 1].date (but hen there may be a problem with timezones which would not include lastest messages, and the period would not be "last week" but "the 7 days which end with the last contribution" => the metric becomes more difficult to understand)
+                // - today (but the statistics would not be totally accurate because the x days period would in fact vary of a maximum of one day, except if we filter messages precisely using their timezone-aware time instead of using per-day totals)
+                // - yesterday (but then how would we consider today's authors? => the metric becomes more difficult to understand)
+                var date_threshold_max = new Date().toISOString();
                 var threshold_passed = false;
                 for (var i = sz - 1; i >= 0; --i) {
                     count += messages[i]['value'];
