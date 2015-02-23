@@ -24,7 +24,7 @@ notify_celery_app._preconf = {
     "CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE,
     "CELERY_DEFAULT_QUEUE": 'notify',
     "CELERY_QUEUES": (Queue(
-        'notify', Exchange('default'), routing_key='notify'),)
+        'notify', Exchange('notify'), routing_key='notify'),)
 }
 
 watcher = None
