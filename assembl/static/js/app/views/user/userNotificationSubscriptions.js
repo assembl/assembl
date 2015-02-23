@@ -229,6 +229,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                         success: function (model, resp) {
                             that.model = undefined;
                             that.trigger('subscriberView:render');
+                            Assembl.vent.trigger('navBarRight:refresh', undefined);
                         },
                         error: function (model, resp) {
                             console.error('ERROR: unSubscription failed', resp);
@@ -251,6 +252,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                         success: function (model, resp) {
                             that.model = LocalRolesUser;
                             that.trigger('subscriberView:render');
+                            Assembl.vent.trigger('navBarRight:refresh', model);
                         },
                         error: function (model, resp) {
                             console.error('ERROR: joinDiscussion->subscription', resp);
@@ -270,25 +272,22 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
               userSubscriber: '#subscriber',
               notifByEmail: '#notifByEmail'
             },
-            initialize: function(){
-                this.collectionManager = new CollectionManager();
-            },
             onBeforeShow: function () {
-                var that = this;
+                var that = this,
+                    collectionManager = new CollectionManager();
 
-                $.when(this.collectionManager.getNotificationsUserCollectionPromise(),
-                       this.collectionManager.getNotificationsDiscussionCollectionPromise(),
-                       this.collectionManager.getLocalRoleCollectionPromise()).then(
+                $.when(collectionManager.getNotificationsUserCollectionPromise(),
+                       collectionManager.getNotificationsDiscussionCollectionPromise(),
+                       collectionManager.getLocalRoleCollectionPromise()).then(
                     function (NotificationsUser, notificationTemplates, allRoles) {
 
                         var role =  allRoles.find(function (local_role) {
-                                return local_role.get('role') == Roles.PARTICIPANT;
+                                return local_role.get('role') === Roles.PARTICIPANT;
                             });
                         var subscriber = new Subscriber({
                             model: role
                         });
                         that.getRegion('userSubscriber').show(subscriber);
-
 
                         var templateSubscriptions = new TemplateSubscriptions({
                             notificationTemplates: notificationTemplates,

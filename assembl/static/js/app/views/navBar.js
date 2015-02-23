@@ -20,6 +20,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
         var navBarRight = Marionette.ItemView.extend({
             template: '#tmpl-navBarRight',
             className: 'navbar-right',
+            initialize: function(){
+                var that = this;
+                this.listenTo(Assembl.vent, 'navBarRight:refresh', function(model){
+                   that.model = model;
+                   that.render();
+                });
+            },
             ui: {
                 currentLocal: '.js_setLocale',
                 joinDiscussion: '.js_joinDiscussion',
@@ -104,7 +111,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
                         var navRight = new navBarRight({
                             model: that.role
-                        })
+                        });
 
                         that.getRegion('navBarRight').show(navRight);
 
