@@ -380,22 +380,25 @@ class AssemblQuadStorageManager(object):
         gr = GraphQuadMapPattern(graph_iri, None, nsm=self.nsm)
         gr.drop(self.session, force)
 
-    def discussion_storage_name(self, discussion_id=None):
+    @staticmethod
+    def discussion_storage_name(discussion_id=None):
         if discussion_id:
             return getattr(QUADNAMES, 'discussion_%d_storage' % discussion_id)
         else:
             return QUADNAMES.discussion_storage
 
+    @staticmethod
     def discussion_graph_name(
-            self, discussion_id=None, section=DISCUSSION_DATA_SECTION):
+            discussion_id=None, section=DISCUSSION_DATA_SECTION):
         if discussion_id:
             return getattr(ASSEMBL, 'discussion_%d_%s' % (
                 discussion_id, section))
         else:
             return getattr(ASSEMBL, 'discussion_%s' % (section, ))
 
+    @staticmethod
     def discussion_graph_iri(
-            self, discussion_id=None, section=DISCUSSION_DATA_SECTION):
+            discussion_id=None, section=DISCUSSION_DATA_SECTION):
         if discussion_id:
             return getattr(QUADNAMES, 'discussion_%d_%s_iri' % (
                 discussion_id, section))
@@ -566,6 +569,7 @@ class AssemblQuadStorageManager(object):
                 ).bindparams(name=name)).first()[0])
             if not exists:
                 self.session.execute(stmt)
+                self.session.execute('GRANT EXECUTE ON "%s" TO PUBLIC' % name)
         for name, stmt in iri_definition_stmts.iteritems():
             if not self.mapping_exists(name, IriClass.mapping_type):
                 self.session.execute(stmt)

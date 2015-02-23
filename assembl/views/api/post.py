@@ -286,14 +286,12 @@ def mark_post_read(request):
 
     new_counts = []
     if change:
-        new_counts = Idea.idea_counts(discussion_id, post_id, user_id)
-    
+        new_counts = Idea.idea_read_counts(discussion_id, post_id, user_id)
+
     return { "ok": True, "ideas": [
         {"@id": Idea.uri_generic(idea_id),
-         "@type": db.query(Idea).get(idea_id).external_typename(),
-         "num_posts": total_posts,
          "num_read_posts": read_posts
-        } for (idea_id, total_posts, read_posts) in new_counts] }
+        } for (idea_id, read_posts) in new_counts] }
 
 
 @posts.post(permission=P_ADD_POST)

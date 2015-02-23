@@ -3,6 +3,7 @@ import transaction
 from datetime import timedelta
 from traceback import print_exc
 from celery import Celery
+from kombu import Exchange, Queue
 
 from ..lib.sqla import mark_changed
 
@@ -21,7 +22,10 @@ CELERYBEAT_SCHEDULE = {
 notify_celery_app = Celery('celery_tasks.notify')
 notify_celery_app._preconf = {
     "CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE,
-    "CELERY_DEFAULT_QUEUE": 'notify'}
+    "CELERY_DEFAULT_QUEUE": 'notify',
+    "CELERY_QUEUES": (Queue(
+        'notify', Exchange('default'), routing_key='notify'),)
+}
 
 watcher = None
 

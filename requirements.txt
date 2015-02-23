@@ -1,5 +1,5 @@
 Babel==1.3
-Beaker==1.6.4
+Beaker>=1.6.5
 Chameleon==2.22
 Chroma==0.2.0
 ColanderAlchemy==0.3.1
@@ -10,8 +10,8 @@ Jinja2==2.7.3
 Mako==1.0.1
 MarkupSafe==0.23
 PasteDeploy==1.5.2
-PyJWT==0.4.1
-PyLD==0.6.6
+PyJWT==0.4.3
+PyLD==0.6.7
 PyStemmer==1.3.0
 Pygments==2.0.2
 SPARQLWrapper==1.6.4
@@ -45,7 +45,7 @@ ecdsa==0.13
 enum34==1.0.4
 greenlet==0.4.5
 html5lib==0.999
-imaplib2==2.37.4
+imaplib2==2.38.0
 isodate==0.5.1
 iso8601==0.1.10
 -e git+https://github.com/maparent/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
@@ -85,10 +85,10 @@ python-memcached==1.53
 python-openid==2.2.5
 pytz==2014.10
 pyzmq==14.5.0
-rdflib==4.1.2
+rdflib==4.2.0
 redis==2.10.3
 docutils==0.12
-raven==5.1.1
+raven==5.2.0
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1

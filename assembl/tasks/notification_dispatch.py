@@ -1,6 +1,7 @@
 from celery import Celery
 from zope.component import getGlobalSiteManager
 from zope import interface
+from kombu import Exchange, Queue
 
 from . import init_task_config, config_celery_app
 from ..lib.model_watcher import IModelEventWatcher
@@ -9,7 +10,10 @@ from ..lib.sqla import get_model_watcher
 # broker specified
 notif_dispatch_celery_app = Celery('celery_tasks.notification_dispatch')
 notif_dispatch_celery_app._preconf = {
-    "CELERY_DEFAULT_QUEUE": 'notification_dispatch'}
+    "CELERY_DEFAULT_QUEUE": 'notification_dispatch',
+    "CELERY_QUEUES": (Queue(
+        'notification_dispatch', Exchange('default'),
+        routing_key='notification_dispatch'),)}
 
 
 watcher = None

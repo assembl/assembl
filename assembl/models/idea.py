@@ -6,6 +6,7 @@ from abc import ABCMeta, abstractmethod
 from datetime import datetime
 
 from bs4 import BeautifulSoup
+from rdflib import URIRef
 from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload)
 from sqlalchemy.orm.attributes import NO_VALUE
@@ -24,11 +25,14 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.associationproxy import association_proxy
 from virtuoso.vmapping import IriClass
+from virtuoso.alchemy import SparqlClause
 
+from ..lib import config
 from ..nlp.wordcounter import WordCounter
 from . import DiscussionBoundBase, Tombstonable
 from .discussion import Discussion
-from ..semantic.virtuoso_mapping import QuadMapPatternS
+from ..semantic.virtuoso_mapping import (
+    QuadMapPatternS, AssemblQuadStorageManager)
 from ..auth import (
     CrudPermissions, P_READ, P_ADMIN_DISC, P_EDIT_IDEA,
     P_ADD_IDEA)
@@ -277,6 +281,9 @@ JOIN post AS family_posts ON (
         """ Worse than above... but temporary """
         connection = self.db().connection()
         user_id = connection.info.get('userid', None)
+        return self.num_read_posts_for(user_id)
+
+    def num_read_posts_for(self, user_id):
         if not user_id:
             return 0
         join = """JOIN action_on_post ON (action_on_post.post_id = family_posts.id)
@@ -483,65 +490,59 @@ JOIN post AS family_posts ON (
         raise NotImplemented()
 
     @classmethod
-    def idea_counts(cls, discussion_id, post_id, user_id):
-        "Given a post and a user, give the total and read count of posts for each affected idea"
-        stmt1 = """SELECT idea.id, root_post.id FROM idea 
-            JOIN idea_content_link ON (idea_content_link.idea_id = idea.id)
-            JOIN idea_content_positive_link
-                ON (idea_content_positive_link.id = idea_content_link.id)
-            JOIN post AS root_post ON (idea_content_link.content_id = root_post.id)
-            WHERE root_post.id = :post_id OR root_post.id IN
-            (SELECT parent_id, id FROM (
-                    SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
-                        parent_id, id FROM post
-                    UNION SELECT id AS parent_id, id FROM POST
-                    ) pa 
-                JOIN content USING (id) WHERE id = :post_id AND content.discussion_id = :discussion_id)"""
-        roots = defaultdict(set)
-        for idea_id, post_id in cls.db().execute(text(stmt1).params(
-            {'post_id': post_id,
-             "discussion_id": discussion_id})):
-            roots[idea_id].add(post_id)
-        result = []
-        common_params = dict(discussion_id=discussion_id, user_id=user_id)
-        for idea_id, post_ids in roots.iteritems():
-            stmt2 = ' UNION '.join([
-                """SELECT  pa.id as post_id FROM (
-                    SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
-                        parent_id, id FROM post
-                    UNION SELECT id AS parent_id, id FROM POST
-                    ) pa
-                WHERE parent_id = :post_id_%d
-                """ % n for n in range(len(post_ids))])
-            # We have to specify distinct to avoid counting nulls. Go figure.
-            stmt2 = """SELECT COUNT(DISTINCT x.post_id),
-                COUNT(DISTINCT action.id) FROM (%s) x
-                LEFT JOIN action_on_post ON (
-                     action_on_post.post_id = x.post_id)
-                LEFT JOIN action ON (action.actor_id = :user_id
-                        AND action.id = action_on_post.id
-                        AND action.type = 'version:ReadStatusChange')""" % (stmt2,)
-            params = {'post_id_'+str(n): post_id
-                      for n, post_id in enumerate(post_ids)}
-            params['user_id'] = user_id
-            cpost, cview = list(
-                cls.db().execute(text(stmt2).params(params))).pop()
-            result.append((idea_id, cpost, cview))
-        stmt3 = """SELECT MIN(root_idea.id) as idea_id,
-            COUNT(DISTINCT post.id) as total_count,
-            COUNT(DISTINCT action_on_post.id) as read_count
-            FROM root_idea
-            JOIN idea ON (idea.id = root_idea.id)
-            CROSS JOIN post
-            JOIN content ON (post.id = content.id)
-            LEFT JOIN action ON (action.actor_id = :user_id)
-            LEFT JOIN action_on_post ON (
-                action.id = action_on_post.id AND action_on_post.post_id = post.id)
-            WHERE idea.discussion_id = :discussion_id
-            AND content.discussion_id = :discussion_id"""
-        result.append(list(
-            cls.db().execute(text(stmt3).params(common_params))).pop())
-        return result
+    def get_idea_ids_showing_post(cls, post_id):
+        "Given a post, give the ID of the ideas that show this message"
+        # This works because of a virtuoso bug...
+        # where DISTINCT gives IDs instead of URIs.
+        from .generic import Content
+        discussion_storage = \
+            AssemblQuadStorageManager.discussion_storage_name()
+
+        post_uri = URIRef(Content.uri_generic(
+            post_id, AssemblQuadStorageManager.local_uri()))
+        return [int(id) for (id,) in cls.db.execute(SparqlClause(
+            '''select distinct ?idea where {
+                %s sioc:reply_of* ?post .
+                ?fragment oa:hasSource ?post .
+                ?fragment assembl:resourceExpressesIdea ?ideaF .
+                ?idea idea:includes* ?ideaF  }''' % (post_uri.n3(),),
+            quad_storage=discussion_storage.n3()))]
+
+    @classmethod
+    def idea_read_counts_sparql(cls, discussion_id, post_id, user_id):
+        """Given a post and a user, give the total and read count
+         of posts for each affected idea
+        This one is slower than the sql version below."""
+        from .auth import AgentProfile
+        local_uri = AssemblQuadStorageManager.local_uri()
+        discussion_storage = \
+            AssemblQuadStorageManager.discussion_storage_name()
+        idea_ids = cls.get_idea_ids_showing_post(post_id)
+        user_uri = URIRef(AgentProfile.uri_generic(user_id, local_uri)).n3()
+        results = []
+        for idea_id in idea_ids:
+            ((read,),) = list(cls.db.execute(SparqlClause(
+            """select count(distinct ?change) where {
+            %s idea:includes* ?ideaF .
+            ?fragment assembl:resourceExpressesIdea ?ideaF .
+            ?fragment oa:hasSource ?postF .
+            ?post sioc:reply_of* ?postF .
+            ?change a version:ReadStatusChange;
+                version:who %s ;
+                version:what ?post }""" % (
+                URIRef(Idea.uri_generic(idea_id, local_uri)).n3(),
+                user_uri), quad_storage=discussion_storage.n3())))
+            results.append((idea_id, read))
+        return results
+
+    @classmethod
+    def idea_read_counts(cls, discussion_id, post_id, user_id):
+        """Given a post and a user, give the total and read count
+            of posts for each affected idea"""
+        idea_ids = cls.get_idea_ids_showing_post(post_id)
+        ideas = cls.db.query(cls).filter(cls.id.in_(idea_ids))
+        return [(idea.id, idea.num_read_posts_for(user_id))
+                for idea in ideas]
 
     def get_widget_creation_urls(self):
         from .widgets import GeneratedIdeaWidgetLink

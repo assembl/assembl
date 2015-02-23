@@ -46,11 +46,11 @@
 	<li class="sub fl mrl">
 	 {% if user %}
 		 <% if(!isUserSubscribed && canSubscribeToDiscussion ){ %>
-			 <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
+			 <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('Subscribe to discussion') }}</a>
 		 <% } %>
 	 {% else %}
 		 {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-			 <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
+			 <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Subscribe to discussion') }}</a>
 		 {% endif %}
 	 {% endif %}
 	</li>
@@ -71,7 +71,7 @@
 				{% if user_profile_edit_url %}
 					<li><a href="<%= userProfile() %>"><i class="icon-options"></i>{{ gettext('Edit your profile') }}</a></li>
 				{% endif %}
-				<li><a href="<%= urlNotifications() %>"><i class="icon-bell"></i>{{ gettext('notifications') }}</a></li>
+				<li><a href="<%= urlNotifications() %>"><i class="icon-bell"></i>{{ gettext('Notifications') }}</a></li>
 				<li><a href="<%= urlLogOut() %>" class="sign-out"><i class="icon-logout"></i>{{ gettext('Sign out') }}</a></li>
 			</ul>
 		</div>
@@ -110,11 +110,11 @@
     <!--<div class="dispib vat">
       {% if user %}
         <% if(!isUserSubscribed && canSubscribeToDiscussion ){ %>
-          <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('subscribe to discussion') }}</a>
+          <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('Subscribe to discussion') }}</a>
         <% } %>
       {% else %}
         {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-          <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('subscribe to discussion') }}</a>
+          <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Subscribe to discussion') }}</a>
         {% endif %}
       {% endif %}
     </div>
