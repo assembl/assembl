@@ -1,6 +1,12 @@
 server {
+    listen    80;
+    #listen    443 ssl;
+    
     server_name assembl.yourdomain.com;
-
+    
+    #ssl_certificate     /etc/ssl/assembl.yourdomain.com/assembl.yourdomain.com.crt;
+    #ssl_certificate_key /etc/ssl/assembl.yourdomain.com/assembl.yourdomain.com.key;
+    
     location /something_or_other.html {
         #This is for domain verification
         alias /var/www/assembl/something_or_other.html;
