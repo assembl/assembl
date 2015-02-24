@@ -26,56 +26,42 @@ def configure(registry, task_name):
     configure_model_watcher(registry, task_name)
 
 
+_celery_queues = None
+_celery_routes = None
+
+
+def get_celery_queues():
+    global _celery_queues
+    if not _celery_queues:
+        _celery_queues = [
+            Queue(q, Exchange(q), routing_key=q)
+            for q in ('notify', 'imap', 'notification_dispatch')]
+    return _celery_queues
+
+
+def get_celery_routes():
+    global _celery_routes
+    apps = (('imap', 'imap_celery_app'),
+            ('notification_dispatch', 'notif_dispatch_celery_app'),
+            ('notify', 'notify_celery_app'))
+    if not _celery_routes:
+        _celery_routes = {}
+        for module, app in apps:
+            full_module_name = "assembl.tasks."+module
+            mod = __import__(full_module_name, fromlist=[app])
+            app = getattr(mod, app)
+            for task_name in app.tasks:
+                if task_name.startswith(full_module_name):
+                    _celery_routes[task_name] = {
+                        'queue': module, 'routing_key': module}
+    return _celery_routes
+
+
 def config_celery_app(celery_app, settings):
-    # TODO: automate this.
     celery_app.config_from_object({
         "BROKER_URL": settings['%s.broker' % (celery_app.main,)],
-        "CELERY_QUEUES": [
-            Queue(
-                'notification_dispatch', Exchange('notification_dispatch'),
-                routing_key='notification_dispatch'),
-            Queue(
-                'notify', Exchange('notify'), routing_key='notify'),
-            Queue(
-                'imap', Exchange('imap'), routing_key='imap'),
-        ],
-        "CELERY_ROUTES": {
-            'assembl.tasks.imap.import_mails': {
-                'queue': 'imap',
-                "routing_key": "imap"},
-            'assembl.tasks.notification_dispatch.processAccountCreatedTask': {
-                'queue': 'notification_dispatch',
-                "routing_key": "notification_dispatch"},
-            'assembl.tasks.notification_dispatch.processAccountModifiedTask': {
-                'queue': 'notification_dispatch',
-                "routing_key": "notification_dispatch"},
-            'assembl.tasks.notification_dispatch.processExtractCreatedTask': {
-                'queue': 'notification_dispatch',
-                "routing_key": "notification_dispatch"},
-            'assembl.tasks.notification_dispatch.processExtractDeletedTask': {
-                'queue': 'notification_dispatch',
-                "routing_key": "notification_dispatch"},
-            'assembl.tasks.notification_dispatch.processExtractModifiedTask': {
-                'queue': 'notification_dispatch',
-                "routing_key": "notification_dispatch"},
-            'assembl.tasks.notification_dispatch.processIdeaCreatedTask': {
-                'queue': 'notification_dispatch',
-                "routing_key": "notification_dispatch"},
-            'assembl.tasks.notification_dispatch.processIdeaDeletedTask': {
-                'queue': 'notification_dispatch',
-                "routing_key": "notification_dispatch"},
-            'assembl.tasks.notification_dispatch.processIdeaModifiedTask': {
-                'queue': 'notification_dispatch',
-                "routing_key": "notification_dispatch"},
-            'assembl.tasks.notification_dispatch.processPostCreatedTask': {
-                'queue': 'notification_dispatch',
-                "routing_key": "notification_dispatch"},
-            'assembl.tasks.notify.notify': {
-                'queue': 'notify',
-                "routing_key": "notify"},
-            'assembl.tasks.notify.process_pending_notifications': {
-                'queue': 'notify',
-                "routing_key": "notify"}}})
+        "CELERY_QUEUES": get_celery_queues(),
+        "CELERY_ROUTES": get_celery_routes()})
 
 
 def init_task_config(celery_app):

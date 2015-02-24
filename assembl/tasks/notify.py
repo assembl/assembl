@@ -14,7 +14,10 @@ CELERYBEAT_SCHEDULE = {
     'resend-every-10-minutes': {
         'task': 'assembl.tasks.notify.process_pending_notifications',
         'schedule': timedelta(seconds=600),
-        'args': ()
+        'options': {
+            'routing_key': 'notify',
+            'exchange': 'notify'
+        }
     },
 }
 
