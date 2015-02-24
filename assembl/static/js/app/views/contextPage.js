@@ -22,29 +22,13 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
         });
 
         var PartnerList = Marionette.CompositeView.extend({
-            template: '#tmpl-loader',
+            template: '#tmpl-partnerList',
             childView: Partner,
             className:'gr mvxl',
             childViewContainer: '.partnersList',
-            initialize: function(){
-                var that = this,
-                    collectionManager = new CollectionManager();
-
-                this.collection = undefined;
-                this.nbOrganisations = 0;
-
-                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).
-                    then(function (DiscussionModel) {
-                        that.nbOrganisations = DiscussionModel.models.length;
-                        that.collection = DiscussionModel;
-                        that.template = '#tmpl-partnerList';
-                        if(that.childViewContainer){
-                            that.render();
-                        }
-
-                    });
+            initialize: function(options){
+                this.nbOrganisations = options.nbOrganisations;
             },
-
             serializeData: function(){
                 return {
                     userCanEditDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
@@ -57,42 +41,35 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
         var Synthesis = Marionette.ItemView.extend({
             template: '#tmpl-synthesisContext',
-            initialize: function () {
-                var that = this,
-                    collectionManager = new CollectionManager();
+            initialize: function (options) {
+                var that = this;
 
                 this.model = new Backbone.Model();
 
-                $.when(collectionManager.getAllMessageStructureCollectionPromise(),
-                    collectionManager.getAllSynthesisCollectionPromise()).then(
-                    function (allMessageStructureCollection, allSynthesisCollection) {
+                var synthesisMessages = options.allMessageStructureCollection.where({'@type': Types.SYNTHESIS_POST});
+                if (synthesisMessages.length > 0) {
+                    _.sortBy(synthesisMessages, function (message) {
+                        return message.get('date');
+                    });
+                    synthesisMessages.reverse();
 
-                        var synthesisMessages = allMessageStructureCollection.where({'@type': Types.SYNTHESIS_POST});
-                        if (synthesisMessages.length > 0) {
-                            _.sortBy(synthesisMessages, function (message) {
-                                return message.get('date');
-                            });
-                            synthesisMessages.reverse();
+                    _.each(synthesisMessages, function (message, index) {
+                        if (index === 0) {
+                            var all = options.allSynthesisCollection.get(message.get('publishes_synthesis'));
 
-                            _.each(synthesisMessages, function (message, index) {
-                                if (index === 0) {
-                                    var all = allSynthesisCollection.get(message.get('publishes_synthesis'));
-
-                                    that.model.set({
-                                        creation_date: message.get('date'),
-                                        introduction: all.get('introduction')
-                                    })
-                                }
+                            that.model.set({
+                                creation_date: message.get('date'),
+                                introduction: all.get('introduction')
                             })
                         }
-                        else {
-                            that.model.set({
-                                empty: i18n.gettext("No synthesis of the discussion has been published yet")
-                            });
-                        }
-
-
+                    })
+                }
+                else {
+                    this.model.set({
+                        empty: i18n.gettext("No synthesis of the discussion has been published yet")
                     });
+                }
+
             },
 
             events: {
@@ -1228,21 +1205,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
         });
 
         var Instigator = Marionette.ItemView.extend({
-            template: '#tmpl-loader',
+            template: '#tmpl-instigator',
             initialize: function(){
-                var that = this,
-                    collectionManager = new CollectionManager();
-
-                this.instigator = undefined;
-
-                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(function(partners){
-                    that.instigator = _.find(partners.models, function(partner){
-                        return partner.get('is_initiator');
-                    });
-                    that.template = '#tmpl-instigator';
-                    that.render();
-                });
-
                 this.editInstigator = false;
             },
 
@@ -1255,10 +1219,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             serializeData: function () {
-                var isConnected = (Ctx.getCurrentUserId()) ? true : false;
-
                 return {
-                   instigator: this.instigator,
+                   instigator: this.model,
                    editInstigator: this.editInstigator,
                    Ctx: Ctx,
                    userCanEditDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
@@ -1315,21 +1277,10 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
         });
 
         var Introduction = Marionette.ItemView.extend({
-            template: '#tmpl-loader',
+            template: '#tmpl-introductions',
             initialize: function(){
                 this.editingIntroduction = false;
                 this.editingObjective = false;
-
-                this.model = undefined;
-
-                var that = this,
-                    collectionManager = new CollectionManager();
-
-                $.when(collectionManager.getDiscussionModelPromise()).then(function (DiscussionModel) {
-                    that.model = DiscussionModel;
-                    that.template = '#tmpl-introductions';
-                    that.render();
-                });
             },
 
             ui: {
@@ -1497,18 +1448,46 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 introductions: '#context-introduction'
             },
 
-            onRender: function () {
-                var partners = new PartnerList(),
-                    synthesis = new Synthesis(),
-                    statistics = new Statistics(),
-                    instigator = new Instigator(),
-                    introduction = new Introduction();
+            onBeforeShow: function(){
+                var that = this,
+                    collectionManager = new CollectionManager();
 
-                this.introductions.show(introduction);
-                this.instigator.show(instigator);
-                this.statistics.show(statistics);
-                this.synthesis.show(synthesis);
-                this.organizations.show(partners);
+                $.when(collectionManager.getDiscussionModelPromise(),
+                    collectionManager.getAllPartnerOrganizationCollectionPromise(),
+                    collectionManager.getAllMessageStructureCollectionPromise(),
+                    collectionManager.getAllSynthesisCollectionPromise())
+                    .then(function (DiscussionModel, AllPartner, allMessageStructureCollection, allSynthesisCollection) {
+
+                    var partnerInstigator =  AllPartner.find(function (partner) {
+                        return partner.get('is_initiator');
+                    });
+
+                    var introduction = new Introduction({
+                        model: DiscussionModel
+                    });
+                    that.getRegion('introductions').show(introduction);
+
+                    var instigator = new Instigator({
+                        model: partnerInstigator
+                    });
+                    that.getRegion('instigator').show(instigator);
+
+                    that.getRegion('statistics').show(new Statistics());
+
+                    var synthesis = new Synthesis({
+                        allMessageStructureCollection: allMessageStructureCollection,
+                        allSynthesisCollection: allSynthesisCollection
+                    });
+                    that.getRegion('synthesis').show(synthesis);
+
+                    var partners = new PartnerList({
+                        nbOrganisations: _.size(AllPartner),
+                        collection: AllPartner
+                    });
+                    that.getRegion('organizations').show(partners);
+
+                });
+
             }
 
         });
