@@ -151,7 +151,8 @@
         "introduction": true,
         "introductionDetails": true,
         "sources": [":partial"],
-        "subscribe_to_notifications_on_signup": true
+        "subscribe_to_notifications_on_signup": true,
+        "web_analytics_piwik_id_site": true
     },
     "Idea": {
         "longTitle": "long_title",

@@ -28,7 +28,7 @@ def backbone_include(config):
 
 
 def get_default_context(request):
-    from ..auth.util import get_user
+    from ..auth.util import get_user, get_current_discussion
     localizer = request.localizer
     _ = TranslationStringFactory('assembl')
     user = get_user(request)
@@ -40,6 +40,12 @@ def get_default_context(request):
             'profile_user', type='id', identifier=user.id)
     else:
         user_profile_edit_url = None
+    web_analytics_piwik_script = config.get('web_analytics_piwik_script') or False
+    discussion = get_current_discussion()
+    if web_analytics_piwik_script and discussion and discussion.web_analytics_piwik_id_site:
+        web_analytics_piwik_script = web_analytics_piwik_script % ( discussion.web_analytics_piwik_id_site, discussion.web_analytics_piwik_id_site )
+    else:
+        web_analytics_piwik_script = False
     return dict(
         default_context,
         request=request,
@@ -51,6 +57,7 @@ def get_default_context(request):
         locales=config.get('available_languages').split(),
         theme=config.get('default_theme') or 'default',
         minified_js=config.get('minified_js') or False,
+        web_analytics_piwik_script=web_analytics_piwik_script,
         raven_url=config.get('raven_url') or '',
         translations=codecs.open(os.path.join(
             os.path.dirname(__file__), '..', 'locale',

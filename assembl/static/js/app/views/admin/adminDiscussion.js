@@ -45,13 +45,15 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
                 var introduction = this.$('textarea[name=introduction]').val(),
                     topic = this.$('input[name=topic]').val(),
                     slug = this.$('input[name=slug]').val(),
-                    objectives = this.$('textarea[name=objectives]').val();
+                    objectives = this.$('textarea[name=objectives]').val(),
+                    web_analytics_piwik_id_site = parseInt(this.$('#web_analytics_piwik_id_site').val());
 
                 this.model.set({
                     introduction:introduction,
                     topic: topic,
                     slug: slug,
-                    objectives: objectives
+                    objectives: objectives,
+                    web_analytics_piwik_id_site: web_analytics_piwik_id_site
                 });
 
                 this.model.save(null, {

@@ -53,6 +53,7 @@ class Discussion(DiscussionBoundBase):
     introductionDetails = Column(UnicodeText)
     settings = Column(Text())  # JSON blob
     subscribe_to_notifications_on_signup = Column(Boolean, default=False)
+    web_analytics_piwik_id_site = Column(Integer, nullable=True, default=None)
 
     @property
     def admin_source(self):
