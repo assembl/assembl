@@ -304,6 +304,7 @@ class Discussion(DiscussionBoundBase):
     def reset_participant_default_subscriptions(self, force=True):
         template, changed = self.get_participant_template()
         # TODO maparent: This is too slow. I need to preload subscriptions.
+        # Consider improving NotificationSubscription.reset_defaults
         if changed or force:
             for participant in self.all_participants:
                 participant.get_notification_subscriptions(self.id, True)

@@ -749,13 +749,16 @@ class User(AgentProfile):
                 subscribed[subscription.__class__] |= subscription.status == NotificationSubscriptionStatus.ACTIVE
         if reset_defaults:
             for sub in my_subscriptions[:]:
-                if (sub.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT
-                        and sub.status == NotificationSubscriptionStatus.ACTIVE
-                        and sub.__class__ in subscribed  # only actual defaults
-                        and not subscribed[sub.__class__]):
-                    self.db.delete(sub)
-                    my_subscriptions.remove(sub)
-                    my_subscriptions_classes.discard(sub.__class__)
+                if (sub.creation_origin ==
+                        NotificationCreationOrigin.DISCUSSION_DEFAULT
+                        # only actual defaults
+                        and sub.__class__ in subscribed):
+                    if (sub.status == NotificationSubscriptionStatus.ACTIVE
+                            and not subscribed[sub.__class__]):
+                        sub.status = NotificationSubscriptionStatus.INACTIVE_DFT
+                    elif (sub.status == NotificationSubscriptionStatus.INACTIVE_DFT
+                            and subscribed[sub.__class__]):
+                        sub.status = NotificationSubscriptionStatus.ACTIVE
             missing = set(needed_classes) - my_subscriptions_classes
         defaults = []
         for cls in missing:

@@ -310,6 +310,20 @@ class NotificationSubscription(DiscussionBoundBase):
     def is_owner(self, user_id):
         return self.user_id == user_id
 
+    def reset_defaults(self):
+        # This notification belongs to a template and was changed;
+        # update all users who have the default subscription value.
+        # Incomplete: Does not handle subscribed users without NS.
+        status = (
+            NotificationSubscriptionStatus.INACTIVE_DFT
+            if self.status == NotificationSubscriptionStatus.UNSUBSCRIBED
+            else self.status)
+
+        self.db.query(self.__class__).filter_by(
+            discussion_id=self.discussion_id,
+            creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT
+            ).update(status=status)
+
     @classmethod
     def restrict_to_owners(cls, query, user_id):
         """Filter query according to object owners.
