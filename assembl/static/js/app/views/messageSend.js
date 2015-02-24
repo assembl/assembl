@@ -53,6 +53,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             className: 'messageSend',
             initialize: function (options) {
                 this.options = options;
+                this.sendInProgress = false;
                 this.initialBody = (this.options.body_help_message !== undefined) ?
                     this.options.body_help_message : i18n.gettext('Type your message here...');
 
@@ -110,6 +111,9 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     reply_message_id = null,
                     success_callback = null;
 
+                if(this.sendInProgress !== false) {
+                  return;
+                }
                 if (this.options.reply_idea_id) {
                     reply_idea_id = this.options.reply_idea_id;
                 }
@@ -133,6 +137,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     }
                     return;
                 }
+                this.sendInProgress = true;
                 this.savePartialMessage();
                 btn.text(i18n.gettext('Sending...'));
                 // This is not too good, but it allows the next render to come.
@@ -151,7 +156,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
 
                         that.ui.messageBody.val('');
                         that.ui.topicSubject.val('');
-
+                        that.sendInProgress = false;
                         /**
                          * Show a popin asking the user to receive notifications if he is posting his first message in the discussion, and does not already receive all default discussion's notifications.
                          * Note: Currently in Assembl we can receive notifications only if we have a "participant" role (which means that here we have a non-null "roles.get('role')"). This role is only given to a user in discussion's parameters, or when the user "subscribes" to the discussion (subscribing gives the "participant" role to the user and also activates discussion's default notifications for the user).
@@ -225,7 +230,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         }, 5000);
                     },
                     error: function (model, resp) {
-                        console.error('ERROR: onSendMessageButtonClick', model, resp);
+                      that.sendInProgress = false;
+                      console.error('ERROR: onSendMessageButtonClick', model, resp);
                     }
                 })
 
