@@ -32,6 +32,13 @@ define(['models/base', 'common/context', 'utils/i18n'],
                 conclusion: i18n.gettext('Add a conclusion'),
                 ideas: [],
                 published_in_post: null
+            },
+
+            validate: function(attrs, options){
+                /**
+                 * check typeof variable
+                 * */
+
             }
 
 

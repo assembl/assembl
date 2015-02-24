@@ -17,6 +17,13 @@ define(['jquery', 'models/base', 'common/context'],
             permissions: [],
             '@type': '',
             '@view': ''
+        },
+
+        validate: function(attrs, options){
+            /**
+             * check typeof variable
+             * */
+
         }
 
     });

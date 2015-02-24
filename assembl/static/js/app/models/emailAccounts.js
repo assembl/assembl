@@ -12,6 +12,12 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
           '@type': null,
           'email': null,
           '@id': null
+        },
+        validate: function(attrs, options){
+            /**
+             * check typeof variable
+             * */
+
         }
 
     });

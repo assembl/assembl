@@ -109,6 +109,13 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
 
             getSingleUser: function () {
                 this.urlRoot = Ctx.getApiV2DiscussionUrl('all_users/') + Ctx.getCurrentUserId();
+            },
+
+            validate: function(attrs, options){
+               /**
+                * check typeof variable
+                * */
+
             }
 
         });

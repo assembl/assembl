@@ -17,6 +17,12 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
             '@view': '',
             'permissions': {},
             'subscribe_to_notifications_on_signup': false
+        },
+        validate: function(attrs, options){
+            /**
+             * check typeof variable
+             * */
+
         }
 
     });

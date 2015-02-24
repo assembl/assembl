@@ -15,6 +15,12 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
             'folder': '',
             'use_ssl': false,
             'port': 0
+        },
+        validate: function(attrs, options){
+            /**
+             * check typeof variable
+             * */
+
         }
 
     });

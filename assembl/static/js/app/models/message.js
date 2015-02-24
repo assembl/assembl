@@ -196,6 +196,13 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
                         Assembl.reqres.request('ideas:update', data.ideas);
                     }
                 });
+            },
+
+            validate: function(attrs, options){
+                /**
+                 * check typeof variable
+                 * */
+
             }
         });
 

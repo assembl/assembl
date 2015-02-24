@@ -15,6 +15,13 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
             creation_origin: null,
             human_readable_description: null,
             user: null
+        },
+
+        validate: function(attrs, options){
+            /**
+             * check typeof variable
+             * */
+
         }
     });
 
