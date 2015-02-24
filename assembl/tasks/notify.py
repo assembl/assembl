@@ -3,7 +3,6 @@ import transaction
 from datetime import timedelta
 from traceback import print_exc
 from celery import Celery
-from kombu import Exchange, Queue
 
 from ..lib.sqla import mark_changed
 
@@ -27,12 +26,11 @@ notify_celery_app._preconf = {
     "CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE
 }
 
-watcher = None
-
 
 def process_notification(notification):
     from ..models.notification import (
-        NotificationDeliveryStateType, UnverifiedEmailException, MissingEmailException)
+        NotificationDeliveryStateType, UnverifiedEmailException,
+        MissingEmailException)
     import smtplib
     import socket
     from assembl.lib import config
@@ -51,7 +49,7 @@ def process_notification(notification):
         return
     try:
         email_str = notification.render_to_email()
-        #sys.stderr.write(email_str)
+        # sys.stderr.write(email_str)
         mail_host = config.get('mail.host')
         assert mail_host
 
@@ -69,24 +67,30 @@ def process_notification(notification):
             for failed_recipient, errors in smtp_retval:
                 sys.stderr.write(repr(failed_recipient), repr(errors))
 
-        notification.delivery_state = NotificationDeliveryStateType.DELIVERY_IN_PROGRESS
+        notification.delivery_state = \
+            NotificationDeliveryStateType.DELIVERY_IN_PROGRESS
         smtp_connection.quit()
     except UnverifiedEmailException as e:
         sys.stderr.write("Not sending to unverified email: "+repr(e))
-        notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
+        notification.delivery_state = \
+            NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
     except MissingEmailException as e:
-        notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
+        notification.delivery_state = \
+            NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
         sys.stderr.write("Missing email! :"+repr(e))
     except (smtplib.SMTPConnectError,
             socket.timeout, socket.error,
             smtplib.SMTPHeloError) as e:
         sys.stderr.write("Temporary failure: "+repr(e))
-        notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
+        notification.delivery_state = \
+            NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
     except smtplib.SMTPRecipientsRefused as e:
-        notification.delivery_state = NotificationDeliveryStateType.DELIVERY_FAILURE
+        notification.delivery_state = \
+            NotificationDeliveryStateType.DELIVERY_FAILURE
         sys.stderr.write("Recepients refused: "+repr(e))
     except smtplib.SMTPSenderRefused as e:
-        notification.delivery_state = NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
+        notification.delivery_state = \
+            NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
         sys.stderr.write("Invalid configuration! :"+repr(e))
 
     mark_changed()
@@ -95,9 +99,9 @@ def process_notification(notification):
         % (notification.id, notification.delivery_state))
 
 
-@notify_celery_app.task(ignore_result=False)
+@notify_celery_app.task(ignore_result=True)
 def notify(id):
-    """ Can be triggered by 
+    """ Can be triggered by
     http://localhost:6543/data/Discussion/6/all_users/2/notifications/12/process_now """
     init_task_config(notify_celery_app)
     from ..models.notification import Notification, waiting_get
@@ -108,7 +112,7 @@ def notify(id):
         process_notification(notification)
 
 
-@notify_celery_app.task(ignore_result=False)
+@notify_celery_app.task(ignore_result=True)
 def process_pending_notifications():
     """ Can be triggered by http://localhost:6543/data/Notification/process_now """
     init_task_config(notify_celery_app)

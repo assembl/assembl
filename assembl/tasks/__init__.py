@@ -61,7 +61,8 @@ def config_celery_app(celery_app, settings):
     celery_app.config_from_object({
         "BROKER_URL": settings['%s.broker' % (celery_app.main,)],
         "CELERY_QUEUES": get_celery_queues(),
-        "CELERY_ROUTES": get_celery_routes()})
+        "CELERY_ROUTES": get_celery_routes(),
+        "CELERY_STORE_ERRORS_EVEN_IF_IGNORED": True})
 
 
 def init_task_config(celery_app):
