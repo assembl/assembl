@@ -51,7 +51,7 @@ iso8601==0.1.10
 -e git+https://github.com/maparent/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.24
-lingua==3.8
+lingua==3.9
 lxml==3.4.2
 meld3==1.0.0
 mock==1.0.1
@@ -59,7 +59,7 @@ oauthlib==0.7.2
 paramiko==1.15.2
 pinocchio==0.4.2
 polib==1.0.6
-premailer==2.8.1
+premailer==2.8.3
 py==1.4.26
 pyOpenSSL==0.14
 pycparser==2.10
@@ -67,7 +67,7 @@ pycrypto==2.6.1
 pyIsEmail==1.1.0
 pylibmc==1.4.1
 pyparsing==2.0.3
-pyramid==1.5.2
+pyramid==1.5.3
 pyramid-beaker==0.8
 pyramid-debugtoolbar==2.3
 -e git+https://github.com/jvanasco/pyramid_debugtoolbar_ajax.git#egg=pyramid-debugtoolbar-ajax
@@ -92,7 +92,7 @@ raven==5.2.0
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1
-requests==2.5.1
+requests==2.5.2
 requests-oauthlib==0.4.2
 selenium==2.44.0
 simplejson==3.6.5
