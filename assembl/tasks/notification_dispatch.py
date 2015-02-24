@@ -26,7 +26,6 @@ class ModelEventWatcherCeleryReceiver(object):
         assert self.mw
 
     def processPostCreated(self, id):
-        print "ModelEventWatcherCeleryReceiver.processPostCreated", id
         self.mw.processPostCreated(id)
 
     def processIdeaCreated(self, id):
@@ -56,7 +55,6 @@ class ModelEventWatcherCeleryReceiver(object):
 
 @notif_dispatch_celery_app.task(ignore_result=True)
 def processPostCreatedTask(id):
-    print "processPostCreatedTask", id
     ModelEventWatcherCeleryReceiver.get_instance().processPostCreated(id)
 
 
@@ -104,7 +102,6 @@ class ModelEventWatcherCelerySender(object):
     interface.implements(IModelEventWatcher)
 
     def processPostCreated(self, id):
-        print "ModelEventWatcherCelerySender.processPostCreated", id
         processPostCreatedTask.delay(id)
 
     def processIdeaCreated(self, id):

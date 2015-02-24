@@ -57,12 +57,16 @@ def get_celery_routes():
     return _celery_routes
 
 
-def config_celery_app(celery_app, settings):
-    celery_app.config_from_object({
-        "BROKER_URL": settings['%s.broker' % (celery_app.main,)],
+def config_celery_app(celery_app, settings=None):
+    config = {
         "CELERY_QUEUES": get_celery_queues(),
         "CELERY_ROUTES": get_celery_routes(),
-        "CELERY_STORE_ERRORS_EVEN_IF_IGNORED": True})
+        "CELERY_STORE_ERRORS_EVEN_IF_IGNORED": True}
+    if settings is not None:
+        config['BROKER_URL'] = settings['%s.broker' % (celery_app.main,)]
+        celery_app.config_from_object(config, force=True)
+    else:
+        celery_app.config_from_object(config)
 
 
 def init_task_config(celery_app):
@@ -107,6 +111,19 @@ def init_task_config(celery_app):
     if notif_dispatch_celery_app.main != celery_app.main:
         config_celery_app(notif_dispatch_celery_app, settings)
     _inited = True
+
+
+def first_init():
+    from .imap import imap_celery_app
+    from .notification_dispatch import notif_dispatch_celery_app
+    from .notify import notify_celery_app
+    config_celery_app(imap_celery_app)
+    config_celery_app(notify_celery_app)
+    config_celery_app(notif_dispatch_celery_app)
+
+
+# This allows us to use celery CLI monitoring
+first_init()
 
 
 def includeme(config):
