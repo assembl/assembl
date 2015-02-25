@@ -67,7 +67,7 @@ pycrypto==2.6.1
 pyIsEmail==1.1.0
 pylibmc==1.4.1
 pyparsing==2.0.3
-pyramid==1.5.3
+pyramid==1.5.4
 pyramid-beaker==0.8
 pyramid-debugtoolbar==2.3
 -e git+https://github.com/jvanasco/pyramid_debugtoolbar_ajax.git#egg=pyramid-debugtoolbar-ajax
