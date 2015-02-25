@@ -46,6 +46,9 @@ def get_default_context(request):
         web_analytics_piwik_script = web_analytics_piwik_script % ( discussion.web_analytics_piwik_id_site, discussion.web_analytics_piwik_id_site )
     else:
         web_analytics_piwik_script = False
+    # TODO: create a user_discussion_data table where we put data like last_visit, which we use to set the following variable to True
+    # first_login_after_auto_subscribe_to_notifications = request.session.get('first_login_after_auto_subscribe_to_notifications', None) or False
+    first_login_after_auto_subscribe_to_notifications = False
     return dict(
         default_context,
         request=request,
@@ -58,6 +61,7 @@ def get_default_context(request):
         theme=config.get('default_theme') or 'default',
         minified_js=config.get('minified_js') or False,
         web_analytics_piwik_script=web_analytics_piwik_script,
+        first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
         raven_url=config.get('raven_url') or '',
         translations=codecs.open(os.path.join(
             os.path.dirname(__file__), '..', 'locale',
