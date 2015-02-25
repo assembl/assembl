@@ -52,7 +52,8 @@ def supervisor_restart():
     with hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl shutdown")
     #Another supervisor,upstart, etc may be watching it, give it a little while
-    sleep(10);
+    #Ideally we should wait, but I didn't have time to code it.
+    sleep(30);
     #If supervisor is already started, this will do nothing
     execute(supervisor_process_start, 'virtuoso')
 

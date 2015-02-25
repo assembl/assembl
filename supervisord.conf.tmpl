@@ -37,29 +37,55 @@ directory = %(here)s
 command = celery worker -l info -A assembl.tasks.imap -n imap -c 1 -b %(IMAP_CELERY_BROKER)s -Q imap
 autorestart = true
 startsecs = 2
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
+
 
 [program:celery_notification_dispatch]
 directory = %(here)s
 command = celery worker -l info -A assembl.tasks.notification_dispatch -n notification_dispatch -c 1 -b %(NOTIF_DISPATCH_CELERY_BROKER)s -Q notification_dispatch
 autorestart = true
 startsecs = 2
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
 
 [program:celery_notify]
 directory = %(here)s
 command = celery worker -l info -A assembl.tasks.notify -n notify -c 2 -b %(NOTIFY_CELERY_BROKER)s -Q notify
 autorestart = true
 startsecs = 2
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
 
 [program:celery_notify_beat]
 directory = %(here)s
 command = celery -A assembl.tasks.notify beat -b %(NOTIFY_CELERY_BROKER)s
 autorestart = true
 startsecs = 2
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
 
 [program:changes_router]
 directory = %(here)s
 command = python assembl/tasks/changes_router.py %(CONFIG_FILE)s
 autorestart = true
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
 
 [group:dev]
 programs = pserve, compass
