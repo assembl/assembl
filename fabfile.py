@@ -955,10 +955,19 @@ def virtuoso_install_if_absent():
         print(red("Virtuso not installed, installing."))
         execute(virtuoso_source_install)
 
+@task
+def virtuoso_source_upgrade():
+    "Upgrades the virtuoso server.  Currently doesn't check if we are already using the latest version."
+    #Virtuoso must be running before the process starts, so that we can 
+    #gracefully stop it later to ensure there is no trx file active.  
+    #trx files are not compatible between virtuoso versions
+    supervisor_process_start('virtuoso')
+    execute(virtuoso_source_install)
+    
 
 @task
 def virtuoso_source_install():
-    "Install the virtuoso server locally"
+    "Install the virtuoso server locally, normally not called directly (use virtuoso_source_upgrade instead)"
     virtuoso_root = get_virtuoso_root()
     virtuoso_src = get_virtuoso_src()
     branch = get_config().get('virtuoso', 'virtuoso_branch')
@@ -1002,6 +1011,8 @@ def virtuoso_source_install():
             sudo('checkinstall')
         else:
             run('make install')
+        #Makes sure there is no trx file with content
+        supervisor_process_stop('virtuoso')
         #If we ran this, there is a strong chance we just reconfigured the ini file
         # Make sure the virtuoso.ini and supervisor.ini reflects the changes
         execute(app_setup)
