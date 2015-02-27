@@ -612,8 +612,8 @@ def confirm_emailid_sent(request):
         email_account_id=request.matchdict.get('email_account_id'),
         title=localizer.translate(_('Confirmation requested')),
         description=localizer.translate(_(
-            'We have sent you a confirmation email. '
-            'Please use the link to confirm your email to Assembl')))
+            'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. '
+            'Please follow the confirmation link in order to confirm your email')))
 
 
 def maybe_auto_subscribe(user, discussion):
@@ -772,8 +772,8 @@ def confirm_email_sent(request):
                 email=email,
                 title=localizer.translate(_('Confirmation requested')),
                 description=localizer.translate(_(
-                    'We have sent you a confirmation email. '
-                    'Please use the link to confirm your email to Assembl')))
+                    'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. '
+                    'Please follow the confirmation link in order to confirm your email')))
         else:
             # We do not have an email to this name.
             return HTTPFound(location=maybe_contextual_route(
