@@ -15,6 +15,7 @@
         "email_accounts": false,
         "identity_accounts": false,
         "was_created_on_current_discussion": false,
+        "is_first_visit": false,
         "preferred_email": false
     },
     "User": {

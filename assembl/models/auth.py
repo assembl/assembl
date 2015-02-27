@@ -241,9 +241,17 @@ class AgentProfile(Base):
                 agent_profile=self, discussion_id=discussion_id,
                 first_visit=now, last_visit=now)
             self.db.add(agent_status)
+        return agent_status
+
+    @property
+    def is_first_visit(self):
+        status = self.status_in_current_discussion
+        if status:
+            return status.last_visit == status.first_visit
 
     @property
     def was_created_on_current_discussion(self):
+        # Use from api v2
         status = self.status_in_current_discussion
         if status:
             return status.user_created_on_this_discussion
