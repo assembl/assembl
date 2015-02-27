@@ -20,7 +20,7 @@ ink_css
         <table class="twelve columns">
           <tr>
             <td>
-              <img style="margin: 0 10px 10px 0;" src="{{ frontendUrls.get_agentprofile_avatar_url(notification.event_source_object().creator, 40) }}">
+              <img style="margin: 0 10px 10px 0; max-width: 40px; max-height: 40px;" src="{{ frontendUrls.get_agentprofile_avatar_url(notification.event_source_object().creator, 40) }}">
               <em>{{ notification.event_source_object().creator.name }}</em>
               <hr style="clear: both">
               {%- block post_body %}
