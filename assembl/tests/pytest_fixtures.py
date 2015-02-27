@@ -144,7 +144,7 @@ def discussion2(request, test_session, test_app_no_perm):
 @pytest.fixture(scope="function")
 def admin_user(request, test_session, db_default_data):
     from assembl.models import User, UserRole, Role
-    u = User(name=u"Mr. Adminstrator", type="user")
+    u = User(name=u"Mr. Administrator", type="user")
     test_session.add(u)
     r = Role.get_role(test_session, R_SYSADMIN)
     ur = UserRole(user=u, role=r)

@@ -209,7 +209,6 @@ def test_api_register(discussion, test_app):
             })
         assert r.status_code == 302
         User.db.flush()
-        User.db.expunge_all()
         # Register step 2
         r = test_app.get(r.location)
         # Sent
@@ -304,7 +303,6 @@ def test_api_get_posts_from_idea(
     res_data = json.loads(res.body)
     extract_post_1_to_subidea_1_1_id = res_data['@id']
     #test_session.flush()
-    #test_session.expunge_all()
     
     check_number_of_posts(subidea_1_1,  2, "Num posts on idea (directly) should recurse to the two posts")
     #import transaction
