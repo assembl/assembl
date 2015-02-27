@@ -170,6 +170,19 @@ def send_account_verification(request):
     return {}
 
 
+# Should I add a secure_connection condition?
+@view_config(
+    context=InstanceContext, ctx_instance_class=User,
+    request_method='GET', name="verify_password", renderer='json')
+def verify_password(request):
+    ctx = request.context
+    user = ctx._instance
+    password = request.params.get('password', None)
+    if password is not None:
+        return user.check_password(password)
+    raise HTTPBadRequest("Please provide a password")
+
+
 @view_config(
     context=InstanceContext, ctx_instance_class=AbstractAgentAccount,
     request_method='DELETE', renderer='json')
