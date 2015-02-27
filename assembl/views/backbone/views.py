@@ -66,6 +66,10 @@ def home_view(request):
     canAddExtract = user_has_permission(context["discussion"].id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract
     context['canDisplayTabs'] = True
+    if user_id != Everyone:
+        from assembl.models import AgentProfile
+        user = AgentProfile.get(user_id)
+        user.is_visiting_discussion(discussion.id)
     response = render_to_response('../../templates/index.jinja2', context, request=request)
     # Prevent caching the home, especially for proper login/logout
     response.cache_control.max_age = 0

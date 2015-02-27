@@ -25,7 +25,7 @@ from pyisemail import is_email
 from assembl.models import (
     EmailAccount, IdentityProvider, IdentityProviderAccount,
     AgentProfile, User, Username, Role, LocalUserRole,
-    AbstractAgentAccount, Discussion)
+    AbstractAgentAccount, Discussion, AgentStatusInDiscussion)
 from assembl.auth import (
     P_READ, R_PARTICIPANT)
 from assembl.auth.password import (
@@ -322,6 +322,14 @@ def assembl_register_view(request):
     )
     session.add(user)
     session.add(email_account)
+    discussion = discussion_from_request(request)
+    if discussion:
+        now = datetime.utcnow()
+        agent_status = AgentStatusInDiscussion(
+            agent_profile=user, discussion=discussion,
+            user_created_on_this_discussion=True,
+            first_visit=now, last_visit=now)
+        session.add(agent_status)
     session.flush()
     if not validate_registration:
         if asbool(config.get('pyramid.debug_authorization')):
@@ -401,6 +409,9 @@ def assembl_login_complete_view(request):
                     error=localizer.translate(_("Invalid user and password")))
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
+    discussion = discussion_from_request(request)
+    if discussion:
+        user.is_visiting_discussion(discussion.id)
     return HTTPFound(location=next_view)
 
 
@@ -498,6 +509,8 @@ def velruse_login_complete_view(request):
             profile.last_login = datetime.now()
             if not profile.name:
                 profile.name = velruse_profile.get('displayName', None)
+        if discussion:
+            profile.is_visiting_discussion(discussion.id)
     else:
         # Create a new user
         profile = User(
@@ -517,6 +530,13 @@ def velruse_login_complete_view(request):
                 break
         if username:
             session.add(Username(username=username, user=profile))
+        if discussion:
+            now = datetime.utcnow()
+            agent_status = AgentStatusInDiscussion(
+                agent_profile=profile, discussion=discussion,
+                user_created_on_this_discussion=True,
+                first_visit=now, last_visit=now)
+            session.add(agent_status)
         session.flush()
         if maybe_auto_subscribe(profile, discussion):
             next_view = "/%s/" % (slug,)

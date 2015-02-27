@@ -26,7 +26,7 @@ from sqlalchemy.orm import (
     relationship, backref, deferred, with_polymorphic)
 from sqlalchemy import inspect
 from sqlalchemy.types import Text
-from sqlalchemy.schema import Index
+from sqlalchemy.schema import (Index, UniqueConstraint)
 from sqlalchemy.orm.attributes import NO_VALUE
 from pyramid.security import Everyone, Authenticated
 from virtuoso.vmapping import IriClass
@@ -39,6 +39,22 @@ from ..auth import *
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, CATALYST, QUADNAMES, VERSION, FOAF, DCTERMS, RDF, VirtRDF)
 from ..semantic.virtuoso_mapping import QuadMapPatternS, USER_SECTION
+
+
+# None-tolerant min, max
+def minN(a, b):
+    if a is None:
+        return b
+    if b is None:
+        return a
+    return min(a, b)
+
+def maxN(a, b):
+    if a is None:
+        return b
+    if b is None:
+        return a
+    return max(a, b)
 
 
 class AgentProfile(Base):
@@ -124,6 +140,22 @@ class AgentProfile(Base):
         for action in session.query(Action).filter_by(
             actor_id=other_profile.id).all():
                 action.actor = self
+        my_status_by_discussion = {
+            s.discussion_id: s for s in self.agent_status_in_discussion
+        }
+
+        for status in other_profile.agent_status_in_discussion:
+            if status.discussion_id in my_status_by_discussion:
+                my_status = my_status_by_discussion[status.discussion_id]
+                my_status.user_created_on_this_discussion |= status.user_created_on_this_discussion
+                my_status.first_visit = minN(my_status.first_visit, status.first_visit)
+                my_status.last_visit = maxN(my_status.last_visit, status.last_visit)
+                my_status.first_subscribed = minN(my_status.first_subscribed, status.first_subscribed)
+                my_status.last_unsubscribed = minN(my_status.last_unsubscribed, status.last_unsubscribed)
+                status.delete()
+            else:
+                status.agent_profile = self
+
 
     def has_permission(self, verb, subject):
         if self is subject.owner:
@@ -186,6 +218,36 @@ class AgentProfile(Base):
         if discussion is None:
             return None
         return self.count_posts_in_discussion(discussion.id)
+
+    def get_status_in_discussion(self, discussion_id):
+        return self.db.query(AgentStatusInDiscussion).filter_by(
+            discussion_id=discussion_id, profile_id=self.id).first()
+
+    @property
+    def status_in_current_discussion(self):
+        # Use from api v2
+        from ..auth.util import get_current_discussion
+        discussion = get_current_discussion()
+        if discussion:
+            return self.get_status_in_discussion(discussion.id)
+
+    def is_visiting_discussion(self, discussion_id):
+        agent_status = self.get_status_in_discussion(discussion_id)
+        if agent_status:
+            agent_status.last_visit = datetime.utcnow()
+        else:
+            now = datetime.utcnow()
+            agent_status = AgentStatusInDiscussion(
+                agent_profile=self, discussion_id=discussion_id,
+                first_visit=now, last_visit=now)
+            self.db.add(agent_status)
+
+    @property
+    def was_created_on_current_discussion(self):
+        status = self.status_in_current_discussion
+        if status:
+            return status.user_created_on_this_discussion
+        return False
 
     def get_preferred_locale(self):
         # TODO: per-user preferred locale
@@ -449,6 +511,35 @@ class IdentityProviderAccount(AbstractAgentAccount):
         self.profile_info = json.dumps(val)
         self.interpret_profile(val)
 
+
+class AgentStatusInDiscussion(DiscussionBoundBase):
+    __tablename__ = 'agent_status_in_discussion'
+    __table_args__ = (
+        UniqueConstraint('discussion_id', 'profile_id'), )
+
+    id = Column(Integer, primary_key=True)
+    discussion_id = Column(Integer, ForeignKey(
+        "discussion.id", ondelete='CASCADE', onupdate='CASCADE'))
+    discussion = relationship(
+        "Discussion", backref=backref(
+            "agent_status_in_discussion", cascade="all, delete-orphan"))
+    profile_id = Column(Integer, ForeignKey(
+        "agent_profile.id", ondelete='CASCADE', onupdate='CASCADE'))
+    agent_profile = relationship(
+        AgentProfile, backref=backref(
+            "agent_status_in_discussion", cascade="all, delete-orphan"))
+    first_visit = Column(DateTime, default=datetime.utcnow)
+    last_visit = Column(DateTime, default=datetime.utcnow)
+    first_subscribed = Column(DateTime)
+    last_unsubscribed = Column(DateTime)
+    user_created_on_this_discussion = Column(Boolean, server_default='0')
+
+    def get_discussion_id(self):
+        return self.discussion_id
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.id == discussion_id,)
 
 
 class User(AgentProfile):

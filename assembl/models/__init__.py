@@ -79,6 +79,7 @@ class DiscussionBoundTombstone(Tombstone):
 from .auth import (
     AbstractAgentAccount,
     AgentProfile,
+    AgentStatusInDiscussion,
     DiscussionPermission,
     EmailAccount,
     IdentityProvider,
