@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-27 18:08+0100\n"
+"POT-Creation-Date: 2015-02-27 12:46-0500\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -472,7 +472,7 @@ msgid "this %s"
 msgstr ""
 
 #: assembl/static/js/app/views/messageListPostQuery.js:55
-#, fuzzy, python-format
+#, python-format
 msgid "Is in the conversation that follows %s"
 msgid_plural "Are in the conversation that follows: %s"
 msgstr[0] ""
@@ -567,7 +567,7 @@ msgid " (all unread)"
 msgstr ""
 
 #: assembl/static/js/app/views/messageListPostQuery.js:563
-#, fuzzy, python-format
+#, python-format
 msgid " (%d unread)"
 msgid_plural " (%d unread)"
 msgstr[0] ""
@@ -2107,7 +2107,7 @@ msgstr ""
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">confirm your ${confirm_what}</a> "
-"&lt;${email}&gt; with <${assembl}>.</p>\n"
+"&lt;${email}&gt; with ${assembl}.</p>\n"
 msgstr ""
 
 #: assembl/views/auth/views.py:968
@@ -2720,5 +2720,12 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "notifications"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "<p>Hello, ${name}!</p>\n"
+#~ "<p>Please <a href=\"${confirm_url}\">confirm your"
+#~ " ${confirm_what}</a> &lt;${email}&gt; with "
+#~ "<${assembl}>.</p>\n"
 #~ msgstr ""
 
