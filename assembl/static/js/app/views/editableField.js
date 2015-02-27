@@ -11,6 +11,7 @@ define(['backbone', 'backbone.marionette', 'app', 'common/context', 'underscore'
                 (_.has(options, 'canEdit')) ? this.canEdit = options.canEdit : this.canEdit = true;
                 (_.has(options, 'modelProp')) ? this.modelProp = options.modelProp : this.modelProp = null;
                 (_.has(options, 'placeholder')) ? this.placeholder = options.placeholder : this.placeholder = null;
+                (_.has(options, 'focus')) ? this.focus = options.focus : this.focus = null;
 
                 if (this.model === null) {
                     throw new Error('EditableField needs a model');
@@ -30,6 +31,9 @@ define(['backbone', 'backbone.marionette', 'app', 'common/context', 'underscore'
                         this.$el.attr('contenteditable', true);
                     }
                     this.$el.addClass('canEdit panel-editablearea');
+                    if (this.focus) {
+                        this.$el.focus();
+                    }
                 }
                 var text = this.model.get(this.modelProp);
                 this.el.innerHTML = text || this.placeholder;
@@ -46,6 +50,7 @@ define(['backbone', 'backbone.marionette', 'app', 'common/context', 'underscore'
 
             onBlur: function (ev) {
                 if (this.canEdit) {
+                    this.focus = false;
                     var data = Ctx.stripHtml(ev.currentTarget.textContent);
                     data = $.trim(data);
 

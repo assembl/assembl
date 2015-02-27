@@ -190,13 +190,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 this.editingDefinition = false;
                 this.editingTitle = false;
+                this.focusShortTitle = false;
 
                 if (!this.model) {
                     this.model = null;
                 }
 
-                this.listenTo(this.getContainingGroup(), "idea:set", function (idea) {
-                    that.setIdeaModel(idea);
+                this.listenTo(this.getContainingGroup(), "idea:set", function (idea, reason) {
+                    that.setIdeaModel(idea, reason);
                 });
 
                 this.listenTo(Assembl.vent, 'DEPRECATEDideaPanel:showSegment', function (segment) {
@@ -417,7 +418,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     'class': 'panel-editablearea text-bold',
                     'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
                     'placeholder': i18n.gettext('New idea'),
-                    'canEdit': canEdit
+                    'canEdit': canEdit,
+                    'focus': this.focusShortTitle
                 });
                 shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
 
@@ -509,9 +511,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
              * Set the given idea as the current one
              * @param  {Idea} [idea=null]
              */
-            setIdeaModel: function (idea) {
+            setIdeaModel: function (idea, reason) {
                 var that = this,
                     collectionManager = new CollectionManager();
+
+                if ( reason == "created" )
+                    this.focusShortTitle = true;
+                else
+                    this.focusShortTitle = false;
 
                 //console.log("setIdeaModel called with", idea);
                 if (idea !== this.model) {
@@ -537,7 +544,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                             // model has acquired an ID. Reset everything.
                             var model = that.model;
                             that.model = null;
-                            that.setIdeaModel(model);
+                            that.setIdeaModel(model, reason);
                         });
                         if (this.model.id) {
                             //Ctx.openPanel(assembl.ideaPanel);

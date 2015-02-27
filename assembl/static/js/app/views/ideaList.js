@@ -394,7 +394,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                                 }
                             });
                         }
-                        that.getContainingGroup().setCurrentIdea(newIdea);
+                        that.getContainingGroup().setCurrentIdea(newIdea, "created");
                     });
             },
 
