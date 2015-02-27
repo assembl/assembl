@@ -17,7 +17,8 @@ from sqlalchemy import (
     Time,
     Binary,
     desc,
-    Index
+    Index,
+    UniqueConstraint
 )
 
 from pyramid.httpexceptions import (
@@ -39,6 +40,7 @@ from ..auth import *
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, CATALYST, QUADNAMES, VERSION, FOAF, DCTERMS, RDF, VirtRDF)
 from ..semantic.virtuoso_mapping import QuadMapPatternS, USER_SECTION
+from iso639 import *
 
 
 # None-tolerant min, max
@@ -1169,9 +1171,9 @@ class UserTemplate(DiscussionBoundBase, User):
     @classmethod
     def get_applicable_notification_subscriptions_classes(cls):
         """
-        The classes of notifications subscriptions that make sense to put in 
+        The classes of notifications subscriptions that make sense to put in
         a template user.
-        
+
         Right now, that is all concrete classes that are global to the discussion.
         """
         from ..lib.utils import get_concrete_subclasses_recursive
@@ -1280,3 +1282,43 @@ class PartnerOrganization(DiscussionBoundBase):
         return (cls.discussion_id == discussion_id,)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
+
+class UserLanguagePreference(Base):
+    __tablename__= 'user_language_preference'
+    __table_args__ = (UniqueConstraint('user_id', 'lang_code'), )
+
+    id = Column(Integer, primary_key=True)
+
+    user_id = Column(Integer, ForeignKey(
+                     User.id, ondelete='CASCADE', onupdate='CASCADE'))
+
+    lang_code = Column(String(), nullable=False)
+
+    # Sort the preference, from lowest to highest
+    # Ascending order prefered
+    preferred_order = Column(Integer, nullable=False)
+    explicitly_defined = Column(Boolean, nullable=False, default=False,
+                                server_default='0')
+
+
+    user = relationship('User', backref=backref(
+                        'language_preference', cascade='all, delete-orphan',
+                        order_by=preferred_order))
+
+    @property
+    def language_code(self):
+        return self.lang_code
+    @language_code.setter
+    def language_code(self, code):
+        # Following the ISO 639-2 Standard
+        if is_valid639_2(code):
+            self.lang_code = code
+        elif is_valid639_1(code):
+            self.lang_code = to_iso639_2(code)
+        else:
+            full_name = code.lower().capitalize()
+            if is_iso639_2(full_name):
+                self.lang_code = to_iso639_2(full_name)
+            else:
+                raise ValueError("The input %s is not a valid input" % code)

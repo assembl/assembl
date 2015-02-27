@@ -118,6 +118,7 @@ zope.event==4.0.3
 zope.deprecation==4.1.2
 zope.interface==4.1.2
 zope.sqlalchemy==0.7.5
+iso639==0.1.1
 -e git+https://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
 -e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
