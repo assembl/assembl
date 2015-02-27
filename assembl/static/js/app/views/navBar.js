@@ -326,7 +326,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                         });
                                         LocalRolesUser.save(null, {
                                             success: function (model, resp) {
-                                                self.ui.joinDiscussion.css('visibility', 'hidden');
+                                                // TODO: Is there a simpler way to do this? MAP
+                                                self.navBarRight.currentView.ui.joinDiscussion.css('visibility', 'hidden');
                                                 self._store.removeItem('needJoinDiscussion');
                                                 that.triggerSubmit();
                                             },
