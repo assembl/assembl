@@ -946,7 +946,7 @@ Please confirm your ${confirm_what} <${email}> with ${assembl} by clicking on th
 <${confirm_url}>
 """), mapping=data),
         html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
-<p>Please <a href="${confirm_url}">confirm your ${confirm_what}</a> &lt;${email}&gt; with <${assembl}>.</p>
+<p>Please <a href="${confirm_url}">confirm your ${confirm_what}</a> &lt;${email}&gt; with ${assembl}.</p>
 """), mapping=data))
     #if deferred:
     #    mailer.send_to_queue(message)
