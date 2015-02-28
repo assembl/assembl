@@ -249,6 +249,12 @@ def jack_layton_mailbox(request, discussion, test_session):
 
     def fin():
         print "finalizer jack_layton_mailbox"
+        agents = set()
+        for post in m.contents:
+            agents.add(post.creator)
+            test_session.delete(post)
+        for agent in agents:
+            test_session.delete(agent)
         test_session.delete(m)
         test_session.flush()
     request.addfinalizer(fin)
