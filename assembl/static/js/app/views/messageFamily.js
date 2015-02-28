@@ -83,7 +83,8 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/ty
 
                 messageView = new messageViewClass({
                     model: this.model,
-                    messageListView: this.messageListView
+                    messageListView: this.messageListView,
+                    messageFamilyView: this
                 });
 
                 messageView.render();

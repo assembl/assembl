@@ -31,7 +31,20 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
                 bodyMimeType: null,
                 publishes_synthesis_id: null
             },
-
+            
+            /**
+             * @return {String} the subject, with any re: stripped
+             */
+            getSubjectNoRe: function () {
+              var subject = this.get('subject');
+              if(subject) {
+                return subject.replace(/( *)?(RE) *(:|$) */igm, "");
+              }
+              else {
+                return subject;
+              }
+            },
+            
             /**
              * @return {Number} the quantity of all descendants
              */
@@ -60,11 +73,14 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
             },
 
             /**
-             * Return the parent idea
-             * @return {MessageModel}
+             * Return the parent message (if any)
+             * @return {Promise}
              */
-            getParent: function () {
-                return this.collection.findWhere({ '@id': this.get('parentId') });
+            getParentPromise: function () {
+              if(this.get('parentId')) {
+                return this.collection.collectionManager.getMessageFullModelPromise(this.get('parentId'));
+              }
+              return this.get('parentId');
             },
 
             /**
@@ -104,33 +120,6 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
                     }
                 );
                 return deferred.promise();
-            },
-
-            /**
-             * Returns the toppest parent
-             * @return {MessageModel}
-             */
-            getRootParent: function () {
-                if (this.get('parentId') === null) {
-                    return null;
-                }
-
-                var parent = this.getParent(),
-                    current = null;
-
-                do {
-
-                    if (parent) {
-                        current = parent;
-                        parent = parent.get('parentId') !== null ? parent.getParent() : null;
-                    } else {
-                        parent = null;
-                    }
-
-                } while (parent !== null);
-
-                return current;
-
             },
 
             /** Return a promise for the post's creator

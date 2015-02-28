@@ -236,6 +236,14 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             currentViewStyle: null,
+            
+            /** 
+             * Is the current view style a non-flat view
+             */
+            iSviewStyleThreadedType: function () {
+              return this.currentViewStyle === this.ViewStyles.THREADED || 
+                     this.currentViewStyle === this.ViewStyles.NEW_MESSAGES;
+            },
 
             /**
              * If there were any render requests inhibited while rendering was

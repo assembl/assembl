@@ -64,19 +64,19 @@
     {# Strip whitespace ...#}{{ readUnreadIndicator() }}{# Strip whitespace ...#}
   </div>
   <div class="centerSection">
-    <div class="message-subject js_messageTitle">
-      <span class="message-title"><%= subject %></span>
+    <div class="message-abstract js_messageTitle">
+      <span class="message-subject"><%= subject %></span>
       <span class="message-body <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></span>
     </div>
   </div>
 
 <% } else { %>
 
-  <div class="rc rcss pbxs mbxs head">
-    <a class="img-left avatar img-rounded mtxs" href="#"><img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}" width="30" height="30"></a>
+  <div class="js_messageHeader rc rcss pbxs mbs head">
+    <a class="img-left avatar  img-rounded mtxs" href="#"><img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}" width="30" height="30"></a>
     <div class="bd">
-      <div class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }} {{ readUnreadIndicator() }}</div>
-      <div class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }} {{ showInspirationSource() }}</div>
+      <div class="message-author">{{ gettext('%(user)s')|format(user=userName)|safe }} {{ readUnreadIndicator() }}</div>
+      <div class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }} {{ showInspirationSource() }}</div>
     </div>
   </div>
 
