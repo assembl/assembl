@@ -92,15 +92,15 @@ raven==5.2.0
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1
-requests==2.5.2
+requests==2.5.3
 requests-oauthlib==0.4.2
-selenium==2.44.0
+selenium==2.45.0
 simplejson==3.6.5
 six==1.9.0
 -e git+https://github.com/maparent/sockjs-tornado.git@master#egg=sockjs_tornado
 sockjsproxy==0.7.1
 sphinx-bootstrap-theme==0.4.5
-splinter==0.7.0
+git+https://github.com/maparent/splinter.git#egg=splinter
 supervisor==3.1.3
 tornado==4.1
 transaction==1.4.3
