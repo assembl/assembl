@@ -30,7 +30,7 @@ class IMAPReader(SourceReader):
                 res = mailbox.starttls()
                 if not is_ok(res):
                     # TODO: Require bad login from client error
-                    raise TransientError(res)
+                    raise ReaderError(res)
             if 'IDLE' in mailbox.capabilities:
                 self.can_push = True
             res = mailbox.login(self.source.username, self.source.password)
