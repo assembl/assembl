@@ -86,8 +86,8 @@ class SourceReader(Thread):
     deamon = True
 
     # Timings. Those should vary per source type, maybe even by source?
-    min_time_between_reads = timedelta(seconds=10)
-    time_between_reads = timedelta(minutes=1) # 10
+    min_time_between_reads = timedelta(minutes=1)
+    time_between_reads = timedelta(minutes=10)
     max_idle_period = timedelta(hours=3)
 
     transient_error_backoff = timedelta(seconds=10)
