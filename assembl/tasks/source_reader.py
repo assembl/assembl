@@ -86,8 +86,8 @@ class SourceReader(Thread):
     deamon = True
 
     # Timings. Those should vary per source type, maybe even by source?
-    min_time_between_reads = timedelta(minutes=1)
-    time_between_reads = timedelta(minutes=10)
+    min_time_between_reads = timedelta(seconds=10)
+    time_between_reads = timedelta(minutes=1) # 10
     max_idle_period = timedelta(hours=3)
 
     transient_error_backoff = timedelta(seconds=10)
@@ -186,6 +186,7 @@ class SourceReader(Thread):
 
     def run(self):
         self.setup()
+        import pdb; pdb.set_trace()
         while self.status != ReaderStatus.SHUTDOWN:
             try:
                 self.login()
@@ -196,56 +197,53 @@ class SourceReader(Thread):
                     self.do_close()
                 self.event.wait(self.current_error_backoff.total_seconds())
                 continue
-            if self.is_connected():
+            while self.is_connected():
                 # Read in all cases
                 try:
                     self.read()
-                    self.successful_read()
-                    if self.can_push:
-                        break
-                    self.set_status(ReaderStatus.PAUSED)
                 except ReaderError as e:
                     self.new_error(e.status)
                     if self.status > ReaderStatus.TRANSIENT_ERROR:
                         self.do_close()
                     self.event.wait(self.current_error_backoff.total_seconds())
+                if not self.is_connected():
                     continue
-            if not self.is_connected():
-                continue
-            if self.can_push:
-                self.set_status(ReaderStatus.WAIT_FOR_PUSH)
-                while self.status == ReaderStatus.WAIT_FOR_PUSH:
-                    try:
-                        self.wait_for_push()
-                    except ReaderError as e:
-                        self.new_error(e.status)
-                        if self.status > ReaderStatus.TRANSIENT_ERROR:
-                            self.do_close()
-                        else:
-                            self.end_wait_for_push()
-                            self.set_status(ReaderStatus.PAUSED)
-                        self.event.wait(self.current_error_backoff.total_seconds())
-                        break
-                    if self.status == ReaderStatus.READING:
-                        self.set_status(ReaderStatus.WAIT_FOR_PUSH)
-                    if self.status == ReaderStatus.WAIT_FOR_PUSH:
-                        if (self.last_successful_read - self.last_prod
-                                > self.max_idle_period):
-                            try:
+                if self.can_push:
+                    self.set_status(ReaderStatus.WAIT_FOR_PUSH)
+                    while self.status == ReaderStatus.WAIT_FOR_PUSH:
+                        try:
+                            self.wait_for_push()
+                        except ReaderError as e:
+                            self.new_error(e.status)
+                            if self.status > ReaderStatus.TRANSIENT_ERROR:
+                                self.do_close()
+                            else:
                                 self.end_wait_for_push()
-                            finally:
-                                close()
-                    elif self.status == ReaderStatus.TRANSIENT_ERROR:
-                        self.event.wait(self.current_error_backoff.total_seconds())
-                        self.self.status == ReaderStatus.WAIT_FOR_PUSH
-            if not self.is_connected():
-                continue
-            if (self.last_successful_read - self.last_prod
-                    > self.max_idle_period):
-                # Nobody cares, I can stop reading
-                self.close()
-                self.event.wait(0)
-            self.event.wait(self.time_between_reads.total_seconds())
+                            self.event.wait(self.current_error_backoff.total_seconds())
+                            break
+                        if not self.is_connected():
+                            break
+                        if self.status == ReaderStatus.READING:
+                            self.set_status(ReaderStatus.WAIT_FOR_PUSH)
+                        if self.status == ReaderStatus.PAUSED:
+                            # If wait_for_push leaves us in PAUSED state,
+                            # restart reading cycle
+                            break
+                if not self.is_connected():
+                    break
+                if (self.last_successful_read - self.last_prod
+                        > self.max_idle_period):
+                    # Nobody cares, I can stop reading
+                    try:
+                        if self.status == ReaderError.WAIT_FOR_PUSH:
+                            self.end_wait_for_push()
+                    finally:
+                        self.close()
+
+                    if self.status != ReaderStatus.SHUTDOWN:
+                        self.event.wait(0)
+                else:
+                    self.event.wait(self.time_between_reads.total_seconds())
 
     @abstractmethod
     def login(self):
@@ -255,6 +253,8 @@ class SourceReader(Thread):
     def wait_for_push(self):
         # redefine in push-capable readers
         assert self.can_push
+        # Leave a non-error status as either WAIT_FOR_PAUSE
+        # or READING; the latter will loop.
 
     @abstractmethod
     def end_wait_for_push(self):
@@ -262,6 +262,11 @@ class SourceReader(Thread):
         self.set_status(ReaderStatus.PAUSED)
 
     def close(self):
+        if self.status == ReaderStatus.WAIT_FOR_PUSH:
+            try:
+                self.end_wait_for_push()
+            except ReaderError as e:
+                self.new_error(min(e.status, ReaderStatus.CLIENT_ERROR))
         self.set_status(ReaderStatus.CLOSED)
         try:
             self.do_close()
@@ -275,9 +280,15 @@ class SourceReader(Thread):
     def setup(self):
         pass
 
-    @abstractmethod
     def read(self):
         self.set_status(ReaderStatus.READING)
+        self.do_read()
+        self.successful_read()
+        self.set_status(ReaderStatus.PAUSED)  # or WAIT_FOR_PUSH
+
+    @abstractmethod
+    def do_read(self):
+        pass
 
     def shutdown(self):
         # TODO: lock.
@@ -338,8 +349,6 @@ class SourceDispatcher(ConsumerMixin):
         super(SourceDispatcher, self).__init__()
         self.connection = connection
         self.readers = {}
-        from assembl.models import ContentSource
-        self.sessionmaker = ContentSource.db
 
     def get_consumers(self, Consumer, channel):
         global _queue
