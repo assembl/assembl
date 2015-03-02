@@ -46,9 +46,12 @@ def get_default_context(request):
         web_analytics_piwik_script = web_analytics_piwik_script % ( discussion.web_analytics_piwik_id_site, discussion.web_analytics_piwik_id_site )
     else:
         web_analytics_piwik_script = False
-    # TODO: create a user_discussion_data table where we put data like last_visit, which we use to set the following variable to True
-    # first_login_after_auto_subscribe_to_notifications = request.session.get('first_login_after_auto_subscribe_to_notifications', None) or False
+
     first_login_after_auto_subscribe_to_notifications = False
+    # Activate when auto-subscribing is repaired, and add something (session variable?) to not show the popin on every page of the visit
+    #if user and user.is_first_visit and discussion and discussion.subscribe_to_notifications_on_signup:
+    #    first_login_after_auto_subscribe_to_notifications = True
+
     return dict(
         default_context,
         request=request,

@@ -245,6 +245,7 @@ class AgentProfile(Base):
             self.db.add(agent_status)
         return agent_status
 
+    # True iff the user visits this discussion for the first time
     @property
     def is_first_visit(self):
         status = self.status_in_current_discussion
