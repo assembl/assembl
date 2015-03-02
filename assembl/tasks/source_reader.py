@@ -96,9 +96,9 @@ class SourceReader(Thread):
     client_error_numlimit = 3
     irrecoverable_error_backoff = timedelta(days=1)
 
-    def __init__(self, source):
+    def __init__(self, source_id):
         super(SourceReader, self).__init__()
-        self.source = source
+        self.source_id = source_id
         self.status = ReaderStatus.CREATED
         self.last_prod = datetime.fromtimestamp(0)
         self.last_read = datetime.fromtimestamp(0)
@@ -111,7 +111,7 @@ class SourceReader(Thread):
 
     def set_status(self, status):
         log.info("%s %d: %s -> %s" % (
-            self.__class__.__name__, self.source.id, self.status.name,
+            self.__class__.__name__, self.source_id, self.status.name,
             status.name))
         self.status = status
 
@@ -186,7 +186,6 @@ class SourceReader(Thread):
 
     def run(self):
         self.setup()
-        import pdb; pdb.set_trace()
         while self.status != ReaderStatus.SHUTDOWN:
             try:
                 self.login()
@@ -235,7 +234,7 @@ class SourceReader(Thread):
                         > self.max_idle_period):
                     # Nobody cares, I can stop reading
                     try:
-                        if self.status == ReaderError.WAIT_FOR_PUSH:
+                        if self.status == ReaderStatus.WAIT_FOR_PUSH:
                             self.end_wait_for_push()
                     finally:
                         self.close()
@@ -278,7 +277,8 @@ class SourceReader(Thread):
         pass
 
     def setup(self):
-        pass
+        from assembl.models import ContentSource
+        self.source = ContentSource.get(self.source_id)
 
     def read(self):
         self.set_status(ReaderStatus.READING)

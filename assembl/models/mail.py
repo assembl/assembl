@@ -841,7 +841,7 @@ class IMAPMailbox(AbstractMailbox):
 
     def make_reader(self):
         from assembl.tasks.imaplib2_source_reader import IMAPReader
-        return IMAPReader(self)
+        return IMAPReader(self.id)
 
     def get_send_address(self):
         """
