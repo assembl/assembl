@@ -40,6 +40,10 @@ _ = TranslationStringFactory('assembl')
 
 
 def get_login_context(request):
+    discussion_title = None
+    discussion = discussion_from_request(request)
+    if discussion:
+        discussion_title = discussion.topic
     slug = request.matchdict.get('discussion_slug', None)
     if slug:
         p_slug = "/" + slug
@@ -50,6 +54,7 @@ def get_login_context(request):
     return dict(get_default_context(request), **{
         'login_url': login_url,
         'slug_prefix': p_slug,
+        'discussion_title': discussion_title,
         'providers': request.registry.settings['login_providers'],
         'google_consumer_key': request.registry.settings.get(
             'google.consumer_key', ''),

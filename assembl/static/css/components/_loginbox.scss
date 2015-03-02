@@ -28,16 +28,19 @@
   }
 
   header {
-    height: 60px;
+    min-height: 60px;
     color:#CCCCCC;
     background-color: #484848;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
+    text-align: center;
 
     h1 {
-      line-height: 60px;
+      line-height: 35px;
       text-align: center;
       color: #fff;
+      margin: 0;
+      padding: 10px;
     }
   }
 

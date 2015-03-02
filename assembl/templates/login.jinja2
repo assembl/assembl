@@ -29,7 +29,7 @@
 
 <div class="loginbox sign-in">
     <header>
-        <h1>{{ gettext("Log in to Assembl") }}</h1>
+        <h1>{% if discussion_title %}{{ gettext("Log in to \"%(discussion_title)s\"")|format(discussion_title=discussion_title) }}{% else %}{{ gettext("Log in to Assembl") }}{% endif %}</h1>
     </header>
 
     <div class="content">
