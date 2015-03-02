@@ -211,8 +211,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         data = that.transformDataBeforeRender(data);
                         that.$el.html(that.template(data));
                         Ctx.initTooltips(that.$el);
-                        if ( that.viewStyle == that.availableMessageViewStyles.FULL_BODY )
-                        {
+                        if ( that.viewStyle == that.availableMessageViewStyles.FULL_BODY ){
                             Ctx.convertUrlsToLinks(that.$el.children('.message-body')); // we target only the body part of the message, not the title
                             Ctx.makeLinksShowOembedOnHover(that.$el.children('.message-body'));
                         }
@@ -266,35 +265,31 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
 
                         if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
 
-                            var applyEllipsis = function()
-                            {
+                            var applyEllipsis = function(){
                                 /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
                                  * Read More links for message previews
                                  */
                                 that.$(".ellipsis").dotdotdot({
-                                    after: "a.readMore",
+                                    after: ".readMoreOrLess",
+                                    ellipsis: '... ',
+                                    height: 70,
                                     callback: function (isTruncated, orgContent) {
                                         //console.log("dotdotdot initialized on message", that.model.id);
                                         //console.log(isTruncated, orgContent);
-                                        if (isTruncated)
-                                        {
-                                            that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
-                                        }
-                                        else
-                                        {
-                                            that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
-                                            if ( data['body'].length > 610 ) // approximate string length for text which uses 4 full lines
-                                            {
+                                        if (isTruncated){
+                                            that.$(".readMoreOrLess").removeClass('hidden');
+                                        } else {
+                                            that.$(".readMoreOrLess").addClass('hidden');
+                                            if ( data['body'].length > 610 ) {// approximate string length for text which uses 4 full lines
                                                 console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
-                                                if ( ++that.reRendered < 5 ) // we use this to avoid infinite loop of render() calls
-                                                {
+                                                if ( ++that.reRendered < 5 ){ // we use this to avoid infinite loop of render() calls
+
                                                     console.log("yes, we will re-render => tries: ", that.reRendered);
                                                     setTimeout(function(){
                                                         that.render();
                                                     }, 500);
                                                 }
-                                                else
-                                                {
+                                                else{
                                                     console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
                                                 }
                                             }
@@ -310,8 +305,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                     //console.log("Initializing ellipsis on message", that.model.id);
                                     var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
                                     //console.log("current_navigation_state:", current_navigation_state);
-                                    if ( current_navigation_state == 'home' )
-                                    {
+                                    if ( current_navigation_state == 'home' ){
                                         that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
                                         return;
                                     }
