@@ -27,6 +27,9 @@ You can append a view, such as ?view=id_only
 Delete a message (Superadmin):
 DELETE http://localhost:6543/data/Content/3244
 
+Permission lookups:
+GET localhost:6543/api/v1/discussion/2/permissions/add_extract/u/
+
 Frontend notes:
 Specific messages are adressed with urls such as 
 http://localhost:6543/jacklayton/posts/local%3AContent%2F16

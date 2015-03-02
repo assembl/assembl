@@ -912,7 +912,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 return this.format("/user/id/{0}/avatar/{1}", userID, size);
             },
 
-            /**
+            /** This removes (rather than escape) all html tags
              * @param  {String} html
              * @return {String} The new string without html tags
              */
@@ -920,6 +920,26 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 return html ? $.trim($('<div>' + html + '</div>').text()) : html;
             },
 
+            /**
+             * Use the browser's built-in functionality to quickly and safely 
+             * escape the string
+             */
+            escapeHtml: function (str) {
+              var div = document.createElement('div');
+              div.appendChild(document.createTextNode(str));
+              return div.innerHTML;
+            },
+              
+            /**
+             * UNSAFE with unsafe strings; only use on previously-escaped ones!
+             */
+            unescapeHtml: function (escapedStr) {
+              var div = document.createElement('div');
+              div.innerHTML = escapedStr;
+              var child = div.childNodes[0];
+              return child ? child.nodeValue : '';
+            },
+                 
             /**
              * Sets the given panel as fullscreen closing all other ones
              * @param {Panel} targetPanel

@@ -165,6 +165,15 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
 
                         data['viewStyle'] = that.viewStyle;
                         bodyFormat = that.model.get('bodyMimeType');
+                        if (bodyFormat == "text/plain") {
+                          //Make really sure no HTML leaked into the plain text
+                          data['body'] = Ctx.escapeHtml(data['body']);
+                        }
+                        else {
+                          //For better or worse, we assume the backend did a good job...
+                          ;
+                        }
+                        
                         if (that.viewStyle == that.availableMessageViewStyles.PREVIEW || that.viewStyle == that.availableMessageViewStyles.TITLE_ONLY) {
                             if (bodyFormat == "text/html") {
                                 //Strip HTML from preview
