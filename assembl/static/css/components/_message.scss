@@ -212,7 +212,7 @@ $message-body: #999999;
     .message-body {
       position: relative;
       padding: 0px;
-      max-height: $previewNumLines * $mesageBodyLineHeight * $messageBodyFontSize;
+      //max-height: $previewNumLines * $mesageBodyLineHeight * $messageBodyFontSize;
       overflow: hidden;
       color: $message-body;
     }
