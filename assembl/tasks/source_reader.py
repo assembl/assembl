@@ -388,6 +388,7 @@ class SourceDispatcher(ConsumerMixin):
         return False
 
     def shutdown(self):
+        self.should_stop = True
         for reader in self.readers.itervalues():
             reader.shutdown()
 

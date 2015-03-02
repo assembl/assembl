@@ -60,10 +60,13 @@ class IMAPReader(SourceReader):
             if res and len(res) > 1 and len(res[1]) > 1 and res[1][1] == 'TIMEOUT':
                 self.set_status(ReaderStatus.PAUSED)
                 return
+            if not self.is_connected():
+                return
             if self.status == ReaderStatus.WAIT_FOR_PUSH:
                 self.do_read()
-            # am I still in IDLE state (WAIT_FOR_PUSH), or PAUSED?
-            self.set_status(ReaderStatus.WAIT_FOR_PUSH)
+            if self.is_connected():
+                # am I still in IDLE state (WAIT_FOR_PUSH), or PAUSED?
+                self.set_status(ReaderStatus.WAIT_FOR_PUSH)
         except IMAP4.abort as e:
             raise IrrecoverableError(e)
         except IMAP4.error as e:
