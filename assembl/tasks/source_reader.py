@@ -301,8 +301,8 @@ class SourceReader(Thread):
         self.event.set()
 
 
-class PullSourceReader(Thread):
-    # Simple reader, no wait for push, just redefine read
+class PullSourceReader(SourceReader):
+    # Simple reader, no wait for push, just redefine do_read
 
     def login(self):
         pass
