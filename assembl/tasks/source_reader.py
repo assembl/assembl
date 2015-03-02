@@ -100,7 +100,7 @@ class SourceReader(Thread):
         super(SourceReader, self).__init__()
         self.source_id = source_id
         self.status = ReaderStatus.CREATED
-        self.last_prod = datetime.fromtimestamp(0)
+        self.last_prod = datetime.now()
         self.last_read = datetime.fromtimestamp(0)
         self.last_successful_read = datetime.fromtimestamp(0)
         self.last_successful_login = datetime.fromtimestamp(0)
@@ -228,6 +228,9 @@ class SourceReader(Thread):
                             # If wait_for_push leaves us in PAUSED state,
                             # restart reading cycle
                             break
+                    if not self.is_connected():
+                        break
+                    continue  # to next read cycle
                 if not self.is_connected():
                     break
                 if (self.last_successful_read - self.last_prod

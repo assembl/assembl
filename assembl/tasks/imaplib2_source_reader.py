@@ -63,7 +63,7 @@ class IMAPReader(SourceReader):
             if self.status == ReaderStatus.WAIT_FOR_PUSH:
                 self.do_read()
             # am I still in IDLE state (WAIT_FOR_PUSH), or PAUSED?
-            self.set_status(ReaderStatus.PAUSED)
+            self.set_status(ReaderStatus.WAIT_FOR_PUSH)
         except IMAP4.abort as e:
             raise IrrecoverableError(e)
         except IMAP4.error as e:
