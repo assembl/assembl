@@ -373,6 +373,10 @@ class EmailAccount(AbstractAgentAccount):
     def avatar_url(self, size=32, default=None):
         return self.avatar_url_for(self.email, size, default)
 
+    def unique_query(self, query):
+        return self.db.query(self.__class__).filter_by(
+            type=self.type, email=self.email), True
+
     @staticmethod
     def avatar_url_for(email, size=32, default=None):
         args = {'s': str(size)}
@@ -512,6 +516,11 @@ class IdentityProviderAccount(AbstractAgentAccount):
                 if size <= name_size:
                     break
             return size_name.join(self.picture_url.split('_normal'))
+
+    def unique_query(self, query):
+        return self.db.query(self.__class__).filter_by(
+            type=self.type, provider_id=self.provider_id,
+            username=self.username), True
 
     @property
     def profile_info_json(self):
