@@ -998,9 +998,6 @@ class Email(ImportedPost):
         'polymorphic_identity': 'email',
     }
 
-    def __init__(self, *args, **kwargs):
-        super(Email, self).__init__(*args, **kwargs)
-
     def REWRITEMEreply(self, sender, response_body):
         """
         Send a response to this email.

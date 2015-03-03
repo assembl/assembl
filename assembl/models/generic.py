@@ -200,9 +200,6 @@ class Content(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
-    def __init__(self, *args, **kwargs):
-        super(Content, self).__init__(*args, **kwargs)
-
     def __repr__(self):
         return "<Content %s>" % repr(self.type)
 
