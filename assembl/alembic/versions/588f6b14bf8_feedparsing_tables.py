@@ -37,7 +37,7 @@ def upgrade(pyramid_env):
                     'abstract_agent_account.id',
                     ondelete='CASCADE',
                     onupdate='CASCADE'), primary_key=True),
-            sa.Column('user_link', String(1024), unique=True))
+            sa.Column('user_link', sa.String(1024), unique=True))
         op.create_table(
             'named_weblink_user',
             sa.Column('id', sa.Integer, sa.ForeignKey(

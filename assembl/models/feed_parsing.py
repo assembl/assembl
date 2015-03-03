@@ -17,9 +17,10 @@ from cStringIO import StringIO
 import feedparser
 import requests
 import pytz
-import importlib
+from importlib import import_module
 from datetime import datetime
 from calendar import timegm
+from ..tasks.source_reader import PullSourceReader
 
 
 class FeedFetcher(object):
@@ -78,7 +79,12 @@ class ParsedData(object):
 
     def _fetch_source(self):
         if not self._feed:
+            print "parsing feed from %s" % (self.url)
             self._feed = self._parse_agent.parse(self.url)
+
+    def _update_feed(self,url):
+        print "parsing feed from new url source"
+        self._feed = self._parse_agent.parse(url)
 
     def refetch_source(self):
         self._feed = self._parse_agent.parse(self.url)
@@ -93,7 +99,11 @@ class ParsedData(object):
         self._fetch_source()
         return self.get_parsed_feed()['feed']
 
-    def get_entries(self, url):
+    # Does not update the source
+    def get_feed_forced(self,url):
+        return self._parse_agent.parse(url)
+
+    def get_entries(self):
         self._fetch_source()
         return iter(self.get_parsed_feed()['entries'])
 
@@ -111,45 +121,40 @@ class PaginatedParsedData(ParsedData):
         self.page_number = start_page
         self.page_key = page_key
         self.url = url
+        self._new_source_fetched = False
         self._parse_wrapper = parser_wrapper or \
             ParserWrapper(FeedFetcher(), feedparser)
-        super(ParsedData, self).__init__(self._parse_wrapper)
+        super(self.__class__, self).__init__(url, self._parse_wrapper)
 
-    def _check_empty_entries(self):
+    def _check_empty_entries(self, feed):
         """Checks if the currently fetched feed has any entries or not"""
-        if super(PaginatedParsedData, self).get_entry() == []:
-            raise StopIteration
+        return feed['entries'] == []
 
-    def _append_pagination_to_url(self):
-        """The method that incorporates the logic in manipulating the url
-        into the appropriate page specific url path.
-
-        @override this in order to change the logic for different entries
-        """
-
-        if self.page_number <= 1:
-            return self.url
-        return self.url + "?" + self.page_key + "=" + str(self.page_number)
-
-    def _update_url():
+    def _update_url(self):
         """The method updates the url to update the concept of 'next page'.
         It will call _append_pagination_to_url.
 
         @override this to implement specific logic"""
-
-        self.page_number += 1
-        return self._append_pagination_to_url()
+        next = self.page_number
+        while True:
+            next_url = self.url + "?" + self.page_key + "=" + str(next)
+            next += 1
+            yield next_url
 
     def get_next_feed(self):
-        next_url = self._update_url() if self.page_number > 1 else self.url
-        feed = self._parse_agent.parse(next_url)
-        self._feed = feed
-        self._check_empty_entries()
-        yield feed
+        for url in self._update_url():
+            print "Fetching current url: \n%s" % url
+            feed = super(self.__class__, self).get_feed_forced(url)
+            if feed['entries'] == []:
+                raise StopIteration
+            yield feed
+
+    def _get_entry_per_feed(self, feed):
+        return iter(feed['entries'])
 
     def get_entries(self):
         for feed in self.get_next_feed():
-            for entry in super(PaginatedParsedData, self).get_entries():
+            for entry in self._get_entry_per_feed(feed):
                 yield entry
 
 
@@ -175,14 +180,14 @@ class FeedPostSource(PostSource):
     }
 
     @classmethod
-    def create_from(cls, discussion, url, parse_config_class):
-        encoded_name = url.encode('utf-8')
+    def create_from(cls, discussion, url, source_name, parse_config_class):
+        encoded_name = source_name.encode('utf-8')
+        encoded_url = url.encode('utf-8')
         created_date = pytz.datetime.datetime.utcnow().\
             replace(tzinfo=pytz.utc)
         parser_name = str(parse_config_class).split("'")[1]
-
         return cls(name=encoded_name, creation_date=created_date,
-                   discussion=discussion,
+                   discussion=discussion, url=encoded_url,
                    parser_full_class_name=parser_name)
 
     def __init__(self, *args, **kwargs):
@@ -195,14 +200,24 @@ class FeedPostSource(PostSource):
         if not self._parse_agent:
             module, parse_cls = \
                 tmp =  self.parser_full_class_name.rsplit(".",1)
-            mod = importlib.load_module(module)
-            self._parse_agent = getattr(mod, parse_cls)()
+            mod = import_module(module)
+            tmp = getattr(mod, parse_cls)
+            pdb.set_trace()
+            self._parse_agent = tmp(self.url)
 
-    def _generate_post_stream(self, parsed_data):
-        for entry in parsed_data.get_entries():
+    def _generate_post_stream(self):
+        self._check_parser_loaded()
+        for entry in self._parse_agent.get_entries():
             account = self._create_account_from_entry(entry)
             self._add_user_agent(account)
             yield self._convert_to_post(entry, account)
+
+    def _generate_post_stream_debug(self):
+        self._check_parser_loaded()
+        for entry in self._parse_agent.get_entries():
+            account = self._create_account_from_entry(entry)
+            self._add_user_agent(account)
+            yield self._convert_to_post(entry, account), account
 
     def _add_user_agent(self, account):
         """Takes an account, and populate the _user_agents cache."""
@@ -241,16 +256,16 @@ class FeedPostSource(PostSource):
             fromtimestamp(timegm(entry['updated_parsed']))
         source_post_id = entry['id'].encode('utf-8')
         source = self
-        body_mime_type = entry['content']['type']
+        body_mime_type = entry['content'][0]['type']
 
         subject = entry['title'].encode('utf-8')
-        body = entry['content']['value'].encode('utf-8')
+        body = entry['content'][0]['value'].encode('utf-8')
         imported_date = pytz.datetime.datetime.\
             utcnow().replace(tzinfo=pytz.utc)
 
         user = account.profile
 
-        return FeedPost(source_date_created=post_created_date,
+        return FeedPost(creation_date=post_created_date,
                         import_date=imported_date,
                         source_post_id=source_post_id,
                         source=source,
@@ -271,20 +286,35 @@ class FeedPostSource(PostSource):
 
         return WebLinkAccount(user_link=author_link, profile=agent_profile)
 
-    def _add_entries(self, parsed_data):
-        for post in self._generate_post_stream(parsed_data):
+    def _add_entries(self):
+        for post in self._generate_post_stream():
             if self._validate_post_not_exists(post):
                 self.db.add(post)
                 self.db.flush()
 
     def generate_posts(self):
         self._check_parser_loaded()
-        self._add_entries(self._parse_agent)
+        self._add_entries()
         # self.commit_changes()
 
     def commit_changes(self):
         self._add_users_to_db()
         self.db.commit()
+
+    def get_reader(self):
+        return FeedSourceReader(self.id)
+
+
+class FeedSourceReader(PullSourceReader):
+    # This will be the type that will be created to fetch a source.
+    # Create a source from url in do_read, and commit all the posts
+    # created from the source.
+
+    # This will probably what will be called from either .generic/Source
+    # or LoomioPostSource ?
+
+    def do_read(self):
+        self.source.generate_posts()
 
 
 class LoomioPostSource(FeedPostSource):
@@ -297,13 +327,11 @@ class LoomioPostSource(FeedPostSource):
 
     def __init__(self, *args, **kwargs):
         self._post_type = LoomioFeedPosts
-        super(LoomioPostSource, self).__init__(*args, **kwargs)
+        super(self.__class__, self).__init__(*args, **kwargs)
 
     def _create_account_from_entry(self, entry):
         author_name = entry['author'].encode('utf-8')
-        # href returns unicode string, perhaps encode in utf-8?
         author_link = entry['author_detail']['href'].encode('utf-8')
-
         desc = "Loomio Feed-Based Account"
         agent_profile = AgentProfile(name=author_name, description=desc)
 
@@ -313,8 +341,40 @@ class LoomioPostSource(FeedPostSource):
         return LoomioAccount(user_link=author_link, user_name=author_name,
                              profile=agent_profile)
 
-    def _convert_to_post(self,entry):
-        pass
+    def _convert_to_post(self,entry,account):
+        # Content Baggage: id (PrimaryKey), type, creation_date, discussion_id,
+        # hidden
+
+        # Post Baggage: id(ForeignKey, content), message_id, ancestry,
+        # parent_id(ForeignKey, post), children (rs: Post),
+        # creator_id(ForeignKey agentprofile), creator(rs: AgentProfile),
+        # subject, body,
+
+        # ImportedPost Baggage: id (ForeignKey, post), import_date,
+        # source_post_id, source_id, body_mime_type, source(PostSource)
+
+        # Time in UTC w/o timezone information
+        post_created_date = datetime.\
+            fromtimestamp(timegm(entry['updated_parsed']))
+        source_post_id = entry['id'].encode('utf-8') # alter
+        source = self
+        body_mime_type = entry['content'][0]['type']
+
+        subject = entry['title'].encode('utf-8')
+        body = entry['content'][0]['value'].encode('utf-8')
+        imported_date = pytz.datetime.datetime.\
+            utcnow().replace(tzinfo=pytz.utc)
+
+        user = account.profile
+
+        return FeedPost(creation_date=post_created_date,
+                        import_date=imported_date,
+                        source_post_id=source_post_id,
+                        source=source,
+                        body_mime_type=body_mime_type,
+                        creator=user,
+                        subject=subject,
+                        body=body)
 
 
 class FeedPost(ImportedPost):
@@ -378,7 +438,6 @@ class NamedWebLinkAccount(WebLinkAccount):
     """
     A weblink account with URL and Name. This is not an authenticated user.
     """
-
     __tablename__ = 'named_weblink_user'
 
     id = Column(Integer, ForeignKey(
@@ -399,26 +458,3 @@ class LoomioAccount(NamedWebLinkAccount):
     __mapper_args__ = {
         'polymorphic_identity': 'loomio_user'
     }
-
-
-Base = declarative_base()
-class TmpTable(Base):
-    __tablename__ = "temporary_table"
-    id = Column(Integer, primary_key=True)
-    name = Column(String(512), nullable=False)
-
-def main():
-    # messing about area
-    tmp_url = "https://www.loomio.org/d/zl29GjrB/nodeinfo.xml?page=2"
-    parse_agent = ParserWrapper(FeedFetcher(), feedparser)
-    parsed_data = ParsedData(parse_agent)
-
-    print list(parsed_data.fetch_entry(tmp_url))
-    print "-------------------------------------"
-    print "-------------------------------------"
-    print "-------------------------------------"
-    print "-------------------------------------"
-    print list(parsed_data.fetch_entry(tmp_url))
-
-if __name__ == "__main__":
-    main()
