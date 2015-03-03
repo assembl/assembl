@@ -48,9 +48,13 @@ def get_default_context(request):
         web_analytics_piwik_script = False
 
     first_login_after_auto_subscribe_to_notifications = False
-    # Activate when auto-subscribing is repaired, and add something (session variable?) to not show the popin on every page of the visit
-    #if user and user.is_first_visit and discussion and discussion.subscribe_to_notifications_on_signup:
-    #    first_login_after_auto_subscribe_to_notifications = True
+    # FIXME: user.is_first_visit() does not seem to work, as it is always false, to right now first_login_after_auto_subscribe_to_notifications can never become True and so the popin can never be shown
+    if user and discussion and discussion.id and user.is_first_visit() and discussion.subscribe_to_notifications_on_signup:
+        # set session variable, so that we show the popin only once in the session
+        # TODO: use a different flag for each discussion, so that if the user joins several auto-subscribing discussions during the same logged-in session, we show one popin for every discussion
+        if not request.session.get('first_login_after_auto_subscribe_to_notifications_popin_has_been_shown', False):
+            request.session['first_login_after_auto_subscribe_to_notifications_popin_has_been_shown'] = True
+            first_login_after_auto_subscribe_to_notifications = True
 
     return dict(
         default_context,

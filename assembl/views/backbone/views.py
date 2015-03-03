@@ -63,7 +63,7 @@ def home_view(request):
         # User is logged-in but doesn't have access to the discussion
         return HTTPUnauthorized()
 
-    canAddExtract = user_has_permission(context["discussion"].id, user_id, P_ADD_EXTRACT)
+    canAddExtract = user_has_permission(discussion.id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract
     context['canDisplayTabs'] = True
     if user_id != Everyone:
