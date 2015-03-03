@@ -327,8 +327,7 @@ def assembl_register_view(request):
         now = datetime.utcnow()
         agent_status = AgentStatusInDiscussion(
             agent_profile=user, discussion=discussion,
-            user_created_on_this_discussion=True,
-            first_visit=now, last_visit=now)
+            user_created_on_this_discussion=True)
         session.add(agent_status)
     session.flush()
     if not validate_registration:
@@ -410,8 +409,6 @@ def assembl_login_complete_view(request):
     headers = remember(request, user.id, tokens=format_token(user))
     request.response.headerlist.extend(headers)
     discussion = discussion_from_request(request)
-    if discussion:
-        user.is_visiting_discussion(discussion.id)
     return HTTPFound(location=next_view)
 
 
@@ -509,8 +506,6 @@ def velruse_login_complete_view(request):
             profile.last_login = datetime.now()
             if not profile.name:
                 profile.name = velruse_profile.get('displayName', None)
-        if discussion:
-            profile.is_visiting_discussion(discussion.id)
     else:
         # Create a new user
         profile = User(
@@ -534,8 +529,7 @@ def velruse_login_complete_view(request):
             now = datetime.utcnow()
             agent_status = AgentStatusInDiscussion(
                 agent_profile=profile, discussion=discussion,
-                user_created_on_this_discussion=True,
-                first_visit=now, last_visit=now)
+                user_created_on_this_discussion=True)
             session.add(agent_status)
         session.flush()
         if maybe_auto_subscribe(profile, discussion):

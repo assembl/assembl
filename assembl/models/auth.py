@@ -235,10 +235,12 @@ class AgentProfile(Base):
 
     def is_visiting_discussion(self, discussion_id):
         agent_status = self.get_status_in_discussion(discussion_id)
+        now = datetime.utcnow()
         if agent_status:
-            agent_status.last_visit = datetime.utcnow()
+            agent_status.last_visit = now
+            if agent_status.first_visit is None:
+                agent_status.first_visit = now
         else:
-            now = datetime.utcnow()
             agent_status = AgentStatusInDiscussion(
                 agent_profile=self, discussion_id=discussion_id,
                 first_visit=now, last_visit=now)
@@ -539,8 +541,8 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
     agent_profile = relationship(
         AgentProfile, backref=backref(
             "agent_status_in_discussion", cascade="all, delete-orphan"))
-    first_visit = Column(DateTime, default=datetime.utcnow)
-    last_visit = Column(DateTime, default=datetime.utcnow)
+    first_visit = Column(DateTime)
+    last_visit = Column(DateTime)
     first_subscribed = Column(DateTime)
     last_unsubscribed = Column(DateTime)
     user_created_on_this_discussion = Column(Boolean, server_default='0')
