@@ -106,16 +106,16 @@ class IMAPReader(SourceReader):
             if not message_string:
                 raise ClientError()
             try:
-                with transaction.manager as session:
-                    if self.source.message_ok_to_import(message_string):
-                        (email_object, dummy, error) = self.source.parse_email(message_string)
-                        if error:
-                            raise ReaderError(error)
-                        ContentSource.db.add(email_object)
-                    else:
-                        print "Skipped message with imap id %s (bounce or vacation message)" % (email_id)
-                    # print "Setting self.source.last_imported_email_uid to "+email_id
-                    self.source.last_imported_email_uid = email_id
+                if self.source.message_ok_to_import(message_string):
+                    (email_object, dummy, error) = self.source.parse_email(message_string)
+                    if error:
+                        raise ReaderError(error)
+                    ContentSource.db.add(email_object)
+                else:
+                    print "Skipped message with imap id %s (bounce or vacation message)" % (email_id)
+                # print "Setting self.source.last_imported_email_uid to "+email_id
+                self.source.last_imported_email_uid = email_id
+                transaction.commit()
             finally:
                 self.source = ContentSource.get(self.source.id)
         except IMAP4.abort as e:
