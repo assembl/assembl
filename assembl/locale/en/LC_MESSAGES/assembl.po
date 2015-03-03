@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-03-02 15:42-0500\n"
+"POT-Creation-Date: 2015-03-03 14:46+0100\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:992
+#: assembl/static/js/app/common/context.js:1012
 msgid "ajax error message:"
 msgstr ""
 
@@ -261,17 +261,17 @@ msgid "Dashboard"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:117
-#: assembl/static/js/app/views/message.js:224
+#: assembl/static/js/app/views/message.js:233
 msgid "Type your response here..."
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:119
-#: assembl/static/js/app/views/message.js:226
+#: assembl/static/js/app/views/message.js:235
 msgid "Send your reply"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:122
-#: assembl/static/js/app/views/message.js:228
+#: assembl/static/js/app/views/message.js:237
 msgid "You did not type a response yet..."
 msgstr ""
 
@@ -358,7 +358,7 @@ msgstr ""
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 
-#: assembl/static/js/app/views/message.js:414
+#: assembl/static/js/app/views/message.js:423
 msgid ""
 "You will be redirected to another idea in connection with the nugget on "
 "which you clicked."
@@ -822,7 +822,7 @@ msgstr ""
 msgid "Email or username"
 msgstr ""
 
-#: assembl/templates/login.jinja2:70 assembl/views/auth/views.py:717
+#: assembl/templates/login.jinja2:70 assembl/views/auth/views.py:712
 msgid "Log in"
 msgstr ""
 
@@ -906,6 +906,11 @@ msgstr ""
 
 #: assembl/templates/profile.jinja2:224
 msgid "Connect other accounts to Assembl"
+msgstr ""
+
+#: assembl/templates/register.jinja2:12
+#, python-format
+msgid "Join \"%(discussion_title)s\""
 msgstr ""
 
 #: assembl/templates/register.jinja2:12
@@ -1119,10 +1124,10 @@ msgstr ""
 msgid ""
 "These are the notifications which a user gets subscribed to when one of "
 "these conditions is matched: 1. The user clicks on the \"Subscribe to "
-"discussion\" button. 2. The user posts his/her first message, Assembl "
-"shows a subscription pop-in, and the user accepts subscribing. 3. The "
-"discussion parameter \"Auto-subscribe users to default notifications when"
-" they register\" is active and the user confirms their account."
+"group\" button. 2. The user posts his/her first message, Assembl shows a "
+"subscription pop-in, and the user accepts subscribing. 3. The discussion "
+"parameter \"Auto-subscribe users to default notifications when they "
+"register\" is active and the user confirms their account."
 msgstr ""
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:41
@@ -1965,18 +1970,18 @@ msgstr ""
 msgid "No file given."
 msgstr ""
 
-#: assembl/views/api/agent.py:100 assembl/views/auth/views.py:204
+#: assembl/views/api/agent.py:100 assembl/views/auth/views.py:199
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/api/agent.py:118 assembl/views/auth/views.py:223
-#: assembl/views/auth/views.py:913
+#: assembl/views/api/agent.py:118 assembl/views/auth/views.py:218
+#: assembl/views/auth/views.py:908
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/api/agent.py:126 assembl/views/auth/views.py:231
-#: assembl/views/auth/views.py:297
+#: assembl/views/api/agent.py:126 assembl/views/auth/views.py:226
+#: assembl/views/auth/views.py:292
 msgid "This is not a valid email"
 msgstr ""
 
@@ -2001,109 +2006,109 @@ msgstr ""
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/auth/views.py:304
+#: assembl/views/auth/views.py:299
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:309
+#: assembl/views/auth/views.py:304
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:397 assembl/views/auth/views.py:815
+#: assembl/views/auth/views.py:392 assembl/views/auth/views.py:810
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:414
+#: assembl/views/auth/views.py:409
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:618 assembl/views/auth/views.py:778
+#: assembl/views/auth/views.py:613 assembl/views/auth/views.py:773
 msgid "Confirmation requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:619 assembl/views/auth/views.py:779
+#: assembl/views/auth/views.py:614 assembl/views/auth/views.py:774
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your"
 " inbox in a few minutes. Please follow the confirmation link in order to "
 "confirm your email"
 msgstr ""
 
-#: assembl/views/auth/views.py:656
+#: assembl/views/auth/views.py:651
 msgid "Wrong email token."
 msgstr ""
 
-#: assembl/views/auth/views.py:673
+#: assembl/views/auth/views.py:668
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:706
+#: assembl/views/auth/views.py:701
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr ""
 
-#: assembl/views/auth/views.py:711
+#: assembl/views/auth/views.py:706
 #, python-format
 msgid "Your email address %s has been confirmed, you can now log in."
 msgstr ""
 
-#: assembl/views/auth/views.py:718
+#: assembl/views/auth/views.py:713
 msgid "Your account is now active!"
 msgstr ""
 
-#: assembl/views/auth/views.py:732
+#: assembl/views/auth/views.py:727
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/auth/views.py:786
+#: assembl/views/auth/views.py:781
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:805 assembl/views/auth/views.py:816
+#: assembl/views/auth/views.py:800 assembl/views/auth/views.py:811
 msgid "I forgot my password"
 msgstr ""
 
-#: assembl/views/auth/views.py:849
+#: assembl/views/auth/views.py:844
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:850
+#: assembl/views/auth/views.py:845
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:872
+#: assembl/views/auth/views.py:867
 msgid "Wrong password token."
 msgstr ""
 
-#: assembl/views/auth/views.py:877
+#: assembl/views/auth/views.py:872
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/auth/views.py:889
+#: assembl/views/auth/views.py:884
 msgid "Change your password"
 msgstr ""
 
-#: assembl/views/auth/views.py:920
+#: assembl/views/auth/views.py:915
 msgid "Password changed"
 msgstr ""
 
-#: assembl/views/auth/views.py:932
+#: assembl/views/auth/views.py:927
 msgid "email"
 msgstr ""
 
-#: assembl/views/auth/views.py:934
+#: assembl/views/auth/views.py:929
 msgid "account"
 msgstr ""
 
-#: assembl/views/auth/views.py:946
+#: assembl/views/auth/views.py:941
 msgid "Please confirm your ${confirm_what} with <${assembl}>"
 msgstr ""
 
-#: assembl/views/auth/views.py:949
+#: assembl/views/auth/views.py:944
 msgid ""
 "Hello, ${name}!\n"
 "Please confirm your ${confirm_what} <${email}> with ${assembl} by "
@@ -2111,18 +2116,18 @@ msgid ""
 "<${confirm_url}>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:953
+#: assembl/views/auth/views.py:948
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">confirm your ${confirm_what}</a> "
 "&lt;${email}&gt; with ${assembl}.</p>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:973
+#: assembl/views/auth/views.py:968
 msgid "Request for password change"
 msgstr ""
 
-#: assembl/views/auth/views.py:977
+#: assembl/views/auth/views.py:972
 msgid ""
 "Hello, ${name}!\n"
 "You asked to change your password on <${assembl}>. (We hope it was you!)\n"
@@ -2131,7 +2136,7 @@ msgid ""
 "<${confirm_url}>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:982
+#: assembl/views/auth/views.py:977
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>You asked to <a href=\"${confirm_url}\">change your password</a> on "
