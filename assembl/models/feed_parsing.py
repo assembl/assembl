@@ -1,12 +1,12 @@
 from sqlalchemy import (
+    orm,
     Column,
     ForeignKey,
     Integer,
     String,
     DateTime
  )
-
-from sqlalchemy.ext.declarative import declarative_base
+import transaction
 
 from .generic import PostSource
 from .post import ImportedPost
@@ -191,10 +191,16 @@ class FeedPostSource(PostSource):
                    parser_full_class_name=parser_name)
 
     def __init__(self, *args, **kwargs):
+        print "I am in the orignial constructor"
+        super(FeedPostSource,self).__init__(*args,**kwargs)
+        self.init_on_reload()
+
+    @orm.reconstructor
+    def init_on_reload(self):
+        print "I am reloading my constructor"
         self._parse_agent = None
-        self._post_type = FeedPost
+        self._post_type = FeedPost # for db querying
         self._user_agents = {}
-        super(FeedPostSource, self).__init__(*args, **kwargs)
 
     def _check_parser_loaded(self):
         if not self._parse_agent:
@@ -202,7 +208,6 @@ class FeedPostSource(PostSource):
                 tmp =  self.parser_full_class_name.rsplit(".",1)
             mod = import_module(module)
             tmp = getattr(mod, parse_cls)
-            pdb.set_trace()
             self._parse_agent = tmp(self.url)
 
     def _generate_post_stream(self):
@@ -227,13 +232,13 @@ class FeedPostSource(PostSource):
 
     def _add_users_to_db(self):
         for user in self._user_agents.itervalues():
-            self.db.add(user)
+            self.db().add(user)
 
     # This must also be overriden to search the correct Posts table
     def _validate_post_not_exists(self, post):
         """Checks that the post is not already a part of the db"""
         tbl = self._post_type
-        results = db.query(tbl).\
+        results = self.db().query(tbl).\
             filter(tbl.source_post_id == post.source_post_id).count()
         return results == 0
 
@@ -269,6 +274,7 @@ class FeedPostSource(PostSource):
                         import_date=imported_date,
                         source_post_id=source_post_id,
                         source=source,
+                        discussion=source.discussion,
                         body_mime_type=body_mime_type,
                         creator=user,
                         subject=subject,
@@ -289,8 +295,8 @@ class FeedPostSource(PostSource):
     def _add_entries(self):
         for post in self._generate_post_stream():
             if self._validate_post_not_exists(post):
-                self.db.add(post)
-                self.db.flush()
+                self.db().add(post)
+                self.db().flush()
 
     def generate_posts(self):
         self._check_parser_loaded()
@@ -299,21 +305,15 @@ class FeedPostSource(PostSource):
 
     def commit_changes(self):
         self._add_users_to_db()
-        self.db.commit()
+        self.db().commit()
 
-    def get_reader(self):
+    def make_reader(self):
         return FeedSourceReader(self.id)
 
 
 class FeedSourceReader(PullSourceReader):
-    # This will be the type that will be created to fetch a source.
-    # Create a source from url in do_read, and commit all the posts
-    # created from the source.
-
-    # This will probably what will be called from either .generic/Source
-    # or LoomioPostSource ?
-
     def do_read(self):
+        import pdb; pdb.set_trace()
         self.source.generate_posts()
 
 
@@ -367,7 +367,7 @@ class LoomioPostSource(FeedPostSource):
 
         user = account.profile
 
-        return FeedPost(creation_date=post_created_date,
+        return LoomioFeedPost(creation_date=post_created_date,
                         import_date=imported_date,
                         source_post_id=source_post_id,
                         source=source,
