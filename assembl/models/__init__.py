@@ -199,5 +199,12 @@ from .notification import (
     NotificationOnPost,
     NotificationOnPostCreated,
 )
+from .feed_parsing import (
+    FeedPostSource,
+    LoomioAccount,
+    LoomioPostSource,
+    NamedWebLinkAccount,
+    WebLinkAccount,
+)
 
 declare_history_mappers()
