@@ -201,7 +201,7 @@ class AgentProfile(Base):
             'name': self.name or self.display_name()
         }
 
-    def get_agent_preload(self, view_def=None):
+    def get_agent_preload(self, view_def='default'):
         if view_def:
             result = self.generic_json(view_def, user_id=self.id)
         else:
