@@ -42,6 +42,9 @@ def get_default_context(request):
         user_profile_edit_url = None
     web_analytics_piwik_script = config.get('web_analytics_piwik_script') or False
     discussion = get_current_discussion()
+    discussion_title = None
+    if discussion:
+        discussion_title = discussion.topic
     if web_analytics_piwik_script and discussion and discussion.web_analytics_piwik_id_site:
         web_analytics_piwik_script = web_analytics_piwik_script % ( discussion.web_analytics_piwik_id_site, discussion.web_analytics_piwik_id_site )
     else:
@@ -62,6 +65,7 @@ def get_default_context(request):
         user=user,
         templates=get_template_views(),
         discussion={},  # Templates won't load without a discussion object
+        discussion_title=discussion_title,
         user_profile_edit_url=user_profile_edit_url,
         locale=localizer.locale_name,
         locales=config.get('available_languages').split(),
