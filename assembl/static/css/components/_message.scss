@@ -81,6 +81,9 @@ $message-body: #999999;
 
   .message-body.ellipsis {
     cursor: pointer;
+    //Must match height: in message.js, so that there is an elipsis before 
+    //dotdotdot renders, and so that the height doesn't change.
+    max-height: 52px;
   }
 
   .header-separator-bullet {

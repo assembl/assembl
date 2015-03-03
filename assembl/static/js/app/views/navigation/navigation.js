@@ -82,6 +82,9 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                     }
                 });
                 this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
+                this.listenTo(Assembl.vent, 'navigation:selected', function(viewName){
+                  console.log("View name: ",viewName);
+                });
             },
             onShow: function () {
                 this.setSideBarHeight();
@@ -94,8 +97,10 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             toggleMenuByEvent: function (evt) {
                 if ($(evt.target).hasClass("panel-header-minimize"))
                     return;
-                var elm = $(evt.currentTarget); // use currentTarget instead of target, so that we are sure that it is a .nav element
-                this.toggleMenuByElement(elm);
+                var elm = $(evt.currentTarget), // use currentTarget instead of target, so that we are sure that it is a .nav element
+                    view = elm.attr('data-view');
+                //this.toggleMenuByElement(elm);
+                Assembl.vent.trigger("navigation:selected", view);
             },
             /**
              * Toggle a navigation accordion item

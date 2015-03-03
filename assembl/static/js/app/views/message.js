@@ -264,9 +264,9 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         if(that.messageListView.iSviewStyleThreadedType() 
                             && that.messageFamilyView.currentLevel !== 1) {
                           $.when(that.model.getParentPromise()).then(function(parentMessageModel){
-                            console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
+                            //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
                             if(parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe() ) {
-                              console.log("Hiding redundant title")
+                              //console.log("Hiding redundant title")
                               that.$(".message-subject").addClass('hidden');
                             }
                           });
@@ -281,7 +281,8 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                 that.$(".ellipsis").dotdotdot({
                                     after: ".readMoreOrLess",
                                     ellipsis: '... ',
-                                    height: 70,
+                                    //Must match the max-height in .message-body.ellipsis of _message.scss so that the height doesn't change after dotdotdot renders
+                                    height: 52,  //3 lines of text, was 70 for 4 lines of text
                                     callback: function (isTruncated, orgContent) {
                                         //console.log("dotdotdot initialized on message", that.model.id);
                                         //console.log(isTruncated, orgContent);
@@ -289,7 +290,10 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                             that.$(".readMoreOrLess").removeClass('hidden');
                                         } else {
                                             that.$(".readMoreOrLess").addClass('hidden');
-                                            if ( data['body'].length > 610 ) {// approximate string length for text which uses 4 full lines
+                                            /* This triggers automatically and uselessly when the home page loads.  
+                                             * Disabling, it rarely triggers when it would help these days.
+                                             * benoitg 2015-3-3
+                                             if ( data['body'].length > 610 ) {// approximate string length for text which uses 4 full lines
                                                 console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
                                                 if ( ++that.reRendered < 5 ){ // we use this to avoid infinite loop of render() calls
 
@@ -301,7 +305,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                                 else{
                                                     console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
                                                 }
-                                            }
+                                            }*/
                                         }
                                     },
                                     watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
@@ -311,13 +315,6 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                             that.messageListView.requestPostRenderSlowCallback(function () {
 
                                 setTimeout(function(){
-                                    //console.log("Initializing ellipsis on message", that.model.id);
-                                    var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
-                                    //console.log("current_navigation_state:", current_navigation_state);
-                                    if ( current_navigation_state == 'home' ){
-                                        that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
-                                        return;
-                                    }
                                     applyEllipsis();
                                 }, 100);
                                 
@@ -330,6 +327,23 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                  that.$(".ellipsis").trigger('update.dot');
                                  });*/
                             });
+                            
+                            var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+                            //console.log("current_navigation_state:", current_navigation_state);
+                            //Why do we need the following block?  benoitg-2015-03-03
+                            //console.log('current_navigation_state is:', current_navigation_state);
+                            if ( current_navigation_state !== undefined ){
+                              //console.log('Setting listener on navigation:selected');
+                              that.listenTo(Assembl.vent, 'navigation:selected', function(navSection) {
+                                //console.log('New navigation has just been selected:', navSection);
+                                if(navSection == 'debate') {
+                                  //console.log('Updating dotdotdot because debate has just been selected');
+                                  that.messageListView.requestPostRenderSlowCallback(function () {
+                                    that.$(".ellipsis").trigger('update.dot');
+                                  });
+                                }
+                              });
+                            }
 
                         }
                     });
