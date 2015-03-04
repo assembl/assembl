@@ -203,6 +203,8 @@ from .feed_parsing import (
     FeedPostSource,
     LoomioAccount,
     LoomioPostSource,
+    FeedPost,
+    LoomioFeedPost,
     NamedWebLinkAccount,
     WebLinkAccount,
 )
