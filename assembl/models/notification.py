@@ -302,10 +302,10 @@ class NotificationSubscription(DiscussionBoundBase):
         return other is None or other == self
 
     def unique_query(self):
-        return self.db.query(self.__class__).filter_by(
-            user_id=self.user_id, discussion_id=self.discussion_id,
-            parent_subscription_id = self.parent_subscription_id,
-            type=self.type), True
+        query, _ = super(NotificationSubscription, self).unique_query()
+        return query.filter_by(
+            user_id=self.user_id, type=self.type,
+            parent_subscription_id = self.parent_subscription_id), True
 
     def is_owner(self, user_id):
         return self.user_id == user_id

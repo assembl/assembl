@@ -989,13 +989,12 @@ class LocalUserRole(DiscussionBoundBase):
     def get_role_name(self):
         return self.role.name
 
-    def unique_query(self, query):
-        query, _ = super(LocalUserRole, self).unique_query(query)
+    def unique_query(self):
+        query, _ = super(LocalUserRole, self).unique_query()
         user_id = self.user_id or self.user.id
         role_id = self.role_id or self.role.id
-        discussion_id = self.discussion_id or self.discussion.id
         return query.filter_by(
-            user_id=user_id, role_id=role_id, discussion_id=discussion_id), True
+            user_id=user_id, role_id=role_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -1273,8 +1272,8 @@ class PartnerOrganization(DiscussionBoundBase):
 
     is_initiator = Column(Boolean)
 
-    def unique_query(self, query):
-        query, _ = super(PartnerOrganization, self).unique_query(query)
+    def unique_query(self):
+        query, _ = super(PartnerOrganization, self).unique_query()
         return query.filter_by(name=self.name), True
 
     def get_discussion_id(self):

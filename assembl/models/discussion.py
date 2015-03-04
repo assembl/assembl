@@ -124,8 +124,10 @@ class Discussion(DiscussionBoundBase):
         participant_template = UserTemplate(discussion=self, for_role=participant)
         self.db.add(participant_template)
 
-    def unique_query(self, query):
-        return query.filter_by(slug=self.slug), True
+    def unique_query(self):
+        # DiscussionBoundBase is misleading here
+        return self.db.query(self.__class__).filter_by(
+            slug=self.slug), True
 
     def serializable(self):
         return {
