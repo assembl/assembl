@@ -41,9 +41,8 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
 
                 $.when(collectionManager.getAllMessageStructureCollectionPromise(),
                     collectionManager.getAllUsersCollectionPromise(),
-                    this.model.getExtractsPromise()
-                ).then(
-                    function (allMessageStructureCollection, allUsersCollection, ideaExtracts) {
+                    this.model.getExtractsPromise())
+                    .then(function (allMessageStructureCollection, allUsersCollection, ideaExtracts) {
                         that.$el.addClass('synthesis-idea');
                         that.$el.attr('id', 'synthesis-idea-' + that.model.id);
                         Ctx.removeCurrentlyDisplayedTooltips(that.$el);
@@ -136,7 +135,8 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
             events: {
                 'click .synthesis-expression': 'onEditableAreaClick',
                 'click .synthesisIdea-replybox-openbtn': 'focusReplyBox',
-                'click .messageSend-cancelbtn': 'closeReplyBox'
+                'click .messageSend-cancelbtn': 'closeReplyBox',
+                'blur .synthesis-expression-editor': 'closeEditableAreaClick'
             },
 
             /**
@@ -166,12 +166,20 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
             /**
              * @event
              */
-            onEditableAreaClick: function (ev) {
+            onEditableAreaClick: function () {
                 if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
                     this.editing = true;
                     this.render();
                 }
+            },
+
+            closeEditableAreaClick: function(){
+                if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
+                    this.editing = false;
+                    this.render();
+                }
             }
+
         });
 
         return IdeaInSynthesisView;
