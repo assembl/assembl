@@ -181,7 +181,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             gridSize: AssemblPanel.prototype.IDEA_PANEL_GRID_SIZE,
             minWidth: 270,
             regions: {
-                //segmentList: ".postitlist"
+                segmentList: ".postitlist",
                 widgetsInteraction: ".ideaPanel-section-widgets"
             },
             initialize: function (options) {
@@ -206,14 +206,15 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
             },
             ui: {
-                'postIt': '.postitlist',
+                'postIt': '.postit[draggable="true"]',
                 'definition': '.js_editDefinition',
                 'longTitle': '.js_editLongTitle',
                 'seeMore': '.js_seeMore',
                 'seeLess': '.js_seeLess',
                 'deleteIdea': '.js_ideaPanel-deleteBtn',
                 'clearIdea': '.js_ideaPanel-clearBtn',
-                'closeExtract': '.js_closeExtract'
+                'closeExtract': '.js_closeExtract',
+                'panelBody': '.panel-body'
             },
             modelEvents: {
                 //Do NOT listen to change here
@@ -221,11 +222,13 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 'change': 'render'
             },
             events: {
-                'dragstart .bx': 'onDragStart',
-                'dragend .bx': "onDragEnd",
-                'dragover': 'onDragOver',
-                'dragleave': 'onDragLeave',
-                'drop': 'onDrop',
+                'dragstart @ui.postIt': 'onDragStart',
+                'dragend @ui.postIt': "onDragEnd",
+
+                'dragover @ui.panelBody': 'onDragOver',
+                'dragleave @ui.panelBody': 'onDragLeave',
+                'drop @ui.panelBody': 'onDrop',
+
                 'click @ui.closeExtract': 'onSegmentCloseButtonClick',
                 'click @ui.clearIdea': 'onClearAllClick',
                 'click @ui.deleteIdea': 'onDeleteButtonClick',
@@ -240,15 +243,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             tooltip: i18n.gettext('Detailled information about the currently selected idea in the Table of ideas'),
-
-            resetView: function () {
-              if(this.segmentList !== undefined) {
-                this.segmentList.reset();
-              }
-              else {
-                console.log("ideaPanel::resetView called, but region doesn't exist");
-              }
-            },
 
             /**
              * This is not inside the template because babel wouldn't extract it in
@@ -310,10 +304,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     subIdeas = this.model.getChildren();
                     contributors = this.model.get('contributors');
                 }
-                else
-                {
-                    //console.log("there is no model");
-                }
 
                 var dataset = {
                     idea: this.model,
@@ -371,7 +361,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     }
 
                     var ideaPanelWidgets = new IdeaPanelWidgets({model: this.model});
-                    this.widgetsInteraction.show(ideaPanelWidgets);
+                    this.getRegion('widgetsInteraction').show(ideaPanelWidgets);
                 }
 
             },
@@ -380,22 +370,19 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                if (this.extractListSubset) {
-                    $.when(
-                        collectionManager.getAllExtractsCollectionPromise(),
-                        collectionManager.getAllUsersCollectionPromise(),
-                        collectionManager.getAllMessageStructureCollectionPromise()
-                    ).then(
-                        function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
+                if (this.extractListSubset.length) {
+                    $.when(collectionManager.getAllExtractsCollectionPromise(),
+                           collectionManager.getAllUsersCollectionPromise(),
+                           collectionManager.getAllMessageStructureCollectionPromise())
+                        .then(function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
+
                             that.extractListView = new SegmentList.SegmentListView({
                                 collection: that.extractListSubset,
                                 allUsersCollection: allUsersCollection,
                                 allMessagesCollection: allMessagesCollection
                             });
 
-                            //TODO: override show method to remove dom before inject
-                            that.ui.postIt.html(that.extractListView.render().el);
-                            //that.segmentList.show(that.extractListView);
+                            that.getRegion('segmentList').show(that.extractListView);
 
                             that.renderTemplateGetExtractsLabel();
                         });
@@ -454,11 +441,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
              * @param  {Segment} segment
              */
             addSegment: function (segment) {
+                var that = this;
                 delete segment.attributes.highlights;
 
                 var id = this.model.getId();
                 segment.save('idIdea', id, {
-                    success: function (model, reps) {
+                    success: function (model, resp) {
+                        console.debug('SUCCESS: addSegment', resp);
+                        that.extractListView.render();
                     },
                     error: function (model, resp) {
                         console.error('ERROR: addSegment', resp);
@@ -591,10 +581,9 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     children = this.model.getChildren();
 
                 this.blockPanel();
-                $.when(
-                    this.model.getExtractsPromise()
-                ).then(
-                    function (ideaExtracts) {
+                $.when(this.model.getExtractsPromise())
+                    .then(function (ideaExtracts) {
+
                         that.unblockPanel();
                         if (children.length > 0) {
                             that.unblockPanel();
@@ -628,49 +617,75 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             onDragStart: function (ev) {
+                if (ev) {
+                    ev.stopPropagation();
+                }
+
                 var that = this,
                     collectionManager = new CollectionManager();
+
                 //TODO: Deal with editing own extract (EDIT_MY_EXTRACT)
-                collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
-                        if (Ctx.getCurrentUser().can(Permissions.EDIT_EXTRACT)) {
-                            ev.currentTarget.style.opacity = 0.4;
+                if (Ctx.getCurrentUser().can(Permissions.EDIT_EXTRACT)) {
+                collectionManager.getAllExtractsCollectionPromise()
+                    .done(function (allExtractsCollection) {
+                        ev.currentTarget.style.opacity = 0.4;
 
-                            var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                                segment = allExtractsCollection.getByCid(cid);
-                            Ctx.showDragbox(ev, segment.getQuote());
-                            Ctx.draggedSegment = segment;
-                        }
+                        ev.originalEvent.dataTransfer.effectAllowed = 'move';
+                        ev.originalEvent.dataTransfer.dropEffect = 'all';
+
+                        var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                            segment = allExtractsCollection.getByCid(cid);
+
+                        Ctx.showDragbox(ev, segment.getQuote());
+                        Ctx.draggedSegment = segment;
+
                     });
-
-            },
-
-            onDragEnd: function (ev) {
-                ev.currentTarget.style.opacity = '';
-                Ctx.draggedSegment = null;
-            },
-
-            onDragOver: function (ev) {
-                // console.log("ideaPanel:onDragOver() fired");
-                ev.preventDefault();
-                if (Ctx.draggedSegment !== null || Ctx.getDraggedAnnotation() !== null) {
-                    this.$el.addClass("is-dragover");
                 }
             },
 
-            onDragLeave: function () {
-                //console.log("ideaPanel:onDragLeave() fired");
+            onDragEnd: function (ev) {
+                if (ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                }
                 this.$el.removeClass('is-dragover');
+                ev.currentTarget.style.opacity = 1;
+                Ctx.draggedSegment = null;
+
             },
 
-            onDrop: function (ev) {
-                //console.log("ideaPanel:onDrop() fired");
+            onDragOver: function (ev) {
                 if (ev) {
                     ev.preventDefault();
                     ev.stopPropagation();
                 }
 
-                this.$el.trigger('dragleave');
+                if (ev.originalEvent) {
+                    ev = ev.originalEvent;
+                }
+
+                ev.dataTransfer.dropEffect = 'all';
+
+                if (Ctx.draggedSegment !== null || Ctx.getDraggedAnnotation() !== null) {
+                    this.$el.addClass("is-dragover");
+                }
+
+            },
+
+            onDragLeave: function (ev) {
+                if (ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                }
+                this.$el.removeClass('is-dragover');
+            },
+
+            onDrop: function (ev) {
+                if (ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                }
+                this.$el.removeClass('is-dragover');
 
                 var segment = Ctx.getDraggedSegment();
                 if (segment) {
@@ -681,10 +696,11 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     // Add as a segment
                     Ctx.currentAnnotationIdIdea = this.model.getId();
                     Ctx.currentAnnotationNewIdeaParentIdea = null;
-                    Ctx.saveCurrentAnnotationAsExtract();
+
+                    this.extractListView.render();
+
                     return;
                 }
-
             },
 
             onSegmentCloseButtonClick: function (ev) {
