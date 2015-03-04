@@ -572,12 +572,14 @@ def install_builddeps():
             run('brew install autoconf')
         if not exists('/usr/local/bin/automake'):
             run('brew install automake')
+        if not exists('/usr/local/bin/pandoc'):
+            run('brew install pandoc')
         # glibtoolize, bison, flex, gperf are on osx by default.
         # brew does not know aclocal, autoheader... 
         # They exist on macports, but do we want to install that?
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
-        sudo('apt-get install -y nodejs nodejs-legacy  npm')
+        sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
         sudo('apt-get install -y automake bison flex gperf  libxml2-dev libssl-dev libreadline-dev')
 
         #Runtime requirements (even in develop)
