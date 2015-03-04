@@ -407,7 +407,7 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
         return self.post
 
     def unique_query(self):
-        query, _ = super(NotificationSubscriptionOnPost, self)
+        query, _ = super(NotificationSubscriptionOnPost, self).unique_query()
         return query.filter_by(post_id=self.post_id), True
 
     def _do_update_from_json(
@@ -446,7 +446,7 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
         return self.idea
 
     def unique_query(self):
-        query, _ = super(NotificationSubscriptionOnIdea, self)
+        query, _ = super(NotificationSubscriptionOnIdea, self).unique_query()
         return query.filter_by(idea_id=self.idea_id), True
 
     def _do_update_from_json(
@@ -485,7 +485,7 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
         return self.extract
 
     def unique_query(self):
-        query, _ = super(NotificationSubscriptionOnExtract, self)
+        query, _ = super(NotificationSubscriptionOnExtract, self).unique_query()
         return query.filter_by(extract_id=self.extract_id), True
 
     def _do_update_from_json(
@@ -524,7 +524,7 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
         return self.user
 
     def unique_query(self):
-        query, _ = super(NotificationSubscriptionOnUserAccount, self)
+        query, _ = super(NotificationSubscriptionOnUserAccount, self).unique_query()
         return query.filter_by(on_user_id=self.on_user_id), True
 
     def _do_update_from_json(
