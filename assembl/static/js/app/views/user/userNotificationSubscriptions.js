@@ -11,6 +11,11 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             tagName:'label',
             className:'checkbox dispb',
             initialize: function(options){
+              var that = this;
+              this.listenTo(Assembl.vent, 'notifications:refresh', function(role){
+                 this.role = role;
+                 that.render();
+              });
 
               if(this.model === 'undefined'){
                 this.template = "#tmpl-loader";
@@ -67,7 +72,13 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             tagName:'label',
             className:'checkbox dispb',
             initialize: function(options){
-              this.roles = options.roles
+              var that = this;
+              this.listenTo(Assembl.vent, 'notifications:refresh', function(role){
+                that.roles = role;
+                that.render();
+              });
+
+              this.roles = options.roles;
               this.notificationsUser = options.notificationsUser;
               this.notificationTemplates = options.notificationTemplates;
             },
@@ -158,10 +169,6 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
             ui: {
               preferredEmail: '.js_preferred'
             },
-            initialize: function(){
-
-
-            },
             events: {
               'click @ui.preferredEmail': 'preferredEmail'
             },
@@ -213,7 +220,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                 'click @ui.subscription': 'subscription'
             },
             initialize: function(){
-                this.listenTo(this, 'subscriberView:render', this.render);
+                this.listenTo(this, 'Subscriber:refresh', this.render);
             },
             serializeData: function(){
                 return {
@@ -228,8 +235,11 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                     this.model.destroy({
                         success: function (model, resp) {
                             that.model = undefined;
-                            that.trigger('subscriberView:render');
+                            that.trigger('Subscriber:refresh');
+
                             Assembl.vent.trigger('navBarRight:refresh', undefined);
+                            Assembl.vent.trigger('notifications:refresh', undefined);
+                            Assembl.vent.trigger('templateSubscriptions:refresh', undefined);
                         },
                         error: function (model, resp) {
                             console.error('ERROR: unSubscription failed', resp);
@@ -251,8 +261,11 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                     LocalRolesUser.save(null, {
                         success: function (model, resp) {
                             that.model = LocalRolesUser;
-                            that.trigger('subscriberView:render');
+                            that.trigger('Subscriber:refresh');
+
                             Assembl.vent.trigger('navBarRight:refresh', model);
+                            Assembl.vent.trigger('notifications:refresh', model);
+                            Assembl.vent.trigger('templateSubscriptions:refresh', model);
                         },
                         error: function (model, resp) {
                             console.error('ERROR: joinDiscussion->subscription', resp);
@@ -278,8 +291,8 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
 
                 $.when(collectionManager.getNotificationsUserCollectionPromise(),
                        collectionManager.getNotificationsDiscussionCollectionPromise(),
-                       collectionManager.getLocalRoleCollectionPromise()).then(
-                    function (NotificationsUser, notificationTemplates, allRoles) {
+                       collectionManager.getLocalRoleCollectionPromise())
+                    .then(function (NotificationsUser, notificationTemplates, allRoles) {
 
                         var role =  allRoles.find(function (local_role) {
                                 return local_role.get('role') === Roles.PARTICIPANT;
@@ -303,16 +316,6 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                         that.getRegion('userNotifications').show(userNotification);
 
                     });
-
-
-
-
-
-
-
-               /*var templateSubscriptions = new TemplateSubscriptions();
-               this.templateSubscription.show(templateSubscriptions);*/
-
 
                var emailAccount = new emailAccounts.Collection();
                var notificationByEmails = new NotificationByEmails({
