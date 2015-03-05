@@ -22,8 +22,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             className: 'navbar-right',
             initialize: function(options){
                 this.roles = options.roles;
+                this.role = options.role;
                 this.listenTo(this.roles, 'remove add', function(model){
-                    this.model = (_.size(this.roles)) ? model : undefined;
+                    this.role = (_.size(this.roles)) ? model : undefined;
                     this.render();
                 });
             },
@@ -40,7 +41,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             serializeData: function () {
                 return {
                     Ctx: Ctx,
-                    role: this.model,
+                    role: this.role,
                     canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER)
                 }
             },
@@ -111,12 +112,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     collectionManager.getLocalRoleCollectionPromise()
                         .then(function (allRole) {
 
-                            that.role = allRole.find(function (local_role) {
+                            var role = allRole.find(function (local_role) {
                                 return local_role.get('role') === Roles.PARTICIPANT;
                             });
 
                             var navRight = new navBarRight({
-                                model: that.role
+                                role: role,
+                                roles: allRole
                             });
 
                             that.getRegion('navBarRight').show(navRight);
