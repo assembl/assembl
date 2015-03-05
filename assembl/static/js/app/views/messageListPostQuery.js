@@ -487,7 +487,9 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
                     params.view = this._viewDef;
                     that._queryResultInfo = null;
 
-                    return Promise.resolve($.getJSON(url, params)).then(function(data){
+                    return Promise.resolve($.getJSON(url, params))
+                        .then(function(data){
+
                         that._queryResultInfo = {};
                         that._queryResultInfo.unread = data.unread;
                         that._queryResultInfo.total = data.total;
@@ -537,7 +539,9 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
                    return Promise.resolve(this._resultIds);
                 }
 
-                return this._execute();
+                return this._execute().then(function(collection){
+                    return Promise.resolve(collection);
+                });
             };
 
             /**
@@ -564,11 +568,14 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
             };*/
 
             this.getResultRawDataPromise = function () {
+                var that = this;
                 if (this._resultsAreValid) {
                     return Promise.resolve(this._rawResults);
                 }
 
-                return this._execute();
+                return this._execute().then(function(){
+                    return Promise.resolve(that._rawResults);
+                });
             };
 
 

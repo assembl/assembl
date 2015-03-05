@@ -34,7 +34,7 @@ define(['app',
              * loading
              * @type {boolean}
              */
-            DEBUG_LAZY_LOADING: false,
+            DEBUG_LAZY_LOADING: true,
 
             /**
              * Collection with all users in the discussion.
@@ -423,7 +423,7 @@ define(['app',
                                 postQuery.getResultRawDataPromise().then(function (results) {
 
                                     _.each(results, function (jsonData) {
-                                        var id = jsonData,
+                                        var id = jsonData['@id'],
                                             structureModel = allMessageStructureCollection.get(id),
                                             deferredList = that.requests[id];
 
@@ -473,7 +473,7 @@ define(['app',
             /**
              * Need to be refactor with bluebird
              * */
-            getMessageFullModelPromise: function (id) {
+            /*getMessageFullModelPromise: function (id) {
                 var that = this,
                     deferred = $.Deferred(),
                     allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
@@ -505,9 +505,9 @@ define(['app',
                 });
 
                 return deferred.promise();
-            },
+            },*/
 
-            /*getMessageFullModelPromise: function (id) {
+            getMessageFullModelPromise: function (id) {
                 var that = this,
                     allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise(),
                     promise = Promise;
@@ -544,7 +544,7 @@ define(['app',
                     }
                 });
 
-            },*/
+            },
 
             /**
              * Retrieve fully populated models for the list of id's given
