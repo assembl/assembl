@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-03-05 12:32-0500\n"
+"POT-Creation-Date: 2015-03-05 12:53-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2096,12 +2096,13 @@ msgid ""
 "\n"
 "Please confirm your email address &lt;${email}&gt; and complete your "
 "registration by clicking the link below.\n"
+"<${confirm_url}>\n"
 "\n"
 "Best regards,\n"
 "The ${assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:930
+#: assembl/views/auth/views.py:931
 msgid ""
 "<p>Hello, ${name}, and welcome to ${assembl}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">click here to confirm your email "
@@ -2110,18 +2111,19 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:935
+#: assembl/views/auth/views.py:936
 msgid ""
 "Hello, ${name}!\n"
 "\n"
 "Please confirm your new email address <${email}> on your ${assembl} account "
 "by clicking the link below.\n"
+"<${confirm_url}>\n"
 "\n"
 "Best regards,\n"
 "The ${assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:941
+#: assembl/views/auth/views.py:943
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">click here to confirm your new email "
@@ -2130,15 +2132,15 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:957
+#: assembl/views/auth/views.py:959
 msgid "Please confirm your ${confirm_what} with ${assembl}"
 msgstr ""
 
-#: assembl/views/auth/views.py:979
+#: assembl/views/auth/views.py:981
 msgid "Request for password change"
 msgstr ""
 
-#: assembl/views/auth/views.py:983
+#: assembl/views/auth/views.py:985
 msgid ""
 "Hello, ${name}!\n"
 "We have received a request to change the password on your ${assembl} account."
@@ -2152,13 +2154,13 @@ msgid ""
 "The ${assembl} Team\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:993
+#: assembl/views/auth/views.py:995
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>We have received a request to change the password on your Assembl account."
 "\n"
-"Please <a href=\"${confirm_url}\">click here</a> to confirm your password "
-"change.</p>\n"
+"Please <a href=\"${confirm_url}\">click here to confirm your password "
+"change</a>.</p>\n"
 "<p>If you did not ask to reset your password please disregard this email.</p>"
 "\n"
 "<p>Best regards,<br />The ${assembl} Team</p>\n"
