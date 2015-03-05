@@ -20,11 +20,11 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
         var navBarRight = Marionette.ItemView.extend({
             template: '#tmpl-navBarRight',
             className: 'navbar-right',
-            initialize: function(){
-                var that = this;
-                this.listenTo(Assembl.vent, 'navBarRight:refresh', function(model){
-                   that.model = model;
-                   that.render();
+            initialize: function(options){
+                this.roles = options.roles;
+                this.listenTo(this.roles, 'remove add', function(model){
+                    this.model = (_.size(this.roles)) ? model : undefined;
+                    this.render();
                 });
             },
             ui: {
@@ -112,12 +112,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     $.when(collectionManager.getLocalRoleCollectionPromise()).then(
                         function (allRole) {
 
-                            that.role = allRole.find(function (local_role) {
+                            var role = allRole.find(function (local_role) {
                                 return local_role.get('role') === Roles.PARTICIPANT;
                             });
 
                             var navRight = new navBarRight({
-                                model: that.role
+                                model: role,
+                                roles: allRole
                             });
 
                             that.getRegion('navBarRight').show(navRight);
