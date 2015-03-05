@@ -435,6 +435,9 @@ define(['app',
                                         if (deferredList !== undefined) {
 
                                             _.each(deferredList['promises'], function (promise) {
+                                                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                                                  console.log("executeRequest true resolving for id", id, structureModel);
+                                                }
                                                 promise.resolve(structureModel);
                                             });
 
@@ -514,34 +517,33 @@ define(['app',
 
                 allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
                     var structureModel = allMessageStructureCollection.get(id);
-                    return structureModel;
-
-                }).then(function(structureModel){
 
                     if (structureModel) {
                         if (structureModel.viewDef !== undefined && structureModel.viewDef == "default") {
                             if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                console.log("getMessageFullModelPromise CACHE HIT!")
+                                console.log("getMessageFullModelPromise CACHE HIT!");
                             }
-                            return Promise.resolve(structureModel);
+                            return promise.resolve(structureModel);
                         }
                         else {
                             if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                console.log("getMessageFullModelPromise CACHE MISS!")
+                                console.log("getMessageFullModelPromise CACHE MISS!");
                             }
 
                             if (that._waitingWorker === undefined) {
                                 that._waitingWorker = new that.getMessageFullModelRequestWorker(that);
                             }
                             that._waitingWorker.addRequest(id, promise);
-
-                            return promise.value();
                         }
-
                     }
                     else {
-                        Promise.reject();
+                      if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                        console.log("getMessageFullModelPromise MODEL NOT FOUND!");
+                      }
+                      promise.reject();
                     }
+                    console.log(promise);
+                    return promise;
                 });
 
             },
