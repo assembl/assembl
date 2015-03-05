@@ -22,10 +22,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             className: 'navbar-right',
             initialize: function(options){
                 this.roles = options.roles;
-                this.listenTo(this.roles, 'remove add', function(model){
-                    this.model = (_.size(this.roles)) ? model : undefined;
+                this.role = options.role;
+                if(this.roles) {
+                  this.listenTo(this.roles, 'remove add', function(model){
+                    this.role = (_.size(this.roles)) ? model : undefined;
                     this.render();
-                });
+                  });
+                }
             },
             ui: {
                 currentLocal: '.js_setLocale',
@@ -40,7 +43,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             serializeData: function () {
                 return {
                     Ctx: Ctx,
-                    role: this.model,
+                    role: this.role,
                     canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER)
                 }
             },
@@ -117,7 +120,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                             });
 
                             var navRight = new navBarRight({
-                                model: role,
+                                role: role,
                                 roles: allRole
                             });
 
