@@ -23,10 +23,12 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             initialize: function(options){
                 this.roles = options.roles;
                 this.role = options.role;
-                this.listenTo(this.roles, 'remove add', function(model){
-                    this.role = (_.size(this.roles)) ? model : undefined;
-                    this.render();
-                });
+                if(this.roles){
+                    this.listenTo(this.roles, 'remove add', function(model){
+                        this.role = (_.size(this.roles)) ? model : undefined;
+                        this.render();
+                    });
+                }
             },
             ui: {
                 currentLocal: '.js_setLocale',
@@ -127,7 +129,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                         });
                 } else {
                     var navRight = new navBarRight({
-                        model: undefined
+                        role: undefined
                     });
                     this.getRegion('navBarRight').show(navRight);
                     this.getRegion('navBarLeft').show(new navBarLeft());
