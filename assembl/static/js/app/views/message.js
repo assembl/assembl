@@ -67,6 +67,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 this.listenTo(this.model, 'change', this.render);
 
                 this.messageListView = options.messageListView;
+                this.messageFamilyView = options.messageFamilyView;
                 this.viewStyle = this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this);
                 this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
                 this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
@@ -250,6 +251,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY && that.messageListView.defaultMessageStyle != that.availableMessageViewStyles.FULL_BODY) {
                             that.showReadLess();
                         }
+
                         if(that.messageListView.iSviewStyleThreadedType() 
                             && that.messageFamilyView.currentLevel !== 1) {
                           $.when(that.model.getParentPromise()).then(function(parentMessageModel){
