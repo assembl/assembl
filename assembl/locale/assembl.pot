@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-03-03 14:46+0100\n"
+"POT-Creation-Date: 2015-03-05 12:32-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,11 +72,11 @@ msgstr ""
 msgid "Complete messages"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:699
+#: assembl/static/js/app/common/context.js:716
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:1012
+#: assembl/static/js/app/common/context.js:1029
 msgid "ajax error message:"
 msgstr ""
 
@@ -105,7 +105,7 @@ msgid "All posts"
 msgstr ""
 
 #: assembl/static/js/app/models/idea.js:123
-#: assembl/static/js/app/views/ideaPanel.js:420
+#: assembl/static/js/app/views/ideaPanel.js:407
 msgid "New idea"
 msgstr ""
 
@@ -260,17 +260,17 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:117
+#: assembl/static/js/app/views/ideaInSynthesis.js:116
 #: assembl/static/js/app/views/message.js:233
 msgid "Type your response here..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:119
+#: assembl/static/js/app/views/ideaInSynthesis.js:118
 #: assembl/static/js/app/views/message.js:235
 msgid "Send your reply"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:122
+#: assembl/static/js/app/views/ideaInSynthesis.js:121
 #: assembl/static/js/app/views/message.js:237
 msgid "You did not type a response yet..."
 msgstr ""
@@ -281,82 +281,82 @@ msgstr ""
 msgid "Table of ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:239
+#: assembl/static/js/app/views/ideaPanel.js:242
 #: assembl/static/js/app/views/messageListPostQuery.js:104
 msgid "Idea"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:242
+#: assembl/static/js/app/views/ideaPanel.js:245
 msgid "Detailled information about the currently selected idea in the Table of ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:259
+#: assembl/static/js/app/views/ideaPanel.js:253
 msgid "This idea has no sub-ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:262
+#: assembl/static/js/app/views/ideaPanel.js:256
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:277
+#: assembl/static/js/app/views/ideaPanel.js:271
 msgid "No extract was harvested"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:280
+#: assembl/static/js/app/views/ideaPanel.js:274
 msgid "No important nugget was harvested"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:285
+#: assembl/static/js/app/views/ideaPanel.js:279
 #, python-format
 msgid "%d extract was harvested"
 msgid_plural "%d extracts were harvested"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:288
+#: assembl/static/js/app/views/ideaPanel.js:282
 #, python-format
 msgid "%d important nugget was harvested"
 msgid_plural "%d important nuggets were harvested"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:419
+#: assembl/static/js/app/views/ideaPanel.js:406
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:439
+#: assembl/static/js/app/views/ideaPanel.js:426
 msgid "Comment on this idea here..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:440
+#: assembl/static/js/app/views/ideaPanel.js:427
 msgid "Send your comment"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:444
+#: assembl/static/js/app/views/ideaPanel.js:431
 #: assembl/static/js/app/views/messageList.js:1059
 msgid "You need to type a comment first..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:601
+#: assembl/static/js/app/views/ideaPanel.js:590
 msgid "You cannot delete an idea while it has sub-ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:606
+#: assembl/static/js/app/views/ideaPanel.js:595
 msgid "You cannot delete an idea associated to extracts."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:610
+#: assembl/static/js/app/views/ideaPanel.js:599
 msgid "Confirm that you want to delete this idea."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:705
+#: assembl/static/js/app/views/ideaPanel.js:721
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 
-#: assembl/static/js/app/views/message.js:423
+#: assembl/static/js/app/views/message.js:437
 msgid ""
 "You will be redirected to another idea in connection with the nugget on which"
 " you clicked."
@@ -628,7 +628,7 @@ msgstr ""
 msgid "Message posted!"
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:225
+#: assembl/static/js/app/views/segmentList.js:223
 #: assembl/static/js/app/views/segmentList.js:266
 #: assembl/static/js/app/views/segmentList.js:269
 #: assembl/templates/views/create-group.tmpl:85
@@ -639,7 +639,7 @@ msgstr ""
 msgid "empty"
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:420
+#: assembl/static/js/app/views/segmentList.js:465
 msgid "Are you sure you want to empty your entire clipboard?"
 msgstr ""
 
@@ -820,7 +820,7 @@ msgstr ""
 msgid "Email or username"
 msgstr ""
 
-#: assembl/templates/login.jinja2:70 assembl/views/auth/views.py:712
+#: assembl/templates/login.jinja2:70 assembl/views/auth/views.py:706
 msgid "Log in"
 msgstr ""
 
@@ -841,8 +841,7 @@ msgstr ""
 msgid "Profile"
 msgstr ""
 
-#: assembl/templates/profile.jinja2:45 assembl/templates/register.jinja2:23
-#: assembl/templates/view_profile.jinja2:25
+#: assembl/templates/profile.jinja2:45 assembl/templates/view_profile.jinja2:25
 #: assembl/templates/views/userAccountForm.tmpl:7
 msgid "Username"
 msgstr ""
@@ -913,6 +912,10 @@ msgstr ""
 
 #: assembl/templates/register.jinja2:12
 msgid "Join Assembl"
+msgstr ""
+
+#: assembl/templates/register.jinja2:23 assembl/templates/views/userProfile.tmpl:31
+msgid "Full name"
 msgstr ""
 
 #: assembl/templates/register.jinja2:31
@@ -1511,29 +1514,29 @@ msgstr ""
 msgid "Nuggets are important expressions of this idea in messages or on the web"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:100
+#: assembl/templates/views/ideaPanel.tmpl:101
 msgid "Add extracts by dragging them in this panel from the clipboard or messages"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:108
+#: assembl/templates/views/ideaPanel.tmpl:110
 msgid "Delete this idea completely"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:108
+#: assembl/templates/views/ideaPanel.tmpl:110
 msgid "Delete idea"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:112
+#: assembl/templates/views/ideaPanel.tmpl:114
 msgid ""
 "Remove all extracts from this idea.  Removed extracts will be available in "
 "your clipboard"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:112
+#: assembl/templates/views/ideaPanel.tmpl:114
 msgid "Remove all extracts"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:122
+#: assembl/templates/views/ideaPanel.tmpl:124
 msgid "Please select an idea in the table of ideas"
 msgstr ""
 
@@ -1632,11 +1635,11 @@ msgstr ""
 msgid "Read more"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:102
+#: assembl/templates/views/message.tmpl:103
 msgid "Read less"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:115
+#: assembl/templates/views/message.tmpl:116
 msgid "Reply"
 msgstr ""
 
@@ -1707,6 +1710,7 @@ msgstr ""
 
 #: assembl/templates/views/navBarRight.tmpl:7
 #: assembl/templates/views/navBarRight.tmpl:11
+#: assembl/templates/views/userSubscriber.tmpl:13
 msgid "Join this group"
 msgstr ""
 
@@ -1787,44 +1791,44 @@ msgstr ""
 msgid "What is their logo?"
 msgstr ""
 
-#: assembl/templates/views/segment.tmpl:10
+#: assembl/templates/views/segment.tmpl:8
 #, python-format
 msgid "Harvested by %(name)s %(date)s"
 msgstr ""
 
-#: assembl/templates/views/segment.tmpl:13
+#: assembl/templates/views/segment.tmpl:11
 msgid "Click here to see the original contribution this segment is quoted from."
 msgstr ""
 
-#: assembl/templates/views/segment.tmpl:14
+#: assembl/templates/views/segment.tmpl:12
 msgid "Show in original context"
 msgstr ""
 
-#: assembl/templates/views/segment.tmpl:64
+#: assembl/templates/views/segment.tmpl:25
 msgid "Show or hide this extract to participants"
 msgstr ""
 
-#: assembl/templates/views/segment.tmpl:70
+#: assembl/templates/views/segment.tmpl:31
 #, python-format
 msgid "%(img)s"
 msgstr ""
 
-#: assembl/templates/views/segment.tmpl:89
+#: assembl/templates/views/segment.tmpl:50
 #, python-format
 msgid ""
 "%(img)s Posted <time title=\"%(precise_date)s\">%(nice_date)s</time> by "
 "%(name)s"
 msgstr ""
 
-#: assembl/templates/views/segment.tmpl:97
+#: assembl/templates/views/segment.tmpl:58
 msgid "Document extracted from the web"
 msgstr ""
 
-#: assembl/templates/views/segment.tmpl:98
+#: assembl/templates/views/segment.tmpl:59
 msgid "Harvested from webpage"
 msgstr ""
 
-#: assembl/templates/views/segment.tmpl:100
+#: assembl/templates/views/segment.tmpl:61
 msgid "Unknown segment type: "
 msgstr ""
 
@@ -1844,7 +1848,7 @@ msgstr ""
 msgid "Extracts not yet associated with an idea"
 msgstr ""
 
-#: assembl/templates/views/segmentList.tmpl:18
+#: assembl/templates/views/segmentList.tmpl:14
 msgid "Clear"
 msgstr ""
 
@@ -1936,10 +1940,6 @@ msgstr ""
 msgid "Notifiy me when"
 msgstr ""
 
-#: assembl/templates/views/userProfile.tmpl:31
-msgid "Full name"
-msgstr ""
-
 #: assembl/templates/views/userProfile.tmpl:33
 msgid "Real name"
 msgstr ""
@@ -1952,10 +1952,6 @@ msgstr ""
 msgid "unsubscribed"
 msgstr ""
 
-#: assembl/templates/views/userSubscriber.tmpl:13
-msgid "subscribe to discussion"
-msgstr ""
-
 #: assembl/views/admin/views.py:246
 msgid "No file given."
 msgstr ""
@@ -1966,7 +1962,7 @@ msgid "The username %s is already used"
 msgstr ""
 
 #: assembl/views/api/agent.py:118 assembl/views/auth/views.py:218
-#: assembl/views/auth/views.py:908
+#: assembl/views/auth/views.py:902
 msgid "The passwords are not identical"
 msgstr ""
 
@@ -2004,133 +2000,168 @@ msgstr ""
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:392 assembl/views/auth/views.py:810
+#: assembl/views/auth/views.py:391 assembl/views/auth/views.py:804
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:409
+#: assembl/views/auth/views.py:408
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:613 assembl/views/auth/views.py:773
+#: assembl/views/auth/views.py:607 assembl/views/auth/views.py:767
 msgid "Confirmation requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:614 assembl/views/auth/views.py:774
+#: assembl/views/auth/views.py:608 assembl/views/auth/views.py:768
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your "
 "inbox in a few minutes. Please follow the confirmation link in order to "
 "confirm your email"
 msgstr ""
 
-#: assembl/views/auth/views.py:651
+#: assembl/views/auth/views.py:645
 msgid "Wrong email token."
 msgstr ""
 
-#: assembl/views/auth/views.py:668
+#: assembl/views/auth/views.py:662
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:701
+#: assembl/views/auth/views.py:695
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr ""
 
-#: assembl/views/auth/views.py:706
+#: assembl/views/auth/views.py:700
 #, python-format
 msgid "Your email address %s has been confirmed, you can now log in."
 msgstr ""
 
-#: assembl/views/auth/views.py:713
+#: assembl/views/auth/views.py:707
 msgid "Your account is now active!"
 msgstr ""
 
-#: assembl/views/auth/views.py:727
+#: assembl/views/auth/views.py:721
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/auth/views.py:781
+#: assembl/views/auth/views.py:775
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:800 assembl/views/auth/views.py:811
+#: assembl/views/auth/views.py:794 assembl/views/auth/views.py:805
 msgid "I forgot my password"
 msgstr ""
 
-#: assembl/views/auth/views.py:844
+#: assembl/views/auth/views.py:838
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:845
+#: assembl/views/auth/views.py:839
 msgid ""
 "We have sent you an email with a temporary connection link. Please use that "
 "link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:867
+#: assembl/views/auth/views.py:861
 msgid "Wrong password token."
 msgstr ""
 
-#: assembl/views/auth/views.py:872
+#: assembl/views/auth/views.py:866
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/auth/views.py:884
+#: assembl/views/auth/views.py:878
 msgid "Change your password"
 msgstr ""
 
-#: assembl/views/auth/views.py:915
+#: assembl/views/auth/views.py:909
 msgid "Password changed"
 msgstr ""
 
-#: assembl/views/auth/views.py:927
+#: assembl/views/auth/views.py:921
 msgid "email"
 msgstr ""
 
-#: assembl/views/auth/views.py:929
+#: assembl/views/auth/views.py:923
 msgid "account"
 msgstr ""
 
-#: assembl/views/auth/views.py:941
-msgid "Please confirm your ${confirm_what} with <${assembl}>"
+#: assembl/views/auth/views.py:924
+msgid ""
+"Hello, ${name}, and welcome to ${assembl}!\n"
+"\n"
+"Please confirm your email address &lt;${email}&gt; and complete your "
+"registration by clicking the link below.\n"
+"\n"
+"Best regards,\n"
+"The ${assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:944
+#: assembl/views/auth/views.py:930
+msgid ""
+"<p>Hello, ${name}, and welcome to ${assembl}!</p>\n"
+"<p>Please <a href=\"${confirm_url}\">click here to confirm your email "
+"address</a>\n"
+"&lt;${email}&gt; and complete your registration.</p>\n"
+"<p>Best regards,<br />The ${assembl} Team</p>"
+msgstr ""
+
+#: assembl/views/auth/views.py:935
 msgid ""
 "Hello, ${name}!\n"
-"Please confirm your ${confirm_what} <${email}> with ${assembl} by clicking on"
-" the link below.\n"
-"<${confirm_url}>\n"
+"\n"
+"Please confirm your new email address <${email}> on your ${assembl} account "
+"by clicking the link below.\n"
+"\n"
+"Best regards,\n"
+"The ${assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:948
+#: assembl/views/auth/views.py:941
 msgid ""
 "<p>Hello, ${name}!</p>\n"
-"<p>Please <a href=\"${confirm_url}\">confirm your ${confirm_what}</a> "
-"&lt;${email}&gt; with ${assembl}.</p>\n"
+"<p>Please <a href=\"${confirm_url}\">click here to confirm your new email "
+"address</a>\n"
+"&lt;${email}&gt; on your ${assembl} account.</p>\n"
+"<p>Best regards,<br />The ${assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:968
+#: assembl/views/auth/views.py:957
+msgid "Please confirm your ${confirm_what} with ${assembl}"
+msgstr ""
+
+#: assembl/views/auth/views.py:979
 msgid "Request for password change"
 msgstr ""
 
-#: assembl/views/auth/views.py:972
+#: assembl/views/auth/views.py:983
 msgid ""
 "Hello, ${name}!\n"
-"You asked to change your password on <${assembl}>. (We hope it was you!)\n"
+"We have received a request to change the password on your ${assembl} account."
 "\n"
-"You can do this by clicking on the link below.\n"
+"To confirm your password change please click on the link below.\n"
 "<${confirm_url}>\n"
+"\n"
+"If you did not ask to reset your password please disregard this email.\n"
+"\n"
+"Best regards,\n"
+"The ${assembl} Team\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:977
+#: assembl/views/auth/views.py:993
 msgid ""
 "<p>Hello, ${name}!</p>\n"
-"<p>You asked to <a href=\"${confirm_url}\">change your password</a> on "
-"${assembl} (We hope it was you!)</p>\n"
+"<p>We have received a request to change the password on your Assembl account."
+"\n"
+"Please <a href=\"${confirm_url}\">click here</a> to confirm your password "
+"change.</p>\n"
+"<p>If you did not ask to reset your password please disregard this email.</p>"
+"\n"
+"<p>Best regards,<br />The ${assembl} Team</p>\n"
 msgstr ""
 
 #: assembl/views/backbone/views.py:31
