@@ -106,6 +106,7 @@ class SourceReader(Thread):
         self.last_successful_login = datetime.fromtimestamp(0)
         self.last_error_status = None
         self.last_error_time = None
+        self.reimporting = False
         self.can_push = False  # Set to true for, eg, imap with polling.
         self.event = Event()
 
@@ -122,6 +123,7 @@ class SourceReader(Thread):
     def successful_read(self):
         self.last_successful_read = datetime.now()
         self.reset_errors()
+        self.reimporting = False
 
     def reset_errors(self):
         self.error_count = 0
@@ -164,6 +166,8 @@ class SourceReader(Thread):
                 self.current_error_backoff *= 2
             else:
                 assert False
+        if self.status > ReaderStatus.TRANSIENT_ERROR:
+            self.reimporting = False
         self.last_error_time = datetime.now()
 
     def is_in_error(self):
@@ -172,7 +176,8 @@ class SourceReader(Thread):
     def is_connected(self):
         return self.status not in disconnected_states
 
-    def prod(self):
+    def wake(self, reimport=False):
+        self.reimporting = reimport
         if self.status in (ReaderStatus.PAUSED, ReaderStatus.CLOSED) and (
                 datetime.now() - max(self.last_prod, self.last_read)
                 > self.min_time_between_reads):
@@ -180,7 +185,7 @@ class SourceReader(Thread):
         elif self.status == ReaderStatus.TRANSIENT_ERROR and (
                 datetime.now() - max(self.last_prod, self.last_error_status)
                 > self.transient_error_backoff):
-            # Exception: transient backoff escalation can be cancelled by prod
+            # Exception: transient backoff escalation can be cancelled by wake
             self.event.set()
         self.last_prod = datetime.now()
 
@@ -326,24 +331,24 @@ _queue = Queue(
 _producer_connection = None
 
 
-def prod(source_id, force_restart=False):
+def wake(source_id, reimport=False, force_restart=False):
     global _producer_connection
     from kombu.common import maybe_declare
     from kombu.pools import producers
     with producers[_producer_connection].acquire(block=True) as producer:
         maybe_declare(_exchange, producer.channel)
         producer.publish(
-            [source_id, force_restart], serializer="json", routing_key=ROUTING_KEY)
+            [source_id, reimport, force_restart], serializer="json", routing_key=ROUTING_KEY)
 
 
-def shutdown(source_id, force_restart=False):
+def shutdown():
     global _producer_connection
     from kombu.common import maybe_declare
     from kombu.pools import producers
     with producers[_producer_connection].acquire(block=True) as producer:
         maybe_declare(_exchange, producer.channel)
         producer.publish(
-            [-1, None], serializer="json", routing_key=ROUTING_KEY)
+            [-1, False, False], serializer="json", routing_key=ROUTING_KEY)
 
 
 class SourceDispatcher(ConsumerMixin):
@@ -359,14 +364,14 @@ class SourceDispatcher(ConsumerMixin):
                          callbacks=[self.callback])]
 
     def callback(self, body, message):
-        source_id, force_restart = body
+        source_id, reimport, force_restart = body
         if source_id > 0:
-            self.read(source_id, force_restart)
+            self.read(source_id, reimport, force_restart)
         else:
             self.shutdown()
         message.ack()
 
-    def read(self, source_id, force_restart=False):
+    def read(self, source_id, reimport=False, force_restart=False):
         if source_id not in self.readers:
             from assembl.models import ContentSource
             source = ContentSource.get(source_id)
@@ -378,6 +383,7 @@ class SourceDispatcher(ConsumerMixin):
                 return False
             if (reader.status != ReaderStatus.IRRECOVERABLE_ERROR
                     or force_restart):
+                reader.reimporting = reimport
                 reader.start()
                 return True
         reader = self.readers[source_id]
@@ -385,7 +391,7 @@ class SourceDispatcher(ConsumerMixin):
             return False
         if (reader.status != ReaderStatus.IRRECOVERABLE_ERROR
                 or force_restart):
-            reader.prod()
+            reader.wake(reimport)
             return True
         return False
 
