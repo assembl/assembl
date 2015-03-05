@@ -1,7 +1,7 @@
 'use strict';
 
-define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/types', 'utils/permissions'],
-    function (_, Base, Ctx, i18n, Types, Permissions) {
+define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/types', 'utils/permissions', 'bluebird'],
+    function (_, Base, Ctx, i18n, Types, Permissions, Promise) {
 
         /**
          * @class IdeaModel
@@ -315,7 +315,8 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
             /** Return a promise for all Extracts models for this idea
              * @return {$.Defered.Promise}
              */
-            getExtractsPromise: function () {
+
+            /*getExtractsPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
                 this.collection.collectionManager.getAllExtractsCollectionPromise().done(
@@ -325,6 +326,22 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                     }
                 );
                 return deferred.promise();
+            },*/
+
+            getExtractsPromise: function () {
+                var that = this,
+                    extracts = undefined;
+
+                this.collection.collectionManager.getAllExtractsCollectionPromise()
+                    .then(function (allExtractsCollection) {
+                        extracts = Promise.resolve(allExtractsCollection.where({idIdea: that.getId()}))
+                            .thenReturn(allExtractsCollection)
+                            .catch(function(e){
+                                console.error(e.statusText);
+                            });
+                    }
+                );
+                return extracts;
             },
 
             /**

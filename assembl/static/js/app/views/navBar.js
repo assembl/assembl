@@ -79,7 +79,6 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             initialize: function () {
                 this._store = window.localStorage;
                 this.showPopInDiscussion();
-                this.showPopInOnFirstLoginAfterAutoSubscribeToNotifications();
                 this.listenTo(Assembl.vent, 'navBar:subscribeOnFirstPost', this.showPopInOnFirstPost);
                 this.listenTo(Assembl.vent, 'navBar:joinDiscussion', this.joinDiscussion)
             },
@@ -109,16 +108,15 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     collectionManager = new CollectionManager();
 
                 if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-                    $.when(collectionManager.getLocalRoleCollectionPromise()).then(
-                        function (allRole) {
+                    collectionManager.getLocalRoleCollectionPromise()
+                        .then(function (allRole) {
 
-                            var role = allRole.find(function (local_role) {
+                            that.role = allRole.find(function (local_role) {
                                 return local_role.get('role') === Roles.PARTICIPANT;
                             });
 
                             var navRight = new navBarRight({
-                                model: role,
-                                roles: allRole
+                                model: that.role
                             });
 
                             that.getRegion('navBarRight').show(navRight);
@@ -263,8 +261,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 Assembl.slider.show(new Modal());
             },
 
-            // @param popinType: null, 'first_post', 'first_login_after_auto_subscribe_to_notifications'
-            joinDiscussion: function (evt, popinType) {
+            joinDiscussion: function (evt, firstPost) {
                 var self = this,
                     collectionManager = new CollectionManager();
 
@@ -275,93 +272,73 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 var modalClassName = 'group-modal popin-wrapper modal-joinDiscussion';
                 var modalTemplate = _.template($('#tmpl-joinDiscussion').html());
 
-                if ( popinType == 'first_post' ){
+                if ( firstPost ){
                     modalClassName = 'group-modal popin-wrapper modal-firstPost';
                     modalTemplate = _.template($('#tmpl-firstPost').html());
                 }
-                else if ( popinType == 'first_login_after_auto_subscribe_to_notifications' ){
-                    modalClassName = 'group-modal popin-wrapper modal-firstPost';
-                    modalTemplate = _.template($('#tmpl-firstLoginAfterAutoSubscribeToNotifications').html());
-                }
 
-                $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then
-                (
-                    function (discussionNotifications) {
-                        model.notificationsToShow = _.filter(discussionNotifications.models, function (m) {
-                            // keep only the list of notifications which become active when a user follows a discussion
-                            return (m.get('creation_origin') === 'DISCUSSION_DEFAULT') && (m.get('status') === 'ACTIVE');
-                        });
+                var Modal = Backbone.Modal.extend({
+                    template: modalTemplate,
+                    className: modalClassName,
+                    cancelEl: '.close, .btn-cancel',
 
-                        // we show the popin only if there are default notifications
-                        if ( model.notificationsToShow && model.notificationsToShow.length )
-                        {
-                            var Modal = Backbone.Modal.extend({
-                                template: modalTemplate,
-                                className: modalClassName,
-                                cancelEl: '.close, .js_close',
+                    model: model,
+                    initialize: function () {
+                        var that = this;
+                        this.$('.bbm-modal').addClass('popin');
 
-                                model: model,
-                                initialize: function () {
-                                    var that = this;
-                                    this.$('.bbm-modal').addClass('popin');
-                                },
-                                events: {
-                                    'click .js_subscribe': 'subscription',
-                                    'click .js_close': 'closeModal'
-                                },
-                                serializeData: function () {
-                                    return {
-                                        i18n: i18n,
-                                        notificationsToShow: model.notificationsToShow,
-                                        urlNotifications: '/' + Ctx.getDiscussionSlug() + '/user/notifications'
-                                    }
-                                },
-                                subscription: function () {
-                                    var that = this;
-
-                                    if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-
-                                        var LocalRolesUser = new RolesModel.Model({
-                                            role: Roles.PARTICIPANT,
-                                            discussion: 'local:Discussion/' + Ctx.getDiscussionId()
-                                        });
-                                        LocalRolesUser.save(null, {
-                                            success: function (model, resp) {
-                                                // TODO: Is there a simpler way to do this? MAP
-                                                self.navBarRight.currentView.ui.joinDiscussion.css('visibility', 'hidden');
-                                                self._store.removeItem('needJoinDiscussion');
-                                                that.triggerSubmit();
-                                            },
-                                            error: function (model, resp) {
-                                                console.error('ERROR: joinDiscussion->subscription', resp);
-                                            }
-                                        })
-                                    }
-                                },
-
-                                closeModal: function () {
-                                    self._store.removeItem('needJoinDiscussion');
-                                }
-                            });
-                            Assembl.slider.show(new Modal());
+                        collectionManager.getNotificationsDiscussionCollectionPromise()
+                            .then(function (discussionNotifications) {
+                                that.model.notificationsToShow = _.filter(discussionNotifications.models, function (m) {
+                                    // keep only the list of notifications which become active when a user follows a discussion
+                                    return (m.get('creation_origin') === 'DISCUSSION_DEFAULT') && (m.get('status') === 'ACTIVE');
+                                });
+                                that.render();
+                            }
+                        );
+                    },
+                    events: {
+                        'click .js_subscribe': 'subscription',
+                        'click .js_close': 'closeModal'
+                    },
+                    serializeData: function () {
+                        return {
+                            i18n: i18n,
+                            notificationsToShow: model.notificationsToShow
                         }
-                    }
-                );
+                    },
+                    subscription: function () {
+                        var that = this;
 
-                
+                        if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
+
+                            var LocalRolesUser = new RolesModel.Model({
+                                role: Roles.PARTICIPANT,
+                                discussion: 'local:Discussion/' + Ctx.getDiscussionId()
+                            });
+                            LocalRolesUser.save(null, {
+                                success: function (model, resp) {
+                                    self._store.removeItem('needJoinDiscussion');
+                                    that.triggerSubmit();
+                                },
+                                error: function (model, resp) {
+                                    console.error('ERROR: joinDiscussion->subscription', resp);
+                                }
+                            })
+                        }
+                    },
+
+                    closeModal: function () {
+                        self._store.removeItem('needJoinDiscussion');
+                    }
+                });
+
+                Assembl.slider.show(new Modal());
 
             },
 
             showPopInOnFirstPost: function(){
-                this.joinDiscussion(null, 'firstPost');
-            },
-
-            showPopInOnFirstLoginAfterAutoSubscribeToNotifications: function(){
-                if ( typeof first_login_after_auto_subscribe_to_notifications != 'undefined'
-                    && first_login_after_auto_subscribe_to_notifications == true )
-                {
-                    this.joinDiscussion(null, 'first_login_after_auto_subscribe_to_notifications');
-                }
+                this.joinDiscussion(null, true);
             },
 
             showPopInDiscussion: function () {

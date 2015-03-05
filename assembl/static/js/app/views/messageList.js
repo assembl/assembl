@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/messageFamily', 'underscore', 'jquery', 'app', 'common/context', 'models/message', 'utils/i18n', 'views/messageListPostQuery', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'utils/panelSpecTypes', 'views/assemblPanel', 'common/collectionManager'],
-    function (Backbone, Raven, objectTreeRenderVisitor, MessageFamilyView, _, $, Assembl, Ctx, Message, i18n, PostQuery, Permissions, MessageSendView, MessagesInProgress, PanelSpecTypes, AssemblPanel, CollectionManager) {
+define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/messageFamily', 'underscore', 'jquery', 'app', 'common/context', 'models/message', 'utils/i18n', 'views/messageListPostQuery', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'utils/panelSpecTypes', 'views/assemblPanel', 'common/collectionManager', 'bluebird'],
+    function (Backbone, Raven, objectTreeRenderVisitor, MessageFamilyView, _, $, Assembl, Ctx, Message, i18n, PostQuery, Permissions, MessageSendView, MessagesInProgress, PanelSpecTypes, AssemblPanel, CollectionManager, Promise) {
 
         /**
          * Constants
@@ -70,8 +70,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                * Benoitg:  Why?  There is no way to know if the message is, or isn't relevent to the user, and worthy
                * of notification.  Everything else updates realtime, why make an exception for messages?
                * */
-              collectionManager.getAllMessageStructureCollectionPromise().done(
-                  function (allMessageStructureCollection) {
+              collectionManager.getAllMessageStructureCollectionPromise()
+                  .then(function (allMessageStructureCollection) {
+
                       that.listenTo(allMessageStructureCollection, 'add reset', function () {
                           /*
                            Disable refresh if a message is being written.
@@ -97,8 +98,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   }
               );
 
-              collectionManager.getAllExtractsCollectionPromise().done(
-                  function (allExtractsCollection) {
+              collectionManager.getAllExtractsCollectionPromise()
+                  .then(function (allExtractsCollection) {
                       that.listenTo(allExtractsCollection, 'add remove reset', function(eventName) {
                           // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
                           that.initAnnotator;
@@ -764,7 +765,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']);
                     var collectionManager = new CollectionManager();
 
-                    messageFullModelsToShowPromise = collectionManager.getMessageFullModelsPromise(messageIdsToShow);
+                    collectionManager.getMessageFullModelsPromise(messageIdsToShow);
                     views_promise = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
                 } else {
                     models = this.getAllMessageStructureModelsToDisplay();
@@ -1073,9 +1074,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               this.$('.messagelist-replybox').html(this.newTopicView.render().el);
               
               var collectionManager = new CollectionManager();
-              $.when(collectionManager.getAllMessageStructureCollectionPromise(),
-                this.currentQuery.getResultMessageIdCollectionPromise()).done(
-                function (allMessageStructureCollection, resultMessageIdCollection) {
+              Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+                           this.currentQuery.getResultMessageIdCollectionPromise(),
+                  function (allMessageStructureCollection, resultMessageIdCollection) {
+
                   if (Ctx.debugRender) {
                     console.log("messageList:render_real() collection ready, processing for render id:", renderId);
                   }
@@ -1147,8 +1149,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this._offsetEnd = undefined;
 
                 /* TODO:  Most of this should be a listen to the returned collection */
-                var newDataCallback = function (messageStructureCollection, resultMessageIdCollection) {
+                Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+                    this.currentQuery.getResultMessageIdCollectionPromise(),
+                    function (messageStructureCollection, resultMessageIdCollection) {
+
                   var resultMessageIdCollectionReference = resultMessageIdCollection;
+
                   function inFilter(message) {
                         return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
                     };
@@ -1171,16 +1177,19 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   that.visitorViewData = {};
                   that.visitorOrderLookupTable = [];
                   that.visitorRootMessagesToDisplay = [];
+
                   messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
                   that = that.render_real();
                   that.unblockPanel();
-                }
+
+                });
 
                 this.blockPanel();
 
+                /* what does it mean ? two promises, one callback  ?
                 $.when(collectionManager.getAllMessageStructureCollectionPromise(),
-                    this.currentQuery.getResultMessageIdCollectionPromise()).done(
-                        newDataCallback);
+                    this.currentQuery.getResultMessageIdCollectionPromise()).done(newDataCallback);
+                */
 
                 //Why isn't this within the when() above?  benoitg 2015-01-28
                 this.ui.panelBody.scroll(function () {
@@ -1302,7 +1311,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     isValid,
                     defer = $.Deferred(),
                     collectionManager = new CollectionManager(),
-                    requestedIds = [];
+                    requestedIds = [],
+                    returnList = undefined;
 
                 returnedDataOffsets['offsetStart'] = i;
                 returnedDataOffsets['offsetEnd'] = _.isUndefined(requestedOffsets['offsetEnd']) ? MORE_PAGES_NUMBER : requestedOffsets['offsetEnd'];
@@ -1322,8 +1332,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     requestedIds.push(messageStructureModel.id);
                 }
 
-                collectionManager.getMessageFullModelsPromise(requestedIds).done(
-                    function (fullMessageModels) {
+                collectionManager.getMessageFullModelsPromise(requestedIds)
+                    .then(function (fullMessageModels) {
                         var list = [];
                         _.each(fullMessageModels, function (fullMessageModel) {
                             view = new MessageFamilyView({
@@ -1334,14 +1344,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                             list.push(view.render().el);
                         });
                         //console.log("getRenderedMessagesFlat():  Resolving promise with:",list);
-                        defer.resolve(list);
-                    },
-                    function () {
-                        defer.reject();
-                    }
-                );
+                        returnList = Promise.resolve(list);
+                    }).catch(function(e){
+                        console.error(e.statusText);
+                        Promise.reject();
+                    });
 
-                return defer.promise();
+                return returnList;
             },
 
             /**
@@ -1454,8 +1463,14 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     var sibblingsviews_promise = [];
                 }
 
-                $.when(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.id)).done(function (subviews, sibblingsviews, messageFullModel) {
-                    view = new MessageFamilyView({model: messageFullModel, messageListView: that}, last_sibling_chain);
+                Promise.join(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.id),
+                    function (subviews, sibblingsviews, messageFullModel) {
+
+                    view = new MessageFamilyView({
+                        model: messageFullModel,
+                        messageListView: that},
+                        last_sibling_chain);
+
                     view.currentLevel = level;
                     //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
                     view.hasChildren = (subviews.length > 0);
@@ -1498,8 +1513,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 // TODO: Re-render message in messagelist if an annotation was added...
                 this.annotator.subscribe('annotationCreated', function (annotation) {
                     var collectionManager = new CollectionManager();
-                    collectionManager.getAllExtractsCollectionPromise().done(
-                        function (allExtractsCollection) {
+                    collectionManager.getAllExtractsCollectionPromise()
+                        .then(function (allExtractsCollection) {
                             var segment = allExtractsCollection.addAnnotationAsExtract(annotation, Ctx.currentAnnotationIdIdea);
                             if (!segment.isValid()) {
                                 annotator.deleteAnnotation(annotation);
@@ -2093,8 +2108,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 return;
               }
 
-              $.when(collectionManager.getAllMessageStructureCollectionPromise(),
-                  this.currentQuery.getResultMessageIdCollectionPromise()).done(
+              Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+                  this.currentQuery.getResultMessageIdCollectionPromise(),
+
                   function (allMessageStructureCollection, resultMessageIdCollection) {
                       var message = allMessageStructureCollection.get(id),
                           messageIsInFilter = that.isMessageIdInResults(id, resultMessageIdCollection),

@@ -65,6 +65,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/ty
 
                 var messageViewClass = undefined;
                 var messageType = this.model.get('@type');
+
                 switch (messageType) {
                     case Types.ASSEMBL_POST:
                     case Types.EMAIL:

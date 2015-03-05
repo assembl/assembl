@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/agents', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot'],
-    function (Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, Agents, CollectionManager, PanelSpecTypes, $) {
+define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/agents', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot', 'bluebird'],
+    function (Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, Agents, CollectionManager, PanelSpecTypes, $, Promise) {
 
         var MIN_TEXT_TO_TOOLTIP = 5,
             TOOLTIP_TEXT_LENGTH = 10;
@@ -67,8 +67,6 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 this.listenTo(this.model, 'change', this.render);
 
                 this.messageListView = options.messageListView;
-                this.messageFamilyView = options.messageFamilyView;
-                
                 this.viewStyle = this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this);
                 this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
                 this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
@@ -86,7 +84,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              */
             events: {
 
-                'click .js_messageHeader': 'onMessageTitleClick',
+                //'click .js_messageHeader': 'onMessageTitleClick',
                 'click .js_messageTitle': 'onMessageTitleClick',
                 'click .js_readMore': 'onMessageTitleClick',
                 'click .js_readLess': 'onMessageTitleClick',
@@ -139,10 +137,10 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 if (Ctx.debugRender) {
                     console.log("message:render() is firing for message", this.model.id);
                 }
-                $.when(this.model.getCreatorPromise(),
-                    this.model.getExtractsPromise()
-                ).then(
-                    function (creator, extracts) {
+
+                this.model.getCreatorPromise()
+                    .then(function(creator){
+
                         var data = that.model.toJSON(),
                             children,
                             bodyFormat = null,
@@ -165,15 +163,6 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
 
                         data['viewStyle'] = that.viewStyle;
                         bodyFormat = that.model.get('bodyMimeType');
-                        if (bodyFormat == "text/plain") {
-                          //Make really sure no HTML leaked into the plain text
-                          data['body'] = Ctx.escapeHtml(data['body']);
-                        }
-                        else {
-                          //For better or worse, we assume the backend did a good job...
-                          ;
-                        }
-                        
                         if (that.viewStyle == that.availableMessageViewStyles.PREVIEW || that.viewStyle == that.availableMessageViewStyles.TITLE_ONLY) {
                             if (bodyFormat == "text/html") {
                                 //Strip HTML from preview
@@ -279,33 +268,32 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                  * Read More links for message previews
                                  */
                                 that.$(".ellipsis").dotdotdot({
-                                    after: ".readMoreOrLess",
-                                    ellipsis: '... ',
-                                    //Must match the max-height in .message-body.ellipsis of _message.scss so that the height doesn't change after dotdotdot renders
-                                    height: 52,  //3 lines of text, was 70 for 4 lines of text
+                                    after: "a.readMore",
                                     callback: function (isTruncated, orgContent) {
                                         //console.log("dotdotdot initialized on message", that.model.id);
                                         //console.log(isTruncated, orgContent);
-                                        if (isTruncated){
-                                            that.$(".readMoreOrLess").removeClass('hidden');
-                                        } else {
-                                            that.$(".readMoreOrLess").addClass('hidden');
-                                            /* This triggers automatically and uselessly when the home page loads.  
-                                             * Disabling, it rarely triggers when it would help these days.
-                                             * benoitg 2015-3-3
-                                             if ( data['body'].length > 610 ) {// approximate string length for text which uses 4 full lines
+                                        if (isTruncated)
+                                        {
+                                            that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
+                                        }
+                                        else
+                                        {
+                                            that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
+                                            if ( data['body'] && data['body'].length > 610 ) // approximate string length for text which uses 4 full lines
+                                            {
                                                 console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
-                                                if ( ++that.reRendered < 5 ){ // we use this to avoid infinite loop of render() calls
-
+                                                if ( ++that.reRendered < 5 ) // we use this to avoid infinite loop of render() calls
+                                                {
                                                     console.log("yes, we will re-render => tries: ", that.reRendered);
                                                     setTimeout(function(){
                                                         that.render();
                                                     }, 500);
                                                 }
-                                                else{
+                                                else
+                                                {
                                                     console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
                                                 }
-                                            }*/
+                                            }
                                         }
                                     },
                                     watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
@@ -315,6 +303,14 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                             that.messageListView.requestPostRenderSlowCallback(function () {
 
                                 setTimeout(function(){
+                                    //console.log("Initializing ellipsis on message", that.model.id);
+                                    var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+                                    //console.log("current_navigation_state:", current_navigation_state);
+                                    if ( current_navigation_state == 'home' )
+                                    {
+                                        that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
+                                        return;
+                                    }
                                     applyEllipsis();
                                 }, 100);
                                 
@@ -443,10 +439,8 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 }
 
                 if (ok) {
-                    $.when(
-                        collectionManager.getAllExtractsCollectionPromise(),
-                        collectionManager.getAllIdeasCollectionPromise()
-                    ).then(
+                    Promise.join(collectionManager.getAllExtractsCollectionPromise(),
+                                 collectionManager.getAllIdeasCollectionPromise(),
                         function (allExtractsCollection, allIdeasCollection) {
                             var segment = allExtractsCollection.getByAnnotation(annotation);
                             if (!segment) {

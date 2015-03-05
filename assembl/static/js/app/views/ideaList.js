@@ -49,8 +49,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         that.listenTo(allIdeasCollection, events.join(' '), that.render);
                     });
 
-                collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
+                collectionManager.getAllExtractsCollectionPromise()
+                    .then(function (allExtractsCollection) {
                         // Benoitg - 2014-05-05:  There is no need for this, if an idealink
                         // is associated with the idea, the idea itself will receive a change event
                         // on the socket (unless it causes problem with local additions?)
@@ -163,8 +163,9 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 }
 
                 var list = document.createDocumentFragment();
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .then(function (allIdeasCollection) {
+
                         rootIdea = allIdeasCollection.getRootIdea();
                         if (Object.keys(filter).length > 0) {
                             rootIdeaDirectChildrenModels = allIdeasCollection.where(filter);

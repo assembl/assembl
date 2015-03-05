@@ -161,8 +161,9 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
 
                 Ctx.initTooltips(this.$el);
 
-                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
-                    function (allPartnerOrganization) {
+                collectionManager.getAllPartnerOrganizationCollectionPromise()
+                    .then(function (allPartnerOrganization) {
+
                         var partnerList = new PartnerList({
                             collection: allPartnerOrganization
                         });

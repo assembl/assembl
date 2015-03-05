@@ -1,7 +1,7 @@
 'use strict';
 
-define(['common/context', 'utils/i18n', 'common/collectionManager'],
-    function (Ctx, i18n, CollectionManager) {
+define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
+    function (Ctx, i18n, CollectionManager, Promise) {
 
         /**
          * @class PostQuery
@@ -405,7 +405,7 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
              * @param {function} success_data_changed callback to call when query is complete only
              * when the data actually changed.  Will be called before success
              */
-            this._execute = function (success, success_data_changed) {
+            /*this._execute = function (success, success_data_changed) {
                 //console.log("messageListPostQuery:execute() called");
                 var that = this,
                     url = Ctx.getApiUrl('posts'),
@@ -432,6 +432,7 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                     params.order = this._view._server_order_param_value;
                     params.view = this._viewDef;
                     that._queryResultInfo = null;
+
                     $.getJSON(url, params, function (data) {
                         that._queryResultInfo = {};
                         that._queryResultInfo.unread = data.unread;
@@ -457,12 +458,61 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                     });
                 }
 
+            };*/
+
+            this._execute = function () {
+                //console.log("messageListPostQuery:execute() called");
+                var that = this,
+                    url = Ctx.getApiUrl('posts'),
+                    params = {},
+                    id = null,
+                    filterDef = null,
+                    value = null;
+
+                if (this._resultsAreValid) {
+                    return Promise.resolve(that._resultIds);
+
+                } else {
+                    for (var filterDefPropName in this.availableFilters) {
+                        filterDef = this.availableFilters[filterDefPropName];
+                        if (filterDef.id in this._query) {
+                            for (var i = 0; i < this._query[filterDef.id].length; i++) {
+                                value = this._query[filterDef.id][i].value;
+                                params[filterDef._server_param] = value;
+                            }
+                        }
+                    }
+
+                    params.order = this._view._server_order_param_value;
+                    params.view = this._viewDef;
+                    that._queryResultInfo = null;
+
+                    return Promise.resolve($.getJSON(url, params)).then(function(data){
+                        that._queryResultInfo = {};
+                        that._queryResultInfo.unread = data.unread;
+                        that._queryResultInfo.total = data.total;
+                        that._queryResultInfo.startIndex = data.startIndex;
+                        that._queryResultInfo.page = data.page;
+                        that._queryResultInfo.maxPage = data.maxPage;
+
+                        var ids = [];
+                        _.each(data.posts, function (post) {
+                            ids.push(post['@id']);
+                        });
+                        that._resultIds = ids;
+                        that._rawResults = data.posts;
+                        that._resultsAreValid = true;
+
+                        return that._resultIds;
+                    });
+                }
+
             };
 
             /**
              * Returns a promise that will resolve to a list of id's
              */
-            this.getResultMessageIdCollectionPromise = function () {
+            /*this.getResultMessageIdCollectionPromise = function () {
                 var that = this,
                     deferred = $.Deferred();
                 //console.log("messageListPostQuery:getResultMessageIdCollectionPromise() called");
@@ -480,12 +530,20 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                 // Returning a Promise so that only this function can modify
                 // the Deferred object
                 return deferred.promise();
+            };*/
+
+            this.getResultMessageIdCollectionPromise = function () {
+                if (this._resultsAreValid) {
+                   return Promise.resolve(this._resultIds);
+                }
+
+                return this._execute();
             };
 
             /**
              * A promise for an array for JSON data, one per post
              */
-            this.getResultRawDataPromise = function () {
+            /*this.getResultRawDataPromise = function () {
                 var that = this,
                     deferred = $.Deferred();
                 //console.log("messageListPostQuery:getResultMessageIdCollectionPromise() called");
@@ -503,6 +561,14 @@ define(['common/context', 'utils/i18n', 'common/collectionManager'],
                 // Returning a Promise so that only this function can modify
                 // the Deferred object
                 return deferred.promise();
+            };*/
+
+            this.getResultRawDataPromise = function () {
+                if (this._resultsAreValid) {
+                    return Promise.resolve(this._rawResults);
+                }
+
+                return this._execute();
             };
 
 

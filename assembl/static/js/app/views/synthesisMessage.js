@@ -12,12 +12,9 @@ define(['ckeditor', 'common/context', 'views/message', 'models/synthesis', 'view
              * @init
              */
             initialize: function (obj) {
-                var that = this,
-                    collectionManager = new CollectionManager();
                 MessageView.prototype.initialize.apply(this, arguments);
                 this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
                 this.synthesisId = this.model.get('publishes_synthesis');
-                this.allSynthesisCollectionPromise = collectionManager.getAllSynthesisCollectionPromise()
             },
 
             /**
@@ -44,9 +41,11 @@ define(['ckeditor', 'common/context', 'views/message', 'models/synthesis', 'view
              */
             postRender: function () {
                 var that = this,
-                    body;
-                this.allSynthesisCollectionPromise.done(
-                    function (allSynthesisCollection) {
+                    body,
+                    collectionManager = new CollectionManager();
+
+                collectionManager.getAllSynthesisCollectionPromise()
+                    .then(function (allSynthesisCollection) {
                         var synthesis = allSynthesisCollection.get(that.synthesisId);
                         if (!synthesis) {
                             // TODO

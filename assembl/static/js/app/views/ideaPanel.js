@@ -1,7 +1,7 @@
 'use strict';
 
-define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/ckeditorField', 'utils/permissions', 'utils/panelSpecTypes', 'views/messageSend', 'objects/messagesInProgress', 'views/notification', 'views/segmentList', 'common/collectionManager', 'views/assemblPanel', 'backbone.marionette', 'backbone.modal', 'backbone.marionette.modals', 'jquery', 'underscore'],
-    function (Assembl, Ctx, i18n, EditableField, CKEditorField, Permissions, PanelSpecTypes, MessageSendView, MessagesInProgress, Notification, SegmentList, CollectionManager, AssemblPanel, Marionette, backboneModal, marionetteModal, $, _) {
+define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/ckeditorField', 'utils/permissions', 'utils/panelSpecTypes', 'views/messageSend', 'objects/messagesInProgress', 'views/notification', 'views/segmentList', 'common/collectionManager', 'views/assemblPanel', 'backbone.marionette', 'backbone.modal', 'backbone.marionette.modals', 'jquery', 'underscore', 'bluebird'],
+    function (Assembl, Ctx, i18n, EditableField, CKEditorField, Permissions, PanelSpecTypes, MessageSendView, MessagesInProgress, Notification, SegmentList, CollectionManager, AssemblPanel, Marionette, backboneModal, marionetteModal, $, _, Promise) {
 
         var IdeaPanelWidgets = Marionette.ItemView.extend({
 
@@ -181,7 +181,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             gridSize: AssemblPanel.prototype.IDEA_PANEL_GRID_SIZE,
             minWidth: 270,
             regions: {
-                segmentList: ".postitlist",
+                //segmentList: ".postitlist"
                 widgetsInteraction: ".ideaPanel-section-widgets"
             },
             initialize: function (options) {
@@ -190,14 +190,13 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 this.editingDefinition = false;
                 this.editingTitle = false;
-                this.focusShortTitle = false;
 
                 if (!this.model) {
                     this.model = null;
                 }
 
-                this.listenTo(this.getContainingGroup(), "idea:set", function (idea, reason) {
-                    that.setIdeaModel(idea, reason);
+                this.listenTo(this.getContainingGroup(), "idea:set", function (idea) {
+                    that.setIdeaModel(idea);
                 });
 
                 this.listenTo(Assembl.vent, 'DEPRECATEDideaPanel:showSegment', function (segment) {
@@ -206,15 +205,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
             },
             ui: {
-                'postIt': '.postit[draggable="true"]',
+                'postIt': '.postitlist',
                 'definition': '.js_editDefinition',
                 'longTitle': '.js_editLongTitle',
                 'seeMore': '.js_seeMore',
                 'seeLess': '.js_seeLess',
                 'deleteIdea': '.js_ideaPanel-deleteBtn',
                 'clearIdea': '.js_ideaPanel-clearBtn',
-                'closeExtract': '.js_closeExtract',
-                'panelBody': '.panel-body'
+                'closeExtract': '.js_closeExtract'
             },
             modelEvents: {
                 //Do NOT listen to change here
@@ -222,13 +220,11 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 'change': 'render'
             },
             events: {
-                'dragstart @ui.postIt': 'onDragStart',
-                'dragend @ui.postIt': "onDragEnd",
-
-                'dragover @ui.panelBody': 'onDragOver',
-                'dragleave @ui.panelBody': 'onDragLeave',
-                'drop @ui.panelBody': 'onDrop',
-
+                'dragstart .bx': 'onDragStart',
+                'dragend .bx': "onDragEnd",
+                'dragover': 'onDragOver',
+                'dragleave': 'onDragLeave',
+                'drop': 'onDrop',
                 'click @ui.closeExtract': 'onSegmentCloseButtonClick',
                 'click @ui.clearIdea': 'onClearAllClick',
                 'click @ui.deleteIdea': 'onDeleteButtonClick',
@@ -243,6 +239,15 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             tooltip: i18n.gettext('Detailled information about the currently selected idea in the Table of ideas'),
+
+            resetView: function () {
+              if(this.segmentList !== undefined) {
+                this.segmentList.reset();
+              }
+              else {
+                console.log("ideaPanel::resetView called, but region doesn't exist");
+              }
+            },
 
             /**
              * This is not inside the template because babel wouldn't extract it in
@@ -304,6 +309,10 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     subIdeas = this.model.getChildren();
                     contributors = this.model.get('contributors');
                 }
+                else
+                {
+                    //console.log("there is no model");
+                }
 
                 var dataset = {
                     idea: this.model,
@@ -361,7 +370,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     }
 
                     var ideaPanelWidgets = new IdeaPanelWidgets({model: this.model});
-                    this.getRegion('widgetsInteraction').show(ideaPanelWidgets);
+                    this.widgetsInteraction.show(ideaPanelWidgets);
                 }
 
             },
@@ -370,12 +379,11 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                if (this.extractListSubset.length) {
-                    $.when(collectionManager.getAllExtractsCollectionPromise(),
-                           collectionManager.getAllUsersCollectionPromise(),
-                           collectionManager.getAllMessageStructureCollectionPromise())
-                        .then(function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
-
+                if (this.extractListSubset) {
+                    Promise.join(collectionManager.getAllExtractsCollectionPromise(),
+                                collectionManager.getAllUsersCollectionPromise(),
+                                collectionManager.getAllMessageStructureCollectionPromise(),
+                        function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
                             that.extractListView = new SegmentList.SegmentListView({
                                 collection: that.extractListSubset,
                                 allUsersCollection: allUsersCollection,
@@ -441,7 +449,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
              * @param  {Segment} segment
              */
             addSegment: function (segment) {
-                var that = this;
                 delete segment.attributes.highlights;
 
                 var id = this.model.getId();
@@ -681,11 +688,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             onDrop: function (ev) {
+                //console.log("ideaPanel:onDrop() fired");
                 if (ev) {
                     ev.preventDefault();
                     ev.stopPropagation();
                 }
                 this.$el.removeClass('is-dragover');
+
+                this.$el.trigger('dragleave');
 
                 var segment = Ctx.getDraggedSegment();
                 if (segment) {
@@ -696,11 +706,12 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     // Add as a segment
                     Ctx.currentAnnotationIdIdea = this.model.getId();
                     Ctx.currentAnnotationNewIdeaParentIdea = null;
-
+                    Ctx.saveCurrentAnnotationAsExtract();
                     this.extractListView.render();
 
                     return;
                 }
+
             },
 
             onSegmentCloseButtonClick: function (ev) {

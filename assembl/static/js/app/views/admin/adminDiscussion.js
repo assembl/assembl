@@ -15,10 +15,7 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
 
                 this.model = undefined;
 
-
-                
-
-                $.when(collectionManager.getDiscussionModelPromise()).then(
+                collectionManager.getDiscussionModelPromise().then(
                     function (Discussion) {
                         that.model =  Discussion;
                         that.render();
