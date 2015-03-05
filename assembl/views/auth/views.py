@@ -924,6 +924,7 @@ def send_confirmation_email(request, email):
         text_message = _(u"""Hello, ${name}, and welcome to ${assembl}!
 
 Please confirm your email address &lt;${email}&gt; and complete your registration by clicking the link below.
+<${confirm_url}>
 
 Best regards,
 The ${assembl} Team""")
@@ -935,6 +936,7 @@ The ${assembl} Team""")
         text_message = _(u"""Hello, ${name}!
 
 Please confirm your new email address <${email}> on your ${assembl} account by clicking the link below.
+<${confirm_url}>
 
 Best regards,
 The ${assembl} Team""")
@@ -992,7 +994,7 @@ The ${assembl} Team
 """), mapping=data),
         html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
 <p>We have received a request to change the password on your Assembl account.
-Please <a href="${confirm_url}">click here</a> to confirm your password change.</p>
+Please <a href="${confirm_url}">click here to confirm your password change</a>.</p>
 <p>If you did not ask to reset your password please disregard this email.</p>
 <p>Best regards,<br />The ${assembl} Team</p>
 """), mapping=data))
