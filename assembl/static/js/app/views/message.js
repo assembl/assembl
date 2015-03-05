@@ -370,7 +370,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     filter;
 
                 annotationsPromise.done(function (annotations) {
-                    if (that.annotationsToLoad === undefined) {
+                    if (this.annotationsToLoad === undefined) {
                         // Is this the right permission to see the clipboard?
                         if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
                             filter = function (extract) {

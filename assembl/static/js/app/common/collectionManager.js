@@ -250,7 +250,6 @@ define(['app',
             },
 
             _waitingWorker: undefined,
-            _waitingWorkerPromise: undefined,
 
             _messageFullModelRequests: {},
 
@@ -659,7 +658,7 @@ define(['app',
                     this._allIdeasCollectionPromise.done(function (collection, response, options) {
                         deferred.resolve(that._allIdeasCollection);
                         //Start listener setup
-
+                        /*
                          this.listenTo(this.ideas, "all", function(eventName) {
                          console.log("ideaList collection event received: ", eventName);
                          });
