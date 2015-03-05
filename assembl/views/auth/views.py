@@ -921,6 +921,28 @@ def send_confirmation_email(request, email):
     confirm_what = _('email')
     if isinstance(email.profile, User) and not email.profile.verified:
         confirm_what = _('account')
+        text_message = _(u"""Hello, ${name}, and welcome to ${assembl}!
+
+Please confirm your email address &lt;${email}&gt; and complete your registration by clicking the link below.
+
+Best regards,
+The ${assembl} Team""")
+        html_message = _(u"""<p>Hello, ${name}, and welcome to ${assembl}!</p>
+<p>Please <a href="${confirm_url}">click here to confirm your email address</a>
+&lt;${email}&gt; and complete your registration.</p>
+<p>Best regards,<br />The ${assembl} Team</p>""")
+    else:
+        text_message = _(u"""Hello, ${name}!
+
+Please confirm your new email address <${email}> on your ${assembl} account by clicking the link below.
+
+Best regards,
+The ${assembl} Team""")
+        html_message = _(u"""<p>Hello, ${name}!</p>
+<p>Please <a href="${confirm_url}">click here to confirm your new email address</a>
+&lt;${email}&gt; on your ${assembl} account.</p>
+<p>Best regards,<br />The ${assembl} Team</p>""")
+
     from assembl.auth.password import email_token
     data = {
         'name': email.profile.name,
@@ -935,13 +957,8 @@ def send_confirmation_email(request, email):
         subject=localizer.translate(_("Please confirm your ${confirm_what} with ${assembl}"), mapping=data),
         sender=config.get('assembl.admin_email'),
         recipients=["%s <%s>" % (email.profile.name, email.email)],
-        body=localizer.translate(_(u"""Hello, ${name}!
-Please confirm your ${confirm_what} <${email}> with ${assembl} by clicking on the link below.
-<${confirm_url}>
-"""), mapping=data),
-        html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
-<p>Please <a href="${confirm_url}">confirm your ${confirm_what}</a> &lt;${email}&gt; with ${assembl}.</p>
-"""), mapping=data))
+        body=localizer.translate(_(text_message), mapping=data),
+        html=localizer.translate(_(html_message), mapping=data))
     #if deferred:
     #    mailer.send_to_queue(message)
     #else:
@@ -964,12 +981,20 @@ def send_change_password_email(
         recipients=["%s <%s>" % (
             profile.name, email or profile.get_preferred_email())],
         body=localizer.translate(_(u"""Hello, ${name}!
-You asked to change your password on ${assembl}. (We hope it was you!)\n
-You can do this by clicking on the link below.
+We have received a request to change the password on your ${assembl} account.
+To confirm your password change please click on the link below.
 <${confirm_url}>
+
+If you did not ask to reset your password please disregard this email.
+
+Best regards,
+The ${assembl} Team
 """), mapping=data),
         html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
-<p>You asked to <a href="${confirm_url}">change your password</a> on ${assembl} (We hope it was you!)</p>
+<p>We have received a request to change the password on your Assembl account.
+Please <a href="${confirm_url}">click here</a> to confirm your password change.</p>
+<p>If you did not ask to reset your password please disregard this email.</p>
+<p>Best regards,<br />The ${assembl} Team</p>
 """), mapping=data))
     # if deferred:
     #    mailer.send_to_queue(message)
