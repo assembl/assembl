@@ -38,13 +38,6 @@ def upgrade(pyramid_env):
                     ondelete='CASCADE',
                     onupdate='CASCADE'), primary_key=True),
             sa.Column('user_link', sa.String(1024), unique=True))
-        op.create_table(
-            'named_weblink_user',
-            sa.Column('id', sa.Integer, sa.ForeignKey(
-                      'weblink_user.id',
-                      ondelete='CASCADE',
-                      onupdate='CASCADE'), primary_key=True),
-            sa.Column('user_name', CoerceUnicode(1024)))
 
     # Do stuff with the app's models here.
     from assembl import models as m
@@ -56,6 +49,5 @@ def upgrade(pyramid_env):
 def downgrade(pyramid_env):
     with context.begin_transaction():
         # Drop in the reverse order than was created.
-        op.drop_table('named_weblink_user')
         op.drop_table('weblink_user')
         op.drop_table('feed_posts_source')

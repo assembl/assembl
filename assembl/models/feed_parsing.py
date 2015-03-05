@@ -11,8 +11,9 @@ import transaction
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
-from virtuoso.alchemy import CoerceUnicode
 from ..lib.sqla import get_session_maker
+from ..tasks.source_reader import PullSourceReader
+from virtuoso.alchemy import CoerceUnicode
 from cStringIO import StringIO
 import feedparser
 import requests
@@ -20,8 +21,10 @@ import pytz
 from importlib import import_module
 from datetime import datetime
 from calendar import timegm
-from ..tasks.source_reader import PullSourceReader
 
+
+def utcnow():
+    return pytz.datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
 
 class FeedFetcher(object):
     """
@@ -103,6 +106,9 @@ class ParsedData(object):
     def get_feed_forced(self,url):
         return self._parse_agent.parse(url)
 
+    def get_feed_title(self):
+        return self.get_feed()['title'].encode('utf-8')
+
     def get_entries(self):
         self._fetch_source()
         return iter(self.get_parsed_feed()['entries'])
@@ -145,12 +151,16 @@ class PaginatedParsedData(ParsedData):
         for url in self._update_url():
             print "Fetching current url: \n%s" % url
             feed = super(PaginatedParsedData, self).get_feed_forced(url)
+            self._feed = feed
             if feed['entries'] == []:
                 raise StopIteration
             yield feed
 
     def _get_entry_per_feed(self, feed):
         return iter(feed['entries'])
+
+    def reset(self):
+        self.page_number = 1
 
     def get_entries(self):
         for feed in self.get_next_feed():
@@ -162,18 +172,6 @@ class FeedPost(ImportedPost):
     """
     A discussion post that is imported from an external feed source.
     """
-
-    # Content Baggage: id (PrimaryKey), type, creation_date, discussion_id,
-    # hidden
-
-    # Post Baggage: id(ForeignKey, content), message_id, ancestry,
-    # parent_id(ForeignKey, post), children (rs: Post),
-    # creator_id(ForeignKey agentprofile), creator(rs: AgentProfile),
-    # subject, body,
-
-    # ImportedPost Baggage: id (ForeignKey, post), import_date,
-    # source_post_id, source_id, body_mime_type, source(PostSource)
-
     __mapper_args__ = {
         'polymorphic_identity': 'feed_imported_posts',
     }
@@ -216,37 +214,129 @@ class FeedPostSource(PostSource):
         return FeedSourceReader(self.id)
 
     @classmethod
+    # eg. create_from(d, "www...xml", "A valid name", PaginatedFeedParser)
     def create_from(cls, discussion, url, source_name, parse_config_class):
         encoded_name = source_name.encode('utf-8')
         encoded_url = url.encode('utf-8')
-        created_date = pytz.datetime.datetime.utcnow().\
-            replace(tzinfo=pytz.utc)
+        created_date = utcnow()
         parser_name = str(parse_config_class).split("'")[1]
         return cls(name=encoded_name, creation_date=created_date,
                    discussion=discussion, url=encoded_url,
                    parser_full_class_name=parser_name)
 
 
+class LoomioPostSource(FeedPostSource):
+    """
+    The source an imported feed, that came directly from Loomio.
+    """
+    __mapper_args__ = {
+        'polymorphic_identity': 'feed_posts_source_loomio'
+    }
+
+    post_type = LoomioFeedPost
+
+    def make_reader(self):
+        return LoomioSourceReader(self.id)
+
+
+class WebLinkAccount(AbstractAgentAccount):
+    """
+    An imported name that has not been validated nor authenticated
+    within Assembl. This is to keep track of an imported post's ownership.
+    """
+    __tablename__ = 'weblink_user'
+
+    id = Column(Integer, ForeignKey(
+                'abstract_agent_account.id',
+                onupdate='CASCADE',
+                ondelete='CASCADE'), primary_key=True)
+
+    user_link = Column(String(1024), unique=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'weblink_user'
+    }
+
+    def get_user_link(self):
+        return self.user_link
+
+    def unique_query(self):
+        query, _ = super(WebLinkAccount, self).unique_query()
+        return query.filter_by(
+            type=self.type, user_link=self.user_link), True
+
+
+class LoomioAccount(WebLinkAccount):
+    """
+    An imported Loomio name and address. This is not an authenticated user.
+    """
+    __mapper_args__ = {
+        'polymorphic_identity': 'loomio_user'
+    }
+
+    def unique_query(self):
+        query, _ = super(LoomioAccount, self).unique_query()
+        return query.filter_by(
+        type=self.type, user_link=self.user_link), True
+
+
 class FeedSourceReader(PullSourceReader):
+
+    user_type = WebLinkAccount
 
     def __init__(self, source_id):
         super(FeedSourceReader,self).__init__(source_id)
         self._parse_agent = None
-        self._user_agents = {}
 
     def do_read(self):
         self._check_parser_loaded()
         self._add_entries()
-        # self.commit_changes()
+
+    def re_import(self, discussion=None):
+        print "Processing re-import for source %s" % self.source.url
+        self._check_parser_loaded()
+        for entry in self.get_entries():
+            try:
+                post_id = self._get_entry_id(entry)
+                user_link = self._get_author_link(entry)
+                persisted_post = self._return_existing_post(post_id)
+                persisted_user = self._return_existing_user(user_link)
+
+                self._process_reimport_post(entry, persisted_post, discussion)
+                self._process_reimport_user(entry, persisted_user)
+                post.db().add(persisted_post)
+                post.db().add(persisted_user)
+                post.db().commit()
+
+            finally:
+                self.source = PostSource.get(self.source_id)
+
+    def _process_reimport_post(self, entry, post, discussion=None):
+        post.import_date = utcnow()
+        post.source_id = self._get_entry_id(entry)
+        post.source = self.source
+        post.body_mime_type = self._get_body_mime_type(entry)
+        post.creation_date = self._get_creation_date(entry)
+        post.subject = self._get_subject(entry)
+        post.body = self._get_body(entry)
+        # if discussion:
+        #     post.discussion = discussion
+
+    def _process_reimport_user(self, entry, user, user_desc=None):
+        user.user_link = self._get_author_link(entry)
+        user.profile.name = self._get_author(entry)
+        user.profile.description = \
+            user_desc if not None else user.profile.description
 
     def _add_entries(self):
-        for post in self._generate_post_stream():
-            if self._validate_post_not_exists(post):
-                try:
-                    post.db().add(post)
-                    post.db().commit()
-                finally:
-                    self.source = PostSource.get(self.source_id)
+        with self.source.db().no_autoflush:
+            for post in self._generate_post_stream():
+                if self._validate_post_not_exists(post):
+                    try:
+                        post.db().add(post)
+                        post.db().commit()
+                    finally:
+                        self.source = PostSource.get(self.source_id)
 
     def _check_parser_loaded(self):
         if not self._parse_agent:
@@ -266,15 +356,29 @@ class FeedSourceReader(PullSourceReader):
     # This must also be overriden to search the correct Posts table
     def _validate_post_not_exists(self, post):
         """Checks that the post is not already a part of the db"""
-        tbl = self.source.post_type
-        other = self.source.db().query(tbl).\
-            filter(tbl.source_post_id == post.source_post_id).first()
+        query, valid = post.unique_query()
+        assert valid, "Class %s needs a valid unique_query" % (
+            post.__class__.__name__)
+        other = query.first()
+        print "*"*100
+        print post
+        print other
         return other is None or other is post
+
+    def _return_existing_post(self, post_id):
+        tbl = self.source.post_type
+        return self.source.db().query(tbl).\
+            filter(tbl.source_post_id == post_id).first()
+
+    def _return_existing_user(self, user_link):
+        tbl = user_type
+        return self.source.db().query(tbl).\
+            filter(tbl.user_link == user_link).first()
 
     def get_existing_agent_account(self, agent_account):
         """Checks that the post is not already a part of the db"""
-        query = self.source.db().query(AbstractAgentAccount)
-        query, valid = agent_account.unique_query(query)
+
+        query, valid = agent_account.unique_query()
         assert valid, "Class %s needs a valid unique_query" % (
             agent_account.__class__.__name__)
         other = query.first()
@@ -282,31 +386,40 @@ class FeedSourceReader(PullSourceReader):
             return agent_account
         return other
 
-    # This should be populated differently for subclasses that handles
-    # convertion logic
+    def _get_title_from_feed(self):
+        self._check_parser_loaded()
+        return self._parse_agent.get_feed_title()
+
+    def _get_creation_date(self,entry):
+        return entry['updated_parsed']
+
+    def _get_entry_id(self, entry):
+        return entry['id'].encode('utf-8')
+
+    def _get_body_mime_type(self,entry):
+        return entry['content'][0]['type']
+
+    def _get_subject(self,entry):
+        return entry['title'].encode('utf-8')
+
+    def _get_body(self,entry):
+        return entry['content'][0]['value'].encode('utf-8')
+
+    def _get_author(self,entry):
+        return entry['author'].encode('utf-8')
+
+    def _get_author_link(self,entry):
+        return entry['author_detail']['href'].encode('utf-8')
+
     def _convert_to_post(self, entry, account):
-        # Content Baggage: id (PrimaryKey), type, creation_date, discussion_id,
-        # hidden
-
-        # Post Baggage: id(ForeignKey, content), message_id, ancestry,
-        # parent_id(ForeignKey, post), children (rs: Post),
-        # creator_id(ForeignKey agentprofile), creator(rs: AgentProfile),
-        # subject, body,
-
-        # ImportedPost Baggage: id (ForeignKey, post), import_date,
-        # source_post_id, source_id, body_mime_type, source(PostSource)
-
-        # Time in UTC w/o timezone information
         post_created_date = datetime.\
-            fromtimestamp(timegm(entry['updated_parsed']))
-        source_post_id = entry['id'].encode('utf-8')
+            fromtimestamp(timegm(self._get_creation_date(entry)))
+        source_post_id = self._get_entry_id(entry)
         source = self.source
-        body_mime_type = entry['content'][0]['type']
-
-        subject = entry['title'].encode('utf-8')
-        body = entry['content'][0]['value'].encode('utf-8')
-        imported_date = pytz.datetime.datetime.\
-            utcnow().replace(tzinfo=pytz.utc)
+        body_mime_type = self._get_body_mime_type(entry)
+        subject = self._get_subject(entry)
+        body = self._get_body(entry)
+        imported_date = utcnow()
 
         user = account.profile
 
@@ -322,127 +435,44 @@ class FeedSourceReader(PullSourceReader):
             body=body)
 
 
-    # Override on subclass, as necessary
-    def _create_account_from_entry(self, entry):
-        """Create a WeblinkAccount from a parsed ATOM entry"""
+class LoomioSourceReader(FeedSourceReader):
 
-        author_name = entry['author'].encode('utf-8')
-        author_link = entry['author_detail']['href'].encode('utf-8')
-        desc = "Generic Feed-Based Account"
-        agent_profile = AgentProfile(name=author_name, description=desc)
+    user_type = LoomioAccount
 
-        return WebLinkAccount(user_link=author_link, profile=agent_profile)
+    def __init__(self, source_id):
+        super(LoomioSourceReader, self).__init__(source_id)
 
-
-class LoomioPostSource(FeedPostSource):
-    """
-    The source an imported feed, that came directly from Loomio.
-    """
-    __mapper_args__ = {
-        'polymorphic_identity': 'feed_posts_source_loomio'
-    }
-
-    post_type = LoomioFeedPost
+    def _process_reimport_post(self, entry, post, discussion):
+        super(LoomioSourceReader, self).\
+            _process_reimport_user(entry, post, discussion)
+        post.subject = self._get_title_from_feed()
 
     def _create_account_from_entry(self, entry):
-        author_name = entry['author'].encode('utf-8')
-        author_link = entry['author_detail']['href'].encode('utf-8')
+        author_name = self._get_author(entry)
+        author_link = self._get_author_link(entry)
         desc = "Loomio Feed-Based Account"
         agent_profile = AgentProfile(name=author_name, description=desc)
-
-        # There appears to be a duplication of records containing the
-        # author_name, both in this table, and in the AgentProfile table.
-        # Does this table become unnecessary?
-        return LoomioAccount(user_link=author_link, user_name=author_name,
-                             profile=agent_profile)
+        return LoomioAccount(user_link=author_link, profile=agent_profile)
 
     def _convert_to_post(self,entry,account):
-        # Content Baggage: id (PrimaryKey), type, creation_date, discussion_id,
-        # hidden
-
-        # Post Baggage: id(ForeignKey, content), message_id, ancestry,
-        # parent_id(ForeignKey, post), children (rs: Post),
-        # creator_id(ForeignKey agentprofile), creator(rs: AgentProfile),
-        # subject, body,
-
-        # ImportedPost Baggage: id (ForeignKey, post), import_date,
-        # source_post_id, source_id, body_mime_type, source(PostSource)
-
-        # Time in UTC w/o timezone information
         post_created_date = datetime.\
-            fromtimestamp(timegm(entry['updated_parsed']))
-        source_post_id = entry['id'].encode('utf-8') # alter
-        source = self
-        body_mime_type = entry['content'][0]['type']
-
-        subject = entry['title'].encode('utf-8')
-        body = entry['content'][0]['value'].encode('utf-8')
-        imported_date = pytz.datetime.datetime.\
-            utcnow().replace(tzinfo=pytz.utc)
+            fromtimestamp(timegm(self._get_creation_date(entry)))
+        source_post_id = self._get_entry_id(entry)
+        source = self.source
+        body_mime_type = self._get_body_mime_type(entry)
+        subject = self._get_title_from_feed()
+        body = self._get_body(entry)
+        imported_date = utcnow()
 
         user = account.profile
 
-        return LoomioFeedPost(creation_date=post_created_date,
-                        import_date=imported_date,
-                        source_post_id=source_post_id,
-                        source=source,
-                        body_mime_type=body_mime_type,
-                        creator=user,
-                        subject=subject,
-                        body=body)
+        return source.post_type(creation_date=post_created_date,
+            import_date=imported_date,
+            source_post_id=source_post_id,
+            source=source,
+            discussion=source.discussion,
+            body_mime_type=body_mime_type,
+            creator=user,
+            subject=subject,
+            body=body)
 
-
-class WebLinkAccount(AbstractAgentAccount):
-    """
-    An imported name that has not been validated nor authenticated
-    within Assembl. This is to keep track of an imported post's ownership.
-    """
-
-    # Baggage: Id, type, profile_id (ForeignKey, agent_profile),
-    # preferred (ForeignKey, agent_profile), verified, email,
-
-    __tablename__ = 'weblink_user'
-
-    id = Column(Integer, ForeignKey(
-                'abstract_agent_account.id',
-                onupdate='CASCADE',
-                ondelete='CASCADE'), primary_key=True)
-
-    user_link = Column(String(1024), unique=True)
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'weblink_user'
-    }
-
-    def get_user_link(self):
-        return self.user_link
-
-    def unique_query(self, query):
-        return self.db.query(self.__class__).filter_by(
-            type=self.type, user_link=self.user_link), True
-
-
-class NamedWebLinkAccount(WebLinkAccount):
-    """
-    A weblink account with URL and Name. This is not an authenticated user.
-    """
-    __tablename__ = 'named_weblink_user'
-
-    id = Column(Integer, ForeignKey(
-                'weblink_user.id',
-                ondelete='CASCADE',
-                onupdate='CASCADE'), primary_key=True)
-
-    user_name = Column(CoerceUnicode(1024))
-    __mapper_args__ = {
-        'polymorphic_identity': 'named_weblink_user'
-    }
-
-
-class LoomioAccount(NamedWebLinkAccount):
-    """
-    An imported Loomio name and address. This is not an authenticated user.
-    """
-    __mapper_args__ = {
-        'polymorphic_identity': 'loomio_user'
-    }
