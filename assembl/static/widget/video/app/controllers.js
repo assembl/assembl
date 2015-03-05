@@ -383,6 +383,14 @@ videosApp.controller('videosCtl',
                 $q.when(relatedTermsPromise).then(function(data){
                     console.log("getRelatedTermsPromise found these terms: ", data);
                     $scope.inspiration_keywords_related = data;
+
+                    // angular does not like duplicates in a repeater and we don't need duplicates, so we remove them
+                    function onlyUnique(value, index, self) { 
+                        return self.indexOf(value) === index;
+                    }
+                    $scope.inspiration_keywords_related = $scope.inspiration_keywords_related.filter(onlyUnique);
+
+                    // if no result, show the i18n no result string in UI
                     if ( data && data.length )
                         $scope.inspiration_keywords_related_no_results = false;
                     else
