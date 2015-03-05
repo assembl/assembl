@@ -69,6 +69,14 @@
         "@extends": "ContentSource",
         "last_import": true
     },
+    "FeedPostSource": {
+        "@extends": "PostSource",
+        "url": true,
+        "parser_full_class_name": true
+    },
+    "LoomioPostSource": {
+        "@extends": "FeedPostSource"
+    },
     "AnnotatorSource": {
         "@extends": "ContentSource"
     },
