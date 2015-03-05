@@ -23,9 +23,6 @@ from datetime import datetime
 from calendar import timegm
 
 
-def utcnow():
-    return pytz.datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
-
 class FeedFetcher(object):
     """
     A thin wrapper around requests in order to be able to get a feed from a
@@ -256,7 +253,7 @@ class FeedPostSource(PostSource):
     def create_from(cls, discussion, url, source_name, parse_config_class):
         encoded_name = source_name.encode('utf-8')
         encoded_url = url.encode('utf-8')
-        created_date = utcnow()
+        created_date = datetime.utcnow()
         parser_name = str(parse_config_class).split("'")[1]
         return cls(name=encoded_name, creation_date=created_date,
                    discussion=discussion, url=encoded_url,
@@ -286,32 +283,36 @@ class FeedSourceReader(PullSourceReader):
 
     def do_read(self):
         self._check_parser_loaded()
-        self._add_entries()
+        if self.reimporting:
+            self.re_import()
+        else:
+            self._add_entries()
 
     def re_import(self, discussion=None):
         print "Processing re-import for source %s" % self.source.url
-        self._check_parser_loaded()
-        for entry in self.get_entries():
-            try:
-                post_id = self._get_entry_id(entry)
-                user_link = self._get_author_link(entry)
-                persisted_post = self._return_existing_post(post_id)
-                persisted_user = self._return_existing_user(user_link)
-                if persisted_user is None:
-                    persisted_user = self._create_account_from_entry(entry)
-                else:
-                    self._process_reimport_user(entry, persisted_user)
-                persisted_post.account = persisted_user
-                self._process_reimport_post(entry, persisted_post, discussion)
-                post.db().add(persisted_post)
-                post.db().add(persisted_user)
-                post.db().commit()
-
-            finally:
-                self.source = PostSource.get(self.source_id)
+        with self.source.db().no_autoflush:
+            for entry in self._parse_agent.get_entries():
+                try:
+                    post_id = self._get_entry_id(entry)
+                    user_link = self._get_author_link(entry)
+                    persisted_post = self._return_existing_post(post_id)
+                    account = self._create_account_from_entry(entry)
+                    other_account = self.get_existing_agent_account(account)
+                    if other_account is not account:
+                        account = other_account
+                        self._process_reimport_user(entry, account)
+                    persisted_post.account = account
+                    self._process_reimport_post(entry, persisted_post, discussion)
+                    persisted_post.db().add(persisted_post)
+                    persisted_post.db().commit()
+                except Exception as e:
+                    PostSource.db().rollback()
+                    raise e
+                finally:
+                    self.source = FeedPostSource.get(self.source_id)
 
     def _process_reimport_post(self, entry, post, discussion=None):
-        post.import_date = utcnow()
+        post.import_date = datetime.utcnow()
         post.source_id = self._get_entry_id(entry)
         post.source = self.source
         post.body_mime_type = self._get_body_mime_type(entry)
@@ -339,7 +340,7 @@ class FeedSourceReader(PullSourceReader):
                         post.db().rollback()
                         raise e
                     finally:
-                        self.source = PostSource.get(self.source_id)
+                        self.source = FeedPostSource.get(self.source_id)
 
     def _check_parser_loaded(self):
         if not self._parse_agent:
@@ -376,11 +377,6 @@ class FeedSourceReader(PullSourceReader):
         return self.source.db().query(cls).\
             filter(cls.source_post_id == post_id).first()
 
-    def _return_existing_user(self, user_link):
-        cls = self.source.user_type
-        return self.source.db().query(cls).\
-            filter(cls.user_link == user_link).first()
-
     def get_existing_agent_account(self, agent_account):
         """Checks that the post is not already a part of the db"""
 
@@ -397,7 +393,7 @@ class FeedSourceReader(PullSourceReader):
         return self._parse_agent.get_feed_title()
 
     def _get_creation_date(self,entry):
-        return entry['updated_parsed']
+        return datetime.fromtimestamp(timegm(entry['updated_parsed']))
 
     def _get_entry_id(self, entry):
         return entry['id'].encode('utf-8')
@@ -418,19 +414,17 @@ class FeedSourceReader(PullSourceReader):
         return entry['author_detail']['href'].encode('utf-8')
 
     def _convert_to_post(self, entry, account):
-        post_created_date = datetime.\
-            fromtimestamp(timegm(self._get_creation_date(entry)))
         source_post_id = self._get_entry_id(entry)
         source = self.source
         body_mime_type = self._get_body_mime_type(entry)
         subject = self._get_subject(entry)
         body = self._get_body(entry)
-        imported_date = utcnow()
+        imported_date = datetime.utcnow()
 
         user = account.profile
 
         return source.post_type(
-            creation_date=post_created_date,
+            creation_date=self._get_creation_date(entry),
             import_date=imported_date,
             source_post_id=source_post_id,
             source=source,
