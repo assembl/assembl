@@ -370,6 +370,8 @@ class SourceDispatcher(ConsumerMixin):
         if source_id not in self.readers:
             from assembl.models import ContentSource
             source = ContentSource.get(source_id)
+            if not source:
+                return False
             reader = source.make_reader()
             self.readers[source_id] = reader
             if reader is None:
