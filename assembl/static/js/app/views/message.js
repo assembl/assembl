@@ -254,7 +254,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
 
                         if(that.messageListView.iSviewStyleThreadedType() 
                             && that.messageFamilyView.currentLevel !== 1) {
-                          $.when(that.model.getParentPromise()).then(function(parentMessageModel){
+                          that.model.getParentPromise().then(function(parentMessageModel){
                             //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
                             if(parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe() ) {
                               //console.log("Hiding redundant title")

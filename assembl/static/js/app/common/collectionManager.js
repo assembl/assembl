@@ -34,7 +34,7 @@ define(['app',
              * loading
              * @type {boolean}
              */
-            DEBUG_LAZY_LOADING: true,
+            DEBUG_LAZY_LOADING: false,
 
             /**
              * Collection with all users in the discussion.
@@ -357,120 +357,132 @@ define(['app',
             },*/
 
             getMessageFullModelRequestWorker: function (collectionManager) {
-                this.collectionManager = collectionManager,
-                    this.requests = this.collectionManager._messageFullModelRequests,
+              this.collectionManager = collectionManager,
+              this.requests = this.collectionManager._messageFullModelRequests,
 
-                    this.addRequest = function (id, promise) {
-                        if (this.requests[id] === undefined) {
-                            this.requests[id] = {'promises': [],
-                                'serverRequestInProgress': false}
-                        }
-                        this.requests[id]['promises'].push(promise);
-                        if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                            console.log("Added request for id:" + id + ", queue size is now:" + _.size(this.requests));
-                        }
-                        // Each id can take up to ~40 characters.  To not exceed
-                        // the 2048 characters unofficial limit for GET URLs,
-                        // (IE and others), we only request up to do up to:
-                        // 2000/40 ~= 50 id's at a time
-                        var unservicedRequests = _.filter(this.requests, function(request){ return request['serverRequestInProgress'] === false; });
-                        var numUnservicedRequests = _.size(unservicedRequests);
-                        if (numUnservicedRequests >= 50) {
-                            if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                console.log("Executing unserviced request immediately, unserviced queue size is now:", numUnservicedRequests);
-                            }
-                            //TODO:  This is suboptimal, as the server can be hammered
-                            //with concurrent requests for the same data, causing
-                            //database contention.  Like a bit below, we should remember
-                            //how many requests are in transit, and not have more than 3
-
-                            //Alternatively, we could POST on a fake URL, with the url path
-                            //as the body of the request and avoid this spliting completely.
-
-                            this.executeRequest();
-                        }
-                    },
-
-                    this.executeRequest = function () {
-
-                        var that = this,
-                            allMessageStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise(),
-                            ids = [];
-                        if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                            console.log("executeRequest fired, unregistering worker from collection Manager");
-                        }
-                        this.collectionManager._waitingWorker = undefined;
-
-                        _.each(that.requests, function (request, id) {
-                            //var structureModel = allMessageStructureCollection.get(id);
-                            if (request['serverRequestInProgress'] === false) {
-                                request['serverRequestInProgress'] = true;
-                                ids.push(id);
-                            }
-                        });
-                        allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
-                            var PostQuery = require('views/messageListPostQuery'),
-                                postQuery = new PostQuery(),
-                                viewDef = 'default';
-
-                            if (_.size(ids) > 0) {
-                                postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
-                                postQuery.setViewDef(viewDef); //We want the full messages
-                                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                    console.log("requesting message data from server for "+ _.size(ids) + " messages");
-                                }
-
-                                postQuery.getResultRawDataPromise().then(function (results) {
-
-                                    _.each(results, function (jsonData) {
-                                        var id = jsonData['@id'],
-                                            structureModel = allMessageStructureCollection.get(id),
-                                            deferredList = that.requests[id];
-
-                                        if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                            console.log("executeRequest resolving for id", id, deferredList['promises'].length, "deferred queued for that id");
-                                        }
-                                        structureModel.set(jsonData);
-                                        structureModel.viewDef = viewDef;
-                                        if (deferredList !== undefined) {
-
-                                            _.each(deferredList['promises'], function (promise) {
-                                                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                                  console.log("executeRequest true resolving for id", id, structureModel);
-                                                }
-                                                promise.resolve(structureModel);
-                                            });
-
-                                            delete that.requests[id];
-                                        }
-                                        else {
-                                            console.log("WARNING: collectionManager::executeRequest() received data for " + id + ", but there is no matching request.  Race condition?");
-                                        }
-                                    });
-
-                                })
-
-                            }
-                            else {
-                                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                                    console.log("executeRequest called, but no ids to request from the server out of the list of ", _.size(that.requests));
-                                }
-                            }
-                        });
-
-                    }
-
-                //Constructor
-                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                    console.log("Spawning new _getMessageFullModelsRequestWorker");
+              this.addRequest = function (id) {
+                /* Emulates the defered pattern in bluebird, in this case we really do need it */
+                function Defer() {
+                  var resolve, reject;
+                  var promise = new Promise(function() {
+                    resolve = arguments[0];
+                    reject = arguments[1];
+                  });
+                  return {
+                    resolve: resolve,
+                    reject: reject,
+                    promise: promise
+                  };
                 }
-                var that = this;
-                this.executeTimeout = setTimeout(function () {
+                var promiseResolver;
+                if (this.requests[id] === undefined) {
+                  promiseResolver = new Defer();
+                  this.requests[id] = {'promiseResolver': promiseResolver,
+                                       'serverRequestInProgress': false,
+                                       'count': 1}
+                }
+                else {
+                  promiseResolver = this.requests[id]['promiseResolver'];
+                  this.requests[id]['count']++;
+                }
+                
+                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                    console.log("Added request for id:" + id + ", now ", this.requests[id]['count'], " requests for this id, queue size is now:" + _.size(this.requests));
+                }
+                // Each id can take up to ~40 characters.  To not exceed
+                // the 2048 characters unofficial limit for GET URLs,
+                // (IE and others), we only request up to do up to:
+                // 2000/40 ~= 50 id's at a time
+                var unservicedRequests = _.filter(this.requests, function(request){ return request['serverRequestInProgress'] === false; });
+                var numUnservicedRequests = _.size(unservicedRequests);
+                if (numUnservicedRequests >= 50) {
+                  if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                    console.log("Executing unserviced request immediately, unserviced queue size is now:", numUnservicedRequests);
+                  }
+                  //TODO:  This is suboptimal, as the server can still be hammered
+                  //with concurrent requests for the same data, causing
+                  //database contention.  Like a bit below, we should remember
+                  //how many requests are in transit, and not have more than 3
+
+                  //Alternatively, we could POST on a fake URL, with the url path
+                  //as the body of the request and avoid this spliting completely.
+
+                  this.executeRequest();
+                }
+                return promiseResolver.promise;
+              },
+
+              this.executeRequest = function () {
+
+                var that = this,
+                    allMessageStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise(),
+                    ids = [];
+                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                  console.log("executeRequest fired, unregistering worker from collection Manager");
+                }
+                this.collectionManager._waitingWorker = undefined;
+
+                _.each(that.requests, function (request, id) {
+                  //var structureModel = allMessageStructureCollection.get(id);
+                  if (request['serverRequestInProgress'] === false) {
+                    request['serverRequestInProgress'] = true;
+                    ids.push(id);
+                  }
+                });
+                allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
+                  var PostQuery = require('views/messageListPostQuery'),
+                      postQuery = new PostQuery(),
+                      viewDef = 'default';
+
+                  if (_.size(ids) > 0) {
+                    postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
+                    postQuery.setViewDef(viewDef); //We want the full messages
                     if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                        console.log("Executing unserviced request immediately (timeaout reached)");
+                      console.log("requesting message data from server for "+ _.size(ids) + " messages");
                     }
-                    that.executeRequest();
-                }, collectionManager.FETCH_WORKERS_LIFETIME);
+
+                    postQuery.getResultRawDataPromise().then(function (results) {
+                      _.each(results, function (jsonData) {
+                        var id = jsonData['@id'],
+                            structureModel = allMessageStructureCollection.get(id),
+                            deferredList = that.requests[id];
+  
+                        if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                          console.log("executeRequest resolving for id", id, deferredList['count'], " requests queued for that id");
+                        }
+                        structureModel.set(jsonData);
+                        structureModel.viewDef = viewDef;
+                        if (deferredList !== undefined) {
+                          deferredList['promiseResolver'].resolve(structureModel);
+                          delete that.requests[id];
+                        }
+                        else {
+                          console.log("WARNING: collectionManager::executeRequest() received data for " + id + ", but there is no matching request.  Race condition?");
+                        }
+                      });
+                    });
+
+                  }
+                  else {
+                    if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                      console.log("executeRequest called, but no ids to request from the server out of the list of ", _.size(that.requests));
+                    }
+                  }
+                });
+
+              }
+
+              //Constructor
+              if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                  console.log("Spawning new _getMessageFullModelsRequestWorker");
+              }
+              var that = this;
+              this.executeTimeout = setTimeout(function () {
+                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                  console.log("Executing unserviced request immediately (timeaout reached)");
+                }
+                that.executeRequest();
+              }, collectionManager.FETCH_WORKERS_LIFETIME);
             },
 
             /**
@@ -512,10 +524,9 @@ define(['app',
 
             getMessageFullModelPromise: function (id) {
                 var that = this,
-                    allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise(),
-                    promise = Promise;
+                    allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
 
-                allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
+                return allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
                     var structureModel = allMessageStructureCollection.get(id);
 
                     if (structureModel) {
@@ -523,7 +534,7 @@ define(['app',
                             if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
                                 console.log("getMessageFullModelPromise CACHE HIT!");
                             }
-                            return promise.resolve(structureModel);
+                            return Promise.resolve(structureModel);
                         }
                         else {
                             if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
@@ -533,17 +544,13 @@ define(['app',
                             if (that._waitingWorker === undefined) {
                                 that._waitingWorker = new that.getMessageFullModelRequestWorker(that);
                             }
-                            that._waitingWorker.addRequest(id, promise);
+                            var requestPromise = that._waitingWorker.addRequest(id);
+                            return requestPromise;
                         }
                     }
                     else {
-                      if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                        console.log("getMessageFullModelPromise MODEL NOT FOUND!");
-                      }
-                      promise.reject();
+                      return Promise.reject("MODEL NOT FOUND for id!"+id);
                     }
-                    console.log(promise);
-                    return promise;
                 });
 
             },

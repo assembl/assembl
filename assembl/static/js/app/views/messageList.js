@@ -1463,7 +1463,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     var sibblingsviews_promise = [];
                 }
 
-                Promise.join(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.id),
+                Promise.join(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.getId()),
                     function (subviews, sibblingsviews, messageFullModel) {
 
                     view = new MessageFamilyView({
