@@ -201,12 +201,11 @@ from .notification import (
 )
 from .feed_parsing import (
     FeedPostSource,
-    LoomioAccount,
     LoomioPostSource,
     FeedPost,
     LoomioFeedPost,
-    NamedWebLinkAccount,
     WebLinkAccount,
+    LoomioAccount,
 )
 
 declare_history_mappers()
