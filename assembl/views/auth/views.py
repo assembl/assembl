@@ -932,7 +932,7 @@ def send_confirmation_email(request, email):
             ticket=email_token(email))
     }
     message = Message(
-        subject=localizer.translate(_("Please confirm your ${confirm_what} with <${assembl}>"), mapping=data),
+        subject=localizer.translate(_("Please confirm your ${confirm_what} with ${assembl}"), mapping=data),
         sender=config.get('assembl.admin_email'),
         recipients=["%s <%s>" % (email.profile.name, email.email)],
         body=localizer.translate(_(u"""Hello, ${name}!
@@ -964,7 +964,7 @@ def send_change_password_email(
         recipients=["%s <%s>" % (
             profile.name, email or profile.get_preferred_email())],
         body=localizer.translate(_(u"""Hello, ${name}!
-You asked to change your password on <${assembl}>. (We hope it was you!)\n
+You asked to change your password on ${assembl}. (We hope it was you!)\n
 You can do this by clicking on the link below.
 <${confirm_url}>
 """), mapping=data),
