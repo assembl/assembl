@@ -993,7 +993,7 @@ Best regards,
 The ${assembl} Team
 """), mapping=data),
         html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
-<p>We have received a request to change the password on your Assembl account.
+<p>We have received a request to change the password on your ${assembl} account.
 Please <a href="${confirm_url}">click here to confirm your password change</a>.</p>
 <p>If you did not ask to reset your password please disregard this email.</p>
 <p>Best regards,<br />The ${assembl} Team</p>
