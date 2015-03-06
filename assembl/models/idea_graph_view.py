@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import datetime
+from abc import abstractmethod
 
 from sqlalchemy.orm import (
     relationship, backref)
@@ -73,6 +74,15 @@ class IdeaGraphView(DiscussionBoundBase):
         return (cls.discussion_id == discussion_id, )
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
+    @abstractmethod
+    def get_idea_links(self):
+        pass
+
+    @abstractmethod
+    def get_ideas(self):
+        pass
+
 
 
 class SubGraphIdeaAssociation(DiscussionBoundBase):
@@ -223,6 +233,12 @@ class ExplicitSubGraphView(IdeaGraphView):
         retval = IdeaGraphView.copy(self)
         retval.ideas = self.ideas
         return retval
+
+    def get_idea_links(self):
+        return self.idea_links
+
+    def get_ideas(self):
+        return self.ideas
 
     @classmethod
     def extra_collections(cls):
