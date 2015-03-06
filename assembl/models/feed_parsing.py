@@ -284,32 +284,41 @@ class FeedSourceReader(PullSourceReader):
     def do_read(self):
         self._check_parser_loaded()
         if self.reimporting:
-            self.re_import()
+            self._re_import()
         else:
             self._add_entries()
 
-    def re_import(self, discussion=None):
+    def _re_import(self, discussion=None):
         print "Processing re-import for source %s" % self.source.url
-        with self.source.db().no_autoflush:
-            for entry in self._parse_agent.get_entries():
-                try:
-                    post_id = self._get_entry_id(entry)
-                    user_link = self._get_author_link(entry)
-                    persisted_post = self._return_existing_post(post_id)
-                    account = self._create_account_from_entry(entry)
-                    other_account = self.get_existing_agent_account(account)
-                    if other_account is not account:
-                        account = other_account
-                        self._process_reimport_user(entry, account)
-                    persisted_post.account = account
+        sess = PostSource.db()
+        for entry in self._parse_agent.get_entries():
+            try:
+                post_id = self._get_entry_id(entry)
+                user_link = self._get_author_link(entry)
+                persisted_post = self._return_existing_post(post_id)
+                account = self._create_account_from_entry(entry)
+                other_account = self.get_existing_agent_account(account)
+                if other_account is not account and other_account is not None:
+                    account = other_account
+                    self._process_reimport_user(entry, account)
+                    sess.add(account)
+                if persisted_post is not None:
                     self._process_reimport_post(entry, persisted_post, discussion)
-                    persisted_post.db().add(persisted_post)
-                    persisted_post.db().commit()
-                except Exception as e:
-                    PostSource.db().rollback()
-                    raise e
-                finally:
-                    self.source = FeedPostSource.get(self.source_id)
+                    persisted_post.creator = account.profile
+                    sess.add(persisted_post)
+                    if other_account is None or other_account is not account:
+                        sess.add(account)
+                    sess.commit()
+                else:
+                    persisted_post = self._convert_to_post(entry, account)
+                    sess.add(persisted_post)
+                    sess.add(account)
+                    sess.commit()
+            except Exception as e:
+                sess.rollback()
+                raise e
+            finally:
+                self.source = FeedPostSource.get(self.source_id)
 
     def _process_reimport_post(self, entry, post, discussion=None):
         post.import_date = datetime.utcnow()
@@ -319,8 +328,6 @@ class FeedSourceReader(PullSourceReader):
         post.creation_date = self._get_creation_date(entry)
         post.subject = self._get_subject(entry)
         post.body = self._get_body(entry)
-        # if discussion:
-        #     post.discussion = discussion
 
     def _process_reimport_user(self, entry, user, user_desc=None):
         if not user.profile.name:
@@ -330,10 +337,11 @@ class FeedSourceReader(PullSourceReader):
                 user_desc if not None else user.profile.description
 
     def _add_entries(self):
-        for post in self._generate_post_stream():
+        for post,account in self._generate_post_stream():
             if self._validate_post_not_exists(post):
                 try:
                     post.db().add(post)
+                    post.db().add(account)
                     post.db().commit()
                 except Exception as e:
                     post.db().rollback()
@@ -360,7 +368,7 @@ class FeedSourceReader(PullSourceReader):
         for entry in self._parse_agent.get_entries():
             account = self._create_account_from_entry(entry)
             account = self.get_existing_agent_account(account)
-            yield self._convert_to_post(entry, account)
+            yield self._convert_to_post(entry, account), account
 
     # This must also be overriden to search the correct Posts table
     def _validate_post_not_exists(self, post):
