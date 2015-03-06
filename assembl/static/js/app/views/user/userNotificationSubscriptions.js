@@ -22,7 +22,6 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
               if(this.model === 'undefined'){
                 this.template = "#tmpl-loader";
               }
-
             },
             ui: {
               currentSubscribeCheckbox: ".js_userNotification"
@@ -213,14 +212,14 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
         var Subscriber = Marionette.ItemView.extend({
             template:'#tmpl-userSubscriber',
             ui: {
-                unSubscription: ".js_unSubscription",
-                subscription: ".js_subscription",
-                btnSubscription:'.btnSubscription',
-                btnUnsubscription:'.btnUnsubscription'
+              unSubscription: ".js_unSubscription",
+              subscription: ".js_subscription",
+              btnSubscription:'.btnSubscription',
+              btnUnsubscription:'.btnUnsubscription'
             },
             events: {
-                'click @ui.unSubscription': 'unSubscription',
-                'click @ui.subscription': 'subscription'
+              'click @ui.unSubscription': 'unSubscription',
+              'click @ui.subscription': 'subscription'
             },
             initialize: function(options){
                 this.roles = options.roles;
@@ -236,7 +235,6 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                     role: this.role
                 }
             },
-
             unSubscription: function () {
                 var that = this;
 
