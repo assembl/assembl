@@ -90,8 +90,8 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
             getAnnotationsPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
-                this.getExtractsPromise().done(
-                    function (extracts) {
+                this.getExtractsPromise()
+                    .done(function (extracts) {
                         var ret = [];
 
                         _.each(extracts, function (extract) {

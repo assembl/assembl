@@ -1,7 +1,7 @@
 'use strict';
 
-define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all'],
-    function (Assembl, $, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed) {
+define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all'],
+    function (Assembl, $, _, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed) {
 
         var Context = function () {
 
@@ -136,7 +136,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 return this.DISCUSSION_SLUG;
             },
 
-            getDiscussionPromise: function () {
+            /*getDiscussionPromise: function () {
 
                 var deferred = $.Deferred();
                 var that = this;
@@ -158,6 +158,22 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 }
 
                 return deferred.promise();
+            },*/
+
+            getDiscussionPromise: function () {
+                if(this.discussionPromise ){
+                  return this.discussionPromise;
+                }
+
+                this.discussionPromise = Promise.resolve($.get(this.getApiV2DiscussionUrl()))
+                    .then(function(model){
+                        return model;
+                    }).catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this.discussionPromise;
+
             },
 
             getSocketUrl: function () {

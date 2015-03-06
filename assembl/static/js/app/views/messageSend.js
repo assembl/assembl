@@ -92,12 +92,6 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             onRender: function () {
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
                 Ctx.initTooltips(this.$el);
-
-                if (this.options.msg_in_progress_body
-                    || this.options.msg_in_progress_title) {
-                    // no need anymore
-                    //this.onChangeBody();
-                }
             },
 
             onSendMessageButtonClick: function (ev) {
