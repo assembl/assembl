@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
     Integer,
+    SmallInteger,
     Boolean,
     UnicodeText,
     String,
@@ -41,6 +42,8 @@ class ContentSource(DiscussionBoundBase):
         ondelete='CASCADE',
         onupdate='CASCADE'
     ))
+    connection_error = Column(SmallInteger)
+    error_description = Column(String)
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
