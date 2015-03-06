@@ -8,6 +8,7 @@ from abc import ABCMeta, abstractmethod
 import logging
 from logging.config import fileConfig
 
+from sqlalchemy.orm import sessionmaker, scoped_session
 from enum import Enum
 from pyramid.paster import get_appsettings
 from zope.component import getGlobalSiteManager
@@ -419,7 +420,8 @@ if __name__ == '__main__':
     registry.settings = settings
     set_config(settings)
     fileConfig(config_file_name)
-    configure(registry, 'source_reader')
+    session_maker = scoped_session(sessionmaker(autoflush=False))
+    configure(registry, 'source_reader', session_maker)
     url = settings.get('celery_tasks.imap.broker')
     signal.signal(signal.SIGTERM, shutdown)
     with BrokerConnection(url) as conn:
