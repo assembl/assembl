@@ -65,6 +65,20 @@ class IdeaLinkVisitor(object):
         pass
 
 
+class GraphViewIdeaVisitor(IdeaVisitor):
+    def __init__(self, graph_view):
+        self.graph_view = graph_view
+
+    def visit_idea(self, idea):
+        # not the most efficient, but everything was prefetched
+        if idea in self.graph_view.ideas:
+            return self.do_visit_idea(idea)
+
+    @abstractmethod
+    def do_visit_idea(self, idea):
+        pass
+
+
 class WordCountVisitor(IdeaVisitor):
     def __init__(self, langs):
         self.counter = WordCounter(langs)
