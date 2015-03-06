@@ -29,6 +29,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             lastScrollTime: null,
             scrollInterval: null,
             scrollLastSpeed: null,
+            tableOfIdeasRowHeight: 36, // must match $tableOfIdeasRowHeight in _variables.scss
+            tableOfIdeasFontSizeDecreasingWithDepth: true, // must match the presence of .idealist-children { font-size: 98.5%; } in _variables.scss
 
             /**
              * Are we showing the graph or the list?
@@ -118,7 +120,11 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
                 'click #ideaList-filterByFeatured': 'filterByFeatured',
                 'click #ideaList-filterByInNextSynthesis': 'filterByInNextSynthesis',
-                'click #ideaList-filterByToc': 'clearFilter'
+                'click #ideaList-filterByToc': 'clearFilter',
+
+                'click .js_decreaseRowHeight': 'decreaseRowHeight',
+                'click .js_increaseRowHeight': 'increaseRowHeight',
+                'click .js_toggleDecreasingFontSizeWithDepth': 'toggleDecreasingFontSizeWithDepth'
             },
 
             serializeData: function () {
@@ -466,6 +472,56 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     speed = this.scrollLastSpeed * 0.8 + speed * 0.2;
                 this.scrollLastSpeed = speed;
                 this.scrollableElement.scrollTop(this.scrollableElement.scrollTop()+(speed*deltaTime));
+            },
+
+            increaseRowHeight: function() {
+                this.tableOfIdeasRowHeight += 2;
+                this.tableOfIdeasRowHeight = Math.min ( 40, Math.max(12, this.tableOfIdeasRowHeight) );
+                this.updateUserCustomStylesheet();
+            },
+
+            decreaseRowHeight: function() {
+                this.tableOfIdeasRowHeight -= 2;
+                this.tableOfIdeasRowHeight = Math.min ( 40, Math.max(12, this.tableOfIdeasRowHeight) );
+                this.updateUserCustomStylesheet();
+            },
+
+            toggleDecreasingFontSizeWithDepth: function(){
+                this.tableOfIdeasFontSizeDecreasingWithDepth = !this.tableOfIdeasFontSizeDecreasingWithDepth;
+                this.updateUserCustomStylesheet();
+            },
+
+            updateUserCustomStylesheet: function() {
+                var sheetId = 'userCustomStylesheet';
+                var rowHeight = this.tableOfIdeasRowHeight + 'px';
+                var rowHeightSmaller = (this.tableOfIdeasRowHeight -2) + 'px';
+
+                console.log("current tableOfIdeasRowHeight: ", this.tableOfIdeasRowHeight);
+
+                // remove sheet if it exists
+                var sheetToBeRemoved = document.getElementById(sheetId);
+                if ( sheetToBeRemoved )
+                {
+                    var sheetParent = sheetToBeRemoved.parentNode;
+                    sheetParent.removeChild(sheetToBeRemoved);
+                }
+             
+                // create sheet
+                var sheet = document.createElement('style');
+                sheet.id = sheetId;
+                var str = ".idealist-item { line-height: " + rowHeight + "; }";
+                str += ".idealist-title { line-height: " + rowHeightSmaller + "; }";
+                str += ".idealist-title { line-height: " + rowHeightSmaller + "; }";
+                str += ".idealist-arrow, .idealist-noarrow, .idealist-space, .idealist-bar, .idealist-link, .idealist-link-last { height: " + rowHeight + "; }";
+                str += "#idealist-list .custom-checkbox { height: " + rowHeight + "; line-height: " + rowHeightSmaller + "; }";
+
+                if ( this.tableOfIdeasFontSizeDecreasingWithDepth )
+                    str += ".idealist-children { font-size: 98.5%; }";
+                else
+                    str += ".idealist-children { font-size: 100%; }";
+
+                sheet.innerHTML = str;
+                document.body.appendChild(sheet); 
             }
 
         });

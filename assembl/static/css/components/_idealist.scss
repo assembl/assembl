@@ -1,12 +1,31 @@
 // The list of Ideas
 // =================
-.idealist {
 
+.idealist-header {
+  min-height: 13px;
+}
+
+.idealist-header-title {
+  display: inline-block;
 }
 
 .idealist-actions {
+  display: inline-block;
   position: absolute;
   right: 6px;
+}
+
+.ideaList .idealist-actions {
+  display: none;
+}
+
+.ideaList:hover .idealist-actions {
+  display: inline-block;
+}
+
+.idealist-actions .dropdown-menu {
+  left: auto;
+  right: 0;
 }
 
 // A row within the list of ideas
