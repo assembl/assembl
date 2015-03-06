@@ -159,6 +159,8 @@ define(['app',
                     case Types.EMAIL:
                     case Types.IDEA_PROPOSAL_POST:
                     case Types.POST_WITH_METADATA:
+                    case Types.FEED_POST:
+                    case Types.LOOMIO_FEED_POST:
                         return this.getAllMessageStructureCollectionPromise();
 
                     case Types.USER:
