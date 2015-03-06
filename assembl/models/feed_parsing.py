@@ -330,17 +330,16 @@ class FeedSourceReader(PullSourceReader):
                 user_desc if not None else user.profile.description
 
     def _add_entries(self):
-        with self.source.db().no_autoflush:
-            for post in self._generate_post_stream():
-                if self._validate_post_not_exists(post):
-                    try:
-                        post.db().add(post)
-                        post.db().commit()
-                    except Exception as e:
-                        post.db().rollback()
-                        raise e
-                    finally:
-                        self.source = FeedPostSource.get(self.source_id)
+        for post in self._generate_post_stream():
+            if self._validate_post_not_exists(post):
+                try:
+                    post.db().add(post)
+                    post.db().commit()
+                except Exception as e:
+                    post.db().rollback()
+                    raise e
+                finally:
+                    self.source = FeedPostSource.get(self.source_id)
 
     def _check_parser_loaded(self):
         if not self._parse_agent:

@@ -1342,6 +1342,9 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
     """Return an SQLAlchemy engine configured as per the provided config."""
     if session_maker is None:
         session_maker = get_session_maker(zope_tr)
+    else:
+        global _session_maker
+        _session_maker = session_maker
     engine = session_maker.session_factory.kw['bind']
     if engine:
         return engine

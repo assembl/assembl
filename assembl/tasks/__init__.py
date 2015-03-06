@@ -17,10 +17,10 @@ resolver = DottedNameResolver(__package__)
 raven_client = None
 
 
-def configure(registry, task_name):
+def configure(registry, task_name, session_maker=None):
     settings = registry.settings
     configure_zmq(settings['changes.socket'], False)
-    configure_engine(settings, False)
+    configure_engine(settings, False, session_maker)
     get_session_maker(False)
     # temporary solution
     configure_model_watcher(registry, task_name)
