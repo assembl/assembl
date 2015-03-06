@@ -1130,6 +1130,10 @@ class BaseOps(object):
         return self
 
     def unique_query(self):
+        """returns a couple (query, usable), with a sqla query for conflicting similar objects.
+        usable is true if the query has to be enforced; sometimes it makes sense to
+        return un-usable query that will be used to construct queries of subclasses.
+        """
         # To be reimplemented in subclasses with a more intelligent check.
         # See notification for example.
         return self.db.query(self.__class__), False
