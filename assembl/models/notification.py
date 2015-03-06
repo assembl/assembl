@@ -299,13 +299,17 @@ class NotificationSubscription(DiscussionBoundBase):
         self.db.flush()
         query, usable = self.unique_query()
         other = query.first()
-        return other is None or other == self
+        return other is None or other is self
 
     def unique_query(self):
         query, _ = super(NotificationSubscription, self).unique_query()
+        user_id = self.user_id or self.user.id
+        parent_subscription_id = self.parent_subscription_id
+        if parent_subscription_id is None and self.parent_subscription is not None:
+            parent_subscription = self.parent_subscription.id
         return query.filter_by(
-            user_id=self.user_id, type=self.type,
-            parent_subscription_id = self.parent_subscription_id), True
+            user_id=user_id, type=self.type,
+            parent_subscription_id = parent_subscription_id), True
 
     def is_owner(self, user_id):
         return self.user_id == user_id
@@ -408,7 +412,8 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnPost, self).unique_query()
-        return query.filter_by(post_id=self.post_id), True
+        post_id = self.post_id or self.post.id
+        return query.filter_by(post_id=post_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -447,7 +452,8 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnIdea, self).unique_query()
-        return query.filter_by(idea_id=self.idea_id), True
+        idea_id = self.idea_id or self.idea.id
+        return query.filter_by(idea_id=idea_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -486,7 +492,8 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnExtract, self).unique_query()
-        return query.filter_by(extract_id=self.extract_id), True
+        extract_id = self.extract_id or self.extract.id
+        return query.filter_by(extract_id=extract_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -525,7 +532,8 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnUserAccount, self).unique_query()
-        return query.filter_by(on_user_id=self.on_user_id), True
+        on_user_id = self.on_user_id or self.on_user.id
+        return query.filter_by(on_user_id=on_user_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
