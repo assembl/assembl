@@ -51,7 +51,7 @@
     border-collapse: collapse;
     border-spacing: 0;
   }
-  fieldset, img {
+  /*fieldset,*/ img {
     border: 0;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -84,6 +84,30 @@
     padding-right: 6px;
     overflow: hidden;
     min-width: 372px;
+
+    fieldset {
+      background: #ddd;
+      border-radius: 5px;
+      margin: 10px 0;
+      padding: 0 7px 5px 7px;
+
+      legend {
+        background: rgba(255, 255, 255, 0.5);
+        border: initial;
+        font-size: initial;
+        margin-bottom: initial;
+        margin-left: 5px;
+        margin-right: initial;
+        margin-top: initial;
+        padding: 0 5px;
+        width: initial;
+      }
+    }
+  }
+
+  #related_terms_query {
+    height: 35px;
+    width: 70%;
   }
 
   .video {

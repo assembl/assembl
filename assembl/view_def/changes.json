@@ -27,6 +27,8 @@
         "for_role": true
     },
     "EmailAccount": false,
+    "WebLinkAccount": false,
+    "LoomioAccount": false,
     "IdentityProviderAccount": false,
     "IdentityProvider": {
         "name": true,
@@ -81,6 +83,12 @@
     "ImportedPost": {
         "@extends": "Post",
         "source": true
+    },
+    "FeedPost": {
+        "@extends": "ImportedPost"
+    },
+    "LoomioFeedPost": {
+        "@extends": "FeedPost"
     },
     "Email": {
         "@extends": "ImportedPost",

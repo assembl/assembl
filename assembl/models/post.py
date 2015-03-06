@@ -401,7 +401,16 @@ class ImportedPost(Post):
     
     def get_body_mime_type(self):
         return self.body_mime_type
-    
+
+    def unique_query(self):
+        query, _ = super(ImportedPost, self).unique_query()
+        source_id = self.source_id or self.source.id
+        return query.filter_by(
+            type=self.type, source_id=source_id,
+            source_post_id=self.source_post_id), True
+
+
+
 @event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)
 def receive_set(target, value, oldvalue, initiator):
     "listen for the 'set' event, keeps the message_id in Post class in sync with the source_post_id"

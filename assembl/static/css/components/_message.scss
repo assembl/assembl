@@ -70,15 +70,20 @@ $message-body: #999999;
 
   .message-subject {
     @extend .header_item_template;
-    cursor: pointer;
+    &.hidden {
+      display: none !important;
+    }
   }
 
-  .js_messageTitle {
+  .js_messageTitle, .js_messageHeader, {
     cursor: pointer;
   }
 
   .message-body.ellipsis {
     cursor: pointer;
+    //Must match height: in message.js, so that there is an elipsis before 
+    //dotdotdot renders, and so that the height doesn't change.
+    max-height: 52px;
   }
 
   .header-separator-bullet {
@@ -210,7 +215,7 @@ $message-body: #999999;
     .message-body {
       position: relative;
       padding: 0px;
-      max-height: $previewNumLines * $mesageBodyLineHeight * $messageBodyFontSize;
+      //max-height: $previewNumLines * $mesageBodyLineHeight * $messageBodyFontSize;
       overflow: hidden;
       color: $message-body;
     }
@@ -275,7 +280,7 @@ $message-body: #999999;
       margin: 0px 0px 0px $mesageSpacing; //No left margin because there is an element on the left
     }
 
-    .message-subject {
+    .message-abstract {
       @extend .header_item_template;
       overflow: hidden;
       text-align: left;
@@ -285,7 +290,7 @@ $message-body: #999999;
       > {
         white-space: normal;
       }
-      .message-title {
+      .message-subject {
         @extend .header_item_template;
         @extend .header-separator-bullet;
         text-overflow: ellipsis;
@@ -434,7 +439,7 @@ $message-body: #999999;
 
   &.SynthesisPost {
     &.viewStyleTitleOnly {
-      .message-subject {
+      .message-abstract {
         margin-left: 5px;
         padding: 0 10px;
       }

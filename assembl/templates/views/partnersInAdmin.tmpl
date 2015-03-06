@@ -2,15 +2,15 @@
 	<div class="bx bx-default">
 		<div class="gr">
 			<div class="gu gu-1of2 description">
-				<h2 class="h2 mbxl dispb mtxs"><%= partner.get('name') %></h2>
-				<% if(partner.get('description').length){ %>
-					<span class="mbxl dispb"><%= partner.get('description') %></span>
+				<h2 class="h2 mbxl dispb mtxs"><%= name %></h2>
+				<% if(_.size(description)){ %>
+					<span class="mbxl dispb"><%= description %></span>
 				<% }else{ %>
 				  <span class="mbxl dispb">{{ gettext('What is the organisation about?') }}</span>
 				<% } %>
 
-				<% if(partner.get('homepage').length){ %>
-					<a class="dispb" href="<%= partner.get('homepage') %>">{{ gettext('link') }}</a>
+				<% if(_.size(homepage)){ %>
+					<a class="dispb" href="<%= _.size(homepage) %>">{{ gettext('link') }}</a>
         <% }else{ %>
           <span class="dispb">{{ gettext('What is their website?') }}</span>
         <% } %>
@@ -21,13 +21,13 @@
 				</div>
 			</div>
 			<div class="gu gu-last">
-			<% if(partner.get('is_initiator')){ %>
+			<% if(is_initiator){ %>
 				<div class="tar mbxl">{{ gettext('is initiator') }}</div>
 			<% } %>
 				<div class="partner-img-content">
 					<div class="partner-img">
-						<% if(partner.get('logo').length){ %>
-             	<img src="<%= partner.get('logo') %>" width="200">
+						<% if(_.size(logo)){ %>
+             	<img src="<%= logo %>" width="200">
             <% }else{ %>
               <span class="dispb">{{ gettext('What is their logo?') }}</span>
             <% } %>

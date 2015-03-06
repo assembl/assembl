@@ -17,6 +17,8 @@
         "real_name": "&real_name",
         "post_count": "&count_posts_in_current_discussion",
         "preferred_email": false,
+        "was_created_on_current_discussion": false,
+        "is_first_visit": false,
         "email_accounts": [":default"],
         "identity_accounts": [":default"]
     },
@@ -27,6 +29,8 @@
         "login_failures": false,
         "password": false,
         "verified": true,
+        "is_first_visit": true,
+        "was_created_on_current_discussion": true,
         "permissions": "&get_all_permissions",
         "username": "username_p"
     },
@@ -44,6 +48,13 @@
     "EmailAccount": {
         "@extends": "AbstractAgentAccount",
         "will_merge_if_validated": "'false"
+    },
+    "WebLinkAccount": {
+        "@extends": "AbstractAgentAccount",
+        "user_link": true
+    },
+    "LoomioAccount": {
+        "@extends": "WebLinkAccount"
     },
     "IdentityProviderAccount": {
         "@extends": "AbstractAgentAccount",
@@ -64,6 +75,14 @@
     "PostSource": {
         "@extends": "ContentSource",
         "last_import": true
+    },
+    "FeedPostSource": {
+        "@extends": "PostSource",
+        "url": true,
+        "parser_full_class_name": true
+    },
+    "LoomioPostSource": {
+        "@extends": "FeedPostSource"
     },
     "AnnotatorSource": {
         "@extends": "ContentSource"
@@ -126,6 +145,12 @@
         "@extends": "Post",
         "source": true
     },
+    "FeedPost": {
+        "@extends": "ImportedPost"
+    },
+    "LoomioFeedPost": {
+        "@extends": "FeedPost"
+    },
     "Webpage": {
         "@extends": "Content",
         "last_modified_date": true,
@@ -151,7 +176,8 @@
         "introduction": true,
         "introductionDetails": true,
         "sources": [":partial"],
-        "subscribe_to_notifications_on_signup": true
+        "subscribe_to_notifications_on_signup": true,
+        "web_analytics_piwik_id_site": true
     },
     "Idea": {
         "longTitle": "long_title",

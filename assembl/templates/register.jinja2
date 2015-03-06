@@ -9,7 +9,7 @@ body{
 
 <div class="loginbox register">
     <header>
-        <h1>{{ gettext('Join Assembl') }}</h1>
+        <h1>{% if discussion_title %}{{ gettext("Join \"%(discussion_title)s\"")|format(discussion_title=discussion_title) }}{% else %}{{ gettext("Join Assembl") }}{% endif %}</h1>
     </header>
 
     <div class="content">
@@ -20,7 +20,7 @@ body{
 
         <form class="form" method="POST">
             <input type="hidden" name="next_view" value="{{next_view}}" />
-            <input type="text" name="name" class="form-control defaultfield" placeholder="{{ gettext('Username') }}" autofocus required />
+            <input type="text" name="name" class="form-control defaultfield" placeholder="{{ gettext('Full name') }}" autofocus required />
             <input type="text" name="email" class="form-control defaultfield" placeholder="{{ gettext('Email') }}" required />
             <input type="password" name="password" class="form-control defaultfield" placeholder="{{ gettext('Password') }}" required />
             <input type="password" name="password2" class="form-control defaultfield" placeholder="{{ gettext('Repeat password') }}" required />

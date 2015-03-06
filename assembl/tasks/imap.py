@@ -1,5 +1,4 @@
 from celery import Celery
-from kombu import Exchange, Queue
 
 from . import init_task_config, config_celery_app
 
@@ -14,8 +13,9 @@ def import_mails(mbox_id, only_new=True):
     # in case of previous issues
     IMAPMailbox.db.rollback()
     mailbox = IMAPMailbox.get(mbox_id)
-    assert mailbox != None
+    assert mailbox is not None
     IMAPMailbox.do_import_content(mailbox, only_new)
+
 
 def includeme(config):
     config_celery_app(imap_celery_app, config.registry.settings)

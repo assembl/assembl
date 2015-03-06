@@ -26,6 +26,7 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 [program:virtuoso]
 directory = %(here)s/var/db
 command = %(VIRTUOSO_ROOT)s/bin/virtuoso-t +foreground
+autostart = %(autostart_virtuoso)s
 autorestart = true
 startsecs = 10
 #Start virtuoso before other processes
@@ -34,32 +35,63 @@ stopsignal = INT
 
 [program:celery_imap]
 directory = %(here)s
-command = celery worker -l info -A assembl.tasks.imap -c 1 -b %(IMAP_CELERY_BROKER)s -Q imap
+command = celery worker -l info -A assembl.tasks.imap -n imap -c 1 -b %(IMAP_CELERY_BROKER)s -Q imap
+autostart = %(autostart_celery_imap)s
 autorestart = true
 startsecs = 2
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
+
 
 [program:celery_notification_dispatch]
 directory = %(here)s
-command = celery worker -l info -A assembl.tasks.notification_dispatch -c 1 -b %(NOTIF_DISPATCH_CELERY_BROKER)s -Q notification_dispatch
+command = celery worker -l info -A assembl.tasks.notification_dispatch -n notification_dispatch -c 1 -b %(NOTIF_DISPATCH_CELERY_BROKER)s -Q notification_dispatch
+autostart = %(autostart_celery_notification_dispatch)s
 autorestart = true
 startsecs = 2
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
 
 [program:celery_notify]
 directory = %(here)s
-command = celery worker -l info -A assembl.tasks.notify -c 2 -b %(NOTIFY_CELERY_BROKER)s -Q notify
+command = celery worker -l info -A assembl.tasks.notify -n notify -c 2 -b %(NOTIFY_CELERY_BROKER)s -Q notify
+autostart = %(autostart_celery_notify)s
 autorestart = true
 startsecs = 2
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
 
 [program:celery_notify_beat]
 directory = %(here)s
 command = celery -A assembl.tasks.notify beat -b %(NOTIFY_CELERY_BROKER)s
+autostart = %(autostart_celery_notify_beat)s
 autorestart = true
 startsecs = 2
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
 
 [program:changes_router]
 directory = %(here)s
 command = python assembl/tasks/changes_router.py %(CONFIG_FILE)s
+autostart = %(autostart_changes_router)s
 autorestart = true
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
 
 [group:dev]
 programs = pserve, compass
@@ -70,37 +102,37 @@ programs = uwsgi
 [program:pserve]
 directory = %(here)s
 command = pserve --reload %(CONFIG_FILE)s
-autostart = false
+autostart = %(autostart_pserve)s
 autorestart = false
 
 [program:compass]
 directory = %(here)s
 command = bundle exec compass watch
-autostart = false
+autostart = %(autostart_compass)s
 autorestart = true
 
 [program:uwsgi]
 directory = %(here)s
 command=uwsgi --die-on-term --ini %(CONFIG_FILE)s
 umask=002
-autostart = false
+autostart = %(autostart_uwsgi)s
 autorestart = true
 #user=www-data
 
 [program:metrics]
 directory = %(metrics_code_dir)s
 command=%(metrics_cl)s -l %(metrics_code_dir)s/metrics-startup.lisp
-autostart = %(has_metrics_server)s
-autorestart = %(has_metrics_server)s
+autostart = %(autostart_metrics_server)s
+autorestart = true
 
 [program:metrics_py]
 directory = %(metrics_code_dir)s
 command= %(metrics_code_dir)s/startup.py
-autostart = %(has_metrics_server)s
-autorestart = %(has_metrics_server)s
+autostart = %(autostart_metrics_server)s
+autorestart = true
 
 [program:edgesense]
 directory = %(edgesense_code_dir)s
 command=%(edgesense_venv)s/bin/edgesense_catalyst_server
-autostart = %(has_edgesense_server)s
-autorestart = %(has_edgesense_server)s
+autostart = %(autostart_edgesense_server)s
+autorestart = true

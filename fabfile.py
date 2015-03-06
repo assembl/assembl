@@ -52,7 +52,8 @@ def supervisor_restart():
     with hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl shutdown")
     #Another supervisor,upstart, etc may be watching it, give it a little while
-    sleep(2);
+    #Ideally we should wait, but I didn't have time to code it.
+    sleep(30);
     #If supervisor is already started, this will do nothing
     execute(supervisor_process_start, 'virtuoso')
 
@@ -429,6 +430,7 @@ def app_compile_nodbupdate():
     execute(virtuoso_install_if_absent)
     execute(app_setup)
     execute(compile_stylesheets)
+    execute(bower_install)
     execute(compile_messages)
     execute(minify_javascript_maybe)
 
@@ -559,18 +561,25 @@ def install_builddeps():
     if env.mac:
         if not exists('/usr/local/bin/brew'):
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
-        run('brew install memcached zeromq redis')
+        run('brew install libevent')
+        # may require a sudo
+        if not run('brew link libevent', quiet=True):
+            sudo('brew link libevent')
+        run('brew install memcached zeromq redis libtool libmemcached gawk')
         if not exists('/usr/local/bin/node'):
             run('brew install nodejs npm')
         if not exists('/usr/local/bin/autoconf'):
             run('brew install autoconf')
         if not exists('/usr/local/bin/automake'):
             run('brew install automake')
+        if not exists('/usr/local/bin/pandoc'):
+            run('brew install pandoc')
         # glibtoolize, bison, flex, gperf are on osx by default.
-        # brew does not know aclocal, autoheader... They exist on macports, but do we want to install that?
+        # brew does not know aclocal, autoheader... 
+        # They exist on macports, but do we want to install that?
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
-        sudo('apt-get install -y nodejs nodejs-legacy  npm')
+        sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
         sudo('apt-get install -y automake bison flex gperf  libxml2-dev libssl-dev libreadline-dev')
 
         #Runtime requirements (even in develop)
@@ -949,10 +958,19 @@ def virtuoso_install_if_absent():
         print(red("Virtuso not installed, installing."))
         execute(virtuoso_source_install)
 
+@task
+def virtuoso_source_upgrade():
+    "Upgrades the virtuoso server.  Currently doesn't check if we are already using the latest version."
+    #Virtuoso must be running before the process starts, so that we can 
+    #gracefully stop it later to ensure there is no trx file active.  
+    #trx files are not compatible between virtuoso versions
+    supervisor_process_start('virtuoso')
+    execute(virtuoso_source_install)
+    
 
 @task
 def virtuoso_source_install():
-    "Install the virtuoso server locally"
+    "Install the virtuoso server locally, normally not called directly (use virtuoso_source_upgrade instead)"
     virtuoso_root = get_virtuoso_root()
     virtuoso_src = get_virtuoso_src()
     branch = get_config().get('virtuoso', 'virtuoso_branch')
@@ -970,14 +988,20 @@ def virtuoso_source_install():
     with cd(virtuoso_src):
         if not exists(join(virtuoso_src, 'configure')):
             run('./autogen.sh')
+        else:
+            #Otherwise, it simply doesn't always work...
+            run('make distclean')
         #This does not work if we change the path or anything else in local.ini
         #if exists(join(virtuoso_src, 'config.status')):
         #    run('./config.status --recheck')
         #else:
 
-        run('./configure --with-readline --prefix '+virtuoso_root)
+        run('./configure --with-readline --enable-maintainer-mode --prefix '+virtuoso_root)
 
-        run('make -j4')
+        run("""physicalCpuCount=$([[ $(uname) = 'Darwin' ]] && 
+                       sysctl -n hw.physicalcpu_max ||
+                       nproc)
+               make -j $(($physicalCpuCount + 1))""")
         need_sudo = False
         if not exists(virtuoso_root):
             if not run('mkdir -p ' + virtuoso_root, quiet=True).succeeded:
@@ -990,6 +1014,8 @@ def virtuoso_source_install():
             sudo('checkinstall')
         else:
             run('make install')
+        #Makes sure there is no trx file with content
+        supervisor_process_stop('virtuoso')
         #If we ran this, there is a strong chance we just reconfigured the ini file
         # Make sure the virtuoso.ini and supervisor.ini reflects the changes
         execute(app_setup)

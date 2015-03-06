@@ -14,6 +14,8 @@
         "post_count": false,
         "email_accounts": false,
         "identity_accounts": false,
+        "was_created_on_current_discussion": false,
+        "is_first_visit": false,
         "preferred_email": false
     },
     "User": {
@@ -40,10 +42,21 @@
         "picture_url": false
     },
     "ContentSource": {
-        "discussion_id": "discussion"
+        "discussion_id": "discussion",
+        "name": true,
+        "creation_date": false
     },
     "PostSource": {
-        "@extends": "ContentSource"
+        "@extends": "ContentSource",
+        "last_import": false
+    },
+    "FeedPostSource": {
+        "@extends": "PostSource",
+        "url": true,
+        "parser_full_class_name": true
+    },
+    "LoomioPostSource": {
+        "@extends": "FeedPostSource"
     },
     "AnnotatorSource": {
         "@extends": "ContentSource"
@@ -101,7 +114,8 @@
         "objectives": true,
         "introduction": true,
         "introductionDetails": true,
-        "subscribe_to_notifications_on_signup": true
+        "subscribe_to_notifications_on_signup": true,
+        "web_analytics_piwik_id_site": true
     },
     "Idea": {
         "longTitle": "long_title",

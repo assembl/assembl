@@ -437,6 +437,12 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
             },
             */
 
+            validate: function(attrs, options){
+                /**
+                 * check typeof variable
+                 * */
+
+            }
         });
 
         /**

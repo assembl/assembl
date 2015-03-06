@@ -37,8 +37,8 @@ def upgrade(pyramid_env):
                 WHERE abstract_agent_account.id = agent_email_account.id)
             WHERE abstract_agent_account."type" = 'agent_email_account'""")
         # Force update, transaction manager saw nothing
-        aaa = db.query(m.Discussion).first()
-        flag_modified(aaa, 'slug')
+        aaa = db.query(m.Role).first()
+        flag_modified(aaa, 'name')
 
     with context.begin_transaction():
         db.execute('ALTER TABLE abstract_agent_account ADD CHECK (preferred IN (0, 1))')
@@ -64,8 +64,8 @@ def downgrade(pyramid_env):
             WHERE abstract_agent_account.id = agent_email_account.id
             AND abstract_agent_account."type" = 'agent_email_account')""")
         # Force update, transaction manager saw nothing
-        aaa = db.query(m.Discussion).first()
-        flag_modified(aaa, 'slug')
+        aaa = db.query(m.Role).first()
+        flag_modified(aaa, 'name')
 
     with context.begin_transaction():
         db.execute('ALTER TABLE agent_email_account ADD CHECK (preferred IN (0, 1))')

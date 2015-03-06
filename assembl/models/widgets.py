@@ -54,9 +54,7 @@ class Widget(DiscussionBoundBase):
 
     def __init__(self, *args, **kwargs):
         super(Widget, self).__init__(*args, **kwargs)
-        if self.id is None:
-            # object creation
-            self.interpret_settings(self.settings_json)
+        self.interpret_settings(self.settings_json)
 
     def idea_data(self, user_id):
         return []

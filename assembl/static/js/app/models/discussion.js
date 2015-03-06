@@ -16,7 +16,13 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
             'slug': '',
             '@view': '',
             'permissions': {},
-            'subscribe_to_notifications_on_signup': false
+            'subscribe_to_notifications_on_signup': false,
+            'web_analytics_piwik_id_site': null
+        },
+        validate: function(attrs, options){
+            /**
+             * check typeof variable
+             * */
         }
 
     });

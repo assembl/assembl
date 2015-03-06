@@ -1,0 +1,63 @@
+<ul class="man pan">
+
+    <!-- SUBSCRIBTION  -->
+    <li class="sub fl mrl">
+        {% if user %}
+        <% if(!role && canSubscribeToDiscussion ){ %>
+        <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('Join this group') }}</a>
+        <% } %>
+        {% else %}
+        {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
+        <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this group') }}</a>
+        {% endif %}
+        {% endif %}
+    </li>
+
+    <!-- USER PROFILE  -->
+    <li class="sub fl">
+        {% if user %}
+        <a href="#" class="avatar img-rounded mrxs">
+            <img class="user-picture" height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
+        </a>
+        {% endif %}
+    </li>
+    <li class="sub fl">
+        {% if user %}
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle username" data-toggle="dropdown" aria-expanded="false">{{ user.display_name() }}</a>
+            <ul class="dropdown-menu">
+                {% if user_profile_edit_url %}
+                <li><a href="<%= userProfile() %>"><i class="icon-options"></i>{{ gettext('Edit your profile') }}</a></li>
+                {% endif %}
+                <li><a href="<%= urlNotifications() %>"><i class="icon-bell"></i>{{ gettext('Notifications') }}</a></li>
+                <li><a href="<%= urlLogOut() %>" class="sign-out"><i class="icon-logout"></i>{{ gettext('Sign out') }}</a></li>
+            </ul>
+        </div>
+        {% else %}
+        {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
+        <a href="/{{discussion.slug}}/login" class="btn btn-default btn-xs">{{ gettext('Sign in') }}</a>
+        {% endif %}
+        {% endif %}
+    </li>
+
+    <!-- LANGUAGE  -->
+    <li class="fl">
+        <div class="dropdown fl mhs">
+            {% if locales.__len__ > 1 %}
+            <a href="#" class="dropdown-toggle user-lang fl" data-toggle="dropdown" aria-expanded="false">
+                {{locale | upper}}
+                <span class="icon-arrowdown"></span>
+            </a>
+            <ul class="dropdown-menu">
+                {% for loc in locales %}
+                {% if (loc != locale) %}
+                <li><a tabindex="-1" href="#" class="lang js_setLocale" data-locale='{{loc}}'>
+                    {{loc | upper}}
+                </a></li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </li>
+</ul>

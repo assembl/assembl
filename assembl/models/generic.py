@@ -83,6 +83,9 @@ class ContentSource(DiscussionBoundBase):
     def import_content(self, only_new=True):
         pass
 
+    def make_reader(self):
+        return None
+
     def get_discussion_id(self):
         return self.discussion_id
 
@@ -196,9 +199,6 @@ class Content(DiscussionBoundBase):
         'polymorphic_on': 'type',
         'with_polymorphic': '*'
     }
-
-    def __init__(self, *args, **kwargs):
-        super(Content, self).__init__(*args, **kwargs)
 
     def __repr__(self):
         return "<Content %s>" % repr(self.type)

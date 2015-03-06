@@ -1,18 +1,37 @@
 // The list of Ideas
 // =================
-.idealist {
 
+.idealist-header {
+  min-height: 13px;
+}
+
+.idealist-header-title {
+  display: inline-block;
 }
 
 .idealist-actions {
+  display: inline-block;
   position: absolute;
   right: 6px;
+}
+
+.ideaList .idealist-actions {
+  display: none;
+}
+
+.ideaList:hover .idealist-actions {
+  display: inline-block;
+}
+
+.idealist-actions .dropdown-menu {
+  left: auto;
+  right: 0;
 }
 
 // A row within the list of ideas
 // -----------------
 .idealist-item {
-  line-height: 40px;
+  line-height: $tableOfIdeasRowHeight;
   &.hidden {
     display: none;
   }
@@ -48,6 +67,7 @@
 .idealist-body {
   position: relative;
   //border-bottom: $idealist-border;
+  clear: both;
 
   &:hover {
     background-color: $green1;
@@ -185,6 +205,7 @@
   cursor: pointer;
   //padding-left: 10px;
   color: $black;
+  line-height: $tableOfIdeasRowHeight - 2;
 }
 
 .idealist-title-unread {
@@ -230,7 +251,7 @@
   }
 
   width: 30px;
-  height: 40px;
+  height: $tableOfIdeasRowHeight;
   display: block;
   float: left;
   cursor: pointer;
@@ -256,7 +277,7 @@
 .idealist-noarrow {
   background: url(#{$img-dir}/idealist/idealist-noarrow.png) center center no-repeat;
   width: 30px;
-  height: 40px;
+  height: $tableOfIdeasRowHeight;
   display: block;
   float: left;
 }
@@ -266,7 +287,7 @@
 .idealist-space {
   display: block;
   width: 30px;
-  height: 40px;
+  height: $tableOfIdeasRowHeight;
   float: left;
 }
 
@@ -276,26 +297,24 @@
   background: url(#{$img-dir}/idealist/idealist-bar.png) center center no-repeat;
   display: block;
   width: 30px;
-  height: 40px;
+  height: $tableOfIdeasRowHeight;
   float: left;
 }
 
 // The link between an idealist and its parent
 // --------------
-.idealist-link {
-  background: url(#{$img-dir}/idealist/idealist-link.png) center center no-repeat;
+.idealist-link, .idealist-link-last {
   display: block;
   width: 30px;
-  height: 40px;
+  height: $tableOfIdeasRowHeight;
   float: left;
+}
+.idealist-link {
+  background: url(#{$img-dir}/idealist/idealist-link.png) center center no-repeat;
 }
 
 .idealist-link-last {
   background: url(#{$img-dir}/idealist/idealist-link-last.png) center center no-repeat;
-  display: block;
-  width: 30px;
-  height: 40px;
-  float: left;
 }
 
 // the graph
@@ -321,6 +340,7 @@
   height: 0px;
   overflow: hidden;
   display: none;
+  font-size: 98.5%; // so idea titles will be smaller as their depth increase
 
   @include transition(height 0.4s);
   @include transform(translateZ(0));
@@ -338,10 +358,10 @@
 
 #idealist-list {
   .custom-checkbox {
-    height: 40px;
-    line-height: 40px;
+    height: $tableOfIdeasRowHeight;
+    line-height: $tableOfIdeasRowHeight - 2;
     float: left;
-    margin-left: 5px;
+    margin-left: 2px;
     // Don't ask
     //padding-top: 4.25px;
   }

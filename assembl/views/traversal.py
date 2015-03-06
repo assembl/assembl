@@ -466,6 +466,20 @@ class NamedCollectionInstancePredicate(object):
             and self.val == parent.collection.name())
 
 
+class SecureConnectionPredicate(object):
+    def __init__(self, val, config):
+        self.val = bool(val)
+
+    def text(self):
+        return 'secure_connection'
+
+    phash = text
+
+    def __call__(self, context, request):
+        return self.val == (
+            request.environ['wsgi.url_scheme'] == 'https')
+
+
 class CollectionContextClassPredicate(object):
     def __init__(self, val, config):
         self.val = val
@@ -664,6 +678,7 @@ def includeme(config):
         NamedCollectionContextPredicate)
     config.add_view_predicate('ctx_named_collection_instance',
         NamedCollectionInstancePredicate)
+    config.add_view_predicate('secure_connection', SecureConnectionPredicate)
     config.add_view_predicate('ctx_collection_class',
                               CollectionContextClassPredicate,
                               weighs_less_than='ctx_named_collection')

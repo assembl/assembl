@@ -1,8 +1,8 @@
 "use strict";
 
 videosApp.controller('videosCtl',
-    ['$scope', '$q', '$http', '$route', '$routeParams', '$log', '$resource', 'localConfig', 'JukeTubeVideosService', 'DiscussionService', 'sendIdeaService', 'configService', 'utils', 'AssemblToolsService', 
-        function ($scope, $q, $http, $route, $routeParams, $log, $resource, localConfig, JukeTubeVideosService, DiscussionService, sendIdeaService, configService, utils, AssemblToolsService) {
+    ['$scope', '$q', '$http', '$route', '$routeParams', '$log', '$resource', '$translate', 'localConfig', 'JukeTubeVideosService', 'DiscussionService', 'sendIdeaService', 'configService', 'utils', 'AssemblToolsService', 
+        function ($scope, $q, $http, $route, $routeParams, $log, $resource, $translate, localConfig, JukeTubeVideosService, DiscussionService, sendIdeaService, configService, utils, AssemblToolsService) {
 
             // intialization code (constructor)
 
@@ -66,11 +66,11 @@ videosApp.controller('videosCtl',
                 ];
 
                 $scope.inspiration_keywords_related = [
-                    "modèle économique",
+                    /*"modèle économique",
                     "low cost",
                     "avantage compétitif",
                     "établissement",
-                    "tactique"
+                    "tactique"*/
                 ];
 
                 $scope.inspiration_keywords_used = {};
@@ -192,6 +192,98 @@ videosApp.controller('videosCtl',
 
             };
 
+            /**
+             * Explore wikipedia and extract keywords from 'See Also' section
+             * More info on:
+             * http://www.mediawiki.org/wiki/API:Tutorial
+             * http://www.mediawiki.org/wiki/API:Query
+             * This method does not handle disambiguation nor redirection yet.
+             * @param page: "|"-separated urlencoded Wikipedia page names
+             * @param lang: 'en' or 'fr'
+             */
+            $scope.getRelatedTermsPromise = function (page, lang) {
+                if ( !lang )
+                    lang = 'en';
+                var deferred = $.Deferred();
+                $.ajax("http://"+lang+".wikipedia.org/w/api.php" +
+                    "?action=query&continue=&prop=revisions" +
+                    "&rvprop=content&format=json&titles=" + page,
+                    {
+                        dataType: "jsonp",
+                        success: function (data) {
+                            var keywords = [];
+                            var pages = data.query.pages;
+
+                            for (var p in pages) {
+                                if (p < 0) {
+                                    console.log("Page not found");
+                                    continue;
+                                }
+                                var revision = pages[p].revisions[0];
+                                var content = revision['*'];
+                                var re = null;
+                                if (lang == "en") {
+                                    re = /== ?see also ?==([^]*?)$/i;
+                                } else {
+                                    re = /(?:=== ?articles connexes ?===|== ?annexes ?==)([^]*?)$/i;
+                                }
+
+                                if (re.exec(content) == null) {
+                                    var rey = /#REDIRECT \[\[(.*)\]\]/;
+                                    if (rey.exec(content) == null) {
+                                      if ((/\{\{disambiguation\}\}/i).exec(content) != null || (/\{\{homonymie\}\}/i).exec(content) != null) {
+                                        console.log("Try disambiguation or honomymy");
+                                        var rez = /\[\[(.*?)\]\](.*)$/mg;
+                                        var dsMatch = null;
+                                        var dsArray = [];
+                                        while ((dsMatch = rez.exec(content)) != null) {
+                                          var canon = dsMatch[2].replace(/\[\[.*\|(.*)\]\]/, "[[$1]]").replace(/\[\[(.*?)\]\]/g, "$1");
+                                          dsArray.push([dsMatch[1], canon]);
+                                        }
+
+                                        console.log("dsArray:", dsArray);
+                                        // TODO: recursivity?
+
+                                        continue;
+                                      } else {
+                                        continue;
+                                      }
+                                    } else {
+                                      var target = rey.exec(content)[1];
+                                      console.log("? Follow redirection from " + pages[p].title + " to " + target);
+                                      // Wikipedia redirection pages seem to not be handled by this code
+                                      /*
+                                      window.kwargs.acc += 2;
+                                      window.kwargs.ary.push({st: "redirect", page: target, kwargs: [pages[p].title], lang: LANG});
+                                      fn.redirect(pages[p].title, target);
+                                      pages[p].title = target;
+                                      target = [];
+                                      for (var k in pages) {
+                                        target.push(pages[k].title);
+                                      }
+                                      */
+                                    }
+                                    continue;
+                                } else {
+                                    var seeAlso = re.exec(content)[1];
+                                    var match = null;
+                                    var rex = /\* ?\[\[(.*?)\]\]/g;
+                                    while ((match = rex.exec(seeAlso)) != null) {
+                                      keywords.push(match[1].replace(/.*?\|/, ""));
+                                    }
+                                }
+                            }
+                            deferred.resolve(keywords);
+                        },
+                        error: function(){
+                            deferred.reject();
+                        }
+                    }
+                );
+                return deferred.promise();
+            };
+
+
             $scope.resumeInspiration = function(){
                 console.log("resumeInspiration()");
                 $scope.message_is_sent = false;
@@ -282,6 +374,30 @@ videosApp.controller('videosCtl',
                     });
                 });
                 
+            };
+
+            $scope.searchRelatedTerms = function() {
+                console.log("searchRelatedTerms()");
+                var current_lang = $translate.use();
+                var relatedTermsPromise = $scope.getRelatedTermsPromise( $('#related_terms_query').val(), current_lang );
+                $q.when(relatedTermsPromise).then(function(data){
+                    console.log("getRelatedTermsPromise found these terms: ", data);
+                    $scope.inspiration_keywords_related = data;
+
+                    // angular does not like duplicates in a repeater and we don't need duplicates, so we remove them
+                    function onlyUnique(value, index, self) { 
+                        return self.indexOf(value) === index;
+                    }
+                    $scope.inspiration_keywords_related = $scope.inspiration_keywords_related.filter(onlyUnique);
+
+                    // if no result, show the i18n no result string in UI
+                    if ( data && data.length )
+                        $scope.inspiration_keywords_related_no_results = false;
+                    else
+                        $scope.inspiration_keywords_related_no_results = true;
+                }, function(){
+                    $scope.inspiration_keywords_related_no_results = true;
+                });
             };
 
             $scope.computeSendMessageEndpointUrl = function(){

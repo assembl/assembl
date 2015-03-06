@@ -53,6 +53,7 @@ class Discussion(DiscussionBoundBase):
     introductionDetails = Column(UnicodeText)
     settings = Column(Text())  # JSON blob
     subscribe_to_notifications_on_signup = Column(Boolean, default=False)
+    web_analytics_piwik_id_site = Column(Integer, nullable=True, default=None)
 
     @property
     def admin_source(self):
@@ -123,8 +124,10 @@ class Discussion(DiscussionBoundBase):
         participant_template = UserTemplate(discussion=self, for_role=participant)
         self.db.add(participant_template)
 
-    def unique_query(self, query):
-        return query.filter_by(slug=self.slug), True
+    def unique_query(self):
+        # DiscussionBoundBase is misleading here
+        return self.db.query(self.__class__).filter_by(
+            slug=self.slug), True
 
     def serializable(self):
         return {
@@ -303,6 +306,7 @@ class Discussion(DiscussionBoundBase):
     def reset_participant_default_subscriptions(self, force=True):
         template, changed = self.get_participant_template()
         # TODO maparent: This is too slow. I need to preload subscriptions.
+        # Consider improving NotificationSubscription.reset_defaults
         if changed or force:
             for participant in self.all_participants:
                 participant.get_notification_subscriptions(self.id, True)

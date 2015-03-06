@@ -12,5 +12,9 @@
     "resumeInspirationButton": "Continue searching for inspiration",
     "exitButton": "Return to the debate",
     "videoNoSearchResults": "There are no results for this search query.",
-    "videoSearch": "Search"
+    "videoSearch": "Search",
+    "videoSearchPlaceholderText": "Type here your search query...",
+    "videoTopExplanationRelatedTermsTitle": "Related terms (via Wikipedia)",
+    "videoTopExplanationRelatedTermsDescription": "You can also type here a concept for which you would like to find some related terms. Then click on the found terms to add them to your video search.",
+    "videoNoRelatedTermsSearchResults": "There are no results for this search query."
 }

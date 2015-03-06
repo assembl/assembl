@@ -31,7 +31,7 @@ backports.ssl-match-hostname==3.4.0.2
 beautifulsoup4==4.3.2
 billiard==3.3.0.19
 celery==3.1.17
-cffi==0.8.6
+cffi==0.9.0
 colander==1.0
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 cov-core==1.15.0
@@ -43,15 +43,18 @@ dogpile.core==0.4.1
 dnspython==1.12.0
 ecdsa==0.13
 enum34==1.0.4
+feedparser==5.1.3
+-e git+https://github.com/maparent/fuxi.git#egg=fuxi
 greenlet==0.4.5
 html5lib==0.999
 imaplib2==2.38.0
 isodate==0.5.1
+iso639==0.1.1
 iso8601==0.1.10
 -e git+https://github.com/maparent/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.24
-lingua==3.8
+lingua==3.9
 lxml==3.4.2
 meld3==1.0.0
 mock==1.0.1
@@ -59,15 +62,16 @@ oauthlib==0.7.2
 paramiko==1.15.2
 pinocchio==0.4.2
 polib==1.0.6
-premailer==2.8.1
+premailer==2.8.3
 py==1.4.26
 pyOpenSSL==0.14
 pycparser==2.10
 pycrypto==2.6.1
 pyIsEmail==1.1.0
 pylibmc==1.4.1
+-e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 pyparsing==2.0.3
-pyramid==1.5.2
+pyramid==1.5.4
 pyramid-beaker==0.8
 pyramid-debugtoolbar==2.3
 -e git+https://github.com/jvanasco/pyramid_debugtoolbar_ajax.git#egg=pyramid-debugtoolbar-ajax
@@ -86,21 +90,22 @@ python-openid==2.2.5
 pytz==2014.10
 pyzmq==14.5.0
 rdflib==4.2.0
+-e git+https://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
 redis==2.10.3
 docutils==0.12
 raven==5.2.0
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1
-requests==2.5.1
+requests==2.5.3
 requests-oauthlib==0.4.2
-selenium==2.44.0
+selenium==2.45.0
 simplejson==3.6.5
 six==1.9.0
 -e git+https://github.com/maparent/sockjs-tornado.git@master#egg=sockjs_tornado
 sockjsproxy==0.7.1
 sphinx-bootstrap-theme==0.4.5
-splinter==0.7.0
+-e git+https://github.com/maparent/splinter.git#egg=splinter
 supervisor==3.1.3
 tornado==4.1
 transaction==1.4.3
@@ -109,6 +114,7 @@ uricore==0.1.2
 uwsgitop==0.8
 -e git+https://github.com/maparent/velruse.git#egg=velruse
 venusian==1.0
+-e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
 waitress==0.8.9
 wsgiref==0.1.2
 xlrd==0.9.3
@@ -118,11 +124,5 @@ zope.event==4.0.3
 zope.deprecation==4.1.2
 zope.interface==4.1.2
 zope.sqlalchemy==0.7.5
--e git+https://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
--e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
--e git+https://github.com/maparent/fuxi.git#egg=fuxi
--e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
-# hapi : a OAuth2 server for pyramid. Still very much work in progress.
-# Also https://github.com/sneridagh/osiris (depends on mongo and old pyramid_who)
-# https://github.com/elliotpeele/pyramid_oauth2_provider (not enough dependencies! But looks good otherwise)
-# oauthlib has provider support but no pyramid adapter. Sigh. The flask adapter may be useful.
+# To be watched:
+# https://github.com/elliotpeele/pyramid_oauth2_provider

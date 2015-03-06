@@ -17,13 +17,20 @@ define(['jquery', 'models/base', 'utils/i18n', 'common/context'],
              * Defaults
              * @type {Object}
              */
-            idAttribute: '@id',
+
             defaults: {
                 name: '',
                 description: '',
                 homepage: '',
                 logo: '',
                 is_initiator: false
+            },
+
+            validate: function(attrs, options){
+                /**
+                 * check typeof variable
+                 * */
+
             }
         });
 

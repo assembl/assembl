@@ -1,9 +1,9 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager', 'common/context', 'models/discussion', 'models/discussionSource', 'utils/i18n'],
-    function (Marionette, $, _, CollectionManager, Ctx, Discussion, DiscussionSource, i18n) {
+define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager', 'common/context', 'models/discussion', 'models/discussionSource', 'utils/i18n', 'jquery-autosize', 'bluebird'],
+    function (Marionette, $, _, CollectionManager, Ctx, Discussion, DiscussionSource, i18n, autosize, Promise) {
 
-        var adminDiscussion = Marionette.LayoutView.extend({
+        var adminDiscussion = Marionette.ItemView.extend({
             template: '#tmpl-adminDiscussion',
             className: 'admin-notifications',
             ui: {
@@ -15,6 +15,9 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
 
                 this.model = undefined;
 
+
+                
+
                 $.when(collectionManager.getDiscussionModelPromise()).then(
                     function (Discussion) {
                         that.model =  Discussion;
@@ -22,7 +25,9 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
                     });
 
             },
-
+            onRender: function(){
+                this.$('#introduction').autosize();
+            },
             events: {
               'click @ui.discussion': 'saveDiscussion'
             },
@@ -40,13 +45,15 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
                 var introduction = this.$('textarea[name=introduction]').val(),
                     topic = this.$('input[name=topic]').val(),
                     slug = this.$('input[name=slug]').val(),
-                    objectives = this.$('textarea[name=objectives]').val();
+                    objectives = this.$('textarea[name=objectives]').val(),
+                    web_analytics_piwik_id_site = parseInt(this.$('#web_analytics_piwik_id_site').val());
 
                 this.model.set({
                     introduction:introduction,
                     topic: topic,
                     slug: slug,
-                    objectives: objectives
+                    objectives: objectives,
+                    web_analytics_piwik_id_site: web_analytics_piwik_id_site
                 });
 
                 this.model.save(null, {

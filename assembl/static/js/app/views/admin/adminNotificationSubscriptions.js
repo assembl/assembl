@@ -38,48 +38,20 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
             template: '#tmpl-adminNotificationList',
             childView: notifications,
             childViewContainer: '.control-group',
-            className:'mtl',
-            initialize: function(){
-                var collectionManager = new CollectionManager(),
-                    that = this;
-
-                this.collection = undefined;
-
-                $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then(
-                    function (NotificationsDiscussion) {
-                        that.collection = NotificationsDiscussion;
-                        that.render();
-                    });
-            }
+            className:'mtl'
         });
 
         var defaultNotification = Marionette.ItemView.extend({
             template: '#tmpl-defaultNotification',
-            initialize: function(){
-                var collectionManager = new CollectionManager(),
-                    that = this;
-
-                this.model = undefined;
-
-                $.when(collectionManager.getDiscussionModelPromise()).then(function (Discussion) {
-                    that.model = Discussion;
-                    that.render();
-                });
-            },
             ui: {
                 autoSubscribeCheckbox: ".js_adminAutoSubscribe"
             },
             events: {
                 'click @ui.autoSubscribeCheckbox': 'updateAutoSubscribe'
             },
-            serializeData: function () {
-                return {
-                    discussion: this.model
-                }
-            },
+
             updateAutoSubscribe: function(){
-                var that = this,
-                    val = (this.$('.autoSubscribe:checked').val()) ? true : false;
+                var val = (this.$('.autoSubscribe:checked').val()) ? true : false;
 
                 this.model.set('subscribe_to_notifications_on_signup', val);
 
@@ -116,12 +88,26 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                 }
             },
 
-            onRender: function(){
-                var notif = new notificationList();
-                this.notification.show(notif);
+            onBeforeShow: function(){
+                var that = this,
+                    collectionManager = new CollectionManager();
 
-                var defaultNotif = new defaultNotification();
-                this.autoSubscribe.show(defaultNotif);
+                $.when(collectionManager.getDiscussionModelPromise(),
+                    collectionManager.getNotificationsDiscussionCollectionPromise())
+                    .then(function (Discussion, NotificationsDiscussion) {
+
+                        var defaultNotif = new defaultNotification({
+                            model: Discussion
+                        });
+                        that.getRegion('autoSubscribe').show(defaultNotif);
+
+                        var notif = new notificationList({
+                            collection: NotificationsDiscussion
+                        });
+                        that.getRegion('notification').show(notif);
+
+                    });
+
             },
 
             close: function () {

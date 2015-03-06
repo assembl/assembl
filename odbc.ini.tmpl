@@ -1,12 +1,12 @@
 [ODBC Data Sources]
-VOSU = localhost virtuoso
+VOSU = Virtuoso
 
 [VOSU]
 Description = Open Virtuoso
 Driver      = %(VIRTUOSO_ROOT_LIB)s/virtodbcu_r.so
 UserName    = dba
 Password    = dba
-Address     = localhost:%(VIRTUOSO_PORT)d
+Address     = %(VIRTUOSO_HOSTNAME)s:%(VIRTUOSO_PORT)d
 Locale      = en.UTF-8
 
 [ODBC]

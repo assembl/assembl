@@ -4,7 +4,6 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
 
     var sourceModel = Base.Model.extend({
         urlRoot: Ctx.getApiV2DiscussionUrl()+'sources',
-        idAttribute: '@id',
         defaults: {
             'name': '',
             'admin_sender': '',
@@ -16,6 +15,12 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
             'folder': '',
             'use_ssl': false,
             'port': 0
+        },
+        validate: function(attrs, options){
+            /**
+             * check typeof variable
+             * */
+
         }
 
     });

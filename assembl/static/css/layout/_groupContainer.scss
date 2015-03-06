@@ -122,6 +122,7 @@
           font-size: $smallFontSize;
           &.active {
             background-color: $theme_navigation_menu_bg_active;
+            color: $theme_navigation_text_color_active;
             i:not(.icon-arrowleft) {
               color: $theme_navigation_icon_color_active;
             }

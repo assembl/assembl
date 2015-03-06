@@ -62,20 +62,31 @@ def db_tables(request, empty_db, app_settings):
     return empty_db  # session_factory
 
 
+@pytest.fixture(scope="session")
+def base_registry(request, app_settings):
+    from assembl.views.traversal import root_factory
+    from pyramid.config import Configurator
+    from zope.component import getGlobalSiteManager
+    registry = getGlobalSiteManager()
+    config = Configurator(registry)
+    config.setup_registry(
+        settings=app_settings, root_factory=root_factory)
+    configure_tasks(registry, 'assembl')
+    return registry
+
+
 @pytest.fixture(scope="module")
-def test_app_no_perm(request, app_settings):
+def test_app_no_perm(request, app_settings, base_registry):
     global_config = {
         '__file__': request.config.getoption('test_settings_file'),
         'here': get_distribution('assembl').location
     }
-    app = TestApp(assembl.main(
+    return TestApp(assembl.main(
         global_config, nosecurity=True, **app_settings))
-    configure_tasks(app.app.registry, 'assembl')
-    return app
 
 
 @pytest.fixture(scope="module")
-def db_default_data(request, db_tables, app_settings, test_app_no_perm):
+def db_default_data(request, db_tables, app_settings, base_registry):
     bootstrap_db_data(db_tables)
     transaction.commit()
 
@@ -100,7 +111,7 @@ def test_session(request, db_default_data):
 
 
 @pytest.fixture(scope="function")
-def discussion(request, test_session, test_app_no_perm):
+def discussion(request, test_session):
     from assembl.models import Discussion
     d = Discussion(topic=u"Jack Layton", slug="jacklayton2", settings="{}")
     test_session.add(d)
@@ -121,7 +132,7 @@ def discussion(request, test_session, test_app_no_perm):
 
 
 @pytest.fixture(scope="function")
-def discussion2(request, test_session, test_app_no_perm):
+def discussion2(request, test_session):
     from assembl.models import Discussion
     d = Discussion(topic=u"Second discussion", slug="testdiscussion2")
     test_session.add(d)
@@ -144,7 +155,7 @@ def discussion2(request, test_session, test_app_no_perm):
 @pytest.fixture(scope="function")
 def admin_user(request, test_session, db_default_data):
     from assembl.models import User, UserRole, Role
-    u = User(name=u"Mr. Adminstrator", type="user")
+    u = User(name=u"Mr. Administrator", type="user")
     test_session.add(u)
     r = Role.get_role(test_session, R_SYSADMIN)
     ur = UserRole(user=u, role=r)
@@ -249,6 +260,12 @@ def jack_layton_mailbox(request, discussion, test_session):
 
     def fin():
         print "finalizer jack_layton_mailbox"
+        agents = set()
+        for post in m.contents:
+            agents.add(post.creator)
+            test_session.delete(post)
+        for agent in agents:
+            test_session.delete(agent)
         test_session.delete(m)
         test_session.flush()
     request.addfinalizer(fin)

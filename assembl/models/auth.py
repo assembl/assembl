@@ -17,7 +17,8 @@ from sqlalchemy import (
     Time,
     Binary,
     desc,
-    Index
+    Index,
+    UniqueConstraint
 )
 
 from pyramid.httpexceptions import (
@@ -26,7 +27,7 @@ from sqlalchemy.orm import (
     relationship, backref, deferred, with_polymorphic)
 from sqlalchemy import inspect
 from sqlalchemy.types import Text
-from sqlalchemy.schema import Index
+from sqlalchemy.schema import (Index, UniqueConstraint)
 from sqlalchemy.orm.attributes import NO_VALUE
 from pyramid.security import Everyone, Authenticated
 from virtuoso.vmapping import IriClass
@@ -39,6 +40,23 @@ from ..auth import *
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, CATALYST, QUADNAMES, VERSION, FOAF, DCTERMS, RDF, VirtRDF)
 from ..semantic.virtuoso_mapping import QuadMapPatternS, USER_SECTION
+from iso639 import *
+
+
+# None-tolerant min, max
+def minN(a, b):
+    if a is None:
+        return b
+    if b is None:
+        return a
+    return min(a, b)
+
+def maxN(a, b):
+    if a is None:
+        return b
+    if b is None:
+        return a
+    return max(a, b)
 
 
 class AgentProfile(Base):
@@ -124,6 +142,22 @@ class AgentProfile(Base):
         for action in session.query(Action).filter_by(
             actor_id=other_profile.id).all():
                 action.actor = self
+        my_status_by_discussion = {
+            s.discussion_id: s for s in self.agent_status_in_discussion
+        }
+
+        for status in other_profile.agent_status_in_discussion:
+            if status.discussion_id in my_status_by_discussion:
+                my_status = my_status_by_discussion[status.discussion_id]
+                my_status.user_created_on_this_discussion |= status.user_created_on_this_discussion
+                my_status.first_visit = minN(my_status.first_visit, status.first_visit)
+                my_status.last_visit = maxN(my_status.last_visit, status.last_visit)
+                my_status.first_subscribed = minN(my_status.first_subscribed, status.first_subscribed)
+                my_status.last_unsubscribed = minN(my_status.last_unsubscribed, status.last_unsubscribed)
+                status.delete()
+            else:
+                status.agent_profile = self
+
 
     def has_permission(self, verb, subject):
         if self is subject.owner:
@@ -167,7 +201,7 @@ class AgentProfile(Base):
             'name': self.name or self.display_name()
         }
 
-    def get_agent_preload(self, view_def=None):
+    def get_agent_preload(self, view_def='default'):
         if view_def:
             result = self.generic_json(view_def, user_id=self.id)
         else:
@@ -186,6 +220,47 @@ class AgentProfile(Base):
         if discussion is None:
             return None
         return self.count_posts_in_discussion(discussion.id)
+
+    def get_status_in_discussion(self, discussion_id):
+        return self.db.query(AgentStatusInDiscussion).filter_by(
+            discussion_id=discussion_id, profile_id=self.id).first()
+
+    @property
+    def status_in_current_discussion(self):
+        # Use from api v2
+        from ..auth.util import get_current_discussion
+        discussion = get_current_discussion()
+        if discussion:
+            return self.get_status_in_discussion(discussion.id)
+
+    def is_visiting_discussion(self, discussion_id):
+        agent_status = self.get_status_in_discussion(discussion_id)
+        now = datetime.utcnow()
+        if agent_status:
+            agent_status.last_visit = now
+            if agent_status.first_visit is None:
+                agent_status.first_visit = now
+        else:
+            agent_status = AgentStatusInDiscussion(
+                agent_profile=self, discussion_id=discussion_id,
+                first_visit=now, last_visit=now)
+            self.db.add(agent_status)
+        return agent_status
+
+    # True iff the user visits current discussion for the first time
+    @property
+    def is_first_visit(self):
+        status = self.status_in_current_discussion
+        if status:
+            return status.last_visit == status.first_visit
+
+    @property
+    def was_created_on_current_discussion(self):
+        # Use from api v2
+        status = self.status_in_current_discussion
+        if status:
+            return status.user_created_on_this_discussion
+        return False
 
     def get_preferred_locale(self):
         # TODO: per-user preferred locale
@@ -297,6 +372,11 @@ class EmailAccount(AbstractAgentAccount):
 
     def avatar_url(self, size=32, default=None):
         return self.avatar_url_for(self.email, size, default)
+
+    def unique_query(self):
+        query, _ = super(EmailAccount, self).unique_query()
+        return query.filter_by(
+            type=self.type, email=self.email), True
 
     @staticmethod
     def avatar_url_for(email, size=32, default=None):
@@ -438,6 +518,12 @@ class IdentityProviderAccount(AbstractAgentAccount):
                     break
             return size_name.join(self.picture_url.split('_normal'))
 
+    def unique_query(self):
+        query, _ = super(IdentityProviderAccount, self).unique_query()
+        return query.filter_by(
+            type=self.type, provider_id=self.provider_id,
+            username=self.username), True
+
     @property
     def profile_info_json(self):
         if self.profile_info:
@@ -449,6 +535,35 @@ class IdentityProviderAccount(AbstractAgentAccount):
         self.profile_info = json.dumps(val)
         self.interpret_profile(val)
 
+
+class AgentStatusInDiscussion(DiscussionBoundBase):
+    __tablename__ = 'agent_status_in_discussion'
+    __table_args__ = (
+        UniqueConstraint('discussion_id', 'profile_id'), )
+
+    id = Column(Integer, primary_key=True)
+    discussion_id = Column(Integer, ForeignKey(
+        "discussion.id", ondelete='CASCADE', onupdate='CASCADE'))
+    discussion = relationship(
+        "Discussion", backref=backref(
+            "agent_status_in_discussion", cascade="all, delete-orphan"))
+    profile_id = Column(Integer, ForeignKey(
+        "agent_profile.id", ondelete='CASCADE', onupdate='CASCADE'))
+    agent_profile = relationship(
+        AgentProfile, backref=backref(
+            "agent_status_in_discussion", cascade="all, delete-orphan"))
+    first_visit = Column(DateTime)
+    last_visit = Column(DateTime)
+    first_subscribed = Column(DateTime)
+    last_unsubscribed = Column(DateTime)
+    user_created_on_this_discussion = Column(Boolean, server_default='0')
+
+    def get_discussion_id(self):
+        return self.discussion_id
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.id == discussion_id,)
 
 
 class User(AgentProfile):
@@ -574,6 +689,8 @@ class User(AgentProfile):
             size, app_url, email or self.preferred_email)
 
     def display_name(self):
+        if self.name:
+            return self.name
         if self.username:
             return self.username.username
         return super(User, self).display_name()
@@ -749,13 +866,16 @@ class User(AgentProfile):
                 subscribed[subscription.__class__] |= subscription.status == NotificationSubscriptionStatus.ACTIVE
         if reset_defaults:
             for sub in my_subscriptions[:]:
-                if (sub.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT
-                        and sub.status == NotificationSubscriptionStatus.ACTIVE
-                        and sub.__class__ in subscribed  # only actual defaults
-                        and not subscribed[sub.__class__]):
-                    self.db.delete(sub)
-                    my_subscriptions.remove(sub)
-                    my_subscriptions_classes.discard(sub.__class__)
+                if (sub.creation_origin ==
+                        NotificationCreationOrigin.DISCUSSION_DEFAULT
+                        # only actual defaults
+                        and sub.__class__ in subscribed):
+                    if (sub.status == NotificationSubscriptionStatus.ACTIVE
+                            and not subscribed[sub.__class__]):
+                        sub.status = NotificationSubscriptionStatus.INACTIVE_DFT
+                    elif (sub.status == NotificationSubscriptionStatus.INACTIVE_DFT
+                            and subscribed[sub.__class__]):
+                        sub.status = NotificationSubscriptionStatus.ACTIVE
             missing = set(needed_classes) - my_subscriptions_classes
         defaults = []
         for cls in missing:
@@ -880,13 +1000,12 @@ class LocalUserRole(DiscussionBoundBase):
     def get_role_name(self):
         return self.role.name
 
-    def unique_query(self, query):
-        query, _ = super(LocalUserRole, self).unique_query(query)
+    def unique_query(self):
+        query, _ = super(LocalUserRole, self).unique_query()
         user_id = self.user_id or self.user.id
         role_id = self.role_id or self.role.id
-        discussion_id = self.discussion_id or self.discussion.id
         return query.filter_by(
-            user_id=user_id, role_id=role_id, discussion_id=discussion_id), True
+            user_id=user_id, role_id=role_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -1065,9 +1184,9 @@ class UserTemplate(DiscussionBoundBase, User):
     @classmethod
     def get_applicable_notification_subscriptions_classes(cls):
         """
-        The classes of notifications subscriptions that make sense to put in 
+        The classes of notifications subscriptions that make sense to put in
         a template user.
-        
+
         Right now, that is all concrete classes that are global to the discussion.
         """
         from ..lib.utils import get_concrete_subclasses_recursive
@@ -1164,8 +1283,8 @@ class PartnerOrganization(DiscussionBoundBase):
 
     is_initiator = Column(Boolean)
 
-    def unique_query(self, query):
-        query, _ = super(PartnerOrganization, self).unique_query(query)
+    def unique_query(self):
+        query, _ = super(PartnerOrganization, self).unique_query()
         return query.filter_by(name=self.name), True
 
     def get_discussion_id(self):
@@ -1176,3 +1295,43 @@ class PartnerOrganization(DiscussionBoundBase):
         return (cls.discussion_id == discussion_id,)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
+
+class UserLanguagePreference(Base):
+    __tablename__= 'user_language_preference'
+    __table_args__ = (UniqueConstraint('user_id', 'lang_code'), )
+
+    id = Column(Integer, primary_key=True)
+
+    user_id = Column(Integer, ForeignKey(
+                     User.id, ondelete='CASCADE', onupdate='CASCADE'))
+
+    lang_code = Column(String(), nullable=False)
+
+    # Sort the preference, from lowest to highest
+    # Ascending order prefered
+    preferred_order = Column(Integer, nullable=False)
+    explicitly_defined = Column(Boolean, nullable=False, default=False,
+                                server_default='0')
+
+
+    user = relationship('User', backref=backref(
+                        'language_preference', cascade='all, delete-orphan',
+                        order_by=preferred_order))
+
+    @property
+    def language_code(self):
+        return self.lang_code
+    @language_code.setter
+    def language_code(self, code):
+        # Following the ISO 639-2 Standard
+        if is_valid639_2(code):
+            self.lang_code = code
+        elif is_valid639_1(code):
+            self.lang_code = to_iso639_2(code)
+        else:
+            full_name = code.lower().capitalize()
+            if is_iso639_2(full_name):
+                self.lang_code = to_iso639_2(full_name)
+            else:
+                raise ValueError("The input %s is not a valid input" % code)

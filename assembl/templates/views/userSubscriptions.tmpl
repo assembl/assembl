@@ -1,12 +1,11 @@
 <% if(role){ %>
-   <% if(role.isUserSubscribed()){ %>
-   	<input type="checkbox" class="js_userNotification" value="<%= subscription.get('@type') %>" id="<%= subscription.get('@id') %>" <%= subscription.get('status') === 'ACTIVE' ? 'checked' : '' %> >
-   	<%= i18n.gettext(subscription.get('human_readable_description')) %>
-   <% } else { %>
-   	<input type="checkbox" class="" value="<%= subscription.get('@type') %>" id="<%= subscription.get('@id') %>" disabled="disabled">
-   	<%= i18n.gettext(subscription.get('human_readable_description')) %>
-   <% } %>
+    <input type="checkbox" class="js_userNotification" value="<%= subscription.get('@type') %>" id="<%= subscription.get('@id') %>" <%= subscription.get('status') === 'ACTIVE' ? 'checked' : '' %> >
+    <%= i18n.gettext(subscription.get('human_readable_description')) %>
+<% } else { %>
+    <input type="checkbox" class="" value="<%= subscription.get('@type') %>" id="<%= subscription.get('@id') %>" disabled="disabled">
+    <%= i18n.gettext(subscription.get('human_readable_description')) %>
 <% } %>
+
 
 
 

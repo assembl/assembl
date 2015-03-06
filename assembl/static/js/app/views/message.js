@@ -67,6 +67,8 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 this.listenTo(this.model, 'change', this.render);
 
                 this.messageListView = options.messageListView;
+                this.messageFamilyView = options.messageFamilyView;
+                
                 this.viewStyle = this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this);
                 this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
                 this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
@@ -84,7 +86,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              */
             events: {
 
-                //'click .js_messageHeader': 'onMessageTitleClick',
+                'click .js_messageHeader': 'onMessageTitleClick',
                 'click .js_messageTitle': 'onMessageTitleClick',
                 'click .js_readMore': 'onMessageTitleClick',
                 'click .js_readLess': 'onMessageTitleClick',
@@ -163,6 +165,15 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
 
                         data['viewStyle'] = that.viewStyle;
                         bodyFormat = that.model.get('bodyMimeType');
+                        if (bodyFormat == "text/plain") {
+                          //Make really sure no HTML leaked into the plain text
+                          data['body'] = Ctx.escapeHtml(data['body']);
+                        }
+                        else {
+                          //For better or worse, we assume the backend did a good job...
+                          ;
+                        }
+                        
                         if (that.viewStyle == that.availableMessageViewStyles.PREVIEW || that.viewStyle == that.availableMessageViewStyles.TITLE_ONLY) {
                             if (bodyFormat == "text/html") {
                                 //Strip HTML from preview
@@ -209,8 +220,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         data = that.transformDataBeforeRender(data);
                         that.$el.html(that.template(data));
                         Ctx.initTooltips(that.$el);
-                        if ( that.viewStyle == that.availableMessageViewStyles.FULL_BODY )
-                        {
+                        if ( that.viewStyle == that.availableMessageViewStyles.FULL_BODY ){
                             Ctx.convertUrlsToLinks(that.$el.children('.message-body')); // we target only the body part of the message, not the title
                             Ctx.makeLinksShowOembedOnHover(that.$el.children('.message-body'));
                         }
@@ -251,41 +261,51 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                         if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY && that.messageListView.defaultMessageStyle != that.availableMessageViewStyles.FULL_BODY) {
                             that.showReadLess();
                         }
+                        if(that.messageListView.iSviewStyleThreadedType() 
+                            && that.messageFamilyView.currentLevel !== 1) {
+                          $.when(that.model.getParentPromise()).then(function(parentMessageModel){
+                            //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
+                            if(parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe() ) {
+                              //console.log("Hiding redundant title")
+                              that.$(".message-subject").addClass('hidden');
+                            }
+                          });
+                        }
 
                         if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
 
-                            var applyEllipsis = function()
-                            {
+                            var applyEllipsis = function(){
                                 /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
                                  * Read More links for message previews
                                  */
                                 that.$(".ellipsis").dotdotdot({
-                                    after: "a.readMore",
+                                    after: ".readMoreOrLess",
+                                    ellipsis: '... ',
+                                    //Must match the max-height in .message-body.ellipsis of _message.scss so that the height doesn't change after dotdotdot renders
+                                    height: 52,  //3 lines of text, was 70 for 4 lines of text
                                     callback: function (isTruncated, orgContent) {
                                         //console.log("dotdotdot initialized on message", that.model.id);
                                         //console.log(isTruncated, orgContent);
-                                        if (isTruncated)
-                                        {
-                                            that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
-                                        }
-                                        else
-                                        {
-                                            that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
-                                            if ( data['body'].length > 610 ) // approximate string length for text which uses 4 full lines
-                                            {
+                                        if (isTruncated){
+                                            that.$(".readMoreOrLess").removeClass('hidden');
+                                        } else {
+                                            that.$(".readMoreOrLess").addClass('hidden');
+                                            /* This triggers automatically and uselessly when the home page loads.  
+                                             * Disabling, it rarely triggers when it would help these days.
+                                             * benoitg 2015-3-3
+                                             if ( data['body'].length > 610 ) {// approximate string length for text which uses 4 full lines
                                                 console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
-                                                if ( ++that.reRendered < 5 ) // we use this to avoid infinite loop of render() calls
-                                                {
+                                                if ( ++that.reRendered < 5 ){ // we use this to avoid infinite loop of render() calls
+
                                                     console.log("yes, we will re-render => tries: ", that.reRendered);
                                                     setTimeout(function(){
                                                         that.render();
                                                     }, 500);
                                                 }
-                                                else
-                                                {
+                                                else{
                                                     console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
                                                 }
-                                            }
+                                            }*/
                                         }
                                     },
                                     watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
@@ -295,14 +315,6 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                             that.messageListView.requestPostRenderSlowCallback(function () {
 
                                 setTimeout(function(){
-                                    //console.log("Initializing ellipsis on message", that.model.id);
-                                    var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
-                                    //console.log("current_navigation_state:", current_navigation_state);
-                                    if ( current_navigation_state == 'home' )
-                                    {
-                                        that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
-                                        return;
-                                    }
                                     applyEllipsis();
                                 }, 100);
                                 
@@ -315,6 +327,23 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                                  that.$(".ellipsis").trigger('update.dot');
                                  });*/
                             });
+                            
+                            var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+                            //console.log("current_navigation_state:", current_navigation_state);
+                            //Why do we need the following block?  benoitg-2015-03-03
+                            //console.log('current_navigation_state is:', current_navigation_state);
+                            if ( current_navigation_state !== undefined ){
+                              //console.log('Setting listener on navigation:selected');
+                              that.listenTo(Assembl.vent, 'navigation:selected', function(navSection) {
+                                //console.log('New navigation has just been selected:', navSection);
+                                if(navSection == 'debate') {
+                                  //console.log('Updating dotdotdot because debate has just been selected');
+                                  that.messageListView.requestPostRenderSlowCallback(function () {
+                                    that.$(".ellipsis").trigger('update.dot');
+                                  });
+                                }
+                              });
+                            }
 
                         }
                     });

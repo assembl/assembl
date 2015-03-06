@@ -6,7 +6,7 @@
             <a href="#edition" class="menu">{{ gettext('Edit discussion') }}</a>
           </li>
           <li>
-						<a href="#settings" class="menu">{{ gettext('Discussion settings') }}</a>
+						<a href="#settings" class="menu">{{ gettext('Server settings') }}</a>
 					</li>
           <li>
             <a href="#notifications" class="menu">{{ gettext('Edit notifications') }}</a>
@@ -23,7 +23,7 @@
   <div class="gu gu-3of4 admin-section">
     <section class="section">
     <div class="admin-title">
-      <h3 class="h3">Edition</h3>
+      <h3 class="h3">{{ gettext('Edit discussion') }}</h3>
     </div>
     <div id="content-container" class="content-container">
       <div class="gr">
@@ -36,38 +36,46 @@
            {% endif %}
              <form class="core-form form-horizontal mtl" id="adminDiscussion">
                <fieldset class="phl">
-
-								<div class="control-group fr">
-									 <label for="introduction" class="control-label fl">Introduction</label>
-									 <div class="controls fl">
-									 	 <textarea rows="10" id="introduction" name="introduction" class="input-xxlarge"><%= discussion.get('introduction') %></textarea>
-									 </div>
-								 </div>
-
-								 <div class="control-group fr">
-										<label for="objectives" class="control-label fl">Objectives</label>
-										<div class="controls fl">
-											<textarea rows="3" id="objectives" name="objectives" class="input-xxlarge"><%= discussion.get('objectives') %></textarea>
-										</div>
-									</div>
-
-                 <div class="control-group fr">
-                   <label for="topic" class="control-label fl">Topic</label>
-                   <div class="controls fl">
-                     <input type="text" id="topic" name="topic" class="input-xxlarge" value="<%= discussion.get('topic') %>" />
+                   <div class="control-group fr">
+                       <label for="topic" class="control-label fl">{{ gettext("Discussion topic") }}</label>
+                       <div class="controls fl">
+                           <input type="text" id="topic" name="topic" class="input-xxlarge" value="<%= discussion.get('topic') %>" />
+                       </div>
                    </div>
-                 </div>
 
-                 <div class="control-group fr">
-                   <label for="slug" class="control-label fl">Slug</label>
-                   <div class="controls fl">
-                     <input type="text" id="slug" name="slug" class="input-xxlarge" value="<%= discussion.get('slug') %>" />
+                   <div class="control-group fr">
+                       <label for="slug" class="control-label fl">{{ gettext("Discussion slug") }}</label>
+                       <div class="controls fl">
+                           <input type="text" id="slug" name="slug" class="input-xxlarge" value="<%= discussion.get('slug') %>" />
+                       </div>
                    </div>
-                 </div>
+
+                    <div class="control-group fr">
+                         <label for="introduction" class="control-label fl">{{ gettext("Introduction") }}</label>
+                         <div class="controls fl">
+                             <textarea id="introduction" name="introduction" class="input-xxlarge"><%= discussion.get('introduction') %></textarea>
+                         </div>
+                     </div>
+
+                      <div class="control-group fr">
+                        <label for="objectives" class="control-label fl">{{ gettext("Objectives") }}</label>
+                        <div class="controls fl">
+                            <textarea rows="3" id="objectives" name="objectives" class="input-xxlarge"><%= discussion.get('objectives') %></textarea>
+                        </div>
+                      </div>
+
+                      <div class="control-group fr">
+                        <label for="web_analytics_piwik_id_site" class="control-label fl">{{ gettext("Web analytics: Piwik id site") }}</label>
+                        <div class="controls fl">
+                          <input type="text" id="web_analytics_piwik_id_site" name="web_analytics_piwik_id_site" class="input-xxlarge" value="<%= discussion.get('web_analytics_piwik_id_site') %>" />
+                        </div>
+                      </div>
+
+
                </fieldset>
-								<div class="form-actions fr">
-									<button class="btn btn-primary fr js_saveDiscussion" type="submit">{{ gettext("Save changes") }}</button>
-								</div>
+                <div class="form-actions fr">
+                    <button class="btn btn-primary fr js_saveDiscussion" type="submit">{{ gettext("Save changes") }}</button>
+                </div>
              </form>
         </div>
         <% } %>

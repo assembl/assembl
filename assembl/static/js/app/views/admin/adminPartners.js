@@ -14,11 +14,6 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                 'click @ui.partnerItem':'deletePartner',
                 'click @ui.partnerItemEdit': 'editPartner'
             },
-            serializeData: function(){
-                return {
-                    partner: this.model
-                }
-            },
             deletePartner: function(){
                var that = this;
                this.model.destroy({
@@ -134,19 +129,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
         });
 
         var PartnerList = Marionette.CollectionView.extend({
-            childView: Partners,
-            initialize: function(){
-                var that = this,
-                    collectionManager = new CollectionManager();
-
-                this.collection = undefined;
-
-                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
-                    function (allPartnerOrganization) {
-                        that.collection = allPartnerOrganization;
-                        that.render();
-                    });
-            }
+            childView: Partners
         });
 
         var adminPartners = Marionette.LayoutView.extend({
@@ -172,12 +155,21 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                 }
             },
 
-            onRender: function () {
+            onBeforeShow: function(){
+                var that = this,
+                    collectionManager = new CollectionManager();
+
                 Ctx.initTooltips(this.$el);
 
-                var partnerList = new PartnerList();
+                $.when(collectionManager.getAllPartnerOrganizationCollectionPromise()).then(
+                    function (allPartnerOrganization) {
+                        var partnerList = new PartnerList({
+                            collection: allPartnerOrganization
+                        });
 
-                this.partner.show(partnerList);
+                        that.getRegion('partner').show(partnerList);
+                    });
+
             },
 
             close: function () {

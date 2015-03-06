@@ -17,6 +17,13 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
 
         isUserSubscribed: function () {
             return (this.get('discussion') === null) ? false : true;
+        },
+
+        validate: function(attrs, options){
+            /**
+             * check typeof variable
+             * */
+
         }
 
     });

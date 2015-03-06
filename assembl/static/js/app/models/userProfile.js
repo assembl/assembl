@@ -4,7 +4,6 @@ define(['jquery', 'models/base', 'common/context'],
     function ($, Base, Ctx) {
 
     var userProfile = Base.Model.extend({
-        idAttribute: '@id',
         url: Ctx.getApiV2DiscussionUrl()+'all_users/'+Ctx.getCurrentUserId(),
         defaults: {
             username: '',
@@ -18,6 +17,13 @@ define(['jquery', 'models/base', 'common/context'],
             permissions: [],
             '@type': '',
             '@view': ''
+        },
+
+        validate: function(attrs, options){
+            /**
+             * check typeof variable
+             * */
+
         }
 
     });

@@ -35,6 +35,13 @@ define(['underscore', 'models/base'], function (_, Base) {
                 child.set('parentId', this.get('source'));
                 child.get('parents').push(this.get('source'));
             }
+        },
+
+        validate: function(attrs, options){
+            /**
+             * check typeof variable
+             * */
+
         }
 
     });

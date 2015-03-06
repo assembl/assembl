@@ -839,6 +839,10 @@ class IMAPMailbox(AbstractMailbox):
                 AbstractMailbox.thread_mails(emails)
                 mark_changed()
 
+    def make_reader(self):
+        from assembl.tasks.imaplib2_source_reader import IMAPReader
+        return IMAPReader(self.id)
+
     def get_send_address(self):
         """
         Get the email address to send a message to the discussion
@@ -993,9 +997,6 @@ class Email(ImportedPost):
     __mapper_args__ = {
         'polymorphic_identity': 'email',
     }
-
-    def __init__(self, *args, **kwargs):
-        super(Email, self).__init__(*args, **kwargs)
 
     def REWRITEMEreply(self, sender, response_body):
         """

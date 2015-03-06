@@ -10,6 +10,9 @@ from ConfigParser import ConfigParser, NoSectionError
 SECTION = 'app:assembl'
 
 
+def _as_bool_string(val):
+    return str(bool(val)).lower()
+
 def main():
     if len(sys.argv) < 2:
         sys.stderr.write('Usage: %s CONFIG_URI\n'
@@ -74,7 +77,7 @@ def main():
         edgesense_code_dir = ''
     vars = {
         'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
-        'VIRTUOSO_HOSTNAME': config.get(SECTION, 'public_hostname'),
+        'VIRTUOSO_HOSTNAME': config.get('virtuoso', 'virtuoso_hostname'),
         'VIRTUOSO_PORT': config.getint('virtuoso', 'port'),
         'VIRTUOSO_ROOT': vroot,
         'VIRTUOSO_ROOT_VAR': vroot_var,
@@ -88,14 +91,34 @@ def main():
             SECTION, 'celery_tasks.notify.broker'),
         'here': dirname(abspath('supervisord.conf')),
         'CONFIG_FILE': config_uri,
-        'has_metrics_server': 'true' if has_metrics_server else 'false',
+        'autostart_virtuoso': config.get('supervisor', 'autostart_virtuoso'),
+        'autostart_celery_imap': config.get(
+            'supervisor', 'autostart_celery_imap'),
+        'autostart_celery_notification_dispatch': config.get(
+            'supervisor', 'autostart_celery_notification_dispatch'),
+        'autostart_celery_notify': config.get(
+            'supervisor', 'autostart_celery_notify'),
+        'autostart_celery_notify_beat': config.get(
+            'supervisor', 'autostart_celery_notify_beat'),
+        'autostart_changes_router': config.get(
+            'supervisor', 'autostart_changes_router'),
+        'autostart_pserve': config.get('supervisor', 'autostart_pserve'),
+        'autostart_compass': config.get('supervisor', 'autostart_compass'),
+        'autostart_uwsgi': config.get('supervisor', 'autostart_uwsgi'),
+        'autostart_metrics_server': (config.get(
+            'supervisor', 'autostart_metrics_server')
+            if has_metrics_server else 'false'),
         'metrics_code_dir': metrics_code_dir,
         'metrics_cl': metrics_cl,
-        'has_edgesense_server': 'true' if has_edgesense_server else 'false',
+        'autostart_edgesense_server': (config.get(
+            'supervisor', 'autostart_edgesense_server')
+            if has_edgesense_server else 'false'),
         'edgesense_venv': edgesense_venv,
         'edgesense_code_dir': edgesense_code_dir,
     }
+    print vars
     for fname in ('var/db/virtuoso.ini', 'odbc.ini', 'supervisord.conf',):
+        print fname
         tmpl = open(fname+'.tmpl').read()
         inifile = open(fname, 'w')
         inifile.write(tmpl % vars)

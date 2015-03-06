@@ -33,13 +33,19 @@
         {% endfor %}
     </div>
 
+    <div id="slider"></div>
+    <div id="popover-oembed"></div>
+
     {% include 'includes/javascript.jinja2' %}
-		{% include 'includes/updatebrowser.jinja2' %}
+	{% include 'includes/updatebrowser.jinja2' %}
 
     {% block extra_js %}{% endblock %}
     {% block main_js %}{% endblock %}
 
-    <div id="slider"></div>
-    <div id="popover-oembed"></div>
+    {% if web_analytics_piwik_script %}
+        {{ web_analytics_piwik_script|safe }}
+    {% endif %}
+
+
 </body>
 </html>
