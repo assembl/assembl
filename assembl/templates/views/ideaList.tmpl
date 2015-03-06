@@ -3,15 +3,24 @@
 <% } else { %>
 	<div class="panel-body">
 <% } %>
-		<div class="pvxs">
-			<span class="pls txt-gray1">{{ gettext('Table of ideas') }}</span>
-			<% if (canAdd) { %>
-				<span class="idealist-actions">
-						<a href="#" class="js_ideaList-addbutton" class="btn btn-default btn-xs">
-								<i class="icon-add-2"></i> {{ gettext('Add idea') }}
-						</a>
-				</span>
-			<% } %>
+		<div class="idealist-header pvxs">
+			<span class="idealist-header-title pls txt-gray1">{{ gettext('Table of ideas') }}</span>
+			<div class="idealist-actions">
+				<% if (canAdd) { %>
+					<a href="#" class="js_ideaList-addbutton" class="btn btn-default btn-xs">
+							<i class="icon-add-2"></i> {{ gettext('Add idea') }}
+					</a> &nbsp;&nbsp;
+				<% } %>
+				<div class="dropdown">
+		            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="icon-options"></i></a>
+		            <ul class="dropdown-menu">
+		                <li><a href="#" class="js_decreaseRowHeight">{{ gettext('Decrease row height') }}</a></li>
+		                <li><a href="#" class="js_increaseRowHeight">{{ gettext('Increase row height') }}</a></li>
+		                <li><a href="#" class="js_toggleDecreasingFontSizeWithDepth">{{ gettext('Toggle decreasing font size with depth') }}</a></li>
+		            </ul>
+		        </div>
+				
+			</div>
 		</div>
 		<div id="idealist-list" class="idealist">
 			<div class="ideaView"></div>
