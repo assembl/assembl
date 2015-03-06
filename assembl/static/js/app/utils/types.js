@@ -18,6 +18,8 @@ define(function () {
         IDEA_PROPOSAL_POST: 'IdeaProposalPost',
         SYNTHESIS_POST: 'SynthesisPost',
         IMPORTED_POST: 'ImportedPost',
+        FEED_POST: 'FeedPost',
+        LOOMIO_FEED_POST: 'LoomioFeedPost',
         EMAIL: 'Email',
         SYNTHESIS: 'Synthesis',
         TABLE_OF_CONTENTS: 'TableOfIdeas',
