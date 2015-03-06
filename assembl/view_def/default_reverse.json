@@ -48,6 +48,7 @@
     },
     "PostSource": {
         "@extends": "ContentSource",
+        "number_of_imported_posts": false,
         "last_import": false
     },
     "FeedPostSource": {
