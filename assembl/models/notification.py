@@ -298,18 +298,18 @@ class NotificationSubscription(DiscussionBoundBase):
     def check_unique(self):
         self.db.flush()
         query, usable = self.unique_query()
+        if not usable:
+            return True
         other = query.first()
         return other is None or other is self
 
     def unique_query(self):
+        # documented in lib/sqla
         query, _ = super(NotificationSubscription, self).unique_query()
         user_id = self.user_id or self.user.id
         parent_subscription_id = self.parent_subscription_id
-        if parent_subscription_id is None and self.parent_subscription is not None:
-            parent_subscription = self.parent_subscription.id
         return query.filter_by(
-            user_id=user_id, type=self.type,
-            parent_subscription_id = parent_subscription_id), True
+            user_id=user_id, type=self.type), False
 
     def is_owner(self, user_id):
         return self.user_id == user_id
@@ -377,6 +377,10 @@ class NotificationSubscriptionGlobal(NotificationSubscription):
     
     def followed_object(self):
         pass
+
+    def unique_query(self):
+        query, _ = super(NotificationSubscriptionGlobal, self).unique_query()
+        return query, True
 
 
 class NotificationSubscriptionOnObject(NotificationSubscription):
