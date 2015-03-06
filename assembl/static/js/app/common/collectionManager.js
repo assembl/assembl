@@ -546,8 +546,7 @@ define(['app',
                             if (that._waitingWorker === undefined) {
                                 that._waitingWorker = new that.getMessageFullModelRequestWorker(that);
                             }
-                            var requestPromise = that._waitingWorker.addRequest(id);
-                            return requestPromise;
+                            return that._waitingWorker.addRequest(id);
                         }
                     }
                     else {

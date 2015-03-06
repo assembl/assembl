@@ -43,8 +43,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .done(function (allIdeasCollection) {
                         var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
                         that.listenTo(allIdeasCollection, events.join(' '), that.render);
                     });
@@ -92,8 +92,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 });
 
                 this.listenTo(Assembl.vent, 'ideaList:selectIdea', function (ideaId) {
-                    collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                    collectionManager.getAllIdeasCollectionPromise()
+                        .done(function (allIdeasCollection) {
                         var idea = allIdeasCollection.get(ideaId);
                         if (idea) {
                             that.getContainingGroup().setCurrentIdea(idea);
@@ -251,8 +251,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 var collectionManager = new CollectionManager();
                 var that = this;
                 this.collapsed = true;
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .done(function (allIdeasCollection) {
                         allIdeasCollection.each(function (idea) {
                             idea.attributes.isOpen = false;
                         });
@@ -266,8 +266,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             expandIdeas: function () {
                 this.collapsed = false;
                 var that = this;
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .done(function (allIdeasCollection) {
                         allIdeasCollection.each(function (idea) {
                             idea.attributes.isOpen = true;
                         });
@@ -378,8 +378,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     that = this,
                     collectionManager = new CollectionManager();
 
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .done(function (allIdeasCollection) {
                         if (allIdeasCollection.get(currentIdea)) {
                             newIdea.set('order', currentIdea.getOrderForNewChild());
                             currentIdea.addChild(newIdea);

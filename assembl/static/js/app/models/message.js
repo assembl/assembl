@@ -124,11 +124,15 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
 
             getExtractsPromise: function () {
                 var that = this;
-
                 return this.collection.collectionManager.getAllExtractsCollectionPromise()
                     .then(function (allExtractsCollection) {
-                        return allExtractsCollection.where({idPost: that.getId()});
-                    });
+                        return Promise.resolve(allExtractsCollection.where({idPost: that.getId()}))
+                            .thenReturn(allExtractsCollection)
+                            .catch(function(e){
+                                console.error(e.statusText);
+                            });
+                    }
+                );
             },
 
             /** Return a promise for the post's creator
@@ -150,8 +154,11 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
 
                 return this.collection.collectionManager.getAllUsersCollectionPromise()
                     .then(function(allUsersCollection){
-                        var creatorId = that.get('idCreator');
-                        return allUsersCollection.getById(creatorId);
+                        return Promise.resolve(allUsersCollection.getById(that.get('idCreator')))
+                            .thenReturn(allUsersCollection)
+                            .catch(function(e){
+                                console.error(e.statusText);
+                            });
                 });
 
             },

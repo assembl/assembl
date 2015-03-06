@@ -329,19 +329,16 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
             },*/
 
             getExtractsPromise: function () {
-                var that = this,
-                    extracts = undefined;
-
-                this.collection.collectionManager.getAllExtractsCollectionPromise()
+                var that = this;
+                return this.collection.collectionManager.getAllExtractsCollectionPromise()
                     .then(function (allExtractsCollection) {
-                        extracts = Promise.resolve(allExtractsCollection.where({idIdea: that.getId()}))
+                        return Promise.resolve(allExtractsCollection.where({idIdea: that.getId()}))
                             .thenReturn(allExtractsCollection)
                             .catch(function(e){
                                 console.error(e.statusText);
                             });
                     }
                 );
-                return extracts;
             },
 
             /**

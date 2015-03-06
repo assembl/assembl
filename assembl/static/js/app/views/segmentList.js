@@ -282,11 +282,10 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
              * @param {Segment} segment
              */
             addSegment: function (segment) {
-                var that = this,
-                    collectionManager = new CollectionManager();
+                var collectionManager = new CollectionManager();
 
-                collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
+                collectionManager.getAllExtractsCollectionPromise()
+                    .done(function (allExtractsCollection) {
                         delete segment.attributes.highlights;
 
                         allExtractsCollection.add(segment, {merge: true});
@@ -443,8 +442,8 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                     user_id = Ctx.getCurrentUser().id;
 
                 if (ok) {
-                    collectionManager.getAllExtractsCollectionPromise().done(
-                        function (allExtractsCollection) {
+                    collectionManager.getAllExtractsCollectionPromise()
+                        .done(function() {
                             that.clipboard.filter(function (s) {
                                 return s.get('idCreator') == user_id
                             }).map(function (segment) {

@@ -1186,11 +1186,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                 this.blockPanel();
 
-                /* what does it mean ? two promises, one callback  ?
-                $.when(collectionManager.getAllMessageStructureCollectionPromise(),
-                    this.currentQuery.getResultMessageIdCollectionPromise()).done(newDataCallback);
-                */
-
                 //Why isn't this within the when() above?  benoitg 2015-01-28
                 this.ui.panelBody.scroll(function () {
 

@@ -474,8 +474,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     box,
                     collectionManager = new CollectionManager();
 
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .done(function (allIdeasCollection) {
                         var idea = allIdeasCollection.get(idIdea);
                         if (!idea) {
                             return;
@@ -565,7 +565,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     collectionManager = new CollectionManager();
                 var fetchPromise = this.model.fetch({ data: $.param({ view: 'contributors'}) });
                             
-                $.when(collectionManager.getAllExtractsCollectionPromise(), fetchPromise).then(
+                Promise.join(collectionManager.getAllExtractsCollectionPromise(), fetchPromise,
                     function (allExtractsCollection, fetchedJQHR) {
                         that.extractListSubset = new SegmentList.IdeaSegmentListSubset([], {
                             parent: allExtractsCollection,
@@ -715,8 +715,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             onSegmentCloseButtonClick: function (ev) {
-                var that = this,
-                    cid = ev.currentTarget.getAttribute('data-segmentid'),
+                var cid = ev.currentTarget.getAttribute('data-segmentid'),
                     collectionManager = new CollectionManager();
                 collectionManager.getAllExtractsCollectionPromise().done(
                     function (allExtractsCollection) {
