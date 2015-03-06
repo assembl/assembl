@@ -1,4 +1,4 @@
-<% if(roles) { %>
+<% if(role) { %>
 		<input type="checkbox" class="js_userNewNotification" value="<%= subscription.get('@type') %>" id="<%= subscription.get('@id') %>" <%= subscription.get('status') === 'ACTIVE' ? 'checked' : '' %> >
 		<%= i18n.gettext(subscription.get('human_readable_description')) %>
 	<% } else { %>
