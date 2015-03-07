@@ -192,6 +192,12 @@ class NotificationSubscription(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
+    def __init__(self, *args, **kwargs):
+        super(NotificationSubscription, self).__init__(*args, **kwargs)
+        #Validates uniqueness on creation
+        if not self.check_unique():
+            raise ValueError("This user already has a subscription with the same effect")
+
     def get_discussion_id(self):
         return self.discussion_id
 
@@ -296,6 +302,8 @@ class NotificationSubscription(DiscussionBoundBase):
         return self
 
     def check_unique(self):
+        """ Verifies that no subscription that would have a duplicate effect 
+        is created """
         self.db.flush()
         query, usable = self.unique_query()
         if not usable:
@@ -307,7 +315,6 @@ class NotificationSubscription(DiscussionBoundBase):
         # documented in lib/sqla
         query, _ = super(NotificationSubscription, self).unique_query()
         user_id = self.user_id or self.user.id
-        parent_subscription_id = self.parent_subscription_id
         return query.filter_by(
             user_id=user_id, type=self.type), False
 
@@ -364,7 +371,6 @@ class NotificationSubscription(DiscussionBoundBase):
 @event.listens_for(NotificationSubscription.status, 'set', propagate=True)
 def update_last_status_change_date(target, value, oldvalue, initiator):
     target.last_status_change_date = datetime.utcnow()
-
 
 class NotificationSubscriptionGlobal(NotificationSubscription):
     __mapper_args__ = {
