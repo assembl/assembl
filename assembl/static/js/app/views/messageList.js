@@ -1463,12 +1463,15 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                     view = new MessageFamilyView({
                         model: messageFullModel,
-                        messageListView: that},
+                        messageListView: that,
+                        currentLevel: level,
+                        hasChildren: subviews},
                         last_sibling_chain);
 
-                    view.currentLevel = level;
+                    // pass logic to the init view
+                    //view.currentLevel = level;
                     //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
-                    view.hasChildren = (subviews.length > 0);
+                    //view.hasChildren = (subviews.length > 0);
                     list.push(view.render().el);
                     view.$('.messagelist-children').append(subviews);
 

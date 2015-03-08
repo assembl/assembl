@@ -33,15 +33,19 @@ define(['backbone.marionette', 'underscore', 'ckeditor', 'app', 'common/context'
                 this.last_sibling_chain = last_sibling_chain;
                 this.messageListView = options.messageListView;
                 this.collapsed = options.collapsed;
+                this.currentLevel = options.currentLevel;
+                this.hasChildren = (_.size(options.hasChildren) > 0);
                 //this.model.on('change:collapsed', this.onCollapsedChange, this);
                 //this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
 
+                this.level = this.currentLevel !== null ? this.currentLevel : 1;
+
+                if (!_.isUndefined(this.level)) {
+                    this.currentLevel = this.level;
+                }
             },
 
             serializeData: function(){
-
-                console.debug('this.level', this.level);
-
               return {
                 id: this.model.get('@id'),
                 level: this.level,
@@ -59,12 +63,6 @@ define(['backbone.marionette', 'underscore', 'ckeditor', 'app', 'common/context'
                 var messageView;
 
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-
-                this.level = this.currentLevel !== null ? this.currentLevel : 1;
-
-                if (!_.isUndefined(level)) {
-                    this.currentLevel = this.level;
-                }
 
                 var messageViewClass = undefined;
                 var messageType = this.model.get('@type');

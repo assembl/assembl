@@ -79,6 +79,12 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                  */
                 this.loadedAnnotations = {};
 
+                this.level = this.currentLevel !== null ? this.currentLevel : 1;
+
+                if (!_.isUndefined(this.level)) {
+                    this.currentLevel = this.level;
+                }
+
                 this.creator = undefined;
                 this.model.getCreatorPromise().then(function(creator){
                     that.creator = creator;
@@ -175,12 +181,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     modelId = this.model.id;
                 if (Ctx.debugRender) {
                     console.log("message:render() is firing for message", this.model.id);
-                }
-
-                this.level = this.currentLevel !== null ? this.currentLevel : 1;
-
-                if (!_.isUndefined(this.level)) {
-                    this.currentLevel = this.level;
                 }
 
                 this.setViewStyle(this.viewStyle);
