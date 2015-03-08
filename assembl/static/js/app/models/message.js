@@ -127,7 +127,6 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
                 return this.collection.collectionManager.getAllExtractsCollectionPromise()
                     .then(function (allExtractsCollection) {
                         return Promise.resolve(allExtractsCollection.where({idPost: that.getId()}))
-                            .thenReturn(allExtractsCollection)
                             .catch(function(e){
                                 console.error(e.statusText);
                             });
@@ -155,7 +154,6 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
                 return this.collection.collectionManager.getAllUsersCollectionPromise()
                     .then(function(allUsersCollection){
                         return Promise.resolve(allUsersCollection.getById(that.get('idCreator')))
-                            .thenReturn(allUsersCollection)
                             .catch(function(e){
                                 console.error(e.statusText);
                             });

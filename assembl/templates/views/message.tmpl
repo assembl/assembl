@@ -1,4 +1,4 @@
-{% set userName = "" %}
+{% set userName = "<%= creator.get('name') %>" %}
 {% set precise_date = "<%= ctx.getReadableDateTime(message.get('date')) %>" %}
 {% set nice_date = "<%= ctx.getNiceDate(message.get('date'), false) %>" %}
 {% macro readUnreadIndicator() -%}

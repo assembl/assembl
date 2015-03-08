@@ -1,21 +1,23 @@
 'use strict';
 
-define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/types', 'views/message', 'views/synthesisMessage', 'utils/i18n'],
-    function (Backbone, _, ckeditor, Assembl, Ctx, Types, MessageView, SynthesisMessageView, i18n) {
+define(['backbone.marionette', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/types', 'views/message', 'views/synthesisMessage', 'utils/i18n'],
+    function (Marionette, _, ckeditor, Assembl, Ctx, Types, MessageView, SynthesisMessageView, i18n) {
 
         /**
          * @class views.MessageFamilyView
          */
-        var MessageFamilyView = Backbone.View.extend({
-            /**
-             * @type {String}
-             */
-            tagName: 'div',
-
+        var MessageFamilyView = Marionette.ItemView.extend({
+            template: '#tmpl-messageFamily',
             /**
              * @type {String}
              */
             className: 'message-family-container',
+
+            /**
+             * Stores the current level
+             * @type {Number}
+             */
+            currentLevel: null,
 
             /**
              * @init
@@ -33,34 +35,35 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/ty
                 this.collapsed = options.collapsed;
                 //this.model.on('change:collapsed', this.onCollapsedChange, this);
                 //this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
+
             },
 
-            /**
-             * The thread message template
-             * @type {_.template}
-             */
-            template: Ctx.loadTemplate('messageFamily'),
+            serializeData: function(){
 
-            /**
-             * Stores the current level
-             * @type {Number}
-             */
-            currentLevel: null,
+                console.debug('this.level', this.level);
+
+              return {
+                id: this.model.get('@id'),
+                level: this.level,
+                last_sibling_chain: this.last_sibling_chain,
+                hasChildren: this.hasChildren
+              }
+            },
 
             /**
              * The render
              * @param {Number} [level] The hierarchy level
              * @return {MessageView}
              */
-            render: function (level) {
-                var data = this.model.toJSON(),
-                    children,
-                    messageView;
+            onRender: function (level) {
+                var messageView;
 
-                level = this.currentLevel !== null ? this.currentLevel : 1;
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+
+                this.level = this.currentLevel !== null ? this.currentLevel : 1;
+
                 if (!_.isUndefined(level)) {
-                    this.currentLevel = level;
+                    this.currentLevel = this.level;
                 }
 
                 var messageViewClass = undefined;
@@ -91,13 +94,13 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/ty
                 messageView.render();
                 this.messageListView.renderedMessageViewsCurrent[this.model.id] = messageView;
 
-                data['id'] = data['@id'];
-                data['level'] = level;
-                data['last_sibling_chain'] = this.last_sibling_chain;
-                data['hasChildren'] = this.hasChildren;
+                //data['id'] = data['@id'];
+                //data['level'] = level;
+                //data['last_sibling_chain'] = this.last_sibling_chain;
+                //data['hasChildren'] = this.hasChildren;
 
-                if (level > 1) {
-                    if (this.last_sibling_chain[level - 1]) {
+                if (this.level > 1) {
+                    if (this.last_sibling_chain[this.level - 1]) {
                         this.$el.addClass('last-child');
                     } else {
                         this.$el.addClass('child');
@@ -106,9 +109,9 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/ty
                     this.$el.addClass('bx bx-default root');
                 }
 
-                this.el.setAttribute('data-message-level', data['level']);
+                this.el.setAttribute('data-message-level',  this.level);
 
-                this.$el.html(this.template(data));
+                //this.$el.html(this.template(data));
                 Ctx.initTooltips(this.$el);
                 this.$el.find('>.message-family-arrow>.message').replaceWith(messageView.el);
 
@@ -116,7 +119,6 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/ty
 
                 Ctx.initClipboard();
 
-                return this;
             },
 
             events: {
