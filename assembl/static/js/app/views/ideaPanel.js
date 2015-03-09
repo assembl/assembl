@@ -181,7 +181,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             gridSize: AssemblPanel.prototype.IDEA_PANEL_GRID_SIZE,
             minWidth: 270,
             regions: {
-                //segmentList: ".postitlist"
+                segmentList: ".postitlist",
                 widgetsInteraction: ".ideaPanel-section-widgets"
             },
             initialize: function (options) {
@@ -391,7 +391,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                             });
 
                             that.getRegion('segmentList').show(that.extractListView);
-
                             that.renderTemplateGetExtractsLabel();
                         });
                 } else {
