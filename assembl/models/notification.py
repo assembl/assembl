@@ -902,7 +902,8 @@ class Notification(Base):
     def get_localizer(self):
         locale = self.first_matching_subscription.user.get_preferred_locale()
         if not locale:
-            locale = self.first_matching_subscription.discussion.get_discussion_locales()[0]
+            locale = self.first_matching_subscription.discussion.discussion_locales[0]
+        # TODO: if locale has country code, make sure we fallback properly.
         return make_localizer(locale, [
             join(dirname(dirname(__file__)), 'locale')])
 

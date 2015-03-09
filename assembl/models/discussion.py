@@ -11,6 +11,7 @@ from sqlalchemy import (
     SmallInteger,
     DateTime,
     Text,
+    String,
     Boolean,
     event,
     and_,
@@ -54,6 +55,7 @@ class Discussion(DiscussionBoundBase):
     settings = Column(Text())  # JSON blob
     subscribe_to_notifications_on_signup = Column(Boolean, default=False)
     web_analytics_piwik_id_site = Column(Integer, nullable=True, default=None)
+    preferred_locales = Column(String)
 
     @property
     def admin_source(self):
@@ -364,12 +366,21 @@ class Discussion(DiscussionBoundBase):
     crud_permissions = CrudPermissions(
         P_SYSADMIN, P_READ, P_ADMIN_DISC, P_SYSADMIN)
 
-    def get_discussion_locales(self):
-        # TODO: Notion of active locales per discussion.
-        # Use installation settings for now.
+    @property
+    def discussion_locales(self):
         # Ordered list, not empty.
+        # TODO: Guard. Each locale should be 2-letter or posix.
+        # Waiting for utility function.
+        if self.preferred_locales:
+            return self.preferred_locales.split(' ')
+        # Use installation settings otherwise.
         from assembl.lib.config import get_config
         return get_config().get('available_languages', 'fr en').split()
+
+    @discussion_locales.setter
+    def discussion_locales(self, locale_list):
+        # TODO: Guard.
+        self.preferred_locales = ' '.join(locale_list)
 
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
