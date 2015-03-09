@@ -31,10 +31,10 @@ def test_subscribe_notification(test_session,
     test_session.flush()
 
 # The unique check cannot be in the creator. We'll try other options.
-@pytest.mark.xfail
+#@pytest.mark.xfail
 def test_subscribe_notification_unique_checks(test_session, 
         discussion, participant1_user, participant2_user, reply_post_2, test_app, root_post_1):
-    
+    test_session.commit()#this is voodoo so finalizers do not crash
     test_session.flush()
     subscription = NotificationSubscriptionFollowSyntheses(
         discussion=discussion,
@@ -43,15 +43,25 @@ def test_subscribe_notification_unique_checks(test_session,
        )
     test_session.add(subscription)
     #On insert
+    from sqlalchemy.exc import InvalidRequestError
     with pytest.raises(ValueError):
-        subscription = NotificationSubscriptionFollowSyntheses(
-            discussion=discussion,
-            user=participant1_user,
-            creation_origin = NotificationCreationOrigin.USER_REQUESTED
-           )
-        test_session.add(subscription)
-    #On add
-    #Unfortunately, no way to run a query within a flush in sqlalchemy
+        try:
+            subscription = NotificationSubscriptionFollowSyntheses(
+                discussion=discussion,
+                user=participant1_user,
+                creation_origin = NotificationCreationOrigin.USER_REQUESTED
+               )
+            test_session.add(subscription)
+            
+            test_session.flush()
+            
+        except Exception as e:
+            #this is voodoo so finalizers do not crash
+            test_session.rollback()
+            raise e
+
+    #WRITEME:  update check
+    
         
 #def test_subscribe_notification_access_control
 

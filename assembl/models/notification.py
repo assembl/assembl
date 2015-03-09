@@ -360,6 +360,26 @@ class NotificationSubscription(DiscussionBoundBase):
 def update_last_status_change_date(target, value, oldvalue, initiator):
     target.last_status_change_date = datetime.utcnow()
 
+from ..lib.sqla import get_session_maker
+
+@event.listens_for(get_session_maker(), "after_flush")
+def after_flush_list(session, flush_context):
+    session.assembl_objects_to_check_unique = []
+    for obj in session.new | session.dirty:
+        if isinstance(obj, NotificationSubscription):
+            session.assembl_objects_to_check_unique.append(obj)
+    for obj in session.dirty:
+        if isinstance(obj, NotificationSubscription) and session.is_modified(obj):
+            session.assembl_objects_to_check_unique.append(obj)
+
+@event.listens_for(get_session_maker(), "after_flush_postexec")
+def after_flush_check(session, flush_context):
+    for obj in session.assembl_objects_to_check_unique:
+        if not obj.check_unique():
+            #session.rollback()
+            raise ValueError("This user already has a subscription with the same effect as subscription %d" % obj.id)
+    session.assembl_objects_to_check_unique = []
+            
 class NotificationSubscriptionGlobal(NotificationSubscription):
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_DISCUSSION
