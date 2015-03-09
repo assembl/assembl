@@ -192,12 +192,6 @@ class NotificationSubscription(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
-    def __init__(self, *args, **kwargs):
-        super(NotificationSubscription, self).__init__(*args, **kwargs)
-        #Validates uniqueness on creation
-        if not self.check_unique():
-            raise ValueError("This user already has a subscription with the same effect")
-
     def get_discussion_id(self):
         return self.discussion_id
 
