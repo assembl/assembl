@@ -1,7 +1,7 @@
 'use strict';
 
 define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/segment', 'utils/types', 'utils/i18n', 'utils/permissions', 'common/collectionManager', 'utils/panelSpecTypes', 'views/assemblPanel', 'backbone.subset', 'bluebird'],
-    function (Backbone, _, $, Assembl, Ctx, Segment, Types, i18n, Permissions, CollectionManager, PanelSpecTypes, AssemblPanel, Promise) {
+    function (Backbone, _, $, Assembl, Ctx, Segment, Types, i18n, Permissions, CollectionManager, PanelSpecTypes, AssemblPanel, Subset, Promise) {
 
         var SegmentView = Marionette.ItemView.extend({
             template: '#tmpl-segment',
@@ -250,16 +250,20 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 }
                 if (this.clipboard) {
                     Ctx.initTooltips(this.$el);
+
                     Promise.join(collectionManager.getAllExtractsCollectionPromise(),
-                        collectionManager.getAllUsersCollectionPromise(),
-                        collectionManager.getAllMessageStructureCollectionPromise(),
+                                 collectionManager.getAllUsersCollectionPromise(),
+                                 collectionManager.getAllMessageStructureCollectionPromise(),
                         function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
-                            that.extractList.show(new SegmentListView({
+
+                            var segmentListView = new SegmentListView({
                                 collection: that.clipboard,
                                 allUsersCollection: allUsersCollection,
                                 allMessagesCollection: allMessagesCollection,
                                 closeDeletes: true
-                            }));
+                            });
+
+                            that.getRegion('extractList').show(segmentListView);
                         });
                 }
                 this.resetTitle();
