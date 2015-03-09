@@ -245,8 +245,12 @@ class NotificationSubscription(DiscussionBoundBase):
                 self, json, parse_def, aliases, ctx, permissions,
                 user_id, duplicate_error=True):
         from ..auth.util import user_has_permission
+        target_user_id = user_id
+        user = ctx.get_instance_of_class(User)
+        if user:
+            target_user_id = user.id
         if self.user_id:
-            if user_id != self.user_id:
+            if target_user_id != self.user_id:
                 if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
                     raise HTTPUnauthorized()
             # For now, do not allow changing user, it's way too complicated.
@@ -255,7 +259,7 @@ class NotificationSubscription(DiscussionBoundBase):
         else:
             json_user_id = json.get('user', None)
             if json_user_id is None:
-                json_user_id = user_id
+                json_user_id = target_user_id
             else:
                 json_user_id = User.get_database_id(json_user_id)
                 if json_user_id != user_id and not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
@@ -290,22 +294,17 @@ class NotificationSubscription(DiscussionBoundBase):
             if status != self.status:
                 self.status = status
                 self.last_status_change_date = datetime.now()
-        if not self.check_unique():
-            print "Duplicate"
-            raise HTTPBadRequest("Duplicate")
+        duplicate = self.find_duplicate()
+        if duplicate is not None:
+            raise HTTPBadRequest("Duplicate of <%s> created" % (duplicate.uri()))
         return self
 
-    def check_unique(self):
-        self.db.flush()
-        query, usable = self.unique_query()
-        other = query.first()
-        return other is None or other == self
-
     def unique_query(self):
+        # documented in lib/sqla
         query, _ = super(NotificationSubscription, self).unique_query()
+        user_id = self.user_id or self.user.id
         return query.filter_by(
-            user_id=self.user_id, type=self.type,
-            parent_subscription_id = self.parent_subscription_id), True
+            user_id=user_id, type=self.type), False
 
     def is_owner(self, user_id):
         return self.user_id == user_id
@@ -361,6 +360,24 @@ class NotificationSubscription(DiscussionBoundBase):
 def update_last_status_change_date(target, value, oldvalue, initiator):
     target.last_status_change_date = datetime.utcnow()
 
+from ..lib.sqla import get_session_maker
+
+@event.listens_for(get_session_maker(), "after_flush")
+def after_flush_list(session, flush_context):
+    session.assembl_objects_to_check_unique = []
+    for obj in session.new | session.dirty:
+        if isinstance(obj, NotificationSubscription):
+            session.assembl_objects_to_check_unique.append(obj)
+    for obj in session.dirty:
+        if isinstance(obj, NotificationSubscription) and session.is_modified(obj):
+            session.assembl_objects_to_check_unique.append(obj)
+
+@event.listens_for(get_session_maker(), "after_flush_postexec")
+def after_flush_check(session, flush_context):
+    for obj in session.assembl_objects_to_check_unique:
+        obj.assert_unique()
+    session.assembl_objects_to_check_unique = []
+
 
 class NotificationSubscriptionGlobal(NotificationSubscription):
     __mapper_args__ = {
@@ -373,6 +390,10 @@ class NotificationSubscriptionGlobal(NotificationSubscription):
     
     def followed_object(self):
         pass
+
+    def unique_query(self):
+        query, _ = super(NotificationSubscriptionGlobal, self).unique_query()
+        return query, True
 
 
 class NotificationSubscriptionOnObject(NotificationSubscription):
@@ -408,7 +429,8 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnPost, self).unique_query()
-        return query.filter_by(post_id=self.post_id), True
+        post_id = self.post_id or self.post.id
+        return query.filter_by(post_id=post_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -447,7 +469,8 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnIdea, self).unique_query()
-        return query.filter_by(idea_id=self.idea_id), True
+        idea_id = self.idea_id or self.idea.id
+        return query.filter_by(idea_id=idea_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -486,7 +509,8 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnExtract, self).unique_query()
-        return query.filter_by(extract_id=self.extract_id), True
+        extract_id = self.extract_id or self.extract.id
+        return query.filter_by(extract_id=extract_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
@@ -525,7 +549,8 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnUserAccount, self).unique_query()
-        return query.filter_by(on_user_id=self.on_user_id), True
+        on_user_id = self.on_user_id or self.on_user.id
+        return query.filter_by(on_user_id=on_user_id), True
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,

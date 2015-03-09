@@ -45,6 +45,9 @@ UPDATE_OP = 0
 INSERT_OP = 1
 
 
+class ObjectNotUniqueError(ValueError):
+    pass
+
 class CleanupStrategy(strategies.PlainEngineStrategy):
     name = 'atexit_cleanup'
 
@@ -1119,7 +1122,7 @@ class BaseOps(object):
                 other = unique_query.first()
                 if other and other is not self:
                     if duplicate_error:
-                        raise HTTPBadRequest("Duplicate object created")
+                        raise HTTPBadRequest("Duplicate of <%s> created" % (other.uri()))
                     else:
                         # Presumably not necessary as never added.
                         # db.delete(self)
@@ -1130,9 +1133,28 @@ class BaseOps(object):
         return self
 
     def unique_query(self):
+        """returns a couple (query, usable), with a sqla query for conflicting similar objects.
+        usable is true if the query has to be enforced; sometimes it makes sense to
+        return un-usable query that will be used to construct queries of subclasses.
+        """
         # To be reimplemented in subclasses with a more intelligent check.
         # See notification for example.
         return self.db.query(self.__class__), False
+
+    def find_duplicate(self):
+        """Verifies that no other object exists that would conflict.
+        See unique_query for usable flag."""
+        query, usable = self.unique_query()
+        if not usable:
+            return True
+        other = query.first()
+        if other is not None and other is not self:
+            return other
+
+    def assert_unique(self):
+        duplicate = self.find_duplicate()
+        if duplicate is not None:
+            raise ObjectNotUniqueError("Duplicate of <%s> created" % (duplicate.uri()))
 
     @classmethod
     def extra_collections(cls):
@@ -1342,6 +1364,9 @@ def configure_engine(settings, zope_tr=True, session_maker=None):
     """Return an SQLAlchemy engine configured as per the provided config."""
     if session_maker is None:
         session_maker = get_session_maker(zope_tr)
+    else:
+        global _session_maker
+        _session_maker = session_maker
     engine = session_maker.session_factory.kw['bind']
     if engine:
         return engine

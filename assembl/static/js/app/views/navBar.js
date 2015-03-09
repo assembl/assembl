@@ -20,12 +20,15 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
         var navBarRight = Marionette.ItemView.extend({
             template: '#tmpl-navBarRight',
             className: 'navbar-right',
-            initialize: function(){
-                var that = this;
-                this.listenTo(Assembl.vent, 'navBarRight:refresh', function(model){
-                   that.model = model;
-                   that.render();
-                });
+            initialize: function(options){
+                this.roles = options.roles;
+                this.role = options.role;
+                if(this.roles) {
+                  this.listenTo(this.roles, 'remove add', function(model){
+                    this.role = (_.size(this.roles)) ? model : undefined;
+                    this.render();
+                  });
+                }
             },
             ui: {
                 currentLocal: '.js_setLocale',
@@ -40,7 +43,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
             serializeData: function () {
                 return {
                     Ctx: Ctx,
-                    role: this.model,
+                    role: this.role,
                     canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER)
                 }
             },
@@ -112,12 +115,13 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     $.when(collectionManager.getLocalRoleCollectionPromise()).then(
                         function (allRole) {
 
-                            that.role = allRole.find(function (local_role) {
+                            var role = allRole.find(function (local_role) {
                                 return local_role.get('role') === Roles.PARTICIPANT;
                             });
 
                             var navRight = new navBarRight({
-                                model: that.role
+                                role: role,
+                                roles: allRole
                             });
 
                             that.getRegion('navBarRight').show(navRight);

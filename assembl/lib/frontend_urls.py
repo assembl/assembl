@@ -12,6 +12,7 @@ class FrontendUrls():
         'edition': '/edition',
         'partners': '/partners',
         'settings': '/settings',
+        'notifications': '/notifications',
         'user_notifications': '/user/notifications',
         'profile': '/user/profile',
         'account': '/user/account',
