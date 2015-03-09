@@ -481,12 +481,10 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
             getRootIdea: function () {
                 var retval = this.findWhere({ '@type': Types.ROOT_IDEA });
                 if (!retval) {
-                    console.log("Size: ", _.size(this.models));
                     _.forEach(this.models, function (model) {
                         console.log(model.get('@type'));
                     })
                     console.error("getRootIdea() failed!");
-                    console.log(this);
                 }
                 return retval;
             },
