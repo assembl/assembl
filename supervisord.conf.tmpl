@@ -45,6 +45,15 @@ stopwaitsecs = 60
 #ever reap them, so kill them all
 killasgroup = true
 
+[program:celery_imap]
+directory = %(here)s
+command = python assembl/tasks/source_reader.py %(CONFIG_FILE)s
+autostart = %(autostart_source_reader)s
+autorestart = true
+startsecs = 2
+stopasgroup = false
+stopwaitsecs = 60
+killasgroup = true
 
 [program:celery_notification_dispatch]
 directory = %(here)s
