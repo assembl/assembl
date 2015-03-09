@@ -154,7 +154,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 if (!_.has(this.model, 'metadata_json')){
                     metadata_json = null;
                 }
-
                 return {
                     message: this.model,
                     viewStyle: this.viewStyle,
@@ -643,7 +642,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     this.model.setRead(true);
                 }
                 this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
-                this.render();
+
+                // I do not know why I should comment this, but it cause an issue
+                //this.render();
             },
 
             /**

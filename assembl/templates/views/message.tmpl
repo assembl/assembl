@@ -1,4 +1,6 @@
-{% set userName = "<%= creator.get('name') %>" %}
+<% if(creator){ %>
+    {% set userName = "<%= creator.get('name') %>" %}
+<% } %>
 {% set precise_date = "<%= ctx.getReadableDateTime(message.get('date')) %>" %}
 {% set nice_date = "<%= ctx.getNiceDate(message.get('date'), false) %>" %}
 {% macro readUnreadIndicator() -%}
@@ -22,44 +24,44 @@
 {% macro menuAction() -%}
    <div class="message-menu">
      <ul class="pan man">
-			<li class="dropdown mrxl mts">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-					{{ gettext('More options') }}
-					<span class="icon-arrowdown"></span>
-				</a>
-				<ul class="dropdown-menu">
-					<% if (user_is_connected){ %>
-						 <% if (read){ %>
-							 <li><a href="#" class="js_message-markasunread dropdown-listitem">{{ gettext('Mark as unread') }}</a></li>
-						 <% } else { %>
-							 <li><a href="#" class="js_message-markasread dropdown-listitem">{{ gettext('Mark as read') }}</a></li>
-						 <% } %>
-					<% } %>
+        <li class="dropdown mrxl mts">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            {{ gettext('More options') }}
+            <span class="icon-arrowdown"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <% if (user_is_connected){ %>
+             <% if (read){ %>
+                 <li><a href="#" class="js_message-markasunread dropdown-listitem">{{ gettext('Mark as unread') }}</a></li>
+             <% } else { %>
+                 <li><a href="#" class="js_message-markasread dropdown-listitem">{{ gettext('Mark as read') }}</a></li>
+             <% } %>
+            <% } %>
 
-          <% if( isHoisted === true ){ %>
+            <% if( isHoisted === true ){ %>
             <li><a href="#" class="message-hoistbtn" data-id="<%= escape(message.get('@id')) %>">{{gettext('Go back to the entire topic thread')}}</a></li>
-          <% } else { %>
+            <% } else { %>
             <li><a href="#" class="message-hoistbtn" data-id="<%= escape(message.get('@id')) %>">{{gettext('Show only this message and its replies')}}</a></li>
-          <% } %>
+            <% } %>
 
-          <li><a href="#" class="message-linkbutton" data-copy-text="<%= direct_link_url %>">{{gettext('Copy the link to share this message')}}</a></li>
-
-					<% if (creator) { %>
-					<li><a title="<%= creator.get('preferred_email') %>" href="mailto:<%= creator.get('preferred_email') %>">{{gettext('Send an email to this user')}}</a></li>
-					<% } %>
-				</ul>
-			</li>
-		 </ul>
+            <li><a href="#" class="message-linkbutton" data-copy-text="<%= direct_link_url %>">{{gettext('Copy the link to share this message')}}</a></li>
+            <% if(creator){ %>
+            <li><a title="<%= creator.get('preferred_email') %>" href="mailto:<%= creator.get('preferred_email') %>">{{gettext('Send an email to this user')}}</a></li>
+            <% } %>
+        </ul>
+        </li>
+     </ul>
    </div>
 {%- endmacro %}
 
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
   <div class="leftSection js_messageTitle">
     <div class="avatar img-rounded">
-      <% if(creator){ %>
+        <% if(creator){ %>
         <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
-      <% } %>
-    </div><span class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
+        <% } %>
+    </div>
+    <span class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
   </div>
   <div class="rightSection">
     <span class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</span>
@@ -75,9 +77,9 @@
 <% } else { %>
 
   <div class="js_messageHeader rc rcss pbxs mbs head">
-    <% if(creator){ %>
-    <a class="img-left avatar  img-rounded mtxs" href="#"><img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}" width="30" height="30"></a>
-    <% } %>
+      <% if(creator){ %>
+      <a class="img-left avatar  img-rounded mtxs" href="#"><img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}" width="30" height="30"></a>
+      <% } %>
       <div class="bd">
       <div class="message-author">{{ gettext('%(user)s')|format(user=userName)|safe }} {{ readUnreadIndicator() }}</div>
       <div class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }} {{ showInspirationSource() }}</div>

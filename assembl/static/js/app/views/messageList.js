@@ -1333,9 +1333,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         _.each(fullMessageModels, function (fullMessageModel) {
                             view = new MessageFamilyView({
                                 model: fullMessageModel,
-                                messageListView: that
+                                messageListView: that,
+                                hasChildren:false
                             });
-                            view.hasChildren = false;
+                            //view.hasChildren = false;
                             list.push(view.render().el);
                         });
                         //console.log("getRenderedMessagesFlat():  Resolving promise with:",list);

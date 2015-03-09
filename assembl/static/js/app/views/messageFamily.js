@@ -59,13 +59,13 @@ define(['backbone.marionette', 'underscore', 'ckeditor', 'app', 'common/context'
              * @param {Number} [level] The hierarchy level
              * @return {MessageView}
              */
-            onRender: function (level) {
+            onRender: function () {
                 var messageView;
 
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-                var messageViewClass = undefined;
-                var messageType = this.model.get('@type');
+                var messageViewClass = undefined,
+                    messageType = this.model.get('@type');
 
                 switch (messageType) {
                     case Types.ASSEMBL_POST:
@@ -89,7 +89,7 @@ define(['backbone.marionette', 'underscore', 'ckeditor', 'app', 'common/context'
                     messageFamilyView: this
                 });
 
-                messageView.render();
+                messageView.triggerMethod("render");
                 this.messageListView.renderedMessageViewsCurrent[this.model.id] = messageView;
 
                 //data['id'] = data['@id'];

@@ -49,7 +49,9 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
                             that.ideas.reset(ideas);
                         }
                         that.listenTo(that.ideas, 'add remove reset', that.render);
-                        that.listenTo(that.model, 'reset change', that.render);
+
+                        //modelEvents should handler this
+                        //that.listenTo(that.model, 'reset change', that.render);
                     });
 
 
@@ -59,6 +61,10 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
             events: {
                 'click .synthesisPanel-publishButton': 'publish',
                 'click .synthesisPanel-fullscreenButton': 'setFullscreen'
+            },
+
+            modelEvents:{
+              'reset change':'render'
             },
 
             getTitle: function () {
