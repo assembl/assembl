@@ -45,6 +45,9 @@ UPDATE_OP = 0
 INSERT_OP = 1
 
 
+class UniqueObjectError(RuntimeError):
+    pass
+
 class CleanupStrategy(strategies.PlainEngineStrategy):
     name = 'atexit_cleanup'
 
@@ -1137,6 +1140,19 @@ class BaseOps(object):
         # To be reimplemented in subclasses with a more intelligent check.
         # See notification for example.
         return self.db.query(self.__class__), False
+
+    def check_unique(self):
+        """Verifies that no other object exists that would conflict.
+        See unique_query for usable flag."""
+        query, usable = self.unique_query()
+        if not usable:
+            return True
+        other = query.first()
+        return other is None or other is self
+
+    def assert_unique(self):
+        if not self.check_unique():
+            raise UniqueObjectError()
 
     @classmethod
     def extra_collections(cls):

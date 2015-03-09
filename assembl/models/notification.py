@@ -298,18 +298,8 @@ class NotificationSubscription(DiscussionBoundBase):
                 self.last_status_change_date = datetime.now()
         if not self.check_unique():
             print "Duplicate"
-            raise HTTPBadRequest("Duplicate")
+            raise HTTPBadRequest("Duplicate object")
         return self
-
-    def check_unique(self):
-        """ Verifies that no subscription that would have a duplicate effect 
-        is created """
-        self.db.flush()
-        query, usable = self.unique_query()
-        if not usable:
-            return True
-        other = query.first()
-        return other is None or other is self
 
     def unique_query(self):
         # documented in lib/sqla
