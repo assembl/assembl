@@ -45,7 +45,7 @@ UPDATE_OP = 0
 INSERT_OP = 1
 
 
-class UniqueObjectError(RuntimeError):
+class ObjectNotUniqueError(ValueError):
     pass
 
 class CleanupStrategy(strategies.PlainEngineStrategy):
@@ -1122,7 +1122,7 @@ class BaseOps(object):
                 other = unique_query.first()
                 if other and other is not self:
                     if duplicate_error:
-                        raise HTTPBadRequest("Duplicate object created")
+                        raise HTTPBadRequest("Duplicate of <%s> created" % (other.uri()))
                     else:
                         # Presumably not necessary as never added.
                         # db.delete(self)
@@ -1141,18 +1141,20 @@ class BaseOps(object):
         # See notification for example.
         return self.db.query(self.__class__), False
 
-    def check_unique(self):
+    def find_duplicate(self):
         """Verifies that no other object exists that would conflict.
         See unique_query for usable flag."""
         query, usable = self.unique_query()
         if not usable:
             return True
         other = query.first()
-        return other is None or other is self
+        if other is not None and other is not self:
+            return other
 
     def assert_unique(self):
-        if not self.check_unique():
-            raise UniqueObjectError()
+        duplicate = self.find_duplicate()
+        if duplicate is not None:
+            raise ObjectNotUniqueError("Duplicate of <%s> created" % (duplicate.uri()))
 
     @classmethod
     def extra_collections(cls):

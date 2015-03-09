@@ -294,9 +294,9 @@ class NotificationSubscription(DiscussionBoundBase):
             if status != self.status:
                 self.status = status
                 self.last_status_change_date = datetime.now()
-        if not self.check_unique():
-            print "Duplicate"
-            raise HTTPBadRequest("Duplicate object")
+        duplicate = self.find_duplicate()
+        if duplicate is not None:
+            raise HTTPBadRequest("Duplicate of <%s> created" % (duplicate.uri()))
         return self
 
     def unique_query(self):
@@ -375,11 +375,10 @@ def after_flush_list(session, flush_context):
 @event.listens_for(get_session_maker(), "after_flush_postexec")
 def after_flush_check(session, flush_context):
     for obj in session.assembl_objects_to_check_unique:
-        if not obj.check_unique():
-            #session.rollback()
-            raise ValueError("This user already has a subscription with the same effect as subscription %d" % obj.id)
+        obj.assert_unique()
     session.assembl_objects_to_check_unique = []
-            
+
+
 class NotificationSubscriptionGlobal(NotificationSubscription):
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_DISCUSSION
