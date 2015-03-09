@@ -251,8 +251,12 @@ class NotificationSubscription(DiscussionBoundBase):
                 self, json, parse_def, aliases, ctx, permissions,
                 user_id, duplicate_error=True):
         from ..auth.util import user_has_permission
+        target_user_id = user_id
+        user = ctx.get_instance_of_class(User)
+        if user:
+            target_user_id = user.id
         if self.user_id:
-            if user_id != self.user_id:
+            if target_user_id != self.user_id:
                 if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
                     raise HTTPUnauthorized()
             # For now, do not allow changing user, it's way too complicated.
@@ -261,7 +265,7 @@ class NotificationSubscription(DiscussionBoundBase):
         else:
             json_user_id = json.get('user', None)
             if json_user_id is None:
-                json_user_id = user_id
+                json_user_id = target_user_id
             else:
                 json_user_id = User.get_database_id(json_user_id)
                 if json_user_id != user_id and not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
