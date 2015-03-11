@@ -14,7 +14,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
          * before being removed from memory
          */
             MAX_MESSAGES_IN_DISPLAY = 50,
-        /* The number of messages to load each time the user reaches scrools to
+        /* The number of messages to load each time the user scrolls to
          * the end or beginning of the list.
          */
             MORE_PAGES_NUMBER = 20,
@@ -30,6 +30,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             gridSize: AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE,
             minWidth: 400, // basic, may receive idea offset.
             debugPaging: false,
+            debugScrollLogging: false,
             _renderId: 0,
 
             ui: {
@@ -54,9 +55,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             initialize: function (options) {
               Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
               var that = this,
-                  collectionManager = new CollectionManager();
-              that.renderIsComplete = false;
-              that.showMessageByIdInProgress = false;
+                  collectionManager = new CollectionManager(),
+                  d = new Date();
+              this.renderIsComplete = false;
+              this.showMessageByIdInProgress = false;
+              this.scrollLoggerPreviousScrolltop = 0;
+              this.scrollLoggerPreviousTimestamp = d.getTime() ;
               this.renderedMessageViewsCurrent = {};
 
               this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
@@ -415,14 +419,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              */
             collapsed: false,
 
-            /**
-             * List of message id's to be displayed in the interface
-             * @type {MessageCollection}
-             *
-             * TODO:  THIS IS TO BE REPLACED WITH getResultMessageIdCollectionPromise(), which is the same data
-             */
-            DEPRECATEDmessageIdsToDisplay: [],
-
             allMessageStructureCollection: undefined,
             //messages
 
@@ -567,55 +563,76 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             /**
-             *
-
+             * Calculate the offsets of messages actually displayed from a request
+             * @return The actual offset array
              */
-            calculateThreadedMessagesOffsets: function (data_by_object, order_lookup_table, requestedOffsets) {
-                var returnedDataOffsets = {},
-                    numMessages = order_lookup_table.length;
-
-                if (numMessages > 0) {
-                    //Find preceding root message, and include it
-                    //It is not possible that we do not find one if there is
-                    //at least one message
-                    //Gaby: Never declare an incremental variable "i" out of loop, it's a memory leak
-                    for (var i = requestedOffsets['offsetStart']; i >= 0; i--) {
-
-                        if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
-
-                            returnedDataOffsets['offsetStart'] = i;
-                            break;
-                        }
-                    }
+            calculateMessagesOffsets: function (requestedOffsets) {
+              var returnedDataOffsets = {},
+                  len = _.size(this.resultMessageIdCollection);
+              
+              if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
+                  (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
+                returnedDataOffsets = this._calculateThreadedMessagesOffsets(this.visitorViewData, this.visitorOrderLookupTable, requestedOffsets);
+              } else {
+                returnedDataOffsets['offsetStart'] = _.isUndefined(requestedOffsets['offsetStart']) ? 0 : requestedOffsets['offsetStart'];
+                returnedDataOffsets['offsetEnd'] = _.isUndefined(requestedOffsets['offsetEnd']) ? MORE_PAGES_NUMBER : requestedOffsets['offsetEnd'];
+                if (returnedDataOffsets['offsetEnd'] < len) {
+                    // if offsetEnd is bigger or equal than len, do not use it
+                    len = returnedDataOffsets['offsetEnd'] + 1;
                 }
                 else {
-                    returnedDataOffsets['offsetStart'] = 0;
+                    returnedDataOffsets['offsetEnd'] = len - 1;
                 }
-                if (requestedOffsets['offsetEnd'] > (numMessages - 1)) {
-                    returnedDataOffsets['offsetEnd'] = (numMessages - 1);
+              }
+              if (this.debugPaging) {
+                console.log("calculateMessagesOffsets() called with requestedOffsets:", requestedOffsets, " returning ", returnedDataOffsets);
+              }
+              return returnedDataOffsets;
+            },
+
+            _calculateThreadedMessagesOffsets: function (data_by_object, order_lookup_table, requestedOffsets) {
+              var returnedDataOffsets = {},
+                  numMessages = order_lookup_table.length;
+
+              if (numMessages > 0) {
+                //Find preceding root message, and include it
+                //It is not possible that we do not find one if there is
+                //at least one message
+                //Gaby: Never declare an incremental variable "i" out of loop, it's a memory leak
+                for (var i = requestedOffsets['offsetStart']; i >= 0; i--) {
+                  if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
+                    returnedDataOffsets['offsetStart'] = i;
+                    break;
+                  }
+                }
+              }
+              else {
+                returnedDataOffsets['offsetStart'] = 0;
+              }
+              if (requestedOffsets['offsetEnd'] > (numMessages - 1)) {
+                returnedDataOffsets['offsetEnd'] = (numMessages - 1);
+              }
+              else {
+                if (data_by_object[order_lookup_table[requestedOffsets['offsetEnd']]]['last_ancestor_id'] === null) {
+                  returnedDataOffsets['offsetEnd'] = requestedOffsets['offsetEnd'];
                 }
                 else {
-                    if (data_by_object[order_lookup_table[requestedOffsets['offsetEnd']]]['last_ancestor_id'] === null) {
-                        returnedDataOffsets['offsetEnd'] = requestedOffsets['offsetEnd'];
-                    }
-                    else {
-                        //If the requested offsetEnd isn't a root, find next root message, and stop just
-                        //before it
+                  //If the requested offsetEnd isn't a root, find next root message, and stop just
+                  //before it
 
-                        for (var i = requestedOffsets['offsetEnd']; i < numMessages; i++) {
-                            if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
-                                returnedDataOffsets['offsetEnd'] = i - 1;
-                                break;
-                            }
-                        }
-                        if (returnedDataOffsets['offsetEnd'] === undefined) {
-                            //It's possible we didn't find a root, if we are at the very end of the list
-                            returnedDataOffsets['offsetEnd'] = numMessages;
-                        }
+                  for (var i = requestedOffsets['offsetEnd']; i < numMessages; i++) {
+                    if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
+                      returnedDataOffsets['offsetEnd'] = i;
+                      break;
                     }
+                  }
+                  if (returnedDataOffsets['offsetEnd'] === undefined) {
+                    //It's possible we didn't find a root, if we are at the very end of the list
+                    returnedDataOffsets['offsetEnd'] = numMessages;
+                  }
                 }
-
-                return returnedDataOffsets;
+              }
+              return returnedDataOffsets;
             },
 
             /**
@@ -669,35 +686,32 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 return requestedOffsets;
             },
 
-
-            /**
-             * Returns the messages to be rendered
-             * @return {Message[]}
-             */
-            getAllMessageStructureModelsToDisplay: function () {
-                var toReturn = [],
-                    that = this,
-                    model = null,
-                    messages = this.allMessageStructureCollection;
-
-                that.DEPRECATEDmessageIdsToDisplay.forEach(function (id) {
-                    model = messages.get(id);
-                    if (model) {
-                        toReturn.push(model);
-                    } else {
-                        console.error('ERROR:  getAllMessageStructureModelsToDisplay():  Message with id ' + id + ' not found!');
-                    }
-                });
-
-                return toReturn;
-            },
-
             /** Essentially the default value of showMessages.
              * Whoever first calls it will get this as the first value of the messagelist upon render */
             requestMessages: function (requestedOffsets) {
                 this._requestedOffsets = requestedOffsets;
             },
 
+            /** 
+             * Get the message ids to show, or shown onscreen for a specific 
+             * offset
+             * @return list of message ids, in the order they are shown onscreen
+             * */
+            getMessageIdsToShow: function (requestedOffsets) {
+              var messageIdsToShow = [],
+                  returnedOffsets = this.calculateMessagesOffsets(requestedOffsets);
+              if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
+                  (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
+                messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']+1);
+              } else {
+                messageIdsToShow = this.resultMessageIdCollection.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']+1);
+              }
+              if (this.debugPaging) {
+                console.log("getMessageIdsToShow() called with requestedOffsets:", requestedOffsets, " returning ", _.size(messageIdsToShow), "/", _.size(this.resultMessageIdCollection), " message ids: ", messageIdsToShow);
+              }
+              return messageIdsToShow;
+            },
+            
             /**
              * Load the new batch of messages according to the requested `offsetStart`
              * and `offsetEnd` prop
@@ -707,21 +721,20 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             showMessages: function (requestedOffsets) {
                 var that = this,
                     views_promise,
-                    models,
                     offsets,
                     numMessages,
+                    messageIdsToShow,
                     returnedOffsets = {},
-                    messageIdsToShow = [],
                     messageFullModelsToShowPromise,
                     previousScrollTarget;
-
-                this.renderIsComplete = false;//Because of a hack to call showMessageById from render_real
+                //Because of a hack to call showMessageById from render_real
+                //Note that this can also be set to false in onRender()
+                this.renderIsComplete = false;
+                
 
                 if (this.debugPaging) {
                     console.log("showMessages() called with requestedOffsets:", requestedOffsets);
                 }
-                //Note that this can also be set to false in onRender()
-                that.renderIsComplete = false;
 
                 if (!requestedOffsets) {
                     if (requestedOffsets === undefined) {
@@ -756,21 +769,15 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                  */
                 this.renderedMessageViewsCurrent = {};
                 this.suspendAnnotatorRefresh();
-
+                
+                returnedOffsets = this.calculateMessagesOffsets(requestedOffsets);
+                messageIdsToShow = this.getMessageIdsToShow(requestedOffsets);
+                numMessages = _.size(this.resultMessageIdCollection);
                 if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
                     (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
-                    models = _.clone(this.visitorRootMessagesToDisplay);
-                    numMessages = _.size(that.visitorOrderLookupTable);
-                    returnedOffsets = this.calculateThreadedMessagesOffsets(this.visitorViewData, that.visitorOrderLookupTable, requestedOffsets);
-                    messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']);
-                    var collectionManager = new CollectionManager();
-
-                    collectionManager.getMessageFullModelsPromise(messageIdsToShow);
-                    views_promise = this.getRenderedMessagesThreaded(models, 1, this.visitorViewData, returnedOffsets);
+                  views_promise = this.getRenderedMessagesThreadedPromise(_.clone(this.visitorRootMessagesToDisplay), 1, this.visitorViewData, messageIdsToShow);
                 } else {
-                    models = this.getAllMessageStructureModelsToDisplay();
-                    numMessages = _.size(models);
-                    views_promise = this.getRenderedMessagesFlat(models, requestedOffsets, returnedOffsets);
+                  views_promise = this.getRenderedMessagesFlatPromise(messageIdsToShow);
                 }
 
                 this._offsetStart = returnedOffsets['offsetStart'];
@@ -942,7 +949,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             /**
-             * Get the requested offsets when scrooling up
+             * Get the requested offsets when scrolling up
              * @private
              */
             getPreviousMessagesRequestedOffsets: function () {
@@ -1173,7 +1180,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   // including zombie views, and we get nested annotator tags as a result.
                   // (Annotator looks at fresh DOM every time).  Is that still the case?  Benoitg - 2014-09-19
                   // TODO long term: Keep them with a real CompositeView.
-                  that.DEPRECATEDmessageIdsToDisplay = resultMessageIdCollection;
+                  that.resultMessageIdCollection = resultMessageIdCollection;
                   that.visitorViewData = {};
                   that.visitorOrderLookupTable = [];
                   that.visitorRootMessagesToDisplay = [];
@@ -1198,12 +1205,21 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     } else {
                         that.ui.stickyBar.fadeIn();
                     }
-
                 });
-
+                //This event cannot be binded in ui, because backbone binds to 
+                //the top element and scroll does not propagate
+                this.$(".panel-body").scroll(this, this.scrollLogger);
+                
                 this.showInspireMeIfAvailable();
-
             },
+            
+            /**
+             * DOM is ready
+             */
+            onAttach: function() {
+;
+            },
+            
             /**
              * Renders the search result information
              */
@@ -1294,38 +1310,11 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * from requestedOffsets
              * @return {HTMLDivElement[]}
              */
-            getRenderedMessagesFlat: function (messages, requestedOffsets, returnedDataOffsets) {
+            getRenderedMessagesFlatPromise: function (requestedIds) {
                 var that = this,
-                    filter = this.currentFilter,
-                    len = messages.length,
-                    i = _.isUndefined(requestedOffsets['offsetStart']) ? 0 : requestedOffsets['offsetStart'],
                     view,
-                    messageStructureModel,
-                    children,
-                    prop,
-                    isValid,
                     defer = $.Deferred(),
-                    collectionManager = new CollectionManager(),
-                    requestedIds = [],
-                    returnList = undefined;
-
-                returnedDataOffsets['offsetStart'] = i;
-                returnedDataOffsets['offsetEnd'] = _.isUndefined(requestedOffsets['offsetEnd']) ? MORE_PAGES_NUMBER : requestedOffsets['offsetEnd'];
-                if (returnedDataOffsets['offsetEnd'] < len) {
-                    // if offsetEnd is bigger than len, do not use it
-                    len = returnedDataOffsets['offsetEnd'] + 1;
-                }
-                else {
-                    returnedDataOffsets['offsetEnd'] = len - 1;
-                }
-                for (; i < len; i++) {
-                    messageStructureModel = messages[i];
-                    if (_.isUndefined(messageStructureModel)) {
-                        console.log("FIXME:  This should NOT happen!");
-                        continue;
-                    }
-                    requestedIds.push(messageStructureModel.id);
-                }
+                    collectionManager = new CollectionManager();
 
                 return collectionManager.getMessageFullModelsPromise(requestedIds)
                     .then(function (fullMessageModels) {
@@ -1338,7 +1327,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                             });
                             list.push(view.render().el);
                         });
-                        //console.log("getRenderedMessagesFlat():  Resolving promise with:",list);
+                        //console.log("getRenderedMessagesFlatPromise():  Resolving promise with:",list);
                         return Promise.resolve(list);
                     }).catch(function(e){
                         console.error(e.statusText);
@@ -1351,10 +1340,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @param {Message.Model[]} list of messages to render at the current level
              * @param {Number} [level=1] The current hierarchy level
              * @param {Object[]} data_by_object render information from ideaRendervisitor
-             * @param {Object[]} offsets the message offset range to show
+             * @param {[]} messageIdsToShow messageIds of the message to show (those in the offset range)
              * @return [jquery.promise]
              */
-            getRenderedMessagesThreaded: function (sibblings, level, data_by_object, offsets) {
+            getRenderedMessagesThreadedPromise: function (sibblings, level, data_by_object, messageIdsToShow) {
                 var that = this,
                     list = [],
                     i = 0,
@@ -1369,7 +1358,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     collectionManager = new CollectionManager(),
                     debug = false;
                 if (debug) {
-                    console.log("getRenderedMessagesThreaded() num sibblings:", _.size(sibblings), "level:", level, "offsets", offsets);
+                    console.log("getRenderedMessagesThreadedPromise() num sibblings:", _.size(sibblings), "level:", level, "messageIdsToShow", messageIdsToShow);
                 }
                 /**  [last_sibling_chain] which of the view's ancestors are the last child of their respective parents.
                  *
@@ -1408,8 +1397,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         return undefined;
                     }
                     //Only process if message is within requested offsets
-                    if ((current_message_info['traversal_order'] >= offsets['offsetStart'])
-                        && (current_message_info['traversal_order'] <= offsets['offsetEnd'])) {
+                    if (_.contains(messageIdsToShow, model.id)) {
                         return model;
                     }
                     else {
@@ -1423,13 +1411,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                 if (!messageStructureModel) {
                     if (debug) {
-                        console.log("getRenderedMessagesThreaded() sibblings is now empty, returning.");
+                        console.log("getRenderedMessagesThreadedPromise() sibblings is now empty, returning.");
                     }
                     return list;
                 }
                 current_message_info = data_by_object[messageStructureModel.getId()];
                 if (debug) {
-                    console.log("getRenderedMessagesThreaded() processing message: ", messageStructureModel.id, " at offset", current_message_info['traversal_order'], "with", _.size(current_message_info['children']), "children");
+                    console.log("getRenderedMessagesThreadedPromise() processing message: ", messageStructureModel.id, " at offset", current_message_info['traversal_order'], "with", _.size(current_message_info['children']), "children");
                 }
 
                 if (current_message_info['last_sibling_chain'] === undefined) {
@@ -1442,7 +1430,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                 //Process children, if any
                 if (_.size(children) > 0) {
-                    var subviews_promise = this.getRenderedMessagesThreaded(children, level + 1, data_by_object, offsets);
+                    var subviews_promise = this.getRenderedMessagesThreadedPromise(children, level + 1, data_by_object, messageIdsToShow);
                 }
                 else {
                     var subviews_promise = [];
@@ -1450,7 +1438,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                 //Process sibblings, if any (this is for-loop rewritten as recursive calls to avoid locking the browser)
                 if (sibblings.length > 0) {
-                    var sibblingsviews_promise = this.getRenderedMessagesThreaded(sibblings, level, data_by_object, offsets);
+                    var sibblingsviews_promise = this.getRenderedMessagesThreadedPromise(sibblings, level, data_by_object, messageIdsToShow);
                 }
                 else {
                     var sibblingsviews_promise = [];
@@ -1481,7 +1469,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                      console.log("Invalid message was:",model);
                      list.push(ghost_element);
                      children = model.getChildren();
-                     ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreaded(
+                     ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreadedPromise(
                      children, level+1, data_by_object) );
                      }
                      */
@@ -1793,7 +1781,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     }
                 }
                 else {
-                    targetMessageViewStyle = defaultMessageStyle;
+                  targetMessageViewStyle = defaultMessageStyle;
                 }
                 return targetMessageViewStyle;
             },
@@ -1866,8 +1854,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         visitorViewData: this.visitorViewData
                       }
                   );
-                  //TO REPRODUCE, USE THE SYNTHESIS SECTION IN NAVIGATION
-                  //return -1;
                 }
                 
                   messageOffset = this.getResultThreadedTraversalOrder(messageId, visitorOrderLookupTable, resultMessageIdCollection);
@@ -1881,24 +1867,38 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             /**
              * Is the message currently onscreen (in the set of filtered messages
              * AND between the offsets onscreen.
-             * This does NOT mean it's view has already finished rendering
+             * This does NOT mean it's view has already finished rendering,
+             * nor that it's vithin the current scroll viewport
              * @param {String} id
              * @return{Boolean} true or false
              */
-            isMessageOnscreen: function (id, visitorOrderLookupTable, resultMessageIdCollection) {
-                var messageIndex = this.getMessageOffset(id, visitorOrderLookupTable, resultMessageIdCollection);
-                if (this.debugPaging) {
-                console.log("isMessageOnscreen(): ", this._offsetStart, messageIndex, this._offsetEnd)
-                }
-                if (this._offsetStart === undefined || this._offsetEnd === undefined) {
-                    return false;
-                }
-                else {
-                    return (this._offsetStart <= messageIndex) && (messageIndex <= this._offsetEnd);
-                }
+            isMessageOnscreen: function (id) {
+              var messagesOnScreenIds= this.getMessageIdsToShow({
+                  'offsetStart': this._offsetStart,
+                  'offsetEnd': this._offsetEnd
+                });
+              
+              return _.contains(messagesOnScreenIds, id);
             },
 
+            /**
+             * @return:  A list of jquery selectors
+             */
+            getOnScreenMessagesSelectors: function () {
+              var that = this,
+                  messagesOnScreenIds = this.getMessageIdsToShow({
+                      'offsetStart': this._offsetStart,
+                      'offsetEnd': this._offsetEnd
+                    }),
+                  messagesOnScreenJquerySelectors = [];
 
+              _.each(messagesOnScreenIds, function(messageId) {
+                var selector = that.getMessageSelector(messageId);
+                messagesOnScreenJquerySelectors.push(selector);
+              });
+              return messagesOnScreenJquerySelectors;
+            },
+            
             /**
              * scrolls to any dom element in the messageList.
              * Unlike scrollToMessage, the element must already be onscreen.
@@ -1932,8 +1932,16 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     }
                 }
             },
-
-            /** Scrools to a specific message, retrying untill relevent renders
+            
+            /** 
+             * Get a jquery selector for a specific message id
+             */
+            getMessageSelector: function (messageId) {
+              var selector = Ctx.format('[id="message-{0}"]', messageId);
+              return this.$(selector);
+            },
+            
+            /** scrolls to a specific message, retrying untill relevent renders
              * are complete
              */
             scrollToMessage: function (messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth, originalRenderId) {
@@ -1975,8 +1983,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this._scrollToMessageInProgressId = originalRenderId;
               }
               var animate_message = function (message) {
-                var selector = Ctx.format('[id="message-{0}"]', message.id),
-                el = $(selector);
+                el = this.getMessageSelector(message.id);
 
                 if (el[0]) {
                   if (shouldOpenMessageSelected) {
@@ -2112,7 +2119,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                           messageIsInFilter = that.isMessageIdInResults(id, resultMessageIdCollection),
                           requestedOffsets;
 
-                      if (messageIsInFilter && !that.isMessageOnscreen(id, that.visitorOrderLookupTable, resultMessageIdCollection)) {
+                      if (messageIsInFilter && !that.isMessageOnscreen(id)) {
                           if (shouldRecurse) {
                               var success = function () {
                                 if(debug) {
@@ -2184,7 +2191,96 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             scrollToMsgBox: function () {
                 this.scrollToElement(this.$('.messagelist-replybox'));
                 this.$('.messageSend-subject').focus();
-            }
+            },
+            
+
+            checkMessagesOnscreen: function() {
+              // Check scrollToElement
+              // that.isMessageOnscreen(id)
+              var messageDoms = this.getOnScreenMessagesSelectors(),
+                  currentScrolltop = this.ui.panelBody.scrollTop(),
+                  currentViewPortTop = this.ui.panelBody.offset().top,
+                  currentViewPortBottom = currentViewPortTop + this.ui.panelBody.height() - this.ui.stickyBar.height();
+              if(this.debugScrollLogging) {
+                //console.log(messageDoms);
+                //onsole.log("checkMessagesOnscreen(): currentScrolltop", currentScrolltop, "currentViewPortTop", currentViewPortTop, "currentViewPortBottom", currentViewPortBottom);
+              }
+              
+              _.each(messageDoms, function(messageSelector) {
+                var messageTop = messageSelector.offset().top,
+                    messageBottom = messageTop + messageSelector.height(),
+                    messageHeight = messageBottom - messageTop,
+                    heightAboveViewPort = currentViewPortTop - messageTop,
+                    heightBelowViewPort = messageBottom - currentViewPortBottom,
+                    messageWhiteSpaceRatio = (messageSelector.find(".js_messageHeader").height() + messageSelector.find(".js_messageBottomMenu").height() - 15) / messageHeight, //15px message padding bottom
+                    ratioOnscreen;
+                if (heightAboveViewPort < 0) {
+                  heightAboveViewPort = 0;
+                }
+                else if (heightAboveViewPort > messageHeight) {
+                  heightAboveViewPort = messageHeight;
+                }
+                if (heightBelowViewPort < 0) {
+                  heightBelowViewPort = 0;
+                }
+                else if (heightBelowViewPort > messageHeight) {
+                  heightBelowViewPort = messageHeight;
+                }
+                ratioOnscreen = (messageHeight - heightAboveViewPort - heightBelowViewPort) / messageHeight;
+                
+                //console.log("message heightAboveViewPort ", heightAboveViewPort, "heightBelowViewPort",heightBelowViewPort );
+                console.log("message % on screen: ", ratioOnscreen * 100, "messageWhiteSpaceRatio", messageWhiteSpaceRatio );
+                }
+              );
+            },
+            
+            /**
+             * WARNING, this is a jquery handler, not a backbone one
+             * Processes the scroll events to ultimately generate analytics
+             * @event
+             * @param ev The jquery event, with the view as ev.data
+             */
+            scrollLogger: _.debounce(function (ev) {
+              var that = ev.data,
+              //alert("scroll");
+              CURRENT_FONT_SIZE_PX = 13,
+              //Approximate using messagelist width - 2 * (messageList padding + messageFamily padding, messageFamily margin, message margin.
+              //This is only a good estimation for flat viewss
+              averageMessageWidth = that.ui.messageList.width() - 2 * (20 + 6 + 6 + 10),
+              //Character per line:  normally between 45 to 75, 66 is considered ideal.
+              //Average character per line = div width / font size in px*0.4
+              CURRENT_CHARACTERS_PER_LINE = averageMessageWidth / (CURRENT_FONT_SIZE_PX*0.4),
+              //(gotcha:  ideally substract non-character size of message, but still count header)
+              ESTIMATED_LINE_HEIGHT = 1.5 * CURRENT_FONT_SIZE_PX,
+              //Character per word: 5.1 average for english language + 1 space => multipy WPM*5 to get CPM
+              LINE_CARACTERS_PER_WORD = 5.1 + 1,
+              WORDS_PER_LINE = CURRENT_CHARACTERS_PER_LINE / LINE_CARACTERS_PER_WORD,
+              currentScrolltop = that.ui.panelBody.scrollTop(),
+              d = new Date(),
+              currentTimeStamp = d.getTime(),
+              distance = currentScrolltop - that.scrollLoggerPreviousScrolltop,
+              elapsedMilliseconds = currentTimeStamp - that.scrollLoggerPreviousTimestamp,
+              scrollLines = distance / ESTIMATED_LINE_HEIGHT,
+              scrollLinesPerMinute = scrollLines / elapsedMilliseconds*1000*60,
+              scrollWordsPerMinute = scrollLinesPerMinute * WORDS_PER_LINE;
+
+              if(that.debugScrollLogging) {
+                /*console.log("CURRENT_FONT_SIZE_PX", CURRENT_FONT_SIZE_PX);
+                console.log("averageMessageWidth", averageMessageWidth);
+                console.log("CURRENT_CHARACTERS_PER_LINE", CURRENT_CHARACTERS_PER_LINE);
+                console.log("ESTIMATED_LINE_HEIGHT", ESTIMATED_LINE_HEIGHT);
+                console.log("LINE_CARACTERS_PER_WORD", LINE_CARACTERS_PER_WORD);
+                console.log("WORDS_PER_LINE", WORDS_PER_LINE);
+                console.log("CURRENT_FONT_SIZE_PX", CURRENT_FONT_SIZE_PX);
+                console.log("scrollLines", scrollLines);
+                console.log("scrollLinesPerMinute", scrollLinesPerMinute);
+*/
+                console.log("Distance: ",distance, "px, scrollWordsPerMinute: ", scrollWordsPerMinute);
+              }
+              that.scrollLoggerPreviousScrolltop = currentScrolltop;
+              that.scrollLoggerPreviousTimestamp = currentTimeStamp;
+              that.checkMessagesOnscreen();
+            }, 1000)
 
         });
 
