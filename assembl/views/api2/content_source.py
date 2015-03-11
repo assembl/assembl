@@ -12,7 +12,7 @@ from assembl.tasks.source_reader import wake
 
 @view_config(context=InstanceContext, request_method='POST',
              ctx_instance_class=ContentSource, permission=P_READ,
-             header=FORM_HEADER, renderer='json')
+             header=FORM_HEADER, renderer='json', name="fetch_posts")
 def fetch_posts(request):
     # Temporary: Restrict to FeedPostSource
     # until the IMAP sources are tested.

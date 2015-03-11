@@ -675,7 +675,7 @@ class User(AgentProfile):
             for notification_subscription in \
                     other_user.notification_subscriptions:
                 notification_subscription.user = self
-                if not notification_subscription.check_unique():
+                if notification_subscription.find_duplicate() is not None:
                     self.db.delete(notification_subscription)
 
     def send_email(self, **kwargs):
