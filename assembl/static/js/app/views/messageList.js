@@ -776,7 +776,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this._offsetStart = returnedOffsets['offsetStart'];
                 this._offsetEnd = returnedOffsets['offsetEnd'];
 
-                $.when(views_promise).done(function (views) {
+                views_promise.then(function (views) {
                     if (that.debugPaging) {
                         console.log("showMessages() showing requestedOffsets:", requestedOffsets, "returnedOffsets:", returnedOffsets, "messageIdsToShow", messageIdsToShow, "out of numMessages", numMessages, "root views", views);
                     }
@@ -1327,26 +1327,23 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     requestedIds.push(messageStructureModel.id);
                 }
 
-                collectionManager.getMessageFullModelsPromise(requestedIds)
+                return collectionManager.getMessageFullModelsPromise(requestedIds)
                     .then(function (fullMessageModels) {
                         var list = [];
                         _.each(fullMessageModels, function (fullMessageModel) {
                             view = new MessageFamilyView({
                                 model: fullMessageModel,
                                 messageListView: that,
-                                hasChildren:false
+                                hasChildren: false
                             });
-                            //view.hasChildren = false;
                             list.push(view.render().el);
                         });
                         //console.log("getRenderedMessagesFlat():  Resolving promise with:",list);
-                        returnList = Promise.resolve(list);
+                        return Promise.resolve(list);
                     }).catch(function(e){
                         console.error(e.statusText);
                         Promise.reject();
                     });
-
-                return returnList;
             },
 
             /**

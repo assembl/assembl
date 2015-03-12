@@ -588,7 +588,6 @@ define(['app',
 
             getMessageFullModelsPromise: function (ids) {
                 var that = this,
-                    returnedCollection = undefined,
                     returnedModelsPromises = [],
                     allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
 
@@ -596,19 +595,17 @@ define(['app',
                         returnedModelsPromises.push(that.getMessageFullModelPromise(id));
                     });
 
-                allMessageStructureCollectionPromise.done(function (allMessageStructureCollection) {
-                    Promise.all(returnedModelsPromises).then(function () {
-                        var args = Array.prototype.slice.call(arguments);
+                return allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
+                    return Promise.all(returnedModelsPromises).then(function (models) {
+                        //var args = Array.prototype.slice.call(arguments);
                         //console.log("getMessageFullModelsPromise() resolved promises:", returnedModelsPromises);
                         //console.log("getMessageFullModelsPromise() resolving with:", args);
-                        returnedCollection = Promise.resolve(args);
+                        return Promise.resolve(models);
                     }).catch(function (e) {
                         console.log("getMessageFullModelsPromise: One of the id's couldn't be retrieved", e.statusText);
                         Promise.reject();
                     });
                 });
-
-                return returnedCollection;
             },
 
             /*getAllSynthesisCollectionPromise: function () {
