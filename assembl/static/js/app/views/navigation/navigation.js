@@ -11,7 +11,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
             minWidth: 350,
             //This MUST match the variables in _variables.scss
-            group_header_height: 3,
+            group_header_height: 0,
             group_editable_header_height: 25,
             getTitle: function () {
                 return 'Navigation'; // unused
