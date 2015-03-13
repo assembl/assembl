@@ -3,12 +3,24 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% block title %}Assembl{% endblock %}</title>
+    <title>{% block page_title %}Assembl{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale = 1,user-scalable=no,maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Imagination for people">
 
-		<link rel="icon" href="/static/img/icon/favicon.ico" type="image/x-icon">
+    {% block open_graph_protocol_meta_tags %}
+    <meta property="og:title" content="Assembl" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.application_url }}" />
+    <meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/crowd2.jpg" />
+    <meta property="og:image:width" content="1600" />
+    <meta property="og:image:height" content="222" />
+    <meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/logo.png" />
+    <meta property="og:image:width" content="111" />
+    <meta property="og:image:height" content="35" />
+    {% endblock open_graph_protocol_meta_tags %}
+
+    <link rel="icon" href="/static/img/icon/favicon.ico" type="image/x-icon">
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
     <link type="text/css" rel="stylesheet" href="/static/css/themes/{{theme}}/theme.css" />
     <link type="text/css" rel="stylesheet" href="/static/js/bower/jquery-oembed-all/jquery.oembed.css" />

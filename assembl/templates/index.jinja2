@@ -1,5 +1,20 @@
 {% extends 'base.jinja2' %}
 
+{% block page_title %}{{ discussion.topic }}{% endblock %}
+
+{% block open_graph_protocol_meta_tags %}
+<meta property="og:title" content="{{ discussion.topic }}" />
+<meta property="og:type" content="website" />
+{# not shown because introduction has HTML, so it should be filtered <meta property="og:description" content="{{ discussion.introduction }}" />#}
+<meta property="og:url" content="{{ request.application_url }}/{{ discussion.slug }}/" />
+<meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/crowd2.jpg" />
+<meta property="og:image:width" content="1600" />
+<meta property="og:image:height" content="222" />
+<meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/logo.png" />
+<meta property="og:image:width" content="111" />
+<meta property="og:image:height" content="35" />
+{% endblock %}
+
 {% block content %}
 <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
 <input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
