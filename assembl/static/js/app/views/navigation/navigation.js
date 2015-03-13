@@ -1,7 +1,7 @@
 'use strict';
 
 define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notification', 'views/navigation/home', 'views/navigation/synthesisInNavigation', 'views/navigation/linkListView', 'views/assemblPanel', 'common/context', 'utils/permissions', 'jquery', 'utils/panelSpecTypes', 'jed'],
-    function (Assembl, Marionette, IdeaList, sidebarNotification, HomePanel, SynthesisInNavigationPanel, LinkListView, AssemblPanel, ctx, Permissions, $, PanelSpecTypes, Jed) {
+    function (Assembl, Marionette, IdeaList, sidebarNotification, HomePanel, SynthesisInNavigationPanel, LinkListView, AssemblPanel, Ctx, Permissions, $, PanelSpecTypes, Jed) {
 
         var NavigationView = AssemblPanel.extend({
             template: "#tmpl-navigation",
@@ -11,7 +11,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
             minWidth: 350,
             //This MUST match the variables in _variables.scss
-            group_header_height: 3,
+            group_header_height: 0,
             group_editable_header_height: 25,
             getTitle: function () {
                 return 'Navigation'; // unused
@@ -46,7 +46,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 this.visualizationItems = new Backbone.Collection();
                 this.num_items = 3;
 
-                ctx.getDiscussionPromise().done(function(discussion) {
+                Ctx.getDiscussionPromise().then(function(discussion) {
                     var settings = discussion['settings'];
                     var jed;
                     try {
@@ -67,7 +67,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         that.visualizationItems.reset(_.map(visualization_items, function(item) {
                             return new Backbone.Model({
                                 "url": _.template(item.url, {
-                                    "url": encodeURIComponent(server_url+'/data/Discussion/'+ctx.getDiscussionId()+'/jsonld'),
+                                    "url": encodeURIComponent(server_url+'/data/Discussion/'+Ctx.getDiscussionId()+'/jsonld'),
                                     "lang": assembl_locale
                                 }),
                                 "title": jed.gettext(item.title),
@@ -208,9 +208,9 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
 
             serializeData: function () {
                 return {
-                    Ctx: ctx,
-                    hasMinimize: (ctx.getCurrentInterfaceType() === ctx.InterfaceTypes.EXPERT),
-                    canAdd: ctx.getCurrentUser().can(Permissions.ADD_IDEA)
+                    Ctx: Ctx,
+                    hasMinimize: (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT),
+                    canAdd: Ctx.getCurrentUser().can(Permissions.ADD_IDEA)
                 }
             },
 

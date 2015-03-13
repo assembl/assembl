@@ -1,7 +1,7 @@
 'use strict';
 
-define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
-    function (_, $, Assembl, Ctx, Base) {
+define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebird'],
+    function (_, $, Assembl, Ctx, Base, Promise) {
 
         /**
          * @class MessageModel
@@ -90,8 +90,8 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
             getAnnotationsPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
-                this.getExtractsPromise().done(
-                    function (extracts) {
+                this.getExtractsPromise()
+                    .done(function (extracts) {
                         var ret = [];
 
                         _.each(extracts, function (extract) {
@@ -110,7 +110,7 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
              * Return all segments in the annotator format
              * @return {Object[]}
              */
-            getExtractsPromise: function () {
+            /*getExtractsPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
                 this.collection.collectionManager.getAllExtractsCollectionPromise().done(
@@ -120,21 +120,45 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base'],
                     }
                 );
                 return deferred.promise();
+            },*/
+
+            getExtractsPromise: function () {
+                var that = this;
+                return this.collection.collectionManager.getAllExtractsCollectionPromise()
+                    .then(function (allExtractsCollection) {
+                        return Promise.resolve(allExtractsCollection.where({idPost: that.getId()}))
+                            .catch(function(e){
+                                console.error(e.statusText);
+                            });
+                    }
+                );
             },
 
             /** Return a promise for the post's creator
              * @return {$.Defered.Promise}
              */
-            getCreatorPromise: function () {
+            /*getCreatorPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
-                this.collection.collectionManager.getAllUsersCollectionPromise().done(
-                    function (allUsersCollection) {
+                this.collection.collectionManager.getAllUsersCollectionPromise()
+                    .then(function (allUsersCollection) {
                         var creatorId = that.get('idCreator');
                         deferred.resolve(allUsersCollection.getById(creatorId));
-                    }
-                );
+                    });
                 return deferred.promise();
+            },*/
+
+            getCreatorPromise: function () {
+                var that = this;
+
+                return this.collection.collectionManager.getAllUsersCollectionPromise()
+                    .then(function(allUsersCollection){
+                        return Promise.resolve(allUsersCollection.getById(that.get('idCreator')))
+                            .catch(function(e){
+                                console.error(e.statusText);
+                            });
+                });
+
             },
 
             /**

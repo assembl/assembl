@@ -245,8 +245,12 @@ class NotificationSubscription(DiscussionBoundBase):
                 self, json, parse_def, aliases, ctx, permissions,
                 user_id, duplicate_error=True):
         from ..auth.util import user_has_permission
+        target_user_id = user_id
+        user = ctx.get_instance_of_class(User)
+        if user:
+            target_user_id = user.id
         if self.user_id:
-            if user_id != self.user_id:
+            if target_user_id != self.user_id:
                 if not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
                     raise HTTPUnauthorized()
             # For now, do not allow changing user, it's way too complicated.
@@ -255,7 +259,7 @@ class NotificationSubscription(DiscussionBoundBase):
         else:
             json_user_id = json.get('user', None)
             if json_user_id is None:
-                json_user_id = user_id
+                json_user_id = target_user_id
             else:
                 json_user_id = User.get_database_id(json_user_id)
                 if json_user_id != user_id and not user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
@@ -290,24 +294,15 @@ class NotificationSubscription(DiscussionBoundBase):
             if status != self.status:
                 self.status = status
                 self.last_status_change_date = datetime.now()
-        if not self.check_unique():
-            print "Duplicate"
-            raise HTTPBadRequest("Duplicate")
+        duplicate = self.find_duplicate()
+        if duplicate is not None:
+            raise HTTPBadRequest("Duplicate of <%s> created" % (duplicate.uri()))
         return self
-
-    def check_unique(self):
-        self.db.flush()
-        query, usable = self.unique_query()
-        if not usable:
-            return True
-        other = query.first()
-        return other is None or other is self
 
     def unique_query(self):
         # documented in lib/sqla
         query, _ = super(NotificationSubscription, self).unique_query()
         user_id = self.user_id or self.user.id
-        parent_subscription_id = self.parent_subscription_id
         return query.filter_by(
             user_id=user_id, type=self.type), False
 
@@ -364,6 +359,24 @@ class NotificationSubscription(DiscussionBoundBase):
 @event.listens_for(NotificationSubscription.status, 'set', propagate=True)
 def update_last_status_change_date(target, value, oldvalue, initiator):
     target.last_status_change_date = datetime.utcnow()
+
+from ..lib.sqla import get_session_maker
+
+@event.listens_for(get_session_maker(), "after_flush")
+def after_flush_list(session, flush_context):
+    session.assembl_objects_to_check_unique = []
+    for obj in session.new | session.dirty:
+        if isinstance(obj, NotificationSubscription):
+            session.assembl_objects_to_check_unique.append(obj)
+    for obj in session.dirty:
+        if isinstance(obj, NotificationSubscription) and session.is_modified(obj):
+            session.assembl_objects_to_check_unique.append(obj)
+
+@event.listens_for(get_session_maker(), "after_flush_postexec")
+def after_flush_check(session, flush_context):
+    for obj in session.assembl_objects_to_check_unique:
+        obj.assert_unique()
+    session.assembl_objects_to_check_unique = []
 
 
 class NotificationSubscriptionGlobal(NotificationSubscription):
@@ -889,7 +902,8 @@ class Notification(Base):
     def get_localizer(self):
         locale = self.first_matching_subscription.user.get_preferred_locale()
         if not locale:
-            locale = self.first_matching_subscription.discussion.get_discussion_locales()[0]
+            locale = self.first_matching_subscription.discussion.discussion_locales[0]
+        # TODO: if locale has country code, make sure we fallback properly.
         return make_localizer(locale, [
             join(dirname(dirname(__file__)), 'locale')])
 

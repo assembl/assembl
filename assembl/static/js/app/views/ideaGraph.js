@@ -98,8 +98,8 @@ define(['jit', 'common/context'], function ($jit, Ctx) {
                 //This is done by collecting the information (stored in the data property)
                 //for all the nodes adjacent to the centered node.
                 var node = ht.graph.getClosestNodeToOrigin("current");
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .done(function (allIdeasCollection) {
                         var idea = allIdeasCollection.get(node.id);
                         var suffix = "";
                         if (idea !== undefined) {

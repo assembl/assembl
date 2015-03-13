@@ -2,6 +2,7 @@
 
 define(['app',
         'backbone.marionette',
+        'bluebird',
         'models/message',
         'models/groupSpec',
         'models/idea',
@@ -18,7 +19,7 @@ define(['app',
         'models/roles',
         'models/discussion',
         'models/discussionSource'],
-    function (Assembl, Marionette, Message, groupSpec, Idea, IdeaLink, Segment, Synthesis, PartnerOrg, Agents, NotificationSubscription, $, Storage, Types, i18n, LocalRole, Discussion, DiscussionSource) {
+    function (Assembl, Marionette, Promise, Message, groupSpec, Idea, IdeaLink, Segment, Synthesis, Partners, Agents, NotificationSubscription, $, Storage, Types, i18n, LocalRole, Discussion, DiscussionSource) {
 
         /**
          * @class CollectionManager
@@ -176,7 +177,7 @@ define(['app',
                 return null;
             },
 
-            getAllUsersCollectionPromise: function () {
+            /*getAllUsersCollectionPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
 
@@ -194,9 +195,25 @@ define(['app',
                     });
                 }
                 return deferred.promise();
+            },*/
+
+            getAllUsersCollectionPromise: function () {
+                if (this._allUsersCollectionPromise) {
+                    return this._allUsersCollectionPromise;
+                }
+
+                this._allUsersCollection = new Agents.Collection();
+                this._allUsersCollection.collectionManager = this;
+                this._allUsersCollectionPromise = Promise.resolve(this._allUsersCollection.fetchFromScriptTag('users-json'))
+                    .thenReturn(this._allUsersCollection)
+                    .catch(function(e){
+                       console.error(e.statusText);
+                    });
+
+                return this._allUsersCollectionPromise;
             },
 
-            getAllMessageStructureCollectionPromise: function () {
+            /*getAllMessageStructureCollectionPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
 
@@ -215,13 +232,28 @@ define(['app',
                     });
                 }
                 return deferred.promise();
+            },*/
+
+            getAllMessageStructureCollectionPromise: function () {
+                if (this._allMessageStructureCollectionPromise) {
+                    return this._allMessageStructureCollectionPromise;
+                }
+                this._allMessageStructureCollection = new Message.Collection();
+                this._allMessageStructureCollection.collectionManager = this;
+                this._allMessageStructureCollectionPromise = Promise.resolve(this._allMessageStructureCollection.fetch())
+                    .thenReturn(this._allMessageStructureCollection)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this._allMessageStructureCollectionPromise;
             },
 
             _waitingWorker: undefined,
 
             _messageFullModelRequests: {},
 
-            getMessageFullModelRequestWorker: function (collectionManager) {
+            /*getMessageFullModelRequestWorker: function (collectionManager) {
                 this.collectionManager = collectionManager,
                     this.requests = this.collectionManager._messageFullModelRequests,
 
@@ -323,16 +355,146 @@ define(['app',
                   }
                   that.executeRequest();
                 }, collectionManager.FETCH_WORKERS_LIFETIME);
+            },*/
+
+            getMessageFullModelRequestWorker: function (collectionManager) {
+              this.collectionManager = collectionManager,
+              this.requests = this.collectionManager._messageFullModelRequests,
+
+              this.addRequest = function (id) {
+                /* Emulates the defered pattern in bluebird, in this case we really do need it */
+                function Defer() {
+                  var resolve, reject;
+                  var promise = new Promise(function() {
+                    resolve = arguments[0];
+                    reject = arguments[1];
+                  });
+                  return {
+                    resolve: resolve,
+                    reject: reject,
+                    promise: promise
+                  };
+                }
+                var promiseResolver;
+                if (this.requests[id] === undefined) {
+                  promiseResolver = new Defer();
+                  this.requests[id] = {'promiseResolver': promiseResolver,
+                                       'serverRequestInProgress': false,
+                                       'count': 1}
+                }
+                else {
+                  promiseResolver = this.requests[id]['promiseResolver'];
+                  this.requests[id]['count']++;
+                }
+                
+                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                    console.log("Added request for id:" + id + ", now ", this.requests[id]['count'], " requests for this id, queue size is now:" + _.size(this.requests));
+                }
+                // Each id can take up to ~40 characters.  To not exceed
+                // the 2048 characters unofficial limit for GET URLs,
+                // (IE and others), we only request up to do up to:
+                // 2000/40 ~= 50 id's at a time
+                var unservicedRequests = _.filter(this.requests, function(request){ return request['serverRequestInProgress'] === false; });
+                var numUnservicedRequests = _.size(unservicedRequests);
+                if (numUnservicedRequests >= 50) {
+                  if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                    console.log("Executing unserviced request immediately, unserviced queue size is now:", numUnservicedRequests);
+                  }
+                  //TODO:  This is suboptimal, as the server can still be hammered
+                  //with concurrent requests for the same data, causing
+                  //database contention.  Like a bit below, we should remember
+                  //how many requests are in transit, and not have more than 3
+
+                  //Alternatively, we could POST on a fake URL, with the url path
+                  //as the body of the request and avoid this spliting completely.
+
+                  this.executeRequest();
+                }
+                return promiseResolver.promise;
+              },
+
+              this.executeRequest = function () {
+
+                var that = this,
+                    allMessageStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise(),
+                    ids = [];
+                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                  console.log("executeRequest fired, unregistering worker from collection Manager");
+                }
+                this.collectionManager._waitingWorker = undefined;
+
+                _.each(that.requests, function (request, id) {
+                  //var structureModel = allMessageStructureCollection.get(id);
+                  if (request['serverRequestInProgress'] === false) {
+                    request['serverRequestInProgress'] = true;
+                    ids.push(id);
+                  }
+                });
+                allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
+                  var PostQuery = require('views/messageListPostQuery'),
+                      postQuery = new PostQuery(),
+                      viewDef = 'default';
+
+                  if (_.size(ids) > 0) {
+                    postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
+                    postQuery.setViewDef(viewDef); //We want the full messages
+                    if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                      console.log("requesting message data from server for "+ _.size(ids) + " messages");
+                    }
+
+                    postQuery.getResultRawDataPromise().then(function (results) {
+                      _.each(results, function (jsonData) {
+                        var id = jsonData['@id'],
+                            structureModel = allMessageStructureCollection.get(id),
+                            deferredList = that.requests[id];
+  
+                        if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                          console.log("executeRequest resolving for id", id, deferredList['count'], " requests queued for that id");
+                        }
+                        structureModel.set(jsonData);
+                        structureModel.viewDef = viewDef;
+                        if (deferredList !== undefined) {
+                          deferredList['promiseResolver'].resolve(structureModel);
+                          delete that.requests[id];
+                        }
+                        else {
+                          console.log("WARNING: collectionManager::executeRequest() received data for " + id + ", but there is no matching request.  Race condition?");
+                        }
+                      });
+                    });
+
+                  }
+                  else {
+                    if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                      console.log("executeRequest called, but no ids to request from the server out of the list of ", _.size(that.requests));
+                    }
+                  }
+                });
+
+              }
+
+              //Constructor
+              if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                  console.log("Spawning new _getMessageFullModelsRequestWorker");
+              }
+              var that = this;
+              this.executeTimeout = setTimeout(function () {
+                if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                  console.log("Executing unserviced request immediately (timeaout reached)");
+                }
+                that.executeRequest();
+              }, collectionManager.FETCH_WORKERS_LIFETIME);
             },
 
-
-            getMessageFullModelPromise: function (id) {
+            /**
+             * Need to be refactor with bluebird
+             * */
+            /*getMessageFullModelPromise: function (id) {
                 var that = this,
                     deferred = $.Deferred(),
                     allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
 
-
-                allMessageStructureCollectionPromise.done(function (allMessageStructureCollection) {
+                allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
                     var structureModel = allMessageStructureCollection.get(id),
                         returnedModel = undefined;
                     if (structureModel) {
@@ -357,7 +519,40 @@ define(['app',
                         deferred.reject();
                     }
                 });
+
                 return deferred.promise();
+            },*/
+
+            getMessageFullModelPromise: function (id) {
+                var that = this,
+                    allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
+
+                return allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
+                    var structureModel = allMessageStructureCollection.get(id);
+
+                    if (structureModel) {
+                        if (structureModel.viewDef !== undefined && structureModel.viewDef == "default") {
+                            if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                                console.log("getMessageFullModelPromise CACHE HIT!");
+                            }
+                            return Promise.resolve(structureModel);
+                        }
+                        else {
+                            if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+                                console.log("getMessageFullModelPromise CACHE MISS!");
+                            }
+
+                            if (that._waitingWorker === undefined) {
+                                that._waitingWorker = new that.getMessageFullModelRequestWorker(that);
+                            }
+                            return that._waitingWorker.addRequest(id);
+                        }
+                    }
+                    else {
+                      return Promise.reject("MODEL NOT FOUND for id!"+id);
+                    }
+                });
+
             },
 
             /**
@@ -365,7 +560,8 @@ define(['app',
              * @param ids[] array of message id's
              * @return Message.Model{}
              */
-            getMessageFullModelsPromise: function (ids) {
+
+            /*getMessageFullModelsPromise: function (ids) {
                 var that = this,
                     deferred = $.Deferred(),
                     allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise(),
@@ -388,9 +584,31 @@ define(['app',
                     );
                 });
                 return deferred.promise();
+            },*/
+
+            getMessageFullModelsPromise: function (ids) {
+                var that = this,
+                    returnedModelsPromises = [],
+                    allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
+
+                _.each(ids, function (id) {
+                        returnedModelsPromises.push(that.getMessageFullModelPromise(id));
+                    });
+
+                return allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
+                    return Promise.all(returnedModelsPromises).then(function (models) {
+                        //var args = Array.prototype.slice.call(arguments);
+                        //console.log("getMessageFullModelsPromise() resolved promises:", returnedModelsPromises);
+                        //console.log("getMessageFullModelsPromise() resolving with:", args);
+                        return Promise.resolve(models);
+                    }).catch(function (e) {
+                        console.log("getMessageFullModelsPromise: One of the id's couldn't be retrieved", e.statusText);
+                        Promise.reject();
+                    });
+                });
             },
 
-            getAllSynthesisCollectionPromise: function () {
+            /*getAllSynthesisCollectionPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
 
@@ -409,9 +627,24 @@ define(['app',
                     });
                 }
                 return deferred.promise();
+            },*/
+
+            getAllSynthesisCollectionPromise: function () {
+                if (this._allSynthesisCollectionPromise) {
+                    return this._allSynthesisCollectionPromise;
+                }
+                this._allSynthesisCollection = new Synthesis.Collection();
+                this._allSynthesisCollection.collectionManager = this;
+                this._allSynthesisCollectionPromise = Promise.resolve(this._allSynthesisCollection.fetch())
+                    .thenReturn(this._allSynthesisCollection)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this._allSynthesisCollectionPromise;
             },
 
-            getAllIdeasCollectionPromise: function () {
+            /*getAllIdeasCollectionPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
 
@@ -426,7 +659,7 @@ define(['app',
                          this.listenTo(this.ideas, "all", function(eventName) {
                          console.log("ideaList collection event received: ", eventName);
                          });
-                         */
+
 
                         //This is so the unread count update when setting a message unread.
                         //See Message:setRead()
@@ -445,9 +678,38 @@ define(['app',
                     });
                 }
                 return deferred.promise();
+            },*/
+
+            getAllIdeasCollectionPromise: function () {
+                var that = this;
+                if (this._allIdeasCollectionPromise) {
+                    return this._allIdeasCollectionPromise;
+                }
+
+                this._allIdeasCollection = new Idea.Collection();
+                this._allIdeasCollection.collectionManager = this;
+                this._allIdeasCollectionPromise = Promise.resolve(this._allIdeasCollection.fetchFromScriptTag('ideas-json'))
+                    .thenReturn(this._allIdeasCollection)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                //Start listener setup
+                //This is so the unread count update when setting a message unread.
+                //See Message:setRead()
+                Assembl.reqres.setHandler('ideas:update', function (ideas) {
+                    if (Ctx.debugRender) {
+                        console.log("ideaList: triggering render because app.on('ideas:update') was triggered");
+                    }
+                    that._allIdeasCollection.add(ideas, {merge: true});
+                });
+                //End listener setup
+
+                return this._allIdeasCollectionPromise;
+
             },
 
-            getAllIdeaLinksCollectionPromise: function () {
+            /*getAllIdeaLinksCollectionPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
 
@@ -458,9 +720,25 @@ define(['app',
                     deferred.resolve(this._allIdeaLinksCollection);
                 }
                 return this._allIdeaLinksCollectionPromise;
+            },*/
+
+            getAllIdeaLinksCollectionPromise: function () {
+                if (this._allIdeaLinksCollectionPromise) {
+                    return this._allIdeaLinksCollectionPromise;
+                }
+
+                this._allIdeaLinksCollection = new IdeaLink.Collection();
+                this._allIdeaLinksCollection.collectionManager = this;
+                this._allIdeaLinksCollectionPromise = Promise.resolve(this._allIdeaLinksCollection.fetch())
+                    .thenReturn(this._allIdeaLinksCollection)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this._allIdeaLinksCollectionPromise;
             },
 
-            getAllExtractsCollectionPromise: function () {
+            /*getAllExtractsCollectionPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
 
@@ -478,9 +756,25 @@ define(['app',
                     });
                 }
                 return deferred.promise();
+            },*/
+
+            getAllExtractsCollectionPromise: function () {
+                if (this._allExtractsCollectionPromise) {
+                    return this._allExtractsCollectionPromise;
+                }
+
+                this._allExtractsCollection = new Segment.Collection();
+                this._allExtractsCollection.collectionManager = this;
+                this._allExtractsCollectionPromise = Promise.resolve(this._allExtractsCollection.fetchFromScriptTag('extracts-json'))
+                    .thenReturn(this._allExtractsCollection)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this._allExtractsCollectionPromise;
             },
 
-            getAllPartnerOrganizationCollectionPromise: function () {
+            /*getAllPartnerOrganizationCollectionPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
 
@@ -498,9 +792,24 @@ define(['app',
                     });
                 }
                 return deferred.promise();
+            },*/
+
+            getAllPartnerOrganizationCollectionPromise: function () {
+                if (this._allPartnerOrganizationCollectionPromise) {
+                    return this._allPartnerOrganizationCollectionPromise;
+                }
+                this._allPartnerOrganizationCollection = new Partners.Collection();
+                this._allPartnerOrganizationCollection.collectionManager = this;
+                this._allPartnerOrganizationCollectionPromise = Promise.resolve(this._allPartnerOrganizationCollection.fetch())
+                    .thenReturn(this._allPartnerOrganizationCollection)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this._allPartnerOrganizationCollectionPromise;
             },
 
-            getNotificationsDiscussionCollectionPromise: function () {
+            /*getNotificationsDiscussionCollectionPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
 
@@ -519,9 +828,25 @@ define(['app',
                     });
                 }
                 return deferred.promise();
+            },*/
+
+            getNotificationsDiscussionCollectionPromise: function () {
+                if (this._allNotificationsDiscussionCollectionPromise) {
+                    return this._allNotificationsDiscussionCollectionPromise;
+                }
+                this._allNotificationsDiscussionCollection = new NotificationSubscription.Collection();
+                this._allNotificationsDiscussionCollection.setUrlToDiscussionTemplateSubscriptions();
+                this._allNotificationsDiscussionCollection.collectionManager = this;
+                this._allNotificationsDiscussionCollectionPromise = Promise.resolve(this._allNotificationsDiscussionCollection.fetch())
+                    .thenReturn(this._allNotificationsDiscussionCollection)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    })
+
+                return this._allNotificationsDiscussionCollectionPromise;
             },
 
-            getNotificationsUserCollectionPromise: function () {
+            /*getNotificationsUserCollectionPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
 
@@ -540,6 +865,24 @@ define(['app',
                     });
                 }
                 return deferred.promise();
+            },*/
+
+            getNotificationsUserCollectionPromise: function () {
+                if (this._allNotificationsUserCollectionPromise) {
+                    return this._allNotificationsUserCollectionPromise;
+                }
+
+                this._allNotificationsUserCollection = new NotificationSubscription.Collection();
+                this._allNotificationsUserCollection.setUrlToUserSubscription();
+                this._allNotificationsUserCollection.collectionManager = this;
+                this._allNotificationsUserCollectionPromise = Promise.resolve(this._allNotificationsUserCollection.fetch())
+                    .thenReturn(this._allNotificationsUserCollection)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this._allNotificationsUserCollectionPromise;
+
             },
 
             /*
@@ -583,7 +926,7 @@ define(['app',
                 return this._allGroupSpecsCollectionPromise;
             },
 
-            getLocalRoleCollectionPromise: function () {
+            /*getLocalRoleCollectionPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
 
@@ -601,9 +944,25 @@ define(['app',
                     });
                 }
                 return deferred.promise();
+            },*/
+
+            getLocalRoleCollectionPromise: function () {
+                if (this._allLocalRoleCollectionPromise) {
+                    return this._allLocalRoleCollectionPromise;
+                }
+
+                this._allLocalRoleCollection = new LocalRole.Collection();
+                this._allLocalRoleCollection.collectionManager = this;
+                this._allLocalRoleCollectionPromise = Promise.resolve(this._allLocalRoleCollection.fetch())
+                    .thenReturn(this._allLocalRoleCollection)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this._allLocalRoleCollectionPromise;
             },
 
-            getDiscussionModelPromise: function () {
+            /*getDiscussionModelPromise: function () {
                 var that = this,
                     deferred = Marionette.Deferred();
 
@@ -622,9 +981,25 @@ define(['app',
                 }
                 return deferred.promise();
 
+            },*/
+
+            getDiscussionModelPromise: function () {
+                if (this._allDiscussionModelPromise) {
+                    return this._allDiscussionModelPromise;
+                }
+
+                this._allDiscussionModel = new Discussion.Model();
+                this._allDiscussionModel.collectionManager = this;
+                this._allDiscussionModelPromise = Promise.resolve(this._allDiscussionModel.fetch())
+                    .thenReturn(this._allDiscussionModel)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this._allDiscussionModelPromise;
             },
 
-            getDiscussionSourceCollectionPromise: function () {
+            /*getDiscussionSourceCollectionPromise: function () {
                 var that = this,
                     deferred = Marionette.Deferred();
 
@@ -643,9 +1018,22 @@ define(['app',
                 }
                 return deferred.promise();
 
+            }*/
+
+            getDiscussionSourceCollectionPromise: function () {
+                if (this._allDiscussionSourceCollectionPromise) {
+                    return this._allDiscussionSourceCollectionPromise;
+                }
+                this._allDiscussionSourceCollection = new DiscussionSource.Collection();
+                this._allDiscussionSourceCollection.collectionManager = this;
+                this._allDiscussionSourceCollectionPromise = Promise.resolve(this._allDiscussionSourceCollection.fetch())
+                    .thenReturn(this._allDiscussionSourceCollection)
+                    .catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this._allDiscussionSourceCollectionPromise;
             }
-
-
 
         });
 

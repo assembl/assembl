@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'backbone.modal', 'backbone.marionette.modals', 'models/partners', 'models/discussion'],
-    function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types, backboneModal, marionetteModals, organization, Discussion) {
+define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'backbone.modal', 'backbone.marionette.modals', 'bluebird'],
+    function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types, backboneModal, marionetteModals, Promise) {
 
         var Partner = Marionette.ItemView.extend({
             template: '#tmpl-partnerItem',
@@ -804,12 +804,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 var collectionManager = new CollectionManager();
                 //var users = collectionManager.getAllUsersCollectionPromise();
 
-                $.when(collectionManager.getAllUsersCollectionPromise(),
-                    collectionManager.getAllMessageStructureCollectionPromise()
-                ).then(function (allUsersCollection, allMessagesCollection) {
+                Promise.join(collectionManager.getAllUsersCollectionPromise(),
+                             collectionManager.getAllMessageStructureCollectionPromise(),
+                    function (allUsersCollection, allMessagesCollection) {
                         // console.log("collections allUsersCollection, allMessagesCollection are loaded");
                         // console.log(allMessagesCollection);
-
                         if (allMessagesCollection.size() == 0) {
                             var chart_div = that.$('.chart');
                             chart_div.html(i18n.gettext("Not enough data yet."));
@@ -1323,7 +1322,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
             seeMore: function (e) {
                 e.stopPropagation();
-                $.when(Ctx.getDiscussionPromise()).then(function (discussion) {
+                Ctx.getDiscussionPromise().then(function (discussion) {
                     if($(e.target).hasClass('js_introductionSeeMore')) {
                         var model = new Backbone.Model({
                             content: discussion.introduction,
@@ -1452,11 +1451,12 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                $.when(collectionManager.getDiscussionModelPromise(),
+                Promise.join(collectionManager.getDiscussionModelPromise(),
                     collectionManager.getAllPartnerOrganizationCollectionPromise(),
                     collectionManager.getAllMessageStructureCollectionPromise(),
-                    collectionManager.getAllSynthesisCollectionPromise())
-                    .then(function (DiscussionModel, AllPartner, allMessageStructureCollection, allSynthesisCollection) {
+                    collectionManager.getAllSynthesisCollectionPromise(),
+
+                    function (DiscussionModel, AllPartner, allMessageStructureCollection, allSynthesisCollection) {
 
                     var partnerInstigator =  AllPartner.find(function (partner) {
                         return partner.get('is_initiator');

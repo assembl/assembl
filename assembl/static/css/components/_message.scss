@@ -123,7 +123,7 @@ $message-body: #999999;
 
   &.viewStyleFullBody, &.viewStylePreview {
     /* Most styles are shared between the FullBody and Preview styles */
-    line-height: 19px;
+    line-height: 19.1px; /* 19px is not enough for message title: it cuts the bottom of the "g" letter */
     > .avatar {
       position: absolute;
     }
@@ -208,8 +208,10 @@ $message-body: #999999;
       }
     }
     .message-menu-actions {
-      visibility: hidden;
-      opacity: 0;
+      /*visibility: hidden;
+      opacity: 0;*/
+      visibility: visible;
+      opacity: 0.5;
     }
 
     .message-body {

@@ -1,21 +1,16 @@
 'use strict';
 
-define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/agents', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot'],
-    function (Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, Agents, CollectionManager, PanelSpecTypes, $) {
+define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/agents', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot', 'bluebird'],
+    function (Marionette, Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, Agents, CollectionManager, PanelSpecTypes, $, Promise) {
 
         var MIN_TEXT_TO_TOOLTIP = 5,
             TOOLTIP_TEXT_LENGTH = 10;
-
         /**
          * @class views.MessageView
          */
-        var MessageView = Backbone.View.extend({
+        var MessageView = Marionette.ItemView.extend({
+            template: '#tmpl-loader',
             availableMessageViewStyles: Ctx.AVAILABLE_MESSAGE_VIEW_STYLES,
-            /**
-             * @type {String}
-             */
-            tagName: 'div',
-
             /**
              * @type {String}
              */
@@ -56,22 +51,26 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              * @param {MessageModel} obj the model
              */
             initialize: function (options) {
+                var that = this;
+
                 /*this.listenTo(this, "all", function(eventName) {
                  console.log("message event received: ", eventName);
                  });
                  this.listenTo(this.model, "all", function(eventName) {
                  console.log("message model event received: ", eventName);
                  });*/
-                this.listenTo(this.model, 'replacedBy', this.onReplaced);
-                this.listenTo(this.model, 'showBody', this.onShowBody);
-                this.listenTo(this.model, 'change', this.render);
+                //this.listenTo(this.model, 'replacedBy', this.onReplaced);
+                //this.listenTo(this.model, 'showBody', this.onShowBody);
+                //this.listenTo(this.model, 'change', this.render);
 
                 this.messageListView = options.messageListView;
                 this.messageFamilyView = options.messageFamilyView;
-                
                 this.viewStyle = this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this);
-                this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
-                this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
+                //this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
+                //this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
+
+                this.listenTo(this.messageListView, 'annotator:destroy', this.onAnnotatorDestroy);
+                this.listenTo(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
 
                 /**
                  * The collection of annotations loaded in annotator for this message.
@@ -79,6 +78,24 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                  * @type {Annotation}
                  */
                 this.loadedAnnotations = {};
+
+                this.level = this.currentLevel !== null ? this.currentLevel : 1;
+
+                if (!_.isUndefined(this.level)) {
+                    this.currentLevel = this.level;
+                }
+
+                this.creator = undefined;
+                this.model.getCreatorPromise().then(function(creator){
+                    that.creator = creator;
+                    that.template = '#tmpl-message';
+                    that.render();
+                });
+            },
+            modelEvents: {
+              'replacedBy':'onReplaced',
+              'showBody':'onShowBody',
+              'change':'render'
             },
 
             /**
@@ -86,7 +103,7 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              */
             events: {
 
-                'click .js_messageHeader': 'onMessageTitleClick',
+                //'click .js_messageHeader': 'onMessageTitleClick',
                 'click .js_messageTitle': 'onMessageTitleClick',
                 'click .js_readMore': 'onMessageTitleClick',
                 'click .js_readLess': 'onMessageTitleClick',
@@ -104,14 +121,224 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
 
                 // menu
                 'click .js_message-markasunread': 'markAsUnread',
-                'click .js_message-markasread': 'markAsRead'
+                'click .js_message-markasread': 'markAsRead',
+
+                'click .js_openTargetInPopOver': 'openTargetInPopOver'
+            },
+
+            serializeData: function(){
+                var bodyFormatClass,
+                    body,
+                    metadata_json;
+
+                var bodyFormat = this.model.get('bodyMimeType');
+
+                if (this.viewStyle == this.availableMessageViewStyles.PREVIEW || this.viewStyle == this.availableMessageViewStyles.TITLE_ONLY) {
+                    if (bodyFormat == "text/html") {
+                        //Strip HTML from preview
+                        bodyFormat = "text/plain";
+                        // The div is just there in case there actually isn't any html
+                        // in which case jquery would crash without it
+                        var bodyWithoutNewLine = $("<div>" + String(this.model.get('body')) + "</div>");
+                        bodyWithoutNewLine.find("p").after(" ");
+                        bodyWithoutNewLine.find("br").replaceWith(" ");
+                        body = bodyWithoutNewLine.text().replace(/\s{2,}/g, ' ');
+                    }
+                }
+
+                body = (body) ? body : this.model.get('body');
+
+                if (bodyFormat !== null) {
+                    bodyFormatClass = "body_format_" + this.model.get('bodyMimeType').replace("/", "_");
+                }
+
+                // this property needs to exist to display the inspiration source of a message (creativity widget)
+                if (!_.has(this.model, 'metadata_json')){
+                    metadata_json = null;
+                }
+                var direct_link_relative_url = "/posts/" + encodeURIComponent(this.model.get('@id'));
+                var share_link_url = "/static/js/bower/expando/add/index.htm?u=" + Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url) + "&t=" + encodeURIComponent(this.model.get('subject'));
+                return {
+                    message: this.model,
+                    viewStyle: this.viewStyle,
+                    metadata_json: metadata_json,
+                    creator: this.creator,
+                    body: body,
+                    bodyFormatClass: bodyFormatClass,
+                    messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
+                    isHoisted: this.isHoisted,
+                    ctx: Ctx,
+                    user_is_connected: !Ctx.getCurrentUser().isUnknownUser(),
+                    read: this.model.get('read'),
+                    nuggets: _.size(this.model.get('extracts')),
+                    direct_link_relative_url: direct_link_relative_url,
+                    share_link_url: share_link_url
+                }
             },
 
             /**
-             * The thread message template
-             * @type {_.template}
+             * The render
+             * @return {MessageView}
              */
-            template: Ctx.loadTemplate('message'),
+            onRender: function () {
+                var that = this,
+                    modelId = this.model.id;
+                if (Ctx.debugRender) {
+                    console.log("message:render() is firing for message", this.model.id);
+                }
+
+                this.setViewStyle(this.viewStyle);
+                this.clearAnnotationsToLoadCache();
+                Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+
+                this.$el.attr("id", "message-" + this.model.get('@id'));
+                this.$el.addClass(this.model.get('@type'));
+                if (this.model.get('read') || !Ctx.getCurrentUser().isUnknownUser()) {
+                    this.$el.addClass('read');
+                    this.$el.removeClass('unread');
+                } else {
+                    this.$el.addClass('unread');
+                    this.$el.removeClass('read');
+                }
+
+                Ctx.initTooltips(this.$el);
+                if ( this.viewStyle == this.availableMessageViewStyles.FULL_BODY ){
+                    Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
+                    Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
+                }
+                Ctx.initClipboard();
+
+                that.replyView = new MessageSendView({
+                    'allow_setting_subject': false,
+                    'reply_message_id': modelId,
+                    'body_help_message': i18n.gettext('Type your response here...'),
+                    'cancel_button_label': null,
+                    'send_button_label': i18n.gettext('Send your reply'),
+                    'subject_label': null,
+                    'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
+                    'messageList': that.messageListView,
+                    'msg_in_progress_body': MessagesInProgress.getMessage(modelId),
+                    'msg_in_progress_ctx': modelId,
+                    'mandatory_subject_missing_msg': null
+                });
+                that.$('.message-replybox').append(this.replyView.render().el);
+
+                this.postRender();
+
+                if (this.replyBoxShown) {
+                    this.openReplyBox();
+                    if ( this.replyBoxHasFocus )
+                        this.focusReplyBox();
+                }
+                else {
+                    this.closeReplyBox();
+                }
+
+                if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
+                    //Only the full body view uses annotator
+                    this.messageListView.requestAnnotatorRefresh();
+                }
+
+                if (this.viewStyle == that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle != this.availableMessageViewStyles.FULL_BODY) {
+                    this.showReadLess();
+                }
+
+
+                if(this.messageListView.iSviewStyleThreadedType()
+                    && that.messageFamilyView.currentLevel !== 1) {
+                    this.model.getParentPromise().then(function(parentMessageModel){
+                        //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
+                        if(parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe() ) {
+                            //console.log("Hiding redundant title")
+                            that.$(".message-subject").addClass('hidden');
+                        }
+                    });
+                }
+
+
+                if (this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+
+                    var applyEllipsis = function(){
+                        /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
+                         * Read More links for message previews
+                         */
+                        that.$(".ellipsis").dotdotdot({
+                            after: "a.readMore",
+                            callback: function (isTruncated, orgContent) {
+                                //console.log("dotdotdot initialized on message", that.model.id);
+                                //console.log(isTruncated, orgContent);
+                                if (isTruncated)
+                                {
+                                    that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
+                                }
+                                else
+                                {
+                                    that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
+                                    if ( that.model.get('body') && that.model.get('body').length > 610 ) // approximate string length for text which uses 4 full lines
+                                    {
+                                        console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
+                                        if ( ++that.reRendered < 5 ) // we use this to avoid infinite loop of render() calls
+                                        {
+                                            console.log("yes, we will re-render => tries: ", that.reRendered);
+                                            setTimeout(function(){
+                                                that.render();
+                                            }, 500);
+                                        }
+                                        else
+                                        {
+                                            console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
+                                        }
+                                    }
+                                }
+                            },
+                            watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
+                        });
+                    };
+
+                    that.messageListView.requestPostRenderSlowCallback(function () {
+
+                        setTimeout(function(){
+                            //console.log("Initializing ellipsis on message", that.model.id);
+                            var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+                            //console.log("current_navigation_state:", current_navigation_state);
+                            if ( current_navigation_state == 'home' )
+                            {
+                                that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
+                                return;
+                            }
+                            applyEllipsis();
+                        }, 100);
+
+
+                        /* We no longer need this, but probably now need to
+                         * update when the panels change size with the
+                         * new system benoitg-2014-09-18
+                         *
+                         * that.listenTo(that.messageListView, "messageList:render_complete", function () {
+                         that.$(".ellipsis").trigger('update.dot');
+                         });*/
+                    });
+
+                    var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+                    //console.log("current_navigation_state:", current_navigation_state);
+                    //Why do we need the following block?  benoitg-2015-03-03
+                    //console.log('current_navigation_state is:', current_navigation_state);
+                    if ( current_navigation_state !== undefined ){
+                        //console.log('Setting listener on navigation:selected');
+                        that.listenTo(Assembl.vent, 'navigation:selected', function(navSection) {
+                            //console.log('New navigation has just been selected:', navSection);
+                            if(navSection == 'debate') {
+                                //console.log('Updating dotdotdot because debate has just been selected');
+                                that.messageListView.requestPostRenderSlowCallback(function () {
+                                    that.$(".ellipsis").trigger('update.dot');
+                                });
+                            }
+                        });
+                    }
+
+                }
+
+            },
 
             /**
              * Meant for derived classes to override
@@ -127,227 +354,6 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              */
             postRender: function () {
                 return;
-            },
-
-            /**
-             * The render
-             * @return {MessageView}
-             */
-            render: function () {
-                var that = this,
-                    modelId = this.model.id;
-                if (Ctx.debugRender) {
-                    console.log("message:render() is firing for message", this.model.id);
-                }
-                $.when(this.model.getCreatorPromise(),
-                    this.model.getExtractsPromise()
-                ).then(
-                    function (creator, extracts) {
-                        var data = that.model.toJSON(),
-                            children,
-                            bodyFormat = null,
-                            bodyFormatClass = null,
-                            level;
-                        level = that.currentLevel !== null ? that.currentLevel : 1;
-                        if (!_.isUndefined(level)) {
-                            that.currentLevel = level;
-                        }
-                        Ctx.removeCurrentlyDisplayedTooltips(that.$el);
-                        that.clearAnnotationsToLoadCache();
-                        that.setViewStyle(that.viewStyle);
-
-                        data['id'] = data['@id'];
-                        data['date'] = data.date; //Ctx.formatDate(data.date);
-                        data['creator'] = creator;
-
-                        if (!("metadata_json" in data)) // this property needs to exist to display the inspiration source of a message (creativity widget)
-                            data['metadata_json'] = null;
-
-                        data['viewStyle'] = that.viewStyle;
-                        bodyFormat = that.model.get('bodyMimeType');
-                        if (bodyFormat == "text/plain") {
-                          //Make really sure no HTML leaked into the plain text
-                          data['body'] = Ctx.escapeHtml(data['body']);
-                        }
-                        else {
-                          //For better or worse, we assume the backend did a good job...
-                          ;
-                        }
-                        
-                        if (that.viewStyle == that.availableMessageViewStyles.PREVIEW || that.viewStyle == that.availableMessageViewStyles.TITLE_ONLY) {
-                            if (bodyFormat == "text/html") {
-                                //Strip HTML from preview
-                                bodyFormat = "text/plain";
-
-                                // The div is just there in case there actually isn't any html
-                                // in which case jquery would crash without it
-                                var bodyWithoutNewLine = $("<div>" + String(data['body']) + "</div>");
-                                bodyWithoutNewLine.find("p").after(" ");
-                                bodyWithoutNewLine.find("br").replaceWith(" ");
-                                data['body'] = bodyWithoutNewLine.text().replace(/\s{2,}/g, ' ');
-                                
-                            }
-                        }
-                        if (bodyFormat !== null) {
-                            bodyFormatClass = "body_format_" + that.model.get('bodyMimeType').replace("/", "_");
-                        }
-                        data['bodyFormatClass'] = bodyFormatClass;
-
-                        // Do NOT change this, it's the message id stored in the database
-                        // by annotator when storing message annotations
-                        // It has to contain ONLY raw content of the message provided by the
-                        // database for annotator to parse it back properly
-                        data['messageBodyId'] = Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + data['@id'];
-                        data['isHoisted'] = that.isHoisted;
-
-                        data['ctx'] = Ctx;
-
-                        that.$el.attr("id", "message-" + data['@id']);
-                        data['read'] = that.model.get('read')
-                        data['user_is_connected'] = !Ctx.getCurrentUser().isUnknownUser();
-                        that.$el.addClass(data['@type']);
-                        if (that.model.get('read') || !data['user_is_connected']) {
-                            that.$el.addClass('read');
-                            that.$el.removeClass('unread');
-                        } else {
-                            that.$el.addClass('unread');
-                            that.$el.removeClass('read');
-                        }
-
-                        data['nuggets'] = _.size(data['extracts']);
-                        data['direct_link_url'] = "/posts/" + encodeURIComponent(data['@id']);
-
-                        data = that.transformDataBeforeRender(data);
-                        that.$el.html(that.template(data));
-                        Ctx.initTooltips(that.$el);
-                        if ( that.viewStyle == that.availableMessageViewStyles.FULL_BODY ){
-                            Ctx.convertUrlsToLinks(that.$el.children('.message-body')); // we target only the body part of the message, not the title
-                            Ctx.makeLinksShowOembedOnHover(that.$el.children('.message-body'));
-                        }
-                        Ctx.initClipboard();
-                        var partialMessage = MessagesInProgress.getMessage(modelId);
-
-                        that.replyView = new MessageSendView({
-                            'allow_setting_subject': false,
-                            'reply_message_id': modelId,
-                            'body_help_message': i18n.gettext('Type your response here...'),
-                            'cancel_button_label': null,
-                            'send_button_label': i18n.gettext('Send your reply'),
-                            'subject_label': null,
-                            'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
-                            'messageList': that.messageListView,
-                            'msg_in_progress_body': partialMessage['body'],
-                            'msg_in_progress_ctx': modelId,
-                            'mandatory_subject_missing_msg': null
-                        });
-                        that.$('.message-replybox').append(that.replyView.render().el);
-
-                        that.postRender();
-
-                        if (that.replyBoxShown) {
-                            that.openReplyBox();
-                            if ( that.replyBoxHasFocus )
-                                that.focusReplyBox();
-                        }
-                        else {
-                            that.closeReplyBox();
-                        }
-
-                        if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY) {
-                            //Only the full body view uses annotator
-                            that.messageListView.requestAnnotatorRefresh();
-                        }
-
-                        if (that.viewStyle == that.availableMessageViewStyles.FULL_BODY && that.messageListView.defaultMessageStyle != that.availableMessageViewStyles.FULL_BODY) {
-                            that.showReadLess();
-                        }
-                        if(that.messageListView.iSviewStyleThreadedType() 
-                            && that.messageFamilyView.currentLevel !== 1) {
-                          $.when(that.model.getParentPromise()).then(function(parentMessageModel){
-                            //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
-                            if(parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe() ) {
-                              //console.log("Hiding redundant title")
-                              that.$(".message-subject").addClass('hidden');
-                            }
-                          });
-                        }
-
-                        if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
-
-                            var applyEllipsis = function(){
-                                /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
-                                 * Read More links for message previews
-                                 */
-                                that.$(".ellipsis").dotdotdot({
-                                    after: ".readMoreOrLess",
-                                    ellipsis: '... ',
-                                    //Must match the max-height in .message-body.ellipsis of _message.scss so that the height doesn't change after dotdotdot renders
-                                    height: 52,  //3 lines of text, was 70 for 4 lines of text
-                                    callback: function (isTruncated, orgContent) {
-                                        //console.log("dotdotdot initialized on message", that.model.id);
-                                        //console.log(isTruncated, orgContent);
-                                        if (isTruncated){
-                                            that.$(".readMoreOrLess").removeClass('hidden');
-                                        } else {
-                                            that.$(".readMoreOrLess").addClass('hidden');
-                                            /* This triggers automatically and uselessly when the home page loads.  
-                                             * Disabling, it rarely triggers when it would help these days.
-                                             * benoitg 2015-3-3
-                                             if ( data['body'].length > 610 ) {// approximate string length for text which uses 4 full lines
-                                                console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
-                                                if ( ++that.reRendered < 5 ){ // we use this to avoid infinite loop of render() calls
-
-                                                    console.log("yes, we will re-render => tries: ", that.reRendered);
-                                                    setTimeout(function(){
-                                                        that.render();
-                                                    }, 500);
-                                                }
-                                                else{
-                                                    console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
-                                                }
-                                            }*/
-                                        }
-                                    },
-                                    watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
-                                });
-                            };
-
-                            that.messageListView.requestPostRenderSlowCallback(function () {
-
-                                setTimeout(function(){
-                                    applyEllipsis();
-                                }, 100);
-                                
-
-                                /* We no longer need this, but probably now need to
-                                 * update when the panels change size with the
-                                 * new system benoitg-2014-09-18
-                                 *
-                                 * that.listenTo(that.messageListView, "messageList:render_complete", function () {
-                                 that.$(".ellipsis").trigger('update.dot');
-                                 });*/
-                            });
-                            
-                            var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
-                            //console.log("current_navigation_state:", current_navigation_state);
-                            //Why do we need the following block?  benoitg-2015-03-03
-                            //console.log('current_navigation_state is:', current_navigation_state);
-                            if ( current_navigation_state !== undefined ){
-                              //console.log('Setting listener on navigation:selected');
-                              that.listenTo(Assembl.vent, 'navigation:selected', function(navSection) {
-                                //console.log('New navigation has just been selected:', navSection);
-                                if(navSection == 'debate') {
-                                  //console.log('Updating dotdotdot because debate has just been selected');
-                                  that.messageListView.requestPostRenderSlowCallback(function () {
-                                    that.$(".ellipsis").trigger('update.dot');
-                                  });
-                                }
-                              });
-                            }
-
-                        }
-                    });
-                return this;
             },
 
             /**
@@ -390,7 +396,6 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                     }
                     deferred.resolve(this.annotationsToLoad);
                 });
-
 
                 return deferred.promise();
             },
@@ -443,10 +448,8 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                 }
 
                 if (ok) {
-                    $.when(
-                        collectionManager.getAllExtractsCollectionPromise(),
-                        collectionManager.getAllIdeasCollectionPromise()
-                    ).then(
+                    Promise.join(collectionManager.getAllExtractsCollectionPromise(),
+                                 collectionManager.getAllIdeasCollectionPromise(),
                         function (allExtractsCollection, allIdeasCollection) {
                             var segment = allExtractsCollection.getByAnnotation(annotation);
                             if (!segment) {
@@ -644,7 +647,9 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
                     this.model.setRead(true);
                 }
                 this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
-                this.render();
+
+                // I do not know why I should comment this, but it cause an issue
+                //this.render();
             },
 
             /**
@@ -695,11 +700,12 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
             /**
              * @event
              */
-            onMessageTitleClick: function (ev) {
-                this.toggleViewStyle();
+            onMessageTitleClick: function (e) {
+                e.stopPropagation();
                 if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
                     this.openReplyBox();
                 }
+                this.toggleViewStyle();
             },
 
             /**
@@ -848,6 +854,11 @@ define(['backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i1
              * */
             showReadLess: function () {
                 this.$('.readLess').removeClass('hidden');
+            },
+
+            openTargetInPopOver: function (evt) {
+                console.log("message openTargetInPopOver(evt: ", evt);
+                return Ctx.openTargetInPopOver(evt);
             }
 
 

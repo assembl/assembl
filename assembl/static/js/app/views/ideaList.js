@@ -45,18 +45,18 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .then(function (allIdeasCollection) {
                         var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
                         that.listenTo(allIdeasCollection, events.join(' '), that.render);
                     });
 
-                collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
+                collectionManager.getAllExtractsCollectionPromise()
+                    .then(function (allExtractsCollection) {
                         // Benoitg - 2014-05-05:  There is no need for this, if an idealink
                         // is associated with the idea, the idea itself will receive a change event
                         // on the socket (unless it causes problem with local additions?)
-                        that.listenTo(allExtractsCollection, 'add change reset', that.render);
+                        //that.listenTo(allExtractsCollection, 'add change reset', that.render);
                     });
 
                 Assembl.commands.setHandler("panel:open", function () {
@@ -75,10 +75,10 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     that.addChildToSelected();
                 });
 
-                this.listenTo(Assembl.vent, 'idea:dragOver', function (idea) {
+                this.listenTo(Assembl.vent, 'idea:dragOver', function () {
                     that.mouseIsOutside = false;
                 });
-                this.listenTo(Assembl.vent, 'idea:dragStart', function (idea) {
+                this.listenTo(Assembl.vent, 'idea:dragStart', function () {
                     that.lastScrollTime = new Date().getTime();
                     that.scrollLastSpeed = 0;
                     that.scrollableElement = that.$('.panel-body');
@@ -88,14 +88,14 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         that.scrollTowardsMouseIfNecessary();
                     }, 10);
                 });
-                this.listenTo(Assembl.vent, 'idea:dragEnd', function (idea) {
+                this.listenTo(Assembl.vent, 'idea:dragEnd', function () {
                     clearInterval(that.scrollInterval);
                     that.scrollInterval = null;
                 });
 
                 this.listenTo(Assembl.vent, 'ideaList:selectIdea', function (ideaId) {
-                    collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                    collectionManager.getAllIdeasCollectionPromise()
+                        .done(function (allIdeasCollection) {
                         var idea = allIdeasCollection.get(ideaId);
                         if (idea) {
                             that.getContainingGroup().setCurrentIdea(idea);
@@ -169,8 +169,9 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 }
 
                 var list = document.createDocumentFragment();
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .then(function (allIdeasCollection) {
+
                         rootIdea = allIdeasCollection.getRootIdea();
                         if (Object.keys(filter).length > 0) {
                             rootIdeaDirectChildrenModels = allIdeasCollection.where(filter);
@@ -190,7 +191,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
                         rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
                         rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
-                        console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid)
+                        console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
                         _.each(roots, function (idea) {
                             var ideaView = new IdeaView({
                                 model: idea, 
@@ -256,8 +257,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 var collectionManager = new CollectionManager();
                 var that = this;
                 this.collapsed = true;
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .done(function (allIdeasCollection) {
                         allIdeasCollection.each(function (idea) {
                             idea.attributes.isOpen = false;
                         });
@@ -271,8 +272,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             expandIdeas: function () {
                 this.collapsed = false;
                 var that = this;
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .done(function (allIdeasCollection) {
                         allIdeasCollection.each(function (idea) {
                             idea.attributes.isOpen = true;
                         });
@@ -383,8 +384,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     that = this,
                     collectionManager = new CollectionManager();
 
-                collectionManager.getAllIdeasCollectionPromise().done(
-                    function (allIdeasCollection) {
+                collectionManager.getAllIdeasCollectionPromise()
+                    .done(function (allIdeasCollection) {
                         if (allIdeasCollection.get(currentIdea)) {
                             newIdea.set('order', currentIdea.getOrderForNewChild());
                             currentIdea.addChild(newIdea);
@@ -433,11 +434,12 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 //console.log("scrollableElementHeight: ", this.scrollableElementHeight);
 
                 // the detection of mouseIsOutside is needed to be done by document also, because when the user is dragging, the mouseleave event is not fired (as the mouse is still on a child)
-                if ( this.mouseRelativeY >= 0 && this.mouseRelativeY <= this.scrollableElementHeight ) // cursor is not outside the block
+                if ( this.mouseRelativeY >= 0 && this.mouseRelativeY <= this.scrollableElementHeight ) { // cursor is not outside the block
                     this.mouseIsOutside = false;
-                else
+                }else{
                     this.mouseIsOutside = true;
-                //console.log("isOutside: ", this.mouseIsOutside);
+                    //console.log("isOutside: ", this.mouseIsOutside);
+                }
             },
 
             scrollTowardsMouseIfNecessary: function() {

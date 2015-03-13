@@ -40,8 +40,8 @@ define(['underscore', 'models/base', 'common/context', 'models/agents', 'models/
                 var that = this;
 
                 this.listenTo(this, "change:idIdea", function () {
-                    that.collection.collectionManager.getAllIdeasCollectionPromise().done(
-                        function (allIdeasCollection) {
+                    that.collection.collectionManager.getAllIdeasCollectionPromise()
+                        .done(function (allIdeasCollection) {
                             var previousIdea,
                                 idea;
 
@@ -121,8 +121,6 @@ define(['underscore', 'models/base', 'common/context', 'models/agents', 'models/
              * @return {$.Defered.Promise}
              */
             getAssociatedPostPromise: function () {
-                var that = this,
-                    deferred = $.Deferred();
                 return this.collection.collectionManager.getMessageFullModelPromise(this.get('idPost'));
             },
 

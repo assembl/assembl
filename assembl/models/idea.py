@@ -52,7 +52,7 @@ class IdeaVisitor(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def visit_idea(self, idea):
+    def visit_idea(self, idea, level, prev_result):
         pass
 
 
@@ -65,6 +65,20 @@ class IdeaLinkVisitor(object):
         pass
 
 
+class GraphViewIdeaVisitor(IdeaVisitor):
+    def __init__(self, graph_view):
+        self.graph_view = graph_view
+
+    def visit_idea(self, idea, level, prev_result):
+        # not the most efficient, but everything was prefetched
+        if idea in self.graph_view.get_ideas():
+            return self.do_visit_idea(idea, level, prev_result)
+
+    @abstractmethod
+    def do_visit_idea(self, idea, level, prev_result):
+        pass
+
+
 class WordCountVisitor(IdeaVisitor):
     def __init__(self, langs):
         self.counter = WordCounter(langs)
@@ -72,7 +86,7 @@ class WordCountVisitor(IdeaVisitor):
     def cleantext(self, text):
         return BeautifulSoup(text).get_text().strip()
 
-    def visit_idea(self, idea):
+    def visit_idea(self, idea, level, prev_result):
         if idea.short_title:
             self.counter.add_text(self.cleantext(idea.short_title))
         if idea.long_title:
@@ -302,42 +316,46 @@ JOIN post AS family_posts ON (
 
     def visit_ideas_depth_first(self, idea_visitor):
         self.prefetch_descendants()
-        self._visit_ideas_depth_first(idea_visitor, set())
+        self._visit_ideas_depth_first(idea_visitor, set(), 0, None)
 
-    def _visit_ideas_depth_first(self, idea_visitor, visited):
+    def _visit_ideas_depth_first(
+            self, idea_visitor, visited, level, prev_result):
         if self in visited:
             # not necessary in a tree, but let's start to think graph.
             return False
-        result = idea_visitor.visit_idea(self)
+        result = idea_visitor.visit_idea(self, level, prev_result)
         visited.add(self)
         if result is not IdeaVisitor.CUT_VISIT:
             for child in self.children:
-                child._visit_ideas_depth_first(idea_visitor, visited)
+                child._visit_ideas_depth_first(
+                    idea_visitor, visited, level+1, result)
 
     def visit_ideas_breadth_first(self, idea_visitor):
         self.prefetch_descendants()
-        result = idea_visitor.visit_idea(self)
+        result = idea_visitor.visit_idea(self, 0, None)
         visited = {self}
         if result is not IdeaVisitor.CUT_VISIT:
-            self._visit_ideas_breadth_first(idea_visitor, visited)
+            self._visit_ideas_breadth_first(idea_visitor, visited, 1, result)
 
-    def _visit_ideas_breadth_first(self, idea_visitor, visited):
+    def _visit_ideas_breadth_first(
+            self, idea_visitor, visited, level, prev_result):
         children = []
         for child in self.children:
             if child in visited:
                 continue
-            result = idea_visitor.visit_idea(child)
+            result = idea_visitor.visit_idea(child, level, prev_result)
             visited.add(child)
             if result != IdeaVisitor.CUT_VISIT:
                 children.append(child)
         for child in children:
-            child._visit_ideas_breadth_first(idea_visitor, visited)
+            child._visit_ideas_breadth_first(
+                idea_visitor, visited, level+1, result)
 
     def most_common_words(self, lang=None, num=8):
         if lang:
             langs = (lang,)
         else:
-            langs = self.discussion.get_discussion_locales()
+            langs = self.discussion.discussion_locales
         word_counter = WordCountVisitor(langs)
         self.visit_ideas_depth_first(word_counter)
         return word_counter.best(num)

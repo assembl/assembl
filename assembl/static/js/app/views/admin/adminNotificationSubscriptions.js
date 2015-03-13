@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 'common/context', 'utils/i18n', 'jquery'],
-    function (Marionette, CollectionManager, Permissions, Ctx, i18n, $) {
+define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 'common/context', 'utils/i18n', 'jquery', 'bluebird'],
+    function (Marionette, CollectionManager, Permissions, Ctx, i18n, $, Promise) {
 
         var notifications = Marionette.ItemView.extend({
             template: '#tmpl-adminNotification',
@@ -92,9 +92,9 @@ define(['backbone.marionette', 'common/collectionManager', 'utils/permissions', 
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                $.when(collectionManager.getDiscussionModelPromise(),
-                    collectionManager.getNotificationsDiscussionCollectionPromise())
-                    .then(function (Discussion, NotificationsDiscussion) {
+                Promise.join(collectionManager.getDiscussionModelPromise(),
+                    collectionManager.getNotificationsDiscussionCollectionPromise(),
+                    function (Discussion, NotificationsDiscussion) {
 
                         var defaultNotif = new defaultNotification({
                             model: Discussion

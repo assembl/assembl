@@ -1,7 +1,7 @@
 "use strict";
 
-define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-growl', 'utils/i18n'],
-    function (Marionette, DiscussionSource, bootstrapGrowl, i18n) {
+define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-growl', 'utils/i18n', 'common/collectionManager'],
+    function (Marionette, DiscussionSource, bootstrapGrowl, i18n, CollectionManager) {
 
     var DiscussionSettings = Marionette.ItemView.extend({
         template: '#tmpl-discussionSource',
@@ -78,14 +78,18 @@ define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-grow
             source: "#source-container"
         },
         onBeforeShow: function(){
-            var source = new DiscussionSource.Collection();
+            var that = this,
+                collectionManager = new CollectionManager();
 
-            var discussionSourceList = new DiscussionSourceList({
-                collection: source
-            });
-            source.fetch();
+            collectionManager.getDiscussionSourceCollectionPromise()
+                .then(function(DiscussionSource){
 
-            this.getRegion('source').show(discussionSourceList);
+                var discussionSourceList = new DiscussionSourceList({
+                    collection: DiscussionSource
+                });
+                that.getRegion('source').show(discussionSourceList);
+            })
+
         }
     });
 

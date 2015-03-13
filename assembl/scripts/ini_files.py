@@ -100,6 +100,8 @@ def main():
             'supervisor', 'autostart_celery_notify'),
         'autostart_celery_notify_beat': config.get(
             'supervisor', 'autostart_celery_notify_beat'),
+        'autostart_source_reader': config.get(
+            'supervisor', 'autostart_source_reader'),
         'autostart_changes_router': config.get(
             'supervisor', 'autostart_changes_router'),
         'autostart_pserve': config.get('supervisor', 'autostart_pserve'),

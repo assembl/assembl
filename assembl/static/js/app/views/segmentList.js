@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'underscore', 'jquery', 'app', 'common/context', 'models/segment', 'utils/types', 'utils/i18n', 'utils/permissions', 'common/collectionManager', 'utils/panelSpecTypes', 'views/assemblPanel', 'backbone.subset'],
-    function (Marionette, _, $, Assembl, Ctx, Segment, Types, i18n, Permissions, CollectionManager, PanelSpecTypes, AssemblPanel) {
+define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/segment', 'utils/types', 'utils/i18n', 'utils/permissions', 'common/collectionManager', 'utils/panelSpecTypes', 'views/assemblPanel', 'backbone.subset', 'bluebird'],
+    function (Backbone, _, $, Assembl, Ctx, Segment, Types, i18n, Permissions, CollectionManager, PanelSpecTypes, AssemblPanel, Subset, Promise) {
 
         var SegmentView = Marionette.ItemView.extend({
             template: '#tmpl-segment',
@@ -54,12 +54,22 @@ define(['backbone.marionette', 'underscore', 'jquery', 'app', 'common/context', 
                 Ctx.convertUrlsToLinks(this.ui.postItFooter);
             },
 
+            onDragStart: function (ev) {
+                ev.currentTarget.style.opacity = 0.4;
+
+                var cid = ev.currentTarget.getAttribute('data-segmentid'),
+                    segment = this.model.collection.get(cid);
+
+                Ctx.showDragbox(ev, segment.getQuote());
+                Ctx.draggedSegment = segment;
+            },
+
             onSegmentLinkClick: function (ev) {
                 var cid = ev.currentTarget.getAttribute('data-segmentid'),
                     collectionManager = new CollectionManager();
 
-                collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
+                collectionManager.getAllExtractsCollectionPromise()
+                    .then(function (allExtractsCollection) {
                         var segment = allExtractsCollection.get(cid);
                         Ctx.showTargetBySegment(segment);
                     });
@@ -181,9 +191,8 @@ define(['backbone.marionette', 'underscore', 'jquery', 'app', 'common/context', 
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                $.when(collectionManager.getAllExtractsCollectionPromise())
+                collectionManager.getAllExtractsCollectionPromise()
                     .then(function (allExtractsCollection) {
-
                         that.clipboard = new Clipboard([], {
                             parent: allExtractsCollection,
                             currentUserId: Ctx.getCurrentUser().id
@@ -241,19 +250,20 @@ define(['backbone.marionette', 'underscore', 'jquery', 'app', 'common/context', 
                 }
                 if (this.clipboard) {
                     Ctx.initTooltips(this.$el);
-                    $.when(collectionManager.getAllExtractsCollectionPromise(),
-                           collectionManager.getAllUsersCollectionPromise(),
-                           collectionManager.getAllMessageStructureCollectionPromise())
-                        .then(function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
 
-                            that.segmentListView = new SegmentListView({
+                    Promise.join(collectionManager.getAllExtractsCollectionPromise(),
+                                 collectionManager.getAllUsersCollectionPromise(),
+                                 collectionManager.getAllMessageStructureCollectionPromise(),
+                        function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
+
+                            var segmentListView = new SegmentListView({
                                 collection: that.clipboard,
                                 allUsersCollection: allUsersCollection,
                                 allMessagesCollection: allMessagesCollection,
                                 closeDeletes: true
                             });
 
-                            that.getRegion('extractList').show(that.segmentListView);
+                            that.getRegion('extractList').show(segmentListView);
                         });
                 }
                 this.resetTitle();
@@ -276,23 +286,14 @@ define(['backbone.marionette', 'underscore', 'jquery', 'app', 'common/context', 
              * @param {Segment} segment
              */
             addSegment: function (segment) {
-                var that = this,
-                    collectionManager = new CollectionManager();
+                var collectionManager = new CollectionManager();
 
-                collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
+                collectionManager.getAllExtractsCollectionPromise()
+                    .done(function (allExtractsCollection) {
                         delete segment.attributes.highlights;
 
                         allExtractsCollection.add(segment, {merge: true});
-                        segment.save('idIdea', null, {
-                            success:function(model, resp){
-                                console.debug('SUCCESS: addSegment', resp);
-                                that.segmentListView.render();
-                            },
-                            error: function(model, resp){
-                                console.error('ERROR: addSegment', resp);
-                            }
-                        });
+                        segment.save('idIdea', null);
                     });
             },
 
@@ -359,26 +360,6 @@ define(['backbone.marionette', 'underscore', 'jquery', 'app', 'common/context', 
                 }
             },
 
-            onDragStart: function (ev) {
-                if (ev) {
-                    ev.stopPropagation();
-                }
-                if (Ctx.getCurrentUser().can(Permissions.EDIT_EXTRACT)) {
-
-                    ev.currentTarget.style.opacity = 0.4;
-
-                    ev.originalEvent.dataTransfer.effectAllowed = 'move';
-                    ev.originalEvent.dataTransfer.dropEffect = 'all';
-
-                    var cid = ev.currentTarget.getAttribute('data-segmentid'),
-                        segment = this.clipboard.get(cid);
-
-                    Ctx.showDragbox(ev, segment.getQuote());
-                    Ctx.draggedSegment = segment;
-                }
-
-            },
-
             onDragEnd: function (ev) {
                 if (ev) {
                     ev.preventDefault();
@@ -415,7 +396,6 @@ define(['backbone.marionette', 'underscore', 'jquery', 'app', 'common/context', 
                 if (Ctx.getDraggedAnnotation() !== null) {
                     this.$el.addClass("is-dragover");
                 }
-
             },
 
             onDragLeave: function (ev) {
@@ -466,8 +446,8 @@ define(['backbone.marionette', 'underscore', 'jquery', 'app', 'common/context', 
                     user_id = Ctx.getCurrentUser().id;
 
                 if (ok) {
-                    collectionManager.getAllExtractsCollectionPromise().done(
-                        function (allExtractsCollection) {
+                    collectionManager.getAllExtractsCollectionPromise()
+                        .done(function() {
                             that.clipboard.filter(function (s) {
                                 return s.get('idCreator') == user_id
                             }).map(function (segment) {

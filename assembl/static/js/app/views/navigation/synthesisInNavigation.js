@@ -1,7 +1,7 @@
 'use strict';
 
-define(['views/assemblPanel', 'common/collectionManager', 'utils/types', 'common/context', 'underscore', 'utils/i18n', 'utils/panelSpecTypes'],
-    function (AssemblPanel, CollectionManager, Types, Ctx, _, i18n, PanelSpecTypes) {
+define(['views/assemblPanel', 'common/collectionManager', 'utils/types', 'common/context', 'underscore', 'utils/i18n', 'utils/panelSpecTypes', 'bluebird'],
+    function (AssemblPanel, CollectionManager, Types, Ctx, _, i18n, PanelSpecTypes, Promise) {
 
         var SynthesisInNavigationPanel = AssemblPanel.extend({
             template: '#tmpl-synthesisInNavigationPanel',
@@ -25,7 +25,8 @@ define(['views/assemblPanel', 'common/collectionManager', 'utils/types', 'common
                 var that = this,
                     collectionManager = new CollectionManager();
 
-                $.when(collectionManager.getAllMessageStructureCollectionPromise(), collectionManager.getAllSynthesisCollectionPromise()).done(
+                Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+                    collectionManager.getAllSynthesisCollectionPromise(),
                     function (allMessageStructureCollection, allSynthesisCollection) {
                         var synthesisMessages = allMessageStructureCollection.where({'@type': Types.SYNTHESIS_POST}),
                             html = '';

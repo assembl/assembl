@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/ckeditorField', 'views/messageSend', 'objects/messagesInProgress', 'common/collectionManager'],
-    function (Backbone, _, Assembl, Ctx, i18n, Permissions, CKEditorField, MessageSendView, MessagesInProgress, CollectionManager) {
+define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/ckeditorField', 'views/messageSend', 'objects/messagesInProgress', 'common/collectionManager', 'bluebird'],
+    function (Backbone, _, Assembl, Ctx, i18n, Permissions, CKEditorField, MessageSendView, MessagesInProgress, CollectionManager, Promise) {
 
         var IdeaInSynthesisView = Backbone.View.extend({
             /**
@@ -39,10 +39,10 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
                     authors = [],
                     collectionManager = new CollectionManager();
 
-                $.when(collectionManager.getAllMessageStructureCollectionPromise(),
+                Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
                     collectionManager.getAllUsersCollectionPromise(),
-                    this.model.getExtractsPromise())
-                    .then(function (allMessageStructureCollection, allUsersCollection, ideaExtracts) {
+                    this.model.getExtractsPromise(),
+                    function (allMessageStructureCollection, allUsersCollection, ideaExtracts) {
                         that.$el.addClass('synthesis-idea');
                         that.$el.attr('id', 'synthesis-idea-' + that.model.id);
                         Ctx.removeCurrentlyDisplayedTooltips(that.$el);
@@ -166,7 +166,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
             /**
              * @event
              */
-            onEditableAreaClick: function () {
+            onEditableAreaClick: function (ev) {
                 if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
                     this.editing = true;
                     this.render();
@@ -179,7 +179,6 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
                     this.render();
                 }
             }
-
         });
 
         return IdeaInSynthesisView;

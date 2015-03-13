@@ -103,7 +103,6 @@ class SourceReader(Thread):
         self.status = ReaderStatus.CREATED
         self.last_prod = datetime.now()
         self.last_read = datetime.fromtimestamp(0)
-        self.last_successful_read = datetime.fromtimestamp(0)
         self.last_successful_login = datetime.fromtimestamp(0)
         self.last_error_status = None
         self.last_error_time = None
@@ -122,7 +121,7 @@ class SourceReader(Thread):
         self.reset_errors()
 
     def successful_read(self):
-        self.last_successful_read = datetime.now()
+        self.last_read = datetime.now()
         self.reset_errors()
         self.reimporting = False
 
@@ -130,9 +129,14 @@ class SourceReader(Thread):
         self.error_count = 0
         self.last_error_status = None
         self.last_error_time = None
+        self.source.connection_error = None
+        self.source.error_description = None
         self.current_error_backoff = 0
 
-    def new_error(self, status):
+    def new_error(self, reader_error, status=None):
+        status = status or reader_error.status
+        self.source.connection_error = status
+        self.source.error_description = str(reader_error)
         if status != self.last_error_status:
             # Counter-intuitive, but either lighter or more severe errors
             # reset the count.
@@ -197,20 +201,22 @@ class SourceReader(Thread):
                 self.login()
                 self.successful_login()
             except ReaderError as e:
-                self.new_error(e.status)
+                self.new_error(e)
                 if self.status > ReaderStatus.TRANSIENT_ERROR:
                     self.do_close()
                 self.event.wait(self.current_error_backoff.total_seconds())
+                self.event.clear()
                 continue
             while self.is_connected():
                 # Read in all cases
                 try:
                     self.read()
                 except ReaderError as e:
-                    self.new_error(e.status)
+                    self.new_error(e)
                     if self.status > ReaderStatus.TRANSIENT_ERROR:
                         self.do_close()
                     self.event.wait(self.current_error_backoff.total_seconds())
+                    self.event.clear()
                 if not self.is_connected():
                     continue
                 if self.can_push:
@@ -219,12 +225,13 @@ class SourceReader(Thread):
                         try:
                             self.wait_for_push()
                         except ReaderError as e:
-                            self.new_error(e.status)
+                            self.new_error(e)
                             if self.status > ReaderStatus.TRANSIENT_ERROR:
                                 self.do_close()
                             else:
                                 self.end_wait_for_push()
                             self.event.wait(self.current_error_backoff.total_seconds())
+                            self.event.clear()
                             break
                         if not self.is_connected():
                             break
@@ -239,7 +246,7 @@ class SourceReader(Thread):
                     continue  # to next read cycle
                 if not self.is_connected():
                     break
-                if (self.last_successful_read - self.last_prod
+                if (self.last_read - self.last_prod
                         > self.max_idle_period):
                     # Nobody cares, I can stop reading
                     try:
@@ -250,8 +257,10 @@ class SourceReader(Thread):
 
                     if self.status != ReaderStatus.SHUTDOWN:
                         self.event.wait(0)
+                        self.event.clear()
                 else:
                     self.event.wait(self.time_between_reads.total_seconds())
+                    self.event.clear()
 
     @abstractmethod
     def login(self):
@@ -274,12 +283,12 @@ class SourceReader(Thread):
             try:
                 self.end_wait_for_push()
             except ReaderError as e:
-                self.new_error(min(e.status, ReaderStatus.CLIENT_ERROR))
+                self.new_error(e, min(e.status, ReaderStatus.CLIENT_ERROR))
         self.set_status(ReaderStatus.CLOSED)
         try:
             self.do_close()
         except ReaderError as e:
-            self.new_error(min(e.status, ReaderStatus.CLIENT_ERROR))
+            self.new_error(e, min(e.status, ReaderStatus.CLIENT_ERROR))
 
     @abstractmethod
     def do_close(self):
@@ -288,6 +297,9 @@ class SourceReader(Thread):
     def setup(self):
         from assembl.models import ContentSource
         self.source = ContentSource.get(self.source_id)
+        connection_error = self.source.connection_error
+        if connection_error:
+            self.status = connection_error
 
     def read(self):
         self.set_status(ReaderStatus.READING)

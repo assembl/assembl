@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'common/context', 'common/collectionManager', 'utils/permissions', 'objects/messagesInProgress', 'utils/i18n', 'jquery-autosize', 'models/message', 'models/agents', 'models/roles', 'utils/roles', 'backbone.modal', 'backbone.marionette.modals'],
-    function (Backbone, Marionette, Assembl, _, $, Ctx, CollectionManager, Permissions, MessagesInProgress, i18n, autosize, Messages, Agents, RolesModel, Roles) {
+define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'common/context', 'common/collectionManager', 'utils/permissions', 'objects/messagesInProgress', 'utils/i18n', 'jquery-autosize', 'models/message', 'models/agents', 'backbone.modal', 'backbone.marionette.modals', 'bluebird'],
+    function (Backbone, Marionette, Assembl, _, $, Ctx, CollectionManager, Permissions, MessagesInProgress, i18n, autosize, Messages, Agents, Promise) {
 
         /**
          * @init
@@ -92,12 +92,6 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             onRender: function () {
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
                 Ctx.initTooltips(this.$el);
-
-                if (this.options.msg_in_progress_body
-                    || this.options.msg_in_progress_title) {
-                    // no need anymore
-                    //this.onChangeBody();
-                }
             },
 
             onSendMessageButtonClick: function (ev) {
@@ -165,7 +159,9 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         //that.roles = new RolesModel.Model();
                         var collectionManager = new CollectionManager();
                         if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-                            $.when(collectionManager.getLocalRoleCollectionPromise(), collectionManager.getNotificationsUserCollectionPromise(), collectionManager.getNotificationsDiscussionCollectionPromise()).then(
+                            Promise.join(collectionManager.getLocalRoleCollectionPromise(),
+                                collectionManager.getNotificationsUserCollectionPromise(),
+                                collectionManager.getNotificationsDiscussionCollectionPromise(),
                                 function (allRole, notificationsUser, notificationsDiscussion) {
                                     //console.log("allRole: ", allRole);
                                     //console.log("notificationsUser: ", notificationsUser);
