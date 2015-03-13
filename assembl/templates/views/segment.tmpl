@@ -9,7 +9,7 @@
 
 {% set segmentCreatorAvatarImg = '<img src="<%= harvester.getAvatarUrl(24) %>" class="image-rounded" alt="" width="24" height="24" data-toggle="tooltip" data-placement="left" title="'+harverterTooltip+'"/>' %}
 {% set segmentLinkTooltip = gettext('Click here to see the original contribution this segment is quoted from.') %}
-{% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('Show in original context')+'<%= segment.getTypeIcon() %>&nbsp;</a>' %}
+{% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('Show in original context')+'&nbsp;</a>' %}
 
 
 <div class="bx bx-default postit" draggable="true" data-segmentid="<%= segment.cid %>">
