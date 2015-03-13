@@ -21,6 +21,10 @@
   #}<% } %>
 {%- endmacro %}
 
+{% macro showShareButton() -%}
+<a href="<%= share_link_url %>" class="js_openTargetInPopOver" data-popover-width="73" data-popover-height="30" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
+{%- endmacro %}
+
 {% macro menuAction() -%}
    <div class="message-menu">
      <ul class="pan man">
@@ -44,7 +48,7 @@
             <li><a href="#" class="message-hoistbtn" data-id="<%= escape(message.get('@id')) %>">{{gettext('Show only this message and its replies')}}</a></li>
             <% } %>
 
-            <li><a href="#" class="message-linkbutton" data-copy-text="<%= direct_link_url %>">{{gettext('Copy the link to share this message')}}</a></li>
+            <li><a href="#" class="message-linkbutton" data-copy-text="<%= direct_link_relative_url %>">{{gettext('Copy the link to share this message')}}</a></li>
             <% if(creator){ %>
             <li><a title="<%= creator.get('preferred_email') %>" href="mailto:<%= creator.get('preferred_email') %>">{{gettext('Send an email to this user')}}</a></li>
             <% } %>
@@ -107,7 +111,6 @@
     {# This is the part that annotator processes.  Do NOT introduce ANY HTML within this div #}
     <div class="message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></div>
     <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>
-    <div class="message-replybox"></div>
   <% } %>
   <div class="js_messageBottomMenu message-menu message-menu-actions">
     {#
@@ -118,7 +121,7 @@
     <% } %>
     #}
 
-    <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
+    <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
       <a href="#" class="message-replybox-openbtn"><i class="icon-answer"></i>&nbsp;&nbsp;{{ gettext("Reply") }}</a>
       {#&nbsp;&nbsp;<a href="#"><i class="icon-heart"></i>{{ gettext("I love") }}</a>
       &nbsp;&nbsp;<a href="#"><i class="icon-download"></i>{{ gettext("share") }}</a>#}
@@ -129,5 +132,13 @@
       </div>
     <% } %>
 
+    <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
+      &nbsp;&nbsp;{{ showShareButton() }}
+    <% } %>
+
   </div>
+
+  <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
+    <div class="message-replybox"></div>
+  <% } %>
 <% } %>
