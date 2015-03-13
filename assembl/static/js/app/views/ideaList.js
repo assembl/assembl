@@ -47,9 +47,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
                 collectionManager.getAllIdeasCollectionPromise()
                     .then(function (allIdeasCollection) {
-                        //Gaby - 2015-03-13: Need the all events below ?
-                        //var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
-                        var events = ['change:parentId', 'change:@id', 'remove', 'add', 'reset'];
+                        var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
                         that.listenTo(allIdeasCollection, events.join(' '), that.render);
                     });
 
@@ -77,10 +75,10 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     that.addChildToSelected();
                 });
 
-                this.listenTo(Assembl.vent, 'idea:dragOver', function (idea) {
+                this.listenTo(Assembl.vent, 'idea:dragOver', function () {
                     that.mouseIsOutside = false;
                 });
-                this.listenTo(Assembl.vent, 'idea:dragStart', function (idea) {
+                this.listenTo(Assembl.vent, 'idea:dragStart', function () {
                     that.lastScrollTime = new Date().getTime();
                     that.scrollLastSpeed = 0;
                     that.scrollableElement = that.$('.panel-body');
@@ -90,7 +88,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         that.scrollTowardsMouseIfNecessary();
                     }, 10);
                 });
-                this.listenTo(Assembl.vent, 'idea:dragEnd', function (idea) {
+                this.listenTo(Assembl.vent, 'idea:dragEnd', function () {
                     clearInterval(that.scrollInterval);
                     that.scrollInterval = null;
                 });
@@ -193,7 +191,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
                         rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
                         rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
-                        console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid)
+                        console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
                         _.each(roots, function (idea) {
                             var ideaView = new IdeaView({
                                 model: idea, 
@@ -436,11 +434,12 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 //console.log("scrollableElementHeight: ", this.scrollableElementHeight);
 
                 // the detection of mouseIsOutside is needed to be done by document also, because when the user is dragging, the mouseleave event is not fired (as the mouse is still on a child)
-                if ( this.mouseRelativeY >= 0 && this.mouseRelativeY <= this.scrollableElementHeight ) // cursor is not outside the block
+                if ( this.mouseRelativeY >= 0 && this.mouseRelativeY <= this.scrollableElementHeight ) { // cursor is not outside the block
                     this.mouseIsOutside = false;
-                else
+                }else{
                     this.mouseIsOutside = true;
-                //console.log("isOutside: ", this.mouseIsOutside);
+                    //console.log("isOutside: ", this.mouseIsOutside);
+                }
             },
 
             scrollTowardsMouseIfNecessary: function() {
