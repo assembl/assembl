@@ -46,8 +46,10 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     collectionManager = new CollectionManager();
 
                 collectionManager.getAllIdeasCollectionPromise()
-                    .done(function (allIdeasCollection) {
-                        var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
+                    .then(function (allIdeasCollection) {
+                        //Gaby - 2015-03-13: Need the all events below ?
+                        //var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
+                        var events = ['change:parentId', 'change:@id', 'remove', 'add', 'reset'];
                         that.listenTo(allIdeasCollection, events.join(' '), that.render);
                     });
 
@@ -56,7 +58,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                         // Benoitg - 2014-05-05:  There is no need for this, if an idealink
                         // is associated with the idea, the idea itself will receive a change event
                         // on the socket (unless it causes problem with local additions?)
-                        that.listenTo(allExtractsCollection, 'add change reset', that.render);
+                        //that.listenTo(allExtractsCollection, 'add change reset', that.render);
                     });
 
                 Assembl.commands.setHandler("panel:open", function () {
