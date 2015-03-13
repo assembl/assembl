@@ -700,11 +700,12 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             /**
              * @event
              */
-            onMessageTitleClick: function () {
-                this.toggleViewStyle();
+            onMessageTitleClick: function (e) {
+                e.stopPropagation();
                 if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
                     this.openReplyBox();
                 }
+                this.toggleViewStyle();
             },
 
             /**
