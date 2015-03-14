@@ -191,7 +191,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
                         rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
                         rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
-                        console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
+                        //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
                         _.each(roots, function (idea) {
                             var ideaView = new IdeaView({
                                 model: idea, 
