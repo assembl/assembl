@@ -103,7 +103,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              */
             events: {
 
-                //'click .js_messageHeader': 'onMessageTitleClick',
+                'click .js_messageHeader': 'onMessageTitleClick',
                 'click .js_messageTitle': 'onMessageTitleClick',
                 'click .js_readMore': 'onMessageTitleClick',
                 'click .js_readLess': 'onMessageTitleClick',
