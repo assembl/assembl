@@ -2195,15 +2195,14 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             
 
             checkMessagesOnscreen: function() {
-              // Check scrollToElement
-              // that.isMessageOnscreen(id)
-              var messageDoms = this.getOnScreenMessagesSelectors(),
+              var that = this,
+                  messageDoms = this.getOnScreenMessagesSelectors(),
                   currentScrolltop = this.ui.panelBody.scrollTop(),
                   currentViewPortTop = this.ui.panelBody.offset().top,
                   currentViewPortBottom = currentViewPortTop + this.ui.panelBody.height() - this.ui.stickyBar.height();
               if(this.debugScrollLogging) {
                 //console.log(messageDoms);
-                //onsole.log("checkMessagesOnscreen(): currentScrolltop", currentScrolltop, "currentViewPortTop", currentViewPortTop, "currentViewPortBottom", currentViewPortBottom);
+                //console.log("checkMessagesOnscreen(): currentScrolltop", currentScrolltop, "currentViewPortTop", currentViewPortTop, "currentViewPortBottom", currentViewPortBottom);
               }
               
               _.each(messageDoms, function(messageSelector) {
@@ -2229,9 +2228,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 ratioOnscreen = (messageHeight - heightAboveViewPort - heightBelowViewPort) / messageHeight;
                 
                 //console.log("message heightAboveViewPort ", heightAboveViewPort, "heightBelowViewPort",heightBelowViewPort );
-                console.log("message % on screen: ", ratioOnscreen * 100, "messageWhiteSpaceRatio", messageWhiteSpaceRatio );
+                if(that.debugScrollLogging) {
+                  console.log("message % on screen: ", ratioOnscreen * 100, "messageWhiteSpaceRatio", messageWhiteSpaceRatio );
                 }
-              );
+              });
             },
             
             /**

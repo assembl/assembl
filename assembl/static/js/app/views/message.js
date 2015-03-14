@@ -129,9 +129,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             serializeData: function(){
                 var bodyFormatClass,
                     body,
-                    metadata_json;
-
-                var bodyFormat = this.model.get('bodyMimeType');
+                    metadata_json,
+                    bodyFormat = this.model.get('bodyMimeType');
 
                 if (this.viewStyle == this.availableMessageViewStyles.PREVIEW || this.viewStyle == this.availableMessageViewStyles.TITLE_ONLY) {
                     if (bodyFormat == "text/html") {
@@ -182,7 +181,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              */
             onRender: function () {
                 var that = this,
-                    modelId = this.model.id;
+                    modelId = this.model.id,
+                    partialMessage = MessagesInProgress.getMessage(modelId);
                 if (Ctx.debugRender) {
                     console.log("message:render() is firing for message", this.model.id);
                 }
@@ -217,7 +217,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     'subject_label': null,
                     'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
                     'messageList': that.messageListView,
-                    'msg_in_progress_body': MessagesInProgress.getMessage(modelId),
+                    'msg_in_progress_body': partialMessage['body'],
                     'msg_in_progress_ctx': modelId,
                     'mandatory_subject_missing_msg': null
                 });
