@@ -187,7 +187,15 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     console.log("message:render() is firing for message", this.model.id);
                 }
 
-                this.setViewStyle(this.viewStyle);
+                if(partialMessage['body']) {
+                  //Somebody started writing a message and didn't finish, make sure they see it.
+                  //console.log("Opening in full view because of reply in progress: ", partialMessage['body'])
+                  this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
+                }
+                else {
+                  this.setViewStyle(this.viewStyle);
+                }
+                
                 this.clearAnnotationsToLoadCache();
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
@@ -225,7 +233,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
 
                 this.postRender();
 
-                if (this.replyBoxShown) {
+                if (this.replyBoxShown || partialMessage['body']) {
                     this.openReplyBox();
                     if ( this.replyBoxHasFocus )
                         this.focusReplyBox();
