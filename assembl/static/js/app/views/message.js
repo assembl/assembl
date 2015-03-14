@@ -698,10 +698,13 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 }
             },
             /**
+             * Note that this is also callable without an event
              * @event
              */
             onMessageTitleClick: function (e) {
-                e.stopPropagation();
+                if(e) {
+                  e.stopPropagation();
+                }
                 if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
                     this.openReplyBox();
                 }
