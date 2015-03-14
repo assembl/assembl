@@ -808,6 +808,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     }
 
                     that.resumeAnnotatorRefresh();
+                    that.unblockPanel();
                     that.renderIsComplete = true;
                     that.trigger("messageList:render_complete", "Render complete");
                 });
@@ -1187,8 +1188,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                   messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
                   that = that.render_real();
-                  that.unblockPanel();
-
                 });
 
                 this.blockPanel();
