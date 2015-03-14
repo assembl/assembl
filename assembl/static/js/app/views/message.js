@@ -601,7 +601,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                         else { // if the .messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
                             that.messageListView.scrollToElement(that.$(".message-replybox"));
                         }
-                    }, 100);
+                    }, 1000);
                 };
                 
                 if (this.viewStyle.id === 'viewStylePreview') {
@@ -618,7 +618,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              *  Opens the reply box the reply button
              */
             openReplyBox: function () {
-                this.$('.message-replybox').show();
                 this.$('.message-replybox').removeClass('hidden');
                 this.replyBoxShown = true;
             },
@@ -627,7 +626,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              *  Closes the reply box
              */
             closeReplyBox: function () {
-                this.$('.message-replybox').hide();
+                this.$('.message-replybox').addClass('hidden');
                 this.replyBoxShown = false;
             },
 
@@ -667,7 +666,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     this.$el.removeClass(this.availableMessageViewStyles.PREVIEW.id);
                     this.$el.addClass(this.availableMessageViewStyles.FULL_BODY.id);
                     this.viewStyle = style;
-                    this.replyBoxShown = true;
 
                 }
                 else if (style == this.availableMessageViewStyles.PREVIEW) {
@@ -705,10 +703,10 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 if(e) {
                   e.stopPropagation();
                 }
+                this.toggleViewStyle();
                 if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
                     this.openReplyBox();
                 }
-                this.toggleViewStyle();
             },
 
             /**
