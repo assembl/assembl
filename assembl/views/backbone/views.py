@@ -9,6 +9,7 @@ from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 
 from assembl.models import Discussion
+from assembl.models.generic import Content
 from assembl.auth import P_READ, P_ADD_EXTRACT
 from assembl.auth.util import user_has_permission
 from .. import get_default_context as base_default_context
@@ -62,6 +63,13 @@ def home_view(request):
     elif not canRead:
         # User is logged-in but doesn't have access to the discussion
         return HTTPUnauthorized()
+
+    # if the route asks for a post, get post content (because this is needed for meta tags)
+    route_name = request.matched_route.name
+    if route_name == "purl_posts" and request.matchdict['remainder']:
+        post = Content.get_instance('/'.join(i for i in request.matchdict['remainder']))
+        if post and post.discussion_id == discussion.id:
+                context['post'] = post
 
     canAddExtract = user_has_permission(discussion.id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract
