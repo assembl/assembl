@@ -1872,7 +1872,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @return{Boolean} true or false
              */
             isMessageOnscreen: function (id) {
-              var messagesOnScreenIds= this.getMessageIdsToShow({
+              //console.log("isMessageOnscreen called for ", id, "Offsets are:", this._offsetStart, this._offsetEnd)
+              if(this._offsetStart === undefined || this._offsetEnd === undefined) {
+                //console.log("The messagelist hasn't displayed any messages yet");
+                return false;
+              }
+              var messagesOnScreenIds = this.getMessageIdsToShow({
                   'offsetStart': this._offsetStart,
                   'offsetEnd': this._offsetEnd
                 });
@@ -1884,6 +1889,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @return:  A list of jquery selectors
              */
             getOnScreenMessagesSelectors: function () {
+              if(this._offsetStart === undefined || this._offsetEnd === undefined) {
+                throw new Error("The messagelist hasn't displayed any messages yet");
+              }
               var that = this,
                   messagesOnScreenIds = this.getMessageIdsToShow({
                       'offsetStart': this._offsetStart,
@@ -1909,27 +1917,28 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @param animate:  Should the scroll be smooth
              */
             scrollToElement: function (el, callback, margin, animate) {
-                if (this.ui.panelBody.offset() !== undefined) {
-                    var panelOffset = this.ui.panelBody.offset().top,
-                        panelScrollTop = this.ui.panelBody.scrollTop(),
-                        elOffset = el.offset().top,
-                        target;
-                    margin = margin || 30;
-                    if (animate === undefined) {
-                      animate = true;
-                    }
-                    target = elOffset - panelOffset + panelScrollTop - margin;
-                    //console.log(elOffset, panelOffset, panelScrollTop, margin, target);
-                    if(animate) {
-                      this.ui.panelBody.animate({ scrollTop: target }, { complete: callback });
-                    }
-                    else {
-                      this.ui.panelBody.scrollTop(target);
-                      if(_.isFunction(callback)) {
-                        callback();
-                      }
-                    }
+              //console.log("scrollToElement called with: ", el, callback, margin, animate);
+              if (this.ui.panelBody.offset() !== undefined) {
+                var panelOffset = this.ui.panelBody.offset().top,
+                    panelScrollTop = this.ui.panelBody.scrollTop(),
+                    elOffset = el.offset().top,
+                    target;
+                margin = margin || 30;
+                if (animate === undefined) {
+                  animate = true;
                 }
+                target = elOffset - panelOffset + panelScrollTop - margin;
+                //console.log(elOffset, panelOffset, panelScrollTop, margin, target);
+                if(animate) {
+                  this.ui.panelBody.animate({ scrollTop: target }, { complete: callback });
+                }
+                else {
+                  this.ui.panelBody.scrollTop(target);
+                  if(_.isFunction(callback)) {
+                    callback();
+                  }
+                }
+              }
             },
             
             /** 
@@ -1947,6 +1956,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               var that = this,
               MAX_RETRIES = 50, //Stop after ~30 seconds
               debug = false;
+
+              if(debug) {
+                console.log("scrollToMessage called with args:", messageModel.id, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth, originalRenderId);
+              }
 
               recursionDepth = recursionDepth || 0;
               originalRenderId = originalRenderId || _.clone(this._renderId);
@@ -1968,7 +1981,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               }
               else if (originalRenderId !== this._renderId) {
                 //This is a normal condition now
-                //console.log("scrollToMessage():  obsolete render, aborting for ", messageModel.id);
+                //console.info("scrollToMessage():  obsolete render, aborting for ", messageModel.id);
                 //Raven.captureMessage("scrollToMessage():  obsolete render, aborting", {message_id: messageModel.id})
                 if(this._scrollToMessageInProgressId === originalRenderId) {
                   this._scrollToMessageInProgressId = false;
@@ -1982,7 +1995,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this._scrollToMessageInProgressId = originalRenderId;
               }
               var animate_message = function (message) {
-                el = this.getMessageSelector(message.id);
+                var el = that.getMessageSelector(message.id);
 
                 if (el[0]) {
                   if (shouldOpenMessageSelected) {
@@ -2002,7 +2015,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   else {
                     var real_callback = function () {
                       if (shouldHighlightMessageSelected) {
-                        $(selector).highlight();
+                        el.highlight();
                       }
                       if (_.isFunction(callback)) {
                         callback();
