@@ -104,16 +104,22 @@
     height: 40px;
     box-shadow: 0px -3px 1px rgba(0, 0, 0, 0.1);
     @include box-sizing(border-box);
-    background-color: $white;
+    background-color: rgba($white, 0.65);
     position: absolute;
     bottom: 0px;
     width: 100%;
     left: 0;
-    line-height: 35px;
+    line-height: 37px;
 
     .icon-comment {
       font-size: 22px;
       vertical-align: sub;
+      line-height: 0;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .icon-comment::before {
+      margin-left: -2px !important;
     }
 
   }
