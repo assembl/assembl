@@ -1312,7 +1312,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             getRenderedMessagesFlatPromise: function (requestedIds) {
                 var that = this,
                     view,
-                    defer = $.Deferred(),
                     collectionManager = new CollectionManager();
 
                 return collectionManager.getMessageFullModelsPromise(requestedIds)
@@ -1353,7 +1352,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     isValid,
                     last_sibling_chain,
                     current_message_info,
-                    defer = $.Deferred(),
                     collectionManager = new CollectionManager(),
                     debug = false;
                 if (debug) {
@@ -1412,7 +1410,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     if (debug) {
                         console.log("getRenderedMessagesThreadedPromise() sibblings is now empty, returning.");
                     }
-                    return list;
+                    return Promise.resolve([]);
                 }
                 current_message_info = data_by_object[messageStructureModel.getId()];
                 if (debug) {
@@ -1443,7 +1441,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     var sibblingsviews_promise = [];
                 }
 
-                Promise.join(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.getId()),
+                return Promise.join(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.getId()),
                     function (subviews, sibblingsviews, messageFullModel) {
 
                     view = new MessageFamilyView({
@@ -1475,10 +1473,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     if (sibblingsviews.length > 0) {
                         list = list.concat(sibblingsviews);
                     }
-                    defer.resolve(list);
+                    return Promise.resolve(list);
                 });
-
-                return defer.promise();
             },
 
 
