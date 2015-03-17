@@ -54,14 +54,11 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 var that = this;
 
                 /*this.listenTo(this, "all", function(eventName) {
-                 console.log("message event received: ", eventName);
+                 console.log("message view event received: ", eventName);
                  });
                  this.listenTo(this.model, "all", function(eventName) {
-                 console.log("message model event received: ", eventName);
+                 
                  });*/
-                //this.listenTo(this.model, 'replacedBy', this.onReplaced);
-                //this.listenTo(this.model, 'showBody', this.onShowBody);
-                //this.listenTo(this.model, 'change', this.render);
 
                 this.messageListView = options.messageListView;
                 this.messageFamilyView = options.messageFamilyView;
@@ -89,6 +86,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 this.model.getCreatorPromise().then(function(creator){
                     that.creator = creator;
                     that.template = '#tmpl-message';
+                    //console.log("about to re-render message because we just got the creator")
                     that.render();
                 });
             },
@@ -184,166 +182,167 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     modelId = this.model.id,
                     partialMessage = MessagesInProgress.getMessage(modelId);
                 if (Ctx.debugRender) {
-                    console.log("message:render() is firing for message", this.model.id);
+                    console.log("message:render() is firing for message", this.model.id, " with template: ", this.template);
                 }
-
-                if(partialMessage['body']) {
-                  //Somebody started writing a message and didn't finish, make sure they see it.
-                  //console.log("Opening in full view because of reply in progress: ", partialMessage['body'])
-                  this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
-                }
-                else {
-                  this.setViewStyle(this.viewStyle);
-                }
-                
-                this.clearAnnotationsToLoadCache();
-                Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-
-                this.$el.attr("id", "message-" + this.model.get('@id'));
-                this.$el.addClass(this.model.get('@type'));
-                if (this.model.get('read') || !Ctx.getCurrentUser().isUnknownUser()) {
-                    this.$el.addClass('read');
-                    this.$el.removeClass('unread');
-                } else {
-                    this.$el.addClass('unread');
-                    this.$el.removeClass('read');
-                }
-
-                Ctx.initTooltips(this.$el);
-                if ( this.viewStyle == this.availableMessageViewStyles.FULL_BODY ){
-                    Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
-                    Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
-                }
-                Ctx.initClipboard();
-
-                that.replyView = new MessageSendView({
-                    'allow_setting_subject': false,
-                    'reply_message_id': modelId,
-                    'body_help_message': i18n.gettext('Type your response here...'),
-                    'cancel_button_label': null,
-                    'send_button_label': i18n.gettext('Send your reply'),
-                    'subject_label': null,
-                    'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
-                    'messageList': that.messageListView,
-                    'msg_in_progress_body': partialMessage['body'],
-                    'msg_in_progress_ctx': modelId,
-                    'mandatory_subject_missing_msg': null
-                });
-                that.$('.message-replybox').append(this.replyView.render().el);
-
-                this.postRender();
-
-                if (this.replyBoxShown || partialMessage['body']) {
-                    this.openReplyBox();
-                    if ( this.replyBoxHasFocus )
-                        this.focusReplyBox();
-                }
-                else {
-                    this.closeReplyBox();
-                }
-
-                if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
-                    //Only the full body view uses annotator
-                    this.messageListView.requestAnnotatorRefresh();
-                }
-
-                if (this.viewStyle == that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle != this.availableMessageViewStyles.FULL_BODY) {
-                    this.showReadLess();
-                }
-
-
-                if(this.messageListView.iSviewStyleThreadedType()
-                    && that.messageFamilyView.currentLevel !== 1) {
-                    this.model.getParentPromise().then(function(parentMessageModel){
-                        //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
-                        if(parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe() ) {
-                            //console.log("Hiding redundant title")
-                            that.$(".message-subject").addClass('hidden');
-                        }
-                    });
-                }
-
-
-                if (this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
-
-                    var applyEllipsis = function(){
-                        /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
-                         * Read More links for message previews
-                         */
-                        that.$(".ellipsis").dotdotdot({
-                            after: "a.readMore",
-                            callback: function (isTruncated, orgContent) {
-                                //console.log("dotdotdot initialized on message", that.model.id);
-                                //console.log(isTruncated, orgContent);
-                                if (isTruncated)
-                                {
-                                    that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
-                                }
-                                else
-                                {
-                                    that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
-                                    if ( that.model.get('body') && that.model.get('body').length > 610 ) // approximate string length for text which uses 4 full lines
-                                    {
-                                        console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
-                                        if ( ++that.reRendered < 5 ) // we use this to avoid infinite loop of render() calls
-                                        {
-                                            console.log("yes, we will re-render => tries: ", that.reRendered);
-                                            setTimeout(function(){
-                                                that.render();
-                                            }, 500);
-                                        }
-                                        else
-                                        {
-                                            console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
-                                        }
-                                    }
-                                }
-                            },
-                            watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
-                        });
-                    };
-
-                    that.messageListView.requestPostRenderSlowCallback(function () {
-
-                        setTimeout(function(){
-                            //console.log("Initializing ellipsis on message", that.model.id);
-                            var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
-                            //console.log("current_navigation_state:", current_navigation_state);
-                            if ( current_navigation_state == 'home' )
-                            {
-                                that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
-                                return;
-                            }
-                            applyEllipsis();
-                        }, 100);
-
-
-                        /* We no longer need this, but probably now need to
-                         * update when the panels change size with the
-                         * new system benoitg-2014-09-18
-                         *
-                         * that.listenTo(that.messageListView, "messageList:render_complete", function () {
-                         that.$(".ellipsis").trigger('update.dot');
-                         });*/
-                    });
-
-                    var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
-                    //console.log("current_navigation_state:", current_navigation_state);
-                    //Why do we need the following block?  benoitg-2015-03-03
-                    //console.log('current_navigation_state is:', current_navigation_state);
-                    if ( current_navigation_state !== undefined ){
-                        //console.log('Setting listener on navigation:selected');
-                        that.listenTo(Assembl.vent, 'navigation:selected', function(navSection) {
-                            //console.log('New navigation has just been selected:', navSection);
-                            if(navSection == 'debate') {
-                                //console.log('Updating dotdotdot because debate has just been selected');
-                                that.messageListView.requestPostRenderSlowCallback(function () {
-                                    that.$(".ellipsis").trigger('update.dot');
-                                });
-                            }
-                        });
-                    }
-
+                if (this.template == '#tmpl-message') {
+                  if(partialMessage['body']) {
+                    //Somebody started writing a message and didn't finish, make sure they see it.
+                    //console.log("Opening in full view because of reply in progress: ", partialMessage['body'])
+                    this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
+                  }
+                  else {
+                    this.setViewStyle(this.viewStyle);
+                  }
+                  
+                  this.clearAnnotationsToLoadCache();
+                  Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+  
+                  this.$el.attr("id", "message-" + this.model.get('@id'));
+                  this.$el.addClass(this.model.get('@type'));
+                  if (this.model.get('read') || !Ctx.getCurrentUser().isUnknownUser()) {
+                      this.$el.addClass('read');
+                      this.$el.removeClass('unread');
+                  } else {
+                      this.$el.addClass('unread');
+                      this.$el.removeClass('read');
+                  }
+  
+                  Ctx.initTooltips(this.$el);
+                  if ( this.viewStyle == this.availableMessageViewStyles.FULL_BODY ){
+                      Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
+                      Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
+                  }
+                  Ctx.initClipboard();
+  
+                  that.replyView = new MessageSendView({
+                      'allow_setting_subject': false,
+                      'reply_message_id': modelId,
+                      'body_help_message': i18n.gettext('Type your response here...'),
+                      'cancel_button_label': null,
+                      'send_button_label': i18n.gettext('Send your reply'),
+                      'subject_label': null,
+                      'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
+                      'messageList': that.messageListView,
+                      'msg_in_progress_body': partialMessage['body'],
+                      'msg_in_progress_ctx': modelId,
+                      'mandatory_subject_missing_msg': null
+                  });
+                  that.$('.message-replybox').append(this.replyView.render().el);
+  
+                  this.postRender();
+  
+                  if (this.replyBoxShown || partialMessage['body']) {
+                      this.openReplyBox();
+                      if ( this.replyBoxHasFocus )
+                          this.focusReplyBox();
+                  }
+                  else {
+                      this.closeReplyBox();
+                  }
+  
+                  if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
+                      //Only the full body view uses annotator
+                      this.messageListView.requestAnnotatorRefresh();
+                  }
+  
+                  if (this.viewStyle == that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle != this.availableMessageViewStyles.FULL_BODY) {
+                      this.showReadLess();
+                  }
+  
+  
+                  if(this.messageListView.iSviewStyleThreadedType()
+                      && that.messageFamilyView.currentLevel !== 1) {
+                      this.model.getParentPromise().then(function(parentMessageModel){
+                          //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
+                          if(parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe() ) {
+                              //console.log("Hiding redundant title")
+                              that.$(".message-subject").addClass('hidden');
+                          }
+                      });
+                  }
+  
+  
+                  if (this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+  
+                      var applyEllipsis = function(){
+                          /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
+                           * Read More links for message previews
+                           */
+                          that.$(".ellipsis").dotdotdot({
+                              after: "a.readMore",
+                              callback: function (isTruncated, orgContent) {
+                                  //console.log("dotdotdot initialized on message", that.model.id);
+                                  //console.log(isTruncated, orgContent);
+                                  if (isTruncated)
+                                  {
+                                      that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
+                                  }
+                                  else
+                                  {
+                                      that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
+                                      if ( that.model.get('body') && that.model.get('body').length > 610 ) // approximate string length for text which uses 4 full lines
+                                      {
+                                          console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
+                                          if ( ++that.reRendered < 5 ) // we use this to avoid infinite loop of render() calls
+                                          {
+                                              console.log("yes, we will re-render => tries: ", that.reRendered);
+                                              setTimeout(function(){
+                                                  that.render();
+                                              }, 500);
+                                          }
+                                          else
+                                          {
+                                              console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
+                                          }
+                                      }
+                                  }
+                              },
+                              watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
+                          });
+                      };
+  
+                      that.messageListView.requestPostRenderSlowCallback(function () {
+  
+                          setTimeout(function(){
+                              //console.log("Initializing ellipsis on message", that.model.id);
+                              var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+                              //console.log("current_navigation_state:", current_navigation_state);
+                              if ( current_navigation_state == 'home' )
+                              {
+                                  that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
+                                  return;
+                              }
+                              applyEllipsis();
+                          }, 100);
+  
+  
+                          /* We no longer need this, but probably now need to
+                           * update when the panels change size with the
+                           * new system benoitg-2014-09-18
+                           *
+                           * that.listenTo(that.messageListView, "messageList:render_complete", function () {
+                           that.$(".ellipsis").trigger('update.dot');
+                           });*/
+                      });
+  
+                      var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+                      //console.log("current_navigation_state:", current_navigation_state);
+                      //Why do we need the following block?  benoitg-2015-03-03
+                      //console.log('current_navigation_state is:', current_navigation_state);
+                      if ( current_navigation_state !== undefined ){
+                          //console.log('Setting listener on navigation:selected');
+                          that.listenTo(Assembl.vent, 'navigation:selected', function(navSection) {
+                              //console.log('New navigation has just been selected:', navSection);
+                              if(navSection == 'debate') {
+                                  //console.log('Updating dotdotdot because debate has just been selected');
+                                  that.messageListView.requestPostRenderSlowCallback(function () {
+                                      that.$(".ellipsis").trigger('update.dot');
+                                  });
+                              }
+                          });
+                      }
+  
+                  }
                 }
 
             },

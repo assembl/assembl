@@ -732,7 +732,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this.renderIsComplete = false;
                 
 
-                if (this.debugPaging) {
+                if (this.debugPaging || Ctx.debugRender) {
                     console.log("showMessages() called with requestedOffsets:", requestedOffsets);
                 }
 
