@@ -29,6 +29,13 @@ class FrontendUrls():
                 home_view, route_name=name, request_method='GET',
                 http_cache=60)
 
+    # used for route 'purl_posts': '/posts*remainder'
+    @staticmethod
+    def getRequestedPostId(request):
+        if 'remainder' in request.matchdict:
+            return '/'.join(i for i in request.matchdict['remainder'])
+        return None
+
     def getDiscussionLogoUrl(self):
         return urljoin(
             self.discussion.get_base_url(), '/static/img/assembl.png')

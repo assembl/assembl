@@ -9,11 +9,12 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPSeeOther, HTTPUnauthorized
 from pyramid.i18n import TranslationStringFactory, default_locale_negotiator
 from sqlalchemy.orm.exc import NoResultFound
 from assembl.models import Discussion
-from assembl.models.generic import Content
+from assembl.models.post import Post
 from assembl.auth import P_READ, P_ADD_EXTRACT
 from ...models.auth import UserLanguagePreference, User
 from assembl.auth.util import user_has_permission
 from .. import get_default_context as base_default_context
+from assembl.lib.frontend_urls import FrontendUrls
 
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
@@ -138,10 +139,12 @@ def home_view(request):
 
     # if the route asks for a post, get post content (because this is needed for meta tags)
     route_name = request.matched_route.name
-    if route_name == "purl_posts" and request.matchdict['remainder']:
-        post = Content.get_instance('/'.join(i for i in request.matchdict['remainder']))
-        if post and post.discussion_id == discussion.id:
-                context['post'] = post
+    if route_name == "purl_posts":
+        post_id = FrontendUrls.getRequestedPostId(request)
+        if post_id:
+            post = Post.get_instance(post_id)
+            if post and post.discussion_id == discussion.id:
+                    context['post'] = post
 
     canAddExtract = user_has_permission(discussion.id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract
