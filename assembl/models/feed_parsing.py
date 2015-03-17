@@ -452,7 +452,17 @@ class LoomioSourceReader(FeedSourceReader):
             _process_reimport_post(entry, post, discussion)
         post.subject = self._get_title_from_feed()
 
+    def _get_body(self,entry):
+        # Debugging encoding issues
+        tmp = entry['content'][0]['value']
+        print '*'*100 + '\n'
+        print '[DEBUG] Entry value from parser is: \n'
+        print tmp
+        print '\n'
+        return tmp
+
     def _convert_to_post(self,entry,account):
         post = super(LoomioSourceReader, self)._convert_to_post(entry,account)
         subject = self._get_title_from_feed()
+        body = self._get_body(entry)
         return post
