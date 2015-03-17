@@ -25,7 +25,7 @@ from pyramid.httpexceptions import (
     HTTPUnauthorized, HTTPBadRequest)
 from sqlalchemy.orm import (
     relationship, backref, deferred, with_polymorphic)
-from sqlalchemy import inspect
+from sqlalchemy import inspect, desc
 from sqlalchemy.types import Text
 from sqlalchemy.schema import (Index, UniqueConstraint)
 from sqlalchemy.orm.attributes import NO_VALUE
@@ -264,7 +264,15 @@ class AgentProfile(Base):
 
     def get_preferred_locale(self):
         # TODO: per-user preferred locale
-        return None
+        # Want a 2-letter locale string
+        # Currently expecting only a scalar value, not a list. Might change
+        # In the near future.
+        prefs = self.language_preference
+        if prefs is None or len(prefs) is 0:
+            # Correct way is to get the default from the app global config
+            return config.get_config().\
+                get('available_languages', 'fr en').split()
+        return prefs[0]
 
 
 class AbstractAgentAccount(Base):
@@ -1309,15 +1317,22 @@ class UserLanguagePreference(Base):
     lang_code = Column(String(), nullable=False)
 
     # Sort the preference, from lowest to highest
-    # Ascending order prefered
+    # Descending order preference, 1 - is the highest
     preferred_order = Column(Integer, nullable=False)
     explicitly_defined = Column(Boolean, nullable=False, default=False,
                                 server_default='0')
 
-
     user = relationship('User', backref=backref(
-                        'language_preference', cascade='all, delete-orphan',
-                        order_by=preferred_order))
+                        'language_preference',
+                        cascade='all, delete-orphan',
+                        order_by=desc(preferred_order)))
+
+    def __cmp__(self,other):
+        if not isinstance(other, UserLanguagePreference):
+            raise AttributeError("Incorrect UserLanguagePreference compared")
+        if self.preferred_order < other.preferred_order: return -1
+        if self.preferred_order == other.preferred_order: return 0
+        if self.preferred_order > other.preferred_order: return 1
 
     @property
     def language_code(self):
@@ -1335,3 +1350,20 @@ class UserLanguagePreference(Base):
                 self.lang_code = to_iso639_2(full_name)
             else:
                 raise ValueError("The input %s is not a valid input" % code)
+
+    @staticmethod
+    def to_posix_format(lang_code):
+        if '-' in lang_code:
+            # ISO format, must convert to POSIX format
+            lang,country = lang_code.split('-')
+            if is_iso639_1(lang):
+                posix_lang = lang
+            if is_iso639_2(lang):
+                posix_lang = to_iso639_1(lang)
+            posix = '_'.join([posix_lang.lower(),country.upper()])
+            return posix
+        # if '_' in lang_code: return lang_code
+        # if len(lang_code) == 2, return lang_code
+        return lang_code
+
+

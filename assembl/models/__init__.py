@@ -90,6 +90,7 @@ from .auth import (
     Permission,
     Role,
     User,
+    UserLanguagePreference,
     UserRole,
     UserTemplate,
     Username,
