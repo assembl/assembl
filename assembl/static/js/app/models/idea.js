@@ -1,7 +1,7 @@
 'use strict';
 
-define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/types', 'utils/permissions'],
-    function (_, Base, Ctx, i18n, Types, Permissions) {
+define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/types', 'utils/permissions', 'bluebird'],
+    function (_, Base, Ctx, i18n, Types, Permissions, Promise) {
 
         /**
          * @class IdeaModel
@@ -315,7 +315,8 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
             /** Return a promise for all Extracts models for this idea
              * @return {$.Defered.Promise}
              */
-            getExtractsPromise: function () {
+
+            /*getExtractsPromise: function () {
                 var that = this,
                     deferred = $.Deferred();
                 this.collection.collectionManager.getAllExtractsCollectionPromise().done(
@@ -325,6 +326,19 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                     }
                 );
                 return deferred.promise();
+            },*/
+
+            getExtractsPromise: function () {
+                var that = this;
+                return this.collection.collectionManager.getAllExtractsCollectionPromise()
+                    .then(function (allExtractsCollection) {
+                        return Promise.resolve(allExtractsCollection.where({idIdea: that.getId()}))
+                            .thenReturn(allExtractsCollection)
+                            .catch(function(e){
+                                console.error(e.statusText);
+                            });
+                    }
+                );
             },
 
             /**
@@ -467,12 +481,10 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
             getRootIdea: function () {
                 var retval = this.findWhere({ '@type': Types.ROOT_IDEA });
                 if (!retval) {
-                    console.log("Size: ", _.size(this.models));
                     _.forEach(this.models, function (model) {
                         console.log(model.get('@type'));
                     })
                     console.error("getRootIdea() failed!");
-                    console.log(this);
                 }
                 return retval;
             },

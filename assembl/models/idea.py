@@ -355,7 +355,7 @@ JOIN post AS family_posts ON (
         if lang:
             langs = (lang,)
         else:
-            langs = self.discussion.get_discussion_locales()
+            langs = self.discussion.discussion_locales
         word_counter = WordCountVisitor(langs)
         self.visit_ideas_depth_first(word_counter)
         return word_counter.best(num)

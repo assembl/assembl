@@ -1,7 +1,7 @@
 'use strict';
 
-define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery', 'app', 'common/context', 'models/message', 'models/synthesis', 'models/idea', 'utils/permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'utils/panelSpecTypes', 'views/assemblPanel', 'utils/i18n', 'views/editableField', 'views/ckeditorField', 'common/collectionManager'],
-    function (objectTreeRenderVisitor, Raven, _, $, Assembl, Ctx, MessageModel, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, PanelSpecTypes, AssemblPanel, i18n, EditableField, CKEditorField, CollectionManager) {
+define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery', 'app', 'common/context', 'models/message', 'models/synthesis', 'models/idea', 'utils/permissions', 'views/ideaFamily', 'views/ideaInSynthesis', 'utils/panelSpecTypes', 'views/assemblPanel', 'utils/i18n', 'views/editableField', 'views/ckeditorField', 'common/collectionManager', 'bluebird'],
+    function (objectTreeRenderVisitor, Raven, _, $, Assembl, Ctx, MessageModel, Synthesis, Idea, Permissions, IdeaFamilyView, IdeaInSynthesisView, PanelSpecTypes, AssemblPanel, i18n, EditableField, CKEditorField, CollectionManager, Promise) {
 
         var SynthesisPanel = AssemblPanel.extend({
             template: '#tmpl-synthesisPanel',
@@ -20,9 +20,9 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
                 // that publishes this synthesis
                 this.messageListView = obj.messageListView;
                 this.ideas = new Idea.Collection();
-                $.when(collectionManager.getAllSynthesisCollectionPromise(),
-                    collectionManager.getAllIdeasCollectionPromise()
-                ).then(function (synthesisCollection, allIdeasCollection) {
+                Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
+                            collectionManager.getAllIdeasCollectionPromise(),
+                    function (synthesisCollection, allIdeasCollection) {
                         var rootIdea = allIdeasCollection.getRootIdea(),
                             raw_ideas;
 
@@ -49,7 +49,9 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
                             that.ideas.reset(ideas);
                         }
                         that.listenTo(that.ideas, 'add remove reset', that.render);
-                        that.listenTo(that.model, 'reset change', that.render);
+
+                        //modelEvents should handler this
+                        //that.listenTo(that.model, 'reset change', that.render);
                     });
 
 
@@ -59,6 +61,10 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
             events: {
                 'click .synthesisPanel-publishButton': 'publish',
                 'click .synthesisPanel-fullscreenButton': 'setFullscreen'
+            },
+
+            modelEvents:{
+              'reset change':'render'
             },
 
             getTitle: function () {
@@ -110,9 +116,9 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
 
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-                $.when(collectionManager.getAllSynthesisCollectionPromise(),
-                    collectionManager.getAllIdeasCollectionPromise()
-                ).then(function (synthesisCollection, allIdeasCollection) {
+                Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
+                    collectionManager.getAllIdeasCollectionPromise(),
+                    function (synthesisCollection, allIdeasCollection) {
                         // Getting the scroll position
                         if (!that.model) {
                             window.setTimeout(function () {

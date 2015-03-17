@@ -1,7 +1,7 @@
 'use strict';
 
-define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all'],
-    function (Assembl, $, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed) {
+define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all'],
+    function (Assembl, $, _, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed) {
 
         var Context = function () {
 
@@ -127,6 +127,11 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
              */
             this.cachedWidgetDataAssociatedToIdeasPromises = {};
 
+            /*
+             * Timeout (created by setTimeout()) which hides the popover
+             */
+            this.timeoutIdHidePopover = null;
+
             this.init();
         }
 
@@ -136,7 +141,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 return this.DISCUSSION_SLUG;
             },
 
-            getDiscussionPromise: function () {
+            /*getDiscussionPromise: function () {
 
                 var deferred = $.Deferred();
                 var that = this;
@@ -158,6 +163,22 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 }
 
                 return deferred.promise();
+            },*/
+
+            getDiscussionPromise: function () {
+                if(this.discussionPromise ){
+                  return this.discussionPromise;
+                }
+
+                this.discussionPromise = Promise.resolve($.get(this.getApiV2DiscussionUrl()))
+                    .then(function(model){
+                        return model;
+                    }).catch(function(e){
+                        console.error(e.statusText);
+                    });
+
+                return this.discussionPromise;
+
             },
 
             getSocketUrl: function () {
@@ -398,6 +419,99 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
              */
             isInFullscreen: function () {
                 return this.openedPanels === 1;
+            },
+
+            // "this" has to be the popover div: $("#popover-oembed")
+            popoverAfterEmbed: function() {
+                //console.log("popoverAfterEmbed() this: ", this);
+                var screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                var screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                var popoverWidth = $(this).outerWidth();
+                var popoverHeight = $(this).outerHeight();
+                var positionLeft = parseInt($(this).css('left'));
+                var positionTop = parseInt($(this).css('top'));
+                var newPositionLeft = positionLeft - popoverWidth/2;
+                if ( newPositionLeft + popoverWidth > screenWidth )
+                    newPositionLeft = screenWidth - popoverWidth;
+                if ( newPositionLeft < 0 )
+                    newPositionLeft = 0;
+                var newPositionTop = positionTop;
+                if ( newPositionTop + popoverHeight > screenHeight )
+                    newPositionTop = screenHeight - popoverHeight;
+                if ( newPositionTop < 0 )
+                    newPositionTop = 0;
+                $(this).css('left', newPositionLeft + 'px' );
+                $(this).css('top', newPositionTop + 'px' );
+            },
+
+            openTargetInPopOver: function(evt) {
+                //console.log("ctx.openTargetInPopOver(evt: ", evt);
+                var that = this;
+
+                var target_url = null;
+                if (evt && evt.currentTarget) {
+                    if ($(evt.currentTarget).attr("data-href"))
+                        target_url = $(evt.currentTarget).attr("data-href");
+                    else if ($(evt.currentTarget).attr("href") && $(evt.currentTarget).attr("href") != "#")
+                        target_url = $(evt.currentTarget).attr("href");
+                }
+                if (!target_url)
+                {
+                    console.log("error: no href attribute given");
+                    return false;
+                }
+
+                var popover_width = 500;
+                var popover_height = 500;
+                var popover_scrolling = "no";
+                if (evt && evt.currentTarget) {
+                    if ($(evt.currentTarget).attr("data-popover-width"))
+                        popover_width = $(evt.currentTarget).attr("data-popover-width");
+                    if ($(evt.currentTarget).attr("data-popover-height"))
+                        popover_height = $(evt.currentTarget).attr("data-popover-height");
+                    if ($(evt.currentTarget).attr("data-popover-scrolling"))
+                        popover_scrolling = $(evt.currentTarget).attr("data-popover-scrolling");
+                }
+
+                var popover = $("#popover-oembed");
+
+                var iframe = '<iframe width="' + popover_width + '" height="' + popover_height + '" frameborder="0" scrolling="' + popover_scrolling + '" frametransparency="1" src="' + target_url + '"></iframe>';
+                popover[0].innerHTML = iframe;
+                
+                var triggerHover = function(evt){
+                    console.log("triggerHover(evt: ", evt);
+                    popover.css('position','fixed');
+                    popover.css('top', (evt.pageY-parseInt(popover_height)-14) + 'px');
+                    popover.css('left', evt.pageX + 'px');
+                    //popover.css('padding', '25px 50px');
+                    popover.show();
+
+                    that.popoverAfterEmbed.apply(popover[0]);
+
+                    window.clearTimeout(that.timeoutIdHidePopover);
+
+                    var hidePopover = function(){
+                        popover.hide();
+                    };
+                    
+                    popover.unbind("mouseleave"); // this avoids handler accumulation (each call to the following popover.mouseleave() adds a handler)
+                    popover.mouseleave(function(evt){
+                        that.timeoutIdHidePopover = setTimeout(hidePopover, 1000);
+                    });
+
+                    popover.unbind("mouseenter"); // this avoids handler accumulation (each call to the following popover.mouseenter() adds a handler)
+                    popover.mouseenter(function(evt){
+                        window.clearTimeout(that.timeoutIdHidePopover);
+                    });
+
+
+                    // hide it after some time even if the user does not put the mouse inside the popover
+                    that.timeoutIdHidePopover = setTimeout(hidePopover, 4000);
+                };
+
+                triggerHover(evt);
+                
+                return false;
             },
 
             // Modal can be dynamically resized once the iframe is loaded, or on demand
@@ -1114,6 +1228,7 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
 
             makeLinksShowOembedOnHover: function(el) {
                 var popover = $("#popover-oembed");
+                var that = this;
                 
                 var triggerHover = function(evt){
                     popover.css('position','fixed');
@@ -1133,53 +1248,38 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                             popover.hide();
                         },
                         afterEmbed: function(){
-                            var screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-                            var screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-                            var popoverWidth = $(this).outerWidth();
-                            var popoverHeight = $(this).outerHeight();
-                            var positionLeft = parseInt($(this).css('left'));
-                            var positionTop = parseInt($(this).css('top'));
-                            //console.log("screenWidth: ", screenWidth);
-                            //console.log("screenHeight: ", screenHeight);
-                            //console.log("popoverWidth: ", popoverWidth);
-                            //console.log("popoverHeight: ", popoverHeight);
-                            //console.log("positionLeft: ", positionLeft);
-                            //console.log("positionTop: ", positionTop);
-                            var newPositionLeft = positionLeft - popoverWidth/2;
-                            if ( newPositionLeft + popoverWidth > screenWidth )
-                                newPositionLeft = screenWidth - popoverWidth;
-                            if ( newPositionLeft < 0 )
-                                newPositionLeft = 0;
-                            var newPositionTop = positionTop;
-                            if ( newPositionTop + popoverHeight > screenHeight )
-                                newPositionTop = screenHeight - popoverHeight;
-                            if ( newPositionTop < 0 )
-                                newPositionTop = 0;
-                            //console.log("newPositionLeft: ", newPositionLeft);
-                            //console.log("newPositionTop: ", newPositionTop);
-                            $(this).css('left', newPositionLeft + 'px' );
-                            $(this).css('top', newPositionTop + 'px' );
+                            that.popoverAfterEmbed.apply(this);
                         }
+                    });
+
+                    var timeoutIdHidePopover = null;
+                    
+                    popover.unbind("mouseleave"); // this avoids handler accumulation (each call to the following popover.mouseleave() adds a handler)
+                    popover.mouseleave(function(evt){
+                        var that = this;
+                        timeoutIdHidePopover = setTimeout(function(){
+                            $(that).hide();
+                        }, 10);
+                    });
+
+                    popover.unbind("mouseenter"); // this avoids handler accumulation (each call to the following popover.mouseenter() adds a handler)
+                    popover.mouseenter(function(evt){
+                        window.clearTimeout(timeoutIdHidePopover);
                     });
                 };
 
                 el.find("a").mouseenter(function(evt){
-                    var timeoutId = null;
+                    var timeoutIdShowPopover = null;
                     var that = this;
-                    timeoutId = window.setTimeout(function(){
+                    timeoutIdShowPopover = window.setTimeout(function(){
                         triggerHover.call(that, evt);
                     }, 800); // => this is how much time the mouse has to stay on the link in order to trigger the popover
                     $(this).mouseout(function(){
-                        window.clearTimeout(timeoutId);
+                        window.clearTimeout(timeoutIdShowPopover);
                     });
                 });
 
-                popover.mouseleave(function(evt){
-                    var that = this;
-                    setTimeout(function(){
-                        $(that).hide();
-                    }, 10);
-                });
+                
             },
 
             /**
@@ -1229,12 +1329,16 @@ define(['../app', 'jquery', '../utils/permissions', '../utils/roles', 'moment', 
                 var that = this;
                 $('[data-copy-text]').each(function (i, el) {
                     var text = el.getAttribute('data-copy-text');
-                    text = that.format('{0}//{1}/{2}{3}', location.protocol, location.host, that.getDiscussionSlug(), text);
+                    text = that.getAbsoluteURLFromRelativeURL(text);
                     el.removeAttribute('data-copy-text');
 
                     el.setAttribute('data-clipboard-text', text);
                     assembl.clipboard.glue(el);
                 });
+            },
+
+            getAbsoluteURLFromRelativeURL: function(url) {
+                return this.format('{0}//{1}/{2}{3}', location.protocol, location.host, this.getDiscussionSlug(), url);
             },
 
             isNewUser: function () {

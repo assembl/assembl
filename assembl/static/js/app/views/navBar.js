@@ -112,8 +112,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     collectionManager = new CollectionManager();
 
                 if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-                    $.when(collectionManager.getLocalRoleCollectionPromise()).then(
-                        function (allRole) {
+                    collectionManager.getLocalRoleCollectionPromise()
+                        .then(function (allRole) {
 
                             var role = allRole.find(function (local_role) {
                                 return local_role.get('role') === Roles.PARTICIPANT;
@@ -130,7 +130,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                         });
                 } else {
                     var navRight = new navBarRight({
-                        model: undefined
+                        role: undefined
                     });
                     this.getRegion('navBarRight').show(navRight);
                     this.getRegion('navBarLeft').show(new navBarLeft());
@@ -287,17 +287,16 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     modalTemplate = _.template($('#tmpl-firstLoginAfterAutoSubscribeToNotifications').html());
                 }
 
-                $.when(collectionManager.getNotificationsDiscussionCollectionPromise()).then
-                (
-                    function (discussionNotifications) {
+                collectionManager.getNotificationsDiscussionCollectionPromise()
+                    .then(function (discussionNotifications) {
                         model.notificationsToShow = _.filter(discussionNotifications.models, function (m) {
                             // keep only the list of notifications which become active when a user follows a discussion
                             return (m.get('creation_origin') === 'DISCUSSION_DEFAULT') && (m.get('status') === 'ACTIVE');
                         });
 
                         // we show the popin only if there are default notifications
-                        if ( model.notificationsToShow && model.notificationsToShow.length )
-                        {
+                        if ( model.notificationsToShow && model.notificationsToShow.length ){
+
                             var Modal = Backbone.Modal.extend({
                                 template: modalTemplate,
                                 className: modalClassName,

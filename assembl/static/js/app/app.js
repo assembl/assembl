@@ -37,7 +37,7 @@ define(['backbone.marionette', 'jquery'], function (Marionette, $) {
     App.on('start', function(){
 
         // change dynamically tab title
-        document.title = document.querySelector('#discussion-topic').value;
+        document.title = document.querySelector('#discussion-topic').value; // not needed anymore on the debate page
 
         // change dynamically favicon in tab
         var link = document.createElement('link');
