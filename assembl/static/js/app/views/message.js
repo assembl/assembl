@@ -103,7 +103,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              */
             events: {
 
-                //'click .js_messageHeader': 'onMessageTitleClick',
+                'click .js_messageHeader': 'onMessageTitleClick',
                 'click .js_messageTitle': 'onMessageTitleClick',
                 'click .js_readMore': 'onMessageTitleClick',
                 'click .js_readLess': 'onMessageTitleClick',
@@ -129,9 +129,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             serializeData: function(){
                 var bodyFormatClass,
                     body,
-                    metadata_json;
-
-                var bodyFormat = this.model.get('bodyMimeType');
+                    metadata_json,
+                    bodyFormat = this.model.get('bodyMimeType');
 
                 if (this.viewStyle == this.availableMessageViewStyles.PREVIEW || this.viewStyle == this.availableMessageViewStyles.TITLE_ONLY) {
                     if (bodyFormat == "text/html") {
@@ -182,12 +181,21 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              */
             onRender: function () {
                 var that = this,
-                    modelId = this.model.id;
+                    modelId = this.model.id,
+                    partialMessage = MessagesInProgress.getMessage(modelId);
                 if (Ctx.debugRender) {
                     console.log("message:render() is firing for message", this.model.id);
                 }
 
-                this.setViewStyle(this.viewStyle);
+                if(partialMessage['body']) {
+                  //Somebody started writing a message and didn't finish, make sure they see it.
+                  //console.log("Opening in full view because of reply in progress: ", partialMessage['body'])
+                  this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
+                }
+                else {
+                  this.setViewStyle(this.viewStyle);
+                }
+                
                 this.clearAnnotationsToLoadCache();
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
@@ -217,7 +225,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     'subject_label': null,
                     'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
                     'messageList': that.messageListView,
-                    'msg_in_progress_body': MessagesInProgress.getMessage(modelId),
+                    'msg_in_progress_body': partialMessage['body'],
                     'msg_in_progress_ctx': modelId,
                     'mandatory_subject_missing_msg': null
                 });
@@ -225,7 +233,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
 
                 this.postRender();
 
-                if (this.replyBoxShown) {
+                if (this.replyBoxShown || partialMessage['body']) {
                     this.openReplyBox();
                     if ( this.replyBoxHasFocus )
                         this.focusReplyBox();
@@ -601,7 +609,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                         else { // if the .messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
                             that.messageListView.scrollToElement(that.$(".message-replybox"));
                         }
-                    }, 100);
+                    }, 1000);
                 };
                 
                 if (this.viewStyle.id === 'viewStylePreview') {
@@ -618,7 +626,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              *  Opens the reply box the reply button
              */
             openReplyBox: function () {
-                this.$('.message-replybox').show();
                 this.$('.message-replybox').removeClass('hidden');
                 this.replyBoxShown = true;
             },
@@ -627,7 +634,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              *  Closes the reply box
              */
             closeReplyBox: function () {
-                this.$('.message-replybox').hide();
+                this.$('.message-replybox').addClass('hidden');
                 this.replyBoxShown = false;
             },
 
@@ -667,7 +674,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     this.$el.removeClass(this.availableMessageViewStyles.PREVIEW.id);
                     this.$el.addClass(this.availableMessageViewStyles.FULL_BODY.id);
                     this.viewStyle = style;
-                    this.replyBoxShown = true;
 
                 }
                 else if (style == this.availableMessageViewStyles.PREVIEW) {
@@ -698,14 +704,17 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 }
             },
             /**
+             * Note that this is also callable without an event
              * @event
              */
             onMessageTitleClick: function (e) {
-                e.stopPropagation();
+                if(e) {
+                  e.stopPropagation();
+                }
+                this.toggleViewStyle();
                 if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
                     this.openReplyBox();
                 }
-                this.toggleViewStyle();
             },
 
             /**

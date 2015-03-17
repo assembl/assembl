@@ -43,6 +43,11 @@ define(function (require) {
 
         getMessage: function(context) {
             var messages = this.getMessages();
+            if(messages[context] && messages[context]['body'] === "[object Object]") {
+              console.warn("savePartialMessage() Fixing corrupted data in message storage (a past bug causes text representation of objects to be stored in local storage)")
+              this.saveMessage(context, '', messages[context]['title']);
+              return this.getMessage(context);
+            }
             return messages[context] || {};
         },
 

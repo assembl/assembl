@@ -244,10 +244,10 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             },
 
             savePartialMessage: function () {
-                var message_body = this.ui.messageBody;
-                if (message_body.length > 0) {
-                    var message_title = this.ui.messageSubject.val();
-                    MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title);
+                var message_body = this.ui.messageBody,
+                    message_title = this.ui.messageSubject;
+                if (message_body.length > 0 || message_title.length > 0) {
+                  MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title.val());
                 }
             },
 
