@@ -97,7 +97,7 @@ docutils==0.12
 raven==5.2.0
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
-repoze.sendmail==4.1
+repoze.sendmail==4.1  # rq.filter: <4.2
 requests==2.6.0
 requests-oauthlib==0.4.2
 selenium==2.45.0
