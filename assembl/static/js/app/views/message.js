@@ -54,11 +54,14 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 var that = this;
 
                 /*this.listenTo(this, "all", function(eventName) {
-                 console.log("message view event received: ", eventName);
+                 console.log("message event received: ", eventName);
                  });
                  this.listenTo(this.model, "all", function(eventName) {
-                 
+                 console.log("message model event received: ", eventName);
                  });*/
+                //this.listenTo(this.model, 'replacedBy', this.onReplaced);
+                //this.listenTo(this.model, 'showBody', this.onShowBody);
+                //this.listenTo(this.model, 'change', this.render);
 
                 this.messageListView = options.messageListView;
                 this.messageFamilyView = options.messageFamilyView;
@@ -86,7 +89,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 this.model.getCreatorPromise().then(function(creator){
                     that.creator = creator;
                     that.template = '#tmpl-message';
-                    //console.log("about to re-render message because we just got the creator")
                     that.render();
                 });
             },
@@ -153,8 +155,11 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 if (!_.has(this.model, 'metadata_json')){
                     metadata_json = null;
                 }
-                var direct_link_relative_url = "/posts/" + encodeURIComponent(this.model.get('@id'));
-                var share_link_url = "/static/js/bower/expando/add/index.htm?u=" + Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url) + "&t=" + encodeURIComponent(this.model.get('subject'));
+                var direct_link_relative_url = "/posts/" + encodeURIComponent(this.model.get('@id')),
+                    share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
+                    Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url) + "&t=" +
+                    encodeURIComponent(this.model.get('subject'));
+
                 return {
                     message: this.model,
                     viewStyle: this.viewStyle,
@@ -182,7 +187,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     modelId = this.model.id,
                     partialMessage = MessagesInProgress.getMessage(modelId);
                 if (Ctx.debugRender) {
-                    console.log("message:render() is firing for message", this.model.id, " with template: ", this.template);
+                    console.log("message:render() is firing for message", this.model.id);
                 }
                 if (this.template == '#tmpl-message') {
                   if(partialMessage['body']) {
