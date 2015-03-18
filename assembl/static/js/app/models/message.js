@@ -179,7 +179,8 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
              * @param {Boolean} value
              */
             setRead: function (value) {
-                var user = Ctx.getCurrentUser();
+                var user = Ctx.getCurrentUser(),
+                    that = this;
 
                 if (user.isUnknownUser()) {
                     // Unknown User can't mark as read
@@ -193,22 +194,16 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
 
                 this.set('read', value, { silent: true });
 
-                var that = this,
-                    url = Ctx.getApiUrl('post_read/') + this.getId(),
-                    ajax;
-
-                ajax = $.ajax(url, {
-                    method: 'PUT',
-                    data: JSON.stringify({ 'read': value }),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (data) {
+                this.url = Ctx.getApiUrl('post_read/') + this.getId();
+                this.save({'read': value},{
+                    success: function(model, resp){
                         that.trigger('change:read', [value]);
                         that.trigger('change', that);
-                        //So the unread count is updated in the ideaList
-                        Assembl.reqres.request('ideas:update', data.ideas);
-                    }
+                        Assembl.reqres.request('ideas:update', resp.ideas);
+                    },
+                    error: function(model, resp){}
                 });
+
             },
 
             validate: function(attrs, options){

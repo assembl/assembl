@@ -13,7 +13,7 @@ $dropdown-divider-bg: #e5e5e5 !default;
 $line-height-base: 1.428571429 !default;
 $dropdown-link-color: $gray4 !default;
 $dropdown-link-hover-color: darken($gray4, 5%) !default;
-$dropdown-link-hover-bg: #f5f5f5 !default;
+$dropdown-link-hover-bg: lighten($gray1, 20%) !default;
 $dropdown-link-active-color: $gray2 !default;
 $dropdown-link-active-bg: #eee !default;
 $dropdown-link-disabled-color: $gray3 !default;
