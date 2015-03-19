@@ -1,6 +1,6 @@
 'use strict';
 
-define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'common/context', 'common/collectionManager', 'utils/permissions', 'objects/messagesInProgress', 'utils/i18n', 'jquery-autosize', 'models/message', 'models/agents', 'backbone.modal', 'backbone.marionette.modals', 'bluebird'],
+define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'common/context', 'common/collectionManager', 'utils/permissions', 'objects/messagesInProgress', 'utils/i18n', 'jquery-autosize', 'models/message', 'models/agents', 'bluebird', 'backbone.modal', 'backbone.marionette.modals'],
     function (Backbone, Marionette, Assembl, _, $, Ctx, CollectionManager, Permissions, MessagesInProgress, i18n, autosize, Messages, Agents, Promise) {
 
         /**
@@ -149,7 +149,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         btn.text(i18n.gettext('Message posted!'));
 
                         that.ui.messageBody.val('');
-                        that.ui.topicSubject.val('');
+                        that.ui.messageSubject.val('');
                         that.sendInProgress = false;
                         /**
                          * Show a popin asking the user to receive notifications if he is posting his first message in the discussion, and does not already receive all default discussion's notifications.
