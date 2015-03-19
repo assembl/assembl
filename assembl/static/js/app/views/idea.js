@@ -38,7 +38,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                   throw new Error("groupContent must be passes in constructor options");
                 }
 
-                this.listenTo(this.model, 'change', this.render);
+                this.listenTo(this.model, 'change change:inNextSynthesis', this.render);
                 this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
                 this.listenTo(this._groupContent, 'idea:set', function (idea) {

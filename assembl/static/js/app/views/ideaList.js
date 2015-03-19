@@ -47,7 +47,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
                 collectionManager.getAllIdeasCollectionPromise()
                     .then(function (allIdeasCollection) {
-                        var events = ['reset', 'change:parentId', 'change:@id', 'change:inNextSynthesis', 'remove', 'add', 'destroy'];
+                        var events = ['reset', 'change:parentId', 'change:@id', 'remove', 'add', 'destroy'];
                         that.listenTo(allIdeasCollection, events.join(' '), that.render);
                     });
 

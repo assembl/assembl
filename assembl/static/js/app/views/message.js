@@ -1,7 +1,7 @@
 'use strict';
 
 define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/agents', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot', 'bluebird'],
-    function (Marionette, Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, Agents, CollectionManager, PanelSpecTypes, $, Promise) {
+    function (Marionette, Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, Agents, CollectionManager, PanelSpecTypes, $, dotdotdot, Promise) {
 
         var MIN_TEXT_TO_TOOLTIP = 5,
             TOOLTIP_TEXT_LENGTH = 10;
