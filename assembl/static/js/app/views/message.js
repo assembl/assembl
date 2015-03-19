@@ -204,13 +204,16 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
   
                   this.$el.attr("id", "message-" + this.model.get('@id'));
                   this.$el.addClass(this.model.get('@type'));
-                  if (this.model.get('read') || !Ctx.getCurrentUser().isUnknownUser()) {
-                      this.$el.addClass('read');
-                      this.$el.removeClass('unread');
-                  } else {
-                      this.$el.addClass('unread');
-                      this.$el.removeClass('read');
-                  }
+
+                    if(Ctx.getCurrentUser().isUnknownUser()){
+                        this.$el.removeClass('unread').addClass('read');
+                    }else {
+                        if (this.model.get('read')) {
+                            this.$el.removeClass('unread').addClass('read');
+                        } else {
+                            this.$el.removeClass('read').addClass('unread');
+                        }
+                    }
   
                   Ctx.initTooltips(this.$el);
                   if ( this.viewStyle == this.availableMessageViewStyles.FULL_BODY ){
