@@ -18,17 +18,20 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
             }
         },
         verifyEmail: function(){
-            var uri = this.model.get('@id').split('/')[1]+'/verify';
-            var that = this;
-            this.model.url = this.model.url+'/'+ uri;
+            var urlRoot = this.model.urlRoot +'/'+ this.model.get('@id').split('/')[1]+'/verify';
 
             var verify = new Backbone.Model();
-            verify.url = this.model.url;
+                verify.url = urlRoot;
 
             verify.save(null, {
                 success: function(model, resp){
+
+                    console.debug('success', resp)
+
                 },
                 error: function(model, resp){
+
+                    console.debug('error', resp)
 
                 }
             })
@@ -39,7 +42,6 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
         template: '#tmpl-associateAccounts',
         childView: email,
         childViewContainer:'.controls'
-
     });
 
     var userAccount =  Marionette.ItemView.extend({
@@ -123,7 +125,6 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
         }
     });
 
-
     var account = Marionette.LayoutView.extend({
         template: '#tmpl-userAccount',
         className: 'admin-account',
@@ -159,7 +160,8 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
         addEmail: function(e){
             e.preventDefault();
 
-            var email = this.$('input[name="new_email"]').val(),
+            var that = this,
+                email = this.$('input[name="new_email"]').val(),
                 emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
             if(email && emailRegex.test(email)){
@@ -171,7 +173,7 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
 
                 emailModel.save(null, {
                     success:function(){
-                        this.emailCollection.fetch();
+                        that.render();
                         $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
                             ele: 'body',
                             type: 'success',
