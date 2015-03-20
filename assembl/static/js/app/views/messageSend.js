@@ -78,6 +78,10 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             },
 
             serializeData: function () {
+                var reply_idea = ('reply_idea' in this.options) ? this.options.reply_idea : null;
+                var reply_message_id = ('reply_message_id' in this.options) ? this.options.reply_message_id : null;
+                var show_target_context_with_choice = ('show_target_context_with_choice' in this.options) ? this.options.show_target_context_with_choice : null;
+
                 return {
                     i18n: i18n,
                     body_help_message: this.initialBody,
@@ -88,7 +92,9 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST),
                     msg_in_progress_body: this.options.msg_in_progress_body,
                     msg_in_progress_title: this.options.msg_in_progress_title,
-                    reply_idea: 'reply_idea' in this.options ? this.options.reply_idea : null
+                    reply_idea: reply_idea,
+                    reply_message_id: reply_message_id,
+                    show_target_context_with_choice: show_target_context_with_choice
                 }
             },
 
@@ -214,12 +220,21 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                                 if (el.length > 0)
                                     el[0].text = '';
 
-                                setTimeout(function () {
-                                    //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
-                                    //console.log("Calling showMessageById for "+data['@id']);
-                                    Assembl.vent.trigger('messageList:showMessageById', model.id);
-
-                                }, 1000);
+                                var current_idea = that.messageList.getContainingGroup().getCurrentIdea();
+                                // if the user was top-posting into the current idea or answering to someone or top-posting from the general conversation context, scroll to his message
+                                if ( reply_idea_id || reply_message_id || (!current_idea && !reply_message_id && !reply_idea_id) ) {
+                                    setTimeout(function () {
+                                        //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
+                                        //console.log("Calling showMessageById for "+data['@id']);
+                                        Assembl.vent.trigger('messageList:showMessageById', model.id);
+                                    }, 1000);
+                                }
+                                // if the user was top-posting into the general conversation from an idea (versus answering to someone or top-posting into the current idea)
+                                else if ( current_idea && !reply_idea_id ) {
+                                    // maybe we could show some info like "Your message has been successfully posted in the general conversation. Click here to see it in context"
+                                    alert(i18n.gettext('Your message has been successfully posted in the general conversation. To see it, go to the bottom of the table of ideas and click on "View posts not yet sorted anywhere", or "All messages".'));
+                                }
+                                
                             });
                         }
                         setTimeout(function () {

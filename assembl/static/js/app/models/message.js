@@ -199,7 +199,7 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
                     success: function(model, resp){
                         that.trigger('change:read', [value]);
                         that.trigger('change', that);
-                        Assembl.reqres.request('ideas:update', resp.ideas);
+                        Assembl.reqres.request('ideas:update', resp.ideas); // this seems to cost a lot of performance. maybe we should update only the ideas related to this message
                     },
                     error: function(model, resp){}
                 });
