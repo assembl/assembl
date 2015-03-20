@@ -1075,7 +1075,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
               var currentIdea = this.getContainingGroup().getCurrentIdea();
               if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
-                options.reply_idea_id = currentIdea.getId();
+                options.reply_idea = currentIdea;
               }
 
               this.newTopicView = new MessageSendView(options);

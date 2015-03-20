@@ -11,7 +11,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
          * reply_message_id:  The id of the message model this replies to
          *  (if any)
          *
-         * reply_idea_id:  The id of the idea object this message comments or
+         * reply_idea:  The idea object this message comments or
          *  replies to (if any)
          *
          * cancel_button_label:  String, the label used for the Cancel button
@@ -52,6 +52,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             template: '#tmpl-messageSend',
             className: 'messageSend',
             initialize: function (options) {
+                //console.log("options given to the constructor of messageSend: ", options);
                 this.options = options;
                 this.sendInProgress = false;
                 this.initialBody = (this.options.body_help_message !== undefined) ?
@@ -78,6 +79,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
 
             serializeData: function () {
                 return {
+                    i18n: i18n,
                     body_help_message: this.initialBody,
                     allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,
                     cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label : i18n.gettext('Cancel'),
@@ -85,7 +87,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     subject_label: this.options.subject_label ? this.options.subject_label : i18n.gettext('Subject:'),
                     canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST),
                     msg_in_progress_body: this.options.msg_in_progress_body,
-                    msg_in_progress_title: this.options.msg_in_progress_title
+                    msg_in_progress_title: this.options.msg_in_progress_title,
+                    reply_idea: 'reply_idea' in this.options ? this.options.reply_idea : null
                 }
             },
 
@@ -103,13 +106,22 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     message_subject = message_subject_field.val() || this.options.default_subject,
                     reply_idea_id = null,
                     reply_message_id = null,
-                    success_callback = null;
+                    success_callback = null,
+                    chosenTargetIdeaField = this.$el.find('.messageSend-target input:checked');
+                console.log("chosenTargetIdea:", chosenTargetIdeaField);
+                console.log("chosenTargetIdea val:", chosenTargetIdeaField.val());
 
                 if(this.sendInProgress !== false) {
                   return;
                 }
-                if (this.options.reply_idea_id) {
-                    reply_idea_id = this.options.reply_idea_id;
+                /*
+                if (this.options.reply_idea) {
+                    reply_idea_id = this.options.reply_idea.getId();
+                }
+                */
+                if ( chosenTargetIdeaField && chosenTargetIdeaField.val() )
+                {
+                    reply_idea_id = chosenTargetIdeaField.val();
                 }
                 if (this.options.reply_message_id) {
                     reply_message_id = this.options.reply_message_id;
