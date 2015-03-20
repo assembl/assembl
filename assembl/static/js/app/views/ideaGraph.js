@@ -99,7 +99,7 @@ define(['jit', 'common/context'], function ($jit, Ctx) {
                 //for all the nodes adjacent to the centered node.
                 var node = ht.graph.getClosestNodeToOrigin("current");
                 collectionManager.getAllIdeasCollectionPromise()
-                    .done(function (allIdeasCollection) {
+                    .then(function (allIdeasCollection) {
                         var idea = allIdeasCollection.get(node.id);
                         var suffix = "";
                         if (idea !== undefined) {

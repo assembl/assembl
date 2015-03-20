@@ -168,47 +168,37 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                          * Note: Currently in Assembl we can receive notifications only if we have a "participant" role (which means that here we have a non-null "roles.get('role')"). This role is only given to a user in discussion's parameters, or when the user "subscribes" to the discussion (subscribing gives the "participant" role to the user and also activates discussion's default notifications for the user).
                          * But, we cannot consider that the user does not already receive notifications by checking that he does not have the participant role. Because some discussions can give automatically the add_post permission to all logged in accounts (system.Authenticated role), instead of only those who have the participant role. So these accounts can post messages but are not subscribed to any notification, so we want to show them the first post pop-in.
                          * */
-                        //that.roles = new RolesModel.Model();
                         var collectionManager = new CollectionManager();
                         if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
+
                             Promise.join(collectionManager.getLocalRoleCollectionPromise(),
                                 collectionManager.getNotificationsUserCollectionPromise(),
                                 collectionManager.getNotificationsDiscussionCollectionPromise(),
                                 function (allRole, notificationsUser, notificationsDiscussion) {
-                                    //console.log("allRole: ", allRole);
-                                    //console.log("notificationsUser: ", notificationsUser);
-                                    //console.log("notificationsDiscussion: ", notificationsDiscussion);
 
-                                    var defaultActiveNotificationsDicussion = _.filter(notificationsDiscussion.models, function (m) {
+                                    var defaultActiveNotificationsDicussion = _.filter(notificationsDiscussion.models, function (model) {
                                         // keep only the list of notifications which become active when a user follows a discussion
-                                        return (m.get('creation_origin') === 'DISCUSSION_DEFAULT') && (m.get('status') === 'ACTIVE');
+                                        return (model.get('creation_origin') === 'DISCUSSION_DEFAULT') && (model.get('status') === 'ACTIVE');
                                     });
 
-                                    var userActiveNotifications = _.filter(notificationsUser.models, function (m) {
-                                        return (m.get('status') === 'ACTIVE');
+                                    var userActiveNotifications = _.filter(notificationsUser.models, function (model) {
+                                        return (model.get('status') === 'ACTIVE');
                                     });
-
-                                    //if (allRole.models.length) {
-                                    //    that.roles = allRole.models[0];
-                                    //}
-                                    
 
                                     var agent = new Agents.Model();
                                     agent.getSingleUser();
-                                    agent.fetch({'success': function(agent, response, options) {
+                                    agent.fetch({
+                                        success: function(model, resp) {
                                         //if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) && this.roles.get('role') === null) {
-                                        if (
-                                            (agent.get('post_count') === 0 || agent.get('post_count') < 2)
-                                            && userActiveNotifications.length < defaultActiveNotificationsDicussion.length
-                                        ) { // we could make a real diff here but this is enough for now
+                                        if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) &&
+                                            userActiveNotifications.length < defaultActiveNotificationsDicussion.length){ // we could make a real diff here but this is enough for now
+
                                             that.showPopInFirstPost();
                                         }
                                     }});
                                 }
                             );
                         }
-
-                        
 
                         // clear on success... so not lost in case of failure.
                         MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
@@ -258,6 +248,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             savePartialMessage: function () {
                 var message_body = this.ui.messageBody,
                     message_title = this.ui.messageSubject;
+
                 if (message_body.length > 0 || message_title.length > 0) {
                   MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title.val());
                 }

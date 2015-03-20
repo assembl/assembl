@@ -607,8 +607,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     // we can't execute this immediately because the opening of the message triggers a setRead(true) which triggers a redraw which looses the focus
                     window.setTimeout(function () {
                         var el = that.$('.messageSend-body');
-                        if ( el.length )
-                        {
+                        if ( el.length ){
                             el.focus();
                             that.replyBoxHasFocus = true;
                             el.on("blur", onReplyBoxBlur);

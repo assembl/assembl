@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'backbone.modal', 'backbone.marionette.modals', 'bluebird'],
-    function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types, backboneModal, marionetteModals, Promise) {
+define(['backbone.marionette', 'app', 'common/context', 'common/collectionManager', 'jquery', 'underscore', 'd3', 'utils/i18n', 'moment', 'utils/permissions', 'utils/panelSpecTypes', 'views/assemblPanel', 'views/ckeditorField', 'utils/types', 'bluebird', 'backbone.modal', 'backbone.marionette.modals'],
+    function (Marionette, Assembl, Ctx, CollectionManager, $, _, d3, i18n, Moment, Permissions, PanelSpecTypes, AssemblPanel, CKEditorField, Types, Promise, backboneModal, marionetteModals) {
 
         var Partner = Marionette.ItemView.extend({
             template: '#tmpl-partnerItem',

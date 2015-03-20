@@ -106,7 +106,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   .then(function (allExtractsCollection) {
                       that.listenTo(allExtractsCollection, 'add remove reset', function(eventName) {
                           // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
-                          that.initAnnotator;
+                          that.initAnnotator();
                         });
                       }
                   );

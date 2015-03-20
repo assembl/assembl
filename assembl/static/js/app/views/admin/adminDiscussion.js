@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager', 'common/context', 'models/discussion', 'models/discussionSource', 'utils/i18n', 'jquery-autosize', 'bluebird'],
-    function (Marionette, $, _, CollectionManager, Ctx, Discussion, DiscussionSource, i18n, autosize, Promise) {
+define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager', 'common/context', 'models/discussion', 'models/discussionSource', 'utils/i18n', 'jquery-autosize'],
+    function (Marionette, $, _, CollectionManager, Ctx, Discussion, DiscussionSource, i18n, autosize) {
 
         var adminDiscussion = Marionette.ItemView.extend({
             template: '#tmpl-adminDiscussion',

@@ -385,7 +385,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     collectionManager = new CollectionManager();
 
                 collectionManager.getAllIdeasCollectionPromise()
-                    .done(function (allIdeasCollection) {
+                    .then(function (allIdeasCollection) {
                         if (allIdeasCollection.get(currentIdea)) {
                             newIdea.set('order', currentIdea.getOrderForNewChild());
                             currentIdea.addChild(newIdea);
