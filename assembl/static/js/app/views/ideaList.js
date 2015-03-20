@@ -199,7 +199,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                             }, view_data);
                             list.appendChild(ideaView.render().el);
                         });
-                        that.$('.ideaView').append(list);
+                        that.$('.ideaView').html(list);
 
                         //sub menu other
                         var OtherView = new OtherInIdeaListView({

@@ -1,6 +1,4 @@
-define(function (require) {
-
-    var Ctx = require('common/context');
+define(['common/context'], function (Ctx) {
 
     var messagesInProgress = Marionette.Object.extend({
 
@@ -25,15 +23,20 @@ define(function (require) {
         },
 
         saveMessage: function(context, body, title) {
+            /**
+             * Gaby Hourlier 03-20-2014 : I don't really understand
+             * why we have to get the previous messages saved instead of delete them
+             * and why add them in the new localstorage of the new message saved
+             * */
             var messages = this.getMessages();
-            if (title === undefined) {
+            if (!title) {
                 title = '';
             }
-            if (body === undefined) {
+            if (!body) {
                 console.error("save undefined message body");
                 body = '';
             }
-            if (title.length == 0 && body.length == 0) {
+            if (title.length === 0 && body.length === 0) {
                 delete messages[context];
             } else {
                 messages[context] = {"body": body, "title": title};
@@ -55,7 +58,7 @@ define(function (require) {
             var messages = this.getMessages();
             delete messages[context];
             window.localStorage.setItem(this._key, JSON.stringify(messages));
-        },
+        }
 
     })
 

@@ -729,7 +729,7 @@ define(['app',
 
                 this._allIdeaLinksCollection = new IdeaLink.Collection();
                 this._allIdeaLinksCollection.collectionManager = this;
-                this._allIdeaLinksCollectionPromise = Promise.resolve(this._allIdeaLinksCollection.fetch())
+                this._allIdeaLinksCollectionPromise = Promise.resolve(this._allIdeaLinksCollection)
                     .thenReturn(this._allIdeaLinksCollection)
                     .catch(function(e){
                         console.error(e.statusText);
