@@ -11,7 +11,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
          * reply_message_id:  The id of the message model this replies to
          *  (if any)
          *
-         * reply_idea_id:  The id of the idea object this message comments or
+         * reply_idea:  The idea object this message comments or
          *  replies to (if any)
          *
          * cancel_button_label:  String, the label used for the Cancel button
@@ -52,6 +52,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             template: '#tmpl-messageSend',
             className: 'messageSend',
             initialize: function (options) {
+                //console.log("options given to the constructor of messageSend: ", options);
                 this.options = options;
                 this.sendInProgress = false;
                 this.initialBody = (this.options.body_help_message !== undefined) ?
@@ -77,7 +78,12 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             },
 
             serializeData: function () {
+                var reply_idea = ('reply_idea' in this.options) ? this.options.reply_idea : null;
+                var reply_message_id = ('reply_message_id' in this.options) ? this.options.reply_message_id : null;
+                var show_target_context_with_choice = ('show_target_context_with_choice' in this.options) ? this.options.show_target_context_with_choice : null;
+
                 return {
+                    i18n: i18n,
                     body_help_message: this.initialBody,
                     allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,
                     cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label : i18n.gettext('Cancel'),
@@ -85,7 +91,10 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     subject_label: this.options.subject_label ? this.options.subject_label : i18n.gettext('Subject:'),
                     canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST),
                     msg_in_progress_body: this.options.msg_in_progress_body,
-                    msg_in_progress_title: this.options.msg_in_progress_title
+                    msg_in_progress_title: this.options.msg_in_progress_title,
+                    reply_idea: reply_idea,
+                    reply_message_id: reply_message_id,
+                    show_target_context_with_choice: show_target_context_with_choice
                 }
             },
 
@@ -103,13 +112,22 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     message_subject = message_subject_field.val() || this.options.default_subject,
                     reply_idea_id = null,
                     reply_message_id = null,
-                    success_callback = null;
+                    success_callback = null,
+                    chosenTargetIdeaField = this.$el.find('.messageSend-target input:checked');
+                console.log("chosenTargetIdea:", chosenTargetIdeaField);
+                console.log("chosenTargetIdea val:", chosenTargetIdeaField.val());
 
                 if(this.sendInProgress !== false) {
                   return;
                 }
-                if (this.options.reply_idea_id) {
-                    reply_idea_id = this.options.reply_idea_id;
+                /*
+                if (this.options.reply_idea) {
+                    reply_idea_id = this.options.reply_idea.getId();
+                }
+                */
+                if ( chosenTargetIdeaField && chosenTargetIdeaField.val() )
+                {
+                    reply_idea_id = chosenTargetIdeaField.val();
                 }
                 if (this.options.reply_message_id) {
                     reply_message_id = this.options.reply_message_id;
@@ -156,47 +174,37 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                          * Note: Currently in Assembl we can receive notifications only if we have a "participant" role (which means that here we have a non-null "roles.get('role')"). This role is only given to a user in discussion's parameters, or when the user "subscribes" to the discussion (subscribing gives the "participant" role to the user and also activates discussion's default notifications for the user).
                          * But, we cannot consider that the user does not already receive notifications by checking that he does not have the participant role. Because some discussions can give automatically the add_post permission to all logged in accounts (system.Authenticated role), instead of only those who have the participant role. So these accounts can post messages but are not subscribed to any notification, so we want to show them the first post pop-in.
                          * */
-                        //that.roles = new RolesModel.Model();
                         var collectionManager = new CollectionManager();
                         if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
+
                             Promise.join(collectionManager.getLocalRoleCollectionPromise(),
                                 collectionManager.getNotificationsUserCollectionPromise(),
                                 collectionManager.getNotificationsDiscussionCollectionPromise(),
                                 function (allRole, notificationsUser, notificationsDiscussion) {
-                                    //console.log("allRole: ", allRole);
-                                    //console.log("notificationsUser: ", notificationsUser);
-                                    //console.log("notificationsDiscussion: ", notificationsDiscussion);
 
-                                    var defaultActiveNotificationsDicussion = _.filter(notificationsDiscussion.models, function (m) {
+                                    var defaultActiveNotificationsDicussion = _.filter(notificationsDiscussion.models, function (model) {
                                         // keep only the list of notifications which become active when a user follows a discussion
-                                        return (m.get('creation_origin') === 'DISCUSSION_DEFAULT') && (m.get('status') === 'ACTIVE');
+                                        return (model.get('creation_origin') === 'DISCUSSION_DEFAULT') && (model.get('status') === 'ACTIVE');
                                     });
 
-                                    var userActiveNotifications = _.filter(notificationsUser.models, function (m) {
-                                        return (m.get('status') === 'ACTIVE');
+                                    var userActiveNotifications = _.filter(notificationsUser.models, function (model) {
+                                        return (model.get('status') === 'ACTIVE');
                                     });
-
-                                    //if (allRole.models.length) {
-                                    //    that.roles = allRole.models[0];
-                                    //}
-                                    
 
                                     var agent = new Agents.Model();
                                     agent.getSingleUser();
-                                    agent.fetch({'success': function(agent, response, options) {
+                                    agent.fetch({
+                                        success: function(model, resp) {
                                         //if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) && this.roles.get('role') === null) {
-                                        if (
-                                            (agent.get('post_count') === 0 || agent.get('post_count') < 2)
-                                            && userActiveNotifications.length < defaultActiveNotificationsDicussion.length
-                                        ) { // we could make a real diff here but this is enough for now
+                                        if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) &&
+                                            userActiveNotifications.length < defaultActiveNotificationsDicussion.length){ // we could make a real diff here but this is enough for now
+
                                             that.showPopInFirstPost();
                                         }
                                     }});
                                 }
                             );
                         }
-
-                        
 
                         // clear on success... so not lost in case of failure.
                         MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
@@ -212,12 +220,21 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                                 if (el.length > 0)
                                     el[0].text = '';
 
-                                setTimeout(function () {
-                                    //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
-                                    //console.log("Calling showMessageById for "+data['@id']);
-                                    Assembl.vent.trigger('messageList:showMessageById', model.id);
-
-                                }, 1000);
+                                var current_idea = that.messageList.getContainingGroup().getCurrentIdea();
+                                // if the user was top-posting into the current idea or answering to someone or top-posting from the general conversation context, scroll to his message
+                                if ( reply_idea_id || reply_message_id || (!current_idea && !reply_message_id && !reply_idea_id) ) {
+                                    setTimeout(function () {
+                                        //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
+                                        //console.log("Calling showMessageById for "+data['@id']);
+                                        Assembl.vent.trigger('messageList:showMessageById', model.id);
+                                    }, 1000);
+                                }
+                                // if the user was top-posting into the general conversation from an idea (versus answering to someone or top-posting into the current idea)
+                                else if ( current_idea && !reply_idea_id ) {
+                                    // maybe we could show some info like "Your message has been successfully posted in the general conversation. Click here to see it in context"
+                                    alert(i18n.gettext('Your message has been successfully posted in the general conversation. To see it, go to the bottom of the table of ideas and click on "View posts not yet sorted anywhere", or "All messages".'));
+                                }
+                                
                             });
                         }
                         setTimeout(function () {
@@ -246,6 +263,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             savePartialMessage: function () {
                 var message_body = this.ui.messageBody,
                     message_title = this.ui.messageSubject;
+
                 if (message_body.length > 0 || message_title.length > 0) {
                   MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title.val());
                 }

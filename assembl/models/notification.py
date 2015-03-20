@@ -901,11 +901,9 @@ class Notification(Base):
 
     def get_localizer(self):
         locale = self.first_matching_subscription.user.get_preferred_locale()
-        if not locale:
-            locale = self.first_matching_subscription.discussion.discussion_locales[0]
         # TODO: if locale has country code, make sure we fallback properly.
-        return make_localizer(locale, [
-            join(dirname(dirname(__file__)), 'locale')])
+        path = os.path.abspath(join(dirname(__file__), os.path.pardir, 'locale'))
+        return make_localizer(locale, [path])
 
     def setup_localizer(self, jinja_env=None):
         localizer = self.get_localizer()

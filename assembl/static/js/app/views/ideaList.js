@@ -199,7 +199,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                             }, view_data);
                             list.appendChild(ideaView.render().el);
                         });
-                        that.$('.ideaView').append(list);
+                        that.$('.ideaView').html(list);
 
                         //sub menu other
                         var OtherView = new OtherInIdeaListView({
@@ -385,7 +385,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     collectionManager = new CollectionManager();
 
                 collectionManager.getAllIdeasCollectionPromise()
-                    .done(function (allIdeasCollection) {
+                    .then(function (allIdeasCollection) {
                         if (allIdeasCollection.get(currentIdea)) {
                             newIdea.set('order', currentIdea.getOrderForNewChild());
                             currentIdea.addChild(newIdea);

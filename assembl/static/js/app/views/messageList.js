@@ -106,7 +106,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   .then(function (allExtractsCollection) {
                       that.listenTo(allExtractsCollection, 'add remove reset', function(eventName) {
                           // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
-                          that.initAnnotator;
+                          that.initAnnotator();
                         });
                       }
                   );
@@ -1070,12 +1070,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 'msg_in_progress_ctx': partialMessageContext,
                 'msg_in_progress_title': partialMessage['title'],
                 'msg_in_progress_body': partialMessage['body'],
-                'messageList': that
+                'messageList': that,
+                'show_target_context_with_choice': true
               };
 
               var currentIdea = this.getContainingGroup().getCurrentIdea();
               if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
-                options.reply_idea_id = currentIdea.getId();
+                options.reply_idea = currentIdea;
               }
 
               this.newTopicView = new MessageSendView(options);

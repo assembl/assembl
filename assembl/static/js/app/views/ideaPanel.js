@@ -429,7 +429,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 this.commentView = new MessageSendView({
                     'allow_setting_subject': false,
-                    'reply_idea_id': this.model.getId(),
+                    'reply_idea': this.model,
                     'body_help_message': i18n.gettext('Comment on this idea here...'),
                     'send_button_label': i18n.gettext('Send your comment'),
                     'subject_label': null,

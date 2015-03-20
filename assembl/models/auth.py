@@ -270,8 +270,9 @@ class AgentProfile(Base):
         prefs = self.language_preference
         if prefs is None or len(prefs) is 0:
             # Correct way is to get the default from the app global config
-            return config.get_config().\
-                get('available_languages', 'fr en').split()
+            prefs = config.get_config().\
+                get('available_languages', 'fr en').split()[0]
+        assert prefs[0]
         return prefs[0]
 
 
