@@ -29,7 +29,7 @@ from assembl.models import (
 from assembl.auth import (
     P_READ, R_PARTICIPANT)
 from assembl.auth.password import (
-    format_token, verify_email_token, verify_password_change_token,
+    verify_email_token, verify_password_change_token,
     password_token)
 from assembl.auth.util import (
     get_identity_provider, discussion_from_request)
@@ -336,7 +336,7 @@ def assembl_register_view(request):
             from assembl.auth.password import email_token
             print "email token:", request.route_url(
                 'user_confirm_email', ticket=email_token(email_account))
-        headers = remember(request, user.id, tokens=format_token(user))
+        headers = remember(request, user.id)
         request.response.headerlist.extend(headers)
         # TODO: Tell them to expect an email.
         request.session.pop('next_view')
@@ -406,7 +406,7 @@ def assembl_login_complete_view(request):
         session.add(user)
         return dict(get_login_context(request),
                     error=localizer.translate(_("Invalid user and password")))
-    headers = remember(request, user.id, tokens=format_token(user))
+    headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
     discussion = discussion_from_request(request)
     return HTTPFound(location=next_view)
@@ -568,7 +568,7 @@ def velruse_login_complete_view(request):
     session.flush()
 
     user_id = profile.id
-    headers = remember(request, user_id, tokens=format_token(profile))
+    headers = remember(request, user_id)
     request.response.headerlist.extend(headers)
     # TODO: Store the OAuth etc. credentials.
     # Though that may be done by velruse?
@@ -867,7 +867,7 @@ def do_password_change(request):
                         "This token is expired. "
                         "Do you want us to send another?")))))
     user = User.get(user_id)
-    headers = remember(request, user_id, tokens=format_token(user))
+    headers = remember(request, user_id)
     request.response.headerlist.extend(headers)
     user.last_login = datetime.now()
     slug = request.matchdict.get('discussion_slug', None)

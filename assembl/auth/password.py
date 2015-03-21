@@ -46,12 +46,6 @@ def email_token(email):
         str(email.id) + email.email + config.get('security.email_token_salt'), True)
 
 
-def format_token(user):
-    ## TODO: everything in this function.
-    'Format user information into a cookie'
-    code = 'x' + str(user.id)  # WRONG! It needs to be stable but random.
-    return [code]
-
 def password_token(user):
     now = datetime.now()
     user.last_login = now
