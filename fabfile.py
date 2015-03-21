@@ -362,6 +362,8 @@ def updatemaincode():
 
 def app_setup():
      venvcmd('pip install -U "pip>=6" --download-cache ~/.pip/cache')
+     # do the requirements separately to update the non-static versions.
+     venvcmd('pip install -r requirements.txt')
      venvcmd('pip install -e ./')
      venvcmd('assembl-ini-files %s' % (env.ini_file))
 
