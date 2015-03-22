@@ -353,6 +353,22 @@ class Discussion(DiscussionBoundBase):
             & (LocalUserRole.requested == 0)),
         backref="participant_in_discussion")
 
+    def get_participants(self, ids_only=False):
+        from .auth import AgentProfile, LocalUserRole
+        from .post import Post
+        from .idea_content_link import Extract
+
+        query = self.db.query(AgentProfile.id).join(LocalUserRole).filter(
+            LocalUserRole.discussion_id == self.id).union(
+            self.db.query(AgentProfile.id).join(Post).filter(
+            Post.discussion_id == self.id)).union(
+            self.db.query(AgentProfile.id).join(
+                Extract, Extract.creator_id==AgentProfile.id).filter(
+            Extract.discussion_id == self.id)).distinct()
+        if ids_only:
+            return query.all()
+        return self.db.query(AgentProfile).filter(AgentProfile.id.in_(query)).all()
+
     def get_base_url(self):
         """ Abstracted so that we can support virtual hosts or communities in 
         the future and access the urls when we can't rely on pyramid's current
