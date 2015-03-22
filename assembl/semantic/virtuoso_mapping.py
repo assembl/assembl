@@ -12,7 +12,7 @@ import simplejson as json
 
 from ..lib.config import get_config
 from ..lib.sqla import class_registry, Base
-from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST)
+from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST, SIOC)
 from virtuoso.vmapping import (
     QuadMapPattern, QuadStorage, GraphQuadMapPattern, IriClass,
     PatternGraphQuadMapPattern, ClassPatternExtractor, VirtRDF)
@@ -349,7 +349,7 @@ class AssemblQuadStorageManager(object):
         QUADNAMES.private_user_graph_iri)
     main_section = DataSection(
         MAIN_SECTION, main_storage, ASSEMBL.main_graph, QUADNAMES.main_graph_iri)
-    storages = (discussion_storage, )  # private_user_storage, main_storage
+    storages = (discussion_storage, private_user_storage)  # main_storage
     global_graph = QUADNAMES.global_graph
     current_discussion_storage_version = 1
 
@@ -621,6 +621,13 @@ class AssemblQuadStorageManager(object):
                 cg.add((s, p, o, ctx))
         return cg
 
+    def add_subject_data(self, virtuoso, graph, subjects):
+        for s in subjects:
+            for p, o, g in virtuoso.query(
+                'SELECT ?p ?o ?g WHERE { graph ?g { %s ?p ?o }}' % (s.n3(),)):
+                    graph.add((s, p, o, g))
+
+
     def discussion_as_graph(self, discussion_id):
         from assembl.models import Discussion, AgentProfile
         local_uri = self.local_uri()
@@ -630,21 +637,17 @@ class AssemblQuadStorageManager(object):
         v = get_virtuoso(self.session, d_storage_name)
         discussion_uri = URIRef(
             Discussion.uri_generic(discussion_id, local_uri))
-        subjects = list(v.query(
+        subjects = [s for (s,) in v.query(
             """SELECT DISTINCT ?s WHERE {
-            ?s assembl:in_conversation %s }""" % (discussion_uri.n3())))
-        subjects.append((discussion_uri,))
+            ?s assembl:in_conversation %s }""" % (discussion_uri.n3()))]
+        subjects.append(discussion_uri)
         participant_ids = discussion.get_participants(True)
-        subjects.extend(((URIRef(AgentProfile.uri_generic(id, local_uri)),)
+        subjects.extend((URIRef(AgentProfile.uri_generic(id, local_uri))
                          for id in participant_ids))
+        # TODO: Add relevant user_roles
         # print len(subjects)
         cg = ConjunctiveGraph(identifier=d_graph_iri)
-        for (s,) in subjects:
-            # Absurdly slow. DISTINCT speeds up a lot, but I get numbers.
-            for p, o, g in v.query(
-                'SELECT ?p ?o ?g WHERE { graph ?g { %s ?p ?o }}' % (s.n3(),)):
-                    cg.add((s, p, o, g))
-
+        self.add_subject_data(v, cg, subjects)
         for (s, o, g) in v.query(
                 '''SELECT ?s ?o ?g WHERE {
                 GRAPH ?g {?s catalyst:expressesIdea ?o } .
@@ -652,10 +655,33 @@ class AssemblQuadStorageManager(object):
             cg.add((s, CATALYST.expressesIdea, o, g))
         return cg
 
+    def participants_private_as_graph(self, discussion_id):
+        from assembl.models import Discussion, AgentProfile
+        local_uri = self.local_uri()
+        discussion = Discussion.get(discussion_id)
+        d_storage_name = self.private_user_storage.name
+        d_graph_iri = self.private_user_storage.sections[0].graph_iri
+        cg = ConjunctiveGraph(identifier=d_graph_iri)
+        v = get_virtuoso(self.session, d_storage_name)
+        v_main = get_virtuoso(self.session, self.discussion_storage_name())
+        participant_ids = discussion.get_participants(True)
+        profiles={URIRef(AgentProfile.uri_generic(id, local_uri))
+                  for id in participant_ids}
+        self.add_subject_data(v, cg, profiles)
+        accounts = [account for ((account, p, profile), g)
+                    in v_main.triples((None, SIOC.account_of, None))
+                    if profile in profiles]
+        # Compensating for a bug
+        accounts.extend([account for ((account, p, profile), g)
+                    in v.triples((None, SIOC.account_of, None))
+                    if profile in profiles])
+        self.add_subject_data(v, cg, accounts)
+        return cg
+
     @staticmethod
     def obfuscate(serialized_rdf, obfuscator=None):
         # Work in progress.
-        r = re.compile(r'((?:/data/|local:)Agent(?:Profile|Account)/)(\d+)\b')
+        r = re.compile(r'((?:/data/|local:)(?:AgentProfile|AgentAccount|AbstractAgentAccount)/)(\d+)\b')
         if not obfuscator:
             # Random obfuscator
             from functools import partial
