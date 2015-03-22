@@ -366,7 +366,7 @@ class Discussion(DiscussionBoundBase):
                 Extract, Extract.creator_id==AgentProfile.id).filter(
             Extract.discussion_id == self.id)).distinct()
         if ids_only:
-            return query.all()
+            return (id for (id,) in query.all())
         return self.db.query(AgentProfile).filter(AgentProfile.id.in_(query)).all()
 
     def get_base_url(self):
