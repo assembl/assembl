@@ -59,7 +59,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     this.options.body_help_message : i18n.gettext('Type your message here...');
 
                 this.messageList = options.messageList;
-                this.msg_in_progress_ctx = options.msg_in_progress_ctx
+                this.msg_in_progress_ctx = options.msg_in_progress_ctx;
             },
 
             ui: {
@@ -265,6 +265,10 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     message_title = this.ui.messageSubject;
 
                 if (message_body.length > 0 || message_title.length > 0) {
+
+                  //TODO: this function does not lock the panel properly when you post un message
+                  this.options.messageList._panelWrapper.autoLockPanel();
+
                   MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title.val());
                 }
             },
@@ -277,19 +281,6 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             
             onChangeBody: function () {
                 this.ui.messageBody.autosize();
-
-                /**
-                 * not necesary anymore 
-                 *
-                 var message_body = this.ui.messageBody.val();
-                if (message_body && message_body.length > 0) {
-                    this.ui.sendButton.removeClass("hidden");
-                    this.ui.cancelButton.removeClass("hidden");
-                }
-                else {
-                    this.ui.sendButton.addClass("hidden");
-                    this.ui.cancelButton.addClass("hidden");
-                }*/
             },
 
             showPopInFirstPost: function () {

@@ -1212,13 +1212,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 
                 this.showInspireMeIfAvailable();
             },
-            
-            /**
-             * DOM is ready
-             */
-            onAttach: function() {
-;
-            },
+
             
             /**
              * Renders the search result information
