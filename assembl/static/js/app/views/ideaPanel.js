@@ -683,7 +683,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 var segment = Ctx.getDraggedSegment();
 
-                if (Ctx.getDraggedSegment()) {
+                if (segment) {
                     this.addSegment(segment);
                 }
 
@@ -694,11 +694,11 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     Ctx.currentAnnotationIdIdea = this.model.getId();
                     Ctx.currentAnnotationNewIdeaParentIdea = null;
                     Ctx.saveCurrentAnnotationAsExtract();
-                    this.extractListView.render();
-
-                    return;
                 }
 
+                this.extractListView.render();
+
+                return;
             },
 
             onSegmentCloseButtonClick: function (ev) {

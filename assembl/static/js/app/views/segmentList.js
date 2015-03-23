@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/segment', 'utils/types', 'utils/i18n', 'utils/permissions', 'common/collectionManager', 'utils/panelSpecTypes', 'views/assemblPanel', 'backbone.subset', 'bluebird'],
-    function (Backbone, _, $, Assembl, Ctx, Segment, Types, i18n, Permissions, CollectionManager, PanelSpecTypes, AssemblPanel, Subset, Promise) {
+define(['backbone.marionette','backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/segment', 'utils/types', 'utils/i18n', 'utils/permissions', 'common/collectionManager', 'utils/panelSpecTypes', 'views/assemblPanel', 'backbone.subset', 'bluebird'],
+    function (Marionette, Backbone, _, $, Assembl, Ctx, Segment, Types, i18n, Permissions, CollectionManager, PanelSpecTypes, AssemblPanel, Subset, Promise) {
 
         var SegmentView = Marionette.ItemView.extend({
             template: '#tmpl-segment',
@@ -257,7 +257,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                                  collectionManager.getAllMessageStructureCollectionPromise(),
                         function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
 
-                            var segmentListView = new SegmentListView({
+                            that.segmentListView = new SegmentListView({
                                 collection: that.clipboard,
                                 allUsersCollection: allUsersCollection,
                                 allMessagesCollection: allMessagesCollection,
@@ -422,22 +422,20 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 var segment = Ctx.getDraggedSegment();
                 if (segment) {
                     this.addSegment(segment);
-                    return;
                 }
 
                 var annotation = Ctx.getDraggedAnnotation();
                 if (annotation) {
                     Ctx.saveCurrentAnnotationAsExtract();
-
-                    this.segmentListView.render();
-
-                    return;
                 }
 
                 var text = ev.dataTransfer.getData("Text");
                 if (text) {
                     this.addTextAsSegment(text);
                 }
+
+                this.segmentListView.render();
+                return;
             },
 
             onClearButtonClick: function (ev) {
