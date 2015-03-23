@@ -95,7 +95,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             modelEvents: {
               'replacedBy':'onReplaced',
               'showBody':'onShowBody',
-              'change':'render'
+              'change':'render',
+              'openWithFullBodyView': 'onOpenWithFullBodyView'
             },
 
             /**
@@ -258,7 +259,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                   }
   
   
-                  if(this.messageListView.iSviewStyleThreadedType()
+                  if(this.messageListView.isViewStyleThreadedType()
                       && that.messageFamilyView.currentLevel !== 1) {
                       this.model.getParentPromise().then(function(parentMessageModel){
                           //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
@@ -600,7 +601,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              **/
             focusReplyBox: function (e) {
                 e.preventDefault();
-
                 var that = this;
                 var onReplyBoxBlur = function(){
                     that.replyBoxHasFocus = false;
@@ -718,11 +718,26 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             onMessageTitleClick: function (e) {
                 if(e) {
                   e.stopPropagation();
+                  e.preventDefault();
                 }
                 this.toggleViewStyle();
                 if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
                     this.openReplyBox();
                 }
+            },
+
+            onOpenWithFullBodyView: function() {
+              console.log("onOpenWithFullBodyView()");
+              if ( this.viewStyle == this.availableMessageViewStyles.FULL_BODY )
+                return;
+
+              var read = this.model.get('read');
+              if (read === false) {
+                  this.model.setRead(true);
+              }
+              this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
+              this.render();
+              this.openReplyBox();
             },
 
             /**

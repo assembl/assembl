@@ -245,7 +245,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             /** 
              * Is the current view style a non-flat view
              */
-            iSviewStyleThreadedType: function () {
+            isViewStyleThreadedType: function () {
               return this.currentViewStyle === this.ViewStyles.THREADED || 
                      this.currentViewStyle === this.ViewStyles.NEW_MESSAGES;
             },
@@ -1909,7 +1909,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              */
             scrollToElement: function (el, callback, margin, animate) {
               //console.log("scrollToElement called with: ", el, callback, margin, animate);
-              if (this.ui.panelBody.offset() !== undefined) {
+              //console.log("this.ui.panelBody: ", this.ui.panelBody);
+              if (el && _.isFunction(this.ui.panelBody.size) && this.ui.panelBody.offset() !== undefined) {
                 var panelOffset = this.ui.panelBody.offset().top,
                     panelScrollTop = this.ui.panelBody.scrollTop(),
                     elOffset = el.offset().top,
@@ -1990,12 +1991,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                 if (el[0]) {
                   if (shouldOpenMessageSelected) {
-                    // console.log("showMessageById(): sending showBody
+                    // console.log("showMessageById(): sending openWithFullBodyView
                     // to message", message.id);
-                    //TODO:  This is horrible, we need to get the reference,
-                    // check that it's not already open,
-                    // then if it's not re-render message and wait
-                    message.trigger('showBody');
+                    message.trigger('openWithFullBodyView');
                     setTimeout(function () {
                       if(debug) {
                         console.log("scrollToMessage(): INFO:  shouldOpenMessageSelected is true, calling recursively after a delay with same recursion depth");
@@ -2016,7 +2014,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   }
                 }
                 else {
-                  // Trigerring showBody above requires the message to
+                  // Trigerring openWithFullBodyView above requires the message to
                   // re-render. We may have to give it time
                   if (recursionDepth <= MAX_RETRIES) {
                     if(debug || recursionDepth >= 2) {
