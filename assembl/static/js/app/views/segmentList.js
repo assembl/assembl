@@ -434,7 +434,7 @@ define(['backbone.marionette','backbone', 'underscore', 'jquery', 'app', 'common
                     this.addTextAsSegment(text);
                 }
 
-                this.segmentListView.render();
+                this.render();
                 return;
             },
 
