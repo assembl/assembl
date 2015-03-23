@@ -13,6 +13,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             //This MUST match the variables in _variables.scss
             group_header_height: 0,
             group_editable_header_height: 25,
+            li_height: 40,
             getTitle: function () {
                 return 'Navigation'; // unused
             },
@@ -76,7 +77,9 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         }));
                         that.num_items = 4;
                         that.ui.visualization_tab.show();
-                        that.setSideBarHeight();
+                        setTimeout(function(){
+                            that.setSideBarHeight();
+                        }, 500);
                     } catch (e) {
                         // console.log(e);
                     }
@@ -87,7 +90,10 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 });
             },
             onShow: function () {
-                this.setSideBarHeight();
+                var that = this;
+                setTimeout(function(){
+                    that.setSideBarHeight();
+                }, 0);
                 //this.notification.show(new sidebarNotification());
             },
             toggleMenuByName: function (itemName) {
@@ -119,8 +125,15 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 }
             },
             setSideBarHeight: function () {
+                var that = this;
                 this.initVar();
-                this.ui.level.css('height', this._accordionContentHeight);
+                setTimeout(function(){
+                    that.ui.level.height(that._accordionContentHeight);
+                    /*setTimeout(function(){
+                        console.log("new height after set: ", that.ui.level.height());
+                    }, 0);*/
+                }, 0);
+                
             },
             loadView: function (view) {
                 // clear aspects of current state
@@ -183,18 +196,16 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
 
                 var _header = $('#header').height(),
                     _window = $(window).height(),
-                    _li = 40 * this.num_items,
+                    _li = this.li_height * this.num_items,
                     _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader").first().hasClass('editable') ? this.group_editable_header_height : this.group_header_height ),
                     _sideBarHeight = (_window - _header) - _headerGroup,
                     that = this;
 
                 if (this.$el && this.$el.parent() && this.$el.parent().height()) {
-
-                    this._accordionContentHeight = _sideBarHeight - _li;
+                    this._accordionContentHeight = _sideBarHeight - _li - 2;
                 }
                 else { // fallback: set an initial estimation
-
-                    this._accordionContentHeight = _sideBarHeight - _li - 15;
+                    this._accordionContentHeight = _sideBarHeight - _li - 2;
 
                     if (++this._accordionHeightTries < 10) // prevent infinite loop
                     {
