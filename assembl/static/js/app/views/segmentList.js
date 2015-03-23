@@ -257,7 +257,7 @@ define(['backbone.marionette','backbone', 'underscore', 'jquery', 'app', 'common
                                  collectionManager.getAllMessageStructureCollectionPromise(),
                         function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
 
-                            that.segmentListView = new SegmentListView({
+                            var segmentListView = new SegmentListView({
                                 collection: that.clipboard,
                                 allUsersCollection: allUsersCollection,
                                 allMessagesCollection: allMessagesCollection,

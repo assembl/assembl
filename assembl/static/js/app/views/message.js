@@ -110,7 +110,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 'click .message-hoistbtn': 'onMessageHoistClick',
 
                 //
-                'click .message-replybox-openbtn': 'focusReplyBox',
+                'click .js_replyBoxMessage': 'focusReplyBox',
                 'click .messageSend-cancelbtn': 'closeReplyBox',
                 'focus .messageSend-body': 'onTextboxFocus',
                 //
@@ -223,17 +223,17 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                   Ctx.initClipboard();
   
                   that.replyView = new MessageSendView({
-                      'allow_setting_subject': false,
-                      'reply_message_id': modelId,
-                      'body_help_message': i18n.gettext('Type your response here...'),
-                      'cancel_button_label': null,
-                      'send_button_label': i18n.gettext('Send your reply'),
-                      'subject_label': null,
-                      'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
-                      'messageList': that.messageListView,
-                      'msg_in_progress_body': partialMessage['body'],
-                      'msg_in_progress_ctx': modelId,
-                      'mandatory_subject_missing_msg': null
+                      allow_setting_subject: false,
+                      reply_message_id: modelId,
+                      body_help_message: i18n.gettext('Type your response here...'),
+                      cancel_button_label: null,
+                      send_button_label: i18n.gettext('Send your reply'),
+                      subject_label: null,
+                      mandatory_body_missing_msg: i18n.gettext('You did not type a response yet...'),
+                      messageList: that.messageListView,
+                      msg_in_progress_body: partialMessage['body'],
+                      msg_in_progress_ctx: modelId,
+                      mandatory_subject_missing_msg: null
                   });
                   that.$('.message-replybox').append(this.replyView.render().el);
   
@@ -598,7 +598,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             /**
              *  Focus on the reply box, and open it if closed
              **/
-            focusReplyBox: function () {
+            focusReplyBox: function (e) {
+                e.preventDefault();
+
                 var that = this;
                 var onReplyBoxBlur = function(){
                     that.replyBoxHasFocus = false;
