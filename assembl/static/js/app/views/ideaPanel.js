@@ -220,8 +220,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 'change': 'render'
             },
             events: {
-                'dragstart .bx': 'onDragStart',
-                'dragend .bx': "onDragEnd",
+                'dragstart .bx.postit': 'onDragStart',
+                'dragend .bx.postit': "onDragEnd",
                 'dragover': 'onDragOver',
                 'dragleave': 'onDragLeave',
                 'drop': 'onDrop',
@@ -309,12 +309,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     subIdeas = this.model.getChildren();
                     contributors = this.model.get('contributors');
                 }
-                else
-                {
-                    //console.log("there is no model");
-                }
 
-                var dataset = {
+                return {
                     idea: this.model,
                     contributors: contributors,
                     subIdeas: subIdeas,
@@ -332,7 +328,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     editingTitle: this.editingTitle
                 };
 
-                return dataset;
             },
 
             onRender: function () {
@@ -384,6 +379,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                                 collectionManager.getAllUsersCollectionPromise(),
                                 collectionManager.getAllMessageStructureCollectionPromise(),
                         function (allExtractsCollection, allUsersCollection, allMessagesCollection) {
+
                             that.extractListView = new SegmentList.SegmentListView({
                                 collection: that.extractListSubset,
                                 allUsersCollection: allUsersCollection,
@@ -402,7 +398,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 var currentUser = Ctx.getCurrentUser(),
                     canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
-                    canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
                     modelId = this.model.id,
                     partialMessage = MessagesInProgress.getMessage(modelId);
 
@@ -416,16 +411,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     'focus': this.focusShortTitle
                 });
                 shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
-
-                // the content is replace by CKEditorField not necessary to init with
-                /*this.longTitleField = new CKEditorField({
-                    'model': this.model,
-                    'modelProp': 'longTitle',
-                    'placeholder': this.model.getLongTitleDisplayText(),
-                    'canEdit': canEditNextSynthesis,
-                    'showPlaceholderOnEditIfEmpty': true
-                });*/
-                //this.longTitleField.renderTo(this.$('.ideaPanel-longtitle'));
 
                 this.commentView = new MessageSendView({
                     'allow_setting_subject': false,
@@ -450,7 +435,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             addSegment: function (segment) {
                 delete segment.attributes.highlights;
 
-                var id = this.model.getId();
+                var id = this.model.getId(),
+                    that = this;
                 segment.save('idIdea', id, {
                     success: function (model, resp) {
                         console.debug('SUCCESS: addSegment', resp);
@@ -474,7 +460,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     collectionManager = new CollectionManager();
 
                 collectionManager.getAllIdeasCollectionPromise()
-                    .done(function (allIdeasCollection) {
+                    .then(function (allIdeasCollection) {
                         var idea = allIdeasCollection.get(idIdea);
                         if (!idea) {
                             return;
@@ -587,7 +573,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     children = this.model.getChildren();
 
                 this.blockPanel();
-                $.when(this.model.getExtractsPromise())
+                this.model.getExtractsPromise()
                     .then(function (ideaExtracts) {
 
                         that.unblockPanel();
@@ -633,7 +619,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 //TODO: Deal with editing own extract (EDIT_MY_EXTRACT)
                 if (Ctx.getCurrentUser().can(Permissions.EDIT_EXTRACT)) {
                 collectionManager.getAllExtractsCollectionPromise()
-                    .done(function (allExtractsCollection) {
+                    .then(function (allExtractsCollection) {
                         ev.currentTarget.style.opacity = 0.4;
 
                         ev.originalEvent.dataTransfer.effectAllowed = 'move';
@@ -643,7 +629,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                             segment = allExtractsCollection.getByCid(cid);
 
                         Ctx.showDragbox(ev, segment.getQuote());
-                        Ctx.draggedSegment = segment;
+                        Ctx.setDraggedSegment(segment);
 
                     });
                 }
@@ -656,7 +642,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 }
                 this.$el.removeClass('is-dragover');
                 ev.currentTarget.style.opacity = 1;
-                Ctx.draggedSegment = null;
+                Ctx.setDraggedSegment(null);
 
             },
 
@@ -672,10 +658,9 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 ev.dataTransfer.dropEffect = 'all';
 
-                if (Ctx.draggedSegment !== null || Ctx.getDraggedAnnotation() !== null) {
+                if (Ctx.getDraggedSegment() !== null || Ctx.getDraggedAnnotation() !== null) {
                     this.$el.addClass("is-dragover");
                 }
-
             },
 
             onDragLeave: function (ev) {
@@ -697,10 +682,13 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 this.$el.trigger('dragleave');
 
                 var segment = Ctx.getDraggedSegment();
-                if (segment) {
+
+                if (Ctx.getDraggedSegment()) {
                     this.addSegment(segment);
                 }
+
                 var annotation = Ctx.getDraggedAnnotation();
+
                 if (annotation) {
                     // Add as a segment
                     Ctx.currentAnnotationIdIdea = this.model.getId();

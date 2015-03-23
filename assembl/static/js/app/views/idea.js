@@ -226,7 +226,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                     Assembl.vent.trigger('idea:dragEnd', this.model);
                 }
                 ev.currentTarget.style.opacity = '';
-                Ctx.draggedSegment = null;
+                Ctx.setDraggedSegment(null);
                 Ctx.draggedIdea = null;
             },
 
@@ -274,7 +274,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                     }
                 }
 
-                if (Ctx.draggedSegment !== null || Ctx.getDraggedAnnotation() !== null) {
+                if (Ctx.getDraggedSegment() !== null || Ctx.getDraggedAnnotation() !== null) {
                     if (ev.target.classList.contains('idealist-dropzone')) {
                         this.$el.addClass('is-dragover-below');
                     } else {

@@ -19,7 +19,8 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
             events: {
                 'click .js_closeExtract': 'onCloseButtonClick',
                 'click .segment-link': "onSegmentLinkClick",
-                'click .js_selectAsNugget': 'selectAsNugget'
+                'click .js_selectAsNugget': 'selectAsNugget',
+                'dragstart .bx.postit': 'onDragStart'
             },
 
             serializeData: function () {
@@ -61,7 +62,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                     segment = this.model.collection.get(cid);
 
                 Ctx.showDragbox(ev, segment.getQuote());
-                Ctx.draggedSegment = segment;
+                Ctx.setDraggedSegment(segment);
             },
 
             onSegmentLinkClick: function (ev) {
@@ -177,7 +178,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
             ui: {
                 panelBody:'.panel-body',
                 clipboardCount: ".clipboardCount",
-                postIt: '.postit[draggable="true"]',
+                postIt: '.postitlist',
                 clearSegmentList:'#segmentList-clear',
                 closeButton:'#segmentList-closeButton',
                 bookmark:'.js_bookmark'
@@ -289,7 +290,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 var collectionManager = new CollectionManager();
 
                 collectionManager.getAllExtractsCollectionPromise()
-                    .done(function (allExtractsCollection) {
+                    .then(function (allExtractsCollection) {
                         delete segment.attributes.highlights;
 
                         allExtractsCollection.add(segment, {merge: true});
@@ -367,7 +368,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 }
 
                 ev.currentTarget.style.opacity = 1;
-                Ctx.draggedSegment = null;
+                Ctx.setDraggedSegment(null);
                 this.$el.removeClass('is-dragover');
                 ev.preventDefault();
             },
@@ -389,7 +390,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                     isText = Ctx.draggedIdea ? false : true;
                 }
 
-                if (Ctx.draggedSegment !== null || isText) {
+                if (Ctx.getDraggedSegment() !== null || isText) {
                     this.$el.addClass("is-dragover");
                 }
 

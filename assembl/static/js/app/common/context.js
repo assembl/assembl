@@ -93,6 +93,11 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              */
             this.openedPanels = 0;
 
+            /**
+             * Default value draggable segment
+             * */
+            this.draggedSegment = null;
+
             this.AVAILABLE_MESSAGE_VIEW_STYLES = {
                 TITLE_ONLY: {
                     id: "viewStyleTitleOnly",
@@ -732,11 +737,18 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             },
 
             /**
+             * @set {Segment}
+             */
+            setDraggedSegment: function(segment){
+              this.draggedSegment = segment;
+            },
+
+            /**
              * @return {Segment}
              */
             getDraggedSegment: function () {
                 var segment = this.draggedSegment;
-                this.draggedSegment = null;
+                //this.setDraggedSegment(null); not necessary;
 
                 if (segment) {
                     delete segment.attributes.highlights;
