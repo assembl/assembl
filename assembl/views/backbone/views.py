@@ -153,30 +153,28 @@ def home_view(request):
         from assembl.models import AgentProfile
         user = AgentProfile.get(user_id)
         user.is_visiting_discussion(discussion.id)
-        # session = Discussion.db()
-        # current_prefs = session.query(UserLanguagePreference).\
-        #     filter_by(user_id = user_id).all()
-        # user = session.query(User).filter_by(id = user_id).first()
+        session = Discussion.db()
+        current_prefs = session.query(UserLanguagePreference).\
+            filter_by(user_id = user_id).all()
+        user = session.query(User).filter_by(id = user_id).first()
 
-        # This causes a detachedsession
-        # with transaction.manager:
-        #     if '_LOCALE_' in request.cookies:
-        #         locale = request.cookies._LOCALE_
-        #         posix_locale = UserLanguagePreference.to_posix_format(locale)
-        #         process_locale(posix_locale,user_id,
-        #                        current_prefs, session, 1)
+        if '_LOCALE_' in request.cookies:
+            locale = request.cookies['_LOCALE_']
+            posix_locale = UserLanguagePreference.to_posix_format(locale)
+            # TODO: use enum.Enum
+            process_locale(posix_locale,user_id,
+                           current_prefs, session, 1)
 
-        #     elif '_LOCALE_' in request.params:
-        #         locale = request.params._LOCALE_
-        #         posix_locale = UserLanguagePreference.to_posix_format(locale)
-        #         process_locale(posix_locale, user_id,
-        #                        current_prefs, session, 2)
-
-        #     else:
-        #         locale = default_locale_negotiator(request)
-        #         posix_locale = UserLanguagePreference.to_posix_format(locale)
-        #         process_locale(posix_locale, user_id,
-        #                        current_prefs, session, 3)
+        elif '_LOCALE_' in request.params:
+            locale = request.params['_LOCALE_']
+            posix_locale = UserLanguagePreference.to_posix_format(locale)
+            process_locale(posix_locale, user_id,
+                           current_prefs, session, 2)
+        else:
+            locale = default_locale_negotiator(request)
+            posix_locale = UserLanguagePreference.to_posix_format(locale)
+            process_locale(posix_locale, user_id,
+                           current_prefs, session, 3)
 
 
     response = render_to_response('../../templates/index.jinja2', context, request=request)
