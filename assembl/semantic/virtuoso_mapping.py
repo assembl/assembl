@@ -3,6 +3,7 @@ from os.path import join, dirname
 from inspect import isabstract
 from threading import Lock
 import re
+from itertools import chain
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
@@ -12,7 +13,7 @@ import simplejson as json
 
 from ..lib.config import get_config
 from ..lib.sqla import class_registry, Base
-from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST, SIOC)
+from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST, SIOC, FOAF)
 from virtuoso.vmapping import (
     QuadMapPattern, QuadStorage, GraphQuadMapPattern, IriClass,
     PatternGraphQuadMapPattern, ClassPatternExtractor, VirtRDF)
@@ -144,6 +145,10 @@ class QuadMapPatternS(QuadMapPattern):
     def clone_with_defaults(self, subject=None, obj=None, graph_name=None,
                             name=None, conditions=None, sections=None,
                             exclude_base_condition=False):
+        # temporary. We should use the section objects themselves.
+        if self.sections:
+            graph_name = AssemblQuadStorageManager.sections[
+                self.sections[0]].graph_iri
         qmp = super(QuadMapPatternS, self).clone_with_defaults(
             subject, obj, graph_name, name, conditions)
         qmp.sections = self.sections or sections
@@ -235,8 +240,9 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
                     alias_maker, for_graph.discussion_id):
                 qmp = self.qmp_with_defaults(
                     qmp, subject_pattern, sqla_cls, alias_maker, for_graph)
+                target_sections = qmp.sections or rdf_sections
                 if (qmp.graph_name == for_graph.name
-                        and for_graph.section in rdf_sections):
+                        and for_graph.section in target_sections):
                     qmp.resolve(sqla_cls)
                     yield qmp
 
@@ -348,10 +354,13 @@ class AssemblQuadStorageManager(object):
         PRIVATE_USER_SECTION, private_user_storage, ASSEMBL.private_user_graph,
         QUADNAMES.private_user_graph_iri)
     main_section = DataSection(
-        MAIN_SECTION, main_storage, ASSEMBL.main_graph, QUADNAMES.main_graph_iri)
+        MAIN_SECTION, main_storage, ASSEMBL.main_graph,
+        QUADNAMES.main_graph_iri)
     storages = (discussion_storage, private_user_storage)  # main_storage
+    sections = {section.name: section for section in chain(*(
+        storage.sections for storage in storages))}
     global_graph = QUADNAMES.global_graph
-    current_discussion_storage_version = 1
+    current_discussion_storage_version = 2
 
     def __init__(self, session=None, nsm=None):
         self.session = session or get_session()
@@ -383,14 +392,17 @@ class AssemblQuadStorageManager(object):
         return gqm
 
     def create_storage(self, storage, discussion_id=None, exclusive=True,
-                       imported=None):
+                       imported=None, execute=True):
         qs, cpe = self.prepare_storage(storage.name, imported or [])
         for section in storage.sections:
             self.populate_section(qs, cpe, section, discussion_id, exclusive)
         if storage is self.discussion_storage:
             self.add_extracts_graphs(qs, cpe, None)
         defn = qs.full_declaration_clause()
-        return qs, cpe, list(self.session.execute(defn))
+        result = None
+        if execute:
+            result = list(self.session.execute(defn))
+        return qs, cpe, defn, result
 
     def update_section(
             self, section, discussion_id, exclusive=True):
@@ -437,7 +449,7 @@ class AssemblQuadStorageManager(object):
         else:
             return getattr(QUADNAMES, 'discussion_%s_iri' % (section,))
 
-    def add_extracts_graphs(self, qs, cpe, discussion_id=None, execute=True):
+    def add_extracts_graphs(self, qs, cpe, discussion_id=None):
         from ..models import Extract, Idea
         # Option 1: explicit graphs.
         # Fails because the extract.id in the condition is not part of
@@ -493,16 +505,9 @@ class AssemblQuadStorageManager(object):
             conditions=extract_conditions,
             sections=(EXTRACT_SECTION,))
         cpe.add_pattern(Extract, qmp, gqm)
-        defn = qs.full_declaration_clause()
-        # After all these efforts, sparql seems to reject binding arguments!
-        print defn.compile(self.session.bind)
-        result = None
-        if execute:
-            result = list(self.session.execute(defn))
         # defn2 = qs.alter_clause_add_graph(gqm)
         # result.extend(self.session.execute(str(defn2.compile(self.session.bind))))
-        # TODO: Store the current version number
-        return qs, defn, result
+        return qs
 
     def discussion_storage_version(self, discussion_id):
         return self.get_storage_version(self.discussion_storage_name(discussion_id))
@@ -641,13 +646,22 @@ class AssemblQuadStorageManager(object):
             """SELECT DISTINCT ?s WHERE {
             ?s assembl:in_conversation %s }""" % (discussion_uri.n3()))]
         subjects.append(discussion_uri)
-        participant_ids = discussion.get_participants(True)
-        subjects.extend((URIRef(AgentProfile.uri_generic(id, local_uri))
+        participant_ids = list(discussion.get_participants(True))
+        profiles = {URIRef(AgentProfile.uri_generic(id, local_uri))
+                    for id in participant_ids}
+        subjects.extend(profiles)
+        # add pseudo-accounts
+        subjects.extend((URIRef("%sAgentAccount/%d" % (local_uri, id))
                          for id in participant_ids))
-        # TODO: Add relevant user_roles
         # print len(subjects)
         cg = ConjunctiveGraph(identifier=d_graph_iri)
         self.add_subject_data(v, cg, subjects)
+        # add relationships of non-pseudo accounts
+        for ((account, p, profile), g) in v.triples((None, SIOC.account_of, None)):
+            if profile in profiles:
+                cg.add((account, SIOC.account_of, profile, g))
+                # Tempting: simplify with this.
+                # cg.add((profile, FOAF.account, account, g))
         for (s, o, g) in v.query(
                 '''SELECT ?s ?o ?g WHERE {
                 GRAPH ?g {?s catalyst:expressesIdea ?o } .
@@ -671,10 +685,6 @@ class AssemblQuadStorageManager(object):
         accounts = [account for ((account, p, profile), g)
                     in v_main.triples((None, SIOC.account_of, None))
                     if profile in profiles]
-        # Compensating for a bug
-        accounts.extend([account for ((account, p, profile), g)
-                    in v.triples((None, SIOC.account_of, None))
-                    if profile in profiles])
         self.add_subject_data(v, cg, accounts)
         return cg
 
