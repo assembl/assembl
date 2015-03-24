@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'common/context', 'common/collectionManager', 'utils/permissions', 'objects/messagesInProgress', 'utils/i18n', 'jquery-autosize', 'models/message', 'models/agents', 'bluebird', 'backbone.modal', 'backbone.marionette.modals'],
-    function (Backbone, Marionette, Assembl, _, $, Ctx, CollectionManager, Permissions, MessagesInProgress, i18n, autosize, Messages, Agents, Promise) {
+define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'common/context', 'common/collectionManager', 'utils/permissions', 'objects/messagesInProgress', 'utils/i18n', 'utils/panelSpecTypes', 'jquery-autosize', 'models/message', 'models/agents', 'bluebird', 'backbone.modal', 'backbone.marionette.modals'],
+    function (Backbone, Marionette, Assembl, _, $, Ctx, CollectionManager, Permissions, MessagesInProgress, i18n, PanelSpecTypes, autosize, Messages, Agents, Promise) {
 
         /**
          * @init
@@ -82,6 +82,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                 var reply_idea = ('reply_idea' in this.options) ? this.options.reply_idea : null;
                 var reply_message_id = ('reply_message_id' in this.options) ? this.options.reply_message_id : null;
                 var show_target_context_with_choice = ('show_target_context_with_choice' in this.options) ? this.options.show_target_context_with_choice : null;
+                var i18n_post_message_in_this_idea = i18n.gettext('Under the idea "%s"'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in messageSend.tmpl)
+                var i18n_post_message_in_general_conversation = i18n.gettext('In the general conversation'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in messageSend.tmpl)
 
                 return {
                     i18n: i18n,
@@ -232,8 +234,27 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                                 }
                                 // if the user was top-posting into the general conversation from an idea (versus answering to someone or top-posting into the current idea)
                                 else if ( current_idea && !reply_idea_id ) {
-                                    // maybe we could show some info like "Your message has been successfully posted in the general conversation. Click here to see it in context"
+                                    // Solution 1: Show an alert message
+                                    /*
                                     alert(i18n.gettext('Your message has been successfully posted in the general conversation. To see it, go to the bottom of the table of ideas and click on "View posts not yet sorted anywhere", or "All messages".'));
+                                    */
+
+                                    // Solution 2: Redirect user to the "Orphan messages" or "All messages" section of the table of ideas, and highlight his message
+                                    // TODO: change browser navigation state once we have proper URLs for things, so that the user can go back to the idea where he was
+                                    // Quentin: this code has been adapted from views/orphanMessagesInIdeaList.js and views/allMessagesInIdeaList.js. Where else could we put it so that it could be called from several places?
+                                    var messageListView = this.options.messageList;
+                                    var groupContent = messageListView.getContainingGroup();
+                                    groupContent.setCurrentIdea(null);
+                                    if (messageListView) {
+                                        messageListView.triggerMethod('messageList:clearAllFilters');
+                                        //messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
+                                        groupContent.resetDebateState();
+                                        setTimeout(function(){
+                                          Assembl.vent.trigger('messageList:showMessageById', model.id);
+                                        }, 500);
+                                    }
+
+                                    // Solution 3: Show some info with a link to his message in its context (in "All messages" or "Orphan messages"), like "Your message has been successfully posted in the general conversation. Click here to see it in context"
                                 }
                                 
                             });

@@ -2206,6 +2206,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               }
               
               _.each(messageDoms, function(messageSelector) {
+                if ( !messageSelector )
+                  return;
                 var messageTop = messageSelector.offset().top,
                     messageBottom = messageTop + messageSelector.height(),
                     messageHeight = messageBottom - messageTop,

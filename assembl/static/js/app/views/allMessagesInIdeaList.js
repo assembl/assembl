@@ -42,6 +42,8 @@ define(['views/idea', 'common/context', 'utils/panelSpecTypes'],
              * @event
              */
             onTitleClick: function () {
+                // Quentin: Where else could we put this code so that it can be called by several things?
+                // I had to duplicate this code into views/messageSend.js
                 var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
                 messageListView.triggerMethod('messageList:clearAllFilters');
                 this._groupContent.setCurrentIdea(null);

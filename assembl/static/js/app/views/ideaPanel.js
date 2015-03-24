@@ -36,7 +36,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
             serializeData: function () {
                 var currentUser = Ctx.getCurrentUser(),
-                    idea = null;
+                    idea = null,
+                    i18n_vote = i18n.gettext('Vote on the \'%s\' idea'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in ideaPanelWidgets.tmpl)
 
                 if (this.model) {
                     //console.log("there is a model");
