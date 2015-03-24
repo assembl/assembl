@@ -274,8 +274,6 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
 
             onCancelMessageButtonClick: function () {
                 this.clearPartialMessage();
-                this.ui.sendButton.addClass("hidden");
-                this.ui.cancelButton.addClass("hidden");
             },
 
             onBlurMessage: function () {
