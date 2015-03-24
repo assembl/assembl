@@ -79,8 +79,7 @@ class AgentProfile(Base):
             'http://%{WSHostName}U/data/AgentAccount/%d', None,
             ('id', Integer, False))
 
-    id = Column(Integer, primary_key=True,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True)
     name = Column(CoerceUnicode(1024),
         info={'rdf': QuadMapPatternS(None, FOAF.name)})
     description = Column(UnicodeText,
@@ -298,8 +297,7 @@ class AbstractAgentAccount(Base):
     rdf_class = SIOC.UserAccount
     rdf_sections = (PRIVATE_USER_SECTION,)
 
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True)
 
     type = Column(String(60))
 
