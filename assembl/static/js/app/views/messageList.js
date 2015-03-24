@@ -77,8 +77,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                * */
               collectionManager.getAllMessageStructureCollectionPromise()
                   .then(function (allMessageStructureCollection) {
+                      var nbMessage = 0;
 
-                      that.listenTo(allMessageStructureCollection, 'add reset', function () {
+                      that.listenTo(allMessageStructureCollection, 'reset', function () {
                           /*
                            Disable refresh if a message is being written.
                            Not as necessary now that we save messages,
@@ -98,11 +99,16 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                            }
                            */
 
-                          that.getPanelWrapper()
+                          /*that.getPanelWrapper()
                               .filterThroughPanelLock(function () {
                                   that.currentQuery.invalidateResults();
                                   that.render();
-                              }, 'syncStateMessages');
+                              }, 'syncStateMessages');*/
+                      });
+
+                      that.listenTo(allMessageStructureCollection, 'add', function(){
+                          nbMessage++;
+                          that.showPendingMessages(nbMessage);
                       });
                   }
               );
@@ -202,7 +208,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                         'click .js_openTargetInModal': 'openTargetInModal',
 
-                        'click .js_scrollToMsgBox': 'scrollToMsgBox'
+                        'click .js_scrollToMsgBox': 'scrollToMsgBox',
+
+                        'click .js_loadPendingMessages': 'loadPendingMessages'
                     };
 
                 _.each(this.ViewStyles, function (messageListViewStyle) {
@@ -2235,7 +2243,29 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 }
               });
             },
-            
+
+            showPendingMessages: function(nbMessage){
+                var nbPendingMessage = this.$('.nbPendingMessage'),
+                    pendingMessage = this.$('.pendingMessage'),
+                    contentPending = this.$('.real-time-updates');
+
+                document.title = ' ('+ nbMessage +') '+ document.querySelector('#discussion-topic').value;
+
+                var msg = (nbMessage.length > 0 ) ? i18n.gettext('messages') : i18n.gettext('message');
+
+                if(nbMessage.length){
+                    nbPendingMessage.html(nbMessage);
+                    pendingMessage.html(msg);
+                    contentPending.removeClass('hidden').slideDown('slow');
+                }
+
+            },
+
+            loadPendingMessages: function(){
+                this.currentQuery.invalidateResults();
+                this.render();
+            },
+
             /**
              * WARNING, this is a jquery handler, not a backbone one
              * Processes the scroll events to ultimately generate analytics
