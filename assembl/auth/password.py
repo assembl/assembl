@@ -73,27 +73,31 @@ def password_token(user):
     return str(user.id)+'e'+hash_password(token_str, HashEncoding.HEX)
 
 
-def login_token(user_id, duration=timedelta(hours=1)):
-    user_id
+def data_token(data, duration=timedelta(hours=1)):
     expiry = datetime.utcnow() + duration
     expiry_str = expiry.strftime('%Y%j%H%M%S')
-    password = str(user_id) + expiry_str + config.get('security.email_token_salt')
+    password = data + expiry_str + config.get('security.email_token_salt')
     hash = hash_password(password, HashEncoding.BASE64, 3)
-    return "d".join((str(user_id), expiry_str, hash))
+    return "%02x%s%s%s" % (len(data), data, expiry_str, hash)
 
 
-def verify_login_token(token):
+def verify_data_token(token):
     try:
-        user_id, expiry_str, hash = token.split('d', 2)
+        pos = 2
+        pos += int(token[:pos], 16)
+        data = token[2:pos]
+        expiry_str = token[pos:pos+13]
+        pos += 13
+        hash = token[pos:]
         expiry = datetime.strptime(expiry_str, '%Y%j%H%M%S')
         if datetime.utcnow() > expiry:
-            return False
-        password = user_id + expiry_str + config.get('security.email_token_salt')
+            return None
+        password = data + expiry_str + config.get('security.email_token_salt')
         if not verify_password(password, hash, HashEncoding.BASE64, 3):
-            return False
-        return int(user_id)
+            return None
+        return data
     except ValueError:
-        return False
+        return None
 
 
 def verify_email_token(token):
