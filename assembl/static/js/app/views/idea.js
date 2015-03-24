@@ -168,12 +168,14 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
              * Select this idea as the current idea
              */
             onTitleClick: function (e) {
-                var messageListView;
+                var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);;
                 e.stopPropagation();
-                console.log("idea::onTitleClick with groupcontent",this._groupContent.cid);
-                if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-                    messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                //console.log("idea::onTitleClick with groupcontent",this._groupContent.cid);
+                if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE && messageListView) {
                     messageListView.triggerMethod('messageList:clearAllFilters');
+                }
+                else {
+                  //messageListView.triggerMethod('messageList:clearAllFilters');
                 }
                 if (this.model === this._groupContent.getCurrentIdea()) {
                     // We want to avoid the "All messages" state,
@@ -182,6 +184,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                     //this._groupContent.setCurrentIdea(null);
                     //This is so the messageList refreshes.
                 } else {
+                  Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, null);
                   this._groupContent.setCurrentIdea(this.model);
                 }
                 this._groupContent.resetDebateState(false);

@@ -19,7 +19,7 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              * Send debugging output to console.log to observe socket input
              * @type {boolean}
              */
-            this.debugSocket = true;
+            this.debugSocket = false;
 
             /**
              * Prefix used to generate the id of the element used by annotator to find it's annotation
