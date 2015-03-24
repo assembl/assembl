@@ -50,7 +50,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 stickyBar: '.sticky-box',
                 replyBox: '.messagelist-replybox',
                 inspireMe: '.js_inspireMe',
-                inspireMeAnchor: '.js_inspireMeAnchor'
+                inspireMeAnchor: '.js_inspireMeAnchor',
+                pendingMessage: '.pendingMessage',
+                contentPending: '.real-time-updates'
             },
 
             initialize: function (options) {
@@ -63,54 +65,47 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               this.scrollLoggerPreviousScrolltop = 0;
               this.scrollLoggerPreviousTimestamp = d.getTime() ;
               this.renderedMessageViewsCurrent = {};
+              this._nbPendingMessage = 0;
 
               this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
               this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
-              
-              /**
-               * @ghourlier
-               * TODO: Usually it would necessary to push notification rather than fetch every time the model change
-               * Need to be a call to action
-               * Benoitg:  Why?  There is no way to know if the message is, or isn't relevent to the user, and worthy
-               * of notification.  Everything else updates realtime, why make an exception for messages?
-               * */
               collectionManager.getAllMessageStructureCollectionPromise()
-                  .then(function (allMessageStructureCollection) {
-                      var nbMessage = 0;
+                .then(function (allMessageStructureCollection) {
+                  that.listenTo(allMessageStructureCollection, 'reset', function () {
+                      /*
+                       Disable refresh if a message is being written.
+                       Not as necessary now that we save messages,
+                       but it prevents a jarring refresh, so keeping it as a comment.
 
-                      that.listenTo(allMessageStructureCollection, 'reset', function () {
-                          /*
-                           Disable refresh if a message is being written.
-                           Not as necessary now that we save messages,
-                           but it prevents a jarring refresh, so keeping it as a comment.
+                       var messageFields = that.$('.messageSend-body');
+                       function not_empty(b) {
+                       return b.value.length != 0;
+                       };
 
-                           var messageFields = that.$('.messageSend-body');
-                           function not_empty(b) {
-                           return b.value.length != 0;
-                           };
+                       if (_.any(messageFields, not_empty)) {
+                       return;
+                       }
+                       messageFields = that.$('.messageSend-subject');
+                       if (_.any(messageFields, not_empty)) {
+                       return;
+                       }
+                       */
 
-                           if (_.any(messageFields, not_empty)) {
-                           return;
-                           }
-                           messageFields = that.$('.messageSend-subject');
-                           if (_.any(messageFields, not_empty)) {
-                           return;
-                           }
-                           */
-
-                          /*that.getPanelWrapper()
-                              .filterThroughPanelLock(function () {
-                                  that.currentQuery.invalidateResults();
-                                  that.render();
-                              }, 'syncStateMessages');*/
-                      });
-
-                      that.listenTo(allMessageStructureCollection, 'add', function(){
-                          nbMessage++;
-                          that.showPendingMessages(nbMessage);
-                      });
-                  }
+                      /*that.getPanelWrapper()
+                          .filterThroughPanelLock(function () {
+                              that.currentQuery.invalidateResults();
+                              that.render();
+                          }, 'syncStateMessages');*/
+                  });
+                  that.resetPendingMessages(allMessageStructureCollection);
+                  var callback = _.bind(function() {
+                    //Here, this is the collection
+                    var nbPendingMessage = this.length - that._initialLenAllMessageStructureCollection;
+                    that.showPendingMessages(nbPendingMessage);
+                  }, allMessageStructureCollection);
+                  that.listenTo(allMessageStructureCollection, 'add', callback);
+                }
               );
 
               collectionManager.getAllExtractsCollectionPromise()
@@ -425,9 +420,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @type {Boolean}
              */
             collapsed: false,
-
-            allMessageStructureCollection: undefined,
-            //messages
 
             /**
              * The array generated by objectTreeRenderVisitor's data_by_object
@@ -1101,8 +1093,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     console.log("messageList:render_real() collections arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
                     return;
                   }
-                  that.allMessageStructureCollection = allMessageStructureCollection;
-                  var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, that.allMessageStructureCollection, resultMessageIdCollection);
+                  var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, allMessageStructureCollection, resultMessageIdCollection);
                   //console.log("that.showMessageByIdInProgress", that.showMessageByIdInProgress);
                   if (that.showMessageByIdInProgress === false 
                       && that.currentViewStyle === that.ViewStyles.NEW_MESSAGES 
@@ -2245,25 +2236,33 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             showPendingMessages: function(nbMessage){
-                var nbPendingMessage = this.$('.nbPendingMessage'),
-                    pendingMessage = this.$('.pendingMessage'),
-                    contentPending = this.$('.real-time-updates');
+              console.log("showPendingMessages", nbMessage);
+              document.title = ' ('+ nbMessage +') '+ document.querySelector('#discussion-topic').value;
 
-                document.title = ' ('+ nbMessage +') '+ document.querySelector('#discussion-topic').value;
-
-                var msg = (nbMessage.length > 0 ) ? i18n.gettext('messages') : i18n.gettext('message');
-
-                if(nbMessage.length){
-                    nbPendingMessage.html(nbMessage);
-                    pendingMessage.html(msg);
-                    contentPending.removeClass('hidden').slideDown('slow');
-                }
-
+              var msg = i18n.sprintf(i18n.ngettext(
+                  '%d new message has been posted.  Click here to refresh',
+                  '%d new messages have been posted.  Click here to refresh',
+                  nbMessage), nbMessage);
+              
+              if(nbMessage > 0){
+                this.ui.pendingMessage.html(msg);
+                this.ui.contentPending.removeClass('hidden').slideDown('slow');
+              }
             },
 
+            resetPendingMessages: function(allMessageStructureCollection){
+              this._initialLenAllMessageStructureCollection = allMessageStructureCollection.length;
+            },
+            
             loadPendingMessages: function(){
-                this.currentQuery.invalidateResults();
-                this.render();
+              var that = this,
+                  collectionManager = new CollectionManager();
+              return collectionManager.getAllMessageStructureCollectionPromise()
+                .then(function (allMessageStructureCollection) {
+                  that.resetPendingMessages(allMessageStructureCollection);
+                  that.currentQuery.invalidateResults();
+                  that.render();
+                });
             },
 
             /**
