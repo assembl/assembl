@@ -27,13 +27,14 @@ define(['common/context'], function (Ctx) {
              * Gaby Hourlier 03-20-2014 : I don't really understand
              * why we have to get the previous messages saved instead of delete them
              * and why add them in the new localstorage of the new message saved
+             * 
+             * benoitg 2015-03-24: We DO delete them if they are empty
              * */
             var messages = this.getMessages();
             if (!title) {
                 title = '';
             }
             if (!body) {
-                console.error("save undefined message body");
                 body = '';
             }
             if (title.length === 0 && body.length === 0) {
