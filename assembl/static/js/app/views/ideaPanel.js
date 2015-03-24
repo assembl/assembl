@@ -587,6 +587,10 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                             that.unblockPanel();
                             alert(i18n.gettext('You cannot delete an idea associated to extracts.'));
                         }
+                        else if(that.model.get('num_posts') > 0){
+                            that.unblockPanel();
+                            alert(i18n.gettext('You cannot delete an idea associated to comments.'));
+                        }
                         else {
                             // That's a bingo
                             var ok = confirm(i18n.gettext('Confirm that you want to delete this idea.'));
@@ -730,10 +734,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             onDeleteButtonClick: function () {
-                if(this.model.get('num_posts') > 0 ){
-                    alert(i18n.gettext('This idea has been discussed, you can not delete'));
-                    return;
-                }
                 this.deleteCurrentIdea();
             },
 
