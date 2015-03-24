@@ -353,21 +353,29 @@ class Discussion(DiscussionBoundBase):
             & (LocalUserRole.requested == 0)),
         backref="participant_in_discussion")
 
-    def get_participants(self, ids_only=False):
+    def get_participants_query(self, ids_only=False):
         from .auth import AgentProfile, LocalUserRole
         from .post import Post
         from .idea_content_link import Extract
 
-        query = self.db.query(AgentProfile.id).join(LocalUserRole).filter(
+        query = self.db.query(AgentProfile.id).join(LocalUserRole,
+                LocalUserRole.user_id==AgentProfile.id).filter(
             LocalUserRole.discussion_id == self.id).union(
-            self.db.query(AgentProfile.id).join(Post).filter(
+            self.db.query(AgentProfile.id).join(Post,
+                Post.creator_id==AgentProfile.id).filter(
             Post.discussion_id == self.id)).union(
             self.db.query(AgentProfile.id).join(
                 Extract, Extract.creator_id==AgentProfile.id).filter(
             Extract.discussion_id == self.id)).distinct()
         if ids_only:
+            return query
+        return self.db.query(AgentProfile).filter(AgentProfile.id.in_(query))
+
+    def get_participants(self, ids_only=False):
+        query = self.get_participants_query(ids_only)
+        if ids_only:
             return (id for (id,) in query.all())
-        return self.db.query(AgentProfile).filter(AgentProfile.id.in_(query)).all()
+        return query.all()
 
     def get_base_url(self):
         """ Abstracted so that we can support virtual hosts or communities in 
