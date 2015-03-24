@@ -261,21 +261,25 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                 console.log("onBlurMessage()");
                 this.savePartialMessage();
 
+                /* Quentin: turned off, because the "when I'm writing a message, I don't want the interface to reload" fix will be done using filtering on message collection add event
                 var panelWrapper = this.options.messageList._panelWrapper;
                 if ( panelWrapper.isPanelLocked() && panelWrapper.getPanelLockedReason() == "USER_IS_WRITING_A_MESSAGE" ) {
                   console.log("onBlurMessage() will autoUnlockPanel()");
                   panelWrapper.autoUnlockPanel(false, "USER_WAS_WRITING_A_MESSAGE");
                 }
+                */
             },
 
             onFocusMessage: function() {
               console.log("onFocusMessage()");
               //TODO: use a better mecanism than panel locking to address the problem of reloading UI when the user is writing a message (for example when other new messages arrive at the same time)
+              /* Quentin: turned off, because the "when I'm writing a message, I don't want the interface to reload" fix will be done using filtering on message collection add event
               var panelWrapper = this.options.messageList._panelWrapper;
               if ( !panelWrapper.isPanelLocked() ) {
                 console.log("onFocusMessage() will autoLockPanel()");
                 panelWrapper.autoLockPanel(false, "USER_IS_WRITING_A_MESSAGE");
               }
+              */
             },
 
             savePartialMessage: function () {
@@ -294,11 +298,13 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                   this.ui.messageSubject.val('');
                 MessagesInProgress.clearMessage(this.msg_in_progress_ctx);
 
+                /* Quentin: turned off, because the "when I'm writing a message, I don't want the interface to reload" fix will be done using filtering on message collection add event
                 var panelWrapper = this.options.messageList._panelWrapper;
                 if ( panelWrapper.isPanelLocked() && panelWrapper.getPanelLockedReason() == "USER_IS_WRITING_A_MESSAGE" ) {
                   console.log("savePartialMessage() will autoUnlockPanel()");
                   panelWrapper.autoUnlockPanel("USER_WAS_WRITING_A_MESSAGE");
                 }
+                */
             },
 
             
