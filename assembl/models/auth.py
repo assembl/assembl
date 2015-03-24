@@ -314,8 +314,8 @@ class AbstractAgentAccount(Base):
     verified = Column(Boolean(), default=False, server_default='0')
     # Note some social accounts don't disclose email (eg twitter), so nullable
     # Virtuoso + nullable -> no unique index (sigh)
-    email = Column(String(100), index=True,
-        info={'rdf': QuadMapPatternS(None, SIOC.email)})
+    email = Column(String(100), index=True)
+    # info={'rdf': QuadMapPatternS(None, SIOC.email)}
 
     def signature(self):
         "Identity of signature implies identity of underlying account"
@@ -460,11 +460,11 @@ class IdentityProviderAccount(AbstractAgentAccount):
         nullable=False,
         info={'rdf': QuadMapPatternS(None, SIOC.member_of)})
     provider = relationship(IdentityProvider)
-    username = Column(String(200),
-        info={'rdf': QuadMapPatternS(None, SIOC.name)})
+    username = Column(String(200))
+    #    info={'rdf': QuadMapPatternS(None, SIOC.name)})
     domain = Column(String(200))
-    userid = Column(String(200),
-        info={'rdf': QuadMapPatternS(None, SIOC.id)})
+    userid = Column(String(200))
+    #    info={'rdf': QuadMapPatternS(None, SIOC.id)})
     profile_info = deferred(Column(Text()))
     picture_url = Column(String(300),
         info={'rdf': QuadMapPatternS(None, FOAF.img)})
@@ -605,8 +605,8 @@ class User(AgentProfile):
         primary_key=True
     )
 
-    preferred_email = Column(CoerceUnicode(50),
-        info={'rdf': QuadMapPatternS(None, FOAF.mbox)})
+    preferred_email = Column(CoerceUnicode(50))
+    #    info={'rdf': QuadMapPatternS(None, FOAF.mbox)})
     verified = Column(Boolean(), default=False)
     password = deferred(Column(Binary(115)))
     timezone = Column(Time(True))
@@ -936,11 +936,11 @@ class Username(Base):
     def get_id_as_str(self):
         return str(self.user_id)
 
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(User.iri_class().apply(Username.user_id),
-            SIOC.name, Username.username,
-            name=QUADNAMES.class_User_username, sections=(PRIVATE_USER_SECTION,))]
+    # @classmethod
+    # def special_quad_patterns(cls, alias_maker, discussion_id):
+    #     return [QuadMapPatternS(User.iri_class().apply(Username.user_id),
+    #         SIOC.name, Username.username,
+    #         name=QUADNAMES.class_User_username, sections=(PRIVATE_USER_SECTION,))]
 
 
 class Role(Base):
