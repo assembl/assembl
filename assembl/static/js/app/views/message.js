@@ -735,7 +735,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             },
             
             onOpenWithFullBodyView: function(e) {
-              console.log("onOpenWithFullBodyView()");
+              //console.log("onOpenWithFullBodyView()");
               if ( this.viewStyle == this.availableMessageViewStyles.FULL_BODY )
                 return;
 

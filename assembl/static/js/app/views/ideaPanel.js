@@ -585,6 +585,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                         // Nor has any segments
                         else if (ideaExtracts.length > 0) {
                             that.unblockPanel();
+                            console.log(ideaExtracts);
                             alert(i18n.gettext('You cannot delete an idea associated to extracts.'));
                         }
                         else if(that.model.get('num_posts') > 0){
