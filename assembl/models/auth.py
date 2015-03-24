@@ -5,6 +5,7 @@ import hashlib
 import chroma
 import simplejson as json
 from collections import defaultdict
+from enum import IntEnum
 
 from sqlalchemy import (
     Boolean,
@@ -1337,6 +1338,12 @@ class PartnerOrganization(DiscussionBoundBase):
         return (cls.discussion_id == discussion_id,)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
+
+
+class LanguagePreferenceOrder(IntEnum):
+    Cookie = 1
+    Parameter = 2
+    OS_Default = 3
 
 
 class UserLanguagePreference(Base):

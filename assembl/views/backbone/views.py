@@ -11,7 +11,11 @@ from sqlalchemy.orm.exc import NoResultFound
 from assembl.models import Discussion
 from assembl.models.post import Post
 from assembl.auth import P_READ, P_ADD_EXTRACT
-from ...models.auth import UserLanguagePreference, User
+from ...models.auth import (
+    UserLanguagePreference,
+    LanguagePreferenceOrder,
+    User,
+)
 from assembl.auth.util import user_has_permission
 from .. import get_default_context as base_default_context
 from assembl.lib.frontend_urls import FrontendUrls
@@ -51,7 +55,8 @@ def get_styleguide_components():
 
 
 def process_locale(posix_locale, user_id, current_prefs, session, order):
-    current = filter(lambda x:x.preferred_order == order, current_prefs)
+    # Current is the current locale for the given order
+    current = [x for x in current_prefs if x.preferred_order == order]
     user = session.query(User).filter_by(id = user_id).first()
 
     # Fresh slate for user, create a lang_pref
@@ -63,10 +68,10 @@ def process_locale(posix_locale, user_id, current_prefs, session, order):
         session.add(lang)
         session.flush()
 
-    elif posix_locale in map(lambda x: x.lang_code, current_prefs):
+    elif posix_locale in {x.lang_code for x in current_prefs}:
 
         if not current:
-            # Cookie priority does not exist, but locale does
+            # current priority does not exist, but locale does
             updated_pref = session.query(UserLanguagePreference).\
                 filter_by(user_id=user_id, lang_code=posix_locale).\
                 first()
@@ -75,9 +80,8 @@ def process_locale(posix_locale, user_id, current_prefs, session, order):
             session.flush()
 
         elif current[0].lang_code != posix_locale:
-            # Cookie exists, but is not the current locale
-            # remove existing cookie, update priority of existing
-            # locale to cookie priority
+            # Current priority exists, but is not the desired locale
+            # Update current to desired local, remove current.
             pref_to_remove = session.query(UserLanguagePreference).\
                 filter_by(user_id=user_id, preferred_order=order).first()
 
@@ -94,10 +98,10 @@ def process_locale(posix_locale, user_id, current_prefs, session, order):
             session.flush()
 
         else:
-            print "Current cookie locale exists."
+            print "Current %s locale exists." % order
 
     # non-empty list of preferences, locale does not exist
-    # check cookie-level priority, and follow example from above.
+    # check priority, and follow example from above.
     elif current_prefs and not current:
         lang = UserLanguagePreference(lang_code=posix_locale,
                                       preferred_order=order,
@@ -107,17 +111,12 @@ def process_locale(posix_locale, user_id, current_prefs, session, order):
         session.flush()
 
     # Finally, locale not previously set, and there exists a previous
-    # cookie-priority locale
+    # priority locale
     else:
-        pref_to_remove = session.query(UserLanguagePreference).\
-            filter_by(user_id=user_id, preferred_order=order).firt()
-        lang = UserLanguagePreference(lang_code=posix_locale,
-                                      preferred_order=order,
-                                      user=user,
-                                      explicitly_defined=False)
-        session.delete(pref_to_remove)
-        session.flush()
-        session.add(lang)
+        pref = session.query(UserLanguagePreference).\
+            filter_by(user_id=user_id, preferred_order=order).first()
+        pref.lang_code = posix_locale
+        session.add(pref)
         session.flush()
 
 
@@ -161,20 +160,22 @@ def home_view(request):
         if '_LOCALE_' in request.cookies:
             locale = request.cookies['_LOCALE_']
             posix_locale = UserLanguagePreference.to_posix_format(locale)
-            # TODO: use enum.Enum
             process_locale(posix_locale,user_id,
-                           current_prefs, session, 1)
+                           current_prefs, session,
+                           LanguagePreferenceOrder.Cookie)
 
         elif '_LOCALE_' in request.params:
             locale = request.params['_LOCALE_']
             posix_locale = UserLanguagePreference.to_posix_format(locale)
             process_locale(posix_locale, user_id,
-                           current_prefs, session, 2)
+                           current_prefs, session,
+                           LanguagePreferenceOrder.Parameter)
         else:
             locale = default_locale_negotiator(request)
             posix_locale = UserLanguagePreference.to_posix_format(locale)
             process_locale(posix_locale, user_id,
-                           current_prefs, session, 3)
+                           current_prefs, session,
+                           LanguagePreferenceOrder.OS_Default)
 
 
     response = render_to_response('../../templates/index.jinja2', context, request=request)
