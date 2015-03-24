@@ -2236,7 +2236,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             showPendingMessages: function(nbMessage){
-              console.log("showPendingMessages", nbMessage);
               document.title = ' ('+ nbMessage +') '+ document.querySelector('#discussion-topic').value;
 
               var msg = i18n.sprintf(i18n.ngettext(
@@ -2253,7 +2252,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             resetPendingMessages: function(allMessageStructureCollection){
               this._initialLenAllMessageStructureCollection = allMessageStructureCollection.length;
             },
-            
+            /**
+             * @return A promise
+             */
             loadPendingMessages: function(){
               var that = this,
                   collectionManager = new CollectionManager();

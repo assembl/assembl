@@ -117,8 +117,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     reply_message_id = null,
                     success_callback = null,
                     chosenTargetIdeaField = this.$el.find('.messageSend-target input:checked');
-                console.log("chosenTargetIdea:", chosenTargetIdeaField);
-                console.log("chosenTargetIdea val:", chosenTargetIdeaField.val());
+                /*console.log("chosenTargetIdea:", chosenTargetIdeaField);
+                console.log("chosenTargetIdea val:", chosenTargetIdeaField.val());*/
 
                 if(this.sendInProgress !== false) {
                   return;
@@ -212,52 +212,47 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                         // clear draft on success... so not lost in case of failure.
                         that.clearPartialMessage();
                         if (that.messageList) {
-                            that.listenToOnce(that.messageList, "messageList:render_complete", function () {
-                                if (_.isFunction(that.options.send_callback)) {
-                                    that.options.send_callback();
-                                }
-                                var el = that.ui.messageBody;
-                                if (el.length > 0)
-                                    el[0].text = '';
-                                el = that.ui.messageSubject;
-                                if (el.length > 0)
-                                    el[0].text = '';
+                          that.messageList.loadPendingMessages().then(function () {
+                            if (_.isFunction(that.options.send_callback)) {
+                              that.options.send_callback();
+                            }
+                            var el = that.ui.messageBody;
+                            if (el.length > 0)
+                                el[0].text = '';
+                            el = that.ui.messageSubject;
+                            if (el.length > 0)
+                                el[0].text = '';
 
-                                var current_idea = that.messageList.getContainingGroup().getCurrentIdea();
-                                // if the user was top-posting into the current idea or answering to someone or top-posting from the general conversation context, scroll to his message
-                                if ( reply_idea_id || reply_message_id || (!current_idea && !reply_message_id && !reply_idea_id) ) {
-                                    setTimeout(function () {
-                                        //TODO:  This delay will no longer be necessary once backbone sync is done below in sendPostToServer
-                                        //console.log("Calling showMessageById for "+data['@id']);
-                                        Assembl.vent.trigger('messageList:showMessageById', model.id);
-                                    }, 1000);
-                                }
-                                // if the user was top-posting into the general conversation from an idea (versus answering to someone or top-posting into the current idea)
-                                else if ( current_idea && !reply_idea_id ) {
-                                    // Solution 1: Show an alert message
-                                    /*
-                                    alert(i18n.gettext('Your message has been successfully posted in the general conversation. To see it, go to the bottom of the table of ideas and click on "View posts not yet sorted anywhere", or "All messages".'));
-                                    */
+                            var current_idea = that.messageList.getContainingGroup().getCurrentIdea();
+                            // if the user was top-posting into the current idea or answering to someone or top-posting from the general conversation context, scroll to his message
+                            if ( reply_idea_id || reply_message_id || (!current_idea && !reply_message_id && !reply_idea_id) ) {
+                              Assembl.vent.trigger('messageList:showMessageById', model.id);
+                            }
+                            // if the user was top-posting into the general conversation from an idea (versus answering to someone or top-posting into the current idea)
+                            else if ( current_idea && !reply_idea_id ) {
+                              // Solution 1: Show an alert message
+                              /*
+                              alert(i18n.gettext('Your message has been successfully posted in the general conversation. To see it, go to the bottom of the table of ideas and click on "View posts not yet sorted anywhere", or "All messages".'));
+                              */
 
-                                    // Solution 2: Redirect user to the "Orphan messages" or "All messages" section of the table of ideas, and highlight his message
-                                    // TODO: change browser navigation state once we have proper URLs for things, so that the user can go back to the idea where he was
-                                    // Quentin: this code has been adapted from views/orphanMessagesInIdeaList.js and views/allMessagesInIdeaList.js. Where else could we put it so that it could be called from several places?
-                                    var messageListView = this.options.messageList;
-                                    var groupContent = messageListView.getContainingGroup();
-                                    groupContent.setCurrentIdea(null);
-                                    if (messageListView) {
-                                        messageListView.triggerMethod('messageList:clearAllFilters');
-                                        //messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
-                                        groupContent.resetDebateState();
-                                        setTimeout(function(){
-                                          Assembl.vent.trigger('messageList:showMessageById', model.id);
-                                        }, 500);
-                                    }
+                              // Solution 2: Redirect user to the "Orphan messages" or "All messages" section of the table of ideas, and highlight his message
+                              // TODO: change browser navigation state once we have proper URLs for things, so that the user can go back to the idea where he was
+                              // Quentin: this code has been adapted from views/orphanMessagesInIdeaList.js and views/allMessagesInIdeaList.js. Where else could we put it so that it could be called from several places?
+                              var messageListView = this.options.messageList;
+                              var groupContent = messageListView.getContainingGroup();
+                              groupContent.setCurrentIdea(null);
+                              if (messageListView) {
+                                messageListView.triggerMethod('messageList:clearAllFilters');
+                                //messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
+                                groupContent.resetDebateState();
+                                setTimeout(function(){
+                                  Assembl.vent.trigger('messageList:showMessageById', model.id);
+                                }, 500);
+                              }
 
-                                    // Solution 3: Show some info with a link to his message in its context (in "All messages" or "Orphan messages"), like "Your message has been successfully posted in the general conversation. Click here to see it in context"
-                                }
-                                
-                            });
+                              // Solution 3: Show some info with a link to his message in its context (in "All messages" or "Orphan messages"), like "Your message has been successfully posted in the general conversation. Click here to see it in context"
+                            }
+                          });
                         }
                         setTimeout(function () {
                             btn.text(btn_original_text);
@@ -277,7 +272,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             },
 
             onBlurMessage: function () {
-                console.log("onBlurMessage()");
+                //console.log("onBlurMessage()");
                 this.savePartialMessage();
 
                 /* Quentin: turned off, because the "when I'm writing a message, I don't want the interface to reload" fix will be done using filtering on message collection add event
@@ -290,7 +285,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             },
 
             onFocusMessage: function() {
-              console.log("onFocusMessage()");
+              //console.log("onFocusMessage()");
               //TODO: use a better mecanism than panel locking to address the problem of reloading UI when the user is writing a message (for example when other new messages arrive at the same time)
               /* Quentin: turned off, because the "when I'm writing a message, I don't want the interface to reload" fix will be done using filtering on message collection add event
               var panelWrapper = this.options.messageList._panelWrapper;
