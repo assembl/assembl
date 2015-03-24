@@ -74,6 +74,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                 'click @ui.sendButton': 'onSendMessageButtonClick',
                 'click @ui.cancelButton': 'onCancelMessageButtonClick',
                 'blur @ui.messageBody': 'onBlurMessage',
+                'focus @ui.messageBody': 'onFocusMessage',
                 'keyup @ui.messageBody': 'onChangeBody'
             },
 
@@ -206,8 +207,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                             );
                         }
 
-                        // clear on success... so not lost in case of failure.
-                        MessagesInProgress.clearMessage(that.msg_in_progress_ctx);
+                        // clear draft on success... so not lost in case of failure.
+                        that.clearPartialMessage();
                         if (that.messageList) {
                             that.listenToOnce(that.messageList, "messageList:render_complete", function () {
                                 if (_.isFunction(that.options.send_callback)) {
@@ -257,25 +258,47 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             },
 
             onBlurMessage: function () {
+                console.log("onBlurMessage()");
                 this.savePartialMessage();
+
+                var panelWrapper = this.options.messageList._panelWrapper;
+                if ( panelWrapper.isPanelLocked() && panelWrapper.getPanelLockedReason() == "USER_IS_WRITING_A_MESSAGE" ) {
+                  console.log("onBlurMessage() will autoUnlockPanel()");
+                  panelWrapper.autoUnlockPanel(false, "USER_WAS_WRITING_A_MESSAGE");
+                }
+            },
+
+            onFocusMessage: function() {
+              console.log("onFocusMessage()");
+              //TODO: use a better mecanism than panel locking to address the problem of reloading UI when the user is writing a message (for example when other new messages arrive at the same time)
+              var panelWrapper = this.options.messageList._panelWrapper;
+              if ( !panelWrapper.isPanelLocked() ) {
+                console.log("onFocusMessage() will autoLockPanel()");
+                panelWrapper.autoLockPanel(false, "USER_IS_WRITING_A_MESSAGE");
+              }
             },
 
             savePartialMessage: function () {
                 var message_body = this.ui.messageBody,
                     message_title = this.ui.messageSubject;
 
-                if (message_body.length > 0 || message_title.length > 0) {
-
-                  //TODO: this function does not lock the panel properly when you post un message
-                  this.options.messageList._panelWrapper.autoLockPanel();
-
+                if ((message_body.length > 0 && message_body.val().length > 0) || (message_title.length > 0 && message_title.val().length > 0)) {
                   MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title.val());
                 }
             },
 
             clearPartialMessage: function () {
-                this.ui.messageBody.val('');
+                if ( this.ui.messageBody.length > 0 )
+                  this.ui.messageBody.val('');
+                if ( this.ui.messageSubject.length > 0 )
+                  this.ui.messageSubject.val('');
                 MessagesInProgress.clearMessage(this.msg_in_progress_ctx);
+
+                var panelWrapper = this.options.messageList._panelWrapper;
+                if ( panelWrapper.isPanelLocked() && panelWrapper.getPanelLockedReason() == "USER_IS_WRITING_A_MESSAGE" ) {
+                  console.log("savePartialMessage() will autoUnlockPanel()");
+                  panelWrapper.autoUnlockPanel("USER_WAS_WRITING_A_MESSAGE");
+                }
             },
 
             
