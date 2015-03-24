@@ -6,7 +6,7 @@ from pyramid.httpexceptions import (HTTPOk, HTTPBadRequest, HTTPUnauthorized)
 from pyramid_dogpile_cache import get_region
 from pyramid.security import authenticated_userid
 
-from assembl.auth import (P_READ, P_ADMIN_DISC, Everyone)
+from assembl.auth import (P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, Everyone)
 from assembl.auth.password import verify_data_token
 from assembl.auth.util import get_permissions
 from assembl.models import (Discussion)
@@ -78,7 +78,7 @@ def discussion_instance_view_jsonld(request):
     discussion = request.context._instance
     user_id, salt = read_user_token(request)
     permissions = get_permissions(user_id, discussion.id)
-    if P_READ not in permissions:
+    if not (P_READ in permissions or P_READ_PUBLIC_CIF in permissions):
         raise HTTPUnauthorized()
     if not salt and P_ADMIN_DISC not in permissions:
         from os import urandom
@@ -103,8 +103,12 @@ def user_private_view_jsonld(request):
     user_id, salt = read_user_token(request)
     permissions = get_permissions(user_id, discussion.id)
     # TODO: Create a view_user_private permission
-    if P_ADMIN_DISC not in permissions:
+    if P_READ not in permissions:
         raise HTTPUnauthorized()
+    if not salt and P_ADMIN_DISC not in permissions:
+        from os import urandom
+        from base64 import urlsafe_b64encode
+        salt = urlsafe_b64encode(urandom(6))
 
     json = userprivate_jsonld(discussion.id)
     if salt:
