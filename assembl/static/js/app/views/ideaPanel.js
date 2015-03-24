@@ -730,6 +730,10 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
             },
 
             onDeleteButtonClick: function () {
+                if(this.model.get('num_posts') > 0 ){
+                    alert(i18n.gettext('This idea has been discussed, you can not delete'));
+                    return;
+                }
                 this.deleteCurrentIdea();
             },
 
