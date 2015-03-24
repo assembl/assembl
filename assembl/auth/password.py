@@ -2,7 +2,9 @@ from os import urandom
 from binascii import hexlify, unhexlify
 import hashlib
 from datetime import datetime, timedelta
+from base64 import urlsafe_b64encode, urlsafe_b64decode
 
+from enum import Enum
 from assembl.lib import config
 from ..models import EmailAccount, User
 from ..lib import config
@@ -10,40 +12,56 @@ from ..lib import config
 SALT_SIZE = 8
 
 
-def hash_password(password, hex=False):
+class HashEncoding(Enum):
+    BINARY = 0
+    HEX = 1
+    BASE64 = 2
+
+
+def hash_password(password, encoding=HashEncoding.BINARY, salt_size=SALT_SIZE):
     """
     Returns a hashed password.
     """
-    salt = urandom(SALT_SIZE)
+    salt = urandom(salt_size)
     hasher = hashlib.new(config.get('security.hash_algorithm') or 'sha256')
     hasher.update(password)
     hasher.update(salt)
-    if hex:
-        return hexlify(salt) + hasher.hexdigest()
-    else:
+    if encoding == HashEncoding.BINARY:
         return salt + hasher.digest()
+    elif encoding == HashEncoding.HEX:
+        return hexlify(salt) + hasher.hexdigest()
+    elif encoding == HashEncoding.BASE64:
+        return urlsafe_b64encode(salt) + urlsafe_b64encode(hasher.digest())
+    raise ValueError()
 
 
-def verify_password(password, hash, hex=False):
+def verify_password(password, hash, encoding=HashEncoding.BINARY,
+                    salt_size=SALT_SIZE):
     """
     Verifies a password against a salted hash
     """
-    if hex:
-        salt, hash = unhexlify(hash[:(2*SALT_SIZE)]), hash[(2*SALT_SIZE):]
+    if encoding == HashEncoding.BINARY:
+        salt, hash = hash[:salt_size], hash[salt_size:]
+    elif encoding == HashEncoding.HEX:
+        salt_len = 2 * salt_size
+        salt, hash = unhexlify(hash[:salt_len]), unhexlify(hash[salt_len:])
+    elif encoding == HashEncoding.BASE64:
+        salt_len = 4 * int((salt_size+2)/3)
+        salt, hash = (urlsafe_b64decode(hash[:salt_len]),
+                      urlsafe_b64decode(hash[salt_len:]))
     else:
-        salt, hash = hash[:SALT_SIZE], hash[SALT_SIZE:]
+        raise ValueError()
+
     hasher = hashlib.new(config.get('security.hash_algorithm') or 'sha256')
     hasher.update(password)
     hasher.update(salt)
-    if hex:
-        return hasher.hexdigest() == hash
-    else:
-        return hasher.digest() == hash
+    return hasher.digest() == hash
 
 
 def email_token(email):
     return str(email.id)+'f'+hash_password(
-        str(email.id) + email.email + config.get('security.email_token_salt'), True)
+        str(email.id) + email.email + config.get('security.email_token_salt'),
+        HashEncoding.HEX)
 
 
 def password_token(user):
@@ -52,7 +70,30 @@ def password_token(user):
     resolution=19
     token_str = str(user.id)+now.isoformat()[:resolution]
     print "hashing "+token_str
-    return str(user.id)+'e'+hash_password(token_str, True)
+    return str(user.id)+'e'+hash_password(token_str, HashEncoding.HEX)
+
+
+def login_token(user_id, duration=timedelta(hours=1)):
+    user_id
+    expiry = datetime.utcnow() + duration
+    expiry_str = expiry.strftime('%Y%j%H%M%S')
+    password = str(user_id) + expiry_str + config.get('security.email_token_salt')
+    hash = hash_password(password, HashEncoding.BASE64, 3)
+    return "d".join((str(user_id), expiry_str, hash))
+
+
+def verify_login_token(token):
+    try:
+        user_id, expiry_str, hash = token.split('d', 2)
+        expiry = datetime.strptime(expiry_str, '%Y%j%H%M%S')
+        if datetime.utcnow() > expiry:
+            return False
+        password = user_id + expiry_str + config.get('security.email_token_salt')
+        if not verify_password(password, hash, HashEncoding.BASE64, 3):
+            return False
+        return int(user_id)
+    except ValueError:
+        return False
 
 
 def verify_email_token(token):
@@ -60,7 +101,7 @@ def verify_email_token(token):
     email = EmailAccount.get(int(id))
     if email and verify_password(
         str(email.id) + email.email + config.get(
-            'security.email_token_salt'), hash, True):
+            'security.email_token_salt'), hash, HashEncoding.HEX):
             return email
 
 
@@ -75,7 +116,7 @@ def verify_password_change_token(token, duration):
         return False, id
     check = str(id)+user.last_login.isoformat()[:19]
     valid = verify_password(
-        check, hash, True)
+        check, hash, HashEncoding.HEX)
     if not valid:
         return False, id
     return True, id
