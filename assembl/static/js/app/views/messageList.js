@@ -24,6 +24,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
          * @class views.MessageList
          */
         var MessageList = AssemblPanel.extend({
+            template: '#tmpl-messageList',
             panelType: PanelSpecTypes.MESSAGE_LIST,
             className: 'panel messageList',
             lockable: true,
@@ -96,8 +97,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                            return;
                            }
                            */
-                          that.currentQuery.invalidateResults();
-                          that.render();
+
+                          that.getPanelWrapper()
+                              .filterThroughPanelLock(function () {
+                                  that.currentQuery.invalidateResults();
+                                  that.render();
+                              }, 'syncStateMessages');
                       });
                   }
               );
@@ -131,7 +136,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
               this.listenTo(Assembl.vent, 'messageList:showMessageById', function (id, callback) {
                 //console.log("Calling showMessageById from messageList:showMessageById with params:", id, callback);
-                that.showMessageById(id, callback);
+                  that.showMessageById(id, callback);
               });
 
               this.listenTo(Assembl.vent, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
@@ -406,12 +411,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     }
                 );
             },
-
-            /**
-             * The template
-             * @type {_.template}
-             */
-            template: '#tmpl-messageList',
 
             /**
              * The collapse/expand flag
