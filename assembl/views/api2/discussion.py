@@ -62,7 +62,7 @@ def read_user_token(request):
             token_user_id = int(token_user_id)
         except ValueError:
             raise HTTPBadRequest("Invalid token")
-        if user_id == Everyone:
+        if not user_id:
             user_id = token_user_id
         elif user_id != token_user_id:
             raise HTTPBadRequest("Stolen token")
