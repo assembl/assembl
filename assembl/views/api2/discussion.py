@@ -1,4 +1,5 @@
 from functools import partial
+import re
 
 from pyramid.response import Response
 from pyramid.view import view_config
@@ -68,6 +69,13 @@ def read_user_token(request):
             raise HTTPBadRequest("Stolen token")
     return user_id, salt
 
+
+def handle_jsonp(callback_fn, json):
+    if not re.match("^\w+$", callback_fn):
+        raise HTTPBadRequest("invalid callback name")
+    return "%s(%s);" % (callback_fn.encode('ascii'), json)
+
+
 @view_config(context=InstanceContext, name="jsonld",
              ctx_instance_class=Discussion, request_method='GET',
              accept="application/ld+json")
@@ -92,7 +100,12 @@ def discussion_instance_view_jsonld(request):
         obfuscator = partial(hash_obfuscator, salt=salt)
         json = AssemblQuadStorageManager.obfuscate(json, obfuscator)
     # TODO: Add age
-    return Response(body=json, content_type="application/ld+json")
+    if "callback" in request.GET:
+        json = handle_jsonp(request.GET['callback'], json)
+        content_type = "application/json-p"
+    else:
+        content_type = "application/ld+json"
+    return Response(body=json, content_type=content_type)
 
 
 @view_config(context=InstanceContext, name="private_jsonld",
@@ -116,5 +129,9 @@ def user_private_view_jsonld(request):
             AssemblQuadStorageManager, hash_obfuscator)
         obfuscator = partial(hash_obfuscator, salt=salt)
         json = AssemblQuadStorageManager.obfuscate(json, obfuscator)
-    # TODO: Add age
-    return Response(body=json, content_type="application/ld+json")
+    if "callback" in request.GET:
+        json = handle_jsonp(request.GET['callback'], json)
+        content_type = "application/json-p"
+    else:
+        content_type = "application/ld+json"
+    return Response(body=json, content_type=content_type)
