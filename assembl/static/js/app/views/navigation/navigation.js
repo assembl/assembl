@@ -87,10 +87,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
             },
             onBeforeShow:function () {
-                var that = this;
-                //setTimeout(function(){
-                    that.setSideBarHeight();
-                //}, 0);
+              this.setSideBarHeight();
             },
             toggleMenuByName: function (itemName) {
                 var elm = this.$('.nav[data-view=' + itemName + ']');
@@ -134,10 +131,8 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
                         if (messageListView) {
                             messageListView.currentQuery.clearAllFilters();
-                            if (view == 'debate') {
-                                //setTimeout(function () {
-                                    messageListView.render();
-                                //});
+                            if (view === 'debate') {
+                              messageListView.render();
                             }
                         }
                         break;
