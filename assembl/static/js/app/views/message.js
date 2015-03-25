@@ -59,15 +59,10 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                  this.listenTo(this.model, "all", function(eventName) {
                  console.log("message model event received: ", eventName);
                  });*/
-                //this.listenTo(this.model, 'replacedBy', this.onReplaced);
-                //this.listenTo(this.model, 'showBody', this.onShowBody);
-                //this.listenTo(this.model, 'change', this.render);
 
                 this.messageListView = options.messageListView;
                 this.messageFamilyView = options.messageFamilyView;
                 this.viewStyle = this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this);
-                //this.messageListView.on('annotator:destroy', this.onAnnotatorDestroy, this);
-                //this.messageListView.on('annotator:initComplete', this.onAnnotatorInitComplete, this);
 
                 this.listenTo(this.messageListView, 'annotator:destroy', this.onAnnotatorDestroy);
                 this.listenTo(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
@@ -94,8 +89,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             },
             modelEvents: {
               'replacedBy':'onReplaced',
-              'showBody':'onShowBody',
-              'change':'render'
+              'change':'render',
+              'openWithFullBodyView': 'onOpenWithFullBodyView'
             },
 
             /**
@@ -110,8 +105,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 'click .message-hoistbtn': 'onMessageHoistClick',
 
                 //
-                'click .message-replybox-openbtn': 'focusReplyBox',
-                'click .messageSend-cancelbtn': 'closeReplyBox',
+                'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
+                'click .messageSend-cancelbtn': 'onReplyBoxCancelBtnClick',
                 'focus .messageSend-body': 'onTextboxFocus',
                 //
                 'mousedown .js_messageBodyAnnotatorSelectionAllowed': 'startAnnotatorTextSelection',
@@ -223,17 +218,17 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                   Ctx.initClipboard();
   
                   that.replyView = new MessageSendView({
-                      'allow_setting_subject': false,
-                      'reply_message_id': modelId,
-                      'body_help_message': i18n.gettext('Type your response here...'),
-                      'cancel_button_label': null,
-                      'send_button_label': i18n.gettext('Send your reply'),
-                      'subject_label': null,
-                      'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
-                      'messageList': that.messageListView,
-                      'msg_in_progress_body': partialMessage['body'],
-                      'msg_in_progress_ctx': modelId,
-                      'mandatory_subject_missing_msg': null
+                      allow_setting_subject: false,
+                      reply_message_id: modelId,
+                      body_help_message: i18n.gettext('Type your response here...'),
+                      cancel_button_label: null,
+                      send_button_label: i18n.gettext('Send your reply'),
+                      subject_label: null,
+                      mandatory_body_missing_msg: i18n.gettext('You did not type a response yet...'),
+                      messageList: that.messageListView,
+                      msg_in_progress_body: partialMessage['body'],
+                      msg_in_progress_ctx: modelId,
+                      mandatory_subject_missing_msg: null
                   });
                   that.$('.message-replybox').append(this.replyView.render().el);
   
@@ -242,10 +237,10 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                   if (this.replyBoxShown || partialMessage['body']) {
                       this.openReplyBox();
                       if ( this.replyBoxHasFocus )
-                          this.focusReplyBox();
+                          this.doFocusReplyBox();
                   }
                   else {
-                      this.closeReplyBox();
+                      this.doCloseReplyBox();
                   }
   
                   if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
@@ -258,7 +253,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                   }
   
   
-                  if(this.messageListView.iSviewStyleThreadedType()
+                  if(this.messageListView.isViewStyleThreadedType()
                       && that.messageFamilyView.currentLevel !== 1) {
                       this.model.getParentPromise().then(function(parentMessageModel){
                           //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
@@ -595,10 +590,15 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
 
             },
 
+            onMessageReplyBtnClick: function (e) {
+              e.preventDefault();
+              this.doFocusReplyBox();
+            },
+            
             /**
              *  Focus on the reply box, and open it if closed
              **/
-            focusReplyBox: function () {
+            doFocusReplyBox: function () {
                 var that = this;
                 var onReplyBoxBlur = function(){
                     that.replyBoxHasFocus = false;
@@ -636,10 +636,14 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 this.replyBoxShown = true;
             },
 
+            onReplyBoxCancelBtnClick: function (e) {
+              this.doCloseReplyBox();
+            },
+          
             /**
              *  Closes the reply box
              */
-            closeReplyBox: function () {
+            doCloseReplyBox: function () {
                 this.$('.message-replybox').addClass('hidden');
                 this.replyBoxShown = false;
             },
@@ -648,21 +652,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 // we will hoist the post, or un-hoist it if it is already hoisted
                 this.isHoisted = this.messageListView.toggleFilterByPostId(this.model.getId());
                 this.render(); // so that the isHoisted property will now be considered
-            },
-
-            /**
-             * @event
-             */
-            onShowBody: function () {
-                var read = this.model.get('read');
-
-                if (read === false) {
-                    this.model.setRead(true);
-                }
-                this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
-
-                // I do not know why I should comment this, but it cause an issue
-                //this.render();
             },
 
             /**
@@ -710,17 +699,37 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 }
             },
             /**
-             * Note that this is also callable without an event
              * @event
              */
             onMessageTitleClick: function (e) {
                 if(e) {
                   e.stopPropagation();
+                  e.preventDefault();
                 }
+                this.doProcessMessageTitleClick();
+            },
+
+            /**
+             */
+            doProcessMessageTitleClick: function () {
                 this.toggleViewStyle();
                 if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
                     this.openReplyBox();
                 }
+            },
+            
+            onOpenWithFullBodyView: function(e) {
+              //console.log("onOpenWithFullBodyView()");
+              if ( this.viewStyle == this.availableMessageViewStyles.FULL_BODY )
+                return;
+
+              var read = this.model.get('read');
+              if (read === false) {
+                  this.model.setRead(true);
+              }
+              this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
+              this.render();
+              this.openReplyBox();
             },
 
             /**
@@ -856,11 +865,11 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 this.model.setRead(true);
             },
 
-            onTextboxFocus: function(){
+            onTextboxFocus: function(e){
                 if ( !this.model.get('read') )
                 {
                     this.model.setRead(true); // we do not call markAsRead on purpose
-                    this.focusReplyBox();
+                    this.doFocusReplyBox();
                 }
             },
 

@@ -13,6 +13,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             //This MUST match the variables in _variables.scss
             group_header_height: 0,
             group_editable_header_height: 25,
+            li_height: 40,
             getTitle: function () {
                 return 'Navigation'; // unused
             },
@@ -76,19 +77,17 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         }));
                         that.num_items = 4;
                         that.ui.visualization_tab.show();
-                        that.setSideBarHeight();
+                        setTimeout(function(){
+                            that.setSideBarHeight();
+                        }, 500);
                     } catch (e) {
                         // console.log(e);
                     }
                 });
                 this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
-                this.listenTo(Assembl.vent, 'navigation:selected', function(viewName){
-                  console.log("View name: ",viewName);
-                });
             },
-            onShow: function () {
-                this.setSideBarHeight();
-                //this.notification.show(new sidebarNotification());
+            onBeforeShow:function () {
+              this.setSideBarHeight();
             },
             toggleMenuByName: function (itemName) {
                 var elm = this.$('.nav[data-view=' + itemName + ']');
@@ -99,7 +98,6 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                     return;
                 var elm = $(evt.currentTarget), // use currentTarget instead of target, so that we are sure that it is a .nav element
                     view = elm.attr('data-view');
-                //this.toggleMenuByElement(elm);
                 Assembl.vent.trigger("navigation:selected", view);
             },
             /**
@@ -119,8 +117,12 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 }
             },
             setSideBarHeight: function () {
+                var that = this;
                 this.initVar();
-                this.ui.level.css('height', this._accordionContentHeight);
+                setTimeout(function(){
+                    that.ui.level.height(that._accordionContentHeight);
+                }, 0);
+                
             },
             loadView: function (view) {
                 // clear aspects of current state
@@ -129,10 +131,8 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
                         if (messageListView) {
                             messageListView.currentQuery.clearAllFilters();
-                            if (view == 'debate') {
-                                setTimeout(function () {
-                                    messageListView.render();
-                                });
+                            if (view === 'debate') {
+                              messageListView.render();
                             }
                         }
                         break;
@@ -183,21 +183,18 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
 
                 var _header = $('#header').height(),
                     _window = $(window).height(),
-                    _li = 40 * this.num_items,
+                    _li = this.li_height * this.num_items,
                     _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader").first().hasClass('editable') ? this.group_editable_header_height : this.group_header_height ),
                     _sideBarHeight = (_window - _header) - _headerGroup,
                     that = this;
 
                 if (this.$el && this.$el.parent() && this.$el.parent().height()) {
-
-                    this._accordionContentHeight = _sideBarHeight - _li;
+                    this._accordionContentHeight = _sideBarHeight - _li - 2;
                 }
                 else { // fallback: set an initial estimation
+                    this._accordionContentHeight = _sideBarHeight - _li - 2;
 
-                    this._accordionContentHeight = _sideBarHeight - _li - 15;
-
-                    if (++this._accordionHeightTries < 10) // prevent infinite loop
-                    {
+                    if (++this._accordionHeightTries < 10){ // prevent infinite loop
                         setTimeout(function () {
                             that.setSideBarHeight();
                         }, 500);

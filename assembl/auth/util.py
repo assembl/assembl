@@ -43,13 +43,20 @@ def get_roles(user_id, discussion_id=None):
 
 def get_permissions(user_id, discussion_id):
     session = get_session_maker()()
-    if user_id in (Everyone, Authenticated):
+    if user_id == Everyone:
         if not discussion_id:
             return []
         permissions = session.query(Permission.name).join(
             DiscussionPermission, Role).filter(
                 (DiscussionPermission.discussion_id == discussion_id)
                 & (Role.name == user_id))
+    elif user_id == Authenticated:
+        if not discussion_id:
+            return []
+        permissions = session.query(Permission.name).join(
+            DiscussionPermission, Role).filter(
+                (DiscussionPermission.discussion_id == discussion_id)
+                & (Role.name.in_((Authenticated, Everyone))))
     else:
         sysadmin = session.query(UserRole).filter_by(
             user_id=user_id).join(Role).filter_by(name=R_SYSADMIN).first()
@@ -124,11 +131,16 @@ def authentication_callback(user_id, request):
 def discussions_with_access(userid, permission=P_READ):
     from ..models import Discussion
     db = Discussion.db()
-    if userid in (Authenticated, Everyone):
+    if userid == Everyone:
         return db.query(Discussion).join(
             DiscussionPermission, Role, Permission).filter(and_(
                 Permission.name == permission,
                 Role.name == userid))
+    elif userid == Authenticated:
+        return db.query(Discussion).join(
+            DiscussionPermission, Role, Permission).filter(and_(
+                Permission.name == permission,
+                Role.name.in_((Authenticated, Everyone))))
     else:
         sysadmin = db.query(UserRole).filter_by(
             user_id=userid).join(Role).filter_by(name=R_SYSADMIN).first()
@@ -159,11 +171,18 @@ def user_has_permission(discussion_id, user_id, permission):
     from ..models import Discussion
     # assume all ids valid
     db = Discussion.db()
-    if user_id in (Authenticated, Everyone):
+    if user_id == Everyone:
         permission = db.query(DiscussionPermission).join(
             Permission, Role).filter(
                 DiscussionPermission.discussion_id == discussion_id).filter(
                     Role.name == user_id).filter(
+                        Permission.name == permission).first()
+        return permission is not None
+    elif user_id == Authenticated:
+        permission = db.query(DiscussionPermission).join(
+            Permission, Role).filter(
+                DiscussionPermission.discussion_id == discussion_id).filter(
+                    Role.name.in_((Authenticated, Everyone))).filter(
                         Permission.name == permission).first()
         return permission is not None
     sysadmin = db.query(UserRole).filter_by(

@@ -36,6 +36,8 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
 
             _unlockCallbackQueue: {},
             _minimizedStateButton: null,
+            panelLockedReason: null,
+            panelUnlockedReason: null,
 
             initialize: function (options) {
                 var contentClass = panelViewByPanelSpec(options.contentSpec);
@@ -119,26 +121,77 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
                 }
             },
 
-            autoLockPanel: function() {
-                if (!this.model.get('locked')) {
-                    this.lockPanel();
-                    var that = this;
+            /**
+             * @param locking: bool. True if we want to lock the panel. False if we want to unlock it
+             * @param informUser: bool. Show a tooltip next to the lock icon, informing the user that the panel has been autolocked.
+             * @param reason: String. The reason why the panel will be automatically locked. Possible values: undefined, "USER_IS_WRITING_A_MESSAGE", "USER_WAS_WRITING_A_MESSAGE"
+             **/
+            autoLockOrUnlockPanel: function(locking, informUser, reason) {
+                console.log("autoLockPanel()");
+                var that = this;
+                informUser = ( informUser === undefined ) ? true : informUser;
+                locking = ( locking === undefined ) ? true : locking;
+                reason = ( reason === undefined ) ? null : reason;
+                var needsToChange = (locking && !this.model.get('locked')) || (!locking && this.model.get('locked'));
 
-                    // show a special tooltip
-                    setTimeout(function(){
-                        var el = that.ui.lockPanelIcon;
-                        var initialTitle = el.attr("data-original-title");
-                        el.attr("data-original-title", i18n.gettext('We have locked the panel for you. Click here to unlock'));
-                        el.tooltip('destroy');
-                        el.tooltip({container: 'body', placement: 'left'});
-                        el.tooltip('show');
-                        setTimeout(function () {
-                            el.attr("data-original-title", initialTitle);
+                if (needsToChange) {
+                    if ( locking )
+                        this.lockPanel();
+                    else
+                        this.unlockPanel();
+
+                    if ( locking )
+                        that.panelLockedReason = reason;
+                    else
+                        that.panelUnlockedReason = reason;
+                    
+                    if ( informUser ){
+                        // show a special tooltip
+                        setTimeout(function(){
+                            var el = that.ui.lockPanelIcon;
+                            var initialTitle = el.attr("data-original-title");
+                            
+                            if ( locking && reason == "USER_IS_WRITING_A_MESSAGE" ){
+                                el.attr("data-original-title", i18n.gettext("We have locked the panel for you, so its content won't change while you're writing your message. Click here to unlock"));
+                            }
+                            else if ( !locking && reason == "USER_WAS_WRITING_A_MESSAGE" ){
+                                el.attr("data-original-title", i18n.gettext("We have unlocked the panel for you, so its content can change now that you're not writing a message anymore. Click here to lock it back"));
+                            }
+                            else {
+                                if ( locking ) {
+                                    el.attr("data-original-title", i18n.gettext("We have locked the panel for you. Click here to unlock"));
+                                }
+                                else {
+                                    el.attr("data-original-title", i18n.gettext("We have unlocked the panel for you. Click here to lock it back"));
+                                }
+                            }
                             el.tooltip('destroy');
-                            el.tooltip({container: 'body'});
-                        }, 7000);
-                    }, 5000); // FIXME: if we set this timer lower than this, the tooltip shows and immediately disappears. Why?
+                            el.tooltip({container: 'body', placement: 'left'});
+                            el.tooltip('show');
+                            setTimeout(function () {
+                                el.attr("data-original-title", initialTitle);
+                                el.tooltip('destroy');
+                                el.tooltip({container: 'body'});
+                            }, 7000);
+                        }, 5000); // FIXME: if we set this timer lower than this, the tooltip shows and immediately disappears. Why?
+                    }
                 }
+            },
+
+            /**
+             * @param informUser: bool. Show a tooltip next to the lock icon, informing the user that the panel has been autolocked.
+             * @param reason: String. The reason why the panel will be automatically locked. Possible values: undefined, "USER_IS_WRITING_A_MESSAGE"
+             **/
+            autoLockPanel: function(informUser, reason) {
+                this.autoLockOrUnlockPanel(true, informUser, reason);
+            },
+
+            /**
+             * @param informUser: bool. Show a tooltip next to the lock icon, informing the user that the panel has been autounlocked.
+             * @param reason: String. The reason why the panel will be automatically unlocked. Possible values: undefined, "USER_WAS_WRITING_A_MESSAGE"
+             **/
+            autoUnlockPanel: function(informUser, reason) {
+                this.autoLockOrUnlockPanel(false, informUser, reason);
             },
 
             /**
@@ -167,15 +220,26 @@ define(['backbone.marionette', 'objects/viewsFactory', 'common/context', 'views/
              * Toggle the lock state of the panel
              */
             toggleLock: function () {
+                console.log("toggleLock()");
                 if (this.isPanelLocked()) {
-                    this.unlockPanel();
+                    console.log("panel was locked, so we unlock it");
+                    this.unlockPanel(true);
                 } else {
-                    this.lockPanel();
+                    console.log("panel was unlocked, so we lock it");
+                    this.lockPanel(true);
                 }
             },
 
             isPanelLocked: function () {
                 return this.model.get('locked');
+            },
+
+            getPanelLockedReason: function() {
+                return this.panelLockedReason;
+            },
+
+            getPanelUnlockedReason: function() {
+                return this.panelUnlockedReason;
             },
 
             toggleMinimize: function (evt) {

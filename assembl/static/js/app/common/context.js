@@ -1,7 +1,7 @@
 'use strict';
 
-define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all'],
-    function (Assembl, $, _, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed) {
+define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all', 'debug'],
+    function (Assembl, $, _, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed, debug) {
 
         var Context = function () {
 
@@ -93,6 +93,11 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              */
             this.openedPanels = 0;
 
+            /**
+             * Default value draggable segment
+             * */
+            this.draggedSegment = null;
+
             this.AVAILABLE_MESSAGE_VIEW_STYLES = {
                 TITLE_ONLY: {
                     id: "viewStyleTitleOnly",
@@ -140,30 +145,6 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             getDiscussionSlug: function () {
                 return this.DISCUSSION_SLUG;
             },
-
-            /*getDiscussionPromise: function () {
-
-                var deferred = $.Deferred();
-                var that = this;
-                //var url =  this.getApiUrl();
-                //var url = this.getApiV2Url() + '/Discussion/' + this.getDiscussionId();
-                var url = this.getApiV2DiscussionUrl();
-
-                if (this.discussionPromise === undefined) {
-                    this.discussion = undefined;
-                    this.discussionPromise = $.get(url, function (data) {
-                        that.discussion = data;
-                        deferred.resolve(that.discussion);
-                    });
-                }
-                else {
-                    this.discussionPromise.done(function () {
-                        deferred.resolve(that.discussion);
-                    });
-                }
-
-                return deferred.promise();
-            },*/
 
             getDiscussionPromise: function () {
                 if(this.discussionPromise ){
@@ -423,7 +404,6 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
 
             // "this" has to be the popover div: $("#popover-oembed")
             popoverAfterEmbed: function() {
-                //console.log("popoverAfterEmbed() this: ", this);
                 var screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
                 var screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
                 var popoverWidth = $(this).outerWidth();
@@ -445,7 +425,6 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             },
 
             openTargetInPopOver: function(evt) {
-                //console.log("ctx.openTargetInPopOver(evt: ", evt);
                 var that = this;
 
                 var target_url = null;
@@ -455,9 +434,8 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                     else if ($(evt.currentTarget).attr("href") && $(evt.currentTarget).attr("href") != "#")
                         target_url = $(evt.currentTarget).attr("href");
                 }
-                if (!target_url)
-                {
-                    console.log("error: no href attribute given");
+                if (!target_url){
+                    this.debug('context', "openTargetInPopOver: no href attribute given");
                     return false;
                 }
 
@@ -573,7 +551,7 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                     var modal = $(iframe).parents(".bbm-modal");
                     if (!modal)
                         return;
-                    console.log("modal: ", modal);
+                    this.debug('context', 'openTargetInModal modal: '+modal);
                     var targetHeight = iframe.contentWindow.document.body.scrollHeight; // margins are not included (but paddings are)
                     var targetWidth = iframe.contentWindow.document.body.scrollWidth;
                     console.log("targetWidth: ", targetWidth);
@@ -732,11 +710,18 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             },
 
             /**
+             * @set {Segment}
+             */
+            setDraggedSegment: function(segment){
+              this.draggedSegment = segment;
+            },
+
+            /**
              * @return {Segment}
              */
             getDraggedSegment: function () {
                 var segment = this.draggedSegment;
-                this.draggedSegment = null;
+                //this.setDraggedSegment(null); not necessary;
 
                 if (segment) {
                     delete segment.attributes.highlights;
@@ -1378,7 +1363,13 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
 
                 $(document).on('click', '.dropdown-label', this.onDropdownClick);
                 $(document).on('ajaxError', this.onAjaxError);
+            },
+
+            debug: function(view, msg){
+                var log = debug(view+':');
+                log(msg);
             }
+
         }
 
         return new Context();

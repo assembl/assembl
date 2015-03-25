@@ -86,15 +86,20 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
                 //TODO: add new behavior to show messageList Panel
                 this.restoreViews();
 
-                setTimeout(function () {
+                // test if this issue fixed
+                Assembl.vent.trigger("navigation:selected", 'debate');
+                Assembl.vent.trigger('messageList:showMessageById', id);
+
+                /*setTimeout(function () {
                     //TODO: fix this horrible hack
                     //We really need to address panels explicitely
                     Assembl.vent.trigger("navigation:selected", 'debate');
                     Assembl.vent.trigger('messageList:showMessageById', id);
-                }, 0);
+                }, 0);*/
                 //TODO: fix this horrible hack that prevents calling
                 //showMessageById over and over.
-                window.history.pushState('object or string', 'Title', '../');
+                //window.history.pushState('object or string', 'Title', '../');
+                Backbone.history.navigate('/', {replace: true});
             },
 
             idea: function (id) {
@@ -109,7 +114,8 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
                 }, 0);
                 //TODO: fix this horrible hack that prevents calling
                 //showMessageById over and over.
-                window.history.pushState('object or string', 'Title', '../');
+                //window.history.pushState('object or string', 'Title', '../');
+                Backbone.history.navigate('/', {replace: true});
             },
 
             loadCurrentUser: function () {

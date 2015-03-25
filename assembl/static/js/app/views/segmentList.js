@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/segment', 'utils/types', 'utils/i18n', 'utils/permissions', 'common/collectionManager', 'utils/panelSpecTypes', 'views/assemblPanel', 'backbone.subset', 'bluebird'],
-    function (Backbone, _, $, Assembl, Ctx, Segment, Types, i18n, Permissions, CollectionManager, PanelSpecTypes, AssemblPanel, Subset, Promise) {
+define(['backbone.marionette','backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/segment', 'utils/types', 'utils/i18n', 'utils/permissions', 'common/collectionManager', 'utils/panelSpecTypes', 'views/assemblPanel', 'backbone.subset', 'bluebird'],
+    function (Marionette, Backbone, _, $, Assembl, Ctx, Segment, Types, i18n, Permissions, CollectionManager, PanelSpecTypes, AssemblPanel, Subset, Promise) {
 
         var SegmentView = Marionette.ItemView.extend({
             template: '#tmpl-segment',
@@ -19,7 +19,8 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
             events: {
                 'click .js_closeExtract': 'onCloseButtonClick',
                 'click .segment-link': "onSegmentLinkClick",
-                'click .js_selectAsNugget': 'selectAsNugget'
+                'click .js_selectAsNugget': 'selectAsNugget',
+                'dragstart .bx.postit': 'onDragStart'
             },
 
             serializeData: function () {
@@ -61,7 +62,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                     segment = this.model.collection.get(cid);
 
                 Ctx.showDragbox(ev, segment.getQuote());
-                Ctx.draggedSegment = segment;
+                Ctx.setDraggedSegment(segment);
             },
 
             onSegmentLinkClick: function (ev) {
@@ -177,7 +178,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
             ui: {
                 panelBody:'.panel-body',
                 clipboardCount: ".clipboardCount",
-                postIt: '.postit[draggable="true"]',
+                postIt: '.postitlist',
                 clearSegmentList:'#segmentList-clear',
                 closeButton:'#segmentList-closeButton',
                 bookmark:'.js_bookmark'
@@ -289,7 +290,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 var collectionManager = new CollectionManager();
 
                 collectionManager.getAllExtractsCollectionPromise()
-                    .done(function (allExtractsCollection) {
+                    .then(function (allExtractsCollection) {
                         delete segment.attributes.highlights;
 
                         allExtractsCollection.add(segment, {merge: true});
@@ -367,7 +368,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 }
 
                 ev.currentTarget.style.opacity = 1;
-                Ctx.draggedSegment = null;
+                Ctx.setDraggedSegment(null);
                 this.$el.removeClass('is-dragover');
                 ev.preventDefault();
             },
@@ -389,7 +390,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                     isText = Ctx.draggedIdea ? false : true;
                 }
 
-                if (Ctx.draggedSegment !== null || isText) {
+                if (Ctx.getDraggedSegment() !== null || isText) {
                     this.$el.addClass("is-dragover");
                 }
 
@@ -411,6 +412,7 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                     ev.preventDefault();
                     ev.stopPropagation();
                 }
+
                 this.$el.removeClass('is-dragover');
 
                 var idea = Ctx.popDraggedIdea();
@@ -421,22 +423,21 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'models/seg
                 var segment = Ctx.getDraggedSegment();
                 if (segment) {
                     this.addSegment(segment);
-                    return;
                 }
 
                 var annotation = Ctx.getDraggedAnnotation();
                 if (annotation) {
                     Ctx.saveCurrentAnnotationAsExtract();
-
-                    this.segmentListView.render();
-
-                    return;
                 }
 
-                var text = ev.dataTransfer.getData("Text");
+                //the segments is already created
+                /*var text = ev.dataTransfer.getData("Text");
                 if (text) {
                     this.addTextAsSegment(text);
-                }
+                }*/
+
+                this.render();
+                return;
             },
 
             onClearButtonClick: function (ev) {

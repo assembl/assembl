@@ -76,7 +76,7 @@ def main(global_config, **settings):
         set_config(settings)
         from .semantic.virtuoso_mapping import AssemblQuadStorageManager
         aqsm = AssemblQuadStorageManager()
-        aqsm.ensure_discussion_storage(None)
+        aqsm.update_all_storages()
         # But we do want the registry settings later
         set_config(None)
 

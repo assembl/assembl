@@ -30,4 +30,10 @@ require(["app", "common/context", "jquery", "router", "utils/socket", "dropdown"
         //to the header
         window.Ctx = Ctx;
 
+        /**
+         * TODO: write doc
+         * */
+        window.AssemblDebug = require("debug");
+        AssemblDebug.disable();
+
     });

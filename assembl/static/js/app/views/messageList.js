@@ -24,6 +24,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
          * @class views.MessageList
          */
         var MessageList = AssemblPanel.extend({
+            template: '#tmpl-messageList',
             panelType: PanelSpecTypes.MESSAGE_LIST,
             className: 'panel messageList',
             lockable: true,
@@ -49,7 +50,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 stickyBar: '.sticky-box',
                 replyBox: '.messagelist-replybox',
                 inspireMe: '.js_inspireMe',
-                inspireMeAnchor: '.js_inspireMeAnchor'
+                inspireMeAnchor: '.js_inspireMeAnchor',
+                pendingMessage: '.pendingMessage',
+                contentPending: '.real-time-updates'
             },
 
             initialize: function (options) {
@@ -62,44 +65,47 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               this.scrollLoggerPreviousScrolltop = 0;
               this.scrollLoggerPreviousTimestamp = d.getTime() ;
               this.renderedMessageViewsCurrent = {};
+              this._nbPendingMessage = 0;
 
               this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
               this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
 
-              
-              /**
-               * @ghourlier
-               * TODO: Usually it would necessary to push notification rather than fetch every time the model change
-               * Need to be a call to action
-               * Benoitg:  Why?  There is no way to know if the message is, or isn't relevent to the user, and worthy
-               * of notification.  Everything else updates realtime, why make an exception for messages?
-               * */
               collectionManager.getAllMessageStructureCollectionPromise()
-                  .then(function (allMessageStructureCollection) {
+                .then(function (allMessageStructureCollection) {
+                  that.listenTo(allMessageStructureCollection, 'reset', function () {
+                      /*
+                       Disable refresh if a message is being written.
+                       Not as necessary now that we save messages,
+                       but it prevents a jarring refresh, so keeping it as a comment.
 
-                      that.listenTo(allMessageStructureCollection, 'add reset', function () {
-                          /*
-                           Disable refresh if a message is being written.
-                           Not as necessary now that we save messages,
-                           but it prevents a jarring refresh, so keeping it as a comment.
+                       var messageFields = that.$('.messageSend-body');
+                       function not_empty(b) {
+                       return b.value.length != 0;
+                       };
 
-                           var messageFields = that.$('.messageSend-body');
-                           function not_empty(b) {
-                           return b.value.length != 0;
-                           };
+                       if (_.any(messageFields, not_empty)) {
+                       return;
+                       }
+                       messageFields = that.$('.messageSend-subject');
+                       if (_.any(messageFields, not_empty)) {
+                       return;
+                       }
+                       */
 
-                           if (_.any(messageFields, not_empty)) {
-                           return;
-                           }
-                           messageFields = that.$('.messageSend-subject');
-                           if (_.any(messageFields, not_empty)) {
-                           return;
-                           }
-                           */
-                          that.currentQuery.invalidateResults();
-                          that.render();
-                      });
-                  }
+                      /*that.getPanelWrapper()
+                          .filterThroughPanelLock(function () {
+                              that.currentQuery.invalidateResults();
+                              that.render();
+                          }, 'syncStateMessages');*/
+                  });
+                  that.resetPendingMessages(allMessageStructureCollection);
+                  var callback = _.bind(function() {
+                    //Here, this is the collection
+                    var nbPendingMessage = this.length - that._initialLenAllMessageStructureCollection;
+                    that.showPendingMessages(nbPendingMessage);
+                  }, allMessageStructureCollection);
+                  that.listenTo(allMessageStructureCollection, 'add', callback);
+                }
               );
 
               collectionManager.getAllExtractsCollectionPromise()
@@ -131,7 +137,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
               this.listenTo(Assembl.vent, 'messageList:showMessageById', function (id, callback) {
                 //console.log("Calling showMessageById from messageList:showMessageById with params:", id, callback);
-                that.showMessageById(id, callback);
+                  that.showMessageById(id, callback);
               });
 
               this.listenTo(Assembl.vent, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
@@ -197,7 +203,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                         'click .js_openTargetInModal': 'openTargetInModal',
 
-                        'click .js_scrollToMsgBox': 'scrollToMsgBox'
+                        'click .js_scrollToMsgBox': 'scrollToMsgBox',
+
+                        'click .js_loadPendingMessages': 'loadPendingMessages'
                     };
 
                 _.each(this.ViewStyles, function (messageListViewStyle) {
@@ -245,7 +253,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             /** 
              * Is the current view style a non-flat view
              */
-            iSviewStyleThreadedType: function () {
+            isViewStyleThreadedType: function () {
               return this.currentViewStyle === this.ViewStyles.THREADED || 
                      this.currentViewStyle === this.ViewStyles.NEW_MESSAGES;
             },
@@ -408,19 +416,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             /**
-             * The template
-             * @type {_.template}
-             */
-            template: '#tmpl-messageList',
-
-            /**
              * The collapse/expand flag
              * @type {Boolean}
              */
             collapsed: false,
-
-            allMessageStructureCollection: undefined,
-            //messages
 
             /**
              * The array generated by objectTreeRenderVisitor's data_by_object
@@ -1094,8 +1093,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     console.log("messageList:render_real() collections arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
                     return;
                   }
-                  that.allMessageStructureCollection = allMessageStructureCollection;
-                  var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, that.allMessageStructureCollection, resultMessageIdCollection);
+                  var first_unread_id = that.findFirstUnreadMessageId(that.visitorOrderLookupTable, allMessageStructureCollection, resultMessageIdCollection);
                   //console.log("that.showMessageByIdInProgress", that.showMessageByIdInProgress);
                   if (that.showMessageByIdInProgress === false 
                       && that.currentViewStyle === that.ViewStyles.NEW_MESSAGES 
@@ -1188,13 +1186,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   that.visitorRootMessagesToDisplay = [];
 
                   messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
-                  that = that.render_real();
-                });
-
-                this.blockPanel();
-
-                //Why isn't this within the when() above?  benoitg 2015-01-28
-                this.ui.panelBody.scroll(function () {
+                  that.render_real();
+                  that.showInspireMeIfAvailable();
+                  that.ui.panelBody.scroll(function () {
 
                     var msgBox = that.$('.messagelist-replybox').height(),
                         scrollH = $(this)[0].scrollHeight - (msgBox + 25),
@@ -1205,20 +1199,17 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     } else {
                         that.ui.stickyBar.fadeIn();
                     }
+                    
+                    //This event cannot be bound in ui, because backbone binds to 
+                    //the top element and scroll does not propagate
+                    that.$(".panel-body").scroll(that, that.scrollLogger);
+                    
+                    });
                 });
-                //This event cannot be binded in ui, because backbone binds to 
-                //the top element and scroll does not propagate
-                this.$(".panel-body").scroll(this, this.scrollLogger);
-                
-                this.showInspireMeIfAvailable();
+
+              this.blockPanel();
             },
-            
-            /**
-             * DOM is ready
-             */
-            onAttach: function() {
-;
-            },
+
             
             /**
              * Renders the search result information
@@ -1915,7 +1906,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              */
             scrollToElement: function (el, callback, margin, animate) {
               //console.log("scrollToElement called with: ", el, callback, margin, animate);
-              if (this.ui.panelBody.offset() !== undefined) {
+              //console.log("this.ui.panelBody: ", this.ui.panelBody);
+              if (el && _.isFunction(this.ui.panelBody.size) && this.ui.panelBody.offset() !== undefined) {
                 var panelOffset = this.ui.panelBody.offset().top,
                     panelScrollTop = this.ui.panelBody.scrollTop(),
                     elOffset = el.offset().top,
@@ -1996,12 +1988,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                 if (el[0]) {
                   if (shouldOpenMessageSelected) {
-                    // console.log("showMessageById(): sending showBody
+                    // console.log("showMessageById(): sending openWithFullBodyView
                     // to message", message.id);
-                    //TODO:  This is horrible, we need to get the reference,
-                    // check that it's not already open,
-                    // then if it's not re-render message and wait
-                    message.trigger('showBody');
+                    message.trigger('openWithFullBodyView');
                     setTimeout(function () {
                       if(debug) {
                         console.log("scrollToMessage(): INFO:  shouldOpenMessageSelected is true, calling recursively after a delay with same recursion depth");
@@ -2022,7 +2011,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   }
                 }
                 else {
-                  // Trigerring showBody above requires the message to
+                  // Trigerring openWithFullBodyView above requires the message to
                   // re-render. We may have to give it time
                   if (recursionDepth <= MAX_RETRIES) {
                     if(debug || recursionDepth >= 2) {
@@ -2215,6 +2204,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               }
               
               _.each(messageDoms, function(messageSelector) {
+                if ( !messageSelector )
+                  return;
                 var messageTop = messageSelector.offset().top,
                     messageBottom = messageTop + messageSelector.height(),
                     messageHeight = messageBottom - messageTop,
@@ -2242,7 +2233,42 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 }
               });
             },
-            
+
+            showPendingMessages: function(nbMessage){
+              this._originalDocumentTitle = document.querySelector('#discussion-topic').value;
+              document.title = ' ('+ nbMessage +') '+ this._originalDocumentTitle;
+
+              var msg = i18n.sprintf(i18n.ngettext(
+                  '%d new message has been posted.  Click here to refresh',
+                  '%d new messages have been posted.  Click here to refresh',
+                  nbMessage), nbMessage);
+              
+              if(nbMessage > 0){
+                this.ui.pendingMessage.html(msg);
+                this.ui.contentPending.removeClass('hidden').slideDown('slow');
+              }
+            },
+
+            resetPendingMessages: function(allMessageStructureCollection){
+              this._initialLenAllMessageStructureCollection = allMessageStructureCollection.length;
+              if(this._originalDocumentTitle) {
+                document.title = this._originalDocumentTitle;
+              }
+            },
+            /**
+             * @return A promise
+             */
+            loadPendingMessages: function(){
+              var that = this,
+                  collectionManager = new CollectionManager();
+              return collectionManager.getAllMessageStructureCollectionPromise()
+                .then(function (allMessageStructureCollection) {
+                  that.resetPendingMessages(allMessageStructureCollection);
+                  that.currentQuery.invalidateResults();
+                  that.render();
+                });
+            },
+
             /**
              * WARNING, this is a jquery handler, not a backbone one
              * Processes the scroll events to ultimately generate analytics

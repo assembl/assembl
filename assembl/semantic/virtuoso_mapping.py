@@ -3,6 +3,7 @@ from os.path import join, dirname
 from inspect import isabstract
 from threading import Lock
 import re
+from itertools import chain
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
@@ -12,12 +13,12 @@ import simplejson as json
 
 from ..lib.config import get_config
 from ..lib.sqla import class_registry, Base
-from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST)
+from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST, SIOC, FOAF)
 from virtuoso.vmapping import (
     QuadMapPattern, QuadStorage, GraphQuadMapPattern, IriClass,
     PatternGraphQuadMapPattern, ClassPatternExtractor, VirtRDF)
 from virtuoso.vstore import Virtuoso
-
+from virtuoso.alchemy import SparqlClause
 
 def get_session():
     admin_engine = create_engine('virtuoso://dba:dba@VOSU')
@@ -40,11 +41,11 @@ def get_virtuoso(session, storage=ASSEMBL.discussion_storage):
     return v
 
 USER_SECTION = 'user'
+PRIVATE_USER_SECTION = 'private'
 MAIN_SECTION = 'main'
 EXTRACT_SECTION = 'extract'
 DISCUSSION_DATA_SECTION = 'data'
-DISCUSSION_HISTORY_SECTION = 'history'
-DISCUSSION_PSEUDONYMS_SECTION = 'pseudonyms'
+
 
 formats = dict(
     ttl='turtle',
@@ -103,8 +104,8 @@ iri_definition_stmts = {
 }
 
 context_url = 'http://purl.org/catalyst/jsonld'
-ontology_dir = join(dirname(dirname(__file__)), 'ontology')
-local_context_url = 'file://' + join(ontology_dir, 'context.jsonld')
+ontology_dir = join(dirname(__file__), 'ontology')
+local_context_loc = join(ontology_dir, 'context.jsonld')
 
 
 def load_ontologies(session, reload=None):
@@ -144,6 +145,10 @@ class QuadMapPatternS(QuadMapPattern):
     def clone_with_defaults(self, subject=None, obj=None, graph_name=None,
                             name=None, conditions=None, sections=None,
                             exclude_base_condition=False):
+        # temporary. We should use the section objects themselves.
+        if self.sections:
+            graph_name = AssemblQuadStorageManager.sections[
+                self.sections[0]].graph_iri
         qmp = super(QuadMapPatternS, self).clone_with_defaults(
             subject, obj, graph_name, name, conditions)
         qmp.sections = self.sections or sections
@@ -235,8 +240,9 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
                     alias_maker, for_graph.discussion_id):
                 qmp = self.qmp_with_defaults(
                     qmp, subject_pattern, sqla_cls, alias_maker, for_graph)
+                target_sections = qmp.sections or rdf_sections
                 if (qmp.graph_name == for_graph.name
-                        and for_graph.section in rdf_sections):
+                        and for_graph.section in target_sections):
                     qmp.resolve(sqla_cls)
                     yield qmp
 
@@ -279,6 +285,9 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
                 and "_d%d_" % (d_id,) not in qmp.name):
             # TODO: improve this
             qmp.name += "_d%d_" % (d_id,)
+        if (for_graph.section != qmp.sections[0]
+                and for_graph.section in qmp.sections):
+            qmp.name += '_s%d' % (qmp.sections.index(for_graph.section),)
         return qmp
 
 
@@ -292,6 +301,15 @@ class AssemblGraphQuadMapPattern(GraphQuadMapPattern):
         self.section = section
 
 
+def hash_obfuscator(x, salt):
+    from base64 import urlsafe_b64encode
+    import hashlib
+    hasher = hashlib.new('sha256')
+    hasher.update(salt)
+    hasher.update(str(x))
+    return urlsafe_b64encode(hasher.digest())
+
+
 class AssemblPatternGraphQuadMapPattern(PatternGraphQuadMapPattern):
     def __init__(
             self, graph_iri_pattern, storage, alias_set, section,
@@ -302,21 +320,47 @@ class AssemblPatternGraphQuadMapPattern(PatternGraphQuadMapPattern):
         self.section = section
 
 
-# QUESTION: 1 storage per discussion? I would say yes.
+class StorageDefinition(object):
+    __slots__ = ("sections", "name")
+    def __init__(self, name):
+        self.sections = []
+        self.name = name
+
+    def add_section(self, section):
+        self.sections.append(section)
+
+class DataSection(object):
+    __slots__ = ("name", "graph_name", "graph_iri", "storage")
+    def __init__(self, name, storage, graph_name, graph_iri, add=True):
+        self.name = name
+        self.storage = storage
+        self.graph_name = graph_name
+        self.graph_iri = graph_iri
+        if add:
+            storage.add_section(self)
+
+
 class AssemblQuadStorageManager(object):
-    user_quad_storage = QUADNAMES.UserStorage
-    user_graph = ASSEMBL.user_graph
-    user_graph_iri = QUADNAMES.user_graph_iri
-    global_quad_storage = QUADNAMES.global_storage
-    global_graph = ASSEMBL.global_graph
-    global_graph_iri = QUADNAMES.global_graph_iri
-    main_quad_storage = QUADNAMES.main_storage
-    main_graph = ASSEMBL.main_graph
-    main_graph_iri = QUADNAMES.main_graph_iri
-    # TODO: Version mappings
-    current_discussion_storage_version = 0
-    # Temporary fix for Virtuoso issue 285
-    quadstore_lock = Lock()
+    private_user_storage = StorageDefinition(QUADNAMES.PrivateUserStorage)
+    discussion_storage = StorageDefinition(QUADNAMES.discussion_storage)
+    main_storage = StorageDefinition(QUADNAMES.main_storage)
+    discussion_data_section = DataSection(
+        DISCUSSION_DATA_SECTION, discussion_storage, ASSEMBL.discussion_data,
+        QUADNAMES.discussion_data_iri)
+    user_section = DataSection(
+        USER_SECTION, discussion_storage, ASSEMBL.user_graph,
+        QUADNAMES.user_graph_iri)
+    private_user_section = DataSection(
+        PRIVATE_USER_SECTION, private_user_storage, ASSEMBL.private_user_graph,
+        QUADNAMES.private_user_graph_iri)
+    main_section = DataSection(
+        MAIN_SECTION, main_storage, ASSEMBL.main_graph,
+        QUADNAMES.main_graph_iri)
+    storages = (discussion_storage, private_user_storage)  # main_storage
+    sections = {section.name: section for section in chain(*(
+        storage.sections for storage in storages))}
+    global_graph = QUADNAMES.global_graph
+    current_discussion_storage_version = 5
 
     def __init__(self, session=None, nsm=None):
         self.session = session or get_session()
@@ -337,36 +381,36 @@ class AssemblQuadStorageManager(object):
             quad_storage_name, cpe, imported, False, nsm=self.nsm)
         return qs, cpe
 
-    def populate_storage(
-        self, qs, cpe, section, graph_name, graph_iri, discussion_id=None,
-            exclusive=True):
+    def populate_section(
+            self, qs, cpe, section, discussion_id=None, exclusive=True):
         gqm = AssemblGraphQuadMapPattern(
-            graph_iri, qs, section, discussion_id, graph_name,
+            section.graph_name, qs, section.name, discussion_id, section.graph_iri,
             'exclusive' if exclusive else None)
         for cls in class_registry.itervalues():
             # TODO: Take pattern's graph into account!
             cpe.add_class(cls, gqm)
         return gqm
 
-    def create_storage(self, quad_storage_name,
-                       sections, discussion_id=None, exclusive=True,
-                       imported=None):
-        qs, cpe = self.prepare_storage(quad_storage_name, imported or [])
-        for section, graph_name, graph_iri, disc_id in sections:
-            self.populate_storage(
-                qs, cpe, section, graph_name, graph_iri, disc_id, exclusive)
+    def create_storage(self, storage, discussion_id=None, exclusive=True,
+                       imported=None, execute=True):
+        qs, cpe = self.prepare_storage(storage.name, imported or [])
+        for section in storage.sections:
+            self.populate_section(qs, cpe, section, discussion_id, exclusive)
+        if storage is self.discussion_storage:
+            self.add_extracts_graphs(qs, cpe, None)
         defn = qs.full_declaration_clause()
-        return qs, list(self.session.execute(defn))
+        result = None
+        if execute:
+            result = list(self.session.execute(defn))
+        return qs, cpe, defn, result
 
-    def update_storage(
-            self, quad_storage_name, sections, exclusive=True):
-        qs, cpe = self.prepare_storage(quad_storage_name)
-        results = []
-        for section, graph_name, graph_iri, disc_id in sections:
-            gqm = self.populate_storage(
-                qs, cpe, section, graph_name, graph_iri, disc_id)
-            defn = qs.alter_clause_add_graph(gqm)
-            results.extend(self.session.execute(defn))
+    def update_section(
+            self, section, discussion_id, exclusive=True):
+        qs, cpe = self.prepare_storage(section.storage.name)
+        gqm = self.populate_section(
+            qs, cpe, section, discussion_id, exclusive)
+        defn = qs.alter_clause_add_graph(gqm)
+        results = self.session.execute(defn)
         return qs, results
 
     def drop_storage(self, storage_name, force=True):
@@ -385,7 +429,7 @@ class AssemblQuadStorageManager(object):
         if discussion_id:
             return getattr(QUADNAMES, 'discussion_%d_storage' % discussion_id)
         else:
-            return QUADNAMES.discussion_storage
+            return AssemblQuadStorageManager.discussion_storage.name
 
     @staticmethod
     def discussion_graph_name(
@@ -405,17 +449,7 @@ class AssemblQuadStorageManager(object):
         else:
             return getattr(QUADNAMES, 'discussion_%s_iri' % (section,))
 
-    def create_main_storage(self):
-        return self.create_storage(self.main_quad_storage, [
-            (MAIN_SECTION, self.main_graph, self.main_graph_iri, None)])
-
-    def create_discussion_storage(self, discussion_id=None, execute=True):
-        qs, cpe = self.prepare_storage(
-            self.discussion_storage_name(discussion_id))
-        for s in (DISCUSSION_DATA_SECTION, ):  # DISCUSSION_HISTORY_SECTION
-            gqm = self.populate_storage(
-                qs, cpe, s, self.discussion_graph_name(discussion_id, s),
-                self.discussion_graph_iri(discussion_id, s), discussion_id)
+    def add_extracts_graphs(self, qs, cpe, discussion_id=None):
         from ..models import Extract, Idea
         # Option 1: explicit graphs.
         # Fails because the extract.id in the condition is not part of
@@ -471,27 +505,36 @@ class AssemblQuadStorageManager(object):
             conditions=extract_conditions,
             sections=(EXTRACT_SECTION,))
         cpe.add_pattern(Extract, qmp, gqm)
-        defn = qs.full_declaration_clause()
-        # After all these efforts, sparql seems to reject binding arguments!
-        print defn.compile(self.session.bind)
-        result = None
-        if execute:
-            result = list(self.session.execute(defn))
         # defn2 = qs.alter_clause_add_graph(gqm)
         # result.extend(self.session.execute(str(defn2.compile(self.session.bind))))
-        # TODO: Store the current version number
-        return qs, defn, result
+        return qs
 
     def discussion_storage_version(self, discussion_id):
-        name = self.discussion_storage_name(discussion_id)
-        exists = self.mapping_exists(name, QuadStorage.mapping_type)
+        return self.get_storage_version(self.discussion_storage_name(discussion_id))
+
+    def get_storage_version(self, storage_name):
+        exists = self.mapping_exists(storage_name, QuadStorage.mapping_type)
         if not exists:
-            return None
-        version = self.session.execute(
-            "SPARQL SELECT ?version WHERE { %s %s ?version }" % (
-                name.n3(self.nsm), ASSEMBL.mapping_version.n3(self.nsm))
-            ).first()
-        return version[0] if version else 0
+            return -1
+        n3 = self.n3
+        version = self.session.execute(SparqlClause(
+            "SELECT ?version WHERE { graph %s { %s %s ?version }}" % (
+                n3(self.global_graph), n3(storage_name), n3(ASSEMBL.mapping_version))
+            )).first()
+        return int(version[0]) if version else 0
+
+    def n3(self, rdf_term):
+        return rdf_term.n3(self.nsm)
+
+    def set_storage_version(self, storage_name, version):
+        n3 = self.n3
+        self.session.execute(SparqlClause(
+            "WITH {0} DELETE {{ {1} {2} ?version }} WHERE {{ {1} {2} ?version }}".format(
+                n3(self.global_graph), n3(storage_name), n3(ASSEMBL.mapping_version))))
+        self.session.execute(SparqlClause(
+            "INSERT DATA { graph %s { %s %s %d } }" % (
+                n3(self.global_graph), n3(storage_name), n3(ASSEMBL.mapping_version), version)))
+        self.session.commit()
 
     def drop_all_discussion_storages_but(self, discussion_id):
         # This to get around virtuoso issue 285
@@ -520,41 +563,33 @@ class AssemblQuadStorageManager(object):
                 continue
             self.drop_discussion_storage(storage_num)
 
-    def ensure_discussion_storage(self, discussion_id):
+    def update_all_storages(self):
         self.declare_functions()
-        self.drop_all_discussion_storages_but(discussion_id)
-        version = self.discussion_storage_version(discussion_id)
-        if (version is not None
-                and version < self.current_discussion_storage_version):
-            self.drop_discussion_storage(discussion_id)
-            version = None
-        if version is None:
-            self.create_discussion_storage(discussion_id)
+        # drop old single-discussion storages
+        self.drop_all_discussion_storages_but(None)
+        for storage in self.storages:
+            version = self.get_storage_version(storage.name)
+            if version < self.current_discussion_storage_version:
+                if version >= 0:
+                    self.drop_storage(storage.name)
+                self.create_storage(storage)
+                self.set_storage_version(
+                    storage.name, self.current_discussion_storage_version)
 
     def drop_discussion_storage(self, discussion_id=None, force=True):
         self.drop_storage(
             self.discussion_storage_name(discussion_id), force)
 
-    def create_user_storage(self):
-        return self.create_storage(self.user_quad_storage, [
-            (USER_SECTION, self.user_graph, self.user_graph_iri, None)])
-
     def create_extract_graph(self, extract):
+        # TODO: Make sure this is called when an extract is added.
         discussion_id = extract.get_discussion_id()
-        return self.update_storage(self.discussion_storage(id), [
-            (EXTRACT_SECTION, extract.extract_graph_name(),
-                extract.extract_graph_iri(), discussion_id)])
+        return self.update_section(DataSection(
+            EXTRACT_SECTION, self.discussion_storage,
+            extract.extract_graph_name(), extract.extract_graph_iri(), False),
+            discussion_id)
 
     def drop_extract_graph(self, extract, force=True):
-        # why do I not need the discussion here?
         self.drop_graph(self.extract_iri(extract.id), force)
-
-    def create_private_global_storage(self):
-        return self.create_storage(self.global_quad_storage, [
-            (None, self.global_graph, self.global_graph_iri, None)])
-
-    def drop_private_global_storage(self, force=True):
-        return self.drop_storage(self.global_quad_storage, force)
 
     def mapping_exists(self, name, mapping_type):
         return bool(self.session.execute(
@@ -575,32 +610,11 @@ class AssemblQuadStorageManager(object):
                 self.session.execute(stmt)
 
     def drop_all(self, force=True):
-        self.drop_storage(self.global_quad_storage, force)
-        self.drop_storage(self.main_quad_storage, force)
-        self.drop_storage(self.user_quad_storage, force)
+        for storage in self.storages:
+            self.drop_storage(storage.name, force)
         from ..models import Discussion
         for (id,) in self.session.query(Discussion.id).all():
             self.drop_storage(self.discussion_storage_name(id), force)
-
-    def discussion_as_quads_old(self, discussion_id):
-        self.quadstore_lock.acquire()
-        self.ensure_discussion_storage(discussion_id)
-        d_storage_name = self.discussion_storage_name(discussion_id)
-        v = get_virtuoso(self.session, d_storage_name)
-        cg = ConjunctiveGraph(v, d_storage_name)
-        quads = cg.serialize(format='nquads')
-        for (g,) in v.query(
-                'SELECT ?g WHERE {graph ?g {?s catalyst:expressesIdea ?o}}'):
-            ectx = cg.get_context(g)
-            for l in ectx.serialize(format='nt').split('\n'):
-                l = l.strip()
-                if not l:
-                    continue
-                l = l.rstrip('.')
-                l += ' ' + g.n3(self.nsm)
-                quads += l + ' .\n'
-        self.quadstore_lock.release()
-        return quads
 
     def as_graph(self, d_storage_name, graphs=()):
         v = get_virtuoso(self.session, d_storage_name)
@@ -612,45 +626,97 @@ class AssemblQuadStorageManager(object):
                 cg.add((s, p, o, ctx))
         return cg
 
+    def add_subject_data(self, virtuoso, graph, subjects):
+        for s in subjects:
+            for p, o, g in virtuoso.query(
+                'SELECT ?p ?o ?g WHERE { graph ?g { %s ?p ?o }}' % (s.n3(),)):
+                    graph.add((s, p, o, g))
+
+
     def discussion_as_graph(self, discussion_id):
-        self.ensure_discussion_storage(None)
-        from assembl.models import Discussion
+        from assembl.models import Discussion, AgentProfile
+        local_uri = self.local_uri()
+        discussion = Discussion.get(discussion_id)
         d_storage_name = self.discussion_storage_name()
         d_graph_iri = URIRef(self.discussion_graph_iri())
         v = get_virtuoso(self.session, d_storage_name)
         discussion_uri = URIRef(
-            Discussion.uri_generic(discussion_id, self.local_uri()))
-        subjects = list(v.query(
+            Discussion.uri_generic(discussion_id, local_uri))
+        subjects = [s for (s,) in v.query(
             """SELECT DISTINCT ?s WHERE {
-            ?s assembl:in_conversation %s }""" % (discussion_uri.n3())))
-        subjects.append([discussion_uri])
+            ?s assembl:in_conversation %s }""" % (discussion_uri.n3()))]
+        subjects.append(discussion_uri)
+        participant_ids = list(discussion.get_participants(True))
+        profiles = {URIRef(AgentProfile.uri_generic(id, local_uri))
+                    for id in participant_ids}
+        subjects.extend(profiles)
+        # add pseudo-accounts
+        subjects.extend((URIRef("%sAgentAccount/%d" % (local_uri, id))
+                         for id in participant_ids))
         # print len(subjects)
         cg = ConjunctiveGraph(identifier=d_graph_iri)
-        for (s,) in subjects:
-            # Absurdly slow. DISTINCT speeds up a lot, but I get numbers.
-            for p, o in v.query(
-                'SELECT ?p ?o WHERE { graph %s { %s ?p ?o }}' % (
-                        d_graph_iri.n3(), s.n3())):
-                    cg.add((s, p, o))
-
+        self.add_subject_data(v, cg, subjects)
+        # add relationships of non-pseudo accounts
+        for ((account, p, profile), g) in v.triples((None, SIOC.account_of, None)):
+            if profile in profiles:
+                cg.add((account, SIOC.account_of, profile, g))
+                # Tempting: simplify with this.
+                # cg.add((profile, FOAF.account, account, g))
         for (s, o, g) in v.query(
                 '''SELECT ?s ?o ?g WHERE {
                 GRAPH ?g {?s catalyst:expressesIdea ?o } .
                 ?o assembl:in_conversation %s }''' % (discussion_uri.n3())):
             cg.add((s, CATALYST.expressesIdea, o, g))
-
-        # TODO: Add roles
-
         return cg
+
+    def participants_private_as_graph(self, discussion_id):
+        from assembl.models import Discussion, AgentProfile
+        local_uri = self.local_uri()
+        discussion = Discussion.get(discussion_id)
+        d_storage_name = self.private_user_storage.name
+        d_graph_iri = self.private_user_storage.sections[0].graph_iri
+        cg = ConjunctiveGraph(identifier=d_graph_iri)
+        v = get_virtuoso(self.session, d_storage_name)
+        v_main = get_virtuoso(self.session, self.discussion_storage_name())
+        participant_ids = discussion.get_participants(True)
+        profiles={URIRef(AgentProfile.uri_generic(id, local_uri))
+                  for id in participant_ids}
+        self.add_subject_data(v, cg, profiles)
+        accounts = [account for ((account, p, profile), g)
+                    in v_main.triples((None, SIOC.account_of, None))
+                    if profile in profiles]
+        self.add_subject_data(v, cg, accounts)
+        return cg
+
+    @staticmethod
+    def obfuscate(serialized_rdf, obfuscator=None):
+        # Work in progress.
+        r = re.compile(r'((?:/data/|local:)(?:AgentProfile|AgentAccount|AbstractAgentAccount)/)(\d+)\b')
+        if not obfuscator:
+            # Random obfuscator
+            from functools import partial
+            from os import urandom
+            obfuscator = partial(hash_obfuscator, salt=urandom(8))
+        return r.sub(lambda matchob: (
+            matchob.group(1) + obfuscator(matchob.group(2))), serialized_rdf)
 
     def discussion_as_quads(self, discussion_id):
         cg = self.discussion_as_graph(discussion_id)
         return cg.serialize(format='nquads')
 
-    def as_jsonld(self, discussion_id):
-        cg = self.discussion_as_graph(discussion_id)
-        context = [
-            context_url, {'local': self.local_uri()}]
+    @staticmethod
+    def get_jsonld_context(expand=False):
+        server_uri = AssemblQuadStorageManager.local_uri()
+        if expand:
+            with open(local_context_loc) as f:
+                context = json.load(f)
+            context["@context"]['local'] = server_uri
+            return context
+        else:
+            return [context_url, {'local': server_uri}]
+
+    def graph_as_jsonld(self, cg):
+        context = self.get_jsonld_context()
         jsonld = cg.serialize(format='json-ld', context=context, indent=None)
         # json-ld serializer does strict CURIES, ie only one segment after
         # the prefix. We use local:Classname/ID, so do this by hand.
@@ -658,16 +724,17 @@ class AssemblQuadStorageManager(object):
         jsonld = self.local_pattern.sub(r'local:\1', jsonld)
         return jsonld
 
-    def quads_to_jsonld(self, quads):
+    def as_jsonld(self, discussion_id):
+        cg = self.discussion_as_graph(discussion_id)
+        return self.graph_as_jsonld(cg)
+
+    @staticmethod
+    def quads_to_jsonld(quads):
         from pyld import jsonld
-        context = json.load(open(join(dirname(__file__), 'ontology',
-                                      'context.jsonld')))
-        server_uri = self.local_uri()
-        context["@context"]['local'] = server_uri
+        context = AssemblQuadStorageManager.get_jsonld_context(True)
         jsonf = jsonld.from_rdf(quads)
         jsonc = jsonld.compact(jsonf, context)
-        jsonc['@context'] = [
-            context_url, {'local': server_uri}]
+        jsonc['@context'] = AssemblQuadStorageManager.get_jsonld_context(False)
         return jsonc
 
     def as_jsonld_old(self, discussion_id):

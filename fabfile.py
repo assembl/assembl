@@ -12,6 +12,7 @@ from StringIO import StringIO
 from os.path import join, dirname, split, normpath
 # Other calls to os.path rarely mostly don't work remotely. Use locally only.
 import os.path
+from distutils.version import LooseVersion
 
 import fabric.operations
 from fabric.operations import put, get
@@ -362,6 +363,8 @@ def updatemaincode():
 
 def app_setup():
      venvcmd('pip install -U "pip>=6" --download-cache ~/.pip/cache')
+     # do the requirements separately to update the non-static versions.
+     venvcmd('pip install -r requirements.txt')
      venvcmd('pip install -e ./')
      venvcmd('assembl-ini-files %s' % (env.ini_file))
 
@@ -626,8 +629,7 @@ def install_ruby_build():
         run_output = run('ruby-build --version')
     if not run_output.failed:
         match = version_regex.match(run_output)
-        version = float(match.group(1))
-
+        version = LooseVersion(match.group(1))
         if version < env.ruby_build_min_version:
             print(red("ruby-build %s is too old (%s is required), reinstalling..." % (version, env.ruby_build_min_version)))
             install = True
@@ -1059,7 +1061,7 @@ def commonenv(projectpath, venvpath=None):
     #Note to maintainers:  If you upgrade ruby, make sure you check that the
     # ruby_build version below supports it...
     env.ruby_version = "2.0.0-p481"
-    env.ruby_build_min_version = 20130628
+    env.ruby_build_min_version = LooseVersion('20130628')
 
 
 # Specific environments

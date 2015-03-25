@@ -27,13 +27,11 @@ agent = Service(
 
 
 def _get_agents_real(discussion, user_id=Everyone, view_def=None):
-    agents = AgentProfile.db().query(AgentProfile)
+    agents = discussion.get_participants_query()
     permissions = get_permissions(user_id, discussion.id)
     include_emails = P_ADMIN_DISC in permissions or P_SYSADMIN in permissions
     if include_emails:
         agents = agents.options(joinedload(AgentProfile.accounts))
-    # TODO: Only those in the discussion...
-    # look at permissions, posts, extracts... argh!
 
     def view(agent):
         if view_def:

@@ -333,7 +333,6 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
                 return this.collection.collectionManager.getAllExtractsCollectionPromise()
                     .then(function (allExtractsCollection) {
                         return Promise.resolve(allExtractsCollection.where({idIdea: that.getId()}))
-                            .thenReturn(allExtractsCollection)
                             .catch(function(e){
                                 console.error(e.statusText);
                             });

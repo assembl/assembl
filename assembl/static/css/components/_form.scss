@@ -6,12 +6,17 @@ $successText: $green;
 .formfield {
   width: 100%;
   @include box-sizing(border-box);
-  padding: 10px;
+  padding: 4px 10px;
   height: 35px;
   line-height: 35px;
   border: solid 1px $white;
   font-size: 14px;
   font-style: italic;
+
+  &:focus {
+    outline: 0;
+    border: 1px solid $theme_form_field_active_border_color;
+  }
 }
 
 // Default textarea

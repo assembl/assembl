@@ -81,6 +81,7 @@ define(['backbone.marionette', 'underscore', 'ckeditor', 'app', 'common/context'
                     default:
                         console.log("messageFamily.render():  WARNING:  Unknown Post type: ", messageType, "creating a default MessageView");
                         messageViewClass = MessageView;
+                        break;
                 }
 
                 messageView = new messageViewClass({
