@@ -412,6 +412,7 @@ define(['backbone.marionette','backbone', 'underscore', 'jquery', 'app', 'common
                     ev.preventDefault();
                     ev.stopPropagation();
                 }
+
                 this.$el.removeClass('is-dragover');
 
                 var idea = Ctx.popDraggedIdea();
@@ -429,10 +430,11 @@ define(['backbone.marionette','backbone', 'underscore', 'jquery', 'app', 'common
                     Ctx.saveCurrentAnnotationAsExtract();
                 }
 
-                var text = ev.dataTransfer.getData("Text");
+                //the segments is already created
+                /*var text = ev.dataTransfer.getData("Text");
                 if (text) {
                     this.addTextAsSegment(text);
-                }
+                }*/
 
                 this.render();
                 return;
