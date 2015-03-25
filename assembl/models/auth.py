@@ -1275,6 +1275,9 @@ class UserTemplate(DiscussionBoundBase, User):
         my_subscriptions, missing = get_subcriptions(True)
         if not missing:
             return my_subscriptions, False
+        from assembl.lib.raven_client import get_raven_client
+        client = get_raven_client()
+        client.captureMessage("creating UserTemplate subscriptions", user_id = self.id)
         # TODO: Fill from config.
         subscribed = defaultdict(bool)
         role_name = self.for_role.name.split(':')[-1]
