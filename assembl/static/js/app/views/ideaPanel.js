@@ -440,7 +440,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     that = this;
                 segment.save('idIdea', id, {
                     success: function (model, resp) {
-                        console.debug('SUCCESS: addSegment', resp);
+                        //console.debug('SUCCESS: addSegment', resp);
                         that.extractListView.render();
                     },
                     error: function (model, resp) {
