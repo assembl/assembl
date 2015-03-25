@@ -45,7 +45,8 @@ var requirejs_config = {
         'jquery-oembed-all': '../bower/jquery-oembed-all/jquery.oembed',
         'jquery.bootstrap-growl':'../bower/bootstrap-growl/jquery.bootstrap-growl',
 
-        'bluebird':'../bower/bluebird/js/browser/bluebird'
+        'bluebird':'../bower/bluebird/js/browser/bluebird',
+        'debug':'../bower/visionmedia-debug/dist/debug'
     },
     shim: {
         'underscore': {

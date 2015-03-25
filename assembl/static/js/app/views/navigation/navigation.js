@@ -85,16 +85,12 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                     }
                 });
                 this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
-                this.listenTo(Assembl.vent, 'navigation:selected', function(viewName){
-                  console.log("View name: ",viewName);
-                });
             },
             onShow: function () {
                 var that = this;
                 setTimeout(function(){
                     that.setSideBarHeight();
                 }, 0);
-                //this.notification.show(new sidebarNotification());
             },
             toggleMenuByName: function (itemName) {
                 var elm = this.$('.nav[data-view=' + itemName + ']');
@@ -105,7 +101,6 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                     return;
                 var elm = $(evt.currentTarget), // use currentTarget instead of target, so that we are sure that it is a .nav element
                     view = elm.attr('data-view');
-                //this.toggleMenuByElement(elm);
                 Assembl.vent.trigger("navigation:selected", view);
             },
             /**
@@ -129,9 +124,6 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 this.initVar();
                 setTimeout(function(){
                     that.ui.level.height(that._accordionContentHeight);
-                    /*setTimeout(function(){
-                        console.log("new height after set: ", that.ui.level.height());
-                    }, 0);*/
                 }, 0);
                 
             },
