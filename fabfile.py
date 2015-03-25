@@ -327,6 +327,7 @@ def bootstrap_from_checkout():
     """
     execute(updatemaincode)
     execute(build_virtualenv)
+    execute(app_update_dependencies)
     execute(app_compile_nodbupdate)
     execute(app_db_install)
     execute(app_reload)
@@ -433,7 +434,6 @@ def app_compile_nodbupdate():
     execute(virtuoso_install_if_absent)
     execute(app_setup)
     execute(compile_stylesheets)
-    execute(bower_install)
     execute(compile_messages)
     execute(minify_javascript_maybe)
 
