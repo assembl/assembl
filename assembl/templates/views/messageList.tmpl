@@ -1,3 +1,9 @@
+<div class="real-time-updates tac hidden phl">
+    <button class="btn-real-time js_loadPendingMessages">
+        <span class="pendingMessage"></span>
+    </button>
+</div>
+
 <div class="panel-body">
     
   <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>
@@ -34,12 +40,6 @@
 
     </div>
   <% } %>
-
-  <div class="real-time-updates tac hidden">
-      <button class="btn-real-time js_loadPendingMessages">
-          <span class="pendingMessage"></span>
-      </button>
-  </div>
 
   <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT) { %>
     <div class="messageList-query-info pll pts"></div>
