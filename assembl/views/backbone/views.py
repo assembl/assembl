@@ -55,7 +55,8 @@ def get_styleguide_components():
 
 
 def process_locale(posix_locale, user_id, current_prefs, session, order):
-    # Current is the current locale for the given order
+    # Current is the current locale for the given order (ex. 'en' for
+    # cookie order)
     current = [x for x in current_prefs if x.preferred_order == order]
     user = session.query(User).filter_by(id = user_id).first()
 
@@ -76,7 +77,6 @@ def process_locale(posix_locale, user_id, current_prefs, session, order):
                 filter_by(user_id=user_id, lang_code=posix_locale).\
                 first()
             updated_pref.preferred_order = order
-            session.add(lang)
             session.flush()
 
         elif current[0].lang_code != posix_locale:
@@ -94,14 +94,12 @@ def process_locale(posix_locale, user_id, current_prefs, session, order):
                 first()
 
             updated_pref.preferred_order = order
-            session.add(updated_pref)
             session.flush()
 
         else:
             print "Current %s locale exists." % order
 
-    # non-empty list of preferences, locale does not exist
-    # check priority, and follow example from above.
+    # non-empty list of current preferences, and current locale does not exist
     elif current_prefs and not current:
         lang = UserLanguagePreference(lang_code=posix_locale,
                                       preferred_order=order,
