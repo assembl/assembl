@@ -89,7 +89,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             },
             modelEvents: {
               'replacedBy':'onReplaced',
-              'showBody':'onShowBody',
               'change':'render',
               'openWithFullBodyView': 'onOpenWithFullBodyView'
             },
@@ -653,21 +652,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 // we will hoist the post, or un-hoist it if it is already hoisted
                 this.isHoisted = this.messageListView.toggleFilterByPostId(this.model.getId());
                 this.render(); // so that the isHoisted property will now be considered
-            },
-
-            /**
-             * @event
-             */
-            onShowBody: function (e) {
-                var read = this.model.get('read');
-
-                if (read === false) {
-                    this.model.setRead(true);
-                }
-                this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
-
-                // I do not know why I should comment this, but it cause an issue
-                //this.render();
             },
 
             /**
