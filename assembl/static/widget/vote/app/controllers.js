@@ -1655,6 +1655,7 @@ voteApp.controller('indexCtl',
       var holder = d3.select("#d3_container");
       var jq_holder = $("#d3_container");
 
+      if ( "items" in config ){
       for ( var i = 0; i < config.items.length; ++i )
       {
         var item = config.items[i];
@@ -1697,6 +1698,7 @@ voteApp.controller('indexCtl',
         {
           $scope.draw2AxesVote(holder, item);
         }
+      }
       }
 
       console.log("drawUIWithoutTable() completed");

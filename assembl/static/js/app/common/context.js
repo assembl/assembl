@@ -435,7 +435,7 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                         target_url = $(evt.currentTarget).attr("href");
                 }
                 if (!target_url){
-                    this.debug('context', "openTargetInPopOver: no href attribute given");
+                    console.log("context::openTargetInPopOver: no href attribute given");
                     return false;
                 }
 
@@ -551,7 +551,6 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                     var modal = $(iframe).parents(".bbm-modal");
                     if (!modal)
                         return;
-                    this.debug('context', 'openTargetInModal modal: '+modal);
                     var targetHeight = iframe.contentWindow.document.body.scrollHeight; // margins are not included (but paddings are)
                     var targetWidth = iframe.contentWindow.document.body.scrollWidth;
                     console.log("targetWidth: ", targetWidth);
