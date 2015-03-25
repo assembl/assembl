@@ -40,7 +40,7 @@ jinja2.directories = assembl:templates
 assembl.domain = assembl.net
 
 #If false, every user will be immediately validated
-assembl.validate_registration_emails = false
+assembl.validate_registration_emails = true
 mail.host = localhost
 assembl.admin_email = webmaster@assembl.net
 
