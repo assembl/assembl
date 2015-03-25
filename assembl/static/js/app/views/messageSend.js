@@ -238,12 +238,11 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                               // Solution 2: Redirect user to the "Orphan messages" or "All messages" section of the table of ideas, and highlight his message
                               // TODO: change browser navigation state once we have proper URLs for things, so that the user can go back to the idea where he was
                               // Quentin: this code has been adapted from views/orphanMessagesInIdeaList.js and views/allMessagesInIdeaList.js. Where else could we put it so that it could be called from several places?
-                              var messageListView = this.options.messageList;
-                              var groupContent = messageListView.getContainingGroup();
+                              var groupContent = that.messageList.getContainingGroup();
                               groupContent.setCurrentIdea(null);
-                              if (messageListView) {
-                                messageListView.triggerMethod('messageList:clearAllFilters');
-                                //messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
+                              if (that.messageList) {
+                                that.messageList.triggerMethod('messageList:clearAllFilters');
+                                //that.messageList.triggerMethod('messageList:addFilterIsOrphanMessage');
                                 groupContent.resetDebateState();
                                 setTimeout(function(){
                                   Assembl.vent.trigger('messageList:showMessageById', model.id);
