@@ -2235,7 +2235,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             showPendingMessages: function(nbMessage){
-              document.title = ' ('+ nbMessage +') '+ document.querySelector('#discussion-topic').value;
+              this._originalDocumentTitle = document.querySelector('#discussion-topic').value;
+              document.title = ' ('+ nbMessage +') '+ this._originalDocumentTitle;
 
               var msg = i18n.sprintf(i18n.ngettext(
                   '%d new message has been posted.  Click here to refresh',
@@ -2250,6 +2251,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
             resetPendingMessages: function(allMessageStructureCollection){
               this._initialLenAllMessageStructureCollection = allMessageStructureCollection.length;
+              if(this._originalDocumentTitle) {
+                document.title = this._originalDocumentTitle;
+              }
             },
             /**
              * @return A promise
