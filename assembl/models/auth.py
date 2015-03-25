@@ -71,7 +71,7 @@ class AgentProfile(Base):
     """
     __tablename__ = "agent_profile"
     rdf_class = FOAF.Agent
-    rdf_sections = (PRIVATE_USER_SECTION,)
+    rdf_sections = (USER_SECTION,)
     # This is very hackish. We need Posts to point to accounts vs users,
     # but right now they do not know the accounts.
     agent_as_account_iri = PatternIriClass(
@@ -81,9 +81,11 @@ class AgentProfile(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(CoerceUnicode(1024),
-        info={'rdf': QuadMapPatternS(None, FOAF.name)})
+        info={'rdf': QuadMapPatternS(
+            None, FOAF.name, sections = (PRIVATE_USER_SECTION,))})
     description = Column(UnicodeText,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
+        info={'rdf': QuadMapPatternS(
+            None, DCTERMS.description, sections = (PRIVATE_USER_SECTION,))})
     type = Column(String(60))
 
     __mapper_args__ = {
@@ -258,9 +260,12 @@ class AgentProfile(Base):
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(cls.agent_as_account_iri.apply(cls.id),
-            SIOC.account_of, cls.iri_class().apply(cls.id),
-            name=QUADNAMES.account_of_self, sections=(USER_SECTION,))]
+        return [
+            QuadMapPatternS(cls.agent_as_account_iri.apply(cls.id),
+                SIOC.account_of, cls.iri_class().apply(cls.id),
+                name=QUADNAMES.account_of_self),
+            QuadMapPatternS(cls.agent_as_account_iri.apply(cls.id),
+                RDF.type, SIOC.UserAccount, name=QUADNAMES.pseudo_account_type)]
 
     # True iff the user visits current discussion for the first time
     @property
@@ -613,7 +618,8 @@ class User(AgentProfile):
     last_login = Column(DateTime)
     login_failures = Column(Integer, default=0)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+        info={'rdf': QuadMapPatternS(
+            None, DCTERMS.created, sections=(PRIVATE_USER_SECTION,))})
 
     def __init__(self, **kwargs):
         if kwargs.get('password'):
