@@ -77,7 +77,7 @@ def main():
         edgesense_code_dir = ''
     vars = {
         'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
-        'VIRTUOSO_HOSTNAME': config.get('virtuoso', 'virtuoso_hostname'),
+        'VIRTUOSO_HOSTNAME': config.get(SECTION, 'public_hostname'),
         'VIRTUOSO_PORT': config.getint('virtuoso', 'port'),
         'VIRTUOSO_ROOT': vroot,
         'VIRTUOSO_ROOT_VAR': vroot_var,
