@@ -169,10 +169,13 @@ def get_posts(request):
         
     #posts = posts.options(contains_eager(Post.source))
     # Horrible hack... But useful for structure load
-    if view_def == 'partial':
+    if view_def == 'id_only':
         pass  # posts = posts.options(defer(Post.body))
     else:
         posts = posts.options(joinedload_all(Post.creator), undefer(Email.recipients))
+        posts = posts.options(joinedload_all(Post.extracts))
+        posts = posts.options(joinedload_all(Post.widget_idea_links))
+        posts = posts.options(joinedload_all(SynthesisPost.publishes_synthesis))
 
     if order == 'chronological':
         posts = posts.order_by(Content.creation_date)
