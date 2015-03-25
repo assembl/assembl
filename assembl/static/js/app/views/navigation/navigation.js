@@ -86,11 +86,11 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 });
                 this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
             },
-            onShow: function () {
+            onBeforeShow:function () {
                 var that = this;
-                setTimeout(function(){
+                //setTimeout(function(){
                     that.setSideBarHeight();
-                }, 0);
+                //}, 0);
             },
             toggleMenuByName: function (itemName) {
                 var elm = this.$('.nav[data-view=' + itemName + ']');
@@ -135,9 +135,9 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         if (messageListView) {
                             messageListView.currentQuery.clearAllFilters();
                             if (view == 'debate') {
-                                setTimeout(function () {
+                                //setTimeout(function () {
                                     messageListView.render();
-                                });
+                                //});
                             }
                         }
                         break;
@@ -199,8 +199,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 else { // fallback: set an initial estimation
                     this._accordionContentHeight = _sideBarHeight - _li - 2;
 
-                    if (++this._accordionHeightTries < 10) // prevent infinite loop
-                    {
+                    if (++this._accordionHeightTries < 10){ // prevent infinite loop
                         setTimeout(function () {
                             that.setSideBarHeight();
                         }, 500);
