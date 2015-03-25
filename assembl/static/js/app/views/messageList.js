@@ -1186,13 +1186,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   that.visitorRootMessagesToDisplay = [];
 
                   messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
-                  that = that.render_real();
-                });
-
-                this.blockPanel();
-
-                //Why isn't this within the when() above?  benoitg 2015-01-28
-                this.ui.panelBody.scroll(function () {
+                  that.render_real();
+                  that.showInspireMeIfAvailable();
+                  that.ui.panelBody.scroll(function () {
 
                     var msgBox = that.$('.messagelist-replybox').height(),
                         scrollH = $(this)[0].scrollHeight - (msgBox + 25),
@@ -1203,12 +1199,15 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     } else {
                         that.ui.stickyBar.fadeIn();
                     }
+                    
+                    //This event cannot be bound in ui, because backbone binds to 
+                    //the top element and scroll does not propagate
+                    that.$(".panel-body").scroll(that, that.scrollLogger);
+                    
+                    });
                 });
-                //This event cannot be binded in ui, because backbone binds to 
-                //the top element and scroll does not propagate
-                this.$(".panel-body").scroll(this, this.scrollLogger);
-                
-                this.showInspireMeIfAvailable();
+
+              this.blockPanel();
             },
 
             

@@ -541,7 +541,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                         //on if the panel was opened by selection, or by something else.
                         //app.closePanel(app.ideaPanel);
                         //this.resetView();
-                        //this.render();
+                      //If we don't call render here, the panel will not refresh if we delete an idea.
+                      this.render();
                     }
                 }
             },
