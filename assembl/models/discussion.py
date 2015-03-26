@@ -16,7 +16,7 @@ from sqlalchemy import (
     event,
     and_,
 )
-from sqlalchemy.orm import relationship, join
+from sqlalchemy.orm import relationship, join, subqueryload_all
 
 from assembl.lib.utils import slugify
 from . import DiscussionBoundBase
@@ -169,7 +169,14 @@ class Discussion(DiscussionBoundBase):
 
     def get_all_syntheses(self):
         from .idea_graph_view import Synthesis
-        return self.db().query(Synthesis).filter(
+        return self.db().query(
+            Synthesis).options(
+            subqueryload_all(
+            'idea_assocs.idea'),
+            subqueryload_all(
+            'idealink_assocs.idea_link'),
+            subqueryload_all(
+            Synthesis.published_in_post)).filter(
             Synthesis.discussion_id == self.id).all()
 
     def get_permissions_by_role(self):
