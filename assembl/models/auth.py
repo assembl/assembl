@@ -34,9 +34,11 @@ from pyramid.security import Everyone, Authenticated
 from rdflib import URIRef
 from virtuoso.vmapping import IriClass, PatternIriClass
 from virtuoso.alchemy import CoerceUnicode
+import transaction
 
 from ..lib import config
-from ..lib.sqla import (UPDATE_OP, INSERT_OP, get_model_watcher)
+from ..lib.sqla import (
+    UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
 from . import Base, DiscussionBoundBase, DiscussionBoundTombstone
 from ..auth import *
 from ..semantic.namespaces import (
@@ -1233,51 +1235,43 @@ class UserTemplate(DiscussionBoundBase, User):
             self.get_applicable_notification_subscriptions_classes()
         # We need to materialize missing NotificationSubscriptions,
         # But have duplication issues, probably due to calls on multiple
-        # threads.
-        # TEMPORARY: We will apply a write lock selectively.
-        # LONG TERM: We will only materialize subscriptions when selected.
-
-        def get_subcriptions(lock):
-            query = self.db.query(NotificationSubscription).filter_by(
-                discussion_id=self.discussion_id, user_id=self.id)
-            if lock:
-                query = query.with_for_update()
-            my_subscriptions = query.all()
-            my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
-            missing = set(needed_classes) - my_subscriptions_classes
-            return my_subscriptions, missing
-        my_subscriptions, missing = get_subcriptions(False)
-        if not missing:
-            return my_subscriptions, False
-        my_subscriptions, missing = get_subcriptions(True)
-        if not missing:
-            return my_subscriptions, False
-        from assembl.lib.raven_client import get_raven_client
-        client = get_raven_client()
-        if client:
-            client.captureMessage("creating UserTemplate subscriptions", user_id = self.id)
+        # threads. So iterate until it works.
+        query = self.db.query(NotificationSubscription).filter_by(
+            discussion_id=self.discussion_id, user_id=self.id)
+        changed = False
+        discussion_id = self.discussion_id
+        my_id = self.id
+        role_name = self.for_role.name.split(':')[-1]
         # TODO: Fill from config.
         subscribed = defaultdict(bool)
-        role_name = self.for_role.name.split(':')[-1]
         default_config = config.get_config().get(
             ".".join(("subscriptions", role_name, "default")),
             "FOLLOW_SYNTHESES")
         for role in default_config.split('\n'):
             subscribed[role.strip()] = True
-        defaults = [
-            cls(
-                discussion_id=self.discussion_id,
-                user_id=self.id,
-                creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
-                status=(NotificationSubscriptionStatus.ACTIVE
-                        if subscribed[cls.__mapper__.polymorphic_identity.name]
-                        else NotificationSubscriptionStatus.INACTIVE_DFT))
-            for cls in missing
-        ]
-        for d in defaults:
-            self.db.add(d)
-        self.db.flush()
-        return chain(my_subscriptions, defaults), True
+        while True:
+            my_subscriptions = query.all()
+            my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
+            missing = set(needed_classes) - my_subscriptions_classes
+            if not missing:
+                return my_subscriptions, changed
+            changed = True
+            try:
+                with transaction.manager:
+                    defaults = [
+                        cls(
+                            discussion_id=discussion_id,
+                            user_id=my_id,
+                            creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                            status=(NotificationSubscriptionStatus.ACTIVE
+                                    if subscribed[cls.__mapper__.polymorphic_identity.name]
+                                    else NotificationSubscriptionStatus.INACTIVE_DFT))
+                        for cls in missing
+                    ]
+                    for d in defaults:
+                        self.db.add(d)
+            except ObjectNotUniqueError as e:
+                transaction.abort()
 
 
 Index("user_template", "discussion_id", "role_id")
