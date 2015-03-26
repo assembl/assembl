@@ -131,16 +131,6 @@ class Discussion(DiscussionBoundBase):
         return self.db.query(self.__class__).filter_by(
             slug=self.slug), True
 
-    def serializable(self):
-        return {
-            "@id": self.uri(),
-            "@type": self.external_typename(),
-            "topic": self.topic,
-            "slug": self.slug,
-            "creation_date": self.creation_date.isoformat(),
-            "root_idea": self.root_idea.uri()
-        }
-
     @property
     def settings_json(self):
         if self.settings:
@@ -226,10 +216,10 @@ class Discussion(DiscussionBoundBase):
     def get_all_agents_preload(self, user=None):
         from assembl.views.api.agent import _get_agents_real
         return json.dumps(_get_agents_real(
-            self, user.id if user else Everyone))
+            self, user.id if user else Everyone, 'partial'))
 
     def get_readers_preload(self):
-        return json.dumps([user.serializable() for user in self.get_readers()])
+        return json.dumps([user.generic_json('partial') for user in self.get_readers()])
 
     def get_ideas_preload(self):
         from assembl.views.api.idea import _get_ideas_real

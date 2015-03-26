@@ -203,20 +203,8 @@ class AgentProfile(Base):
     def external_avatar_url(self):
         return "/user/id/%d/avatar/" % (self.id,)
 
-    def serializable(self, use_email=None):
-        # Obsolete method. We want to switch to view_defs.
-        # Not returning the email is intentional for confidentiality reasons
-        return {
-            '@type': self.external_typename(),
-            '@id': self.uri_generic(self.id),
-            'name': self.name or self.display_name()
-        }
-
     def get_agent_preload(self, view_def='default'):
-        if view_def:
-            result = self.generic_json(view_def, user_id=self.id)
-        else:
-            result = self.serializable()
+        result = self.generic_json(view_def, user_id=self.id)
         return json.dumps(result)
 
     def count_posts_in_discussion(self, discussion_id):
@@ -381,10 +369,6 @@ class EmailAccount(AbstractAgentAccount):
     def display_name(self):
         if self.verified:
             return self.email
-
-    def serialize_profile(self):
-        # Obsolete method. We want to switch to view_defs.
-        return self.profile.serializable(self.email)
 
     def signature(self):
         return ('agent_email_account', self.email,)
@@ -749,13 +733,6 @@ class User(AgentProfile):
             watcher.processAccountModified(self.id)
         elif operation == INSERT_OP:
             watcher.processAccountCreated(self.id)
-
-    def serializable(self, use_email=None):
-        # Obsolete method. We want to switch to view_defs.
-        ser = super(User, self).serializable()
-        ser['username'] = self.display_name()
-        #r['email'] = use_email or self.get_preferred_email()
-        return ser
 
     def subscribe(self, discussion, role=R_PARTICIPANT):
         existing = self.db.query(LocalUserRole).join(Role).filter(

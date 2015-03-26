@@ -12,7 +12,8 @@
     },
     "AgentProfile": {
         "description": false,
-        "preferred_email": false
+        "preferred_email": false,
+        "name": "&display_name"
     },
     "User": {
         "@extends": "AgentProfile",

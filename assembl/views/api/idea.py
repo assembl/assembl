@@ -226,7 +226,7 @@ def delete_idea(request):
 def get_idea_extracts(request):
     idea_id = request.matchdict['id']
     idea = Idea.get_instance(idea_id)
-    view_def = request.GET.get('view')
+    view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
     user_id = authenticated_userid(request)
     permissions = get_permissions(user_id, discussion_id)
@@ -238,8 +238,5 @@ def get_idea_extracts(request):
         Extract.idea_id == idea.id
     ).order_by(Extract.order.desc())
 
-    if view_def:
-        return [extract.generic_json(view_def, user_id, permissions)
-                for extract in extracts]
-    else:
-        return [extract.serializable() for extract in extracts]
+    return [extract.generic_json(view_def, user_id, permissions)
+            for extract in extracts]

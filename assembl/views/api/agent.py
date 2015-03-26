@@ -26,7 +26,7 @@ agent = Service(
     description="Retrieve a single agent", renderer='json')
 
 
-def _get_agents_real(discussion, user_id=Everyone, view_def=None):
+def _get_agents_real(discussion, user_id=Everyone, view_def='default'):
     agents = discussion.get_participants_query()
     permissions = get_permissions(user_id, discussion.id)
     include_emails = P_ADMIN_DISC in permissions or P_SYSADMIN in permissions
@@ -34,10 +34,7 @@ def _get_agents_real(discussion, user_id=Everyone, view_def=None):
         agents = agents.options(joinedload(AgentProfile.accounts))
 
     def view(agent):
-        if view_def:
-            result = agent.generic_json(view_def, user_id, permissions)
-        else:
-            result = agent.serializable()
+        result = agent.generic_json(view_def, user_id, permissions)
         if result is None:
             return
         if include_emails or agent.id == user_id:

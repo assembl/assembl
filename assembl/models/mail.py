@@ -849,21 +849,6 @@ class IMAPMailbox(AbstractMailbox):
         """
         return self.most_common_recipient_address()
 
-    def serializable(self):
-        serializable_source = super(AbstractMailbox, self).serializable()
-
-        serializable_source.update({
-            "host": self.host,
-            "port": self.port,
-            "username": self.username,
-            "use_ssl": self.use_ssl,
-            "folder": self.folder,
-            "most_common_recipient_address":
-            self.most_common_recipient_address()
-        })
-
-        return serializable_source
-
 class MailingList(IMAPMailbox):
     """
     A mailbox with mailing list semantics

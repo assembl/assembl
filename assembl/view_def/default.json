@@ -276,7 +276,7 @@
         "quote": "body",
         "order": true,
         "discussion": false,
-        "ranges": ["text_fragment_identifiers:"],
+        "ranges": ["text_fragment_identifiers:default"],
         "text": "annotation_text"
     },
     "TextFragmentIdentifier": {
