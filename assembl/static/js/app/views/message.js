@@ -92,6 +92,11 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
               'change':'render',
               'openWithFullBodyView': 'onOpenWithFullBodyView'
             },
+            
+            ui: {
+              jumpToParentButton: ".js_message-jumptoparentbtn"
+            },
+            
 
             /**
              * @event
@@ -103,6 +108,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 'click .js_readMore': 'onMessageTitleClick',
                 'click .js_readLess': 'onMessageTitleClick',
                 'click .message-hoistbtn': 'onMessageHoistClick',
+                'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
 
                 //
                 'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
@@ -169,6 +175,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     viewStyle: this.viewStyle,
                     metadata_json: metadata_json,
                     creator: this.creator,
+                    parentId: this.model.get('parentId'),
                     body: body,
                     bodyFormatClass: bodyFormatClass,
                     messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
@@ -662,6 +669,10 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 // we will hoist the post, or un-hoist it if it is already hoisted
                 this.isHoisted = this.messageListView.toggleFilterByPostId(this.model.getId());
                 this.render(); // so that the isHoisted property will now be considered
+            },
+            
+            onMessageJumpToParentClick: function (ev) {
+              this.messageListView.showMessageById(this.model.get('parentId'));
             },
 
             /**
