@@ -374,6 +374,10 @@ class AssemblQuadStorageManager(object):
     def local_uri():
         return "http://%s/data/" % (get_config().get('public_hostname'))
 
+    def audit_metadata(self):
+        # in response to error 22023, The quad storage is edited by other client
+        self.session.execute("DB.DBA.RDF_AUDIT_METADATA(1, '*')")
+
     def prepare_storage(self, quad_storage_name, imported=None):
         cpe = AssemblClassPatternExtractor(
             Base._decl_class_registry)
@@ -564,6 +568,7 @@ class AssemblQuadStorageManager(object):
             self.drop_discussion_storage(storage_num)
 
     def update_all_storages(self):
+        self.audit_metadata()
         self.declare_functions()
         # drop old single-discussion storages
         self.drop_all_discussion_storages_but(None)
