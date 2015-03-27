@@ -311,6 +311,8 @@ class AbstractAgentAccount(Base):
     # Virtuoso + nullable -> no unique index (sigh)
     email = Column(String(100), index=True)
     # info={'rdf': QuadMapPatternS(None, SIOC.email)}
+    # Note: we could also have a FOAF.mbox, but we'd have to make
+    # them into URLs with mailto:
 
     def signature(self):
         "Identity of signature implies identity of underlying account"
@@ -457,8 +459,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
     userid = Column(String(200))
     #    info={'rdf': QuadMapPatternS(None, SIOC.id)})
     profile_info = deferred(Column(Text()))
-    picture_url = Column(String(300),
-        info={'rdf': QuadMapPatternS(None, FOAF.img)})
+    picture_url = Column(String(300))
     profile_i = relationship(AgentProfile, backref='identity_accounts')
 
     def __init__(self, profile_info_json=None, **kwargs):
@@ -531,6 +532,15 @@ class IdentityProviderAccount(AbstractAgentAccount):
                 if size <= name_size:
                     break
             return size_name.join(self.picture_url.split('_normal'))
+
+    @classmethod
+    def special_quad_patterns(cls, alias_maker, discussion_id):
+        return [QuadMapPatternS(AgentProfile.iri_class().apply(
+                IdentityProviderAccount.profile_id),
+            FOAF.img, IdentityProviderAccount.picture_url,
+            name=QUADNAMES.foaf_image,
+            conditions=(IdentityProviderAccount.picture_url != None),
+            sections=(PRIVATE_USER_SECTION,))]
 
     def unique_query(self):
         query, _ = super(IdentityProviderAccount, self).unique_query()
