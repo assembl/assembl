@@ -33,13 +33,13 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
 
                 (this.editing) ? this.editing = true : this.editing = false;
 
-                (_.has(options, 'modelProp')) ? this.modelProp = options.modelProp : this.modelProp = null;
+                this.modelProp = (_.has(options, 'modelProp')) ? options.modelProp : null;
 
-                (_.has(options, 'placeholder')) ? this.placeholder = options.placeholder : this.placeholder = null;
+                this.placeholder = (_.has(options, 'placeholder')) ? options.placeholder : null;
 
-                (_.has(options, 'showPlaceholderOnEditIfEmpty')) ? this.showPlaceholderOnEditIfEmpty = options.showPlaceholderOnEditIfEmpty : this.showPlaceholderOnEditIfEmpty = null;
+                this.showPlaceholderOnEditIfEmpty = (_.has(options, 'showPlaceholderOnEditIfEmpty')) ? options.showPlaceholderOnEditIfEmpty : null;
 
-                (_.has(options, 'canEdit')) ? this.canEdit = options.canEdit : this.canEdit = true;
+                this.canEdit = (_.has(options, 'canEdit')) ? options.canEdit : true;
 
                 if (this.model === null) {
                     throw new Error('EditableField needs a model');
@@ -93,39 +93,36 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
              */
             startEditing: function () {
                 var editingArea = this.$('#' + this.fieldId).get(0);
+                var that = this;
 
                 var config = _.extend({}, this.CKEDITOR_CONFIG, {
                     sharedSpaces: { top: this.topId, bottom: this.bottomId }
                 });
 
                 this.ckInstance = ckeditor.inline(editingArea, config);
-                window.setTimeout(function () {
+
+                setTimeout(function () {
                     editingArea.focus();
                 }, 100);
-                /*
-                 We do not enable save on blur, because:
-                 - we have a Save and a Cancel button
-                 - the save on blur feature until now was called even when the user clicked on Save or Cancel button, so the content was saved anyway and the buttons were useless
-                 - an editor may blur by mistake (which saves new content) but maybe he wanted to revert his changes afterwards
 
-                 this.ckInstance.element.on('blur', function () {
+                this.ckInstance.element.on('blur', function () {
 
-                 // Firefox triggers the blur event if we paste (ctrl+v)
-                 // in the ckeditor, so instead of calling the function directly
-                 // we wait to see if the focus is still in the ckeditor
-                 setTimeout(function () {
-                 if (!that.ckInstance.element) {
-                 return;
-                 }
+                   /**
+                      * Firefox triggers the blur event if we paste (ctrl+v)
+                      * in the ckeditor, so instead of calling the function directly
+                      * we wait to see if the focus is still in the ckeditor
+                   */
+                   setTimeout(function () {
+                     if (!that.ckInstance.element) return;
 
-                 var hasFocus = $(that.ckInstance.element).is(":focus");
-                 if (!hasFocus) {
-                 that.saveEdition();
-                 }
-                 }, 100);
+                     var hasFocus = $(that.ckInstance.element).is(":focus");
 
-                 });
-                 */
+                     if (!hasFocus) that.saveEdition();
+
+                   }, 100);
+
+                });
+
             },
 
             /**
@@ -143,11 +140,6 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
              * Destroy the ckeditor instance
              */
             destroy: function () {
-                //FIXME: need this ?
-                /*if (this.ckInstance) {
-                 this.ckInstance.destroy();
-                 } */
-
                 this.ckInstance = null;
             },
 
