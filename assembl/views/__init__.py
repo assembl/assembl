@@ -28,7 +28,6 @@ def backbone_include(config):
 
 
 def get_theme(discussion_slug):
-    import pdb; pdb.set_trace()
     theme_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'css', 'themes')
     default_theme = config.get('default_theme') or 'default'
     default_folder = os.path.realpath(os.path.join(theme_path, default_theme))
