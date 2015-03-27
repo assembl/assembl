@@ -121,6 +121,20 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 'click .js_openTargetInPopOver': 'openTargetInPopOver'
             },
 
+            /**
+             * @param htmlOrText Any string, p and br tags are replaced with 
+             * spaces, and all html is stripped
+             * @return string
+             */
+            generateBodyPreview: function(htmlOrText){
+              // The div is just there in case there actually isn't any html
+              // in which case jquery would crash without it
+              var bodyWithoutNewLine = $("<div>" + String(htmlOrText) + "</div>");
+              bodyWithoutNewLine.find("p").after(" ");
+              bodyWithoutNewLine.find("br").replaceWith(" ");
+              return bodyWithoutNewLine.text().replace(/\s{2,}/g, ' ');
+            },
+            
             serializeData: function(){
                 var bodyFormatClass,
                     body,
@@ -131,12 +145,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     if (bodyFormat == "text/html") {
                         //Strip HTML from preview
                         bodyFormat = "text/plain";
-                        // The div is just there in case there actually isn't any html
-                        // in which case jquery would crash without it
-                        var bodyWithoutNewLine = $("<div>" + String(this.model.get('body')) + "</div>");
-                        bodyWithoutNewLine.find("p").after(" ");
-                        bodyWithoutNewLine.find("br").replaceWith(" ");
-                        body = bodyWithoutNewLine.text().replace(/\s{2,}/g, ' ');
+                        body = this.generateBodyPreview(this.model.get('body'));
                     }
                 }
 
