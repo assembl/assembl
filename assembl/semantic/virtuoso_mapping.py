@@ -421,8 +421,8 @@ class AssemblQuadStorageManager(object):
         qs = QuadStorage(storage_name, None, nsm=self.nsm)
         try:
             qs.drop(self.session, force)
-        except:
-            pass
+        except Exception as e:
+            print e
 
     def drop_graph(self, graph_iri, force=True):
         gr = GraphQuadMapPattern(graph_iri, None, nsm=self.nsm)
