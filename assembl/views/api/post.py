@@ -344,7 +344,7 @@ def create_post(request):
     else:
         #print(in_reply_to_post.subject, discussion.topic)
         if in_reply_to_post:
-            subject = in_reply_to_post.subject if in_reply_to_post.subject else ''
+            subject = in_reply_to_post.get_title() if in_reply_to_post.get_title() else ''
         elif in_reply_to_idea:
             #TODO:  THis should use a cascade like the frontend   
             subject = in_reply_to_idea.short_title if in_reply_to_idea.short_title else ''
