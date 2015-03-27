@@ -67,7 +67,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                 cancelButton: '.messageSend-cancelbtn',
                 messageBody: '.messageSend-body',
                 messageSubject: '.messageSend-subject',
-                topicSubject: '.topic-subject .formfield'
+                topicSubject: '.topic-subject .formfield',
+                permissionDeniedWarningMessage: '.js_warning-message-for-message-post'
             },
 
             events: {
@@ -84,7 +85,9 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                 var show_target_context_with_choice = ('show_target_context_with_choice' in this.options) ? this.options.show_target_context_with_choice : null;
                 var i18n_post_message_in_this_idea = i18n.gettext('Under the idea "%s"'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in messageSend.tmpl)
                 var i18n_post_message_in_general_conversation = i18n.gettext('In the general conversation'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in messageSend.tmpl)
-
+                var canPost = Ctx.getCurrentUser().can(Permissions.ADD_POST);
+                var requiredRolesToPost = null;
+                
                 return {
                     i18n: i18n,
                     body_help_message: this.initialBody,
@@ -92,7 +95,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label : i18n.gettext('Cancel'),
                     send_button_label: this.options.send_button_label ? this.options.send_button_label : i18n.gettext('Send'),
                     subject_label: this.options.subject_label ? this.options.subject_label : i18n.gettext('Subject:'),
-                    canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST),
+                    canPost: canPost,
                     msg_in_progress_body: this.options.msg_in_progress_body,
                     msg_in_progress_title: this.options.msg_in_progress_title,
                     reply_idea: reply_idea,
@@ -103,8 +106,27 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             },
 
             onRender: function () {
+              var that = this,
+                  collectionManager = new CollectionManager(),
+                  canPost = Ctx.getCurrentUser().can(Permissions.ADD_POST);
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
                 Ctx.initTooltips(this.$el);
+                
+                if(!Ctx.getCurrentUser().can(Permissions.ADD_POST)) {
+                  collectionManager.getDiscussionModelPromise().then(function(discussion) {
+                    var rolesMissingMessageForPermission = discussion.getRolesMissingMessageForPermission(Ctx.getCurrentUser(), Permissions.ADD_POST),
+                        messageString,
+                        warningMessage;
+                    if('reply_message_id' in that.options) {
+                      messageString = i18n.gettext("Before you can reply to this message %s")
+                    }
+                    else{
+                      messageString = i18n.gettext("Before you can post a message %s")
+                    }
+                    warningMessage = i18n.sprintf(messageString, rolesMissingMessageForPermission);
+                    that.ui.permissionDeniedWarningMessage.html(warningMessage);
+                  });
+                }
             },
 
             onSendMessageButtonClick: function (ev) {

@@ -146,7 +146,11 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                 return this.DISCUSSION_SLUG;
             },
 
-            getDiscussionPromise: function () {
+            getLoginURL: function() {
+              return '/' + Ctx.getDiscussionSlug() + '/login';
+            },
+            
+            DEPRECATEDgetDiscussionPromise: function () {
                 if(this.discussionPromise ){
                   return this.discussionPromise;
                 }
