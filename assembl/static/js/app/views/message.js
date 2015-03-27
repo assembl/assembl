@@ -228,7 +228,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                       messageList: that.messageListView,
                       msg_in_progress_body: partialMessage['body'],
                       msg_in_progress_ctx: modelId,
-                      mandatory_subject_missing_msg: null
+                      mandatory_subject_missing_msg: null,
+                      enable_button: false
                   });
                   that.$('.message-replybox').append(this.replyView.render().el);
   

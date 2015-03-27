@@ -422,7 +422,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     'msg_in_progress_body': partialMessage['body'],
                     'msg_in_progress_ctx': modelId,
                     'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-                    'mandatory_subject_missing_msg': null
+                    'mandatory_subject_missing_msg': null,
+                    'enable_button': false
                     //TODO:  Pass the messageListView that is expected to refresh with the new comment
                 });
                 this.$('#ideaPanel-comment').append(this.commentView.render().el);

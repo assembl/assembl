@@ -34,13 +34,15 @@
               <% } %>
           </div>
           <% } %>
-          <div class="messageSend-buttons fr hidden"> <!-- delete this html part after check if you save on blur -->
+          <div class="messageSend-buttons fr"> <!-- need again this part for top posting -->
+            <% if(enable_button){ %>
               <% if ( reply_message_id ) { %>
                 <a class="btn btn-primary btn-xs messageSend-sendbtn"><%= send_button_label %></a>
               <% } else { %>
                 <a class="btn btn-primary btn-sm messageSend-sendbtn"><%= send_button_label %></a>
               <% } %>
               <a class="btn btn-cancel btn-sm messageSend-cancelbtn"><%= cancel_button_label %></a>
+            <% } %>
           </div>
         </div>
       </div>

@@ -97,7 +97,8 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                     msg_in_progress_title: this.options.msg_in_progress_title,
                     reply_idea: reply_idea,
                     reply_message_id: reply_message_id,
-                    show_target_context_with_choice: show_target_context_with_choice
+                    show_target_context_with_choice: show_target_context_with_choice,
+                    enable_button: this.options.enable_button
                 }
             },
 
