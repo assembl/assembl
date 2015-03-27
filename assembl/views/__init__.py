@@ -27,6 +27,21 @@ def backbone_include(config):
     config.add_route('home', '/')
 
 
+def get_theme(discussion_slug):
+    import pdb; pdb.set_trace()
+    theme_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'css', 'themes')
+    default_theme = config.get('default_theme') or 'default'
+    default_folder = os.path.realpath(os.path.join(theme_path, default_theme))
+    if not discussion_slug:
+        return default_theme
+    try:
+        slug_file = os.path.realpath(os.path.join(theme_path, discussion_slug))
+        if os.path.isdir(slug_file):
+            return discussion_slug
+    except NameError:
+        return default_theme
+    return default_theme
+
 def get_default_context(request):
     from ..auth.util import get_user, get_current_discussion
     localizer = request.localizer
@@ -72,7 +87,7 @@ def get_default_context(request):
         user_profile_edit_url=user_profile_edit_url,
         locale=localizer.locale_name,
         locales=config.get('available_languages').split(),
-        theme=config.get('default_theme') or 'default',
+        theme=get_theme(discussion_slug),
         minified_js=config.get('minified_js') or False,
         web_analytics_piwik_script=web_analytics_piwik_script,
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
