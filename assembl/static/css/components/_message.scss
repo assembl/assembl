@@ -208,10 +208,8 @@ $message-body: #999999;
       }
     }
     .message-menu-actions {
-      /*visibility: hidden;
-      opacity: 0;*/
-      visibility: visible;
-      opacity: 0.5;
+      visibility: hidden;
+      opacity: 0;
     }
 
     .message-body {
