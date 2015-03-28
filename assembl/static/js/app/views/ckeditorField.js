@@ -17,7 +17,8 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
                 ],
                 extraPlugins: 'sharedspace',
                 removePlugins: 'floatingspace,resize',
-                sharedSpaces: { top: 'ckeditor-toptoolbar', bottom: 'ckeditor-bottomtoolbar' }
+                sharedSpaces: { top: 'ckeditor-toptoolbar', bottom: 'ckeditor-bottomtoolbar' },
+                title: false //Removes the annoying tooltip in the middle of the main textarea
             },
 
             ckInstance: null,
