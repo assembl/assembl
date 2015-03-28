@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-03-27 20:15-0400\n"
-"PO-Revision-Date: 2015-03-25 15:17+0000\n"
+"POT-Creation-Date: 2015-03-27 20:42-0400\n"
+"PO-Revision-Date: 2015-03-27 20:42-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
@@ -101,32 +101,32 @@ msgid "Unknown user"
 msgstr "Utilisateur non-identifié"
 
 #: assembl/static/js/app/models/discussion.js:50
-#, fuzzy
-#| msgid "Edit discussion permissions"
 msgid "need no additional permissions"
-msgstr "Éditer les permissions de la discussion"
+msgstr "n'avez besoin d'aucune permission additionnelle"
 
 #: assembl/static/js/app/models/discussion.js:53
 #, python-format
 msgid "you must <a href='%s'>Sign in</a>"
-msgstr ""
+msgstr "vous devez <a href='%s'>Vous connecter</a>"
 
 #: assembl/static/js/app/models/discussion.js:59
-#, fuzzy
-#| msgid "Join this group"
 msgid "you must Join this group"
-msgstr "Rejoindre ce groupe"
+msgstr "vous devez Rejoindre ce groupe"
 
 #: assembl/static/js/app/models/discussion.js:63
 #, python-format
 msgid "you must ask a discussion administrator for the following role: %s"
 msgid_plural "you must ask a discussion administrator for one of the following roles: %s"
 msgstr[0] ""
+"vous devez demander à un administrateur de la discussion qu'il vous donne"
+" le rôle suivant: %s"
 msgstr[1] ""
+"vous devez demander à un administrateur de la discussion qu'il vous donne"
+" l'un des rôles suivants: %s"
 
 #: assembl/static/js/app/models/discussion.js:67
 msgid "an administrator must open this discussion to contributions"
-msgstr ""
+msgstr "un administrateur doit ouvrir la discussion aux contributions"
 
 #: assembl/static/js/app/models/idea.js:62
 msgid "The root idea will not be in the synthesis"
@@ -273,14 +273,11 @@ msgstr[0] "La dernière contribution de %d participant date d'avant %s"
 msgstr[1] "La dernière contribution de %d participants date d'avant %s"
 
 #: assembl/static/js/app/views/contextPage.js:1088
-#, fuzzy, python-format
-#| msgid "%d participant has contributed since the beginning of the debate"
-#| msgid_plural "%d participants have contributed since the beginning of the
-#| debate"
+#, python-format
 msgid "%d participant has contributed since the beginning of the discussion"
 msgid_plural "%d participants have contributed since the beginning of the discussion"
-msgstr[0] "%d participant a contribué depuis le début du débat"
-msgstr[1] "%d participants ont contribué depuis le début du débat"
+msgstr[0] "%d participant a contribué depuis le début de la discussion"
+msgstr[1] "%d participants ont contribué depuis le début de la discussion"
 
 #: assembl/static/js/app/views/contextPage.js:1100
 msgid "Contributors active recently"
@@ -700,15 +697,14 @@ msgid "Subject:"
 msgstr "Sujet:"
 
 #: assembl/static/js/app/views/messageSend.js:121
-#, fuzzy, python-format
-#| msgid "Reply to this message"
+#, python-format
 msgid "Before you can reply to this message %s"
-msgstr "Répondre à ce message"
+msgstr "Avant que vous puissiez répondre à ce message %s"
 
 #: assembl/static/js/app/views/messageSend.js:124
 #, python-format
 msgid "Before you can post a message %s"
-msgstr ""
+msgstr "Avant que vous puissiez publier un message %s"
 
 #: assembl/static/js/app/views/messageSend.js:166
 msgid "You need to set a subject before you can send your message..."
@@ -1446,15 +1442,12 @@ msgid "Web capture to"
 msgstr "Capture du Web vers"
 
 #: assembl/templates/views/bookmarket.tmpl:14
-#, fuzzy
-#| msgid "" "Find extracts that will add value to the current debate. For
-#| example, you" " could find extracts for:"
 msgid ""
 "Find extracts that will add value to the current discussion. For example,"
 " you could find extracts for:"
 msgstr ""
-"Dénichez des extraits qui apporteront de la valeur au débat en cours. Par"
-" exemple, vous pourriez trouver des extraits pour :"
+"Dénichez des extraits qui apporteront de la valeur à la discussion en "
+"cours. Par exemple, vous pourriez trouver des extraits pour:"
 
 #: assembl/templates/views/bookmarket.tmpl:16
 msgid "Dig deeper in an existing idea"
@@ -1519,10 +1512,8 @@ msgstr ""
 "la discussion lorsqu'ils s'inscrivent"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:7
-#, fuzzy
-#| msgid "Return to the discussion"
 msgid "Welcome on the discussion!"
-msgstr "Revenir à la discussion"
+msgstr "Bienvenue à la discussion!"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:8
 msgid "You will receive notifications when:"
@@ -1543,10 +1534,8 @@ msgid "Edit my notifications"
 msgstr "Configurer mes notifications"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:19
-#, fuzzy
-#| msgid "Return to the discussion"
 msgid "Continue to the discussion"
-msgstr "Revenir à la discussion"
+msgstr "Consulter les échanges"
 
 #: assembl/templates/views/firstPost.tmpl:7
 msgid "Congratulations on making your first contribution!"
@@ -1591,22 +1580,38 @@ msgid ""
 " of contents of the ideas shared</li>\n"
 "\t</ol>"
 msgstr ""
+"<p>Voici comment participer à la discussion \"%(debate_name)s\":</p> <ul>"
+" <li>Explorez les échanges en naviguant sur les idées qui ont déjà "
+"émergé</li> <li>Poursuivez le dialogue en répondant directement aux "
+"contributions des participants</li> <li>Lancez un nouveau sujet de "
+"discussion si vous souhaitez relancer les échanges sur une idée en "
+"particulier</li> </ul> <p>Comment ça fonctionne:</p> <ol> <li>Au fur et à"
+" mesure que vous contribuez, des attrapeurs vont sélectionner les idées "
+"clés de vos messages – Ils sont là pour s'assurer que vos contributions "
+"sont remarquées</li> <li>À partir de ces idées, ils vont réorganiser ces "
+"idées dans une table des matières des idées identifiées</li> </ol><p>How "
+"to participate in the debate \"%(debate_name)s\":</p> <ol> <li>Explore "
+"the debate using the ideas that have already emerged</li> <li>Join in the"
+" conversation by replying directly to the contributions of "
+"participants</li> <li>Start a new topic of discussion if you wish to "
+"rejuvenate the debate around a particular idea</li> </ol> <p>How the "
+"process works:</p> <ol> <li>As you contribute, Harvesters will select the"
+" key ideas from your messages – they are here to make sure your "
+"contributions get noticed</li> <li>Based on these ideas, they will "
+"reorganize the ideas into a table of contents of the ideas shared</li> "
+"</ol> "
 
 #: assembl/templates/views/home.tmpl:18
-#, fuzzy
-#| msgid "Edit discussion"
 msgid "Join the discussions"
-msgstr "Éditer la discussion"
+msgstr "Rejoindre le groupe"
 
 #: assembl/templates/views/home.tmpl:20
 msgid "Your opinion deserves to be heard"
 msgstr "Votre opinion mérite d'être entendue"
 
 #: assembl/templates/views/home.tmpl:23
-#, fuzzy
-#| msgid "Create a new discussion"
 msgid "Read the discussions"
-msgstr "Créer une nouvelle discussion"
+msgstr "Consulter les échanges"
 
 #: assembl/templates/views/idea.tmpl:6 assembl/templates/views/idea.tmpl:12
 msgid "Remove from next synthesis"
@@ -1807,10 +1812,8 @@ msgid "More options"
 msgstr "Plus d'options"
 
 #: assembl/templates/views/message.tmpl:46
-#, fuzzy
-#| msgid "Reply to this message"
 msgid "Jump to this message's parent"
-msgstr "Répondre à ce message"
+msgstr "Voir le parent de ce message"
 
 #: assembl/templates/views/message.tmpl:50
 msgid "Go back to the entire topic thread"
@@ -2470,59 +2473,6 @@ msgstr "Nous n'avons pas de discussion sous le code=%s"
 
 #~ msgid "Continue to the debate"
 #~ msgstr "Explorer le débat"
-
-#~ msgid ""
-#~ "<p>How to participate in the debate \"%(debate_name)s\":</p>\n"
-#~ "\t<ol>\n"
-#~ "\t\t<li>Explore the debate using the "
-#~ "ideas that have already emerged</li>\n"
-#~ "\t\t<li>Join in the conversation by "
-#~ "replying directly to the contributions "
-#~ "of participants</li>\n"
-#~ "\t\t<li>Start a new topic of "
-#~ "discussion if you wish to rejuvenate "
-#~ "the debate around a particular idea</li>"
-#~ "\n"
-#~ "\t</ol>\n"
-#~ "\t<p>How the process works:</p>\n"
-#~ "\t<ol>\n"
-#~ "\t\t<li>As you contribute, Harvesters "
-#~ "will select the key ideas from "
-#~ "your messages – they are here to"
-#~ " make sure your contributions get "
-#~ "noticed</li>\n"
-#~ "\t\t<li>Based on these ideas, they "
-#~ "will reorganize the ideas into a "
-#~ "table of contents of the ideas "
-#~ "shared</li>\n"
-#~ "\t</ol>"
-#~ msgstr ""
-#~ "<p>Voici comment participer au débat \"%(debate_name)s\":</p>\n"
-#~ "<ul>\n"
-#~ "<li>Explorez le débat en naviguant sur"
-#~ " les idées qui ont déjà émergé</li>"
-#~ "\n"
-#~ "<li>Poursuivez le dialogue en répondant "
-#~ "directement aux contributions des "
-#~ "participants</li>\n"
-#~ "<li>Lancez un nouveau sujet de "
-#~ "discussion si vous souhaitez relancer le"
-#~ " débat sur une idée en "
-#~ "particulier</li>\n"
-#~ "</ul>\n"
-#~ "<p>Comment ça fonctionne:</p>\n"
-#~ "\t<ol>\n"
-#~ "\t\t<li>Au fur et à mesure que "
-#~ "vous contribuez, des animateurs vont "
-#~ "sélectionner les idées clés de vos "
-#~ "messages – Ils sont là pour "
-#~ "s'assurer que vos contributions sont "
-#~ "remarquées</li>\n"
-#~ "\t\t<li>À partir de ces idées, ils"
-#~ " vont réorganiser ces idées dans une"
-#~ " table des matières des idées "
-#~ "identifiées</li>\n"
-#~ "\t</ol>"
 
 #~ msgid "Join the debate"
 #~ msgstr "Rejoindre le débat"
