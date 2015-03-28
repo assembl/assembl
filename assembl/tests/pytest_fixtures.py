@@ -616,7 +616,7 @@ def creativity_session_widget(
             'notifications': [
                 {
                     'start': '2014-01-01T00:00:00',
-                    'end': format(datetime.now() + timedelta(1)),
+                    'end': format(datetime.utcnow() + timedelta(1)),
                     'message': 'creativity_session'
                 }
             ]}))

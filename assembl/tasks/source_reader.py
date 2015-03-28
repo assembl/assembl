@@ -15,7 +15,6 @@ from zope.component import getGlobalSiteManager
 from kombu import BrokerConnection, Exchange, Queue
 from kombu.mixins import ConsumerMixin
 from kombu.utils.debug import setup_logging
-import transaction
 
 from assembl.tasks import configure
 from assembl.lib.config import set_config
@@ -101,7 +100,7 @@ class SourceReader(Thread):
         super(SourceReader, self).__init__()
         self.source_id = source_id
         self.status = ReaderStatus.CREATED
-        self.last_prod = datetime.now()
+        self.last_prod = datetime.utcnow()
         self.last_read = datetime.fromtimestamp(0)
         self.last_successful_login = datetime.fromtimestamp(0)
         self.last_error_status = None
@@ -117,11 +116,11 @@ class SourceReader(Thread):
         self.status = status
 
     def successful_login(self):
-        self.last_successful_login = datetime.now()
+        self.last_successful_login = datetime.utcnow()
         self.reset_errors()
 
     def successful_read(self):
-        self.last_read = datetime.now()
+        self.last_read = datetime.utcnow()
         self.reset_errors()
         self.reimporting = False
 
@@ -173,7 +172,7 @@ class SourceReader(Thread):
                 assert False
         if self.status > ReaderStatus.TRANSIENT_ERROR:
             self.reimporting = False
-        self.last_error_time = datetime.now()
+        self.last_error_time = datetime.utcnow()
 
     def is_in_error(self):
         return self.last_error_status is not None
@@ -184,15 +183,15 @@ class SourceReader(Thread):
     def wake(self, reimport=False):
         self.reimporting = reimport
         if self.status in (ReaderStatus.PAUSED, ReaderStatus.CLOSED) and (
-                datetime.now() - max(self.last_prod, self.last_read)
+                datetime.utcnow() - max(self.last_prod, self.last_read)
                 > self.min_time_between_reads):
             self.event.set()
         elif self.status == ReaderStatus.TRANSIENT_ERROR and (
-                datetime.now() - max(self.last_prod, self.last_error_status)
+                datetime.utcnow() - max(self.last_prod, self.last_error_status)
                 > self.transient_error_backoff):
             # Exception: transient backoff escalation can be cancelled by wake
             self.event.set()
-        self.last_prod = datetime.now()
+        self.last_prod = datetime.utcnow()
 
     def run(self):
         self.setup()

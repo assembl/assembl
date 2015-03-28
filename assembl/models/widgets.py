@@ -161,7 +161,7 @@ class Widget(DiscussionBoundBase):
     def has_notification(self):
         settings = self.settings_json
         notifications = settings.get('notifications', [])
-        now = datetime.now()
+        now = datetime.utcnow()
 
         for notification in notifications:
             try:
@@ -464,7 +464,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
 
     def notification_data(self, data):
         end = data.get('end', None)
-        time_to_end = (datetime.strptime(end, ISO_8601_FORMAT) - datetime.now()
+        time_to_end = (datetime.strptime(end, ISO_8601_FORMAT) - datetime.utcnow()
                        ).total_seconds() if end else None
         participant_ids = set()
         # participants from user_configs

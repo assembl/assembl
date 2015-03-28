@@ -293,7 +293,7 @@ class NotificationSubscription(DiscussionBoundBase):
             status = NotificationSubscriptionStatus.from_string(status)
             if status != self.status:
                 self.status = status
-                self.last_status_change_date = datetime.now()
+                self.last_status_change_date = datetime.utcnow()
         duplicate = self.find_duplicate()
         if duplicate is not None:
             raise HTTPBadRequest("Duplicate of <%s> created" % (duplicate.uri()))

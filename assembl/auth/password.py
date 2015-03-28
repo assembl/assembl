@@ -65,7 +65,7 @@ def email_token(email):
 
 
 def password_token(user):
-    now = datetime.now()
+    now = datetime.utcnow()
     user.last_login = now
     resolution=19
     token_str = str(user.id)+now.isoformat()[:resolution]
@@ -115,7 +115,7 @@ def verify_password_change_token(token, duration):
     user = User.get(id)
     if not user:
         return False, None
-    age = datetime.now() - user.last_login
+    age = datetime.utcnow() - user.last_login
     if age > timedelta(duration/24.0):
         return False, id
     check = str(id)+user.last_login.isoformat()[:19]

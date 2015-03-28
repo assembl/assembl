@@ -319,14 +319,14 @@ def add_user(name, email, password, role, force=False, username=None,
                 preferred_email=email,
                 verified=True,
                 password=password,
-                creation_date=datetime.now())
+                creation_date=datetime.utcnow())
         else:
             user = User(
                 name=name,
                 preferred_email=email,
                 verified=True,
                 password=password,
-                creation_date=datetime.now())
+                creation_date=datetime.utcnow())
         db.add(user)
         if username:
             db.add(Username(username=username, user=user))

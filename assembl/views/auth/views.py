@@ -313,7 +313,7 @@ def assembl_register_view(request):
         name=name,
         password=password,
         verified=not validate_registration,
-        creation_date=datetime.now()
+        creation_date=datetime.utcnow()
     )
     email_account = EmailAccount(
         email=email,
@@ -503,7 +503,7 @@ def velruse_login_complete_view(request):
         if isinstance(profile, User):
             if profile.username:
                 username = profile.username.username
-            profile.last_login = datetime.now()
+            profile.last_login = datetime.utcnow()
             if not profile.name:
                 profile.name = velruse_profile.get('displayName', None)
     else:
@@ -511,8 +511,8 @@ def velruse_login_complete_view(request):
         profile = User(
             name=velruse_profile.get('displayName', ''),
             verified=True,
-            last_login=datetime.now(),
-            creation_date=datetime.now(),
+            last_login=datetime.utcnow(),
+            creation_date=datetime.utcnow(),
             #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
         )
 
@@ -869,7 +869,7 @@ def do_password_change(request):
     user = User.get(user_id)
     headers = remember(request, user_id)
     request.response.headerlist.extend(headers)
-    user.last_login = datetime.now()
+    user.last_login = datetime.utcnow()
     slug = request.matchdict.get('discussion_slug', None)
     slug_prefix = "/" + slug if slug else ""
     return dict(
