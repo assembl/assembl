@@ -92,6 +92,11 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
               'change':'render',
               'openWithFullBodyView': 'onOpenWithFullBodyView'
             },
+            
+            ui: {
+              jumpToParentButton: ".js_message-jumptoparentbtn"
+            },
+            
 
             /**
              * @event
@@ -103,6 +108,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 'click .js_readMore': 'onMessageTitleClick',
                 'click .js_readLess': 'onMessageTitleClick',
                 'click .message-hoistbtn': 'onMessageHoistClick',
+                'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
 
                 //
                 'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
@@ -121,6 +127,20 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 'click .js_openTargetInPopOver': 'openTargetInPopOver'
             },
 
+            /**
+             * @param htmlOrText Any string, p and br tags are replaced with 
+             * spaces, and all html is stripped
+             * @return string
+             */
+            generateBodyPreview: function(htmlOrText){
+              // The div is just there in case there actually isn't any html
+              // in which case jquery would crash without it
+              var bodyWithoutNewLine = $("<div>" + String(htmlOrText) + "</div>");
+              bodyWithoutNewLine.find("p").after(" ");
+              bodyWithoutNewLine.find("br").replaceWith(" ");
+              return bodyWithoutNewLine.text().replace(/\s{2,}/g, ' ');
+            },
+            
             serializeData: function(){
                 var bodyFormatClass,
                     body,
@@ -131,12 +151,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     if (bodyFormat == "text/html") {
                         //Strip HTML from preview
                         bodyFormat = "text/plain";
-                        // The div is just there in case there actually isn't any html
-                        // in which case jquery would crash without it
-                        var bodyWithoutNewLine = $("<div>" + String(this.model.get('body')) + "</div>");
-                        bodyWithoutNewLine.find("p").after(" ");
-                        bodyWithoutNewLine.find("br").replaceWith(" ");
-                        body = bodyWithoutNewLine.text().replace(/\s{2,}/g, ' ');
+                        body = this.generateBodyPreview(this.model.get('body'));
                     }
                 }
 
@@ -160,6 +175,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     viewStyle: this.viewStyle,
                     metadata_json: metadata_json,
                     creator: this.creator,
+                    parentId: this.model.get('parentId'),
                     body: body,
                     bodyFormatClass: bodyFormatClass,
                     messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
@@ -228,7 +244,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                       messageList: that.messageListView,
                       msg_in_progress_body: partialMessage['body'],
                       msg_in_progress_ctx: modelId,
-                      mandatory_subject_missing_msg: null
+                      mandatory_subject_missing_msg: null,
+                      enable_button: true
                   });
                   that.$('.message-replybox').append(this.replyView.render().el);
   
@@ -652,6 +669,10 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 // we will hoist the post, or un-hoist it if it is already hoisted
                 this.isHoisted = this.messageListView.toggleFilterByPostId(this.model.getId());
                 this.render(); // so that the isHoisted property will now be considered
+            },
+            
+            onMessageJumpToParentClick: function (ev) {
+              this.messageListView.showMessageById(this.model.get('parentId'));
             },
 
             /**

@@ -61,24 +61,7 @@
   .panel-body {
     top: 0px;
     background-color: $gray5;
-
-    .real-time-updates{
-      position: absolute;
-      margin-left: auto;
-      margin-right: auto;
-      left: 0;
-      right: 0;
-
-      .btn-real-time{
-        box-shadow: 0 3px 8px rgba(0,0,0,0.5);
-        height: 24px;
-        cursor: pointer;
-        border-radius: 0 0 2px 2px;
-        font-weight: bold;
-        font-size: 12px;
-        border: none;
-      }
-    }
+    z-index: 1;
   }
 
   .options-filter,
@@ -128,6 +111,7 @@
     width: 100%;
     left: 0;
     line-height: 37px;
+    z-index: 2;
 
     .icon-comment {
       font-size: 22px;
@@ -140,6 +124,25 @@
       margin-left: -2px !important;
     }
 
+  }
+
+  .real-time-updates{
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    z-index: 2;
+
+    .btn-real-time{
+      box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+      height: 24px;
+      cursor: pointer;
+      @include border-radius(0 0 2px 2px);
+      font-weight: bold;
+      font-size: 12px;
+      border: none;
+    }
   }
 
 }

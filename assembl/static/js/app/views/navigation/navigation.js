@@ -47,7 +47,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 this.visualizationItems = new Backbone.Collection();
                 this.num_items = 3;
 
-                Ctx.getDiscussionPromise().then(function(discussion) {
+                Ctx.DEPRECATEDgetDiscussionPromise().then(function(discussion) {
                     var settings = discussion['settings'];
                     var jed;
                     try {

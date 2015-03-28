@@ -360,7 +360,7 @@ class AssemblQuadStorageManager(object):
     sections = {section.name: section for section in chain(*(
         storage.sections for storage in storages))}
     global_graph = QUADNAMES.global_graph
-    current_discussion_storage_version = 5
+    current_discussion_storage_version = 6
 
     def __init__(self, session=None, nsm=None):
         self.session = session or get_session()
@@ -373,6 +373,10 @@ class AssemblQuadStorageManager(object):
     @staticmethod
     def local_uri():
         return "http://%s/data/" % (get_config().get('public_hostname'))
+
+    def audit_metadata(self):
+        # in response to error 22023, The quad storage is edited by other client
+        self.session.execute("DB.DBA.RDF_AUDIT_METADATA(1, '*')")
 
     def prepare_storage(self, quad_storage_name, imported=None):
         cpe = AssemblClassPatternExtractor(
@@ -417,8 +421,8 @@ class AssemblQuadStorageManager(object):
         qs = QuadStorage(storage_name, None, nsm=self.nsm)
         try:
             qs.drop(self.session, force)
-        except:
-            pass
+        except Exception as e:
+            print e
 
     def drop_graph(self, graph_iri, force=True):
         gr = GraphQuadMapPattern(graph_iri, None, nsm=self.nsm)
@@ -564,6 +568,7 @@ class AssemblQuadStorageManager(object):
             self.drop_discussion_storage(storage_num)
 
     def update_all_storages(self):
+        self.audit_metadata()
         self.declare_functions()
         # drop old single-discussion storages
         self.drop_all_discussion_storages_but(None)

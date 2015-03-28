@@ -169,10 +169,13 @@ def get_posts(request):
         
     #posts = posts.options(contains_eager(Post.source))
     # Horrible hack... But useful for structure load
-    if view_def == 'partial':
+    if view_def == 'id_only':
         pass  # posts = posts.options(defer(Post.body))
     else:
         posts = posts.options(joinedload_all(Post.creator), undefer(Email.recipients))
+        posts = posts.options(joinedload_all(Post.extracts))
+        posts = posts.options(joinedload_all(Post.widget_idea_links))
+        posts = posts.options(joinedload_all(SynthesisPost.publishes_synthesis))
 
     if order == 'chronological':
         posts = posts.order_by(Content.creation_date)
@@ -341,7 +344,7 @@ def create_post(request):
     else:
         #print(in_reply_to_post.subject, discussion.topic)
         if in_reply_to_post:
-            subject = in_reply_to_post.subject if in_reply_to_post.subject else ''
+            subject = in_reply_to_post.get_title() if in_reply_to_post.get_title() else ''
         elif in_reply_to_idea:
             #TODO:  THis should use a cascade like the frontend   
             subject = in_reply_to_idea.short_title if in_reply_to_idea.short_title else ''

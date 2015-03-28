@@ -11,7 +11,7 @@
     <div>
         <a class="bookmarklet" data-toggle="tooltip" title="{{gettext('Drag this button to your bookmark bar to create a bookmarklet. You can then capture selections from most webpages (those that are not secured with https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of text you wish to send to the discussion.')}}" href="javascript:(function(a,b){r='//{{ request.server_name }}:{{ request.server_port }}',a._annotatorConfig={root:r,discussion:{{ discussion.id }}},s=b.body.appendChild(b.createElement('script')),s.language='javascript',s.src=r+'/static/js/lib/annotator_bkmklet.min.js'})(this,this.document);">{{ gettext('Web capture to') }} {{ discussion.slug }}</a>
     </div>
-    <li>{{ gettext("Find extracts that will add value to the current debate. For example, you could find extracts for:") }}
+    <li>{{ gettext("Find extracts that will add value to the current discussion. For example, you could find extracts for:") }}
       <ul>
         <li>{{ gettext("Dig deeper in an existing idea") }}</li>
         <li>{{ gettext("Bring supplementary information relative to an idea") }}</li>

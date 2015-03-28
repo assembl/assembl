@@ -1032,7 +1032,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                         }
 
                         var pie_chart_data = [
-                            "the title of the first element is purposely not used, only its data is used", //"posted since the beginning of the debate",
+                            "the title of the first element is purposely not used, only its data is used", //"posted since the beginning of the discussion",
                             authors_total,
                             messages_total,
                             "",
@@ -1086,8 +1086,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                             null,
                             null,
                             i18n.sprintf(i18n.ngettext(
-                                "%d participant has contributed since the beginning of the debate",
-                                "%d participants have contributed since the beginning of the debate",
+                                "%d participant has contributed since the beginning of the discussion",
+                                "%d participants have contributed since the beginning of the discussion",
                                 authors_total), authors_total),
                             null,
                             authors_total,
@@ -1322,7 +1322,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
             seeMore: function (e) {
                 e.stopPropagation();
-                Ctx.getDiscussionPromise().then(function (discussion) {
+                Ctx.DEPRECATEDgetDiscussionPromise().then(function (discussion) {
                     if($(e.target).hasClass('js_introductionSeeMore')) {
                         var model = new Backbone.Model({
                             content: discussion.introduction,

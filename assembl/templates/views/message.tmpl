@@ -42,6 +42,10 @@
              <% } %>
             <% } %>
 
+            <% if( parentId ){ %>
+            <li><a href="#" class="js_message-jumptoparentbtn">{{gettext("Jump to this message's parent")}}</a></li>
+            <% } %>
+            
             <% if( isHoisted === true ){ %>
             <li><a href="#" class="message-hoistbtn" data-id="<%= escape(message.get('@id')) %>">{{gettext('Go back to the entire topic thread')}}</a></li>
             <% } else { %>

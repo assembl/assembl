@@ -4,7 +4,7 @@
 
 <div class="popin-body ptxs background-grey">
   <div class="content">
-    <h1 class="h1 pbs">{{ gettext('Welcome on the debate!') }}</h1>
+    <h1 class="h1 pbs">{{ gettext('Welcome on the discussion!') }}</h1>
     <h6 class="h6 tal">{{ gettext('You will receive notifications when:') }}</h6>
     <ul class="tal"><% console.log("notificationsToShow in template: ", notificationsToShow); _.each(notificationsToShow, function(notification, i){ %>
     	<li class="h6"><%= i18n.gettext(notification.get('human_readable_description')) %></li>
@@ -16,5 +16,5 @@
 
 <div class="popin-footer background-lightgrey">
   <a class="btn btn-cancel btn-sm fl" href="<%= urlNotifications %>">{{ gettext('Edit my notifications') }}</a>
-  <button class="btn btn-third btn-sm fr js_close">{{ gettext('Continue to the debate') }}</button>
+  <button class="btn btn-third btn-sm fr js_close">{{ gettext('Continue to the discussion') }}</button>
 </div>

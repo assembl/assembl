@@ -23,8 +23,11 @@ from assembl.auth import R_SYSADMIN, R_PARTICIPANT
 
 @pytest.fixture(scope="session")
 def app_settings(request):
+    from assembl.lib.config import set_config
     app_settings_file = request.config.getoption('test_settings_file')
-    return get_appsettings(app_settings_file, 'assembl')
+    app_settings = get_appsettings(app_settings_file, 'assembl')
+    set_config(app_settings)
+    return app_settings
 
 
 @pytest.fixture(scope="session")

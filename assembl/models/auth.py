@@ -34,9 +34,11 @@ from pyramid.security import Everyone, Authenticated
 from rdflib import URIRef
 from virtuoso.vmapping import IriClass, PatternIriClass
 from virtuoso.alchemy import CoerceUnicode
+import transaction
 
 from ..lib import config
-from ..lib.sqla import (UPDATE_OP, INSERT_OP, get_model_watcher)
+from ..lib.sqla import (
+    UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
 from . import Base, DiscussionBoundBase, DiscussionBoundTombstone
 from ..auth import *
 from ..semantic.namespaces import (
@@ -203,20 +205,8 @@ class AgentProfile(Base):
     def external_avatar_url(self):
         return "/user/id/%d/avatar/" % (self.id,)
 
-    def serializable(self, use_email=None):
-        # Obsolete method. We want to switch to view_defs.
-        # Not returning the email is intentional for confidentiality reasons
-        return {
-            '@type': self.external_typename(),
-            '@id': self.uri_generic(self.id),
-            'name': self.name or self.display_name()
-        }
-
     def get_agent_preload(self, view_def='default'):
-        if view_def:
-            result = self.generic_json(view_def, user_id=self.id)
-        else:
-            result = self.serializable()
+        result = self.generic_json(view_def, user_id=self.id)
         return json.dumps(result)
 
     def count_posts_in_discussion(self, discussion_id):
@@ -321,6 +311,8 @@ class AbstractAgentAccount(Base):
     # Virtuoso + nullable -> no unique index (sigh)
     email = Column(String(100), index=True)
     # info={'rdf': QuadMapPatternS(None, SIOC.email)}
+    # Note: we could also have a FOAF.mbox, but we'd have to make
+    # them into URLs with mailto:
 
     def signature(self):
         "Identity of signature implies identity of underlying account"
@@ -381,10 +373,6 @@ class EmailAccount(AbstractAgentAccount):
     def display_name(self):
         if self.verified:
             return self.email
-
-    def serialize_profile(self):
-        # Obsolete method. We want to switch to view_defs.
-        return self.profile.serializable(self.email)
 
     def signature(self):
         return ('agent_email_account', self.email,)
@@ -471,8 +459,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
     userid = Column(String(200))
     #    info={'rdf': QuadMapPatternS(None, SIOC.id)})
     profile_info = deferred(Column(Text()))
-    picture_url = Column(String(300),
-        info={'rdf': QuadMapPatternS(None, FOAF.img)})
+    picture_url = Column(String(300))
     profile_i = relationship(AgentProfile, backref='identity_accounts')
 
     def __init__(self, profile_info_json=None, **kwargs):
@@ -545,6 +532,15 @@ class IdentityProviderAccount(AbstractAgentAccount):
                 if size <= name_size:
                     break
             return size_name.join(self.picture_url.split('_normal'))
+
+    @classmethod
+    def special_quad_patterns(cls, alias_maker, discussion_id):
+        return [QuadMapPatternS(AgentProfile.iri_class().apply(
+                IdentityProviderAccount.profile_id),
+            FOAF.img, IdentityProviderAccount.picture_url,
+            name=QUADNAMES.foaf_image,
+            conditions=(IdentityProviderAccount.picture_url != None),
+            sections=(PRIVATE_USER_SECTION,))]
 
     def unique_query(self):
         query, _ = super(IdentityProviderAccount, self).unique_query()
@@ -749,13 +745,6 @@ class User(AgentProfile):
             watcher.processAccountModified(self.id)
         elif operation == INSERT_OP:
             watcher.processAccountCreated(self.id)
-
-    def serializable(self, use_email=None):
-        # Obsolete method. We want to switch to view_defs.
-        ser = super(User, self).serializable()
-        ser['username'] = self.display_name()
-        #r['email'] = use_email or self.get_preferred_email()
-        return ser
 
     def subscribe(self, discussion, role=R_PARTICIPANT):
         existing = self.db.query(LocalUserRole).join(Role).filter(
@@ -1256,47 +1245,43 @@ class UserTemplate(DiscussionBoundBase, User):
             self.get_applicable_notification_subscriptions_classes()
         # We need to materialize missing NotificationSubscriptions,
         # But have duplication issues, probably due to calls on multiple
-        # threads.
-        # TEMPORARY: We will apply a write lock selectively.
-        # LONG TERM: We will only materialize subscriptions when selected.
-
-        def get_subcriptions(lock):
-            query = self.db.query(NotificationSubscription).filter_by(
-                discussion_id=self.discussion_id, user_id=self.id)
-            if lock:
-                query = query.with_for_update()
-            my_subscriptions = query.all()
-            my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
-            missing = set(needed_classes) - my_subscriptions_classes
-            return my_subscriptions, missing
-        my_subscriptions, missing = get_subcriptions(False)
-        if not missing:
-            return my_subscriptions, False
-        my_subscriptions, missing = get_subcriptions(True)
-        if not missing:
-            return my_subscriptions, False
+        # threads. So iterate until it works.
+        query = self.db.query(NotificationSubscription).filter_by(
+            discussion_id=self.discussion_id, user_id=self.id)
+        changed = False
+        discussion_id = self.discussion_id
+        my_id = self.id
+        role_name = self.for_role.name.split(':')[-1]
         # TODO: Fill from config.
         subscribed = defaultdict(bool)
-        role_name = self.for_role.name.split(':')[-1]
         default_config = config.get_config().get(
             ".".join(("subscriptions", role_name, "default")),
             "FOLLOW_SYNTHESES")
         for role in default_config.split('\n'):
             subscribed[role.strip()] = True
-        defaults = [
-            cls(
-                discussion_id=self.discussion_id,
-                user_id=self.id,
-                creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
-                status=(NotificationSubscriptionStatus.ACTIVE
-                        if subscribed[cls.__mapper__.polymorphic_identity.name]
-                        else NotificationSubscriptionStatus.INACTIVE_DFT))
-            for cls in missing
-        ]
-        for d in defaults:
-            self.db.add(d)
-        self.db.flush()
-        return chain(my_subscriptions, defaults), True
+        while True:
+            my_subscriptions = query.all()
+            my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
+            missing = set(needed_classes) - my_subscriptions_classes
+            if not missing:
+                return my_subscriptions, changed
+            changed = True
+            try:
+                with transaction.manager:
+                    defaults = [
+                        cls(
+                            discussion_id=discussion_id,
+                            user_id=my_id,
+                            creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                            status=(NotificationSubscriptionStatus.ACTIVE
+                                    if subscribed[cls.__mapper__.polymorphic_identity.name]
+                                    else NotificationSubscriptionStatus.INACTIVE_DFT))
+                        for cls in missing
+                    ]
+                    for d in defaults:
+                        self.db.add(d)
+            except ObjectNotUniqueError as e:
+                transaction.abort()
 
 
 Index("user_template", "discussion_id", "role_id")

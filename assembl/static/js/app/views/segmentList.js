@@ -30,13 +30,15 @@ define(['backbone.marionette','backbone', 'underscore', 'jquery', 'app', 'common
                     currentUser = Ctx.getCurrentUser(),
                     harvester = this.model.getCreatorFromUsersCollection(this.allUsersCollection);
 
+                if(!harvester) {
+                  throw new Error("No harvester found in segment");
+                }
                 if (idPost) {
                     post = this.allMessagesCollection.get(idPost);
                     if (post) {
                         postCreator = this.allUsersCollection.get(post.get('idCreator'));
                     }
                 }
-
                 return {
                     segment: this.model,
                     post: post,

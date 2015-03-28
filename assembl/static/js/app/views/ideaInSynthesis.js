@@ -123,7 +123,8 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
                     'msg_in_progress_body': partialMessage['body'],
                     'msg_in_progress_ctx': partialCtx,
                     'send_callback': send_callback,
-                    'messageList': this.messageListView
+                    'messageList': this.messageListView,
+                    'enable_button': false
                 });
                 this.$('.synthesisIdea-replybox').append(this.replyView.render().el);
             },

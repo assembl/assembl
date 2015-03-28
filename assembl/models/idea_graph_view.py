@@ -331,18 +331,6 @@ class TableOfContents(IdeaGraphView):
     discussion = relationship(
         Discussion, backref=backref("table_of_contents", uselist=False))
 
-    def serializable(self):
-        return {
-            "@id": self.uri_generic(self.id),
-            "@type": self.external_typename(),
-            "topic": self.topic,
-            "slug": self.slug,
-            "table_of_contents_id":
-            TableOfContents.uri_generic(self.table_of_contents_id),
-            "synthesis_id":
-            Synthesis.uri_generic(self.synthesis_id)
-        }
-
     def get_discussion_id(self):
         return self.discussion.id
 

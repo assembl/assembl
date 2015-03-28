@@ -323,32 +323,6 @@ class Extract(IdeaContentPositiveLink):
             retval['url'] = self.content.url
         return retval
 
-    def serializable(self):
-        json = {
-            '@id': self.uri_generic(self.id),
-            '@type': self.external_typename(),
-            'annotator_schema_version': 'v1.0',
-            'quote': self.body,
-            'ranges': [tfi.__json__() for tfi
-                       in self.text_fragment_identifiers],
-            'target': self.target,
-            'important': self.important,
-            'created': self.creation_date.isoformat(),
-            'idCreator': AgentProfile.uri_generic(self.creator_id),
-            #'user': self.creator.get_uri(),
-            'text': self.annotation_text,
-        }
-        if self.idea_id:
-            json['idIdea'] = Idea.uri_generic(self.idea_id)
-            #json['text'] += '<a href="%s">%s</a>' % (
-            #   self.idea.get_uri(), self.idea.short_title)
-        if isinstance(self.content, Post):
-            json['idPost'] = Post.uri_generic(self.content.id)  # legacy
-            #json['url'] = self.post.get_uri()
-        elif self.content.type == 'webpage':
-            json['uri'] = self.content.url
-        return json
-
     def __repr__(self):
         return "<Extract %d %s>" % (self.id or -1, repr(self.body[:20]))
 

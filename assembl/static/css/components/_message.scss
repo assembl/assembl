@@ -8,7 +8,6 @@ $mesageBodyLineHeight: $baseLineHeight;
 $ten: 10px;
 $separatorBulletMargin: 0.6em;
 $previewNumLines: 4;
-$message-body: #999999;
 
 // A message block
 // ================
@@ -75,7 +74,7 @@ $message-body: #999999;
     }
   }
 
-  .js_messageTitle, .js_messageHeader, {
+  .js_messageTitle, .js_messageHeader {
     cursor: pointer;
   }
 
@@ -159,6 +158,12 @@ $message-body: #999999;
     }
     .message-menu-actions {
       margin-top: $mesageSpacing;
+      & * {
+        opacity: 0.7;
+      }
+      & *:hover {
+        opacity: 1;
+      }
     }
     .head {
       border-bottom: 2px solid $gray3;
@@ -204,14 +209,14 @@ $message-body: #999999;
     &:hover {
       .message-menu-actions {
         visibility: visible;
-        opacity: 1;
       }
     }
     .message-menu-actions {
-      /*visibility: hidden;
-      opacity: 0;*/
-      visibility: visible;
-      opacity: 0.5;
+      visibility: hidden;
+    }
+
+    .message-subject, .message-date {
+      color: $txtGray1;
     }
 
     .message-body {
@@ -219,7 +224,7 @@ $message-body: #999999;
       padding: 0px;
       //max-height: $previewNumLines * $mesageBodyLineHeight * $messageBodyFontSize;
       overflow: hidden;
-      color: $message-body;
+      color: $txtGray1;
     }
 
     .message-body.body_format_text_plain > .elipsis > div {
@@ -297,7 +302,7 @@ $message-body: #999999;
         @extend .header-separator-bullet;
         text-overflow: ellipsis;
         white-space: nowrap;
-        color: #333333;
+        color: $txtGray2;
       }
       .message-body {
         @extend .header_item_template;

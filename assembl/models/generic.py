@@ -71,15 +71,6 @@ class ContentSource(DiscussionBoundBase):
 
     retypeable_as = ("IMAPMailbox", "MailingList", "AbstractMailbox")
 
-    def serializable(self):
-        return {
-            "@id": self.uri_generic(self.id),
-            "@type": self.external_typename(),
-            "name": self.name,
-            "creation_date": self.creation_date.isoformat(),
-            "discussion_id": self.discussion_id
-        }
-
     def __repr__(self):
         return "<ContentSource %s>" % repr(self.name)
 
@@ -123,12 +114,6 @@ class PostSource(ContentSource):
     __mapper_args__ = {
         'polymorphic_identity': 'post_source',
     }
-
-    def serializable(self):
-        ser = super(PostSource, self).serializable()
-        ser["last_import"] = \
-            self.last_import.isoformat() if self.last_import else None
-        return ser
 
     def __repr__(self):
         return "<PostSource %s>" % repr(self.name)

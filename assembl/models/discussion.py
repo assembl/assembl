@@ -16,7 +16,7 @@ from sqlalchemy import (
     event,
     and_,
 )
-from sqlalchemy.orm import relationship, join
+from sqlalchemy.orm import relationship, join, subqueryload_all
 
 from assembl.lib.utils import slugify
 from . import DiscussionBoundBase
@@ -131,16 +131,6 @@ class Discussion(DiscussionBoundBase):
         return self.db.query(self.__class__).filter_by(
             slug=self.slug), True
 
-    def serializable(self):
-        return {
-            "@id": self.uri(),
-            "@type": self.external_typename(),
-            "topic": self.topic,
-            "slug": self.slug,
-            "creation_date": self.creation_date.isoformat(),
-            "root_idea": self.root_idea.uri()
-        }
-
     @property
     def settings_json(self):
         if self.settings:
@@ -179,7 +169,14 @@ class Discussion(DiscussionBoundBase):
 
     def get_all_syntheses(self):
         from .idea_graph_view import Synthesis
-        return self.db().query(Synthesis).filter(
+        return self.db().query(
+            Synthesis).options(
+            subqueryload_all(
+            'idea_assocs.idea'),
+            subqueryload_all(
+            'idealink_assocs.idea_link'),
+            subqueryload_all(
+            Synthesis.published_in_post)).filter(
             Synthesis.discussion_id == self.id).all()
 
     def get_permissions_by_role(self):
@@ -226,14 +223,14 @@ class Discussion(DiscussionBoundBase):
     def get_all_agents_preload(self, user=None):
         from assembl.views.api.agent import _get_agents_real
         return json.dumps(_get_agents_real(
-            self, user.id if user else Everyone))
+            self, user.id if user else Everyone, 'partial'))
 
     def get_readers_preload(self):
-        return json.dumps([user.serializable() for user in self.get_readers()])
+        return json.dumps([user.generic_json('partial') for user in self.get_readers()])
 
-    def get_ideas_preload(self):
+    def get_ideas_preload(self, user_id):
         from assembl.views.api.idea import _get_ideas_real
-        return json.dumps(_get_ideas_real(discussion=self))
+        return json.dumps(_get_ideas_real(discussion=self, user_id=user_id))
 
     def get_idea_links(self):
         from .idea import Idea
@@ -248,9 +245,9 @@ class Discussion(DiscussionBoundBase):
             Idea.discussion_id == self.id).filter(
                 ~Idea.source_links.any()).all()
 
-    def get_related_extracts_preload(self):
+    def get_related_extracts_preload(self, user_id):
         from assembl.views.api.extract import _get_extracts_real
-        return json.dumps(_get_extracts_real(discussion=self))
+        return json.dumps(_get_extracts_real(discussion=self, user_id=user_id))
 
     def get_user_permissions(self, user_id):
         from ..auth.util import get_permissions
