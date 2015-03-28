@@ -55,17 +55,22 @@
 {% endblock %}
 
 {% block extra_js %}
+    {% if user %}   
+      {% set userId = user.id %}
+    {% else %}
+      {% set userId = 'system.Everyone' %}
+    {% endif %}
+
     <script type="text/javascript">start_application = true;</script>
     <script type="text/json" id="users-json">{{ discussion.get_all_agents_preload(user) |safe }}</script>
-    <script type="text/json" id="ideas-json">{{ discussion.get_ideas_preload(user_id=user.id) |safe }}</script>
-    <script type="text/json" id="extracts-json">{{ discussion.get_related_extracts_preload(user_id=user.id) |safe }}</script>
+    <script type="text/json" id="ideas-json">{{ discussion.get_ideas_preload(user_id=userId) |safe }}</script>
+    <script type="text/json" id="extracts-json">{{ discussion.get_related_extracts_preload(user_id=userId) |safe }}</script>
     {% if user %}
         <script type="text/json" id="current-user-json">{{ user.get_agent_preload() |safe }}</script>
-        <script type="text/json" id="permissions-json">{{ discussion.get_user_permissions_preload(user.id) |safe }}</script>
-        <script type="text/json" id="read-posts-json">{{ discussion.get_read_posts_ids_preload(user.id) |safe }}</script>
-    {% else %}
-        <script type="text/json" id="permissions-json">{{ discussion.get_user_permissions_preload('system.Everyone') |safe }}</script>
+        <script type="text/json" id="read-posts-json">{{ discussion.get_read_posts_ids_preload(userId) |safe }}</script>
     {% endif %}
+    <script type="text/json" id="permissions-json">{{ discussion.get_user_permissions_preload(userId) |safe }}</script>
+
 
 {% endblock %}
 
