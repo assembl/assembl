@@ -583,7 +583,7 @@ def install_builddeps():
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
-        sudo('apt-get install -y automake bison flex gperf  libxml2-dev libssl-dev libreadline-dev')
+        sudo('apt-get install -y automake bison flex gperf  libxml2-dev libssl-dev libreadline-dev gawk')
 
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev')
