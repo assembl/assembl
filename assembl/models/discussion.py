@@ -228,9 +228,9 @@ class Discussion(DiscussionBoundBase):
     def get_readers_preload(self):
         return json.dumps([user.generic_json('partial') for user in self.get_readers()])
 
-    def get_ideas_preload(self):
+    def get_ideas_preload(self, user_id):
         from assembl.views.api.idea import _get_ideas_real
-        return json.dumps(_get_ideas_real(discussion=self))
+        return json.dumps(_get_ideas_real(discussion=self, user_id=user_id))
 
     def get_idea_links(self):
         from .idea import Idea
@@ -245,9 +245,9 @@ class Discussion(DiscussionBoundBase):
             Idea.discussion_id == self.id).filter(
                 ~Idea.source_links.any()).all()
 
-    def get_related_extracts_preload(self):
+    def get_related_extracts_preload(self, user_id):
         from assembl.views.api.extract import _get_extracts_real
-        return json.dumps(_get_extracts_real(discussion=self))
+        return json.dumps(_get_extracts_real(discussion=self, user_id=user_id))
 
     def get_user_permissions(self, user_id):
         from ..auth.util import get_permissions

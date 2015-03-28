@@ -166,6 +166,9 @@ define(['underscore', 'models/base', 'common/context', 'models/agents', 'models/
             getCreatorFromUsersCollection: function (usersCollection) {
                 var creatorId = this.get('idCreator'),
                     creator = usersCollection.getById(creatorId);
+                if(!creatorId) {
+                  throw new Error("A segment cannot have an empty creator");
+                }
                 return creator;
             },
 
@@ -226,7 +229,7 @@ define(['underscore', 'models/base', 'common/context', 'models/agents', 'models/
             addAnnotationAsExtract: function (annotation, idIdea) {
                 var that = this,
                     idPost = Ctx.getPostIdFromAnnotation(annotation);
-                console.log("addAnnotationAsExtract called");
+                //console.log("addAnnotationAsExtract called");
 
                 var segment = new SegmentModel({
                     target: { "@id": idPost, "@type": Types.EMAIL },
