@@ -11,10 +11,6 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
              */
             template: '#tmpl-loader',
 
-            ui:{
-              synthesisReplyBox: '.synthesisIdea-replybox'
-            },
-
             /**
              * @init
              */
@@ -69,7 +65,8 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
                   longTitle: this.model.getLongTitleDisplayText(),
                   authors: _.uniq(this.authors),
                   subject: this.model.get('longTitle'),
-                  synthesis_is_published: this.synthesis.get("published_in_post") != null
+                  synthesis_is_published: this.synthesis.get("published_in_post") != null,
+                  canEdit: Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)
                 }
             },
 
