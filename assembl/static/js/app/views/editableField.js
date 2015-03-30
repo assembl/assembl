@@ -8,10 +8,10 @@ define(['backbone', 'backbone.marionette', 'app', 'common/context', 'underscore'
             initialize: function (options) {
                 this.view = this;
 
-                (_.has(options, 'canEdit')) ? this.canEdit = options.canEdit : this.canEdit = true;
-                (_.has(options, 'modelProp')) ? this.modelProp = options.modelProp : this.modelProp = null;
-                (_.has(options, 'placeholder')) ? this.placeholder = options.placeholder : this.placeholder = null;
-                (_.has(options, 'focus')) ? this.focus = options.focus : this.focus = null;
+                this.canEdit = (_.has(options, 'canEdit')) ? options.canEdit : true;
+                this.modelProp = (_.has(options, 'modelProp')) ? options.modelProp : null;
+                this.placeholder = (_.has(options, 'placeholder')) ? options.placeholder : null;
+                this.focus = (_.has(options, 'focus')) ? options.focus : null;
 
                 if (this.model === null) {
                     throw new Error('EditableField needs a model');

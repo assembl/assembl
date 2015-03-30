@@ -32,7 +32,7 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
                 this.fieldId = _.uniqueId('ckeditorField');
                 this.bottomId = _.uniqueId('ckeditorField-bottomid');
 
-                (this.editing) ? this.editing = true : this.editing = false;
+                this.editing = (this.editing) ? true : false;
 
                 this.modelProp = (_.has(options, 'modelProp')) ? options.modelProp : null;
 
