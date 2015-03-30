@@ -1,9 +1,7 @@
 <% if( editing && synthesis_is_published === false) { %> 
     <div class="synthesis-expression-editor"></div>
 <% } else { %>
-    <div class="synthesis-expression">
-    <%= longTitle %>
-    </div>
+    <div class="synthesis-expression <%= (canEdit) ? 'canEdit' : '' %>"><%= longTitle %></div>
 <% } %>
 
 <span class="comment">

@@ -7,6 +7,19 @@
   div {
     margin: 0;
   }
+
+  .synthesis-expression {
+    &.canEdit {
+      border: 1px solid transparent;
+      &:hover{
+        -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px inset;
+        -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px inset;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px inset;
+        border: 1px solid #cccccc;
+      }
+    }
+  }
+
   .comment {
     font-size: 11px;
     .synthesisIdea-replybox-openbtn {
