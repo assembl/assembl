@@ -1,31 +1,76 @@
 'use strict';
 
-define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/ckeditorField', 'views/messageSend', 'objects/messagesInProgress', 'common/collectionManager', 'bluebird'],
-    function (Backbone, _, Assembl, Ctx, i18n, Permissions, CKEditorField, MessageSendView, MessagesInProgress, CollectionManager, Promise) {
+define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/ckeditorField', 'views/messageSend', 'objects/messagesInProgress', 'common/collectionManager', 'bluebird'],
+    function (Marionette , _, Assembl, Ctx, i18n, Permissions, CKEditorField, MessageSendView, MessagesInProgress, CollectionManager, Promise) {
 
-        var IdeaInSynthesisView = Backbone.View.extend({
-            /**
-             * Tag name
-             * @type {String}
-             */
-            tagName: 'div',
-
+        var IdeaInSynthesisView = Marionette.ItemView.extend({
+            synthesis: null,
             /**
              * The template
              * @type {[type]}
              */
-            template: Ctx.loadTemplate('ideaInSynthesis'),
+            template: '#tmpl-loader',
 
-            synthesis: null,
+            ui:{
+              synthesisReplyBox: '.synthesisIdea-replybox'
+            },
 
             /**
              * @init
              */
             initialize: function (options) {
-                this.listenTo(this.model, 'change:shortTitle change:longTitle change:segments', this.render);
                 this.synthesis = options.synthesis || null;
                 this.messageListView = options.messageListView;
                 this.editing = false;
+                this.authors = [];
+
+                var that = this,
+                    collectionManager = new CollectionManager();
+
+                Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+                    collectionManager.getAllUsersCollectionPromise(),
+                    this.model.getExtractsPromise(),
+                    function (allMessageStructureCollection, allUsersCollection, ideaExtracts) {
+
+                        ideaExtracts.forEach(function (segment) {
+                            var post = allMessageStructureCollection.get(segment.get('idPost'));
+                            if (post) {
+                                var creator = allUsersCollection.get(post.get('idCreator'));
+                                if (creator) {
+                                    that.authors.push(creator);
+                                }
+                            }
+                        });
+
+                        that.template = '#tmpl-ideaInSynthesis';
+                        that.render();
+                    });
+            },
+
+            /**
+             * The events
+             * @type {Object}
+             */
+            events: {
+              'click .synthesis-expression': 'onEditableAreaClick',
+              'click .synthesisIdea-replybox-openbtn': 'focusReplyBox',
+              'click .messageSend-cancelbtn': 'closeReplyBox',
+              'blur .synthesis-expression-editor': 'closeEditableAreaClick'
+            },
+
+            modelEvents: {
+              'change:shortTitle change:longTitle change:segments':'render'
+            },
+
+            serializeData: function(){
+                return {
+                  id: this.model.getId(),
+                  editing: this.editing,
+                  longTitle: this.model.getLongTitleDisplayText(),
+                  authors: _.uniq(this.authors),
+                  subject: this.model.get('longTitle'),
+                  synthesis_is_published: this.synthesis.get("published_in_post") != null
+                }
             },
 
             /**
@@ -33,44 +78,18 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
              * @param renderParams {}
              * @return {IdeaInSynthesisView}
              */
-            render: function () {
-                var that = this,
-                    data = this.model.toJSON(),
-                    authors = [],
-                    collectionManager = new CollectionManager();
+            onRender: function () {
 
-                Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
-                    collectionManager.getAllUsersCollectionPromise(),
-                    this.model.getExtractsPromise(),
-                    function (allMessageStructureCollection, allUsersCollection, ideaExtracts) {
-                        that.$el.addClass('synthesis-idea');
-                        that.$el.attr('id', 'synthesis-idea-' + that.model.id);
-                        Ctx.removeCurrentlyDisplayedTooltips(that.$el);
-                        ideaExtracts.forEach(function (segment) {
-                            var post = allMessageStructureCollection.get(segment.get('idPost'));
-                            if (post) {
-                                var creator = allUsersCollection.get(post.get('idCreator'));
-                                if (creator) {
-                                    authors.push(creator);
-                                }
-                            }
-                        });
+                Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-                        data.id = that.model.getId();
-                        data.editing = that.editing;
-                        data.longTitle = that.model.getLongTitleDisplayText();
-                        data.authors = _.uniq(authors);
-                        data.subject = data.longTitle;
-                        data.synthesis_is_published = that.synthesis.get("published_in_post") != null;
+                this.$el.addClass('synthesis-idea');
+                this.$el.attr('id', 'synthesis-idea-' + this.model.id);
 
-                        that.$el.html(that.template(data));
-                        Ctx.initTooltips(that.$el);
-                        if (that.editing && data.synthesis_is_published === false) {
-                            that.renderCKEditor();
-                        }
-                        that.renderReplyView();
-                    });
-                return this;
+                Ctx.initTooltips(this.$el);
+                if (this.editing && !this.model.get('synthesis_is_published')) {
+                    this.renderCKEditor();
+                }
+                this.renderReplyView();
             },
 
             /**
@@ -109,7 +128,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
                         that.messageListView.getContainingGroup().setCurrentIdea(that.model);
                     };
 
-                this.replyView = new MessageSendView({
+                var replyView = new MessageSendView({
                     'allow_setting_subject': false,
                     'reply_message_id': this.synthesis.get('published_in_post'),
                     'reply_idea': this.model,
@@ -126,18 +145,8 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/
                     'messageList': this.messageListView,
                     'enable_button': false
                 });
-                this.$('.synthesisIdea-replybox').append(this.replyView.render().el);
-            },
 
-            /**
-             * The events
-             * @type {Object}
-             */
-            events: {
-                'click .synthesis-expression': 'onEditableAreaClick',
-                'click .synthesisIdea-replybox-openbtn': 'focusReplyBox',
-                'click .messageSend-cancelbtn': 'closeReplyBox',
-                'blur .synthesis-expression-editor': 'closeEditableAreaClick'
+                this.$('.synthesisIdea-replybox').html(replyView.render().el);
             },
 
             /**
