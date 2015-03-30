@@ -704,20 +704,30 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             },
 
             toggleViewStyle: function () {
-                var previousViewStyle = this.viewStyle;
+              var previousViewStyle = this.viewStyle;
+              if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
+                this.setViewStyle(this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this));
+              }
+              else {
+                this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
+              }
+              var read = this.model.get('read');
+              if (read === false) {
+                this.model.setRead(true);
+              }
+              if (previousViewStyle !== this.viewStyle) {
+                this.render();
+              }
+              else {
                 if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
-                    this.setViewStyle(this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this));
+                  if (this.replyBoxShown) {
+                    this.doCloseReplyBox();
+                  }
+                  else {
+                    this.openReplyBox();
+                  }
                 }
-                else {
-                    var read = this.model.get('read');
-                    if (read === false) {
-                        this.model.setRead(true);
-                    }
-                    this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
-                }
-                if (previousViewStyle !== this.viewStyle) {
-                    this.render();
-                }
+              }
             },
             /**
              * @event
@@ -734,9 +744,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              */
             doProcessMessageTitleClick: function () {
                 this.toggleViewStyle();
-                if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
-                    this.openReplyBox();
-                }
             },
             
             onOpenWithFullBodyView: function(e) {
