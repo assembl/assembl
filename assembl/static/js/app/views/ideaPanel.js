@@ -241,15 +241,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
             tooltip: i18n.gettext('Detailled information about the currently selected idea in the Table of ideas'),
 
-            resetView: function () {
-              if(this.segmentList !== undefined) {
-                this.segmentList.reset();
-              }
-              else {
-                console.log("ideaPanel::resetView called, but region doesn't exist");
-              }
-            },
-
             /**
              * This is not inside the template because babel wouldn't extract it in
              * the pot file
@@ -413,7 +404,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 });
                 shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
 
-                this.commentView = new MessageSendView({
+                var commentView = new MessageSendView({
                     'allow_setting_subject': false,
                     'reply_idea': this.model,
                     'body_help_message': i18n.gettext('Comment on this idea here...'),
@@ -426,7 +417,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     'enable_button': false
                     //TODO:  Pass the messageListView that is expected to refresh with the new comment
                 });
-                this.$('#ideaPanel-comment').append(this.commentView.render().el);
+                this.$('#ideaPanel-comment').html(commentView.render().el);
 
             },
 
@@ -496,13 +487,13 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
              * @param  {Idea} [idea=null]
              */
             setIdeaModel: function (idea, reason) {
-                var that = this,
-                    collectionManager = new CollectionManager();
+                var that = this;
 
-                if ( reason == "created" )
+                if ( reason === "created" ){
                     this.focusShortTitle = true;
-                else
+                }else {
                     this.focusShortTitle = false;
+                }
 
                 //console.log("setIdeaModel called with", idea);
                 if (idea !== this.model) {
