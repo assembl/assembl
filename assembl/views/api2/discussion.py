@@ -103,7 +103,8 @@ def get_token(request):
     discussion_id = request.context.get_discussion_id()
     if not user_id:
         raise HTTPUnauthorized()
-    req_permissions = request.GET.get('permission', ['read'])
+    req_permissions = request.GET.get('permission', [
+        P_READ, P_READ_PUBLIC_CIF])
     if isinstance(req_permissions, list):
         req_permissions = set(req_permissions)
     else:
