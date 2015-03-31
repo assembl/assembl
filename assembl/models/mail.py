@@ -493,7 +493,7 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
             raise MultipleResultsFound("ID %s has duplicates in source %d"%(new_message_id,self.id))
         email_object.creator = sender_email_account.profile
         email_object.source = self
-        email_object = self.db.merge(email_object)
+        # email_object = self.db.merge(email_object)
         return (email_object, parsed_email, error_description)
         
     """
