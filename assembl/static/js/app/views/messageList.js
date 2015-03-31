@@ -1314,15 +1314,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                             view = new MessageFamilyView({
                                 model: fullMessageModel,
                                 messageListView: that,
-                                hasChildren: false
+                                hasChildren: []
                             });
                             list.push(view.render().el);
                         });
                         //console.log("getRenderedMessagesFlatPromise():  Resolving promise with:",list);
                         return Promise.resolve(list);
-                    }).catch(function(e){
-                        console.error(e.statusText);
-                        Promise.reject();
                     });
             },
 
