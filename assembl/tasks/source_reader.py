@@ -353,7 +353,7 @@ def wake(source_id, reimport=False, force_restart=False):
             [source_id, reimport, force_restart], serializer="json", routing_key=ROUTING_KEY)
 
 
-def shutdown():
+def external_shutdown(*args):
     global _producer_connection
     from kombu.common import maybe_declare
     from kombu.pools import producers
@@ -434,10 +434,12 @@ if __name__ == '__main__':
     session_maker = scoped_session(sessionmaker(autoflush=False))
     configure(registry, 'source_reader', session_maker)
     url = settings.get('celery_tasks.imap.broker')
-    signal.signal(signal.SIGTERM, shutdown)
     with BrokerConnection(url) as conn:
         sourcedispatcher = SourceDispatcher(conn)
+        def shutdown(*args):
+            sourcedispatcher.shutdown()
+        signal.signal(signal.SIGTERM, shutdown)
         try:
             sourcedispatcher.run()
         except KeyboardInterrupt:
-            sourcedispatcher.shutdown()
+            shutdown()

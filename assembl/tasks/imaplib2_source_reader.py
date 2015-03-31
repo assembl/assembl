@@ -115,7 +115,7 @@ class IMAPReader(SourceReader):
                     print "Skipped message with imap id %s (bounce or vacation message)" % (email_id)
                 # print "Setting self.source.last_imported_email_uid to "+email_id
                 self.source.last_imported_email_uid = email_id
-                transaction.commit()
+                ContentSource.db.commit()
             finally:
                 self.source = ContentSource.get(self.source.id)
         except IMAP4.abort as e:
