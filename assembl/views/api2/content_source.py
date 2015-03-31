@@ -1,13 +1,13 @@
 
 from pyramid.view import view_config
-from pyramid.response import Response
+from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPNotImplemented
 
 from assembl.auth import (P_READ, P_SYSADMIN)
 from assembl.models import (ContentSource, FeedPostSource)
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext
-from . import (FORM_HEADER, check_permissions)
+from . import FORM_HEADER
 from assembl.tasks.source_reader import wake
 
 @view_config(context=InstanceContext, request_method='POST',
