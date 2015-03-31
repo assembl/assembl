@@ -50,14 +50,15 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             description_mandatory = this.$('.partner-description'),
                             website = this.$('.partner-homepage'),
                             url_logo = this.$('.partner-logo'),
-                            regexUrl = /^(http|https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                            //urlPattern = new RegExp("(http|https?:\/\/)?([\a-z\.-]+)\.([a-z\.]{3,6})"),
+                            urlPattern = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?"),
                             parent = name_mandatory.parent().parent(),
                             p_website = website.parent().parent(),
                             p_url_logo = url_logo.parent().parent(),
                             p_description_mandatory = description_mandatory.parent().parent(),
                             controls = document.querySelectorAll('#partner-form .control-group');
 
-                        if(name_mandatory.val() === ''){
+                            if(!name_mandatory.val().length){
                             validForm = false;
                             parent.addClass('error');
                             return false;
@@ -66,7 +67,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             parent.removeClass('error');
                         }
 
-                        if(description_mandatory.val() === ''){
+                        if(!description_mandatory.val().length){
                             validForm = false;
                             p_description_mandatory.addClass('error');
                             return false;
@@ -75,8 +76,8 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             p_description_mandatory.removeClass('error');
                         }
 
-                        if(website.val()){
-                            if (!regexUrl.test(website.val())) {
+                        if(website.val().length){
+                            if (!urlPattern.test(website.val())) {
                                 p_website.addClass('error');
                                 validForm = false;
                                 return false;
@@ -86,8 +87,8 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             }
                         }
 
-                        if(url_logo.val()){
-                            if (!regexUrl.test(url_logo.val())) {
+                        if(url_logo.val().length){
+                            if (!urlPattern.test(url_logo.val())) {
                                 p_url_logo.addClass('error');
                                 validForm = false;
                                 return false;
