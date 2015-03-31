@@ -10,10 +10,10 @@
 				<% } %>
 
 				<% if(_.size(homepage)){ %>
-					<a class="dispb" href="<%= _.size(homepage) %>">{{ gettext('link') }}</a>
-        <% }else{ %>
-          <span class="dispb">{{ gettext('What is their website?') }}</span>
-        <% } %>
+					<a class="dispb" href="<%= homepage %>">{{ gettext('link') }}</a>
+                <% }else{ %>
+                  <span class="dispb">{{ gettext('What is their website?') }}</span>
+                <% } %>
 
 				<div class="mtxl">
 					<a class="js_editPartner" href="#">{{ gettext('edit partner') }}</a>&nbsp;&nbsp;
@@ -24,15 +24,15 @@
 			<% if(is_initiator){ %>
 				<div class="tar mbxl">{{ gettext('is initiator') }}</div>
 			<% } %>
-				<div class="partner-img-content">
-					<div class="partner-img">
-						<% if(_.size(logo)){ %>
-             	<img src="<%= logo %>" width="200">
-            <% }else{ %>
-              <span class="dispb">{{ gettext('What is their logo?') }}</span>
-            <% } %>
-					</div>
-				</div>
+            <div class="partner-img-content">
+                <div class="partner-img">
+                <% if(_.size(logo)){ %>
+                <img src="<%= logo %>" width="200">
+                <% }else{ %>
+                  <span class="dispb">{{ gettext('What is their logo?') }}</span>
+                <% } %>
+                </div>
+            </div>
 			</div>
 		</div>
 	</div>
