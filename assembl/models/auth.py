@@ -443,6 +443,9 @@ class IdentityProviderAccount(AbstractAgentAccount):
     __mapper_args__ = {
         'polymorphic_identity': 'idprovider_agent_account',
     }
+    __table_args__ = (
+        UniqueConstraint('provider_id', 'userid'), )
+
     id = Column(Integer, ForeignKey(
         'abstract_agent_account.id',
         ondelete='CASCADE', onupdate='CASCADE'
@@ -456,7 +459,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
     username = Column(String(200))
     #    info={'rdf': QuadMapPatternS(None, SIOC.name)})
     domain = Column(String(200))
-    userid = Column(String(200))
+    userid = Column(String(200), nullable = False)
     #    info={'rdf': QuadMapPatternS(None, SIOC.id)})
     profile_info = deferred(Column(Text()))
     picture_url = Column(String(300))
