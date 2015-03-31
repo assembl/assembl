@@ -1286,14 +1286,18 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 introduction: '.js_editIntroduction',
                 objective: '.js_editObjective',
                 seeMoreIntro: '.js_introductionSeeMore',
-                seeMoreObjectives: '.js_objectivesSeeMore'
+                seeMoreObjectives: '.js_objectivesSeeMore',
+                introductionEditor: '.context-introduction-editor',
+                objectiveEditor: '.context-objective-editor'
             },
 
             events: {
                 'click @ui.seeMoreIntro': 'seeMore',
                 'click @ui.seeMoreObjectives': 'seeMore',
                 'click @ui.introduction': 'editIntroduction',
-                'click @ui.objective':'editObjective'
+                'click @ui.objective':'editObjective',
+                'blur @ui.introductionEditor':'cancelIntroduction',
+                'blur @ui.objectiveEditor': 'cancelObjective'
             },
 
             serializeData: function () {
@@ -1355,6 +1359,16 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     this.editingIntroduction = true;
                     this.render();
                 }
+            },
+
+            cancelIntroduction: function(){
+                this.editingIntroduction = false;
+                this.render();
+            },
+
+            cancelObjective: function(){
+                this.editingObjective = false;
+                this.render();
             },
 
             editObjective: function(){
