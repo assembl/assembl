@@ -10,7 +10,8 @@
     <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
       <div class="options-filter">
         <span class="messageListViewStyleUserHighlightNew <%= availableViewStyles.NEW_MESSAGES.css_class %> option dispb fl tac pas mbs"></span>
-        <span class="messageListViewStyleUserThreaded <%= availableViewStyles.THREADED.css_class %> option dispb fl tac pas mbs"></span>
+        {# <span class="messageListViewStyleUserThreaded <%= availableViewStyles.THREADED.css_class %> option dispb fl tac pas mbs"></span> #}
+        <span class="js_messageListViewStyleUserActivityFeed <%= availableViewStyles.REVERSE_CHRONOLOGICAL.css_class %> option dispb fl tac pas mbs"></span>
       </div>
     <% } %>
   <% } else { %>

@@ -46,6 +46,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 loadNextMessagesButton: '.js_messageList-morebutton',
                 messageList: '.messageList-list',
                 userThreadedViewButton: '.messageListViewStyleUserThreaded',
+                userActivityFeedViewButton: '.js_messageListViewStyleUserActivityFeed',
                 userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew',
                 stickyBar: '.sticky-box',
                 replyBox: '.messagelist-replybox',
@@ -1228,11 +1229,18 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
 
                 if (this.currentViewStyle == this.ViewStyles.THREADED) {
                     this.ui.userHighlightNewViewButton.removeClass('selected');
+                    this.ui.userActivityFeedViewButton.removeClass('selected');
                     this.ui.userThreadedViewButton.addClass('selected');
                 }
                 else if (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES) {
                     this.ui.userHighlightNewViewButton.addClass('selected');
+                    this.ui.userActivityFeedViewButton.removeClass('selected');
                     this.ui.userThreadedViewButton.removeClass('selected');
+                }
+                else if (this.currentViewStyle == this.ViewStyles.REVERSE_CHRONOLOGICAL) {
+                  this.ui.userHighlightNewViewButton.removeClass('selected');
+                  this.ui.userActivityFeedViewButton.addClass('selected');
+                  this.ui.userThreadedViewButton.removeClass('selected');
                 }
                 else {
                     console.log("This viewstyle is unknown in user mode:", this.currentViewStyle);
@@ -1241,6 +1249,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('All %s'), resultNumTotal));
                 this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread = '' : resultNumUnread = i18n.sprintf("%d", this.currentQuery.getResultNumUnread());
                 this.ui.userHighlightNewViewButton.html(i18n.sprintf(i18n.gettext('Unread %s'), resultNumUnread));
+                this.ui.userActivityFeedViewButton.html(i18n.sprintf(i18n.gettext('Activity feed %s'), resultNumUnread));
             },
 
 
@@ -1679,7 +1688,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         //Only threaded view makes sence for annonymous users
                         viewStyle = this.ViewStyles.THREADED;
                     }
-                    else if ((viewStyle != this.ViewStyles.NEW_MESSAGES) && (viewStyle != this.ViewStyles.THREADED)) {
+                    else if ((viewStyle != this.ViewStyles.NEW_MESSAGES) && (viewStyle != this.ViewStyles.REVERSE_CHRONOLOGICAL)) {//THREADED used to be allowed
                         //New messages is default view
                         viewStyle = this.ViewStyles.NEW_MESSAGES;
                     }
