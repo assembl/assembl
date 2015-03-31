@@ -99,6 +99,7 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
                 //TODO: fix this horrible hack that prevents calling
                 //showMessageById over and over.
                 //window.history.pushState('object or string', 'Title', '../');
+                console.log("DEFAULT ");
                 Backbone.history.navigate('/', {replace: true});
             },
 
