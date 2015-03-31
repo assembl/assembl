@@ -65,7 +65,7 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
             ui: {
                 sendButton: '.messageSend-sendbtn',
                 cancelButton: '.messageSend-cancelbtn',
-                messageBody: '.messageSend-body',
+                messageBody: '.js_messageSend-body',
                 messageSubject: '.messageSend-subject',
                 topicSubject: '.topic-subject .formfield',
                 permissionDeniedWarningMessage: '.js_warning-message-for-message-post'

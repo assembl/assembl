@@ -154,7 +154,7 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
 
                 var that = this;
                 window.setTimeout(function () {
-                    that.$('.messageSend-body').focus();
+                    that.$('.js_messageSend-body').focus();
                 }, 100);
             },
             /**

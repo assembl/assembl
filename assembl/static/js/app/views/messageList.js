@@ -78,7 +78,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                        Not as necessary now that we save messages,
                        but it prevents a jarring refresh, so keeping it as a comment.
 
-                       var messageFields = that.$('.messageSend-body');
+                       var messageFields = that.$('.js_messageSend-body');
                        function not_empty(b) {
                        return b.value.length != 0;
                        };
@@ -274,7 +274,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     this.newTopicView.savePartialMessage();
                 }
                 // Otherwise I need to work from the DOM and not view objects, for those are buried in messages
-                var messageFields = this.$('.messageSend-body');
+                var messageFields = this.$('.js_messageSend-body');
 
                 function not_empty(b) {
                     return b.value.length != 0;
@@ -1989,24 +1989,22 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     // console.log("showMessageById(): sending openWithFullBodyView
                     // to message", message.id);
                     message.trigger('openWithFullBodyView');
-                    setTimeout(function () {
+                    /*setTimeout(function () {
                       if(debug) {
                         console.log("scrollToMessage(): INFO:  shouldOpenMessageSelected is true, calling recursively after a delay with same recursion depth");
                       }
                       that.scrollToMessage(messageModel, shouldHighlightMessageSelected, false, callback, failedCallback, recursionDepth, originalRenderId);
-                    }, 1000); //Add a delay if we had to open the message
+                    }, 1000); //Add a delay if we had to open the message*/
                   }
-                  else {
-                    var real_callback = function () {
-                      if (shouldHighlightMessageSelected) {
-                        el.highlight();
-                      }
-                      if (_.isFunction(callback)) {
-                        callback();
-                      }
-                    };
-                    that.scrollToElement(el, real_callback);
+                  var real_callback = function () {
+                    if (shouldHighlightMessageSelected) {
+                      el.highlight();
+                    }
+                    if (_.isFunction(callback)) {
+                      callback();
+                    }
                   }
+                  that.scrollToElement(el, real_callback);
                 }
                 else {
                   // Trigerring openWithFullBodyView above requires the message to
@@ -2016,11 +2014,11 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                       Raven.captureMessage(
                         "scrollToMessage():  Message still not found in the DOM, calling recursively", 
                         { message_id: message.id,
-                          selector: selector,
+                          selector: el,
                           next_call_recursion_depth: recursionDepth + 1
                         }
                       );
-                      console.log("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: " + selector + ", calling recursively with ", recursionDepth + 1);
+                      console.log("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: ", el , ", calling recursively with ", recursionDepth + 1);
                     }
                     setTimeout(function () {
                       that.scrollToMessage(messageModel, shouldHighlightMessageSelected, shouldOpenMessageSelected, callback, failedCallback, recursionDepth + 1, originalRenderId);

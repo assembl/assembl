@@ -94,7 +94,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             },
             
             ui: {
-              jumpToParentButton: ".js_message-jumptoparentbtn"
+              jumpToParentButton: ".js_message-jumptoparentbtn",
+              messageReplyBox: ".message-replybox"
             },
             
 
@@ -113,7 +114,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 //
                 'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
                 'click .messageSend-cancelbtn': 'onReplyBoxCancelBtnClick',
-                'focus .messageSend-body': 'onTextboxFocus',
+                //These two are from messageSend.js, do NOT use @ui
+                'focus .js_messageSend-body': 'onReplyBoxFocus',
+                'blur .js_messageSend-body': 'onReplyBoxBlur',
                 //
                 'mousedown .js_messageBodyAnnotatorSelectionAllowed': 'startAnnotatorTextSelection',
                 'mousemove .js_messageBodyAnnotatorSelectionAllowed': 'updateAnnotatorTextSelection',
@@ -247,17 +250,17 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                       mandatory_subject_missing_msg: null,
                       enable_button: true
                   });
-                  that.$('.message-replybox').append(this.replyView.render().el);
+                  that.ui.messageReplyBox.append(this.replyView.render().el);
   
                   this.postRender();
   
                   if (this.replyBoxShown || partialMessage['body']) {
-                      this.openReplyBox();
+                    this.ui.messageReplyBox.removeClass('hidden');
                       if ( this.replyBoxHasFocus )
-                          this.doFocusReplyBox();
+                          this.focusReplyBox();
                   }
                   else {
-                      this.doCloseReplyBox();
+                    this.ui.messageReplyBox.addClass('hidden');
                   }
   
                   if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
@@ -609,60 +612,49 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
 
             onMessageReplyBtnClick: function (e) {
               e.preventDefault();
-              this.doFocusReplyBox();
+              //So it is saved if the view refreshes
+              this.replyBoxHasFocus = true;
+              if(!this.isMessageOpened()) {
+                this.doOpenMessage();
+              }
+              else {
+                this.focusReplyBox();
+              }
             },
             
             /**
-             *  Focus on the reply box, and open it if closed
+             *  Focus on the reply box, and open the message if closed
              **/
-            doFocusReplyBox: function () {
-                var that = this;
-                var onReplyBoxBlur = function(){
-                    that.replyBoxHasFocus = false;
-                };
-                var waitAndFocus = function(){
-                    // we can't execute this immediately because the opening of the message triggers a setRead(true) which triggers a redraw which looses the focus
-                    window.setTimeout(function () {
-                        var el = that.$('.messageSend-body');
-                        if ( el.length ){
-                            el.focus();
-                            that.replyBoxHasFocus = true;
-                            el.on("blur", onReplyBoxBlur);
-                        }
-                        else { // if the .messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
-                            that.messageListView.scrollToElement(that.$(".message-replybox"));
-                        }
-                    }, 1000);
-                };
-                
-                if (this.viewStyle.id === 'viewStylePreview') {
-                    this.onMessageTitleClick();
-                    waitAndFocus();
-                    return;
+            focusReplyBox: function () {
+              if(!this.isMessageOpened()) {
+                console.error("Tried to focus on the reply box of a closed message, this should not happen!");
+              }
+              if(!this.replyBoxHasFocus) {
+                console.error("Tried to focus on the reply box of a message that isn't supposed to have focus, this should not happen!");
+              }
+              var el = this.replyView.ui.messageBody;
+              if ( el.length ){
+                if(!el.is(':visible')) {
+                  console.error("Element not yet visible...")
                 }
-
-                this.openReplyBox();
-                waitAndFocus();
-            },
-
-            /**
-             *  Opens the reply box the reply button
-             */
-            openReplyBox: function () {
-                this.$('.message-replybox').removeClass('hidden');
-                this.replyBoxShown = true;
+                
+                setTimeout(function () {
+                  el.focus();
+                }, 1);//This settimeout is necessary, at least for chrome, to focus properly
+              }
+              else if (this.ui.messageReplyBox.length){ 
+                // if the .js_messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
+                //console.log("Scrooling to reply box instead");
+                this.messageListView.scrollToElement(this.ui.messageReplyBox);
+              }
+              else {
+                console.error("Tried to focus on the reply box of a message, but reply box isn't onscreen.  This should not happen!");
+              }
             },
 
             onReplyBoxCancelBtnClick: function (e) {
-              this.doCloseReplyBox();
-            },
-          
-            /**
-             *  Closes the reply box
-             */
-            doCloseReplyBox: function () {
-                this.$('.message-replybox').addClass('hidden');
-                this.replyBoxShown = false;
+              this.replyBoxShown = false;
+              this.render();
             },
 
             onMessageHoistClick: function (ev) {
@@ -703,32 +695,61 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 }
             },
 
-            toggleViewStyle: function () {
-              var previousViewStyle = this.viewStyle;
-              if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
-                this.setViewStyle(this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this));
+            /**
+             * Is the message currently in it's "opened" state?
+             */
+            isMessageOpened: function () {
+              if(this.viewStyle === this.availableMessageViewStyles.FULL_BODY &&
+                 this.replyBoxShown === true) {
+                 return true;
               }
               else {
+                return false;
+              }
+            },
+
+            /**
+             * move the message to it's "opened" state (FULL_BODY, reply box shown
+             * etc.
+             */
+            doOpenMessage: function () {
+              if(!this.isMessageOpened()) {
                 this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
+                this.replyBoxShown = true;
+                this.render();
+              }
+              else {
+                //Message is already in the right state
               }
               var read = this.model.get('read');
               if (read === false) {
                 this.model.setRead(true);
               }
-              if (previousViewStyle !== this.viewStyle) {
+            },
+
+            /**
+             * move the message to it's "closed" state, which is dependent on the 
+             * view
+             */
+            doCloseMessage: function () {
+              if(this.isMessageOpened()) {
+                this.setViewStyle(this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this));
+                this.replyBoxShown = false;
                 this.render();
               }
               else {
-                if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
-                  if (this.replyBoxShown) {
-                    this.doCloseReplyBox();
-                  }
-                  else {
-                    this.openReplyBox();
-                  }
-                }
+                //Message is already in the right state
               }
             },
+
+            /**
+             * Change the message view Style and re-render.
+             * In most cases will switch between FULL_BODY and another view
+             */
+            toggleViewStyle: function () {
+              this.isMessageOpened()?this.doCloseMessage():this.doOpenMessage();
+            },
+            
             /**
              * @event
              */
@@ -746,18 +767,14 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 this.toggleViewStyle();
             },
             
+            /** 
+             * This il only called by messageList::showMessageById
+             */
             onOpenWithFullBodyView: function(e) {
               //console.log("onOpenWithFullBodyView()");
-              if ( this.viewStyle == this.availableMessageViewStyles.FULL_BODY )
-                return;
-
-              var read = this.model.get('read');
-              if (read === false) {
-                  this.model.setRead(true);
+              if(!this.isMessageOpened()) {
+                this.doOpenMessage();
               }
-              this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
-              this.render();
-              this.openReplyBox();
             },
 
             /**
@@ -893,12 +910,17 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 this.model.setRead(true);
             },
 
-            onTextboxFocus: function(e){
-                if ( !this.model.get('read') )
-                {
+            onReplyBoxFocus: function(e){
+              //console.log('mesage:onReplyBoxFocus');
+              this.replyBoxHasFocus = true;
+                if ( !this.model.get('read') ) {
                     this.model.setRead(true); // we do not call markAsRead on purpose
-                    this.doFocusReplyBox();
                 }
+            },
+
+            onReplyBoxBlur: function(e){
+              //console.log('mesage:onReplyBoxBlur');
+              this.replyBoxHasFocus = false;
             },
 
             /**
