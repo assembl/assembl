@@ -14,6 +14,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                 'click @ui.partnerItem':'deletePartner',
                 'click @ui.partnerItemEdit': 'editPartner'
             },
+
             deletePartner: function(){
                var that = this;
                this.model.destroy({
@@ -25,6 +26,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                   }
                });
             },
+
             editPartner: function(){
                 var self = this;
 
@@ -191,7 +193,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                     events: {
                      'click .js_validatePartner' :'validatePartner'
                     },
-                    validatePartner: function (e) {
+                    validatePartner: function () {
 
                         var that = this,
                             validForm = false,
@@ -206,7 +208,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             p_description_mandatory = description_mandatory.parent().parent(),
                             controls = document.querySelectorAll('#partner-form .control-group');
 
-                        if(name_mandatory.val() === ''){
+                        if(!name_mandatory.val().length){
                             parent.addClass('error');
                             validForm = false;
                             return false;
@@ -215,7 +217,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             parent.removeClass('error');
                         }
 
-                        if(description_mandatory.val() === ''){
+                        if(!description_mandatory.val().length){
                             validForm = false;
                             p_description_mandatory.addClass('error');
                             return false;
@@ -224,7 +226,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             p_description_mandatory.removeClass('error');
                         }
 
-                        if(website.val()){
+                        if(website.val().length){
                             if (!regexUrl.test(website.val())) {
                                 p_website.addClass('error');
                                 validForm = false;
@@ -235,7 +237,7 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             }
                         }
 
-                        if(url_logo.val()){
+                        if(url_logo.val().length){
                             if (!regexUrl.test(url_logo.val())) {
                                 p_url_logo.addClass('error');
                                 validForm = false;
