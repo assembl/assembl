@@ -84,7 +84,6 @@ class DeclEnumType(SchemaType, TypeDecorator):
         return DeclEnumType(self.enum)
 
     def process_bind_param(self, value, dialect):
-        print "*************", value
         if value is None:
             return None
         if isinstance(value, EnumSymbol):
