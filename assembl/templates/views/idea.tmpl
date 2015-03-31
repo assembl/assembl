@@ -1,10 +1,5 @@
 <div class="idealist-body" draggable="true">
     <% if (hasCheckbox) { %>
-    <!--<label class="chk chk--idealist">
-        <input type="checkbox" class="chk-checkbox" <% if(inNextSynthesis) { %>checked="checked"<% } %> />
-        <span class="chk-label" data-toggle="tooltip" data-placement="right"
-         <% if(inNextSynthesis) { %>title="{{ gettext('Remove from next synthesis') }}"<% } else { %>title="{{ gettext('Add to next synthesis') }}"<% } %> ></span>
-    </label>-->
 
     <label class="checkbox inline custom-checkbox">
       <input type="checkbox" <% if(inNextSynthesis) { %>checked="checked"<% } %>>
@@ -50,7 +45,7 @@
         <span><%= num_posts %></span>
     </div>
     <div class="idealist-title<% if (num_unread_posts > 0 && !Ctx.getCurrentUser().isUnknownUser()) { %> idealist-title-unread<% } %>" title="<%= shortTitle %>">
-        <%= shortTitle %>
+        <%= Ctx.stripHtml(shortTitle) %>
         <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
           <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>
               <% if (num_unread_posts > 0) { %>
