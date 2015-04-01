@@ -150,7 +150,7 @@ def app_reload():
         #supervisor config file may have changed
         venvcmd("supervisorctl reread")
         venvcmd("supervisorctl update")
-        venvcmd("supervisorctl restart celery_imap changes_router celery_notification_dispatch celery_notify celery_notify_beat")
+        venvcmd("supervisorctl restart celery_imap changes_router celery_notification_dispatch celery_notify celery_notify_beat source_reader")
         if env.uses_uwsgi:
             venvcmd("supervisorctl restart prod:uwsgi")
     """ This will log everyone out, hopefully the code is now resilient enough
