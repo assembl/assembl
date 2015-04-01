@@ -75,7 +75,7 @@ def supervisor_process_start(process_name):
             exit()
         else:
             print(red('Supervisord doesn\'t seem to be running, trying to start it'))
-            supervisord_cmd_result = venvcmd("supervisord -c %s update" % os.path.join(env.projectpath, "supervisord.conf"))
+            supervisord_cmd_result = venvcmd("supervisord -c %s" % os.path.join(env.projectpath, "supervisord.conf"))
             if supervisord_cmd_result.failed:
                 print(red('Failed starting supervisord'))
                 exit()
