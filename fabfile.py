@@ -75,7 +75,7 @@ def supervisor_process_start(process_name):
             exit()
         else:
             print(red('Supervisord doesn\'t seem to be running, trying to start it'))
-            supervisord_cmd_result = venvcmd("supervisord")
+            supervisord_cmd_result = venvcmd("supervisord -c %s update" % os.path.join(env.projectpath, "supervisord.conf"))
             if supervisord_cmd_result.failed:
                 print(red('Failed starting supervisord'))
                 exit()
@@ -147,6 +147,9 @@ def app_reload():
         print(cyan('Asking supervisor to restart %(projectname)s' % env))
         run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
     else:
+        #supervisor config file may have changed
+        venvcmd("supervisorctl reread")
+        venvcmd("supervisorctl update")
         venvcmd("supervisorctl restart celery_imap changes_router celery_notification_dispatch celery_notify celery_notify_beat")
         if env.uses_uwsgi:
             venvcmd("supervisorctl restart prod:uwsgi")
