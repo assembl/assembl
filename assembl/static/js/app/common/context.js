@@ -1,7 +1,7 @@
 'use strict';
 
-define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all', 'debug'],
-    function (Assembl, $, _, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed, debug) {
+define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all', 'debug', 'bluebird'],
+    function (Assembl, $, _, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed, debug, Promise) {
 
         var Context = function () {
 
