@@ -120,7 +120,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 var that = this;
                 this.initVar();
                 setTimeout(function(){
-                    that.ui.level.height(that._accordionContentHeight);
+                    that.ui.level.css('height', that._accordionContentHeight);
                 }, 0);
                 
             },
