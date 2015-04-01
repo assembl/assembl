@@ -52,7 +52,7 @@
         return;
     }
 
-    if( BrowserDetect.version <= currentBrowser.version ){
+    if( BrowserDetect.version < currentBrowser.version ){
         BrowserDetect.showMsg(currentBrowser.name);
     }
 
