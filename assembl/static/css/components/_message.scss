@@ -164,6 +164,10 @@ $previewNumLines: 4;
       & *:hover {
         opacity: 1;
       }
+
+      .icon-download::before {
+        font-size: 17px;
+      }
     }
     .head {
       border-bottom: 2px solid $gray3;
