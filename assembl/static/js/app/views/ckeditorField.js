@@ -26,25 +26,28 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
             showPlaceholderOnEditIfEmpty: false,
 
             initialize: function (options) {
+
+                if (this.model === null) {
+                    throw new Error('EditableField needs a model');
+                }
+
                 this.view = this;
 
                 this.topId = _.uniqueId('ckeditorField-topid');
                 this.fieldId = _.uniqueId('ckeditorField');
                 this.bottomId = _.uniqueId('ckeditorField-bottomid');
 
+                this.autosave = (options.autosave) ? options.autosave : false;
+
                 this.editing = (this.editing) ? true : false;
 
-                this.modelProp = (_.has(options, 'modelProp')) ? options.modelProp : null;
+                this.modelProp = (options.modelProp) ? options.modelProp : null;
 
-                this.placeholder = (_.has(options, 'placeholder')) ? options.placeholder : null;
+                this.placeholder = (options.placeholder) ? options.placeholder : null;
 
-                this.showPlaceholderOnEditIfEmpty = (_.has(options, 'showPlaceholderOnEditIfEmpty')) ? options.showPlaceholderOnEditIfEmpty : null;
+                this.showPlaceholderOnEditIfEmpty = (options.showPlaceholderOnEditIfEmpty) ? options.showPlaceholderOnEditIfEmpty : null;
 
-                this.canEdit = (_.has(options, 'canEdit')) ? options.canEdit : true;
-
-                if (this.model === null) {
-                    throw new Error('EditableField needs a model');
-                }
+                this.canEdit = (options.canEdit) ? options.canEdit : true;
 
                 this.listenTo(this.view, 'cKEditorField:render', this.render);
             },
@@ -99,25 +102,26 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
                     editingArea.focus();
                 }, 100);
 
-                /*this.ckInstance.element.on('blur', function () {
+                if(this.autosave){
 
-                   /**
-                      * Firefox triggers the blur event if we paste (ctrl+v)
-                      * in the ckeditor, so instead of calling the function directly
-                      * we wait to see if the focus is still in the ckeditor
+                    this.ckInstance.element.on('blur', function () {
+                         /**
+                         * Firefox triggers the blur event if we paste (ctrl+v)
+                         * in the ckeditor, so instead of calling the function directly
+                         * we wait to see if the focus is still in the ckeditor
+                         */
+                         setTimeout(function () {
 
-                   setTimeout(function () {
+                             if (!that.ckInstance.element) return;
 
-                     if (!that.ckInstance.element) return;
+                             var hasFocus = $(that.ckInstance.element).is(":focus");
 
-                     var hasFocus = $(that.ckInstance.element).is(":focus");
+                             if (!hasFocus) that.saveEdition();
 
-                     if (!hasFocus) that.saveEdition();
+                         }, 100);
 
-                   }, 100);
-
-                });*/
-
+                     });
+                }
             },
 
             /**
