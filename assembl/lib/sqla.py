@@ -1121,11 +1121,11 @@ class BaseOps(object):
             if usable:
                 other = unique_query.first()
                 if other and other is not self:
+                    if inspect(self).pending:
+                        other.db.expunge(self)
                     if duplicate_error:
                         raise HTTPBadRequest("Duplicate of <%s> created" % (other.uri()))
                     else:
-                        # Presumably not necessary as never added.
-                        # db.delete(self)
                         # TODO: Check if there's a risk of infinite recursion here?
                         return other._do_update_from_json(
                             json, parse_def, aliases, context, permissions,
@@ -1136,20 +1136,30 @@ class BaseOps(object):
         """returns a couple (query, usable), with a sqla query for conflicting similar objects.
         usable is true if the query has to be enforced; sometimes it makes sense to
         return un-usable query that will be used to construct queries of subclasses.
+        Note that when a duplicate is found, you'll often want to expunge the original.
         """
         # To be reimplemented in subclasses with a more intelligent check.
         # See notification for example.
         return self.db.query(self.__class__), False
 
-    def find_duplicate(self):
+    def find_duplicate(self, expunge=True, must_define_uniqueness=False):
         """Verifies that no other object exists that would conflict.
         See unique_query for usable flag."""
         query, usable = self.unique_query()
+        if must_define_uniqueness:
+            assert usable, "Class %s needs a valid unique_query" % (
+                self.__class__.__name__)
         if not usable:
             return True
         other = query.first()
         if other is not None and other is not self:
+            if expunge and inspect(self).pending:
+                other.db.expunge(self)
             return other
+
+    def get_unique_from_db(self, expunge=True):
+        "Returns the object, or a unique object from the DB"
+        return self.find_duplicate(expunge, True) or self
 
     def assert_unique(self):
         duplicate = self.find_duplicate()

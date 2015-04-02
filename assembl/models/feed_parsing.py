@@ -297,23 +297,21 @@ class FeedSourceReader(PullSourceReader):
                 user_link = self._get_author_link(entry)
                 persisted_post = self._return_existing_post(post_id)
                 account = self._create_account_from_entry(entry)
-                other_account = self.get_existing_agent_account(account)
+                other_account = account.find_duplicate(True, True)
                 if other_account is not account and other_account is not None:
                     account = other_account
                     self._process_reimport_user(entry, account)
+                else:
                     sess.add(account)
+
                 if persisted_post is not None:
                     self._process_reimport_post(entry, persisted_post, discussion)
                     persisted_post.creator = account.profile
-                    sess.add(persisted_post)
-                    if other_account is None or other_account is not account:
-                        sess.add(account)
                     sess.commit()
                 else:
                     persisted_post = self._convert_to_post(entry, account)
                     sess.add(persisted_post)
-                    sess.add(account)
-                    sess.commit()
+                sess.commit()
             except Exception as e:
                 sess.rollback()
                 raise ReaderError(e)
@@ -337,21 +335,18 @@ class FeedSourceReader(PullSourceReader):
                 user_desc if not None else user.profile.description
 
     def _add_entries(self):
-        for post,account in self._generate_post_stream():
-            if self._validate_post_not_exists(post):
-                try:
-                    post.db().add(post)
-                    post.db().add(account)
-                    post.db().commit()
-                except Exception as e:
-                    post.db().expunge(post)
-                    post.db().expunge(account)
-                    post.db().rollback()
-                    raise ReaderError(e)
-                finally:
-                    self.source = FeedPostSource.get(self.source_id)
-            post.db().expunge(post)
-            post.db().expunge(account)
+        for post, account in self._generate_post_stream():
+            try:
+                if not account.find_duplicate(True, True):
+                    post.db.add(account)
+                if not post.find_duplicate(True, True):
+                    post.db.add(post)
+                post.db().commit()
+            except Exception as e:
+                post.db().rollback()
+                raise ReaderError(e)
+            finally:
+                self.source = FeedPostSource.get(self.source_id)
 
     def _check_parser_loaded(self):
         if not self._parse_agent:
@@ -371,33 +366,13 @@ class FeedSourceReader(PullSourceReader):
         self._check_parser_loaded()
         for entry in self._parse_agent.get_entries():
             account = self._create_account_from_entry(entry)
-            account = self.get_existing_agent_account(account)
+            account = account.get_unique_from_db()
             yield self._convert_to_post(entry, account), account
-
-    # This must also be overriden to search the correct Posts table
-    def _validate_post_not_exists(self, post):
-        """Checks that the post is not already a part of the db"""
-        query, valid = post.unique_query()
-        assert valid, "Class %s needs a valid unique_query" % (
-            post.__class__.__name__)
-        other = query.first()
-        return other is None or other is post
 
     def _return_existing_post(self, post_id):
         cls = self.source.post_type
         return self.source.db().query(cls).\
-            filter(cls.source_post_id == post_id).first()
-
-    def get_existing_agent_account(self, agent_account):
-        """Checks that the post is not already a part of the db"""
-
-        query, valid = agent_account.unique_query()
-        assert valid, "Class %s needs a valid unique_query" % (
-            agent_account.__class__.__name__)
-        other = query.first()
-        if other is None:
-            return agent_account
-        return other
+            filter_by(source_post_id=post_id, source_id=self.source_id).first()
 
     def _get_title_from_feed(self):
         self._check_parser_loaded()
