@@ -204,6 +204,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     that.showSegment(segment);
                 });
 
+
             },
             ui: {
                 'postIt': '.postitlist',
@@ -297,7 +298,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     contributors = null;
 
                 if (this.model) {
-                    //console.log("there is a model");
                     subIdeas = this.model.getChildren();
                     contributors = this.model.get('contributors');
                 }
@@ -349,7 +349,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     this.onTruncate();
 
                     if (this.editingDefinition) {
-                        this.renderCKEditorDefinition();
+                        this.renderCKEditorDescription();
                     }
 
                     if (this.editingTitle) {
@@ -789,27 +789,26 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 }
             },
 
-            renderCKEditorDefinition: function () {
+            renderCKEditorDescription: function () {
                 var that = this,
                     area = this.$('.ideaPanel-definition-editor');
 
-                var definitionText = this.model.getDefinitionDisplayText();
+                var descriptionText = this.model.getDefinitionDisplayText();
 
-                if (definitionText.length > 0) {
+                if (!descriptionText.length) return;
 
-                    this.definition = new CKEditorField({
-                        'model': this.model,
-                        'modelProp': 'definition'
-                    });
-                }
+                var description = new CKEditorField({
+                    'model': this.model,
+                    'modelProp': 'definition'
+                });
 
-                this.definition.on('save cancel', function () {
+                this.listenTo(description, 'save cancel', function(){
                     that.editingDefinition = false;
                     that.render();
                 });
 
-                this.definition.renderTo(area);
-                this.definition.changeToEditMode();
+                description.renderTo(area);
+                description.changeToEditMode();
             },
 
             renderCKEditorLongTitle: function () {
@@ -818,15 +817,14 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 var longTitle = this.model.getLongTitleDisplayText();
 
-                if (longTitle.length > 0) {
+                if (!longTitle.length) return;
 
-                    this.shortTitle = new CKEditorField({
-                        'model': this.model,
-                        'modelProp': 'longTitle'
-                    });
-                }
+                var shortTitle = new CKEditorField({
+                    'model': this.model,
+                    'modelProp': 'longTitle'
+                });
 
-                this.shortTitle.on('save cancel', function () {
+                this.listenTo(shortTitle, 'save cancel', function(){
                     that.editingTitle = false;
                     that.render();
                 });

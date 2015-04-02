@@ -1239,23 +1239,22 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 var uri = this.instigator.id.split('/')[1];
                 this.instigator.url = Ctx.getApiV2DiscussionUrl('partner_organizations/') + uri;
 
-                var descriptionText = this.instigator.get('description');
+                var model = this.instigator.get('description');
 
-                if (descriptionText.length > 0) {
+                if(!model.length) return;
 
-                    this.description = new CKEditorField({
-                        'model': this.instigator,
-                        'modelProp': 'description'
-                    });
-                }
+                var instigator = new CKEditorField({
+                    'model': model,
+                    'modelProp': 'description'
+                });
 
-                this.description.on('save cancel', function () {
+                this.listenTo(instigator, 'save cancel', function(){
                     that.editInstigator = false;
                     that.render();
                 });
 
-                this.description.renderTo(area);
-                this.description.changeToEditMode();
+                instigator.renderTo(area);
+                instigator.changeToEditMode();
             },
 
             editDescription: function(){
@@ -1382,40 +1381,44 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 var that = this,
                     area = this.$('.context-introduction-editor');
 
-                var introduction = this.model.get('introduction');
+                var model = this.model.get('introduction');
 
-                this.introField = new CKEditorField({
-                    'model': this.model,
+                if(!model.length) return;
+
+                var introduction = new CKEditorField({
+                    'model': model,
                     'modelProp': 'introduction'
                 });
 
-                this.introField.on('save cancel', function () {
+                this.listenTo(introduction, 'save cancel', function(){
                     that.editingIntroduction = false;
                     that.render();
                 });
 
-                this.introField.renderTo(area);
-                this.introField.changeToEditMode();
+                introduction.renderTo(area);
+                introduction.changeToEditMode();
             },
 
             renderCKEditorObjective: function () {
                 var that = this,
                     area = this.$('.context-objective-editor');
 
-                var objective = this.model.get('objectives');
+                var model = this.model.get('objectives');
 
-                this.objectiveField = new CKEditorField({
-                    'model': this.model,
+                if(!model.length) return;
+
+                var objective = new CKEditorField({
+                    'model': model,
                     'modelProp': 'objectives'
                 });
 
-                this.objectiveField.on('save cancel', function () {
+                this.listenTo(objective, 'save cancel', function(){
                     that.editingObjective = false;
                     that.render();
                 });
 
-                this.objectiveField.renderTo(area);
-                this.objectiveField.changeToEditMode();
+                objective.renderTo(area);
+                objective.changeToEditMode();
             },
 
             applyEllipsisToSection: function(sectionSelector, seemoreUi){

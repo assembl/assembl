@@ -84,7 +84,7 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
 
                 Ctx.initTooltips(this.$el);
                 if (this.editing && !this.model.get('synthesis_is_published')) {
-                    this.renderCKEditor();
+                    this.renderCKEditorIdea();
                 }
                 this.renderReplyView();
             },
@@ -92,25 +92,24 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
             /**
              * renders the ckEditor if there is one editable field
              */
-            renderCKEditor: function () {
+            renderCKEditorIdea: function () {
                 var that = this,
                     area = this.$('.synthesis-expression-editor');
 
-                this.ckeditor = new CKEditorField({
+                var ideaSynthesis = new CKEditorField({
                     'model': this.model,
                     'modelProp': 'longTitle',
                     'placeholder': this.model.getLongTitleDisplayText(),
                     'showPlaceholderOnEditIfEmpty': true
                 });
 
-                this.ckeditor.on('save cancel', function () {
+                this.listenTo(ideaSynthesis, 'save cancel', function(){
                     that.editing = false;
                     that.render();
                 });
 
-
-                this.ckeditor.renderTo(area);
-                this.ckeditor.changeToEditMode();
+                ideaSynthesis.renderTo(area);
+                ideaSynthesis.changeToEditMode();
             },
 
             /**
