@@ -1,3 +1,9 @@
+{% macro showShareButton() -%}
+<a href="<%= share_link_url %>" class="js_openTargetInPopOver" data-popover-width="73" data-popover-height="30" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
+{%- endmacro %}
+{% macro showCopyUrlLink() -%}
+<a href="#" class="idea-linkbutton" data-copy-text="<%= direct_link_relative_url %>">{{gettext('Copy the link to share this idea')}}</a>
+{%- endmacro %}
 <div class="panel-body">
     <% if( idea ) { %>
     <fieldset id="ideaPanel-section-summary" class="panel-section mtn">
@@ -105,11 +111,14 @@
     </fieldset>
 
     <fieldset class="panel-section ideaPanel-section-actions">
+        <div>{{ showShareButton() }} - {{ showCopyUrlLink() }}</div>
+
         <% if (canDelete) { %>
         <div class="fr">
             <a href="#" class="js_ideaPanel-deleteBtn" data-toggle="tooltip" title="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
         </div>
         <% }
+
         if (canEditExtracts) { %>
         <a href="#" class="js_ideaPanel-clearBtn" data-toggle="tooltip" title="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
         <% } %>

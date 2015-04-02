@@ -233,7 +233,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 'click @ui.seeMore': 'seeMoreOrLess',
                 'click @ui.seeLess': 'seeMoreOrLess',
                 'click @ui.definition': 'editDefinition',
-                'click @ui.longTitle': 'editTitle'
+                'click @ui.longTitle': 'editTitle',
+                'click .js_openTargetInPopOver': 'openTargetInPopOver'
             },
 
             getTitle: function () {
@@ -295,11 +296,18 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     currentUser = Ctx.getCurrentUser(),
                     canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
                     canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
-                    contributors = null;
+                    contributors = null,
+                    direct_link_relative_url = null,
+                    share_link_url = null;
 
                 if (this.model) {
                     subIdeas = this.model.getChildren();
                     contributors = this.model.get('contributors');
+
+                    direct_link_relative_url = "/idea/" + encodeURIComponent(this.model.get('@id'));
+                    share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
+                        Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url) + "&t=" +
+                        encodeURIComponent(this.model.get('shortTitle'));
                 }
 
                 return {
@@ -317,7 +325,9 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT), //TODO: This is a bit too coarse
                     Ctx: Ctx,
                     editingDefinition: this.editingDefinition,
-                    editingTitle: this.editingTitle
+                    editingTitle: this.editingTitle,
+                    direct_link_relative_url: direct_link_relative_url,
+                    share_link_url: share_link_url
                 };
 
             },
@@ -831,6 +841,11 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 shortTitle.renderTo(area);
                 shortTitle.changeToEditMode();
+            },
+
+            openTargetInPopOver: function (evt) {
+                console.log("ideaPanel openTargetInPopOver(evt: ", evt);
+                return Ctx.openTargetInPopOver(evt);
             }
 
         });
