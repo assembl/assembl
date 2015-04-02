@@ -1244,7 +1244,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 if(!model.length) return;
 
                 var instigator = new CKEditorField({
-                    'model': model,
+                    'model': this.instigator,
                     'modelProp': 'description'
                 });
 
@@ -1392,7 +1392,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 if(!model.length) return;
 
                 var introduction = new CKEditorField({
-                    'model': model,
+                    'model': this.model,
                     'modelProp': 'introduction'
                 });
 
@@ -1414,7 +1414,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 if(!model.length) return;
 
                 var objective = new CKEditorField({
-                    'model': model,
+                    'model': this.model,
                     'modelProp': 'objectives'
                 });
 

@@ -98,20 +98,21 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
 
                 var model = this.model.getLongTitleDisplayText();
 
-                var ideaSynthesis = new CKEditorField({
-                    'model': model,
+                this.ideaSynthesis = new CKEditorField({
+                    'model': this.model,
                     'modelProp': 'longTitle',
                     'placeholder': model,
-                    'showPlaceholderOnEditIfEmpty': true
+                    'showPlaceholderOnEditIfEmpty': true,
+                    'autosave': true
                 });
 
-                this.listenTo(ideaSynthesis, 'save cancel', function(){
+                this.listenTo(this.ideaSynthesis, 'save cancel', function(){
                     that.editing = false;
                     that.render();
                 });
 
-                ideaSynthesis.renderTo(area);
-                ideaSynthesis.changeToEditMode();
+                this.ideaSynthesis.renderTo(area);
+                this.ideaSynthesis.changeToEditMode();
             },
 
             /**
@@ -174,7 +175,7 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
             /**
              * @event
              */
-            onEditableAreaClick: function (ev) {
+            onEditableAreaClick: function () {
                 if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
                     this.editing = true;
                     this.render();

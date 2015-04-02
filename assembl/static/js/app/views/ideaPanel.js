@@ -798,7 +798,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 if (!model.length) return;
 
                 var description = new CKEditorField({
-                    'model': model,
+                    'model': this.model,
                     'modelProp': 'definition'
                 });
 
@@ -820,7 +820,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 if (!model.length) return;
 
                 var shortTitle = new CKEditorField({
-                    'model': model,
+                    'model': this.model,
                     'modelProp': 'longTitle'
                 });
 
@@ -829,8 +829,8 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     that.render();
                 });
 
-                this.shortTitle.renderTo(area);
-                this.shortTitle.changeToEditMode();
+                shortTitle.renderTo(area);
+                shortTitle.changeToEditMode();
             }
 
         });
