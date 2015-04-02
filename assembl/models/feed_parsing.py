@@ -12,7 +12,7 @@ from .generic import PostSource
 from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
 from ..lib.sqla import get_session_maker
-from ..tasks.source_reader import PullSourceReader
+from ..tasks.source_reader import PullSourceReader, ReaderError
 from virtuoso.alchemy import CoerceUnicode
 from cStringIO import StringIO
 import feedparser
@@ -316,7 +316,7 @@ class FeedSourceReader(PullSourceReader):
                     sess.commit()
             except Exception as e:
                 sess.rollback()
-                raise e
+                raise ReaderError(e)
             finally:
                 self.source = FeedPostSource.get(self.source_id)
 
@@ -344,10 +344,14 @@ class FeedSourceReader(PullSourceReader):
                     post.db().add(account)
                     post.db().commit()
                 except Exception as e:
+                    post.db().expunge(post)
+                    post.db().expunge(account)
                     post.db().rollback()
-                    raise e
+                    raise ReaderError(e)
                 finally:
                     self.source = FeedPostSource.get(self.source_id)
+            post.db().expunge(post)
+            post.db().expunge(account)
 
     def _check_parser_loaded(self):
         if not self._parse_agent:

@@ -407,7 +407,7 @@ class ImportedPost(Post):
         query, _ = super(ImportedPost, self).unique_query()
         source_id = self.source_id or self.source.id
         return query.filter_by(
-            type=self.type, source_id=source_id,
+            source_id=source_id,
             source_post_id=self.source_post_id), True
 
 
@@ -416,4 +416,4 @@ class ImportedPost(Post):
 def receive_set(target, value, oldvalue, initiator):
     "listen for the 'set' event, keeps the message_id in Post class in sync with the source_post_id"
 
-    target.message_id = value 
+    target.message_id = value
