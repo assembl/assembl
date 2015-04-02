@@ -1309,7 +1309,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             onRender: function(){
-              if(this.model) {
                 if (this.editingIntroduction) {
                     this.renderCKEditorIntroduction();
                 }
@@ -1317,10 +1316,12 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 if (this.editingObjective) {
                     this.renderCKEditorObjective();
                 }
-                //console.log("Just rendered with model, aplying elipsis");
+            },
+
+            onShow: function(){
+                // react to when a view has been rendered and displayed
                 this.applyEllipsisToSection(".context-introduction", this.ui.seeMoreIntro);
                 this.applyEllipsisToSection(".context-objective", this.ui.seeMoreObjectives);
-              }
             },
 
             seeMore: function (e) {
@@ -1425,23 +1426,20 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
                  * Read More links for introduction preview
                  */
-                var that = this;
-                setTimeout(function(){
-                    that.$(sectionSelector).dotdotdot({
-                        after: seemoreUi,
-                        height: 170,
-                        callback: function (isTruncated, orgContent) {
-                            //console.log("dotdotdot callback: ", isTruncated, orgContent);
-                            if (isTruncated) {
-                                seemoreUi.show();
-                            }
-                            else {
-                                seemoreUi.hide();
-                            }
-                        },
-                        watch: "window"
-                    });
-                }, 10);
+                this.$(sectionSelector).dotdotdot({
+                    after: seemoreUi,
+                    height: 170,
+                    callback: function (isTruncated, orgContent) {
+                        if (isTruncated) {
+                            seemoreUi.show();
+                        }
+                        else {
+                            seemoreUi.hide();
+                        }
+                    },
+                    watch: "window"
+                });
+
             }
 
         });
