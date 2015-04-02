@@ -5,7 +5,7 @@ import json
 import codecs
 from pyramid.security import Allow, ALL_PERMISSIONS, DENY_ALL
 from pyramid.httpexceptions import (
-    HTTPException, HTTPNotFound, HTTPInternalServerError)
+    HTTPException, HTTPNotFound, HTTPInternalServerError, HTTPFound, HTTPMovedPermanently)
 from pyramid.i18n import TranslationStringFactory
 
 from ..lib.json import json_renderer_factory
@@ -24,7 +24,7 @@ def backbone_include(config):
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
     config.add_route('graph_view', '/graph')
-    config.add_route('home', '/')
+
 
 
 def get_theme(discussion_slug):
@@ -130,14 +130,19 @@ class JSONError(HTTPException):
             self.content_type = 'text/plain'
             return r
 
-
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
 
     config.add_renderer('json', json_renderer_factory)
     config.include('.traversal')
-    config.add_route('discussion_list', '/')
 
+    config.add_route('discussion_list', '/')
+    config.add_route('home', '/{discussion_slug}')
+    config.add_route('home-auto', '/{discussion_slug}/')
+    def redirector(request):
+        return HTTPMovedPermanently(request.route_url('home', discussion_slug=request.matchdict.get('discussion_slug')))
+    config.add_view(redirector, route_name='home-auto')
+    
     config.include(backbone_include, route_prefix='/{discussion_slug}')
 
     #  authentication
