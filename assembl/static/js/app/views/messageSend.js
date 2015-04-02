@@ -83,10 +83,10 @@ define(['backbone', 'backbone.marionette', 'app', 'underscore', 'jquery', 'commo
                 var reply_idea = ('reply_idea' in this.options) ? this.options.reply_idea : null;
                 var reply_message_id = ('reply_message_id' in this.options) ? this.options.reply_message_id : null;
                 var show_target_context_with_choice = ('show_target_context_with_choice' in this.options) ? this.options.show_target_context_with_choice : null;
-                var i18n_post_message_in_this_idea = i18n.gettext('Under the idea "%s"'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in messageSend.tmpl)
-                var i18n_post_message_in_general_conversation = i18n.gettext('In the general conversation'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in messageSend.tmpl)
+                //var i18n_post_message_in_this_idea = i18n.gettext('Under the idea "%s"'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in messageSend.tmpl)
+                //var i18n_post_message_in_general_conversation = i18n.gettext('In the general conversation'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in messageSend.tmpl)
                 var canPost = Ctx.getCurrentUser().can(Permissions.ADD_POST);
-                var requiredRolesToPost = null;
+                //var requiredRolesToPost = null;
                 
                 return {
                     i18n: i18n,

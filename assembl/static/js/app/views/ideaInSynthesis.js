@@ -96,10 +96,12 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
                 var that = this,
                     area = this.$('.synthesis-expression-editor');
 
+                var model = this.model.getLongTitleDisplayText();
+
                 var ideaSynthesis = new CKEditorField({
-                    'model': this.model,
+                    'model': model,
                     'modelProp': 'longTitle',
-                    'placeholder': this.model.getLongTitleDisplayText(),
+                    'placeholder': model,
                     'showPlaceholderOnEditIfEmpty': true
                 });
 

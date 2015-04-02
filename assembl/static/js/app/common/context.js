@@ -1039,6 +1039,13 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                 return html ? $.trim($('<div>' + html + '</div>').text()) : html;
             },
 
+            /** Convert all applicable characters to HTML entities
+             * @param  {String} html
+             */
+            htmlEntities: function(str){
+                return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            },
+
             /**
              * Use the browser's built-in functionality to quickly and safely 
              * escape the string

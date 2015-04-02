@@ -62,14 +62,7 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
             },
 
             serializeData: function () {
-                var textToShow = null;
-
-                if (this.showPlaceholderOnEditIfEmpty) {
-                    textToShow = this.placeholder;
-                }
-                else {
-                    textToShow = this.model.get(this.modelProp);
-                }
+                var textToShow = (this.showPlaceholderOnEditIfEmpty) ? this.placeholder : this.model.get(this.modelProp);
 
                 return {
                     topId: this.topId,
@@ -106,14 +99,15 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
                     editingArea.focus();
                 }, 100);
 
-                this.ckInstance.element.on('blur', function () {
+                /*this.ckInstance.element.on('blur', function () {
 
                    /**
                       * Firefox triggers the blur event if we paste (ctrl+v)
                       * in the ckeditor, so instead of calling the function directly
                       * we wait to see if the focus is still in the ckeditor
-                   */
+
                    setTimeout(function () {
+
                      if (!that.ckInstance.element) return;
 
                      var hasFocus = $(that.ckInstance.element).is(":focus");
@@ -122,7 +116,7 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
 
                    }, 100);
 
-                });
+                });*/
 
             },
 
