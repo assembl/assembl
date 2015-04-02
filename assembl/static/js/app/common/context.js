@@ -149,22 +149,6 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             getLoginURL: function() {
               return '/' + Ctx.getDiscussionSlug() + '/login';
             },
-            
-            DEPRECATEDgetDiscussionPromise: function () {
-                if(this.discussionPromise ){
-                  return this.discussionPromise;
-                }
-
-                this.discussionPromise = Promise.resolve($.get(this.getApiV2DiscussionUrl()))
-                    .then(function(model){
-                        return model;
-                    }).catch(function(e){
-                        console.error(e.statusText);
-                    });
-
-                return this.discussionPromise;
-
-            },
 
             getSocketUrl: function () {
                 return this.SOCKET_URL;

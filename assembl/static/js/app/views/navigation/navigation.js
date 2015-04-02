@@ -1,7 +1,7 @@
 'use strict';
 
-define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notification', 'views/navigation/home', 'views/navigation/synthesisInNavigation', 'views/navigation/linkListView', 'views/assemblPanel', 'common/context', 'utils/permissions', 'jquery', 'utils/panelSpecTypes', 'jed'],
-    function (Assembl, Marionette, IdeaList, sidebarNotification, HomePanel, SynthesisInNavigationPanel, LinkListView, AssemblPanel, Ctx, Permissions, $, PanelSpecTypes, Jed) {
+define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notification', 'views/navigation/home', 'views/navigation/synthesisInNavigation', 'views/navigation/linkListView', 'views/assemblPanel', 'common/context', 'utils/permissions', 'jquery', 'utils/panelSpecTypes', 'jed', 'common/collectionManager'],
+    function (Assembl, Marionette, IdeaList, sidebarNotification, HomePanel, SynthesisInNavigationPanel, LinkListView, AssemblPanel, Ctx, Permissions, $, PanelSpecTypes, Jed, CollectionManager) {
 
         var NavigationView = AssemblPanel.extend({
             template: "#tmpl-navigation",
@@ -36,7 +36,8 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             },
             initialize: function (options) {
                 Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
-                var that = this;
+                var that = this,
+                    collectionManager = new CollectionManager();
 
                 $(window).resize(function () {
                     that.setSideBarHeight();
@@ -47,15 +48,19 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 this.visualizationItems = new Backbone.Collection();
                 this.num_items = 3;
 
-                Ctx.DEPRECATEDgetDiscussionPromise().then(function(discussion) {
-                    var settings = discussion['settings'];
-                    var jed;
+                collectionManager.getDiscussionModelPromise()
+                    .then(function(discussion) {
+
+                    var settings = discussion['settings'],
+                        jed;
+
                     try {
                         jed = new Jed(settings['translations'][assembl_locale]);
                     } catch (e) {
                         // console.error(e);
                         jed = new Jed({});
                     }
+
                     try {
                         // temporary hack
                         var visualization_items = settings['navigation_sections'][0]['navigation_content']['items'];

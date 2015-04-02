@@ -1326,7 +1326,12 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
             seeMore: function (e) {
                 e.stopPropagation();
-                Ctx.DEPRECATEDgetDiscussionPromise().then(function (discussion) {
+
+                var collectionManager = new CollectionManager();
+
+                collectionManager.getDiscussionModelPromise()
+                    .then(function (discussion) {
+
                     if($(e.target).hasClass('js_introductionSeeMore')) {
                         var model = new Backbone.Model({
                             content: discussion.introduction,

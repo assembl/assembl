@@ -234,7 +234,6 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                   hasNavSide = true;
                                 }
                             });
-                            console.log(items);
                             groupSpecsP.done(function (groupSpecs) {
                                 var groupSpec = new GroupSpec.Model(
                                     {'panels': items}, {'parse': true, 'viewsFactory': viewsFactory});
