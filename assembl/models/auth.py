@@ -1285,6 +1285,10 @@ class UserTemplate(DiscussionBoundBase, User):
                         self.db.add(d)
             except ObjectNotUniqueError as e:
                 transaction.abort()
+                # Sleep some time to avoid race condition
+                from time import sleep
+                from random import random
+                sleep(random()/10.0)
 
 
 Index("user_template", "discussion_id", "role_id")
