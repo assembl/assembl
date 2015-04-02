@@ -24,7 +24,7 @@
     "cytoscape": "*",
     "jit": "~2.0.2",
     "jasmine": "2.2.1",
-    "marionette": "~2.2.1",
+    "marionette": "~2.4.1",
     "momentjs": "~2.8.3",
     "raven-js": "https://github.com/benoitg/raven-js.git#f9f5993cb63879137385b3a546a675a04a490b71",
     "requirejs": "~2.1.15",
