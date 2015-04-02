@@ -793,12 +793,12 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 var that = this,
                     area = this.$('.ideaPanel-definition-editor');
 
-                var descriptionText = this.model.getDefinitionDisplayText();
+                var model = this.model.getDefinitionDisplayText();
 
-                if (!descriptionText.length) return;
+                if (!model.length) return;
 
                 var description = new CKEditorField({
-                    'model': this.model,
+                    'model': model,
                     'modelProp': 'definition'
                 });
 
@@ -815,12 +815,12 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 var that = this,
                     area = this.$('.ideaPanel-longtitle-editor');
 
-                var longTitle = this.model.getLongTitleDisplayText();
+                var model = this.model.getLongTitleDisplayText();
 
-                if (!longTitle.length) return;
+                if (!model.length) return;
 
                 var shortTitle = new CKEditorField({
-                    'model': this.model,
+                    'model': model,
                     'modelProp': 'longTitle'
                 });
 
