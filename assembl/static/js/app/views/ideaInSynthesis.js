@@ -50,8 +50,7 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
             events: {
               'click .synthesis-expression': 'onEditableAreaClick',
               'click .synthesisIdea-replybox-openbtn': 'focusReplyBox',
-              'click .messageSend-cancelbtn': 'closeReplyBox',
-              'blur .synthesis-expression-editor': 'closeEditableAreaClick'
+              'click .messageSend-cancelbtn': 'closeReplyBox'
             },
 
             modelEvents: {
@@ -180,14 +179,8 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
                     this.editing = true;
                     this.render();
                 }
-            },
-
-            closeEditableAreaClick: function(){
-                if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
-                    this.editing = false;
-                    this.render();
-                }
             }
+
         });
 
         return IdeaInSynthesisView;
