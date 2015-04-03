@@ -91,7 +91,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 });
                 this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
             },
-            onBeforeShow:function () {
+            onShow:function () {
               this.setSideBarHeight();
             },
             toggleMenuByName: function (itemName) {
@@ -124,9 +124,10 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             setSideBarHeight: function () {
                 var that = this;
                 this.initVar();
-                setTimeout(function(){
-                    that.ui.level.css('height', that._accordionContentHeight);
-                }, 0);
+
+                //setTimeout(function(){
+                    that.ui.level.height(that._accordionContentHeight);
+                //}, 0);
                 
             },
             loadView: function (view) {
@@ -189,7 +190,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 var _header = $('#header').height(),
                     _window = $(window).height(),
                     _li = this.li_height * this.num_items,
-                    _headerGroup = $(".groupHeader").first().height() ? $(".groupHeader").first().height() : ( $(".groupHeader").first().hasClass('editable') ? this.group_editable_header_height : this.group_header_height ),
+                    _headerGroup = ($(".groupHeader").first().hasClass('editable')) ? this.group_editable_header_height : this.group_header_height,
                     _sideBarHeight = (_window - _header) - _headerGroup,
                     that = this;
 
@@ -202,7 +203,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                     if (++this._accordionHeightTries < 10){ // prevent infinite loop
                         setTimeout(function () {
                             that.setSideBarHeight();
-                        }, 500);
+                        }, 100);
                     }
                 }
 
