@@ -19,6 +19,10 @@ raven_client = None
 
 def configure(registry, task_name, session_maker=None):
     settings = registry.settings
+    if settings.get('%s_debug_signal' % (task_name,), False):
+        from assembl.lib import signals
+        signals.listen()
+
     configure_zmq(settings['changes.socket'], False)
     configure_engine(settings, False, session_maker)
     get_session_maker(False)

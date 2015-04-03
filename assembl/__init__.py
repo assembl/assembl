@@ -28,6 +28,9 @@ def main(global_config, **settings):
     # here we create the engine and bind it to the (not really a) session
     # factory
     configure_engine(settings)
+    if settings.get('assembl_debug_signal', False):
+        from assembl.lib import signals
+        signals.listen()
 
     from views.traversal import root_factory
     config = Configurator(registry=getGlobalSiteManager())
