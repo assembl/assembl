@@ -79,11 +79,9 @@ class ParsedData(object):
 
     def _fetch_source(self):
         if not self._feed:
-            print "parsing feed from %s" % (self.url)
             self._feed = self._parse_agent.parse(self.url)
 
     def _update_feed(self,url):
-        print "parsing feed from new url source"
         self._feed = self._parse_agent.parse(url)
 
     def refetch_source(self):
@@ -146,7 +144,6 @@ class PaginatedParsedData(ParsedData):
 
     def get_next_feed(self):
         for url in self._update_url():
-            print "Fetching current url: \n%s" % url
             feed = super(PaginatedParsedData, self).get_feed_forced(url)
             self._feed = feed
             if feed['entries'] == []:
@@ -289,7 +286,6 @@ class FeedSourceReader(PullSourceReader):
             self._add_entries()
 
     def _re_import(self, discussion=None):
-        print "Processing re-import for source %s" % self.source.url
         sess = PostSource.db()
         for entry in self._parse_agent.get_entries():
             try:
@@ -432,13 +428,7 @@ class LoomioSourceReader(FeedSourceReader):
         post.subject = self._get_title_from_feed()
 
     def _get_body(self,entry):
-        # Debugging encoding issues
-        tmp = entry['content'][0]['value']
-        print '*'*100 + '\n'
-        print '[DEBUG] Entry value from parser is: \n'
-        print tmp
-        print '\n'
-        return tmp
+        return entry['content'][0]['value']
 
     def _convert_to_post(self,entry,account):
         post = super(LoomioSourceReader, self)._convert_to_post(entry,account)
