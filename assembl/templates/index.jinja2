@@ -14,7 +14,7 @@
         <meta property="og:description" content="{{ post.get_body_preview() }}" />
         <meta property="article:published_time" content="{{ post.creation_date }}" />
         {# TODO: have unique URL for a user <meta property="article:author" content="http://examples.opengraphprotocol.us/profile.html"> #}
-        <meta property="og:url" content="{{ request.application_url }}/{{ discussion.slug }}/posts/{{ post.id }}" />
+        <meta property="og:url" content="{{ post.get_url() }}" />
         <meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/crowd2.jpg" />
         <meta property="og:image:width" content="1600" />
         <meta property="og:image:height" content="222" />
@@ -29,7 +29,7 @@
         {#<meta property="og:site_name" content="Assembl" />#}
         {#<meta property="og:locale" content="fr_FR" />#}
         {# not shown because introduction has HTML, so it should be filtered. TODO: filter. <meta property="og:description" content="{{ discussion.introduction }}" />#}
-        <meta property="og:url" content="{{ request.application_url }}/{{ discussion.slug }}/" />
+        <meta property="og:url" content="{{ discussion.get_url() }}" />
         <meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/crowd2.jpg" />
         <meta property="og:image:width" content="1600" />
         <meta property="og:image:height" content="222" />
@@ -72,6 +72,17 @@
     <script type="text/json" id="permissions-json">{{ discussion.get_user_permissions_preload(userId) |safe }}</script>
 
 
+{% endblock %}
+
+{% block backboneTemplates %}
+    <div id="templates">
+        {% for template in templates %}
+            {% set template_path = 'views/' + template + '.tmpl' %}
+            <script id="tmpl-{{template}}" type="text/x-template">
+                {% include template_path %}
+            </script>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block main_js %}

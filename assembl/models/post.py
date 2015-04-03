@@ -111,6 +111,11 @@ class Post(Content):
 
     def get_subject(self):
         return self.subject
+    
+    def get_url(self):
+        from assembl.lib.frontend_urls import FrontendUrls
+        frontendUrls = FrontendUrls(self.discussion)
+        return frontendUrls.get_post_url(self)
 
     def get_body(self):
         return self.body.strip()

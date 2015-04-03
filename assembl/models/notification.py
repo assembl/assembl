@@ -36,7 +36,6 @@ from jinja2 import Environment, PackageLoader
 from . import Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
-from ..lib.frontend_urls import FrontendUrls
 from .auth import (
     User, Everyone, P_ADMIN_DISC, CrudPermissions, P_READ, UserTemplate)
 from .discussion import Discussion
@@ -932,7 +931,7 @@ class Notification(Base):
         return to_email
     
     def render_to_email(self):
-
+        from ..lib.frontend_urls import FrontendUrls
         email_text_part = self.render_to_email_text_part()
         email_html_part = self.render_to_email_html_part()
         if not email_text_part and not email_html_part:
@@ -1023,6 +1022,7 @@ class NotificationOnPostCreated(NotificationOnPost):
         return subject
 
     def render_to_email_html_part(self):
+        from ..lib.frontend_urls import FrontendUrls
         from premailer import Premailer
         ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
         ink_css = open(ink_css_path)

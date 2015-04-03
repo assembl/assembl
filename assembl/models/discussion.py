@@ -384,6 +384,11 @@ class Discussion(DiscussionBoundBase):
         portString = (':'+port) if port != 80 else ''
         return 'http://'+config.get('public_hostname')+portString
 
+    def get_url(self):
+        from assembl.lib.frontend_urls import FrontendUrls
+        frontendUrls = FrontendUrls(self)
+        return frontendUrls.get_discussion_url()
+    
     crud_permissions = CrudPermissions(
         P_SYSADMIN, P_READ, P_ADMIN_DISC, P_SYSADMIN)
 

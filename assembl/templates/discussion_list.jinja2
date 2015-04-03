@@ -4,7 +4,7 @@
 <div class="gr discussionlist">
   {% for discussion in discussions %}
   <div class="gu gu1of5 bx bx-default">
-    <h4 class="h4"><a href='{{ discussion.slug }}/'>{{ discussion.topic }}</a></h4>
+    <h4 class="h4"><a href='{{ discussion.url }}'>{{ discussion.topic }}</a></h4>
     <span class="discussion">
     {% if discussion.admin_url %}
         <br/><a href='{{ discussion.admin_url }}'><em>{{ gettext("Admin") }}</em></a>
@@ -47,7 +47,7 @@
         {% for discussion in discussions %}
         <li>
             <span class="discussion">
-            <a href='{{ discussion.slug }}/'>{{ discussion.topic }}</a>
+            <a href='{{ discussion.get_url() }}'>{{ discussion.topic }}</a>
             {% if discussion.admin_url %}
                 <br/><a href='{{ discussion.admin_url }}'><em>{{ gettext("Admin") }}</em></a>
             {% endif %}

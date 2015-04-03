@@ -27,13 +27,14 @@ def discussion_list_view(request):
     #authenticated, so they can login and read them
     discussions = discussions_with_access(Authenticated if user_id == Everyone else user_id)
     for discussion in discussions:
+        discussionFrontendUrls = FrontendUrls(discussion)
         discussion_context = {
             'topic': discussion.topic,
-            'slug': discussion.slug
+            'slug': discussion.slug,
+            'url': discussionFrontendUrls.get_discussion_url()
         }
         if user_has_permission(discussion.id, user_id, P_ADMIN_DISC):
-            discussion_context['admin_url'] = FrontendUrls(
-                discussion).get_discussion_edition_url()
+            discussion_context['admin_url'] = discussionFrontendUrls.get_discussion_edition_url()
             discussion_context['permissions_url'] = request.route_url(
                 'discussion_permissions', discussion_id=discussion.id)
         context['discussions'].append(discussion_context)

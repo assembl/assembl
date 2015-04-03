@@ -11,6 +11,7 @@ from pyramid.i18n import TranslationStringFactory
 from ..lib.json import json_renderer_factory
 from ..lib import config
 from ..auth import R_SYSADMIN
+from ..lib.frontend_urls import FrontendUrls
 
 default_context = {
     'STATIC_URL': '/static'
@@ -19,7 +20,6 @@ default_context = {
 TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
 
 def backbone_include(config):
-    from ..lib.frontend_urls import FrontendUrls
     FrontendUrls.register_frontend_routes(config)
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
@@ -27,16 +27,16 @@ def backbone_include(config):
 
 
 
-def get_theme(discussion_slug):
+def get_theme(discussion):
     theme_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'css', 'themes')
     default_theme = config.get('default_theme') or 'default'
-    default_folder = os.path.realpath(os.path.join(theme_path, default_theme))
-    if not discussion_slug:
+    #default_folder = os.path.realpath(os.path.join(theme_path, default_theme))
+    if not discussion:
         return default_theme
     try:
-        slug_file = os.path.realpath(os.path.join(theme_path, discussion_slug))
+        slug_file = os.path.realpath(os.path.join(theme_path, discussion.slug))
         if os.path.isdir(slug_file):
-            return discussion_slug
+            return discussion.slug
     except NameError:
         return default_theme
     return default_theme
@@ -56,11 +56,6 @@ def get_default_context(request):
         user_profile_edit_url = None
     web_analytics_piwik_script = config.get('web_analytics_piwik_script') or False
     discussion = get_current_discussion()
-    discussion_title = None
-    discussion_slug = None
-    if discussion:
-        discussion_title = discussion.topic
-        discussion_slug = discussion.slug
     if web_analytics_piwik_script and discussion and discussion.web_analytics_piwik_id_site:
         web_analytics_piwik_script = web_analytics_piwik_script % ( discussion.web_analytics_piwik_id_site, discussion.web_analytics_piwik_id_site )
     else:
@@ -81,12 +76,10 @@ def get_default_context(request):
         user=user,
         templates=get_template_views(),
         discussion={},  # Templates won't load without a discussion object
-        discussion_title=discussion_title,
-        discussion_slug=discussion_slug,
         user_profile_edit_url=user_profile_edit_url,
         locale=localizer.locale_name,
         locales=config.get('available_languages').split(),
-        theme=get_theme(discussion_slug),
+        theme=get_theme(discussion),
         minified_js=config.get('minified_js') or False,
         web_analytics_piwik_script=web_analytics_piwik_script,
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
@@ -137,11 +130,6 @@ def includeme(config):
     config.include('.traversal')
 
     config.add_route('discussion_list', '/')
-    config.add_route('home', '/{discussion_slug}')
-    config.add_route('home-auto', '/{discussion_slug}/')
-    def redirector(request):
-        return HTTPMovedPermanently(request.route_url('home', discussion_slug=request.matchdict.get('discussion_slug')))
-    config.add_view(redirector, route_name='home-auto')
     
     config.include(backbone_include, route_prefix='/{discussion_slug}')
 
@@ -153,6 +141,12 @@ def includeme(config):
 
     config.include('.home')
     config.include('.admin')
+    
+    config.add_route('home', '/{discussion_slug}')
+    config.add_route('home-auto', '/{discussion_slug}/')
+    def redirector(request):
+        return HTTPMovedPermanently(request.route_url('home', discussion_slug=request.matchdict.get('discussion_slug')))
+    config.add_view(redirector, route_name='home-auto')
     default_context['socket_url'] = \
         config.registry.settings['changes.websocket.url']
     default_context['cache_bust'] = \

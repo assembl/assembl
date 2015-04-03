@@ -9,7 +9,7 @@ body{
 
 <div class="loginbox register">
     <header>
-        <h1>{% if discussion_title %}{{ gettext("Join \"%(discussion_title)s\"")|format(discussion_title=discussion_title) }}{% else %}{{ gettext("Join Assembl") }}{% endif %}</h1>
+        <h1>{% if discussion %}{{ gettext("Join \"%(discussion_title)s\"")|format(discussion_title=discussion.topic) }}{% else %}{{ gettext("Join Assembl") }}{% endif %}</h1>
     </header>
 
     <div class="content">

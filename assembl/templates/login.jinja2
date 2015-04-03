@@ -1,12 +1,12 @@
 {% extends 'base.jinja2' %}
 {# TODO: mutualise this among all guest pages (login, register, forgot password, etc) #}
-{% if discussion_title %}
-  {% block page_title %}{{ discussion_title }}{% endblock %}
+{% if discussion %}
+  {% block page_title %}{{ discussion.topic }}{% endblock %}
 {% endif %}
 {% block meta_tags %}
   <meta name="description" content="">{# not shown because introduction may not be public and has HTML, so it should be filtered. TODO: filter. <meta property="description" content="{{ discussion.introduction }}" />#}
-  {% if discussion_title %}
-    <meta property="og:title" content="{{ discussion_title }}" />
+  {% if discussion %}
+    <meta property="og:title" content="{{ discussion.topic }}" />
   {% else %}
     <meta property="og:title" content="Assembl" />
   {% endif %}
@@ -14,7 +14,11 @@
   {#<meta property="og:site_name" content="Assembl" />#}
   {#<meta property="og:locale" content="fr_FR" />#}
   {# not shown because introduction may not be public and has HTML, so it should be filtered. TODO: filter. <meta property="og:description" content="{{ discussion.introduction }}" />#}
-  <meta property="og:url" content="{{ request.application_url }}/{{ discussion_slug }}/login" />
+  {% if discussion %}
+    <meta property="og:url" content="{{ request.application_url }}/{{ discussion_slug }}/login" />
+  {% else %}
+    <meta property="og:url" content="{{ request.application_url }}/login" />
+  {% endif %}
   <meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/crowd2.jpg" />
   <meta property="og:image:width" content="1600" />
   <meta property="og:image:height" content="222" />
@@ -52,7 +56,7 @@
 
 <div class="loginbox sign-in">
     <header>
-        <h1>{% if discussion_title %}{{ gettext("Log in to \"%(discussion_title)s\"")|format(discussion_title=discussion_title) }}{% else %}{{ gettext("Log in to Assembl") }}{% endif %}</h1>
+        <h1>{% if discussion %}{{ gettext("Log in to \"%(discussion_title)s\"")|format(discussion_title=discussion.topic) }}{% else %}{{ gettext("Log in to Assembl") }}{% endif %}</h1>
     </header>
 
     <div class="content">

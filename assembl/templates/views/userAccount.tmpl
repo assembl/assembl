@@ -12,7 +12,7 @@
             <a href="#user/notifications" class="menu">{{ gettext('Notifications') }}</a>
           </li>
           <li class="mtxl">
-            <a href="/{{ discussion.slug }}/">{{ gettext('Back to discussion') }}</a>
+            <a href="{{ discussion.get_url() }}">{{ gettext('Back to discussion') }}</a>
           </li>
         </ul>
     </nav>

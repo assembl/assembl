@@ -8,7 +8,7 @@
         <% } %>
         {% else %}
         {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-        <a href="/{{ discussion.slug }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this group') }}</a>
+        <a href="{{ discussion.get_url() }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this group') }}</a>
         {% endif %}
         {% endif %}
     </li>
@@ -35,7 +35,7 @@
         </div>
         {% else %}
         {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-        <a href="/{{discussion.slug}}/login" class="btn btn-default btn-xs">{{ gettext('Sign in') }}</a>
+        <a href="{{discussion.get_url()}}/login" class="btn btn-default btn-xs">{{ gettext('Sign in') }}</a>
         {% endif %}
         {% endif %}
     </li>

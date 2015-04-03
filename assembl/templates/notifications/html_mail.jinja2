@@ -10,7 +10,7 @@ frontendUrls
 ink_css
 #}
 
-{% set discussionUrl = frontendUrls.getDiscussionUrl() %}
+{% set discussionUrl = frontendUrls.get_discussion_url() %}
 {% set notificationConfigUrl = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl() %}
 {% set discussionTopic = subscription.discussion.topic %}
 {% set discussionLink='<a href="'+discussionUrl+'">'+discussionTopic+'</a>' %}

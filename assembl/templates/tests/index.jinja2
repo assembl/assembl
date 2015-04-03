@@ -7,7 +7,7 @@
 
 {% block content %}
 <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
-<input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
+<input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.get_url() }}" />
 <input type="hidden" name="socket-url" id="socket-url" value="{{ socket_url }}" />
 
 {% if user %}
