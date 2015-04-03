@@ -33,8 +33,8 @@ define(['backbone.marionette', 'views/assemblPanel', 'common/collectionManager',
                 messageListView.toggleFilterByPostId(messageId);
                 messageListView.showMessageById(messageId, undefined, false);
 
-                //messageListView.ui.stickyBar.addClass('hidden');
-                //messageListView.ui.replyBox.addClass('hidden');
+                messageListView.ui.stickyBar.addClass('hidden');
+                messageListView.ui.replyBox.addClass('hidden');
 
                 // Show that entry is selected
                 this.selectSynthesisInMenu(messageId);
