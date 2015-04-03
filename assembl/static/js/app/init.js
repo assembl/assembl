@@ -40,7 +40,7 @@ require(['mocha', 'chai', 'chai-jquery'], function(mocha, chai, chaiJquery){
     //mocha.bail(false);
 
     require([
-        'tests/views.spec',
+        //'tests/views.spec',
         'tests/routes.spec',
         'tests/context.spec',
         'tests/models.spec',
