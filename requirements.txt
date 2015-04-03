@@ -57,7 +57,7 @@ iso8601==0.1.10
 kombu==3.0.24
 lingua==3.9
 lxml==3.4.2
-meld3==1.0.0
+meld3==1.0.2
 mock==1.0.1
 oauthlib==0.7.2
 paramiko==1.15.2
@@ -84,8 +84,8 @@ pyramid-tm==0.11
 pytest==2.7.0
 pytest-cov==1.8.1
 pytest-localserver==0.3.4
-pytest-mock==0.4.1
-pytest-splinter==1.2.11
+pytest-mock==0.4.2
+pytest-splinter==1.3.0
 python-memcached==1.54
 python-openid==2.2.5
 pytz==2015.2
@@ -107,7 +107,7 @@ snowballstemmer==1.2.0
 -e git+https://github.com/maparent/sockjs-tornado.git@master#egg=sockjs_tornado
 sockjsproxy==0.7.1
 sphinx-bootstrap-theme==0.4.5
--e git+https://github.com/maparent/splinter.git#egg=splinter
+splinter==0.7.2
 supervisor==3.1.3
 tornado==4.1
 transaction==1.4.3
