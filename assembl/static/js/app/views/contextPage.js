@@ -1375,10 +1375,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 var that = this,
                     area = this.$('.context-introduction-editor');
 
-                var model = this.model.get('introduction');
-
-                if(!model.length) return;
-
                 var introduction = new CKEditorField({
                     'model': this.model,
                     'modelProp': 'introduction'
@@ -1396,10 +1392,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             renderCKEditorObjective: function () {
                 var that = this,
                     area = this.$('.context-objective-editor');
-
-                var model = this.model.get('objectives');
-
-                if(!model.length) return;
 
                 var objective = new CKEditorField({
                     'model': this.model,
