@@ -762,8 +762,11 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              * Saves the current annotation if there is any
              */
             saveCurrentAnnotationAsExtract: function () {
-                if (this.getCurrentUser().can(Permissions.EDIT_EXTRACT)) {
+                if (this.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
                     this._annotatorEditor.element.find('.annotator-save').click();
+                } else {
+                    alert("Error: You don't have the permission to save this annotation as an extract.");
+                    this._annotatorEditor.element.find('.annotator-cancel').click();
                 }
             },
 
