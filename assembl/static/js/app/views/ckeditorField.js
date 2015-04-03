@@ -39,6 +39,8 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
 
                 this.autosave = (options.autosave) ? options.autosave : false;
 
+                this.hideButton = (options.hideButton) ? options.hideButton : false;
+
                 this.editing = (this.editing) ? true : false;
 
                 this.modelProp = (options.modelProp) ? options.modelProp : null;
@@ -74,7 +76,8 @@ define(['backbone.marionette', 'app' , 'underscore', 'common/context', 'ckeditor
                     text: textToShow,
                     editing: this.editing,
                     canEdit: this.canEdit,
-                    placeholder: this.placeholder
+                    placeholder: this.placeholder,
+                    hideButton: this.hideButton
                 }
             },
 

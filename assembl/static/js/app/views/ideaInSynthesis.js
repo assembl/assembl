@@ -102,7 +102,8 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
                     'modelProp': 'longTitle',
                     'placeholder': model,
                     'showPlaceholderOnEditIfEmpty': true,
-                    'autosave': true
+                    'autosave': true,
+                    'hideButton': true
                 });
 
                 this.listenTo(this.ideaSynthesis, 'save cancel', function(){
@@ -140,8 +141,7 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
                     'msg_in_progress_body': partialMessage['body'],
                     'msg_in_progress_ctx': partialCtx,
                     'send_callback': send_callback,
-                    'messageList': this.messageListView,
-                    'enable_button': false
+                    'messageList': this.messageListView
                 });
 
                 this.$('.synthesisIdea-replybox').html(replyView.render().el);

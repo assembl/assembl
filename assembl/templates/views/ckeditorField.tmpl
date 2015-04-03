@@ -3,10 +3,12 @@
         <div id="<%= topId %>"></div>
         <div id="<%= fieldId %>" class="margin panel-editablearea" contenteditable="true"><%= text %></div>
         {# <div id="<%= bottomId %>"></div> #}
-        
+
         <div class="paxs tar">
+            <% if(!hideButton){ %>
             <a class="btn btn-primary btn-sm ckeditorField-savebtn">{{ gettext('Save') }}</a>
             <a class="btn btn-cancel btn-sm ckeditorField-cancelbtn">{{ gettext('Cancel') }}</a>
+            <% } %>
         </div>
     </div>
 <% } else { %>

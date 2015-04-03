@@ -1071,8 +1071,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 'msg_in_progress_title': partialMessage['title'],
                 'msg_in_progress_body': partialMessage['body'],
                 'messageList': that,
-                'show_target_context_with_choice': true,
-                'enable_button': true
+                'show_target_context_with_choice': true
               };
 
               var currentIdea = this.getContainingGroup().getCurrentIdea();
