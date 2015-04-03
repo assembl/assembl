@@ -687,6 +687,9 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
             applicableInstances = subscriptionClass.findApplicableInstances(objectInstance.get_discussion_id(), CrudVerbs.CREATE, objectInstance)
             for subscription in applicableInstances:
                 applicableInstancesByUser[subscription.user_id].append(subscription)
+        num_instances = len([v for v in applicableInstancesByUser.itervalues() if v])
+        print "processEvent: %d notifications created for %s %s %d" % (
+            num_instances, verb, objectClass.__name__, objectId)
         with transaction.manager:
             for userId, applicableInstances in applicableInstancesByUser.iteritems():
                 if(len(applicableInstances) > 0):
