@@ -30,7 +30,7 @@
     "requirejs": "~2.1.15",
     "sockjs": "~0.3.4",
     "underscore": "~1.7.0",
-    "zeroclipboard": "~1.2.3",
+    "zeroclipboard": "~2.2.0",
     "jed": "~0.5.4",
     "Backbone.Subset": "maparent/Backbone.Subset#0.1.1",
     "d3": "~3.4.11",

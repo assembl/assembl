@@ -33,7 +33,7 @@ var requirejs_config = {
         'raven.backbone': '../bower/raven-js/plugins/backbone',
         'raven.console': '../bower/raven-js/plugins/console',
         'raven.require': '../bower/raven-js/plugins/require',
-        'zeroclipboard': '../bower/zeroclipboard/ZeroClipboard',
+        'zeroclipboard': '../bower/zeroclipboard/dist/ZeroClipboard',
         'sockjs': '../bower/sockjs/sockjs',
         'cytoscape': '../bower/cytoscape/dist/cytoscape',
         'jit': '../bower/jit/Jit/jit',

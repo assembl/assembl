@@ -1293,20 +1293,25 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              * @init
              */
             initClipboard: function () {
-                if (!assembl.clipboard) {
-                    Zeroclipboard.setDefaults({
-                        moviePath: '/static/js/bower/zeroclipboard/ZeroClipboard.swf'
-                    });
-                    assembl.clipboard = new Zeroclipboard();
 
-                    assembl.clipboard.on(assembl.clipboard, 'mouseover', function () {
-                        $(this).trigger('mouseover');
-                    });
+                Zeroclipboard.config({
+                    moviePath: '/static/js/bower/zeroclipboard/dist/ZeroClipboard.swf'
+                });
 
-                    assembl.clipboard.on('mouseout', function () {
-                        $(this).trigger('mouseout');
-                    });
-                }
+                var client = new Zeroclipboard($('[data-copy-text]'));
+
+                client.on("error", function(event) {
+                    console.error('error[name="' + event.name + '"]: ' + event.message);
+                    ZeroClipboard.destroy();
+                });
+
+                client.on('mouseover', function () {
+                    $(this).trigger('mouseover');
+                });
+
+                client.on('mouseout', function () {
+                    $(this).trigger('mouseout');
+                });
 
                 var that = this;
                 $('[data-copy-text]').each(function (i, el) {
@@ -1315,8 +1320,8 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                     el.removeAttribute('data-copy-text');
 
                     el.setAttribute('data-clipboard-text', text);
-                    assembl.clipboard.glue(el);
                 });
+
             },
 
             getAbsoluteURLFromRelativeURL: function(url) {
