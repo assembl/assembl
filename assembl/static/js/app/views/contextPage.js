@@ -1294,9 +1294,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 'click @ui.seeMoreIntro': 'seeMore',
                 'click @ui.seeMoreObjectives': 'seeMore',
                 'click @ui.introduction': 'editIntroduction',
-                'click @ui.objective':'editObjective',
-                'blur @ui.introductionEditor':'cancelIntroduction',
-                'blur @ui.objectiveEditor': 'cancelObjective'
+                'click @ui.objective':'editObjective'
             },
 
             serializeData: function () {
@@ -1320,8 +1318,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
             onShow: function(){
                 // react to when a view has been rendered and displayed
-                this.applyEllipsisToSection(".context-introduction", this.ui.seeMoreIntro);
-                this.applyEllipsisToSection(".context-objective", this.ui.seeMoreObjectives);
+                this.applyEllipsisToSection('.context-introduction', this.ui.seeMoreIntro);
+                this.applyEllipsisToSection('.context-objective', this.ui.seeMoreObjectives);
             },
 
             seeMore: function (e) {
@@ -1364,16 +1362,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     this.editingIntroduction = true;
                     this.render();
                 }
-            },
-
-            cancelIntroduction: function(){
-                this.editingIntroduction = false;
-                this.render();
-            },
-
-            cancelObjective: function(){
-                this.editingObjective = false;
-                this.render();
             },
 
             editObjective: function(){
@@ -1420,6 +1408,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
                 this.listenTo(objective, 'save cancel', function(){
                     that.editingObjective = false;
+                    that.$('#context-objective').trigger('update.dot');
                     that.render();
                 });
 
@@ -1431,7 +1420,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
                  * Read More links for introduction preview
                  */
-                this.$(sectionSelector).dotdotdot({
+                $(sectionSelector).dotdotdot({
                     after: seemoreUi,
                     height: 170,
                     callback: function (isTruncated, orgContent) {
