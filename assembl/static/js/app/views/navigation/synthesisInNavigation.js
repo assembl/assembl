@@ -41,7 +41,7 @@ define(['backbone.marionette', 'views/assemblPanel', 'common/collectionManager',
             },
 
             selectSynthesisInMenu: function (messageId) {
-                this.$(".synthesisItem").removeClass("selected");
+                $(".synthesisItem").closest('li').removeClass("selected");
                 this.$(".synthesisItem[data-message-id=\"" + messageId + "\"]").addClass("selected");
             }
 
