@@ -184,9 +184,9 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
                             conclusionField.renderTo(that.$('.synthesisPanel-conclusion'));
                         }
                         else {
-                            that.$('.synthesisPanel-title').append(that.model.get('subject'));
-                            that.$('.synthesisPanel-introduction').append(that.model.get('introduction'));
-                            that.$('.synthesisPanel-conclusion').append(that.model.get('conclusion'));
+                            that.$('.synthesisPanel-title').html(that.model.get('subject'));
+                            that.$('.synthesisPanel-introduction').html(that.model.get('introduction'));
+                            that.$('.synthesisPanel-conclusion').html(that.model.get('conclusion'));
                         }
                     });
 
