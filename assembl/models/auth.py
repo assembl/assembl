@@ -1186,6 +1186,51 @@ def create_default_permissions(session, discussion):
     add_perm(P_SYSADMIN, [R_ADMINISTRATOR])
 
 
+class AnonymousUser(DiscussionBoundBase, User):
+    "A fake anonymous user bound to a source."
+    __tablename__ = "anonymous_user"
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'anonymous_user'
+    }
+
+    id = Column(
+        Integer,
+        ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
+        primary_key=True
+    )
+
+    source_id = Column(Integer, ForeignKey(
+        "content_source.id",
+        ondelete='CASCADE', onupdate='CASCADE'), unique=True)
+    source = relationship(
+        "ContentSource", backref=backref(
+            "anonymous_user", cascade="all, delete-orphan",
+            uselist=False))
+
+    def __init__(self, **kwargs):
+        kwargs['verified'] = True
+        kwargs['name'] = "anonymous"
+        super(AnonymousUser, self).__init__(**kwargs)
+
+    # Create an index for (discussion, role)?
+
+    def get_discussion_id(self):
+        return self.source.discussion_id
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        from .generic import ContentSource
+        if alias_maker is None:
+            anonymous_user = cls
+            source = ContentSource
+        else:
+            anonymous_user = alias_maker.alias_from_class(cls)
+            source = alias_maker.alias_from_relns(anonymous_user.source)
+        return (anonymous_user.source_id == source.id,
+                source.discussion_id == discussion_id)
+
+
 class UserTemplate(DiscussionBoundBase, User):
     "A fake user with default permissions and Notification Subscriptions."
     __tablename__ = "user_template"

@@ -81,6 +81,7 @@ from .auth import (
     AbstractAgentAccount,
     AgentProfile,
     AgentStatusInDiscussion,
+    AnonymousUser,
     DiscussionPermission,
     EmailAccount,
     IdentityProvider,
