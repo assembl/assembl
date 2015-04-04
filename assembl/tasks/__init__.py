@@ -65,6 +65,7 @@ def config_celery_app(celery_app, settings=None):
     config = {
         "CELERY_QUEUES": get_celery_queues(),
         "CELERY_ROUTES": get_celery_routes(),
+        "CELERY_TASK_SERIALIZER": 'json',
         "CELERY_STORE_ERRORS_EVEN_IF_IGNORED": True}
     if settings is not None:
         config['BROKER_URL'] = settings['%s.broker' % (celery_app.main,)]
