@@ -34,7 +34,7 @@ stopsignal = INT
 
 [program:celery_imap]
 directory = %(here)s
-command = celery worker -l info -A assembl.tasks.imap -n imap -c 1 -b %(IMAP_CELERY_BROKER)s -Q imap
+command = celery worker -E -l info -A assembl.tasks.imap -n imap -c 1 -b %(IMAP_CELERY_BROKER)s -Q imap
 autostart = %(autostart_celery_imap)s
 autorestart = true
 startsecs = 2
@@ -56,7 +56,7 @@ killasgroup = true
 
 [program:celery_notification_dispatch]
 directory = %(here)s
-command = celery worker -l info -A assembl.tasks.notification_dispatch -n notification_dispatch -c 1 -b %(NOTIF_DISPATCH_CELERY_BROKER)s -Q notification_dispatch
+command = celery worker -E -l info -A assembl.tasks.notification_dispatch -n notification_dispatch -c 1 -b %(NOTIF_DISPATCH_CELERY_BROKER)s -Q notification_dispatch
 autostart = %(autostart_celery_notification_dispatch)s
 autorestart = true
 startsecs = 2
@@ -68,7 +68,7 @@ killasgroup = true
 
 [program:celery_notify]
 directory = %(here)s
-command = celery worker -l info -A assembl.tasks.notify -n notify -c 2 -b %(NOTIFY_CELERY_BROKER)s -Q notify
+command = celery worker -E -l info -A assembl.tasks.notify -n notify -c 2 -b %(NOTIFY_CELERY_BROKER)s -Q notify
 autostart = %(autostart_celery_notify)s
 autorestart = true
 startsecs = 2
