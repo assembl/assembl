@@ -99,7 +99,7 @@ def process_notification(notification):
         % (notification.id, notification.delivery_state))
 
 
-@notify_celery_app.task(ignore_result=True)
+@notify_celery_app.task()
 def notify(id):
     """ Can be triggered by
     http://localhost:6543/data/Discussion/6/all_users/2/notifications/12/process_now """
@@ -112,7 +112,7 @@ def notify(id):
         process_notification(notification)
 
 
-@notify_celery_app.task(ignore_result=True)
+@notify_celery_app.task()
 def process_pending_notifications():
     """ Can be triggered by http://localhost:6543/data/Notification/process_now """
     init_task_config(notify_celery_app)

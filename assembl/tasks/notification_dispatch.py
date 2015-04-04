@@ -53,47 +53,47 @@ class ModelEventWatcherCeleryReceiver(object):
         self.mw.processAccountModified(id)
 
 
-@notif_dispatch_celery_app.task(ignore_result=True)
+@notif_dispatch_celery_app.task()
 def processPostCreatedTask(id):
     ModelEventWatcherCeleryReceiver.get_instance().processPostCreated(id)
 
 
-@notif_dispatch_celery_app.task(ignore_result=True)
+@notif_dispatch_celery_app.task()
 def processIdeaCreatedTask(id):
     ModelEventWatcherCeleryReceiver.get_instance().processIdeaCreated(id)
 
 
-@notif_dispatch_celery_app.task(ignore_result=True)
+@notif_dispatch_celery_app.task()
 def processIdeaModifiedTask(id, version):
     ModelEventWatcherCeleryReceiver.get_instance().processIdeaModified(id, version)
 
 
-@notif_dispatch_celery_app.task(ignore_result=True)
+@notif_dispatch_celery_app.task()
 def processIdeaDeletedTask(id):
     ModelEventWatcherCeleryReceiver.get_instance().processIdeaDeleted(id)
 
 
-@notif_dispatch_celery_app.task(ignore_result=True)
+@notif_dispatch_celery_app.task()
 def processExtractCreatedTask(id):
     ModelEventWatcherCeleryReceiver.get_instance().processExtractCreated(id)
 
 
-@notif_dispatch_celery_app.task(ignore_result=True)
+@notif_dispatch_celery_app.task()
 def processExtractModifiedTask(id, version):
     ModelEventWatcherCeleryReceiver.get_instance().processExtractModified(id, version)
 
 
-@notif_dispatch_celery_app.task(ignore_result=True)
+@notif_dispatch_celery_app.task()
 def processExtractDeletedTask(id):
     ModelEventWatcherCeleryReceiver.get_instance().processExtractDeleted(id)
 
 
-@notif_dispatch_celery_app.task(ignore_result=True)
+@notif_dispatch_celery_app.task()
 def processAccountCreatedTask(id):
     ModelEventWatcherCeleryReceiver.get_instance().processAccountCreated(id)
 
 
-@notif_dispatch_celery_app.task(ignore_result=True)
+@notif_dispatch_celery_app.task()
 def processAccountModifiedTask(id):
     ModelEventWatcherCeleryReceiver.get_instance().processAccountModified(id)
 
