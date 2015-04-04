@@ -729,6 +729,15 @@ class User(AgentProfile):
         else:
             return "<User id=%d>" % self.id
 
+    @property
+    def permissions_for_current_discussion(self):
+        "CAN ONLY BE CALLED FROM API V2"
+        from ..auth.util import get_current_discussion
+        discussion = get_current_discussion()
+        if discussion:
+            return self.get_permissions(discussion.id)
+        return self.get_all_permissions()
+
     def get_permissions(self, discussion_id):
         from ..auth.util import get_permissions
         return get_permissions(self.id, discussion_id)

@@ -25,7 +25,7 @@
         "login_failures": false,
         "password": false,
         "verified": true,
-        "permissions": "&get_all_permissions",
+        "permissions": "permissions_for_current_discussion",
         "notification_subscriptions": "&get_notification_subscriptions_for_current_discussion:"
     },
     "UserTemplate": {

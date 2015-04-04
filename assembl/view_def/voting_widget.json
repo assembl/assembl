@@ -24,7 +24,7 @@
         "name": "&display_name",
         "avatar_url_base": "&external_avatar_url",
         "real_name": "&real_name",
-        "permissions": "&get_all_permissions"
+        "permissions": "permissions_for_current_discussion"
     },
     "UserTemplate": {
         "@extends": "User",

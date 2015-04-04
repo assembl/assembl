@@ -31,7 +31,7 @@
         "verified": true,
         "is_first_visit": true,
         "was_created_on_current_discussion": true,
-        "permissions": "&get_all_permissions",
+        "permissions": "permissions_for_current_discussion",
         "username": "username_p"
     },
     "UserTemplate": {
