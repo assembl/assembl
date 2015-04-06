@@ -55,40 +55,29 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         jed;
 
                     try {
-                        jed = new Jed(settings['translations'][assembl_locale]);
-                    } catch (e) {
-                        // console.error(e);
-                        jed = new Jed({});
-                    }
-
-                    try {
                         // temporary hack
-                        var visualization_items = settings['navigation_sections'][0]['navigation_content']['items'];
-                        if (visualization_items.length == 0)
+                        var visualization_items = settings.navigation_sections[0].navigation_content.items;
+                        if (visualization_items.length === 0)
                             return;
-                        var server_url = document.URL;
-                        var server_url_comp1 = server_url.split('://', 2);
-                        var server_url_comp2 = server_url_comp1[1].split('/', 1);
-                        server_url = server_url_comp1[0]+'://'+server_url_comp2[0];
+                        try {
+                            jed = new Jed(settings['translations'][assembl_locale]);
+                        } catch (e) {
+                            // console.error(e);
+                            jed = new Jed({});
+                        }
                         that.visualizationItems.reset(_.map(visualization_items, function(item) {
                             return new Backbone.Model({
-                                "url": _.template(item.url, {
-                                    "url": encodeURIComponent(server_url+'/data/Discussion/'+Ctx.getDiscussionId()+'/jsonld'),
-                                    "lang": assembl_locale
-                                }),
+                                "url": item.url,
                                 "title": jed.gettext(item.title),
                                 "description": jed.gettext(item.description)
                             });
                         }));
                         that.num_items = 4;
                         that.ui.visualization_tab.show();
-                        setTimeout(function(){
-                            that.setSideBarHeight();
-                        }, 500);
                     } catch (e) {
                         // console.log(e);
                     }
-                });
+                }).delay(500).then(function() {that.setSideBarHeight();});
                 this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
             },
             onShow:function () {

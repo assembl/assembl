@@ -4,6 +4,7 @@ define(function () {
 
     var Permissions = {
         READ: "read",
+        READ_PUBLIC_CIF: "read_public_cif",
         SELF_REGISTER: "self_register",
         ADD_POST: "add_post",
         EDIT_POST: "edit_post",
