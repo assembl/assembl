@@ -28,8 +28,7 @@ def view_notification_collection(request):
              accept="application/json")
 def view_notification_subscription_collection(request):
     ctx = request.context
-    templates = ctx.find_collection(
-        'NotificationSubscription.user_templates')
+    templates = ctx.find_collection('Discussion.user_templates')
     if templates:
         templates.parent_instance.reset_participant_default_subscriptions(False)
     return collection_view(request, 'default')
@@ -58,6 +57,9 @@ def notif_collection_add_json(request):
         for instance in instances:
             db.add(instance)
         db.flush()
+        templates = ctx.find_collection('Discussion.user_templates')
+        if templates:
+            templates.parent_instance.reset_participant_default_subscriptions(False)
         view = request.GET.get('view', None) or 'default'
         return Response(
             dumps(first.generic_json(view, user_id, permissions)),
@@ -116,7 +118,7 @@ def process_all_now(request):
 def put_notification_request(request):
     result = instance_put_json(request)
     templates = request.context.find_collection(
-        'NotificationSubscription.user_templates')
+        'Discussion.user_templates')
     if templates:
         templates.parent_instance.reset_participant_default_subscriptions()
     return result
