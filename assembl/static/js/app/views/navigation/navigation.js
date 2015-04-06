@@ -51,7 +51,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 collectionManager.getDiscussionModelPromise()
                     .then(function(discussion) {
 
-                    var settings = discussion['settings'],
+                    var settings = discussion.get('settings'),
                         jed;
 
                     try {
