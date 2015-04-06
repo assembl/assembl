@@ -72,6 +72,7 @@ define(['backbone.marionette', 'underscore', 'ckeditor', 'app', 'common/context'
                     case Types.EMAIL:
                     case Types.POST_WITH_METADATA:
                     case Types.IDEA_PROPOSAL_POST:
+                    case Types.LOOMIO_FEED_POST:
                         messageViewClass = MessageView;
                         break;
 
