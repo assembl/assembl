@@ -178,8 +178,7 @@ def test_user_subscribed_stable(test_app, discussion, admin_user, participant1_u
     # Subscribe the user
     new_subscription = {
         "status": "ACTIVE",
-        "@type": t_unsub["@type"],
-        "creation_origin": "USER_REQUESTED"
+        "@type": t_unsub["@type"]
     }
     response = test_app.post_json(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions' % (

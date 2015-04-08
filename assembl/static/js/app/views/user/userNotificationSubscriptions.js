@@ -42,6 +42,7 @@ define(['backbone.marionette','app', 'jquery', 'underscore', 'common/collectionM
                 var status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
 
                 this.model.set("status", status);
+                this.model.set("creation_origin", "USER_REQUESTED");
                 this.model.save(null, {
                     success: function (model, resp) {
                     },

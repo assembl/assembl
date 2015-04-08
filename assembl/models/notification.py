@@ -282,7 +282,7 @@ class NotificationSubscription(DiscussionBoundBase):
             return new_instance._do_update_from_json(
                 json, parse_def, aliases, ctx, permissions,
                 user_id)
-        creation_origin = json.get('creation_origin', None)
+        creation_origin = json.get('creation_origin', "USER_REQUESTED")
         if creation_origin is not None:
             self.creation_origin = NotificationCreationOrigin.from_string(creation_origin)
         if json.get('parent_subscription', None) is not None:
