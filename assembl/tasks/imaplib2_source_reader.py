@@ -18,6 +18,7 @@ class IMAPReader(SourceReader):
     def setup(self):
         super(IMAPReader, self).setup()
         self.selected_folder = False
+        self.mailbox = None
 
     def login(self):
         try:
@@ -83,9 +84,10 @@ class IMAPReader(SourceReader):
                 res = self.mailbox.close()
                 if not is_ok(res):
                     raise ClientError(res)
-            res = self.mailbox.logout()
-            if not is_ok(res):
-                raise ClientError(res)
+            if self.mailbox:
+                res = self.mailbox.logout()
+                if not is_ok(res):
+                    raise ClientError(res)
         except IMAP4.abort as e:
             raise IrrecoverableError(e)
         except IMAP4.error as e:
