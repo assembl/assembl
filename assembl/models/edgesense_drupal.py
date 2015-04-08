@@ -9,21 +9,22 @@ from sqlalchemy import (
 #    not_
  )
 
-from sqlalchemy.orm import relationship, backref
 from .generic import PostSource, ContentSource
 from .post import ImportedPost, Post, Content
 from .auth import AbstractAgentAccount, AgentProfile
 from .feed_parsing import WebLinkAccount
 from ..lib.sqla import get_session_maker
 from ..tasks.source_reader import PullSourceReader
+from ..lib import config
+from sqlalchemy.orm import relationship, backref
 from virtuoso.alchemy import CoerceUnicode
-import requests
-import pytz
+from exceptions import ImportError, TypeError
 from importlib import import_module
 from datetime import datetime
+import requests
+import pytz
 import uuid
 import simplejson as json
-from exceptions import ImportError, TypeError
 
 
 class EdgeSenseDrupalSource(PostSource):
@@ -58,8 +59,11 @@ class EdgeSenseDrupalSource(PostSource):
     post_id_prepend = Column(String(100), nullable=False)
 
     def generate_prepend_id(self):
-        self.post_id_prepend = uuid.uuid1().hex+"@"+ \
-            config.get('public_hostname') + "_"
+        return uuid.uuid1().hex + "_"
+
+    # @override
+    def get_default_prepended_id(self):
+        return self.post_id_prepend
 
     def get_prepend_id(self):
         return self.post_id_prepend
@@ -68,6 +72,7 @@ class EdgeSenseDrupalSource(PostSource):
         if 'post_id_prepend' not in kwargs:
             kwargs['post_id_prepend'] = self.generate_prepend_id()
         super(EdgeSenseDrupalSource, self).__init__(*args, **kwargs)
+
 
 class SourceSpecificAccount(AbstractAgentAccount):
     """
@@ -94,10 +99,9 @@ class SourceSpecificAccount(AbstractAgentAccount):
                 ondelete='CASCADE'), primary_key=True)
 
     user_link = Column(String(1024))
-    user_name = Column(CoerceUnicode(512))
     # user_id: Edgeryder returns "6464" or "6460"
     user_id = Column(String(15), nullable=False)
-    user_info = Column(Text()) # The JSON blob for future-keeping
+    user_info = Column(Text) # The JSON blob for future-keeping
     source_id = Column(Integer, ForeignKey(
                        'edgesense_drupal_source.id',
                        onupdate='CASCADE',
@@ -229,18 +233,21 @@ class SourceSpecificPost(ImportedPost):
 # In the parsing process, ALWAYS parse the USERS FIRST, because they will
 # be queried to get their agent-profile
 class EdgeSenseParser(object):
-    def __init__(self, source, from_file=False):
+    def __init__(self, source, from_file=False, file_source=None):
         if not from_file:
             self.source = source
             self.session= source.db
             self.users = self._load_json(source, 'users')
             self.nodes = self._load_json(source, 'nodes')
             self.comments = self._load_json(source, 'comments')
+        elif file_source:
+            self.users = self.load_json_from_file(file_source, 'users')
+            self.nodes = self.load_json_from_file(file_source, 'nodes')
+            self.comments = self.load_json_from_file(file_source, 'comments')
+            self.source = source
+            self.session = source.db
         else:
-            self.users = self.load_json_from_file(source, 'users')
-            self.nodes = self.load_json_from_file(source, 'nodes')
-            self.comments = self.load_json_from_file(source, 'comments')
-            self.source
+            print "You dun goofed hard"
 
     def _load_json(self,source, resource_type):
         if resource_type is 'users':
