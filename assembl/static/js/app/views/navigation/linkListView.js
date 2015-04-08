@@ -14,20 +14,24 @@ define(['backbone', 'underscore', 'jquery', 'bluebird', 'backbone.marionette', '
             events: {
                 'click @ui.links': 'linkClicked'
             },
-            getPermissionTokenPromise: function(discussion, permissions) {
+            getPermissionTokenPromise: function(permissions, seed) {
               permissions = _.map(permissions, function(p){return "permission="+p;}).join("&");
-              return Promise.resolve($.get(Ctx.getApiV2DiscussionUrl('perm_token')+"?"+permissions));
+              var url = Ctx.getApiV2DiscussionUrl('perm_token')+"?"+permissions;
+              if (seed !== undefined)
+                url += '&seed='+seed;
+              return Promise.resolve($.get(url));
             },
             linkClicked: function(a) {
                 var url = this.model.get('url'),
                     content = this.groupContent,
+                    random_seed = String(Math.random()),
                     server_url = document.URL,
                     server_url_comp1 = document.URL.split('://', 2),
                     server_url_comp2 = server_url_comp1[1].split('/', 1),
                     url_base = server_url_comp1[0]+'://'+server_url_comp2[0]+'/data/Discussion/'+Ctx.getDiscussionId();
                 Promise.join(
-                    this.getPermissionTokenPromise([Permissions.READ_PUBLIC_CIF]),
-                    this.getPermissionTokenPromise([Permissions.READ]),
+                    this.getPermissionTokenPromise([Permissions.READ_PUBLIC_CIF], random_seed),
+                    this.getPermissionTokenPromise([Permissions.READ], random_seed),
                     function (cif_token, user_token) {
                         content.resetVisualizationState(_.template(url, {
                                 "url": encodeURIComponent(url_base+'/jsonld?token='+cif_token),

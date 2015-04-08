@@ -105,6 +105,15 @@ def get_token(request):
         raise HTTPUnauthorized()
     req_permissions = request.GET.getall('permission') or [
         P_READ, P_READ_PUBLIC_CIF]
+    random_seed = request.GET.get('seed', None)
+    if random_seed:
+        # We need some determinism
+        import random
+        random.seed(random_seed)
+        random_str = ''.join([chr(random.randint(0,256)) for i in range(8)])
+        random.seed(urandom(8))
+    else:
+        random_str = urandom(8)
     if isinstance(req_permissions, list):
         req_permissions = set(req_permissions)
     else:
@@ -121,7 +130,7 @@ def get_token(request):
     data = [str(user_id), str(discussion_id)]
     data.extend([str(x) for (x,) in Permission.db.query(Permission.id).filter(
         Permission.name.in_(req_permissions)).all()])
-    data = ','.join(data) + '.' + base64.urlsafe_b64encode(urandom(8))
+    data = ','.join(data) + '.' + base64.urlsafe_b64encode(random_str)
     return Response(body=data_token(data), content_type="text/text")
 
 
