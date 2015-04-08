@@ -268,7 +268,7 @@ class NotificationSubscription(DiscussionBoundBase):
             if 'discussion_id' in json and Discussion.get_database_id(json['discussion_id']) != self.discussion_id:
                 raise HTTPBadRequest()
         else:
-            discussion_id = json.get('discussion', None)
+            discussion_id = json.get('discussion', None) or ctx.get_discussion_id()
             if discussion_id is None:
                 raise HTTPBadRequest()
             self.discussion_id = Discussion.get_database_id(discussion_id)
