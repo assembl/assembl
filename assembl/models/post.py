@@ -46,7 +46,7 @@ class Post(Content):
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-    
+
     message_id = Column(CoerceUnicode(),
                         nullable=False,
                         index=True,
@@ -81,7 +81,7 @@ class Post(Content):
         info={'rdf': QuadMapPatternS(
             None, SIOC.has_creator, AgentProfile.agent_as_account_iri.apply(None))})
     creator = relationship(AgentProfile, backref="posts_created")
-    
+
     subject = Column(CoerceUnicode(), nullable=True,
         info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
     # TODO: check HTML or text? SIOC.content should be text.
@@ -111,7 +111,7 @@ class Post(Content):
 
     def get_subject(self):
         return self.subject
-    
+
     def get_url(self):
         from assembl.lib.frontend_urls import FrontendUrls
         frontendUrls = FrontendUrls(self.discussion)
@@ -166,7 +166,7 @@ class Post(Content):
 
     def last_updated(self):
         ancestry_query_string = "%s%d,%%" % (self.ancestry or '', self.id)
-        
+
         query = self.db.query(
             func.max(Content.creation_date)
         ).select_from(
@@ -249,14 +249,14 @@ class Post(Content):
 
 
 def orm_insert_listener(mapper, connection, target):
-    """ This is to allow the root idea to send update to "All posts", 
+    """ This is to allow the root idea to send update to "All posts",
     "Synthesis posts" and "orphan posts" in the table of ideas", if the post
     isn't otherwise linked to the table of idea """
     if target.discussion.root_idea:
         target.discussion.root_idea.send_to_changes(connection)
-        
+
 event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
-    
+
 
 
 class AssemblPost(Post):
@@ -270,11 +270,11 @@ class AssemblPost(Post):
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-        
+
     __mapper_args__ = {
         'polymorphic_identity': 'assembl_post',
     }
-    
+
     def get_body_mime_type(self):
         return "text/plain"
 
@@ -295,21 +295,21 @@ class SynthesisPost(AssemblPost):
         ForeignKey('synthesis.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False
     )
-    
+
     publishes_synthesis = relationship('Synthesis',
                                      backref=backref('published_in_post',uselist=False))
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'synthesis_post',
     }
-    
+
     def __init__(self, *args, **kwargs):
         super(SynthesisPost, self).__init__(*args, **kwargs)
         self.publishes_synthesis.publish()
 
     def get_body_mime_type(self):
         return "text/html"
-    
+
     def get_title(self):
         return self.publishes_synthesis.subject
 
@@ -388,23 +388,23 @@ class ImportedPost(Post):
     source_post_id = Column(CoerceUnicode(),
                         nullable=False,
                         doc="The source-specific unique id of the imported post.  A listener keeps the message_id in the post class in sync")
-    
+
     source_id = Column('source_id', Integer, ForeignKey('post_source.id', ondelete='CASCADE'),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.has_origin)})
-    
+
     source = relationship(
         "PostSource",
         backref=backref('contents')
     )
-    
+
     body_mime_type = Column(CoerceUnicode(),
                         nullable=False,
                         doc="The mime type of the body of the imported content.  See Content::get_body_mime_type() for allowed values.")
-    
+
     __mapper_args__ = {
         'polymorphic_identity': 'imported_post',
     }
-    
+
     def get_body_mime_type(self):
         return self.body_mime_type
 
@@ -421,4 +421,4 @@ class ImportedPost(Post):
 def receive_set(target, value, oldvalue, initiator):
     "listen for the 'set' event, keeps the message_id in Post class in sync with the source_post_id"
 
-    target.message_id = value
+    target.message_id = target.source.get_default_prepend_id() + value

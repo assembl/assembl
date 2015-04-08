@@ -122,6 +122,15 @@ class PostSource(ContentSource):
     def get_discussion_id(self):
         return self.discussion_id
 
+    def get_default_prepended_id(self):
+        # Used for PostSource's whose incoming posts cannot guarantee
+        # Post.post_source_id is unique; in which case, the Post.message_id
+        # which is a globally unique value maintain uniqueness integrity
+        # by calling this function
+        # Must be implemented by subclasses that will not have unique
+        # id's on their incoming posts
+        return ""
+
     @property
     def number_of_imported_posts(self):
         from .post import ImportedPost
@@ -198,7 +207,7 @@ class Content(DiscussionBoundBase):
         return ""
 
     def get_body_mime_type(self):
-        """ Return the format of the body, so the frontend will know how to 
+        """ Return the format of the body, so the frontend will know how to
         display it.  Currently, only:
         text/plain (Understood as preformatted text)
         text/html (Undestood as some subste of html)
