@@ -36,22 +36,17 @@ define(['backbone', 'common/context'], function (Backbone, Ctx) {
          * @param {String} id The script tag id
          */
         fetchFromScriptTag: function (id) {
-            var that = this,
-                script = document.getElementById(id),
-                json;
-
-            if (!script) {
-                console.login(Ctx.format("Script tag #{0} doesn't exist", id));
-                return {};
-            }
-
+            var json = null;
             try {
-                json = JSON.parse(script.textContent);
+                json = Ctx.getJsonFromScriptTag(id);
             } catch (e) {
-                console.log(script.textContent);
                 throw new Error("Invalid json. " + e.message);
             }
             this.set(json);
+        },
+
+        toScriptTag: function (id) {
+            Ctx.writeJsonToScriptTag(this.toJSON(), id);
         },
 
         url: function () {

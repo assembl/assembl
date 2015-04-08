@@ -14,7 +14,7 @@ define(['jasmine', 'underscore', '../models/agents', 'chai'], function (jasmine,
             // improve this test, need to be connected and disconnected
             it('fetchFromScriptTag method should return the current user', function () {
                 //agent.fetchFromScriptTag('current-user-json');
-                //agent.fetchPermissionsFromScripTag();
+                //agent.fetchPermissionsFromScriptTag();
                 //expect(agent).not.toBeUndefined();
                 expect(true).to.be.true;
             });

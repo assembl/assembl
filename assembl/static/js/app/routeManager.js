@@ -9,7 +9,6 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
                 window.assembl = {};
 
                 this.collectionManager = new CollectionManager();
-                this.user = null;
 
                 /**
                  * fulfill app.currentUser
@@ -120,15 +119,16 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
             },
 
             loadCurrentUser: function () {
+                var user = null;
                 if (Ctx.getCurrentUserId()) {
-                    this.user = new Agents.Model();
-                    this.user.fetchFromScriptTag('current-user-json');
+                    user = new Agents.Model();
+                    user.fetchFromScriptTag('current-user-json');
                 }
                 else {
-                    this.user = new Agents.Collection().getUnknownUser();
+                    user = new Agents.Collection().getUnknownUser();
                 }
-                this.user.fetchPermissionsFromScripTag();
-                Ctx.setCurrentUser(this.user);
+                user.fetchPermissionsFromScriptTag();
+                Ctx.setCurrentUser(user);
                 Ctx.loadCsrfToken(true);
             },
 

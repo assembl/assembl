@@ -162,6 +162,10 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                 return this.CURRENT_USER_ID;
             },
 
+            setCurrentUserId: function(user_id) {
+                this.CURRENT_USER_ID = user_id;
+            },
+
             getCurrentUser: function () {
                 return this.currentUser;
             },
@@ -1370,6 +1374,65 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             debug: function(view, msg){
                 var log = debug(view+':');
                 log(msg);
+            },
+
+            /*
+             * Get from database up-to-date information about current logged-in user.
+             * And update HTML script tags content accordingly.
+             */
+            updateCurrentUser: function() {
+                var that = this;
+                var user = null;
+                if (this.getCurrentUserId()) {
+                    user = this.getCurrentUser();
+                    user.fetch({
+                        success: function(model, resp) {
+                            //that.setCurrentUser(user);
+                            user.fetchPermissionsToScriptTag();
+                            user.toScriptTag('current-user-json');
+                            that.loadCsrfToken(true);
+                        }
+                    });
+                } else {
+                    /*
+                    user = new Agents.Collection().getUnknownUser();
+                    that.setCurrentUser(user);
+                    that.loadCsrfToken(true);
+                    */
+                }
+            },
+
+            getJsonFromScriptTag: function (id) {
+                var script = document.getElementById(id),
+                    json;
+
+                if (!script) {
+                    console.login(this.format("Script tag #{0} doesn't exist", id));
+                    return {};
+                }
+
+                try {
+                    json = JSON.parse(script.textContent);
+                } catch (e) {
+                    console.log(script.textContent);
+                    throw new Error("Invalid json. " + e.message);
+                }
+                return json;
+            },
+
+            writeJsonToScriptTag: function (json, id) {
+                var script = document.getElementById(id);
+
+                if (!script) { // TODO: maybe we could create it?
+                    console.login(this.format("Script tag #{0} doesn't exist", id));
+                    return;
+                }
+
+                try {
+                    script.textContent = JSON.stringify(json);
+                } catch (e) {
+                    throw new Error("Invalid json. " + e.message);
+                }
             }
 
         }

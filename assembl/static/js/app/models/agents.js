@@ -44,24 +44,44 @@ define(['jquery', 'models/base', 'common/context', 'utils/i18n', 'utils/roles'],
              *
              * @param {String} [id='permissions-json'] The script tag id
              */
-            fetchPermissionsFromScripTag: function (id) {
+            fetchPermissionsFromScriptTag: function (id) {
                 id = id || 'permissions-json';
 
-                var script = document.getElementById(id),
-                    json;
-
-                if (!script) {
-                    console.log(Ctx.format("Script tag #{0} doesn't exist", id));
-                    return {};
-                }
-
                 try {
-                    json = JSON.parse(script.textContent);
-                    this.permissions = json;
+                    this.permissions = Ctx.getJsonFromScriptTag(id);
                 } catch (e) {
                     throw new Error("Invalid json");
                 }
+            },
 
+            fetchPermissionsToScriptTag: function (id){
+                //console.log("AgentModel::fetchPermissionsToScriptTag()");
+                id = id || 'permissions-json';
+
+                var promise = this.fetchPermissions();
+                promise.then(function(permissions){
+                    try {
+                        Ctx.writeJsonToScriptTag(permissions, id);
+                    } catch (e) {
+                        throw new Error("Invalid json");
+                    }
+                });
+
+                return promise;
+            },
+
+            /**
+             * Load permissions from database
+             */
+            fetchPermissions: function () {
+                //console.log("AgentModel::fetchPermissions()");
+                var that = this;
+                var promise = Promise.resolve($.get(Ctx.getApiUrl('permissions/u/' + this.getId())));
+                promise.then(function (permissions) {
+                    console.log("AgentModel::fetchPermissions() promise received");
+                    that.permissions = permissions;
+                });
+                return promise;
             },
 
             /**

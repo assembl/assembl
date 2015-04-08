@@ -332,6 +332,14 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                                 self.navBarRight.currentView.ui.joinDiscussion.css('visibility', 'hidden');
                                                 self._store.removeItem('needJoinDiscussion');
                                                 that.triggerSubmit();
+
+                                                // reload user data and its permissions (so for example now when he clicks on the "reply" button of a message, it should not show "Before you can reply to this message..." anymore)
+                                                try { // we try to be a good Single Page Application and update user data without reloading the whole page
+                                                    Ctx.updateCurrentUser();
+                                                } catch (e) { // but if it does not work, we reload the page
+                                                    console.log("Error while reloading user data: " + e.message);
+                                                    location.reload();
+                                                }
                                             },
                                             error: function (model, resp) {
                                                 console.error('ERROR: joinDiscussion->subscription', resp);
