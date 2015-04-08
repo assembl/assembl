@@ -9,7 +9,6 @@ import logging
 from logging.config import fileConfig
 
 from sqlalchemy.orm import sessionmaker, scoped_session
-from enum import Enum
 from pyramid.paster import get_appsettings
 from zope.component import getGlobalSiteManager
 from kombu import BrokerConnection, Exchange, Queue
@@ -18,29 +17,9 @@ from kombu.utils.debug import setup_logging
 
 from assembl.tasks import configure
 from assembl.lib.config import set_config
-
+from assembl.lib.ordered_enum import OrderedEnum
 
 log = logging.getLogger('assembl')
-
-
-class OrderedEnum(Enum):
-    # As per enum34 recipe
-    def __ge__(self, other):
-        if self.__class__ is other.__class__:
-            return self._value_ >= other._value_
-        return NotImplemented
-    def __gt__(self, other):
-        if self.__class__ is other.__class__:
-            return self._value_ > other._value_
-        return NotImplemented
-    def __le__(self, other):
-        if self.__class__ is other.__class__:
-            return self._value_ <= other._value_
-        return NotImplemented
-    def __lt__(self, other):
-        if self.__class__ is other.__class__:
-            return self._value_ < other._value_
-        return NotImplemented
 
 
 class ReaderStatus(OrderedEnum):
@@ -278,7 +257,6 @@ class SourceReader(Thread):
     def end_wait_for_push(self):
         # redefine in push-capable readers
         self.set_status(ReaderStatus.PAUSED)
-        # This is not a final close, but sends it back to the QueuePool
         self.source.db().close()
 
     def close(self):
@@ -293,7 +271,6 @@ class SourceReader(Thread):
         except ReaderError as e:
             self.new_error(e, min(e.status, ReaderStatus.CLIENT_ERROR))
         finally:
-            # This is not a final close, but sends it back to the QueuePool
             self.source.db().close()
 
     @abstractmethod
