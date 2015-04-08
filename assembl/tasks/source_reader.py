@@ -17,7 +17,7 @@ from kombu.utils.debug import setup_logging
 
 from assembl.tasks import configure
 from assembl.lib.config import set_config
-from assembl.lib.ordered_enum import OrderedEnum
+from assembl.lib.enum import OrderedEnum
 
 log = logging.getLogger('assembl')
 
