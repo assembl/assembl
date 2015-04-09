@@ -1236,15 +1236,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 var that = this,
                     area = this.$('.instigator-editor');
 
-                var uri = this.instigator.id.split('/')[1];
-                this.instigator.url = Ctx.getApiV2DiscussionUrl('partner_organizations/') + uri;
-
-                var model = this.instigator.get('description');
-
-                if(!model.length) return;
+                var uri = this.model.id.split('/')[1];
+                this.model.url = Ctx.getApiV2DiscussionUrl('partner_organizations/') + uri;
 
                 var instigator = new CKEditorField({
-                    'model': this.instigator,
+                    'model': this.model,
                     'modelProp': 'description'
                 });
 
@@ -1400,7 +1396,6 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
                 this.listenTo(objective, 'save cancel', function(){
                     that.editingObjective = false;
-                    that.$('#context-objective').trigger('update.dot');
                     that.render();
                 });
 
