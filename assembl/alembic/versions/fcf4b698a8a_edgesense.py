@@ -31,7 +31,7 @@ def upgrade(pyramid_env):
             sa.Column('node_root', sa.String(200)),
             sa.Column('user_source', sa.String(1024)),
             sa.Column('comment_source', sa.String(1024)),
-            sa.Column('post_id_prepend', sa.Column(100))
+            sa.Column('post_id_prepend', sa.String(100))
             )
 
         op.create_table(
@@ -40,12 +40,12 @@ def upgrade(pyramid_env):
                       'abstract_agent_account.id',
                       onupdate='CASCADE',
                       ondelete='CASCADE'), primary_key=True),
+            sa.Column('user_info', sa.Text),
             sa.Column('user_link', sa.String(1024)),
             sa.Column('user_id', sa.String(15), nullable=False),
             sa.Column('source_id', sa.Integer, sa.ForeignKey(
-                      'edgesense_drupal_source',
-                      onupdate='CASCADE', ondelete='CASCADE')),
-            sa.Column('user_info', sa.Text())
+                      'edgesense_drupal_source.id', onupdate='CASCADE',
+                      ondelete='CASCADE'), nullable=False),
             )
 
     # Do stuff with the app's models here.

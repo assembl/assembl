@@ -5,7 +5,9 @@ from sqlalchemy import (
     Integer,
     String,
     Boolean,
-    DateTime
+    DateTime,
+    UniqueConstraint,
+    Text
 #    not_
  )
 
@@ -28,7 +30,7 @@ import simplejson as json
 
 
 class EdgeSenseDrupalSource(PostSource):
-    __tablename = 'edgesense_drupal_source'
+    __tablename__ = 'edgesense_drupal_source'
     __mapper_args__ = {
         'polymorphic_identity': 'edgesense_drupal_source'
     }
@@ -84,7 +86,7 @@ class SourceSpecificAccount(AbstractAgentAccount):
     stored, by the source that they come from.
     """
 
-    __tablename = 'source_specific_account'
+    __tablename__ = 'source_specific_account'
 
     __mapper_args__ = {
         'polymorphic_identity': 'source_specific_account'
@@ -105,7 +107,7 @@ class SourceSpecificAccount(AbstractAgentAccount):
     source_id = Column(Integer, ForeignKey(
                        'edgesense_drupal_source.id',
                        onupdate='CASCADE',
-                       ondelete='CASCADE'))
+                       ondelete='CASCADE'), nullable=False)
     source = relationship(EdgeSenseDrupalSource,
                           backref=backref('accounts'))
 
