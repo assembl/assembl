@@ -75,7 +75,8 @@ class ContentSource(DiscussionBoundBase):
         return "<ContentSource %s>" % repr(self.name)
 
     def import_content(self, only_new=True):
-        pass
+        from assembl.tasks.source_reader import wake
+        wake(self.id, reimport=not only_new)
 
     def make_reader(self):
         return None
@@ -117,9 +118,6 @@ class PostSource(ContentSource):
 
     def __repr__(self):
         return "<PostSource %s>" % repr(self.name)
-
-    def import_content(self, only_new=True):
-        pass
 
     def get_discussion_id(self):
         return self.discussion_id

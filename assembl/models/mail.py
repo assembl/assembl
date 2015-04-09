@@ -597,9 +597,14 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
             self.thread_mails(emails)
 
     def import_content(self, only_new=True):
-        #Mailbox.do_import_content(self, only_new)
+        from assembl.lib.config import get_config
+        from pyramid.settings import asbool
         assert self.id
-        import_mails.delay(self.id, only_new)
+        config = get_config()
+        if asbool(config.get('use_source_reader_for_mail', False)):
+            super(AbstractMailbox, self).import_content(only_new)
+        else:
+            import_mails.delay(self.id, only_new)
 
     _address_match_re = re.compile(
         r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}'
