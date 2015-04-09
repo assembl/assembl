@@ -727,7 +727,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 var ok = confirm(i18n.gettext('Confirm that you want to send all extracts back to the clipboard.'));
                 if (ok) {
                     // Clone first, because the operation removes extracts from the subset.
-                    var models = _.clone(this.extractList.models)
+                    var models = _.clone(this.extractListSubset.models)
                     _.each(models, function(extract) {
                         extract.set('idIdea', null);
                     });
