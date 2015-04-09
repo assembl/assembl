@@ -15,6 +15,10 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                 'click @ui.partnerItemEdit': 'editPartner'
             },
 
+            modelEvents: {
+                'change':'render'
+            },
+
             deletePartner: function(){
                var that = this;
                this.model.destroy({
@@ -111,7 +115,6 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
 
                             self.model.save(null, {
                                 success: function(model, resp){
-                                    self.render();
                                     that.triggerSubmit();
                                 },
                                 error: function(model, resp){
@@ -132,7 +135,10 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
         });
 
         var PartnerList = Marionette.CollectionView.extend({
-            childView: Partners
+            childView: Partners,
+            collectionEvents: {
+                'sync':'render'
+            }
         });
 
         var adminPartners = Marionette.LayoutView.extend({
@@ -181,8 +187,6 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
             },
 
             addNewPartner: function(){
-                var self = this;
-
                 var Modal = Backbone.Modal.extend({
                     template: _.template($('#tmpl-adminPartnerForm').html()),
                     className: 'partner-modal popin-wrapper',
@@ -265,7 +269,6 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                             partner.save(null, {
                                 success: function(model, resp){
                                     $(inputs).val('');
-                                    self.render();
                                     that.triggerSubmit();
                                 },
                                 error: function(model, resp){
