@@ -84,8 +84,8 @@ pyramid-tm==0.11
 pytest==2.7.0
 pytest-cov==1.8.1
 pytest-localserver==0.3.4
-pytest-mock==0.4.2
-pytest-splinter==1.3.0
+pytest-mock==0.4.3
+pytest-splinter==1.3.4
 python-memcached==1.54
 python-openid==2.2.5
 pytz==2015.2
