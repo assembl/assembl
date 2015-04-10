@@ -115,13 +115,15 @@ class IdeaContentLink(DiscussionBoundBase):
 def idea_content_link_idea_set_listener(target, value, oldvalue, initiator):
     print "idea_content_link_idea_set_listener for target: %s set to %s, was %s" % (target, value, oldvalue)
     if oldvalue is not None:
-        oldvalue.send_to_changes()
-        for ancestor in oldvalue.get_all_ancestors():
-            ancestor.send_to_changes()
+        with oldvalue.db.no_autoflush:
+            oldvalue.send_to_changes()
+            for ancestor in oldvalue.get_all_ancestors():
+                ancestor.send_to_changes()
     if value is not None:
-        value.send_to_changes()
-        for ancestor in value.get_all_ancestors():
-            ancestor.send_to_changes()
+        with value.db.no_autoflush:
+            value.send_to_changes()
+            for ancestor in value.get_all_ancestors():
+                ancestor.send_to_changes()
 
 
 class IdeaContentWidgetLink(IdeaContentLink):
