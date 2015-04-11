@@ -37,7 +37,7 @@ colander==1.0
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 cov-core==1.15.0
 coverage==3.7.1
-cryptography==0.8.1
+cryptography==0.8.2
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 dogpile.cache==0.5.6
 dogpile.core==0.4.1
@@ -86,7 +86,6 @@ pytest-cov==1.8.1
 pytest-localserver==0.3.4
 pytest-mock==0.4.3
 pytest-splinter==1.3.4
-python-memcached==1.54
 python-openid==2.2.5
 pytz==2015.2
 pyzmq==14.5.0
@@ -105,7 +104,6 @@ simplejson==3.6.5
 six==1.9.0
 snowballstemmer==1.2.0
 -e git+https://github.com/maparent/sockjs-tornado.git@master#egg=sockjs_tornado
-sockjsproxy==0.7.1
 sphinx-bootstrap-theme==0.4.5
 splinter==0.7.2
 supervisor==3.1.3
@@ -118,9 +116,6 @@ uwsgitop==0.8
 venusian==1.0
 -e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
 waitress==0.8.9
-wsgiref==0.1.2
-xlrd==0.9.3
-xlwt==0.7.5
 zope.component==4.2.1
 zope.event==4.0.3
 zope.deprecation==4.1.2
