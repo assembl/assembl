@@ -256,6 +256,10 @@ class FeedPostSource(PostSource):
                    discussion=discussion, url=encoded_url,
                    parser_full_class_name=parser_name)
 
+    def send_post(self, post):
+        #TODO?
+        print "TODO?: FeedPostSource::send_post():  Actually send the post"
+
 
 class LoomioPostSource(FeedPostSource):
     """
@@ -270,6 +274,10 @@ class LoomioPostSource(FeedPostSource):
 
     def make_reader(self):
         return LoomioSourceReader(self.id)
+
+    def send_post(self, post):
+        #TODO?
+        print "TODO?: LoomioPostSource::send_post():  Actually send the post"
 
 
 class FeedSourceReader(PullSourceReader):
