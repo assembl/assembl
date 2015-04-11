@@ -41,7 +41,7 @@
     <% } %>
 
     <div class="extractOrigin">
-      <% var type = segment.get("target")["@type"]; if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost") { %>
+      <% var type = segment.get("target")["@type"]; if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost" || type == "LoomioFeedPost" ) { %>
 
         {% set postCreatorAvatarImg = '<img src="<%= postCreator.getAvatarUrl(30) %>" class="creatorAvatar image-rounded fl prxs" alt="" width="30" height="30" />' %}
         {% set postCreatorName = '<%= postCreator.get("name") %>' %}
