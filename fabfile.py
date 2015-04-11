@@ -366,9 +366,10 @@ def updatemaincode():
 
 
 def app_setup():
-     venvcmd('pip install -U "pip>=6"')
      # do the requirements separately to update the non-static versions.
-     venvcmd('pip install -r requirements.txt')
+     # This broke app_update_noupdate
+     # And was done in the non DRY way
+     # execute(update_requirements)
      venvcmd('pip install -e ./')
      venvcmd('assembl-ini-files %s' % (env.ini_file))
 
