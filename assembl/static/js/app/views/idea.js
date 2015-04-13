@@ -229,6 +229,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                     Assembl.vent.trigger('idea:dragEnd', this.model);
                 }
                 ev.currentTarget.style.opacity = '';
+                Ctx.setDraggedAnnotation(null);
                 Ctx.setDraggedSegment(null);
                 Ctx.draggedIdea = null;
             },
@@ -261,7 +262,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                         return;
                     }
 
-                    // If it is a descendent, do nothing
+                    // If it is a descendant, do nothing
                     if (this.model.isDescendantOf(Ctx.draggedIdea)) {
                         ev.dataTransfer.dropEffect = 'none';
                         return;
@@ -284,7 +285,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                         this.$el.addClass('is-dragover');
                     }
                 }
-
+                //We should user a _.debounce instead for performance reasons benoitg 2014-04-13
                 this.dragOverCounter += 1;
             },
 
@@ -326,7 +327,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                         // Add to the current idea
                         this.model.addSegment(segment);
                     }
-
+                    Ctx.setDraggedSegment(null);
                     return;
                 }
 

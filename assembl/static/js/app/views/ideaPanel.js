@@ -694,6 +694,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
 
                 if (segment) {
                     this.addSegment(segment);
+                    Ctx.setDraggedSegment(null);
                 }
 
                 var annotation = Ctx.getDraggedAnnotation();

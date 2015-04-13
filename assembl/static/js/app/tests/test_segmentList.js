@@ -36,14 +36,14 @@ function(jasmine, Backbone, _, $, app, SegmentList){
             expect(view.segments.length).toBe(0);
         });
 
-        it('should set the app.draggedSegment as the current dragged segment', function(){
+        it('should set the app._draggedSegment as the current dragged segment', function(){
             view.addSegment( new Backbone.Model({ text: 'nada' }) );
             view.$('.box').trigger('dragstart');
 
-            expect(app.draggedSegment.get('text')).toBe('nada');
+            expect(app._draggedSegment.get('text')).toBe('nada');
 
             view.$('.box').trigger('dragend');
-            expect(app.draggedSegment).toBe(null);
+            expect(app._draggedSegment).toBe(null);
         });
 
         it('should remove the segment by click', function(){

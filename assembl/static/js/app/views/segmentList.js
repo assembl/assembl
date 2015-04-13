@@ -425,6 +425,7 @@ define(['backbone.marionette','backbone', 'underscore', 'jquery', 'app', 'common
                 var segment = Ctx.getDraggedSegment();
                 if (segment) {
                     this.addSegment(segment);
+                    Ctx.setDraggedSegment(null);
                 }
 
                 var annotation = Ctx.getDraggedAnnotation();

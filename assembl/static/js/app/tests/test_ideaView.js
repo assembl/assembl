@@ -65,7 +65,7 @@ function(jasmine, _, app, IdeaView, Idea){
         });
 
         it('should set the state to .is-dragover-below when there is a segment over in the below area', function(){
-            app.draggedSegment = new Backbone.Model({ 'some': 'thing' });
+            app._draggedSegment = new Backbone.Model({ 'some': 'thing' });
             var dropzone = view.$('.idealist-dropzone');
             dropzone.trigger('dragover');
 
