@@ -61,7 +61,7 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              * Current dragged segment
              * @type {Segment}
              */
-            this.draggedSegment = null;
+            this._draggedSegment = null;
 
             /**
              * Current dragged idea
@@ -92,11 +92,6 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              * @type {Number}
              */
             this.openedPanels = 0;
-
-            /**
-             * Default value draggable segment
-             * */
-            this.draggedSegment = null;
 
             this.AVAILABLE_MESSAGE_VIEW_STYLES = {
                 TITLE_ONLY: {
@@ -180,15 +175,6 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
 
             setCsrfToken: function (token) {
                 this.csrfToken = token;
-            },
-
-            getDraggedAnnotation: function () {
-                return this._draggedAnnotation;
-            },
-
-            setDraggedAnnotation: function (annotation, annotatorEditor) {
-                this._draggedAnnotation = annotation;
-                this._annotatorEditor = annotatorEditor;
             },
 
             /**
@@ -700,18 +686,29 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                 return deferred.promise();
             },
 
+
+            getDraggedAnnotation: function () {
+                return this._draggedAnnotation;
+            },
+
+            setDraggedAnnotation: function (annotation, annotatorEditor) {
+                this._draggedAnnotation = annotation;
+                this._annotatorEditor = annotatorEditor;
+            },
+            
             /**
              * @set {Segment}
+             * Sets the current 
              */
             setDraggedSegment: function(segment){
-              this.draggedSegment = segment;
+              this._draggedSegment = segment;
             },
 
             /**
              * @return {Segment}
              */
             getDraggedSegment: function () {
-                var segment = this.draggedSegment;
+                var segment = this._draggedSegment;
                 //this.setDraggedSegment(null); not necessary;
 
                 if (segment) {
@@ -772,6 +769,8 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                     alert("Error: You don't have the permission to save this annotation as an extract.");
                     this._annotatorEditor.element.find('.annotator-cancel').click();
                 }
+                //Saving the annotation as an extract is the end of the annotation's lifecycle
+                this.setDraggedAnnotation(null);
             },
 
             /**
