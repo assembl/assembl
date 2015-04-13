@@ -467,7 +467,7 @@ define(['app',
 
                 this._allIdeasCollection = new Idea.Collection();
                 this._allIdeasCollection.collectionManager = this;
-                this._allIdeasCollectionPromise = Promise.resolve(this._allIdeasCollection.fetchFromScriptTag('ideas-json'))
+                this._allIdeasCollectionPromise = Promise.resolve(this._allIdeasCollection.fetch())
                     .thenReturn(this._allIdeasCollection)
                     .catch(function(e){
                         console.error(e.statusText);
