@@ -75,6 +75,10 @@ class EdgeSenseDrupalSource(PostSource):
             kwargs['post_id_prepend'] = self.generate_prepend_id()
         super(EdgeSenseDrupalSource, self).__init__(*args, **kwargs)
 
+    def make_reader(self):
+        # Duck-Typed method to create a source_reader from this source
+        return EdgeSenseReader(self.id)
+
     @classmethod
     def create(cls, nodes, users, comments, title, discussion, root_url=None):
         now = datetime.utcnow()
@@ -535,3 +539,15 @@ class EdgeSenseParser(object):
         self._process_comment_threading()
         self.session.commit()
 
+
+class EdgeSenseReader(PullSourceReader):
+    def __init__(self, source_id):
+        super(EdgeSenseReader, self).__init__(source_id)
+
+    def do_read(self):
+        parser = EdgeSenseParser(self.source)
+        parser.parse()
+
+    def re_import(self):
+        parser = EdgeSenseParser(self.source)
+        parser.re_import()
