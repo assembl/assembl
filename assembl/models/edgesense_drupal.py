@@ -209,9 +209,10 @@ class SourceSpecificPost(ImportedPost):
             import_date = datetime.utcnow()
             body = node['body']
             discussion = source.discussion
+            message_id = source.get_default_prepended_id() + node_id
 
             return cls(import_date=import_date, source=source,
-                       source2 = source,
+                       message_id = message_id,
                        source_post_id=node_id, creator=agent,
                        creation_date=created,
                        discussion=discussion, body=body)
@@ -235,19 +236,12 @@ class SourceSpecificPost(ImportedPost):
             body = comment['body']
             title = comment['title']
             discussion = source.discussion
-            # if comment['pid'] == 0:
-            #     parent_id = prefix_id + comment['nid']
-            # else:
-            #     parent_id = prefix_id + comment['pid']
-
-            # parent = source.db.query(Post).\
-            #     filter_by(message_id=parent_id).first()
-
-            # parent_id_to_store = parent.id
+            message_id = source.get_default_prepended_id() + comment_id
 
             return cls(import_date=import_date, source_post_id=comment_id,
-                       source=source, creator=agent, creation_date=created,
-                       discussion=discussion, body=body, subject=title)
+                       message_id=message_id, source=source, creator=agent,
+                       reation_date=created, discussion=discussion,
+                       body=body, subject=title)
                        # parent_id=parent_id_to_store)
 
 

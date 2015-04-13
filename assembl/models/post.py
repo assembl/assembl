@@ -417,8 +417,8 @@ class ImportedPost(Post):
 
 
 
-@event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)
-def receive_set(target, value, oldvalue, initiator):
-    "listen for the 'set' event, keeps the message_id in Post class in sync with the source_post_id"
+# @event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)
+# def receive_set(target, value, oldvalue, initiator):
+#     "listen for the 'set' event, keeps the message_id in Post class in sync with the source_post_id"
 
-    target.message_id = target.source.get_default_prepend_id() + value
+#     target.message_id = target.source.get_default_prepend_id() + value

@@ -443,6 +443,8 @@ class AbstractMailbox(PostSource):
             email_object.subject = subject
             email_object.creation_date = creation_date
             email_object.source_post_id = new_message_id
+            email_object.message_id = self.get_default_prepended_id() + \
+                new_message_id
             email_object.in_reply_to = new_in_reply_to
             email_object.body = body
             email_object.body_mime_type = mimeType

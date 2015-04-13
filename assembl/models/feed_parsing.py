@@ -417,6 +417,7 @@ class FeedSourceReader(PullSourceReader):
             creation_date=self._get_creation_date(entry),
             import_date=imported_date,
             source_post_id=source_post_id,
+            message_id = source.get_default_prepended_id() + source_post_id,
             source=source,
             discussion=source.discussion,
             body_mime_type=body_mime_type,
