@@ -33,8 +33,8 @@
   .panel-editablebox.is-editing {
     .panel-editablearea {
       color: $black;
-      word-break: break-all;
-      -ms-word-break: break-all;
+      word-break: break-word;
+      -ms-word-break: break-word;
       -webkit-hyphens: auto;
       -moz-hyphens: auto;
       hyphens: auto;
