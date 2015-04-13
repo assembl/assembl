@@ -183,6 +183,11 @@ class SourceSpecificPost(ImportedPost):
 
     # Char-escape for the body of content is going to be a Biznitch
 
+    @staticmethod
+    def create_nid(node):
+        # prefixed because cid & nid WILL collide with each other
+        return "nid_" + node['nid']
+
     @classmethod
     def create(cls, source, post):
         # post is a dictionary of the post from json
@@ -194,8 +199,8 @@ class SourceSpecificPost(ImportedPost):
             if not 'uid' in post['node']:
                 return None
             node = post['node']
-            node_id = "nid_" + node['nid'] #prefixed because cid & nid WILL
-            # collide with each other
+            node_id = SourceSpecificPost.create_nid(node)
+
             created = datetime.fromtimestamp(int(node['created']))
             user_id = node['uid']
             source_id = source.id
@@ -422,3 +427,111 @@ class EdgeSenseParser(object):
 
         self._process_comment_threading()
         self.session.commit()
+
+    def _update_users(self,db):
+        if not self.users:
+            print "Array of users is empty!"
+        else:
+            for user in self.users:
+                if user['user']['uid'] in db:
+                    usr = user.get('user')
+                    old_user = db.get(usr['uid'])
+                    old_user.user_info = json.dumps(user)
+                    old_user.user_link = usr['link']
+                    old_user.user_id = usr['uid']
+                    old_user.source = self.source
+
+                else:
+                    new_user = SourceSpecificAccount.create(self.source, user)
+                    self.session.add(new_user)
+
+
+                # return cls(import_date=import_date, source=source,
+                #        message_id = message_id,
+                #        source_post_id=node_id, creator=agent,
+                #        creation_date=created,
+                #        discussion=discussion, body=body)
+
+    def _update_nodes(self, db, users_db):
+        if not self.nodes:
+            print "Array of nodes is empty!"
+        else:
+            for node in self.nodes:
+                nde = node['node']
+                nid = SourceSpecificPost.create_nid(nde)
+                if nid in db:
+                    old_node = db.get(nid)
+                    old_node.import_date = datetime.utcnow()
+                    old_node.source = self.source
+                    old_node.discussion = self.source.discussion
+                    old_node.source_post_id = SourceSpecificPost.create_nid(
+                        nde)
+                    old_node.message_id = \
+                        self.source.get_default_prepended_id() + \
+                        SourceSpecificPost.create_nid(nde)
+                    old_node.body = nde['body']
+                    old_node.creation_date = datetime.fromtimestamp(
+                        int(nde['created']))
+
+                    user = users_db.get(nde['uid'])
+                    agent = user.profile
+                    old_node.creator = agent
+
+                else:
+                    new_post = SourceSpecificPost.create(self.source, node)
+                    if not new_post:
+                        continue
+                    self.session.add(new_post)
+
+
+    def _update_comments(self, db, users_db):
+        if not self.comments:
+            print "Array of comments is empty!"
+        else:
+            for comment in self.comments:
+                comm = comment['comment']
+                if comm['cid'] in db:
+                    old_comm = db.get(comm['cid'])
+                    old_comm.import_date = datetime.utcnow()
+                    old_comm.source = self.source
+                    old_comm.discussion = self.source.discussion
+                    old_comm.source_post_id = comm['cid']
+                    old_comm.message_id = \
+                        self.source.get_default_prepended_id() + comm['cid']
+                    old_comm.body = comm['comment']
+                    old_comm.creation_date = datetime.fromtimestamp(
+                        int(comm['created']))
+
+                    user = users_db.get(comm['uid'])
+                    agent = user.profile
+                    old_comm.creator = agent
+                else:
+                    new_comm = SourceSpecificPost.create(self.source, comment)
+                    if not new_comm:
+                        continue
+                    self.session.add(new_comm)
+
+    def re_import(self):
+
+        users_db = self._convert_users_to_dict(self._get_all_users())
+        self._update_users(users_db)
+        self.session.commit()
+
+        # Users have been updated. Must update the local cache of users
+        # as well
+        users_db = self._convert_users_to_dict(self._get_all_users())
+
+        posts_db = self._convert_posts_to_dict(self._get_all_posts())
+        self._update_nodes(posts_db, users_db)
+        self.session.commit()
+
+        # Likewise, Posts have been updated; must update the posts_db to
+        # reflect that change as well
+        posts_db = self._convert_posts_to_dict(self._get_all_posts())
+        self._update_comments(posts_db, users_db)
+        self.session.commit()
+
+        self.threaded = False
+        self._process_comment_threading()
+        self.session.commit()
+
