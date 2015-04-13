@@ -21,7 +21,7 @@ function(jasmine, _, app, IdeaPanel){
         });
 
         it('should change the state to .is-dragover when it is dragover', function(){
-            app.draggedSegment = { title: 'Something' };
+            app._draggedSegment = { title: 'Something' };
             view.panel.trigger('dragover');
 
             expect(view.panel.hasClass('is-dragover')).toBeTruthy();
@@ -32,7 +32,7 @@ function(jasmine, _, app, IdeaPanel){
 
         it('should add the current segment when drop', function(){
             spyOn(IdeaPanel.prototype, 'addSegment');
-            app.draggedSegment = { title: 'Something' };
+            app._draggedSegment = { title: 'Something' };
 
             view = getView();
 
