@@ -205,7 +205,7 @@ class SourceSpecificPost(ImportedPost):
             user = source.db.query(SourceSpecificAccount).filter_by(
                 user_id=user_id, source_id=source_id).first()
 
-            agent = user.profile
+            agent = None if not user else user.profile
             import_date = datetime.utcnow()
             body = node['body']
             discussion = source.discussion
@@ -224,8 +224,7 @@ class SourceSpecificPost(ImportedPost):
             comment_id = comment['cid']
             created = datetime.fromtimestamp(int(comment['created']))
 
-            if 'uid' in comment['uid']:
-                user_id = comment['uid']
+            user_id = comment['uid']
             source_id = source.id
 
             user = source.db.query(SourceSpecificAccount).filter_by(
@@ -233,14 +232,14 @@ class SourceSpecificPost(ImportedPost):
 
             agent =  None if not user else user.profile
             import_date = datetime.utcnow()
-            body = comment['body']
+            body = comment['comment']
             title = comment['title']
             discussion = source.discussion
             message_id = source.get_default_prepended_id() + comment_id
 
             return cls(import_date=import_date, source_post_id=comment_id,
                        message_id=message_id, source=source, creator=agent,
-                       reation_date=created, discussion=discussion,
+                       creation_date=created, discussion=discussion,
                        body=body, subject=title)
                        # parent_id=parent_id_to_store)
 
@@ -252,6 +251,7 @@ class EdgeSenseParser(object):
     def __init__(self, source, from_file=False):
         self.source = source
         self.session= source.db
+        self.threaded = False
         if from_file:
             self.users = self._load_json_from_file(source.user_source)['users']
             self.nodes = self._load_json_from_file(source.node_source)['nodes']
@@ -273,7 +273,7 @@ class EdgeSenseParser(object):
                 data = self.load_json_from_file(
                     source.user_source, 'users')
             else:
-                data = requests.request(source_link).json()
+                data = requests.get(source_link).json()
             if 'users' in data:
                 data = data['users']
             return data
@@ -330,8 +330,8 @@ class EdgeSenseParser(object):
     def _convert_posts_to_dict(self, db):
         return {x.source_post_id: x for x in db}
 
-    def _process_comment_threading(self, comments):
-        # incoming comments are json formatted dictionary objects
+    def _process_comment_threading(self):
+        # comments are json formatted dictionary objects
         # includes both nodes and comments
 
         # posts_db = self.session.query(SourceSpecificPost)./
@@ -339,24 +339,28 @@ class EdgeSenseParser(object):
         #            ~(SourceSpecificPost.source_post_id.like(
         #            '%'+'nid_'+'%')) & (
         #            SourceSpecificPost.source_id == self.source.id)).all()
+        if not self.threaded:
+            posts_db = self._convert_posts_to_dict(
+                self._get_all_posts()
+            )
 
-        posts_db = self._get_all_posts()
-        comments_dict = self._convert_posts_to_dict(self,posts_db)
+            for comment in self.comments:
+                comm = comment['comment']
+                if int(comm['pid']) == 0:
+                    # Node nid is the parent
+                    parent_id = 'nid_' + comm['nid']
+                    parent = posts_db[parent_id]
+                    child = posts_db[comm['cid']]
+                    child.set_parent(parent)
 
-        for comment in comments:
-            comm = comment['comment']
-            if comm['pid'] == 0:
-                # Node nid is the parent
-                parent_id = 'nid_' + comm['nid']
-                parent = posts_db[parent_id]
-                child = posts_db[comm['cid']]
-                child.set_parent(parent)
+                else:
+                    # Otherwise the comment is a reply to another comment
+                    parent_id = comm['pid']
+                    parent = posts_db[parent_id]
+                    child = posts_db[comm['cid']]
+                    child.set_parent(parent)
 
-            # Otherwise the comment is a reply to another comment
-            parent_id = comm['pid']
-            parent = posts_db[parent_id]
-            child = posts_db[comm['cid']]
-            child.set_parent(parent)
+            self.threaded = True
 
 
     def _parse_users(self, db):
@@ -386,14 +390,14 @@ class EdgeSenseParser(object):
             print "Array of comments is empty!"
         else:
             for comment in self.comments:
-                if comment['comment']['cid'] in posts_db:
+                if comment['comment']['cid'] in db:
                     continue
                 new_post = SourceSpecificPost.create(self.source, comment)
                 if not new_post:
                     continue
                 self.session.add(new_post)
 
-    def parse(self, bound_discussion):
+    def parse(self):
         # First add all of the users to the db
         # Then add all of the nodes
         # Then add all of the comments
@@ -416,5 +420,5 @@ class EdgeSenseParser(object):
         self._parse_comments(posts_db)
         self.session.commit()
 
-        self._process_comment_threading(self.comments)
+        self._process_comment_threading()
         self.session.commit()
