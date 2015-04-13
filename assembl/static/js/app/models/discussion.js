@@ -17,7 +17,8 @@ define(['models/base', 'common/context', 'utils/permissions', 'utils/i18n', 'uti
             '@view': '',
             'permissions': {},
             'subscribe_to_notifications_on_signup': false,
-            'web_analytics_piwik_id_site': null
+            'web_analytics_piwik_id_site': null,
+            'show_help_in_debate_section': true
         },
         validate: function(attrs, options){
             /**

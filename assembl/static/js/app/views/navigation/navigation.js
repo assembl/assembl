@@ -150,7 +150,21 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                             nav: true
                         });
                         this.debate.show(idealist);
-                        this.getContainingGroup().resetDebateState();
+                        if ( this.getContainingGroup().getCurrentIdea() ) {
+                            this.getContainingGroup().resetDebateState();
+                        }
+                        else {
+                            var that = this;
+                            var collectionManager = new CollectionManager();
+                            collectionManager.getDiscussionModelPromise().then(function (discussion){
+                                if ( discussion.get("show_help_in_debate_section") ){
+                                    that.getContainingGroup().resetDebateState(false, true);
+                                }
+                                else {
+                                    that.getContainingGroup().resetDebateState();
+                                }
+                            });
+                        }
                         break;
                     case 'synthesis':
                         var synthesisInNavigationPanel = new SynthesisInNavigationPanel({

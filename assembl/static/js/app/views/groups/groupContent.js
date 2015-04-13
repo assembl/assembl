@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/assemblPanel', 'views/groups/panelWrapper', 'utils/panelSpecTypes'],
-    function (Marionette, ctx, panelSpec, AssemblPanel, PanelWrapper, PanelSpecTypes) {
+define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec', 'views/assemblPanel', 'views/groups/panelWrapper', 'utils/panelSpecTypes'],
+    function (Marionette, ctx, i18n, panelSpec, AssemblPanel, PanelWrapper, PanelSpecTypes) {
 
         /** Represents the entire content of a single group */
         var groupContent = Marionette.CompositeView.extend({
@@ -190,14 +190,27 @@ define(['backbone.marionette', 'common/context', 'models/panelSpec', 'views/asse
                 return this.model.findNavigationSidebarPanelSpec();
             },
 
-            resetDebateState: function (skip_animation) {
+            resetDebateState: function (skip_animation, show_debate_help) {
                 // Ensure that the simple view is in debate state, and coherent.
                 if (this.findNavigationSidebarPanelSpec()) {
                     this.groupContainer.suspendResize();
                     this.model.set('navigationState', 'debate');
-                    this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-                    this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
-                    this.resetMessagePanelState();
+                    
+                    if ( show_debate_help === true ){
+                        // this is a bit ugly but it works. Making it nice will be for a v2
+                        this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
+                        this.ensurePanelsHidden(PanelSpecTypes.MESSAGE_LIST, PanelSpecTypes.IDEA_PANEL);
+                        this.ensurePanelsVisible(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
+                        var vizPanel = this.findViewByType(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
+                        var help_text = i18n.gettext("Getting started<br/><br/>Welcome to the discussion! The table to the left is a list of the ideas people are talking about. We've tried to make it easy for you to find conversations that you are interested in! To join in:<br/><br/>1) Choose an idea from the table of contents<br/><br/>2) Reply to an existing message or start a new message of your own<br/><br/>This is a safe and respectful space. All ideas are welcome!");
+                        var url = "data:text/html,<style>html{margin-top:%20100px;%20text-align:%20center;}%20.debateIntroductionContent{margin:%200%20auto;width:%2090%;%20background:%20rgb(250,250,250);}</style><div%20class='debateIntroductionContent'>" + help_text + "</div>"; // "http://assembl.org/user-guides/"
+                        vizPanel.setUrl(url);
+                    }
+                    else {
+                        this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
+                        this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
+                        this.resetMessagePanelState();
+                    }
 
                     if (skip_animation === false) {
                         this.groupContainer.resumeResize(false);
