@@ -54,10 +54,10 @@ class EdgeSenseDrupalSource(PostSource):
                 onupdate='CASCADE',
                 ondelete='CASCADE'), primary_key=True)
 
-    node_source = Column(String(1024))
+    node_source = Column(String(1024), nullable=False)
     node_root = Column(String(200))
-    user_source = Column(String(1024))
-    comment_source = Column(String(1024))
+    user_source = Column(String(1024), nullable=False)
+    comment_source = Column(String(1024), nullable=False)
     post_id_prepend = Column(String(100), nullable=False)
 
     def generate_prepend_id(self):
@@ -74,6 +74,18 @@ class EdgeSenseDrupalSource(PostSource):
         if 'post_id_prepend' not in kwargs:
             kwargs['post_id_prepend'] = self.generate_prepend_id()
         super(EdgeSenseDrupalSource, self).__init__(*args, **kwargs)
+
+    @classmethod
+    def create(cls, nodes, users, comments, title, discussion, root_url=None):
+        now = datetime.utcnow()
+        return cls(node_source=nodes,
+                   user_source=users,
+                   comment_source=comments,
+                   node_root=root_url,
+                   last_import=now,
+                   name=title,
+                   creation_date=now,
+                   discussion=discussion)
 
 
 class SourceSpecificAccount(AbstractAgentAccount):
@@ -130,9 +142,10 @@ class SourceSpecificAccount(AbstractAgentAccount):
         link = user['link']
         profile = AgentProfile(name=name)
 
-        return cls(user_link=link, user_name=name,
-                   user_id=user_id, source=source,
-                   user_info=json.dumps(user_dict),
+        return cls(user_info=json.dumps(user_dict),
+                   user_link=link,
+                   user_id=user_id,
+                   source=source,
                    profile=profile)
 
 
@@ -171,13 +184,15 @@ class SourceSpecificPost(ImportedPost):
     # Char-escape for the body of content is going to be a Biznitch
 
     @classmethod
-    def create(cls, discussion, source, post):
+    def create(cls, source, post):
         # post is a dictionary of the post from json
 
         #post = json.loads(json_post)
         # Check whether the incoming post is a Node post or a Comment post
         # prefix_id = source.get_prepend_id()
         if 'node' in post:
+            if not 'uid' in post['node']:
+                return None
             node = post['node']
             node_id = "nid_" + node['nid'] #prefixed because cid & nid WILL
             # collide with each other
@@ -193,12 +208,17 @@ class SourceSpecificPost(ImportedPost):
             agent = user.profile
             import_date = datetime.utcnow()
             body = node['body']
+            discussion = source.discussion
 
-            return cls(import_date=import_date, source_post_id=node_id,
-                       source=source, creator=agent, creation_date=created,
+            return cls(import_date=import_date, source=source,
+                       source2 = source,
+                       source_post_id=node_id, creator=agent,
+                       creation_date=created,
                        discussion=discussion, body=body)
 
         if 'comment' in post:
+            if 'uid' not in post['comment']:
+                return None
             comment = post['comment']
             comment_id = comment['cid']
             created = datetime.fromtimestamp(int(comment['created']))
@@ -214,7 +234,7 @@ class SourceSpecificPost(ImportedPost):
             import_date = datetime.utcnow()
             body = comment['body']
             title = comment['title']
-
+            discussion = source.discussion
             # if comment['pid'] == 0:
             #     parent_id = prefix_id + comment['nid']
             # else:
@@ -235,55 +255,57 @@ class SourceSpecificPost(ImportedPost):
 # In the parsing process, ALWAYS parse the USERS FIRST, because they will
 # be queried to get their agent-profile
 class EdgeSenseParser(object):
-    def __init__(self, source, from_file=False, file_source=None):
-        if not from_file:
-            self.source = source
-            self.session= source.db
-            self.users = self._load_json(source, 'users')
-            self.nodes = self._load_json(source, 'nodes')
-            self.comments = self._load_json(source, 'comments')
-        elif file_source:
-            self.users = self.load_json_from_file(file_source, 'users')
-            self.nodes = self.load_json_from_file(file_source, 'nodes')
-            self.comments = self.load_json_from_file(file_source, 'comments')
-            self.source = source
-            self.session = source.db
+    def __init__(self, source, from_file=False):
+        self.source = source
+        self.session= source.db
+        if from_file:
+            self.users = self._load_json_from_file(source.user_source)['users']
+            self.nodes = self._load_json_from_file(source.node_source)['nodes']
+            self.comments = self._load_json_from_file(
+                source.comment_source)['comments']
         else:
-            print "You dun goofed hard"
+            self.users = self._load_json(source, 'users', from_file)
+            self.nodes = self._load_json(source, 'nodes', from_file)
+            self.comments = self._load_json(source, 'comments', from_file)
 
-    def _load_json(self,source, resource_type):
+    def _load_json_from_file(self,file_name):
+        with open(file_name) as data:
+            return json.load(data)
+
+    def _load_json(self,source, resource_type, from_file):
         if resource_type is 'users':
             source_link = source.user_source
-            data = None
-            try:
+            if from_file:
+                data = self.load_json_from_file(
+                    source.user_source, 'users')
+            else:
                 data = requests.request(source_link).json()
-                if 'users' in data:
-                    data = data['users']
-            except e:
-                data=None
+            if 'users' in data:
+                data = data['users']
             return data
 
         if resource_type is 'nodes':
             source_link = source.node_source
-            data = None
-            try:
+            if from_file:
+                data = self.load_json_from_file(
+                    source.node_source, 'nodes')
+            else:
                 data = requests.request(source_link).json()
-                if 'nodes' in data:
-                    data = data['nodes']
-            except e:
-                data=None
+            if 'nodes' in data:
+                data = data['nodes']
             return data
 
         if resource_type is 'comments':
             source_link = source.comment_source
-            data = None
-            try:
+            if from_file:
+                data = self.load_json_from_file(
+                    source.comment_source, 'comments')
+            else:
                 data = requests.request(source_link).json()
-                if 'comments' in data:
-                    data = data['comments']
-            except e:
-                data=None
+            if 'comments' in data:
+                data = data['comments']
             return data
+
         else:
             raise InputError("%s is not a proper resource" % resource_type)
 
@@ -291,14 +313,13 @@ class EdgeSenseParser(object):
         # source_type = ['users', 'nodes', 'comments']
         with open(file_path) as data:
             if source_type is 'users':
-                self.users = json.load(data)['users']
-            elif source_type is 'nodes':
-                self.users = json.load(data)['nodes']
-            elif source_type is 'comments':
-                self.comments = json.load(data)['comments']
+                return json.load(data)['users']
+            if source_type is 'nodes':
+                return json.load(data)['nodes']
+            if source_type is 'comments':
+                return json.load(data)['comments']
             else:
                 raise InputError('source_type is not valid')
-
 
     def _get_all_users(self):
         return self.session.query(SourceSpecificAccount).\
@@ -309,7 +330,10 @@ class EdgeSenseParser(object):
         return self.session.query(SourceSpecificPost).\
             filter(SourceSpecificPost.source_id == self.source.id).all()
 
-    def _covert_posts_to_dict(self, db):
+    def _convert_users_to_dict(self, db):
+        return {x.user_id: x for x in db}
+
+    def _convert_posts_to_dict(self, db):
         return {x.source_post_id: x for x in db}
 
     def _process_comment_threading(self, comments):
@@ -323,7 +347,7 @@ class EdgeSenseParser(object):
         #            SourceSpecificPost.source_id == self.source.id)).all()
 
         posts_db = self._get_all_posts()
-        comments_dict = self._conver_post_to_dict(self,posts_db)
+        comments_dict = self._convert_posts_to_dict(self,posts_db)
 
         for comment in comments:
             comm = comment['comment']
@@ -340,6 +364,41 @@ class EdgeSenseParser(object):
             child = posts_db[comm['cid']]
             child.set_parent(parent)
 
+
+    def _parse_users(self, db):
+        if not self.users:
+            print "Array of users is empty!"
+        else:
+            for user in self.users:
+                if user['user']['uid'] in db:
+                    continue
+                new_user = SourceSpecificAccount.create(self.source, user)
+                self.session.add(new_user)
+
+    def _parse_nodes(self,db):
+        if not self.nodes:
+            print "Array of nodes is empty!"
+        else:
+            for node in self.nodes:
+                if ("nid_" + node['node']['nid']) in db:
+                    continue
+                new_post = SourceSpecificPost.create(self.source, node)
+                if not new_post:
+                    continue
+                self.session.add(new_post)
+
+    def _parse_comments(self,db):
+        if not self.comments:
+            print "Array of comments is empty!"
+        else:
+            for comment in self.comments:
+                if comment['comment']['cid'] in posts_db:
+                    continue
+                new_post = SourceSpecificPost.create(self.source, comment)
+                if not new_post:
+                    continue
+                self.session.add(new_post)
+
     def parse(self, bound_discussion):
         # First add all of the users to the db
         # Then add all of the nodes
@@ -348,36 +407,19 @@ class EdgeSenseParser(object):
 
         #First, get all users and posts from the source, so as to not create
         # duplicates
-        users_db = self._conver_users_to_dict(self._get_all_users())
-        posts_db = self._conver_post_to_dict(self._get_all_posts())
+        users_db = self._convert_users_to_dict(self._get_all_users())
+        posts_db = self._convert_posts_to_dict(self._get_all_posts())
 
         # pre-cursor to getting started
         self.session.flush()
 
-        for user in self.users:
-            if user['user']['uid'] in users_db:
-                continue
-            new_user = SourceSpecificAccount.create(self.source, user)
-            self.session.add(new_user)
-
+        self._parse_users(users_db)
         self.session.commit()
 
-        for node in self.nodes:
-            if ("nid_" + node['user']['nid']) in posts_db:
-                continue
-            new_post = SourceSpecificPost.create(bound_discussion,
-                                                 self.source)
-            self.session.add(new_post)
-
+        self._parse_nodes(posts_db)
         self.session.commit()
 
-        for comment in self.comments:
-            if comment['comment']['cid'] in posts_db:
-                continue
-            new_post = SourceSpecificPost.create(bound_discussion,
-                                                 self.source)
-            self.session.add(new_post)
-
+        self._parse_comments(posts_db)
         self.session.commit()
 
         self._process_comment_threading(self.comments)

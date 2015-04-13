@@ -27,11 +27,11 @@ def upgrade(pyramid_env):
                       'post_source.id',
                       onupdate='CASCADE',
                       ondelete='CASCADE'), primary_key=True),
-            sa.Column('node_source', sa.String(1024)),
+            sa.Column('node_source', sa.String(1024), nullable=False),
             sa.Column('node_root', sa.String(200)),
-            sa.Column('user_source', sa.String(1024)),
-            sa.Column('comment_source', sa.String(1024)),
-            sa.Column('post_id_prepend', sa.String(100))
+            sa.Column('user_source', sa.String(1024), nullable=False),
+            sa.Column('comment_source', sa.String(1024), nullable=False),
+            sa.Column('post_id_prepend', sa.String(100), nullable=False)
             )
 
         op.create_table(
