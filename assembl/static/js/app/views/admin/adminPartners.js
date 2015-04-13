@@ -44,66 +44,13 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                         this.$('.bbm-modal').addClass('popin');
                     },
                     events: {
-                        'click .js_validatePartner' :'validatePartner'
+                        'submit #partner-form-edit' :'validatePartner'
                     },
                     validatePartner: function (e) {
 
-                        var that = this,
-                            validForm = false,
-                            name_mandatory = this.$('.partner-name'),
-                            description_mandatory = this.$('.partner-description'),
-                            website = this.$('.partner-homepage'),
-                            url_logo = this.$('.partner-logo'),
-                            //urlPattern = new RegExp("(http|https?:\/\/)?([\a-z\.-]+)\.([a-z\.]{3,6})"),
-                            urlPattern = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?"),
-                            parent = name_mandatory.parent().parent(),
-                            p_website = website.parent().parent(),
-                            p_url_logo = url_logo.parent().parent(),
-                            p_description_mandatory = description_mandatory.parent().parent(),
-                            controls = document.querySelectorAll('#partner-form .control-group');
+                        if(e.target.checkValidity()){
 
-                            if(!name_mandatory.val().length){
-                            validForm = false;
-                            parent.addClass('error');
-                            return false;
-                        } else {
-                            validForm = true;
-                            parent.removeClass('error');
-                        }
-
-                        if(!description_mandatory.val().length){
-                            validForm = false;
-                            p_description_mandatory.addClass('error');
-                            return false;
-                        } else {
-                            validForm = true;
-                            p_description_mandatory.removeClass('error');
-                        }
-
-                        if(website.val().length){
-                            if (!urlPattern.test(website.val())) {
-                                p_website.addClass('error');
-                                validForm = false;
-                                return false;
-                            } else {
-                                validForm = true;
-                                p_website.removeClass('error');
-                            }
-                        }
-
-                        if(url_logo.val().length){
-                            if (!urlPattern.test(url_logo.val())) {
-                                p_url_logo.addClass('error');
-                                validForm = false;
-                                return false;
-                            } else {
-                                validForm = true;
-                                p_url_logo.removeClass('error');
-                            }
-                        }
-
-                        if(validForm){
-                            $(controls).removeClass('success');
+                            var that = this;
 
                             self.model.set({
                                 description: this.$('.partner-description').val(),
@@ -120,10 +67,11 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
                                 error: function(model, resp){
                                     console.log(resp)
                                 }
-                            })
+                            });
 
                         }
 
+                        return false;
                     }
                 });
 
