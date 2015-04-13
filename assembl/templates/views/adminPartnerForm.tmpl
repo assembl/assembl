@@ -7,7 +7,7 @@
 			<div class="control-group">
 				<label for="name" class="control-label">{{ gettext('Partner name') }}</label>
 				<div class="controls">
-					<input type="text" class="partner-name input-xlarge" name="name" required="required">
+					<input type="text" class="partner-name input-xlarge" name="name" required>
 					<span class="help-inline">
 						<p class="control-error">{{ gettext('This field is mandatory') }}</p>
 						<p class="control-success"><i class="icon-ok"></i></p>
@@ -18,7 +18,7 @@
 			<div class="control-group">
 				<label for="description" class="control-label">{{ gettext('Description') }}</label>
 				<div class="controls">
-					<textarea rows="3" class="partner-description input-xlarge" name="description" required="required"></textarea>
+					<textarea rows="3" class="partner-description input-xlarge" name="description" required></textarea>
 					<p class="help-block">{{ gettext('Share what the organisation is all about') }}</p>
 					<span class="help-inline">
 						<p class="control-error">{{ gettext('please correct the error') }}</p>
@@ -30,7 +30,7 @@
 			<div class="control-group">
 				<label for="homepage" class="control-label">{{ gettext('Website') }}</label>
 				<div class="controls">
-					<input type="text" class="partner-homepage input-xlarge" name="homepage" required="required">
+					<input type="url" class="partner-homepage input-xlarge" name="homepage" pattern="https?://.+" required>
 					<p class="help-block">{{ gettext('Example : http://example.org/ or http://www.hompage.com/') }}</p>
 					<span class="help-inline">
 						<p class="control-error">{{ gettext('Invalid URL format') }}</p>
@@ -42,7 +42,7 @@
 			<div class="control-group">
 				<label for="logo" class="control-label">{{ gettext('URL of logo image') }}</label>
 				<div class="controls">
-					<input type="text" class="partner-logo input-xlarge" name="logo" required="required">
+					<input type="url" class="partner-logo input-xlarge" name="logo" pattern="https?://.+" required>
 					<p class="help-block">{{ gettext('Example : http://example.org/logo.jpg') }}</p>
 					<span class="help-inline">
 						<p class="control-error">{{ gettext('Invalid URL format') }}</p>
@@ -58,11 +58,15 @@
 				</div>
 			</div>
 
+            <div class="form-actions ptm">
+                <button class="btn btn-primary" type="submit">{{ gettext('Validate') }}</button>
+                <button class="btn btn-default js_close">{{ gettext('Cancel') }}</button>
+            </div>
 		</fieldset>
 	</form>
 </div>
-<div class="popin-footer">
+<!--<div class="popin-footer">
 	<button class="btn btn-cancel btn-sm fr js_close">{{ gettext('Cancel') }}</button>
   <button class="btn btn-primary btn-sm fr js_validatePartner">{{ gettext('Validate') }}</button>
-</div>
+</div>-->
 
