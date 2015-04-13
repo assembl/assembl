@@ -1436,6 +1436,34 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             },
             /**
              * Executor of lazy code
+             * ex :
+             *
+             * Normale code
+             *
+             * $(document).ready(function() {
+             *  // a lot of li's, lets say 500
+             *   $('li').each(function() {
+             *       $(this).bind('click', function() {
+             *           alert('Yeah you clicked me');
+             *       });
+             *   });
+             * });
+             *
+             * After refactoring
+             *
+             *  $(document).ready(function() {
+             *       // a lot of li's, lets say 500
+             *       $('li').each(function() {
+             *       var self = this, doBind = function() {
+             *           $(self).bind('click', function() {
+             *               alert('Yeah you clicked me');
+             *           });
+             *       };
+             *       $.queue.add(doBind, this);
+             *       });
+             *  });
+             *
+             *
              * */
             queue: {
                 _timer: null,
