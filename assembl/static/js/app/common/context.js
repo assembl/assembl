@@ -1470,7 +1470,7 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                 add: function(fn, context, time) {
                     var setTimer = function(time) {
                         queue._timer = setTimeout(function() {
-                            time = $.queue.add();
+                            time = queue.add();
                             if (queue._queue.length) {
                                 setTimer(time);
                             }
@@ -1478,7 +1478,7 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                     }
 
                     if (fn) {
-                        $.queue._queue.push([fn, context, time]);
+                        queue._queue.push([fn, context, time]);
                         if (queue._queue.length == 1) {
                             setTimer(time);
                         }
