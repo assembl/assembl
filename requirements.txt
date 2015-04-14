@@ -1,7 +1,6 @@
 Babel==1.3
 Beaker>=1.6.5
 Chameleon==2.22
-Chroma==0.2.0
 ColanderAlchemy==0.3.1
 DateTime==4.0.1
 Fabric==1.10.1
@@ -18,7 +17,7 @@ SPARQLWrapper==1.6.4
 SQLAlchemy==0.9.9
 Sphinx==1.3.1
 Unidecode==0.04.17
-WebOb==1.4
+WebOb==1.4.1
 WebTest==2.0.18
 Werkzeug==0.10.4
 alabaster==0.7.3
@@ -48,7 +47,7 @@ feedparser==5.1.3
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
 greenlet==0.4.5
 html5lib==0.999
-imaplib2==2.38.0
+imaplib2==2.43.0
 isodate==0.5.1
 iso639==0.1.1
 iso8601==0.1.10
@@ -65,11 +64,11 @@ pinocchio==0.4.2
 polib==1.0.6
 premailer==2.8.3
 py==1.4.26
-pyOpenSSL==0.14
+pyOpenSSL==0.15
 pycparser==2.10
 pycrypto==2.6.1
 pyIsEmail==1.2.0
-pylibmc==1.4.1
+pylibmc==1.4.2
 -e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 pyparsing==2.0.3
 pyramid==1.5.4
@@ -85,7 +84,7 @@ pytest==2.7.0
 pytest-cov==1.8.1
 pytest-localserver==0.3.4
 pytest-mock==0.4.3
-pytest-splinter==1.3.4
+pytest-splinter==1.3.5
 python-openid==2.2.5
 pytz==2015.2
 pyzmq==14.5.0

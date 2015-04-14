@@ -2,7 +2,6 @@ from datetime import datetime
 from itertools import chain
 import urllib
 import hashlib
-import chroma
 import simplejson as json
 from collections import defaultdict
 from enum import IntEnum
