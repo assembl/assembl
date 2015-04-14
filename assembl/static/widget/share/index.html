@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <title>Share</title>
+    <!--
+    <link type="text/css" rel="stylesheet" href="app/css/global.css" />
+	-->
+</head>
+<body>
+
+<style>
+iframe {
+	display: block;
+}
+#url {
+	width: 95%;
+	max-width: 1000px;
+	display: block;
+}
+</style>
+
+<input type="text" id="url" />
+
+<iframe id="iframe" src="" frameborder=0 frametransparency=1 scrolling=no height=30 width=73></iframe>
+
+<script>
+var i,
+h = location.href,
+u = (h.match(/[&?]u=(.*)&t=/) || h.match(/[&?]u=(.*)(&|$)/) || [0,document.referrer])[1] || "",
+t = (h.match(/[&?]t=(.*)&u=/) || h.match(/[&?]t=(.*)(&|$)/) || [])[1] || "",
+dec = function(s) {return decodeURIComponent(s)},
+enc = function(s) {return encodeURIComponent(s)},
+iframe_url = "bower_components/expando/add/index.htm?";
+
+if(u){ 
+	document.title = "Share: "+dec(u);
+	var e = document.getElementById("url")
+	e.value = dec(u);
+	e.focus();
+    e.select();
+	iframe_url += "&u=" + u;
+}
+
+if(t) {
+	//document.getElementById("title").value = dec(t);
+	document.title = "Share: "+dec(t);
+	iframe_url += "&t=" + t;
+}
+
+document.getElementById("iframe").src = iframe_url;
+</script>
+
+
+</body>
+</html>

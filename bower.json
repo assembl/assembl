@@ -45,7 +45,6 @@
     "jquery-oembed-all": "https://github.com/swergas/jquery-oembed-all.git#initially-visible-option",
     "bootstrap-growl": "~1.1.0",
     "bluebird": "~2.9.12",
-    "expando": "https://github.com/expando/expando.github.com.git#0e8c3980c1",
     "visionmedia-debug": "~2.1.3"
   }
 }

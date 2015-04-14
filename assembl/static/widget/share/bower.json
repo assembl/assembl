@@ -1,0 +1,14 @@
+{
+  "name": "Share widget",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ImaginationForPeople/assembl",
+  "authors": [
+    "Quentin Grimaud <quentin.grimaud@gmail.com>"
+  ],
+  "description": "Widget which enables sharing an URL",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "expando": "https://github.com/expando/expando.github.com.git#0e8c3980c1"
+  }
+}

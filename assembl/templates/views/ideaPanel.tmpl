@@ -1,8 +1,5 @@
 {% macro showShareButton() -%}
-<a href="<%= share_link_url %>" class="js_openTargetInPopOver" data-popover-width="73" data-popover-height="30" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
-{%- endmacro %}
-{% macro showCopyUrlLink() -%}
-<a href="#" class="idea-linkbutton" data-copy-text="<%= direct_link_relative_url %>">{{gettext('Copy the link to share this idea')}}</a>
+<a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_openTargetInPopOver" data-popover-width="300" data-popover-height="71" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
 {%- endmacro %}
 <div class="panel-body">
     <% if( idea ) { %>
@@ -111,7 +108,7 @@
     </fieldset>
 
     <fieldset class="panel-section ideaPanel-section-actions">
-        <div>{{ showShareButton() }} - {{ showCopyUrlLink() }}</div>
+        <div>{{ showShareButton() }}</div>
 
         <% if (canDelete) { %>
         <div class="fr">

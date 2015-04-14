@@ -169,8 +169,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     metadata_json = null;
                 }
                 var direct_link_relative_url = "/posts/" + encodeURIComponent(this.model.get('@id')),
-                    share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
-                    Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url) + "&t=" +
+                    //share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
+                    share_link_url = "/static/widget/share/index.html?u=" +
+                    encodeURIComponent(Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)) + "&t=" +
                     encodeURIComponent(this.model.get('subject'));
 
                 return {
@@ -234,7 +235,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                       Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
                       Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
                   }
-                  Ctx.initClipboard();
+                  //Ctx.initClipboard();
   
                   that.replyView = new MessageSendView({
                       allow_setting_subject: false,

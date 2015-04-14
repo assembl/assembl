@@ -305,8 +305,9 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     contributors = this.model.get('contributors');
 
                     direct_link_relative_url = "/idea/" + encodeURIComponent(this.model.get('@id'));
-                    share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
-                        Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url) + "&t=" +
+                    //share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
+                    share_link_url = "/static/widget/share/index.html?u=" +
+                        encodeURIComponent(Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)) + "&t=" +
                         encodeURIComponent(this.model.get('shortTitle'));
                 }
 
@@ -339,8 +340,6 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
                 Ctx.initTooltips(this.$el);
-
-                Ctx.initClipboard();
 
                 if (this.model && this.model.id  && this.extractListSubset) { 
                   //Only fetch extracts if idea already has an id.

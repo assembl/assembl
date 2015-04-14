@@ -556,6 +556,7 @@ def bower_install():
     bower_cmd('install', 'assembl/static/widget/video')
     bower_cmd('install', 'assembl/static/widget/vote')
     bower_cmd('install', 'assembl/static/widget/creativity')
+    bower_cmd('install', 'assembl/static/widget/share')
 
 
 @task

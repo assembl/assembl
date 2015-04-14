@@ -22,7 +22,7 @@
 {%- endmacro %}
 
 {% macro showShareButton() -%}
-<a href="<%= share_link_url %>" class="js_openTargetInPopOver" data-popover-width="73" data-popover-height="30" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
+<a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_openTargetInPopOver" data-popover-width="300" data-popover-height="71" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
 {%- endmacro %}
 
 {% macro menuAction() -%}
@@ -52,7 +52,6 @@
             <li><a href="#" class="message-hoistbtn" data-id="<%= escape(message.get('@id')) %>">{{gettext('Show only this message and its replies')}}</a></li>
             <% } %>
 
-            <li><a href="#" class="message-linkbutton" data-copy-text="<%= direct_link_relative_url %>">{{gettext('Copy the link to share this message')}}</a></li>
             <% if(creator){ %>
             <li><a title="<%= creator.get('preferred_email') %>" href="mailto:<%= creator.get('preferred_email') %>">{{gettext('Send an email to this user')}}</a></li>
             <% } %>
