@@ -1,16 +1,15 @@
 """ App URL routing and renderers are configured in this module. """
 
 import os.path
-import json
 import codecs
-from pyramid.security import Allow, ALL_PERMISSIONS, DENY_ALL
+
+from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPException, HTTPNotFound, HTTPInternalServerError, HTTPFound, HTTPMovedPermanently)
 from pyramid.i18n import TranslationStringFactory
 
 from ..lib.json import json_renderer_factory
 from ..lib import config
-from ..auth import R_SYSADMIN
 from ..lib.frontend_urls import FrontendUrls
 
 default_context = {
@@ -122,6 +121,17 @@ class JSONError(HTTPException):
             r = super(JSONError, self).prepare(environ)
             self.content_type = 'text/plain'
             return r
+
+
+@view_config(context=Exception)
+def error_view(exc, request):
+    # from traceback import format_exc
+    from datetime import datetime
+    return HTTPInternalServerError(
+        explanation="Sorry, Assembl had an internal issue and you have to reload. Please send this to a discussion administrator.",
+        detail=datetime.now().isoformat()+"\n"+repr(request.exception))
+        # format_exc(request.exception))
+
 
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
