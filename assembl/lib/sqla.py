@@ -340,6 +340,11 @@ class BaseOps(object):
     def uri(self, base_uri='local:'):
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
+    @classmethod
+    def get_subclasses(cls):
+        global class_registry
+        return (c for c in class_registry.itervalues() if issubclass(c, cls))
+
     def change_class(self, newclass, json=None, **kwargs):
         def table_list(cls):
             tables = []
