@@ -343,7 +343,9 @@ class BaseOps(object):
     @classmethod
     def get_subclasses(cls):
         global class_registry
-        return (c for c in class_registry.itervalues() if issubclass(c, cls))
+        from inspect import isclass
+        return (c for c in class_registry.itervalues()
+                if isclass(c) and issubclass(c, cls))
 
     def change_class(self, newclass, json=None, **kwargs):
         def table_list(cls):
