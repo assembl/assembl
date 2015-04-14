@@ -1,14 +1,14 @@
 """edgesense
 
 Revision ID: fcf4b698a8a
-Revises: 2c1cd2d2af9b
+Revises: 2e96ee310c2f
 Create Date: 2015-04-08 16:37:01.418049
 
 """
 
 # revision identifiers, used by Alembic.
 revision = 'fcf4b698a8a'
-down_revision = '301275210522'
+down_revision = '2e96ee310c2f'
 
 from alembic import context, op
 from virtuoso.alchemy import CoerceUnicode
