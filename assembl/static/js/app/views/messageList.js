@@ -1005,13 +1005,14 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             isMessageIdInResults: function (messageId, resultMessageIdList) {
-                if (!resultMessageIdList) {
-                    throw new Error("isMessageIdInResults():  resultMessageIdList needs to be provided");
-                }
+              //console.log("isMessageIdInResults called with ", messageId, resultMessageIdList)
+              if (!resultMessageIdList) {
+                throw new Error("isMessageIdInResults():  resultMessageIdList needs to be provided");
+              }
 
-                return false != _.find(resultMessageIdList, function (resultMessageId) {
-                    return messageId === resultMessageId;
-                });
+              return undefined != _.find(resultMessageIdList, function (resultMessageId) {
+                return messageId === resultMessageId;
+              });
             },
 
             /**
@@ -2130,7 +2131,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                                 that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, 0);
                               };
                               requestedOffsets = that.calculateRequestedOffsetToShowMessage(id, that.visitorOrderLookupTable, resultMessageIdCollection);
-                              that.requestMessages(requestedOffsets); //It may be that a render in progress will actually use it
+                              that.requestMessages(requestedOffsets); //It may be that a render in progress that will actually use it
                               if(debug) {
                                 console.log("showMessageById() requesting page change with requestedOffset:", requestedOffsets);
                               }
