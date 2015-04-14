@@ -35,7 +35,7 @@ define(['backbone', 'underscore', 'jquery', 'bluebird', 'backbone.marionette', '
                     function (cif_token, user_token) {
                         content.resetVisualizationState(_.template(url, {
                                 "url": encodeURIComponent(url_base+'/jsonld?token='+cif_token),
-                                "user_url": encodeURIComponent(url_base+'/private_jsonld?token='+user_token),
+                                "user_url": encodeURIComponent(url_base+'/private_jsonld?callback=processCIFUserData&token='+user_token),
                                 "lang": assembl_locale
                             }));
                     });
