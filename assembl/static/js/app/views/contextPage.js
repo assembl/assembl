@@ -1335,7 +1335,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     else if($(e.target).hasClass('js_objectivesSeeMore')) {
                         var model = new Backbone.Model({
                             content: discussion.get('objectives'),
-                            title: i18n.gettext('Debate objectives')
+                            title: i18n.gettext('Discussion objectives')
                         });
                     }
                     else {
