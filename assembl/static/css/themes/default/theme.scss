@@ -58,7 +58,9 @@ $theme_navigation_text_color: $th_white;
 $theme_navigation_text_color_active: $th_white;
 
 //Panel groups
-$theme_panel_group_header_bg_color: $th_gray1;
+//$theme_panel_group_header_bg_color: $th_gray1;
+$theme_panel_group_header_bg_color: #ecf0f1;
+$theme_panel_group_header_close: #484848;
 
 //extract
 $theme_extract_bg: $theme_navigation_bg;
