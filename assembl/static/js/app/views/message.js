@@ -910,16 +910,16 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             },
 
             onReplyBoxFocus: function(e){
-              //console.log('mesage:onReplyBoxFocus');
               this.replyBoxHasFocus = true;
-                if ( !this.model.get('read') ) {
-                    this.model.setRead(true); // we do not call markAsRead on purpose
-                }
+              if ( !this.model.get('read') ) {
+                  this.model.setRead(true); // we do not call markAsRead on purpose
+              }
+              Assembl.vent.trigger('messageList:replyBoxFocus');
             },
 
             onReplyBoxBlur: function(e){
-              //console.log('mesage:onReplyBoxBlur');
               this.replyBoxHasFocus = false;
+              Assembl.vent.trigger('messageList:replyBoxBlur');
             },
 
             /**

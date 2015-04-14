@@ -67,6 +67,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
               this.scrollLoggerPreviousTimestamp = d.getTime() ;
               this.renderedMessageViewsCurrent = {};
               this._nbPendingMessage = 0;
+              this.aReplyBoxHasFocus = false;
 
               this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
               this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
@@ -180,6 +181,14 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   if (!that.getPanelWrapper().isPanelLocked()) {
                       that.currentQuery.clearAllFilters();
                   }
+              });
+
+              this.listenTo(Assembl.vent, 'messageList:replyBoxFocus', function () {
+                that.onReplyBoxFocus();
+              });
+
+              this.listenTo(Assembl.vent, 'messageList:replyBoxBlur', function () {
+                that.onReplyBoxBlur();
               });
             },
 
@@ -1198,7 +1207,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     if (panelScrollTop >= scrollH) {
                         that.ui.stickyBar.fadeOut();
                     } else {
-                        that.ui.stickyBar.fadeIn();
+                        if ( !that.aReplyBoxHasFocus ){
+                          that.ui.stickyBar.fadeIn();
+                        }
                     }
                     
                     //This event cannot be bound in ui, because backbone binds to 
@@ -2271,6 +2282,17 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   that.currentQuery.invalidateResults();
                   that.render();
                 });
+            },
+
+            onReplyBoxFocus: function(){
+              this.aReplyBoxHasFocus = true;
+              this.ui.stickyBar.fadeOut();
+            },
+
+            onReplyBoxBlur: function(){
+              this.aReplyBoxHasFocus = false;
+              // commented out because it will reappear on scroll if necessary (and forcing it is bad if the user clics from a message reply box to the bottom comment box)
+              //this.ui.stickyBar.fadeIn();
             },
 
             /**
