@@ -8,7 +8,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
 
 
         var IdeaList = AssemblPanel.extend({
-            template: '#tmpl-ideaList',
+            template: '#tmpl-loader',
             panelType: PanelSpecTypes.TABLE_OF_IDEAS,
             className: 'ideaList',
             regions: {
@@ -49,6 +49,9 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     .then(function (allIdeasCollection) {
                         var events = ['reset', 'change:parentId', 'change:@id', 'remove', 'add', 'destroy'];
                         that.listenTo(allIdeasCollection, events.join(' '), that.render);
+                        that.template = '#tmpl-ideaList'
+                        that.collection = allIdeasCollection;
+                        that.render();
                     });
 
                 collectionManager.getAllExtractsCollectionPromise()
@@ -138,29 +141,33 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             },
 
             onRender: function () {
-                if (Ctx.debugRender) {
-                    console.log("ideaList:render() is firing");
-                }
-                Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-                this.body = this.$('.panel-body');
-                var that = this,
-                    y = 0,
-                    rootIdea = null,
-                    rootIdeaDirectChildrenModels = [],
-                    filter = {},
-                    view_data = {},
-                    order_lookup_table = [],
-                    roots = [],
-                    collectionManager = new CollectionManager();
+              if (Ctx.debugRender) {
+                  console.log("ideaList:render() is firing");
+              }
+              Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+              this.body = this.$('.panel-body');
+              var that = this,
+                  y = 0,
+                  rootIdea = null,
+                  rootIdeaDirectChildrenModels = [],
+                  filter = {},
+                  view_data = {},
+                  order_lookup_table = [],
+                  roots = [],
+                  collectionManager = new CollectionManager();
 
-                function excludeRoot(idea) {
-                    return idea != rootIdea && !idea.hidden;
-                }
+              function excludeRoot(idea) {
+                  return idea != rootIdea && !idea.hidden;
+              }
 
-                if (this.body.get(0)) {
-                    y = this.body.get(0).scrollTop;
-                }
+              if (this.body.get(0)) {
+                  y = this.body.get(0).scrollTop;
+              }
 
+              if (this.template != '#tmpl-loader') {
+                if (!that.collection) {
+                  throw new Error("loader has been cleared, but ideas aren't available yet");
+                }
                 if (this.filter === FEATURED) {
                     filter.featured = true;
                 }
@@ -171,69 +178,69 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 var list = document.createDocumentFragment();
                 collectionManager.getAllIdeasCollectionPromise()
                     .then(function (allIdeasCollection) {
+                  rootIdea = allIdeasCollection.getRootIdea();
+                  if (Object.keys(filter).length > 0) {
+                      rootIdeaDirectChildrenModels = allIdeasCollection.where(filter);
+                  }
+                  else {
+                      rootIdeaDirectChildrenModels = allIdeasCollection.models;
+                  }
 
-                        rootIdea = allIdeasCollection.getRootIdea();
-                        if (Object.keys(filter).length > 0) {
-                            rootIdeaDirectChildrenModels = allIdeasCollection.where(filter);
-                        }
-                        else {
-                            rootIdeaDirectChildrenModels = allIdeasCollection.models;
-                        }
+                  rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function (idea) {
+                          return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id);
+                      }
+                  );
 
-                        rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function (idea) {
-                                return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id);
-                            }
-                        );
+                  rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function (idea) {
+                      return idea.get('order');
+                  });
 
-                        rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function (idea) {
-                            return idea.get('order');
-                        });
+                  rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
+                  rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
+                  //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
+                  _.each(roots, function (idea) {
+                      var ideaView = new IdeaView({
+                          model: idea, 
+                          groupContent: that.getContainingGroup()
+                      }, view_data);
+                      list.appendChild(ideaView.render().el);
+                  });
+                  that.$('.ideaView').html(list);
 
-                        rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
-                        rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
-                        //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
-                        _.each(roots, function (idea) {
-                            var ideaView = new IdeaView({
-                                model: idea, 
-                                groupContent: that.getContainingGroup()
-                            }, view_data);
-                            list.appendChild(ideaView.render().el);
-                        });
-                        that.$('.ideaView').html(list);
+                  //sub menu other
+                  var OtherView = new OtherInIdeaListView({
+                      model: rootIdea,
+                      groupContent: that.getContainingGroup()
+                  });
+                  that.otherView.show(OtherView);
 
-                        //sub menu other
-                        var OtherView = new OtherInIdeaListView({
-                            model: rootIdea,
-                            groupContent: that.getContainingGroup()
-                        });
-                        that.otherView.show(OtherView);
+                  // Synthesis posts pseudo-idea
+                  var synthesisView = new SynthesisInIdeaListView({
+                      model: rootIdea, 
+                      groupContent: that.getContainingGroup()
+                  });
+                  that.synthesisView.show(synthesisView);
 
-                        // Synthesis posts pseudo-idea
-                        var synthesisView = new SynthesisInIdeaListView({
-                            model: rootIdea, 
-                            groupContent: that.getContainingGroup()
-                        });
-                        that.synthesisView.show(synthesisView);
+                  // Orphan messages pseudo-idea
+                  var orphanView = new OrphanMessagesInIdeaListView({
+                      model: rootIdea,
+                      groupContent: that.getContainingGroup()
+                  });
+                  that.orphanView.show(orphanView);
 
-                        // Orphan messages pseudo-idea
-                        var orphanView = new OrphanMessagesInIdeaListView({
-                            model: rootIdea,
-                            groupContent: that.getContainingGroup()
-                        });
-                        that.orphanView.show(orphanView);
+                  // All posts pseudo-idea
+                  var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
+                      model: rootIdea,
+                      groupContent: that.getContainingGroup()
+                  });
+                  that.allMessagesView.show(allMessagesInIdeaListView);
 
-                        // All posts pseudo-idea
-                        var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
-                            model: rootIdea,
-                            groupContent: that.getContainingGroup()
-                        });
-                        that.allMessagesView.show(allMessagesInIdeaListView);
+                  Ctx.initTooltips(that.$el);
 
-                        Ctx.initTooltips(that.$el);
-
-                        that.body = that.$('.panel-body');
-                        that.body.get(0).scrollTop = y;
-                    });
+                  that.body = that.$('.panel-body');
+                  that.body.get(0).scrollTop = y;
+                });
+              }
             },
 
             /**

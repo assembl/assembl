@@ -235,7 +235,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                       Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
                       Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
                   }
-                  //Ctx.initClipboard();
   
                   that.replyView = new MessageSendView({
                       allow_setting_subject: false,
