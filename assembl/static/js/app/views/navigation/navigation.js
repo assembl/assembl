@@ -83,9 +83,9 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             onShow:function () {
               this.setSideBarHeight();
             },
-            toggleMenuByName: function (itemName) {
+            toggleMenuByName: function (itemName, options) {
                 var elm = this.$('.nav[data-view=' + itemName + ']');
-                this.toggleMenuByElement(elm);
+                this.toggleMenuByElement(elm, options);
             },
             toggleMenuByEvent: function (evt) {
                 if ($(evt.target).hasClass("panel-header-minimize"))
@@ -98,7 +98,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
              * Toggle a navigation accordion item
              * @param  {jQuery selection of a DOM element} elm
              */
-            toggleMenuByElement: function (elm) {
+            toggleMenuByElement: function (elm, options) {
                 var view = elm.attr('data-view');
 
                 if (elm.next(this.ui.level).is(':hidden')) {
@@ -107,7 +107,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                     elm.addClass('active');
                     elm.next(this.ui.level).slideDown();
 
-                    this.loadView(view);
+                    this.loadView(view, options);
                 }
             },
             setSideBarHeight: function () {
@@ -119,7 +119,11 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 //}, 0);
                 
             },
-            loadView: function (view) {
+
+            /**
+             * @param options: { show_help: boolean }
+             */
+            loadView: function (view, options) {
                 // clear aspects of current state
                 switch (this.getContainingGroup().model.get('navigationState')) {
                     case 'synthesis':
@@ -155,15 +159,23 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         }
                         else {
                             var that = this;
-                            var collectionManager = new CollectionManager();
-                            collectionManager.getDiscussionModelPromise().then(function (discussion){
-                                if ( discussion.get("show_help_in_debate_section") ){
+                            if ( options && 'show_help' in options ){
+                                if ( options.show_help )
                                     that.getContainingGroup().resetDebateState(false, true);
-                                }
-                                else {
+                                else
                                     that.getContainingGroup().resetDebateState();
-                                }
-                            });
+                            }
+                            else {
+                                var collectionManager = new CollectionManager();
+                                collectionManager.getDiscussionModelPromise().then(function (discussion){
+                                    if ( discussion.get("show_help_in_debate_section") ){
+                                        that.getContainingGroup().resetDebateState(false, true);
+                                    }
+                                    else {
+                                        that.getContainingGroup().resetDebateState();
+                                    }
+                                });
+                            }
                         }
                         break;
                     case 'synthesis':

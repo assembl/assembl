@@ -86,7 +86,7 @@ define(['backbone.marionette', 'app', 'common/context', 'models/agents', 'object
                 this.restoreViews();
 
                 // test if this issue fixed
-                Assembl.vent.trigger("navigation:selected", 'debate');
+                Assembl.vent.trigger("navigation:selected", 'debate', { show_help: false });
                 Assembl.vent.trigger('messageList:showMessageById', id);
 
                 /*setTimeout(function () {
