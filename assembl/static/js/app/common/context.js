@@ -1,7 +1,7 @@
 'use strict';
 
-define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'zeroclipboard', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all', 'debug', 'bluebird'],
-    function (Assembl, $, _, Permissions, Roles, Moment, i18n, Zeroclipboard, backboneModal, marionetteModal, bootstrap, linkify, oembed, debug, Promise) {
+define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/roles', 'moment', '../utils/i18n', 'backbone.modal', 'backbone.marionette.modals', 'bootstrap', 'jquery-linkify', 'jquery-oembed-all', 'debug', 'bluebird'],
+    function (Assembl, $, _, Permissions, Roles, Moment, i18n, backboneModal, marionetteModal, bootstrap, linkify, oembed, debug, Promise) {
 
         var Context = function () {
 
@@ -1290,41 +1290,6 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                 //a few of them.  Maybe it can be more specific to be faster
                 // ex: html > .tipsy I don't know jquery enough to know
                 $('.tooltip').remove();
-            },
-
-            /**
-             * @init
-             */
-            initClipboard: function () {
-
-                Zeroclipboard.config({
-                    moviePath: '/static/js/bower/zeroclipboard/dist/ZeroClipboard.swf'
-                });
-
-                var client = new Zeroclipboard($('[data-copy-text]'));
-
-                client.on("error", function(event) {
-                    console.error('error[name="' + event.name + '"]: ' + event.message);
-                    ZeroClipboard.destroy();
-                });
-
-                client.on('mouseover', function () {
-                    $(this).trigger('mouseover');
-                });
-
-                client.on('mouseout', function () {
-                    $(this).trigger('mouseout');
-                });
-
-                var that = this;
-                $('[data-copy-text]').each(function (i, el) {
-                    var text = el.getAttribute('data-copy-text');
-                    text = that.getAbsoluteURLFromRelativeURL(text);
-                    el.removeAttribute('data-copy-text');
-
-                    el.setAttribute('data-clipboard-text', text);
-                });
-
             },
 
             getAbsoluteURLFromRelativeURL: function(url) {

@@ -39,7 +39,6 @@
         'ckeditor-sharedspace': '../lib/ckeditor-sharedcontainer/plugin',
 
         'moment': '../bower/momentjs/min/moment-with-locales.min',
-        'zeroclipboard': '../bower/zeroclipboard/ZeroClipboard',
         'sockjs': '../bower/sockjs/sockjs',
         'cytoscape': '../bower/cytoscape/dist/cytoscape',
         'jit': '../bower/jit/Jit/jit',
@@ -94,9 +93,6 @@
         'ckeditor-sharedspace': {
             deps: ['ckeditor'],
             exports: 'CKEDITOR'
-        },
-        'zeroclipboard': {
-            exports: 'ZeroClipboard'
         },
         'sockjs': {
             deps: ['jquery'],
