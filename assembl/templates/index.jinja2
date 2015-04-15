@@ -21,6 +21,24 @@
         <meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/logo.png" />
         <meta property="og:image:width" content="111" />
         <meta property="og:image:height" content="35" />
+    {% else if request.matched_route.name == "purl_idea" and idea %}
+        {# Idea description can contain HTML, so it has to be filtered and shortened #}
+        <meta name="description" content="{{ idea.get_definition_preview() }}">
+        {#<meta name="author" content="{{ post.creator.display_name() }}">#}
+        <meta property="og:title" content="{{ idea.short_title }}" />
+        <meta property="og:type" content="article" />
+        {#<meta property="og:site_name" content="Assembl" />#}
+        {#<meta property="og:locale" content="fr_FR" />#}
+        <meta property="og:description" content="{{ idea.get_definition_preview() }}" />
+        <meta property="article:published_time" content="{{ idea.creation_date }}" />
+        {# TODO: have unique URL for a user <meta property="article:author" content="http://examples.opengraphprotocol.us/profile.html"> #}
+        <meta property="og:url" content="{{ idea.get_url() }}" />
+        <meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/crowd2.jpg" />
+        <meta property="og:image:width" content="1600" />
+        <meta property="og:image:height" content="222" />
+        <meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/logo.png" />
+        <meta property="og:image:width" content="111" />
+        <meta property="og:image:height" content="35" />
     {% else %}
         <meta name="description" content="">{# not shown because introduction has HTML, so it should be filtered. TODO: filter. <meta property="description" content="{{ discussion.introduction }}" />#}
         <meta name="author" content="Imagination for people">{# when showing a Post, we could write its author here #}

@@ -10,6 +10,7 @@ from pyramid.i18n import TranslationStringFactory, default_locale_negotiator
 from sqlalchemy.orm.exc import NoResultFound
 from assembl.models import Discussion
 from assembl.models.post import Post
+from assembl.models.idea import Idea
 from assembl.auth import P_READ, P_ADD_EXTRACT
 from ...models.auth import (
     UserLanguagePreference,
@@ -142,6 +143,12 @@ def home_view(request):
             post = Post.get_instance(post_id)
             if post and post.discussion_id == discussion.id:
                     context['post'] = post
+    elif route_name == "purl_idea":
+        idea_id = FrontendUrls.getRequestedIdeaId(request)
+        if idea_id:
+            idea = Idea.get_instance(idea_id)
+            if idea and idea.discussion_id == discussion.id:
+                    context['idea'] = idea
 
     canAddExtract = user_has_permission(discussion.id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract

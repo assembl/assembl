@@ -36,6 +36,13 @@ class FrontendUrls():
             return '/'.join(i for i in request.matchdict['remainder'])
         return None
 
+    # used for route 'purl_idea': '/idea*remainder'
+    @staticmethod
+    def getRequestedIdeaId(request):
+        if 'remainder' in request.matchdict:
+            return '/'.join(i for i in request.matchdict['remainder'])
+        return None
+
     def getDiscussionLogoUrl(self):
         return urljoin(
             self.discussion.get_base_url(), '/static/img/assembl.png')
@@ -57,6 +64,9 @@ class FrontendUrls():
 
     def get_post_url(self, post):
         return self.get_discussion_url() + '/posts/' + urllib.quote(post.uri(), '')
+
+    def get_idea_url(self, idea):
+        return self.get_discussion_url() + '/idea/' + urllib.quote(idea.uri(), '')
 
     def get_discussion_edition_url(self):
         return self.get_discussion_url() + '/edition'
