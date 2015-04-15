@@ -1,0 +1,8 @@
+#Reference: http://nedbatchelder.com/code/coverage/config.html
+
+[run]
+omit = 
+	*/test_*.py
+	*/tests.py
+	assembl/tests/*
+	assembl/alembic/versions/*
