@@ -117,8 +117,6 @@ define(['backbone.marionette', 'underscore', 'ckeditor', 'app', 'common/context'
 
                 this.onCollapsedChange();
 
-                Ctx.initClipboard();
-
             },
 
             events: {
