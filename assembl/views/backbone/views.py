@@ -142,13 +142,13 @@ def home_view(request):
         if post_id:
             post = Post.get_instance(post_id)
             if post and post.discussion_id == discussion.id:
-                    context['post'] = post
+                context['post'] = post
     elif route_name == "purl_idea":
         idea_id = FrontendUrls.getRequestedIdeaId(request)
         if idea_id:
             idea = Idea.get_instance(idea_id)
             if idea and idea.discussion_id == discussion.id:
-                    context['idea'] = idea
+                context['idea'] = idea
 
     canAddExtract = user_has_permission(discussion.id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract

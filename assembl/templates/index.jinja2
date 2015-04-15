@@ -21,7 +21,7 @@
         <meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/logo.png" />
         <meta property="og:image:width" content="111" />
         <meta property="og:image:height" content="35" />
-    {% else if request.matched_route.name == "purl_idea" and idea %}
+    {% elif request.matched_route.name == "purl_idea" and idea %}
         {# Idea description can contain HTML, so it has to be filtered and shortened #}
         <meta name="description" content="{{ idea.get_definition_preview() }}">
         {#<meta name="author" content="{{ post.creator.display_name() }}">#}
