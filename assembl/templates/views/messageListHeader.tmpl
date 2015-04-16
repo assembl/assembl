@@ -1,0 +1,54 @@
+{% macro expert_view_toggle_button() -%}
+<% if ( expertViewIsAvailable ) { %>
+<div class="show-expert-mode">
+  <span class="show-expert-mode-label">{{ gettext('Expert view') }}</span>
+  <div class="show-expert-mode-toggle-button"></div>
+</div>
+<% } %>
+{%- endmacro %}
+
+<% if (!isUsingExpertView) { %>
+  <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
+    <div class="options-filter">
+      <div class="options-filter-items">
+        <div class="messageListViewStyleUserHighlightNew <%= availableViewStyles.NEW_MESSAGES.css_class %> option tac pas"></div>
+        {# <div class="messageListViewStyleUserThreaded <%= availableViewStyles.THREADED.css_class %> option tac pas"></div> #}
+        <div class="js_messageListViewStyleUserActivityFeed <%= availableViewStyles.REVERSE_CHRONOLOGICAL.css_class %> option tac pas"></div>
+      </div>
+      {{ expert_view_toggle_button() }}
+    </div>
+  <% } %>
+<% } else { %>
+  <div class="view-config pll pvxs">
+    <ul class="config pan man ptxs">
+      <li class="dropdown fl mrs mbxs js_messageListViewStyle-dropdown"></li>
+      <li class="dropdown fl mrs mbxs js_defaultMessageView-dropdown"></li>
+
+    	<li class="dropdown fl mrs mbxs">
+    		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					{{ gettext('Add filter') }}
+					<span class="icon-arrowdown"></span>
+    		</a>
+    		<ul class="dropdown-menu">
+    			<li><a class="js_messageList-onlyorphan" href="#">{{ gettext('Orphan messages') }}</a></li>
+    			<li><a class="js_messageList-onlysynthesis" href="#">{{ gettext('Synthesis messages') }}</a></li>
+    			<li><a class="js_messageList-isunread" href="#">{{ gettext('Unread messages') }}</a></li>
+    			{#
+					<li><a href="#">{{ gettext('Uncaught') }}</a></li>
+					<li><a href="#">{{ gettext('Followed') }}</a></li>
+					#}
+    		</ul>
+    	</li>
+    	<li class="clr"></li>
+    </ul>
+
+    {{ expert_view_toggle_button() }}
+
+
+  </div>
+<% } %>
+
+<% if (isUsingExpertView) { %>
+  <div class="messageList-query-info pll pts"></div>
+<% } %>
+  

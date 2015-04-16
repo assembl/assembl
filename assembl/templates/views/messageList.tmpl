@@ -1,3 +1,4 @@
+
 <div class="real-time-updates tac hidden phl">
     <button class="btn-real-time js_loadPendingMessages">
         <span class="pendingMessage"></span>
@@ -6,45 +7,15 @@
 
 <div class="panel-body">
     
-  <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>
-    <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
-      <div class="options-filter">
-        <span class="messageListViewStyleUserHighlightNew <%= availableViewStyles.NEW_MESSAGES.css_class %> option dispb fl tac pas mbs"></span>
-        {# <span class="messageListViewStyleUserThreaded <%= availableViewStyles.THREADED.css_class %> option dispb fl tac pas mbs"></span> #}
-        <span class="js_messageListViewStyleUserActivityFeed <%= availableViewStyles.REVERSE_CHRONOLOGICAL.css_class %> option dispb fl tac pas mbs"></span>
-      </div>
-    <% } %>
-  <% } else { %>
-    <div class="view-config pll pvs">
-      <ul class="config pan man">
-        <li class="dropdown fl mrs mbxs js_messageListViewStyle-dropdown"></li>
-        <li class="dropdown fl mrs mbxs js_defaultMessageView-dropdown"></li>
+  <div class="messageListHeader"></div>
 
-      	<li class="dropdown fl mrs mbxs">
-      		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-						{{ gettext('Add filter') }}
-						<span class="icon-arrowdown"></span>
-      		</a>
-      		<ul class="dropdown-menu">
-      			<li><a class="js_messageList-onlyorphan" href="#">{{ gettext('Orphan messages') }}</a></li>
-      			<li><a class="js_messageList-onlysynthesis" href="#">{{ gettext('Synthesis messages') }}</a></li>
-      			<li><a class="js_messageList-isunread" href="#">{{ gettext('Unread messages') }}</a></li>
-      			{#
-						<li><a href="#">{{ gettext('Uncaught') }}</a></li>
-						<li><a href="#">{{ gettext('Followed') }}</a></li>
-						#}
-      		</ul>
-      	</li>
-      	<li class="clr"></li>
-      </ul>
-
-
-    </div>
-  <% } %>
-
+  {# this should maybe be in messageListHeader.tmpl instead of this file
   <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT) { %>
     <div class="messageList-query-info pll pts"></div>
   <% } %>
+  #}
+
+
   <div class="js_messageList-toparea messageList-toparea margin tac hidden">
     <a class="js_messageList-prevbutton button">{{ gettext('Load previous messages') }}</a>
   </div>

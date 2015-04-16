@@ -1,0 +1,23 @@
+<div class="js_toggleButton flipswitch <% if (isOn){ %>flipswitch-yes<% } else { %>flipswitch-no<% } %>">
+  <label class="flipswitch-lbl-yes">
+    <input type="radio" checked="checked" name="flipswitch-sample-1">{# On #}
+  </label>
+
+  <span class="flipswitch-sliders">
+    <span class="flipswitch-outer">
+      <span class="flipswitch-inner">
+        <span class="flipswitch-btn-no">
+          <span class="flipswitch-btn-no-background-text"><%= labelOff %></span>
+        </span>
+        <span class="flipswitch-btn-yes">
+          <span class="flipswitch-btn-no-background-text"><%= labelOn %></span>
+        </span>
+      </span>
+    </span>
+    <span class="flipswitch-slider"></span>
+  </span>
+
+  <label class="flipswitch-lbl-no">
+    <input type="radio" name="flipswitch-sample-1">{# Off #}
+  </label>
+</div>

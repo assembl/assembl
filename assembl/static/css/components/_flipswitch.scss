@@ -1,0 +1,117 @@
+// Flipswitch from https://github.com/viadeo/tetra-ui
+// Licence: MIT
+
+.flipswitch {
+	label {
+		display: inline;
+		text-transform: uppercase;
+		cursor: pointer;
+
+		input {
+			display: none;
+		}
+	}
+
+	.flipswitch-lbl-yes {
+		color: $black;
+	}
+
+	.flipswitch-lbl-no {
+		color: lighten($black, 70%);
+		&:hover {
+			color: $black;
+		}
+	}
+
+	.flipswitch-sliders {
+		display: inline-block;
+		position: relative;
+		width: 56px; height: 24px;
+		margin: 0 $spacingXs;
+		border-radius: 12px;
+		vertical-align: middle;
+		//cursor: default;
+		cursor: pointer;
+	}
+
+	.flipswitch-outer {
+		display: block;
+		width: 100%; height: 100%;
+		overflow: hidden;
+		border-radius: 12px;
+	}
+
+	.flipswitch-inner {
+		display: block;
+		width: 200%; height: 100%;
+		margin-left: -100%;
+
+		-webkit-transition: margin-left 0.2s ease-in;
+    transition: margin-left 0.2s ease-in;
+	}
+
+	.flipswitch-btn-no, .flipswitch-btn-yes {
+		float: left;
+		width: 50%; height: 100%;
+		box-shadow: 0 1px 3px rgba($black, (30/100)) inset;
+	}
+
+	.flipswitch-btn-no {
+		background: $errorText;
+		.flipswitch-btn-no-background-text {
+			line-height: 22px;
+			padding-left: 12px;
+		}
+	}
+
+	.flipswitch-btn-yes {
+		float: right;
+		//background: $green1;
+		background: $green;
+		.flipswitch-btn-no-background-text {
+			line-height: 22px;
+			padding-left: 25px;
+		}
+	}
+
+	.flipswitch-slider {
+		position: absolute;
+		left: 0; top: 2px;
+		width: 20px; height: 20px;
+		margin-left: 2px;
+		border-radius: 12px;
+		background: $white;
+		text-align: center;
+		line-height: 20px;
+		font-size: 8px;
+		color: mix(#000000, $white, 15%);
+		cursor: pointer;
+
+		-webkit-transition: left 0.2s ease-in, margin-left 0.2s ease-in;
+    transition: left 0.2s ease-in, margin-left 0.2s ease-in;
+
+	}
+
+	&:hover .flipswitch-slider {
+    	background: mix(#000000, $white, 5%);
+    }
+
+	&.flipswitch-no {
+		.flipswitch-lbl-yes {
+			color: lighten($black, 70%);
+			&:hover {
+				color: $black;
+			}
+		}
+		.flipswitch-lbl-no {
+			color: $black;
+		}
+		.flipswitch-inner {
+			margin-left: 0;
+		}
+		.flipswitch-slider {
+			left: 100%;
+			margin-left: -22px;
+		}
+	}
+}
