@@ -125,7 +125,8 @@ class IMAPReader(SourceReader):
         except IMAP4.error as e:
             raise ClientError(e)
 
-    def do_read(self, only_new=True):
+    def do_read(self):
+        only_new = not self.reimporting
         try:
             self.set_status(ReaderStatus.READING)
             mailbox = self.mailbox
