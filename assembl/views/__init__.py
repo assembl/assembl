@@ -4,8 +4,10 @@ import os.path
 import codecs
 
 from pyramid.view import view_config
+from velruse.exceptions import CSRFError
 from pyramid.httpexceptions import (
-    HTTPException, HTTPNotFound, HTTPInternalServerError, HTTPFound, HTTPMovedPermanently)
+    HTTPException, HTTPInternalServerError, HTTPMovedPermanently,
+    HTTPClientError)
 from pyramid.i18n import TranslationStringFactory
 
 from ..lib.json import json_renderer_factory
@@ -121,6 +123,14 @@ class JSONError(HTTPException):
             r = super(JSONError, self).prepare(environ)
             self.content_type = 'text/plain'
             return r
+
+
+@view_config(context=CSRFError)
+def csrf_error_view(exc, request):
+    if "HTTP_COOKIE" not in request.environ:
+        return HTTPClientError(explanation="Missing cookies", detail="""Note that we need active cookies.
+            On Safari, the \"Allow from current website only\" option in the Privacy tab of preferences is too restrictive; use \"Allow from websites I visit\" and try again.""")
+    return HTTPInternalServerError(explanation="Missing cookies", detail=repr(request.exception))
 
 
 @view_config(context=Exception)
