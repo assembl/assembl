@@ -209,5 +209,10 @@ from .feed_parsing import (
     WebLinkAccount,
     LoomioAccount,
 )
+from .edgesense_drupal import (
+    EdgeSenseDrupalSource,
+    SourceSpecificAccount,
+    SourceSpecificPost,
+)
 
 declare_history_mappers()
