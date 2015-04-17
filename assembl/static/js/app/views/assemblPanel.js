@@ -74,7 +74,20 @@ define(['backbone.marionette', 'underscore'], function (Marionette, _) {
         
         getParentGroup: function () {
           throw new Error("Unimplemented");
-        }
+        },
+
+        showAlternativeContent: function(el) {
+            this.$el.hide();
+            if ( this.$el.next() )
+                this.$el.next().remove();
+            this.$el.parent().append(el);
+        },
+
+        hideAlternativeContent: function() {
+            if ( this.$el.next() )
+                this.$el.next().remove();
+            this.$el.show();
+        },
     });
     return AssemblPanel;
 });

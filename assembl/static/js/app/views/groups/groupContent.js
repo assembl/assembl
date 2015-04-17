@@ -198,18 +198,29 @@ define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec
                     
                     if ( show_debate_help === true ){
                         // this is a bit ugly but it works. Making it nice will be for a v2
+                        var help_text = i18n.gettext("<h1>Getting started</h1><br/>Welcome to the discussion! The table to the left is a list of the ideas people are talking about. We've tried to make it easy for you to find conversations that you are interested in! To join in:<br/><br/>1) Choose an idea from the table of contents - ideas include messages from all related sub-ideas as well<br/><br/>2) Reply to an existing message or start a new message of your own<br/><br/>This is a safe and respectful space. All ideas are welcome!");
+
                         this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-                        this.ensurePanelsHidden(PanelSpecTypes.MESSAGE_LIST, PanelSpecTypes.IDEA_PANEL);
-                        this.ensurePanelsVisible(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-                        var vizPanel = this.findViewByType(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-                        var help_text = i18n.gettext("Getting started<br/><br/>Welcome to the discussion! The table to the left is a list of the ideas people are talking about. We've tried to make it easy for you to find conversations that you are interested in! To join in:<br/><br/>1) Choose an idea from the table of contents - ideas include messages from all related sub-ideas as well<br/><br/>2) Reply to an existing message or start a new message of your own<br/><br/>This is a safe and respectful space. All ideas are welcome!");
-                        var url = "data:text/html,<style>html{margin-top:%20100px;%20text-align:%20center;}%20.debateIntroductionContent{margin:%200%20auto;width:%2090%;%20background:%20rgb(250,250,250);}</style><div%20class='debateIntroductionContent'>" + help_text + "</div>"; // "http://assembl.org/user-guides/"
-                        vizPanel.setUrl(url);
+                        this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
+                        this.resetMessagePanelState();
+
+                        var style="<style>.debateIntroductionContainer{margin-top: 50px; text-align: left;} .debateIntroductionContent{margin: 0 auto; padding: 5px 15px 15px 15px; width: 90%; background: rgb(250,250,250);} .debateIntroductionContent h1 { text-align: center; }</style>";
+                        var el = $("<div class='debateIntroductionContainer'>");
+                        el.append($(style));
+                        var content = $("<div class='debateIntroductionContent'>");
+                        content.html(help_text);
+                        el.append(content);
+
+                        var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                        conversationPanel.showAlternativeContent(el);
                     }
                     else {
                         this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
                         this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
                         this.resetMessagePanelState();
+
+                        var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                        conversationPanel.hideAlternativeContent();
                     }
 
                     if (skip_animation === false) {
