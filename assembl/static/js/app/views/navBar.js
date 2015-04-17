@@ -244,7 +244,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                 that.scrollToRight();
 
                                 if(hasNavSide){
-                                    Assembl.vent.trigger('navigation:selected', 'home');
+                                    Assembl.vent.trigger('navigation:selected', 'about');
                                 }
 
                                 that.$el.unbind();

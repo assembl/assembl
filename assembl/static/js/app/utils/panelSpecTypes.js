@@ -16,8 +16,8 @@ define(function () {
         },//implemented in views/ideaPanel.js
         MESSAGE_LIST: {id: 'messageList'
         },//implemented in views/messageList.js
-        NAVIGATION_PANEL_HOME_SECTION: {id: 'homeNavPanel'
-        },//implemented in views/navigation/home.js
+        NAVIGATION_PANEL_ABOUT_SECTION: {id: 'aboutNavPanel'
+        },//implemented in views/navigation/about.js
         TABLE_OF_IDEAS: {id: 'ideaList'
         },//implemented in views/ideaList.js        
         CLIPBOARD: {id: 'clipboard'
@@ -26,7 +26,7 @@ define(function () {
         },//implemented in views/navigation/synthesisInNavigation.js
         SYNTHESIS_EDITOR: {id: 'synthesisPanel'
         },//implemented in views/synthesisPanel.js
-        DISCUSSION_CONTEXT: {id: 'homePanel'
+        DISCUSSION_CONTEXT: {id: 'contextPanel'
         },//implemented in views/contextPage.js
         EXTERNAL_VISUALIZATION_CONTEXT: {id: 'externalVisualizationPanel'
         },//implemented in views/externalVisualization.js

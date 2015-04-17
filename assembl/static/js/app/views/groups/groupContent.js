@@ -237,7 +237,7 @@ define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec
                 var nav = this.findNavigationSidebarPanelSpec();
                 if (nav) {
                     this.groupContainer.suspendResize();
-                    this.model.set('navigationState', 'home');
+                    this.model.set('navigationState', 'about');
                     this.ensureOnlyPanelsVisible(PanelSpecTypes.DISCUSSION_CONTEXT);
                     this.groupContainer.resumeResize();
                 }

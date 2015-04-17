@@ -1,11 +1,7 @@
 <ul class="side-menu">
-  <li>
-    <a href="#" class="nav js_navigation" data-view="home"><i class="icon-home btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Home') }}
-    <% if ( hasMinimize ){ %>
-      <span class="js_minimizePanel panel-header-minimize btn btn-sm icon-arrowleft" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}"></span>
-    <% } %>
-    </a>
-    <div class="second-level home"></div>
+  <li style="display:none"  id="synthesis_tab">
+    <a href="#" class="nav js_navigation" data-view="synthesis"><i class="icon-doc btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Synthesis') }}</a>
+    <div class="second-level synthesis"></div>
   </li>
   <li>
     <a href="#" class="nav js_navigation" data-view="debate"><i class="icon-discuss btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Discussion') }}
@@ -20,11 +16,15 @@
     <div class="second-level debate"></div>
   </li>
   <li>
-    <a href="#" class="nav js_navigation" data-view="synthesis"><i class="icon-doc btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Synthesis') }}</a>
-    <div class="second-level synthesis"></div>
+    <a href="#" class="nav js_navigation" data-view="about"><i class="icon-home btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('About this discussion') }}
+    <% if ( hasMinimize ){ %>
+      <span class="js_minimizePanel panel-header-minimize btn btn-sm icon-arrowleft" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}"></span>
+    <% } %>
+    </a>
+    <div class="second-level about"></div>
   </li>
   <li style="display:none" id="visualization_tab">
-    <a href="#" class="nav js_navigation" data-view="visualizations"><i class="icon-doc btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Discussion dashboard') }}</a>
+    <a href="#" class="nav js_navigation" data-view="visualizations"><i class="icon-doc btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Discussion statistics') }}</a>
     <div class="second-level visualizations">
     <ul class="visualization-list"></ul>
     </div>

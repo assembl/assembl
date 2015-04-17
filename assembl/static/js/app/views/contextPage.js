@@ -1428,7 +1428,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
         var ContextPage = Marionette.LayoutView.extend({
             template: '#tmpl-contextPage',
             panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
-            className: 'homePanel',
+            className: 'contextPanel',
             gridSize: AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE,
             hideHeader: true,
             getTitle: function () {

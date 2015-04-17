@@ -150,14 +150,14 @@
           display: none;
           box-sizing: border-box;
         }
-        .second-level.home {
+        .second-level.about {
           overflow: auto;
         }
 
         .second-level.synthesis,
         .second-level.debate,
         .second-level.visualizations,
-        .second-level.home {
+        .second-level.about {
           background-color: $theme_navigation_bg;
         }
       }

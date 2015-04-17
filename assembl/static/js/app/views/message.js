@@ -329,7 +329,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                               //console.log("Initializing ellipsis on message", that.model.id);
                               var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
                               //console.log("current_navigation_state:", current_navigation_state);
-                              if ( current_navigation_state == 'home' )
+                              if ( current_navigation_state == 'about' )
                               {
                                   that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
                                   return;

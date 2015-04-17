@@ -542,7 +542,7 @@ define(['app',
                                     {type: PanelSpecTypes.MESSAGE_LIST.id}
                                 ],
                                 {'viewsFactory': viewsFactory }),
-                            navigationState: 'home'
+                            navigationState: 'debate'
                         };
                         collection.add(new groupSpec.Model(defaults, {'viewsFactory': viewsFactory }));
 

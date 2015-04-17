@@ -1,7 +1,7 @@
 'use strict';
 
-define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notification', 'views/navigation/home', 'views/navigation/synthesisInNavigation', 'views/navigation/linkListView', 'views/assemblPanel', 'common/context', 'utils/permissions', 'jquery', 'utils/panelSpecTypes', 'jed', 'common/collectionManager'],
-    function (Assembl, Marionette, IdeaList, sidebarNotification, HomePanel, SynthesisInNavigationPanel, LinkListView, AssemblPanel, Ctx, Permissions, $, PanelSpecTypes, Jed, CollectionManager) {
+define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notification', 'views/navigation/about', 'views/navigation/synthesisInNavigation', 'views/navigation/linkListView', 'views/assemblPanel', 'common/context', 'utils/permissions', 'jquery', 'utils/panelSpecTypes', 'jed', 'common/collectionManager'],
+    function (Assembl, Marionette, IdeaList, sidebarNotification, AboutNavPanel, SynthesisInNavigationPanel, LinkListView, AssemblPanel, Ctx, Permissions, $, PanelSpecTypes, Jed, CollectionManager) {
 
         var NavigationView = AssemblPanel.extend({
             template: "#tmpl-navigation",
@@ -18,7 +18,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 return 'Navigation'; // unused
             },
             regions: {
-                home: '.home',
+                about: '.about',
                 debate: '.debate',
                 synthesis: '.synthesis',
                 notification: '.navNotification',
@@ -28,7 +28,8 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 navigation: '.js_navigation',
                 ideaFromIdealist: '.js_addIdeaFromIdeaList',
                 level: 'div.second-level',
-                visualization_tab: '#visualization_tab'
+                visualization_tab: '#visualization_tab',
+                synthesis_tab: '#synthesis_tab'
             },
             events: {
                 'click @ui.navigation': 'toggleMenuByEvent',
@@ -46,7 +47,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 this._accordionContentHeight = null;
                 this._accordionHeightTries = 0;
                 this.visualizationItems = new Backbone.Collection();
-                this.num_items = 3;
+                this.num_items = 2;
 
                 collectionManager.getDiscussionModelPromise()
                     .then(function(discussion) {
@@ -72,12 +73,23 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                                 "description": jed.gettext(item.description)
                             });
                         }));
-                        that.num_items = 4;
+                        that.num_items += 1;
                         that.ui.visualization_tab.show();
                     } catch (e) {
                         // console.log(e);
                     }
                 }).delay(500).then(function() {that.setSideBarHeight();});
+                collectionManager.getAllSynthesisCollectionPromise()
+                    .then(function(synthesisCollection) {
+
+                        if (synthesisCollection.find(
+                            function(s){
+                                return s.get('published_in_post');
+                            }) !== undefined) {
+                            that.num_items += 1;
+                            that.ui.synthesis_tab.show();
+                        }
+                    }).delay(500).then(function() {that.setSideBarHeight();});
                 this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
             },
             onShow:function () {
@@ -139,12 +151,12 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                 this.getContainingGroup().model.set('navigationState', view);
                 // set new state
                 switch (view) {
-                    case 'home':
-                        var homePanel = new HomePanel({
+                    case 'about':
+                        var aboutNavPanel = new AboutNavPanel({
                             groupContent: this.getContainingGroup(),
                             panelWrapper: this.getPanelWrapper()
                         });
-                        this.home.show(homePanel);
+                        this.about.show(aboutNavPanel);
                         this.getContainingGroup().resetContextState();
                         break;
                     case 'debate':

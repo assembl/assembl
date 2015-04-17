@@ -1,7 +1,7 @@
 'use strict';
 
-define(['views/assemblPanel', 'underscore', 'views/navigation/home', 'views/contextPage', 'views/ideaList', 'views/ideaPanel', 'views/messageList', 'views/navigation/navigation', 'views/segmentList', 'views/navigation/synthesisInNavigation', 'views/synthesisPanel', 'views/externalVisualization'],
-    function (AssemblPanel, _, HomeNavPanel, HomePanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanel) {
+define(['views/assemblPanel', 'underscore', 'views/navigation/about', 'views/contextPage', 'views/ideaList', 'views/ideaPanel', 'views/messageList', 'views/navigation/navigation', 'views/segmentList', 'views/navigation/synthesisInNavigation', 'views/synthesisPanel', 'views/externalVisualization'],
+    function (AssemblPanel, _, AboutNavPanel, ContextPanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanel) {
 
         /*
          * A registry of AssemblView subclasses implementing a panelSpec,
@@ -9,7 +9,7 @@ define(['views/assemblPanel', 'underscore', 'views/navigation/home', 'views/cont
          */
         var panelTypeRegistry = {};
         _.each([
-            HomeNavPanel, HomePanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList.SegmentListPanel, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanel
+            AboutNavPanel, ContextPanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList.SegmentListPanel, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanel
         ], function (panelClass) {
             var panelType = panelClass.prototype.panelType;
             //console.log(panelClass.prototype.panelType);

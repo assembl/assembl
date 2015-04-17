@@ -3,10 +3,10 @@
 define(['app', 'views/assemblPanel', 'utils/panelSpecTypes'],
     function (Assembl, AssemblPanel, PanelSpecTypes) {
 
-        var HomePanel = AssemblPanel.extend({
-            template: '#tmpl-home',
-            panelType: PanelSpecTypes.NAVIGATION_PANEL_HOME_SECTION,
-            className: 'homeNavPanel',
+        var AboutNavPanel = AssemblPanel.extend({
+            template: '#tmpl-about',
+            panelType: PanelSpecTypes.NAVIGATION_PANEL_ABOUT_SECTION,
+            className: 'aboutNavPanel',
             ui: {
                 debate: '.js_go-to-debate'
             },
@@ -21,5 +21,5 @@ define(['app', 'views/assemblPanel', 'utils/panelSpecTypes'],
             }
         });
 
-        return HomePanel;
+        return AboutNavPanel;
     });
