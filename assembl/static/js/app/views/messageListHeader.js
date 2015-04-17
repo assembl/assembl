@@ -14,7 +14,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             template: '#tmpl-messageListHeader',
             className: 'messageListHeaderItsMe',
             initialize: function(options){
-                console.log("MessageListHeader::initialize()");
+                //console.log("MessageListHeader::initialize()");
                 var that = this;
 
                 this.options = options;
@@ -24,7 +24,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this.expertViewIsAvailable = options.expertViewIsAvailable;
                 this.isUsingExpertView = options.isUsingExpertView;
                 this.currentViewStyle = options.currentViewStyle;
-                //this.availableViewStyles = options.availableViewStyles;
                 this.currentQuery = options.currentQuery;
 
                 this.toggleButtonModelInstance = new FlipSwitchButtonModel({
@@ -33,30 +32,25 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     isOn: this.isUsingExpertView
                 });
                 this.toggleButtonModelInstance.on("change:isOn", function(){
-                    console.log("messageListHeader got the change:isOn event");
+                    //console.log("messageListHeader got the change:isOn event");
                     that.toggleExpertView();
                 });
             },
-            /*
-            regions: {
-                toggleButton: '.show-expert-mode-toggle-button'
-            },
-            */
+
             ui: {
                 queryInfo: ".messageList-query-info",
-                //expertViewToggleButton: '.js_toggleExpertView',
                 expertViewToggleButton: '.show-expert-mode-toggle-button',
                 viewStyleDropdown: ".js_messageListViewStyle-dropdown",
                 defaultMessageViewDropdown: ".js_defaultMessageView-dropdown",
-                userThreadedViewButton: '.messageListViewStyleUserThreaded',
+                userThreadedViewButton: '.messageListViewStyleUserThreaded', // FIXME: this seems to be not used => remove?
                 userActivityFeedViewButton: '.js_messageListViewStyleUserActivityFeed',
-                userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew' // FIXME: this seems to be not used => remove?
+                userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew'
             },
 
             events: function() {
                 var that = this;
                 var data = {
-                    //'click @ui.expertViewToggleButton': 'toggleExpertView'
+                    //'click @ui.expertViewToggleButton': 'toggleExpertView' // handled by change:isOn model event instead
                 };
 
                 _.each(this.ViewStyles, function (messageListViewStyle) {
@@ -94,33 +88,18 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 }
             },
 
-            onShow: function(){
-                /*
-                // react to when a view has been rendered and displayed
-                this.applyEllipsisToSection('.context-introduction', this.ui.seeMoreIntro);
-                this.applyEllipsisToSection('.context-objective', this.ui.seeMoreObjectives);
-                */
-            },
-
             renderToggleButton: function() {
-                console.log("messageListHeader::renderToggleButton()");
-                // check that ui is here (it may not be, for example if logged out)
-                //var region = this.getRegion("toggleButton");
-                //console.log("region: ", region);
-                //if (region){
+                //console.log("messageListHeader::renderToggleButton()");
+                // check that ui is here (it may not be, for example if logged out). I could not use a region here because the region would not always have been present in DOM, which is not possible
                 var el = this.ui.expertViewToggleButton;
                 if ( el && this.expertViewIsAvailable ){
                     var v = new FlipSwitchButtonView({model: this.toggleButtonModelInstance});
-                    
-                    //region.show(v);
                     el.html(v.render().el);
-
-                    //this.getRegion("toggleButton").show(new FlipSwitchButtonView(toggleButton));
                 }
             },
 
             toggleExpertView: function(){
-                console.log("messageListHeader::toggleExpertView()");
+                //console.log("messageListHeader::toggleExpertView()");
                 this.isUsingExpertView = !this.isUsingExpertView;
                 this.messageList.triggerMethod("setIsUsingExpertView", this.isUsingExpertView);
 
@@ -185,7 +164,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * @event
              */
             onSelectMessageListViewStyle: function (e) {
-                console.log("messageListHeader::onSelectMessageListViewStyle()");
+                //console.log("messageListHeader::onSelectMessageListViewStyle()");
                 var messageListViewStyleClass,
                     messageListViewStyleSelected,
                     classes = $(e.currentTarget).attr('class').split(" ");

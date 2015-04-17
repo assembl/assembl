@@ -6,13 +6,6 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'utils/i18n
         var FlipSwitchButton = Marionette.ItemView.extend({
             template: '#tmpl-flipSwitchButton',
             className: 'flipSwitchButton',
-            /*
-            initialize: function(){
-                console.log("FlipSwitchButton::initialize()");
-
-                //this.listenTo(this.model, 'change:isOn', this.updateState); // replaced by modelEvents
-            },
-            */
 
             ui: {
                 toggleButton: '.js_toggleButton'
@@ -23,34 +16,10 @@ define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'utils/i18n
             },
 
             modelEvents: {
-                'change:isOn': 'updateState'
+                'change:isOn': 'updateState' // this is the same as writing this.listenTo(this.model, 'change:isOn', this.updateState); in the initialize() method
             },
 
-            /* not needed: model attributes are sent automatically to the template
-            serializeData: function () {
-                return {
-                    isOn: this.isOn,
-                    labelOn: this.labelOn,
-                    labelOff: this.labelOff
-                };
-            },
-            */
-
-            onRender: function(){
-                console.log("FlipSwitchButton::onRender()");
-                /*
-                this.renderMessageListViewStyleDropdown();
-                this.renderDefaultMessageViewDropdown();
-                */
-            },
-
-            onShow: function(){
-                /*
-                // react to when a view has been rendered and displayed
-                this.applyEllipsisToSection('.context-introduction', this.ui.seeMoreIntro);
-                this.applyEllipsisToSection('.context-objective', this.ui.seeMoreObjectives);
-                */
-            },
+            // the serializeData() method is not needed because model attributes are sent automatically to the template
 
             onToggle: function(){
                 this.model.set('isOn', !this.model.get('isOn'));

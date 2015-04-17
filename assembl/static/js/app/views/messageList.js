@@ -53,7 +53,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             initialize: function (options) {
-              console.log("messageList::initialize()");
+              //console.log("messageList::initialize()");
               Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
               var that = this,
                   collectionManager = new CollectionManager(),
@@ -547,7 +547,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             onSetIsUsingExpertView: function(isUsingExpertView) {
-                console.log("messageList::onSetIsUsingExpertView()");
+                //console.log("messageList::onSetIsUsingExpertView()");
                 this.isUsingExpertView = isUsingExpertView;
             },
 
@@ -1583,7 +1583,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             onSetViewStyle: function(viewStyle) {
-              console.log("messageList::onSetViewStyle()");
+              //console.log("messageList::onSetViewStyle()");
               this.setViewStyle(viewStyle);
               this.render();
             },
@@ -1668,7 +1668,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             },
 
             onSetIndividualMessageViewStyleForMessageListViewStyle: function(messageViewStyle) {
-                console.log("messageList::onSetIndividualMessageViewStyleForMessageListViewStyle()");
+                //console.log("messageList::onSetIndividualMessageViewStyleForMessageListViewStyle()");
                 this.setIndividualMessageViewStyleForMessageListViewStyle(messageViewStyle);
             },
 
