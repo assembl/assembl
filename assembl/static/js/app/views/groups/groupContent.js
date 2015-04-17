@@ -251,6 +251,9 @@ define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec
                     this.ensurePanelsHidden(PanelSpecTypes.IDEA_PANEL);
                     this.resetMessagePanelWidth();
                     this.groupContainer.resumeResize(true);
+
+                    var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                    conversationPanel.hideAlternativeContent();
                 }
             },
 
