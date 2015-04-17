@@ -313,20 +313,8 @@ define(['underscore', 'models/base', 'common/context', 'utils/i18n', 'utils/type
             },
 
             /** Return a promise for all Extracts models for this idea
-             * @return {$.Defered.Promise}
+             * @return {Promise}
              */
-
-            /*getExtractsPromise: function () {
-                var that = this,
-                    deferred = $.Deferred();
-                this.collection.collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
-                        var extracts = allExtractsCollection.where({idIdea: that.getId()});
-                        deferred.resolve(extracts);
-                    }
-                );
-                return deferred.promise();
-            },*/
 
             getExtractsPromise: function () {
                 var that = this;

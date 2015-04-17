@@ -164,26 +164,6 @@ define(['app',
                 return null;
             },
 
-            /*getAllUsersCollectionPromise: function () {
-                var that = this,
-                    deferred = $.Deferred();
-
-                if (this._allUsersCollectionPromise === undefined) {
-                    this._allUsersCollection = new Agents.Collection();
-                    this._allUsersCollection.collectionManager = this;
-                    this._allUsersCollectionPromise = this._allUsersCollection.fetchFromScriptTag('users-json');
-                    this._allUsersCollectionPromise.done(function () {
-                        deferred.resolve(that._allUsersCollection);
-                    });
-                }
-                else {
-                    this._allUsersCollectionPromise.done(function () {
-                        deferred.resolve(that._allUsersCollection);
-                    });
-                }
-                return deferred.promise();
-            },*/
-
             getAllUsersCollectionPromise: function () {
                 if (this._allUsersCollectionPromise) {
                     return this._allUsersCollectionPromise;
@@ -199,27 +179,6 @@ define(['app',
 
                 return this._allUsersCollectionPromise;
             },
-
-            /*getAllMessageStructureCollectionPromise: function () {
-                var that = this,
-                    deferred = $.Deferred();
-
-                if (this._allMessageStructureCollectionPromise === undefined) {
-                    this._allMessageStructureCollection = new Message.Collection();
-                    this._allMessageStructureCollection.collectionManager = this;
-                    this._allMessageStructureCollectionPromise = this._allMessageStructureCollection.fetch({
-                        success: function (collection, response, options) {
-                            deferred.resolve(that._allMessageStructureCollection);
-                        }
-                    });
-                }
-                else {
-                    this._allMessageStructureCollectionPromise.done(function () {
-                        deferred.resolve(that._allMessageStructureCollection);
-                    });
-                }
-                return deferred.promise();
-            },*/
 
             getAllMessageStructureCollectionPromise: function () {
                 if (this._allMessageStructureCollectionPromise) {
@@ -556,7 +515,7 @@ define(['app',
 
             },
 
-            /*
+            /* TODO:  Bluebirdify
              * Gets the stored configuration of groups and panels
              */
             getGroupSpecsCollectionPromise: function (viewsFactory) {

@@ -84,6 +84,7 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
             },
 
             /**
+             * TODO:  Bluebirdify
              * Return all segments in the annotator format
              * @return {Object[]}
              */
@@ -110,18 +111,6 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
              * Return all segments in the annotator format
              * @return {Object[]}
              */
-            /*getExtractsPromise: function () {
-                var that = this,
-                    deferred = $.Deferred();
-                this.collection.collectionManager.getAllExtractsCollectionPromise().done(
-                    function (allExtractsCollection) {
-                        var extracts = allExtractsCollection.where({ idPost: that.getId() });
-                        deferred.resolve(extracts);
-                    }
-                );
-                return deferred.promise();
-            },*/
-
             getExtractsPromise: function () {
                 var that = this;
                 return this.collection.collectionManager.getAllExtractsCollectionPromise()
@@ -137,17 +126,6 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
             /** Return a promise for the post's creator
              * @return {$.Defered.Promise}
              */
-            /*getCreatorPromise: function () {
-                var that = this,
-                    deferred = $.Deferred();
-                this.collection.collectionManager.getAllUsersCollectionPromise()
-                    .then(function (allUsersCollection) {
-                        var creatorId = that.get('idCreator');
-                        deferred.resolve(allUsersCollection.getById(creatorId));
-                    });
-                return deferred.promise();
-            },*/
-
             getCreatorPromise: function () {
                 var that = this;
 

@@ -514,26 +514,6 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
             /**
              * Returns a promise that will resolve to a list of id's
              */
-            /*this.getResultMessageIdCollectionPromise = function () {
-                var that = this,
-                    deferred = $.Deferred();
-                //console.log("messageListPostQuery:getResultMessageIdCollectionPromise() called");
-                if (this._resultsAreValid) {
-                    deferred.resolve(this._resultIds);
-                }
-                else {
-                    this._execute(function (collection) {
-                        //console.log('resolving getResultMessageIdCollectionPromise()');
-                        deferred.resolve(collection);
-                    });
-                }
-                ;
-
-                // Returning a Promise so that only this function can modify
-                // the Deferred object
-                return deferred.promise();
-            };*/
-
             this.getResultMessageIdCollectionPromise = function () {
                 if (this._resultsAreValid) {
                    return Promise.resolve(this._resultIds);
@@ -547,26 +527,6 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
             /**
              * A promise for an array for JSON data, one per post
              */
-            /*this.getResultRawDataPromise = function () {
-                var that = this,
-                    deferred = $.Deferred();
-                //console.log("messageListPostQuery:getResultMessageIdCollectionPromise() called");
-                if (this._resultsAreValid) {
-                    deferred.resolve(this._rawResults);
-                }
-                else {
-                    this._execute(function () {
-                        //console.log('resolving getResultMessageIdCollectionPromise()');
-                        deferred.resolve(that._rawResults);
-                    });
-                }
-                ;
-
-                // Returning a Promise so that only this function can modify
-                // the Deferred object
-                return deferred.promise();
-            };*/
-
             this.getResultRawDataPromise = function () {
                 var that = this;
                 if (this._resultsAreValid) {
