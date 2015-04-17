@@ -4,6 +4,7 @@ import os.path
 import codecs
 
 from pyramid.view import view_config
+from pyramid.response import Response
 from velruse.exceptions import CSRFError
 from pyramid.httpexceptions import (
     HTTPException, HTTPInternalServerError, HTTPMovedPermanently,
@@ -128,9 +129,33 @@ class JSONError(HTTPException):
 @view_config(context=CSRFError)
 def csrf_error_view(exc, request):
     if "HTTP_COOKIE" not in request.environ:
-        return HTTPClientError(explanation="Missing cookies", detail="""Note that we need active cookies.
-            On Safari, the \"Allow from current website only\" option in the Privacy tab of preferences is too restrictive; use \"Allow from websites I visit\" and try again.""")
-    return HTTPInternalServerError(explanation="Missing cookies", detail=repr(request.exception))
+        user_agent = request.user_agent
+        is_safari = 'Safari' in user_agent and 'Chrome' not in user_agent
+        route_name = request.matched_route.name
+        is_login_callback = route_name.startswith('velruse.') and route_name.endswith('-callback')
+        if is_safari and is_login_callback:
+            # This is an absolutely horrible hack, but depending on some settings,
+            # Safari does not give cookies on a redirect, so we lose session info.
+            if 'reload' not in request.GET:
+                # So first make sure the new session does not kill the old one
+                def callback(request, response):
+                    response._headerlist = [(h, v) for (h, v) in response._headerlist if h != 'Set-Cookie']
+                    print "headerlist:", response._headerlist
+                request.add_response_callback(callback)
+                # And return a page that will reload the same request, NOT through a 303.
+                # Also add a "reload" parameter to avoid doing it twice if it failed.
+                template = ('<html><head><script>document.location = "' +
+                    request.path_info + '?' + request.query_string +
+                    '&reload=true"</script></head></html>')
+                return Response(template, content_type='text/html')
+            else:
+                # The hack failed. Tell the user what to do.
+                return HTTPClientError(explanation="Missing cookies", detail="""Note that we need active cookies.
+                    On Safari, the "Allow from current website only" option
+                    in the Privacy tab of preferences is too restrictive;
+                    use "Allow from websites I visit" and try again. Simply reloading may work.""")
+        return HTTPClientError(explanation="Missing cookies", detail=repr(request.exception))
+    return  HTTPClientError(explanation="CSRF error", detail=repr(request.exception))
 
 
 @view_config(context=Exception)
