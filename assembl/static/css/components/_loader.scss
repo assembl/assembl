@@ -3,6 +3,8 @@
 .loader-wrapper {
   position: relative;
   min-height: em(20);
+  height: 100%;
+  width: 100%;
 }
 .is-loading {
   cursor: wait;
