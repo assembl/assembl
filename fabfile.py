@@ -435,7 +435,7 @@ def app_compile_noupdate():
 @task
 def app_compile_nodbupdate():
     "Separated mostly for tests, which need to run alembic manually"
-    execute(virtuoso_install_if_absent)
+    execute(virtuoso_install_or_upgrade)
     execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
@@ -958,12 +958,14 @@ def virtuoso_reconstruct_db():
     execute(virtuoso_reconstruct_restore_db)
 
 
-def virtuoso_install_if_absent():
+def virtuoso_install_or_upgrade():
     with settings(warn_only=True), hide('warnings', 'stdout', 'stderr'):
         ls_cmd = run("ls %s" % get_virtuoso_exec())
     if ls_cmd.failed:
         print(red("Virtuso not installed, installing."))
         execute(virtuoso_source_install)
+    else:
+        execute(virtuoso_source_upgrade)
 
 @task
 def virtuoso_source_upgrade():
@@ -984,8 +986,15 @@ def virtuoso_source_install():
 
     if exists(virtuoso_src):
         with cd(virtuoso_src):
+            already_built = exists('binsrc/virtuoso/virtuoso-t')
+            current_checkout = run('git rev-parse HEAD')
+            if already_built and current_checkout == branch:
+                return
             run('git fetch')
             run('git checkout '+branch)
+            new_checkout = run('git rev-parse HEAD')
+            if already_built and new_checkout == current_checkout:
+                return
     else:
         run('mkdir -p ' + dirname(virtuoso_src))
         virtuso_github = 'https://github.com/openlink/virtuoso-opensource.git'
