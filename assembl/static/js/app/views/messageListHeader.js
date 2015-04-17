@@ -81,11 +81,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this.renderDefaultMessageViewDropdown();
                 this.renderToggleButton();
 
-                if (this.isUsingExpertView) {
-                    this.renderQueryInfo();
-                } else {
+                if (!this.isUsingExpertView) {
                     this.renderUserViewButtons();
                 }
+                this.renderQueryInfo();
             },
 
             renderToggleButton: function() {
