@@ -1,7 +1,7 @@
 'use strict';
 
-define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebird'],
-    function (_, $, Assembl, Ctx, Base, Promise) {
+define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebird', 'utils/types'],
+    function (_, $, Assembl, Ctx, Base, Promise, Types) {
 
         /**
          * @class MessageModel
@@ -209,6 +209,21 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
             /** Our data is inside the posts array */
             parse: function (response) {
                 return response.posts;
+            },
+            
+            /** Get the last synthesis 
+             * @return Message.Model or null
+             */
+            getLastSynthesisPost: function () {
+              var lastSynthesisPost = null,
+                  synthesisMessages = this.where({'@type': Types.SYNTHESIS_POST});
+              if (synthesisMessages.length > 0) {
+                _.sortBy(synthesisMessages, function (message) {
+                  return message.get('date');
+                });
+                lastSynthesisPost = _.last(synthesisMessages);
+              }
+              return lastSynthesisPost;
             },
 
             /**

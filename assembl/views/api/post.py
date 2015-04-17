@@ -102,6 +102,9 @@ def get_posts(request):
     
 
     only_synthesis = request.GET.get('only_synthesis')
+    
+    posted_after_date = request.GET.get('posted_after_date')
+
     PostClass = SynthesisPost if only_synthesis == "true" else Post
     posts = Post.db.query(PostClass)
 
@@ -149,6 +152,17 @@ def get_posts(request):
     if ids:
         posts = posts.filter(Post.id.in_(ids))
 
+    if posted_after_date:
+        import iso8601
+        try:
+            posted_after_date = iso8601.parse_date(posted_after_date)
+        except iso8601.ParseError as e:
+            posted_after_date = None
+            raise e 
+        if posted_after_date:
+            posts = posts.filter(PostClass.creation_date >= posted_after_date)
+        #Maybe we should do something if the date is invalid.  benoitg
+        
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
     if user_id:

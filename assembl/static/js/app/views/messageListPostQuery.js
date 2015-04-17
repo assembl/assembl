@@ -62,8 +62,9 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
                 var retval = '';
                 if (queryObjects && queryObjects.length > 0) {
                     var value = true;
-                    if (queryObjects[0].hasOwnProperty("value"))
-                        value = queryObjects[0].value;
+                    if (queryObjects[0].hasOwnProperty("value")){
+                      value = queryObjects[0].value;
+                    }
 
                     var closeBtn = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></a>\n';
 
@@ -76,6 +77,20 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
 
                 return retval;
             }
+            
+            this._returnHtmlDescriptionPostedSinceLastSynthesis = function (filterDef, queryObjects) {
+              var retval = '';
+              if (queryObjects && queryObjects.length > 0) {
+                var value = true;
+                if (queryObjects[0].hasOwnProperty("value")){
+                  value = queryObjects[0].value;
+                }
+                var closeBtn = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></a>\n';  
+                retval += i18n.sprintf("%s %s", i18n.gettext("Posted since last synthesis"), closeBtn);
+              }
+              return retval;
+            }
+            
             this._returnHtmlDescriptionSynthesis = function (filterDef, queryObjects) {
                 var retval = '',
                     valuesText = [];
@@ -149,6 +164,16 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
                     _server_param: 'is_unread',
                     _client_side_implementation: null,
                     _filter_description: this._returnHtmlDescriptionPostIsUnread
+                },
+                POST_IS_POSTED_SINCE_LAST_SYNTHESIS: {
+                  id: 'is_posted_since_last_synthesis',
+                  name: i18n.gettext('posted since last synthesis'),
+                  help_text: i18n.gettext('Only include posts created after the last synthesis.'),
+                  _value_is_boolean: false,
+                  _can_be_reversed: false,
+                  _server_param: 'posted_after_date',
+                  _client_side_implementation: null,
+                  _filter_description: this._returnHtmlDescriptionPostedSinceLastSynthesis
                 }
             };
             /**
@@ -405,61 +430,6 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
              * @param {function} success_data_changed callback to call when query is complete only
              * when the data actually changed.  Will be called before success
              */
-            /*this._execute = function (success, success_data_changed) {
-                //console.log("messageListPostQuery:execute() called");
-                var that = this,
-                    url = Ctx.getApiUrl('posts'),
-                    params = {},
-                    id = null,
-                    filterDef = null,
-                    value = null;
-
-                if (this._resultsAreValid) {
-                    if (_.isFunction(success)) {
-                        success(that._resultIds);
-                    }
-                } else {
-                    for (var filterDefPropName in this.availableFilters) {
-                        filterDef = this.availableFilters[filterDefPropName];
-                        if (filterDef.id in this._query) {
-                            for (var i = 0; i < this._query[filterDef.id].length; i++) {
-                                value = this._query[filterDef.id][i].value;
-                                params[filterDef._server_param] = value;
-                            }
-                        }
-                    }
-
-                    params.order = this._view._server_order_param_value;
-                    params.view = this._viewDef;
-                    that._queryResultInfo = null;
-
-                    $.getJSON(url, params, function (data) {
-                        that._queryResultInfo = {};
-                        that._queryResultInfo.unread = data.unread;
-                        that._queryResultInfo.total = data.total;
-                        that._queryResultInfo.startIndex = data.startIndex;
-                        that._queryResultInfo.page = data.page;
-                        that._queryResultInfo.maxPage = data.maxPage;
-
-                        var ids = [];
-                        _.each(data.posts, function (post) {
-                            ids.push(post['@id']);
-                        });
-                        that._resultIds = ids;
-                        that._rawResults = data.posts;
-                        that._resultsAreValid = true;
-
-                        if (_.isFunction(success_data_changed)) {
-                            success_data_changed(that._resultIds);
-                        }
-                        if (_.isFunction(success)) {
-                            success(that._resultIds);
-                        }
-                    });
-                }
-
-            };*/
-
             this._execute = function () {
                 //console.log("messageListPostQuery:execute() called");
                 var that = this,

@@ -205,6 +205,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         'click .js_messageList-onlyorphan': 'addFilterIsOrphanMessage',
                         'click .js_messageList-onlysynthesis': 'addFilterIsSynthesMessage',
                         'click .js_messageList-isunread': 'addFilterIsUnreadMessage',
+                        'click .js_messageList-ispostedsincelastsynthesis': 'addFilterIsPostedSinceLastSynthesis',
 
                         'click .js_messageList-fullScreenButton': 'setFullscreen',
 
@@ -1576,6 +1577,23 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             addFilterIsUnreadMessage: function () {
                 this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, true);
                 this.render();
+            },
+            
+            addFilterIsPostedSinceLastSynthesis: function () {
+              var that = this,
+                  collectionManager = new CollectionManager();
+              collectionManager.getAllMessageStructureCollectionPromise().then(function(allMessageStructureCollection) {
+                var date = null,
+                    lastSynthesisPost = allMessageStructureCollection.getLastSynthesisPost();
+                if(lastSynthesisPost) {
+                  date = lastSynthesisPost.get('date');
+                }
+                that.currentQuery.addFilter(
+                    that.currentQuery.availableFilters.POST_IS_POSTED_SINCE_LAST_SYNTHESIS, 
+                  date);
+                that.render();
+              })
+
             },
 
             openTargetInModal: function (evt) {

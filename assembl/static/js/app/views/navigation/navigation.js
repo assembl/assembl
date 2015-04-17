@@ -79,17 +79,13 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
                         // console.log(e);
                     }
                 }).delay(500).then(function() {that.setSideBarHeight();});
-                collectionManager.getAllSynthesisCollectionPromise()
-                    .then(function(synthesisCollection) {
-
-                        if (synthesisCollection.find(
-                            function(s){
-                                return s.get('published_in_post');
-                            }) !== undefined) {
-                            that.num_items += 1;
-                            that.ui.synthesis_tab.show();
+                collectionManager.getAllMessageStructureCollectionPromise()
+                    .then(function(allMessageStructureCollection) {
+                        if (allMessageStructureCollection.getLastSynthesisPost()){
+                          that.num_items += 1;
+                          that.ui.synthesis_tab.show();
                         }
-                    }).delay(500).then(function() {that.setSideBarHeight();});
+                      }).delay(500).then(function() {that.setSideBarHeight();});
                 this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
             },
             onShow:function () {

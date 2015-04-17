@@ -42,34 +42,23 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
         var Synthesis = Marionette.ItemView.extend({
             template: '#tmpl-synthesisContext',
             initialize: function (options) {
-                var that = this;
+              var that = this;
 
-                this.model = new Backbone.Model();
+              this.model = new Backbone.Model();
 
-                var synthesisMessages = options.allMessageStructureCollection.where({'@type': Types.SYNTHESIS_POST});
-                if (synthesisMessages.length > 0) {
-                    _.sortBy(synthesisMessages, function (message) {
-                        return message.get('date');
-                    });
-                    synthesisMessages.reverse();
-
-                    _.each(synthesisMessages, function (message, index) {
-                        if (index === 0) {
-                            var all = options.allSynthesisCollection.get(message.get('publishes_synthesis'));
-
-                            that.model.set({
-                                creation_date: message.get('date'),
-                                introduction: all.get('introduction')
-                            })
-                        }
-                    })
-                }
-                else {
-                    this.model.set({
-                        empty: i18n.gettext("No synthesis of the discussion has been published yet")
-                    });
-                }
-
+              var synthesisMessage = options.allMessageStructureCollection.getLastSynthesisPost();
+              if (synthesisMessage) {
+                var synthesis = options.allSynthesisCollection.get(synthesisMessage.get('publishes_synthesis'));
+                this.model.set({
+                  creation_date: synthesisMessage.get('date'),
+                  introduction: synthesis.get('introduction')
+                  });
+              }
+              else {
+                this.model.set({
+                  empty: i18n.gettext("No synthesis of the discussion has been published yet")
+                });
+              }
             },
 
             events: {
