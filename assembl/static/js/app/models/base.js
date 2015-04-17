@@ -1,6 +1,6 @@
 'use strict';
 
-define(['backbone', 'common/context'], function (Backbone, Ctx) {
+define(['backbone', 'common/context', 'utils/types'], function (Backbone, Ctx, Types) {
 
     /**
      * @class Model
@@ -72,6 +72,17 @@ define(['backbone', 'common/context'], function (Backbone, Ctx) {
             return this.get('@id') || this.get('id') || this.cid;
         },
 
+        getBEType: function() {
+            return this.get('@type');
+        },
+
+        getBaseType: function() {
+            return Types.getBaseType(this.getBEType());
+        },
+
+        isInstance: function(type) {
+            return Types.isInstance(this.getBEType(), type);
+        },
 
         /**
          * Overwritting backbone's parse function

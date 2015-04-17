@@ -347,6 +347,35 @@ class BaseOps(object):
         return (c for c in class_registry.itervalues()
                 if isclass(c) and issubclass(c, cls))
 
+    @classmethod
+    def get_inheritance(cls):
+        name = cls.external_typename()
+        inheritance = {}
+        for subclass in cls.get_subclasses():
+            subclass_name = subclass.external_typename()
+
+            if subclass_name == name:
+                continue
+            for supercls in subclass.mro()[1:]:
+                if not supercls.__dict__.get('__mapper_args__', {}).get('polymorphic_identity', None):
+                    continue
+                superclass_name = supercls.external_typename()
+                inheritance[subclass_name] = superclass_name
+                if (superclass_name == name
+                        or superclass_name in inheritance):
+                    break
+                subclass_name = superclass_name
+        return inheritance
+
+    @staticmethod
+    def get_json_inheritance_for(*classnames):
+        inheritance = {}
+        classnames = set(classnames)
+        for name in classnames:
+            cls = get_named_class(name)
+            inheritance.update(cls.get_inheritance())
+        return dumps(inheritance)
+
     def change_class(self, newclass, json=None, **kwargs):
         def table_list(cls):
             tables = []

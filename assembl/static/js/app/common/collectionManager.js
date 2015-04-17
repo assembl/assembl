@@ -136,32 +136,19 @@ define(['app',
              * @return {BaseCollection}
              */
             getCollectionPromiseByType: function (item, type) {
-                type = type || item['@type'];
+                type = type || Types.getBaseType(item['@type']);
 
                 switch (type) {
                     case Types.EXTRACT:
                         return this.getAllExtractsCollectionPromise();
 
                     case Types.IDEA:
-                    case Types.ROOT_IDEA:
-                    case Types.PROPOSAL:
-                    case Types.ISSUE:
-                    case Types.CRITERION:
-                    case Types.ARGUMENT:
                         return this.getAllIdeasCollectionPromise();
 
                     case Types.IDEA_LINK:
                         return this.getAllIdeaLinksCollectionPromise();
 
                     case Types.POST:
-                    case Types.ASSEMBL_POST:
-                    case Types.SYNTHESIS_POST:
-                    case Types.IMPORTED_POST:
-                    case Types.EMAIL:
-                    case Types.IDEA_PROPOSAL_POST:
-                    case Types.POST_WITH_METADATA:
-                    case Types.FEED_POST:
-                    case Types.LOOMIO_FEED_POST:
                         return this.getAllMessageStructureCollectionPromise();
 
                     case Types.USER:

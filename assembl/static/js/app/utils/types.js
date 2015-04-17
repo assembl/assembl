@@ -7,26 +7,44 @@ define(function () {
         EXTRACT: 'Extract',
         ROOT_IDEA: 'RootIdea',
         IDEA: 'Idea',
-        CRITERION: 'Criterion',
-        ISSUE: 'Issue',
-        ARGUMENT: 'Argument',
-        PROPOSAL: 'Proposal',
         IDEA_LINK: 'IdeaLink',
         POST: 'Post',
-        ASSEMBL_POST: 'AssemblPost',
-        POST_WITH_METADATA: 'PostWithMetadata',
-        IDEA_PROPOSAL_POST: 'IdeaProposalPost',
         SYNTHESIS_POST: 'SynthesisPost',
-        IMPORTED_POST: 'ImportedPost',
-        FEED_POST: 'FeedPost',
-        LOOMIO_FEED_POST: 'LoomioFeedPost',
         EMAIL: 'Email',
         SYNTHESIS: 'Synthesis',
         TABLE_OF_CONTENTS: 'TableOfIdeas',
         USER: 'User',
         PARTNER_ORGANIZATION: 'PartnerOrganization',
-        WEBPAGE: 'Webpage'
+        WEBPAGE: 'Webpage',
+        initInheritance: function(inheritance) {
+            // This is small, I think it can be synchronous.
+            var script = document.getElementById("inheritance-json");
+            try {
+                this.inheritance = JSON.parse(script.textContent);
+            } catch (e) {
+                this.inheritance = {};
+            }
+        },
+        getBaseType: function(type) {
+            if (this.inheritance === undefined)
+                return type;
+            while (this.inheritance[type] !== undefined) {
+                type = this.inheritance[type];
+            }
+            return type;
+        },
+        isInstance: function(type, parentType) {
+            if (this.inheritance === undefined)
+                return type == parentType;
+            while (this.inheritance[type] !== undefined) {
+                if (type == parentType)
+                    return true;
+                type = this.inheritance[type];
+            }
+            return type == parentType;
+        }
     };
+    Types.initInheritance();
 
     return Types;
 

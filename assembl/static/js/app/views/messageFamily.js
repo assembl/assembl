@@ -64,25 +64,12 @@ define(['backbone.marionette', 'underscore', 'ckeditor', 'app', 'common/context'
 
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-                var messageViewClass = undefined,
-                    messageType = this.model.get('@type');
-
-                switch (messageType) {
-                    case Types.ASSEMBL_POST:
-                    case Types.EMAIL:
-                    case Types.POST_WITH_METADATA:
-                    case Types.IDEA_PROPOSAL_POST:
-                    case Types.LOOMIO_FEED_POST:
-                        messageViewClass = MessageView;
-                        break;
-
-                    case Types.SYNTHESIS_POST:
-                        messageViewClass = SynthesisMessageView;
-                        break;
-                    default:
-                        console.log("messageFamily.render():  WARNING:  Unknown Post type: ", messageType, "creating a default MessageView");
-                        messageViewClass = MessageView;
-                        break;
+                var messageViewClass = MessageView;
+                if (!this.model.isInstance(Types.POST)) {
+                    console.error("not a post?");
+                }
+                if (this.model.getBEType() == Types.SYNTHESIS_POST) {
+                    messageViewClass = SynthesisMessageView;
                 }
 
                 messageView = new messageViewClass({
