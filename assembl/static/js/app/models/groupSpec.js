@@ -103,6 +103,11 @@ define(['models/base', 'models/panelSpec', 'utils/panelSpecTypes'],
                 });
             },
             validate: function () {
+                var navstate = this.get('navigationState');
+                if (navstate == 'home') {
+                    this.set('navigationState', 'about');
+                }
+                // check other values for validity?
                 var panels = this.get('panels');
                 return panels.validate();
             }
