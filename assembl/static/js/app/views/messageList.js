@@ -237,17 +237,17 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 CHRONOLOGICAL: {
                     id: "chronological",
                     css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "chronological",
-                    label: i18n.gettext('Chronological')
+                    label: i18n.gettext('Oldest first')
                 },
                 REVERSE_CHRONOLOGICAL: {
                     id: "reverse_chronological",
                     css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "activityfeed",
-                    label: i18n.gettext('Reverse-Chronological')
+                    label: i18n.gettext('Newest first')
                 },
                 NEW_MESSAGES: {
                     id: "new_messages",
                     css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "newmessages",
-                    label: i18n.gettext('New Messages')
+                    label: i18n.gettext('New messages threaded')
                 }
             },
 

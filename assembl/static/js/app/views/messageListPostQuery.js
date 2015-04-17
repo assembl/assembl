@@ -198,14 +198,14 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
 
                 CHRONOLOGICAL: {
                     id: 'chronological',
-                    name: i18n.gettext('Chronological'),
+                    name: i18n.gettext('Oldest first'),
                     _supports_paging: true,
                     _server_order_param_value: 'chronological',
                     _client_side_implementation: null
                 },
                 REVERSE_CHRONOLOGICAL: {
                     id: 'reverse_chronological',
-                    name: i18n.gettext('Activity feed (reverse chronological)'),
+                    name: i18n.gettext('Newest first'),
                     _supports_paging: true,
                     _server_order_param_value: 'reverse_chronological',
                     _client_side_implementation: null
