@@ -24,26 +24,8 @@ define(['backbone.marionette', 'views/assemblPanel', 'common/collectionManager',
 
             onSelectedSynthesis: function (e) {
                 var messageId =  $(e.currentTarget).attr('data-message-id');
-                this.displaySynthesis(messageId);
+                this.panel.displaySynthesis(messageId);
             },
-
-            displaySynthesis: function (messageId) {
-                var messageListView = this.panel.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
-                messageListView.currentQuery.clearAllFilters();
-                messageListView.toggleFilterByPostId(messageId);
-                messageListView.showMessageById(messageId, undefined, false);
-
-                messageListView.ui.stickyBar.addClass('hidden');
-                messageListView.ui.replyBox.addClass('hidden');
-
-                // Show that entry is selected
-                this.selectSynthesisInMenu(messageId);
-            },
-
-            selectSynthesisInMenu: function (messageId) {
-                $(".synthesisItem").closest('li').removeClass("selected");
-                this.$(".synthesisItem[data-message-id=\"" + messageId + "\"]").addClass("selected");
-            }
 
         });
 
@@ -83,6 +65,24 @@ define(['backbone.marionette', 'views/assemblPanel', 'common/collectionManager',
               Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
             },
 
+            selectSynthesisInMenu: function (messageId) {
+              $(".synthesisItem").closest('li').removeClass("selected");
+              this.$(".synthesisItem[data-message-id=\"" + messageId + "\"]").addClass("selected");
+            },
+
+            displaySynthesis: function (messageId) {
+                var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                messageListView.currentQuery.clearAllFilters();
+                messageListView.toggleFilterByPostId(messageId);
+                messageListView.showMessageById(messageId, undefined, false);
+
+                messageListView.ui.stickyBar.addClass('hidden');
+                messageListView.ui.replyBox.addClass('hidden');
+
+                // Show that entry is selected
+                this.selectSynthesisInMenu(messageId);
+            },
+
             onBeforeShow: function(){
                 var that = this,
                     collectionManager = new CollectionManager();
@@ -102,9 +102,7 @@ define(['backbone.marionette', 'views/assemblPanel', 'common/collectionManager',
                             });
 
                             that.getRegion('synthesisContainer').show(synthesisList);
-
-                            // TODO: find way to do that
-                            //that.displaySynthesis(synthesisMessages[0].id);
+                            that.displaySynthesis(allMessageStructureCollection.getLastSynthesisPost().id);
                         }
                         else {
                             that.ui.synthesisListHeader.html(i18n.gettext("No synthesis of the discussion has been published yet"));
