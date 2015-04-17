@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 
 from bs4 import BeautifulSoup
 import simplejson as json
-from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.orm import relationship, backref, aliased, deferred
 from sqlalchemy.sql import func
 from sqlalchemy import (
     Column,
@@ -13,6 +13,7 @@ from sqlalchemy import (
     String,
     ForeignKey,
     UnicodeText,
+    Binary,
     Text,
     or_,
     event,
@@ -400,6 +401,8 @@ class ImportedPost(Post):
     body_mime_type = Column(CoerceUnicode(),
                         nullable=False,
                         doc="The mime type of the body of the imported content.  See Content::get_body_mime_type() for allowed values.")
+
+    imported_blob = deferred(Column(Binary), group='raw_details')
 
     __mapper_args__ = {
         'polymorphic_identity': 'imported_post',
