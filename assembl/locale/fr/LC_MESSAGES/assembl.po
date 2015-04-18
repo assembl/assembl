@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-17 18:24-0400\n"
-"PO-Revision-Date: 2015-04-17 18:23-0500\n"
-"Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
+"POT-Creation-Date: 2015-04-18 08:55-0400\n"
+"PO-Revision-Date: 2015-04-18 12:54+0000\n"
+"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -497,17 +497,17 @@ msgid_plural "%d new messages have been posted.  Click here to refresh"
 msgstr[0] "%d nouveau message a été reçu.  Cliquez ici pour rafraichir"
 msgstr[1] "%d nouveaux messages ont été reçus.  Cliquez ici pour rafraichir"
 
-#: assembl/static/js/app/views/messageListHeader.js:243
+#: assembl/static/js/app/views/messageListHeader.js:242
 #, python-format
 msgid "All %s"
 msgstr "Tous %s"
 
-#: assembl/static/js/app/views/messageListHeader.js:245
+#: assembl/static/js/app/views/messageListHeader.js:244
 #, python-format
 msgid "Unread %s"
 msgstr "Non-lus %s"
 
-#: assembl/static/js/app/views/messageListHeader.js:246
+#: assembl/static/js/app/views/messageListHeader.js:245
 #, python-format
 msgid "Activity feed %s"
 msgstr "Fil d'activité %s"
@@ -780,6 +780,14 @@ msgid ""
 "an existing message or start a new message of your own<br/><br/>This is a"
 " safe and respectful space. All ideas are welcome!"
 msgstr ""
+"<h1>Pour commencer</h1><br/>Bienvenue à cette discussion! À gauche, vous "
+"voyez une table des matières, constituée des idées dont les gens "
+"discutent. Nous nous efforçons à vous permettre de trouver facilement les"
+" conversations qui vous intéressent! Pour participer:<br/><br/>1) "
+"Choisissez une idée dans la table des matières: chaque idée inclut aussi "
+"les messages associés aux idées subordonnées<br/><br/>2) Répondez à un "
+"message existant, ou envoyez votre propre nouveau message<br/><br/>Ceci "
+"est un espace sûr et respectueux. Toutes les idées sont les bienvenues!"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:120
 msgid "Unlock panel"
@@ -2161,6 +2169,8 @@ msgstr "Ajouter une adresse de courriel"
 #: assembl/templates/views/userAccountForm.tmpl:10
 msgid "You can set a username as an alternate way to login."
 msgstr ""
+"Vous pouvez définir un nom d'utilisateur, qui peut servir pour vous "
+"connecter."
 
 #: assembl/templates/views/userAccountForm.tmpl:15
 msgid "New password"
@@ -2475,52 +2485,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
-
-#~ msgid "Debate objectives"
-#~ msgstr "Objectifs du débat"
-
-#~ msgid "Expand all"
-#~ msgstr "Tout déployer"
-
-#~ msgid "Collapse all"
-#~ msgstr "Tout replier"
-
-#~ msgid "Under the idea \"%s\""
-#~ msgstr "Sous l'idée \"%s\""
-
-#~ msgid "In the general conversation"
-#~ msgstr "Dans la conversation générale"
-
-#~ msgid "Copy the link to share this message"
-#~ msgstr "Copier le lien pour partager ce message"
-
-#~ msgid "Debate"
-#~ msgstr "Débat"
-
-#~ msgid "Discussion dashboard"
-#~ msgstr "Tableau de bord"
-
-#~ msgid "Your username is used to log in."
-#~ msgstr "Votre identifiant vous permet de vous connecter."
-
-#~ msgid "Chronological"
-#~ msgstr "Chronologique"
-
-#~ msgid "Reverse-Chronological"
-#~ msgstr "Chronologique-inverse"
-
-#~ msgid "New Messages"
-#~ msgstr "Nouveaux Messages"
-
-#~ msgid "Activity feed (reverse chronological)"
-#~ msgstr "Fil d'activité (ordre chronologique inverse)"
-
-#~ msgid "View all posts in this discussion"
-#~ msgstr "Tous les messages"
-
-#~ msgid "View posts not yet sorted anywhere"
-#~ msgstr "Voir les messages non-classés"
-
-#~ msgid "Expert view"
-#~ msgstr ""
 

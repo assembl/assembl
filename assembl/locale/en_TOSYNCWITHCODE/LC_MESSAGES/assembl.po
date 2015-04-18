@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-17 18:24-0400\n"
-"PO-Revision-Date: 2015-04-01 13:59+0000\n"
+"POT-Creation-Date: 2015-04-18 08:55-0400\n"
+"PO-Revision-Date: 2015-04-17 22:25+0000\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: English (Canada) "
 "(http://www.transifex.com/projects/p/assembl/language/en_CA/)\n"
@@ -431,7 +431,6 @@ msgid "Newest first"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:250
-#, fuzzy
 msgid "New messages threaded"
 msgstr ""
 
@@ -482,17 +481,17 @@ msgid_plural "%d new messages have been posted.  Click here to refresh"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/messageListHeader.js:243
+#: assembl/static/js/app/views/messageListHeader.js:242
 #, python-format
 msgid "All %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListHeader.js:245
+#: assembl/static/js/app/views/messageListHeader.js:244
 #, python-format
 msgid "Unread %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageListHeader.js:246
+#: assembl/static/js/app/views/messageListHeader.js:245
 #, python-format
 msgid "Activity feed %s"
 msgstr ""
@@ -1872,9 +1871,8 @@ msgid "Discussion"
 msgstr ""
 
 #: assembl/templates/views/navigation.tmpl:19
-#, fuzzy
 msgid "About this discussion"
-msgstr "All messages"
+msgstr ""
 
 #: assembl/templates/views/navigation.tmpl:27
 msgid "Discussion statistics"
@@ -2316,55 +2314,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
-
-#~ msgid "Debate objectives"
-#~ msgstr ""
-
-#~ msgid "Expand all"
-#~ msgstr ""
-
-#~ msgid "Collapse all"
-#~ msgstr ""
-
-#~ msgid "Under the idea \"%s\""
-#~ msgstr ""
-
-#~ msgid "In the general conversation"
-#~ msgstr ""
-
-#~ msgid "Copy the link to share this message"
-#~ msgstr ""
-
-#~ msgid "Debate"
-#~ msgstr ""
-
-#~ msgid "Discussion dashboard"
-#~ msgstr ""
-
-#~ msgid "Your username is used to log in."
-#~ msgstr ""
-
-#~ msgid "Chronological"
-#~ msgstr ""
-
-#~ msgid "Reverse-Chronological"
-#~ msgstr ""
-
-#~ msgid "New Messages"
-#~ msgstr ""
-
-#~ msgid "Activity feed (reverse chronological)"
-#~ msgstr ""
-
-#~ msgid "View all posts in this discussion"
-#~ msgstr "All messages"
-
-#~ msgid "View posts not yet sorted anywhere"
-#~ msgstr ""
-
-#~ msgid "View syntheses"
-#~ msgstr ""
-
-#~ msgid "Expert view"
-#~ msgstr ""
 
