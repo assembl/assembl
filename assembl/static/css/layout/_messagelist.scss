@@ -82,15 +82,39 @@
   }
 
   .view-config {
-    display: flex;
-    display: -ms-flexbox; // IE 10 way of saying "display: flex;"
+    @include flexbox((
+      display: box,
+      box-orient: vertical
+    ), $version: 1);
+    @include flexbox((
+      display: flexbox,
+      flex-direction: row
+    ), $version: 2);
+    @include flexbox((
+      display: flex,
+      flex-direction: row
+    ));
     justify-content: space-between;
     -ms-flex-pack: space-between; // IE 10 way of saying "justify-content: space-between;"
+    .config {
+      @include flexbox((flex: 1));
+    }
   }
 
   .show-expert-mode {
-    display: flex;
-    display: -ms-flexbox; // IE 10 way of saying "display: flex;"
+    @include flexbox((
+      display: box,
+      box-orient: vertical
+    ), $version: 1);
+    @include flexbox((
+      display: flexbox,
+      flex-direction: row
+    ), $version: 2);
+    @include flexbox((
+      display: flex,
+      flex-direction: row
+    ));
+
     .show-expert-mode-label {
       line-height: 24px; // the height of the toggle button
       min-width: 70px; // the approximate width of label's text
@@ -102,14 +126,35 @@
 
   .options-filter {
     max-height: 60px;
-    display: flex;
-    display: -ms-flexbox; // IE 10 way of saying "display: flex;"
+    @include flexbox((
+      display: box,
+      box-orient: vertical
+    ), $version: 1);
+    @include flexbox((
+      display: flexbox,
+      flex-direction: row
+    ), $version: 2);
+    @include flexbox((
+      display: flex,
+      flex-direction: row
+    ));
 
     .options-filter-items {
-      display: flex;
-      display: -ms-flexbox; // IE 10 way of saying "display: flex;"
-      flex: 1;
-      -ms-flex: 1; // IE 10 way of saying "flex: 1;"
+      @include flexbox((
+        display: box,
+        box-orient: vertical,
+        flex: 1
+      ), $version: 1);
+      @include flexbox((
+        display: flexbox,
+        flex-direction: row,
+        flex: 1
+      ), $version: 2);
+      @include flexbox((
+        display: flex,
+        flex-direction: row,
+        flex: 1
+      ));
     }
 
     .option {
