@@ -10,7 +10,7 @@ from pyramid.security import authenticated_userid
 
 from sqlalchemy import String, text
 
-from sqlalchemy.orm import (joinedload_all, undefer)
+from sqlalchemy.orm import joinedload_all
 from sqlalchemy.sql.expression import bindparam, and_
 from sqlalchemy.sql import cast, column
 
@@ -186,7 +186,7 @@ def get_posts(request):
     if view_def == 'id_only':
         pass  # posts = posts.options(defer(Post.body))
     else:
-        posts = posts.options(joinedload_all(Post.creator), undefer(Email.recipients))
+        posts = posts.options(joinedload_all(Post.creator))
         posts = posts.options(joinedload_all(Post.extracts))
         posts = posts.options(joinedload_all(Post.widget_idea_links))
         posts = posts.options(joinedload_all(SynthesisPost.publishes_synthesis))
