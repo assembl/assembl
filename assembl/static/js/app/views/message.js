@@ -397,13 +397,12 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              */
             getAnnotationsToLoadPromise: function () {
                 var that = this,
-                    deferred = $.Deferred(),
                     annotationsPromise = this.model.getAnnotationsPromise(), //TODO:  This is fairly CPU intensive, and may be worth caching.
                     annotationsToLoad = [],
                     filter;
 
-                annotationsPromise.done(function (annotations) {
-                    if (this.annotationsToLoad === undefined) {
+                return annotationsPromise.then(function (annotations) {
+                    if (that.annotationsToLoad === undefined) {
                         // Is this the right permission to see the clipboard?
                         if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
                             filter = function (extract) {
@@ -421,12 +420,10 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                                 annotationsToLoad.push(annotation);
                             }
                         });
-                        this.annotationsToLoad = annotationsToLoad;
+                        that.annotationsToLoad = annotationsToLoad;
                     }
-                    deferred.resolve(this.annotationsToLoad);
+                    return that.annotationsToLoad;
                 });
-
-                return deferred.promise();
             },
 
             /**

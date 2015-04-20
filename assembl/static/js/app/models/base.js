@@ -1,6 +1,6 @@
 'use strict';
 
-define(['backbone', 'common/context', 'utils/types'], function (Backbone, Ctx, Types) {
+define(['backbone', 'bluebird', 'common/context', 'utils/types'], function (Backbone, Promise, Ctx, Types) {
 
     /**
      * @class Model
@@ -158,26 +158,23 @@ define(['backbone', 'common/context', 'utils/types'], function (Backbone, Ctx, T
          * @param {String} id The script tag id
          */
         fetchFromScriptTag: function (id) {
-            var that = this,
-                script = document.getElementById(id),
-                json,
-                deferred = $.Deferred();
-            setTimeout(function () {
-                if (!script) {
-                    console.log(Ctx.format("Script tag #{0} doesn't exist", id));
-                    return deferred.reject();
-                }
+          var that = this;
 
-                try {
-                    json = JSON.parse(script.textContent);
-                } catch (e) {
-                    throw new Error("Invalid json. " + e.message);
-                    deferred.reject();
-                }
-                that.reset(json);
-                deferred.resolve(that);
-            }, 1);
-            return deferred.promise();
+          return Promise.delay(1).then(function () {
+            var script = document.getElementById(id),
+            json;
+            if (!script) {
+              throw new Error(Ctx.format("Script tag #{0} doesn't exist", id));
+            }
+
+            try {
+              json = JSON.parse(script.textContent);
+            } catch (e) {
+              throw new Error("Invalid json. " + e.message);
+            }
+            that.reset(json);
+            return that;
+          });
         },
 
         /**

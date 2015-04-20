@@ -89,10 +89,9 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
              * @return {Object[]}
              */
             getAnnotationsPromise: function () {
-                var that = this,
-                    deferred = $.Deferred();
-                this.getExtractsPromise()
-                    .done(function (extracts) {
+                var that = this;
+                return this.getExtractsPromise()
+                    .then(function (extracts) {
                         var ret = [];
 
                         _.each(extracts, function (extract) {
@@ -101,10 +100,9 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
                             ret.push(_.clone(extract.attributes));
                         });
 
-                        deferred.resolve(ret);
+                        return ret;
                     }
                 );
-                return deferred.promise();
             },
 
             /**
