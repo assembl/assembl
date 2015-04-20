@@ -241,8 +241,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this.currentQuery.getResultNumTotal() === undefined ? resultNumTotal = '' : resultNumTotal = i18n.sprintf("%d", this.currentQuery.getResultNumTotal());
                 this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('All %s'), resultNumTotal));
                 this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread = '' : resultNumUnread = i18n.sprintf("%d", this.currentQuery.getResultNumUnread());
-                this.ui.userHighlightNewViewButton.html(i18n.sprintf(i18n.gettext('Unread %s'), resultNumUnread));
-                this.ui.userActivityFeedViewButton.html(i18n.sprintf(i18n.gettext('Activity feed %s'), resultNumUnread));
+                this.ui.userHighlightNewViewButton.html(i18n.sprintf(i18n.gettext('New messages threaded %s'), resultNumUnread));
+                this.ui.userActivityFeedViewButton.html(i18n.sprintf(i18n.gettext('Newest first %s'), resultNumUnread));
             },
 
             /**
