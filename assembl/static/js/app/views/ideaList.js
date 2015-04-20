@@ -96,13 +96,15 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     that.scrollInterval = null;
                 });
 
-                this.listenTo(Assembl.vent, 'ideaList:selectIdea', function (ideaId) {
+                this.listenTo(Assembl.vent, 'ideaList:selectIdea', function (ideaId, reason, doScroll) {
                     collectionManager.getAllIdeasCollectionPromise()
                         .done(function (allIdeasCollection) {
                         var idea = allIdeasCollection.get(ideaId);
                         if (idea) {
                             that.getContainingGroup().setCurrentIdea(idea);
                             that.getContainingGroup().resetDebateState();
+                            if ( doScroll )
+                              that.onScrollToIdea(idea);
                         }
                     });
                 });
