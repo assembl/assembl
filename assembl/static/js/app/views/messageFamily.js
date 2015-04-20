@@ -22,15 +22,18 @@ define(['backbone.marionette', 'underscore', 'ckeditor', 'app', 'common/context'
             /**
              * @init
              * @param {MessageModel} obj the model
-             * @param {Array[boolean]} last_sibling_chain which of the view's ancestors
+             * @param {Array[boolean]} options.last_sibling_chain which of the view's ancestors
              *   are the last child of their respective parents.
              */
-            initialize: function (options, last_sibling_chain) {
+            initialize: function (options) {
 
-                if (_.isUndefined(last_sibling_chain)) {
-                    last_sibling_chain = [];
+                if (_.isUndefined(options.last_sibling_chain)) {
+                  this.last_sibling_chain = [];
                 }
-                this.last_sibling_chain = last_sibling_chain;
+                else {
+                  this.last_sibling_chain = options.last_sibling_chain;
+                }
+
                 this.messageListView = options.messageListView;
                 this.collapsed = options.collapsed;
                 this.currentLevel = options.currentLevel;

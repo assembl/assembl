@@ -1360,8 +1360,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                         model: messageFullModel,
                         messageListView: that,
                         currentLevel: level,
-                        hasChildren: subviews},
-                        last_sibling_chain);
+                        hasChildren: subviews,
+                        last_sibling_chain: last_sibling_chain});
 
                     // pass logic to the init view
                     //view.currentLevel = level;
