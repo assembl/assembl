@@ -1194,6 +1194,43 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                 }
             },
 
+            /**
+             * scrolls to any dom element in the messageList.
+             * Unlike scrollToMessage, the element must already be onscreen.
+             * This is also called by views/message.js
+             *
+             * @param el: DOM element to scroll to
+             * @param container: el's DOM container which will scroll
+             * @param callback:  will be called once animation is complete
+             * @param margin:  How much to scroll up or down from the top of the
+             * element.  Default is 30px for historical reasons
+             * @param animate:  Should the scroll be smooth
+             */
+            scrollToElement: function (el, container, callback, margin, animate) {
+              //console.log("context::scrollToElement called with: ", el, container, callback, margin, animate);
+              if (el && _.isFunction(container.size) && container.offset() !== undefined) {
+                var panelOffset = container.offset().top,
+                    panelScrollTop = container.scrollTop(),
+                    elOffset = el.offset().top,
+                    target;
+                margin = margin || 30;
+                if (animate === undefined) {
+                  animate = true;
+                }
+                target = elOffset - panelOffset + panelScrollTop - margin;
+                //console.log(elOffset, panelOffset, panelScrollTop, margin, target);
+                if(animate) {
+                  container.animate({ scrollTop: target }, { complete: callback });
+                }
+                else {
+                  container.scrollTop(target);
+                  if(_.isFunction(callback)) {
+                    callback();
+                  }
+                }
+              }
+            },
+
             getCurrentInterfaceType: function () {
                 var interfaceType = this.getCookieItem('interface');
                 if (!this.canUseExpertInterface()) {

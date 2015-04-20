@@ -488,7 +488,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                             if (segment.get('idIdea')) {
                                 if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.IDEA_PANEL)) {
                                   //FIXME:  Even this isn't proper behaviour.  Maybe we should just pop a panel systematically in this case.
-                                    that.messageListView.getContainingGroup().setCurrentIdea(allIdeasCollection.get(annotation.idIdea));
+                                    that.messageListView.getContainingGroup().setCurrentIdea(allIdeasCollection.get(annotation.idIdea), "from_annotation", true);
                                     Assembl.vent.trigger('DEPRECATEDideaPanel:showSegment', segment);
                                 }
                                 else {

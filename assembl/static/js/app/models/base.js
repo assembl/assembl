@@ -29,6 +29,17 @@ define(['backbone', 'common/context', 'utils/types'], function (Backbone, Ctx, T
                 return this.id;
             }
         },
+
+        getCssClassFromId: function() {
+            var re = /^(\w+):(\w+)\/(\d+)$/;
+            if (re.test(this.id)) {
+                return this.id.replace(re,"$1-$2-$3");
+            }
+            else {
+                return this.id;
+            }
+        },
+
         /**
          * Get the innerText from the given `id` element
          * Parses the json and execute `.reset` method in the Model

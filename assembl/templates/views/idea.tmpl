@@ -44,7 +44,7 @@
     <div class="idealist-counter" data-toggle="tooltip" title="{{ gettext('Number of messages related to this idea, or any of its sub-ideas') }}">
         <span><%= num_posts %></span>
     </div>
-    <div class="idealist-title<% if (num_unread_posts > 0 && !Ctx.getCurrentUser().isUnknownUser()) { %> idealist-title-unread<% } %>" title="<%= shortTitle %>">
+    <div class="idealist-title<% if (num_unread_posts > 0 && !Ctx.getCurrentUser().isUnknownUser()) { %> idealist-title-unread<% } %> <% if (idea_css_class ){ %><%= idea_css_class %><% } %>" title="<%= shortTitle %>">
         <%= Ctx.stripHtml(shortTitle) %>
         <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
           <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>

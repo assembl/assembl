@@ -31,6 +31,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
             initialize: function (options, view_data) {
                 var that = this;
                 this.view_data = view_data;
+                this.parentView = options.parentView;
                 if(options.groupContent) {
                   this._groupContent = options.groupContent;
                 }
@@ -41,8 +42,8 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                 this.listenTo(this.model, 'change change:inNextSynthesis', this.render);
                 this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
-                this.listenTo(this._groupContent, 'idea:set', function (idea) {
-                    that.onIsSelectedChange(idea);
+                this.listenTo(this._groupContent, 'idea:set', function (idea, reason, doScroll) {
+                    that.onIsSelectedChange(idea, reason, doScroll);
                 });
             },
 
@@ -93,8 +94,10 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
                 }
 
                 data.Ctx = Ctx;
+                data.idea_css_class = this.model.getCssClassFromId();
 
                 data.shortTitle = this.model.getShortTitleDisplayText();
+
                 this.$el.html(this.template(data));
                 Ctx.initTooltips(this.$el);
                 var rendered_children = [];
@@ -126,7 +129,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
             /**
              * @event
              */
-            onIsSelectedChange: function (idea) {
+            onIsSelectedChange: function (idea, reason, doScroll) {
                 //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
                 if (idea === this.model) {
                     this.$el.addClass('is-selected');

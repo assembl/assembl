@@ -107,6 +107,17 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                     });
                 });
 
+                this.listenTo(this, 'scrollToIdea', this.onScrollToIdea);
+
+                
+                // why is there idea:set and ideaList:selectIdea ?
+                this.listenTo(this.getContainingGroup(), 'idea:set', function (idea, reason, doScroll) {
+                    //console.log("ideaList heared a idea:set event");
+                    if (idea && doScroll) {
+                        that.onScrollToIdea(idea);
+                    }
+                });
+
                 $('html').on('dragover', function(e){
                     that.onDocumentDragOver(e);
                 });
@@ -201,7 +212,8 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                   _.each(roots, function (idea) {
                       var ideaView = new IdeaView({
                           model: idea, 
-                          groupContent: that.getContainingGroup()
+                          groupContent: that.getContainingGroup(),
+                          parentView: that
                       }, view_data);
                       list.appendChild(ideaView.render().el);
                   });
@@ -241,6 +253,35 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                   that.body.get(0).scrollTop = y;
                 });
               }
+            },
+
+            onScrollToIdea: function(ideaModel, retry) {
+                //console.log("ideaList::onScrollToIdea()");
+                var that = this;
+                if ( ideaModel ){
+                    if ( ideaModel.id ){
+                        var el = this.$el.find("."+ideaModel.getCssClassFromId());
+                        if ( el.length )
+                        {
+                            Ctx.scrollToElement(el.first(), that.body, null, 10, true);
+                        } else {
+                            console.log("el not found, will retry later");
+                            if ( retry == undefined )
+                              retry = 0;
+                            if ( ++retry < 5 )
+                            setTimeout(function(){
+                                that.onScrollToIdea(ideaModel, retry);
+                            }, 200);
+                        }
+                        
+                    } else {
+                        // idea has no id yet, so we will wait until it has one to then be able to compare its model to ours
+                        console.log("idea has no id yet, so we will wait until it has one to then be able to compare its model to ours");
+                        that.listenToOnce(ideaModel, "acquiredId", function () {
+                            that.onScrollToIdea(ideaModel);
+                        });
+                    }
+                }
             },
 
             /**
@@ -408,7 +449,7 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                                 }
                             });
                         }
-                        that.getContainingGroup().setCurrentIdea(newIdea, "created");
+                        that.getContainingGroup().setCurrentIdea(newIdea, "created", true);
                     });
             },
 

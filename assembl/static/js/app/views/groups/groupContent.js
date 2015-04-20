@@ -40,21 +40,20 @@ define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec
              * Set the given Idea as the current one to be edited
              * @param  {Idea} [idea]
              */
-            setCurrentIdea: function (idea, reason) {
-              //console.log("setCurrentIdea() fired", idea, reason);
+            setCurrentIdea: function (idea, reason, doScroll) {
+              //console.log("setCurrentIdea() fired", idea, reason, doScroll);
               if (idea === undefined) {
                 throw new Error("Setting the idea undefined isn't allowed.  Perhaps you meant null?");
               }
               if (idea != this.getCurrentIdea()) {
                 // console.log("About to set current idea on group:", this.cid);
                 this._currentIdea = idea;
-                this.trigger("idea:set", idea, reason);
+                this.trigger("idea:set", idea, reason, doScroll);
               }
-
             },
 
             /**
-             * @return: undefined if not idea was set yet.  
+             * @return: undefined if no idea was set yet.  
              * null if it was explicitely set to no idea.
              * 
              */
@@ -66,6 +65,7 @@ define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec
                 this.model.collection.remove(this.model);
                 this.groupContainer.resizeAllPanels();
             },
+            
             calculateGridSize: function () {
                 var gridSize = 0;
                 this.children.each(function (panelWrapper) {
