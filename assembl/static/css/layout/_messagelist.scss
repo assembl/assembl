@@ -117,10 +117,12 @@
 
     .show-expert-mode-label {
       line-height: 24px; // the height of the toggle button
-      min-width: 70px; // the approximate width of label's text
+      min-width: 85px; // the approximate width of label's text
+      padding-left: 15px;
       padding-right: 2px;
       text-align: right;
       vertical-align: middle;
+      color: $txtGray1;
     }
 
     .show-expert-mode-toggle-button {
@@ -163,15 +165,18 @@
 
     .option {
       @include box-sizing(border-box);
-      width: 50%;
-      height: 36px;
+      //width: 50%;
+      min-height: 36px;
+      @include flex-grow(1);
       cursor: pointer;
-      color: $gray4;
+      //color: $gray4;
+      color: $txtGray1;
       background-color: $white;
       @include transition(border-bottom 0.2s ease-in);
       border-bottom: 3px solid transparent;
       &:hover {
-        border-bottom: 3px solid lighten($black, 70%);
+        //border-bottom: 3px solid lighten($black, 70%);
+        border-bottom: 3px solid $txtGray1;
       }
     }
     .option:first-child {
