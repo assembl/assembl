@@ -108,7 +108,7 @@ def maybe_contextual_route(request, route_name, **args):
 )
 def logout(request):
     forget(request)
-    next_view = handle_next_view(request, True)
+    next_view = handle_next_view(request)
     return HTTPFound(location=next_view)
 
 
