@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/messageFamily', 'views/messageListHeader', 'underscore', 'jquery', 'app', 'common/context', 'models/message', 'utils/i18n', 'views/messageListPostQuery', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'utils/panelSpecTypes', 'views/assemblPanel', 'common/collectionManager', 'bluebird'],
-    function (Backbone, Raven, objectTreeRenderVisitor, MessageFamilyView, MessageListHeaderView, _, $, Assembl, Ctx, Message, i18n, PostQuery, Permissions, MessageSendView, MessagesInProgress, PanelSpecTypes, AssemblPanel, CollectionManager, Promise) {
+define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/visitors/objectTreeRenderVisitorReSort', 'views/messageFamily', 'views/messageListHeader', 'underscore', 'jquery', 'app', 'common/context', 'models/message', 'utils/i18n', 'views/messageListPostQuery', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'utils/panelSpecTypes', 'views/assemblPanel', 'common/collectionManager', 'bluebird'],
+    function (Backbone, Raven, objectTreeRenderVisitor, objectTreeRenderVisitorReSort, MessageFamilyView, MessageListHeaderView, _, $, Assembl, Ctx, Message, i18n, PostQuery, Permissions, MessageSendView, MessagesInProgress, PanelSpecTypes, AssemblPanel, CollectionManager, Promise) {
 
         /**
          * Constants
@@ -1170,6 +1170,16 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   that.visitorRootMessagesToDisplay = [];
 
                   messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
+                  
+                  that.visitorOrderLookupTable = [];
+                  that.visitorRootMessagesToDisplay = [];
+                  objectTreeRenderVisitorReSort(
+                      that.visitorViewData, 
+                      that.visitorOrderLookupTable, 
+                      that.visitorRootMessagesToDisplay, 
+                      function (message) {
+                        return message.get('date');
+                      });
                   that.render_real();
                   that.showInspireMeIfAvailable();
                   that.renderMessageListHeader();
