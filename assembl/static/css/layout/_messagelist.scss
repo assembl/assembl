@@ -122,6 +122,10 @@
       text-align: right;
       vertical-align: middle;
     }
+
+    .show-expert-mode-toggle-button {
+      margin-top: 3px;
+    }
   }
 
   .options-filter {
@@ -164,9 +168,14 @@
       cursor: pointer;
       color: $gray4;
       background-color: $white;
+      @include transition(border-bottom 0.2s ease-in);
+      border-bottom: 3px solid transparent;
+      &:hover {
+        border-bottom: 3px solid lighten($black, 70%);
+      }
     }
     .option:first-child {
-      border-right: 1px solid $gray;
+      //border-right: 1px solid $gray;
     }
     .option.selected {
       color: $green;
