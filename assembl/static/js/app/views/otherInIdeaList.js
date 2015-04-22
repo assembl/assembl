@@ -7,8 +7,6 @@ define(['common/context', 'views/idea', 'underscore'], function (Ctx, IdeaView, 
         render: function () {
             Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-            this.$el.addClass('idealist-item');
-
             var hasOrphanPosts = this.model.get('num_orphan_posts'),
                 hasSynthesisPosts = this.model.get('num_synthesis_posts');
 

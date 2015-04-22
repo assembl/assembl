@@ -1,9 +1,12 @@
-<div class="idealist-bottom idealist-body--rootidea">
-    <div class="idealist-title idealist-title-unread mls" title="{{ gettext('All messages') }}">
+<div class="idealist-body">
+    <span class="idealist-space"></span>
+
+    <div data-toggle="tooltip" class="idealist-counter" title="{{ gettext('Number of posts in the entire discussion') }}">
+        <span><%= num_posts %></span>
+    </div>
+    <% var num_unread_posts = (num_posts - num_read_posts); %>
+    <div title="{{ gettext('All messages') }}" class="idealist-title idealist-title-unread">
         {{ gettext('All messages') }}
-        <span class="idealist-counter" data-toggle="tooltip" data-placement="top" title="{{ gettext('Number of posts in the entire discussion') }}">(<%= num_posts %>)</span>
-        <i class="icon-arrowright"></i>
+        <span data-toggle="tooltip" class="idealist-title-unread-count js_idealist-title-unread-count mlxs" title="{{ gettext('Number of unread posts in the entire discussion') }}"> <%= num_unread_posts %> </span>
     </div>
 </div>
-
-<div class="idealist-children"></div>

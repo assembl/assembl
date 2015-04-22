@@ -1,7 +1,12 @@
-<div class="idealist-bottom idealist-body--synthesis pll">
-    <div class="idealist-title" title="{{ gettext('All syntheses') }}">
+<div class="idealist-body">
+    <span class="idealist-space"></span>
+
+    <div data-toggle="tooltip" class="idealist-counter" title="{{ gettext('All syntheses') }}">
+        <span><%= num_synthesis_posts %></span>
+    </div>
+    {# TODO <% var num_unread_posts = (num_posts - num_read_posts); %>#}
+    <div title="{{ gettext('All syntheses') }}" class="idealist-title idealist-title-unread">
         {{ gettext('All syntheses') }}
-        <span class="idealist-counter" data-toggle="tooltip" title="{{ gettext('Number of syntheses in the discussion') }}">(<%= num_synthesis_posts %>)</span>
-        <i class="icon-arrowright"></i>
+        {#<span data-toggle="tooltip" class="idealist-title-unread-count js_idealist-title-unread-count mlxs" title="{{ gettext('Number of unread syntheses') }}"> <%= num_unread_posts %> </span>#}
     </div>
 </div>
