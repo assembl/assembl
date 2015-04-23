@@ -21,7 +21,7 @@ WebOb==1.4.1
 WebTest==2.0.18
 Werkzeug==0.10.4
 alabaster==0.7.3
--e git+https://github.com/maparent/alembic.git#egg=alembic
+-e git+https://github.com/imaginationforpeople/alembic.git#egg=alembic
 amqp==1.4.6
 anyjson==0.3.3
 anykeystore==0.2
@@ -51,7 +51,7 @@ imaplib2==2.43.0
 isodate==0.5.1
 iso639==0.1.1
 iso8601==0.1.10
--e git+https://github.com/maparent/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
+-e git+https://github.com/imaginationforpeople/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.24
 lingua==3.9
@@ -102,7 +102,7 @@ selenium==2.45.0
 simplejson==3.6.5
 six==1.9.0
 snowballstemmer==1.2.0
--e git+https://github.com/maparent/sockjs-tornado.git@master#egg=sockjs_tornado
+-e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
 sphinx-bootstrap-theme==0.4.5
 splinter==0.7.2
 supervisor==3.1.3
@@ -111,7 +111,7 @@ transaction==1.4.3
 translationstring==1.3
 uricore==0.1.2
 uwsgitop==0.8
--e git+https://github.com/maparent/velruse.git#egg=velruse
+-e git+https://github.com/imaginationforpeople/velruse.git#egg=velruse
 venusian==1.0
 -e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
 waitress==0.8.9
