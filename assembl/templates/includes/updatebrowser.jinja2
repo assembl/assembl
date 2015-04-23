@@ -1,20 +1,48 @@
 <script src="{{ STATIC_URL }}/js/app/utils/browser-detect.js"></script>
 
+<style>
+
+/* Need to be there to not depend of global css or latency */
+#asn-warning{
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    margin: 0px;
+    padding: 13px 10px;
+    width: 100%;
+    z-index: 99999;
+    font-size: 10pt;
+    background-color: #bb7be2;
+    text-align: left;
+    border-radius: 0;
+    box-sizing: border-box;
+}
+
+#asn-warning .bx-close {
+    float: right;
+    left: 0;
+    top: -2px;
+    font-size: 16px;
+}
+#asn-warning .bx-close .icon-delete {
+    color: #ffffff;
+}
+
+</style>
+
 <script id="asn-template" type="text/x-template">
-    <div id="asn-warning" style="position: fixed; left: 0px; border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: rgb(223, 221, 203); top: 0px; margin: 0px; width: 100%; z-index: 99999; color: rgb(111, 109, 91); font-size: 10pt; padding: 0px; background-color: rgb(255, 252, 223); text-align: left; background-position: initial initial; background-repeat: initial initial;">
-        <a href="http://www.updateyourbrowser.net/" style="color: rgb(79, 77, 59); text-decoration: none; font-style: normal; font-variant: normal; font-weight: normal; font-size: 9pt; line-height: 14px; font-family: 'Trebuchet MS', Arial, Helvetica; padding-right: 30px; display: block;" target="_blank">
-            <span id="asn-outofdate" style="display: block;  color: #fff; float: left; padding: 10px 18px 10px 8px; background: #bd695b url('http://www.updateyourbrowser.net/_static/imagens/arrow.gif') no-repeat right -2px; ">
-                {{ gettext('Your browser is out of date') }}
-            </span>
-            <span style="display: block; padding: 10px 10px; float: left;">
-                {{ gettext("You're using an old version of <strong>{0}</strong>.")|safe }}
-                {{ gettext('For the best experience, please <span style="text-decoration: underline;">update your browser</span>.')|safe }}            
-            </span>
-        </a>
-        <a href="javascript://" onclick="document.body.removeChild( this.parentNode.parentNode )" id="asn-close" style="position: absolute; text-decoration: none; width: 12px; border: none; padding: 3px; top: 8px; right: 14px; color: rgb(79, 77, 59); height: 14px; font-style: normal; font-variant: normal; font-weight: normal; font-size: 8pt; line-height: 14px; font-family: 'Trebuchet MS', Arial, Helvetica; background-image: url(http://www.updateyourbrowser.net/_static/imagens/close_03.gif);"></a>
+    <div id="asn-warning" class="bx">
+        <button class="btn btn-cancel btn-xs bx-close" type="button" style="">
+            <a href="javascript://" onclick="document.querySelector('#asn-warning').remove()">
+                <i class="icon-delete"></i>
+            </a>
+        </button>
+        <span style="display: block; float: left; color:#ffffff;">
+            {{ gettext("Your version of <strong>{0}</strong> is outdated and may deteriorate your experience on Assemble.")|safe }}
+            <a href="http://www.updateyourbrowser.net/" target="_blank" class="btn btn-secondary">{{ gettext("update your browser") }}</a>
+        </span>
     </div>
 </script>
-
 
 <script type="text/javascript"> 
 (function(BrowserDetect){
