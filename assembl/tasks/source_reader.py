@@ -159,8 +159,11 @@ class SourceReader(Thread):
     def is_connected(self):
         return self.status not in disconnected_states
 
-    def wake(self, reimport=False):
+    def setup_read(self, reimport, **kwargs):
         self.reimporting = reimport
+        self.extra_args = kwargs
+
+    def wake(self):
         if self.status in (ReaderStatus.PAUSED, ReaderStatus.CLOSED) and (
                 datetime.utcnow() - max(self.last_prod, self.last_read)
                 > self.min_time_between_reads):
@@ -327,24 +330,24 @@ _queue = Queue(
 _producer_connection = None
 
 
-def wake(source_id, reimport=False, force_restart=False):
+def wake(source_id, reimport=False, force_restart=False, **kwargs):
+    global _producer_connection
+    from kombu.common import maybe_declare
+    from kombu.pools import producers
+    with producers[_producer_connection].acquire(block=True) as producer:
+        maybe_declare(_exchange, producer.channel)
+        kwargs.update(dict(source=source_id, reimport=reimport, force_restart=force_restart))
+        producer.publish(kwargs, serializer="json", routing_key=ROUTING_KEY)
+
+
+def external_shutdown():
     global _producer_connection
     from kombu.common import maybe_declare
     from kombu.pools import producers
     with producers[_producer_connection].acquire(block=True) as producer:
         maybe_declare(_exchange, producer.channel)
         producer.publish(
-            [source_id, reimport, force_restart], serializer="json", routing_key=ROUTING_KEY)
-
-
-def external_shutdown(*args):
-    global _producer_connection
-    from kombu.common import maybe_declare
-    from kombu.pools import producers
-    with producers[_producer_connection].acquire(block=True) as producer:
-        maybe_declare(_exchange, producer.channel)
-        producer.publish(
-            [-1, False, False], serializer="json", routing_key=ROUTING_KEY)
+            {"shutdown": True}, serializer="json", routing_key=ROUTING_KEY)
 
 
 class SourceDispatcher(ConsumerMixin):
@@ -360,14 +363,19 @@ class SourceDispatcher(ConsumerMixin):
                          callbacks=[self.callback])]
 
     def callback(self, body, message):
-        source_id, reimport, force_restart = body
-        if source_id > 0:
-            self.read(source_id, reimport, force_restart)
-        else:
+        if isinstance(body, list):
+            message.ack()
+            return  # old message
+        if body.get("shutdown", False):
             self.shutdown()
+        else:
+            source_id = body.get("source", None)
+            if not source_id:
+                raise ValueError("source not defined in "+repr(body))
+            self.read(source_id, **body)
         message.ack()
 
-    def read(self, source_id, reimport=False, force_restart=False):
+    def read(self, source_id, reimport=False, force_restart=False, **kwargs):
         if source_id not in self.readers:
             from assembl.models import ContentSource
             source = ContentSource.get(source_id)
@@ -379,7 +387,7 @@ class SourceDispatcher(ConsumerMixin):
                 return False
             if (reader.status != ReaderStatus.IRRECOVERABLE_ERROR
                     or force_restart):
-                reader.reimporting = reimport
+                reader.setup_read(reimport, **kwargs)
                 reader.start()
                 return True
         reader = self.readers[source_id]
@@ -387,7 +395,8 @@ class SourceDispatcher(ConsumerMixin):
             return False
         if (reader.status != ReaderStatus.IRRECOVERABLE_ERROR
                 or force_restart):
-            reader.wake(reimport)
+            reader.setup_read(reimport, **kwargs)
+            reader.wake()
             return True
         return False
 
