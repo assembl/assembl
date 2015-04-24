@@ -198,7 +198,9 @@ define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec
                     
                     if ( show_debate_help === true ){
                         // this is a bit ugly but it works. Making it nice will be for a v2
-                        var help_text = i18n.gettext("<h1>Getting started</h1><br/>Welcome to the discussion! The table to the left is a list of the ideas people are talking about. We've tried to make it easy for you to find conversations that you are interested in! To join in:<br/><br/>1) Choose an idea from the table of contents - ideas include messages from all related sub-ideas as well<br/><br/>2) Reply to an existing message or start a new message of your own<br/><br/>This is a safe and respectful space. All ideas are welcome!");
+                        var help_text = i18n.gettext("<h1>Pick a topic and start contributing</h1>" +
+                            "<br/>This table of contents helps you find the conversations and topics you are interested in so you don’t get overwhelmed. Topics include messages from all related sub-topics as well.<br/>" +
+                            "<br/>This is a safe and respectful space. All ideas are welcome!<br/>");
 
                         this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
                         this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
