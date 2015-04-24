@@ -867,7 +867,7 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              * Returns a fancy date (ex: a few seconds ago), or a formatted precise date if precise is true
              * @return {String}
              */
-            getNiceDateTime: function (date, precise, with_time) {
+            getNiceDateTime: function (date, precise, with_time, forbid_future) {
                 // set default values
                 precise = (precise === undefined) ? false : precise;
                 with_time = (with_time === undefined) ? true : with_time;
@@ -877,6 +877,12 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                 // (Right now, the server gives UTC datetimes but is not explicit enough because it does not append "+0000". So Moment thinks that the date is not in UTC but in user's timezone. So we have to tell it explicitly, using .utc())
                 var momentDate = Moment.utc(date);
                 momentDate.local(); // switch off UTC mode, which had been activated using .utc()
+
+                if ( forbid_future ) { // server time may be ahead of us of some minutes. In this case, say it was now
+                    var now = Moment();
+                    if ( momentDate > now )
+                        momentDate = now;
+                }
 
                 if (momentDate) {
                     if (precise == true) {
@@ -897,10 +903,10 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             },
 
             // without time
-            getNiceDate: function (date, precise) {
+            getNiceDate: function (date, precise, forbid_future) {
                 if (precise === undefined)
                     precise = true;
-                return this.getNiceDateTime(date, precise, false);
+                return this.getNiceDateTime(date, precise, false, true);
             },
 
             /**
