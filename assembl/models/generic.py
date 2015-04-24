@@ -20,6 +20,7 @@ from ..auth import (
 from ..lib.sqla import (INSERT_OP, UPDATE_OP, get_model_watcher)
 from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
 from .discussion import Discussion
+from ..lib.sqla import Base
 #from ..lib.history_meta import Versioned
 
 class ContentSource(DiscussionBoundBase):
@@ -162,6 +163,24 @@ class AnnotatorSource(ContentSource):
     __mapper_args__ = {
         'polymorphic_identity': 'annotator_source',
     }
+
+
+class ContentSourceIDs(Base):
+    __tablename__ = 'content_source_ids'
+
+    id = Column(Integer, primary_key=True)
+    source_id = Column(Integer, ForeignKey('content_source.id',
+                       onupdate='CASCADE', ondelete='CASCADE'))
+    source = relationship('ContentSource', backref=backref(
+                          'pushed_messages',
+                          cascade='all, delete-orphan'))
+
+    post_id = Column(Integer, ForeignKey('content.id',
+                     onupdate='CASCADE', ondelete='CASCADE'))
+    post = relationship('Content',
+                        backref=backref('source_ids',
+                        cascade='all, delete-orphan'))
+    message_id_in_source = Column(String(256), nullable=False)
 
 
 class Content(DiscussionBoundBase):
