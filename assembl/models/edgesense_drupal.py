@@ -8,11 +8,10 @@ from sqlalchemy import (
  )
 
 from .generic import PostSource
-from .models.posts import ImportedPost
+from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
 from ..tasks.source_reader import PullSourceReader
 from ..lib import config
-from exceptions import InputError
 from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 import requests
