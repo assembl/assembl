@@ -8,23 +8,15 @@ from sqlalchemy import (
     DateTime,
     UniqueConstraint,
     Text
-#    not_
  )
 
-from .generic import PostSource, ContentSource
-from .post import ImportedPost, Post, Content
+from .generic import PostSource
 from .auth import AbstractAgentAccount, AgentProfile
-from .feed_parsing import WebLinkAccount
-from ..lib.sqla import get_session_maker
 from ..tasks.source_reader import PullSourceReader
 from ..lib import config
 from sqlalchemy.orm import relationship, backref
-from virtuoso.alchemy import CoerceUnicode
-from exceptions import ImportError, TypeError
-from importlib import import_module
 from datetime import datetime
 import requests
-import pytz
 import uuid
 import simplejson as json
 
@@ -108,8 +100,7 @@ class SourceSpecificAccount(AbstractAgentAccount):
         'polymorphic_identity': 'source_specific_account'
     }
 
-    __table_args__ = (
-        UniqueConstraint('user_id','source_id'), )
+    __table_args__ = ( UniqueConstraint('user_id', 'source_id'), )
 
     id = Column(Integer, ForeignKey(
                 'abstract_agent_account.id',
@@ -119,7 +110,7 @@ class SourceSpecificAccount(AbstractAgentAccount):
     user_link = Column(String(1024))
     # user_id: Edgeryder returns "6464" or "6460"
     user_id = Column(String(15), nullable=False)
-    user_info = Column(Text) # The JSON blob for future-keeping
+    user_info = Column(Text)  # The JSON blob for future-keeping
     source_id = Column(Integer, ForeignKey(
                        'edgesense_drupal_source.id',
                        onupdate='CASCADE',
