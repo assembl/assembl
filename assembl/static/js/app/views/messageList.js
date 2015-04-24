@@ -66,8 +66,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
               this._nbPendingMessage = 0;
               this.aReplyBoxHasFocus = false;
 
-              this.expertViewIsAvailable = (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT); // TODO: enable it for everyone
-              this.isUsingExpertView = (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT); // TODO: have a dedicated flag
+              this.expertViewIsAvailable = !Ctx.getCurrentUser().isUnknownUser(); // TODO: enable it also for logged out visitors (but for this we need to disable user-related filters, like read)
+              this.isUsingExpertView = (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT); // TODO?: have a dedicated flag
 
               this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
               this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
