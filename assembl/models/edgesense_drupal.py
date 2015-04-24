@@ -1,19 +1,18 @@
 from sqlalchemy import (
-    orm,
     Column,
     ForeignKey,
     Integer,
     String,
-    Boolean,
-    DateTime,
     UniqueConstraint,
     Text
  )
 
 from .generic import PostSource
+from .models.posts import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
 from ..tasks.source_reader import PullSourceReader
 from ..lib import config
+from exceptions import InputError
 from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 import requests
@@ -100,7 +99,7 @@ class SourceSpecificAccount(AbstractAgentAccount):
         'polymorphic_identity': 'source_specific_account'
     }
 
-    __table_args__ = ( UniqueConstraint('user_id', 'source_id'), )
+    __table_args__ = (UniqueConstraint('user_id', 'source_id'), )
 
     id = Column(Integer, ForeignKey(
                 'abstract_agent_account.id',
@@ -145,38 +144,9 @@ class SourceSpecificAccount(AbstractAgentAccount):
 
 
 class SourceSpecificPost(ImportedPost):
-    # __tablename__ = 'source_specific_post'
     __mapper_args__ = {
         'polymorphic_identity': 'source_specific_post'
     }
-
-    # "node": {
-    #     "nid": "4413",
-    #     "uid": "34",
-    #     "date": "13 Mar 2015 - 10:18",
-    #     "created": "1426241895",
-    #     "body": "https:\/\/edgeryders.eu\/profiles\/commons\/libraries\/ckeditor\/plugins\/smiley\/images\/regular_smile.png"
-
-    # "comment": {
-    #     "cid": "286",
-    #     "nid": "194",
-    #     "uid": "34",
-    #     "created": "1316509746",
-    #     "pid": "0",
-    #     "comment": "Definitely a lot of energy at #15shm. For me it was quite clear that there is no accepted way to deal with an institution that shows up respectfully and wishes to interact. People are so accustomed to having to fight for attention that they are not sure what to do when they get it!",
-    #     "title": ""
-    # }
-
-    # if pid is 0, then the comment is on a node
-    # if pid is not 0, then the comment is on another comment
-
-    # Content: creation_date, discussion_id/discussion,
-    # Post: message_id, ancestry, parent_id, children, creator_id/creator,
-    #   subject, body
-    # ImportedPost: import_date, source_post_id, source_id/source,
-    #   body_mime_type,
-
-    # Char-escape for the body of content is going to be a Biznitch
 
     @staticmethod
     def create_nid(node):
@@ -187,13 +157,13 @@ class SourceSpecificPost(ImportedPost):
     def create(cls, source, post):
         # post is a dictionary of the post from json
 
-        #post = json.loads(json_post)
+        # post = json.loads(json_post)
         # Check whether the incoming post is a Node post or a Comment post
         # prefix_id = source.get_prepend_id()
         if 'node' in post:
-            if not 'uid' in post['node']:
+            if 'uid' not in post['node']:
                 return None
-            node = post['node']
+            node = post.get('node', None)
             node_id = SourceSpecificPost.create_nid(node)
 
             created = datetime.fromtimestamp(int(node['created']))
@@ -212,7 +182,7 @@ class SourceSpecificPost(ImportedPost):
             message_id = source.get_default_prepended_id() + node_id
 
             return cls(import_date=import_date, source=source,
-                       message_id = message_id,
+                       message_id=message_id,
                        source_post_id=node_id, creator=agent,
                        creation_date=created,
                        discussion=discussion, body=body)
@@ -230,7 +200,7 @@ class SourceSpecificPost(ImportedPost):
             user = source.db.query(SourceSpecificAccount).filter_by(
                 user_id=user_id, source_id=source_id).first()
 
-            agent =  None if not user else user.profile
+            agent = None if not user else user.profile
             import_date = datetime.utcnow()
             body = comment['comment']
             title = comment['title']
@@ -241,8 +211,6 @@ class SourceSpecificPost(ImportedPost):
                        message_id=message_id, source=source, creator=agent,
                        creation_date=created, discussion=discussion,
                        body=body, subject=title)
-                       # parent_id=parent_id_to_store)
-
 
 
 # In the parsing process, ALWAYS parse the USERS FIRST, because they will
@@ -250,7 +218,7 @@ class SourceSpecificPost(ImportedPost):
 class EdgeSenseParser(object):
     def __init__(self, source, from_file=False):
         self.source = source
-        self.session= source.db
+        self.session = source.db
         self.threaded = False
         if from_file:
             self.users = self._load_json_from_file(source.user_source)['users']
@@ -262,11 +230,11 @@ class EdgeSenseParser(object):
             self.nodes = self._load_json(source, 'nodes', from_file)
             self.comments = self._load_json(source, 'comments', from_file)
 
-    def _load_json_from_file(self,file_name):
+    def _load_json_from_file(self, file_name):
         with open(file_name) as data:
             return json.load(data)
 
-    def _load_json(self,source, resource_type, from_file):
+    def _load_json(self, source, resource_type, from_file):
         if resource_type is 'users':
             source_link = source.user_source
             if from_file:
@@ -303,7 +271,7 @@ class EdgeSenseParser(object):
         else:
             raise InputError("%s is not a proper resource" % resource_type)
 
-    def load_json_from_file(self,file_path,source_type='nodes'):
+    def load_json_from_file(self, file_path, source_type='nodes'):
         # source_type = ['users', 'nodes', 'comments']
         with open(file_path) as data:
             if source_type is 'users':
@@ -362,7 +330,6 @@ class EdgeSenseParser(object):
 
             self.threaded = True
 
-
     def _parse_users(self, db):
         if not self.users:
             print "Array of users is empty!"
@@ -373,7 +340,7 @@ class EdgeSenseParser(object):
                 new_user = SourceSpecificAccount.create(self.source, user)
                 self.session.add(new_user)
 
-    def _parse_nodes(self,db):
+    def _parse_nodes(self, db):
         if not self.nodes:
             print "Array of nodes is empty!"
         else:
@@ -385,7 +352,7 @@ class EdgeSenseParser(object):
                     continue
                 self.session.add(new_post)
 
-    def _parse_comments(self,db):
+    def _parse_comments(self, db):
         if not self.comments:
             print "Array of comments is empty!"
         else:
@@ -403,7 +370,7 @@ class EdgeSenseParser(object):
         # Then add all of the comments
         # Then set parent on all comments
 
-        #First, get all users and posts from the source, so as to not create
+        # First, get all users and posts from the source, so as to not create
         # duplicates
         users_db = self._convert_users_to_dict(self._get_all_users())
         posts_db = self._convert_posts_to_dict(self._get_all_posts())
@@ -423,7 +390,7 @@ class EdgeSenseParser(object):
         self._process_comment_threading()
         self.session.commit()
 
-    def _update_users(self,db):
+    def _update_users(self, db):
         if not self.users:
             print "Array of users is empty!"
         else:
@@ -439,7 +406,6 @@ class EdgeSenseParser(object):
                 else:
                     new_user = SourceSpecificAccount.create(self.source, user)
                     self.session.add(new_user)
-
 
                 # return cls(import_date=import_date, source=source,
                 #        message_id = message_id,
@@ -477,7 +443,6 @@ class EdgeSenseParser(object):
                     if not new_post:
                         continue
                     self.session.add(new_post)
-
 
     def _update_comments(self, db, users_db):
         if not self.comments:
