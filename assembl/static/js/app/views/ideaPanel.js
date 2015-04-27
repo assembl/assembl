@@ -304,7 +304,7 @@ define(['app', 'common/context', 'utils/i18n', 'views/editableField', 'views/cke
                     subIdeas = this.model.getChildren();
                     contributors = this.model.get('contributors');
 
-                    direct_link_relative_url = "/idea/" + encodeURIComponent(this.model.get('@id'));
+                    direct_link_relative_url = Ctx.getRelativeURLFromDiscussionRelativeURL("idea/" + encodeURIComponent(this.model.get('@id')));
                     //share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
                     share_link_url = "/static/widget/share/index.html?u=" +
                         encodeURIComponent(Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)) + "&t=" +

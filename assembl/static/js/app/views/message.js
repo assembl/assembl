@@ -168,7 +168,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 if (!_.has(this.model, 'metadata_json')){
                     metadata_json = null;
                 }
-                var direct_link_relative_url = "/posts/" + encodeURIComponent(this.model.get('@id')),
+                var direct_link_relative_url = Ctx.getRelativeURLFromDiscussionRelativeURL("posts/" + encodeURIComponent(this.model.get('@id'))),
                     //share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
                     share_link_url = "/static/widget/share/index.html?u=" +
                     encodeURIComponent(Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)) + "&t=" +

@@ -1336,7 +1336,15 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             },
 
             getAbsoluteURLFromRelativeURL: function(url) {
-                return this.format('{0}//{1}/{2}{3}', location.protocol, location.host, this.getDiscussionSlug(), url);
+                return this.format('{0}//{1}/{2}', location.protocol, location.host, url);
+            },
+
+            getAbsoluteURLFromDiscussionRelativeURL: function(url) {
+                return this.format('{0}//{1}/{2}/{3}', location.protocol, location.host, this.getDiscussionSlug(), url);
+            },
+
+            getRelativeURLFromDiscussionRelativeURL: function(url) {
+                return this.format('/{0}/{1}', this.getDiscussionSlug(), url);
             },
 
             isNewUser: function () {
