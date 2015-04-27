@@ -1336,14 +1336,20 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             },
 
             getAbsoluteURLFromRelativeURL: function(url) {
+                if ( url && url[0] == "/" )
+                    url = url.substring(1);
                 return this.format('{0}//{1}/{2}', location.protocol, location.host, url);
             },
 
             getAbsoluteURLFromDiscussionRelativeURL: function(url) {
+                if ( url && url[0] == "/" )
+                    url = url.substring(1);
                 return this.format('{0}//{1}/{2}/{3}', location.protocol, location.host, this.getDiscussionSlug(), url);
             },
 
             getRelativeURLFromDiscussionRelativeURL: function(url) {
+                if ( url && url[0] == "/" )
+                    url = url.substring(1);
                 return this.format('/{0}/{1}', this.getDiscussionSlug(), url);
             },
 
