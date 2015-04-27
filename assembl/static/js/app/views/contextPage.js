@@ -1299,10 +1299,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                 if (this.editingObjective) {
                     this.renderCKEditorObjective();
                 }
-            },
 
-            onShow: function(){
-                // react to when a view has been rendered and displayed
                 this.applyEllipsisToSection('.context-introduction', this.ui.seeMoreIntro);
                 this.applyEllipsisToSection('.context-objective', this.ui.seeMoreObjectives);
             },
