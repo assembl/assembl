@@ -20,11 +20,14 @@ appCards.controller('cardsCtl',
             {
                 console.log("Error: no config or idea given.");
             }
+            $scope.canPost = true;
+            $scope.canNotPostReason = null;
 
             $scope.sendMessageEndpointUrl = $scope.computeSendMessageEndpointUrl($scope.config, $scope.urlParameterConfig);
             console.log("$scope.sendMessageEndpointUrl: ", $scope.sendMessageEndpointUrl);
             if ( !$scope.sendMessageEndpointUrl ){
-                $(".card-comment form p").first().after ( document.createTextNode("This idea is not linked to a video creativity widget, so you will not be able to post a message.") );
+                $scope.canPost = false;
+                $scope.canNotPostReason = "no_endpoint";
             }
 
 

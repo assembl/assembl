@@ -25,5 +25,6 @@
     "messageSuccessfullyPosted": "Your message has been successfully posted.",
     "resumeInspirationButton": "Continue searching for inspiration",
     "exitButton": "Return to the debate",
-    "doesThisCardInspireYou": "Does this card inspire you? Write your idea below."
+    "doesThisCardInspireYou": "Does this card inspire you? Write your idea below.",
+    "canNotPostBecauseNoEndpoint": "This idea is not linked to a video creativity widget, so you can't post an inspired message."
 }

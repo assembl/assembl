@@ -24,7 +24,10 @@
         </div>-->
     </div>
     <div class="card-comment">
-        <form role="form" ng-submit="sendIdea()" ng-hide="message_is_sent">
+        <p ng-show="!canPost && canNotPostReason == 'no_endpoint'">
+            {{ 'canNotPostBecauseNoEndpoint' | translate }}
+        </p>
+        <form role="form" ng-submit="sendIdea()" ng-hide="message_is_sent || !canPost">
             <p>
                 {{ 'doesThisCardInspireYou' | translate }}
             </p>

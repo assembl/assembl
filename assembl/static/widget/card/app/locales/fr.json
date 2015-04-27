@@ -25,5 +25,6 @@
     "messageSuccessfullyPosted": "Votre message a été posté avec succès.",
     "resumeInspirationButton": "Continuer à chercher l'inspiration",
     "exitButton": "Retourner au débat",
-    "doesThisCardInspireYou": "Cette carte vous inspire ? Écrivez votre idée ci-dessous."
+    "doesThisCardInspireYou": "Cette carte vous inspire ? Écrivez votre idée ci-dessous.",
+    "canNotPostBecauseNoEndpoint": "Cette idée n'a pas été associée à un widget de créativité, donc vous ne pouvez pas poster de message inspiré."
 }
