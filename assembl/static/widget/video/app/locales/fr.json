@@ -16,5 +16,6 @@
     "videoSearchPlaceholderText": "Entrez ici votre recherche...",
     "videoTopExplanationRelatedTermsTitle": "Concepts connexes (via Wikipédia)",
     "videoTopExplanationRelatedTermsDescription": "Vous pouvez aussi écrire ici un concept pour lequel vous souhaitez trouver des termes connexes. Cliquez ensuite sur les mots trouvés pour les utiliser dans votre recherche de vidéos.",
-    "videoNoRelatedTermsSearchResults": "Il n'y a pas de résultat de recherche pour cette requête."
+    "videoNoRelatedTermsSearchResults": "Il n'y a pas de résultat de recherche pour cette requête.",
+    "canNotPostBecauseNoEndpoint": "Cette idée n'a pas été associée à un widget de créativité, donc vous ne pouvez pas poster de message inspiré."
 }

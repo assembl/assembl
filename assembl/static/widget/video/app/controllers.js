@@ -30,12 +30,15 @@ videosApp.controller('videosCtl',
                     console.log("localConfig received");
                     $scope.localConfig = data;
                 });
+                $scope.canPost = true;
+                $scope.canNotPostReason = null;
 
 
                 $scope.sendMessageEndpointUrl = $scope.computeSendMessageEndpointUrl();
                 console.log("$scope.sendMessageEndpointUrl: ", $scope.sendMessageEndpointUrl);
                 if ( !$scope.sendMessageEndpointUrl ){
-                    $("#results > p").first().after ( document.createTextNode("This idea is not linked to a video creativity widget, so you will not be able to post a message.") );
+                    $scope.canPost = false;
+                    $scope.canNotPostReason = "no_endpoint";
                 }
                 
 

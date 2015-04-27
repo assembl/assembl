@@ -16,5 +16,6 @@
     "videoSearchPlaceholderText": "Type here your search query...",
     "videoTopExplanationRelatedTermsTitle": "Related terms (via Wikipedia)",
     "videoTopExplanationRelatedTermsDescription": "You can also type here a concept for which you would like to find some related terms. Then click on the found terms to add them to your video search.",
-    "videoNoRelatedTermsSearchResults": "There are no results for this search query."
+    "videoNoRelatedTermsSearchResults": "There are no results for this search query.",
+    "canNotPostBecauseNoEndpoint": "This idea is not linked to a video creativity widget, so you can't post an inspired message."
 }

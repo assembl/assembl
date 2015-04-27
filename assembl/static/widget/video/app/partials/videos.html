@@ -5,7 +5,11 @@
         <div id="playlist">
             <p id="current">{{ youtube.videoTitle }}</p>
 
-            <div class="card-comment">
+            <p ng-show="!canPost && canNotPostReason == 'no_endpoint'">
+                {{ 'canNotPostBecauseNoEndpoint' | translate }}
+            </p>
+
+            <div class="card-comment" ng-show="canPost">
                 
                 <div ng-hide="message_is_sent">
                     <p>
@@ -40,6 +44,10 @@
     <div id="results">
         <p>
             {{ 'videoTopExplanation' | translate: {idea: idea.shortTitle, discussion: discussion.topic} }}
+        </p>
+
+        <p ng-show="!canPost && canNotPostReason == 'no_endpoint'">
+            {{ 'canNotPostBecauseNoEndpoint' | translate }}
         </p>
 
         <ul class="keywords">
