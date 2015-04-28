@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/agents', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot', 'bluebird'],
-    function (Marionette, Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, Agents, CollectionManager, PanelSpecTypes, $, dotdotdot, Promise) {
+define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/messageSend', 'objects/messagesInProgress', 'models/agents', 'common/collectionManager', 'utils/panelSpecTypes', 'jquery', 'jquery.dotdotdot', 'bluebird',  'backbone.modal', 'backbone.marionette.modals'],
+    function (Marionette, Backbone, _, ckeditor, Assembl, Ctx, i18n, Permissions, MessageSendView, MessagesInProgress, Agents, CollectionManager, PanelSpecTypes, $, dotdotdot, Promise, modal1, modal2) {
 
         var MIN_TEXT_TO_TOOLTIP = 5,
             TOOLTIP_TEXT_LENGTH = 10;
@@ -465,7 +465,65 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
 
                 if (currentIdea) {
                     if (currentIdea.id !== annotation.idIdea) {
-                        ok = confirm(i18n.gettext('You will be redirected to another idea in connection with the nugget on which you clicked.'))
+
+                        var Modal = Backbone.Modal.extend({
+                            template: _.template($('#tmpl-showSegmentByAnnotation').html()),
+                            className: 'group-modal popin-wrapper modal-showSegment',
+                            cancelEl: '.js_close',
+                            keyControl: false,
+                            initialize: function () {
+                               this.$('.bbm-modal').addClass('popin');
+                            },
+                            events: {
+                              'click .js_redirectIdea':'redirectToIdea'
+                            },
+                            redirectToIdea: function(){
+                                var self = this;
+
+                                Promise.join(collectionManager.getAllExtractsCollectionPromise(),
+                                    collectionManager.getAllIdeasCollectionPromise(),
+                                    function (allExtractsCollection, allIdeasCollection) {
+
+                                        var segment = allExtractsCollection.getByAnnotation(annotation);
+                                        if (!segment) {
+                                            console.error("message::showSegmentByAnnotation(): the extract doesn't exist");
+                                            return;
+                                        }
+                                        if (segment.get('idIdea')) {
+                                            if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.IDEA_PANEL)) {
+                                                //FIXME:  Even this isn't proper behaviour.  Maybe we should just pop a panel systematically in this case.
+                                                that.messageListView.getContainingGroup().setCurrentIdea(allIdeasCollection.get(annotation.idIdea), "from_annotation", true);
+                                                Assembl.vent.trigger('DEPRECATEDideaPanel:showSegment', segment);
+                                            }
+                                            else {
+                                                console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ");
+                                            }
+                                        } else {
+                                            if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.CLIPBOARD)) {
+                                                //FIXME:  We don't want to affect every panel, only the one in the current group
+                                                //FIXME:  Nothing listens to this anymore
+                                                console.error("FIXME:  Nothing listens to DEPRECATEDsegmentList:showSegment anymore");
+                                                Assembl.vent.trigger('DEPRECATEDsegmentList:showSegment', segment);
+                                            }
+                                            else {
+                                                console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
+                                            }
+                                        }
+
+                                        self.destroy();
+                                    });
+
+                            }
+
+                        });
+
+                        var modal = new Modal();
+
+                        $('#slider').html(modal.render().el);
+
+
+
+                        //ok = confirm(i18n.gettext('You will be redirected to another idea in connection with the nugget on which you clicked.'))
                     }
                     else {
                         //It's already the current idea, do nothing
@@ -473,38 +531,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     }
                 }
 
-                if (ok) {
-                    Promise.join(collectionManager.getAllExtractsCollectionPromise(),
-                                 collectionManager.getAllIdeasCollectionPromise(),
-                        function (allExtractsCollection, allIdeasCollection) {
-                            var segment = allExtractsCollection.getByAnnotation(annotation);
-                            if (!segment) {
-                                console.error("message::showSegmentByAnnotation(): the extract doesn't exist")
-                                return;
-                            }
-                            if (segment.get('idIdea')) {
-                                if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.IDEA_PANEL)) {
-                                  //FIXME:  Even this isn't proper behaviour.  Maybe we should just pop a panel systematically in this case.
-                                    that.messageListView.getContainingGroup().setCurrentIdea(allIdeasCollection.get(annotation.idIdea), "from_annotation", true);
-                                    Assembl.vent.trigger('DEPRECATEDideaPanel:showSegment', segment);
-                                }
-                                else {
-                                    console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
-                                }
-                            } else {
-                                if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.CLIPBOARD)) {
-                                  //FIXME:  We don't want to affect every panel, only the one in the current group
-                                  //FIXME:  Nothing listens to this anymore
-                                  console.error("FIXME:  Nothing listens to DEPRECATEDsegmentList:showSegment anymore");
-                                  Assembl.vent.trigger('DEPRECATEDsegmentList:showSegment', segment);
-                                }
-                                else {
-                                    console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
-                                }
-                            }
-                        }
-                    );
-                }
+                /*if (!ok) {
+
+                }*/
             },
 
             /**

@@ -84,6 +84,17 @@
   }
 }
 
+.modal-showSegment{
+  .popin-header{
+    background-color: $white;
+  }
+
+  .popin-body {
+    @include border-radius(6px 6px 0 0);
+  }
+
+}
+
 .modal-firstPost {
   text-align: center;
   .icon-discuss {
