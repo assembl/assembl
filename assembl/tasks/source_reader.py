@@ -93,6 +93,7 @@ class SourceReader(Thread):
             self.__class__.__name__, self.source_id, self.status.name,
             status.name))
         self.status = status
+        self.source.read_status = status
 
     def successful_login(self):
         self.last_successful_login = datetime.utcnow()

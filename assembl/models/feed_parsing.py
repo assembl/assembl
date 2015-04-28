@@ -154,8 +154,6 @@ class PaginatedParsedData(ParsedData):
         for feed in self.get_next_feed():
             for entry in self._get_entry_per_feed(feed):
                 yield entry
-                if self.status == ReaderStatus.SHUTDOWN:
-                    break
 
 
 class FeedPost(ImportedPost):
@@ -370,6 +368,8 @@ class FeedSourceReader(PullSourceReader):
             account = self._create_account_from_entry(entry)
             account = account.get_unique_from_db()
             yield self._convert_to_post(entry, account), account
+            if self.status == ReaderStatus.SHUTDOWN:
+                break
 
     def _return_existing_post(self, post_id):
         cls = self.source.post_type

@@ -46,6 +46,9 @@ class ContentSource(DiscussionBoundBase):
     connection_error = Column(SmallInteger)
     error_description = Column(String)
 
+    # Non-persistant, default reading status
+    read_status = 0
+
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
         return [
