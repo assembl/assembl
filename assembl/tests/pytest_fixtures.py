@@ -108,7 +108,10 @@ def test_session(request, db_default_data):
 
     def fin():
         print "finalizer test_session"
-        session.commit()
+        try:
+            session.commit()
+        except Exception:
+            session.rollback()
     request.addfinalizer(fin)
     return session
 
