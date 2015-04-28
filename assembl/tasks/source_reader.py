@@ -260,7 +260,8 @@ class SourceReader(Thread):
     @abstractmethod
     def end_wait_for_push(self):
         # redefine in push-capable readers
-        self.set_status(ReaderStatus.PAUSED)
+        if (self.status in (ReaderStatus.READING, ReaderStatus.WAIT_FOR_PUSH)):
+            self.set_status(ReaderStatus.PAUSED)
         self.source.db().close()
 
     def close(self):
@@ -292,7 +293,8 @@ class SourceReader(Thread):
         self.set_status(ReaderStatus.READING)
         self.do_read()
         self.successful_read()
-        self.set_status(ReaderStatus.PAUSED)  # or WAIT_FOR_PUSH
+        if (self.status in (ReaderStatus.READING, ReaderStatus.WAIT_FOR_PUSH)):
+            self.set_status(ReaderStatus.PAUSED)  # or WAIT_FOR_PUSH
 
     @abstractmethod
     def do_read(self):

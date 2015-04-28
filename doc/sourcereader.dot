@@ -37,6 +37,7 @@ strict digraph {
     LOGIN->WAIT_FOR_PUSH [label="setup", color="blue"];
     READING->WAIT_FOR_PUSH [label="end read", color="blue"];
     WAIT_FOR_PUSH->READING [label="data received", color="blue"];
+    WAIT_FOR_PUSH->PAUSED [label="shutdown", color="blue"];
     WAIT_FOR_PUSH->TRANSIENT_ERROR [label="connection error", color="red"];
     WAIT_FOR_PUSH->CLIENT_ERROR [label="connection error", color="red"];
     WAIT_FOR_PUSH->WAIT_FOR_PUSH [label="prod", color="blue"];
