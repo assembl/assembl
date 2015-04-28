@@ -370,8 +370,6 @@ class FeedSourceReader(PullSourceReader):
             account = self._create_account_from_entry(entry)
             account = account.get_unique_from_db()
             yield self._convert_to_post(entry, account), account
-            if self.status == ReaderStatus.SHUTDOWN:
-                break
 
     def _return_existing_post(self, post_id):
         cls = self.source.post_type
