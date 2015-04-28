@@ -76,7 +76,10 @@ $grid-float-breakpoint: 768px !default;
 
   // Dividers (basically an hr) within the dropdown
   .divider {
-    //@include nav-divider($dropdown-divider-bg);
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: $dropdown-divider-bg;
   }
 
   // Links within the dropdown menu

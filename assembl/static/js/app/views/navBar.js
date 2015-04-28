@@ -44,7 +44,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 return {
                     Ctx: Ctx,
                     role: this.role,
-                    canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER)
+                    canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER),
+                    isAdminDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
                 }
             },
             templateHelpers: function () {
@@ -57,6 +58,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     },
                     userProfile: function(){
                         return '/' + Ctx.getDiscussionSlug() + '/user/profile';
+                    },
+                    discussionSettings: function(){
+                        return '/' + Ctx.getDiscussionSlug() + '/edition';
                     }
                 }
             },
