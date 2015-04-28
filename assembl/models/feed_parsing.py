@@ -1,23 +1,17 @@
 from sqlalchemy import (
-    orm,
     Column,
     ForeignKey,
     Integer,
     String,
-    DateTime
  )
-import transaction
 
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
-from ..lib.sqla import get_session_maker
-from ..tasks.source_reader import PullSourceReader, ReaderError
-from virtuoso.alchemy import CoerceUnicode
+from ..tasks.source_reader import PullSourceReader, ReaderError, ReaderStatus
 from cStringIO import StringIO
 import feedparser
 import requests
-import pytz
 from importlib import import_module
 from datetime import datetime
 from calendar import timegm
@@ -160,6 +154,8 @@ class PaginatedParsedData(ParsedData):
         for feed in self.get_next_feed():
             for entry in self._get_entry_per_feed(feed):
                 yield entry
+                if self.status == ReaderStatus.SHUTDOWN:
+                    break
 
 
 class FeedPost(ImportedPost):
@@ -321,6 +317,8 @@ class FeedSourceReader(PullSourceReader):
                 raise ReaderError(e)
             finally:
                 self.source = FeedPostSource.get(self.source_id)
+            if self.status == ReaderStatus.SHUTDOWN:
+                break
 
     def _process_reimport_post(self, entry, post, discussion=None):
         post.import_date = datetime.utcnow()
@@ -372,6 +370,8 @@ class FeedSourceReader(PullSourceReader):
             account = self._create_account_from_entry(entry)
             account = account.get_unique_from_db()
             yield self._convert_to_post(entry, account), account
+            if self.status == ReaderStatus.SHUTDOWN:
+                break
 
     def _return_existing_post(self, post_id):
         cls = self.source.post_type
