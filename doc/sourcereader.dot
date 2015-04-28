@@ -1,30 +1,25 @@
 strict digraph {
     CREATED;
-    LOGIN;
     READING;
     PAUSED;
     CLOSED;
     SHUTDOWN;
 
-    CREATED->LOGIN [label="setup"];
-    LOGIN->READING [label="login ok"];
+    CREATED->READING [label="setup"];
     TRANSIENT_ERROR->READING [label="prod, end wait"];
-    CLOSED->LOGIN [label="prod"];
+    CLOSED->READING [label="prod"];
     CLOSED->SHUTDOWN [label="shutdown"];
-    CLIENT_ERROR->LOGIN [label="end wait"];
+    CLIENT_ERROR->READING [label="end wait"];
     IRRECOVERABLE_ERROR->IRRECOVERABLE_ERROR [label="restart"];
-    IRRECOVERABLE_ERROR->LOGIN [label="force restart"];
+    IRRECOVERABLE_ERROR->READING [label="force restart"];
     CLIENT_ERROR->SHUTDOWN [label="shutdown", color="red"];
     IRRECOVERABLE_ERROR->SHUTDOWN [label="shutdown", color="red"];
 
     TRANSIENT_ERROR [color="red"];
     CLIENT_ERROR [color="red"];
     IRRECOVERABLE_ERROR [color="red"];
-    LOGIN->CLIENT_ERROR [label="connection error", color="red"];
-    LOGIN->IRRECOVERABLE_ERROR [label="login error", color="red"];
-    READING->TRANSIENT_ERROR [label="connection error", color="red"];
     READING->CLIENT_ERROR [label="connection error", color="red"];
-    READING->IRRECOVERABLE_ERROR [label="connection error", color="red"];
+    READING->IRRECOVERABLE_ERROR [label="login or connection error", color="red"];
     READING->TRANSIENT_ERROR [label="error", color="red"];
     CLOSED->CLIENT_ERROR [label="error while closing", color="red"];
 
@@ -34,7 +29,6 @@ strict digraph {
     PAUSED->CLOSED [label="no prods", color="green"];
 
     WAIT_FOR_PUSH [color="blue"];
-    LOGIN->WAIT_FOR_PUSH [label="setup", color="blue"];
     READING->WAIT_FOR_PUSH [label="end read", color="blue"];
     WAIT_FOR_PUSH->READING [label="data received", color="blue"];
     WAIT_FOR_PUSH->PAUSED [label="shutdown", color="blue"];
