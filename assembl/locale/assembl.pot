@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-28 13:16-0400\n"
+"POT-Creation-Date: 2015-04-28 13:24-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1889,11 +1889,11 @@ msgid "What is their website?"
 msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:19
-msgid "edit"
+msgid "Edit"
 msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:20
-msgid "delete partner"
+msgid "Delete"
 msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:25

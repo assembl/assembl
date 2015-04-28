@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-28 13:16-0400\n"
+"POT-Creation-Date: 2015-04-28 13:24-0400\n"
 "PO-Revision-Date: 2015-04-18 12:54+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: French "
@@ -1124,7 +1124,6 @@ msgstr ""
 
 #: assembl/templates/includes/updatebrowser.jinja2:42
 #, fuzzy
-#| msgid "Edit your profile"
 msgid "update your browser"
 msgstr "Modifier votre profil"
 
@@ -1390,7 +1389,6 @@ msgstr "Est à l'initiative de la discussion"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:66
 #, fuzzy
-#| msgid "unconfirmed"
 msgid "Confirm"
 msgstr "non-confirmé"
 
@@ -1463,7 +1461,6 @@ msgstr "Tous les messages"
 
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:10
 #, fuzzy
-#| msgid "Number of posts in the entire discussion"
 msgid "Number of unread posts in the entire discussion"
 msgstr "Nombre de messages dans toute la discussion"
 
@@ -1954,7 +1951,6 @@ msgstr "Notifications"
 
 #: assembl/templates/views/navigation.tmpl:21
 #, fuzzy
-#| msgid "account"
 msgid "About"
 msgstr "compte"
 
@@ -2004,12 +2000,14 @@ msgid "What is their website?"
 msgstr "Quel est leur site internet ?"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:19
-msgid "edit"
+msgid "Edit"
 msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:20
-msgid "delete partner"
-msgstr "Supprimer le partenaire"
+#, fuzzy
+#| msgid "delete role"
+msgid "Delete"
+msgstr "effacer le rôle"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:25
 msgid "is initiator"
@@ -2485,51 +2483,13 @@ msgstr "Nous n'avons pas de discussion sous le code=%s"
 #~ msgstr "Fil d'activité %s"
 
 #~ msgid ""
-#~ "<h1>Getting started</h1><br/>Welcome to the "
-#~ "discussion! The table to the left "
-#~ "is a list of the ideas people "
-#~ "are talking about. We've tried to "
-#~ "make it easy for you to find "
-#~ "conversations that you are interested "
-#~ "in! To join in:<br/><br/>1) Choose an"
-#~ " idea from the table of contents "
-#~ "- ideas include messages from all "
-#~ "related sub-ideas as well<br/><br/>2) "
-#~ "Reply to an existing message or "
-#~ "start a new message of your "
-#~ "own<br/><br/>This is a safe and "
-#~ "respectful space. All ideas are welcome!"
 #~ msgstr ""
-#~ "<h1>Pour commencer</h1><br/>Bienvenue à cette "
-#~ "discussion! À gauche, vous voyez une "
-#~ "table des matières, constituée des idées"
-#~ " dont les gens discutent. Nous nous"
-#~ " efforçons à vous permettre de "
-#~ "trouver facilement les conversations qui "
-#~ "vous intéressent! Pour participer:<br/><br/>1) "
-#~ "Choisissez une idée dans la table "
-#~ "des matières: chaque idée inclut aussi"
-#~ " les messages associés aux idées "
-#~ "subordonnées<br/><br/>2) Répondez à un message"
-#~ " existant, ou envoyez votre propre "
-#~ "nouveau message<br/><br/>Ceci est un espace"
-#~ " sûr et respectueux. Toutes les idées"
-#~ " sont les bienvenues!"
 
 #~ msgid "Your browser is out of date"
 #~ msgstr "Votre fureteur est obsolète"
 
 #~ msgid "You're using an old version of <strong>{0}</strong>."
 #~ msgstr "Vous utilisez une version obsolète de <strong>{0}</strong>."
-
-#~ msgid ""
-#~ "For the best experience, please <span"
-#~ " style=\"text-decoration: underline;\">update "
-#~ "your browser</span>."
-#~ msgstr ""
-#~ "Pour une expérience optimale, veuillez "
-#~ "<span style=\"text-decoration: underline;\">mettre"
-#~ " votre fureteur à jour</span>."
 
 #~ msgid "Conversation"
 #~ msgstr "Conversations"
@@ -2545,4 +2505,10 @@ msgstr "Nous n'avons pas de discussion sous le code=%s"
 
 #~ msgid "Number of syntheses in the discussion"
 #~ msgstr "Nombre de synthèses dans la discussion"
+
+#~ msgid "edit"
+#~ msgstr ""
+
+#~ msgid "delete partner"
+#~ msgstr "Supprimer le partenaire"
 

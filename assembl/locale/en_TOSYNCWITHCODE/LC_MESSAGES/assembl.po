@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-28 13:16-0400\n"
+"POT-Creation-Date: 2015-04-28 13:24-0400\n"
 "PO-Revision-Date: 2015-04-17 22:25+0000\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: English (Canada) "
@@ -1904,11 +1904,11 @@ msgid "What is their website?"
 msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:19
-msgid "edit"
+msgid "Edit"
 msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:20
-msgid "delete partner"
+msgid "Delete"
 msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:25
@@ -2316,32 +2316,12 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ""
-#~ "<h1>Getting started</h1><br/>Welcome to the "
-#~ "discussion! The table to the left "
-#~ "is a list of the ideas people "
-#~ "are talking about. We've tried to "
-#~ "make it easy for you to find "
-#~ "conversations that you are interested "
-#~ "in! To join in:<br/><br/>1) Choose an"
-#~ " idea from the table of contents "
-#~ "- ideas include messages from all "
-#~ "related sub-ideas as well<br/><br/>2) "
-#~ "Reply to an existing message or "
-#~ "start a new message of your "
-#~ "own<br/><br/>This is a safe and "
-#~ "respectful space. All ideas are welcome!"
 #~ msgstr ""
 
 #~ msgid "Your browser is out of date"
 #~ msgstr ""
 
 #~ msgid "You're using an old version of <strong>{0}</strong>."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "For the best experience, please <span"
-#~ " style=\"text-decoration: underline;\">update "
-#~ "your browser</span>."
 #~ msgstr ""
 
 #~ msgid "Conversation"
@@ -2360,5 +2340,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Number of syntheses in the discussion"
+#~ msgstr ""
+
+#~ msgid "edit"
+#~ msgstr ""
+
+#~ msgid "delete partner"
 #~ msgstr ""
 
