@@ -9,13 +9,11 @@
   </li>
   <li>
     <a href="#" class="nav js_navigation" data-view="debate"><i class="icon-discuss btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Discussion') }}
-      {#
-      <% if (canAdd) { %>
-      <span class="js_ideaList-addbutton" class="btn btn-xs fr js_addIdeaFromIdeaList iconbutton" data-toggle="tooltip" data-placement="top" title="{{ gettext('Add idea') }}">
-        <i class="icon-add-2"></i>
-      </span>
-      <% } %>
-      #}
+    {# check if number of synthesis > 0 to hide this
+    <% if ( hasMinimize ){ %>
+    <span class="js_minimizePanel panel-header-minimize btn btn-sm icon-arrowleft" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}"></span>
+    <% } %>
+    #}
     </a>
     <div class="second-level debate"></div>
   </li>
