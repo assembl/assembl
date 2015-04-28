@@ -34,6 +34,51 @@ class ReaderStatus(OrderedEnum):
     CLIENT_ERROR = 11  # Make a new connection to re-try
     IRRECOVERABLE_ERROR = 12  # This server will never work.
 
+
+known_transitions = {
+    ReaderStatus.CREATED: {
+        ReaderStatus.READING,
+    },
+    ReaderStatus.READING: {
+        ReaderStatus.CLIENT_ERROR,
+        ReaderStatus.READING,
+        ReaderStatus.IRRECOVERABLE_ERROR,
+        ReaderStatus.PAUSED,
+        ReaderStatus.TRANSIENT_ERROR,
+        ReaderStatus.TRANSIENT_ERROR,
+        ReaderStatus.WAIT_FOR_PUSH,
+    },
+    ReaderStatus.PAUSED: {
+        ReaderStatus.CLOSED,
+        ReaderStatus.READING,
+        ReaderStatus.WAIT_FOR_PUSH,
+    },
+    ReaderStatus.CLIENT_ERROR: {
+        ReaderStatus.SHUTDOWN,
+        ReaderStatus.READING,
+    },
+    ReaderStatus.CLOSED: {
+        ReaderStatus.CLIENT_ERROR,
+        ReaderStatus.SHUTDOWN,
+    },
+    ReaderStatus.IRRECOVERABLE_ERROR: {
+        ReaderStatus.IRRECOVERABLE_ERROR,
+        ReaderStatus.READING,
+        ReaderStatus.SHUTDOWN,
+    },
+    ReaderStatus.TRANSIENT_ERROR: {
+        ReaderStatus.READING,
+    },
+    ReaderStatus.WAIT_FOR_PUSH: {
+        ReaderStatus.CLIENT_ERROR,
+        ReaderStatus.CLOSED,
+        ReaderStatus.PAUSED,
+        ReaderStatus.READING,
+        ReaderStatus.TRANSIENT_ERROR,
+        ReaderStatus.WAIT_FOR_PUSH,
+    },
+}
+
 disconnected_states = set((
         ReaderStatus.CLIENT_ERROR, ReaderStatus.IRRECOVERABLE_ERROR,
         ReaderStatus.CLOSED, ReaderStatus.SHUTDOWN))
@@ -89,7 +134,8 @@ class SourceReader(Thread):
         self.event = Event()
 
     def set_status(self, status):
-        log.info("%s %d: %s -> %s" % (
+        lvl = logging.INFO if status in known_transitions[self.status] else logging.ERROR
+        log.log(lvl, "%s %d: %s -> %s" % (
             self.__class__.__name__, self.source_id, self.status.name,
             status.name))
         self.status = status
