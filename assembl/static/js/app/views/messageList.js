@@ -225,7 +225,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
             },
 
             getTitle: function () {
-                return i18n.gettext('Conversations');
+                return i18n.gettext('Discussion');
             },
 
             ViewStyles: {

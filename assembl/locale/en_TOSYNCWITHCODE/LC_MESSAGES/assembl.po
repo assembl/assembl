@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-18 08:55-0400\n"
+"POT-Creation-Date: 2015-04-28 13:16-0400\n"
 "PO-Revision-Date: 2015-04-17 22:25+0000\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: English (Canada) "
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:1128
+#: assembl/static/js/app/common/context.js:1134
 msgid "ajax error message:"
 msgstr ""
 
@@ -193,6 +193,7 @@ msgid "Evolution of the number of messages posted"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:113
+#: assembl/templates/views/navigation.tmpl:25
 #: assembl/templates/views/statistics.tmpl:5
 msgid "Statistics"
 msgstr ""
@@ -277,17 +278,17 @@ msgstr ""
 msgid "Contributors inactive recently"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1321
+#: assembl/static/js/app/views/contextPage.js:1318
 #: assembl/templates/views/introductions.tmpl:22
 msgid "Context"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1327
+#: assembl/static/js/app/views/contextPage.js:1324
 #: assembl/templates/views/introductions.tmpl:37
 msgid "Discussion objectives"
 msgstr ""
 
-#: assembl/static/js/app/views/contextPage.js:1424
+#: assembl/static/js/app/views/contextPage.js:1421
 msgid "Home"
 msgstr ""
 
@@ -310,9 +311,9 @@ msgstr ""
 msgid "You did not type a response yet..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaList.js:140
+#: assembl/static/js/app/views/ideaList.js:153
 #: assembl/templates/views/create-group.tmpl:42
-#: assembl/templates/views/ideaList.tmpl:7
+#: assembl/templates/views/ideaList.tmpl:8
 msgid "Table of ideas"
 msgstr ""
 
@@ -402,18 +403,15 @@ msgstr ""
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 
-#: assembl/static/js/app/views/message.js:471
-msgid ""
-"You will be redirected to another idea in connection with the nugget on "
-"which you clicked."
-msgstr ""
-
 #: assembl/static/js/app/views/messageList.js:9
 msgid "You can drag the segment above directly to the table of ideas"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:228
-msgid "Conversations"
+#: assembl/templates/views/create-group.tmpl:73
+#: assembl/templates/views/navBarRight.tmpl:34
+#: assembl/templates/views/navigation.tmpl:11
+msgid "Discussion"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:235
@@ -426,11 +424,13 @@ msgid "Oldest first"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:245
+#: assembl/static/js/app/views/messageListHeader.js:250
 #: assembl/static/js/app/views/messageListPostQuery.js:208
 msgid "Newest first"
 msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:250
+#: assembl/static/js/app/views/messageListHeader.js:249
 msgid "New messages threaded"
 msgstr ""
 
@@ -457,11 +457,11 @@ msgstr ""
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1437
+#: assembl/static/js/app/views/messageList.js:1447
 msgid "Send to clipboard"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1439
+#: assembl/static/js/app/views/messageList.js:1449
 #: assembl/static/js/app/views/messageSend.js:95
 #: assembl/templates/styleguide/components/Dialogs.jinja2:119
 #: assembl/templates/views/adminPartnerEditForm.tmpl:65
@@ -470,11 +470,12 @@ msgstr ""
 #: assembl/templates/views/adminPartnerForm.tmpl:69
 #: assembl/templates/views/ckeditorField.tmpl:10
 #: assembl/templates/views/create-group.tmpl:96
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:9
 #: assembl/templates/views/synthesisIdea.tmpl:34
 msgid "Cancel"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:2156
+#: assembl/static/js/app/views/messageList.js:2166
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
@@ -484,16 +485,6 @@ msgstr[1] ""
 #: assembl/static/js/app/views/messageListHeader.js:242
 #, python-format
 msgid "All %s"
-msgstr ""
-
-#: assembl/static/js/app/views/messageListHeader.js:244
-#, python-format
-msgid "Unread %s"
-msgstr ""
-
-#: assembl/static/js/app/views/messageListHeader.js:245
-#, python-format
-msgid "Activity feed %s"
 msgstr ""
 
 #: assembl/static/js/app/views/messageListPostQuery.js:28
@@ -751,13 +742,11 @@ msgstr ""
 
 #: assembl/static/js/app/views/groups/groupContent.js:201
 msgid ""
-"<h1>Getting started</h1><br/>Welcome to the discussion! The table to the "
-"left is a list of the ideas people are talking about. We've tried to make"
-" it easy for you to find conversations that you are interested in! To "
-"join in:<br/><br/>1) Choose an idea from the table of contents - ideas "
-"include messages from all related sub-ideas as well<br/><br/>2) Reply to "
-"an existing message or start a new message of your own<br/><br/>This is a"
-" safe and respectful space. All ideas are welcome!"
+"<h1>Pick a topic and start contributing</h1><br/>This table of contents "
+"helps you find the conversations and topics you are interested in so you "
+"don’t get overwhelmed. Topics include messages from all related sub-"
+"topics as well.<br/><br/>This is a safe and respectful space. All ideas "
+"are welcome!<br/>"
 msgstr ""
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:120
@@ -804,7 +793,7 @@ msgstr ""
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:417
 #: assembl/static/js/app/views/groups/panelWrapper.js:438
-#: assembl/templates/views/navigation.tmpl:21
+#: assembl/templates/views/navigation.tmpl:5
 #: assembl/templates/views/panelWrapper.tmpl:20
 msgid "Minimize panel"
 msgstr ""
@@ -824,7 +813,7 @@ msgstr ""
 
 #: assembl/templates/discussion_list.jinja2:22
 #: assembl/templates/discussion_list.jinja2:29
-#: assembl/templates/views/navBarRight.tmpl:38
+#: assembl/templates/views/navBarRight.tmpl:42
 msgid "Sign in"
 msgstr ""
 
@@ -850,7 +839,7 @@ msgid "Change global permissions"
 msgstr ""
 
 #: assembl/templates/discussion_list.jinja2:41
-#: assembl/templates/views/navBarRight.tmpl:33
+#: assembl/templates/views/navBarRight.tmpl:37
 msgid "Sign out"
 msgstr ""
 
@@ -936,6 +925,7 @@ msgid "Sign up"
 msgstr ""
 
 #: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
+#: assembl/templates/views/navBarRight.tmpl:30
 #: assembl/templates/views/userProfile.tmpl:23
 msgid "Profile"
 msgstr ""
@@ -1089,18 +1079,18 @@ msgstr ""
 msgid "Global roles"
 msgstr ""
 
-#: assembl/templates/includes/updatebrowser.jinja2:7
-msgid "Your browser is out of date"
-msgstr ""
-
-#: assembl/templates/includes/updatebrowser.jinja2:10
-msgid "You're using an old version of <strong>{0}</strong>."
-msgstr ""
-
-#: assembl/templates/includes/updatebrowser.jinja2:11
+#: assembl/templates/includes/updatebrowser.jinja2:41
 msgid ""
-"For the best experience, please <span style=\"text-decoration: "
-"underline;\">update your browser</span>."
+"Your version of <strong>{0}</strong> is outdated and may deteriorate your"
+" experience on Assembl."
+msgstr ""
+
+#: assembl/templates/includes/updatebrowser.jinja2:42
+msgid "update your browser"
+msgstr ""
+
+#: assembl/templates/includes/updatebrowser.jinja2:43
+msgid "Thanks!"
 msgstr ""
 
 #: assembl/templates/notifications/html_mail.jinja2:87
@@ -1130,9 +1120,7 @@ msgid "Please read the rest of this synthesis online"
 msgstr ""
 
 #: assembl/templates/styleguide/components/Dialogs.jinja2:120
-#: assembl/templates/views/adminPartnerEditForm.tmpl:66
 #: assembl/templates/views/adminPartnerEditForm.tmpl:72
-#: assembl/templates/views/adminPartnerForm.tmpl:62
 #: assembl/templates/views/adminPartnerForm.tmpl:70
 #: assembl/templates/views/create-group.tmpl:97
 msgid "Validate"
@@ -1280,7 +1268,6 @@ msgid "Auto-subscribe users to default notifications"
 msgstr ""
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:2
-#: assembl/templates/views/partnersInAdmin.tmpl:19
 msgid "edit partner"
 msgstr ""
 
@@ -1341,8 +1328,16 @@ msgstr ""
 msgid "Is instigator of the discussion"
 msgstr ""
 
+#: assembl/templates/views/adminPartnerEditForm.tmpl:66
+msgid "Confirm"
+msgstr ""
+
 #: assembl/templates/views/adminPartnerForm.tmpl:2
 msgid "add a new partner"
+msgstr ""
+
+#: assembl/templates/views/adminPartnerForm.tmpl:62
+msgid "Add"
 msgstr ""
 
 #: assembl/templates/views/adminPartners.tmpl:26
@@ -1391,13 +1386,17 @@ msgstr ""
 msgid "Reload"
 msgstr ""
 
-#: assembl/templates/views/allMessagesInIdeaList.tmpl:2
-#: assembl/templates/views/allMessagesInIdeaList.tmpl:3
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:4
+msgid "Number of posts in the entire discussion"
+msgstr ""
+
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:8
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:9
 msgid "All messages"
 msgstr ""
 
-#: assembl/templates/views/allMessagesInIdeaList.tmpl:4
-msgid "Number of posts in the entire discussion"
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:10
+msgid "Number of unread posts in the entire discussion"
 msgstr ""
 
 #: assembl/templates/views/associateAccount.tmpl:22
@@ -1488,10 +1487,6 @@ msgstr ""
 msgid "Idea Panel"
 msgstr ""
 
-#: assembl/templates/views/create-group.tmpl:73
-msgid "Conversation"
-msgstr ""
-
 #: assembl/templates/views/defaultNotification.tmpl:7
 msgid "Auto-subscribe users to default notifications when they register"
 msgstr ""
@@ -1562,19 +1557,19 @@ msgstr ""
 msgid "By"
 msgstr ""
 
-#: assembl/templates/views/ideaList.tmpl:11
+#: assembl/templates/views/ideaList.tmpl:12
 msgid "Add idea"
 msgstr ""
 
-#: assembl/templates/views/ideaList.tmpl:17
+#: assembl/templates/views/ideaList.tmpl:18
 msgid "Decrease row height"
 msgstr ""
 
-#: assembl/templates/views/ideaList.tmpl:18
+#: assembl/templates/views/ideaList.tmpl:19
 msgid "Increase row height"
 msgstr ""
 
-#: assembl/templates/views/ideaList.tmpl:19
+#: assembl/templates/views/ideaList.tmpl:20
 msgid "Toggle decreasing font size with depth"
 msgstr ""
 
@@ -1854,10 +1849,6 @@ msgstr ""
 msgid "Join this group"
 msgstr ""
 
-#: assembl/templates/views/navBarRight.tmpl:30
-msgid "Edit your profile"
-msgstr ""
-
 #: assembl/templates/views/navBarRight.tmpl:32
 #: assembl/templates/views/userAccount.tmpl:12
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:12
@@ -1866,16 +1857,8 @@ msgstr ""
 msgid "Notifications"
 msgstr ""
 
-#: assembl/templates/views/navigation.tmpl:7
-msgid "Discussion"
-msgstr ""
-
-#: assembl/templates/views/navigation.tmpl:19
-msgid "About this discussion"
-msgstr ""
-
-#: assembl/templates/views/navigation.tmpl:27
-msgid "Discussion statistics"
+#: assembl/templates/views/navigation.tmpl:21
+msgid "About"
 msgstr ""
 
 #: assembl/templates/views/notification.tmpl:1
@@ -1885,13 +1868,10 @@ msgid ""
 "session\">Rejoignez la session</button>"
 msgstr ""
 
-#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:2
-#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:3
-msgid "Messages not yet associated with an idea"
-msgstr ""
-
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
-msgid "Number of posts"
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
+msgid "Messages not yet associated with an idea"
 msgstr ""
 
 #: assembl/templates/views/otherInIdeaList.tmpl:2
@@ -1921,6 +1901,10 @@ msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:15
 msgid "What is their website?"
+msgstr ""
+
+#: assembl/templates/views/partnersInAdmin.tmpl:19
+msgid "edit"
 msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:20
@@ -1996,6 +1980,16 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:3
+msgid ""
+"You will be redirected to another idea in connection with the nugget on "
+"which you clicked."
+msgstr ""
+
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:10
+msgid "Ok"
+msgstr ""
+
 #: assembl/templates/views/statistics.tmpl:7
 msgid "Loading..."
 msgstr ""
@@ -2016,13 +2010,10 @@ msgstr ""
 msgid "Activate"
 msgstr ""
 
-#: assembl/templates/views/synthesisInIdeaList.tmpl:2
-#: assembl/templates/views/synthesisInIdeaList.tmpl:3
-msgid "All syntheses"
-msgstr ""
-
 #: assembl/templates/views/synthesisInIdeaList.tmpl:4
-msgid "Number of syntheses in the discussion"
+#: assembl/templates/views/synthesisInIdeaList.tmpl:8
+#: assembl/templates/views/synthesisInIdeaList.tmpl:9
+msgid "All syntheses"
 msgstr ""
 
 #: assembl/templates/views/synthesisPanel.tmpl:15
@@ -2314,4 +2305,60 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
+
+#~ msgid "Conversations"
+#~ msgstr ""
+
+#~ msgid "Unread %s"
+#~ msgstr ""
+
+#~ msgid "Activity feed %s"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "<h1>Getting started</h1><br/>Welcome to the "
+#~ "discussion! The table to the left "
+#~ "is a list of the ideas people "
+#~ "are talking about. We've tried to "
+#~ "make it easy for you to find "
+#~ "conversations that you are interested "
+#~ "in! To join in:<br/><br/>1) Choose an"
+#~ " idea from the table of contents "
+#~ "- ideas include messages from all "
+#~ "related sub-ideas as well<br/><br/>2) "
+#~ "Reply to an existing message or "
+#~ "start a new message of your "
+#~ "own<br/><br/>This is a safe and "
+#~ "respectful space. All ideas are welcome!"
+#~ msgstr ""
+
+#~ msgid "Your browser is out of date"
+#~ msgstr ""
+
+#~ msgid "You're using an old version of <strong>{0}</strong>."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For the best experience, please <span"
+#~ " style=\"text-decoration: underline;\">update "
+#~ "your browser</span>."
+#~ msgstr ""
+
+#~ msgid "Conversation"
+#~ msgstr ""
+
+#~ msgid "Edit your profile"
+#~ msgstr ""
+
+#~ msgid "About this discussion"
+#~ msgstr ""
+
+#~ msgid "Discussion statistics"
+#~ msgstr ""
+
+#~ msgid "Number of posts"
+#~ msgstr ""
+
+#~ msgid "Number of syntheses in the discussion"
+#~ msgstr ""
 

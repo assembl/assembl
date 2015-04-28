@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-18 08:55-0400\n"
+"POT-Creation-Date: 2015-04-28 13:16-0400\n"
 "PO-Revision-Date: 2015-04-18 12:54+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: French "
@@ -92,7 +92,7 @@ msgstr "Messages complets"
 msgid "Extract"
 msgstr "Extrait"
 
-#: assembl/static/js/app/common/context.js:1128
+#: assembl/static/js/app/common/context.js:1134
 msgid "ajax error message:"
 msgstr "Message d'erreur ajax:"
 
@@ -203,6 +203,7 @@ msgid "Evolution of the number of messages posted"
 msgstr "Évolution du nombre de messages postés"
 
 #: assembl/static/js/app/views/contextPage.js:113
+#: assembl/templates/views/navigation.tmpl:25
 #: assembl/templates/views/statistics.tmpl:5
 msgid "Statistics"
 msgstr "Statistiques"
@@ -287,17 +288,17 @@ msgstr "Participants actifs récemment"
 msgid "Contributors inactive recently"
 msgstr "Participants non actifs récemment"
 
-#: assembl/static/js/app/views/contextPage.js:1321
+#: assembl/static/js/app/views/contextPage.js:1318
 #: assembl/templates/views/introductions.tmpl:22
 msgid "Context"
 msgstr "Contexte"
 
-#: assembl/static/js/app/views/contextPage.js:1327
+#: assembl/static/js/app/views/contextPage.js:1324
 #: assembl/templates/views/introductions.tmpl:37
 msgid "Discussion objectives"
 msgstr "Objectifs de la discussion"
 
-#: assembl/static/js/app/views/contextPage.js:1424
+#: assembl/static/js/app/views/contextPage.js:1421
 msgid "Home"
 msgstr "Accueil"
 
@@ -320,9 +321,9 @@ msgstr "Envoyez votre réponse"
 msgid "You did not type a response yet..."
 msgstr "Vous n'avez pas encore écrit de réponse"
 
-#: assembl/static/js/app/views/ideaList.js:140
+#: assembl/static/js/app/views/ideaList.js:153
 #: assembl/templates/views/create-group.tmpl:42
-#: assembl/templates/views/ideaList.tmpl:7
+#: assembl/templates/views/ideaList.tmpl:8
 msgid "Table of ideas"
 msgstr "Table des idées"
 
@@ -416,21 +417,16 @@ msgstr "Confirmez que vous souhaitez supprimer cette idée."
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr "Confirmez que vous souhaitez renvoyer tous les extraits au presse-papier."
 
-#: assembl/static/js/app/views/message.js:471
-msgid ""
-"You will be redirected to another idea in connection with the nugget on "
-"which you clicked."
-msgstr ""
-"Vous serez redirigé vers une autre idée en lien avec l'extrait sur lequel"
-" vous venez de cliquer."
-
 #: assembl/static/js/app/views/messageList.js:9
 msgid "You can drag the segment above directly to the table of ideas"
 msgstr "Vous pouvez glisser l'extrait ci-dessus directement sur la table des idées"
 
 #: assembl/static/js/app/views/messageList.js:228
-msgid "Conversations"
-msgstr "Conversations"
+#: assembl/templates/views/create-group.tmpl:73
+#: assembl/templates/views/navBarRight.tmpl:34
+#: assembl/templates/views/navigation.tmpl:11
+msgid "Discussion"
+msgstr "Discussion"
 
 #: assembl/static/js/app/views/messageList.js:235
 msgid "Threaded"
@@ -442,11 +438,13 @@ msgid "Oldest first"
 msgstr "Plus vieux en premier"
 
 #: assembl/static/js/app/views/messageList.js:245
+#: assembl/static/js/app/views/messageListHeader.js:250
 #: assembl/static/js/app/views/messageListPostQuery.js:208
 msgid "Newest first"
 msgstr "Récents en premier"
 
 #: assembl/static/js/app/views/messageList.js:250
+#: assembl/static/js/app/views/messageListHeader.js:249
 msgid "New messages threaded"
 msgstr "Nouveaux messages en enfilades"
 
@@ -473,11 +471,11 @@ msgstr "Rédigez le contenu de votre nouveau message"
 msgid "You need to set a subject to add a new topic..."
 msgstr "Vous devez ajouter un titre pour lancer un sujet de discussion..."
 
-#: assembl/static/js/app/views/messageList.js:1437
+#: assembl/static/js/app/views/messageList.js:1447
 msgid "Send to clipboard"
 msgstr "Ajouter au presse-papier"
 
-#: assembl/static/js/app/views/messageList.js:1439
+#: assembl/static/js/app/views/messageList.js:1449
 #: assembl/static/js/app/views/messageSend.js:95
 #: assembl/templates/styleguide/components/Dialogs.jinja2:119
 #: assembl/templates/views/adminPartnerEditForm.tmpl:65
@@ -486,11 +484,12 @@ msgstr "Ajouter au presse-papier"
 #: assembl/templates/views/adminPartnerForm.tmpl:69
 #: assembl/templates/views/ckeditorField.tmpl:10
 #: assembl/templates/views/create-group.tmpl:96
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:9
 #: assembl/templates/views/synthesisIdea.tmpl:34
 msgid "Cancel"
 msgstr "Annuler"
 
-#: assembl/static/js/app/views/messageList.js:2156
+#: assembl/static/js/app/views/messageList.js:2166
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
@@ -501,16 +500,6 @@ msgstr[1] "%d nouveaux messages ont été reçus.  Cliquez ici pour rafraichir"
 #, python-format
 msgid "All %s"
 msgstr "Tous %s"
-
-#: assembl/static/js/app/views/messageListHeader.js:244
-#, python-format
-msgid "Unread %s"
-msgstr "Non-lus %s"
-
-#: assembl/static/js/app/views/messageListHeader.js:245
-#, python-format
-msgid "Activity feed %s"
-msgstr "Fil d'activité %s"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:28
 #, python-format
@@ -772,22 +761,12 @@ msgstr "Erreur lors de la mise à jour de vos paramètres"
 
 #: assembl/static/js/app/views/groups/groupContent.js:201
 msgid ""
-"<h1>Getting started</h1><br/>Welcome to the discussion! The table to the "
-"left is a list of the ideas people are talking about. We've tried to make"
-" it easy for you to find conversations that you are interested in! To "
-"join in:<br/><br/>1) Choose an idea from the table of contents - ideas "
-"include messages from all related sub-ideas as well<br/><br/>2) Reply to "
-"an existing message or start a new message of your own<br/><br/>This is a"
-" safe and respectful space. All ideas are welcome!"
+"<h1>Pick a topic and start contributing</h1><br/>This table of contents "
+"helps you find the conversations and topics you are interested in so you "
+"don’t get overwhelmed. Topics include messages from all related sub-"
+"topics as well.<br/><br/>This is a safe and respectful space. All ideas "
+"are welcome!<br/>"
 msgstr ""
-"<h1>Pour commencer</h1><br/>Bienvenue à cette discussion! À gauche, vous "
-"voyez une table des matières, constituée des idées dont les gens "
-"discutent. Nous nous efforçons à vous permettre de trouver facilement les"
-" conversations qui vous intéressent! Pour participer:<br/><br/>1) "
-"Choisissez une idée dans la table des matières: chaque idée inclut aussi "
-"les messages associés aux idées subordonnées<br/><br/>2) Répondez à un "
-"message existant, ou envoyez votre propre nouveau message<br/><br/>Ceci "
-"est un espace sûr et respectueux. Toutes les idées sont les bienvenues!"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:120
 msgid "Unlock panel"
@@ -847,7 +826,7 @@ msgstr "Maximiser le panneau"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:417
 #: assembl/static/js/app/views/groups/panelWrapper.js:438
-#: assembl/templates/views/navigation.tmpl:21
+#: assembl/templates/views/navigation.tmpl:5
 #: assembl/templates/views/panelWrapper.tmpl:20
 msgid "Minimize panel"
 msgstr "Minimiser le panneau"
@@ -867,7 +846,7 @@ msgstr "Permissions"
 
 #: assembl/templates/discussion_list.jinja2:22
 #: assembl/templates/discussion_list.jinja2:29
-#: assembl/templates/views/navBarRight.tmpl:38
+#: assembl/templates/views/navBarRight.tmpl:42
 msgid "Sign in"
 msgstr "Connectez-vous"
 
@@ -893,7 +872,7 @@ msgid "Change global permissions"
 msgstr "Changer les permissions globales"
 
 #: assembl/templates/discussion_list.jinja2:41
-#: assembl/templates/views/navBarRight.tmpl:33
+#: assembl/templates/views/navBarRight.tmpl:37
 msgid "Sign out"
 msgstr "Déconnexion"
 
@@ -979,6 +958,7 @@ msgid "Sign up"
 msgstr "Créer un compte"
 
 #: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
+#: assembl/templates/views/navBarRight.tmpl:30
 #: assembl/templates/views/userProfile.tmpl:23
 msgid "Profile"
 msgstr "Profil"
@@ -1136,21 +1116,21 @@ msgstr "Fichier CSV"
 msgid "Global roles"
 msgstr "Rôles globaux"
 
-#: assembl/templates/includes/updatebrowser.jinja2:7
-msgid "Your browser is out of date"
-msgstr "Votre fureteur est obsolète"
-
-#: assembl/templates/includes/updatebrowser.jinja2:10
-msgid "You're using an old version of <strong>{0}</strong>."
-msgstr "Vous utilisez une version obsolète de <strong>{0}</strong>."
-
-#: assembl/templates/includes/updatebrowser.jinja2:11
+#: assembl/templates/includes/updatebrowser.jinja2:41
 msgid ""
-"For the best experience, please <span style=\"text-decoration: "
-"underline;\">update your browser</span>."
+"Your version of <strong>{0}</strong> is outdated and may deteriorate your"
+" experience on Assembl."
 msgstr ""
-"Pour une expérience optimale, veuillez <span style=\"text-decoration: "
-"underline;\">mettre votre fureteur à jour</span>."
+
+#: assembl/templates/includes/updatebrowser.jinja2:42
+#, fuzzy
+#| msgid "Edit your profile"
+msgid "update your browser"
+msgstr "Modifier votre profil"
+
+#: assembl/templates/includes/updatebrowser.jinja2:43
+msgid "Thanks!"
+msgstr ""
 
 #: assembl/templates/notifications/html_mail.jinja2:87
 #, python-format
@@ -1182,9 +1162,7 @@ msgid "Please read the rest of this synthesis online"
 msgstr "Lire la suite de la synthèse en ligne"
 
 #: assembl/templates/styleguide/components/Dialogs.jinja2:120
-#: assembl/templates/views/adminPartnerEditForm.tmpl:66
 #: assembl/templates/views/adminPartnerEditForm.tmpl:72
-#: assembl/templates/views/adminPartnerForm.tmpl:62
 #: assembl/templates/views/adminPartnerForm.tmpl:70
 #: assembl/templates/views/create-group.tmpl:97
 msgid "Validate"
@@ -1350,7 +1328,6 @@ msgid "Auto-subscribe users to default notifications"
 msgstr "Abonner automatiquement les utilisateurs aux notifications par défaut"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:2
-#: assembl/templates/views/partnersInAdmin.tmpl:19
 msgid "edit partner"
 msgstr "Éditer les partenaires"
 
@@ -1411,9 +1388,19 @@ msgstr "Exemple : http://example.org/logo.jpg"
 msgid "Is instigator of the discussion"
 msgstr "Est à l'initiative de la discussion"
 
+#: assembl/templates/views/adminPartnerEditForm.tmpl:66
+#, fuzzy
+#| msgid "unconfirmed"
+msgid "Confirm"
+msgstr "non-confirmé"
+
 #: assembl/templates/views/adminPartnerForm.tmpl:2
 msgid "add a new partner"
 msgstr "Ajouter un nouveau partenaire"
+
+#: assembl/templates/views/adminPartnerForm.tmpl:62
+msgid "Add"
+msgstr ""
 
 #: assembl/templates/views/adminPartners.tmpl:26
 #: assembl/templates/views/partnerList.tmpl:6
@@ -1465,13 +1452,19 @@ msgstr "Pas maintenant"
 msgid "Reload"
 msgstr "Recharger"
 
-#: assembl/templates/views/allMessagesInIdeaList.tmpl:2
-#: assembl/templates/views/allMessagesInIdeaList.tmpl:3
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:4
+msgid "Number of posts in the entire discussion"
+msgstr "Nombre de messages dans toute la discussion"
+
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:8
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:9
 msgid "All messages"
 msgstr "Tous les messages"
 
-#: assembl/templates/views/allMessagesInIdeaList.tmpl:4
-msgid "Number of posts in the entire discussion"
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:10
+#, fuzzy
+#| msgid "Number of posts in the entire discussion"
+msgid "Number of unread posts in the entire discussion"
 msgstr "Nombre de messages dans toute la discussion"
 
 #: assembl/templates/views/associateAccount.tmpl:22
@@ -1573,10 +1566,6 @@ msgstr "Autres panneaux :"
 msgid "Idea Panel"
 msgstr "Description de l'idée"
 
-#: assembl/templates/views/create-group.tmpl:73
-msgid "Conversation"
-msgstr "Conversations"
-
 #: assembl/templates/views/defaultNotification.tmpl:7
 msgid "Auto-subscribe users to default notifications when they register"
 msgstr ""
@@ -1655,19 +1644,19 @@ msgstr ""
 msgid "By"
 msgstr "Par"
 
-#: assembl/templates/views/ideaList.tmpl:11
+#: assembl/templates/views/ideaList.tmpl:12
 msgid "Add idea"
 msgstr "Ajouter une idée"
 
-#: assembl/templates/views/ideaList.tmpl:17
+#: assembl/templates/views/ideaList.tmpl:18
 msgid "Decrease row height"
 msgstr "Diminuer la hauteur de ligne"
 
-#: assembl/templates/views/ideaList.tmpl:18
+#: assembl/templates/views/ideaList.tmpl:19
 msgid "Increase row height"
 msgstr "Augmenter la hauteur de ligne"
 
-#: assembl/templates/views/ideaList.tmpl:19
+#: assembl/templates/views/ideaList.tmpl:20
 msgid "Toggle decreasing font size with depth"
 msgstr "Activer/désactiver la taille de texte décroissante avec la profondeur"
 
@@ -1955,10 +1944,6 @@ msgstr "Connexion en cours..."
 msgid "Join this group"
 msgstr "Rejoindre ce groupe"
 
-#: assembl/templates/views/navBarRight.tmpl:30
-msgid "Edit your profile"
-msgstr "Modifier votre profil"
-
 #: assembl/templates/views/navBarRight.tmpl:32
 #: assembl/templates/views/userAccount.tmpl:12
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:12
@@ -1967,17 +1952,11 @@ msgstr "Modifier votre profil"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: assembl/templates/views/navigation.tmpl:7
-msgid "Discussion"
-msgstr "Discussion"
-
-#: assembl/templates/views/navigation.tmpl:19
-msgid "About this discussion"
-msgstr "À propos de cette discussion"
-
-#: assembl/templates/views/navigation.tmpl:27
-msgid "Discussion statistics"
-msgstr "Statistiques de la discussion"
+#: assembl/templates/views/navigation.tmpl:21
+#, fuzzy
+#| msgid "account"
+msgid "About"
+msgstr "compte"
 
 #: assembl/templates/views/notification.tmpl:1
 msgid ""
@@ -1989,14 +1968,11 @@ msgstr ""
 " rejoindre les 18 premiers contributeurs <button class=\"js_openSession "
 "session\">Rejoignez la session</button>"
 
-#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:2
-#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:3
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
 msgid "Messages not yet associated with an idea"
 msgstr "Messages pas encore associés à une idée"
-
-#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
-msgid "Number of posts"
-msgstr "Nombre de messages"
 
 #: assembl/templates/views/otherInIdeaList.tmpl:2
 msgid "Other messages"
@@ -2026,6 +2002,10 @@ msgstr "lien"
 #: assembl/templates/views/partnersInAdmin.tmpl:15
 msgid "What is their website?"
 msgstr "Quel est leur site internet ?"
+
+#: assembl/templates/views/partnersInAdmin.tmpl:19
+msgid "edit"
+msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:20
 msgid "delete partner"
@@ -2104,6 +2084,18 @@ msgstr "Extraits non associés à une idée"
 msgid "Clear"
 msgstr "Effacer"
 
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:3
+msgid ""
+"You will be redirected to another idea in connection with the nugget on "
+"which you clicked."
+msgstr ""
+"Vous serez redirigé vers une autre idée en lien avec l'extrait sur lequel"
+" vous venez de cliquer."
+
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:10
+msgid "Ok"
+msgstr ""
+
 #: assembl/templates/views/statistics.tmpl:7
 msgid "Loading..."
 msgstr "Chargement..."
@@ -2124,14 +2116,11 @@ msgstr "Désactiver"
 msgid "Activate"
 msgstr "Activer"
 
-#: assembl/templates/views/synthesisInIdeaList.tmpl:2
-#: assembl/templates/views/synthesisInIdeaList.tmpl:3
+#: assembl/templates/views/synthesisInIdeaList.tmpl:4
+#: assembl/templates/views/synthesisInIdeaList.tmpl:8
+#: assembl/templates/views/synthesisInIdeaList.tmpl:9
 msgid "All syntheses"
 msgstr "Toutes les synthèses"
-
-#: assembl/templates/views/synthesisInIdeaList.tmpl:4
-msgid "Number of syntheses in the discussion"
-msgstr "Nombre de synthèses dans la discussion"
 
 #: assembl/templates/views/synthesisPanel.tmpl:15
 #: assembl/templates/views/synthesisPanelMessage.tmpl:14
@@ -2485,4 +2474,75 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
+
+#~ msgid "Conversations"
+#~ msgstr "Conversations"
+
+#~ msgid "Unread %s"
+#~ msgstr "Non-lus %s"
+
+#~ msgid "Activity feed %s"
+#~ msgstr "Fil d'activité %s"
+
+#~ msgid ""
+#~ "<h1>Getting started</h1><br/>Welcome to the "
+#~ "discussion! The table to the left "
+#~ "is a list of the ideas people "
+#~ "are talking about. We've tried to "
+#~ "make it easy for you to find "
+#~ "conversations that you are interested "
+#~ "in! To join in:<br/><br/>1) Choose an"
+#~ " idea from the table of contents "
+#~ "- ideas include messages from all "
+#~ "related sub-ideas as well<br/><br/>2) "
+#~ "Reply to an existing message or "
+#~ "start a new message of your "
+#~ "own<br/><br/>This is a safe and "
+#~ "respectful space. All ideas are welcome!"
+#~ msgstr ""
+#~ "<h1>Pour commencer</h1><br/>Bienvenue à cette "
+#~ "discussion! À gauche, vous voyez une "
+#~ "table des matières, constituée des idées"
+#~ " dont les gens discutent. Nous nous"
+#~ " efforçons à vous permettre de "
+#~ "trouver facilement les conversations qui "
+#~ "vous intéressent! Pour participer:<br/><br/>1) "
+#~ "Choisissez une idée dans la table "
+#~ "des matières: chaque idée inclut aussi"
+#~ " les messages associés aux idées "
+#~ "subordonnées<br/><br/>2) Répondez à un message"
+#~ " existant, ou envoyez votre propre "
+#~ "nouveau message<br/><br/>Ceci est un espace"
+#~ " sûr et respectueux. Toutes les idées"
+#~ " sont les bienvenues!"
+
+#~ msgid "Your browser is out of date"
+#~ msgstr "Votre fureteur est obsolète"
+
+#~ msgid "You're using an old version of <strong>{0}</strong>."
+#~ msgstr "Vous utilisez une version obsolète de <strong>{0}</strong>."
+
+#~ msgid ""
+#~ "For the best experience, please <span"
+#~ " style=\"text-decoration: underline;\">update "
+#~ "your browser</span>."
+#~ msgstr ""
+#~ "Pour une expérience optimale, veuillez "
+#~ "<span style=\"text-decoration: underline;\">mettre"
+#~ " votre fureteur à jour</span>."
+
+#~ msgid "Conversation"
+#~ msgstr "Conversations"
+
+#~ msgid "About this discussion"
+#~ msgstr "À propos de cette discussion"
+
+#~ msgid "Discussion statistics"
+#~ msgstr "Statistiques de la discussion"
+
+#~ msgid "Number of posts"
+#~ msgstr "Nombre de messages"
+
+#~ msgid "Number of syntheses in the discussion"
+#~ msgstr "Nombre de synthèses dans la discussion"
 
