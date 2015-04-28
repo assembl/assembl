@@ -460,8 +460,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             showSegmentByAnnotation: function (annotation) {
                 var that = this,
                     currentIdea = this.messageListView.getContainingGroup().getCurrentIdea(),
-                    collectionManager = new CollectionManager(),
-                    ok = true;
+                    collectionManager = new CollectionManager();
 
                 if (currentIdea) {
                     if (currentIdea.id !== annotation.idIdea) {
@@ -512,7 +511,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
 
                                         self.destroy();
                                     });
-
                             }
 
                         });
@@ -520,20 +518,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                         var modal = new Modal();
 
                         $('#slider').html(modal.render().el);
-
-
-
-                        //ok = confirm(i18n.gettext('You will be redirected to another idea in connection with the nugget on which you clicked.'))
-                    }
-                    else {
-                        //It's already the current idea, do nothing
-                        ok = false;
                     }
                 }
 
-                /*if (!ok) {
-
-                }*/
             },
 
             /**
