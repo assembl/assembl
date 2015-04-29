@@ -130,9 +130,9 @@ class SourceSpecificAccount(AbstractAgentAccount):
     def create(cls, source, user_dict):
         user = user_dict['user']
         user_id = user['uid']
-        created = user['created']
+        # created = datetime.datetime.fromtimestamp(user['created'])
         name = user['name']
-        link = user['link']
+        link = u"https://edgeryders.eu/user/%s" % user_id
         profile = AgentProfile(name=name)
 
         return cls(user_info=json.dumps(user_dict),
@@ -176,14 +176,19 @@ class SourceSpecificPost(ImportedPost):
 
             agent = None if not user else user.profile
             import_date = datetime.utcnow()
-            body = node['body']
+            body = node.get('Body')
+            if '/sites/default/files/' in body and ('http' or 'www'
+                                                    not in body):
+                body = source.node_root + body
+            body_mime_type = 'text/html'
             discussion = source.discussion
             message_id = source.get_default_prepended_id() + node_id
+            blob = json.dumps(post)
 
             return cls(import_date=import_date, source=source,
-                       message_id=message_id,
+                       message_id=message_id, body_mime_type=body_mime_type,
                        source_post_id=node_id, creator=agent,
-                       creation_date=created,
+                       creation_date=created, imported_blob=blob,
                        discussion=discussion, body=body)
 
         if 'comment' in post:
@@ -201,86 +206,91 @@ class SourceSpecificPost(ImportedPost):
 
             agent = None if not user else user.profile
             import_date = datetime.utcnow()
-            body = comment['comment']
-            title = comment['title']
+            body = comment.get('Comment')
+            if '/sites/default/files/' in body:
+
+                body = source.node_root + body
+            body_mime_type = 'text/html'
+            # title = comment['title']
             discussion = source.discussion
             message_id = source.get_default_prepended_id() + comment_id
+            blob = json.dumps(post)
 
             return cls(import_date=import_date, source_post_id=comment_id,
                        message_id=message_id, source=source, creator=agent,
                        creation_date=created, discussion=discussion,
-                       body=body, subject=title)
+                       body_mime_type=body_mime_type, imported_blob=blob,
+                       body=body)
 
 
-# In the parsing process, ALWAYS parse the USERS FIRST, because they will
-# be queried to get their agent-profile
+class EdgeSenseFetcher(object):
+    def __init__(self, source, from_file=None):
+        self.from_file = from_file or False
+        self.source = source
+
+    def get_users(self, **kwargs):
+        """To pass an HTTP AUTH to the request, pass as a (username,pass)
+        tuple in kwargs.
+
+        eg. get_users(auth=(my_username, my_password))"""
+        path = self.source.user_source
+        if self.from_file:
+            with open(path) as data:
+                users = json.load(data)
+                return users.get('users', [])
+        else:
+            users = requests.get(path, **kwargs)
+            return users.json().get('users', [])
+
+    def get_nodes(self, **kwargs):
+        """To pass an HTTP AUTH to the request, pass as a (username,pass)
+        tuple in kwargs.
+
+        eg. get_users(auth=(my_username, my_password))"""
+        path = self.source.node_source
+        if self.from_file:
+            with open(path) as data:
+                nodes = json.load(data)
+                return nodes.get('nodes', [])
+        else:
+            nodes = requests.get(path, **kwargs)
+            return nodes.json().get('nodes', [])
+
+    def get_comments(self, **kwargs):
+        """To pass an HTTP AUTH to the request, pass as a (username,pass)
+        tuple in kwargs.
+
+        eg. get_users(auth=(my_username, my_password))"""
+        path = self.source.comment_source
+        if self.from_file:
+            with open(path) as data:
+                comments = json.load(data)
+                return comments.get('comments', [])
+        else:
+            comments = requests.get(path, **kwargs)
+            return comments.json().get('comments', [])
+
+
 class EdgeSenseParser(object):
-    def __init__(self, source, from_file=False):
+    # In the parsing process, ALWAYS parse the USERS FIRST, because they will
+    # be queried to get their agent-profile
+    def __init__(self, source, fetcher=None):
         self.source = source
         self.session = source.db
         self.threaded = False
-        if from_file:
-            self.users = self._load_json_from_file(source.user_source)['users']
-            self.nodes = self._load_json_from_file(source.node_source)['nodes']
-            self.comments = self._load_json_from_file(
-                source.comment_source)['comments']
-        else:
-            self.users = self._load_json(source, 'users', from_file)
-            self.nodes = self._load_json(source, 'nodes', from_file)
-            self.comments = self._load_json(source, 'comments', from_file)
+        self.fetcher = fetcher or EdgeSenseFetcher(source)
+        self.users = None
+        self.nodes = None
+        self.comments = None
 
-    def _load_json_from_file(self, file_name):
-        with open(file_name) as data:
-            return json.load(data)
-
-    def _load_json(self, source, resource_type, from_file):
-        if resource_type is 'users':
-            source_link = source.user_source
-            if from_file:
-                data = self.load_json_from_file(
-                    source.user_source, 'users')
-            else:
-                data = requests.get(source_link).json()
-            if 'users' in data:
-                data = data['users']
-            return data
-
-        if resource_type is 'nodes':
-            source_link = source.node_source
-            if from_file:
-                data = self.load_json_from_file(
-                    source.node_source, 'nodes')
-            else:
-                data = requests.request(source_link).json()
-            if 'nodes' in data:
-                data = data['nodes']
-            return data
-
-        if resource_type is 'comments':
-            source_link = source.comment_source
-            if from_file:
-                data = self.load_json_from_file(
-                    source.comment_source, 'comments')
-            else:
-                data = requests.request(source_link).json()
-            if 'comments' in data:
-                data = data['comments']
-            return data
-
-        else:
-            raise InputError("%s is not a proper resource" % resource_type)
-
-    def load_json_from_file(self, file_path, source_type='nodes'):
-        # source_type = ['users', 'nodes', 'comments']
-        with open(file_path) as data:
-            if source_type is 'users':
-                return json.load(data)['users']
-            if source_type is 'nodes':
-                return json.load(data)['nodes']
-            if source_type is 'comments':
-                return json.load(data)['comments']
-            else:
-                raise InputError('source_type is not valid')
+    def _setup(self):
+        username = config.get('edgeryder.username')
+        password = config.get('edgeryder.password')
+        auth = (username, password)
+        self.nodes = self.fetcher.get_nodes(auth=auth, verify=False)
+        self.comments = self.fetcher.get_comments(auth=auth, verify=False)
+        self.users = {x.get('user').get('uid'): x for x in
+                      self.fetcher.get_users(auth=auth, verify=False)}
 
     def _get_all_users(self):
         return self.session.query(SourceSpecificAccount).\
@@ -297,39 +307,48 @@ class EdgeSenseParser(object):
     def _convert_posts_to_dict(self, db):
         return {x.source_post_id: x for x in db}
 
-    def _process_comment_threading(self):
+    def _process_comment_threading(self, posts_db):
         # comments are json formatted dictionary objects
         # includes both nodes and comments
 
-        # posts_db = self.session.query(SourceSpecificPost)./
-        #     filter(
-        #            ~(SourceSpecificPost.source_post_id.like(
-        #            '%'+'nid_'+'%')) & (
-        #            SourceSpecificPost.source_id == self.source.id)).all()
-        if not self.threaded:
-            posts_db = self._convert_posts_to_dict(
-                self._get_all_posts()
-            )
+        waiting_list = []
+        first_run = True
+        while True:
+            if first_run:
+                current_list = self.comments
+                first_run = False
+            else:
+                current_list = waiting_list
+                waiting_list = []
 
-            for comment in self.comments:
+            for comment in current_list:
                 comm = comment['comment']
                 if int(comm['pid']) == 0:
                     # Node nid is the parent
                     parent_id = 'nid_' + comm['nid']
-                    parent = posts_db[parent_id]
+                    parent = posts_db.get(parent_id, None)
+                    if not parent:
+                        waiting_list.append(comment)
+                        continue
                     child = posts_db[comm['cid']]
                     child.set_parent(parent)
 
                 else:
-                    # Otherwise the comment is a reply to another comment
+                    # Otherwise the comment is a reply to
+                    # another comment
                     parent_id = comm['pid']
-                    parent = posts_db[parent_id]
+                    parent = posts_db.get(parent_id, None)
+                    if not parent:
+                        waiting_list.append(comment)
+                        continue
                     child = posts_db[comm['cid']]
                     child.set_parent(parent)
 
-            self.threaded = True
+            if not current_list:
+                break
 
     def _parse_users(self, db):
+        """WARNING: OBSOLETE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"""
         if not self.users:
             print "Array of users is empty!"
         else:
@@ -339,36 +358,53 @@ class EdgeSenseParser(object):
                 new_user = SourceSpecificAccount.create(self.source, user)
                 self.session.add(new_user)
 
-    def _parse_nodes(self, db):
+    def _create_user(self, user, users_db):
+        if user:
+            new_user = SourceSpecificAccount.create(self.source, user)
+            self.session.add(new_user)
+            users_db[user.get('uid')] = new_user
+
+    def _parse_nodes(self, posts_db, users_db):
         if not self.nodes:
             print "Array of nodes is empty!"
         else:
             for node in self.nodes:
-                if ("nid_" + node['node']['nid']) in db:
+                node_id = "nid_" + node['node']['nid']
+                if node_id in posts_db:
                     continue
+                user_id = node.get('node', {}).get('uid', None)
+                if user_id and user_id not in users_db:
+                    user = self.users.get(user_id)
+                    self._create_user(user, users_db)
+
                 new_post = SourceSpecificPost.create(self.source, node)
                 if not new_post:
                     continue
+                posts_db[node_id] = new_post
                 self.session.add(new_post)
 
-    def _parse_comments(self, db):
+    def _parse_comments(self, posts_db, users_db):
         if not self.comments:
             print "Array of comments is empty!"
         else:
             for comment in self.comments:
-                if comment['comment']['cid'] in db:
+                comment_id = comment['comment']['cid']
+                if comment_id in posts_db:
                     continue
+                user_id = comment.get('comment', {}).get('uid', None)
+                if user_id and user_id not in users_db:
+                    user = self.users.get(user_id, None)
+                    self._create_user(user, users_db)
+
                 new_post = SourceSpecificPost.create(self.source, comment)
                 if not new_post:
                     continue
+                posts_db[comment_id] = new_post
                 self.session.add(new_post)
 
     def parse(self):
-        # First add all of the users to the db
-        # Then add all of the nodes
-        # Then add all of the comments
-        # Then set parent on all comments
-
+        # First, setup
+        self._setup()
         # First, get all users and posts from the source, so as to not create
         # duplicates
         users_db = self._convert_users_to_dict(self._get_all_users())
@@ -377,59 +413,56 @@ class EdgeSenseParser(object):
         # pre-cursor to getting started
         self.session.flush()
 
-        self._parse_users(users_db)
+        self._parse_nodes(posts_db, users_db)
         self.session.commit()
 
-        self._parse_nodes(posts_db)
+        self._parse_comments(posts_db, users_db)
         self.session.commit()
 
-        self._parse_comments(posts_db)
+        self._process_comment_threading(posts_db)
         self.session.commit()
 
-        self._process_comment_threading()
-        self.session.commit()
+    def _update_user(self, user, user_db):
+        if int(user.get('user').get('uid')) in user_db:
+            usr = user.get('user')
+            user_id = usr.get('uid')
+            old_user = user_db.get(user_id)
+            old_user.user_info = json.dumps(user)
+            old_user.user_link = u"https://edgeryders.eu/user/%s" % \
+                                 user_id
+            old_user.source = self.source
+            profile = old_user.profile
+            profile.name = usr.get('name')
 
-    def _update_users(self, db):
-        if not self.users:
-            print "Array of users is empty!"
         else:
-            for user in self.users:
-                if user['user']['uid'] in db:
-                    usr = user.get('user')
-                    old_user = db.get(usr['uid'])
-                    old_user.user_info = json.dumps(user)
-                    old_user.user_link = usr['link']
-                    old_user.user_id = usr['uid']
-                    old_user.source = self.source
+            new_user = SourceSpecificAccount.create(self.source, user)
+            user_db[user.get('user').get('uid')] = new_user
+            self.session.add(new_user)
 
-                else:
-                    new_user = SourceSpecificAccount.create(self.source, user)
-                    self.session.add(new_user)
-
-                # return cls(import_date=import_date, source=source,
-                #        message_id = message_id,
-                #        source_post_id=node_id, creator=agent,
-                #        creation_date=created,
-                #        discussion=discussion, body=body)
-
-    def _update_nodes(self, db, users_db):
+    def _reimport_nodes_users(self, posts_db, users_db):
         if not self.nodes:
             print "Array of nodes is empty!"
         else:
             for node in self.nodes:
                 nde = node['node']
                 nid = SourceSpecificPost.create_nid(nde)
-                if nid in db:
-                    old_node = db.get(nid)
+                if nid in posts_db:
+                    user_id = nde.get('uid')
+                    user = users_db.get(int(user_id), None)
+                    if user:
+                        self._update_user(user, users_db)
+                    else:
+                        # create the user
+                        self._update_user(user, self.users)
+
+                    old_node = posts_db.get(nid)
                     old_node.import_date = datetime.utcnow()
                     old_node.source = self.source
                     old_node.discussion = self.source.discussion
-                    old_node.source_post_id = SourceSpecificPost.create_nid(
-                        nde)
+                    old_node.source_post_id = nid
                     old_node.message_id = \
-                        self.source.get_default_prepended_id() + \
-                        SourceSpecificPost.create_nid(nde)
-                    old_node.body = nde['body']
+                        self.source.get_default_prepended_id() + nid
+                    old_node.body = nde['Body']
                     old_node.creation_date = datetime.fromtimestamp(
                         int(nde['created']))
 
@@ -443,7 +476,7 @@ class EdgeSenseParser(object):
                         continue
                     self.session.add(new_post)
 
-    def _update_comments(self, db, users_db):
+    def _reimport_comment_users(self, db, users_db):
         if not self.comments:
             print "Array of comments is empty!"
         else:
@@ -457,7 +490,7 @@ class EdgeSenseParser(object):
                     old_comm.source_post_id = comm['cid']
                     old_comm.message_id = \
                         self.source.get_default_prepended_id() + comm['cid']
-                    old_comm.body = comm['comment']
+                    old_comm.body = comm['Comment']
                     old_comm.creation_date = datetime.fromtimestamp(
                         int(comm['created']))
 
@@ -471,27 +504,19 @@ class EdgeSenseParser(object):
                     self.session.add(new_comm)
 
     def re_import(self):
-
+        self._setup()
         users_db = self._convert_users_to_dict(self._get_all_users())
-        self._update_users(users_db)
+        posts_db = self._convert_posts_to_dict(self._get_all_posts())
+
+        self._reimport_nodes_users(posts_db, users_db)
         self.session.commit()
-
-        # Users have been updated. Must update the local cache of users
-        # as well
-        users_db = self._convert_users_to_dict(self._get_all_users())
 
         posts_db = self._convert_posts_to_dict(self._get_all_posts())
-        self._update_nodes(posts_db, users_db)
+
+        self._reimport_comment_users(posts_db, users_db)
         self.session.commit()
 
-        # Likewise, Posts have been updated; must update the posts_db to
-        # reflect that change as well
-        posts_db = self._convert_posts_to_dict(self._get_all_posts())
-        self._update_comments(posts_db, users_db)
-        self.session.commit()
-
-        self.threaded = False
-        self._process_comment_threading()
+        self._process_comment_threading(posts_db)
         self.session.commit()
 
 
