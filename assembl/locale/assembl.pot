@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-28 18:20-0400\n"
+"POT-Creation-Date: 2015-04-29 12:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -732,15 +732,6 @@ msgstr ""
 #: assembl/static/js/app/views/user/account.js:188
 #: assembl/static/js/app/views/user/profile.js:55
 msgid "Your settings fail to update"
-msgstr ""
-
-#: assembl/static/js/app/views/groups/groupContent.js:201
-msgid ""
-"<h1>Pick a topic and start contributing</h1><br/>This table of contents helps"
-" you find the conversations and topics you are interested in so you don’t get"
-" overwhelmed. Topics include messages from all related sub-topics as "
-"well.<br/><br/>This is a safe and respectful space. All ideas are "
-"welcome!<br/>"
 msgstr ""
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:120
@@ -1520,6 +1511,25 @@ msgstr ""
 #: assembl/templates/views/firstPost.tmpl:19
 #: assembl/templates/views/joinDiscussion.tmpl:19
 msgid "Receive notifications"
+msgstr ""
+
+#: assembl/templates/views/helperDebate.tmpl:3
+msgid "Welcome!"
+msgstr ""
+
+#: assembl/templates/views/helperDebate.tmpl:4
+msgid "Pick a topic and start contributing"
+msgstr ""
+
+#: assembl/templates/views/helperDebate.tmpl:5
+msgid ""
+"This table of contents helps you find the conversations and topics you are "
+"interested in so you don’t get overwhelmed. Topics include messages from all "
+"related sub-topics as well."
+msgstr ""
+
+#: assembl/templates/views/helperDebate.tmpl:6
+msgid "This is a safe and respectful space. All ideas are welcome!"
 msgstr ""
 
 #: assembl/templates/views/idea.tmpl:7

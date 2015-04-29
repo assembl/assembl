@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-28 18:20-0400\n"
+"POT-Creation-Date: 2015-04-29 12:28+0200\n"
 "PO-Revision-Date: 2015-04-28 21:42+0000\n"
 "Last-Translator: François Burra <francoisburra@imaginationforpeople.org>\n"
 "Language-Team: French "
@@ -758,20 +758,6 @@ msgstr "Vos paramètres ont été sauvegardés"
 #: assembl/static/js/app/views/user/profile.js:55
 msgid "Your settings fail to update"
 msgstr "Erreur lors de la mise à jour de vos paramètres"
-
-#: assembl/static/js/app/views/groups/groupContent.js:201
-msgid ""
-"<h1>Pick a topic and start contributing</h1><br/>This table of contents "
-"helps you find the conversations and topics you are interested in so you "
-"don’t get overwhelmed. Topics include messages from all related sub-"
-"topics as well.<br/><br/>This is a safe and respectful space. All ideas "
-"are welcome!<br/>"
-msgstr ""
-"<h1>Choisis un sujet et commencé à contribuer</h1><br/>Cette table des "
-"contenu vous permet de trouver les discussions et les sujets qui peuvent "
-"vous intéresser sans être submergé. Chaque sujet contient aussi les "
-"messages de ces sous-sujets.<br/><br/>C'est un espace d'échanges "
-"respectueux et convivial. Toutes les idées sont les bienvenues !<br/>"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:120
 msgid "Unlock panel"
@@ -1618,6 +1604,36 @@ msgstr ""
 #: assembl/templates/views/joinDiscussion.tmpl:19
 msgid "Receive notifications"
 msgstr "Recevoir des notifications"
+
+#: assembl/templates/views/helperDebate.tmpl:3
+msgid "Welcome!"
+msgstr ""
+
+#: assembl/templates/views/helperDebate.tmpl:4
+msgid "Pick a topic and start contributing"
+msgstr ""
+
+#: assembl/templates/views/helperDebate.tmpl:5
+#, fuzzy
+#| msgid "" "<h1>Pick a topic and start contributing</h1><br/>This table of
+#| contents " "helps you find the conversations and topics you are interested
+#| in so you " "don’t get overwhelmed. Topics include messages from all related
+#| sub-" "topics as well.<br/><br/>This is a safe and respectful space. All
+#| ideas " "are welcome!<br/>"
+msgid ""
+"This table of contents helps you find the conversations and topics you "
+"are interested in so you don’t get overwhelmed. Topics include messages "
+"from all related sub-topics as well."
+msgstr ""
+"<h1>Choisis un sujet et commencé à contribuer</h1><br/>Cette table des "
+"contenu vous permet de trouver les discussions et les sujets qui peuvent "
+"vous intéresser sans être submergé. Chaque sujet contient aussi les "
+"messages de ces sous-sujets.<br/><br/>C'est un espace d'échanges "
+"respectueux et convivial. Toutes les idées sont les bienvenues !<br/>"
+
+#: assembl/templates/views/helperDebate.tmpl:6
+msgid "This is a safe and respectful space. All ideas are welcome!"
+msgstr ""
 
 #: assembl/templates/views/idea.tmpl:7
 msgid "Remove from next synthesis"
