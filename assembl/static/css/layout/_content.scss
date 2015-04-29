@@ -104,18 +104,23 @@
 }
 
 .debateIntroductionContainer{
-  margin-top: 50px;
+  display: table;
+  height: 100%;
   .debateIntroductionContent{
     margin: 0 auto;
     padding: 5px 15px 15px 15px;
-    width: 90%;
     background-color: rgb(250,250,250);
-    .help1, .help2 {
+    display: table-cell;
+    vertical-align: middle;
+    .help1, .help2, .help3 {
       width: 50%;
       margin: 0 auto;
       color: $gray1;
     }
-    .welcome{
+    .help3{
+      font-size: 20px;
+    }
+    .welcome, .help3{
       color: $green;
     }
   }
