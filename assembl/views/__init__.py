@@ -162,6 +162,9 @@ def csrf_error_view(exc, request):
 def error_view(exc, request):
     # from traceback import format_exc
     from datetime import datetime
+    from assembl.lib.raven_client import get_raven_client
+    client = get_raven_client()
+    client.captureException(getattr(request, "exc_info", None))
     return HTTPInternalServerError(
         explanation="Sorry, Assembl had an internal issue and you have to reload. Please send this to a discussion administrator.",
         detail=datetime.now().isoformat()+"\n"+repr(request.exception))
