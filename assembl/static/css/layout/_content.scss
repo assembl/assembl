@@ -102,3 +102,25 @@
     font-size: 400%;
   }
 }
+
+.debateIntroductionContainer{
+  margin-top: 50px;
+  .debateIntroductionContent{
+    margin: 0 auto;
+    padding: 5px 15px 15px 15px;
+    width: 90%;
+    background-color: rgb(250,250,250);
+    .help1, .help2 {
+      width: 50%;
+      margin: 0 auto;
+      color: $gray1;
+    }
+    .welcome{
+      color: $green;
+    }
+  }
+}
+
+
+
+

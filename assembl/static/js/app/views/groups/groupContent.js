@@ -1,7 +1,7 @@
 'use strict';
 
-define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec', 'views/assemblPanel', 'views/groups/panelWrapper', 'utils/panelSpecTypes'],
-    function (Marionette, ctx, i18n, panelSpec, AssemblPanel, PanelWrapper, PanelSpecTypes) {
+define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec', 'views/assemblPanel', 'views/groups/panelWrapper', 'utils/panelSpecTypes', 'views/helperDebate'],
+    function (Marionette, ctx, i18n, panelSpec, AssemblPanel, PanelWrapper, PanelSpecTypes, helperDebate) {
 
         /** Represents the entire content of a single group */
         var groupContent = Marionette.CompositeView.extend({
@@ -196,25 +196,16 @@ define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec
                     this.groupContainer.suspendResize();
                     this.model.set('navigationState', 'debate');
                     
-                    if ( show_debate_help === true ){
-                        // this is a bit ugly but it works. Making it nice will be for a v2
-                        var help_text = i18n.gettext("<h1>Pick a topic and start contributing</h1>" +
-                            "<br/>This table of contents helps you find the conversations and topics you are interested in so you don’t get overwhelmed. Topics include messages from all related sub-topics as well.<br/>" +
-                            "<br/>This is a safe and respectful space. All ideas are welcome!<br/>");
+                    if ( show_debate_help ){
 
                         this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
                         this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
                         this.resetMessagePanelState();
 
-                        var style="<style>.debateIntroductionContainer{margin-top: 50px; text-align: left;} .debateIntroductionContent{margin: 0 auto; padding: 5px 15px 15px 15px; width: 90%; background: rgb(250,250,250);} .debateIntroductionContent h1 { text-align: center; }</style>";
-                        var el = $("<div class='debateIntroductionContainer'>");
-                        el.append($(style));
-                        var content = $("<div class='debateIntroductionContent'>");
-                        content.html(help_text);
-                        el.append(content);
+                        var helper = new helperDebate();
 
                         var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-                        conversationPanel.showAlternativeContent(el);
+                        conversationPanel.showAlternativeContent(helper.render().el);
                     }
                     else {
                         this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
