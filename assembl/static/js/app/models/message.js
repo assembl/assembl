@@ -29,7 +29,8 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
                 avatarUrl: null,
                 date: null,
                 bodyMimeType: null,
-                publishes_synthesis_id: null
+                publishes_synthesis_id: null,
+                metadata_json: null // this property needs to exist to display the inspiration source of a message (creativity widget)
             },
             
             /**

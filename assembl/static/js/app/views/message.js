@@ -147,7 +147,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             serializeData: function(){
                 var bodyFormatClass,
                     body,
-                    metadata_json,
+                    metadata_json = this.model.get('metadata_json'), // this property needs to exist to display the inspiration source of a message (creativity widget)
                     bodyFormat = this.model.get('bodyMimeType');
 
                 if (this.viewStyle == this.availableMessageViewStyles.PREVIEW || this.viewStyle == this.availableMessageViewStyles.TITLE_ONLY) {
@@ -164,10 +164,6 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     bodyFormatClass = "body_format_" + this.model.get('bodyMimeType').replace("/", "_");
                 }
 
-                // this property needs to exist to display the inspiration source of a message (creativity widget)
-                if (!_.has(this.model, 'metadata_json')){
-                    metadata_json = null;
-                }
                 var direct_link_relative_url = Ctx.getRelativeURLFromDiscussionRelativeURL("posts/" + encodeURIComponent(this.model.get('@id'))),
                     //share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
                     share_link_url = "/static/widget/share/index.html?u=" +
