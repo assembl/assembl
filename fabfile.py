@@ -1172,7 +1172,7 @@ def env_inm_agora():
     env.user = "www-data"
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
-    env.hosts = ['coeus.ca']
+    env.hosts = ['discussions.bluenove.com']
 
     env.uses_apache = False
     env.uses_ngnix = True
