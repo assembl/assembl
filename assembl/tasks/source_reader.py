@@ -45,7 +45,6 @@ known_transitions = {
         ReaderStatus.IRRECOVERABLE_ERROR,
         ReaderStatus.PAUSED,
         ReaderStatus.TRANSIENT_ERROR,
-        ReaderStatus.TRANSIENT_ERROR,
         ReaderStatus.WAIT_FOR_PUSH,
     },
     ReaderStatus.PAUSED: {
@@ -104,6 +103,10 @@ class IrrecoverableError(ClientError):
     pass
 
 
+class ReadingForTooLong(ClientError):
+    pass
+
+
 class SourceReader(Thread):
     """ """
     __metaclass__ = ABCMeta
@@ -119,12 +122,14 @@ class SourceReader(Thread):
     client_error_backoff = timedelta(minutes=15)
     client_error_numlimit = 3
     irrecoverable_error_backoff = timedelta(days=1)
+    reading_takes_too_long = timedelta(minutes=15)
 
     def __init__(self, source_id):
         super(SourceReader, self).__init__()
         self.source_id = source_id
         self.status = ReaderStatus.CREATED
         self.last_prod = datetime.utcnow()
+        self.last_read_started = datetime.fromtimestamp(0)
         self.last_read = datetime.fromtimestamp(0)
         self.last_successful_login = datetime.fromtimestamp(0)
         self.last_error_status = None
@@ -160,13 +165,10 @@ class SourceReader(Thread):
 
     def new_error(self, reader_error, status=None):
         status = status or reader_error.status
-        self.source.connection_error = status
-        self.source.error_description = str(reader_error)
         if status != self.last_error_status:
             # Counter-intuitive, but either lighter or more severe errors
             # reset the count.
             self.error_count = 1
-            self.last_error_status = status
             if status == ReaderStatus.TRANSIENT_ERROR:
                 self.current_error_backoff = self.transient_error_backoff
             elif status == ReaderStatus.CLIENT_ERROR:
@@ -179,14 +181,14 @@ class SourceReader(Thread):
             self.error_count += 1
             if status == ReaderStatus.TRANSIENT_ERROR:
                 if self.error_count > self.transient_error_numlimit:
-                    self.last_error_status = ReaderStatus.CLIENT_ERROR
+                    status = ReaderStatus.CLIENT_ERROR
                     self.error_count = 1
                     self.current_error_backoff = self.client_error_backoff
                 else:
                     self.current_error_backoff *= 2
             elif status == ReaderStatus.CLIENT_ERROR:
                 if self.error_count > self.client_error_numlimit:
-                    self.last_error_status = ReaderStatus.IRRECOVERABLE_ERROR
+                    status = ReaderStatus.IRRECOVERABLE_ERROR
                     self.error_count = 1
                     self.current_error_backoff = \
                         self.irrecoverable_error_backoff
@@ -196,7 +198,11 @@ class SourceReader(Thread):
                 self.current_error_backoff *= 2
             else:
                 assert False
-        if self.status > ReaderStatus.TRANSIENT_ERROR:
+        self.last_error_status = status
+        self.source.connection_error = status
+        self.source.error_description = str(reader_error)
+        if status > ReaderStatus.TRANSIENT_ERROR:
+            self.set_status(status)
             self.reimporting = False
         self.last_error_time = datetime.utcnow()
 
@@ -220,6 +226,15 @@ class SourceReader(Thread):
                 > self.transient_error_backoff):
             # Exception: transient backoff escalation can be cancelled by wake
             self.event.set()
+        elif (self.status == ReaderStatus.READING
+            and (datetime.utcnow() - self.last_read_started)
+                > self.reading_takes_too_long):
+            try:
+                self.do_close()
+                self.new_error(ReadingForTooLong())
+            except ReaderError as e:
+                self.new_error(e)
+
         self.last_prod = datetime.utcnow()
 
     def run(self):
@@ -235,6 +250,13 @@ class SourceReader(Thread):
                 self.event.wait(self.current_error_backoff.total_seconds())
                 self.event.clear()
                 continue
+            except Exception as e:
+                log.error("Unexpected error: "+repr(e))
+                self.new_error(e, ReaderStatus.CLIENT_ERROR)
+                self.do_close()
+                self.event.wait(self.current_error_backoff.total_seconds())
+                self.event.clear()
+                break
             while self.is_connected():
                 # Read in all cases
                 try:
@@ -246,7 +268,7 @@ class SourceReader(Thread):
                     self.event.wait(self.current_error_backoff.total_seconds())
                     self.event.clear()
                 if not self.is_connected():
-                    continue
+                    break
                 if self.can_push:
                     self.set_status(ReaderStatus.WAIT_FOR_PUSH)
                     while self.status == ReaderStatus.WAIT_FOR_PUSH:
@@ -260,6 +282,13 @@ class SourceReader(Thread):
                                 self.do_close()
                             else:
                                 self.end_wait_for_push()
+                            self.event.wait(self.current_error_backoff.total_seconds())
+                            self.event.clear()
+                            break
+                        except Exception as e:
+                            log.error("Unexpected error: "+repr(e))
+                            self.new_error(e, ReaderStatus.CLIENT_ERROR)
+                            self.do_close()
                             self.event.wait(self.current_error_backoff.total_seconds())
                             self.event.clear()
                             break
@@ -337,6 +366,7 @@ class SourceReader(Thread):
 
     def read(self):
         self.set_status(ReaderStatus.READING)
+        self.last_read_started = datetime.utcnow()
         self.do_read()
         self.successful_read()
         if (self.status in (ReaderStatus.READING, ReaderStatus.WAIT_FOR_PUSH)):
@@ -425,29 +455,29 @@ class SourceDispatcher(ConsumerMixin):
         message.ack()
 
     def read(self, source_id, reimport=False, force_restart=False, **kwargs):
-        if source_id not in self.readers:
+        if not (self.readers.get(source_id, None)
+                and self.readers[source_id].is_connected()):
             from assembl.models import ContentSource
             source = ContentSource.get(source_id)
             if not source:
+                return False
+            if (source.connection_error == ReaderStatus.IRRECOVERABLE_ERROR
+                    and not force_restart):
                 return False
             reader = source.make_reader()
             self.readers[source_id] = reader
             if reader is None:
                 return False
-            if (reader.status != ReaderStatus.IRRECOVERABLE_ERROR
-                    or force_restart):
-                reader.setup_read(reimport, **kwargs)
-                reader.start()
-                return True
-        reader = self.readers[source_id]
+            reader.setup_read(reimport, **kwargs)
+            reader.start()
+            return True
+        reader = self.readers.get(source_id, None)
         if reader is None:
             return False
-        if (reader.status != ReaderStatus.IRRECOVERABLE_ERROR
-                or force_restart):
-            reader.setup_read(reimport, **kwargs)
-            reader.wake()
-            return True
-        return False
+        # We know it is connected by now.
+        reader.setup_read(reimport, **kwargs)
+        reader.wake()
+        return True
 
     def shutdown(self):
         self.should_stop = True

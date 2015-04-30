@@ -171,7 +171,7 @@ class IMAPReader(SourceReader):
                 print "Processing messages from IMAP: %d "% (len(email_ids))
                 for email_id in email_ids:
                     self.import_email(email_id)
-                    if self.status == ReaderStatus.SHUTDOWN:
+                    if self.status != ReaderStatus.READING:
                         break
             else:
                 print "No IMAP messages to process"

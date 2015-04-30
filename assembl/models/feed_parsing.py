@@ -315,7 +315,7 @@ class FeedSourceReader(PullSourceReader):
                 raise ReaderError(e)
             finally:
                 self.source = FeedPostSource.get(self.source_id)
-            if self.status == ReaderStatus.SHUTDOWN:
+            if self.status != ReaderStatus.READING:
                 break
 
     def _process_reimport_post(self, entry, post, discussion=None):
@@ -368,7 +368,7 @@ class FeedSourceReader(PullSourceReader):
             account = self._create_account_from_entry(entry)
             account = account.get_unique_from_db()
             yield self._convert_to_post(entry, account), account
-            if self.status == ReaderStatus.SHUTDOWN:
+            if self.status != ReaderStatus.READING:
                 break
 
     def _return_existing_post(self, post_id):
