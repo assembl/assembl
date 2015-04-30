@@ -267,6 +267,13 @@ class SourceReader(Thread):
                         self.do_close()
                     self.event.wait(self.current_error_backoff.total_seconds())
                     self.event.clear()
+                except Exception as e:
+                    log.error("Unexpected error: "+repr(e))
+                    self.new_error(e, ReaderStatus.CLIENT_ERROR)
+                    self.do_close()
+                    self.event.wait(self.current_error_backoff.total_seconds())
+                    self.event.clear()
+                    break
                 if not self.is_connected():
                     break
                 if self.can_push:
