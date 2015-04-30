@@ -880,7 +880,8 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
 
                 if ( forbid_future ) { // server time may be ahead of us of some minutes. In this case, say it was now
                     var now = Moment();
-                    if ( momentDate > now )
+                    var now_plus_delta = Moment().add(30, 'minutes');
+                    if ( momentDate > now && momentDate < now_plus_delta )
                         momentDate = now;
                 }
 
