@@ -126,8 +126,13 @@
     <fieldset class="panel-section ideaPanel-section-bottom mtl"></fieldset>
 
     <% } else { %>
-        <div class="mls mts">
-            <p>{{ gettext('Please select an idea in the table of ideas') }}</p>
+        <div class="emptyIdeaPanelContainer phs">
+            <div class="emptyIdeaPanelContent">
+                <p class="tac emptyIdeaIcon"><i class="icon-idea"></i></p>
+                <p class="helperIdea tac">{{ gettext('No idea selected') }}</p>
+                <p class="tac mvl">{{ gettext('Choose an idea in the Table of ideas to explore the discussion or close this panel as you will have open')}}</p>
+                <p class="emptyIdeaIcon2 tac mtxl"><i class="icon-imported"></i></p>
+            </div>
         </div>
     <% } %>
 </div>

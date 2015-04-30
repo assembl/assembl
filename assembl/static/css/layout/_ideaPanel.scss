@@ -132,3 +132,25 @@
     font-size: 17px;
   }
 }
+
+.emptyIdeaPanelContainer {
+  display: table;
+  height: 100%;
+  width: 100%;
+  .emptyIdeaPanelContent {
+    display: table-cell;
+    vertical-align: middle;
+    color: $gray1;
+    .emptyIdeaIcon i{
+      font-size: 100px;
+    }
+    .emptyIdeaIcon2 i{
+      color: $green;
+      font-size: 20px;
+    }
+
+    .helperIdea {
+      font-size: 16px;
+    }
+  }
+}
