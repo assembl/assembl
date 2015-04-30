@@ -254,7 +254,11 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
              * Renders the search result information
              */
             renderQueryInfo: function () {
-                this.ui.queryInfo.html(this.currentQuery.getHtmlDescription());
+              var that = this;
+              this.currentQuery.getHtmlDescriptionPromise().then(function(htmlDescription) {
+                that.ui.queryInfo.html(htmlDescription);
+              })
+                
             }
         });
 

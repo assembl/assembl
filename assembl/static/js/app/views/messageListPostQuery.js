@@ -14,95 +14,89 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
         var PostQuery = function () {
             var collectionManager = new CollectionManager();
 
-            this._returnHtmlDescriptionPostInContextOfIdea = function (filterDef, queryObjects) {
-                var retval = '',
-                    idea = null,
-                    valuesText = [];
-                for (var i = 0; i < queryObjects.length; i++) {
-                    var value = queryObjects[i].value,
-                    //Yes, this is cheating - benoitg 2014-07-23
-                        idea = collectionManager._allIdeasCollection.get(value),
-                        span = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></a>\n';
-                    valuesText.push('"' + idea.get('shortTitle') + '"' + span);
-                }
-                retval += i18n.sprintf(i18n.ngettext("Discuss idea %s", "Discuss ideas: %s", valuesText.length), valuesText.join(i18n.gettext(' AND ')));
-                return retval;
-            }
-            this._returnHtmlDescriptionPostIsDescendentOfPost = function (filterDef, queryObjects) {
-                var retval = '',
-                    post = null,
-                    valuesText = [];
-                for (var i = 0; i < queryObjects.length; i++) {
-                    var value = queryObjects[i].value,
-                        post = collectionManager._allMessageStructureCollection.get(value),
-                        span = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></a>\n';
-                    if (post == undefined) {
-                        // TODO
-                        console.log("BUG: could not find post", value);
-                    } else {
-                      if(post.get('subject')) {
-                        //Best case, but unless the message is in cache we won have this data
-                        valuesText.push(i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject')) + span);
-                      }
-                      else if (post.get('@type') === "SynthesisPost"){
-                        valuesText.push(i18n.gettext('this synthesis') + span);
-                      }
-                      else {
-                        valuesText.push(i18n.sprintf(i18n.gettext('this %s'), post.get('@type')) + span);
-                      }
+            /* See _getHtmlFilterDescriptionPromise for more detailled example of those methods */
+            //getFilterDescriptionStringPromise = function(filterDef, individualValuesButtonsPromises){
+            //getFilterIndividualValueDescriptionStringPromise = function(filterDef, individualFilterValue) {
+/*
+                getFilterDescriptionStringPromise = function(filterDef, individualValuesButtonsPromises){
+                  return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+                    var retval;
+                    if(filterDef._value_is_boolean) {
+                      retval = i18n.sprintf(i18n.gettext("%s"), individualValuesButtons.join(', '));
                     }
-                }
-                retval += i18n.sprintf(i18n.ngettext("Is in the conversation that follows %s",
-                        "Are in the conversation that follows: %s",
-                        valuesText.length),
-                    valuesText.join(i18n.gettext(' AND ')));
-                return retval;
-            }
-            this._returnHtmlDescriptionPostIsUnread = function (filterDef, queryObjects) {
-                var retval = '';
-                if (queryObjects && queryObjects.length > 0) {
-                    var value = true;
-                    if (queryObjects[0].hasOwnProperty("value")){
-                      value = queryObjects[0].value;
+                    else {
+                      retval = i18n.sprintf(i18n.ngettext("%s for value %s", "%s for values: %s", _.size(individualValuesButtons)), filterDef.name, individualValuesButtons.join(', '));
                     }
+                    return retval;
+                  });
+                };
 
-                    var closeBtn = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></a>\n';
-
-                    if (value === true) {
-                        retval += i18n.sprintf("%s %s", i18n.gettext("You haven't read yet"), closeBtn);
-                    } else {
-                        retval += i18n.gettext("You've already read");
-                    }
+                getFilterIndividualValueDescriptionStringPromise = function(filterDef, individualFilterValue) {
+                  var retval;
+                  if (filterDef._value_is_boolean) {
+                    var filterQuery = that._query[filterDef.id][0];
+                    retval = i18n.sprintf((individualFilterValue === true) ? i18n.gettext("%s") : i18n.gettext("NOT %s"), filterDef.name);
+                  }
+                  else {
+                    retval = individualFilterValue;
+                  }
+                  return Promise.resolve(retval)
                 }
-
-                return retval;
+ */
+            /* Useful for single values where the actual filter value doesn't need to be displayed at all */
+            this._returnEmptyStringPromise = function (filterDef, individualFilterValue) {
+              return Promise.resolve('');
             }
             
-            this._returnHtmlDescriptionPostedSinceLastSynthesis = function (filterDef, queryObjects) {
-              var retval = '';
-              if (queryObjects && queryObjects.length > 0) {
-                var value = true;
-                if (queryObjects[0].hasOwnProperty("value")){
-                  value = queryObjects[0].value;
+            this._getFilterIndividualValueDescriptionStringPromisePostInContextOfIdea = function(filterDef, individualFilterValue) {
+              return collectionManager.getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
+                var idea = allIdeasCollection.get(individualFilterValue);
+                if(!idea) {
+                  throw new Error('Idea ' + individualFilterValue + ' not found');
                 }
-                var closeBtn = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></a>\n';  
-                retval += i18n.sprintf("%s %s", i18n.gettext("Posted since last synthesis"), closeBtn);
+                return '"' + idea.get('shortTitle') + '"';
+              })
+            }
+            this._getFilterDescriptionStringPromisePostInContextOfIdea = function (filterDef, individualValuesButtonsPromises) {
+              return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+                return i18n.sprintf(i18n.ngettext("Discuss idea %s", "Discuss ideas: %s", individualValuesButtons.length), individualValuesButtons.join(i18n.gettext(' AND ')));
+              });
+            }
+            
+            this._getFilterIndividualValueDescriptionStringPromisePostIsDescendentOfPost = function(filterDef, individualFilterValue) {
+              return collectionManager.getMessageFullModelPromise(individualFilterValue).then(function(post) {
+                if(!post) {
+                  throw new Error('Post ' + individualFilterValue + ' not found');
+                }
+                if (post.get('@type') === "SynthesisPost"){
+                  return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject'));
+                }
+                if(post.get('subject')) {
+                  return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject'));
+                }
+              })
+            }
+            this._getFilterDescriptionStringPromisePostIsDescendentOfPost = function (filterDef, individualValuesButtonsPromises) {
+              return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+                return i18n.sprintf(i18n.gettext("Are in the conversation that follows: %s"), individualValuesButtons.join(i18n.gettext(' AND ')));
+              });
+            }
+
+            this._getFilterIndividualValueDescriptionStringPromisePostIsUnread = function(filterDef, individualFilterValue) {
+              var retval;
+              if (individualFilterValue === true) {
+                retval = i18n.gettext("You haven't read yet");
+              } else {
+                retval = i18n.gettext("You've already read");
               }
-              return retval;
+              return Promise.resolve(retval);
+            }
+            this._getFilterDescriptionStringPromisePostIsUnread = function (filterDef, individualValuesButtonsPromises) {
+              return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+                return i18n.sprintf("%s", individualValuesButtons.join(''));
+              });
             }
             
-            this._returnHtmlDescriptionSynthesis = function (filterDef, queryObjects) {
-                var retval = '',
-                    valuesText = [];
-                var value = queryObjects[0].value,
-                    span = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value=' + value + '><i class="icon-delete"></i></a>\n';
-
-                valuesText.push(span);
-
-                retval += i18n.sprintf(i18n.gettext("%s %s"), filterDef.name, valuesText.join(', '));
-
-                return retval;
-            }
             this.availableFilters = {
                 POST_HAS_ID_IN: {
                     id: 'post_has_id_in',
@@ -111,29 +105,31 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
                     _value_is_boolean: false,
                     _can_be_reversed: true,
                     _server_param: 'ids',
-                    _client_side_implementation: null,
-                    _filter_description: null
+                    _client_side_implementation: null
                 },
                 POST_IS_IN_CONTEXT_OF_IDEA: {
                     id: 'post_in_context_of_idea',
-                    name: i18n.gettext('Idea'),
+                    name: i18n.gettext('Related to idea'),
                     help_text: i18n.gettext('Only include messages related to the specified idea.  The filter is recursive:  Messages related to ideas that are descendents of the idea are included.'),
                     _value_is_boolean: false,
                     _can_be_reversed: false,
                     _server_param: 'root_idea_id',
                     _client_side_implementation: null,
-                    _filter_description: this._returnHtmlDescriptionPostInContextOfIdea
+                    _getFilterDescriptionStringPromise: this._getFilterDescriptionStringPromisePostInContextOfIdea,
+                    _getFilterIndividualValueDescriptionStringPromise: this._getFilterIndividualValueDescriptionStringPromisePostInContextOfIdea
+                    
                 },
 
                 POST_IS_DESCENDENT_OF_POST: {
                     id: 'post_thread',
-                    name: i18n.gettext('Post thread'),
+                    name: i18n.gettext('Part of thread of'),
                     help_text: i18n.gettext('Only include messages that are in the specified post reply thread.'),
                     _value_is_boolean: false,
                     _can_be_reversed: false,
                     _server_param: 'root_post_id',
                     _client_side_implementation: null,
-                    _filter_description: this._returnHtmlDescriptionPostIsDescendentOfPost
+                    _getFilterDescriptionStringPromise: this._getFilterDescriptionStringPromisePostIsDescendentOfPost,
+                    _getFilterIndividualValueDescriptionStringPromise: this._getFilterIndividualValueDescriptionStringPromisePostIsDescendentOfPost
                 },
                 POST_IS_ORPHAN: {
                     id: 'only_orphan_posts',
@@ -142,8 +138,7 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
                     _value_is_boolean: true,
                     _can_be_reversed: false,
                     _server_param: 'only_orphan',
-                    _client_side_implementation: null,
-                    _filter_description: null
+                    _client_side_implementation: null
                 },
                 POST_IS_SYNTHESIS: {
                     id: 'only_synthesis_posts',
@@ -152,22 +147,22 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
                     _value_is_boolean: true,
                     _can_be_reversed: false,
                     _server_param: 'only_synthesis',
-                    _client_side_implementation: null,
-                    _filter_description: this._returnHtmlDescriptionSynthesis
+                    _client_side_implementation: null
                 },
                 POST_IS_UNREAD: {
                     id: 'is_unread_post',
-                    name: i18n.gettext('not read yet'),
+                    name: i18n.gettext('Are not read yet'),
                     help_text: i18n.gettext('Only include unread messages.'),
                     _value_is_boolean: false,
                     _can_be_reversed: true,
                     _server_param: 'is_unread',
                     _client_side_implementation: null,
-                    _filter_description: this._returnHtmlDescriptionPostIsUnread
+                    _getFilterDescriptionStringPromise: this._getFilterDescriptionStringPromisePostIsUnread,
+                    _getFilterIndividualValueDescriptionStringPromise: this._getFilterIndividualValueDescriptionStringPromisePostIsUnread
                 },
                 POST_IS_POSTED_SINCE_LAST_SYNTHESIS: {
                   id: 'is_posted_since_last_synthesis',
-                  name: i18n.gettext('posted since last synthesis'),
+                  name: i18n.gettext('Are posted since last synthesis'),
                   help_text: i18n.gettext('Only include posts created after the last synthesis.'),
                   _value_is_boolean: false,
                   _can_be_reversed: false,
@@ -528,93 +523,154 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
                     return undefined;
                 }
             };
-
+            
             /**
-             * Return a HTML description of the results shown to the user
-             * @param {String} ideaId
+             * Return a promise to a HTML description of a single active query filter
              */
-            this.getHtmlDescription = function () {
-                var retval = '',
-                    valuesText = [],
-                    numActiveFilters = _.keys(this._query).length;
-                if (this._queryResultInfo == null) {
-                    retval += '<span class="post-query-results-info">';
-                    retval += i18n.gettext("No query has been executed yet");
-                    retval += '</span>';
-                }
-                else if (this._resultsAreValid) {
-                    retval += '<span class="post-query-results-info">';
-                    if (this.getResultNumTotal() == 0) {
-                        if (numActiveFilters > 0) {
-                            retval += i18n.gettext("There is no message to display with those filters:");
-                        }
-                        else {
-                            retval += i18n.gettext("There are no messages in the discussion.");
-                        }
+            this._getHtmlFilterDescriptionPromise = function (filterDef) {
+              var that = this,
+                  descriptionPromise,
+                  getFilterIndividualValueDescriptionStringPromise,
+                  getFilterDescriptionStringPromise,
+                  individualValuesButtonsPromises = [];
+              
+
+              if (filterDef._getFilterDescriptionStringPromise) {
+                getFilterDescriptionStringPromise = filterDef._getFilterDescriptionStringPromise;
+              }
+              else {
+                getFilterDescriptionStringPromise = function(filterDef, individualValuesButtonsPromises){
+                  return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+                    var retval;
+                    if(filterDef._value_is_boolean) {
+                      retval = i18n.sprintf(i18n.gettext("%s"), individualValuesButtons.join(', '));
                     }
                     else {
-                        var unreadText = '';
-                        if (this.getResultNumUnread() > 0) {
-                            if (this.getResultNumUnread() == this.getResultNumTotal()) {
-                                if (this.getResultNumTotal() == 1) {
-                                    unreadText = i18n.gettext(" (unread)");
-                                } else {
-                                    unreadText = i18n.gettext(" (all unread)");
-                                }
-                            } else {
-                                unreadText = i18n.sprintf(
-                                    i18n.ngettext(" (%d unread)", " (%d unread)", this.getResultNumUnread()),
-                                    this.getResultNumUnread());
-                            }
-                        }
-                        if (numActiveFilters > 0) {
-                            retval += i18n.sprintf(i18n.ngettext("Found %d message%s that:", "Found %d messages%s that:", this.getResultNumTotal()), this.getResultNumTotal(), unreadText);
-                        }
-                        else {
-                            retval += i18n.sprintf(i18n.ngettext("Found %d message%s:", "Found %d messages%s:", this.getResultNumTotal()), this.getResultNumTotal(), unreadText);
-                        }
+                      retval = i18n.sprintf(i18n.ngettext("%s (%s)", "%s (%s)", _.size(individualValuesButtons)), filterDef.name, individualValuesButtons.join(', '));
                     }
+                    return retval;
+                  });
+                 
+                };
+              }
+              if (filterDef._getFilterIndividualValueDescriptionStringPromise) {
+                getFilterIndividualValueDescriptionStringPromise = filterDef._getFilterIndividualValueDescriptionStringPromise;
+              }
+              else {
+                getFilterIndividualValueDescriptionStringPromise = function(filterDef, individualFilterValue) {
+                  var retval;
+                  if (filterDef._value_is_boolean) {
+                    var filterQuery = that._query[filterDef.id][0];
+                    retval = i18n.sprintf((individualFilterValue === true) ? i18n.gettext("%s") : i18n.gettext("NOT %s"), filterDef.name);
+                  }
+                  else {
+                    retval = individualFilterValue;
+                  }
+                  return Promise.resolve(retval)
+                }
+              }
 
-                    retval += '</span>';
-                    retval += '<ul class="post-query-filter-info pan">';
+              for (var i = 0; i < that._query[filterDef.id].length; i++) {
+                var value = that._query[filterDef.id][i].value;
 
-                    var nActiveFilters = 0;
-                    for (var filterDefPropName in this.availableFilters) {
-                        var filterDef = this.availableFilters[filterDefPropName];
+                individualValuesButtonsPromises.push(getFilterIndividualValueDescriptionStringPromise(filterDef, value).then(
+                    function(individualValueString) {
+                      return '<span>' + individualValueString + '</span><a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></a>\n';
+                    }));
+              }
+              descriptionPromise = getFilterDescriptionStringPromise(filterDef, individualValuesButtonsPromises);
 
-                        if (filterDef.id in this._query) {
-                            ++nActiveFilters;
-                            retval += '<li class="filter ui-tag">';
-                            if (filterDef._filter_description) {
-                                retval += filterDef._filter_description(filterDef, this._query[filterDef.id]);
-                            }
-                            else {
-                                if (filterDef._value_is_boolean) {
-                                    var filterQuery = this._query[filterDef.id][0];
-                                    var span = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + filterQuery.value + '"><i class="icon-delete"></i></a>\n';
-                                    retval += i18n.sprintf((filterQuery.value === true) ? i18n.gettext("%s") : i18n.gettext("NOT %s"), filterDef.name);
-                                    retval += span;
-                                }
+              return descriptionPromise.then((function(description) {
+                return '<li class="filter ui-tag">' + description + '</li>';
+              }));
+            }
+            /**
+             * Return a promise to a HTML description of the active query filters
+             */
+            this._getHtmlFiltersDescriptionPromise = function () {
+              var that = this,
+                  nActiveFilters = 0,
+                  filterDescriptionPromises = [];
 
-                                else {
-                                    for (var i = 0; i < this._query[filterDef.id].length; i++) {
-                                        var value = this._query[filterDef.id][i].value;
-                                        var span = '<a href="#" class="remove js_deleteFilter" data-filterid="' + filterDef.id + '" data-value="' + value + '"><i class="icon-delete"></i></span>\n';
-                                        valuesText.push(value + span);
-                                    }
-                                    retval += i18n.sprintf(i18n.gettext("%s for values %s"), filterDef.name, valuesText.join(', '));
-                                }
-                            }
-                            retval += '</li>';
-                        }
-                    }
-                    retval += '</ul>';
+              for (var filterDefPropName in that.availableFilters) {
+                var filterDef = that.availableFilters[filterDefPropName];
 
-                    if (nActiveFilters > 0) {
-                        retval += '<div class="actions"><a class="js_messageList-allmessages btn btn-cancel btn-xs">' + i18n.gettext("Clear filters") + '</a></div>';
-                    }
+                if (filterDef.id in that._query) {
+                  ++nActiveFilters;
+                  filterDescriptionPromises.push(this._getHtmlFilterDescriptionPromise(filterDef));
+                }
+              }
+              return Promise.all(filterDescriptionPromises).then(function(filterDescriptions) {
+                var retval = '';
+                retval += '<ul class="post-query-filter-info pan">';
+                retval += filterDescriptions.join('');
+                retval += '</ul>';
+
+                if (nActiveFilters > 0) {
+                  retval += '<div class="actions"><a class="js_messageList-allmessages btn btn-cancel btn-xs">' + i18n.gettext("Clear filters") + '</a></div>';
                 }
                 return retval;
+              });
+
+            };
+            
+            /**
+             * Return a HTML description of the query results shown to the user
+             */
+            this.getHtmlDescriptionPromise = function () {
+              var that = this;
+
+              return this._getHtmlFiltersDescriptionPromise().then(function(filtersDescription) {
+                var retval = '',
+                individualValuesButtons = [],
+                numActiveFilters = _.keys(that._query).length;
+                
+                if (that._queryResultInfo == null) {
+                  retval += '<span class="post-query-results-info">';
+                  retval += i18n.gettext("No query has been executed yet");
+                  retval += '</span>';
+                }
+                else if (that._resultsAreValid) {
+                  retval += '<span class="post-query-results-info">';
+                  if (that.getResultNumTotal() == 0) {
+                    if (numActiveFilters > 0) {
+                      retval += i18n.gettext("There is no message to display with those filters:");
+                    }
+                    else {
+                      retval += i18n.gettext("There are no messages in the discussion.");
+                    }
+                  }
+                  else {
+                    var unreadText = '';
+                    if (that.getResultNumUnread() > 0) {
+                      if (that.getResultNumUnread() == that.getResultNumTotal()) {
+                        if (that.getResultNumTotal() == 1) {
+                          unreadText = i18n.gettext(" (unread)");
+                        } else {
+                          unreadText = i18n.gettext(" (all unread)");
+                        }
+                      } else {
+                        unreadText = i18n.sprintf(
+                            i18n.ngettext(" (%d unread)", " (%d unread)", that.getResultNumUnread()),
+                            that.getResultNumUnread());
+                      }
+                    }
+                    if (numActiveFilters > 0) {
+                      retval += i18n.sprintf(i18n.ngettext("Found %d message%s that:", "Found %d messages%s that:", that.getResultNumTotal()), that.getResultNumTotal(), unreadText);
+                    }
+                    else {
+                      retval += i18n.sprintf(i18n.ngettext("Found %d message%s:", "Found %d messages%s:", that.getResultNumTotal()), that.getResultNumTotal(), unreadText);
+                    }
+                  }
+
+                  retval += '</span>';
+                  retval += filtersDescription;
+                }
+                else {
+                  throw new Error("Query has been executed but results are invalid")
+                }
+                return retval;
+              });
             };
 
         };
