@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-29 12:28+0200\n"
+"POT-Creation-Date: 2015-04-30 15:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -761,10 +761,6 @@ msgstr ""
 #: assembl/static/js/app/views/groups/panelWrapper.js:206
 #: assembl/templates/views/panelWrapper.tmpl:9
 msgid "Lock panel"
-msgstr ""
-
-#: assembl/static/js/app/views/groups/panelWrapper.js:269
-msgid "Please select an idea in the table of ideas to open the idea panel."
 msgstr ""
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:291
@@ -1653,8 +1649,14 @@ msgstr ""
 msgid "Remove all extracts"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:130
-msgid "Please select an idea in the table of ideas"
+#: assembl/templates/views/ideaPanel.tmpl:132
+msgid "No idea selected"
+msgstr ""
+
+#: assembl/templates/views/ideaPanel.tmpl:133
+msgid ""
+"Choose an idea in the Table of ideas to explore the discussion or close this "
+"panel as you will have open"
 msgstr ""
 
 #: assembl/templates/views/ideaPanelWidgets.tmpl:13
@@ -1761,20 +1763,20 @@ msgstr ""
 msgid "Reply"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:13
+#: assembl/templates/views/messageList.tmpl:14
 msgid "Load previous messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:19
+#: assembl/templates/views/messageList.tmpl:20
 msgid "Load more messages"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:25
-#: assembl/templates/views/messageList.tmpl:35
+#: assembl/templates/views/messageList.tmpl:26
+#: assembl/templates/views/messageList.tmpl:36
 msgid "Inspire me!"
 msgstr ""
 
-#: assembl/templates/views/messageList.tmpl:33
+#: assembl/templates/views/messageList.tmpl:34
 msgid "React to the ongoing discussion"
 msgstr ""
 
