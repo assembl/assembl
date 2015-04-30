@@ -133,7 +133,6 @@ class SourceReader(Thread):
         self.last_read = datetime.fromtimestamp(0)
         self.last_successful_login = datetime.fromtimestamp(0)
         self.last_error_status = None
-        self.last_error_time = None
         self.reimporting = False
         self.can_push = False  # Set to true for, eg, imap with polling.
         self.event = Event()
@@ -158,10 +157,10 @@ class SourceReader(Thread):
     def reset_errors(self):
         self.error_count = 0
         self.last_error_status = None
-        self.last_error_time = None
+        self.error_backoff_until = None
         self.source.connection_error = None
         self.source.error_description = None
-        self.current_error_backoff = 0
+        self.source.error_backoff_until = None
 
     def new_error(self, reader_error, status=None):
         status = status or reader_error.status
@@ -169,42 +168,38 @@ class SourceReader(Thread):
             # Counter-intuitive, but either lighter or more severe errors
             # reset the count.
             self.error_count = 1
-            if status == ReaderStatus.TRANSIENT_ERROR:
-                self.current_error_backoff = self.transient_error_backoff
-            elif status == ReaderStatus.CLIENT_ERROR:
-                self.current_error_backoff = self.client_error_backoff
-            elif status == ReaderStatus.IRRECOVERABLE_ERROR:
-                self.current_error_backoff = self.irrecoverable_error_backoff
-            else:
-                assert False
         elif status == self.last_error_status:
             self.error_count += 1
+            # escalate errors with repetition
             if status == ReaderStatus.TRANSIENT_ERROR:
                 if self.error_count > self.transient_error_numlimit:
                     status = ReaderStatus.CLIENT_ERROR
                     self.error_count = 1
-                    self.current_error_backoff = self.client_error_backoff
-                else:
-                    self.current_error_backoff *= 2
             elif status == ReaderStatus.CLIENT_ERROR:
                 if self.error_count > self.client_error_numlimit:
                     status = ReaderStatus.IRRECOVERABLE_ERROR
                     self.error_count = 1
-                    self.current_error_backoff = \
-                        self.irrecoverable_error_backoff
-                else:
-                    self.current_error_backoff *= 2
-            elif status == ReaderStatus.IRRECOVERABLE_ERROR:
-                self.current_error_backoff *= 2
             else:
                 assert False
+        if status == ReaderStatus.TRANSIENT_ERROR:
+            error_backoff = self.transient_error_backoff
+        elif status == ReaderStatus.CLIENT_ERROR:
+            error_backoff = self.client_error_backoff
+        elif status == ReaderStatus.IRRECOVERABLE_ERROR:
+            error_backoff = self.irrecoverable_error_backoff
+        else:
+            assert False
+        # double backoff every time
+        error_backoff *= 2 ** (self.error_count - 1)
+
         self.last_error_status = status
         self.source.connection_error = status
         self.source.error_description = str(reader_error)
         if status > ReaderStatus.TRANSIENT_ERROR:
             self.set_status(status)
             self.reimporting = False
-        self.last_error_time = datetime.utcnow()
+        self.error_backoff_until = datetime.utcnow() + error_backoff
+        self.source.error_backoff_until = self.error_backoff_until
 
     def is_in_error(self):
         return self.last_error_status is not None
@@ -240,6 +235,11 @@ class SourceReader(Thread):
     def run(self):
         self.setup()
         while self.status != ReaderStatus.SHUTDOWN:
+            if self.error_backoff_until:
+                interval = (self.error_backoff_until - datetime.utcnow()).total_seconds()
+                if interval > 0:
+                    self.event.wait(interval)
+                    self.event.clear()
             try:
                 self.login()
                 self.successful_login()
@@ -247,15 +247,11 @@ class SourceReader(Thread):
                 self.new_error(e)
                 if self.status > ReaderStatus.TRANSIENT_ERROR:
                     self.do_close()
-                self.event.wait(self.current_error_backoff.total_seconds())
-                self.event.clear()
                 continue
             except Exception as e:
                 log.error("Unexpected error: "+repr(e))
                 self.new_error(e, ReaderStatus.CLIENT_ERROR)
                 self.do_close()
-                self.event.wait(self.current_error_backoff.total_seconds())
-                self.event.clear()
                 break
             while self.is_connected():
                 # Read in all cases
@@ -265,14 +261,10 @@ class SourceReader(Thread):
                     self.new_error(e)
                     if self.status > ReaderStatus.TRANSIENT_ERROR:
                         self.do_close()
-                    self.event.wait(self.current_error_backoff.total_seconds())
-                    self.event.clear()
                 except Exception as e:
                     log.error("Unexpected error: "+repr(e))
                     self.new_error(e, ReaderStatus.CLIENT_ERROR)
                     self.do_close()
-                    self.event.wait(self.current_error_backoff.total_seconds())
-                    self.event.clear()
                     break
                 if not self.is_connected():
                     break
@@ -289,15 +281,11 @@ class SourceReader(Thread):
                                 self.do_close()
                             else:
                                 self.end_wait_for_push()
-                            self.event.wait(self.current_error_backoff.total_seconds())
-                            self.event.clear()
                             break
                         except Exception as e:
                             log.error("Unexpected error: "+repr(e))
                             self.new_error(e, ReaderStatus.CLIENT_ERROR)
                             self.do_close()
-                            self.event.wait(self.current_error_backoff.total_seconds())
-                            self.event.clear()
                             break
                         if not self.is_connected():
                             break
@@ -368,6 +356,7 @@ class SourceReader(Thread):
         from assembl.models import ContentSource
         self.source = ContentSource.get(self.source_id)
         connection_error = self.source.connection_error
+        self.error_backoff_until = self.source.error_backoff_until
         if connection_error:
             self.status = connection_error
 

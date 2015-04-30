@@ -45,6 +45,7 @@ class ContentSource(DiscussionBoundBase):
     ))
     connection_error = Column(SmallInteger)
     error_description = Column(String)
+    error_backoff_until = Column(DateTime)
 
     # Non-persistant, default reading status
     read_status = 0
