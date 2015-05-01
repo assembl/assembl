@@ -1,5 +1,7 @@
 from datetime import datetime
 import simplejson as json
+from urllib import quote
+from smtplib import SMTPRecipientsRefused
 
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
@@ -277,8 +279,11 @@ def assembl_register_view(request):
     p_slug = "/" + slug if slug else ""
     next_view = handle_next_view(request)
     if not request.params.get('email'):
-        return dict(get_default_context(request),
+        response = dict(get_default_context(request),
                     slug_prefix=p_slug)
+        if request.GET.get('error', None):
+            response['error'] = request.GET['error']
+        return response
     forget(request)
     session = AgentProfile.db
     localizer = request.localizer
@@ -343,6 +348,20 @@ def assembl_register_view(request):
         return HTTPFound(location=next_view)
     return HTTPFound(location=maybe_contextual_route(
         request, 'confirm_emailid_sent', email_account_id=email_account.id))
+
+
+@view_config(context=SMTPRecipientsRefused)
+def smtp_error_view(exc, request):
+    path_info = request.environ['PATH_INFO']
+    if path_info.startswith('/data/') or path_info.startswith('/api/'):
+        raise HTTPBadRequest("Invalid email")
+    localizer = request.localizer
+    referrer = request.environ['HTTP_REFERER']
+    if '?' in referrer:
+        referrer = referrer.split('?')[0]
+    referrer += '?error='+quote(localizer.translate(_(
+                        "This is not a valid email")))
+    return HTTPFound(location=referrer)
 
 
 def from_identifier(identifier):
