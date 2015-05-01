@@ -57,6 +57,8 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
 
                     try {
                         // temporary hack
+                        if (settings.navigation_sections === undefined)
+                            return;
                         var visualization_items = settings.navigation_sections[0].navigation_content.items;
                         if (visualization_items.length === 0)
                             return;
