@@ -184,7 +184,8 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
                             stackup_spacing: 10
                         });
                     },
-                    error: function(){
+                    error: function(model, resp){
+                        resp.handled = true;
                         $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
                             ele: 'body',
                             type: 'error',

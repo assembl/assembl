@@ -1117,6 +1117,8 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              * @event
              */
             onAjaxError: function (ev, jqxhr, settings, exception) {
+                if (jqxhr.handled)
+                    return;
 
                 // ignore Ajax errors which come from outside (sub-)domains. This is useful for oembed related errors
                 var getHostnameFromUrl = function(data) { // hostname examples: "localhost", "localhost:4321"
