@@ -347,26 +347,15 @@ class EdgeSenseParser(object):
             if not current_list:
                 break
 
-    def _parse_users(self, db):
-        """WARNING: OBSOLETE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"""
-        if not self.users:
-            print "Array of users is empty!"
-        else:
-            for user in self.users:
-                if user['user']['uid'] in db:
-                    continue
-                new_user = SourceSpecificAccount.create(self.source, user)
-                self.session.add(new_user)
-
     def _create_user(self, user, users_db):
         if user:
             new_user = SourceSpecificAccount.create(self.source, user)
             self.session.add(new_user)
-            users_db[user.get('uid')] = new_user
+            users_db[new_user.user_id] = new_user
 
     def _parse_nodes(self, posts_db, users_db):
         if not self.nodes:
-            print "Array of nodes is empty!"
+            raise ValueError('There are no nodes to parse')
         else:
             for node in self.nodes:
                 node_id = "nid_" + node['node']['nid']
@@ -385,7 +374,7 @@ class EdgeSenseParser(object):
 
     def _parse_comments(self, posts_db, users_db):
         if not self.comments:
-            print "Array of comments is empty!"
+            raise ValueError('There are no comments to parse')
         else:
             for comment in self.comments:
                 comment_id = comment['comment']['cid']
@@ -422,38 +411,34 @@ class EdgeSenseParser(object):
         self._process_comment_threading(posts_db)
         self.session.commit()
 
-    def _update_user(self, user, user_db):
-        if int(user.get('user').get('uid')) in user_db:
-            usr = user.get('user')
-            user_id = usr.get('uid')
-            old_user = user_db.get(user_id)
-            old_user.user_info = json.dumps(user)
-            old_user.user_link = u"https://edgeryders.eu/user/%s" % \
-                                 user_id
-            old_user.source = self.source
-            profile = old_user.profile
-            profile.name = usr.get('name')
-
+    def _update_user(self, user_id, user_db):
+        user = user_db.get(user_id, None)
+        if not user:
+            user = self.users.get(user_id, None)
+            self._create_user(user, user_db)
         else:
-            new_user = SourceSpecificAccount.create(self.source, user)
-            user_db[user.get('user').get('uid')] = new_user
-            self.session.add(new_user)
+            new_user = self.users.get(user_id, None)
+            if new_user:
+                # If new_user is not in the db (for whatever reason), then
+                # retain the old data.
+                usr = new_user.get('user')
+                user.user_info = json.dumps(new_user)
+                user.user_link = u"https://edgeryders.eu/user/%s" % \
+                                 user_id
+                user.source = self.source
+                profile = user.profile
+                profile.name = usr.get('name')
 
     def _reimport_nodes_users(self, posts_db, users_db):
         if not self.nodes:
-            print "Array of nodes is empty!"
+            raise ValueError('There are no nodes to re-parse')
         else:
             for node in self.nodes:
                 nde = node['node']
                 nid = SourceSpecificPost.create_nid(nde)
                 if nid in posts_db:
                     user_id = nde.get('uid')
-                    user = users_db.get(int(user_id), None)
-                    if user:
-                        self._update_user(user, users_db)
-                    else:
-                        # create the user
-                        self._update_user(user, self.users)
+                    self._update_user(user_id, users_db)
 
                     old_node = posts_db.get(nid)
                     old_node.import_date = datetime.utcnow()
@@ -462,45 +447,66 @@ class EdgeSenseParser(object):
                     old_node.source_post_id = nid
                     old_node.message_id = \
                         self.source.get_default_prepended_id() + nid
-                    old_node.body = nde['Body']
+                    body = nde['Body']
+                    if '/sites/default/files/' in body and ('http' or 'www'
+                                                            not in body):
+                        body = self.source.node_root + body
+                    old_node.body = body
+                    old_node.body_mime_type = 'text/html'
                     old_node.creation_date = datetime.fromtimestamp(
                         int(nde['created']))
 
-                    user = users_db.get(nde['uid'])
-                    agent = user.profile
-                    old_node.creator = agent
+                    user = users_db.get(user_id, None)
+                    if user:
+                        # user can possibly not exist
+                        agent = user.profile
+                        old_node.creator = agent
 
                 else:
                     new_post = SourceSpecificPost.create(self.source, node)
                     if not new_post:
                         continue
+                    posts_db[nid] = new_post
                     self.session.add(new_post)
 
-    def _reimport_comment_users(self, db, users_db):
+    def _reimport_comment_users(self, posts_db, users_db):
         if not self.comments:
-            print "Array of comments is empty!"
+            raise ValueError('There are no comments to re-parse')
         else:
             for comment in self.comments:
                 comm = comment['comment']
-                if comm['cid'] in db:
-                    old_comm = db.get(comm['cid'])
+                comment_id = comm.get('cid')
+                user_id = comm.get('uid', None)
+                if comm['cid'] in posts_db:
+                    self._update_user(user_id, users_db)
+
+                    old_comm = posts_db.get(comment_id)
                     old_comm.import_date = datetime.utcnow()
                     old_comm.source = self.source
                     old_comm.discussion = self.source.discussion
-                    old_comm.source_post_id = comm['cid']
+                    old_comm.source_post_id = comment_id
                     old_comm.message_id = \
-                        self.source.get_default_prepended_id() + comm['cid']
-                    old_comm.body = comm['Comment']
+                        self.source.get_default_prepended_id() + comment_id
+
+                    body = comm['Comment']
+                    if '/sites/default/files/' in body and ('http' or 'www'
+                                                            not in body):
+                        body = self.source.node_root + body
+
+                    old_comm.body = body
                     old_comm.creation_date = datetime.fromtimestamp(
                         int(comm['created']))
 
-                    user = users_db.get(comm['uid'])
-                    agent = user.profile
-                    old_comm.creator = agent
+                    user = users_db.get(user_id, None)
+                    if user:
+                        agent = user.profile
+                        old_comm.creator = agent
+
                 else:
                     new_comm = SourceSpecificPost.create(self.source, comment)
                     if not new_comm:
                         continue
+                    posts_db[comment_id] = new_comm
                     self.session.add(new_comm)
 
     def re_import(self):
@@ -510,8 +516,6 @@ class EdgeSenseParser(object):
 
         self._reimport_nodes_users(posts_db, users_db)
         self.session.commit()
-
-        posts_db = self._convert_posts_to_dict(self._get_all_posts())
 
         self._reimport_comment_users(posts_db, users_db)
         self.session.commit()
@@ -523,11 +527,10 @@ class EdgeSenseParser(object):
 class EdgeSenseReader(PullSourceReader):
     def __init__(self, source_id):
         super(EdgeSenseReader, self).__init__(source_id)
+        self.parser = EdgeSenseParser(self.source)
 
     def do_read(self):
-        parser = EdgeSenseParser(self.source)
-        parser.parse()
+        self.parser.parse()
 
     def re_import(self):
-        parser = EdgeSenseParser(self.source)
-        parser.re_import()
+        self.parser.re_import()
