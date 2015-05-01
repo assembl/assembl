@@ -403,7 +403,7 @@ def app_update_dependencies():
     execute(update_requirements, force=False)
     execute(update_compass)
     execute(update_bower)
-    execute(bower_install)
+    execute(bower_update)
 
 
 @task
@@ -546,17 +546,24 @@ def bower_cmd(cmd, relative_path='.'):
         with cd(relative_path):
             run(' '.join((node_cmd, bower_cmd, cmd)))
 
-
+def _bower_foreach_do(cmd):
+    bower_cmd(cmd)
+    bower_cmd(cmd, 'assembl/static/widget/card')
+    bower_cmd(cmd, 'assembl/static/widget/session')
+    bower_cmd(cmd, 'assembl/static/widget/video')
+    bower_cmd(cmd, 'assembl/static/widget/vote')
+    bower_cmd(cmd, 'assembl/static/widget/creativity')
+    bower_cmd(cmd, 'assembl/static/widget/share')
+    
 @task
 def bower_install():
     """ Normally not called manually """
-    bower_cmd('install')
-    bower_cmd('install', 'assembl/static/widget/card')
-    bower_cmd('install', 'assembl/static/widget/session')
-    bower_cmd('install', 'assembl/static/widget/video')
-    bower_cmd('install', 'assembl/static/widget/vote')
-    bower_cmd('install', 'assembl/static/widget/creativity')
-    bower_cmd('install', 'assembl/static/widget/share')
+    execute(_bower_foreach_do, 'install')
+
+@task
+def bower_update():
+    """ Normally not called manually """
+    execute(_bower_foreach_do, 'update')
 
 
 @task

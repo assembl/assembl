@@ -199,7 +199,6 @@ define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec
                     if ( show_debate_help ){
 
                         this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-                        this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
                         this.resetMessagePanelState();
 
                         var helper = new helperDebate();
@@ -209,7 +208,6 @@ define(['backbone.marionette', 'common/context', 'utils/i18n', 'models/panelSpec
                     }
                     else {
                         this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-                        this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
                         this.resetMessagePanelState();
 
                         var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);

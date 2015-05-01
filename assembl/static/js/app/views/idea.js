@@ -202,6 +202,7 @@ define(['backbone', 'underscore', 'app', 'common/context', 'utils/permissions', 
 
                 Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, true);
                 this._groupContent.setCurrentIdea(this.model);
+                this._groupContent.resetDebateState(false);
             },
 
             /**

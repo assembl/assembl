@@ -320,39 +320,41 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
              * Synchronizes the panel with the currently selected idea (possibly none)
              */
             syncWithCurrentIdea: function () {
-                var currentIdea = this.getContainingGroup().getCurrentIdea(),
-                    filterValue,
-                    that = this;
+              var currentIdea = this.getContainingGroup().getCurrentIdea(),
+              filterValue,
+              snapshot = this.currentQuery.getFilterConfigSnapshot();
 
-                //Ctx.openPanel(this);
-                //!currentIdea?filterValue=null:filterValue=currentIdea.getId();
-                //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea, this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, filterValue));
-                //TODO benoitg - this logic should really be in postQuery, not here - 2014-07-29
-                if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
-                    //Filter is already in sync
-                    return;
-                }
-                else if (!currentIdea && (this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null) == false)) {
-                    //Filter is already in sync
-                    //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
-                    return;
-                }
-                else {
-                    this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
-                    this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, null);
-                    this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, null);
+              //Ctx.openPanel(this);
+              //!currentIdea?filterValue=null:filterValue=currentIdea.getId();
+              //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea, this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, filterValue));
+              //TODO benoitg - this logic should really be in postQuery, not here - 2014-07-29
+              if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
+                //Filter is already in sync
+                return;
+              }
+              else if (!currentIdea && (this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null) === false)) {
+                //Filter is already in sync
+                //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+                return;
+              }
+              else {
+                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
+                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, null);
+                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, null);
 
-                    if (currentIdea) {
-                        this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
-                        this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId());
-                        //app.openPanel(app.messageList);
-                    }
-                    if (Ctx.debugRender) {
-                        console.log("messageList:syncWithCurrentIdea(): triggering render because new idea was selected");
-                    }
-                    //console.log("messageList:syncWithCurrentIdea(): Query is now: ",this.currentQuery._query);
-                    this.render();
+                if (currentIdea) {
+                  this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
+                  this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId());
+                  //app.openPanel(app.messageList);
                 }
+                if(this.currentQuery.isFilterConfigSameAsSnapshot(snapshot) === false) {
+                  if (Ctx.debugRender) {
+                    console.log("messageList:syncWithCurrentIdea(): triggering render because the filter was modified");
+                    console.log("messageList:syncWithCurrentIdea(): Query is now: ",this.currentQuery._query);
+                  }
+                  this.render();
+                }
+              }
             },
 
             showInspireMeIfAvailable: function(){
@@ -1520,7 +1522,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
              * Toggle hoist on a post (filter which shows posts which are descendent of a given post)
              */
             toggleFilterByPostId: function (postId) {
-                var alreadyHere = this.currentQuery.isFilterActive(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, postId);
+                var alreadyHere = this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, postId);
                 if (alreadyHere) {
                     this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, null);
                     this.render();
@@ -1547,22 +1549,28 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
              * @param {bool} show only unread messages (this parameter is optional and is a flag)
              */
             addFilterIsRelatedToIdea: function (idea, only_unread) {
+              var snapshot = this.currentQuery.getFilterConfigSnapshot();
                 //Can't filter on an idea at the same time as getting synthesis messages
-                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, null);
-                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
-                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
-                // this was probably set before... eg by synthesis panel, and is cancelled when clicking an idea.
-                this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, null);
+              this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, null);
+              this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
+              this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
+              // this was probably set before... eg by synthesis panel, and is cancelled when clicking an idea.
+              this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, null);
 
-                if (arguments.length > 1) {
-                    if (only_unread === null)
-                        this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, null);
-                    else
-                        this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, only_unread);
+              if (arguments.length > 1) {
+                if (only_unread === null)
+                  this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, null);
+                else
+                  this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_UNREAD, only_unread);
+              }
+              this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
+              if(this.currentQuery.isFilterConfigSameAsSnapshot(snapshot) === false) {
+                if (Ctx.debugRender) {
+                  console.log("messageList:addFilterIsRelatedToIdea(): triggering render because new filter was modified");
+                  console.log("messageList:addFilterIsRelatedToIdea(): Query is now: ",this.currentQuery._query);
                 }
-                this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId());
-
                 this.render();
+              }
             },
 
             /**
@@ -2110,10 +2118,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
              * @event
              */
             onFilterDeleteClick: function (ev) {
-                var value = ev.currentTarget.getAttribute('data-value');
+                var valueIndex = ev.currentTarget.getAttribute('data-value-index');
                 var filterid = ev.currentTarget.getAttribute('data-filterid');
                 var filter = this.currentQuery.getFilterDefById(filterid);
-                this.currentQuery.clearFilter(filter, value);
+                this.currentQuery.clearFilter(filter, valueIndex);
                 this.render();
             },
 
