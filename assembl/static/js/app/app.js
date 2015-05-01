@@ -25,6 +25,11 @@ define(['backbone.marionette', 'jquery'], function (Marionette, $) {
                 $(document).delegate("a", "click", function (evt) {
                     var href = $(this).attr("href");
                     var protocol = this.protocol + "//";
+                    // Note that we only care about assembl #tags.
+                    // We should prefix ours. For now, detect annotator.
+                    if (_.any(this.classList, function(cls) {
+                        return cls.startsWith('annotator-');
+                    })) return;
                     if (typeof href !== 'undefined' && href.slice(protocol.length) !== protocol && /^#.+$/.test(href)) {
                         evt.preventDefault();
                         Backbone.history.navigate(href, true);

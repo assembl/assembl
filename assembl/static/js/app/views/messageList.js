@@ -1399,6 +1399,12 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 });
             },
 
+            annotator_config: {
+                externals: {
+                  "jQuery": "/static/js/bower/jquery/jquery.js",
+                  "styles": "/static/css/lib/annotator.min.css"
+                }
+              },
 
             /**
              * Inits the annotator instance
@@ -1409,7 +1415,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 this.destroyAnnotator();
                 //console.log("initAnnotator called");
                 // Saving the annotator reference
-                this.annotator = this.ui.messageList.annotator().data('annotator');
+                this.annotator = this.ui.messageList.annotator(this.annotator_config).data('annotator');
 
                 // TODO: Re-render message in messagelist if an annotation was added...
                 this.annotator.subscribe('annotationCreated', function (annotation) {
