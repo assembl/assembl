@@ -918,6 +918,19 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
                 return this.getNiceDateTime(date, true);
             },
 
+            getErrorMessageFromAjaxError: function(response) {
+                var message, pos = response.responseText.indexOf("ERRMSG:");
+                if (pos > 0) {
+                    message = response.responseText.substr(pos+7);
+                    pos = message.indexOf("<");
+                    if (pos > 0) {
+                        message = message.substr(0, pos);
+                    }
+                    return message;
+                }
+                return null;
+            },
+
             /**
              * Shows the context menu given the options
              * @param {Number} x

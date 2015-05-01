@@ -186,7 +186,11 @@ define(['backbone.marionette', 'models/emailAccounts', 'common/context', 'models
                     },
                     error: function(model, resp){
                         resp.handled = true;
-                        $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
+                        var message = Ctx.getErrorMessageFromAjaxError(resp);
+                        if (message === null) {
+                            message = i18n.gettext('Your settings fail to update');
+                        }
+                        $.bootstrapGrowl(message, {
                             ele: 'body',
                             type: 'error',
                             offset: {from: 'bottom', amount:20},

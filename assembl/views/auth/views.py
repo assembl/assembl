@@ -353,14 +353,15 @@ def assembl_register_view(request):
 @view_config(context=SMTPRecipientsRefused)
 def smtp_error_view(exc, request):
     path_info = request.environ['PATH_INFO']
-    if path_info.startswith('/data/') or path_info.startswith('/api/'):
-        raise HTTPBadRequest("Invalid email")
     localizer = request.localizer
+    message = localizer.translate(_(
+            "This is not a valid email"))
+    if path_info.startswith('/data/') or path_info.startswith('/api/'):
+        return HTTPBadRequest("ERRMSG:" + message)
     referrer = request.environ['HTTP_REFERER']
     if '?' in referrer:
         referrer = referrer.split('?')[0]
-    referrer += '?error='+quote(localizer.translate(_(
-                        "This is not a valid email")))
+    referrer += '?error='+quote(message)
     return HTTPFound(location=referrer)
 
 
