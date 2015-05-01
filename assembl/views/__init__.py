@@ -8,7 +8,7 @@ from pyramid.response import Response
 from velruse.exceptions import CSRFError
 from pyramid.httpexceptions import (
     HTTPException, HTTPInternalServerError, HTTPMovedPermanently,
-    HTTPClientError)
+    HTTPBadRequest)
 from pyramid.i18n import TranslationStringFactory
 
 from ..lib.json import json_renderer_factory
@@ -150,12 +150,12 @@ def csrf_error_view(exc, request):
                 return Response(template, content_type='text/html')
             else:
                 # The hack failed. Tell the user what to do.
-                return HTTPClientError(explanation="Missing cookies", detail="""Note that we need active cookies.
+                return HTTPBadRequest(explanation="Missing cookies", detail="""Note that we need active cookies.
                     On Safari, the "Allow from current website only" option
                     in the Privacy tab of preferences is too restrictive;
                     use "Allow from websites I visit" and try again. Simply reloading may work.""")
-        return HTTPClientError(explanation="Missing cookies", detail=repr(request.exception))
-    return  HTTPClientError(explanation="CSRF error", detail=repr(request.exception))
+        return HTTPBadRequest(explanation="Missing cookies", detail=repr(request.exception))
+    return  HTTPBadRequest(explanation="CSRF error", detail=repr(request.exception))
 
 
 @view_config(context=Exception)

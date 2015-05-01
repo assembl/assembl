@@ -5,7 +5,7 @@ from cornice import Service
 
 from pyramid.security import authenticated_userid, Everyone, ACLDenied
 from pyramid.httpexceptions import (
-    HTTPNotFound, HTTPClientError, HTTPForbidden, HTTPServerError, HTTPBadRequest, HTTPNoContent)
+    HTTPNotFound, HTTPBadRequest, HTTPForbidden, HTTPServerError, HTTPNoContent)
 from sqlalchemy import Unicode
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
@@ -136,7 +136,7 @@ def post_extract(request):
     else:
         target = extract_data.get('target')
         if not (target or uri):
-            raise HTTPClientError("No target")
+            raise HTTPBadRequest("No target")
 
         target_class = sqla.get_named_class(target.get('@type'))
         if issubclass(target_class, Post):
@@ -289,7 +289,7 @@ def do_search_extracts(request):
     permissions = get_permissions(user_id, discussion_id)
 
     if not uri:
-        return HTTPClientError("Please specify a search uri")
+        return HTTPBadRequest("Please specify a search uri")
     content = Webpage.get_by(url=uri)
     if content:
         extracts = Extract.db.query(Extract).filter_by(content=content).all()
