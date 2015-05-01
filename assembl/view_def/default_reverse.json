@@ -35,6 +35,12 @@
         "@extends": "AbstractAgentAccount",
         "will_merge_if_validated": false
     },
+    "SourceSpecificAccount": {
+        "@extends": "AbstractAgentAccount",
+        "user_link": true,
+        "user_id": true,
+        "source_id": true
+    },
     "IdentityProviderAccount": {
         "@extends": "AbstractAgentAccount",
         "provider": false,
@@ -58,6 +64,14 @@
     },
     "LoomioPostSource": {
         "@extends": "FeedPostSource"
+    },
+    "EdgeSenseDrupalSource": {
+        "@extends": "PostSource",
+        "node_source": true,
+        "user_source": true,
+        "comment_source": true,
+        "node_root": false,
+        "post_id_prepend": false
     },
     "AnnotatorSource": {
         "@extends": "ContentSource"

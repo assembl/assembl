@@ -56,6 +56,12 @@
     "LoomioAccount": {
         "@extends": "WebLinkAccount"
     },
+    "SourceSpecificAccount": {
+        "@extends": "AbstractAgentAccount",
+        "user_link": true,
+        "user_id": true,
+        "source_id": true
+    },
     "IdentityProviderAccount": {
         "@extends": "AbstractAgentAccount",
         "provider": "&get_provider_name",
@@ -87,6 +93,14 @@
     },
     "AnnotatorSource": {
         "@extends": "ContentSource"
+    },
+    "EdgeSenseDrupalSource": {
+        "@extends": "PostSource",
+        "node_source": true,
+        "user_source": true,
+        "comment_source": true,
+        "node_root": true,
+        "post_id_prepend": false
     },
     "AbstractMailbox": {
         "@extends": "PostSource",
@@ -151,6 +165,9 @@
     },
     "LoomioFeedPost": {
         "@extends": "FeedPost"
+    },
+    "SourceSpecificPost": {
+        "@extends": "ImportedPost"
     },
     "Webpage": {
         "@extends": "Content",
