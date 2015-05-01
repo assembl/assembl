@@ -8,6 +8,7 @@ class FrontendUrls():
         assert isinstance(discussion, Discussion)
         self.discussion = discussion
 
+    # Note:  This should match with assembl/static/js/app/router.js
     frontend_routes = {
         'edition': '/edition',
         'partners': '/partners',
