@@ -36,7 +36,7 @@ from assembl.auth.password import (
 from assembl.auth.util import (
     get_identity_provider, discussion_from_request)
 from ...lib import config
-from .. import get_default_context
+from .. import get_default_context, JSONError
 
 _ = TranslationStringFactory('assembl')
 
@@ -357,7 +357,7 @@ def smtp_error_view(exc, request):
     message = localizer.translate(_(
             "This is not a valid email"))
     if path_info.startswith('/data/') or path_info.startswith('/api/'):
-        return HTTPBadRequest("ERRMSG:" + message)
+        return JSONError(400, message)
     referrer = request.environ['HTTP_REFERER']
     if '?' in referrer:
         referrer = referrer.split('?')[0]

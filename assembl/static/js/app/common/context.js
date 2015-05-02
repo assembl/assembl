@@ -919,9 +919,16 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
             },
 
             getErrorMessageFromAjaxError: function(response) {
-                var message, pos = response.responseText.indexOf("ERRMSG:");
+                var message = response.responseText;
+                try {
+                    message = JSON.parse(message);
+                    return message.error;  // may be undefined
+                } catch (Exception) {
+                    // maybe a text message
+                }
+                var pos = message.indexOf('ERRMSG:');
                 if (pos > 0) {
-                    message = response.responseText.substr(pos+7);
+                    message = message.substr(pos+7);
                     pos = message.indexOf("<");
                     if (pos > 0) {
                         message = message.substr(0, pos);
