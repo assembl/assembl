@@ -137,6 +137,7 @@
   display: table;
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
   .emptyIdeaPanelContent {
     display: table-cell;
     vertical-align: middle;
@@ -148,7 +149,6 @@
       color: $green;
       font-size: 20px;
     }
-
     .helperIdea {
       font-size: 16px;
     }
