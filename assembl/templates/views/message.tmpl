@@ -59,8 +59,13 @@
             <% } %>
 
             <% if(creator){ %>
-            <li><a title="<%= creator.get('preferred_email') %>" href="mailto:<%= creator.get('preferred_email') %>">{{gettext('Send an email to this user')}}</a></li>
+            <li><a href="#" class="js_message-show-all-by-this-author" ><%= i18n.sprintf("{{gettext('Show all posts by %s')}}", creator.get('name')) %></a></li>
             <% } %>
+
+            <% if(creator && creator.get('preferred_email') && user_can_see_email){ %>
+            <li><a title="<%= creator.get('preferred_email') %>" href="mailto:<%= creator.get('preferred_email') %>">{{ gettext('Send an email to this user')}}</a></li>
+            <% } %>
+
         </ul>
         </li>
      </ul>

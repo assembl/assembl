@@ -165,7 +165,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
     AbstractFilter.call(this);
   }
   FilterPostHasIdIn.prototype = Object.create(AbstractFilter.prototype);
-  _.extend(AbstractFilter.prototype, {
+  _.extend(FilterPostHasIdIn.prototype, {
     getId: function() {
       return 'post_has_id_in';
     },
@@ -241,7 +241,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
         if (post.get('@type') === "SynthesisPost"){
           return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject'));
         }
-        if(post.get('subject')) {
+        else {
           return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject'));
         }
       })
@@ -249,6 +249,39 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
         return i18n.sprintf(i18n.gettext("Are in the conversation that follows: %s"), individualValuesButtons.join(i18n.gettext(' AND ')));
+      });
+    }
+  });
+
+  function FilterPostIsFromUser() {
+    AbstractFilterSingleValue.call(this);
+  }
+  FilterPostIsFromUser.prototype = Object.create(AbstractFilterSingleValue.prototype);
+  _.extend(FilterPostIsFromUser.prototype, {
+    getId: function() {
+      return 'post_is_from';
+    },
+    getServerParam: function() {
+      return 'post_author';
+    },
+    getName: function() {
+      return i18n.gettext('Posted by');
+    },
+    getHelpText: function() {
+      return i18n.gettext('Only include messages that are posted by a specific user.');
+    },
+    getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
+      return collectionManager.getAllUsersCollectionPromise(individualFilterValue).then(function(users) {
+        var user = users.get(individualFilterValue);
+        if(!user) {
+          throw new Error('User ' + individualFilterValue + ' not found');
+        }
+        return i18n.sprintf(i18n.gettext('"%s"'), user.get('name'));
+      })
+    },
+    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+      return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+        return i18n.sprintf(i18n.gettext("Are posted by: %s"), individualValuesButtons.join(i18n.gettext(' AND ')));
       });
     }
   });
@@ -399,7 +432,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     POST_IS_SYNTHESIS: FilterPostIsSynthesis,
     POST_IS_UNREAD: FilterPostIsUnread,
     POST_IS_READ: FilterPostIsRead,
-    POST_IS_POSTED_SINCE_LAST_SYNTHESIS: FilterPostIsPostedSinceLastSynthesis
+    POST_IS_POSTED_SINCE_LAST_SYNTHESIS: FilterPostIsPostedSinceLastSynthesis,
+    POST_IS_FROM: FilterPostIsFromUser
   };
   
   return availableFilters;

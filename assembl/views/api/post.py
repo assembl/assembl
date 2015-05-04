@@ -22,7 +22,7 @@ from assembl.auth.util import get_permissions
 from assembl.models import (
     get_database_id, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, Content, Idea, ViewPost, User, Action,
-    IdeaRelatedPostLink, Email)
+    IdeaRelatedPostLink, Email, AgentProfile)
 import uuid
 from assembl.lib import config
 from jwzthreading import restrip_pat
@@ -103,6 +103,10 @@ def get_posts(request):
 
     only_synthesis = request.GET.get('only_synthesis')
     
+    post_author_id = request.GET.get('post_author')
+    if post_author_id:
+        post_author_id = get_database_id("AgentProfile", post_author_id)
+    
     posted_after_date = request.GET.get('posted_after_date')
 
     PostClass = SynthesisPost if only_synthesis == "true" else Post
@@ -162,6 +166,10 @@ def get_posts(request):
         if posted_after_date:
             posts = posts.filter(PostClass.creation_date >= posted_after_date)
         #Maybe we should do something if the date is invalid.  benoitg
+    
+    if post_author_id:
+        assert AgentProfile.get(post_author_id), "Unable to find agent profile with id " + post_author
+        posts = posts.filter(PostClass.creator_id == post_author_id)
         
     # Post read/unread management
     is_unread = request.GET.get('is_unread')

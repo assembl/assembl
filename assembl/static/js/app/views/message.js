@@ -97,6 +97,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
               jumpToParentButton: ".js_message-jumptoparentbtn",
               jumpToMessageInThreadButton: ".js_message-jump-to-message-in-thread",
               jumpToMessageInReverseChronologicalButton: ".js_message-jump-to-message-in-reverse-chronological",
+              showAllMessagesByThisAuthorButton: ".js_message-show-all-by-this-author",
               messageReplyBox: ".message-replybox"
             },
             
@@ -114,6 +115,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
                 'click @ui.jumpToMessageInThreadButton': 'onMessageJumpToMessageInThreadClick',
                 'click @ui.jumpToMessageInReverseChronologicalButton': 'onMessageJumpToMessageInReverseChronologicalClick',
+                'click @ui.showAllMessagesByThisAuthorButton': 'onShowAllMessagesByThisAuthorClick',
 
                 //
                 'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
@@ -186,6 +188,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                     messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
                     isHoisted: this.isHoisted,
                     ctx: Ctx,
+                    i18n: i18n,
+                    user_can_see_email: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
                     user_is_connected: !Ctx.getCurrentUser().isUnknownUser(),
                     read: this.model.get('read'),
                     nuggets: _.size(this.model.get('extracts')),
@@ -688,6 +692,14 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
 
             onMessageJumpToMessageInReverseChronologicalClick: function (ev) {
               this.messageListView.setViewStyle(this.messageListView.ViewStyles.REVERSE_CHRONOLOGICAL);
+              this.messageListView.render();
+              this.messageListView.showMessageById(this.model.id);
+            },
+            
+            
+            onShowAllMessagesByThisAuthorClick: function (ev) {
+              this.messageListView.currentQuery.clearAllFilters();
+              this.messageListView.currentQuery.addFilter(this.messageListView.currentQuery.availableFilters.POST_IS_FROM, this.model.get('idCreator'));
               this.messageListView.render();
               this.messageListView.showMessageById(this.model.id);
             },
