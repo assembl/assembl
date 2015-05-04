@@ -28,7 +28,7 @@ define(['backbone.marionette', 'jquery'], function (Marionette, $) {
                     // Note that we only care about assembl #tags.
                     // We should prefix ours. For now, detect annotator.
                     if (_.any(this.classList, function(cls) {
-                        return cls.startsWith('annotator-');
+                        return cls.indexOf('annotator-') === 0;
                     })) return;
                     if (typeof href !== 'undefined' && href.slice(protocol.length) !== protocol && /^#.+$/.test(href)) {
                         evt.preventDefault();
