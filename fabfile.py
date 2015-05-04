@@ -380,6 +380,7 @@ def app_fullupdate():
     Full Update: Update to latest git, update dependencies and compile app.
     You need internet connectivity, and can't run this on a branch.
     """
+    execute(database_dump)
     execute(updatemaincode)
     execute(app_compile)
 
@@ -391,6 +392,7 @@ def app_update():
     Useful for deploying hotfixes.  You need internet connectivity, and can't
     run this on a branch.
     """
+    execute(database_dump)
     execute(updatemaincode)
     execute(app_compile_noupdate)
 
