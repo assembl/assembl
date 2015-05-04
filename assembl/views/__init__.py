@@ -64,7 +64,7 @@ def get_default_context(request):
     else:
         web_analytics_piwik_script = False
 
-    help_url = config.get('help_url', '')
+    help_url = config.get('help_url') or ''
     if discussion and discussion.help_url:
         help_url = discussion.help_url
     if help_url and "%s" in help_url:
