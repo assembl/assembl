@@ -74,6 +74,11 @@ function (Ctx, i18n, CollectionManager, Promise) {
       throw new Error("Need to implement getId");
     },
     
+    /** Generates a unique CSS class for a button to add the filter */
+    getAddButtonCssClass: function() {
+      return "js_filter-"+this.getId()+"-add-button";
+    },
+    
     getName: function() {
       throw new Error("Need to implement getName");
     },
@@ -121,7 +126,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
   _.extend(AbstractFilterSingleValue.prototype, {
     /** For filters who can only have a single, implicit value
      * Typically displayed in the filters menu */
-    getImplicitValue: function() {
+    getImplicitValuePromise: function() {
       return undefined;
     },
     
@@ -148,7 +153,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
       //console.log("AbstractFilterBooleanValue::addValue called with", value)
       if(!this.isValueInFilter(value)) {
         if (!(value === true || value === false)) {
-          throw new Error("Filter expects a boolean value, and we were provided with: " + values[0]);
+          console.log(value);
+          throw new Error("Filter expects a boolean value, and we were provided with: " + value);
         }
       }
       return AbstractFilterSingleValue.prototype.addValue.call(this, value);
@@ -294,14 +300,14 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getId: function() {
       return 'only_orphan_posts';
     },
-    getImplicitValue: function() {
-      return "true";
+    getImplicitValuePromise: function() {
+      return Promise.resolve(true);
     },
     getServerParam: function() {
       return 'only_orphan';
     },
     getName: function() {
-      return i18n.gettext('Are orphan (not relevent to any idea so far)');
+      return i18n.gettext('Only orphan messages');
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that are not found in any idea.');
@@ -316,14 +322,14 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getId: function() {
       return 'only_synthesis_posts';
     },
-    getImplicitValue: function() {
-      return "true";
+    getImplicitValuePromise: function() {
+      return Promise.resolve(true);
     },
     getServerParam: function() {
       return 'only_synthesis';
     },
     getName: function() {
-      return i18n.gettext('Are a synthesis');
+      return i18n.gettext('Only synthesis messages');
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that represent a synthesis of the discussion.');
@@ -372,14 +378,14 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getId: function() {
       return 'is_unread_post';
     },
-    getImplicitValue: function() {
-      return "true";
+    getImplicitValuePromise: function() {
+      return Promise.resolve(true);
     },
     getName: function() {
-      return i18n.gettext('Are not read yet');
+      return i18n.gettext("Only messages you haven't read yet");
     },
     getHelpText: function() {
-      return i18n.gettext('Only include messages you haven\'t read yet.');
+      return i18n.gettext('Only include messages you haven\'t read yet, or you manually marked unread.');
     }
   });
 
@@ -391,14 +397,14 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getId: function() {
       return 'is_read_post';
     },
-    getImplicitValue: function() {
-      return "false";
+    getImplicitValuePromise: function() {
+      return Promise.resolve(false);
     },
     getName: function() {
-      return i18n.gettext('Are already read');
+      return i18n.gettext('Only messages you have already read');
     },
     getHelpText: function() {
-      return i18n.gettext('Only include messages you have read already.');
+      return i18n.gettext('Only include messages that have previously been marked read.');
     }
   });
   
@@ -410,14 +416,26 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getId: function() {
       return 'is_posted_since_last_synthesis';
     },
-    getImplicitValue: function() {
-      return 'WRITEME';
+    getImplicitValuePromise: function() {
+      var that = this,
+      collectionManager = new CollectionManager();
+      
+      return collectionManager.getAllMessageStructureCollectionPromise().then(function(allMessageStructureCollection) {
+        var date = null,
+        lastSynthesisPost = allMessageStructureCollection.getLastSynthesisPost();
+        if(lastSynthesisPost) {
+          return lastSynthesisPost.get('date');
+        }
+        else {
+          return undefined;
+        }
+      });
     },
     getServerParam: function() {
       return 'posted_after_date';
     },
     getName: function() {
-      return i18n.gettext('Are posted since last synthesis');
+      return i18n.gettext('Only messages posted since the last synthesis');
     },
     getHelpText: function() {
       return i18n.gettext('Only include posts created after the last synthesis.');

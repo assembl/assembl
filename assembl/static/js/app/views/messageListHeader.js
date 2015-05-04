@@ -44,7 +44,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 defaultMessageViewDropdown: ".js_defaultMessageView-dropdown",
                 userThreadedViewButton: '.messageListViewStyleUserThreaded', // FIXME: this seems to be not used => remove?
                 userActivityFeedViewButton: '.js_messageListViewStyleUserActivityFeed',
-                userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew'
+                userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew',
+                filtersDropdown: '.js_filters-dropdown'
             },
 
             events: function() {
@@ -61,6 +62,14 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 _.each(Ctx.AVAILABLE_MESSAGE_VIEW_STYLES, function (messageViewStyle) {
                     var key = 'click .' + that.getMessageViewStyleCssClass(messageViewStyle);
                     data[key] = 'onSelectDefaultMessageViewStyle';
+                });
+                
+                _.each(this.messageList.currentQuery.availableFilters, function (availableFilterDef) {
+                  var candidateFilter = new availableFilterDef();
+                  if(_.isFunction(candidateFilter.getImplicitValuePromise)) {
+                    var key = 'click .' + candidateFilter.getAddButtonCssClass();
+                    data[key] = 'onAddFilter';
+                  }
                 });
                 //console.log(data);
                 return data;
@@ -79,6 +88,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
             onRender: function(){
                 this.renderMessageListViewStyleDropdown();
                 this.renderDefaultMessageViewDropdown();
+                this.renderMessageListFiltersDropdown();
                 this.renderToggleButton();
 
                 if (!this.isUsingExpertView) {
@@ -125,6 +135,44 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 });
                 html += '</ul>';
                 this.ui.viewStyleDropdown.html(html);
+            },
+            
+            /**
+             * Renders the messagelist view style dropdown button
+             */
+            renderMessageListFiltersDropdown: function () {
+                var that = this,
+                    filtersPromises = [];
+                
+                _.each(this.messageList.currentQuery.availableFilters, function (availableFilterDef) {
+                  var candidateFilter = new availableFilterDef(),
+
+                  implicitValuePromise = undefined;
+                  if(_.isFunction(candidateFilter.getImplicitValuePromise)) {
+                    implicitValuePromise = candidateFilter.getImplicitValuePromise();
+                    if(implicitValuePromise !== undefined) {
+                      filtersPromises.push(Promise.join(candidateFilter.getName(), implicitValuePromise, function(label, value) {
+                        if(value !== undefined) {
+                          return '<li><a class="' + candidateFilter.getAddButtonCssClass() + '" data-filterid="' + candidateFilter.getId() + '">' + candidateFilter.getName() + '</a></li>';
+                        }
+                        else{
+                          return '';
+                        }
+                      }));
+                    }
+                  }
+                });
+                Promise.all(filtersPromises).then(function(filterButtons) {
+                  var html = "";
+                  html += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">';
+                  html += i18n.gettext('Add filter');
+                  html += '<span class="icon-arrowdown"></span></a>';
+                  html += '<ul class="dropdown-menu">';
+                  html += filterButtons.join('');
+                  html += '</ul>';
+                  that.ui.filtersDropdown.html(html);
+                })
+
             },
 
             /**
@@ -193,6 +241,25 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                 this.messageList.triggerMethod("setIndividualMessageViewStyleForMessageListViewStyle", messageViewStyleSelected);
 
                 this.renderDefaultMessageViewDropdown();
+            },
+            
+            /**
+             * @event
+             */
+            onAddFilter: function (ev) {
+              var that = this,
+                  filterValue = ev.currentTarget.getAttribute('data-filtervalue'),
+                  filterId = ev.currentTarget.getAttribute('data-filterid'),
+                  filterDef = this.messageList.currentQuery.getFilterDefById(filterId),
+                  filter = new filterDef(),
+                  queryChanged = false;
+              filter.getImplicitValuePromise().then(function(implicitValue) {
+                queryChanged = that.messageList.currentQuery.addFilter(filterDef, implicitValue);
+                if(queryChanged){
+                  that.messageList.render();
+                }
+              })
+
             },
 
             /**

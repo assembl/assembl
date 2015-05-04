@@ -23,23 +23,7 @@
     <ul class="config pan man ptxs">
       <li class="dropdown fl mrs mbxs js_messageListViewStyle-dropdown"></li>
       <li class="dropdown fl mrs mbxs js_defaultMessageView-dropdown"></li>
-
-    	<li class="dropdown fl mrs mbxs">
-    		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-					{{ gettext('Add filter') }}
-					<span class="icon-arrowdown"></span>
-    		</a>
-    		<ul class="dropdown-menu">
-    			<li><a class="js_messageList-onlyorphan" href="#">{{ gettext('Orphan messages') }}</a></li>
-    			<li><a class="js_messageList-onlysynthesis" href="#">{{ gettext('Synthesis messages') }}</a></li>
-    			<li><a class="js_messageList-isunread" href="#">{{ gettext('Unread messages') }}</a></li>
-    			<li><a class="js_messageList-ispostedsincelastsynthesis" href="#">{{ gettext('Posted since last synthesis') }}</a></li>
-    			{#
-					<li><a href="#">{{ gettext('Uncaught') }}</a></li>
-					<li><a href="#">{{ gettext('Followed') }}</a></li>
-					#}
-    		</ul>
-    	</li>
+      <li class="dropdown fl mrs mbxs js_filters-dropdown"></li>
     	<li class="clr"></li>
     </ul>
 
