@@ -67,7 +67,7 @@ def get_default_context(request):
     help_url = config.get('help_url') or False
     if discussion and discussion.help_url:
         help_url = discussion.help_url
-    if "%s" in help_url:
+    if help_url and "%s" in help_url:
         help_url = help_url % localizer.locale_name
 
     first_login_after_auto_subscribe_to_notifications = False
