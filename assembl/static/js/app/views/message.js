@@ -95,6 +95,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             
             ui: {
               jumpToParentButton: ".js_message-jumptoparentbtn",
+              jumpToMessageInThreadButton: ".js_message-jump-to-message-in-thread",
+              jumpToMessageInReverseChronologicalButton: ".js_message-jump-to-message-in-reverse-chronological",
               messageReplyBox: ".message-replybox"
             },
             
@@ -110,6 +112,8 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 'click .js_readLess': 'onMessageTitleClick',
                 'click .message-hoistbtn': 'onMessageHoistClick',
                 'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
+                'click @ui.jumpToMessageInThreadButton': 'onMessageJumpToMessageInThreadClick',
+                'click @ui.jumpToMessageInReverseChronologicalButton': 'onMessageJumpToMessageInReverseChronologicalClick',
 
                 //
                 'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
@@ -172,6 +176,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
 
                 return {
                     message: this.model,
+                    messageListView: this.messageListView,
                     viewStyle: this.viewStyle,
                     metadata_json: metadata_json,
                     creator: this.creator,
@@ -673,6 +678,18 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             
             onMessageJumpToParentClick: function (ev) {
               this.messageListView.showMessageById(this.model.get('parentId'));
+            },
+
+            onMessageJumpToMessageInThreadClick: function (ev) {
+              this.messageListView.setViewStyle(this.messageListView.ViewStyles.NEW_MESSAGES);
+              this.messageListView.render();
+              this.messageListView.showMessageById(this.model.id);
+            },
+
+            onMessageJumpToMessageInReverseChronologicalClick: function (ev) {
+              this.messageListView.setViewStyle(this.messageListView.ViewStyles.REVERSE_CHRONOLOGICAL);
+              this.messageListView.render();
+              this.messageListView.showMessageById(this.model.id);
             },
 
             /**

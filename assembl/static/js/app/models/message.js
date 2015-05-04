@@ -85,8 +85,7 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
             },
 
             /**
-             * TODO:  Bluebirdify
-             * Return all segments in the annotator format
+             * Returns a promise to all segments in the annotator format
              * @return {Object[]}
              */
             getAnnotationsPromise: function () {

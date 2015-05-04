@@ -62,7 +62,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     var key = 'click .' + that.getMessageViewStyleCssClass(messageViewStyle);
                     data[key] = 'onSelectDefaultMessageViewStyle';
                 });
-
+                //console.log(data);
                 return data;
             },
 

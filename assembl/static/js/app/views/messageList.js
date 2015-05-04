@@ -1136,7 +1136,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 if (Ctx.debugRender) {
                     console.log("messageList:onRender() is firing for render id:", renderId);
                 }
-
+;
                 //Clear internal state
                 this._offsetStart = undefined;
                 this._offsetEnd = undefined;
@@ -1630,6 +1630,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
               this.render();
             },
 
+
             /**
              * @event
              * Set the view to the selected viewStyle, if allowable by the current user
@@ -2018,6 +2019,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
               if(debug) {
                 console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes);
                 console.log("this.showMessageByIdInProgress:",this.showMessageByIdInProgress);
+              }
+              if(!id) {
+                throw new Error("showMessageById called with an empty id");
               }
 
               if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
