@@ -38,6 +38,8 @@ class ReaderStatus(OrderedEnum):
 known_transitions = {
     ReaderStatus.CREATED: {
         ReaderStatus.READING,
+        ReaderStatus.CLIENT_ERROR,
+        ReaderStatus.IRRECOVERABLE_ERROR,
     },
     ReaderStatus.READING: {
         ReaderStatus.CLIENT_ERROR,
