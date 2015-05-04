@@ -44,6 +44,7 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
                     slug = this.$('input[name=slug]').val(),
                     objectives = this.$('textarea[name=objectives]').val(),
                     web_analytics_piwik_id_site = parseInt(this.$('#web_analytics_piwik_id_site').val()),
+                    help_url = this.$('#help_url').val(),
                     show_help_in_debate_section = this.$('#show_help_in_debate_section:checked').length == 1;
 
                 this.model.set({
@@ -52,6 +53,7 @@ define(['backbone.marionette', 'jquery', 'underscore','common/collectionManager'
                     slug: slug,
                     objectives: objectives,
                     web_analytics_piwik_id_site: web_analytics_piwik_id_site,
+                    help_url: help_url,
                     show_help_in_debate_section: show_help_in_debate_section
                 });
 

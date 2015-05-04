@@ -31,8 +31,12 @@
                 {% endif %}
                 <li><a href="<%= urlNotifications() %>"><i class="icon-bell"></i>{{ gettext('Notifications') }}</a></li>
                 <% if(isAdminDiscussion){ %>
-                <li><a href="<%= discussionSettings() %>"><i class="icon-options"></i>{{ gettext('Discussion') }}</a></li>
+                <li><a href="<%= discussionSettings() %>"><i class="icon-options"></i>{{ gettext('Discussion settings') }}</a></li>
+                <li><a href="<%= discussionPermissions() %>"><i class="icon-options"></i>{{ gettext('Discussion permissions') }}</a></li>
                 <% } %>
+                {% if help_url %}
+                     <li><a href="{{ help_url }}" target="_blank"><i class="icon-help"></i>{{ gettext('Help') }}</a></li>
+                {% endif %}
                 <li class="divider"></li>
                 <li><a href="<%= urlLogOut() %>" class="sign-out"><i class="icon-logout"></i>{{ gettext('Sign out') }}</a></li>
             </ul>

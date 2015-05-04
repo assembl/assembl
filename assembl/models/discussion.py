@@ -55,6 +55,7 @@ class Discussion(DiscussionBoundBase):
     settings = Column(Text())  # JSON blob
     subscribe_to_notifications_on_signup = Column(Boolean, default=False)
     web_analytics_piwik_id_site = Column(Integer, nullable=True, default=None)
+    help_url = Column(String, nullable=True, default=None)
     preferred_locales = Column(String)
     show_help_in_debate_section = Column(Boolean, default=True)
 

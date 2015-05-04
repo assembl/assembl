@@ -56,12 +56,19 @@ def get_default_context(request):
             'profile_user', type='id', identifier=user.id)
     else:
         user_profile_edit_url = None
+
     web_analytics_piwik_script = config.get('web_analytics_piwik_script') or False
     discussion = get_current_discussion()
     if web_analytics_piwik_script and discussion and discussion.web_analytics_piwik_id_site:
         web_analytics_piwik_script = web_analytics_piwik_script % ( discussion.web_analytics_piwik_id_site, discussion.web_analytics_piwik_id_site )
     else:
         web_analytics_piwik_script = False
+
+    help_url = config.get('help_url') or False
+    if discussion and discussion.help_url:
+        help_url = discussion.help_url
+    if "%s" in help_url:
+        help_url = help_url % localizer.locale_name
 
     first_login_after_auto_subscribe_to_notifications = False
     # FIXME: user.is_first_visit does not seem to work, as it is always false, to right now first_login_after_auto_subscribe_to_notifications can never become True and so the popin can never be shown
@@ -84,6 +91,7 @@ def get_default_context(request):
         theme=get_theme(discussion),
         minified_js=config.get('minified_js') or False,
         web_analytics_piwik_script=web_analytics_piwik_script,
+        help_url=help_url,
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
         raven_url=config.get('raven_url') or '',
         translations=codecs.open(os.path.join(

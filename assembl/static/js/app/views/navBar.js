@@ -61,6 +61,9 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                     },
                     discussionSettings: function(){
                         return '/' + Ctx.getDiscussionSlug() + '/edition';
+                    },
+                    discussionPermissions: function(){
+                        return '/admin/permissions/discussion/' + Ctx.getDiscussionId();
                     }
                 }
             },
