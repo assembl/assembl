@@ -74,16 +74,17 @@ def main(global_config, **settings):
         session = get_session_maker()
         populate_default_roles(session)
         populate_default_permissions(session)
-        from .lib.config import set_config, get_config
-        # aqsm needs config information
-        # We may already have an old config when testing
-        old_config = get_config()
-        set_config(settings)
-        from .semantic.virtuoso_mapping import AssemblQuadStorageManager
-        aqsm = AssemblQuadStorageManager()
-        aqsm.update_all_storages()
-        # But we do want the registry settings later
-        set_config(old_config)
+        if settings['sqlalchemy.url'].startswith('virtuoso:'):
+            from .lib.config import set_config, get_config
+            # aqsm needs config information
+            # We may already have an old config when testing
+            old_config = get_config()
+            set_config(settings)
+            from .semantic.virtuoso_mapping import AssemblQuadStorageManager
+            aqsm = AssemblQuadStorageManager()
+            aqsm.update_all_storages()
+            # But we do want the registry settings later
+            set_config(old_config)
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('widget', 'widget', cache_max_age=3600)
