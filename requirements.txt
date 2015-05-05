@@ -14,13 +14,13 @@ PyLD==0.6.7
 PyStemmer==1.3.0
 Pygments==2.0.2
 SPARQLWrapper==1.6.4
-SQLAlchemy==1.0.2
+SQLAlchemy==1.0.3
 Sphinx==1.3.1
 Unidecode==0.04.17
 WebOb==1.4.1
 WebTest==2.0.18
 Werkzeug==0.10.4
-alabaster==0.7.3
+alabaster==0.7.4
 -e git+https://github.com/imaginationforpeople/alembic.git#egg=alembic
 amqp==1.4.6
 anyjson==0.3.3
@@ -42,10 +42,10 @@ dogpile.cache==0.5.6
 dogpile.core==0.4.1
 ecdsa==0.13
 enum34==1.0.4
-feedparser==5.1.3
+feedparser==5.2.0
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
-greenlet==0.4.5
-html5lib==0.999
+greenlet==0.4.6
+html5lib==0.99999
 imaplib2==2.43.0
 isodate==0.5.1
 iso639==0.1.1
@@ -53,7 +53,7 @@ iso8601==0.1.10
 -e git+https://github.com/imaginationforpeople/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.26
-lingua==3.9
+lingua==3.10
 lxml==3.4.4
 meld3==1.0.2
 mock==1.0.1
@@ -61,7 +61,7 @@ oauthlib==0.7.2
 paramiko==1.15.2
 pinocchio==0.4.2
 polib==1.0.6
-premailer==2.8.3
+premailer==2.8.4
 py==1.4.26
 pyOpenSSL==0.15.1
 pycparser==2.12
@@ -71,7 +71,7 @@ dnspython==1.12.0   # must come after pyisemail?
 pylibmc==1.4.2
 -e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 pyparsing==2.0.3
-pyramid==1.5.6
+pyramid==1.5.7
 pyramid-beaker==0.8
 pyramid-debugtoolbar==2.3
 -e git+https://github.com/jvanasco/pyramid_debugtoolbar_ajax.git#egg=pyramid-debugtoolbar-ajax
@@ -83,7 +83,7 @@ pyramid-tm==0.11
 pytest==2.7.0
 pytest-cov==1.8.1
 pytest-localserver==0.3.4
-pytest-mock==0.4.3
+pytest-mock==0.5.0
 pytest-splinter==1.3.6
 python-openid==2.2.5
 pytz==2015.2
@@ -92,12 +92,12 @@ rdflib==4.2.0
 -e git+https://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
 redis==2.10.3
 docutils==0.12
-raven==5.2.0
+raven==5.3.1
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1  # rq.filter: <4.2
-requests==2.6.2
-requests-oauthlib==0.4.2
+requests==2.7.0
+requests-oauthlib==0.5.0
 selenium==2.45.0
 simplejson==3.6.5
 six==1.9.0
