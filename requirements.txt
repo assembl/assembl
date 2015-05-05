@@ -89,7 +89,7 @@ python-openid==2.2.5
 pytz==2015.2
 pyzmq==14.6.0
 rdflib==4.2.0
--e git+https://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
+rdflib-jsonld==0.3
 redis==2.10.3
 docutils==0.12
 raven==5.3.1
