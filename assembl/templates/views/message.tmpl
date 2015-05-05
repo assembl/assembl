@@ -46,10 +46,10 @@
             <li><a href="#" class="js_message-jumptoparentbtn">{{gettext("Jump to this message's parent in current view (if possible, will not clear filters)")}}</a></li>
             <% } %>
             <% if( messageListView.isViewStyleThreadedType() === false && (parentId || message.getChildren().length > 0)){ %>
-            <li><a href="#" class="js_message-jump-to-message-in-thread">{{gettext("Show this message in it's entire thread (clears all filters)")}}</a></li>
+            <li><a href="#" class="js_message-jump-to-message-in-thread">{{gettext("Show this message in its entire thread (clears all filters)")}}</a></li>
             <% } %>
             <% if( messageListView.isViewStyleThreadedType() === true ){ %>
-            <li><a href="#" class="js_message-jump-to-message-in-reverse-chronological">{{gettext("Show this message in the full reverse-chronological view (clears all filters)")}}</a></li>
+            <li><a href="#" class="js_message-jump-to-message-in-reverse-chronological">{{gettext("Show this message in the full Newest first view (clears all filters)")}}</a></li>
             <% } %>
             
             <% if( isHoisted === true ){ %>

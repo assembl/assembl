@@ -685,12 +685,14 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
             },
 
             onMessageJumpToMessageInThreadClick: function (ev) {
+              this.messageListView.currentQuery.clearAllFilters();
               this.messageListView.setViewStyle(this.messageListView.ViewStyles.NEW_MESSAGES);
               this.messageListView.render();
               this.messageListView.showMessageById(this.model.id);
             },
 
             onMessageJumpToMessageInReverseChronologicalClick: function (ev) {
+              this.messageListView.currentQuery.clearAllFilters();
               this.messageListView.setViewStyle(this.messageListView.ViewStyles.REVERSE_CHRONOLOGICAL);
               this.messageListView.render();
               this.messageListView.showMessageById(this.model.id);
