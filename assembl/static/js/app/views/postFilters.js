@@ -315,6 +315,58 @@ function (Ctx, i18n, CollectionManager, Promise) {
     }
   });
 
+  function FilterPostReplyToUser() {
+    AbstractFilterSingleValue.call(this);
+  }
+  FilterPostReplyToUser.prototype = Object.create(AbstractFilterSingleValue.prototype);
+  _.extend(FilterPostReplyToUser.prototype, {
+    getId: function() {
+      return 'post_replies_to_user';
+    },
+    getServerParam: function() {
+      return 'post_replies_to';
+    },
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Replies to'));
+    },
+    getHelpText: function() {
+      return i18n.gettext('Only include messages that replies to a specific user.');
+    },
+    getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
+      return collectionManager.getAllUsersCollectionPromise(individualFilterValue).then(function(users) {
+        var user = users.get(individualFilterValue);
+        if(!user) {
+          throw new Error('User ' + individualFilterValue + ' not found');
+        }
+        return i18n.sprintf(i18n.gettext('"%s"'), user.get('name'));
+      })
+    },
+    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+      return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+        return i18n.sprintf(i18n.gettext("Replies to: %s"), individualValuesButtons.join(i18n.gettext(' AND ')));
+      });
+    }
+  });
+  
+  function FilterPostReplyToMe() {
+    FilterPostReplyToUser.call(this);
+  }
+  FilterPostReplyToMe.prototype = Object.create(FilterPostReplyToUser.prototype);
+  _.extend(FilterPostReplyToMe.prototype, {
+    getId: function() {
+      return 'post_replies_to_me';
+    },
+    getImplicitValuePromise: function() {
+      return Promise.resolve(Ctx.getCurrentUser().id);
+    },
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Only messages that reply to me'));
+    },
+    getHelpText: function() {
+      return i18n.gettext('Only include messages that reply one of the messages I posted.');
+    }
+  });
+
   function FilterPostIsOrphan() {
     AbstractFilterBooleanValue.call(this);
   }
@@ -477,7 +529,9 @@ function (Ctx, i18n, CollectionManager, Promise) {
     POST_IS_READ: FilterPostIsRead,
     POST_IS_POSTED_SINCE_LAST_SYNTHESIS: FilterPostIsPostedSinceLastSynthesis,
     POST_IS_FROM: FilterPostIsFromUser,
-    POST_IS_FROM_SELF: FilterPostIsOwnPost
+    POST_IS_FROM_SELF: FilterPostIsOwnPost,
+    POST_REPONDS_TO: FilterPostReplyToUser,
+    POST_REPONDS_TO_ME: FilterPostReplyToMe
   };
   
   return availableFilters;

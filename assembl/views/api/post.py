@@ -10,7 +10,7 @@ from pyramid.security import authenticated_userid
 
 from sqlalchemy import String, text
 
-from sqlalchemy.orm import joinedload_all
+from sqlalchemy.orm import joinedload_all, aliased
 from sqlalchemy.sql.expression import bindparam, and_
 from sqlalchemy.sql import cast, column
 
@@ -106,7 +106,13 @@ def get_posts(request):
     post_author_id = request.GET.get('post_author')
     if post_author_id:
         post_author_id = get_database_id("AgentProfile", post_author_id)
-    
+        assert AgentProfile.get(post_author_id), "Unable to find agent profile with id " + post_author_id
+
+    post_replies_to = request.GET.get('post_replies_to')
+    if post_replies_to:
+        post_replies_to = get_database_id("AgentProfile", post_replies_to)
+        assert AgentProfile.get(post_replies_to), "Unable to find agent profile with id " + post_replies_to
+
     posted_after_date = request.GET.get('posted_after_date')
 
     PostClass = SynthesisPost if only_synthesis == "true" else Post
@@ -168,8 +174,12 @@ def get_posts(request):
         #Maybe we should do something if the date is invalid.  benoitg
     
     if post_author_id:
-        assert AgentProfile.get(post_author_id), "Unable to find agent profile with id " + post_author
         posts = posts.filter(PostClass.creator_id == post_author_id)
+    
+    if post_replies_to:
+        parent_alias = aliased(PostClass)
+        posts = posts.join(parent_alias, PostClass.parent)
+        posts = posts.filter(parent_alias.creator_id == post_replies_to)
         
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
