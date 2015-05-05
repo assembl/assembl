@@ -151,9 +151,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                   if(_.isFunction(candidateFilter.getImplicitValuePromise)) {
                     implicitValuePromise = candidateFilter.getImplicitValuePromise();
                     if(implicitValuePromise !== undefined) {
-                      filtersPromises.push(Promise.join(candidateFilter.getName(), implicitValuePromise, function(label, value) {
+                      filtersPromises.push(Promise.join(candidateFilter.getLabelPromise(), implicitValuePromise, function(label, value) {
                         if(value !== undefined) {
-                          return '<li><a class="' + candidateFilter.getAddButtonCssClass() + '" data-filterid="' + candidateFilter.getId() + '">' + candidateFilter.getName() + '</a></li>';
+                          return '<li><a class="' + candidateFilter.getAddButtonCssClass() + '" data-filterid="' + candidateFilter.getId() + '">' + label + '</a></li>';
                         }
                         else{
                           return '';

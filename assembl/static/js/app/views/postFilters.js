@@ -79,8 +79,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
       return "js_filter-"+this.getId()+"-add-button";
     },
     
-    getName: function() {
-      throw new Error("Need to implement getName");
+    getLabelPromise: function() {
+      throw new Error("Need to implement getLabelPromise");
     },
     
     /** This is the text used for hover help 
@@ -104,7 +104,9 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getFilterDescriptionStringPromise: function(individualValuesButtonsPromises){
       var that = this;
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
-        return i18n.sprintf(i18n.ngettext("%s (%s)", "%s (%s)", _.size(individualValuesButtons)), that.getName(), individualValuesButtons.join(', '));
+        return that.getLabelPromise().then(function(label) {
+          return i18n.sprintf(i18n.ngettext("%s (%s)", "%s (%s)", _.size(individualValuesButtons)), label, individualValuesButtons.join(', '));
+        });
       });
     },
     
@@ -161,9 +163,11 @@ function (Ctx, i18n, CollectionManager, Promise) {
     },
 
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
-      var retval;
-      retval = i18n.sprintf((individualFilterValue === true) ? i18n.gettext("%s") : i18n.gettext("NOT %s"), this.getName());
-      return Promise.resolve(retval)
+      return that.getLabelPromise().then(function(label) {
+        var retval = i18n.sprintf((individualFilterValue === true) ? i18n.gettext("%s") : i18n.gettext("NOT %s"), label);
+        return retval;
+      });
+
     }
   });
   
@@ -178,8 +182,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getServerParam: function() {
       return 'ids';
     },
-    getName: function() {
-      return i18n.gettext('Posts with specific ids');
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Posts with specific ids'));
     },
     
     getHelpText: function() {
@@ -199,8 +203,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getServerParam: function() {
       return 'root_idea_id';
     },
-    getName: function() {
-      return i18n.gettext('Related to idea');
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Related to idea'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages related to the specified idea.  The filter is recursive:  Messages related to ideas that are descendents of the idea are included.');
@@ -233,8 +237,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getServerParam: function() {
       return 'root_post_id';
     },
-    getName: function() {
-      return i18n.gettext('Part of thread of');
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Part of thread of'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that are in the specified post reply thread.');
@@ -270,8 +274,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getServerParam: function() {
       return 'post_author';
     },
-    getName: function() {
-      return i18n.gettext('Posted by');
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Posted by'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that are posted by a specific user.');
@@ -292,6 +296,25 @@ function (Ctx, i18n, CollectionManager, Promise) {
     }
   });
 
+  function FilterPostIsOwnPost() {
+    FilterPostIsFromUser.call(this);
+  }
+  FilterPostIsOwnPost.prototype = Object.create(FilterPostIsFromUser.prototype);
+  _.extend(FilterPostIsOwnPost.prototype, {
+    getId: function() {
+      return 'only_own_posts';
+    },
+    getImplicitValuePromise: function() {
+      return Promise.resolve(Ctx.getCurrentUser().id);
+    },
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Only my own messages'));
+    },
+    getHelpText: function() {
+      return i18n.gettext('Only include messages that I posted.');
+    }
+  });
+
   function FilterPostIsOrphan() {
     AbstractFilterBooleanValue.call(this);
   }
@@ -306,8 +329,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getServerParam: function() {
       return 'only_orphan';
     },
-    getName: function() {
-      return i18n.gettext('Only orphan messages');
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Only orphan messages'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that are not found in any idea.');
@@ -328,8 +351,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getServerParam: function() {
       return 'only_synthesis';
     },
-    getName: function() {
-      return i18n.gettext('Only synthesis messages');
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Only synthesis messages'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that represent a synthesis of the discussion.');
@@ -347,8 +370,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getServerParam: function() {
       return 'is_unread';
     },
-    getName: function() {
-      return i18n.gettext('Have unread value');
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Have unread value'));
     },
 
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
@@ -381,8 +404,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getImplicitValuePromise: function() {
       return Promise.resolve(true);
     },
-    getName: function() {
-      return i18n.gettext("Only messages you haven't read yet");
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext("Only messages you haven't read yet"));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages you haven\'t read yet, or you manually marked unread.');
@@ -400,8 +423,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getImplicitValuePromise: function() {
       return Promise.resolve(false);
     },
-    getName: function() {
-      return i18n.gettext('Only messages you have already read');
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Only messages you have already read'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that have previously been marked read.');
@@ -434,8 +457,10 @@ function (Ctx, i18n, CollectionManager, Promise) {
     getServerParam: function() {
       return 'posted_after_date';
     },
-    getName: function() {
-      return i18n.gettext('Only messages posted since the last synthesis');
+    getLabelPromise: function() {
+      return this.getImplicitValuePromise().then(function(value) {
+        return i18n.sprintf(i18n.gettext('Only messages posted since the last synthesis (%s)'), Ctx.getNiceDateTime(value));
+      });
     },
     getHelpText: function() {
       return i18n.gettext('Only include posts created after the last synthesis.');
@@ -451,7 +476,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
     POST_IS_UNREAD: FilterPostIsUnread,
     POST_IS_READ: FilterPostIsRead,
     POST_IS_POSTED_SINCE_LAST_SYNTHESIS: FilterPostIsPostedSinceLastSynthesis,
-    POST_IS_FROM: FilterPostIsFromUser
+    POST_IS_FROM: FilterPostIsFromUser,
+    POST_IS_FROM_SELF: FilterPostIsOwnPost
   };
   
   return availableFilters;
