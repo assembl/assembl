@@ -163,7 +163,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
     },
 
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
-      return that.getLabelPromise().then(function(label) {
+      return this.getLabelPromise().then(function(label) {
         var retval = i18n.sprintf((individualFilterValue === true) ? i18n.gettext("%s") : i18n.gettext("NOT %s"), label);
         return retval;
       });
@@ -308,7 +308,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
       return Promise.resolve(Ctx.getCurrentUser().id);
     },
     getLabelPromise: function() {
-      return Promise.resolve(i18n.gettext('Only my own messages'));
+      return Promise.resolve(i18n.gettext('Messages I posted'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that I posted.');
@@ -360,7 +360,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
       return Promise.resolve(Ctx.getCurrentUser().id);
     },
     getLabelPromise: function() {
-      return Promise.resolve(i18n.gettext('Only messages that reply to me'));
+      return Promise.resolve(i18n.gettext('Messages that reply to me'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that reply one of the messages I posted.');
@@ -382,7 +382,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
       return 'only_orphan';
     },
     getLabelPromise: function() {
-      return Promise.resolve(i18n.gettext('Only orphan messages'));
+      return Promise.resolve(i18n.gettext('Messages not yet associated with an idea'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that are not found in any idea.');
@@ -404,10 +404,13 @@ function (Ctx, i18n, CollectionManager, Promise) {
       return 'only_synthesis';
     },
     getLabelPromise: function() {
-      return Promise.resolve(i18n.gettext('Only synthesis messages'));
+      return Promise.resolve(i18n.gettext('Synthesis messages'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that represent a synthesis of the discussion.');
+    },
+    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+      return this.getLabelPromise();
     }
   });
   
@@ -457,7 +460,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
       return Promise.resolve(true);
     },
     getLabelPromise: function() {
-      return Promise.resolve(i18n.gettext("Only messages you haven't read yet"));
+      return Promise.resolve(i18n.gettext("Unread messages"));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages you haven\'t read yet, or you manually marked unread.');
@@ -476,7 +479,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
       return Promise.resolve(false);
     },
     getLabelPromise: function() {
-      return Promise.resolve(i18n.gettext('Only messages you have already read'));
+      return Promise.resolve(i18n.gettext('Read messages'));
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that have previously been marked read.');
@@ -511,7 +514,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
     },
     getLabelPromise: function() {
       return this.getImplicitValuePromise().then(function(value) {
-        return i18n.sprintf(i18n.gettext('Only messages posted since the last synthesis (%s)'), Ctx.getNiceDateTime(value));
+        return i18n.sprintf(i18n.gettext('Messages posted since the last synthesis (%s)'), Ctx.getNiceDateTime(value));
       });
     },
     getHelpText: function() {
