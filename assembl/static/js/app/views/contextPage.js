@@ -5,7 +5,7 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
 
         var Partner = Marionette.ItemView.extend({
             template: '#tmpl-partnerItem',
-            className: 'gu gu-2of7 mrl',
+            className: 'gu gu-2of7 partnersItem mrl',
             serializeData: function () {
                 return {
                     organization: this.model
@@ -28,6 +28,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             childViewContainer: '.partnersList',
             initialize: function(options){
                 this.nbOrganisations = options.nbOrganisations;
+
+                this.collection.models = _.reject(this.collection.models, function(model){
+                    return model.get('is_initiator');
+                });
+
             },
             serializeData: function(){
                 return {

@@ -1,9 +1,7 @@
-<% if(!organization.get('is_initiator')){ %>
 <a href="<%= organization.get('homepage') %>" class="popover-display" target="_blank">
-	<img width="200" src="<%= organization.get('logo')  %>" />
+	<img src="<%= organization.get('logo')  %>" class="partnerItemLogo"/>
 	<span class="popover">
 		<span class="popover-header"><%= organization.get('name') %></span>
 		<span class="popover-content"><%= htmlEntities(organization.get('description')) %></span>
 	</span>
 </a>
-<% } %>

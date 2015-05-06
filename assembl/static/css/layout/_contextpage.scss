@@ -202,3 +202,19 @@
 .context-introduction.ctx_edit {
   cursor: text;
 }
+
+.partnersList{
+  .partnersItem {
+    display: table;
+    width: 200px;
+    height: 200px;
+    a {
+      display: table-cell;
+      vertical-align: middle;
+    }
+    .partnerItemLogo{
+      max-width: 200px;
+      max-height: 200px;
+    }
+  }
+}
