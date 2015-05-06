@@ -685,7 +685,9 @@ class User(AgentProfile):
                 # NOTE: The user may be confused by the implicit change of
                 # password when we destroy the second account.
                 # Use most recent login
-                if other_user.last_login > self.last_login:
+                if other_user.last_login and (
+                        (not self.last_login)
+                        or (other_user.last_login > self.last_login)):
                     self.password = other_user.password
             for extract in other_user.extracts_created:
                 extract.creator = self
