@@ -35,13 +35,14 @@ def main():
     session = get_session_maker(False)
     import assembl.models
     tables = get_metadata().sorted_tables
-    tables.reverse()
+    # tables.reverse()
     # special case
-    session.execute("""UPDATE "extract" SET discussion_id = (
-        SELECT content.discussion_id FROM content 
-            JOIN idea_content_link on (content_id=content.id)
-            JOIN "extract" on ("extract".id = idea_content_link.id)
-            WHERE "extract".discussion_id=-1)""")
+    if session.query(assembl.models.Extract).filter_by(discussion_id=-1).count():
+        session.execute("""UPDATE "extract" SET discussion_id = (
+            SELECT content.discussion_id FROM content
+                JOIN idea_content_link on (content_id=content.id)
+                JOIN "extract" on ("extract".id = idea_content_link.id)
+                WHERE "extract".discussion_id=-1)""")
     for table in tables:
         print "table", table.name
         if table.name in args.rebuild_table:
@@ -52,9 +53,6 @@ def main():
         # keys.sort(key=lambda k: (k.parent.primary_key, k.parent.name))
         for fk in keys:
             print fk
-            #These two keys bug. WHY?
-            if (table.name, fk.parent.name) not in {('extract', 'id'), ('extract', 'discussion_id')}:
-                continue
             missing_fkey(fk)
             continue
             try:
@@ -68,7 +66,7 @@ def main():
                 try:
                     missing_fkey(fk)
                     session.execute(AddForeignKey(fk))
-                except Exception:
+                except ProgrammingError:
                     rebuild_table(table)
                     break
 
@@ -155,7 +153,11 @@ def rebuild_table(table):
     table.create(session.bind)
     sel = select([getattr(clone.c, cname) for cname in column_names])
     session.execute(table.insert().from_select(column_names, sel))
+    session.execute(DropTable(clone))
     for fk in outgoing:
+        session.execute(AddForeignKey(fk))
+    for fk in incoming:
+        missing_fkey(fk)
         session.execute(AddForeignKey(fk))
 
 if __name__ == '__main__':
