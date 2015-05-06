@@ -1,15 +1,82 @@
 "use strict";
 
-define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-growl', 'utils/i18n', 'common/collectionManager'],
-    function (Marionette, DiscussionSource, bootstrapGrowl, i18n, CollectionManager) {
+define(['backbone.marionette', 'models/discussionSource', 'jquery.bootstrap-growl', 'utils/i18n', 'common/collectionManager', "common/context", "bluebird"],
+    function (Marionette, DiscussionSource, bootstrapGrowl, i18n, CollectionManager, Ctx, promise) {
 
     var DiscussionSettings = Marionette.ItemView.extend({
         template: '#tmpl-discussionSource',
         ui: {
-            source:'.js_saveSource'
+            source:'.js_saveSource',
+            reimport: '.js_reimport',
+            reprocess: '.js_reprocess'
         },
         events: {
-            'click @ui.source':'saveSource'
+            'click @ui.source':'saveSource',
+            'click @ui.reimport':'reimportSource',
+            'click @ui.reprocess':'reprocessSource'
+        },
+        reimportSource: function(e) {
+            e.preventDefault();
+            var msg = 'This will take several minutes! You cannot leave the page in the meantime. Are you sure you want to continue?';
+            console.log('this.model is :', this.model);
+            if ( confirm(i18n.gettext(msg)) ) {
+                return Promise.resolve(this.model.doReimport()).then( function(whatever) {
+                    $.bootstrapGrowl(i18n.gettext('Reimport has begun! It can take up to 15 minutes to complete.'), {
+                        ele: 'body',
+                        type: 'success',
+                        offset: {from: 'bottom', amount:20},
+                        align: 'left',
+                        delay: 4000,
+                        allow_dismiss: true,
+                        stackup_spacing: 10
+                    });
+                }).catch(function(e){
+                    $.bootstrapGrowl(i18n.gettext('Reimport failed'), {
+                        ele: 'body',
+                        type: 'error',
+                        offset: {from: 'bottom', amount:20},
+                        align: 'left',
+                        delay: 4000,
+                        allow_dismiss: true,
+                        stackup_spacing: 10
+                    });
+                });
+            }
+            else {
+                //do nothing
+            }
+            return false;
+        },
+        reprocessSource: function(e) {
+            e.preventDefault();
+            var msg = 'This will take several minutes! You cannot leave the page in the meantime. Are you sure you want to continue?';
+            if ( confirm(i18n.gettext(msg)) ) {
+                return Promise.resolve(this.model.doReprocess()).then( function(whatever) {
+                    $.bootstrapGrowl(i18n.gettext('Reprocess has begun! It can take up to 15 minutes to complete.'), {
+                        ele: 'body',
+                        type: 'success',
+                        offset: {from: 'bottom', amount:20},
+                        align: 'left',
+                        delay: 4000,
+                        allow_dismiss: true,
+                        stackup_spacing: 10
+                    });
+                }).catch(function(e){
+                    $.bootstrapGrowl(i18n.gettext('Reimport failed'), {
+                        ele: 'body',
+                        type: 'error',
+                        offset: {from: 'bottom', amount:20},
+                        align: 'left',
+                        delay: 4000,
+                        allow_dismiss: true,
+                        stackup_spacing: 10
+                    });
+                });
+            }
+            else {
+                //do absolutely nothing
+            }
+            return false;
         },
         saveSource: function(e){
             e.preventDefault();

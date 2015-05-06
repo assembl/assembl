@@ -1,6 +1,6 @@
 'use strict';
 
-define(['models/base', 'common/context'], function (Base, Ctx) {
+define(['models/base', 'common/context', 'jquery'], function (Base, Ctx, $) {
 
     var sourceModel = Base.Model.extend({
         urlRoot: Ctx.getApiV2DiscussionUrl()+'sources',
@@ -21,6 +21,14 @@ define(['models/base', 'common/context'], function (Base, Ctx) {
              * check typeof variable
              * */
 
+        },
+        doReimport: function() {
+            var url = this.url() + '/fetch_posts';
+            return $.post(url, {reimport: true});
+        },
+        doReprocess: function() {
+            var url = this.url() + '/fetch_posts';
+            return $.post(url, {reprocess: true});
         }
 
     });
