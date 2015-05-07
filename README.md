@@ -13,7 +13,7 @@ Assembl is made with the following technologies :
 - [Nginx](http://nginx.org/)
 - [Virtuoso](http://virtuoso.openlinksw.com/)
 
-Assembl is developed by [Imagine For People](http://imaginationforpeople.org)
+Assembl is developed by [Imagination For People](http://imaginationforpeople.org) and [bluenove](http://bluenove.com)
 
 ## Installation for developers
 
