@@ -1304,19 +1304,29 @@ event.listen(mapper, 'before_insert', insert_timestamp)
 event.listen(mapper, 'before_update', update_timestamp)
 
 
-def get_session_maker(zope_tr=True):
+def make_session_maker(zope_tr=True, autoflush=True):
+    return scoped_session(sessionmaker(
+        autoflush=autoflush,
+        extension=ZopeTransactionExtension() if zope_tr else None))
+
+
+def initialize_session_maker(zope_tr=True, autoflush=True):
+    "Initialize the application global sessionmaker object"
     global _session_maker
-    if _session_maker is None:
-        # This path is executed once, and maybe not when you expect it.
-        # nosetest may fail if the session_maker is built with the ZTE.
-        # This will happen if any of the models is imported before the
-        # nose plugin is configured. In that case, trace the importation thus:
-        # print "ZOPISH SESSIONS: ", zope_tr
-        # import traceback; traceback.print_stack();
-        ext = None
-        if zope_tr:
-            ext = ZopeTransactionExtension()
-        _session_maker = scoped_session(sessionmaker(extension=ext))
+    assert _session_maker is None
+    _session_maker = make_session_maker(zope_tr, autoflush)
+    return _session_maker
+
+
+def session_maker_is_initialized():
+    global _session_maker
+    return _session_maker is not None
+
+
+def get_session_maker():
+    "Get the application global sessionmaker object"
+    global _session_maker
+    assert _session_maker is not None
     return _session_maker
 
 
@@ -1406,13 +1416,14 @@ event.listen(BaseOps, 'after_update', orm_update_listener, propagate=True)
 event.listen(BaseOps, 'after_delete', orm_delete_listener, propagate=True)
 
 
-def configure_engine(settings, zope_tr=True, session_maker=None):
+def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None):
     """Return an SQLAlchemy engine configured as per the provided config."""
     if session_maker is None:
-        session_maker = get_session_maker(zope_tr)
-    else:
-        global _session_maker
-        _session_maker = session_maker
+        if session_maker_is_initialized():
+            print "ERROR: Initialized twice."
+            session_maker = get_session_maker()
+        else:
+            session_maker = initialize_session_maker(zope_tr, autoflush)
     engine = session_maker.session_factory.kw['bind']
     if engine:
         return engine

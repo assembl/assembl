@@ -5,7 +5,7 @@ from pyramid.paster import get_appsettings
 from pyramid.path import DottedNameResolver
 from kombu import Exchange, Queue
 
-from ..lib.sqla import configure_engine, get_session_maker
+from ..lib.sqla import configure_engine
 from ..lib.zmqlib import configure_zmq
 from ..lib.config import set_config
 from zope.component import getGlobalSiteManager
@@ -17,15 +17,12 @@ resolver = DottedNameResolver(__package__)
 raven_client = None
 
 
-def configure(registry, task_name, session_maker=None):
+def configure(registry, task_name):
     settings = registry.settings
     if settings.get('%s_debug_signal' % (task_name,), False):
         from assembl.lib import signals
         signals.listen()
-
     configure_zmq(settings['changes.socket'], False)
-    configure_engine(settings, False, session_maker)
-    get_session_maker(False)
     # temporary solution
     configure_model_watcher(registry, task_name)
 
@@ -102,6 +99,7 @@ def init_task_config(celery_app):
     registry = getGlobalSiteManager()
     registry.settings = settings
     set_config(settings)
+    configure_engine(settings, False)
     configure(registry, celery_app.main)
     config_celery_app(celery_app, settings)
     from threaded_model_watcher import ThreadDispatcher

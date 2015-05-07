@@ -10,12 +10,11 @@ from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.schema import DropTable
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.sql.expression import select, alias
-from zope.sqlalchemy import mark_changed
 
 from virtuoso.alchemy import AddForeignKey, DropForeignKey
 
 from assembl.lib.sqla import (
-    configure_engine, get_metadata, get_session_maker)
+    configure_engine, get_metadata, get_session_maker, mark_changed)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 
@@ -32,7 +31,7 @@ def main():
     logging.config.fileConfig(args.configuration)
     configure_zmq(settings['changes.socket'], False)
     configure_engine(settings, True)
-    session = get_session_maker(False)
+    session = get_session_maker()()
     import assembl.models
     tables = get_metadata().sorted_tables
     # tables.reverse()
@@ -117,7 +116,7 @@ def missing_fkey(fkey, delete=True):
     fkey = as_fkey(fkey)
     if fkey.parent.nullable:
         return
-    session = get_session_maker(False)
+    session = get_session_maker()()
     source = fkey.parent.table
     target = fkey.column.table
     if source == target:
@@ -135,7 +134,7 @@ def missing_fkey(fkey, delete=True):
 
 def rebuild_table(table):
     print "rebuilding", table
-    session = get_session_maker(False)
+    session = get_session_maker()()
     incoming = get_incoming_fks(table)
     outgoing = table.foreign_keys
     for fk in chain(incoming, outgoing):

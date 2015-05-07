@@ -8,7 +8,6 @@ from abc import ABCMeta, abstractmethod
 import logging
 from logging.config import fileConfig
 
-from sqlalchemy.orm import sessionmaker, scoped_session
 from pyramid.paster import get_appsettings
 from zope.component import getGlobalSiteManager
 from kombu import BrokerConnection, Exchange, Queue
@@ -18,6 +17,7 @@ from kombu.utils.debug import setup_logging
 from assembl.tasks import configure
 from assembl.lib.config import set_config
 from assembl.lib.enum import OrderedEnum
+from assembl.lib.sqla import configure_engine
 
 log = logging.getLogger('assembl')
 
@@ -501,8 +501,9 @@ if __name__ == '__main__':
     registry.settings = settings
     set_config(settings)
     fileConfig(config_file_name)
-    session_maker = scoped_session(sessionmaker(autoflush=False))
-    configure(registry, 'source_reader', session_maker)
+    # set the basic session maker without zope or autoflush
+    configure_engine(settings, False, autoflush=False)
+    configure(registry, 'source_reader')
     url = settings.get('celery_tasks.imap.broker')
     with BrokerConnection(url) as conn:
         sourcedispatcher = SourceDispatcher(conn)

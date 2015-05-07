@@ -3,11 +3,11 @@ from __future__ import with_statement
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import pool
 
 from pyramid.paster import bootstrap
 
-from assembl.lib.sqla import get_session_maker, get_metadata
+from assembl.lib.sqla import (
+    get_session_maker, configure_engine, get_metadata)
 from assembl.lib.zmqlib import configure_zmq
 
 # this is the Alembic Config object, which provides
@@ -21,8 +21,7 @@ fileConfig(config.config_file_name)
 pyramid_env = bootstrap(config.config_file_name)
 configure_zmq(pyramid_env['registry'].settings['changes.socket'], False)
 
-get_session_maker(False)
-
+configure_engine(pyramid_env['registry'].settings, False)
 
 def run_migrations_online():
     """Run migrations in 'online' mode.
@@ -31,7 +30,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    engine = get_session_maker(False).bind
+    engine = get_session_maker().bind
     connection = engine.connect()
     context.configure(connection=connection,
                       target_metadata=get_metadata())

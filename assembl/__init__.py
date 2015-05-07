@@ -11,7 +11,7 @@ from pyramid_beaker import session_factory_from_settings
 from pyramid.i18n import default_locale_negotiator
 from zope.component import getGlobalSiteManager
 
-from .lib.sqla import configure_engine
+from .lib.sqla import configure_engine, session_maker_is_initialized
 
 
 # Do not import models here, it will break tests.
@@ -27,7 +27,8 @@ def main(global_config, **settings):
 
     # here we create the engine and bind it to the (not really a) session
     # factory
-    configure_engine(settings)
+    if not session_maker_is_initialized():
+        configure_engine(settings)
     if settings.get('assembl_debug_signal', False):
         from assembl.lib import signals
         signals.listen()
