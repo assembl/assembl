@@ -39,6 +39,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 //collapseButton: '.js_messageList-collapseButton', // FIXME: this seems to be not used anymore, so I (Quentin) commented it out
                 loadPreviousMessagesButton: '.js_messageList-prevbutton',
                 loadNextMessagesButton: '.js_messageList-morebutton',
+                loadAllButton: '.js_messageList-loadallbutton',
                 messageList: '.messageList-list',
                 stickyBar: '.sticky-box',
                 replyBox: '.messagelist-replybox',
@@ -197,27 +198,24 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
              * @type {Object}
              */
             events: function () {
-                var that = this,
-                    data = {
-                        'click .post-query-filter-info .js_deleteFilter ': 'onFilterDeleteClick',
+              var data = {
+                'click .post-query-filter-info .js_deleteFilter ': 'onFilterDeleteClick',
 
-                        'click .js_messageList-allmessages': 'showAllMessages',
+                'click .js_messageList-allmessages': 'showAllMessages',
 
-                        'click .js_messageList-fullScreenButton': 'setFullscreen',
+                'click .js_messageList-fullScreenButton': 'setFullscreen',
 
-                        'click .js_messageList-prevbutton': 'showPreviousMessages',
-                        'click .js_messageList-morebutton': 'showNextMessages',
+                'click .js_messageList-prevbutton': 'showPreviousMessages',
+                'click .js_messageList-morebutton': 'showNextMessages',
+                'click @ui.loadAllButton': 'showAllMessagesAtOnce',
 
-                        'click .js_openTargetInModal': 'openTargetInModal',
+                'click .js_openTargetInModal': 'openTargetInModal',
 
-                        'click .js_scrollToMsgBox': 'scrollToMsgBox',
+                'click .js_scrollToMsgBox': 'scrollToMsgBox',
 
-                        'click .js_loadPendingMessages': 'loadPendingMessages'
-                    };
-
-                
-
-                return data;
+                'click .js_loadPendingMessages': 'loadPendingMessages'
+              };
+              return data;
             },
 
             getTitle: function () {
@@ -916,6 +914,22 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 requestedOffsets = this.getPreviousMessagesRequestedOffsets();
                 //console.log("showPreviousMessages calling showMessages");
                 this.showMessages(requestedOffsets);
+            },
+
+            /**
+             * Show all messages on screen, regardless of the time it will take.
+             */
+            showAllMessagesAtOnce: function () {
+              var that = this;
+
+              this.currentQuery.getResultMessageIdCollectionPromise().then(function(resultMessageIdCollection) {
+                var requestedOffsets = {
+                'offsetStart': 0,
+                'offsetEnd': _.size(resultMessageIdCollection)
+                };
+                //console.log("showAllMessages calling showMessages");
+                that.showMessages(requestedOffsets);
+              });
             },
 
             /**
