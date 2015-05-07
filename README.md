@@ -11,7 +11,7 @@ Assembl is made with the following technologies :
 - HTML5, [MarionetteJS](http://marionettejs.com/)
 - [The Pyramid Framework](http://www.pylonsproject.org/)
 - [Nginx](http://nginx.org/)
-- [Virtuoso](http://www.virtuoso.com/)
+- [Virtuoso](http://virtuoso.openlinksw.com/)
 
 Assembl is developed by [Imagine For People](http://imaginationforpeople.org)
 
