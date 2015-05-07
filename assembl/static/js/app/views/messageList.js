@@ -769,7 +769,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 this._offsetStart = returnedOffsets['offsetStart'];
                 this._offsetEnd = returnedOffsets['offsetEnd'];
 
-                views_promise.then(function (views) {
+                return views_promise.then(function (views) {
                     if (that.debugPaging) {
                         console.log("showMessages() showing requestedOffsets:", requestedOffsets, "returnedOffsets:", returnedOffsets, "messageIdsToShow", messageIdsToShow, "out of numMessages", numMessages, "root views", views);
                     }
@@ -781,12 +781,13 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                         that.ui.messageList.html(views);
                     }
                     that.scrollToPreviousScrollTarget();
+                    that.$el.find('.js_messageList-loadprevloader').addClass('hidden');
                     if (that._offsetStart <= 0) {
                         that.ui.topArea.addClass('hidden');
                     } else {
                         that.ui.topArea.removeClass('hidden');
                     }
-
+                    that.$el.find('.js_messageList-loadmoreloader').addClass('hidden');
                     if (that._offsetEnd >= (numMessages - 1)) {
                         that.ui.bottomArea.addClass('hidden');
                     } else {
@@ -797,6 +798,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                     that.unblockPanel();
                     that.renderIsComplete = true;
                     that.trigger("messageList:render_complete", "Render complete");
+                    return true;
                 });
 
             },
@@ -899,7 +901,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
              */
             showNextMessages: function () {
                 var requestedOffsets = {};
-
+                this.$el.find('.js_messageList-loadmoreloader').removeClass('hidden');
+                this.ui.bottomArea.addClass('hidden');
                 requestedOffsets = this.getNextMessagesRequestedOffsets();
                 //console.log("showNextMessages calling showMessages");
                 this.showMessages(requestedOffsets);
@@ -910,7 +913,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
              */
             showPreviousMessages: function () {
                 var requestedOffsets = {};
-
+                this.$el.find('.js_messageList-loadprevloader').removeClass('hidden');
+                this.ui.topArea.addClass('hidden');
                 requestedOffsets = this.getPreviousMessagesRequestedOffsets();
                 //console.log("showPreviousMessages calling showMessages");
                 this.showMessages(requestedOffsets);
@@ -921,7 +925,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
              */
             showAllMessagesAtOnce: function () {
               var that = this;
-
+              this.$el.find('.js_messageList-loadmoreloader').removeClass('hidden');
+              this.ui.bottomArea.addClass('hidden');
               this.currentQuery.getResultMessageIdCollectionPromise().then(function(resultMessageIdCollection) {
                 var requestedOffsets = {
                 'offsetStart': 0,
