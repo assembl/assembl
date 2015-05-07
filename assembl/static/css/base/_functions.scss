@@ -1,5 +1,5 @@
-$browser-context: 16; // Default
+$browser-context: 12; // Default
 
 @function em($pixels, $context: $browser-context) {
-  @return #{$pixels/$context}em
+  @return ($pixels / $context) * 1em;
 }
