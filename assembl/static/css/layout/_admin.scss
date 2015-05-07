@@ -168,11 +168,17 @@ table {
   }
   .partner-img-content {
     display: table;
-    width: 100%;
+    width: em(200);
+    height: em(200);
+    margin: 0 auto;
     .partner-img {
       text-align: center;
       display: table-cell;
       vertical-align: middle;
+      img{
+        max-width: em(200);
+        max-height: em(200);
+      }
     }
   }
 }
