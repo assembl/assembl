@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="error-message">{{error}}</div>
-<div class="admin-permissions">
+<div class="bx bx-default admin-permissions mbl mhl">
 <h2>{% trans %}Discussion {% endtrans %}{{discussion.topic}}</h2>
 <h3>{% trans %}Role permissions:{% endtrans %}</h3>
 <form method="POST" action="#">
@@ -48,7 +48,7 @@
 <input type="submit" name="submit_role_permissions" value="{% trans %}Save{% endtrans %}">
 </form>
 </div>
-<div class="admin-permissions">
+<div class="bx bx-default admin-permissions mbl mhl">
 <h3>{% trans %}User roles specific to this discussion:{% endtrans %}</h3>
 <form method="POST" action="#">
 <table>
@@ -85,7 +85,7 @@
 <input type="submit" name="submit_user_roles" value="{% trans %}Save{% endtrans %}">
 </form>
 </div>
-<div class="admin-permissions">
+<div class="bx bx-default admin-permissions mhl">
 <form method="POST" action="#" enctype="multipart/form-data" accept-charset="utf-8">
 <h3>{% trans %}Add users with a CSV file{% endtrans %}</h3>
 <p>{% trans %}The CSV file should have three fields, in this order: full name, email, and password.  If it has a header, it MUST be on the first line.  Imported user's email will be considered validated.{% endtrans %}</p>
