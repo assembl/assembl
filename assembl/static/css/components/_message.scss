@@ -536,7 +536,11 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
     left: 0px;
   }
 }
-
+.printable .message {
+  .message-menu {
+    display: none !important;
+  }
+}
 /* ------------------- Start of message family section ---------------------- */
 
 // The arrow
@@ -678,4 +682,12 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 
 }
 
+.printable {
+  .link-img {
+    display: none !important;
+    }
+  .message-family-arrow.arrow, .message-family-container.child {
+    border-left: none !important;
+  }
+}
 /* --------------------- End of message family section ---------------------- */

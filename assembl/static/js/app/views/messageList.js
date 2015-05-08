@@ -46,7 +46,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 inspireMe: '.js_inspireMe',
                 inspireMeAnchor: '.js_inspireMeAnchor',
                 pendingMessage: '.pendingMessage',
-                contentPending: '.real-time-updates'
+                contentPending: '.real-time-updates',
+                printButton: '.js_messageListView-print'
             },
 
             regions: {
@@ -213,7 +214,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
 
                 'click .js_scrollToMsgBox': 'scrollToMsgBox',
 
-                'click .js_loadPendingMessages': 'loadPendingMessages'
+                'click .js_loadPendingMessages': 'loadPendingMessages',
+                'click @ui.printButton': 'togglePrintableClass'
               };
               return data;
             },
@@ -935,6 +937,33 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 //console.log("showAllMessages calling showMessages");
                 that.showMessages(requestedOffsets);
               });
+            },
+
+            isInPrintableView: function () {
+              if(this.ui.messageList.hasClass('printable')) {
+                return true
+              }
+              else {
+                return false;
+              }
+            },
+
+            /**
+             * Hide elements of the messageList to make it more printable and
+             * copy-pastable in word processing documents
+             */
+            togglePrintableClass: function (ev) {
+              console.log("togglePrintableClass", $(ev.currentTarget), this.ui.messageList);
+              if(this.isInPrintableView()) {
+                this.ui.messageList.removeClass('printable');
+                $(ev.currentTarget).addClass('btn-secondary');
+                $(ev.currentTarget).removeClass('btn-primary');
+              }
+              else {
+                this.ui.messageList.addClass('printable');
+                $(ev.currentTarget).addClass('btn-primary');
+                $(ev.currentTarget).removeClass('btn-secondary');
+              }
             },
 
             /**

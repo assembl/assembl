@@ -95,6 +95,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     this.renderUserViewButtons();
                 }
                 this.renderQueryInfo();
+                Ctx.initTooltips(this.$el);
             },
 
             renderToggleButton: function() {
@@ -153,7 +154,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/me
                     if(implicitValuePromise !== undefined) {
                       filtersPromises.push(Promise.join(candidateFilter.getLabelPromise(), implicitValuePromise, function(label, value) {
                         if(value !== undefined) {
-                          return '<li><a class="' + candidateFilter.getAddButtonCssClass() + '" data-filterid="' + candidateFilter.getId() + '">' + label + '</a></li>';
+                          return '<li><a class="' + candidateFilter.getAddButtonCssClass() + '" data-filterid="' + candidateFilter.getId() + '" data-toggle="tooltip" title="" data-placement="left" data-original-title="' + candidateFilter.getHelpText() + '">' + label + '</a></li>';
                         }
                         else{
                           return '';

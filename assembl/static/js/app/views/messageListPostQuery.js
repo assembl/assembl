@@ -368,7 +368,10 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird', 
       _.each(filter.getValues(), function(value) {
         individualValuesButtonsPromises.push(filter.getFilterIndividualValueDescriptionStringPromise(value).then(
             function(individualValueString) {
-              return '<span>' + individualValueString + '</span><a href="#" class="remove js_deleteFilter" data-filterid="' + filter.getId() + '" data-value-index="' + _.indexOf(filter.getValues(), value) + '"><i class="icon-delete"></i></a>\n';
+              var retval = '';
+              retval += '<span>' + individualValueString + '</span>';
+              retval += '<a href="#" class="remove js_deleteFilter" data-filterid="' + filter.getId() + '" data-value-index="' + _.indexOf(filter.getValues(), value) + '"  ><i class="icon-delete"></i></a>\n';
+              return retval;
             }));
       });
         

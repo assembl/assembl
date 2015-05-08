@@ -820,15 +820,18 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              * Starts annotator text selection process
              */
             startAnnotatorTextSelection: function () {
-                this.hideAnnotatorSelectionTooltip();
-                this.isSelecting = true;
-                this.$el.addClass('is-selecting');
+              if(this.messageListView.isInPrintableView()) {
+                return;
+              }
+              this.hideAnnotatorSelectionTooltip();
+              this.isSelecting = true;
+              this.$el.addClass('is-selecting');
 
-                var that = this;
+              var that = this;
 
-                $(document).one('mouseup', function (ev) {
-                    that.finishAnnotatorTextSelection(ev);
-                });
+              $(document).one('mouseup', function (ev) {
+                that.finishAnnotatorTextSelection(ev);
+              });
             },
 
             /**
@@ -836,45 +839,54 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              * Does the selection
              */
             updateAnnotatorTextSelection: function (ev) {
+              if(this.messageListView.isInPrintableView()) {
+                return;
+              }
                 if (!this.isSelecting) {
-                    return;
-                }
+                return;
+              }
 
-                if ($(ev.target).closest('.is-selecting').length === 0) {
-                    // If it isn't inside the one which started, don't show it
-                    return;
-                }
+              if ($(ev.target).closest('.is-selecting').length === 0) {
+                // If it isn't inside the one which started, don't show it
+                return;
+              }
 
-                var selectedText = this.getSelectedText(),
-                    text = selectedText.focusNode ? selectedText.getRangeAt(0).cloneContents() : '';
+              var selectedText = this.getSelectedText(), text = selectedText.focusNode ? selectedText
+                  .getRangeAt(0).cloneContents()
+                  : '';
 
-                text = text.textContent || '';
+              text = text.textContent || '';
 
-                if (text.length > MIN_TEXT_TO_TOOLTIP) {
-                    this.showAnnotatorSelectionTooltip(ev.clientX, ev.clientY, text);
-                } else {
-                    this.hideAnnotatorSelectionTooltip();
-                }
+              if (text.length > MIN_TEXT_TO_TOOLTIP) {
+                this
+                    .showAnnotatorSelectionTooltip(ev.clientX, ev.clientY, text);
+              }
+              else {
+                this.hideAnnotatorSelectionTooltip();
+              }
             },
 
             /**
              * @event
              */
             onMouseLeaveMessageBodyAnnotatorSelectionAllowed: function () {
-                if (this.isSelecting) {
-                    this.hideAnnotatorSelectionTooltip();
-                    this.isSelecting = false;
-                    this.$el.removeClass('is-selecting');
-                    (function deselect() {
-                        var selection = ('getSelection' in window)
-                            ? window.getSelection()
-                            : ('selection' in document)
-                            ? document.selection
-                            : null;
-                        if ('removeAllRanges' in selection) selection.removeAllRanges();
-                        else if ('empty' in selection) selection.empty();
-                    })();
-                }
+              if(this.messageListView.isInPrintableView()) {
+                return;
+              }
+              if (this.isSelecting) {
+                this.hideAnnotatorSelectionTooltip();
+                this.isSelecting = false;
+                this.$el.removeClass('is-selecting');
+                (function deselect() {
+                  var selection = ('getSelection' in window)
+                  ? window.getSelection()
+                      : ('selection' in document)
+                      ? document.selection
+                          : null;
+                  if ('removeAllRanges' in selection) selection.removeAllRanges();
+                  else if ('empty' in selection) selection.empty();
+                })();
+              }
 
             },
 
