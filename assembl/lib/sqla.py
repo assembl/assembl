@@ -1456,8 +1456,9 @@ def is_zopish():
         ZopeTransactionExtension)
 
 
-def mark_changed():
-    z_mark_changed(get_session_maker()())
+def mark_changed(session=None):
+    session = session or get_session_maker()()
+    z_mark_changed(session)
 
 
 def get_metadata():

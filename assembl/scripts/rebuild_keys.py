@@ -129,7 +129,7 @@ def missing_fkey(fkey, delete=True):
         print count
         with transaction.manager:
             session.execute(source.delete(source.c.id.in_(q)))
-            mark_changed(session())
+            mark_changed(session)
 
 
 def rebuild_table(table):
