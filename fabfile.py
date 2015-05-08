@@ -75,7 +75,7 @@ def supervisor_process_start(process_name):
             exit()
         else:
             print(red('Supervisord doesn\'t seem to be running, trying to start it'))
-            supervisord_cmd_result = venvcmd("supervisord -c %s" % os.path.join(env.projectpath, "supervisord.conf"))
+            supervisord_cmd_result = venvcmd("supervisord -c %s" % get_supervisord_conf())
             if supervisord_cmd_result.failed:
                 print(red('Failed starting supervisord'))
                 exit()
@@ -900,6 +900,8 @@ def get_virtuoso_exec():
     virtuoso_exec = os.path.join(get_virtuoso_root(), 'bin', 'virtuoso-t')
     return virtuoso_exec
 
+def get_supervisord_conf():
+    return os.path.join(env.projectpath, "supervisord.conf")
 
 def get_virtuoso_src():
     config = get_config()
@@ -970,7 +972,8 @@ def virtuoso_reconstruct_db():
 def virtuoso_install_or_upgrade():
     with settings(warn_only=True), hide('warnings', 'stdout', 'stderr'):
         ls_cmd = run("ls %s" % get_virtuoso_exec())
-    if ls_cmd.failed:
+        ls_supervisord_conf_cmd = run("ls %s" % get_supervisord_conf())
+    if ls_cmd.failed or ls_supervisord_conf_cmd:
         print(red("Virtuso not installed, installing."))
         execute(virtuoso_source_install)
     else:
