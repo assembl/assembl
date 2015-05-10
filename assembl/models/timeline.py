@@ -32,7 +32,7 @@ class TimelineEvent(DiscussionBoundBase):
         'discussion.id',
         ondelete='CASCADE',
         onupdate='CASCADE'
-    ))
+    ), nullable=False)
 
     type = Column(String(60), nullable=False)
 
@@ -61,7 +61,7 @@ class TimelineEvent(DiscussionBoundBase):
     # that disallows multiple NULLs.
     # Also, the linked list defines lanes.
     previous_event_id = Column(Integer, ForeignKey(
-        'timeline_event.id'))
+        'timeline_event.id'), nullable=True)
 
     previous_event = relationship(
         "TimelineEvent", remote_side=[id], post_update=True, uselist=False,

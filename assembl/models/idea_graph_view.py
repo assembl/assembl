@@ -95,7 +95,8 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
         "ExplicitSubGraphView", backref=backref(
             "idea_assocs", cascade="all, delete-orphan"))
     idea_id = Column(Integer, ForeignKey(
-        'idea.id', ondelete="CASCADE", onupdate="CASCADE"), index=True)
+        'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True)
     # reference to the "Idea" object for proxying
     idea = relationship("Idea")
 
@@ -156,7 +157,7 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
 
     idea_link_id = Column(Integer, ForeignKey(
         'idea_idea_link.id', ondelete="CASCADE", onupdate="CASCADE"),
-        index=True)
+        index=True, nullable=False)
 
     # reference to the "IdeaLink" object for proxying
     idea_link = relationship("IdeaLink")

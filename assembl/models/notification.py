@@ -418,7 +418,7 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
 
     post_id = Column(
         Integer, ForeignKey("post.id",
-            ondelete='CASCADE', onupdate='CASCADE'))
+            ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
 
     post = relationship("Post", backref=backref(
         "subscriptions_on_post", cascade="all, delete-orphan"))
@@ -458,7 +458,7 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     idea_id = Column(
         Integer, ForeignKey("idea.id",
-            ondelete='CASCADE', onupdate='CASCADE'))
+            ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
 
     idea = relationship("Idea", backref=backref(
         "subscriptions_on_idea", cascade="all, delete-orphan"))
@@ -494,11 +494,11 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
         NotificationSubscription.id,
         ondelete='CASCADE',
         onupdate='CASCADE'
-    ), primary_key=True)
+    ), nullable=False, primary_key=True)
 
     extract_id = Column(
         Integer, ForeignKey("extract.id",
-            ondelete='CASCADE', onupdate='CASCADE'))
+            ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
 
     extract = relationship("Extract", backref=backref(
         "subscriptions_on_extract", cascade="all, delete-orphan"))
@@ -538,7 +538,7 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     on_user_id = Column(
         Integer, ForeignKey("user.id",
-            ondelete='CASCADE', onupdate='CASCADE'))
+            ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
 
     on_user = relationship("User", foreign_keys=[on_user_id], backref=backref(
         "subscriptions_on_user", cascade="all, delete-orphan"))

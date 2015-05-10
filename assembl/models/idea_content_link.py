@@ -236,7 +236,7 @@ class Extract(IdeaContentPositiveLink):
         nullable=False, index=True,
         info={'rdf': QuadMapPatternS(None, CATALYST.relevantToConversation)})
     discussion = relationship(
-        Discussion, backref='extracts',
+        Discussion, backref=backref('extracts', cascade="all, delete-orphan"),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     important = Column('important', Boolean, server_default='0')
@@ -412,7 +412,7 @@ class IdeaContentNegativeLink(IdeaContentLink):
     id = Column(Integer, ForeignKey(
         'idea_content_link.id',
         ondelete='CASCADE', onupdate='CASCADE'
-    ), primary_key=True)
+    ), nullable=False, primary_key=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postDelinkedToIdea_abstract',
@@ -444,7 +444,7 @@ class TextFragmentIdentifier(DiscussionBoundBase):
     id = Column(Integer, primary_key=True,
                 info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     extract_id = Column(Integer, ForeignKey(
-        Extract.id, ondelete="CASCADE"), index=True)
+        Extract.id, ondelete="CASCADE"), nullable=False, index=True)
     xpath_start = Column(String)
     offset_start = Column(Integer)
     xpath_end = Column(String)

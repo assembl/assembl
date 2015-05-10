@@ -569,12 +569,14 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
 
     id = Column(Integer, primary_key=True)
     discussion_id = Column(Integer, ForeignKey(
-        "discussion.id", ondelete='CASCADE', onupdate='CASCADE'))
+            "discussion.id", ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False)
     discussion = relationship(
         "Discussion", backref=backref(
             "agent_status_in_discussion", cascade="all, delete-orphan"))
     profile_id = Column(Integer, ForeignKey(
-        "agent_profile.id", ondelete='CASCADE', onupdate='CASCADE'))
+            "agent_profile.id", ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False)
     agent_profile = relationship(
         AgentProfile, backref=backref(
             "agent_status_in_discussion", cascade="all, delete-orphan"))
@@ -936,7 +938,7 @@ class Username(Base):
     __tablename__ = 'username'
     user_id = Column(Integer,
                      ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
-                     unique=True)
+                     nullable=False, unique=True)
     username = Column(CoerceUnicode(20), primary_key=True)
     user = relationship(User, backref=backref('username', uselist=False, lazy="joined"))
 
@@ -977,10 +979,11 @@ class UserRole(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(
         Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
-        index=True, info={'rdf': QuadMapPatternS(
+        nullable=False, index=True, info={'rdf': QuadMapPatternS(
             None, SIOC.function_of, AgentProfile.agent_as_account_iri.apply(None))})
     user = relationship(User, backref=backref("roles", cascade="all, delete-orphan"))
-    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
+    role_id = Column(Integer, ForeignKey(
+        'role.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     role = relationship(Role)
 
     @classmethod
@@ -1009,17 +1012,19 @@ class LocalUserRole(DiscussionBoundBase):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False,
         info={'rdf': QuadMapPatternS(
             None, SIOC.function_of, AgentProfile.agent_as_account_iri.apply(None))})
     user = relationship(User, backref=backref("local_roles", cascade="all, delete-orphan"))
     discussion_id = Column(Integer, ForeignKey(
-        'discussion.id', ondelete='CASCADE'),
+        'discussion.id', ondelete='CASCADE'), nullable=False,
         info={'rdf': QuadMapPatternS(None, SIOC.has_scope)})
     discussion = relationship(
         'Discussion', backref=backref(
             "local_user_roles", cascade="all, delete-orphan"),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
-    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
+    role_id = Column(Integer, ForeignKey(
+        'role.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     role = relationship(Role)
     requested = Column(Boolean, server_default='0', default=False)
     # BUG in virtuoso: It will often refuse to create an index
@@ -1143,15 +1148,18 @@ class DiscussionPermission(DiscussionBoundBase):
     __tablename__ = 'discussion_permission'
     id = Column(Integer, primary_key=True)
     discussion_id = Column(Integer, ForeignKey(
-        'discussion.id', ondelete='CASCADE', onupdate='CASCADE'))
+        'discussion.id', ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False)
     discussion = relationship(
         'Discussion', backref=backref(
             "acls", cascade="all, delete-orphan"),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
-    role_id = Column(Integer, ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'))
+    role_id = Column(Integer, ForeignKey(
+        'role.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     role = relationship(Role)
     permission_id = Column(Integer, ForeignKey(
-        'permission.id', ondelete='CASCADE', onupdate='CASCADE'))
+        'permission.id', ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False)
     permission = relationship(Permission)
 
     def role_name(self):
@@ -1211,7 +1219,8 @@ class AnonymousUser(DiscussionBoundBase, User):
 
     source_id = Column(Integer, ForeignKey(
         "content_source.id",
-        ondelete='CASCADE', onupdate='CASCADE'), unique=True)
+        ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False, unique=True)
     source = relationship(
         "ContentSource", backref=backref(
             "anonymous_user", cascade="all, delete-orphan",
@@ -1255,14 +1264,15 @@ class UserTemplate(DiscussionBoundBase, User):
     )
 
     discussion_id = Column(Integer, ForeignKey(
-        "discussion.id", ondelete='CASCADE', onupdate='CASCADE'))
+        "discussion.id", ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False)
     discussion = relationship(
         "Discussion", backref=backref(
             "user_templates", cascade="all, delete-orphan"),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     role_id = Column(Integer, ForeignKey(
-        Role.id, ondelete='CASCADE', onupdate='CASCADE'))
+        Role.id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     for_role = relationship(Role)
 
     # Create an index for (discussion, role)?
@@ -1355,7 +1365,7 @@ class PartnerOrganization(DiscussionBoundBase):
         info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
     discussion_id = Column(Integer, ForeignKey(
-        "discussion.id", ondelete='CASCADE'),
+        "discussion.id", ondelete='CASCADE'), nullable=False,
         info={'rdf': QuadMapPatternS(None, DCTERMS.contributor)})
     discussion = relationship(
         'Discussion', backref=backref(
@@ -1402,8 +1412,10 @@ class UserLanguagePreference(Base):
 
     id = Column(Integer, primary_key=True)
 
-    user_id = Column(Integer, ForeignKey(
-                     User.id, ondelete='CASCADE', onupdate='CASCADE'))
+    user_id = Column(
+        Integer, ForeignKey(
+            User.id, ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False)
 
     lang_code = Column(String(), nullable=False)
 

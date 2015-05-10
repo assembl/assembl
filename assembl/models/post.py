@@ -78,7 +78,7 @@ class Post(Content):
                 conditions=(cls.parent_id != None,)),
         ]
 
-    creator_id = Column(Integer, ForeignKey('agent_profile.id'),
+    creator_id = Column(Integer, ForeignKey('agent_profile.id'), nullable=False,
         info={'rdf': QuadMapPatternS(
             None, SIOC.has_creator, AgentProfile.agent_as_account_iri.apply(None))})
     creator = relationship(AgentProfile, backref="posts_created")
@@ -390,7 +390,8 @@ class ImportedPost(Post):
                         nullable=False,
                         doc="The source-specific unique id of the imported post.  A listener keeps the message_id in the post class in sync")
 
-    source_id = Column('source_id', Integer, ForeignKey('post_source.id', ondelete='CASCADE'),
+    source_id = Column('source_id', Integer, ForeignKey(
+        'post_source.id', ondelete='CASCADE'), nullable=False,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.has_origin)})
 
     source = relationship(

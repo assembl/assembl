@@ -42,7 +42,7 @@ class ContentSource(DiscussionBoundBase):
         'discussion.id',
         ondelete='CASCADE',
         onupdate='CASCADE'
-    ))
+    ), nullable=False)
     connection_error = Column(SmallInteger)
     error_description = Column(String)
     error_backoff_until = Column(DateTime)
@@ -173,14 +173,18 @@ class ContentSourceIDs(Base):
     __tablename__ = 'content_source_ids'
 
     id = Column(Integer, primary_key=True)
-    source_id = Column(Integer, ForeignKey('content_source.id',
-                       onupdate='CASCADE', ondelete='CASCADE'))
+    source_id = Column(
+        Integer, ForeignKey(
+            'content_source.id', onupdate='CASCADE', ondelete='CASCADE'),
+        nullable=False)
     source = relationship('ContentSource', backref=backref(
                           'pushed_messages',
                           cascade='all, delete-orphan'))
 
-    post_id = Column(Integer, ForeignKey('content.id',
-                     onupdate='CASCADE', ondelete='CASCADE'))
+    post_id = Column(
+        Integer, ForeignKey(
+            'content.id', onupdate='CASCADE', ondelete='CASCADE'),
+        nullable=False)
     post = relationship('Content',
                         backref=backref('source_ids',
                         cascade='all, delete-orphan'))
