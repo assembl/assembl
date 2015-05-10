@@ -138,6 +138,44 @@ def supervisor_process_stop(process_name):
             print(status_cmd_result)
             exit()
 
+
+def maintenance_mode_start():
+    assert env.uses_uwsgi
+    supervisor_process_stop('prod:uwsgi')
+    supervisor_process_start('maintenance_uwsgi')
+    supervisor_process_stop('celery_notify_beat')
+    supervisor_process_stop('source_reader')
+
+
+def maintenance_mode_stop():
+    assert env.uses_uwsgi
+    supervisor_process_start('celery_notify_beat')
+    supervisor_process_start('source_reader')
+    supervisor_process_stop('maintenance_uwsgi')
+    supervisor_process_start('prod:uwsgi')
+
+
+@task
+def app_majorupdate():
+    "This update is so major that assembl needs to be put in maintenance mode. Only for production."
+    execute(database_dump)
+    execute(updatemaincode)
+    execute(app_update_dependencies)
+    execute(app_compile_nodbupdate)
+    maintenance_mode_start()
+    execute(app_db_update)
+    if env.uses_global_supervisor:
+        print(cyan('Asking supervisor to restart %(projectname)s' % env))
+        run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
+    else:
+        #supervisor config file may have changed
+        venvcmd("supervisorctl reread")
+        venvcmd("supervisorctl update")
+        venvcmd("supervisorctl restart celery_imap changes_router celery_notification_dispatch celery_notify")
+        maintenance_mode_stop()
+    execute(webservers_reload)
+
+
 @task
 def app_reload():
     """
