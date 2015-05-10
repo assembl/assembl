@@ -195,7 +195,7 @@ def test_widget_user_state(
 
 def test_creativity_session_widget(
         discussion, test_app, subidea_1, subidea_1_1,
-        participant1_user, test_session):
+        participant1_user, test_session, request):
     # Post the initial configuration
     format = lambda x: x.strftime('%Y-%m-%dT%H:%M:%S')
     new_widget_loc = test_app.post(
@@ -262,6 +262,7 @@ def test_creativity_session_widget(
     assert new_widget.base_idea == subidea_1
     new_idea1_id = new_idea_create.location
     new_idea1 = Idea.get_instance(new_idea1_id)
+    assert new_idea1.proposed_in_post
     assert new_idea1 in new_widget.generated_ideas
     assert new_idea1.hidden
     assert not new_idea1.proposed_in_post.hidden
@@ -330,6 +331,7 @@ def test_creativity_session_widget(
     # Get the sub-idea from the db
     Idea.db.flush()
     new_idea2_id = new_idea_create.location
+
     # Approve the first but not the second idea
     confirm_idea_url = local_to_absolute(widget_rep['confirm_ideas_url'])
     confirm = test_app.post(confirm_idea_url, {
@@ -345,6 +347,7 @@ def test_creativity_session_widget(
     assert not new_idea1.hidden
     new_idea2 = Idea.get_instance(new_idea2_id)
     assert new_idea2.hidden
+    assert new_idea2.proposed_in_post
     # The second idea was not proposed in public
     assert new_idea2.proposed_in_post.hidden
     # Create a second post.
@@ -369,6 +372,14 @@ def test_creativity_session_widget(
     new_post1 = Post.get_instance(new_post1_id)
     assert not new_post1.hidden
     new_post2 = Post.get_instance(new_post2_id)
+    def clear_data():
+        print "finalizing test data"
+        test_session.delete(new_post1)
+        test_session.delete(new_post2)
+        test_session.delete(new_idea1.proposed_in_post)
+        test_session.delete(new_idea2.proposed_in_post)
+        test_session.flush()
+    request.addfinalizer(clear_data)
     assert new_post2.hidden
     # Get the notifications
     notifications = test_app.get(
