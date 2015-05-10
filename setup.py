@@ -50,6 +50,7 @@ setup(name='assembl',
       entry_points="""\
       [paste.app_factory]
       main = assembl:main
+      maintenance = assembl.maintenance:main
       [console_scripts]
       assembl-db-manage = assembl.scripts.db_manage:main
       assembl-ini-files = assembl.scripts.ini_files:main
