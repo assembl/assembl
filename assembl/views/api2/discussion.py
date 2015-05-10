@@ -8,6 +8,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import (HTTPOk, HTTPBadRequest, HTTPUnauthorized)
 from pyramid_dogpile_cache import get_region
 from pyramid.security import authenticated_userid
+from pyramid.renderers import JSONP_VALID_CALLBACK
 
 from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_SYSADMIN, Everyone)
@@ -90,9 +91,10 @@ def read_user_token(request):
 
 
 def handle_jsonp(callback_fn, json):
-    if not re.match("^\w+$", callback_fn):
+    # TODO: Use an augmented JSONP renderer with ld content-type
+    if not JSONP_VALID_CALLBACK.match(callback_fn):
         raise HTTPBadRequest("invalid callback name")
-    return "%s(%s);" % (callback_fn.encode('ascii'), json)
+    return "/**/{0}({1});".format(callback_fn.encode('ascii'), json)
 
 
 @view_config(context=InstanceContext, name="perm_token",
