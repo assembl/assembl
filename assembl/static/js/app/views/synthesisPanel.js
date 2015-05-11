@@ -214,42 +214,33 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
              * Publishes the synthesis
              */
             _publish: function () {
+                this.blockPanel();
+
                 var publishes_synthesis_id = this.model.id,
-                    url = Ctx.getApiUrl('posts'),
                     that = this;
 
-                var doPublish = function () {
-                    var data = {
-                        publishes_synthesis_id: publishes_synthesis_id,
-                        subject: "Not used",
-                        message: "Not used"
-                    };
+                var synthesisMessage = new MessageModel.Model({
+                    publishes_synthesis_id: publishes_synthesis_id,
+                    subject: "Not used",
+                    message: "Not used"
+                });
 
-                    var synthesisMessage = new MessageModel.Model({
-                        publishes_synthesis_id: publishes_synthesis_id,
-                        subject: "Not used",
-                        message: "Not used"
-                    });
+                synthesisMessage.save(null, {
+                    success: function (model, resp) {
+                        alert(i18n.gettext("Synthesis has been successfully published!"));
+                        that.model = new Synthesis.Model({'@id': 'next_synthesis'});
+                        that.model.fetch();
+                        that.unblockPanel();
+                    },
+                    error: function (model, resp) {
+                        Raven.captureMessage('Failed publishing synthesis!');
+                        alert(i18n.gettext("Failed publishing synthesis!"));
+                        that.model = new Synthesis.Model({'@id': 'next_synthesis'});
+                        that.model.fetch();
+                        that.unblockPanel();
+                    }
+                });
 
-                    synthesisMessage.save(null, {
-                        success: function (model, resp) {
-                            alert(i18n.gettext("Synthesis has been successfully published!"));
-                            that.model = new Synthesis.Model({'@id': 'next_synthesis'});
-                            that.model.fetch();
-                            that.unblockPanel();
-                        },
-                        error: function (model, resp) {
-                            Raven.captureMessage('Failed publishing synthesis!');
-                            alert(i18n.gettext("Failed publishing synthesis!"));
-                            that.model = new Synthesis.Model({'@id': 'next_synthesis'});
-                            that.model.fetch();
-                            that.unblockPanel();
-                        }
-                    });
-                };
-
-                that.blockPanel();
-                doPublish();
             }
 
         });
