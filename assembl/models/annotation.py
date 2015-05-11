@@ -19,6 +19,9 @@ class Webpage(Content):
         'polymorphic_identity': 'webpage',
     }
 
+    def get_body(self):
+        return ""
+
     def get_title(self):
         return self.url
 

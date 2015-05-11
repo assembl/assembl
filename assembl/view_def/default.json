@@ -128,6 +128,8 @@
         "hidden": true,
         "discussion": true,
         "import_date": false,
+        "subject": "&get_title",
+        "body": "&get_body",
         "widget_ideas": "&widget_ideas"
     },
     "Post": {
@@ -136,8 +138,6 @@
         "ancestry": false,
         "parentId": "parent",
         "idCreator": "creator",
-        "subject": "&get_title",
-        "body": "&get_body",
         "bodyMimeType": "&get_body_mime_type",
         "extracts": [":id_only"]
     },

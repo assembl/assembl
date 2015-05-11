@@ -83,13 +83,6 @@ class Post(Content):
             None, SIOC.has_creator, AgentProfile.agent_as_account_iri.apply(None))})
     creator = relationship(AgentProfile, backref="posts_created")
 
-    subject = Column(CoerceUnicode(), nullable=True,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
-    # TODO: check HTML or text? SIOC.content should be text.
-    # Do not give it for now, privacy reasons
-    body = Column(UnicodeText, nullable=False)
-    #    info={'rdf': QuadMapPatternS(None, SIOC.content)})
-
     __mapper_args__ = {
         'polymorphic_identity': 'post',
         'with_polymorphic': '*'
@@ -107,19 +100,10 @@ class Post(Content):
         # TODO: Make it user-specific.
         return self.views is not None
 
-    def get_title(self):
-        return self.subject
-
-    def get_subject(self):
-        return self.subject
-
     def get_url(self):
         from assembl.lib.frontend_urls import FrontendUrls
         frontendUrls = FrontendUrls(self.discussion)
         return frontendUrls.get_post_url(self)
-
-    def get_body(self):
-        return self.body.strip()
 
     def get_body_as_html(self):
         if self.get_body_mime_type == 'text/html':

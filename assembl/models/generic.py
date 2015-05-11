@@ -11,6 +11,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
 )
+from virtuoso.alchemy import CoerceUnicode
 
 from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
@@ -22,6 +23,7 @@ from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADN
 from .discussion import Discussion
 from ..lib.sqla import Base
 #from ..lib.history_meta import Versioned
+
 
 class ContentSource(DiscussionBoundBase):
     """
@@ -194,6 +196,8 @@ class ContentSourceIDs(Base):
 class Content(DiscussionBoundBase):
     """
     Content is a polymorphic class to describe what is imported from a Source.
+    The body and subject properly belong to the Post but were moved here to
+    optimize the most common case.
     """
     __tablename__ = "content"
     rdf_class = SIOC.Post
@@ -219,6 +223,13 @@ class Content(DiscussionBoundBase):
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
     )
 
+    subject = Column(CoerceUnicode(), server_default="",
+        info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+    # TODO: check HTML or text? SIOC.content should be text.
+    # Do not give it for now, privacy reasons
+    body = Column(UnicodeText, server_default="")
+    #    info={'rdf': QuadMapPatternS(None, SIOC.content)})
+
     hidden = Column(Boolean, server_default='0')
 
     __mapper_args__ = {
@@ -231,7 +242,10 @@ class Content(DiscussionBoundBase):
         return "<Content %s>" % repr(self.type)
 
     def get_body(self):
-        return ""
+        return self.body.strip()
+
+    def get_title(self):
+        return self.subject
 
     def get_body_mime_type(self):
         """ Return the format of the body, so the frontend will know how to
@@ -240,9 +254,6 @@ class Content(DiscussionBoundBase):
         text/html (Undestood as some subste of html)
         """
         return "text/plain"
-
-    def get_title(self):
-        return ""
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP):
         super(Content, self).send_to_changes(connection, operation)

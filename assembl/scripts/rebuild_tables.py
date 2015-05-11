@@ -126,7 +126,7 @@ def delete_row(session, table, id):
     for fk in incoming:
         origin_table = fk.parent.table
         primary_key = primary_key_col(origin_table)
-        assert primary_key != fk.parent
+        # assert primary_key != fk.parent
         for (iid,) in session.query(primary_key).filter(fk.parent==id):
             delete_row(session, origin_table, iid)
     session.execute(table.delete(primary_key_col(table) == id))

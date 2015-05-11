@@ -54,16 +54,16 @@
         "date": "creation_date",
         "hidden": true,
         "discussion": true,
-        "import_date": false
+        "import_date": false,
+        "subject": true,
+        "body": true
     },
     "Post": {
         "@extends": "Content",
         "message_id": false,
         "ancestry": false,
         "parentId": "parent",
-        "idCreator": "creator",
-        "subject": true,
-        "body": true
+        "idCreator": "creator"
     },
     "AssemblPost": {
         "@extends": "Post"
