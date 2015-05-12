@@ -62,14 +62,14 @@ define(['ckeditor', 'common/context', 'views/message', 'models/synthesis', 'view
                     that.synthesisPanel = new SynthesisPanel({
                       model: synthesis,
                       messageListView: that.messageListView,
-                      panelWrapper: that.messageListView.getPanelWrapper()
+                      panelWrapper: that.messageListView.getPanelWrapper(),
+                      el: that.$('.message-body')
                     });
                     that.synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
                     that.synthesisPanel.render();
-                    body = that.synthesisPanel.el;
-                    that.$('.message-body').html(body);
                   }
                 });
+              this.$(".message-body").removeClass('js_messageBodyAnnotatorSelectionAllowed');
 
               return;
             }

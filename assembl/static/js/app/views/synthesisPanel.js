@@ -59,8 +59,7 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
             },
 
             events: {
-                'click .synthesisPanel-publishButton': 'publish',
-                'click .synthesisPanel-fullscreenButton': 'setFullscreen'
+                'click .synthesisPanel-publishButton': 'publish'
             },
 
             modelEvents:{
@@ -191,13 +190,6 @@ define(['views/visitors/objectTreeRenderVisitor', 'raven', 'underscore', 'jquery
                     });
 
                 return this;
-            },
-
-            /**
-             * Sets the panel as full screen
-             */
-            setFullscreen: function () {
-                Ctx.setFullscreen(this);
             },
 
             /**

@@ -204,8 +204,6 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
 
                 'click .js_messageList-allmessages': 'showAllMessages',
 
-                'click .js_messageList-fullScreenButton': 'setFullscreen',
-
                 'click .js_messageList-prevbutton': 'showPreviousMessages',
                 'click .js_messageList-morebutton': 'showNextMessages',
                 'click @ui.loadAllButton': 'showAllMessagesAtOnce',

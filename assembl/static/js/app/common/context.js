@@ -14,6 +14,13 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              * @type {boolean}
              */
             this.debugRender = false;
+            
+            /**
+             * Send debugging output to console.log to observe annotator related
+             * events
+             * @type {boolean}
+             */
+            this.debugAnnotator = true;
 
             /**
              * Send debugging output to console.log to observe socket input
@@ -1081,28 +1088,6 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
               div.innerHTML = escapedStr;
               var child = div.childNodes[0];
               return child ? child.nodeValue : '';
-            },
-                 
-            /**
-             * Sets the given panel as fullscreen closing all other ones
-             * @param {Panel} targetPanel
-             */
-            setFullscreen: function (targetPanel) {
-                //TODO: custom view for this
-                var panels = [
-                    assembl.ideaList,
-                    assembl.segmentList,
-                    assembl.ideaPanel,
-                    assembl.messageList,
-                    assembl.synthesisPanel
-                ];
-
-                _.each(panels, function (panel) {
-                    if (targetPanel !== panel) {
-                        this.closePanel(panel);
-                        $(document.body).addClass('is-fullscreen');
-                    }
-                });
             },
 
             /**

@@ -820,6 +820,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              * Starts annotator text selection process
              */
             startAnnotatorTextSelection: function () {
+              if(Ctx.debugAnnotator) {
+                console.log("startAnnotatorTextSelection called");
+              }
               if(this.messageListView.isInPrintableView()) {
                 return;
               }
@@ -839,6 +842,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              * Does the selection
              */
             updateAnnotatorTextSelection: function (ev) {
+              if(Ctx.debugAnnotator) {
+                console.log("updateAnnotatorTextSelection called");
+              }
               if(this.messageListView.isInPrintableView()) {
                 return;
               }
@@ -870,6 +876,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              * @event
              */
             onMouseLeaveMessageBodyAnnotatorSelectionAllowed: function () {
+              if(Ctx.debugAnnotator) {
+                console.log("onMouseLeaveMessageBodyAnnotatorSelectionAllowed called");
+              }
               if(this.messageListView.isInPrintableView()) {
                 return;
               }
@@ -896,14 +905,17 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              * @return {Selection}
              */
             getSelectedText: function () {
-                if (document.getSelection) {
-                    return document.getSelection();
-                } else if (window.getSelection) {
-                    return window.getSelection();
-                } else {
-                    var selection = document.selection && document.selection.createRange();
-                    return selection.text ? selection.text : false;
-                }
+              if(Ctx.debugAnnotator) {
+                console.log("getSelectedText called");
+              }
+              if (document.getSelection) {
+                return document.getSelection();
+              } else if (window.getSelection) {
+                return window.getSelection();
+              } else {
+                var selection = document.selection && document.selection.createRange();
+                return selection.text ? selection.text : false;
+              }
             },
 
             /**
@@ -911,25 +923,31 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              * @event
              */
             finishAnnotatorTextSelection: function (ev) {
-                var isInsideAMessage = false,
-                    selectedText = this.getSelectedText(),
-                    user = Ctx.getCurrentUser(),
-                    text = selectedText.focusNode ? selectedText.getRangeAt(0).cloneContents() : '';
+              var isInsideAMessage = false,
+                  selectedText = this.getSelectedText(),
+                  user = Ctx.getCurrentUser(),
+                  text = selectedText.focusNode ? selectedText.getRangeAt(0).cloneContents() : '';
 
-                text = text.textContent || '';
+              if(Ctx.debugAnnotator) {
+                console.log("finishAnnotatorTextSelection called");
+              }
+              text = text.textContent || '';
 
-                if (ev) {
-                    isInsideAMessage = $(ev.target).closest('.is-selecting').length > 0;
+              if (ev) {
+                isInsideAMessage = $(ev.target).closest('.is-selecting').length > 0;
+              }
+
+              if (this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage) {
+                if(user.can(Permissions.ADD_EXTRACT)) {
+                  this.showAnnotatorSelectionSaveOptions(ev.clientX - 50, ev.clientY);
                 }
-
-                if (user.can(Permissions.ADD_EXTRACT) && this.isSelecting && text.length > MIN_TEXT_TO_TOOLTIP && isInsideAMessage) {
-                    this.showAnnotatorSelectionSaveOptions(ev.clientX - 50, ev.clientY);
-                } else if (!user.can(Permissions.ADD_EXTRACT)) {
-                    console.warn('finishAnnotatorTextSelection() called but current user does not have Permissions.ADD_EXTRACT');
+                else {
+                  console.warn('finishAnnotatorTextSelection() called but current user does not have Permissions.ADD_EXTRACT');
                 }
+              }
 
-                this.isSelecting = false;
-                this.$el.removeClass('is-selecting');
+              this.isSelecting = false;
+              this.$el.removeClass('is-selecting');
             },
 
             /**

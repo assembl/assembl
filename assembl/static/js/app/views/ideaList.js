@@ -132,7 +132,6 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
                 'click #ideaList-collapseButton': 'toggleIdeas',
                 'click #ideaList-graphButton': 'toggleGraphView',
                 'click #ideaList-closeButton': 'closePanel',
-                'click #ideaList-fullscreenButton': 'setFullscreen',
 
                 'click #ideaList-filterByFeatured': 'filterByFeatured',
                 'click #ideaList-filterByInNextSynthesis': 'filterByInNextSynthesis',
@@ -353,13 +352,6 @@ define(['views/allMessagesInIdeaList', 'views/orphanMessagesInIdeaList', 'views/
             clearFilter: function () {
                 this.filter = '';
                 this.render();
-            },
-
-            /**
-             * Sets the panel as full screen
-             */
-            setFullscreen: function () {
-                Ctx.setFullscreen(this);
             },
 
             toggleGraphView: function () {

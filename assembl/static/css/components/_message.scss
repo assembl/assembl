@@ -418,7 +418,6 @@ $previewNumLines: 4;
         .synthesis-expression {
           display: inline;
           margin: 0;
-          pointer-events: none;
           & > *:first-child {
             margin-top: 0px;
           }
