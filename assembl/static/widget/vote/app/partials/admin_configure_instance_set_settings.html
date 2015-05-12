@@ -94,7 +94,9 @@
                 <div class="item" ng-repeat="criterion in item.criteria" ng-controller="adminConfigureInstanceSetSettingsItemCriterionCtl">
                     <div class="item-title">
                         <strong>{{'adminConfigureInstanceSetAppearanceCriterion' | translate}}</strong>
+                        <!-- not shown because not necessary: when the item type dropdown value changes, the controller creates the right amount of criteria
                         <button ng-click="item.criteria.splice($index,1)">{{'adminConfigureInstanceSetAppearanceDeleteCriterion' | translate}}</button>
+                        -->
                     </div>
                     <div ng-init="criterion_index = $index" class="item-content">
                         <!--
@@ -134,10 +136,9 @@
                 </div>
 
                 <br/>
-                <!--
-                <button ng-click="item.criteria.push({});">Add a criterion</button>
-                -->
+                <!-- not shown because not necessary: when the item type dropdown value changes, the controller creates the right amount of criteria
                 <button ng-click="addCriterion(item_index);">{{'adminConfigureInstanceSetAppearanceAddCriterion' | translate}}</button>
+                -->
             </div>
         </div>
 

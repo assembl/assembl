@@ -68,7 +68,11 @@ voteApp.controller('adminConfigureInstanceSetSettingsItemCtl', ['$scope', 'VoteW
           VoteWidgetService.addDefaultFields(criterion, VoteWidgetService.mandatory_criterion_fields);
           $scope.widget.settings.items[$scope.item_index].criteria.push(criterion);
         }
-        // here we could also remove the remaining criteria if there are more than 1, or show them in red
+        // remove the remaining criteria if there are more than 1
+        if ( $scope.item.criteria.length > 1 && confirm('This item currently has more criteria than needed. Would you like to remove these remaining criteria?') )
+        {
+          $scope.item.criteria.splice(1, 999);
+        }
       }
       else if ( newValue == "2_axes" )
       {
@@ -78,7 +82,11 @@ voteApp.controller('adminConfigureInstanceSetSettingsItemCtl', ['$scope', 'VoteW
           VoteWidgetService.addDefaultFields(criterion, VoteWidgetService.mandatory_criterion_fields);
           $scope.widget.settings.items[$scope.item_index].criteria.push(criterion);
         }
-        // here we could also remove the remaining criteria if there are more than 2, or show them in red
+        // remove the remaining criteria if there are more than 1
+        if ( $scope.item.criteria.length > 2 && confirm('This item currently has more criteria than needed. Would you like to remove these remaining criteria?') )
+        {
+          $scope.item.criteria.splice(2, 999);
+        }
       }
     }
   });
