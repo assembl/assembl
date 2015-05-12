@@ -167,8 +167,8 @@ define(['backbone.marionette', 'app','jquery', 'common/collectionManager', 'comm
 
                             partner.save(null, {
                                 success: function(model, resp){
+                                    that.destroy();
                                     $(inputs).val('');
-                                    that.triggerSubmit();
                                     self.partners.fetch();
                                 },
                                 error: function(model, resp){
