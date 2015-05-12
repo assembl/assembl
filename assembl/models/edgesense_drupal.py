@@ -525,8 +525,8 @@ class EdgeSenseParser(object):
 
 
 class EdgeSenseReader(PullSourceReader):
-    def __init__(self, source_id):
-        super(EdgeSenseReader, self).__init__(source_id)
+    def setup(self):
+        super(EdgeSenseReader, self).setup()
         self.parser = EdgeSenseParser(self.source)
 
     def do_read(self):
