@@ -3,6 +3,10 @@ import itertools
 from collections import defaultdict
 import argparse
 from inspect import isabstract
+import logging.config
+import traceback
+from functools import partial
+import pdb
 
 from pyramid.paster import get_appsettings, bootstrap
 from sqlalchemy.orm import (
@@ -14,12 +18,13 @@ from sqlalchemy.sql.expression import and_
 
 from assembl.auth import SYSTEM_ROLES, ASSEMBL_PERMISSIONS
 from assembl.lib.config import set_config
-from assembl.lib.sqla import configure_engine, get_session_maker
+from assembl.lib.sqla import (
+    configure_engine, get_session_maker, make_session_maker)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.model_watcher import configure_model_watcher
 
 
-def find_or_create_object_by_keys(db, obj, keys, columns=None):
+def find_or_create_object_by_keys(db, keys, obj, columns=None):
     args = {key: getattr(obj, key) for key in keys}
     eq = db.query(obj.__class__).filter_by(**args).first()
     if eq is None:
@@ -30,83 +35,98 @@ def find_or_create_object_by_keys(db, obj, keys, columns=None):
     return eq
 
 
-def find_or_create_permission(db, perm):
-    from assembl.models import Permission
-    assert isinstance(perm, Permission)
-    return find_or_create_object_by_keys(db, perm, ['name'])
+fn_for_classes = None
+
+user_refs = None
+
+def init_key_for_classes(db):
+    global fn_for_classes, user_refs
+    from assembl.models import (
+        AgentProfile, User, Permission, Role, Webpage, Action, LocalUserRole,
+        IdentityProvider, EmailAccount, WebLinkAccount, NotificationSubscription)
+    fn_for_classes = {
+        AgentProfile: partial(find_or_create_agent_profile, db),
+        User: partial(find_or_create_agent_profile, db),
+        Webpage: partial(find_or_create_object_by_keys, db, ['url']),
+        Permission: partial(find_or_create_object_by_keys, db, ['name']),
+        Role: partial(find_or_create_object_by_keys, db, ['name']),
+        IdentityProvider: partial(find_or_create_object_by_keys, db, ['provider_type', 'name']),
+        EmailAccount: partial(find_or_create_object_by_keys, db, ['email'], columns=['preferred']),
+        WebLinkAccount: partial(find_or_create_object_by_keys, db, ['user_link']),
+    }
+    user_refs = {
+        Action: 'actor',
+        NotificationSubscription: 'user',
+        LocalUserRole: 'user',
+    }
 
 
-def find_or_create_role(db, role):
-    from assembl.models import Role
-    assert isinstance(role, Role)
-    return find_or_create_object_by_keys(db, role, ['name'])
+def find_or_create_object(ob):
+    global fn_for_classes
+    assert ob.__class__ in fn_for_classes
+    return fn_for_classes[ob.__class__](ob)
 
 
-def find_or_create_webpage(db, page):
-    from assembl.models import Webpage
-    assert isinstance(page, Webpage)
-    page = find_or_create_object_by_keys(db, page, ['url'])
-    # Do something with last_modified_date?
-    return page
-
-
-def find_or_create_identity_provider(db, provider):
-    from assembl.models import IdentityProvider
-    assert isinstance(provider, IdentityProvider)
-    return find_or_create_object_by_keys(
-        db, provider, ['provider_type', 'name'])
-
-
-def find_or_create_email_account(db, account):
-    from assembl.models import EmailAccount
-    assert isinstance(account, EmailAccount)
-    return find_or_create_object_by_keys(db, account, ['email'], ['preferred'])
+def is_special_class(ob):
+    global fn_for_classes
+    if ob.__class__ in fn_for_classes:
+        return True
+    if ob.__class__.__name__ == 'UserTemplate':
+        return False
+    assert not isinstance(ob, tuple(fn_for_classes.keys())),\
+        "Missing subclass: "+ob.__class__
+    return False
 
 
 def find_or_create_provider_account(db, account):
-    from assembl.models import IdentityProvider, IdentityProviderAccount
-    assert isinstance(account, (
-        IdentityProviderAccount, IdentityProvider))
-    provider = find_or_create_identity_provider(account.provider)
+    from assembl.models import IdentityProviderAccount
+    assert isinstance(account, IdentityProviderAccount)
+    # Note: need a similar one for SourceSpecificAccount
+    provider = find_or_create_object(account.provider)
     args = {
         "provider": provider,
         "userid": account.userid,
         "username": account.username,
         "domain": account.domain
     }
-    account = db.query(IdentityProviderAccount).filter_by(**args).first()
-    if account is None:
+    to_account = db.query(IdentityProviderAccount).filter_by(**args).first()
+    if to_account is None:
         for k in ['profile_info', 'picture_url']:
             args[k] = getattr(account, k)
-        account = IdentityProvider(**args)
-        db.add(account)
-    return account
+        to_account = account.__class__(**args)
+        db.add(to_account)
+    return to_account
 
 
 def find_or_create_agent_profile(db, profile):
     from assembl.models import (
-        AgentProfile, IdentityProviderAccount, EmailAccount, User)
+        AgentProfile, IdentityProviderAccount, User)
     assert isinstance(profile, AgentProfile)
     accounts = []
     profiles = set()
     for account in profile.accounts:
-        if isinstance(account, EmailAccount):
-            eq = find_or_create_email_account(account)
-        elif isinstance(account, IdentityProviderAccount):
-            eq = find_or_create_provider_account(account)
+        if isinstance(account, IdentityProviderAccount):
+            eq = find_or_create_provider_account(db, account)
+        else:
+            eq = find_or_create_object(account)
         if eq.profile:
             profiles.add(eq.profile)
         accounts.append(eq)
     if not profiles:
         cols = ['name', 'description']
-        if isinstance(profile, User):
-            cols += ["preferred_email", "timezone"]
+        # if isinstance(profile, User):
+        #     cols += ["preferred_email", "timezone"]
         new_profile = AgentProfile(**{k: getattr(profile, k) for k in cols})
         db.add(new_profile)
     else:
-        new_profile = profiles.pop()
+        user_profiles = {p for p in profiles if isinstance(p, User)}
+        if user_profiles:
+            new_profile = user_profiles.pop()
+            profiles.remove(new_profile)
+        else:
+            new_profile = profiles.pop()
         while profiles:
-            new_profile = new_profile.merge(profiles.pop())
+            new_profile.merge(profiles.pop())
     for account in accounts:
         if account.profile is None:
             account.profile = new_profile
@@ -114,16 +134,8 @@ def find_or_create_agent_profile(db, profile):
     return new_profile
 
 
-def get_special_classes():
-    from assembl.models import (
-        AgentProfile, User, Webpage, Permission, Role)
-    return {
-        AgentProfile: find_or_create_agent_profile,
-        User: find_or_create_agent_profile,
-        Webpage: find_or_create_webpage,
-        Permission: find_or_create_permission,
-        Role: find_or_create_role}
-
+def find_or_create_user_template(db, template):
+    pass
 
 def print_path(path):
     print [(x, y.__class__.__name__, y.id) for (x, y) in path]
@@ -160,7 +172,7 @@ def recursive_fetch(ob, visited=None):
             if subob in visited:
                 continue
             visited.add(subob)
-            if isinstance(subob, tuple(get_special_classes().keys())):
+            if is_special_class(subob):
                 continue
             recursive_fetch(subob, visited)
 
@@ -267,14 +279,15 @@ class JoinColumnsVisitor(ClauseVisitor):
 
 
 def delete_discussion(session, discussion_id):
-    from assembl.models import Discussion, DiscussionBoundBase
+    from assembl.models import Discussion, DiscussionBoundBase, Base
     # First, delete the discussion.
     session.delete(Discussion.get(discussion_id))
     session.flush()
     # See if anything is left...
     classes = DiscussionBoundBase._decl_class_registry.itervalues()
     classes_by_table = {
-        cls.__dict__.get('__table__', None): cls for cls in classes}
+        cls.__dict__.get('__table__', None): cls for cls in classes
+        if isinstance(cls, type)}
     # Only direct subclass of abstract
     concrete_classes = set(filter(lambda cls:
         issubclass(cls, DiscussionBoundBase) and (not isabstract(cls))
@@ -304,8 +317,11 @@ def delete_discussion(session, discussion_id):
 
 def clone_discussion(
         from_session, discussion_id, to_session=None, new_slug=None):
-    from assembl.models import DiscussionBoundBase, Discussion, Post
-    discussion = Discussion.get(discussion_id)
+    from assembl.models import (
+        DiscussionBoundBase, Discussion, Post, User, LocalUserRole, Action)
+    global user_refs
+    discussion = from_session.query(Discussion).get(discussion_id)
+    assert discussion
     prefetch(from_session, discussion_id)
     changes = defaultdict(dict)
     if to_session is None:
@@ -333,11 +349,13 @@ def clone_discussion(
         if ob in in_process:
             print "in process", ob.__class__, ob.id
             return None
-        if isinstance(ob, tuple(get_special_classes().keys())):
+        if is_special_class(ob):
             if from_session == to_session:
                 copy = ob
             else:
-                copy = get_special_classes()[ob.__class__](ob)
+                copy = find_or_create_object(ob)
+                to_session.flush()
+            assert copy is not None
             copies_of[ob] = copy
             return copy
         if isinstance(ob, DiscussionBoundBase):
@@ -364,10 +382,10 @@ def clone_discussion(
                     elif r.key == 'target':
                         subob_id = ob.target_id
                     if subob_id:
-                        subob = ob.db.query(Idea).get(subob_id)
+                        subob = from_session.query(Idea).get(subob_id)
             assert subob is not None
             assert subob not in in_process
-            print 'recurse ^0', r.key
+            print 'recurse ^0', r.key, subob.id
             result = recursive_clone(subob, path + [(r.key, subob)])
             assert result is not None
             assert result.id
@@ -386,6 +404,13 @@ def clone_discussion(
             values['table_of_contents'] = None
             values['root_idea'] = None
             values['next_synthesis'] = None
+        elif isinstance(ob, tuple(user_refs.keys())):
+            for cls in ob.__class__.mro():
+                if cls in user_refs:
+                    user = values.get(user_refs[cls])
+                    if not isinstance(user, User):
+                        return ob
+                    break
         copy = ob.__class__(**values)
         to_session.add(copy)
         to_session.flush()
@@ -398,14 +423,15 @@ def clone_discussion(
             if subob in in_process:
                 promises[subob].append((copy, reln))
             else:
-                print 'recurse 0', reln.key
+                print 'recurse 0', reln.key, subob.id
                 result = recursive_clone(subob, path + [(reln.key, subob)])
                 if result is None:  # in process
                     print "promising", subob.__class__, subob.id, reln.key
                     promises[subob].append((copy, reln))
                 else:
-                    print "delayed", reln.key, result.__class__, result.id
+                    print "resolving promise", reln.key, result.__class__, result.id
                     assign_ob(copy, reln, result)
+        to_session.flush()
         return copy
 
     treating = set()
@@ -413,14 +439,18 @@ def clone_discussion(
     def stage_2_rec_clone(ob, path):
         if ob in treating:
             return
-        if isinstance(ob, tuple(get_special_classes().keys())):
+        if is_special_class(ob):
             if from_session == to_session:
                 copy = ob
             else:
-                copy = get_special_classes()[ob.__class__](ob)
+                copy = find_or_create_object(ob)
+                to_session.flush()
+            assert copy is not None
             copies_of[ob] = copy
             return copy
         print "stage_2_rec_clone",
+        if isinstance(ob, DiscussionBoundBase):
+            assert discussion_id == ob.get_discussion_id()
         print_path(path)
         treating.add(ob)
         if ob in copies_of:
@@ -465,15 +495,19 @@ if __name__ == '__main__':
     parser.add_argument("-n", "--new_name", help="slug of new discussion")
     parser.add_argument("-d", "--delete", action="store_true", default=False,
                         help="delete discussion copy if exists")
+    parser.add_argument("--debug", action="store_true", default=False,
+                        help="enter pdb on failure")
     parser.add_argument(
-        "-c", "--connection_string",
-        help="connection string of source database if different")
+        "-s", "--source_db_configuration",
+        help="""configuration file with source database configuration, if distinct.
+        Be aware that ODBC.ini settings are distinct.""")
     parser.add_argument("discussion", help="original discussion slug")
-    parser.add_argument("-p", "--permissions", action="append",
+    parser.add_argument("-p", "--permissions", action="append", default=[],
                         help="Add a role+permission pair to the copy "
                         "(eg system.Authenticated+admin_discussion)")
     args = parser.parse_args()
     env = bootstrap(args.configuration)
+    logging.config.fileConfig(args.configuration)
     settings = get_appsettings(args.configuration, 'assembl')
     set_config(settings)
     raven_client = None
@@ -490,9 +524,12 @@ if __name__ == '__main__':
         configure_model_watcher(env['registry'], 'assembl')
         to_engine = configure_engine(settings, True)
         to_session = get_session_maker()
+        init_key_for_classes(to_session)
         new_slug = args.new_name or (args.discussion + "_copy")
-        if args.connection_string:
-            from_engine = configure_engine(args.connection)
+        if args.source_db_configuration:
+            from_session = make_session_maker(zope_tr=True)
+            settings = get_appsettings(args.source_db_configuration, 'assembl')
+            from_engine = configure_engine(settings, session_maker=from_session)
             from_session = sessionmaker(from_engine)()
         else:
             from_engine = to_engine
@@ -527,5 +564,8 @@ if __name__ == '__main__':
                 to_session.add(DiscussionPermission(
                     discussion=copy, role=role, permission=permission))
     except Exception:
-        if raven_client:
+        traceback.print_exc()
+        if args.debug:
+            pdb.post_mortem()
+        elif raven_client:
             raven_client.captureException()
