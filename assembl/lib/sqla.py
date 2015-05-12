@@ -131,6 +131,10 @@ class BaseOps(object):
         assert _session_maker is not None
         return _session_maker
 
+    @property
+    def object_session(self):
+        return object_session(self)
+
     def __iter__(self, **kwargs):
         """Return a generator that iterates through model columns."""
         return self.iteritems(**kwargs)
