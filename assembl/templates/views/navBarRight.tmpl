@@ -1,27 +1,35 @@
 <ul class="man pan">
 
     <!-- SUBSCRIBTION  -->
-    <li class="sub fl mrl">
-        {% if user %}
-        <% if(!role && canSubscribeToDiscussion ){ %>
-        <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('Join this group') }}</a>
-        <% } %>
-        {% else %}
-        {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-        <a href="{{ discussion.get_url() }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this group') }}</a>
-        {% endif %}
-        {% endif %}
+    {% if help_url %}
+    <li class="sub fl mrs">
+        <a href="{{ help_url }}" target="_blank" title="{{ gettext('Help') }}" class="btn btn-default btn-xs help"><i class="icon-help"></i></a>
     </li>
+    {% endif %}
+    
+    {% if user %}
+    <% if(!role && canSubscribeToDiscussion ){ %>
+    <li class="sub fl mrs">
+        <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('Join this group') }}</a>
+    </li>
+    <% } %>
+    {% else %}
+    {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
+    <li class="sub fl mrs">
+        <a href="{{ discussion.get_url() }}/login?next_view=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this group') }}</a>
+    </li>
+    {% endif %}
+    {% endif %}
 
     <!-- USER PROFILE  -->
+    {% if user %}
     <li class="sub fl">
-        {% if user %}
         <a href="#" class="avatar img-rounded mrxs">
             <img class="user-picture" height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
         </a>
-        {% endif %}
     </li>
-    <li class="sub fl">
+    {% endif %}
+    <li class="sub fl mrs">
         {% if user %}
         <div class="dropdown">
             <a href="#" class="dropdown-toggle username" data-toggle="dropdown" aria-expanded="false">{{ user.display_name() }}</a>
@@ -34,9 +42,6 @@
                 <li><a href="<%= discussionSettings() %>"><i class="icon-options"></i>{{ gettext('Discussion settings') }}</a></li>
                 <li><a href="<%= discussionPermissions() %>"><i class="icon-options"></i>{{ gettext('Discussion permissions') }}</a></li>
                 <% } %>
-                {% if help_url %}
-                     <li><a href="{{ help_url }}" target="_blank"><i class="icon-help"></i>{{ gettext('Help') }}</a></li>
-                {% endif %}
                 <li class="divider"></li>
                 <li><a href="<%= urlLogOut() %>" class="sign-out"><i class="icon-logout"></i>{{ gettext('Sign out') }}</a></li>
             </ul>

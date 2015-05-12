@@ -59,6 +59,10 @@ $textProfile: #515151;
     right: 0;
     line-height: $theme_header_height;
 
+    .help {
+      font-size: 18px;
+    }
+
     ul > li{
       list-style: none;
     }
