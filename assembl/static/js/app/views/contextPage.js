@@ -1297,6 +1297,8 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
             },
 
             onRender: function(){
+                var that = this;
+
                 if (this.editingIntroduction) {
                     this.renderCKEditorIntroduction();
                 }
@@ -1305,8 +1307,11 @@ define(['backbone.marionette', 'app', 'common/context', 'common/collectionManage
                     this.renderCKEditorObjective();
                 }
 
-                this.applyEllipsisToSection('.context-introduction', this.ui.seeMoreIntro);
-                this.applyEllipsisToSection('.context-objective', this.ui.seeMoreObjectives);
+                setTimeout(function(){
+                    that.applyEllipsisToSection('.context-introduction', that.ui.seeMoreIntro);
+                    that.applyEllipsisToSection('.context-objective', that.ui.seeMoreObjectives);
+                },0);
+
             },
 
             seeMore: function (e) {
