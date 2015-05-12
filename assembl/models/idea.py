@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from rdflib import URIRef
 from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload)
+from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql import text, column
 from sqlalchemy.sql.expression import union_all
 from sqlalchemy import (
@@ -992,7 +993,10 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
         return retval
 
     def get_discussion_id(self):
-        return self.source.get_discussion_id()
+        if inspect(self).attrs.source.loaded_value != NO_VALUE:
+            return self.source.get_discussion_id()
+        else:
+            return Idea.get(self.source_id).get_discussion_id()
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP):
         connection = connection or self.db().connection()
