@@ -12,6 +12,7 @@ from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
 from ..tasks.source_reader import PullSourceReader
 from ..lib import config
+from ..lib.locale import get_localizer, _
 from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 import requests
@@ -140,6 +141,17 @@ class SourceSpecificAccount(AbstractAgentAccount):
                    user_id=user_id,
                    source=source,
                    profile=profile)
+
+
+class SourceSpecificUnknownAccount(SourceSpecificAccount):
+    __mapper_args__ = {
+        'polymorphic_identity': 'unknown_source_specific_account'
+    }
+
+    def display_name(self):
+        localizer = get_localizer()
+        return localizer.translate(_("Unknown User ${uid}",
+                                   mapping={'uid': self.user_id}))
 
 
 class SourceSpecificPost(ImportedPost):
@@ -331,6 +343,7 @@ class EdgeSenseParser(object):
                         waiting_list.append(comment)
                         continue
                     child = posts_db[comm['cid']]
+                    # print child.id, parent.id, child.creator_id, parent.creator_id
                     child.set_parent(parent)
 
                 else:
@@ -347,9 +360,13 @@ class EdgeSenseParser(object):
             if not current_list:
                 break
 
-    def _create_user(self, user, users_db):
+    def _create_user(self, user, users_db, unknown=False):
         if user:
-            new_user = SourceSpecificAccount.create(self.source, user)
+            if unknown:
+                new_user = SourceSpecificUnknownAccount.create(self.source,
+                                                               user)
+            else:
+                new_user = SourceSpecificAccount.create(self.source, user)
             self.session.add(new_user)
             users_db[new_user.user_id] = new_user
 
@@ -362,15 +379,26 @@ class EdgeSenseParser(object):
                 if node_id in posts_db:
                     continue
                 user_id = node.get('node', {}).get('uid', None)
-                if user_id and user_id not in users_db:
-                    user = self.users.get(user_id)
-                    self._create_user(user, users_db)
+                if user_id:
+                    if user_id not in users_db:
+                        user = self.users.get(user_id, None)
+                        if not user:
+                            # Simplification:
+                            # There is a user that is created with a user that
+                            # does not exist in the users.json db
+                            unknown_user = {"user": {
+                                                    "uid": user_id,
+                                                    "name": None,
+                                           }}
+                            self._create_user(unknown_user, users_db, True)
 
-                new_post = SourceSpecificPost.create(self.source, node)
-                if not new_post:
-                    continue
-                posts_db[node_id] = new_post
-                self.session.add(new_post)
+                        self._create_user(user, users_db)
+
+                    new_post = SourceSpecificPost.create(self.source, node)
+                    if not new_post:
+                        continue
+                    posts_db[node_id] = new_post
+                    self.session.add(new_post)
 
     def _parse_comments(self, posts_db, users_db):
         if not self.comments:
