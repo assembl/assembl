@@ -238,8 +238,7 @@ def discussion_permissions(request):
             if 'user_csvfile' in request.POST:
                 try:
                     num_users = add_multiple_users_csv(
-                        request.POST['user_csvfile'].file, discussion_id, role,
-                        request.localizer)
+                        request.POST['user_csvfile'].file, discussion_id, role)
                 except Exception as e:
                     error = repr(e)
             else:

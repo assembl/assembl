@@ -5,18 +5,15 @@ from sqlalchemy.sql.expression import and_
 from pyramid.security import (
     authenticated_userid, Everyone, Authenticated)
 from pyramid.httpexceptions import HTTPNotFound
-from pyramid.i18n import TranslationStringFactory
 from pyisemail import is_email
 
+from assembl.lib.locale import _, get_localizer
 from ..lib.sqla import get_session_maker
 from . import R_SYSADMIN, P_READ, SYSTEM_ROLES
 from ..models.auth import (
     User, Role, UserRole, LocalUserRole, Permission,
     DiscussionPermission, IdentityProvider, AgentProfile,
     EmailAccount)
-
-
-_ = TranslationStringFactory('assembl')
 
 
 def get_user(request):
@@ -362,8 +359,9 @@ def add_user(name, email, password, role, force=False, username=None,
         user.get_notification_subscriptions(discussion.id)
 
 
-def add_multiple_users_csv(csv_file, discussion_id, with_role, localizer):
+def add_multiple_users_csv(csv_file, discussion_id, with_role):
     r = reader(csv_file)
+    localizer = get_localizer()
     for i, l in enumerate(r):
         if not len(l):
             # tolerate empty lines
