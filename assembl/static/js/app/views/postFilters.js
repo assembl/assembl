@@ -17,7 +17,8 @@ function (Ctx, i18n, CollectionManager, Promise) {
       if(!this.isValueInFilter(value)) {
         var index = _.sortedIndex(this._values, value);
         this._values.splice(index, 0, value)
-        return true
+        //console.log("AbstractFilter.addValue added value", value, "value are now:", this._values);
+        return true;
       }
       else {
         return false;
@@ -135,7 +136,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
     addValue: function(value) {
       if(!this.isValueInFilter(value)) {
         if(_.size(this._values) !== 0) {
-          throw new Error("Filter can only have a single value, and we were provided" + _.size(values));
+          throw new Error("Filter can only have a single value, and we were provided" + value);
         }
       }
       return AbstractFilter.prototype.addValue.call(this, value);

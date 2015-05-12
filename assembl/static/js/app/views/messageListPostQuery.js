@@ -91,14 +91,14 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird', 
      */
     this.isFilterInQuery = function (filterDef, value) {
       var retval = false;
-      var filter = new filterDef();
-      //console.log("isFilterInQuery():",filter.getId(), value, this._query)
-      if (filter.getId() in this._query) {
+      var filterDef = new filterDef();
+      //console.log("isFilterInQuery() called with:", filterDef.getId(), value, this._query)
+      if (filterDef.getId() in this._query) {
         if (value === null) {
           retval = true;
         }
         else {
-          retval = filter.isValueInFilter(value);
+          retval = this._query[filterDef.getId()].isValueInFilter(value);
         }
       }
       //console.log("isFilterInQuery() returning:",retval);

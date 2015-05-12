@@ -1102,6 +1102,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
               };
 
               var currentIdea = this.getContainingGroup().getCurrentIdea();
+
               if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                 options.reply_idea = currentIdea;
               }
