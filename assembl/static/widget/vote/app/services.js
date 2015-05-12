@@ -180,6 +180,19 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     }
   ];
 
+  this.item_types = [
+    {
+      "key": "vertical_gauge",
+      "label": "Vertical gauge (aka lickert): needs 1 criterion",
+      "number_of_criteria": 1
+    },
+    {
+      "key": "2_axes",
+      "label": "Two axes graph: needs 2 criteria",
+      "number_of_criteria": 2
+    }
+  ];
+
   this.addDefaultFields = function(obj, default_fields){
     var sz = default_fields.length;
     for ( var i = 0; i < sz; ++i )

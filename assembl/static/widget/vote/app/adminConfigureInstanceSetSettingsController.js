@@ -22,6 +22,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   $scope.optional_item_fields = VoteWidgetService.optional_item_fields;
   $scope.mandatory_criterion_fields = VoteWidgetService.mandatory_criterion_fields;
   $scope.optional_criterion_fields = VoteWidgetService.optional_criterion_fields;
+  $scope.item_types = VoteWidgetService.item_types;
 
 
   $scope.criterion_current_selected_field = null;

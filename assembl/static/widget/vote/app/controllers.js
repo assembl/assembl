@@ -56,38 +56,30 @@ voteApp.controller('adminConfigureInstanceCtl',
 }]);
 
 voteApp.controller('adminConfigureInstanceSetSettingsItemCtl', ['$scope', 'VoteWidgetService', function($scope, VoteWidgetService){
+  // ask and remove the remaining criteria if there are more than 1
+  $scope.confirmDeleteRemainingCriteria = function(max_size) {
+    if ( $scope.item.criteria.length > max_size && confirm('This item currently has more criteria than needed. Would you like to remove these remaining criteria?') )
+    {
+      $scope.item.criteria.splice(max_size, 999);
+    }
+  };
+
   $scope.$watch('item.type', function (newValue, oldValue) {
     if ( newValue != oldValue )
     {
       // create the necessary amount of criterion fields, depending on the item type chosen, and the minimum of criterion they require
-      if ( newValue == "vertical_gauge" )
-      {
-        if ( $scope.item.criteria.length < 1 )
-        {
-          var criterion = {};
-          VoteWidgetService.addDefaultFields(criterion, VoteWidgetService.mandatory_criterion_fields);
-          $scope.widget.settings.items[$scope.item_index].criteria.push(criterion);
+      $.each(VoteWidgetService.item_types, function(index, item_type){
+        if ( 'key' in item_type && newValue == item_type.key ){
+          if ( 'number_of_criteria' in item_type ){
+            while ( $scope.item.criteria.length < item_type.number_of_criteria ){
+              var criterion = {};
+              VoteWidgetService.addDefaultFields(criterion, VoteWidgetService.mandatory_criterion_fields);
+              $scope.widget.settings.items[$scope.item_index].criteria.push(criterion);
+            }
+            $scope.confirmDeleteRemainingCriteria(item_type.number_of_criteria);
+          }
         }
-        // remove the remaining criteria if there are more than 1
-        if ( $scope.item.criteria.length > 1 && confirm('This item currently has more criteria than needed. Would you like to remove these remaining criteria?') )
-        {
-          $scope.item.criteria.splice(1, 999);
-        }
-      }
-      else if ( newValue == "2_axes" )
-      {
-        while ( $scope.item.criteria.length < 2 )
-        {
-          var criterion = {};
-          VoteWidgetService.addDefaultFields(criterion, VoteWidgetService.mandatory_criterion_fields);
-          $scope.widget.settings.items[$scope.item_index].criteria.push(criterion);
-        }
-        // remove the remaining criteria if there are more than 1
-        if ( $scope.item.criteria.length > 2 && confirm('This item currently has more criteria than needed. Would you like to remove these remaining criteria?') )
-        {
-          $scope.item.criteria.splice(2, 999);
-        }
-      }
+      });
     }
   });
 }]);

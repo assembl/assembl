@@ -59,10 +59,7 @@
             </div>
             <div ng-init="item_index = $index" class="item-content">
                 <span>{{'adminConfigureInstanceSetAppearanceItemType' | translate}} </span>
-                <select ng-model="item.type">
-                    <option value="vertical_gauge">Vertical gauge (aka lickert), needs 1 criterion</option>
-                    <option value="2_axes">Two axes graph, needs 2 criteria</option>
-                </select>
+                <select ng-model="item.type" ng-options="item_type.key as item_type.label for item_type in item_types"></select>
 
                 <br/>
 
