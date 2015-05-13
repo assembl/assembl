@@ -41,15 +41,20 @@ define(['app', 'common/context', 'utils/panelSpecTypes', 'views/idea'],
              * @event
              */
             onTitleClick: function (e) {
+                $('.idealist-item').removeClass('is-selected');
+
                 var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
+
                 if (messageListView) {
                     e.stopPropagation();
 
                     messageListView.triggerMethod('messageList:clearAllFilters');
                     messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
-                    this._groupContent.setCurrentIdea(null);
 
+                    this._groupContent.setCurrentIdea(null);
                     this._groupContent.resetDebateState();
+
+                    this.$el.addClass('is-selected');
                 }
             }
         });

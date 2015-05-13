@@ -42,14 +42,20 @@ define(['views/idea', 'common/context', 'utils/panelSpecTypes'],
              * @event
              */
             onTitleClick: function () {
+                $('.idealist-item').removeClass('is-selected');
                 // Quentin: Where else could we put this code so that it can be called by several things?
                 // I had to duplicate this code into views/messageSend.js
                 var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-                messageListView.triggerMethod('messageList:clearAllFilters');
-                this._groupContent.setCurrentIdea(null);
-                //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.
-                messageListView.render();
-                this._groupContent.resetDebateState(false);
+
+                if(messageListView){
+                    messageListView.triggerMethod('messageList:clearAllFilters');
+                    this._groupContent.setCurrentIdea(null);
+                    //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.
+                    messageListView.render();
+                    this._groupContent.resetDebateState(false);
+
+                    this.$el.addClass('is-selected');
+                }
             }
         });
 
