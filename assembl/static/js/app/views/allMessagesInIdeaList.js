@@ -47,7 +47,6 @@ define(['views/idea', 'common/context', 'utils/panelSpecTypes'],
                 // I had to duplicate this code into views/messageSend.js
                 var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
 
-                if(messageListView){
                     messageListView.triggerMethod('messageList:clearAllFilters');
                     this._groupContent.setCurrentIdea(null);
                     //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.
@@ -55,7 +54,6 @@ define(['views/idea', 'common/context', 'utils/panelSpecTypes'],
                     this._groupContent.resetDebateState(false);
 
                     this.$el.addClass('is-selected');
-                }
             }
         });
 
