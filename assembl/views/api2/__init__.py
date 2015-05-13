@@ -420,7 +420,7 @@ def votes_collection_add_json(request):
     typename = request.json_body.get(
         '@type', ctx.collection_class.external_typename())
     json = request.json_body
-    json['voter_id'] = user_id
+    json['voter'] = User.uri_generic(user_id)
     try:
         instances = ctx.create_object(typename, json, user_id)
     except Exception as e:

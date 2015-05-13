@@ -1095,6 +1095,7 @@ class BaseOps(object):
                 # Hence we do not handle well the case of simple
                 # string or dict properties
                 setattr(self, accessor_name, value)
+                continue
             elif value is None:
                 # TODO: if a 1-Many list, clear elements?
                 pass
