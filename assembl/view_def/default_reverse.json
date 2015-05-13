@@ -227,5 +227,14 @@
     },
     "LocalUserRole": {
         "role": "&get_role_name"
+    },
+    "AbstractIdeaVote": {
+        "value": true
+    },
+    "LickertIdeaVote": {
+        "@extends": "AbstractIdeaVote"
+    },
+    "BinaryIdeaVote": {
+        "@extends": "AbstractIdeaVote"
     }
 }
