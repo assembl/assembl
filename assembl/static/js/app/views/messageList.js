@@ -76,38 +76,15 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
 
               collectionManager.getAllMessageStructureCollectionPromise()
                 .then(function (allMessageStructureCollection) {
-                  that.listenTo(allMessageStructureCollection, 'reset', function () {
-                      /*
-                       Disable refresh if a message is being written.
-                       Not as necessary now that we save messages,
-                       but it prevents a jarring refresh, so keeping it as a comment.
 
-                       var messageFields = that.$('.js_messageSend-body');
-                       function not_empty(b) {
-                       return b.value.length != 0;
-                       };
-
-                       if (_.any(messageFields, not_empty)) {
-                       return;
-                       }
-                       messageFields = that.$('.messageSend-subject');
-                       if (_.any(messageFields, not_empty)) {
-                       return;
-                       }
-                       */
-
-                      /*that.getPanelWrapper()
-                          .filterThroughPanelLock(function () {
-                              that.currentQuery.invalidateResults();
-                              that.render();
-                          }, 'syncStateMessages');*/
-                  });
                   that.resetPendingMessages(allMessageStructureCollection);
+
                   var callback = _.bind(function() {
                     //Here, this is the collection
                     var nbPendingMessage = this.length - that._initialLenAllMessageStructureCollection;
                     that.showPendingMessages(nbPendingMessage);
                   }, allMessageStructureCollection);
+
                   that.listenTo(allMessageStructureCollection, 'add', callback);
                 }
               );
@@ -1465,14 +1442,17 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 // TODO: Re-render message in messagelist if an annotation was added...
                 this.annotator.subscribe('annotationCreated', function (annotation) {
                     var collectionManager = new CollectionManager();
+
                     collectionManager.getAllExtractsCollectionPromise()
                         .then(function (allExtractsCollection) {
+
                             var segment = allExtractsCollection.addAnnotationAsExtract(annotation, Ctx.currentAnnotationIdIdea);
                             if (!segment.isValid()) {
                                 annotator.deleteAnnotation(annotation);
                             } else if (Ctx.currentAnnotationNewIdeaParentIdea) {
                                 //We asked to create a new idea from segment
-                              console.log("FIXME:  What's the proper behaviour here now that groups are separated?  We should probably find out if the group is the same as the origin, and lock ONLY in that case");
+                              console.log("FIXME:  What's the proper behaviour here now that groups are separated?  " +
+                                  "We should probably find out if the group is the same as the origin, and lock ONLY in that case");
                                 that.getPanelWrapper().autoLockPanel();
 
                                 var newIdea = Ctx.currentAnnotationNewIdeaParentIdea.addSegmentAsChild(segment);
@@ -1481,6 +1461,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                             else {
                                 segment.save(null, {
                                     success: function (model, resp) {
+                                        that.trigger("annotator:success", that.annotator);
                                     },
                                     error: function (model, resp) {
                                         console.error('ERROR: initAnnotator', resp);

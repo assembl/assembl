@@ -20,7 +20,7 @@ define(['../app', 'jquery', 'underscore', '../utils/permissions', '../utils/role
              * events
              * @type {boolean}
              */
-            this.debugAnnotator = true;
+            this.debugAnnotator = false;
 
             /**
              * Send debugging output to console.log to observe socket input

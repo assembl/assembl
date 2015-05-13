@@ -56,6 +56,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                 /*this.listenTo(this, "all", function(eventName) {
                  console.log("message event received: ", eventName);
                  });
+
                  this.listenTo(this.model, "all", function(eventName) {
                  console.log("message model event received: ", eventName);
                  });*/
@@ -66,7 +67,7 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
 
                 this.listenTo(this.messageListView, 'annotator:destroy', this.onAnnotatorDestroy);
                 this.listenTo(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
-
+                this.listenTo(this.messageListView, 'annotator:success', this.render);
                 /**
                  * The collection of annotations loaded in annotator for this message.
                  * They do not need to be re-loaded on render
