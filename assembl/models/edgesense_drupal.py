@@ -165,7 +165,7 @@ class SourceSpecificPost(ImportedPost):
         return "nid_" + node['nid']
 
     @classmethod
-    def create(cls, source, post):
+    def create(cls, source, post, creator):
         # post is a dictionary of the post from json
 
         # post = json.loads(json_post)
@@ -183,10 +183,10 @@ class SourceSpecificPost(ImportedPost):
 
             # By putting the users in first, assuming that this is
             # never empty
-            user = source.db.query(SourceSpecificAccount).filter_by(
-                user_id=user_id, source_id=source_id).first()
+            # user = source.db.query(SourceSpecificAccount).filter_by(
+            #     user_id=user_id, source_id=source_id).first()
 
-            agent = None if not user else user.profile
+            agent = creator.profile
             import_date = datetime.utcnow()
             body = node.get('Body')
             if '/sites/default/files/' in body and ('http' or 'www'
@@ -213,10 +213,10 @@ class SourceSpecificPost(ImportedPost):
             user_id = comment['uid']
             source_id = source.id
 
-            user = source.db.query(SourceSpecificAccount).filter_by(
-                user_id=user_id, source_id=source_id).first()
+            # user = source.db.query(SourceSpecificAccount).filter_by(
+            #     user_id=user_id, source_id=source_id).first()
 
-            agent = None if not user else user.profile
+            agent = creator.profile
             import_date = datetime.utcnow()
             body = comment.get('Comment')
             if '/sites/default/files/' in body:
@@ -387,14 +387,16 @@ class EdgeSenseParser(object):
                             # There is a user that is created with a user that
                             # does not exist in the users.json db
                             unknown_user = {"user": {
-                                                    "uid": user_id,
-                                                    "name": None,
-                                           }}
+                                    "uid": user_id,
+                                    "name": None
+                                }
+                            }
                             self._create_user(unknown_user, users_db, True)
 
                         self._create_user(user, users_db)
 
-                    new_post = SourceSpecificPost.create(self.source, node)
+                    new_post = SourceSpecificPost.create(self.source, node,
+                                                         users_db[user_id])
                     if not new_post:
                         continue
                     posts_db[node_id] = new_post
@@ -409,15 +411,26 @@ class EdgeSenseParser(object):
                 if comment_id in posts_db:
                     continue
                 user_id = comment.get('comment', {}).get('uid', None)
-                if user_id and user_id not in users_db:
-                    user = self.users.get(user_id, None)
-                    self._create_user(user, users_db)
+                if user_id:
+                    if user_id not in users_db:
+                        user = self.users.get(user_id, None)
+                        if not user:
+                            # User that does not exist
+                            unknown_user = {"user": {
+                                    "uid": user_id,
+                                    "name": None
+                                }
+                            }
+                            self._create_user(unknown_user, users_db, True)
 
-                new_post = SourceSpecificPost.create(self.source, comment)
-                if not new_post:
-                    continue
-                posts_db[comment_id] = new_post
-                self.session.add(new_post)
+                        self._create_user(user, users_db)
+
+                    new_post = SourceSpecificPost.create(self.source, comment,
+                                                         users_db[user_id])
+                    if not new_post:
+                        continue
+                    posts_db[comment_id] = new_post
+                    self.session.add(new_post)
 
     def parse(self):
         # First, setup
