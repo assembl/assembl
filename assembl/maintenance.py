@@ -6,12 +6,19 @@ from pyramid.i18n import default_locale_negotiator, TranslationStringFactory
 from zope.component import getGlobalSiteManager
 
 
+maintenance_template = '''\
+<h2>${detail}</h2>
+<p>${explanation}</p>${br}${br}
+${html_comment}
+'''
+
 
 def maintenance_message(request):
     _ = TranslationStringFactory('assembl')
     localizer = request.localizer
     return HTTPServiceUnavailable(
-        localizer.translate(_('Assembl is down for maintenance.')))
+        localizer.translate(_('Assembl is down for maintenance.')),
+        body_template=maintenance_template)
 
 
 # Do not import models here, it will break tests.
