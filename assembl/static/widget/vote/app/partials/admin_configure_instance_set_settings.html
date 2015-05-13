@@ -58,14 +58,12 @@
                 <button ng-click="widget.settings.items.splice($index,1)">{{'adminConfigureInstanceSetAppearanceDeleteItem' | translate}}</button>
             </div>
             <div ng-init="item_index = $index" class="item-content">
-                <span>{{'adminConfigureInstanceSetAppearanceItemType' | translate}} </span>
-                <select ng-model="item.type" ng-options="item_type.key as item_type.label for item_type in item_types"></select>
-
-                <br/>
-
                 <div ng-repeat="field in mandatory_item_fields">
-                    <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
-                    <input type="text" ng-model="item[field.key]" value="{{ field.default }}" />
+                    <div ng-switch on="field.type">
+                        <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
+                        <select ng-switch-when="select" ng-model="item[field.key]" ng-options="v.key as v.label for v in field.options"></select>
+                        <input ng-switch-default type="text" ng-model="item[field.key]" value="{{ field.default }}" />
+                    </div>
                 </div>
 
                 <fieldset>
@@ -104,12 +102,25 @@
                                 <div ng-switch on="field.type">
                                     <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
                                     <select ng-switch-when="criterion" ng-model="criterion[field.key]" ng-options="c['@id'] as c.shortTitle for c in criteria"></select>
+                                    <select ng-switch-when="select" ng-model="criterion[field.key]" ng-options="v.key as v.label for v in field.options"></select>
                                     <input ng-switch-default type="text" ng-model="criterion[field.key]" />
+                                </div>
+                            </div>
+
+                            <div ng-if="criterion.hasOwnProperty('type') && mandatory_typed_criterion_fields.hasOwnProperty(criterion.type)">
+                                <div ng-repeat="field in mandatory_typed_criterion_fields[criterion.type]">
+                                    <div ng-switch on="field.type">
+                                        <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
+                                        <select ng-switch-when="criterion" ng-model="criterion[field.key]" ng-options="c['@id'] as c.shortTitle for c in criteria"></select>
+                                        <select ng-switch-when="select" ng-model="criterion[field.key]" ng-options="v.key as v.label for v in field.options"></select>
+                                        <input ng-switch-default type="text" ng-model="criterion[field.key]" />
+                                    </div>
                                 </div>
                             </div>
                         <!--
                         </fieldset>
                         -->
+
                         <fieldset>
                             <legend>{{'adminConfigureInstanceSetAppearanceOptionalFields' | translate}}</legend>
                             <div ng-repeat="field in optional_criterion_fields">

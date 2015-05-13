@@ -64,22 +64,26 @@ voteApp.controller('adminConfigureInstanceSetSettingsItemCtl', ['$scope', 'VoteW
     }
   };
 
+  $scope.enforceCorrectNumberOfCriteria = function(item_type_value){
+    // create the necessary amount of criterion fields, depending on the item type chosen, and the minimum of criterion they require
+    $.each(VoteWidgetService.item_types, function(index, item_type){
+      if ( 'key' in item_type && item_type_value == item_type.key ){
+        if ( 'number_of_criteria' in item_type ){
+          while ( $scope.item.criteria.length < item_type.number_of_criteria ){
+            var criterion = {};
+            VoteWidgetService.addDefaultFields(criterion, VoteWidgetService.mandatory_criterion_fields);
+            $scope.widget.settings.items[$scope.item_index].criteria.push(criterion);
+          }
+          $scope.confirmDeleteRemainingCriteria(item_type.number_of_criteria);
+        }
+      }
+    });
+  };
+
   $scope.$watch('item.type', function (newValue, oldValue) {
     if ( newValue != oldValue )
     {
-      // create the necessary amount of criterion fields, depending on the item type chosen, and the minimum of criterion they require
-      $.each(VoteWidgetService.item_types, function(index, item_type){
-        if ( 'key' in item_type && newValue == item_type.key ){
-          if ( 'number_of_criteria' in item_type ){
-            while ( $scope.item.criteria.length < item_type.number_of_criteria ){
-              var criterion = {};
-              VoteWidgetService.addDefaultFields(criterion, VoteWidgetService.mandatory_criterion_fields);
-              $scope.widget.settings.items[$scope.item_index].criteria.push(criterion);
-            }
-            $scope.confirmDeleteRemainingCriteria(item_type.number_of_criteria);
-          }
-        }
-      });
+      $scope.enforceCorrectNumberOfCriteria(newValue);
     }
   });
 }]);

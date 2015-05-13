@@ -122,6 +122,10 @@ voteApp.controller('indexCtl',
       {
         $scope.drawUIWithoutTable();
       }
+      $scope.resizeIframe();
+    };
+
+    $scope.resizeIframe = function(){
       if ( window.parent && window.parent.resizeIframe )
         window.parent.resizeIframe();
     };
@@ -138,6 +142,18 @@ voteApp.controller('indexCtl',
         var value = parseFloat($(this).attr("data-criterion-value"));
         var valueToPost = (value - valueMin) / (valueMax - valueMin); // the posted value has to be a float in [0;1]
         $scope.myVotes[$(this).attr("data-criterion-id")] = valueToPost;
+      });
+
+      $("#d3_container > div.criterion").each(function(index) {
+        var criterion_id = $(this).attr("data-criterion-id");
+        var value = parseInt($(this).attr("data-criterion-value"));
+        if ( isNaN(value) )
+        {
+          alert("Error: no value for criterion " + criterion_id);
+          return;
+        }
+        var valueToPost = value; // or maybe !!value
+        $scope.myVotes[criterion_id] = valueToPost;
       });
 
       return $scope.myVotes;
@@ -158,17 +174,62 @@ voteApp.controller('indexCtl',
       {
         if ( $scope.myVotes.hasOwnProperty(k) )
         {
+
+          // determine vote type
+
+          var vote_type = "LickertIdeaVote";
+
+          var found = false;
+          if ( "items" in $scope.settings )
+          {
+            for ( var i = 0; !found && i < $scope.settings.items.length; ++i )
+            {
+              if ( "criteria" in $scope.settings.items[i] )
+              {
+                for ( var j = 0; !found && j < $scope.settings.items[i].criteria.length; ++j )
+                {
+                  if ( "entity_id" in $scope.settings.items[i].criteria[j] && $scope.settings.items[i].criteria[j].entity_id == k )
+                  {
+                    if ( "type" in $scope.settings.items[i].criteria[j] )
+                    {
+                      found = true;
+                      vote_type = $scope.settings.items[i].criteria[j].type;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          // validate vote value
+
           var vote_value = null; // must be float, and contained in the range defined in the criterion
-          if ( typeof $scope.myVotes[k] === 'string' )
-            vote_value = parseFloat($scope.myVotes[k]);
-          else
-            vote_value = $scope.myVotes[k];
+          if ( vote_type == "BinaryIdeaVote" )
+          {
+            console.log("$scope.myVotes[k]: ", $scope.myVotes[k]);
+            console.log("typeof $scope.myVotes[k]: ", typeof $scope.myVotes[k]);
+            if ( typeof $scope.myVotes[k] === 'string' )
+              vote_value = !!parseInt($scope.myVotes[k]);
+            else if ( typeof $scope.myVotes[k] === 'number' )
+              vote_value = !!$scope.myVotes[k];
+            else
+              vote_value = $scope.myVotes[k];
+          }
+          else // if ( vote_type == "LickertIdeaVote" )
+          {
+            if ( typeof $scope.myVotes[k] === 'string' )
+              vote_value = parseFloat($scope.myVotes[k]);
+            else
+              vote_value = $scope.myVotes[k];
+          }
+
+
 
           if ( voting_urls[k] )
           {
             var url = AssemblToolsService.resourceToUrl(voting_urls[k]);
             var data_to_post = {
-              "type": "LickertIdeaVote",
+              "type": vote_type,
               "value": vote_value
             };
 
@@ -186,6 +247,8 @@ voteApp.controller('indexCtl',
 
                 console.log("k: " + vk);
                 var criterion_tag = $("svg g[data-criterion-id=\"" + vk + "\"]");
+                if ( !criterion_tag.length )
+                  criterion_tag = $("div.criterion[data-criterion-id=\"" + vk + "\"]");
                 var svg = criterion_tag.parent("svg");
                 var criterion_name = criterion_tag.attr("data-criterion-name");
 
@@ -197,6 +260,7 @@ voteApp.controller('indexCtl',
 
                 $translate('voteSubmitSuccessForCriterion', {'criterion': criterion_name}).then(function (translation) {
                   vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
+                  // $scope.resizeIframe(); // our resize function is not good enough yet
                 });
               };          
             };
@@ -212,6 +276,8 @@ voteApp.controller('indexCtl',
                 //$location.path( "/voted" );
                 console.log("k: " + vk);
                 var criterion_tag = $("svg g[data-criterion-id=\"" + vk + "\"]");
+                if ( !criterion_tag.length )
+                  criterion_tag = $("div.criterion[data-criterion-id=\"" + vk + "\"]");
                 var svg = criterion_tag.parent("svg");
                 var criterion_name = criterion_tag.attr("data-criterion-name");
 
@@ -220,6 +286,7 @@ voteApp.controller('indexCtl',
 
                 $translate('voteSubmitFailureForCriterion', {'criterion': criterion_name}).then(function (translation) {
                   vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
+                  // $scope.resizeIframe(); // our resize function is not good enough yet
                 });
               }
             };
@@ -797,6 +864,101 @@ voteApp.controller('indexCtl',
     
     };
 
+    // @param destination
+    // The DOM element which will be used as container (div)
+    // @param item_data
+    // One of the elements of the "items" array, from the configuration JSON
+    $scope.drawRadioVote = function(destination, item_data){
+      console.log("drawRadioVote()");
+      console.log("item_data:");
+      console.log(item_data);
+      var config = $scope.settings;
+      var criterion = item_data.criteria[0];
+      //keep this logic or not? var criterionValue = (criterion.valueDefault || criterion.valueDefault === 0.0) ? criterion.valueDefault : criterion.valueMin;
+
+      var div = $('<div>');
+      div.attr({
+        'class': 'criterion',
+        'data-criterion-id': criterion.entity_id,
+        'data-criterion-name': criterion.name,
+        'data-criterion-value': null
+      });
+      console.log("div: ", div);
+
+      // adapt data format from BinaryIdeaVote which has labelYes and labelNo, to PluralityIdeaVote which has possibleValues
+      // criterion.possibleValues is like so: [ { label: 'Choice 1', value: 0 }, { label: 'Choice 2', value: 1} ]
+      if ( 'type' in criterion && criterion.type == 'BinaryIdeaVote' )
+      {
+        var labelYes = ( 'labelYes' in criterion ) ? criterion.labelYes : 'Yes';
+        var labelNo = ( 'labelNo' in criterion ) ? criterion.labelNo : 'No';
+        criterion.possibleValues = [
+          {
+            "label": labelNo,
+            "value": 0 // or false?
+          },
+          {
+            "label": labelYes,
+            "value": 1 // or true?
+          }
+        ];
+      }
+
+      var updateSelectedValue = function(){
+        console.log("updateSelectedValue()");
+        var el = div.find('input:checked');
+        if ( el )
+        {
+          div.attr('data-criterion-value', el.val());
+        }
+        else {
+          div.attr('data-criterion-value', null);
+        }
+      };
+
+      if ( 'possibleValues' in criterion )
+      {
+        if ( 'name' in criterion )
+        {
+          var name = $('<strong>');
+          name.text(criterion.name);
+          div.append(name);
+        }
+        if ( 'description' in criterion )
+        {
+          var description = $('<p>');
+          description.text(criterion.description);
+          div.append(description);
+        }
+        
+        $.each ( criterion.possibleValues, function(index, item){
+          if ( 'value' in item && 'label' in item )
+          {
+            var option = $('<div>');
+            var input = $('<input>');
+            var radio_id = 'radio_'+criterion.entity_id+'_'+item.value;
+            input.attr({
+              type: 'radio',
+              name: criterion.entity_id, // criterion.name,
+              value: item.value,
+              id: radio_id
+            });
+            input.on('change', updateSelectedValue);
+            var label = $('<label>');
+            label.attr('for', radio_id);
+            label.text(item.label);
+            option.append(input);
+            option.append(label);
+            console.log("option: ", option);
+            div.append(option);
+          }
+        });
+      }
+      
+      destination.append(div);
+
+      updateSelectedValue();
+    };
+
 
 
     $scope.drawUIWithTable = function(){
@@ -864,6 +1026,11 @@ voteApp.controller('indexCtl',
         {
           $scope.draw2AxesVote(holder, item);
         }
+        else if ( item.type == "radio" )
+        {
+          holder = $("#d3_container");
+          $scope.drawRadioVote(holder, item);
+        }
       }
 
       console.log("drawUIWithTable() completed");
@@ -918,6 +1085,11 @@ voteApp.controller('indexCtl',
         else if ( item.type == "2_axes" )
         {
           $scope.draw2AxesVote(holder, item);
+        }
+        else if ( item.type == "radio" )
+        {
+          holder = $("#d3_container");
+          $scope.drawRadioVote(holder, item);
         }
       }
       }
