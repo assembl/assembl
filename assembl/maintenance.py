@@ -7,17 +7,15 @@ from zope.component import getGlobalSiteManager
 
 
 maintenance_template = '''\
-<h2>${detail}</h2>
-<p>${explanation}</p>${br}${br}
+<h1 style="text-align:center">${detail}</h1>${br}${br}
 ${html_comment}
 '''
-
 
 def maintenance_message(request):
     _ = TranslationStringFactory('assembl')
     localizer = request.localizer
     return HTTPServiceUnavailable(
-        localizer.translate(_('Assembl is down for maintenance.')),
+        localizer.translate(_("Assembl is down for maintenance. We'll be back in a few minutes.")),
         body_template=maintenance_template)
 
 
