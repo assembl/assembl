@@ -44,8 +44,7 @@
     "jquery-oembed-all":"https://github.com/ImaginationForPeople/jquery-oembed-all.git",
     "bootstrap-growl": "~1.1.0",
     "bluebird": "~2.9.12",
-    "visionmedia-debug": "~2.1.3",
-    "annotator":"https://github.com/ImaginationForPeople/annotator.git#assembl"
+    "visionmedia-debug": "~2.1.3"
   },
   "resolutions": {
     "underscore": "~1.7.0"
