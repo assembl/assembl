@@ -792,7 +792,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              */
             onMessageTitleClick: function (e) {
                 if(e) {
-                  if($(e.target).is('a'))
+                  var target = $(e.target);
+                  if(target.is('a') && !(
+                      target.hasClass('js_readMore') || target.hasClass('js_readLess')))
                     return;
                   e.stopPropagation();
                   e.preventDefault();
