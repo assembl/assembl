@@ -22,7 +22,7 @@ define(['backbone', 'underscore', 'jquery', 'bluebird', 'backbone.marionette', '
               return Promise.resolve($.get(url));
             },
             linkClicked: function(a) {
-                var url = this.model.get('url'),
+                var url = _.template(this.model.get('url')),
                     content = this.groupContent,
                     random_seed = String(Math.random()),
                     server_url = document.URL,
@@ -33,7 +33,7 @@ define(['backbone', 'underscore', 'jquery', 'bluebird', 'backbone.marionette', '
                     this.getPermissionTokenPromise([Permissions.READ_PUBLIC_CIF], random_seed),
                     this.getPermissionTokenPromise([Permissions.READ], random_seed),
                     function (cif_token, user_token) {
-                        content.resetVisualizationState(_.template(url, {
+                        content.resetVisualizationState(url({
                                 "url": encodeURIComponent(url_base+'/jsonld?token='+cif_token),
                                 "user_url": encodeURIComponent(url_base+'/private_jsonld?callback=processCIFUserData&token='+user_token),
                                 "lang": assembl_locale
