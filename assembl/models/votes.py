@@ -217,8 +217,7 @@ class BinaryIdeaVote(AbstractIdeaVote):
 
     @safe_value.setter
     def safe_value(self, val):
-        assert val <= self.lickert_range.maximum and \
-            val >= self.lickert_range.minimum
+        assert self.lickert_range.minimum <= val <= self.lickert_range.maximum
         self.value = val
 
     @property
