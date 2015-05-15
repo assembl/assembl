@@ -340,6 +340,7 @@ JOIN post AS family_posts ON (
     def _visit_ideas_breadth_first(
             self, idea_visitor, visited, level, prev_result):
         children = []
+        result = True
         for child in self.children:
             if child in visited:
                 continue

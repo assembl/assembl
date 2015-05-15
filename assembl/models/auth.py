@@ -1463,6 +1463,8 @@ class UserLanguagePreference(Base):
                 posix_lang = lang
             if is_iso639_2(lang):
                 posix_lang = to_iso639_1(lang)
+            else:
+                return lang_code
             posix = '_'.join([posix_lang.lower(),country.upper()])
             return posix
         # if '_' in lang_code: return lang_code
