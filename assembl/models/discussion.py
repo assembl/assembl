@@ -352,9 +352,11 @@ class Discussion(DiscussionBoundBase):
             & (LocalUserRole.requested == 0)),
         backref="participant_in_discussion")
 
-    def get_participants_query(self, ids_only=False):
+    def get_participants_query(self, ids_only=False, include_readers=False):
         from .auth import AgentProfile, LocalUserRole
+        from .generic import Content
         from .post import Post
+        from .action import ViewPost
         from .idea_content_link import Extract
 
         query = self.db.query(AgentProfile.id).join(LocalUserRole,
@@ -365,7 +367,13 @@ class Discussion(DiscussionBoundBase):
             Post.discussion_id == self.id)).union(
             self.db.query(AgentProfile.id).join(
                 Extract, Extract.creator_id==AgentProfile.id).filter(
-            Extract.discussion_id == self.id)).distinct()
+            Extract.discussion_id == self.id))
+        if include_readers:
+            query = query.union(
+                self.db.query(ViewPost.actor_id).join(
+                Content, Content.id==ViewPost.post_id).filter(
+                Content.discussion_id==self.id))
+        query = query.distinct()
         if ids_only:
             return query
         return self.db.query(AgentProfile).filter(AgentProfile.id.in_(query))
