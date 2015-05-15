@@ -83,6 +83,8 @@ def read_user_token(request):
             raise HTTPUnauthorized("Token for another discussion")
         if user_id is None:
             permissions = get_permissions(t_user_id, discussion_id)
+            if P_READ in permissions:
+                permissions.append(P_READ_PUBLIC_CIF)
         elif t_user_id != user_id:
             raise HTTPUnauthorized("Token for another user")
         user_id = t_user_id
