@@ -149,7 +149,7 @@ class SourceReader(Thread):
 
     def successful_login(self):
         self.last_successful_login = datetime.utcnow()
-        self.reset_errors()
+        self.status = ReaderStatus.READING
 
     def successful_read(self):
         self.last_read = datetime.utcnow()
