@@ -78,11 +78,15 @@ def get_posts(request):
     except (ValueError, KeyError):
         page = 1
 
+    text_search = request.GET.get('text_search', None)
+
     order = request.GET.get('order')
     if order == None:
         order = 'chronological'
-    assert order in ('chronological', 'reverse_chronological')
-        
+    assert order in ('chronological', 'reverse_chronological', 'score')
+    if order == 'score':
+        assert text_search is not None
+
     if page < 1:
         page = 1
 
@@ -117,6 +121,10 @@ def get_posts(request):
 
     PostClass = SynthesisPost if only_synthesis == "true" else Post
     posts = Post.db.query(PostClass)
+    if order == 'score':
+        posts = Post.db.query(PostClass, Content.body_text_index.score_name)
+    else:
+        posts = Post.db.query(PostClass)
 
     posts = posts.filter(
         PostClass.discussion_id == discussion_id,
@@ -198,7 +206,13 @@ def get_posts(request):
         if is_unread == "false":
             raise HTTPBadRequest(localizer.translate(
                 _("You must be logged in to view which posts are read")))
-        
+
+    if text_search is not None:
+        # another Virtuoso bug: offband kills score. but it helps speed.
+        offband = () if (order == 'score') else None
+        posts = posts.filter(Post.body_text_index.contains(
+            text_search.encode('utf-8'), offband=offband))
+
     #posts = posts.options(contains_eager(Post.source))
     # Horrible hack... But useful for structure load
     if view_def == 'id_only':
@@ -213,19 +227,25 @@ def get_posts(request):
         posts = posts.order_by(Content.creation_date)
     elif order == 'reverse_chronological':
         posts = posts.order_by(Content.creation_date.desc())
+    elif order == 'score':
+        posts = posts.order_by(Content.body_text_index.score_name.desc())
+    print str(posts)
 
     no_of_posts = 0
     no_of_posts_viewed_by_user = 0
     
 
     for query_result in posts:
+        score, viewpost = None, None
+        post = query_result[0]
         if user_id:
-            post, viewpost = query_result
-        else:
-            post, viewpost = query_result, None
+            viewpost = query_result[-1]
         no_of_posts += 1
         serializable_post = post.generic_json(
             view_def, user_id, permissions) or {}
+        if order == 'score':
+            score = query_result[1]
+            serializable_post['score'] = score
 
         if viewpost:
             serializable_post['read'] = True

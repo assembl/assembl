@@ -12,6 +12,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 from virtuoso.alchemy import CoerceUnicode
+from virtuoso.textindex import TextIndex, TableWithTextIndex
 
 from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
@@ -200,6 +201,8 @@ class Content(DiscussionBoundBase):
     optimize the most common case.
     """
     __tablename__ = "content"
+    __table_cls__ = TableWithTextIndex
+
     rdf_class = SIOC.Post
 
     id = Column(Integer, primary_key=True,
@@ -231,6 +234,8 @@ class Content(DiscussionBoundBase):
     #    info={'rdf': QuadMapPatternS(None, SIOC.content)})
 
     hidden = Column(Boolean, server_default='0')
+
+    body_text_index = TextIndex(body, clusters=[discussion_id])
 
     __mapper_args__ = {
         'polymorphic_identity': 'content',
