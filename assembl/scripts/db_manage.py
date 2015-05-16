@@ -22,6 +22,7 @@ init_instructions = [
     "user_create('%(db_user)s', '%(db_password)s')",
     "grant select on db..tables to %(db_user)s",
     "grant select on db..sys_users to %(db_user)s",
+    "grant select on db..sys_cluster to  %(db_user)s",
     "db..user_set_qualifier ('%(db_user)s', '%(db_schema)s')"]
 
 
