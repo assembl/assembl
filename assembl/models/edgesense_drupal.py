@@ -71,7 +71,7 @@ class EdgeSenseDrupalSource(PostSource):
         return EdgeSenseReader(self.id)
 
     @classmethod
-    def create(cls, nodes, users, comments, title, discussion, root_url=None):
+    def create(cls, nodes, users, comments, title, discussion, root_url=''):
         now = datetime.utcnow()
         return cls(node_source=nodes,
                    user_source=users,
@@ -504,6 +504,7 @@ class EdgeSenseParser(object):
                         old_node.creator = agent
 
                 else:
+                    # creator?
                     new_post = SourceSpecificPost.create(self.source, node)
                     if not new_post:
                         continue
@@ -544,6 +545,7 @@ class EdgeSenseParser(object):
                         old_comm.creator = agent
 
                 else:
+                    # creator?
                     new_comm = SourceSpecificPost.create(self.source, comment)
                     if not new_comm:
                         continue
