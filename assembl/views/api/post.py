@@ -237,6 +237,8 @@ def get_posts(request):
 
     for query_result in posts:
         score, viewpost = None, None
+        if not isinstance(query_result, (list, tuple)):
+            query_result = [query_result]
         post = query_result[0]
         if user_id:
             viewpost = query_result[-1]
