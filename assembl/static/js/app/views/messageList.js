@@ -1501,6 +1501,15 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                     that.annotatorEditor = annotatorEditor;
                 });
 
+                /**
+                 * TODO: replace by the parent idea of extracts, uncomment the following line
+                 * comment viewer.hide();
+                 */
+                this.annotator.subscribe('annotationViewerTextField', function(field, annotation){
+                    //var txt = i18n.sprintf(i18n.gettext('This extract was organized in the idea %s by the facilitator of the debate'), "toto");
+                    //$(field).html(txt);
+                });
+
                 this.annotator.subscribe('annotationViewerShown', function (viewer, annotation) {
                     // We do not need the annotator's tooltip
                     viewer.hide();
