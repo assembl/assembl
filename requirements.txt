@@ -42,7 +42,6 @@ dogpile.cache==0.5.6
 dogpile.core==0.4.1
 ecdsa==0.13
 enum34==1.0.4
-feedparser==5.2.0.post1
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
 greenlet==0.4.7
