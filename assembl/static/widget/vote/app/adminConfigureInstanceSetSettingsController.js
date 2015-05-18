@@ -24,6 +24,30 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   $scope.optional_criterion_fields = VoteWidgetService.optional_criterion_fields;
   $scope.item_types = VoteWidgetService.item_types;
   $scope.mandatory_typed_criterion_fields = VoteWidgetService.mandatory_typed_criterion_fields;
+  //$scope.optional_typed_criterion_fields = VoteWidgetService.optional_typed_criterion_fields;
+
+
+  // build an object of array, which will be used by Angular to build a <select> DOM element where <option>s will be grouped into <optgroup> by criterion type
+  $scope.aggregated_optional_criterion_fields_by_type = {}; // will be like { "LickertIdeaVote": [ {"key": "description", "type": "all", ..}, {"key": "descriptionMin", "type": "LickertIdeaVote", ..}, .. ], .. }
+  for ( var j = 0; j < VoteWidgetService.criterion_types.length; ++j ) {
+    var type_key = VoteWidgetService.criterion_types[j].key;
+    $scope.aggregated_optional_criterion_fields_by_type[type_key] = [];
+    // general fields
+    for ( var i = 0; i < VoteWidgetService.optional_criterion_fields.length; ++i) {
+      var el = VoteWidgetService.optional_criterion_fields[i];
+      el.criterion_type = 'all';
+      $scope.aggregated_optional_criterion_fields_by_type[type_key].push(el);
+    }
+    // type-specific fields
+    if ( type_key in VoteWidgetService.optional_typed_criterion_fields ){ 
+      var val = VoteWidgetService.optional_typed_criterion_fields[type_key];
+      for ( var i = 0; i < val.length; ++i) {
+        val[i].criterion_type = type_key;
+        $scope.aggregated_optional_criterion_fields_by_type[type_key].push(val[i]);
+      }
+    }
+  }
+
 
 
   $scope.criterion_current_selected_field = null;
@@ -51,6 +75,16 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
 
   };
 
+  $scope.getOptionalFieldCategoryName = function(key){
+    if ( key == 'all' )
+      return "General";
+    if ( key == 'LickertIdeaVote' )
+      return "Optional fields for type Lickert";
+    if ( key == 'BinaryIdeaVote' )
+      return "Optional fields for type Binary";
+    return "Unknown";
+  };
+
   $scope.addItem = function(){
     var item = {
       'criteria': []
@@ -66,7 +100,15 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   };
 
   $scope.addCriterionField = function(item_index, criterion_index, field_name){
-    $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_criterion_fields, field_name, true);
+    //console.log("addCriterionField(): ", item_index, criterion_index, field_name);
+    if ( field_name ){
+      //$scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_criterion_fields, field_name, true);
+      var current_criterion = $scope.widget.settings.items[item_index].criteria[criterion_index];
+      var defaultValue = VoteWidgetService.getFieldDefaultValue($scope.aggregated_optional_criterion_fields_by_type[current_criterion.type], field_name, true);
+      //console.log("defaultValue: ", defaultValue);
+      $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = defaultValue;
+      //console.log("settings items after: ", $scope.widget.settings.items);
+    }
   };
 
   $scope.addItemField = function(item_index, field_name){

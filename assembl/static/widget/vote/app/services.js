@@ -233,55 +233,60 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "key": "description",
       "type": "text",
       "description": "Text which will be shown around the votable item"
-    },
-    {
-      "key": "valueDefault",
-      "type": "integer",
-      "label": "default value",
-      "description": "Value on which the votable item will be initially set"
-    },
-    {
-      "key": "descriptionMin",
-      "type": "text",
-      "description": "Text which will be shown around the minimum value of the axis"
-    },
-    {
-      "key": "descriptionMax",
-      "type": "text",
-      "description": "Text which will be shown around the maximum value of the axis"
-    },
-    {
-      "key": "ticks",
-      "label": "number of ticks",
-      "type": "integer",
-      "default": 5,
-      "description": "Indicative number of ticks to be shown on the axis"
-    },
-    {
-      "key": "colorMin",
-      "type": "text",
-      "description": "Color of the minimum value",
-      "defaultAdmin":"#ff0000"
-    },
-    {
-      "key": "colorMax",
-      "type": "text",
-      "description": "Color of the maximum value",
-      "defaultAdmin":"#00ff00"
-    },
-    {
-      "key": "colorAverage",
-      "type": "text",
-      "description": "Color of the average value",
-      "defaultAdmin":"#ffff00"
-    },
-    {
-      "key": "colorCursor",
-      "type": "text",
-      "description": "Color of the draggable cursor",
-      "defaultAdmin":"#000000"
     }
   ];
+
+  this.optional_typed_criterion_fields = {
+    "LickertIdeaVote": [
+      {
+        "key": "valueDefault",
+        "type": "integer",
+        "label": "default value",
+        "description": "Value on which the votable item will be initially set"
+      },
+      {
+        "key": "descriptionMin",
+        "type": "text",
+        "description": "Text which will be shown around the minimum value of the axis"
+      },
+      {
+        "key": "descriptionMax",
+        "type": "text",
+        "description": "Text which will be shown around the maximum value of the axis"
+      },
+      {
+        "key": "ticks",
+        "label": "number of ticks",
+        "type": "integer",
+        "default": 5,
+        "description": "Indicative number of ticks to be shown on the axis"
+      },
+      {
+        "key": "colorMin",
+        "type": "text",
+        "description": "Color of the minimum value",
+        "defaultAdmin":"#ff0000"
+      },
+      {
+        "key": "colorMax",
+        "type": "text",
+        "description": "Color of the maximum value",
+        "defaultAdmin":"#00ff00"
+      },
+      {
+        "key": "colorAverage",
+        "type": "text",
+        "description": "Color of the average value",
+        "defaultAdmin":"#ffff00"
+      },
+      {
+        "key": "colorCursor",
+        "type": "text",
+        "description": "Color of the draggable cursor",
+        "defaultAdmin":"#000000"
+      }
+    ]
+  };
 
   this.addDefaultFields = function(obj, default_fields){
     var sz = default_fields.length;
@@ -298,6 +303,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
   };
 
   this.getFieldDefaultValue = function (default_fields, field_name, for_admin){
+    //console.log("getFieldDefaultValue(): ", default_fields, field_name, for_admin);
     // var default_value = ''; // /!\ setting it to an empty string does not create the property!
     var default_value = "something";
     var optional_field = default_fields.find(function(e){
