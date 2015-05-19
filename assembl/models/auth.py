@@ -16,36 +16,33 @@ from sqlalchemy import (
     DateTime,
     Time,
     Binary,
+    inspect,
     desc,
     Index,
     UniqueConstraint
 )
-
-from pyramid.httpexceptions import (
-    HTTPUnauthorized, HTTPBadRequest)
+from pyramid.httpexceptions import HTTPBadRequest
 from sqlalchemy.orm import (
-    relationship, backref, deferred, with_polymorphic)
-from sqlalchemy import inspect, desc
+    relationship, backref, deferred)
 from sqlalchemy.types import Text
-from sqlalchemy.schema import (Index, UniqueConstraint)
 from sqlalchemy.orm.attributes import NO_VALUE
 from pyramid.security import Everyone, Authenticated
 from rdflib import URIRef
-from virtuoso.vmapping import IriClass, PatternIriClass
+from virtuoso.vmapping import PatternIriClass
 from virtuoso.alchemy import CoerceUnicode
 import transaction
+from iso639 import (is_valid639_2, is_valid639_1, to_iso639_2, to_iso639_1)
 
 from ..lib import config
 from ..lib.sqla import (
     UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
-from . import Base, DiscussionBoundBase, DiscussionBoundTombstone
+from . import Base, DiscussionBoundBase
 from ..auth import *
 from ..semantic.namespaces import (
-    SIOC, ASSEMBL, CATALYST, QUADNAMES, VERSION, FOAF, DCTERMS, RDF, VirtRDF)
+    SIOC, ASSEMBL, QUADNAMES, FOAF, DCTERMS, RDF)
 from ..semantic.virtuoso_mapping import (
-    QuadMapPatternS, USER_SECTION, PRIVATE_USER_SECTION, DISCUSSION_DATA_SECTION,
+    QuadMapPatternS, USER_SECTION, PRIVATE_USER_SECTION,
     AssemblQuadStorageManager)
-from iso639 import *
 
 
 # None-tolerant min, max
@@ -1449,7 +1446,7 @@ class UserLanguagePreference(Base):
             self.lang_code = to_iso639_2(code)
         else:
             full_name = code.lower().capitalize()
-            if is_iso639_2(full_name):
+            if is_valid639_2(full_name):
                 self.lang_code = to_iso639_2(full_name)
             else:
                 raise ValueError("The input %s is not a valid input" % code)
@@ -1459,9 +1456,9 @@ class UserLanguagePreference(Base):
         if '-' in lang_code:
             # ISO format, must convert to POSIX format
             lang,country = lang_code.split('-')
-            if is_iso639_1(lang):
+            if is_valid639_1(lang):
                 posix_lang = lang
-            if is_iso639_2(lang):
+            if is_valid639_2(lang):
                 posix_lang = to_iso639_1(lang)
             else:
                 return lang_code
