@@ -1507,25 +1507,19 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                     that.annotatorEditor = annotatorEditor;
                 });
 
-                /**
-                 * TODO: replace by the parent idea of extracts, uncomment the following line
-                 * comment viewer.hide();
-                 */
                 this.annotator.subscribe('annotationViewerTextField', function(field, annotation){
                   var collectionManager = new CollectionManager();
                   //$(field).html("THIS IS A TEST");
                   //console.log(annotation);
                   collectionManager.getAllExtractsCollectionPromise().then(function(extracts){
                     return extracts.get(annotation['@id']).getAssociatedIdeaPromise().then(function(idea){
-                      var txt = '';
-                      console.debug(field);
                       if(idea) {
-                        txt = i18n.sprintf(i18n.gettext('This extract was organized in the idea "%s" by the facilitator of the debate'), idea.getShortTitleDisplayText());
+                        annotation.text = i18n.sprintf(i18n.gettext('This extract was organized in the idea "%s" by the facilitator of the debate'), idea.getShortTitleDisplayText());
                       }
                       else {
-                        txt = i18n.gettext('This extract is in a harvester\'s clipboard and hasn\' been sorted yet.');
+                        annotation.text = i18n.gettext('This extract is in a harvester\'s clipboard and hasn\' been sorted yet.');
                       }
-                      $(field).html(txt);
+                      $(field).html(annotation.text);
                     });
                   });
                   
