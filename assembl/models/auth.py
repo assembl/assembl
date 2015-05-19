@@ -31,7 +31,6 @@ from rdflib import URIRef
 from virtuoso.vmapping import PatternIriClass
 from virtuoso.alchemy import CoerceUnicode
 import transaction
-from iso639 import (is_valid639_2, is_valid639_1, to_iso639_2, to_iso639_1)
 
 from ..lib import config
 from ..lib.sqla import (
@@ -277,7 +276,7 @@ class AgentProfile(Base):
         if prefs is None or len(prefs) is 0:
             # Correct way is to get the default from the app global config
             prefs = config.get_config().\
-                get('available_languages', 'fr en').split()[0]
+                get('available_languages', 'fr_CA en_CA').split()[0]
         assert prefs[0]
         return prefs[0]
 
@@ -1437,35 +1436,10 @@ class UserLanguagePreference(Base):
     @property
     def language_code(self):
         return self.lang_code
+
     @language_code.setter
     def language_code(self, code):
-        # Following the ISO 639-2 Standard
-        if is_valid639_2(code):
-            self.lang_code = code
-        elif is_valid639_1(code):
-            self.lang_code = to_iso639_2(code)
-        else:
-            full_name = code.lower().capitalize()
-            if is_valid639_2(full_name):
-                self.lang_code = to_iso639_2(full_name)
-            else:
-                raise ValueError("The input %s is not a valid input" % code)
-
-    @staticmethod
-    def to_posix_format(lang_code):
-        if '-' in lang_code:
-            # ISO format, must convert to POSIX format
-            lang,country = lang_code.split('-')
-            if is_valid639_1(lang):
-                posix_lang = lang
-            if is_valid639_2(lang):
-                posix_lang = to_iso639_1(lang)
-            else:
-                return lang_code
-            posix = '_'.join([posix_lang.lower(),country.upper()])
-            return posix
-        # if '_' in lang_code: return lang_code
-        # if len(lang_code) == 2, return lang_code
-        return lang_code
-
-
+        posix_code = to_posix_format(code)
+        if not posix_code:
+            raise ValueError("The input %s is not a valid input" % code)
+        self.lang_code = posix_code

@@ -58,14 +58,22 @@
         <div class="dropdown fl mhs">
             {% if locales.__len__ > 1 %}
             <a href="#" class="dropdown-toggle user-lang fl" data-toggle="dropdown" aria-expanded="false">
-                {{locale | upper}}
+                {% if show_locale_country[locale] %}
+                    {{locale | upper}}
+                {% else %}
+                    {{locale.split('_')[0] | upper}}
+                {% endif %}
                 <span class="icon-arrowdown"></span>
             </a>
             <ul class="dropdown-menu">
                 {% for loc in locales %}
                 {% if (loc != locale) %}
                 <li><a tabindex="-1" href="#" class="lang js_setLocale" data-locale='{{loc}}'>
+                {% if show_locale_country[loc] %}
                     {{loc | upper}}
+                {% else %}
+                    {{loc.split('_')[0] | upper}}
+                {% endif %}
                 </a></li>
                 {% endif %}
                 {% endfor %}

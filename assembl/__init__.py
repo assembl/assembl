@@ -12,7 +12,7 @@ from pyramid.i18n import default_locale_negotiator
 from zope.component import getGlobalSiteManager
 
 from .lib.sqla import configure_engine, session_maker_is_initialized
-
+from .lib.locale import get_language, to_posix_format
 
 # Do not import models here, it will break tests.
 
@@ -39,12 +39,14 @@ def main(global_config, **settings):
     config.add_translation_dirs('assembl:locale/')
 
     def my_locale_negotiator(request):
-        locale = default_locale_negotiator(request)
+        locale = to_posix_format(default_locale_negotiator(request))
         available = settings['available_languages'].split()
-        locale = locale if locale in available else None
+        avail_langs = {get_language(loc): loc for loc in reversed(available)}
+        if locale and locale not in available:
+            locale = avail_langs.get(get_language(locale), None)
         if not locale:
-            locale = request.accept_language.best_match(
-                available, settings.get('pyramid.default_locale_name', 'en'))
+            locale = to_posix_format(request.accept_language.best_match(
+                available, settings.get('pyramid.default_locale_name', 'en')))
         request._LOCALE_ = locale
         return locale
 

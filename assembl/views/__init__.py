@@ -2,6 +2,7 @@
 
 import os.path
 import codecs
+from collections import defaultdict
 
 from pyramid.view import view_config
 from pyramid.response import Response
@@ -10,10 +11,12 @@ from pyramid.httpexceptions import (
     HTTPException, HTTPInternalServerError, HTTPMovedPermanently,
     HTTPBadRequest)
 from pyramid.i18n import TranslationStringFactory
+from pyramid.settings import asbool
 
 from ..lib.json import json_renderer_factory
 from ..lib import config
 from ..lib.frontend_urls import FrontendUrls
+from ..lib.locale import get_language, get_country
 
 default_context = {
     'STATIC_URL': '/static'
@@ -78,6 +81,23 @@ def get_default_context(request):
         if not request.session.get('first_login_after_auto_subscribe_to_notifications_popin_has_been_shown', False):
             request.session['first_login_after_auto_subscribe_to_notifications_popin_has_been_shown'] = True
             first_login_after_auto_subscribe_to_notifications = True
+    locales = config.get('available_languages').split()
+    countries_for_locales = defaultdict(set)
+    for locale in locales:
+        countries_for_locales[get_language(locale)].add(get_country(locale))
+    print "countries_for_locales", countries_for_locales
+    show_locale_country = {
+        locale: (len(countries_for_locales[get_language(locale)]) > 1)
+        for locale in locales}
+    print "show_lang_country", show_locale_country
+    jedfilename = os.path.join(
+            os.path.dirname(__file__), '..', 'locale',
+            localizer.locale_name, 'LC_MESSAGES', 'assembl.jed.json')
+    if not os.path.exists(jedfilename) and '_' in localizer.locale_name:
+        jedfilename = os.path.join(
+            os.path.dirname(__file__), '..', 'locale',
+            get_language(localizer.locale_name), 'LC_MESSAGES', 'assembl.jed.json')
+    assert os.path.exists(jedfilename)
 
     return dict(
         default_context,
@@ -87,17 +107,15 @@ def get_default_context(request):
         discussion={},  # Templates won't load without a discussion object
         user_profile_edit_url=user_profile_edit_url,
         locale=localizer.locale_name,
-        locales=config.get('available_languages').split(),
+        locales=locales,
+        show_locale_country=show_locale_country,
         theme=get_theme(discussion),
         minified_js=config.get('minified_js') or False,
         web_analytics_piwik_script=web_analytics_piwik_script,
         help_url=help_url,
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
         raven_url=config.get('raven_url') or '',
-        translations=codecs.open(os.path.join(
-            os.path.dirname(__file__), '..', 'locale',
-            localizer.locale_name, 'LC_MESSAGES', 'assembl.jed.json'),
-        encoding='utf-8').read()
+        translations=codecs.open(jedfilename, encoding='utf-8').read()
         #TODO:  batch strip json not from js files
         #translations=json.dumps({
         #    id:localizer.translate(_(id)) for id in JS_MESSAGE_IDS}))

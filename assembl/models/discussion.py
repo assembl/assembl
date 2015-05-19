@@ -411,7 +411,7 @@ class Discussion(DiscussionBoundBase):
             return self.preferred_locales.split(' ')
         # Use installation settings otherwise.
         from assembl.lib.config import get_config
-        return get_config().get('available_languages', 'fr en').split()
+        return get_config().get('available_languages', 'fr_CA en_CA').split()
 
     @discussion_locales.setter
     def discussion_locales(self, locale_list):

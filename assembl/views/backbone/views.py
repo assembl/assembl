@@ -12,6 +12,7 @@ from assembl.models import Discussion
 from assembl.models.post import Post
 from assembl.models.idea import Idea
 from assembl.auth import P_READ, P_ADD_EXTRACT
+from assembl.lib.locale import to_posix_format
 from ...models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
@@ -156,6 +157,7 @@ def home_view(request):
     if user_id != Everyone:
         from assembl.models import AgentProfile
         user = AgentProfile.get(user_id)
+        # TODO: user may not exist. Case of session with BD change.
         user.is_visiting_discussion(discussion.id)
         session = Discussion.db()
         current_prefs = session.query(UserLanguagePreference).\
@@ -164,20 +166,20 @@ def home_view(request):
 
         if '_LOCALE_' in request.cookies:
             locale = request.cookies['_LOCALE_']
-            posix_locale = UserLanguagePreference.to_posix_format(locale)
+            posix_locale = to_posix_format(locale)
             process_locale(posix_locale,user_id,
                            current_prefs, session,
                            LanguagePreferenceOrder.Cookie)
 
         elif '_LOCALE_' in request.params:
             locale = request.params['_LOCALE_']
-            posix_locale = UserLanguagePreference.to_posix_format(locale)
+            posix_locale = to_posix_format(locale)
             process_locale(posix_locale, user_id,
                            current_prefs, session,
                            LanguagePreferenceOrder.Parameter)
         else:
             locale = default_locale_negotiator(request)
-            posix_locale = UserLanguagePreference.to_posix_format(locale)
+            posix_locale = to_posix_format(locale)
             process_locale(posix_locale, user_id,
                            current_prefs, session,
                            LanguagePreferenceOrder.OS_Default)
