@@ -70,7 +70,7 @@
         "node_source": true,
         "user_source": true,
         "comment_source": true,
-        "node_root": false,
+        "node_root": true,
         "post_id_prepend": false
     },
     "AnnotatorSource": {
