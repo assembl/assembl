@@ -235,7 +235,8 @@ class Content(DiscussionBoundBase):
 
     hidden = Column(Boolean, server_default='0')
 
-    body_text_index = TextIndex(body, clusters=[discussion_id])
+    # Another bloody virtuoso bug. Insert with large string fails.
+    # body_text_index = TextIndex(body, clusters=[discussion_id])
 
     __mapper_args__ = {
         'polymorphic_identity': 'content',
