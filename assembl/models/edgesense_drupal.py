@@ -15,6 +15,7 @@ from ..lib import config
 from ..lib.locale import get_localizer, _
 from sqlalchemy.orm import relationship, backref
 from datetime import datetime
+from urlparse import urlparse
 import requests
 import uuid
 import simplejson as json
@@ -73,6 +74,10 @@ class EdgeSenseDrupalSource(PostSource):
     @classmethod
     def create(cls, nodes, users, comments, title, discussion, root_url=''):
         now = datetime.utcnow()
+        if root_url is '':
+            url = urlparse(nodes)
+            schema = url[0] if url[0] is not '' else 'http'
+            root_url = schema + '//' + url[1]
         return cls(node_source=nodes,
                    user_source=users,
                    comment_source=comments,
