@@ -1518,7 +1518,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                   collectionManager.getAllExtractsCollectionPromise().then(function(extracts){
                     return extracts.get(annotation['@id']).getAssociatedIdeaPromise().then(function(idea){
                       var txt = '';
-                      console.log(field);
+                      console.debug(field);
                       if(idea) {
                         txt = i18n.sprintf(i18n.gettext('This extract was organized in the idea "%s" by the facilitator of the debate'), idea.getShortTitleDisplayText());
                       }
@@ -1533,7 +1533,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
 
                 this.annotator.subscribe('annotationViewerShown', function (viewer, annotation) {
                     // We do not need the annotator's tooltip
-                    viewer.hide();
+                    //viewer.hide();
                 });
 
                 // We need extra time for annotator to be ready, but I don't
