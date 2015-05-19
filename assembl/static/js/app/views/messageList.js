@@ -667,6 +667,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                   (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
                 messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']+1);
               } else {
+                if (this.debugPaging) {
+                  console.log("getMessageIdsToShow() about to slice collection", this.resultMessageIdCollection);
+                }
                 messageIdsToShow = this.resultMessageIdCollection.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']+1);
               }
               if (this.debugPaging) {
@@ -736,8 +739,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 returnedOffsets = this.calculateMessagesOffsets(requestedOffsets);
                 messageIdsToShow = this.getMessageIdsToShow(requestedOffsets);
                 numMessages = _.size(this.resultMessageIdCollection);
-                if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
-                    (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
+                if ((this.currentViewStyle === this.ViewStyles.THREADED) ||
+                    (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES)) {
                   views_promise = this.getRenderedMessagesThreadedPromise(_.clone(this.visitorRootMessagesToDisplay), 1, this.visitorViewData, messageIdsToShow);
                 } else {
                   views_promise = this.getRenderedMessagesFlatPromise(messageIdsToShow);
@@ -776,6 +779,9 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                     that.renderIsComplete = true;
                     that.trigger("messageList:render_complete", "Render complete");
                     return true;
+                }).catch(function(e) {
+                  console.error("An error occured during rendering: ", e);
+                  that.ui.messageList.html("<div class='error'>We are sorry, a technical error occured during rendering.</div>");
                 });
 
             },

@@ -3,6 +3,7 @@
 define(['app',
         'backbone.marionette',
         'bluebird',
+        'raven',
         'models/message',
         'models/groupSpec',
         'models/idea',
@@ -19,7 +20,7 @@ define(['app',
         'models/roles',
         'models/discussion',
         'models/discussionSource'],
-    function (Assembl, Marionette, Promise, Message, groupSpec, Idea, IdeaLink, Segment, Synthesis, Partners, Agents, NotificationSubscription, $, Storage, Types, i18n, LocalRole, Discussion, DiscussionSource) {
+    function (Assembl, Marionette, Promise, Raven, Message, groupSpec, Idea, IdeaLink, Segment, Synthesis, Partners, Agents, NotificationSubscription, $, Storage, Types, i18n, LocalRole, Discussion, DiscussionSource) {
 
         /**
          * @class CollectionManager
@@ -335,6 +336,12 @@ define(['app',
                 var that = this,
                     allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
 
+                if (!id) {
+                  var msg = "getMessageFullModelPromise(): Tried to request full message model with a falsy id.";
+                  console.error(msg);
+                  return Promise.reject(msg);
+                }
+
                 return allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
                     var structureModel = allMessageStructureCollection.get(id);
 
@@ -375,7 +382,8 @@ define(['app',
               returnedModelsPromises = [];
 
               _.each(ids, function (id) {
-                returnedModelsPromises.push(that.getMessageFullModelPromise(id));
+                var promise = that.getMessageFullModelPromise(id);
+                returnedModelsPromises.push(promise);
               });
 
               return Promise.all(returnedModelsPromises).then(function (models) {
@@ -384,8 +392,8 @@ define(['app',
                 //console.log("getMessageFullModelsPromise() resolving with:", args);
                 return Promise.resolve(models);
               }).catch(function (e) {
-                console.log("getMessageFullModelsPromise: One or more of the id's couldn't be retrieved", e);
-                Promise.reject();
+                console.error("getMessageFullModelsPromise: One or more of the id's couldn't be retrieved: ", e);
+                return Promise.reject(e);
               });
             },
 
