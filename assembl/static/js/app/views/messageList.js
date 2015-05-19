@@ -1512,8 +1512,23 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                  * comment viewer.hide();
                  */
                 this.annotator.subscribe('annotationViewerTextField', function(field, annotation){
-                    //var txt = i18n.sprintf(i18n.gettext('This extract was organized in the idea %s by the facilitator of the debate'), "toto");
-                    //$(field).html(txt);
+                  var collectionManager = new CollectionManager();
+                  //$(field).html("THIS IS A TEST");
+                  //console.log(annotation);
+                  collectionManager.getAllExtractsCollectionPromise().then(function(extracts){
+                    return extracts.get(annotation['@id']).getAssociatedIdeaPromise().then(function(idea){
+                      var txt = '';
+                      console.log(field);
+                      if(idea) {
+                        txt = i18n.sprintf(i18n.gettext('This extract was organized in the idea "%s" by the facilitator of the debate'), idea.getShortTitleDisplayText());
+                      }
+                      else {
+                        txt = i18n.gettext('This extract is in a harvester\'s clipboard and hasn\' been sorted yet.');
+                      }
+                      $(field).html(txt);
+                    });
+                  });
+                  
                 });
 
                 this.annotator.subscribe('annotationViewerShown', function (viewer, annotation) {

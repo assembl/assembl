@@ -120,6 +120,23 @@ define(['underscore', 'models/base', 'common/context', 'models/agents', 'models/
             /** Return a promise for the Post the segments is associated to, if any
              * @return {$.Defered.Promise}
              */
+            getAssociatedIdeaPromise: function () {
+              var that = this,
+                  idIdea = this.get('idIdea');
+              if(idIdea) {
+                return this.collection.collectionManager.getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
+                  return allIdeasCollection.get(idIdea);
+                });
+              }
+              else {
+                return Promise.resolve(null);
+              }
+
+            },
+
+            /** Return a promise for the Post the segments is associated to, if any
+             * @return {$.Defered.Promise}
+             */
             getAssociatedPostPromise: function () {
                 return this.collection.collectionManager.getMessageFullModelPromise(this.get('idPost'));
             },
