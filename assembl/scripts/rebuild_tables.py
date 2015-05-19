@@ -1,6 +1,7 @@
 from itertools import chain
 import logging.config
 import argparse
+from collections import defaultdict
 import traceback
 import pdb
 
@@ -161,6 +162,55 @@ def delete_rows_with_missing_fkey(fkey, delete_missing=True):
     return True
 
 
+def ensure_inheritance():
+    from assembl.models import Base
+    subs = {c:c.mro()[1] for c in Base.get_subclasses()}
+    subof = defaultdict(set)
+    for sub, cls in subs.iteritems():
+        subof[cls].add(sub)
+    treated = set()
+    def rec_rebuild(cls):
+        if cls in treated:
+            return
+        for sub in subof[cls]:
+            rec_rebuild(sub)
+        ensure_inheritance_of(cls)
+    bases = [cls for cls in subof
+        if getattr(cls, '__mapper_args__', {}).get('polymorphic_on', None) is not None]
+    for cls in bases:
+        rec_rebuild(cls)
+
+
+def ensure_inheritance_of(cls):
+    # Do not bother with tableless classes
+    if not '__tablename__' in cls.__dict__:
+        return
+    base = cls
+    first = None
+    table = cls.__table__
+    for c in cls.mro():
+        if c == cls:
+            continue
+        if '__tablename__' in c.__dict__:
+            if first is None:
+                first = c
+            base = c
+    if base == cls:
+        return
+    basetable = base.__table__
+    db = get_session_maker()()
+    poly_col = base.__mapper_args__['polymorphic_on']
+    if not isinstance(poly_col, Column):
+        poly_col = basetable.c[poly_col]
+    poly_id = cls.__mapper_args__['polymorphic_identity']
+    sub_poly_id = first.__mapper_args__['polymorphic_identity']
+    query = db.query(basetable.c.id).outerjoin(table, basetable.c.id==table.c.id).filter((poly_col==poly_id) & (table.c.id==None))
+    if query.count() > 0:
+        with transaction.manager:
+            db.execute(basetable.update().where(basetable.c.id.in_(query)).values(**{poly_col.name: sub_poly_id}))
+            mark_changed(db)
+
+
 def rebuild_table(table, delete_missing=False):
     print "rebuilding", table
     session = get_session_maker()()
@@ -227,6 +277,8 @@ if __name__ == '__main__':
                         help="All tables fkeys will be rebuilt.")
     parser.add_argument("--rebuild_all_tables", action="store_true", default=False,
                         help="All tables will be rebuilt.")
+    parser.add_argument("--ensure_inheritance", action="store_true", default=False,
+                        help="Make sure no class has a missing subclass row.")
     parser.add_argument("-d", "--delete_missing", action="store_true", default=False,
                         help="Delete rows with missing corresponding values. (otherwise abort rebuild.)")
     parser.add_argument("--reset_extract_discussion", action="store_true", default=False,
@@ -259,6 +311,8 @@ if __name__ == '__main__':
                     rebuild_table(table, args.delete_missing)
                 elif table in args.rebuild_table_fkey:
                     rebuild_table_fkeys(session, table, args.delete_missing)
+        if args.ensure_inheritance:
+            ensure_inheritance()
     except Exception as e:
         traceback.print_exc()
         pdb.post_mortem()
