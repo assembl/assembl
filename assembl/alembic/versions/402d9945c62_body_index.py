@@ -28,7 +28,8 @@ def upgrade(pyramid_env):
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
-        m.Content.body_text_index.create(db.bind)
+        ti = TextIndex(m.Content.body, clusters=[m.Content.discussion_id])
+        ti.create(db.bind)
 
 
 def downgrade(pyramid_env):
