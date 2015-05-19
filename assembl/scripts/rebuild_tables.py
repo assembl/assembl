@@ -198,7 +198,11 @@ def rebuild_table(table, delete_missing=False):
     table.create(session.bind)
     # self ref will make the insert fail.
     for fk in self_ref:
-        session.execute(DropForeignKey(fk))
+        try:
+            session.execute(DropForeignKey(fk))
+        except Exception as e:
+            print "Could not drop fkey %s, maybe does not exist." % (fk_as_str(fk),)
+            print e
     sel = select([getattr(clone.c, cname) for cname in column_names])
     session.execute(table.insert().from_select(column_names, sel))
     session.execute(DropTable(clone))
