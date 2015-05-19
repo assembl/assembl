@@ -184,7 +184,6 @@ def csrf_error_view(exc, request):
     return  HTTPBadRequest(explanation="CSRF error", detail=repr(request.exception))
 
 
-@view_config(context=Exception)
 def error_view(exc, request):
     # from traceback import format_exc
     from datetime import datetime
@@ -207,6 +206,9 @@ def includeme(config):
     config.add_route('discussion_list', '/')
     
     config.include(backbone_include, route_prefix='/{discussion_slug}')
+
+    if asbool(config.get_settings().get('assembl_handle_exceptions', 'true')):
+        config.add_view(error_view, context=Exception)
 
     #  authentication
     config.include('.auth')
