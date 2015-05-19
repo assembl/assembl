@@ -964,7 +964,8 @@ voteApp.controller('indexCtl',
     $scope.drawUIWithTable = function(){
       console.log("drawUIWithTable()");
       var config = $scope.settings;
-      var holder = d3.select("#d3_container");
+      var holder_svg = null; //d3.select("#d3_container");
+      var holder_jquery = null; //$("#d3_container");
 
       var table = $("<table/>");
       table.attr("id","table_vote");
@@ -1013,23 +1014,23 @@ voteApp.controller('indexCtl',
         var td2 = $("<td/>");
         td2.attr("id","table_vote_item_"+i);
         tr2.append(td2);
-        var holder = d3.select("#table_vote_item_"+i);
+        holder_svg = d3.select("#table_vote_item_"+i);
+        holder_jquery = $("#table_vote_item_"+i);
 
         
         //console.log("item.type:");
         //console.log(item.type);
         if ( item.type == "vertical_gauge" )
         {
-          $scope.drawVerticalGauge(holder, item);
+          $scope.drawVerticalGauge(holder_svg, item);
         }
         else if ( item.type == "2_axes" )
         {
-          $scope.draw2AxesVote(holder, item);
+          $scope.draw2AxesVote(holder_svg, item);
         }
         else if ( item.type == "radio" )
         {
-          holder = $("#d3_container");
-          $scope.drawRadioVote(holder, item);
+          $scope.drawRadioVote(holder_jquery, item);
         }
       }
 
@@ -1040,8 +1041,8 @@ voteApp.controller('indexCtl',
     $scope.drawUIWithoutTable = function(){
       console.log("drawUIWithoutTable()");
       var config = $scope.settings;
-      var holder = d3.select("#d3_container");
-      var jq_holder = $("#d3_container");
+      var holder_svg = d3.select("#d3_container");
+      var holder_jquery = $("#d3_container");
 
       if ( "items" in config ){
       for ( var i = 0; i < config.items.length; ++i )
@@ -1051,7 +1052,7 @@ voteApp.controller('indexCtl',
         //console.log(item.type);
         if ( item.type == "vertical_gauge" )
         {
-          $scope.drawVerticalGauge(holder, item);
+          $scope.drawVerticalGauge(holder_svg, item);
 
           /*
           // add specific vote button for this criterion
@@ -1069,13 +1070,13 @@ voteApp.controller('indexCtl',
               console.log("configService.voting_urls[criterion_id]:");
               console.log(configService.voting_urls[criterion_id]);
               var criterion_endpoint = AssemblToolsService.resourceToUrl(configService.voting_urls[criterion_id]);
-              //jq_holder.append("<a href='#' ng-click=\"submitSingleVote('"+criterion_endpoint+"', 'LickertIdeaVote', '"+criterion_id+"')\">Vote</a>").click(function(){
+              //holder_jquery.append("<a href='#' ng-click=\"submitSingleVote('"+criterion_endpoint+"', 'LickertIdeaVote', '"+criterion_id+"')\">Vote</a>").click(function(){
               var link = $("<button>Vote</button>");
               link.click(function(){ // TODO: does not work, all buttons call with the same parameter value
                 console.log("coucou");
                 $scope.submitSingleVote(criterion_endpoint, 'LickertIdeaVote', item.criteria[0]["id"]);
               });
-              jq_holder.append(link);
+              holder_jquery.append(link);
             }
           }
           */
@@ -1084,12 +1085,11 @@ voteApp.controller('indexCtl',
         }
         else if ( item.type == "2_axes" )
         {
-          $scope.draw2AxesVote(holder, item);
+          $scope.draw2AxesVote(holder_svg, item);
         }
         else if ( item.type == "radio" )
         {
-          holder = $("#d3_container");
-          $scope.drawRadioVote(holder, item);
+          $scope.drawRadioVote(holder_jquery, item);
         }
       }
       }
