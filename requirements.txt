@@ -31,7 +31,7 @@ backports.ssl-match-hostname==3.4.0.2
 beautifulsoup4==4.3.2
 billiard==3.3.0.20
 celery==3.1.18
-cffi==0.9.2
+cffi==1.0.0
 colander==1.0
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 cov-core==1.15.0
@@ -80,7 +80,7 @@ pyramid-jinja2==2.5
 pyramid-mailer==0.14
 pyramid-mako==1.0.2
 pyramid-tm==0.11
-pytest==2.7.0
+pytest==2.7.1
 pytest-cov==1.8.1
 pytest-localserver==0.3.4
 pytest-mock==0.5.0
@@ -99,7 +99,7 @@ repoze.sendmail==4.1  # rq.filter: <4.2
 requests==2.7.0
 requests-oauthlib==0.5.0
 selenium==2.45.0
-simplejson==3.6.5
+simplejson==3.7.1
 six==1.9.0
 snowballstemmer==1.2.0
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
@@ -107,7 +107,7 @@ sphinx-bootstrap-theme==0.4.5
 splinter==0.7.2
 supervisor==3.1.3
 tornado==4.1
-transaction==1.4.3
+transaction==1.4.4
 translationstring==1.3
 uricore==0.1.2
 uwsgitop==0.8
