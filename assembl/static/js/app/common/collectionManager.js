@@ -357,7 +357,9 @@ define(['app',
                         }
                     }
                     else {
-                      return Promise.reject("MODEL NOT FOUND for id!"+id);
+                      var msg = "Structure model not in allMessageStructureCollection for id!" + id;
+                      console.log(msg);
+                      return Promise.reject(msg);
                     }
                 });
 
@@ -369,25 +371,22 @@ define(['app',
              * @return Message.Model{}
              */
             getMessageFullModelsPromise: function (ids) {
-                var that = this,
-                    returnedModelsPromises = [],
-                    allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
+              var that = this,
+              returnedModelsPromises = [];
 
-                _.each(ids, function (id) {
-                        returnedModelsPromises.push(that.getMessageFullModelPromise(id));
-                    });
+              _.each(ids, function (id) {
+                returnedModelsPromises.push(that.getMessageFullModelPromise(id));
+              });
 
-                return allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
-                    return Promise.all(returnedModelsPromises).then(function (models) {
-                        //var args = Array.prototype.slice.call(arguments);
-                        //console.log("getMessageFullModelsPromise() resolved promises:", returnedModelsPromises);
-                        //console.log("getMessageFullModelsPromise() resolving with:", args);
-                        return Promise.resolve(models);
-                    }).catch(function (e) {
-                        console.log("getMessageFullModelsPromise: One of the id's couldn't be retrieved", e.statusText);
-                        Promise.reject();
-                    });
-                });
+              return Promise.all(returnedModelsPromises).then(function (models) {
+                //var args = Array.prototype.slice.call(arguments);
+                //console.log("getMessageFullModelsPromise() resolved promises:", returnedModelsPromises);
+                //console.log("getMessageFullModelsPromise() resolving with:", args);
+                return Promise.resolve(models);
+              }).catch(function (e) {
+                console.log("getMessageFullModelsPromise: One or more of the id's couldn't be retrieved", e);
+                Promise.reject();
+              });
             },
 
             getAllSynthesisCollectionPromise: function () {
