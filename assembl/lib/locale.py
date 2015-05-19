@@ -22,13 +22,15 @@ def get_localizer(request=None):
 
 def use_underscore(locale):
     # Normalize fr-ca to fr_ca
-    if '-' in locale:
+    if locale and '-' in locale:
         return '_'.join(locale.split('-'))
     return locale
 
 def to_posix_format(lang_code):
     # Normalize fra-ca to fr_CA
     lang_code = use_underscore(lang_code)
+    if not lang_code:
+        return None
     if '_' in lang_code:
         # ISO format, must convert to POSIX format
         lang, country = lang_code.split('_')[:2]
