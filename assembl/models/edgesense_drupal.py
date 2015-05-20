@@ -1,3 +1,9 @@
+from datetime import datetime
+from urlparse import urlparse, urljoin
+import uuid
+import re
+
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
     ForeignKey,
@@ -6,6 +12,8 @@ from sqlalchemy import (
     UniqueConstraint,
     Text
  )
+import requests
+import simplejson as json
 
 from .generic import PostSource
 from .post import ImportedPost
@@ -13,12 +21,6 @@ from .auth import AbstractAgentAccount, AgentProfile
 from ..tasks.source_reader import PullSourceReader
 from ..lib import config
 from ..lib.locale import get_localizer, _
-from sqlalchemy.orm import relationship, backref
-from datetime import datetime
-from urlparse import urlparse
-import requests
-import uuid
-import simplejson as json
 
 
 class EdgeSenseDrupalSource(PostSource):
@@ -74,7 +76,7 @@ class EdgeSenseDrupalSource(PostSource):
     @classmethod
     def create(cls, nodes, users, comments, title, discussion, root_url=''):
         now = datetime.utcnow()
-        if root_url is '':
+        if root_url is '' or None:
             url = urlparse(nodes)
             schema = url[0] if url[0] is not '' else 'http'
             root_url = schema + '//' + url[1]
@@ -164,80 +166,82 @@ class SourceSpecificPost(ImportedPost):
         'polymorphic_identity': 'source_specific_post'
     }
 
+
+class EdgeSenseSpecificPost(SourceSpecificPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'edge_sense_specific_post'
+    }
+
+    file_prefix = "/sites/default/files/"
+    body_fix_regex = re.compile(r"\A" + file_prefix)
+
     @staticmethod
     def create_nid(node):
         # prefixed because cid & nid WILL collide with each other
         return "nid_" + node['nid']
 
     @classmethod
+    def process_body(cls, body, node_root):
+        return re.sub(cls.body_fix_regex, node_root + cls.file_prefix, body)
+
+
+class EdgeSenseNode(EdgeSenseSpecificPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'edge_sense_node'
+    }
+
+    @classmethod
     def create(cls, source, post, creator):
         # post is a dictionary of the post from json
 
-        # post = json.loads(json_post)
-        # Check whether the incoming post is a Node post or a Comment post
-        # prefix_id = source.get_prepend_id()
-        if 'node' in post:
-            if 'uid' not in post['node']:
-                return None
-            node = post.get('node', None)
-            node_id = SourceSpecificPost.create_nid(node)
+        if 'uid' not in post['node']:
+            return None
+        node = post.get('node', None)
+        node_id = EdgeSenseSpecificPost.create_nid(node)
+        created = datetime.fromtimestamp(int(node['created']))
+        agent = creator.profile
+        import_date = datetime.utcnow()
+        body = node.get('Body')
+        body = cls.process_body(body, source.node_root)
+        body_mime_type = 'text/plain'
+        discussion = source.discussion
+        message_id = source.get_default_prepended_id() + node_id
+        blob = json.dumps(post)
 
-            created = datetime.fromtimestamp(int(node['created']))
-            user_id = node['uid']
-            source_id = source.id
+        return cls(import_date=import_date, source=source,
+                   message_id=message_id, body_mime_type=body_mime_type,
+                   source_post_id=node_id, creator=agent,
+                   creation_date=created, imported_blob=blob,
+                   discussion=discussion, body=body)
 
-            # By putting the users in first, assuming that this is
-            # never empty
-            # user = source.db.query(SourceSpecificAccount).filter_by(
-            #     user_id=user_id, source_id=source_id).first()
 
-            agent = creator.profile
-            import_date = datetime.utcnow()
-            body = node.get('Body')
-            if '/sites/default/files/' in body and ('http' or 'www'
-                                                    not in body):
-                body = source.node_root + body
-            body_mime_type = 'text/html'
-            discussion = source.discussion
-            message_id = source.get_default_prepended_id() + node_id
-            blob = json.dumps(post)
+class EdgeSenseComment(EdgeSenseSpecificPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'edge_sense_comment'
+    }
 
-            return cls(import_date=import_date, source=source,
-                       message_id=message_id, body_mime_type=body_mime_type,
-                       source_post_id=node_id, creator=agent,
-                       creation_date=created, imported_blob=blob,
-                       discussion=discussion, body=body)
+    @classmethod
+    def create(cls, source, post, creator):
+        if 'uid' not in post['comment']:
+            return None
+        comment = post['comment']
+        comment_id = comment['cid']
+        created = datetime.fromtimestamp(int(comment['created']))
 
-        if 'comment' in post:
-            if 'uid' not in post['comment']:
-                return None
-            comment = post['comment']
-            comment_id = comment['cid']
-            created = datetime.fromtimestamp(int(comment['created']))
+        agent = creator.profile
+        import_date = datetime.utcnow()
+        body = comment.get('Comment')
+        body = cls.process_body(body, source.node_root)
+        body_mime_type = 'text/plain'
+        discussion = source.discussion
+        message_id = source.get_default_prepended_id() + comment_id
+        blob = json.dumps(post)
 
-            user_id = comment['uid']
-            source_id = source.id
-
-            # user = source.db.query(SourceSpecificAccount).filter_by(
-            #     user_id=user_id, source_id=source_id).first()
-
-            agent = creator.profile
-            import_date = datetime.utcnow()
-            body = comment.get('Comment')
-            if '/sites/default/files/' in body:
-
-                body = source.node_root + body
-            body_mime_type = 'text/html'
-            # title = comment['title']
-            discussion = source.discussion
-            message_id = source.get_default_prepended_id() + comment_id
-            blob = json.dumps(post)
-
-            return cls(import_date=import_date, source_post_id=comment_id,
-                       message_id=message_id, source=source, creator=agent,
-                       creation_date=created, discussion=discussion,
-                       body_mime_type=body_mime_type, imported_blob=blob,
-                       body=body)
+        return cls(import_date=import_date, source_post_id=comment_id,
+                   message_id=message_id, source=source, creator=agent,
+                   creation_date=created, discussion=discussion,
+                   body_mime_type=body_mime_type, imported_blob=blob,
+                   body=body)
 
 
 class EdgeSenseFetcher(object):
@@ -294,7 +298,6 @@ class EdgeSenseParser(object):
     def __init__(self, source, fetcher=None):
         self.source = source
         self.session = source.db
-        self.threaded = False
         self.fetcher = fetcher or EdgeSenseFetcher(source)
         self.users = None
         self.nodes = None
@@ -348,7 +351,6 @@ class EdgeSenseParser(object):
                         waiting_list.append(comment)
                         continue
                     child = posts_db[comm['cid']]
-                    # print child.id, parent.id, child.creator_id, parent.creator_id
                     child.set_parent(parent)
 
                 else:
@@ -375,37 +377,65 @@ class EdgeSenseParser(object):
             self.session.add(new_user)
             users_db[new_user.user_id] = new_user
 
+    def _create_node(self, post, posts_db, users_db):
+        user_id = post.get('node', {}).get('uid', None)
+        if user_id:
+            if user_id not in users_db:
+                user = self.users.get(user_id, None)
+                if not user:
+                    # Simplification:
+                    # There is a user that is created with a user that
+                    # does not exist in the users.json db
+                    unknown_user = {"user": {
+                            "uid": user_id,
+                            "name": None
+                        }
+                    }
+                    self._create_user(unknown_user, users_db, True)
+                else:
+                    self._create_user(user, users_db)
+
+            new_post = EdgeSenseNode.create(self.source, post,
+                                            users_db[user_id])
+            return new_post
+        return None
+
+    def _create_comment(self, post, posts_db, users_db):
+        user_id = post.get('comment', {}).get('uid', None)
+        if user_id:
+            if user_id not in users_db:
+                user = self.users.get(user_id, None)
+                if not user:
+                    # Simplification:
+                    # There is a user that is created with a user that
+                    # does not exist in the users.json db
+                    unknown_user = {"user": {
+                            "uid": user_id,
+                            "name": None
+                        }
+                    }
+                    self._create_user(unknown_user, users_db, True)
+                else:
+                    self._create_user(user, users_db)
+
+            new_post = EdgeSenseComment.create(self.source, post,
+                                               users_db[user_id])
+            return new_post
+        return None
+
     def _parse_nodes(self, posts_db, users_db):
         if not self.nodes:
             raise ValueError('There are no nodes to parse')
         else:
             for node in self.nodes:
-                node_id = "nid_" + node['node']['nid']
+                node_id = EdgeSenseSpecificPost.create_nid(node.get('node'))
                 if node_id in posts_db:
                     continue
-                user_id = node.get('node', {}).get('uid', None)
-                if user_id:
-                    if user_id not in users_db:
-                        user = self.users.get(user_id, None)
-                        if not user:
-                            # Simplification:
-                            # There is a user that is created with a user that
-                            # does not exist in the users.json db
-                            unknown_user = {"user": {
-                                    "uid": user_id,
-                                    "name": None
-                                }
-                            }
-                            self._create_user(unknown_user, users_db, True)
-
-                        self._create_user(user, users_db)
-
-                    new_post = SourceSpecificPost.create(self.source, node,
-                                                         users_db[user_id])
-                    if not new_post:
-                        continue
-                    posts_db[node_id] = new_post
-                    self.session.add(new_post)
+                new_post = self._create_node(node, posts_db, users_db)
+                if not new_post:
+                    continue
+                posts_db[node_id] = new_post
+                self.session.add(new_post)
 
     def _parse_comments(self, posts_db, users_db):
         if not self.comments:
@@ -415,27 +445,11 @@ class EdgeSenseParser(object):
                 comment_id = comment['comment']['cid']
                 if comment_id in posts_db:
                     continue
-                user_id = comment.get('comment', {}).get('uid', None)
-                if user_id:
-                    if user_id not in users_db:
-                        user = self.users.get(user_id, None)
-                        if not user:
-                            # User that does not exist
-                            unknown_user = {"user": {
-                                    "uid": user_id,
-                                    "name": None
-                                }
-                            }
-                            self._create_user(unknown_user, users_db, True)
-
-                        self._create_user(user, users_db)
-
-                    new_post = SourceSpecificPost.create(self.source, comment,
-                                                         users_db[user_id])
-                    if not new_post:
-                        continue
-                    posts_db[comment_id] = new_post
-                    self.session.add(new_post)
+                new_post = self._create_comment(comment, posts_db, users_db)
+                if not new_post:
+                    continue
+                posts_db[comment_id] = new_post
+                self.session.add(new_post)
 
     def parse(self):
         # First, setup
@@ -481,7 +495,7 @@ class EdgeSenseParser(object):
         else:
             for node in self.nodes:
                 nde = node['node']
-                nid = SourceSpecificPost.create_nid(nde)
+                nid = EdgeSenseSpecificPost.create_nid(nde)
                 if nid in posts_db:
                     user_id = nde.get('uid')
                     self._update_user(user_id, users_db)
@@ -494,11 +508,9 @@ class EdgeSenseParser(object):
                     old_node.message_id = \
                         self.source.get_default_prepended_id() + nid
                     body = nde['Body']
-                    if '/sites/default/files/' in body and ('http' or 'www'
-                                                            not in body):
-                        body = self.source.node_root + body
+                    body = old_node.process_body(body, self.source.node_root)
                     old_node.body = body
-                    old_node.body_mime_type = 'text/html'
+                    old_node.body_mime_type = 'text/plain'
                     old_node.creation_date = datetime.fromtimestamp(
                         int(nde['created']))
 
@@ -509,8 +521,7 @@ class EdgeSenseParser(object):
                         old_node.creator = agent
 
                 else:
-                    # creator?
-                    new_post = SourceSpecificPost.create(self.source, node)
+                    new_post = self._create_node(node, posts_db, users_db)
                     if not new_post:
                         continue
                     posts_db[nid] = new_post
@@ -536,11 +547,9 @@ class EdgeSenseParser(object):
                         self.source.get_default_prepended_id() + comment_id
 
                     body = comm['Comment']
-                    if '/sites/default/files/' in body and ('http' or 'www'
-                                                            not in body):
-                        body = self.source.node_root + body
-
+                    body = old_comm.process_body(body, self.source.node_root)
                     old_comm.body = body
+                    old_comm.body_mime_type = 'text/plain'
                     old_comm.creation_date = datetime.fromtimestamp(
                         int(comm['created']))
 
@@ -550,8 +559,8 @@ class EdgeSenseParser(object):
                         old_comm.creator = agent
 
                 else:
-                    # creator?
-                    new_comm = SourceSpecificPost.create(self.source, comment)
+                    new_comm = self._create_comment(comment, posts_db,
+                                                    users_db)
                     if not new_comm:
                         continue
                     posts_db[comment_id] = new_comm
