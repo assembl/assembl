@@ -226,4 +226,10 @@ class BinaryIdeaVote(AbstractIdeaVote):
 
     @value.setter
     def value(self, val):
-        self.vote_value = bool(val)
+        if val == '0' or val == 0 or val == 'false' or val == 'False' or val is False:
+            val = False
+        elif val == '1' or val == 1 or val == 'true' or val == 'True' or val is True:
+            val = True
+        else:
+            raise Exception('Wrong value given. A BinaryIdeaVote value can only be boolean')
+        self.vote_value = val

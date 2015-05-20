@@ -75,7 +75,23 @@ voteApp.controller('indexCtl',
               if ( my_vote_for_this_criterion )
               {
                 console.log("value found: " + my_vote_for_this_criterion.vote_value);
-                var new_value = criterion.valueMin + my_vote_for_this_criterion.vote_value * (criterion.valueMax - criterion.valueMin);
+                var new_value = my_vote_for_this_criterion.vote_value;
+                // interpret vote value differently depending on criterion type
+                if ( criterion.type == "BinaryIdeaVote" )
+                {
+                  if ( my_vote_for_this_criterion.vote_value === true || my_vote_for_this_criterion.vote_value == "true" || my_vote_for_this_criterion.vote_value === 1 || my_vote_for_this_criterion.vote_value == "1" )
+                  {
+                    new_value = 1;
+                  }
+                  else if ( my_vote_for_this_criterion.vote_value === false || my_vote_for_this_criterion.vote_value == "false" || my_vote_for_this_criterion.vote_value === 0 || my_vote_for_this_criterion.vote_value == "0" )
+                  {
+                    new_value = 0;
+                  }
+                } else // if ( criterion.type == "LickertIdeaVote" )
+                {
+                  new_value = criterion.valueMin + my_vote_for_this_criterion.vote_value * (criterion.valueMax - criterion.valueMin);
+                }
+                
                 $scope.settings.items[item_index].criteria[criterion_index].valueDefault = new_value;
                 console.log("value set: " + new_value);
               }
@@ -147,6 +163,7 @@ voteApp.controller('indexCtl',
       $("#d3_container > div.criterion").each(function(index) {
         var criterion_id = $(this).attr("data-criterion-id");
         var value = parseInt($(this).attr("data-criterion-value"));
+        console.log("criterion " + criterion_id + " has value " + value);
         if ( isNaN(value) )
         {
           alert("Error: no value for criterion " + criterion_id);
@@ -208,16 +225,20 @@ voteApp.controller('indexCtl',
           {
             console.log("$scope.myVotes[k]: ", $scope.myVotes[k]);
             console.log("typeof $scope.myVotes[k]: ", typeof $scope.myVotes[k]);
-            if ( typeof $scope.myVotes[k] === 'string' )
+            if ( typeof $scope.myVotes[k] == 'string' )
               vote_value = !!parseInt($scope.myVotes[k]);
-            else if ( typeof $scope.myVotes[k] === 'number' )
-              vote_value = !!$scope.myVotes[k];
+            else if ( typeof $scope.myVotes[k] == 'number' )
+            {
+              //vote_value = !!$scope.myVotes[k];
+              vote_value = $scope.myVotes[k];
+            }
             else
               vote_value = $scope.myVotes[k];
+            console.log("new vote_value:", vote_value);
           }
           else // if ( vote_type == "LickertIdeaVote" )
           {
-            if ( typeof $scope.myVotes[k] === 'string' )
+            if ( typeof $scope.myVotes[k] == 'string' )
               vote_value = parseFloat($scope.myVotes[k]);
             else
               vote_value = $scope.myVotes[k];
@@ -874,7 +895,7 @@ voteApp.controller('indexCtl',
       console.log(item_data);
       var config = $scope.settings;
       var criterion = item_data.criteria[0];
-      //keep this logic or not? var criterionValue = (criterion.valueDefault || criterion.valueDefault === 0.0) ? criterion.valueDefault : criterion.valueMin;
+      var criterionValue = (criterion.valueDefault || criterion.valueDefault === 0) ? criterion.valueDefault : null;
 
       var div = $('<div>');
       div.attr({
@@ -942,6 +963,8 @@ voteApp.controller('indexCtl',
               value: item.value,
               id: radio_id
             });
+            if ( criterionValue === item.value )
+              input.prop("checked", true);
             input.on('change', updateSelectedValue);
             var label = $('<label>');
             label.attr('for', radio_id);
