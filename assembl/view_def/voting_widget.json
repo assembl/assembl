@@ -281,15 +281,14 @@
         "idea": true,
         "criterion": true,
         "widget": true,
+        "value": true,
         "voter": true
     },
     "BinaryIdeaVote": {
-        "@extends": "AbstractIdeaVote",
-        "vote_value": true
+        "@extends": "AbstractIdeaVote"
     },
     "LickertIdeaVote": {
-        "@extends": "AbstractIdeaVote",
-        "vote_value": true
+        "@extends": "AbstractIdeaVote"
     },
     "PartnerOrganization": {
         "name": true,
