@@ -279,11 +279,8 @@ class JoinColumnsVisitor(ClauseVisitor):
 
 
 def delete_discussion(session, discussion_id):
-    from assembl.models import Discussion, DiscussionBoundBase, Base
-    # First, delete the discussion.
-    session.delete(Discussion.get(discussion_id))
-    session.flush()
-    # See if anything is left...
+    from assembl.models import Discussion, DiscussionBoundBase
+    # delete anything related first
     classes = DiscussionBoundBase._decl_class_registry.itervalues()
     classes_by_table = {
         cls.__dict__.get('__table__', None): cls for cls in classes
@@ -313,6 +310,10 @@ def delete_discussion(session, discussion_id):
             print "*" * 20, "Not all deleted!"
             session.query(cls).filter(
                 cls.id.in_(query.subquery())).delete(False)
+        session.flush()
+    # Then, delete the discussion.
+    session.delete(Discussion.get(discussion_id))
+    session.flush()
 
 
 def clone_discussion(
