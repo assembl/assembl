@@ -4,6 +4,7 @@ from datetime import datetime
 from sqlalchemy import (
     Column, Integer, ForeignKey, Boolean, String, Float, DateTime, and_)
 from sqlalchemy.orm import relationship, backref
+from pyramid.settings import asbool
 
 from . import (Base, DiscussionBoundBase, Tombstonable)
 from .discussion import Discussion
@@ -226,10 +227,4 @@ class BinaryIdeaVote(AbstractIdeaVote):
 
     @value.setter
     def value(self, val):
-        if val == '0' or val == 0 or val == 'false' or val == 'False' or val is False:
-            val = False
-        elif val == '1' or val == 1 or val == 'true' or val == 'True' or val is True:
-            val = True
-        else:
-            raise Exception('Wrong value given. A BinaryIdeaVote value can only be boolean')
-        self.vote_value = val
+        self.vote_value = asbool(val)
