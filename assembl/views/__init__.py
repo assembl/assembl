@@ -183,7 +183,7 @@ def csrf_error_view(exc, request):
         return HTTPBadRequest(explanation="Missing cookies", detail=repr(request.exception))
     return  HTTPBadRequest(explanation="CSRF error", detail=repr(request.exception))
 
-
+@view_config(context=Exception)
 def error_view(exc, request):
     # from traceback import format_exc
     from datetime import datetime
