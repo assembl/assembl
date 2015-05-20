@@ -91,7 +91,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
 
               collectionManager.getAllExtractsCollectionPromise()
                   .then(function (allExtractsCollection) {
-                      that.listenTo(allExtractsCollection, 'add remove reset', function(eventName) {
+                      that.listenToOnce(allExtractsCollection, 'add remove reset', function(eventName) {
                           // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
                           that.initAnnotator();
                         });
@@ -1448,10 +1448,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 // TODO: Re-render message in messagelist if an annotation was added...
                 this.annotator.subscribe('annotationCreated', function (annotation) {
                     var collectionManager = new CollectionManager();
-
-                    collectionManager.getAllExtractsCollectionPromise()
+                   collectionManager.getAllExtractsCollectionPromise()
                         .then(function (allExtractsCollection) {
-
                             var segment = allExtractsCollection.addAnnotationAsExtract(annotation, Ctx.currentAnnotationIdIdea);
                             if (!segment.isValid()) {
                                 annotator.deleteAnnotation(annotation);
@@ -1513,19 +1511,32 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                   //console.log(annotation);
                   collectionManager.getAllExtractsCollectionPromise().then(function(extracts){
                     return extracts.get(annotation['@id']).getAssociatedIdeaPromise().then(function(idea){
+                      var txt = '';
                       if(idea) {
-                        annotation.text = i18n.sprintf(i18n.gettext('This extract was organized in the idea "%s" by the facilitator of the debate'), idea.getShortTitleDisplayText());
+                        txt = i18n.sprintf(i18n.gettext('This extract was organized in the idea "%s" by the facilitator of the debate'), idea.getShortTitleDisplayText());
                       }
                       else {
-                        annotation.text = i18n.gettext('This extract is in a harvester\'s clipboard and hasn\' been sorted yet.');
+                        txt = i18n.gettext('This extract is in a harvester\'s clipboard and hasn\' been sorted yet.');
                       }
-                      $(field).html(annotation.text);
+                      $(field).html(txt);
+
                     });
+
                   });
-                  
+
                 });
 
+                //FIXME: I do not why but between the init and when the annotation is shown there is a duplicate DOM created
                 this.annotator.subscribe('annotationViewerShown', function (viewer, annotation) {
+                    var controls = $(viewer.element).find(".annotator-controls");
+                        controls.hide();
+
+                    var annotationItem = $(viewer.element).find(".annotator-item");
+
+                    // Delete the duplicate DOM
+                    annotationItem.each(function(index){
+                        if(index > 0) $(this).remove();
+                    });
                     // We do not need the annotator's tooltip
                     //viewer.hide();
                 });
