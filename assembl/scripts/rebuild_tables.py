@@ -242,7 +242,9 @@ def rebuild_table(table, delete_missing=False):
     clone.create(session.bind)
     column_names = [c.name for c in table.columns]
     sel = select([getattr(table.c, cname) for cname in column_names])
-    session.execute(clone.insert().from_select(column_names, sel))
+    with transaction.manager:
+        session.execute(clone.insert().from_select(column_names, sel))
+        mark_changed(session)
     session.execute(DropTable(table))
     # Should we create it without outgoing first?
     table.create(session.bind)
@@ -254,7 +256,9 @@ def rebuild_table(table, delete_missing=False):
             print "Could not drop fkey %s, maybe does not exist." % (fk_as_str(fk),)
             print e
     sel = select([getattr(clone.c, cname) for cname in column_names])
-    session.execute(table.insert().from_select(column_names, sel))
+    with transaction.manager:
+        session.execute(table.insert().from_select(column_names, sel))
+        mark_changed(session)
     session.execute(DropTable(clone))
     if delete_missing:
         # Delete a second time, in case.
