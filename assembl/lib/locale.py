@@ -60,3 +60,17 @@ def get_country(locale):
     if '_' in locale:
         return locale.split('_')[1]
     # otherwise None
+
+def ensure_locale_has_country(locale):
+    # assuming a posix locale
+    if '_' not in locale:
+        # first look in config
+        from .config import get_config
+        settings = get_config()
+        available = settings.get('available_languages', 'en_CA fr_CA').split()
+        avail_langs = {get_language(loc): loc for loc in reversed(available) if '_' in loc}
+        locale_with_country = avail_langs.get(locale, None)
+        if locale_with_country:
+            return locale_with_country
+        # TODO: Default countries for languages. Look in pycountry?
+    return locale
