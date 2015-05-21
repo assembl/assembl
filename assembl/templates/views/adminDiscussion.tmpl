@@ -53,14 +53,14 @@
                     <div class="control-group fr">
                          <label for="introduction" class="control-label fl">{{ gettext("Introduction") }}</label>
                          <div class="controls fl">
-                             <textarea id="introduction" name="introduction" class="input-xxlarge"><%= discussion.get('introduction') %></textarea>
+                             <textarea id="introduction" name="introduction" class="input-xxlarge"><%= Ctx.stripHtml(discussion.get('introduction')) %></textarea>
                          </div>
                      </div>
 
                       <div class="control-group fr">
                         <label for="objectives" class="control-label fl">{{ gettext("Objectives") }}</label>
                         <div class="controls fl">
-                            <textarea rows="3" id="objectives" name="objectives" class="input-xxlarge"><%= discussion.get('objectives') %></textarea>
+                            <textarea rows="3" id="objectives" name="objectives" class="input-xxlarge"><%= Ctx.stripHtml(discussion.get('objectives')) %></textarea>
                         </div>
                       </div>
 
