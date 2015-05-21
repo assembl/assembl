@@ -126,6 +126,9 @@ def supervisor_process_stop(process_name):
             if(status == 'STOPPED'):
                 print(green("%s is stopped" % process_name))
                 break
+            if(status == 'FATAL'):
+                print(red("%s had a fatal error" % process_name))
+                break
             elif(status == 'RUNNING'):
                 venvcmd("supervisorctl stop %s" % process_name)
             elif(status == 'STOPPING'):
@@ -983,7 +986,7 @@ def virtuoso_reconstruct_save_db():
         if backup.failed:
             print "ERROR: Normal backup failed."
             # these were created by previous attempt
-            run('rm virtuoso-temp.db virtuoso.pxa virtuoso.trx virtuoso.lck')
+            run('rm -f virtuoso-temp.db virtuoso.pxa virtuoso.trx virtuoso.lck')
             run('%s +crash-dump +foreground' % (get_virtuoso_exec(),))
 
 
