@@ -12,7 +12,7 @@ from assembl.models import Discussion
 from assembl.models.post import Post
 from assembl.models.idea import Idea
 from assembl.auth import P_READ, P_ADD_EXTRACT
-from assembl.lib.locale import to_posix_format
+from assembl.lib.locale import to_posix_format, ensure_locale_has_country
 from ...models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
@@ -164,22 +164,25 @@ def home_view(request):
             filter_by(user_id = user_id).all()
         user = session.query(User).filter_by(id = user_id).first()
 
+        def validate_locale(l):
+            return ensure_locale_has_country(to_posix_format(locale))
+
         if '_LOCALE_' in request.cookies:
             locale = request.cookies['_LOCALE_']
-            posix_locale = to_posix_format(locale)
-            process_locale(posix_locale,user_id,
+            posix_locale = validate_locale(locale)
+            process_locale(posix_locale, user_id,
                            current_prefs, session,
                            LanguagePreferenceOrder.Cookie)
 
         elif '_LOCALE_' in request.params:
             locale = request.params['_LOCALE_']
-            posix_locale = to_posix_format(locale)
+            posix_locale = validate_locale(locale)
             process_locale(posix_locale, user_id,
                            current_prefs, session,
                            LanguagePreferenceOrder.Parameter)
         else:
             locale = default_locale_negotiator(request)
-            posix_locale = to_posix_format(locale)
+            posix_locale = validate_locale(locale)
             process_locale(posix_locale, user_id,
                            current_prefs, session,
                            LanguagePreferenceOrder.OS_Default)
