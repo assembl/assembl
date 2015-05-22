@@ -164,6 +164,12 @@
 
   #playlist .card-comment {
     margin: 0 20px;
+    .btn-secondary {
+      color: #333;
+      &:hover {
+        background: #ccc;
+      }
+    }
   }
   #current {
     color: white;
