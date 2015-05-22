@@ -1,0 +1,27 @@
+<div class="dropdown discussion-title-dropdown">
+  <a href="#" class="dropdown-toggle debate-title-dropdown" data-toggle="dropdown" aria-expanded="false">
+      <span class="icon-arrowdown"></span>
+  </a>
+  <ul class="dropdown-menu">
+{# 
+  If available, show configuration link of the inspiration/creativity widget associated to this idea
+#}
+<% if ( canCreateWidgets && inspiration_widget_configure_url ){
+  print("<li>");
+  print("<a href=\"" + inspiration_widget_configure_url + "\" target=\"_blank\" class=\"js_openTargetInModal js_clearWidgetDataAssociatedToIdea\" data-modal-title=\"{{gettext('Configure the creativity widget associated to the discussion')}}\">{{gettext('Configure the creativity widget associated to the discussion')}}</a>");
+  print("</li>");
+} %>
+
+
+{# 
+  Show a widget creation link (inspiration/creativity and vote) from this idea
+#}
+<% /* if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE){ */
+  if ( canCreateWidgets && idea ) {
+    if ( inspiration_widget_create_url ) {
+      print("<li><a href=\"" + inspiration_widget_create_url + "\" target=\"_blank\" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title=\"{{gettext('Create a creativity widget on the discussion')}}\">{{gettext('Create a creativity widget on the discussion')}}</a></li>");
+    }
+  }
+/* } */ %>
+  </ul>
+</div>

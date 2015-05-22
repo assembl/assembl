@@ -310,17 +310,23 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
                                       that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
                                       if ( that.model.get('body') && that.model.get('body').length > 610 ) // approximate string length for text which uses 4 full lines
                                       {
-                                          console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
+                                          if (Ctx.debugRender) {
+                                            console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
+                                          }
                                           if ( ++that.reRendered < 5 ) // we use this to avoid infinite loop of render() calls
                                           {
-                                              console.log("yes, we will re-render => tries: ", that.reRendered);
+                                              if (Ctx.debugRender) {
+                                                console.log("yes, we will re-render => tries: ", that.reRendered);
+                                              }
                                               setTimeout(function(){
                                                   that.render();
                                               }, 500);
                                           }
                                           else
                                           {
-                                              console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
+                                              if (Ctx.debugRender) {
+                                                console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
+                                              }
                                           }
                                       }
                                   }

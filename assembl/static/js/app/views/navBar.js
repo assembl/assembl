@@ -1,11 +1,14 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'utils/i18n', 'utils/roles', 'backbone.modal', 'backbone.marionette.modals'],
-    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions, i18n, Roles) {
+define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'utils/i18n', 'utils/roles', 'backbone.modal', 'backbone.marionette.modals', 'views/ideaWidgets'],
+    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions, i18n, Roles, backboneModal, marionetteModal, IdeaWidgets) {
 
         var navBarLeft = Marionette.ItemView.extend({
             template: '#tmpl-navBarLeft',
             className: 'navbar-left',
+            initialize: function(options){
+                this.isAdminDiscussion = Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION);
+            },
             onRender: function(){
                 var that = this;
                 Assembl.commands.setHandler('socket:open', function () {
@@ -14,6 +17,31 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                 Assembl.commands.setHandler('socket:close', function () {
                     that.$('#onlinedot').removeClass('is-online');
                 });
+
+                // show a dropdown to admins, for widgets management
+                // TODO: add to the dropdown the "discussion permissions" and "discussion parameters" options => so this IdeaWidgets view would only add <li>s to a dropdown which will be built elsewhere
+                if ( this.isAdminDiscussion ){
+                    // find root idea
+                    var collectionManager = new CollectionManager();
+                    collectionManager.getAllIdeasCollectionPromise().then(function (allIdeasCollection) {
+                        var rootIdea = allIdeasCollection.getRootIdea();
+                        if ( rootIdea ){
+                            var ideaWidgets = new IdeaWidgets({
+                                template: "#tmpl-rootIdeaWidgets",
+                                model: rootIdea
+                            });
+                            var el = ideaWidgets.render().el;
+                            that.$(".potential-discussion-dropdown-container").html(el);
+                        } else {
+                            console.log("rootIdea problem: ", rootIdea);
+                        }
+                    });
+                }
+            },
+            serializeData: function() {
+                return {
+                    isAdminDiscussion: this.isAdminDiscussion
+                };
             }
         });
 
