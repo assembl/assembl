@@ -237,7 +237,7 @@ define(['app', 'backbone.marionette', 'views/ideaList', 'views/navigation/notifi
             serializeData: function () {
                 return {
                     Ctx: Ctx,
-                    hasMinimize: (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT),
+                    hasMinimize: true, // minimization of the navigation panel is now allowed to everyone. Before, it was: (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT),
                     canAdd: Ctx.getCurrentUser().can(Permissions.ADD_IDEA)
                 }
             },
