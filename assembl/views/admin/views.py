@@ -30,7 +30,7 @@ def discussion_admin(request):
     if not user_id:
         return HTTPFound(location='/login?next_view=/admin/discussions/')
 
-    session = User.db
+    session = User.default_db
 
     context = dict(
         get_default_context(request),
@@ -127,7 +127,7 @@ def discussion_edit(request):
 @view_config(route_name='discussion_permissions', permission=P_ADMIN_DISC)
 def discussion_permissions(request):
     user_id = authenticated_userid(request)
-    db = Discussion.db()
+    db = Discussion.default_db
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
     error=''
@@ -274,7 +274,7 @@ def discussion_permissions(request):
 @view_config(route_name='general_permissions', permission=P_SYSADMIN)
 def general_permissions(request):
     user_id = authenticated_userid(request)
-    db = Discussion.db()
+    db = Discussion.default_db
 
     roles = db.query(Role).all()
     roles_by_name = {r.name: r for r in roles}

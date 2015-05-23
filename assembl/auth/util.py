@@ -110,7 +110,7 @@ def get_current_discussion():
 
 def authentication_callback(user_id, request):
     "This is how pyramid knows the user's permissions"
-    connection = User.db().connection()
+    connection = User.default_db.connection()
     connection.info['userid'] = user_id
     discussion = discussion_from_request(request)
     discussion_id = discussion.id if discussion else None
@@ -127,7 +127,7 @@ def authentication_callback(user_id, request):
 
 def discussions_with_access(userid, permission=P_READ):
     from ..models import Discussion
-    db = Discussion.db()
+    db = Discussion.default_db
     if userid == Everyone:
         return db.query(Discussion).join(
             DiscussionPermission, Role, Permission).filter(and_(
@@ -167,7 +167,7 @@ def discussions_with_access(userid, permission=P_READ):
 def user_has_permission(discussion_id, user_id, permission):
     from ..models import Discussion
     # assume all ids valid
-    db = Discussion.db()
+    db = Discussion.default_db
     if user_id == Everyone:
         permission = db.query(DiscussionPermission).join(
             Permission, Role).filter(
@@ -214,7 +214,7 @@ def user_has_permission(discussion_id, user_id, permission):
 def users_with_permission(discussion_id, permission, id_only=True):
     from ..models import Discussion
     # assume all ids valid
-    db = Discussion.db()
+    db = Discussion.default_db
     user_ids = db.query(User.id).join(
         LocalUserRole, Role, DiscussionPermission, Permission).filter(and_(
         Permission.name == permission,
@@ -245,7 +245,7 @@ def get_identity_provider(request, create=True):
     trusted = request.registry.settings['trusted_login_providers']
     provider = None
     session = get_session_maker()()
-    provider = IdentityProvider.db.query(IdentityProvider).filter_by(
+    provider = IdentityProvider.default_db.query(IdentityProvider).filter_by(
         provider_type=auth_context.provider_type,
         name=auth_context.provider_name
     ).first()
@@ -265,9 +265,9 @@ def add_user(name, email, password, role, force=False, username=None,
              localrole=None, discussion=None, change_old_password=True,
              **kwargs):
     from assembl.models import Discussion, Username
-    db = Discussion.db()
+    db = Discussion.default_db
     # refetch within transaction
-    all_roles = {r.name: r for r in Role.db.query(Role).all()}
+    all_roles = {r.name: r for r in Role.default_db.query(Role).all()}
     user = None
     if discussion and localrole:
         if isinstance(discussion, (str, unicode)):

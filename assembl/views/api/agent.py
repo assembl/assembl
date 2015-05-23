@@ -84,7 +84,7 @@ def post_agent(request):
         raise HTTPUnauthorized()
     redirect = False
     username = request.params.get('username', '').strip()
-    session = AgentProfile.db
+    session = AgentProfile.default_db
     localizer = request.localizer
     errors = []
 

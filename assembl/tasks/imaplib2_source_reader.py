@@ -112,14 +112,14 @@ class IMAPReader(SourceReader):
                     (email_object, dummy, error) = self.source.parse_email(message_string)
                     if error:
                         raise ReaderError(error)
-                    ContentSource.db.add(email_object)
+                    self.source.db.add(email_object)
                 else:
                     print "Skipped message with imap id %s (bounce or vacation message)" % (email_id)
                 # print "Setting self.source.last_imported_email_uid to "+email_id
                 self.source.last_imported_email_uid = email_id
-                ContentSource.db.commit()
+                self.source.db.commit()
             finally:
-                self.source = ContentSource.get(self.source.id)
+                self.source = self.source.db.get(self.source.id)
         except IMAP4.abort as e:
             raise IrrecoverableError(e)
         except IMAP4.error as e:

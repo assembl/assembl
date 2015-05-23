@@ -56,7 +56,7 @@ def main():
     engine = configure_engine(settings, True)
     from assembl.models import Role
     from assembl.auth.util import add_user
-    all_roles = {r.name: r for r in Role.db.query(Role).all()}
+    all_roles = {r.name: r for r in Role.default_db.query(Role).all()}
     if args.f:
         userinfo = load(args.f)
         if isinstance(userinfo, dict):

@@ -193,7 +193,7 @@ class Idea(Tombstonable, DiscussionBoundBase):
                   JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
                   WHERE dag_idea.discussion_id = :discussion_id
                   AND ia.target_id=:idea_id) x on (id=source_id)'''
-        ancestors = self.db().query(Idea).from_statement(text(sql).bindparams(
+        ancestors = self.db.query(Idea).from_statement(text(sql).bindparams(
             discussion_id=self.discussion_id, idea_id=self.id))
 
         return ancestors.all()
@@ -293,7 +293,7 @@ JOIN post AS family_posts ON (
     @property
     def num_read_posts(self):
         """ Worse than above... but temporary """
-        connection = self.db().connection()
+        connection = self.db.connection()
         user_id = connection.info.get('userid', None)
         return self.num_read_posts_for(user_id)
 
@@ -452,7 +452,7 @@ JOIN post AS family_posts ON (
         if id_only:
             return [AgentProfile.uri_generic(id) for id in author_ids]
         else:
-            return AgentProfile.db.query(AgentProfile).filter(
+            return self.db.query(AgentProfile).filter(
                 AgentProfile.id.in_(author_ids)).all()
 
     def get_discussion_id(self):
@@ -508,7 +508,7 @@ JOIN post AS family_posts ON (
             next_synthesis.send_to_changes()
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP):
-        connection = connection or self.db().connection()
+        connection = connection or self.db.connection()
         if self.is_tombstone:
             self.tombstone().send_to_changes(connection)
         else:
@@ -542,7 +542,7 @@ JOIN post AS family_posts ON (
 
         post_uri = URIRef(Content.uri_generic(
             post_id, AssemblQuadStorageManager.local_uri()))
-        return [int(id) for (id,) in cls.db.execute(SparqlClause(
+        return [int(id) for (id,) in cls.default_db.execute(SparqlClause(
             '''select distinct ?idea where {
                 %s sioc:reply_of* ?post .
                 ?fragment oa:hasSource ?post .
@@ -563,7 +563,7 @@ JOIN post AS family_posts ON (
         user_uri = URIRef(AgentProfile.uri_generic(user_id, local_uri)).n3()
         results = []
         for idea_id in idea_ids:
-            ((read,),) = list(cls.db.execute(SparqlClause(
+            ((read,),) = list(cls.default_db.execute(SparqlClause(
             """select count(distinct ?change) where {
             %s idea:includes* ?ideaF .
             ?fragment assembl:resourceExpressesIdea ?ideaF .
@@ -582,7 +582,7 @@ JOIN post AS family_posts ON (
         """Given a post and a user, give the total and read count
             of posts for each affected idea"""
         idea_ids = cls.get_idea_ids_showing_post(post_id)
-        ideas = cls.db.query(cls).filter(cls.id.in_(idea_ids))
+        ideas = cls.default_db.query(cls).filter(cls.id.in_(idea_ids))
         return [(idea.id, idea.num_read_posts_for(user_id))
                 for idea in ideas]
 
@@ -603,7 +603,7 @@ JOIN post AS family_posts ON (
     def get_all_idea_links(cls, discussion_id):
         target = aliased(cls)
         source = aliased(cls)
-        return cls.db().query(
+        return cls.default_db.query(
             IdeaLink).join(
             source, source.id == IdeaLink.source_id).join(
             target, target.id == IdeaLink.target_id).filter(
@@ -642,7 +642,7 @@ JOIN post AS family_posts ON (
                             IdeaLink, kwargs)))
 
             def contains(self, parent_instance, instance):
-                return IdeaLink.db.query(
+                return instance.db.query(
                     IdeaLink).filter_by(
                     source=parent_instance, target=instance
                     ).count() > 0
@@ -691,7 +691,7 @@ JOIN post AS family_posts ON (
                 iwlink = aliased(IdeaWidgetLink)
                 ancestry = self.ancestry.bindparams(
                     idea_id=parent_instance.id).alias('ancestry')
-                query = Widget.db.query(Widget).join(iwlink).join(
+                query = instance.db.query(Widget).join(iwlink).join(
                     ancestors).filter(ancestors.id.in_(ancestry)).filter(
                     Widget.id == instance.id)
                 if self.widget_subclass is not None:
@@ -721,7 +721,7 @@ JOIN post AS family_posts ON (
                                 IdeaRelatedPostLink, kwargs)))
 
             def contains(self, parent_instance, instance):
-                return IdeaRelatedPostLink.db.query(
+                return instance.db.query(
                     IdeaRelatedPostLink).filter_by(
                     content=instance, idea=parent_instance
                     ).count() > 0
@@ -758,7 +758,7 @@ JOIN post AS family_posts ON (
                     instance.hidden = True
 
             def contains(self, parent_instance, instance):
-                return IdeaContentWidgetLink.db.query(
+                return instance.db.query(
                     IdeaContentWidgetLink).filter_by(
                     content=instance, idea=parent_instance
                     ).count() > 0
@@ -782,7 +782,7 @@ JOIN post AS family_posts ON (
                     widgets_coll = ctx.find_collection(
                         'CriterionCollection.criteria')
                     if isinstance(inst, AbstractIdeaVote):
-                        other_votes = cls.db.query(AbstractIdeaVote).filter_by(
+                        other_votes = instance.db.query(AbstractIdeaVote).filter_by(
                             voter_id=user_id, idea_id=inst.idea.id,
                             criterion_id=parent_instance.id, is_tombstone=False
                             ).options(joinedload(AbstractIdeaVote.idea)).all()
@@ -1000,7 +1000,7 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
             return self.object_session.query(Idea).get(self.source_id).get_discussion_id()
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP):
-        connection = connection or self.db().connection()
+        connection = connection or self.db.connection()
         if self.is_tombstone:
             self.tombstone().send_to_changes(connection)
         else:

@@ -131,7 +131,7 @@ def login_view(request):
 def get_profile(request):
     id_type = request.matchdict.get('type').strip()
     identifier = request.matchdict.get('identifier').strip()
-    session = AgentProfile.db
+    session = AgentProfile.default_db
     if id_type == 'u':
         username = session.query(Username).filter_by(
             username=identifier).first()
@@ -166,7 +166,7 @@ def get_profile(request):
 
 @view_config(route_name='profile_user')
 def assembl_profile(request):
-    session = AgentProfile.db
+    session = AgentProfile.default_db
     localizer = request.localizer
     profile = get_profile(request)
     id_type = request.matchdict.get('type').strip()
@@ -285,7 +285,7 @@ def assembl_register_view(request):
             response['error'] = request.GET['error']
         return response
     forget(request)
-    session = AgentProfile.db
+    session = AgentProfile.default_db
     localizer = request.localizer
     name = request.params.get('name', '').strip()
     password = request.params.get('password', '').strip()
@@ -366,7 +366,7 @@ def smtp_error_view(exc, request):
 
 
 def from_identifier(identifier):
-    session = AgentProfile.db
+    session = AgentProfile.default_db
     if '@' in identifier:
         account = session.query(AbstractAgentAccount).filter_by(
             email=identifier).order_by(AbstractAgentAccount.verified.desc()).first()
@@ -395,7 +395,7 @@ def from_identifier(identifier):
 )
 def assembl_login_complete_view(request):
     # Check if proper authorization. Otherwise send to another page.
-    session = AgentProfile.db
+    session = AgentProfile.default_db
     identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
     next_view = handle_next_view(
@@ -436,7 +436,7 @@ def assembl_login_complete_view(request):
     context='velruse.AuthenticationComplete'
 )
 def velruse_login_complete_view(request):
-    session = AgentProfile.db
+    session = AgentProfile.default_db
     context = request.context
     velruse_profile = context.profile
     discussion = None
@@ -635,11 +635,11 @@ def maybe_auto_subscribe(user, discussion):
             or not discussion.subscribe_to_notifications_on_signup):
         return False
     # really auto-subscribe user
-    role = User.db.query(Role).filter_by(name=R_PARTICIPANT).first()
-    User.db.add(LocalUserRole(
+    role = discussion.db.query(Role).filter_by(name=R_PARTICIPANT).first()
+    discussion.db.add(LocalUserRole(
         user_id=user.id, role=role,
         discussion_id=discussion.id))
-    User.db.flush()
+    discussion.db.flush()
     # apply new notifications
     user.get_notification_subscriptions(discussion.id)
     return True
@@ -658,7 +658,7 @@ def maybe_auto_subscribe(user, discussion):
 def user_confirm_email(request):
     token = request.matchdict.get('ticket')
     email = verify_email_token(token)
-    session = AbstractAgentAccount.db
+    session = AbstractAgentAccount.default_db
     # TODO: token expiry
     localizer = request.localizer
     if not email:
@@ -677,7 +677,7 @@ def user_confirm_email(request):
     next_view = handle_next_view(request, False)
 
     if email.verified:
-        raise HTTPFound(location=maybe_contextual_route(
+        return HTTPFound(location=maybe_contextual_route(
             request, 'login', _query=dict(message=localizer.translate(
                 _("Email <%s> already confirmed")) % (email.email,))))
     else:
@@ -759,8 +759,8 @@ def confirm_email_sent(request):
     email = request.matchdict.get('email')
     if not email:
         raise HTTPNotFound()
-    email_objects = AbstractAgentAccount.db.query(AbstractAgentAccount).filter_by(
-        email=email)
+    email_objects = AbstractAgentAccount.default_db.query(
+        AbstractAgentAccount).filter_by(email=email)
     verified_emails = [e for e in email_objects if e.verified]
     unverified_emails = [e for e in email_objects if not e.verified]
     if len(verified_emails) > 1:

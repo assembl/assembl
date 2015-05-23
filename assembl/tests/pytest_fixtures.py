@@ -15,7 +15,7 @@ from splinter import Browser
 
 import assembl
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
-from assembl.lib.sqla import get_session_maker
+from assembl.lib.sqla import get_typed_session_maker
 from assembl.tasks import configure as configure_tasks
 from .utils import clear_rows, drop_tables
 from assembl.auth import R_SYSADMIN, R_PARTICIPANT
@@ -32,7 +32,10 @@ def app_settings(request):
 
 @pytest.fixture(scope="session")
 def session_factory(request):
-    session_factory = get_session_maker()
+    # Get the zopeless session maker,
+    # while the Webtest server will use the
+    # default session maker, which is zopish.
+    session_factory = get_typed_session_maker(False)
 
     def fin():
         print "finalizer session_factory"
@@ -91,6 +94,7 @@ def test_app_no_perm(request, app_settings, base_registry):
 @pytest.fixture(scope="module")
 def db_default_data(request, db_tables, app_settings, base_registry):
     bootstrap_db_data(db_tables)
+    #db_tables.commit()
     transaction.commit()
 
     def fin():
@@ -110,6 +114,7 @@ def test_session(request, db_default_data):
         print "finalizer test_session"
         try:
             session.commit()
+            #session.close()
         except Exception:
             session.rollback()
     request.addfinalizer(fin)
@@ -119,7 +124,8 @@ def test_session(request, db_default_data):
 @pytest.fixture(scope="function")
 def discussion(request, test_session):
     from assembl.models import Discussion
-    d = Discussion(topic=u"Jack Layton", slug="jacklayton2", settings="{}")
+    d = Discussion(topic=u"Jack Layton", slug="jacklayton2", settings="{}",
+                   session=test_session)
     test_session.add(d)
     test_session.add(d.next_synthesis)
     test_session.add(d.root_idea)
@@ -163,7 +169,7 @@ def admin_user(request, test_session, db_default_data):
     from assembl.models import User, UserRole, Role
     u = User(name=u"Mr. Administrator", type="user")
     test_session.add(u)
-    r = Role.get_role(test_session, R_SYSADMIN)
+    r = Role.get_role(R_SYSADMIN, test_session)
     ur = UserRole(user=u, role=r)
     test_session.add(ur)
     test_session.flush()
@@ -203,7 +209,7 @@ def participant1_user(request, test_session, discussion):
     u = User(name=u"A. Barking Loon", type="user", password="password", verified=True)
     email = EmailAccount(email="abloon@example.com", profile=u, verified=True)
     test_session.add(u)
-    r = Role.get_role(test_session, R_PARTICIPANT)
+    r = Role.get_role(R_PARTICIPANT, test_session)
     ur = UserRole(user=u, role=r)
     test_session.add(ur)
     u.subscribe(discussion)
@@ -222,7 +228,7 @@ def participant2_user(request, test_session):
     from assembl.models import User, UserRole, Role
     u = User(name=u"James T. Expert", type="user")
     test_session.add(u)
-    r = Role.get_role(test_session, R_PARTICIPANT)
+    r = Role.get_role(R_PARTICIPANT, test_session)
     ur = UserRole(user=u, role=r)
     test_session.add(ur)
     test_session.flush()

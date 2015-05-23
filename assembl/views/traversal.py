@@ -49,7 +49,7 @@ class AppRoot(DictContext):
         if key in self.subobjects:
             return self.subobjects[key]
         from assembl.models import Discussion
-        discussion = Discussion.db.query(Discussion).filter_by(
+        discussion = Discussion.default_db.query(Discussion).filter_by(
             slug=key).first()
         if not discussion:
             raise KeyError()
@@ -167,9 +167,9 @@ class ClassContext(TraversalContext):
         cls = self._class
         self.class_alias = alias = aliased(cls)
         if id_only:
-            query = cls.db().query(alias.id)
+            query = self._class.default_db.query(alias.id)
         else:
-            query = cls.db().query(alias)
+            query = self._class.default_db.query(alias)
         # TODO: Distinguish tombstone condition from other base_conditions
         if issubclass(cls, Tombstonable) and not tombstones:
             query = query.filter(and_(*cls.base_conditions(alias)))
@@ -186,7 +186,7 @@ class ClassContext(TraversalContext):
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_class(typename)
-        with cls.db().no_autoflush:
+        with self._class.default_db.no_autoflush:
             if json is None:
                 mapper = sqlainspect(cls)
                 for prop in ('creator_id', 'user_id'):
@@ -372,7 +372,7 @@ class CollectionContext(TraversalContext):
         cls = self.collection_class
         alias = aliased(cls)
         if id_only:
-            query = cls.db().query(alias.id)
+            query = self.parent_instance.db.query(alias.id)
             return self.decorate_query(
                 query, alias, self, tombstones).distinct()
         else:
@@ -380,7 +380,7 @@ class CollectionContext(TraversalContext):
             # virtuoso won't allow distinct on full query,
             # and a distinct subquery takes forever.
             # Oh, and quietcast loses the distinct. Just great.
-            query = cls.db().query(alias)
+            query = self.parent_instance.db.query(alias)
             return self.decorate_query(query, alias, self, tombstones)
 
     def decorate_query(self, query, last_alias, ctx, tombstones=False):
@@ -402,7 +402,7 @@ class CollectionContext(TraversalContext):
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
-        with cls.db.no_autoflush:
+        with self.parent_instance.db.no_autoflush:
             try:
                 if json is None:
                     mapper = sqlainspect(cls)
@@ -655,13 +655,13 @@ def root_factory(request):
     from ..models import Discussion
     if request.matchdict and 'discussion_id' in request.matchdict:
         discussion_id = int(request.matchdict['discussion_id'])
-        discussion = Discussion.db.query(Discussion).get(discussion_id)
+        discussion = Discussion.default_db.query(Discussion).get(discussion_id)
         if not discussion:
             raise HTTPNotFound("No discussion ID %d" % (discussion_id,))
         return discussion
     elif request.matchdict and 'discussion_slug' in request.matchdict:
         discussion_slug = request.matchdict['discussion_slug']
-        discussion = Discussion.db.query(Discussion).filter_by(
+        discussion = Discussion.default_db.query(Discussion).filter_by(
             slug=discussion_slug).first()
         if not discussion:
             raise HTTPNotFound("No discussion named %s" % (discussion_slug,))

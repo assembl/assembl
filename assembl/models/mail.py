@@ -583,12 +583,12 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
             but without re-hitting the source, or changing the object ids.
             Call when a code change would change the representation in the database
             """
-        emails = self.db.query(Email).filter(
+        session = self.db
+        emails = session.query(Email).filter(
                 Email.source_id == self.id,
                 ).options(joinedload_all(Email.parent))
-        session = self.db
         for email in emails:
-            #session = Email.db
+            #session = self.db
             #session.add(email)
             (email_object, dummy, error) = self.parse_email(
                 email.imported_blob, email)
@@ -757,7 +757,8 @@ class IMAPMailbox(AbstractMailbox):
     @staticmethod
     def do_import_content(mbox, only_new=True):
         mbox = mbox.db.merge(mbox)
-        mbox.db.add(mbox)
+        session = mbox.db
+        session.add(mbox)
         if mbox.use_ssl:
             mailbox = IMAP4_SSL(host=mbox.host.encode('utf-8'), port=mbox.port)
         else:
@@ -803,7 +804,7 @@ class IMAPMailbox(AbstractMailbox):
             email_ids = search_result[0].split()
 
         def import_email(mailbox_obj, email_id):
-            session = mailbox_obj.db()
+            session = mailbox_obj.db
             #print "running fetch for message: "+email_id
             status, message_data = mailbox.uid('fetch', email_id, "(RFC822)")
             assert status == 'OK'
@@ -840,7 +841,7 @@ class IMAPMailbox(AbstractMailbox):
         with transaction.manager:
             if len(email_ids):
                 #We imported mails, we need to re-thread
-                emails = Email.db().query(Email).filter(
+                emails = session.query(Email).filter(
                     Email.discussion_id == discussion_id,
                     ).options(joinedload_all(Email.parent))
 
@@ -917,7 +918,8 @@ class MaildirMailbox(AbstractFilesystemMailbox):
     @staticmethod
     def do_import_content(abstract_mbox, only_new=True):
         abstract_mbox = abstract_mbox.db.merge(abstract_mbox)
-        abstract_mbox.db.add(abstract_mbox)
+        session = abstract_mbox.db
+        session.add(abstract_mbox)
         discussion_id = abstract_mbox.discussion_id
 
         if not os.path.isdir(abstract_mbox.filesystem_path):
@@ -946,7 +948,7 @@ class MaildirMailbox(AbstractFilesystemMailbox):
         mails = mbox.values()
         #import pdb; pdb.set_trace()
         def import_email(abstract_mbox, message_data):
-            session = abstract_mbox.db()
+            session = abstract_mbox.db
             message_string = message_data.as_string()
 
             (email_object, dummy, error) = abstract_mbox.parse_email(message_string)
@@ -960,7 +962,7 @@ class MaildirMailbox(AbstractFilesystemMailbox):
             [import_email(abstract_mbox, message_data) for message_data in mails]
 
             #We imported mails, we need to re-thread
-            emails = Email.db().query(Email).filter(
+            emails = session.query(Email).filter(
                     Email.discussion_id == discussion_id,
                     ).options(joinedload_all(Email.parent))
 

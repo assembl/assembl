@@ -219,7 +219,7 @@ class NotificationSubscription(DiscussionBoundBase):
         override this with a more optimal implementation
         """
         applicable_subscriptions = []
-        subscriptionsQuery = cls.db.query(cls)
+        subscriptionsQuery = cls.default_db.query(cls)
         subscriptionsQuery = subscriptionsQuery.filter(cls.status==NotificationSubscriptionStatus.ACTIVE);
         subscriptionsQuery = subscriptionsQuery.filter(cls.discussion_id==discussion_id);
         if user:
@@ -610,7 +610,6 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
-        from sqlalchemy import inspect
         from ..tasks.notify import notify
         notification = NotificationOnPostCreated(
             post_id = objectInstance.id,

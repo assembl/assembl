@@ -11,7 +11,7 @@ def _test_load_fixture(request, discussion, admin, fixture):
     print fixture.__dict__
     fixture.update_from_json(json, admin.id)
     print fixture.__dict__
-    assert not fixture.db.is_modified(fixture, True)
+    assert not discussion.db.is_modified(fixture, True)
 
 
 def test_load_discussion(request, discussion, admin_user):

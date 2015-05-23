@@ -74,7 +74,7 @@ def read_user_token(request):
             t_user_id, t_discussion_id = data[:2]
             req_permissions = data[2:]
             if len(req_permissions):
-                req_permissions = [x for (x,) in Permission.db.query(
+                req_permissions = [x for (x,) in Permission.default_db.query(
                     Permission.name).filter(
                     Permission.id.in_(req_permissions)).all()]
         except (ValueError, IndexError):
@@ -132,8 +132,8 @@ def get_token(request):
             req_permissions = list(req_permissions.intersection(permissions))
     req_permissions = list(req_permissions)
     data = [str(user_id), str(discussion_id)]
-    data.extend([str(x) for (x,) in Permission.db.query(Permission.id).filter(
-        Permission.name.in_(req_permissions)).all()])
+    data.extend([str(x) for (x,) in Permission.default_db.query(
+            Permission.id).filter(Permission.name.in_(req_permissions)).all()])
     data = ','.join(data) + '.' + base64.urlsafe_b64encode(random_str)
     return Response(body=data_token(data), content_type="text/text")
 

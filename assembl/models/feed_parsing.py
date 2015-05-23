@@ -288,7 +288,7 @@ class FeedSourceReader(PullSourceReader):
             self._add_entries()
 
     def _re_import(self, discussion=None):
-        sess = PostSource.db()
+        sess = self.source.db
         for entry in self._parse_agent.get_entries():
             try:
                 post_id = self._get_entry_id(entry)
@@ -338,12 +338,12 @@ class FeedSourceReader(PullSourceReader):
         for post, account in self._generate_post_stream():
             try:
                 if not account.find_duplicate(True, True):
-                    post.db.add(account)
+                    self.source.db.add(account)
                 if not post.find_duplicate(True, True):
-                    post.db.add(post)
-                post.db().commit()
+                    self.source.add(post)
+                self.source.commit()
             except Exception as e:
-                post.db().rollback()
+                self.source.rollback()
                 raise ReaderError(e)
             finally:
                 self.source = FeedPostSource.get(self.source_id)
@@ -373,7 +373,7 @@ class FeedSourceReader(PullSourceReader):
 
     def _return_existing_post(self, post_id):
         cls = self.source.post_type
-        return self.source.db().query(cls).\
+        return self.source.db.query(cls).\
             filter_by(source_post_id=post_id, source_id=self.source_id).first()
 
     def _get_title_from_feed(self):

@@ -2,7 +2,7 @@ from itertools import groupby, chain
 import traceback
 from datetime import datetime
 
-import anyjson as json
+import simplejson as json
 from pyramid.security import Allow, ALL_PERMISSIONS
 from sqlalchemy import (
     Column,
@@ -87,10 +87,9 @@ class Discussion(DiscussionBoundBase):
             Post.uri_generic(id) for id in self.read_post_ids(user_id)])
 
     def import_from_sources(self, only_new=True):
-        from .generic import PostSource
         for source in self.sources:
             # refresh after calling
-            source = PostSource.db.merge(source)
+            source = self.db.merge(source)
             assert source != None
             assert source.id
             try:
@@ -99,6 +98,7 @@ class Discussion(DiscussionBoundBase):
                 traceback.print_exc()
 
     def __init__(self, *args, **kwargs):
+        session = kwargs.pop('session', self.default_db)
         super(Discussion, self).__init__(*args, **kwargs)
         # create unless explicitly set to None
         if 'root_idea' in kwargs:
@@ -123,10 +123,10 @@ class Discussion(DiscussionBoundBase):
         else:
             from .idea_graph_view import Synthesis
             synthesis = Synthesis(discussion=self)
-            self.db.add(synthesis)
-        participant = self.db.query(Role).filter_by(name=R_PARTICIPANT).one()
+            session.add(synthesis)
+        participant = session.query(Role).filter_by(name=R_PARTICIPANT).one()
         participant_template = UserTemplate(discussion=self, for_role=participant)
-        self.db.add(participant_template)
+        session.add(participant_template)
 
     def unique_query(self):
         # DiscussionBoundBase is misleading here
@@ -163,7 +163,7 @@ class Discussion(DiscussionBoundBase):
 
     def get_last_published_synthesis(self):
         from .idea_graph_view import Synthesis
-        return self.db().query(Synthesis).filter(
+        return self.db.query(Synthesis).filter(
             Synthesis.discussion_id == self.id and
             Synthesis.published_in_post != None
         ).order_by(Synthesis.published_in_post.creation_date.desc()
@@ -171,7 +171,7 @@ class Discussion(DiscussionBoundBase):
 
     def get_all_syntheses(self):
         from .idea_graph_view import Synthesis
-        return self.db().query(
+        return self.db.query(
             Synthesis).options(
             subqueryload_all(
             'idea_assocs.idea'),
@@ -182,7 +182,7 @@ class Discussion(DiscussionBoundBase):
             Synthesis.discussion_id == self.id).all()
 
     def get_permissions_by_role(self):
-        roleperms = self.db().query(Role.name, Permission.name).select_from(
+        roleperms = self.db.query(Role.name, Permission.name).select_from(
             DiscussionPermission).join(Role, Permission).filter(
                 DiscussionPermission.discussion_id == self.id).all()
         roleperms.sort()
@@ -190,7 +190,7 @@ class Discussion(DiscussionBoundBase):
         return {r: [p for (r2, p) in rps] for (r, rps) in byrole}
 
     def get_roles_by_permission(self):
-        permroles = self.db().query(Permission.name, Role.name).select_from(
+        permroles = self.db.query(Permission.name, Role.name).select_from(
             DiscussionPermission).join(Role, Permission).filter(
                 DiscussionPermission.discussion_id == self.id).all()
         permroles.sort()
@@ -198,12 +198,12 @@ class Discussion(DiscussionBoundBase):
         return {p: [r for (p2, r) in prs] for (p, prs) in byperm}
 
     def get_readers(self):
-        session = self.db()
+        session = self.db
         users = session.query(User).join(
             UserRole, Role, DiscussionPermission, Permission).filter(
                 DiscussionPermission.discussion_id == self.id and
                 Permission.name == P_READ
-            ).union(self.db().query(User).join(
+            ).union(self.db.query(User).join(
                 LocalUserRole, Role, DiscussionPermission, Permission).filter(
                     DiscussionPermission.discussion_id == self.id and
                     LocalUserRole.discussion_id == self.id and
@@ -243,7 +243,7 @@ class Discussion(DiscussionBoundBase):
 
     def get_top_ideas(self):
         from .idea import Idea
-        return self.db().query(Idea).filter(
+        return self.db.query(Idea).filter(
             Idea.discussion_id == self.id).filter(
                 ~Idea.source_links.any()).all()
 

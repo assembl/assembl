@@ -67,6 +67,7 @@ def dispose_sqlengines():
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
 _session_maker = None
+_session_makers = {True: None, False: None }
 db_schema = None
 _metadata = None
 Base = TimestampedBase = None
@@ -126,10 +127,15 @@ class BaseOps(object):
     #     return _TABLENAME_RE.sub(r'_\1', cls.__name__).strip('_').lower()
 
     @classproperty
-    def db(cls):
-        """Return the SQLAlchemy db session maker object."""
+    def default_db(cls):
+        """Return the global SQLAlchemy db session maker object."""
         assert _session_maker is not None
         return _session_maker
+
+    @property
+    def db(self):
+        """Return the SQLAlchemy db session object."""
+        return inspect(self).session or self.default_db()
 
     @property
     def object_session(self):
@@ -265,7 +271,7 @@ class BaseOps(object):
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
             # This should be the case in general, no need to add a transaction manager.
-            connection = self.db().connection()
+            connection = self.db.connection()
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
         connection.info['cdict'][self.uri()] = (
@@ -779,7 +785,7 @@ class BaseOps(object):
         discussion = context.get_instance_of_class(Discussion)
         permissions = get_permissions(
             user_id, discussion.id if discussion else None)
-        with cls.db.no_autoflush:
+        with cls.default_db.no_autoflush:
             # We need this to allow db.is_modified to work well
             return cls._do_create_from_json(
                 json, parse_def, {}, context, permissions, user_id)
@@ -806,12 +812,12 @@ class BaseOps(object):
         elif result is not inst and \
             not result.user_can(
                 user_id, CrudPermissions.UPDATE, permissions
-                ) and cls.db.is_modified(result, False):
+                ) and cls.default_db.is_modified(result, False):
             raise HTTPUnauthorized(
                 "User id <%s> cannot modify a <%s> object" % (
                     user_id, cls.__name__))
         if result is not inst:
-            cls.db.add(result)
+            cls.default_db.add(result)
             result_id = result.uri()
             if '@id' in json and result_id != json['@id']:
                 aliases[json['@id']] = result
@@ -1317,10 +1323,14 @@ def make_session_maker(zope_tr=True, autoflush=True):
 
 def initialize_session_maker(zope_tr=True, autoflush=True):
     "Initialize the application global sessionmaker object"
-    global _session_maker
-    assert _session_maker is None
-    _session_maker = make_session_maker(zope_tr, autoflush)
-    return _session_maker
+    global _session_maker, _session_makers
+    assert _session_maker is None or _session_maker == _session_makers[not zope_tr]
+    session_maker = make_session_maker(zope_tr, autoflush)
+    _session_makers[zope_tr] = session_maker
+    if _session_maker is None:
+        # The global object is the first one initialized
+        _session_maker = session_maker
+    return session_maker
 
 
 def session_maker_is_initialized():
@@ -1333,6 +1343,14 @@ def get_session_maker():
     global _session_maker
     assert _session_maker is not None
     return _session_maker
+
+
+def get_typed_session_maker(zope_tr, autoflush=True):
+    global _session_makers
+    zope_tr = bool(zope_tr)
+    if _session_makers[zope_tr] is None:
+        _session_makers[zope_tr] = initialize_session_maker(zope_tr, autoflush)
+    return _session_makers[zope_tr]
 
 
 class Tombstone(object):

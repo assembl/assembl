@@ -78,7 +78,7 @@ def test_extracts(
     modified_extract_data["idIdea"] = subidea_1_1.uri()
     res = test_app.put(url, json.dumps(modified_extract_data))
     assert res.status_code == 200
-    Extract.db.flush()
+    discussion.db.flush()
     res = test_app.get(url)
     assert res.status_code == 200
     extract_json = json.loads(res.body)
@@ -208,7 +208,7 @@ def test_api_register(discussion, test_app):
             'password2': '1234',
             })
         assert r.status_code == 302
-        User.db.flush()
+        discussion.db.flush()
         # Register step 2
         r = test_app.get(r.location)
         # Sent
@@ -251,7 +251,7 @@ def test_api_get_posts_from_idea(
     
     def check_number_of_posts(idea, expected_num, fail_msg):
         #Check from idea API
-        idea.db.flush()
+        discussion.db.flush()
         res = test_app.get(base_idea_url + "/" + str(idea.id))
         assert res.status_code == 200
         res_data = json.loads(res.body)

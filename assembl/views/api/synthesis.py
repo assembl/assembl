@@ -72,7 +72,7 @@ def save_synthesis(request):
     synthesis.introduction = synthesis_data.get('introduction')
     synthesis.conclusion = synthesis_data.get('conclusion')
 
-    Synthesis.db.add(synthesis)
-    Synthesis.db.flush()
+    Synthesis.default_db.add(synthesis)
+    Synthesis.default_db.flush()
 
     return {'ok': True, 'id': synthesis.uri()}

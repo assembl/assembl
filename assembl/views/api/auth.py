@@ -83,7 +83,7 @@ users_with_permission = Service(
 @permissions.get(permission=P_READ)
 def get_permissions_for_discussion(request):
     discussion_id = int(request.matchdict['discussion_id'])
-    session = Discussion.db()
+    session = Discussion.default_db
     discussion = session.query(Discussion).get(discussion_id)
     if not discussion:
         raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
@@ -94,7 +94,7 @@ def get_permissions_for_discussion(request):
 def get_permissions_for_role(request):
     discussion_id = int(request.matchdict['discussion_id'])
     role_name = request.matchdict['role_name']
-    session = Discussion.db()
+    session = Discussion.default_db
     discussion = session.query(Discussion).get(discussion_id)
     if not discussion:
         raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
@@ -108,7 +108,7 @@ def get_permissions_for_role(request):
 def put_permissions_for_role(request):
     discussion_id = int(request.matchdict['discussion_id'])
     role_name = request.matchdict['role_name']
-    session = Discussion.db()
+    session = Discussion.default_db
     discussion = session.query(Discussion).get(discussion_id)
     if not discussion:
         raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
@@ -143,14 +143,14 @@ def put_permissions_for_role(request):
 
 @roles.get(permission=P_READ)
 def get_roles(request):
-    session = Role.db()
+    session = Role.default_db
     roles = session.query(Role)
     return [r.name for r in roles]
 
 
 @roles.put(permission=P_SYSADMIN)
 def put_roles(request):
-    session = Role.db()
+    session = Role.default_db
     try:
         data = json.loads(request.body)
     except Exception as e:
@@ -179,7 +179,7 @@ def get_global_roles_for_user(request):
     user = User.get_instance(user_id)
     if not user:
         raise HTTPNotFound("User id %s does not exist" % (user_id,))
-    rolenames = User.db.query(Role.name).join(
+    rolenames = User.default_db.query(Role.name).join(
         UserRole).filter(UserRole.user == user)
     return [x[0] for x in rolenames]
 
@@ -188,7 +188,7 @@ def get_global_roles_for_user(request):
 def put_global_roles_for_user(request):
     user_id = request.matchdict['user_id']
     user = User.get_instance(user_id)
-    session = User.db()
+    session = User.default_db
     if not user:
         raise HTTPNotFound("User id %d does not exist" % (user_id,))
     try:
@@ -221,7 +221,7 @@ def get_discussion_roles_for_user(request):
     discussion_id = int(request.matchdict['discussion_id'])
     user_id = request.matchdict['user_id']
     user = User.get_instance(user_id)
-    session = Discussion.db()
+    session = Discussion.default_db
     if not user:
         raise HTTPNotFound("User id %d does not exist" % (user_id,))
     rolenames = session.query(Role.name).join(
@@ -244,7 +244,7 @@ def put_discussion_roles_for_user(request):
         data = json.loads(request.body)
     except Exception as e:
         raise HTTPBadRequest("Malformed Json")
-    session = Discussion.db()
+    session = Discussion.default_db
     if not isinstance(data, list):
         raise HTTPBadRequest("Not a list")
     if data and frozenset((type(x) for x in data)) != frozenset((str,)):

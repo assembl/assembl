@@ -30,7 +30,7 @@ idea_extracts = Service(
 @ideas.post(permission=P_ADD_IDEA)
 def create_idea(request):
     discussion_id = int(request.matchdict['discussion_id'])
-    session = Discussion.db()
+    session = Discussion.default_db
     discussion = session.query(Discussion).get(int(discussion_id))
     idea_data = json.loads(request.body)
 
@@ -70,7 +70,7 @@ def get_idea(request):
 
 def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     next_synthesis = discussion.get_next_synthesis()
-    ideas = Idea.db.query(Idea).filter_by(
+    ideas = discussion.db.query(Idea).filter_by(
         discussion_id=discussion.id
     )
 
@@ -128,7 +128,7 @@ def save_idea(request):
     discussion_id = int(request.matchdict['discussion_id'])
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)
-    #Idea.db.execute('set transaction isolation level read committed')
+    #Idea.default_db.execute('set transaction isolation level read committed')
     # Special items in TOC, like unsorted posts.
     if idea_id in ['orphan_posts']:
         return {'ok': False, 'id': Idea.uri_generic(idea_id)}
@@ -168,7 +168,7 @@ def save_idea(request):
             new_ancestors.update(pl_ancestors)
             if parent_link.source != parent:
                 parent_link.is_tombstone=True
-                Idea.db.expire(idea, ['source_links'])
+                idea.db.expire(idea, ['source_links'])
                 for ancestor in pl_ancestors:
                     if ancestor in prev_ancestors:
                         break
@@ -176,19 +176,19 @@ def save_idea(request):
             else:
                 parent_link.order = order
                 current_parent = parent_link
-            Idea.db.expire(parent_link.source, ['target_links'])
+            parent_link.db.expire(parent_link.source, ['target_links'])
             parent_link.source.send_to_changes()
             
         if current_parent is None:
             link = IdeaLink(source=parent, target=idea, order=order)
-            Idea.db.add(link)
+            parent.db.add(link)
             # None of these 3 calls should be necessary, but they do help with 
             # the parents being available (the "empty parent" bug).
             # The root cause is somewhere  IdeaLink, or in sqlalchemy proper
             # but I can't seem to find it - benoitg - 2014-05-27
-            Idea.db.flush()
-            Idea.db.expire(parent, ['target_links'])
-            Idea.db.expire(idea, ['source_links'])
+            parent.db.flush()
+            parent.db.expire(parent, ['target_links'])
+            parent.db.expire(idea, ['source_links'])
             parent.send_to_changes()
             for ancestor in prev_ancestors:
                 if ancestor in new_ancestors:
@@ -216,7 +216,7 @@ def delete_idea(request):
     num_extracts = len(idea.extracts)
     if num_extracts > 0:
         raise HTTPBadRequest("Idea cannot be deleted because it still has %d extracts." % num_extracts)
-    db = Idea.db()
+    db = Idea.default_db
     db.delete(idea)
     request.response.status = HTTPNoContent.code
     return HTTPNoContent()
@@ -234,7 +234,7 @@ def get_idea_extracts(request):
     if not idea:
         raise HTTPNotFound("Idea with id '%s' not found." % idea_id)
 
-    extracts = Extract.db.query(Extract).filter(
+    extracts = Extract.default_db.query(Extract).filter(
         Extract.idea_id == idea.id
     ).order_by(Extract.order.desc())
 

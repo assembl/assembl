@@ -956,7 +956,8 @@ class Role(Base):
     name = Column(String(20), nullable=False)
 
     @classmethod
-    def get_role(cls, session, name):
+    def get_role(cls, name, session=None):
+        session = session or cls.default_db
         return session.query(cls).filter_by(name=name).first()
 
 

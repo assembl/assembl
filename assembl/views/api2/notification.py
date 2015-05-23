@@ -53,7 +53,7 @@ def notif_collection_add_json(request):
         raise HTTPBadRequest(e)
     if instances:
         first = instances[0]
-        db = first.db()
+        db = first.db
         for instance in instances:
             db.add(instance)
         db.flush()

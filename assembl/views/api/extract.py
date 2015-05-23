@@ -68,7 +68,7 @@ def get_extract(request):
 
 
 def _get_extracts_real(discussion, view_def='default', ids=None, user_id=Everyone):
-    all_extracts = Extract.db.query(Extract).filter(
+    all_extracts = discussion.db.query(Extract).filter(
         Extract.discussion_id == discussion.id
     )
     if ids:
@@ -153,7 +153,7 @@ def post_extract(request):
         if not content:
             # TODO: maparent:  This is actually a singleton pattern, should be
             # handled by the AnnotatorSource now that it exists...
-            source = AnnotatorSource.db.query(AnnotatorSource).filter_by(
+            source = AnnotatorSource.default_db.query(AnnotatorSource).filter_by(
                 discussion_id=discussion_id).filter(
                 cast(AnnotatorSource.name, Unicode) == 'Annotator').first()
             if not source:
@@ -183,7 +183,7 @@ def post_extract(request):
         annotation_text=annotation_text,
         content=content
     )
-    Extract.db.add(new_extract)
+    Extract.default_db.add(new_extract)
 
     for range_data in extract_data.get('ranges', []):
         range = TextFragmentIdentifier(
@@ -192,8 +192,8 @@ def post_extract(request):
             offset_start=range_data['startOffset'],
             xpath_end=range_data['end'],
             offset_end=range_data['endOffset'])
-        TextFragmentIdentifier.db.add(range)
-    Extract.db.flush()
+        TextFragmentIdentifier.default_db.add(range)
+    Extract.default_db.flush()
 
     return {'ok': True, '@id': new_extract.uri()}
 
@@ -241,7 +241,7 @@ def put_extract(request):
     else:
         extract.idea = None
 
-    Extract.db.add(extract)
+    Extract.default_db.add(extract)
     #TODO: Merge ranges. Sigh.
 
     return {'ok': True}
@@ -275,7 +275,7 @@ def delete_extract(request):
         return HTTPNoContent()
 
     with transaction.manager:
-        Extract.db.delete(extract)
+        Extract.default_db.delete(extract)
     request.response.status = HTTPNoContent.code
     return HTTPNoContent()
 
@@ -292,7 +292,7 @@ def do_search_extracts(request):
         return HTTPBadRequest("Please specify a search uri")
     content = Webpage.get_by(url=uri)
     if content:
-        extracts = Extract.db.query(Extract).filter_by(content=content).all()
+        extracts = Extract.default_db.query(Extract).filter_by(content=content).all()
         rows = [
             extract.generic_json(view_def, user_id, permissions)
             for extract in extracts]

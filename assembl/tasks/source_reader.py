@@ -275,7 +275,7 @@ class SourceReader(Thread):
                     while self.status == ReaderStatus.WAIT_FOR_PUSH:
                         try:
                             # This is not a final close, but sends it back to the QueuePool
-                            self.source.db().close()
+                            self.source.db.close()
                             self.wait_for_push()
                         except ReaderError as e:
                             self.new_error(e)
@@ -334,7 +334,7 @@ class SourceReader(Thread):
         # redefine in push-capable readers
         if (self.status in (ReaderStatus.READING, ReaderStatus.WAIT_FOR_PUSH)):
             self.set_status(ReaderStatus.PAUSED)
-        self.source.db().close()
+        self.source.db.close()
 
     def close(self):
         if self.status == ReaderStatus.WAIT_FOR_PUSH:
@@ -348,7 +348,7 @@ class SourceReader(Thread):
         except ReaderError as e:
             self.new_error(e, min(e.status, ReaderStatus.CLIENT_ERROR))
         finally:
-            self.source.db().close()
+            self.source.db.close()
 
     @abstractmethod
     def do_close(self):

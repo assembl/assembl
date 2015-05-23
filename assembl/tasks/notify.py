@@ -120,7 +120,7 @@ def process_pending_notifications():
         Notification, NotificationDeliveryStateType)
     sys.stderr.write("process_pending_notifications called")
     with transaction.manager:
-        retryable_notifications = Notification.db.query(Notification).filter(
+        retryable_notifications = Notification.default_db.query(Notification).filter(
             Notification.delivery_state not in
             NotificationDeliveryStateType.getNonRetryableDeliveryStates())
         for notification in retryable_notifications:

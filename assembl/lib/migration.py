@@ -53,7 +53,7 @@ def bootstrap_db_data(db):
         populate_default_permissions, populate_default_roles)
     populate_default_permissions(db())
     populate_default_roles(db())
-    mark_changed()
+    mark_changed(db())
 
 
 def ensure_db_version(config_uri, session_maker):

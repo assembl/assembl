@@ -35,7 +35,7 @@ def get_default_context(request):
     base = base_default_context(request)
     slug = request.matchdict['discussion_slug']
     try:
-        discussion = Discussion.db.query(Discussion).filter(Discussion.slug==slug).one()
+        discussion = Discussion.default_db.query(Discussion).filter(Discussion.slug==slug).one()
     except NoResultFound:
         raise HTTPNotFound(_("No discussion found for slug=%s") % slug)
     return dict(base, discussion=discussion)
@@ -159,7 +159,7 @@ def home_view(request):
         user = AgentProfile.get(user_id)
         # TODO: user may not exist. Case of session with BD change.
         user.is_visiting_discussion(discussion.id)
-        session = Discussion.db()
+        session = Discussion.default_db
         current_prefs = session.query(UserLanguagePreference).\
             filter_by(user_id = user_id).all()
         user = session.query(User).filter_by(id = user_id).first()

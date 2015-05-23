@@ -11,7 +11,7 @@ def import_mails(mbox_id, only_new=True):
     init_task_config(imap_celery_app)
     from ..models import IMAPMailbox
     # in case of previous issues
-    IMAPMailbox.db.rollback()
+    IMAPMailbox.default_db.rollback()
     mailbox = IMAPMailbox.get(mbox_id)
     assert mailbox is not None
     IMAPMailbox.do_import_content(mailbox, only_new)

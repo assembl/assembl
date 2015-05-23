@@ -1,11 +1,8 @@
-import logging
-import sys
-
 from pyramid.paster import get_appsettings
-import transaction
 
-from .lib.sqla import configure_engine
-from .tests.utils import as_boolean, log
+from .lib.sqla import (
+    configure_engine, initialize_session_maker)
+from .tests.utils import log
 from .tests.pytest_fixtures import *
 
 
@@ -32,8 +29,10 @@ def pytest_configure(config):
     log.setLevel(config.getoption('logging_level'))
     app_settings_file = config.getoption('test_settings_file')
     app_settings = get_appsettings(app_settings_file, 'assembl')
-    with_zope = as_boolean(app_settings.get('test_with_zope'))
-    engine = configure_engine(app_settings, with_zope)
+    # Make the zopish sessionmaker the default... eventually
+    #configure_engine(app_settings, session_maker=initialize_session_maker(True))
+    # Then load the other one
+    configure_engine(app_settings, session_maker=initialize_session_maker(False))
     from .lib.zmqlib import configure_zmq
     configure_zmq(app_settings['changes.socket'],
                   app_settings['changes.multiplex'])

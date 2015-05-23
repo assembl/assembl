@@ -266,7 +266,7 @@ class ExplicitSubGraphView(IdeaGraphView):
                                     SubGraphIdeaLinkAssociation, kwargs)))
 
             def contains(self, parent_instance, instance):
-                return SubGraphIdeaAssociation.db.query(
+                return instance.db.query(
                     SubGraphIdeaAssociation).filter_by(
                         idea=instance,
                         sub_graph=parent_instance
@@ -290,7 +290,7 @@ class ExplicitSubGraphView(IdeaGraphView):
                                 SubGraphIdeaLinkAssociation, kwargs)))
 
             def contains(self, parent_instance, instance):
-                return SubGraphIdeaAssociation.db.query(
+                return instance.db.query(
                     SubGraphIdeaLinkAssociation).filter_by(
                         idea_link=instance,
                         sub_graph=parent_instance

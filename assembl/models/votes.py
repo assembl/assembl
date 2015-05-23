@@ -132,10 +132,10 @@ class LickertRange(Base):
 
     @classmethod
     def get_range(cls, max=10, min=1):
-        range = cls.db.query(cls).filter_by(minimum=min, maximum=max).first()
+        range = cls.default_db.query(cls).filter_by(minimum=min, maximum=max).first()
         if not range:
             range = cls(minimum=min, maximum=max)
-            cls.db.add(range)
+            cls.default_db.add(range)
         return range
 
 

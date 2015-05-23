@@ -70,7 +70,7 @@ def test_add_idea_in_synthesis(
     link = new_idea_r.location
     new_idea = Idea.get_instance(link)
     assert new_idea
-    idea_assoc = Idea.db.query(SubGraphIdeaAssociation).filter_by(
+    idea_assoc = discussion.db.query(SubGraphIdeaAssociation).filter_by(
         idea=new_idea, sub_graph=synthesis_1).first()
     assert idea_assoc
 
@@ -85,7 +85,7 @@ def test_add_subidea_in_synthesis(
     link = new_idea_r.location
     new_idea = Idea.get_instance(link)
     assert new_idea
-    db = Idea.db
+    db = discussion.db
     idea_link = db.query(IdeaLink).filter_by(
         target=new_idea, source=subidea_1_1).first()
     assert idea_link
@@ -149,7 +149,7 @@ def test_widget_user_state(
         })
     assert new_widget_loc.status_code == 201
     # Get the widget from the db
-    Idea.db.flush()
+    discussion.db.flush()
     widget_id = new_widget_loc.location
     # Get the widget representation
     widget_rep = test_app.get(
@@ -219,13 +219,13 @@ def test_creativity_session_widget(
         })
     assert new_widget_loc.status_code == 201
     # Get the widget from the db
-    Idea.db.flush()
+    discussion.db.flush()
     new_widget = Widget.get_instance(new_widget_loc.location)
     assert new_widget
     assert new_widget.base_idea == subidea_1
     widget_id = new_widget.id
     # There should be a link
-    widget_link = Idea.db.query(BaseIdeaWidgetLink).filter_by(
+    widget_link = discussion.db.query(BaseIdeaWidgetLink).filter_by(
         idea_id=subidea_1.id, widget_id=widget_id).all()
     assert widget_link
     assert len(widget_link) == 1
@@ -248,7 +248,7 @@ def test_creativity_session_widget(
     assert test.status_code == 200
     assert test.json == []
 
-    Idea.db.flush()
+    discussion.db.flush()
     assert new_widget.base_idea == subidea_1
     ctx_url = "http://example.com/cardgame.xml#card_1"
     # Create a new sub-idea
@@ -258,7 +258,7 @@ def test_creativity_session_widget(
         })
     assert new_idea_create.status_code == 201
     # Get the sub-idea from the db
-    Idea.db.flush()
+    discussion.db.flush()
     assert new_widget.base_idea == subidea_1
     new_idea1_id = new_idea_create.location
     new_idea1 = Idea.get_instance(new_idea1_id)
@@ -275,11 +275,11 @@ def test_creativity_session_widget(
     assert new_idea1_rep.status_code == 200
     new_idea1_rep = new_idea1_rep.json
     # It should have a link to the root idea
-    idea_link = IdeaLink.db.query(IdeaLink).filter_by(
+    idea_link = discussion.db.query(IdeaLink).filter_by(
         source_id=subidea_1.id, target_id=new_idea1.id).one()
     assert idea_link
     # It should have a link to the widget
-    widget_link = Idea.db.query(GeneratedIdeaWidgetLink).filter_by(
+    widget_link = discussion.db.query(GeneratedIdeaWidgetLink).filter_by(
         idea_id=new_idea1.id, widget_id=widget_id).all()
     assert widget_link
     assert len(widget_link) == 1
@@ -303,12 +303,12 @@ def test_creativity_session_widget(
         "body": "body", "creator_id": participant1_user.id})
     assert new_post_create.status_code == 201
     # Get the new post from the db
-    Post.db.flush()
+    discussion.db.flush()
     new_post1_id = new_post_create.location
     post = Post.get_instance(new_post1_id)
     assert post.hidden
     # It should have a widget link to the idea.
-    post_widget_link = Idea.db.query(IdeaContentWidgetLink).filter_by(
+    post_widget_link = discussion.db.query(IdeaContentWidgetLink).filter_by(
         content_id=post.id, idea_id=new_idea1.id).one()
     # The new post should now be in the collection api
     test = test_app.get(local_to_absolute(post_endpoint))
@@ -329,7 +329,7 @@ def test_creativity_session_widget(
         "type": "Idea", "short_title": "This is another new idea"})
     assert new_idea_create.status_code == 201
     # Get the sub-idea from the db
-    Idea.db.flush()
+    discussion.db.flush()
     new_idea2_id = new_idea_create.location
 
     # Approve the first but not the second idea
@@ -337,7 +337,7 @@ def test_creativity_session_widget(
     confirm = test_app.post(confirm_idea_url, {
         "ids": json.dumps([new_idea1_id])})
     assert confirm.status_code == 200
-    Idea.db.flush()
+    discussion.db.flush()
     # Get it back
     get_back = test_app.get(confirm_idea_url)
     assert get_back.status_code == 200
@@ -355,7 +355,7 @@ def test_creativity_session_widget(
         "type": "Post", "message_id": 0,
         "body": "body", "creator_id": participant1_user.id})
     assert new_post_create.status_code == 201
-    Post.db.flush()
+    discussion.db.flush()
     new_post2_id = new_post_create.location
     # Approve the first but not the second idea
     confirm_messages_url = local_to_absolute(
@@ -363,7 +363,7 @@ def test_creativity_session_widget(
     confirm = test_app.post(confirm_messages_url, {
         "ids": json.dumps([new_post1_id])})
     assert confirm.status_code == 200
-    Idea.db.flush()
+    discussion.db.flush()
     # Get it back
     get_back = test_app.get(confirm_messages_url)
     assert get_back.status_code == 200
@@ -410,13 +410,13 @@ def test_inspiration_widget(
         })
     assert new_widget_loc.status_code == 201
     # Get the widget from the db
-    Idea.db.flush()
+    discussion.db.flush()
     new_widget = Widget.get_instance(new_widget_loc.location)
     assert new_widget
     assert new_widget.base_idea == subidea_1
     widget_id = new_widget.id
     # There should be a link
-    widget_link = Idea.db.query(BaseIdeaWidgetLink).filter_by(
+    widget_link = discussion.db.query(BaseIdeaWidgetLink).filter_by(
         idea_id=subidea_1.id, widget_id=widget_id).all()
     assert widget_link
     assert len(widget_link) == 1
@@ -439,7 +439,7 @@ def test_inspiration_widget(
     assert test.status_code == 200
     assert test.json == []
 
-    Idea.db.flush()
+    discussion.db.flush()
     assert new_widget.base_idea == subidea_1
     return
     # WEIRD virtuoso crash in the tests here, dependent on previous tests being run.
@@ -462,7 +462,7 @@ def test_voting_widget(
         criterion_3, admin_user, participant1_user, lickert_range,
         test_session):
     # Post the initial configuration
-    db = Idea.db()
+    db = discussion.db
     criteria = (criterion_1, criterion_2, criterion_3)
     criteria_def = [
         {
@@ -580,7 +580,7 @@ def test_voting_widget_criteria(
         criterion_3, admin_user, participant1_user, lickert_range,
         test_session):
     # Post the initial configuration
-    db = Idea.db()
+    db = discussion.db
     criteria = (criterion_1, criterion_2)
     criteria_def = [
         {
@@ -690,7 +690,7 @@ def test_add_timeline_event(test_app, discussion):
     r = test_app.post(url, phase1)
     assert r.status_code == 201
     uri1 = r.location
-    Idea.db.flush()
+    discussion.db.flush()
     # Create phase2
     phase2 = {
         'type': "DiscussionPhase",
@@ -701,8 +701,8 @@ def test_add_timeline_event(test_app, discussion):
     # Create the phase
     r = test_app.post(url, phase2)
     assert r.status_code == 201
-    Idea.db.flush()
-    Idea.db.expunge_all()
+    discussion.db.flush()
+    discussion.db.expunge_all()
 
     # Check it
     uri2 = r.location

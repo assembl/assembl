@@ -120,11 +120,11 @@ def get_posts(request):
     posted_after_date = request.GET.get('posted_after_date')
 
     PostClass = SynthesisPost if only_synthesis == "true" else Post
-    posts = Post.db.query(PostClass)
+    posts = discussion.db.query(PostClass)
     if order == 'score':
-        posts = Post.db.query(PostClass, Content.body_text_index.score_name)
+        posts = discussion.db.query(PostClass, Content.body_text_index.score_name)
     else:
-        posts = Post.db.query(PostClass)
+        posts = discussion.db.query(PostClass)
 
     posts = posts.filter(
         PostClass.discussion_id == discussion_id,
@@ -258,7 +258,7 @@ def get_posts(request):
                 actor_id=user_id,
                 post=root_post
                 )
-            Post.db.add(viewed_post)
+            discussion.db.add(viewed_post)
             serializable_post['read'] = True
         else:
             serializable_post['read'] = False
@@ -271,7 +271,7 @@ def get_posts(request):
     # This code isn't up to date.  If limiting the query by page, we need to 
     # calculate the counts with a separate query to have the right number of 
     # results
-    #no_of_messages_viewed_by_user = Post.db.query(ViewPost).join(
+    #no_of_messages_viewed_by_user = discussion.db.query(ViewPost).join(
     #    Post
     #).filter(
     #    Post.discussion_id == discussion_id,
@@ -323,7 +323,7 @@ def mark_post_read(request):
     if not user_id:
         raise HTTPUnauthorized()
     read_data = json.loads(request.body)
-    db = Discussion.db()
+    db = discussion.db
     change = False
     with transaction.manager:
         if read_data.get('read', None) is False:
@@ -359,7 +359,7 @@ def create_post(request):
     localizer = request.localizer
     request_body = json.loads(request.body)
     user_id = authenticated_userid(request)
-    user = Post.db.query(User).filter_by(id=user_id).one()
+    user = Post.default_db.query(User).filter_by(id=user_id).one()
 
     message = request_body.get('message', None)
     html = request_body.get('html', None)
@@ -422,8 +422,8 @@ def create_post(request):
     else:
         new_post = AssemblPost(**post_constructor_args)
 
-    new_post.db.add(new_post)
-    new_post.db.flush()
+    discussion.db.add(new_post)
+    discussion.db.flush()
 
     if in_reply_to_post:
         new_post.set_parent(in_reply_to_post)
@@ -433,7 +433,7 @@ def create_post(request):
             content=new_post,
             idea=in_reply_to_idea
         )
-        IdeaRelatedPostLink.db.add(idea_post_link)
+        discussion.db.add(idea_post_link)
     for source in discussion.sources:
         source.send_post(new_post)
     permissions = get_permissions(user_id, discussion_id)
