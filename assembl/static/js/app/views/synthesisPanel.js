@@ -171,13 +171,13 @@ var SynthesisPanel = AssemblPanel.extend({
                         retval = idea != rootIdea && synthesisIdeasCollection.contains(idea)
                     }
                     //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
-                    return retval
+                    return retval;
                 };
                 if (rootIdea) {
                     var link_collection = allIdeaLinksCollection;
                     if (!that.model.get('is_next_synthesis'))
                         link_collection = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
-                    synthesisIdeasCollection.visitDepthFirst(link_collection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId());
+                    synthesisIdeasCollection.visitDepthFirst(link_collection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId(), true);
                 }
                 _.each(roots, function append_recursive(idea) {
                     var rendered_idea_view = new IdeaFamilyView({

@@ -176,6 +176,20 @@ class Idea(Tombstonable, DiscussionBoundBase):
     def widget_add_post_endpoint(self):
         return self.widget_ancestor_endpoints()
 
+    def copy(self, tombstone=None):
+        tombstone = self.is_tombstone if tombstone is None else tombstone
+        copy = self.__class__(
+            long_title=self.long_title,
+            short_title=self.short_title,
+            definition=self.definition,
+            hidden=self.hidden,
+            creation_date=self.creation_date,
+            discussion=self.discussion,
+            is_tombstone=tombstone,
+            )
+        self.db.add(copy)
+        return copy
+
     def widget_ancestor_endpoints(self, target_idea=None):
         # HACK. Review consequences after test.
         target_idea = target_idea or self
@@ -973,10 +987,11 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
                 name=QUADNAMES.class_IdeaLink_class),
         ]
 
-    def copy(self):
+    def copy(self, tombstone=None):
+        tombstone = self.is_tombstone if tombstone is None else tombstone
         retval = self.__class__(source_id=self.source_id,
                                 target_id=self.target_id,
-                                is_tombstone=self.is_tombstone
+                                is_tombstone=tombstone
                                 )
         self.db.add(retval)
         return retval

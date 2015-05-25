@@ -23,6 +23,7 @@ var IdeaLinkModel = Base.Model.extend({
     defaults: {
         source: '',
         target: '',
+        is_tombstone: false,
         order: 1
     },
 

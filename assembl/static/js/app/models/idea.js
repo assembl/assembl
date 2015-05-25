@@ -44,6 +44,7 @@ var IdeaModel = Base.Model.extend({
         isOpen: true,
         hidden: false,
         hasCheckbox: false,
+        is_tombstone: false,
         featured: false,
         active: false,
         inNextSynthesis: false,
@@ -473,12 +474,15 @@ var IdeaCollection = Base.Collection.extend({
      * @param origin_id the id of the root
      * @param ancestry Internal recursion parameter, do not set or use
      */
-    visitDepthFirst: function (idea_links, visitor, origin_id, ancestry) {
+    visitDepthFirst: function (idea_links, visitor, origin_id, include_ts, ancestry) {
         if (ancestry === undefined) {
             ancestry = [];
         }
         //console.log(idea_links);
         var idea = this.get(origin_id);
+        if (idea !== undefined && idea.get('is_tombstone') && include_ts !== true) {
+            return;
+        }
         if (idea === undefined || visitor(idea, ancestry)) {
             ancestry = ancestry.slice(0);
             ancestry.push(origin_id);
@@ -492,7 +496,7 @@ var IdeaCollection = Base.Collection.extend({
                 return ancestry.indexOf(l.get('target')) === -1;
             });
             for (var i in child_links) {
-                this.visitDepthFirst(idea_links, visitor, child_links[i].get('target'), ancestry);
+                this.visitDepthFirst(idea_links, visitor, child_links[i].get('target'), include_ts, ancestry);
             }
         }
     },
@@ -502,7 +506,7 @@ var IdeaCollection = Base.Collection.extend({
      * @param visitor Visitor function
      * @param ancestry Internal recursion parameter, do not set or use
      */
-    visitBreadthFirst: function (idea_links, visitor, origin_id, ancestry) {
+    visitBreadthFirst: function (idea_links, visitor, origin_id, include_ts, ancestry) {
         var continue_visit = true;
         var idea = this.get(origin_id);
         if (ancestry === undefined) {
@@ -527,12 +531,14 @@ var IdeaCollection = Base.Collection.extend({
                 var link = child_links[i],
                     target_id = link.get('target'),
                     target = this.get(target_id);
+                if (target.get('is_tombstone') && include_ts !== true)
+                    continue;
                 if (visitor(target, ancestry)) {
                     children_to_visit.push(target_id);
                 }
             }
             for (var i in children_to_visit) {
-                this.visitBreadthFirst(idea_links, visitor, children_to_visit[i], ancestry);
+                this.visitBreadthFirst(idea_links, visitor, children_to_visit[i], include_ts, ancestry);
             }
         }
     },

@@ -207,6 +207,7 @@
         "order": "&get_order_from_first_parent",
         "discussion": false,
         "hidden": true,
+        "is_tombstone": true,
         "parents": true,
         "is_tombstone": true,
         "parentId": "&get_first_parent_uri",
@@ -264,6 +265,8 @@
         "conclusion": true,
         "is_next_synthesis": true,
         "published_in_post": true
+        "published_in_post": true,
+        "ideas": [":tombstones"]
     },
     "IdeaContentLink": {
         "idea": true,

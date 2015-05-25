@@ -1,0 +1,34 @@
+{
+    "_default": {
+        "id": false,
+        "type": false,
+        "@id": "self",
+        "@type": "&external_typename",
+        "@view": "@view",
+        "_default": false
+    },
+    "Idea": {
+        "longTitle": "long_title",
+        "shortTitle": "short_title",
+        "definition": true,
+        "creationDate": "creation_date",
+        "order": "&get_order_from_first_parent_ts",
+        "discussion": false,
+        "hidden": true,
+        "is_tombstone": true,
+        "parents": "parents_ts",
+        "parentId": "&get_first_parent_uri_ts",
+        "inNextSynthesis": "is_in_next_synthesis",
+        "numChildIdea": "&get_num_children",
+        "num_posts": true,
+        "num_read_posts": true,
+        "notifications": "&get_notifications",
+        "widget_add_post_endpoint": true
+    },
+    "IdeaLink": {
+        "target": true,
+        "source": true,
+        "is_tombstone": true,
+        "order": true
+    }
+}

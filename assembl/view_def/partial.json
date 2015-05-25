@@ -115,6 +115,7 @@
         "longTitle": "long_title",
         "shortTitle": "short_title",
         "definition": true,
+        "is_tombstone": true,
         "creationDate": "creation_date",
         "order": "&get_order_from_first_parent",
         "discussion": false,
@@ -143,6 +144,7 @@
     "IdeaLink": {
         "source": true,
         "target": true,
+        "is_tombstone": true,
         "order": true
     },
     "IdeaGraphView": {
