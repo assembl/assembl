@@ -19,7 +19,7 @@ define(['common/context', 'utils/i18n', 'utils/permissions', 'common/collectionM
 
             template: '#tmpl-ideaPanelWidgets',
             initialize: function (options) {
-                console.log("IdeaWidgets::initialize()");
+                //console.log("IdeaWidgets::initialize()");
                 if (!this.model) {
                     this.model = null;
                 }
@@ -89,7 +89,7 @@ define(['common/context', 'utils/i18n', 'utils/permissions', 'common/collectionM
             },
 
             populateAssociatedWidgetData: function () {
-                console.log("ideaWidget::populateAssociatedWidgetData()");
+                //console.log("ideaWidget::populateAssociatedWidgetData()");
                 if (this.model) {
                     var that = this;
                     var previous = {};
