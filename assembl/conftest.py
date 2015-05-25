@@ -29,10 +29,10 @@ def pytest_configure(config):
     log.setLevel(config.getoption('logging_level'))
     app_settings_file = config.getoption('test_settings_file')
     app_settings = get_appsettings(app_settings_file, 'assembl')
-    # Make the zopish sessionmaker the default... eventually
-    #configure_engine(app_settings, session_maker=initialize_session_maker(True))
-    # Then load the other one
+    # Make the unzopish sessionmaker the default
     configure_engine(app_settings, session_maker=initialize_session_maker(False))
+    # Then load the other one
+    configure_engine(app_settings, session_maker=initialize_session_maker(True))
     from .lib.zmqlib import configure_zmq
     configure_zmq(app_settings['changes.socket'],
                   app_settings['changes.multiplex'])

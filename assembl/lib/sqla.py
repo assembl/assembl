@@ -216,10 +216,10 @@ class BaseOps(object):
         return raise_ and q.one() or q.first()
 
     @classmethod
-    def get(cls, id):
-        """Return the record by id.
-        """
-        return _session_maker.query(cls).get(id)
+    def get(cls, id, session=None):
+        """Return the record by id."""
+        session = session or cls.default_db
+        return session.query(cls).get(id)
 
     @classmethod
     def find(cls, **criteria):
@@ -1351,6 +1351,11 @@ def get_typed_session_maker(zope_tr, autoflush=True):
     if _session_makers[zope_tr] is None:
         _session_makers[zope_tr] = initialize_session_maker(zope_tr, autoflush)
     return _session_makers[zope_tr]
+
+
+def set_session_maker_type(zope_tr):
+    global _session_maker
+    _session_maker = get_typed_session_maker(zope_tr)
 
 
 class Tombstone(object):

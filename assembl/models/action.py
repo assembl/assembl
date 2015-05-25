@@ -53,7 +53,7 @@ class Action(DiscussionBoundBase):
 
     actor = relationship(
         User,
-        backref=backref('actions', order_by=creation_date)
+        backref=backref('actions', order_by=creation_date, cascade="all, delete-orphan")
     )
 
     verb = 'did something to'

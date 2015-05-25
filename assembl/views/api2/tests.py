@@ -544,14 +544,13 @@ def test_voting_widget(
     voting_url = local_to_absolute(voting_urls[criterion_key])
     test_app.post(voting_url, {
         "type": "LickertIdeaVote", "value": 10})
-    db.flush()
     votes = db.query(AbstractIdeaVote).filter_by(
         voter_id=admin_user.id, idea_id=subidea_1_1.id,
         criterion_id=criteria[0].id).all()
     assert len(votes) == 2
     assert len([v for v in votes if v.is_tombstone]) == 1
     for v in votes:
-        assert v.widget == new_widget
+        assert v.widget_id == new_widget.id
     # Get vote results again.
     vote_results_url = local_to_absolute(widget_rep['vote_results_url'])
     vote_results = test_app.get(vote_results_url)

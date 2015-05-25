@@ -12,13 +12,27 @@ from webtest import TestApp
 from pkg_resources import get_distribution
 import simplejson as json
 from splinter import Browser
+from sqlalchemy import inspect
 
 import assembl
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
-from assembl.lib.sqla import get_typed_session_maker
+from assembl.lib.sqla import get_typed_session_maker, set_session_maker_type
 from assembl.tasks import configure as configure_tasks
 from .utils import clear_rows, drop_tables
 from assembl.auth import R_SYSADMIN, R_PARTICIPANT
+
+
+def zopish_session_tween_factory(handler, registry):
+
+    def zopish_session_tween(request):
+        get_typed_session_maker(False).commit()
+        set_session_maker_type(True)
+        try:
+            return handler(request)
+        finally:
+            set_session_maker_type(False)
+
+    return zopish_session_tween
 
 
 @pytest.fixture(scope="session")
@@ -78,6 +92,7 @@ def base_registry(request, app_settings):
     config.setup_registry(
         settings=app_settings, root_factory=root_factory)
     configure_tasks(registry, 'assembl')
+    config.add_tween('assembl.tests.pytest_fixtures.zopish_session_tween_factory')
     return registry
 
 
@@ -134,10 +149,14 @@ def discussion(request, test_session):
 
     def fin():
         print "finalizer discussion"
-        test_session.delete(d.table_of_contents)
-        test_session.delete(d.root_idea)
-        test_session.delete(d.next_synthesis)
-        test_session.delete(d)
+        discussion = d
+        if inspect(d).detached:
+            # How did this happen?
+            discussion = test_session.query(Discussion).get(d.id)
+        test_session.delete(discussion.table_of_contents)
+        test_session.delete(discussion.root_idea)
+        test_session.delete(discussion.next_synthesis)
+        test_session.delete(discussion)
         test_session.flush()
     request.addfinalizer(fin)
     return d
