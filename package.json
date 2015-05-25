@@ -3,8 +3,17 @@
   "version": "0.0.9",
   "description": "I4P online debate and synthesis platform",
   "main": "index.js",
+  "author": "Gaby Hourlier <gaby.hourlier@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ImaginationForPeople/assembl/issues"
+  },
   "directories": {
     "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ImaginationForPeople/assembl.git"
   },
   "dependencies": {
     "bower": "~1.3.12",
@@ -18,14 +27,6 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/ImaginationForPeople/assembl.git"
-  },
-  "author": "Gaby Hourlier <gaby.hourlier@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ImaginationForPeople/assembl/issues"
   }
+
 }
