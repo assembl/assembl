@@ -61,7 +61,7 @@ class TimelineEvent(DiscussionBoundBase):
     # that disallows multiple NULLs.
     # Also, the linked list defines lanes.
     previous_event_id = Column(Integer, ForeignKey(
-        'timeline_event.id'), nullable=True)
+        'timeline_event.id', ondelete="SET NULL"), nullable=True)
 
     previous_event = relationship(
         "TimelineEvent", remote_side=[id], post_update=True, uselist=False,
