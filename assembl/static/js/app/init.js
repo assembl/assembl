@@ -1,27 +1,3 @@
-requirejs.config(requirejs_config);
-
-/*require(['jquery', 'jasmine-boot'], function ($, jasmine_boot) {
-        'use strict';
-
-        $('#wrapper').hide();
-
-        var jasmineEnv = jasmine.getEnv();
-        jasmineEnv.updateInterval = 1000;
-
-        require([
-            'tests/views.spec',
-            'tests/routes.spec',
-            'tests/context.spec',
-            'tests/models.spec',
-            'tests/utils.spec',
-            'tests/objects.spec'
-        ], function () {
-            // Initialize the HTML Reporter and execute the environment (setup by `boot.js`)
-            window.onload();
-
-        });
-    });*/
-
 /**
  * BDD & TDD testing
  *
@@ -31,9 +7,11 @@ requirejs.config(requirejs_config);
  *
  * */
 
-require(['mocha', 'chai', 'chai-jquery'], function(mocha, chai, chaiJquery){
-    // Chai
-    //var should = chai.should();
+var mocha = require('mocha'),
+    chai = require('chai'),
+    chaiJquery = require('chai-jquery');
+
+(function(){
     chai.use(chaiJquery);
 
     //mocha.setup('bdd');
@@ -50,4 +28,5 @@ require(['mocha', 'chai', 'chai-jquery'], function(mocha, chai, chaiJquery){
         mocha.run();
     });
 
-});
+})();
+

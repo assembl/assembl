@@ -2,7 +2,7 @@
   "name": "Assembl",
   "version": "0.0.9",
   "description": "I4P online debate and synthesis platform",
-  "main": "index.js",
+  "main": "./assembl/static/js/app/index.js",
   "author": "Gaby Hourlier <gaby.hourlier@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -16,17 +16,43 @@
     "url": "git://github.com/ImaginationForPeople/assembl.git"
   },
   "dependencies": {
-    "bower": "~1.3.12",
+    "backbone": "<=1.1.2",
+    "backbone.marionette": "~2.4.1",
+    "bluebird": "^2.9.26",
+    "browserify": "^10.2.1",
+    "browserify-shim": "^3.8.7",
     "gulp": "^3.8.11",
     "gulp-autoprefixer": "^2.1.0",
+    "gulp-concat-sourcemap": "^1.3.1",
+    "gulp-rename": "^1.2.2",
     "gulp-sass": "^1.3.3",
     "gulp-size": "^1.2.1",
-    "po2json": "~0.3.2",
-    "requirejs": "~2.1.15"
+    "gulp-streamify": "0.0.5",
+    "gulp-uglify": "^1.2.0",
+    "jed": "^1.1.0",
+    "jquery": "~2.1.1",
+    "linkifyjs": "^2.0.0-alpha.3",
+    "moment": "^2.10.3",
+    "underscore": "^1.8.3",
+    "vinyl-source-stream": "^1.1.0"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "scripts": {},
+  "browser": {
+    "backbone.modal": "./assembl/static/js/bower/backbone-modal/backbone.modal.js",
+    "backbone.marionette.modals": "./assembl/static/js/bower/backbone-modal/backbone.marionette.modals.js",
+    "bootstrap": "./assembl/static/js/lib/bootstrap.js",
+    "jquery-oembed-all": "./assembl/static/js/bower/jquery-oembed-all/jquery.oembed.js",
+    "raven": "./assembl/static/js/bower/raven-js/dist/raven.js",
+    "annotator": "./assembl/static/js/lib/annotator/annotator-full.js"
+  },
+  "browserify-shim": "./assembl/static/js/app/shim.js",
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ],
+    "options": {
+      "debug": true
+    }
   }
-
 }
