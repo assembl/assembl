@@ -30,23 +30,20 @@ gulp.task('browserify', function() {
     .pipe(gulp.dest('./assembl/static/js/build/'));
 });
 
-//infrastructure
+//Infrastructure
 gulp.task('libs', function() {
-    browserify('./assembl/static/js/app/browser.js')
-        .bundle()
-        .pipe(source('infrastructure.js'))
-    //gulp.src('./assembl/static/js/app/shim.js')
-    //.pipe(concat('infrastructure.js'))
-        .pipe(gulp.dest('./assembl/static/js/build/'));
+  browserify('./assembl/static/js/app/browser.js')
+    .bundle()
+    .pipe(source('infrastructure.js'))
+    .pipe(gulp.dest('./assembl/static/js/build/'));
 });
 
 gulp.task('watch', function() {
     gulp.watch('./assembl/static/js/app/**/*.js', ['browserify']);
-    //gulp.watch('test/client/**/*.js', ['test']);
     //gulp.watch('client/**/*.less', ['styles']);
 });
 
-gulp.task('uglify', ['browserify'], function() {
+gulp.task('uglify', function() {
     return gulp.src('./assembl/static/js/app/index.js')
         .pipe(uglify())
         .pipe(rename('app.min.js'))
@@ -54,5 +51,5 @@ gulp.task('uglify', ['browserify'], function() {
 });
 
 // Tasks
-gulp.task('build', ['uglify']);
+gulp.task('build', ['browserify','uglify']);
 gulp.task('default', ['build', 'watch']);
