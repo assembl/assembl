@@ -3,7 +3,7 @@
 var Backbone = require('backbone'),
     Promise = require('bluebird'),
     Ctx = require('../common/context.js'),
-    Types = require('../utils/types');
+    Types = require('../utils/types.js');
 
 /**
  * @class Model

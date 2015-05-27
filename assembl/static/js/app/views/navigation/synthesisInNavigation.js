@@ -2,13 +2,13 @@
 
 var Marionette = require('backbone.marionette'),
     _ = require('underscore'),
+    Promise = require('bluebird'),
     AssemblPanel = require('../assemblPanel.js'),
     CollectionManager = require('../../common/collectionManager.js'),
     Types = require('../../utils/types.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
-    PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    Promise = require('bluebird');
+    PanelSpecTypes = require('../../utils/panelSpecTypes.js');
 
 
 var SynthesisItem = Marionette.ItemView.extend({

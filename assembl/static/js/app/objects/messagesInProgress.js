@@ -1,6 +1,7 @@
 'use strict';
 
-var Ctx = require('../common/context.js');
+var Marionette = require('backbone.marionette'),
+    Ctx = require('../common/context.js');
 
 var messagesInProgress = Marionette.Object.extend({
 

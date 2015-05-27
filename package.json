@@ -16,7 +16,7 @@
     "url": "git://github.com/ImaginationForPeople/assembl.git"
   },
   "scripts": {
-     "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "annotator": "<=1.2.10",
@@ -45,21 +45,35 @@
     "moment": "^2.10.3",
     "sockjs": "^0.3.15",
     "underscore": "^1.8.3",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.2.1"
   },
   "devDependencies": {},
   "browser": {
     "jquery": "./assembl/static/js/bower/jquery/dist/jquery.js",
+    "backbone": "./assembl/static/js/bower/backbone/backbone.js",
     "backbone.modal": "./assembl/static/js/bower/backbone-modal/backbone.modal.js",
     "backbone.marionette.modals": "./assembl/static/js/bower/backbone-modal/backbone.marionette.modals.js",
     "bootstrap": "./assembl/static/js/lib/bootstrap.js",
     "jquery-oembed-all": "./assembl/static/js/bower/jquery-oembed-all/jquery.oembed.js",
     "raven": "./assembl/static/js/bower/raven/dist/raven.js",
     "annotator": "./assembl/static/js/lib/annotator/annotator-full.js",
-    "jquery.bootstrap-growl": "./assembl/static/js/bower/bootstrap-growl/jquery.bootstrap-growl.js"
+    "jquery.bootstrap-growl": "./assembl/static/js/bower/bootstrap-growl/jquery.bootstrap-growl.js",
+    "jit": "./assembl/static/js/bower/jit/jit/jit.js",
+    "backbone.subset": "./assembl/static/js/bower/Backbone.Subset/backbone.subset.js",
+    "jquery.dotdotdot": "./assembl/static/js/bower/jquery.dotdotdot/src/js/jquery.dotdotdot.js",
+    "ckeditor": "./assembl/static/js/bower/ckeditor/ckeditor.js",
+    "ckeditor-sharedspace": "./assembl/static/js/lib/ckeditor-sharedcontainer/plugin.js"
   },
   "browserify-shim": {
-    "jquery":"jQuery"
+    "jquery": "jQuery",
+    "jit": "$jit",
+    "ckeditor-sharedspace": {
+      "depends": "ckeditor"
+    },
+    "backbone.subset": {
+      "depends": "backbone"
+    }
   },
   "browserify": {
     "transform": [

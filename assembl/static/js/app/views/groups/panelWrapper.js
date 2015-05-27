@@ -3,7 +3,7 @@
 var Marionette = require('backbone.marionette'),
     panelViewByPanelSpec = require('../../objects/viewsFactory.js'),
     Ctx = require('../../common/context.js'),
-    AssemblPanel = require('../../assemblPanel.js'),
+    AssemblPanel = require('../assemblPanel.js'),
     i18n = require('../../utils/i18n.js'),
     panelSpec = require('../../models/panelSpec.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js');

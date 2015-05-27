@@ -1,18 +1,17 @@
 'use strict';
 
 var App = require('./app.js'),
-    Router = require('./router');
-    //Ctx = require('./common/context'),
-    //Socket = require('./utils/socket'),
-    //dropdown = require('../lib/dropdown');
-    //raven = require('raven');
+    Router = require('./router.js'),
+    Ctx = require('./common/context.js'),
+    Socket = require('./utils/socket.js'),
+    raven = require('raven');
 
 var router = new Router();
-//var socket = new Socket();
+var socket = new Socket();
 
-//App.start();
+App.start();
 
-//window.Ctx = Ctx;
+window.Ctx = Ctx;
 
 /*(function(){
 

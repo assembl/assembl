@@ -5,9 +5,9 @@ var Marionette = require('backbone.marionette'),
     i18n = require('../../utils/i18n.js'),
     panelSpec = require('../../models/panelSpec.js'),
     AssemblPanel = require('../assemblPanel.js'),
-    PanelWrapper = require('./panelWrapper'),
+    PanelWrapper = require('./panelWrapper.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    helperDebate = require('../helperDebate');
+    helperDebate = require('../helperDebate.js');
 
 
 /** Represents the entire content of a single group */

@@ -1,7 +1,22 @@
 'use strict';
 
-define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 'models/groupSpec', 'common/collectionManager', 'utils/panelSpecTypes', 'objects/viewsFactory', 'models/roles', 'utils/permissions', 'utils/i18n', 'utils/roles', 'backbone.modal', 'backbone.marionette.modals', 'views/ideaWidgets'],
-    function (Marionette, $, _, Assembl, Ctx, GroupSpec, CollectionManager, PanelSpecTypes, viewsFactory, RolesModel, Permissions, i18n, Roles, backboneModal, marionetteModal, IdeaWidgets) {
+var Marionette = require('backbone.marionette'),
+    $ = require('jquery'),
+    _ = require('underscore'),
+    Assembl = require('../app.js'),
+    Ctx = require('../common/context.js'),
+    GroupSpec = require('../models/groupSpec.js'),
+    CollectionManager = require('../common/collectionManager.js'),
+    PanelSpecTypes = require('../utils/panelSpecTypes.js'),
+    viewsFactory = require('../objects/viewsFactory.js'),
+    RolesModel = require('../models/roles.js'),
+    Permissions = require('../utils/permissions.js'),
+    i18n = require('../utils/i18n.js'),
+    Roles = require('../utils/roles.js'),
+    IdeaWidgets = require('./ideaWidgets.js');
+
+require('backbone.modal');
+require('backbone.marionette.modals');
 
         var navBarLeft = Marionette.ItemView.extend({
             template: '#tmpl-navBarLeft',
@@ -419,6 +434,5 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
 
         });
 
-        return navBar;
 
-    });
+        module.exports = navBar;

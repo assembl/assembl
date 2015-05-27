@@ -20,11 +20,19 @@ var streamify = require('gulp-streamify');
 var uglify = require('gulp-uglify');
 var source = require('vinyl-source-stream');
 var browserify = require('browserify');
+var watchify = require('watchify');
 
 // Browserify
 gulp.task('browserify', function() {
-  browserify('./assembl/static/js/app/index.js')
+    return browserify({
+      entries: ['./assembl/static/js/app/index.js'],
+      debug: true
+    })
     .bundle()
+    .on('error', function(err){
+        console.error('Browserify failed :', err.message);
+        this.emit('end');
+    })
     .pipe(source('index.js'))
     .pipe(rename('app.js'))
     .pipe(gulp.dest('./assembl/static/js/build/'));
@@ -32,7 +40,7 @@ gulp.task('browserify', function() {
 
 //Infrastructure
 gulp.task('libs', function() {
-  browserify('./assembl/static/js/app/browser.js')
+  return browserify('./assembl/static/js/app/browser.js')
     .bundle()
     .pipe(source('infrastructure.js'))
     .pipe(gulp.dest('./assembl/static/js/build/'));
@@ -51,5 +59,5 @@ gulp.task('uglify', function() {
 });
 
 // Tasks
-gulp.task('build', ['browserify','uglify']);
+gulp.task('build', ['browserify']);
 gulp.task('default', ['build', 'watch']);

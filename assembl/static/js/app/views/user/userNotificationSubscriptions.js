@@ -4,14 +4,14 @@ var Marionette = require('backbone.marionette'),
     Assembl = require('../../app.js'),
     $ = require('jquery'),
     _ = require('underscore'),
+    Promise = require('bluebird'),
     CollectionManager = require('../../common/collectionManager.js'),
     Ctx = require('../../common/context.js'),
     NotificationSubscription = require('../../models/notificationSubscription.js'),
     RolesModel = require('../../models/roles.js'),
     i18n = require('../../utils/i18n.js'),
     Roles = require('../../utils/roles.js'),
-    emailAccounts = require('../../models/emailAccounts.js'),
-    Promise = require('bluebird');
+    emailAccounts = require('../../models/emailAccounts.js');
 
 /**
  * User notification

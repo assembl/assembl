@@ -1,10 +1,9 @@
 "use strict";
 
-define(['backbone.marionette'], function (Marionette) {
+var Marionette = require('backbone.marionette');
 
-    var helperDebate = Marionette.ItemView.extend({
-        template: '#tmpl-helperDebate'
-    });
-
-    return helperDebate;
+var helperDebate = Marionette.ItemView.extend({
+    template: '#tmpl-helperDebate'
 });
+
+module.exports = helperDebate;

@@ -1,59 +1,62 @@
 'use strict';
 
-define(['common/context', 'app', 'utils/panelSpecTypes', 'views/idea'],
-    function (Ctx, Assembl, PanelSpecTypes, IdeaView) {
+var Ctx = require('../common/context.js'),
+    Assembl = require('../app.js'),
+    PanelSpecTypes = require('../utils/panelSpecTypes.js'),
+    IdeaView = require('./idea.js');
 
-        var SynthesisIdeaView = IdeaView.extend({
-            /**
-             * The template
-             * @type {[type]}
-             */
-            template: Ctx.loadTemplate('synthesisInIdeaList'),
 
-            /**
-             * The render
-             */
-            render: function () {
-                Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+var SynthesisIdeaView = IdeaView.extend({
+    /**
+     * The template
+     * @type {[type]}
+     */
+    template: Ctx.loadTemplate('synthesisInIdeaList'),
 
-                var data = this.model.toJSON();
+    /**
+     * The render
+     */
+    render: function () {
+        Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-                this.$el.addClass('idealist-item');
-                if (this.model.get('num_synthesis_posts') == 0) {
-                    this.$el.addClass('hidden');
-                }
-                else {
-                    this.$el.removeClass('hidden');
-                }
+        var data = this.model.toJSON();
 
-                this.$el.html(this.template(data));
-                Ctx.initTooltips(this.$el);
-                return this;
-            },
+        this.$el.addClass('idealist-item');
+        if (this.model.get('num_synthesis_posts') == 0) {
+            this.$el.addClass('hidden');
+        }
+        else {
+            this.$el.removeClass('hidden');
+        }
 
-            /**
-             * @events
-             */
-            events: {
-                'click .idealist-title': 'onTitleClick'
-            },
+        this.$el.html(this.template(data));
+        Ctx.initTooltips(this.$el);
+        return this;
+    },
 
-            /**
-             * @event
-             */
-            onTitleClick: function () {
-                $('.idealist-item').removeClass('is-selected');
+    /**
+     * @events
+     */
+    events: {
+        'click .idealist-title': 'onTitleClick'
+    },
 
-                var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
-                    messageListView.triggerMethod('messageList:clearAllFilters');
-                    messageListView.triggerMethod('messageList:addFilterIsSynthesisMessage');
+    /**
+     * @event
+     */
+    onTitleClick: function () {
+        $('.idealist-item').removeClass('is-selected');
 
-                    this._groupContent.setCurrentIdea(null);
-                    this._groupContent.resetDebateState();
+        var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
+            messageListView.triggerMethod('messageList:clearAllFilters');
+            messageListView.triggerMethod('messageList:addFilterIsSynthesisMessage');
 
-                    this.$el.addClass('is-selected');
-            }
-        });
+            this._groupContent.setCurrentIdea(null);
+            this._groupContent.resetDebateState();
 
-        return SynthesisIdeaView;
-    });
+            this.$el.addClass('is-selected');
+    }
+});
+
+
+module.exports = SynthesisIdeaView;

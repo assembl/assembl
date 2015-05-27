@@ -1,6 +1,8 @@
 'use strict';
 
 var Marionette = require('backbone.marionette'),
+    Jed = require('jed'),
+    $ = require('jquery'),
     Assembl = require('../../app.js'),
     IdeaList = require('../ideaList.js'),
     sidebarNotification = require('../navigation/notification.js'),
@@ -10,9 +12,7 @@ var Marionette = require('backbone.marionette'),
     AssemblPanel = require('../assemblPanel.js'),
     Ctx = require('../../common/context.js'),
     Permissions = require('../../utils/permissions.js'),
-    $ = require('jquery'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    Jed = require('jed'),
     CollectionManager = require('../../common/collectionManager.js');
 
 
