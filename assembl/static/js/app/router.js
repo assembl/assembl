@@ -1,6 +1,6 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
+var Marionette = require('./shims/marionette.js'),
     routeManager = require('./routeManager.js');
 
 var Router = Marionette.AppRouter.extend({

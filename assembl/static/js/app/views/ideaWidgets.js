@@ -4,7 +4,7 @@ var Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     Permissions = require('../utils/permissions.js') ,
     CollectionManager = require('../common/collectionManager.js'),
-    Marionette = require('backbone.marionette'),
+    Marionette = require('../shims/marionette.js'),
     $ = require('jquery');
 
 

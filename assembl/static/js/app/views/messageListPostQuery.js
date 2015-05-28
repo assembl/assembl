@@ -4,7 +4,7 @@ var Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Promise = require('bluebird'),
-    _ = require('underscore');
+    _ = require('../shims/underscore.js');
 
 /**
 * @class PostQuery

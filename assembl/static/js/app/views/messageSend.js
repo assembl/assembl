@@ -1,9 +1,9 @@
 'use strict';
 
-var Backbone = require('backbone'),
-    Marionette = require('backbone.marionette'),
+var Backbone = require('../shims/backbone.js'),
+    Marionette = require('../shims/marionette.js'),
     Assembl = require('../app.js'),
-    _ = require('underscore'),
+    _ = require('../shims/underscore.js'),
     $ = require('jquery'),
     Ctx = require('../common/context.js'),
     CollectionManager = require('../common/collectionManager.js'),
@@ -15,9 +15,6 @@ var Backbone = require('backbone'),
     Messages = require('../models/message.js'),
     Agents = require('../models/agents.js'),
     Promise = require('bluebird');
-
-    require('backbone.modal');
-    require('backbone.marionette.modals');
 
 /**
  * @init

@@ -1,6 +1,6 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
+var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird'),
     Raven = require('raven'),
     $ = require('jquery'),

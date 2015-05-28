@@ -1,8 +1,8 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
-    Backbone = require('backbone'),
-    _ = require('underscore'),
+var Marionette = require('../shims/marionette.js'),
+    Backbone = require('../shims/backbone.js'),
+    _ = require('../shims/underscore.js'),
     $ = require('jquery'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),

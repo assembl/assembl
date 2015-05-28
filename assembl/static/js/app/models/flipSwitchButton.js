@@ -1,6 +1,6 @@
 'use strict';
 
-var Backbone = require('backbone');
+var Backbone = require('../shims/backbone.js');
 
 var FlipSwitchButtonModel = Backbone.Model.extend({
     defaults: {

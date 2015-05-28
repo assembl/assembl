@@ -1,6 +1,6 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
+var Marionette = require('./shims/marionette.js'),
     App = require('./app.js'),
     Ctx = require('./common/context.js'),
     Agents = require('./models/agents.js'),

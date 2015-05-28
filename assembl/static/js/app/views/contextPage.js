@@ -1,11 +1,11 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
+var Marionette = require('../shims/marionette.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     CollectionManager = require('../common/collectionManager.js'),
     $ = require('jquery'),
-    _ = require('underscore'),
+    _ = require('../shims/underscore.js'),
     d3 = require('d3'),
     i18n = require('../utils/i18n.js'),
     Moment = require('moment'),
@@ -15,9 +15,6 @@ var Marionette = require('backbone.marionette'),
     CKEditorField = require('./ckeditorField.js'),
     Types = require('../utils/types.js'),
     Promise = require('bluebird');
-
-require('backbone.modal');
-require('backbone.marionette.modals');
 
 var Partner = Marionette.ItemView.extend({
     template: '#tmpl-partnerItem',

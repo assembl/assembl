@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('underscore'),
+var _ = require('../../shims/underscore.js'),
     $ = require('jquery'),
     Promise = require('bluebird'),
-    Marionette = require('backbone.marionette'),
+    Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js'),
     Permissions = require('../../utils/permissions.js');
 

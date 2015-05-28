@@ -1,15 +1,12 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
+var Marionette = require('../../shims/marionette.js'),
     Assembl = require('../../app.js'),
     $ = require('jquery'),
     CollectionManager = require('../../common/collectionManager.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
-    backboneModal = require('backbone.modal'),
-    marionetteModal = require('backbone.marionette.modals'),
     partnerModel = require('../../models/partners.js');
-
 
 var Partners = Marionette.ItemView.extend({
     template: '#tmpl-partnersInAdmin',

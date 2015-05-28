@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('underscore'),
+var _ = require('../shims/underscore.js'),
     Promise = require('bluebird'),
     Base = require('./base.js'),
     Ctx = require('../common/context.js'),

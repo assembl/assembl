@@ -17,18 +17,18 @@ var rename = require('gulp-rename');
 var streamify = require('gulp-streamify');
 
 // Build Dependencies
-var uglify = require('gulp-uglify');
+var uglify = require('gulp-uglifyjs');
 var source = require('vinyl-source-stream');
 var browserify = require('browserify');
 var watchify = require('watchify');
 
 // Browserify
 gulp.task('browserify', function() {
-    return browserify({
-      entries: ['./assembl/static/js/app/index.js'],
-      debug: true
-    })
-    .bundle()
+    var b = browserify({
+        entries: './assembl/static/js/app/index.js',
+        debug: true
+    });
+    return b.bundle()
     .on('error', function(err){
         console.error('Browserify failed :', err.message);
         this.emit('end');
@@ -40,9 +40,15 @@ gulp.task('browserify', function() {
 
 //Infrastructure
 gulp.task('libs', function() {
-  return browserify('./assembl/static/js/app/browser.js')
-    .bundle()
-    .pipe(source('infrastructure.js'))
+  return gulp.src([
+        './assembl/static/js/bower/underscore/underscore.js',
+        './assembl/static/js/bower/jquery/dist/jquery.js',
+        './assembl/static/js/bower/backbone/backbone.js',
+        './assembl/static/js/bower/marionette/lib/backbone.marionette.js',
+        './assembl/static/js/bower/backbone-modal/backbone.modal.js'
+    ])
+    .pipe(uglify())
+    .pipe(rename('infrastructure.min.js'))
     .pipe(gulp.dest('./assembl/static/js/build/'));
 });
 
@@ -51,12 +57,12 @@ gulp.task('watch', function() {
     //gulp.watch('client/**/*.less', ['styles']);
 });
 
-gulp.task('uglify', function() {
+/*gulp.task('uglify', function() {
     return gulp.src('./assembl/static/js/app/index.js')
         .pipe(uglify())
         .pipe(rename('app.min.js'))
         .pipe(gulp.dest('./assembl/static/js/build/'));
-});
+});*/
 
 // Tasks
 gulp.task('build', ['browserify']);

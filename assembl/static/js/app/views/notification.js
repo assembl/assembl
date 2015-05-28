@@ -1,10 +1,7 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
+var Marionette = require('../shims/marionette.js'),
     $ = require('jquery');
-
-require('backbone.modal');
-
 
 var Notification = Marionette.LayoutView.extend({
     template: '#tmpl-notification',

@@ -1,8 +1,8 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
-    Backbone = require('backbone'),
-    _ = require('underscore'),
+var Marionette = require('../shims/marionette.js'),
+    Backbone = require('../shims/backbone.js'),
+    _ = require('../shims/underscore.js'),
     ckeditor = require('ckeditor'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
@@ -16,9 +16,6 @@ var Marionette = require('backbone.marionette'),
     $ = require('jquery'),
     dotdotdot = require('jquery.dotdotdot'),
     Promise = require('bluebird');
-
-require('backbone.modal');
-require('backbone.marionette.modals');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10;

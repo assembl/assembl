@@ -1,6 +1,6 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
+var Marionette = require('../../shims/marionette.js'),
     CollectionManager = require('../../common/collectionManager.js'),
     Permissions = require('../../utils/permissions.js'),
     Ctx = require('../../common/context.js'),

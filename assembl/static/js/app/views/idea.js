@@ -1,7 +1,7 @@
 'use strict';
 
-var Backbone = require('backbone'),
-    _ = require('underscore'),
+var Backbone = require('../shims/backbone.js'),
+    _ = require('../shims/underscore.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js'),

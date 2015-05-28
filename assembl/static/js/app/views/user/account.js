@@ -1,6 +1,6 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
+var Marionette = require('../../shims/marionette.js'),
     $ = require('jquery'),
     emailAccounts = require('../../models/emailAccounts.js'),
     Ctx = require('../../common/context.js'),

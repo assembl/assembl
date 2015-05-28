@@ -14,14 +14,10 @@ var Assembl = require('../app.js'),
     IdeaWidgets = require('./ideaWidgets.js'),
     CollectionManager = require('../common/collectionManager.js'),
     AssemblPanel = require('./assemblPanel.js'),
-    Marionette = require('backbone.marionette'),
+    Marionette = require('../shims/marionette.js')  ,
     $ = require('jquery'),
-    _ = require('underscore'),
+    _ = require('../shims/underscore.js'),
     Promise = require('bluebird');
-
-require('backbone.modal');
-require('backbone.marionette.modals');
-
 
 var IdeaPanel = AssemblPanel.extend({
     template: '#tmpl-ideaPanel',

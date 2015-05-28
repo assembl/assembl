@@ -1,8 +1,8 @@
 'use strict';
 
-var Backbone = require('backbone'),
+var Backbone = require('../shims/backbone.js'),
     Raven = require('raven'),
-    _ = require('underscore'),
+    _ = require('../shims/underscore.js'),
     $ = require('jquery'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),

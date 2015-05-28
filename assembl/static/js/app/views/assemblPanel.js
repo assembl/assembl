@@ -1,7 +1,7 @@
 'use strict';
 
-var Marionette = require('backbone.marionette'),
-    _ = require('underscore');
+var Marionette = require('../shims/marionette.js'),
+    _ = require('../shims/underscore.js');
 
 /**
  * An abstract class every panel should eventually extend

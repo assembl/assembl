@@ -1,11 +1,6 @@
 'use strict';
 
-var $ = require('jquery'),
-    Backbone = require('backbone');
-    Backbone.$ = $;
-
-var Marionette = require('backbone.marionette'),
-    _ =  require('underscore');
+var Marionette = require('./shims/marionette.js');
 
 var App = new Marionette.Application();
 

@@ -1,11 +1,9 @@
 'use strict';
 
-require('backbone.modal');
-require('backbone.marionette.modals');
 require('bootstrap');
 
 var $ = require('jquery'),
-    _ = require('underscore'),
+    _ = require('../shims/underscore.js'),
     Moment = require('moment'),
     Linkify = require('linkifyjs'),
     Oembed = require('jquery-oembed-all'),
