@@ -10,7 +10,7 @@ var Marionette = require('../../shims/marionette.js'),
     helperDebate = require('../helperDebate.js');
 
 
-/** Represents the entire content of a single group */
+/** Represents the entire content of a single panel group */
 var groupContent = Marionette.CompositeView.extend({
     template: "#tmpl-groupContent",
     className: "groupContent",
@@ -34,7 +34,7 @@ var groupContent = Marionette.CompositeView.extend({
         'click .js_closeGroup': 'closeGroup'
     },
     collectionEvents: {
-        'add remove reset change': 'adjustGridSize'
+        'add remove reset change': 'containerAdjustGridSize'
     },
 
     serializeData: function () {
@@ -179,9 +179,12 @@ var groupContent = Marionette.CompositeView.extend({
         });
     },
 
-    adjustGridSize: function () {
+    containerAdjustGridSize: function () {
+      if(this.groupContainer) {
         this.groupContainer.adjustGridSize();
+      }
     },
+
     /**
      * Tell the panelWrapper which view to put in its contents
      */
@@ -196,8 +199,11 @@ var groupContent = Marionette.CompositeView.extend({
         return this.model.findNavigationSidebarPanelSpec();
     },
 
-    resetDebateState: function (skip_animation, show_debate_help) {
-        // Ensure that the simple view is in debate state, and coherent.
+    /**
+     * Specific to the simple interface.  Does nothing if there is no
+     * navigation sidebar panel in this group
+     */
+    NavigationResetDebateState: function (skip_animation, show_debate_help) {        // Ensure that the simple view is in debate state, and coherent.
         if (this.findNavigationSidebarPanelSpec()) {
             this.groupContainer.suspendResize();
             this.model.set('navigationState', 'debate');
@@ -205,7 +211,7 @@ var groupContent = Marionette.CompositeView.extend({
             if ( show_debate_help ){
 
                 this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-                this.resetMessagePanelState();
+                this.SimpleUIResetMessageAndIdeaPanelState();
 
                 var helper = new helperDebate();
 
@@ -214,7 +220,7 @@ var groupContent = Marionette.CompositeView.extend({
             }
             else {
                 this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-                this.resetMessagePanelState();
+                this.SimpleUIResetMessageAndIdeaPanelState();
 
                 var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
                 conversationPanel.hideAlternativeContent();
@@ -230,7 +236,7 @@ var groupContent = Marionette.CompositeView.extend({
         }
     },
 
-    resetContextState: function () {
+    NavigationResetContextState: function () {
         var nav = this.findNavigationSidebarPanelSpec();
         if (nav) {
             this.groupContainer.suspendResize();
@@ -240,7 +246,7 @@ var groupContent = Marionette.CompositeView.extend({
         }
     },
 
-    resetSynthesisMessagesState: function (synthesisInNavigationPanel) {
+    NavigationResetSynthesisMessagesState: function (synthesisInNavigationPanel) {
         if (this.findNavigationSidebarPanelSpec()) {
             this.groupContainer.suspendResize();
             this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
@@ -254,7 +260,7 @@ var groupContent = Marionette.CompositeView.extend({
         }
     },
 
-    resetVisualizationState: function (url) {
+    NavigationResetVisualizationState: function (url) {
         var nav = this.findNavigationSidebarPanelSpec();
         if (nav) {
             this.groupContainer.suspendResize();
@@ -267,9 +273,9 @@ var groupContent = Marionette.CompositeView.extend({
     },
 
     resetMessagePanelWidth: function () {
-        var messagePanel = this.findWrapperByType(PanelSpecTypes.MESSAGE_LIST);
+      var messagePanel = this.findPanelWrapperByType(PanelSpecTypes.MESSAGE_LIST);
         if (this.groupContainer.isOneNavigationGroup()) {
-            var ideaPanel = this.findWrapperByType(PanelSpecTypes.IDEA_PANEL);
+          var ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
             if (ideaPanel.isPanelMinimized() || ideaPanel.isPanelHidden()) {
                 messagePanel.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
                 messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(ideaPanel.minWidth);
@@ -283,15 +289,16 @@ var groupContent = Marionette.CompositeView.extend({
         }
     },
 
-    resetMessagePanelState: function () {
+    SimpleUIResetMessageAndIdeaPanelState: function () {
         this.groupContainer.suspendResize();
         this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
         var nav = this.findNavigationSidebarPanelSpec(),
-            ideaPanel = this.findWrapperByType(PanelSpecTypes.IDEA_PANEL);
+            ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
         this.resetMessagePanelWidth();
     },
 
     // not used?
+    /*
     setPanelWidthByType: function (panelType, width) {
         var panels = this.model.get('panels');
         var panel = panels.findWhere({'type': panelType.id});
@@ -326,7 +333,7 @@ var groupContent = Marionette.CompositeView.extend({
 
         }
     },
-
+    */
 
     /**
      * @params panelSpecTypes
@@ -350,29 +357,32 @@ var groupContent = Marionette.CompositeView.extend({
      * panel class
      *
      */
-    findWrapperByType: function (panelSpecType) {
+    findPanelWrapperByType: function (panelSpecType) {
         var model = this.model.getPanelSpecByType(panelSpecType);
         if (model !== undefined) {
             var view = this.children.findByModel(model);
             if (view == null)
-                return;
+                return undefined;
             return view;
         }
         /*else {
-            console.log("findWrapperByType: WARNING: unable to find a wrapper for type", panelSpecType);
+            console.log("findPanelWrapperByType: WARNING: unable to find a wrapper for type", panelSpecType);
         }*/
         return undefined;
     },
 
     findViewByType: function (panelSpecType) {
-        var wrapper = this.findWrapperByType(panelSpecType);
-        if (wrapper != null && wrapper.contents !== undefined) {
-            return wrapper.contents.currentView;
+      var wrapper = this.findPanelWrapperByType(panelSpecType);
+      if (wrapper != null) {
+        if(wrapper.contents === undefined) {
+          throw new Error("PanelWrapper doesn't have any content");
         }
-        /*else {
-            console.log("findViewByType: WARNING: unable to find a view for type", panelSpecType);
-        }*/
-        return undefined;
+        return wrapper.contents.currentView;
+      }
+      else {
+        console.log("findViewByType: WARNING: unable to find a view for type", panelSpecType);
+      }
+      return undefined;
     },
 
     /**

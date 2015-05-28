@@ -191,7 +191,7 @@ var IdeaView = Backbone.View.extend({
         messageListView.trigger('messageList:addFilterIsRelatedToIdea', this.model, is_unread);
       }
       // Why is this call here?  benoitg - 2015-06-09
-      this._groupContent.resetDebateState(false);
+      this._groupContent.NavigationResetDebateState(false);
     },
 
     /**
@@ -333,7 +333,7 @@ var IdeaView = Backbone.View.extend({
                 // Add as a child idea
                 var newIdea = this.model.addSegmentAsChild(segment);
                 this._groupContent.setCurrentIdea(newIdea);
-                this._groupContent.resetDebateState(false);
+                this._groupContent.NavigationResetDebateState(false);
             } else {
                 // Add to the current idea
                 this.model.addSegment(segment);
@@ -349,7 +349,7 @@ var IdeaView = Backbone.View.extend({
                 Ctx.currentAnnotationIdIdea = null;
                 Ctx.currentAnnotationNewIdeaParentIdea = this.model;
                 Ctx.saveCurrentAnnotationAsExtract();
-                this._groupContent.resetDebateState(false);
+                this._groupContent.NavigationResetDebateState(false);
             } else {
                 // Add as a segment
                 Ctx.currentAnnotationIdIdea = this.model.getId();

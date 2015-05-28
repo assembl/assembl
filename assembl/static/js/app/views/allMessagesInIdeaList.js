@@ -52,7 +52,7 @@ var AllMessagesInIdeaListView = IdeaView.extend({
             this._groupContent.setCurrentIdea(null);
             //Yes, this will cause double-renders in some cases.  Will be fixed once messageList observes it's result list.
             messageListView.render();
-            this._groupContent.resetDebateState(false);
+            this._groupContent.NavigationResetDebateState(false);
 
             this.$el.addClass('is-selected');
     }

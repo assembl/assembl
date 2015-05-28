@@ -168,7 +168,7 @@ var NavigationView = AssemblPanel.extend({
                     panelWrapper: this.getPanelWrapper()
                 });
                 this.about.show(aboutNavPanel);
-                this.getContainingGroup().resetContextState();
+                this.getContainingGroup().NavigationResetContextState();
                 break;
             case 'debate':
                 var idealist = new IdeaList({
@@ -178,24 +178,24 @@ var NavigationView = AssemblPanel.extend({
                 });
                 this.debate.show(idealist);
                 if ( this.getGroupState().get('currentIdea') ) {
-                    this.getContainingGroup().resetDebateState();
+                    this.getContainingGroup().NavigationResetDebateState();
                 }
                 else {
                     var that = this;
                     if ( options && 'show_help' in options ){
                         if ( options.show_help )
-                            that.getContainingGroup().resetDebateState(false, true);
+                            that.getContainingGroup().NavigationResetDebateState(false, true);
                         else
-                            that.getContainingGroup().resetDebateState();
+                            that.getContainingGroup().NavigationResetDebateState();
                     }
                     else {
                         var collectionManager = new CollectionManager();
                         collectionManager.getDiscussionModelPromise().then(function (discussion){
                             if ( discussion.get("show_help_in_debate_section") ){
-                                that.getContainingGroup().resetDebateState(false, true);
+                                that.getContainingGroup().NavigationResetDebateState(false, true);
                             }
                             else {
-                                that.getContainingGroup().resetDebateState();
+                                that.getContainingGroup().NavigationResetDebateState();
                             }
                         });
                     }
@@ -207,7 +207,7 @@ var NavigationView = AssemblPanel.extend({
                     panelWrapper: this.getPanelWrapper()
                 });
                 this.synthesis.show(synthesisInNavigationPanel);
-                this.getContainingGroup().resetSynthesisMessagesState(synthesisInNavigationPanel);
+                this.getContainingGroup().NavigationResetSynthesisMessagesState(synthesisInNavigationPanel);
                 break;
             case 'visualizations':
                 var visualizationListPanel = new LinkListView({

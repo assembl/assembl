@@ -162,7 +162,7 @@ var routeManager = Marionette.Object.extend({
         var groupSpecsP = this.collectionManager.getGroupSpecsCollectionPromise(ViewsFactory);
 
         groupSpecsP.done(function (groupSpecs) {
-            var group = new GroupContainer({
+            var groupsView = new GroupContainer({
                 collection: groupSpecs
             });
             var lastSave = Storage.getDateOfLastViewSave();
@@ -177,14 +177,16 @@ var routeManager = Marionette.Object.extend({
                 });
                 if (navigableGroupSpec) {
                     setTimeout(function () {
-                        var groupContent = group.children.findByModel(navigableGroupSpec);
-                        groupContent.resetContextState();
+                        var groupContent = groupsView.children.findByModel(navigableGroupSpec);
+                        groupContent.NavigationResetContextState();
                     });
                 }
             }
             //console.log(group);
-            group.resizeAllPanels();
-            Assembl.groupContainer.show(group);
+            //Will the following line work?  The group isn't in the dom yet...
+            // benoitg - 2015-05-28
+            groupsView.resizeAllPanels();
+            Assembl.groupContainer.show(groupsView);
         });
     },
 

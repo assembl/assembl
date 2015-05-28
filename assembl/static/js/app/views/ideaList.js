@@ -58,6 +58,15 @@ var IdeaList = AssemblPanel.extend({
     minWidth: 320,
     gridSize: AssemblPanel.prototype.NAVIGATION_PANEL_GRID_SIZE,
 
+    /**
+     * Is this panel the primary navigation panel for it's group?
+     * @return true or false
+     */
+    isPrimaryNavigationPanel: function () {
+      //TODO:  This overrides parent class, but will not always be true
+      return true;
+    },
+
     initialize: function (options) {
         Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
         var that = this,
@@ -118,7 +127,7 @@ var IdeaList = AssemblPanel.extend({
                 var idea = allIdeasCollection.get(ideaId);
                 if (idea) {
                     that.getContainingGroup().setCurrentIdea(idea);
-                    that.getContainingGroup().resetDebateState();
+                    that.getContainingGroup().NavigationResetDebateState();
                     if ( doScroll )
                       that.onScrollToIdea(idea);
                 }

@@ -20,6 +20,9 @@ var groupContainer = Marionette.CollectionView.extend({
         var that = this;
         // boilerplate in marionette if you listen m/c here, use collectionEvents or modelEvents
         //this.listenTo(this.collection, 'change reset add remove', this.adjustGridSize);
+
+        // Shouldn't this be in onRender, or better wait untill all groups have rendered?
+        // benoitg-2015-05-27
         setTimeout(function () {
             that.resizeAllPanels();
         }, 200);
@@ -40,6 +43,7 @@ var groupContainer = Marionette.CollectionView.extend({
      * @param viewClass A view (such as a messageList) for
      * which we want the matching groupContent to send events or manipulate
      * state.
+     * @return Possibly empty array of panels
      */
     findPanelInstance: function (viewClass) {
         console.log("getGroupContent(): WRITEME!")
@@ -76,6 +80,9 @@ var groupContainer = Marionette.CollectionView.extend({
         this.resizeSuspended = false;
         this.resizeAllPanels(skip_animation);
     },
+    /** Does this group have exactly one navigation panel?
+    * 
+    */
     isOneNavigationGroup: function () {
         if (this.collection.size() == 1) {
             var group1 = this.collection.first();
@@ -83,6 +90,8 @@ var groupContainer = Marionette.CollectionView.extend({
             if (panel_types.length == 3
                 && (PanelSpecTypes.getByRawId(panel_types[0]) === PanelSpecTypes.NAV_SIDEBAR
                     || PanelSpecTypes.getByRawId(panel_types[0]) === PanelSpecTypes.TABLE_OF_IDEAS)
+                    //I don't think this code is correct anymore.   Why do we check that
+                    //there is an idea panel followed by a messagelist? benoitg- 2015-05-27
                 && PanelSpecTypes.getByRawId(panel_types[1]) === PanelSpecTypes.IDEA_PANEL
                 && PanelSpecTypes.getByRawId(panel_types[2]) === PanelSpecTypes.MESSAGE_LIST)
                 return true;

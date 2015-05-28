@@ -38,7 +38,7 @@ var SimpleLinkView = Marionette.ItemView.extend({
             this.getPermissionTokenPromise([Permissions.READ_PUBLIC_CIF], random_seed),
             this.getPermissionTokenPromise([Permissions.READ], random_seed),
             function (cif_token, user_token) {
-                content.resetVisualizationState(url({
+                content.NavigationResetVisualizationState(url({
                         "url": encodeURIComponent(url_base+'/jsonld?token='+cif_token),
                         "user_url": encodeURIComponent(url_base+'/private_jsonld?token='+user_token),
                         "lang": assembl_locale

@@ -55,7 +55,7 @@ var OrphanMessagesInIdeaListView = IdeaView.extend({
             messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
 
             this._groupContent.setCurrentIdea(null);
-            this._groupContent.resetDebateState();
+            this._groupContent.NavigationResetDebateState();
 
             this.$el.addClass('is-selected');
         }

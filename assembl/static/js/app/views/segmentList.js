@@ -486,7 +486,7 @@ var SegmentListPanel = AssemblPanel.extend({
 
         var Modal = Backbone.Modal.extend({
             template: _.template($('#tmpl-bookmarket').html()),
-            className: 'capture group-modal popin-wrapper',
+            className: 'capture generic-modal popin-wrapper',
             cancelEl: '.close, .btn-primary'
         });
 

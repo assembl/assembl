@@ -137,7 +137,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       partialMessage = MessagesInProgress.getMessage(partialCtx),
       send_callback = function () {
         Assembl.vent.trigger('messageList:currentQuery');
-        that.messageListView.getContainingGroup().setCurrentIdea(that.model);
+        that.getPanel().getContainingGroup().setCurrentIdea(that.model);
       };
 
       var replyView = new MessageSendView({
@@ -197,8 +197,67 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       }
     },
 
+    getPanel: function () {
+      if (!this.messageListView) {
+        throw new Error("WRITEME:  We are not in a messagelist, and I don't know how to find the panel");
+      }
+      return this.messageListView;
+    },
+    
     navigateToIdea: function () {
-        console.log('WRITEME ideaInSysthesis: navigateToIdea called');
+      var panel = this.getPanel();
+      
+      if(panel.isPrimaryNavigationPanel()) {
+        panel.getContainingGroup().setCurrentIdea(this.model);
+      }
+      else {
+        console.log('WRITEME ideaInSysthesis: navigateToIdea called, and we are not the primary navigation panel');
+
+        var self = this;
+
+        var Modal = Backbone.Modal.extend({
+          template: _.template($('#tmpl-groupModal').html()),
+          className: 'panelGroups-modal popin-wrapper',
+          cancelEl: '.close, .js_close',
+          keyControl: false,
+          initialize: function () {
+            this.$('.bbm-modal').addClass('popin');
+          },
+          events: {
+            'submit #partner-form' :'validatePartner'
+          },
+
+          onRender: function() {
+            var panelSpec = require('../models/panelSpec');
+            var PanelSpecTypes = require('../utils/panelSpecTypes');
+            var viewsFactory = require('../objects/viewsFactory');
+            var groupSpec = require('../models/groupSpec');
+            //var groupContent = require('views/groups/groupContent');
+            var GroupContainer = require('../views/groups/groupContainer');
+            var defaults = {
+                panels: new panelSpec.Collection([
+                        {type: PanelSpecTypes.IDEA_PANEL.id, minimized: false},
+                        {type: PanelSpecTypes.MESSAGE_LIST.id}
+                    ],
+                    {'viewsFactory': viewsFactory }),
+                navigationState: 'debate'
+            };
+            var groupSpecModel = new groupSpec.Model(defaults, {'viewsFactory': viewsFactory });
+            var groupSpecCollection = new groupSpec.Collection([groupSpecModel]);
+            //var groupView = new groupContent({model: groupSpecModel});
+            var groupsView = new GroupContainer({
+              collection: groupSpecCollection
+            });
+            groupsView.render();
+            this.$('.popin-body').html(groupsView.el);
+          }
+        });
+
+        var modal = new Modal();
+
+        Assembl.slider.show(modal);
+
+      }
     },
 
     makeEditable: function () {

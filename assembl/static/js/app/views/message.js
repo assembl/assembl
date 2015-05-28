@@ -490,7 +490,7 @@ var MessageView = Marionette.ItemView.extend({
           return;
         var Modal = Backbone.Modal.extend({
             template: _.template($('#tmpl-showSegmentByAnnotation').html()),
-            className: 'group-modal popin-wrapper modal-showSegment',
+            className: 'generic-modal popin-wrapper modal-showSegment',
             cancelEl: '.js_close',
             keyControl: false,
             initialize: function () {

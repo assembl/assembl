@@ -260,9 +260,15 @@
   color: $green;
 }
 
-.group-modal {
+.generic-modal {
   .popin, .bbm-modal {
     max-width: 500px;
+  }
+}
+
+.panelGroups-modal {
+  .popin, .bbm-modal {
+    min-height: 90%;
   }
 }
 

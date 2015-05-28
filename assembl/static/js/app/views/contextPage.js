@@ -1353,7 +1353,7 @@ var Introduction = Marionette.ItemView.extend({
 
             var Modal = Backbone.Modal.extend({
                 template: _.template($('#tmpl-homeIntroductionDetail').html()),
-                className: 'group-modal popin-wrapper',
+                className: 'generic-modal popin-wrapper',
                 model: model,
                 cancelEl: '.close'
             });

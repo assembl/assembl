@@ -45,13 +45,21 @@ var AssemblPanel = Marionette.LayoutView.extend({
     },
 
     /**
+     * Is this panel the primary navigation panel for it's group?
+     * @return trur or false
+     */
+    isPrimaryNavigationPanel: function () {
+      return false;
+    },
+
+    /**
      * Get the current group.  You should NEVER hold a reference to this,
      * you should chain method calls.
      * @return a groupContent object, or throws an exception.
      */
 
     getContainingGroup: function () {
-      if(this._panelWrapper.groupContent) { //Not using  instanceof GroupContent here to avoid requirejs circular dependency.
+      if(this._panelWrapper.groupContent) { //Not using instanceof GroupContent here to avoid requirejs circular dependency.
         return this._panelWrapper.groupContent;
       }
       else {

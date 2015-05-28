@@ -279,7 +279,7 @@ var messageSend = Marionette.ItemView.extend({
                       if (that.messageList) {
                         that.messageList.triggerMethod('messageList:clearAllFilters');
                         //that.messageList.triggerMethod('messageList:addFilterIsOrphanMessage');
-                        groupContent.resetDebateState();
+                        groupContent.NavigationResetDebateState();
                         //FIXME:  Remove this magic delay.  Benoitg - 2015-06-09
                         setTimeout(function(){
                           that.messageList.showMessageById(model.id);

@@ -29,7 +29,7 @@ return describe('Views Specs', function () {
 
         it('Views should exist', function () {
             //view.ui.joinDiscussion.click()
-            //expect($('#slider')).to.have.html('<div class="group-modal popin-wrapper modal-joinDiscussion bbm-wrapper"></div>');
+            //expect($('#slider')).to.have.html('<div class="generic-modal popin-wrapper modal-joinDiscussion bbm-wrapper"></div>');
         });
 
         afterEach(function(){

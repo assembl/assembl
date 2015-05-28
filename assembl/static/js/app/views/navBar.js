@@ -199,7 +199,7 @@ var navBar = Marionette.LayoutView.extend({
 
         var Modal = Backbone.Modal.extend({
             template: _.template($('#tmpl-create-group').html()),
-            className: 'group-modal popin-wrapper',
+            className: 'generic-modal popin-wrapper',
             cancelEl: '.close, .btn-cancel',
             serializeData: function () {
                 return {
@@ -322,15 +322,15 @@ var navBar = Marionette.LayoutView.extend({
             notificationsToShow: null
         });
 
-        var modalClassName = 'group-modal popin-wrapper modal-joinDiscussion';
+        var modalClassName = 'generic-modal popin-wrapper modal-joinDiscussion';
         var modalTemplate = _.template($('#tmpl-joinDiscussion').html());
 
         if ( popinType == 'first_post' ){
-            modalClassName = 'group-modal popin-wrapper modal-firstPost';
+            modalClassName = 'generic-modal popin-wrapper modal-firstPost';
             modalTemplate = _.template($('#tmpl-firstPost').html());
         }
         else if ( popinType == 'first_login_after_auto_subscribe_to_notifications' ){
-            modalClassName = 'group-modal popin-wrapper modal-firstPost';
+            modalClassName = 'generic-modal popin-wrapper modal-firstPost';
             modalTemplate = _.template($('#tmpl-firstLoginAfterAutoSubscribeToNotifications').html());
         }
 

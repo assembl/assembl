@@ -37,6 +37,7 @@ The second generates the runtime files and needs to be run before you can see th
 ```
 fab devenv compile_messages
 ```
+
 The translation workflow
 ========================
 
@@ -52,10 +53,12 @@ if transifex's version is the most up to date.  The --all flag will pull new lan
 ```
 fab devenv make_messages
 ```
+
 3) Mandatory: Push the pot file back to transifex:
 ```
 tx push --source
 ```
+
 4) Optionnal: You may want to do some local translation work at this stage (in a local po editor)
 
 Once you've completed your changes, you need to
@@ -63,9 +66,10 @@ Once you've completed your changes, you need to
 ```
 tx push --translations -l fr
 ```
+
 5) Mandatory:  Commit all your changes to git.
 
-Namely, commit the following files:
+Specifically, commit the following files:
 ```
 git add assembl/locale/assembl.pot
 git add assembl/locale/en/LC_MESSAGES/assembl.po

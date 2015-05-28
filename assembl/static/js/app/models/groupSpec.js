@@ -8,8 +8,8 @@ var Base = require('./base.js'),
 /**
  * @class GroupSpecModel
  *
- * Represents an independent group of panels in the interface.  When added
- * the matching views (groupContainerView) will be instanciated
+ * Represents an independent group of panels in the interface.  When 
+ * added, the matching views (groupContainerView) will be instanciated
  */
 var GroupSpecModel = Base.Model.extend({
   defaults: function () {
@@ -93,7 +93,7 @@ var GroupSpecModel = Base.Model.extend({
 
   /**
    * Note that despite the name, this function does NOT check that if
-   * the panel exists, it exists at the right position. It ONLY checks
+   * the panel exists, it exists at the right position. It ONLY check
    * that the panel exists - benoitg
    * @list_of_options PanelType or array of PanelType
    * @position int order of first panel listed in sequence of panels
