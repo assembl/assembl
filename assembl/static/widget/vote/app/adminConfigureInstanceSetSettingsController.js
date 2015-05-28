@@ -10,9 +10,9 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   $scope.widget_uri = null; // "local:Widget/24"
   $scope.widget_endpoint = null; // "/data/Widget/24"
   $scope.widget = null;
-  $scope.discussion_uri = null; // "local:Discussion/1"
-  $scope.criteria_url = null; // "local:Discussion/1/widgets/66/criteria"
-  $scope.criteria_endpoint = null; // "/data/Discussion/1/widgets/66/criteria"
+  //$scope.discussion_uri = null; // "local:Discussion/1"
+  //$scope.criteria_url = null; // "local:Discussion/1/widgets/66/criteria"
+  //$scope.criteria_endpoint = null; // "/data/Discussion/1/widgets/66/criteria"
   $scope.criteria = null; // array of ideas (their full structure)
 
 
@@ -145,9 +145,9 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     console.log("$scope.widget.settings:");
     console.log($scope.widget.settings);
 
-    $scope.discussion_uri = $scope.widget.discussion;
-    $scope.criteria_url = $scope.widget.criteria_url;
-    $scope.criteria_endpoint = AssemblToolsService.resourceToUrl($scope.criteria_url);
+    //$scope.discussion_uri = $scope.widget.discussion;
+    //$scope.criteria_url = $scope.widget.criteria_url;
+    //$scope.criteria_endpoint = AssemblToolsService.resourceToUrl($scope.criteria_url);
     $scope.criteria = $scope.widget.criteria;
     console.log("$scope.criteria:");
     console.log($scope.criteria);

@@ -13,8 +13,8 @@ voteApp.controller('adminConfigureInstanceSetVotableIdeasCtl',
   $scope.widget = null;
   $scope.discussion_uri = null; // "local:Discussion/1"
   $scope.ideas = null; // list of all ideas of the discussion
-  $scope.votable_ideas_url = null; // "local:Discussion/1/widgets/66/criteria"
-  $scope.votable_ideas_endpoint = null; // "/data/Discussion/1/widgets/66/criteria"
+  $scope.votable_ideas_url = null; // "local:Discussion/4/widgets/5/targets/"
+  $scope.votable_ideas_endpoint = null; // "/data/Discussion/4/widgets/5/targets/"
   $scope.votable_ideas = null; // array of ideas (their full structure)
 
   $scope.init = function(){
@@ -61,9 +61,11 @@ voteApp.controller('adminConfigureInstanceSetVotableIdeasCtl',
     $scope.votable_ideas_url = $scope.widget.votables_url;
     
 
-    console.log("$scope.widget.votable_ideas_url: ", $scope.widget.votable_ideas_url);
+    //console.log("$scope.widget.votable_ideas_url: ", $scope.widget.votable_ideas_url);
+    console.log("$scope.widget.votables_url: ", $scope.widget.votables_url);
     console.log("$scope.widget: ", $scope.widget);
     $scope.votable_ideas_endpoint = AssemblToolsService.resourceToUrl($scope.votable_ideas_url);
+    console.log("$scope.votable_ideas_endpoint: ", $scope.votable_ideas_endpoint);
     $scope.votable_ideas = $scope.widget.votable_ideas; // should we transform this data? we do not get the shortTitles
     console.log("$scope.votable_ideas:");
     console.log($scope.votable_ideas);
