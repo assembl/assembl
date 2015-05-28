@@ -99,12 +99,19 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     $scope.widget.settings.items[item_index].criteria.push(criterion);
   };
 
+  $scope.resetCriterionFromType = function(item_index, criterion_index) {
+    console.log("resetCriterionFromType()");
+    var criterion = $scope.widget.settings.items[item_index].criteria[criterion_index];
+    VoteWidgetService.resetCriterionFromType(criterion);
+  };
+
   $scope.addCriterionField = function(item_index, criterion_index, field_name){
     //console.log("addCriterionField(): ", item_index, criterion_index, field_name);
     if ( field_name ){
       //$scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_criterion_fields, field_name, true);
       var current_criterion = $scope.widget.settings.items[item_index].criteria[criterion_index];
-      var defaultValue = VoteWidgetService.getFieldDefaultValue($scope.aggregated_optional_criterion_fields_by_type[current_criterion.type], field_name, true);
+      var defaultValue = null;
+      defaultValue = VoteWidgetService.getFieldDefaultValue($scope.aggregated_optional_criterion_fields_by_type[current_criterion.type], field_name, true);
       //console.log("defaultValue: ", defaultValue);
       $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = defaultValue;
       //console.log("settings items after: ", $scope.widget.settings.items);

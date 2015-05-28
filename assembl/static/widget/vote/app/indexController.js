@@ -360,11 +360,12 @@ voteApp.controller('indexCtl',
     // Position on the X coordinates of the center of the gauge, in the created SVG
     $scope.drawVerticalGauge = function(destination, item_data, xPosCenter){
       console.log("drawVerticalGauge()");
-      //console.log("item_data:");
-      //console.log(item_data);
+      console.log("item_data:");
+      console.log(item_data);
       var config = $scope.settings;
       var criterion = item_data.criteria[0];
-      var criterionValue = (criterion.valueDefault || criterion.valueDefault === 0.0) ? criterion.valueDefault : criterion.valueMin;
+      var criterionValue = (("valueDefault" in criterion) && (criterion.valueDefault || criterion.valueDefault === 0.0)) ? criterion.valueDefault : (("valueMin" in criterion) ? criterion.valueMin : 0);
+      console.log("criterionValue: ", criterionValue);
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
 
       // create the graph, as a SVG in the d3 container div

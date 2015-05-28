@@ -302,6 +302,36 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     return obj;
   };
 
+  this.resetCriterionFromType = function(criterion){
+    console.log("VoteWidgetService::resetCriterionFromType()");
+    var criterion_type = criterion.type;
+    //var criterion_reset = {};
+
+    // keep original mandatory fields (entity_id, name, type)
+    /*
+    for ( var i = 0; i < this.mandatory_criterion_fields.length; ++i ){
+      var key = this.mandatory_criterion_fields[i].key;
+      if (key in criterion) 
+        criterion_reset[key] = criterion[key];
+    }
+    */
+
+    // add or reset mandatory typed criterion fields
+    if ( criterion_type in this.mandatory_typed_criterion_fields){
+      var fields = this.mandatory_typed_criterion_fields[criterion_type];
+      for ( var i = 0; i < fields.length; ++i ){
+        if ( "default" in fields[i] ){
+          //criterion_reset[fields[i].key] = fields[i].default;
+          criterion[fields[i].key] = fields[i].default;
+        }
+      }
+    }
+
+    console.log("criterion built: ", criterion);
+    //console.log("criterion built: ", criterion_reset);
+    //criterion = criterion_reset;
+  };
+
   this.getFieldDefaultValue = function (default_fields, field_name, for_admin){
     //console.log("getFieldDefaultValue(): ", default_fields, field_name, for_admin);
     // var default_value = ''; // /!\ setting it to an empty string does not create the property!

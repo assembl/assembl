@@ -102,7 +102,7 @@
                                 <div ng-switch on="field.type">
                                     <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
                                     <select ng-switch-when="criterion" ng-model="criterion[field.key]" ng-options="c['@id'] as c.shortTitle for c in criteria"></select>
-                                    <select ng-switch-when="select" ng-model="criterion[field.key]" ng-options="v.key as v.label for v in field.options"></select>
+                                    <select ng-switch-when="select" ng-model="criterion[field.key]" ng-options="v.key as v.label for v in field.options" ng-change="field.key == 'type' && resetCriterionFromType(item_index, criterion_index)"></select>
                                     <input ng-switch-default type="text" ng-model="criterion[field.key]" />
                                 </div>
                             </div>
