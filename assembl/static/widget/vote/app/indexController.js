@@ -29,7 +29,16 @@ voteApp.controller('indexCtl',
           if ( el.criteria && el.criteria.length ){
             _.each(el.criteria, function(el2){
               VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_criterion_fields);
+              
+              if ( "type" in el2 && el2.type in VoteWidgetService.mandatory_typed_criterion_fields ){
+                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_typed_criterion_fields[el2.type]);
+              }
+
               VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_criterion_fields);
+
+              if ( "type" in el2 && el2.type in VoteWidgetService.optional_typed_criterion_fields ){
+                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_typed_criterion_fields[el2.type]);
+              }
             });
           }
         });
