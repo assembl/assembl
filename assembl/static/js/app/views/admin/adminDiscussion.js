@@ -1,7 +1,7 @@
 'use strict';
 
 var Marionette = require('../../shims/marionette.js'),
-    $ = require('jquery'),
+    $ = require('../../shims/jquery.js'),
     _ = require('../../shims/underscore.js'),
     autosize = require('jquery-autosize'),
     CollectionManager = require('../../common/collectionManager.js'),

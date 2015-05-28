@@ -5,7 +5,7 @@ var Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js') ,
     CollectionManager = require('../common/collectionManager.js'),
     Marionette = require('../shims/marionette.js'),
-    $ = require('jquery');
+    $ = require('../shims/jquery.js');
 
 
 var IdeaWidgets = Marionette.ItemView.extend({

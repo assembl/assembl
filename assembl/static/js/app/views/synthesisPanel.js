@@ -3,7 +3,7 @@
 var objectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     Raven = require('raven-js'),
     _ = require('../shims/underscore.js'),
-    $ = require('jquery'),
+    $ = require('../shims/jquery.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     MessageModel = require('../models/message.js'),

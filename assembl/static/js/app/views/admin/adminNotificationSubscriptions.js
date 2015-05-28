@@ -5,7 +5,7 @@ var Marionette = require('../../shims/marionette.js'),
     Permissions = require('../../utils/permissions.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
-    $ = require('jquery'),
+    $ = require('../../shims/jquery.js'),
     Promise = require('bluebird');
 
 var notifications = Marionette.ItemView.extend({

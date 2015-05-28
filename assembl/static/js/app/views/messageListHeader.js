@@ -3,7 +3,7 @@
 var Backbone = require('../shims/backbone.js'),
     Raven = require('raven-js'),
     _ = require('../shims/underscore.js'),
-    $ = require('jquery'),
+    $ = require('../shims/jquery.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Message = require('../models/message.js'),

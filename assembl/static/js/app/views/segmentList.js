@@ -3,7 +3,7 @@
 var Marionette = require('../shims/marionette.js'),
     Backbone = require('../shims/backbone.js'),
     _ = require('../shims/underscore.js'),
-    $ = require('jquery'),
+    $ = require('../shims/jquery.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Segment = require('../models/segment.js'),

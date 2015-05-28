@@ -15,7 +15,7 @@ var Assembl = require('../app.js'),
     CollectionManager = require('../common/collectionManager.js'),
     AssemblPanel = require('./assemblPanel.js'),
     Marionette = require('../shims/marionette.js')  ,
-    $ = require('jquery'),
+    $ = require('../shims/jquery.js'),
     _ = require('../shims/underscore.js'),
     Promise = require('bluebird');
 

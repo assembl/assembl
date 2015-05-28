@@ -18,7 +18,7 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     CollectionManager = require('../common/collectionManager.js'),
     i18n = require('../utils/i18n.js'),
     OtherInIdeaListView = require('./otherInIdeaList.js'),
-    $ = require('jquery');
+    $ = require('../shims/jquery.js');
 
 
 var FEATURED = 'featured',

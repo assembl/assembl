@@ -13,7 +13,7 @@ var Marionette = require('../shims/marionette.js'),
     Agents = require('../models/agents.js'),
     CollectionManager = require('../common/collectionManager.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
-    $ = require('jquery'),
+    $ = require('../shims/jquery.js'),
     Promise = require('bluebird');
 
 var MIN_TEXT_TO_TOOLTIP = 5,

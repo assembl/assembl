@@ -2,7 +2,7 @@
 
 var Marionette = require('../../shims/marionette.js'),
     Jed = require('jed'),
-    $ = require('jquery'),
+    $ = require('../../shims/jquery.js'),
     Assembl = require('../../app.js'),
     IdeaList = require('../ideaList.js'),
     sidebarNotification = require('../navigation/notification.js'),

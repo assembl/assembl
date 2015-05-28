@@ -2,7 +2,7 @@
 
 var Base = require('./base.js'),
     Ctx = require('../common/context.js'),
-    $ = require('jquery');
+    $ = require('../shims/jquery.js');
 
 var sourceModel = Base.Model.extend({
     urlRoot: Ctx.getApiV2DiscussionUrl()+'sources',

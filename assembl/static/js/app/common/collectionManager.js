@@ -3,7 +3,7 @@
 var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird'),
     Raven = require('raven-js'),
-    $ = require('jquery'),
+    $ = require('../shims/jquery.js'),
     Assembl = require('../app.js'),
     Message = require('../models/message.js'),
     groupSpec = require('../models/groupSpec.js'),

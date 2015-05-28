@@ -1,7 +1,7 @@
 'use strict';
 
 var Marionette = require('../shims/marionette.js'),
-    $ = require('jquery');
+    $ = require('../shims/jquery.js');
 
 var Notification = Marionette.LayoutView.extend({
     template: '#tmpl-notification',

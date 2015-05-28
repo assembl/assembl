@@ -1,9 +1,8 @@
 'use strict';
 
-var $ = require('jquery'),
+var $ = require('../shims/jquery.js'),
     _ = require('../shims/underscore.js'),
     Moment = require('moment'),
-    Linkify = require('linkifyjs'),
     Promise = require('bluebird'),
     App =  require('../app.js'),
     Permissions =  require('../utils/permissions.js'),
@@ -1266,7 +1265,7 @@ Context.prototype = {
     },
 
     convertUrlsToLinks: function(el) {
-        el.Linkify();
+        $(el).linkify();
     },
 
     makeLinksShowOembedOnHover: function(el) {

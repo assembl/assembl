@@ -2,7 +2,7 @@
 
 var Marionette = require('../shims/marionette.js'),
     _ = require('../shims/underscore.js'),
-    $ = require('jquery'),
+    $ = require('../shims/jquery.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     ckeditor = require('ckeditor-sharedspace');

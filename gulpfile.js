@@ -11,7 +11,6 @@ var sass = require('gulp-sass');
 // Gulp Dependencies
 var gulp = require('gulp');
 var rename = require('gulp-rename');
-var streamify = require('gulp-streamify');
 
 // Build Dependencies
 var uglify = require('gulp-uglifyjs');
@@ -19,53 +18,56 @@ var source = require('vinyl-source-stream');
 var browserify = require('browserify');
 var watchify = require('watchify');
 
+var jsPath = './assembl/static/js';
+
 // Browserify
 gulp.task('browserify', function() {
-    var b = browserify({
-        entries: './assembl/static/js/app/index.js',
+    var b = watchify(browserify({
+        entries: jsPath+'/app/index.js',
         debug: true
-    });
+    }));
     return b.bundle()
     .pipe(source('index.js'))
     .pipe(rename('app.js'))
-    .pipe(gulp.dest('./assembl/static/js/build/'));
+    .pipe(gulp.dest(jsPath+'/build/'));
 });
 
 //Infrastructure
 gulp.task('libs', function() {
   return gulp.src([
-        './assembl/static/js/bower/underscore/underscore.js',
-        './assembl/static/js/bower/jquery/dist/jquery.js',
-        './assembl/static/js/bower/backbone/backbone.js',
-        './assembl/static/js/bower/marionette/lib/backbone.marionette.js',
-        './assembl/static/js/bower/backbone-modal/backbone.modal.js',
-        './assembl/static/js/bower/sockjs/sockjs.js',
-        './assembl/static/js/bower/ckeditor/ckeditor.js',
-        './assembl/static/js/bower/cytoscape/dist/cytoscape.js',
-        './assembl/static/js/bower/jquery.dotdotdot/src/js/jquery.dotdotdot.js',
-        './assembl/static/js/bower/jquery-oembed-all/jquery.oembed.js',
-        './assembl/static/js/bower/bootstrap-growl/jquery.bootstrap-growl.js',
-        './assembl/static/js/lib/bootstrap.js',
-        './assembl/static/js/lib/dropdown.js',
-        './assembl/static/js/lib/annotator/annotator-full.js'
+        jsPath+'/bower/underscore/underscore.js',
+        jsPath+'/bower/jquery/dist/jquery.js',
+        jsPath+'/bower/backbone/backbone.js',
+        jsPath+'/bower/marionette/lib/backbone.marionette.js',
+        jsPath+'/bower/backbone-modal/backbone.modal.js',
+        jsPath+'/bower/sockjs/sockjs.js',
+        jsPath+'/bower/ckeditor/ckeditor.js',
+        jsPath+'/bower/cytoscape/dist/cytoscape.js',
+        jsPath+'/bower/jquery.dotdotdot/src/js/jquery.dotdotdot.js',
+        jsPath+'/bower/jquery-oembed-all/jquery.oembed.js',
+        jsPath+'/bower/bootstrap-growl/jquery.bootstrap-growl.js',
+        jsPath+'/lib/bootstrap.js',
+        jsPath+'/lib/dropdown.js',
+        jsPath+'/lib/annotator/annotator-full.js',
+        jsPath+'/bower/jQuery-linkify/dist/jquery.linkify.js'
   ])
     .pipe(uglify())
     .pipe(rename('infrastructure.min.js'))
-    .pipe(gulp.dest('./assembl/static/js/build/'));
+    .pipe(gulp.dest(jsPath+'/build/'));
 });
 
 gulp.task('watch', function() {
-    gulp.watch('./assembl/static/js/app/**/*.js', ['browserify']);
+    gulp.watch(jsPath+'/app/**/*.js', ['browserify']);
     //gulp.watch('client/**/*.less', ['styles']);
 });
 
 /*gulp.task('uglify', function() {
-    return gulp.src('./assembl/static/js/app/index.js')
+    return gulp.src(jsPath+'/app/index.js')
         .pipe(uglify())
         .pipe(rename('app.min.js'))
-        .pipe(gulp.dest('./assembl/static/js/build/'));
+        .pipe(gulp.dest(jsPath+'/build/'));
 });*/
 
 // Tasks
 gulp.task('build', ['browserify']);
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['build']);
