@@ -48,9 +48,9 @@ This page makes a GET request to the value of the widget_uri parameter, which lo
 http://localhost:6543/data/Widget/4
 The response is a JSON with fields like "discussion", "criteria_url", "criteria", which are needed by the page.
 
-The page then makes a GET request to AssemblToolsService.resourceToUrl($scope.discussion_uri) + '/ideas?view=default', which is like
+The page then makes a GET request to AssemblToolsService.resourceToUrl($scope.discussion_uri) + '/ideas?view=default', which looks like
 http://localhost:6543/data/Discussion/4/ideas?view=default
-The response is a JSON array of ideas, which is used to show the user selectable vote targets (votable ideas). Those which are already present in the previously mentioned "criteria" array will appear already selected.
+The response is a JSON array of ideas, which is used to show the user selectable vote criteria (a criterion has to be an idea). Those which are already present in the previously mentioned "criteria" array will appear already selected.
 
 Select ideas which will be used as criteria, and click "Submit". This sends a application/json PUT to
 http://localhost:6543/data/Discussion/4/widgets/4/criteria
@@ -76,6 +76,10 @@ The URL of this page looks like
 http://localhost:6543/static/widget/vote/?admin=1#/admin/configure_instance_set_votable_ideas?widget_uri=http:%2F%2Flocalhost:6543%2Fdata%2FWidget%2F4&target=local:Idea%2F120
 
 This page also makes a GET request to the value of the widget_uri parameter, in order to use widget's data. It uses these response fields: "discussion" (to compute the URL which lists the ideas), "votables_url" (to know where to PUT data), and "votable_ideas" (to know which ideas are already set as votables and show them selected).
+
+The page then makes a GET request to AssemblToolsService.resourceToUrl($scope.discussion_uri) + '/ideas?view=default', which looks like
+http://localhost:6543/data/Discussion/4/ideas?view=default
+The response is a JSON array of ideas, which is used to show the user selectable vote targets (votable ideas). Those which are already present in the previously mentioned "votable_ideas" array will appear already selected.
 
 Select ideas which will be votable (a "Vote on this idea" link will be shown in the Idea panel when these ideas are open), and click "Submit". This sends a application/json PUT to
 http://localhost:6543/data/Discussion/4/widgets/4/targets/
