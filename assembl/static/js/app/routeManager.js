@@ -85,7 +85,7 @@ var routeManager = Marionette.Object.extend({
     profile: function () {
         Assembl.headerRegions.show(new NavBar());
         if (this.userHaveAccess()) {
-            var profile = new userProfile();
+            var profile = new Profile();
             Assembl.groupContainer.show(profile);
         }
     },
@@ -93,7 +93,7 @@ var routeManager = Marionette.Object.extend({
     account: function(){
         Assembl.headerRegions.show(new NavBar());
         if (this.userHaveAccess()) {
-            var account = new userAccount();
+            var account = new Account();
             Assembl.groupContainer.show(account);
         }
     },
