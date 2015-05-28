@@ -538,12 +538,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 returnedDataOffsets = this._calculateThreadedMessagesOffsets(this.visitorViewData, this.visitorOrderLookupTable, requestedOffsets);
               } else {
                 returnedDataOffsets['offsetStart'] = _.isUndefined(requestedOffsets['offsetStart']) ? 0 : requestedOffsets['offsetStart'];
-                returnedDataOffsets['offsetEnd'] = _.isUndefined(requestedOffsets['offsetEnd']) ? MORE_PAGES_NUMBER : requestedOffsets['offsetEnd'];
-                if (returnedDataOffsets['offsetEnd'] < len) {
-                    // if offsetEnd is bigger or equal than len, do not use it
-                    len = returnedDataOffsets['offsetEnd'] + 1;
-                }
-                else {
+                returnedDataOffsets['offsetEnd'] = _.isUndefined(requestedOffsets['offsetEnd']) ? MORE_PAGES_NUMBER - 1 : requestedOffsets['offsetEnd'];
+                if (returnedDataOffsets['offsetEnd'] >= len) {
                     returnedDataOffsets['offsetEnd'] = len - 1;
                 }
               }
@@ -573,7 +569,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 returnedDataOffsets['offsetStart'] = 0;
               }
               if (requestedOffsets['offsetEnd'] > (numMessages - 1)) {
-                returnedDataOffsets['offsetEnd'] = (numMessages - 1);
+                returnedDataOffsets['offsetEnd'] = numMessages - 1;
               }
               else {
                 if (data_by_object[order_lookup_table[requestedOffsets['offsetEnd']]]['last_ancestor_id'] === null) {
@@ -581,17 +577,19 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 }
                 else {
                   //If the requested offsetEnd isn't a root, find next root message, and stop just
-                  //before it
+                  //BEFORE it
 
                   for (var i = requestedOffsets['offsetEnd']; i < numMessages; i++) {
                     if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
-                      returnedDataOffsets['offsetEnd'] = i;
+                      //Carefull here, the i matches the offset (0 based), 
+                      //the -1 is to stop one message BEFORE the found root
+                      returnedDataOffsets['offsetEnd'] = i - 1;
                       break;
                     }
                   }
                   if (returnedDataOffsets['offsetEnd'] === undefined) {
                     //It's possible we didn't find a root, if we are at the very end of the list
-                    returnedDataOffsets['offsetEnd'] = numMessages;
+                    returnedDataOffsets['offsetEnd'] = numMessages - 1;
                   }
                 }
               }
@@ -709,7 +707,7 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                         }
                         this.requestMessages({
                             offsetStart: 0,
-                            offsetEnd: MORE_PAGES_NUMBER
+                            offsetEnd: MORE_PAGES_NUMBER - 1
                         });
                     }
                     if (that.debugPaging) {
@@ -2179,10 +2177,16 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 //console.log(messageDoms);
                 //console.log("checkMessagesOnscreen(): currentScrolltop", currentScrolltop, "currentViewPortTop", currentViewPortTop, "currentViewPortBottom", currentViewPortBottom);
               }
-              
+
               _.each(messageDoms, function(messageSelector) {
-                if ( !messageSelector )
+                if ( !messageSelector ) {
+                  console.warn("checkMessagesOnscreen:  Received a falsy jquery selector");
                   return;
+                }
+                if ( !messageSelector.length ) {
+                  console.warn("checkMessagesOnscreen:  For some reason the message for the following selector is no longer onscreen (aborted render?):", messageSelector);
+                  return;
+                }
                 var messageTop = messageSelector.offset().top,
                     messageBottom = messageTop + messageSelector.height(),
                     messageHeight = messageBottom - messageTop,
