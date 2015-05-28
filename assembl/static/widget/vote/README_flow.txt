@@ -112,8 +112,11 @@ http://localhost:6543/static/widget/vote/?config=local:Widget/4%3Ftarget%3Dlocal
 
 This page makes a GET request to
 http://localhost:6543/data/Widget/5?target=local:Idea/120
-which returns a JSON with fields like "user", "user_votes_url" and "settings".
-The content of this "settings" field is the JSON of configuration of the appearance, which has been set by the creator of the widget. The page parses this content and displays votable items and their criteria accordingly.
+which returns a JSON with fields. Response fields which are used by this page are "user", "user_votes_url", "settings", and "voting_urls".
+The content of the "voting_urls" field looks like
+{"local:Idea/120":"local:Discussion/4/widgets/5/criteria/120/vote_targets/120/votes","local:Idea/184":"local:Discussion/4/widgets/5/criteria/184/vote_targets/120/votes"}
+It is a JSON Object used as an associative array: the key is the id of a criterion, and the value is the URI where the voter can POST his vote to (for this criterion). So these voting URLs are built by the server depending on the value given in the "target" GET parameter.
+The content of the "settings" field is the JSON of configuration of the appearance, which has been set by the creator of the widget. The page parses this content and displays votable items and their criteria accordingly.
 The content of the "user" field is optionnaly used by the page to display as which registered account the user is voting.
 
 The page then makes a GET request to the URL given in this "user_votes_url" field, which is like
