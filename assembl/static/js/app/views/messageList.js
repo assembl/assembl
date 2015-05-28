@@ -690,7 +690,8 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                     messageIdsToShow,
                     returnedOffsets = {},
                     messageFullModelsToShowPromise,
-                    previousScrollTarget;
+                    previousScrollTarget,
+                    renderId = _.clone(this._renderId);
                 //Because of a hack to call showMessageById from render_real
                 //Note that this can also be set to false in onRender()
                 this.renderIsComplete = false;
@@ -748,6 +749,10 @@ define(['backbone', 'raven', 'views/visitors/objectTreeRenderVisitor', 'views/vi
                 this._offsetEnd = returnedOffsets['offsetEnd'];
 
                 return views_promise.then(function (views) {
+                    if(that._renderId != renderId) {
+                      console.log("showMessages() for render ", renderId, "got it's views, but render ",that._renderId," is already in progress.  Aborting");
+                      return false;
+                    }
                     if (that.debugPaging) {
                         console.log("showMessages() showing requestedOffsets:", requestedOffsets, "returnedOffsets:", returnedOffsets, "messageIdsToShow", messageIdsToShow, "out of numMessages", numMessages, "root views", views);
                     }
