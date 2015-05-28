@@ -4,9 +4,19 @@ var App = require('./app.js'),
     Router = require('./router.js'),
     Ctx = require('./common/context.js'),
     Socket = require('./utils/socket.js'),
-    raven = require('raven');
+    Raven = require('raven-js');
 
 (function(){
+
+    if (raven_url.length) {
+        Raven.config(raven_url).install();
+        Raven.setUserContext({id: Ctx.getCurrentUserId()});
+    }
+    else {
+        //Disables raven for development
+        Raven.config(false);
+        Raven.debug = false;
+    }
 
     var router = new Router();
     var socket = new Socket();
@@ -14,15 +24,5 @@ var App = require('./app.js'),
     App.start();
 
     window.Ctx = Ctx;
-
-    if (raven_url.length) {
-        raven.config(raven_url).install();
-        raven.setUserContext({id: Ctx.getCurrentUserId()});
-    }
-    else {
-        //Disables raven for development
-        raven.config(false);
-        raven.debug = false;
-    }
 
 })();

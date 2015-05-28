@@ -39,8 +39,16 @@ gulp.task('libs', function() {
         './assembl/static/js/bower/backbone/backbone.js',
         './assembl/static/js/bower/marionette/lib/backbone.marionette.js',
         './assembl/static/js/bower/backbone-modal/backbone.modal.js',
-        './assembl/static/js/bower/sockjs/sockjs.js'
-    ])
+        './assembl/static/js/bower/sockjs/sockjs.js',
+        './assembl/static/js/bower/ckeditor/ckeditor.js',
+        './assembl/static/js/bower/cytoscape/dist/cytoscape.js',
+        './assembl/static/js/bower/jquery.dotdotdot/src/js/jquery.dotdotdot.js',
+        './assembl/static/js/bower/jquery-oembed-all/jquery.oembed.js',
+        './assembl/static/js/bower/bootstrap-growl/jquery.bootstrap-growl.js',
+        './assembl/static/js/lib/bootstrap.js',
+        './assembl/static/js/lib/dropdown.js',
+        './assembl/static/js/lib/annotator/annotator-full.js'
+  ])
     .pipe(uglify())
     .pipe(rename('infrastructure.min.js'))
     .pipe(gulp.dest('./assembl/static/js/build/'));

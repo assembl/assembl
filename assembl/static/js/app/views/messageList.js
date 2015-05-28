@@ -1,7 +1,7 @@
 'use strict';
 
 var Backbone = require('../shims/backbone.js'),
-    Raven = require('raven'),
+    Raven = require('raven-js'),
     objectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     objectTreeRenderVisitorReSort = require('./visitors/objectTreeRenderVisitorReSort.js'),
     MessageFamilyView = require('./messageFamily.js'),
@@ -110,13 +110,10 @@ var MessageList = AssemblPanel.extend({
 
       collectionManager.getAllExtractsCollectionPromise()
           .then(function (allExtractsCollection) {
-
-              console.debug('allExtractsCollection', allExtractsCollection)
-
-              /*that.listenToOnce(allExtractsCollection, 'add remove reset', function(eventName) {
+              that.listenToOnce(allExtractsCollection, 'add remove reset', function(eventName) {
                   // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
                   that.initAnnotator();
-                });*/
+                });
               }
           );
 

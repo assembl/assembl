@@ -2,7 +2,7 @@
 
 var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird'),
-    Raven = require('raven'),
+    Raven = require('raven-js'),
     $ = require('jquery'),
     Assembl = require('../app.js'),
     Message = require('../models/message.js'),

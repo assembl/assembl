@@ -1,7 +1,7 @@
 'use strict';
 
 var objectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
-    Raven = require('raven'),
+    Raven = require('raven-js'),
     _ = require('../shims/underscore.js'),
     $ = require('jquery'),
     Assembl = require('../app.js'),

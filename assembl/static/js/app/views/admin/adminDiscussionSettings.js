@@ -5,8 +5,6 @@ var Marionette = require('../../shims/marionette.js'),
     CollectionManager = require('../../common/collectionManager.js'),
     Promise = require('bluebird');
 
-require('jquery.bootstrap-growl');
-
 
 var DiscussionSettings = Marionette.ItemView.extend({
     template: '#tmpl-discussionSource',

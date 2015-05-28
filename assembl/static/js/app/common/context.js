@@ -1,12 +1,9 @@
 'use strict';
 
-require('bootstrap');
-
 var $ = require('jquery'),
     _ = require('../shims/underscore.js'),
     Moment = require('moment'),
     Linkify = require('linkifyjs'),
-    Oembed = require('jquery-oembed-all'),
     Promise = require('bluebird'),
     App =  require('../app.js'),
     Permissions =  require('../utils/permissions.js'),
