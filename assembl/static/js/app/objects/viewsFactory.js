@@ -21,6 +21,7 @@ var panelTypeRegistry = {};
 _.each([
     AboutNavPanel, ContextPanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList.SegmentListPanel, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanel
 ], function (panelClass) {
+
     var panelType = panelClass.prototype.panelType;
     //console.log(panelClass.prototype.panelType);
     panelTypeRegistry[panelType.id] = panelClass;

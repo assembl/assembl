@@ -1,11 +1,11 @@
 'use strict';
 
 var Marionette = require('./shims/marionette.js'),
-    App = require('./app.js'),
+    Assembl = require('./app.js'),
     Ctx = require('./common/context.js'),
     Agents = require('./models/agents.js'),
     Storage = require('./objects/storage.js'),
-    Navbar = require('./views/navBar.js'),
+    NavBar = require('./views/navBar.js'),
     GroupContainer = require('./views/groups/groupContainer.js'),
     CollectionManager = require('./common/collectionManager.js'),
     ViewsFactory = require('./objects/viewsFactory.js'),
@@ -43,7 +43,7 @@ var routeManager = Marionette.Object.extend({
     },
 
     edition: function () {
-        App.headerRegions.show(new NavBar());
+        Assembl.headerRegions.show(new NavBar());
         if (this.userHaveAccess()) {
             var edition = new AdminDiscussion();
             Assembl.groupContainer.show(edition);
@@ -51,50 +51,50 @@ var routeManager = Marionette.Object.extend({
     },
 
     partners: function () {
-        App.headerRegions.show(new navBar());
+        Assembl.headerRegions.show(new NavBar());
         if (this.userHaveAccess()) {
             var partners = new AdminPartners();
-            App.groupContainer.show(partners);
+            Assembl.groupContainer.show(partners);
         }
     },
 
     notifications: function () {
-        App.headerRegions.show(new navBar());
+        Assembl.headerRegions.show(new NavBar());
         if (this.userHaveAccess()) {
             var notifications = new AdminNotificationSubscriptions();
-            App.groupContainer.show(notifications);
+            Assembl.groupContainer.show(notifications);
         }
     },
 
     settings: function(){
-        App.headerRegions.show(new navBar());
+        Assembl.headerRegions.show(new NavBar());
         if (this.userHaveAccess()) {
             var adminSetting = new AdminDiscussionSettings();
-            App.groupContainer.show(adminSetting);
+            Assembl.groupContainer.show(adminSetting);
         }
     },
 
     userNotifications: function () {
-        App.headerRegions.show(new navBar());
+        Assembl.headerRegions.show(new NavBar());
         if (this.userHaveAccess()) {
             var user = new UserNotificationSubscriptions();
-            App.groupContainer.show(user);
+            Assembl.groupContainer.show(user);
         }
     },
 
     profile: function () {
-        App.headerRegions.show(new navBar());
+        Assembl.headerRegions.show(new NavBar());
         if (this.userHaveAccess()) {
             var profile = new userProfile();
-            App.groupContainer.show(profile);
+            Assembl.groupContainer.show(profile);
         }
     },
 
     account: function(){
-        App.headerRegions.show(new navBar());
+        Assembl.headerRegions.show(new NavBar());
         if (this.userHaveAccess()) {
             var account = new userAccount();
-            App.groupContainer.show(account);
+            Assembl.groupContainer.show(account);
         }
     },
 
@@ -103,8 +103,8 @@ var routeManager = Marionette.Object.extend({
         this.restoreViews();
 
         // test if this issue fixed
-        App.vent.trigger("navigation:selected", 'debate', { show_help: false });
-        App.vent.trigger('messageList:showMessageById', id);
+        Assembl.vent.trigger("navigation:selected", 'debate', { show_help: false });
+        Assembl.vent.trigger('messageList:showMessageById', id);
 
         /*setTimeout(function () {
             //TODO: fix this horrible hack
@@ -126,8 +126,8 @@ var routeManager = Marionette.Object.extend({
         setTimeout(function () {
             //TODO: fix this horrible hack
             //We really need to address panels explicitely
-            App.vent.trigger("navigation:selected", 'debate');
-            App.vent.trigger('ideaList:selectIdea', id, "from_url", true);
+            Assembl.vent.trigger("navigation:selected", 'debate');
+            Assembl.vent.trigger('ideaList:selectIdea', id, "from_url", true);
         }, 0);
         //TODO: fix this horrible hack that prevents calling
         //showMessageById over and over.
@@ -150,7 +150,7 @@ var routeManager = Marionette.Object.extend({
     },
 
     restoreViews: function () {
-        App.headerRegions.show(new NavBar());
+        Assembl.headerRegions.show(new NavBar());
         /**
          * Render the current group of views
          * */
@@ -160,7 +160,7 @@ var routeManager = Marionette.Object.extend({
             var group = new GroupContainer({
                 collection: groupSpecs
             });
-            var lastSave = storage.getDateOfLastViewSave();
+            var lastSave = Storage.getDateOfLastViewSave();
             if (!lastSave
                 || (Date.now() - lastSave.getTime() > (7 * 24 * 60 * 60 * 1000))
                 ) {
@@ -179,7 +179,7 @@ var routeManager = Marionette.Object.extend({
             }
             //console.log(group);
             group.resizeAllPanels();
-            App.groupContainer.show(group);
+            Assembl.groupContainer.show(group);
         });
     },
 
@@ -196,7 +196,7 @@ var routeManager = Marionette.Object.extend({
                 error: 401,
                 message: i18n.gettext('You must be logged in to access this page.')
             });
-            App.groupContainer.show(authorization);
+            Assembl.groupContainer.show(authorization);
             return;
         }
 
@@ -218,7 +218,7 @@ var routeManager = Marionette.Object.extend({
                 error: 401,
                 message: i18n.gettext('Your level of permissions do not allow you to see the rest of this content')
             });
-            App.groupContainer.show(authorization);
+            Assembl.groupContainer.show(authorization);
         }
 
         return access;
@@ -226,4 +226,4 @@ var routeManager = Marionette.Object.extend({
 
 });
 
-module.exports = routeManager;
+module.exports = new routeManager();

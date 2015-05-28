@@ -4,7 +4,7 @@ var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird'),
     Raven = require('raven'),
     $ = require('jquery'),
-    App = require('../app.js'),
+    Assembl = require('../app.js'),
     Message = require('../models/message.js'),
     groupSpec = require('../models/groupSpec.js'),
     Idea = require('../models/idea.js'),
@@ -613,11 +613,9 @@ var CollectionManager = Marionette.Controller.extend({
 
 var _instance;
 
-return function () {
+module.exports = function () {
     if (!_instance) {
         _instance = new CollectionManager();
     }
     return _instance;
 };
-
-module.exports = _instance;

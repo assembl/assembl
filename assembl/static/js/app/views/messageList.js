@@ -110,10 +110,13 @@ var MessageList = AssemblPanel.extend({
 
       collectionManager.getAllExtractsCollectionPromise()
           .then(function (allExtractsCollection) {
-              that.listenToOnce(allExtractsCollection, 'add remove reset', function(eventName) {
+
+              console.debug('allExtractsCollection', allExtractsCollection)
+
+              /*that.listenToOnce(allExtractsCollection, 'add remove reset', function(eventName) {
                   // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
                   that.initAnnotator();
-                });
+                });*/
               }
           );
 

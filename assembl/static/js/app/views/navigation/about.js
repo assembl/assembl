@@ -22,4 +22,4 @@ var AboutNavPanel = AssemblPanel.extend({
     }
 });
 
-module.export = AboutNavPanel;
+module.exports = AboutNavPanel;

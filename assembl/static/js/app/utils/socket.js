@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('../shims/underscore.js'),
-    SockJS = require('sockjs'),
     App = require('../app.js'),
     Ctx = require('../common/context.js'),
     CollectionManager = require('../common/collectionManager.js');

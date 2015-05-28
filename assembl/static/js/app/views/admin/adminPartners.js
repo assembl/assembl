@@ -196,4 +196,4 @@ var adminPartners = Marionette.LayoutView.extend({
 
 });
 
-module.export = adminPartners;
+module.exports = adminPartners;
