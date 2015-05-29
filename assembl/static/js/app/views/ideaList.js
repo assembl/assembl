@@ -13,7 +13,6 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     IdeaView = require('./idea.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     AssemblPanel = require('./assemblPanel.js'),
-    ideaGraphLoader = require('./ideaGraph.js'),
     _ = require('../shims/underscore.js'),
     CollectionManager = require('../common/collectionManager.js'),
     i18n = require('../utils/i18n.js'),
@@ -80,14 +79,6 @@ var IdeaList = AssemblPanel.extend({
                 //that.listenTo(allExtractsCollection, 'add change reset', that.render);
             });
 
-        Assembl.commands.setHandler("panel:open", function () {
-            that.resizeGraphView();
-        });
-
-        Assembl.commands.setHandler("panel:close", function () {
-            that.resizeGraphView();
-        });
-
         this.listenTo(Assembl.vent, 'ideaList:removeIdea', function (idea) {
             that.removeIdea(idea);
         });
@@ -148,7 +139,6 @@ var IdeaList = AssemblPanel.extend({
 
         'click .js_ideaList-addbutton': 'addChildToSelected',
         'click #ideaList-collapseButton': 'toggleIdeas',
-        'click #ideaList-graphButton': 'toggleGraphView',
         'click #ideaList-closeButton': 'closePanel',
 
         'click #ideaList-filterByFeatured': 'filterByFeatured',
@@ -370,56 +360,6 @@ var IdeaList = AssemblPanel.extend({
     clearFilter: function () {
         this.filter = '';
         this.render();
-    },
-
-    toggleGraphView: function () {
-        this.show_graph = !this.show_graph;
-        if (this.show_graph) {
-            this.$('#idealist-graph').show();
-            this.$('#idealist-list').hide();
-            this.loadGraphView();
-        } else {
-            this.$('#idealist-graph').hide();
-            this.$('#idealist-list').show();
-        }
-    },
-
-    /**
-     * Load the graph view
-     */
-    loadGraphView: function () {
-        if (this.show_graph) {
-            var that = this;
-            $.getJSON(Ctx.getApiUrl('generic') + "/Discussion/" + Ctx.getDiscussionId() + "/idea_graph_jit", function (data) {
-                that.graphData = data['graph'];
-                console.log(ideaGraphLoader);
-                that.hypertree = ideaGraphLoader(that.graphData);
-                try {
-                    that.hypertree.onClick(that.getContainingGroup().getCurrentIdea().getId(), {
-                        // onComplete: function() {
-                        //     that.hypertree.controller.onComplete();
-                        // },
-                        duration: 0
-                    });
-                } catch (Exception) {
-                }
-            });
-        }
-    },
-
-    /**
-     * Load the graph view
-     */
-    resizeGraphView: function () {
-        if (this.show_graph && this.graphData !== undefined) {
-            try {
-                this.hypertree = ideaGraphLoader(this.graphData);
-                this.hypertree.onClick(that.getContainingGroup().getCurrentIdea().getId(), {
-                    duration: 0
-                });
-            } catch (Exception) {
-            }
-        }
     },
 
     /**
