@@ -325,31 +325,6 @@ def compile_javascript():
     with cd(env.projectpath):
         run('node_modules/gulp/bin/gulp.js build')
 
-@task
-def minify_javascript_maybe():
-    config = get_config()
-    try:
-        minify = config.get('app:assembl', 'minified_js')
-        print minify
-        if minify == 'debug':
-            execute(minify_javascript_debug)
-        elif minify and minify != 'false':
-            execute(minify_javascript)
-    except NoOptionError:
-        pass
-
-
-@task
-def minify_javascript():
-    with cd(join(env.projectpath, 'assembl', 'static', 'js')):
-        run('node r.js -o build.js')
-
-
-@task
-def minify_javascript_debug():
-    with cd(join(env.projectpath, 'assembl', 'static', 'js')):
-        run('node r.js -o build_with_map.js')
-
 
 def tests():
     """
@@ -491,8 +466,6 @@ def app_compile_nodbupdate():
     execute(compile_stylesheets)
     execute(compile_messages)
     execute(compile_javascript)
-    execute(minify_javascript_maybe)
-
 
 @task
 def webservers_reload():
