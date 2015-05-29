@@ -40,7 +40,6 @@ function bundle(done){
       .pipe(rename('app.js'))
       .pipe(sourcemaps.write(jsPath+'/build/'))
       .pipe(gulp.dest(jsPath+'/build/'))
-      .pipe(exit());
 }
 
 //Infrastructure
@@ -69,22 +68,29 @@ gulp.task('libs', function() {
     .pipe(exit());
 });
 
-/*gulp.task('sass', function() {
-    gulp.src(['./assembl/static/css/**\/*.scss', './assembl/static/css/*.scss'])
-    .pipe(autoprefixer("last 3 version"))
-    .pipe(sass.sync().on('error', sass.logError))
-    //.pipe(rename('themes.min.css'))
-    //.pipe(minifycss())
-    .pipe(gulp.dest('./assembl/static/css/themes/default/'));
-});*/
 
-//build
-/*gulp.task('uglify', function() {
-    return gulp.src(jsPath+'/app/index.js')
-        .pipe(uglify('app.min.js'))
-        .pipe(gulp.dest(jsPath+'/build/'));
-});*/
+/***
+ * build assembl
+ */
+gulp.task('browserify-build', function() {
+    var b = browserify({
+        entries: './assembl/static/js/app/index.js',
+        debug: true
+    });
+    return b.bundle()
+        .on('error', function(err){
+            console.error('Browserify failed :', err.message);
+            this.emit('end');
+        })
+        .pipe(source('index.js'))
+        .pipe(uglify())
+        .pipe(rename('app.js'))
+        .pipe(gulp.dest('./assembl/static/js/build/'))
+        .pipe(exit());
+});
+
 
 // Tasks
-gulp.task('build', ['browserify']);
+gulp.task('run', ['browserify']);
+gulp.task('build', ['browserify-build']);
 gulp.task('default', ['build']);
