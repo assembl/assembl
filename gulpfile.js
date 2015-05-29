@@ -15,8 +15,11 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var gutil = require('gulp-util');
 var concat = require('gulp-concat');
+var autoprefixer = require('gulp-autoprefixer');
+var minifycss = require('gulp-minify-css');
 
 var jsPath = './assembl/static/js';
+var sassFiles = ["./assembl/static/css/themes/_assembl_base_styles.scss"];
 
 var b = watchify(browserify({
     entries: jsPath+'/app/index.js',
@@ -60,6 +63,15 @@ gulp.task('libs', function() {
     .pipe(size())
     .pipe(gulp.dest(jsPath+'/build/'));
 });
+
+/*gulp.task('sass', function() {
+    gulp.src(['./assembl/static/css/**\/*.scss', './assembl/static/css/*.scss'])
+    .pipe(autoprefixer("last 3 version"))
+    .pipe(sass.sync().on('error', sass.logError))
+    //.pipe(rename('themes.min.css'))
+    //.pipe(minifycss())
+    .pipe(gulp.dest('./assembl/static/css/themes/default/'));
+});*/
 
 
 //build
