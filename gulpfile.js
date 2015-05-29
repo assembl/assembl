@@ -1,12 +1,5 @@
 'use strict';
 
-//Configuration
-
-var paths = {
-    css: 'assembl/static/sass',
-    sass: ['assembl/static/css/**/*.scss', 'assembl/static/css/*.scss']
-}
-
 //Require
 var sass = require('gulp-sass');
 
@@ -22,11 +15,8 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var gutil = require('gulp-util');
 var concat = require('gulp-concat');
-var streamify = require('gulp-streamify');
-
 
 var jsPath = './assembl/static/js';
-var cssPath = './assembl/static/css';
 
 var b = watchify(browserify({
     entries: jsPath+'/app/index.js',

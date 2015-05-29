@@ -31,7 +31,6 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^1.3.3",
     "gulp-size": "^1.2.1",
-    "gulp-streamify": "0.0.5",
     "gulp-uglifyjs": "^0.6.2",
     "gulp-util": "^3.0.4",
     "jed": "^1.1.0",
