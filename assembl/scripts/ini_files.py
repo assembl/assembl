@@ -106,6 +106,7 @@ def main():
             'supervisor', 'autostart_changes_router'),
         'autostart_pserve': config.get('supervisor', 'autostart_pserve'),
         'autostart_compass': config.get('supervisor', 'autostart_compass'),
+        'autostart_gulp': config.get('supervisor', 'autostart_gulp'),
         'autostart_uwsgi': config.get('supervisor', 'autostart_uwsgi'),
         'autostart_metrics_server': (config.get(
             'supervisor', 'autostart_metrics_server')
