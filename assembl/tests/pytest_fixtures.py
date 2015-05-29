@@ -496,8 +496,8 @@ def subidea_1_1(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def criterion_1(request, discussion, subidea_1, test_session):
-    from assembl.models import Criterion, IdeaLink
-    i = Criterion(short_title="cost", discussion=discussion)
+    from assembl.models import Idea, IdeaLink
+    i = Idea(short_title="cost", discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)
@@ -514,8 +514,8 @@ def criterion_1(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def criterion_2(request, discussion, subidea_1, test_session):
-    from assembl.models import Criterion, IdeaLink
-    i = Criterion(short_title="quality", discussion=discussion)
+    from assembl.models import Idea, IdeaLink
+    i = Idea(short_title="quality", discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)
@@ -532,8 +532,8 @@ def criterion_2(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def criterion_3(request, discussion, subidea_1, test_session):
-    from assembl.models import Criterion, IdeaLink
-    i = Criterion(short_title="time", discussion=discussion)
+    from assembl.models import Idea, IdeaLink
+    i = Idea(short_title="time", discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)

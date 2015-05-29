@@ -882,7 +882,7 @@ MultiCriterionVotingWidget.criteria_links = relationship(
 Idea.has_criterion_links = relationship(VotingCriterionWidgetLink)
 
 MultiCriterionVotingWidget.criteria = relationship(
-    Idea,  # Criterion
+    Idea,
     viewonly=True, secondary=VotingCriterionWidgetLink.__table__,
     primaryjoin=MultiCriterionVotingWidget.idea_links.of_type(VotingCriterionWidgetLink),
     secondaryjoin=VotingCriterionWidgetLink.idea,

@@ -127,12 +127,8 @@ from .mail import (
     MailingList,
 )
 from .idea import (
-    Argument,
-    Criterion,
     Idea,
     IdeaLink,
-    Issue,
-    Position,
     RootIdea,
 )
 from .idea_content_link import (

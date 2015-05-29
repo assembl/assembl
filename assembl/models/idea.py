@@ -12,6 +12,7 @@ from sqlalchemy.orm import (
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql import text, column
 from sqlalchemy.sql.expression import union_all
+from sqlalchemy.types import TIMESTAMP
 from sqlalchemy import (
     Column,
     Boolean,
@@ -105,6 +106,8 @@ class Idea(Tombstonable, DiscussionBoundBase):
     __tablename__ = "idea"
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
     sqla_type = Column(String(60), nullable=False)
+    rdf_type = Column(
+        String(60), nullable=False, server_default='idea:GenericIdeaNode')
 
     long_title = Column(
         UnicodeText,
@@ -116,6 +119,7 @@ class Idea(Tombstonable, DiscussionBoundBase):
         UnicodeText,
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
     hidden = Column(Boolean, server_default='0')
+    last_modified = Column(TIMESTAMP)
 
     id = Column(
         Integer, primary_key=True,
@@ -144,7 +148,7 @@ class Idea(Tombstonable, DiscussionBoundBase):
     #widget = relationship("Widget", backref=backref('ideas', order_by=creation_date))
 
     __mapper_args__ = {
-        'polymorphic_identity': 'idea:GenericIdeaNode',
+        'polymorphic_identity': 'idea',
         'polymorphic_on': sqla_type,
         # Not worth it for now, as the only other class is RootIdea, and there
         # is only one per discussion - benoitg 2013-12-23
@@ -154,7 +158,7 @@ class Idea(Tombstonable, DiscussionBoundBase):
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
         return [QuadMapPatternS(
-            None, RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Idea.sqla_type),
+            None, RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Idea.rdf_type),
             name=QUADNAMES.class_Idea_class)]
 
     parents = association_proxy(
@@ -831,21 +835,13 @@ class RootIdea(Idea):
 
     If has implicit links to all content and posts in the discussion.
     """
-    __tablename__ = "root_idea"
-
-    id = Column(Integer, ForeignKey(
-        'idea.id',
-        ondelete='CASCADE',
-        onupdate='CASCADE'
-    ), primary_key=True)
-
     root_for_discussion = relationship(
         Discussion,
         backref=backref('root_idea', uselist=False),
     )
 
     __mapper_args__ = {
-        'polymorphic_identity': 'assembl:RootIdea',
+        'polymorphic_identity': 'root_idea',
     }
 
     @property
@@ -880,30 +876,6 @@ class RootIdea(Idea):
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 
-class Issue(Idea):
-    __mapper_args__ = {
-        'polymorphic_identity': 'ibis:Issue',
-    }
-
-
-class Position(Idea):
-    __mapper_args__ = {
-        'polymorphic_identity': 'ibis:Position',
-    }
-
-
-class Argument(Idea):
-    __mapper_args__ = {
-        'polymorphic_identity': 'ibis:Argument',
-    }
-
-
-class Criterion(Idea):
-    __mapper_args__ = {
-        'polymorphic_identity': 'ibis:Criterion',
-    }
-
-
 class IdeaLink(Tombstonable, DiscussionBoundBase):
     """
     A generic link between two ideas
@@ -916,8 +888,8 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
     id = Column(
         Integer, primary_key=True,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
-    sqla_type = Column(String(60), nullable=False,
-                       default="idea:InclusionRelation")
+    rdf_type = Column(
+        String(60), nullable=False, server_default='idea:InclusionRelation')
     source_id = Column(
         Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
@@ -951,12 +923,6 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
     order = Column(
         Float, nullable=False, default=0.0,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.link_order)})
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'idea:InclusionRelation',
-        'polymorphic_on': sqla_type,
-        'with_polymorphic': '*'
-    }
 
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
@@ -1002,7 +968,10 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
                 IDEA.target_idea,
                 Idea.iri_class().apply(idea_link.source_id),
                 name=QUADNAMES.col_pattern_IdeaLink_source_id
-                )
+                ),
+            QuadMapPatternS(
+                None, RDF.type, IriClass(VirtRDF.QNAME_ID).apply(IdeaLink.rdf_type),
+                name=QUADNAMES.class_IdeaLink_class),
         ]
 
     def copy(self):
@@ -1044,33 +1013,3 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
         Discussion, viewonly=True, uselist=False,
         secondary=Idea.__table__, primaryjoin=(source_id == Idea.id),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
-
-
-class PositionRespondsToIssue(IdeaLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'ibis:PositionRespondsToIssue',
-    }
-
-
-class ArgumentSupportsIdea(IdeaLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'ibis:ArgumentSupportsIdea',
-    }
-
-
-class ArgumentOpposesIdea(IdeaLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'ibis:ArgumentOpposesIdea',
-    }
-
-
-class IssueAppliesTo(IdeaLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'ibis:IssueAppliesTo',
-    }
-
-
-class IssueQuestions(IssueAppliesTo):
-    __mapper_args__ = {
-        'polymorphic_identity': 'ibis:IssueQuestions',
-    }

@@ -8,7 +8,7 @@ from pyramid.httpexceptions import (
 from assembl.auth import (
     P_READ, P_ADMIN_DISC, P_ADD_POST, Everyone)
 from assembl.models import (
-    Widget, User, Discussion, Idea, Criterion, IdeaCreatingWidget,
+    Widget, User, Discussion, Idea, IdeaCreatingWidget,
     MultiCriterionVotingWidget)
 from assembl.auth.util import get_permissions
 from assembl.auth import CrudPermissions
@@ -182,7 +182,7 @@ def get_idea_sibling_criteria(request):
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     return [cr.generic_json(view, user_id, permissions) for cr in
-            ctx._instance.get_siblings_of_type(Criterion)]
+            ctx._instance.get_siblings_of_type(Idea)]
 
 
 @view_config(

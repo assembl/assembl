@@ -15,7 +15,6 @@ from ...models import (
     Widget,
     IdeaContentWidgetLink,
     LickertRange,
-    Criterion,
     GeneratedIdeaWidgetLink,
     BaseIdeaWidgetLink
 )
