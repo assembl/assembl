@@ -6,23 +6,19 @@ var App = require('./app.js'),
     Socket = require('./utils/socket.js'),
     Raven = require('raven-js');
 
-(function(){
+if (raven_url.length) {
+    Raven.config(raven_url).install();
+    Raven.setUserContext({id: Ctx.getCurrentUserId()});
+}
+else {
+    //Disables raven for development
+    Raven.config(false);
+    Raven.debug = false;
+}
 
-    if (raven_url.length) {
-        Raven.config(raven_url).install();
-        Raven.setUserContext({id: Ctx.getCurrentUserId()});
-    }
-    else {
-        //Disables raven for development
-        Raven.config(false);
-        Raven.debug = false;
-    }
+var router = new Router();
+var socket = new Socket();
 
-    var router = new Router();
-    var socket = new Socket();
+window.Ctx = Ctx;
 
-    App.start();
-
-    window.Ctx = Ctx;
-
-})();
+App.start();

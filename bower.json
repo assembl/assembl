@@ -19,7 +19,6 @@
   "dependencies": {
     "jquery.dotdotdot": "https://github.com/ImaginationForPeople/jQuery.dotdotdot.git#fix-paragraph-and-read-more-not-showing",
     "ckeditor": "^4.4.7",
-    "cytoscape": "^2.4.0",
     "jit": "~2.0.2",
     "Backbone.Subset": "https://github.com/ImaginationForPeople/Backbone.Subset.git#~0.1.1",
     "ink": "~1.0.5",
