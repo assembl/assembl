@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
@@ -24,6 +25,8 @@ from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADN
 from .discussion import Discussion
 from ..lib.sqla import Base
 #from ..lib.history_meta import Versioned
+
+log = logging.getLogger('assembl')
 
 
 class ContentSource(DiscussionBoundBase):
@@ -150,7 +153,7 @@ class PostSource(ContentSource):
 
     def send_post(self, post):
         """ Send a new post in the discussion to the source. """
-        raise NotImplementedError(
+        log.warn(
             "Source %s did not implement PostSource::send_post()"
             % self.__class__.__name__)
 
