@@ -19,6 +19,7 @@ var autoprefixer = require('gulp-autoprefixer');
 var minifycss = require('gulp-minify-css');
 var sourcemaps = require('gulp-sourcemaps');
 var exit = require('gulp-exit');
+var mocha = require('gulp-mocha');
 
 var jsPath = './assembl/static/js';
 var sassFiles = ["./assembl/static/css/themes/_assembl_base_styles.scss"];
@@ -68,6 +69,13 @@ gulp.task('libs', function() {
     .pipe(exit());
 });
 
+//run test
+gulp.task('tests', function() {
+    return gulp.src(['./assembl/static/js/app/tests/*.spec.js'], {read: false})
+        .pipe(mocha({
+            reporter:'spec'
+        }))
+});
 
 /***
  * build assembl
