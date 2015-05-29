@@ -17,6 +17,8 @@ var gutil = require('gulp-util');
 var concat = require('gulp-concat');
 var autoprefixer = require('gulp-autoprefixer');
 var minifycss = require('gulp-minify-css');
+var sourcemaps = require('gulp-sourcemaps');
+var exit = require('gulp-exit');
 
 var jsPath = './assembl/static/js';
 var sassFiles = ["./assembl/static/css/themes/_assembl_base_styles.scss"];
@@ -31,12 +33,14 @@ gulp.task('browserify', bundle);
 b.on('update', bundle);
 b.on('log', gutil.log);
 
-function bundle(){
+function bundle(done){
     return b.bundle()
-        .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-        .pipe(source('index.js'))
-        .pipe(rename('app.js'))
-        .pipe(gulp.dest(jsPath+'/build/'));
+      .pipe(source('index.js'))
+      .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+      .pipe(rename('app.js'))
+      .pipe(sourcemaps.write(jsPath+'/build/'))
+      .pipe(gulp.dest(jsPath+'/build/'))
+      .pipe(exit());
 }
 
 //Infrastructure
@@ -61,7 +65,8 @@ gulp.task('libs', function() {
           compress: false
       }))
     .pipe(size())
-    .pipe(gulp.dest(jsPath+'/build/'));
+    .pipe(gulp.dest(jsPath+'/build/'))
+    .pipe(exit());
 });
 
 /*gulp.task('sass', function() {
