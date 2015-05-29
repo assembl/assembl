@@ -335,6 +335,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                 template: modalTemplate,
                                 className: modalClassName,
                                 cancelEl: '.close, .js_close',
+                                submitEl: '.js_subscribe',
 
                                 model: model,
                                 initialize: function () {
@@ -352,7 +353,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                         urlNotifications: '/' + Ctx.getDiscussionSlug() + '/user/notifications'
                                     }
                                 },
-                                subscription: function () {
+                                submit: function (ev) {
                                     var that = this;
 
                                     if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
@@ -366,7 +367,6 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                                 // TODO: Is there a simpler way to do this? MAP
                                                 self.navBarRight.currentView.ui.joinDiscussion.css('visibility', 'hidden');
                                                 self._store.removeItem('needJoinDiscussion');
-                                                that.triggerSubmit();
 
                                                 // reload user data and its permissions (so for example now when he clicks on the "reply" button of a message, it should not show "Before you can reply to this message..." anymore)
                                                 try { // we try to be a good Single Page Application and update user data without reloading the whole page
@@ -383,7 +383,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                     }
                                 },
 
-                                closeModal: function () {
+                                cancel: function () {
                                     self._store.removeItem('needJoinDiscussion');
                                 }
                             });

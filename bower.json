@@ -33,7 +33,7 @@
     "jed": "~0.5.4",
     "Backbone.Subset": "https://github.com/ImaginationForPeople/Backbone.Subset.git#~0.1.1",
     "d3": "~3.4.11",
-    "backbone-modal": "~1.1.1",
+    "backbone-modal": "~1.1.5",
     "ink": "1.0.5",
     "jquery-autosize": "~1.18.15",
     "chai": "~1.10.0",
