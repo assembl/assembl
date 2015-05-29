@@ -78,7 +78,6 @@ gulp.task('libs', function() {
     .pipe(gulp.dest('./assembl/static/css/themes/default/'));
 });*/
 
-
 //build
 /*gulp.task('uglify', function() {
     return gulp.src(jsPath+'/app/index.js')
