@@ -92,5 +92,5 @@ gulp.task('browserify-build', function() {
 
 // Tasks
 gulp.task('run', ['browserify']);
-gulp.task('build', ['browserify-build']);
+gulp.task('build', ['libs','browserify-build']);
 gulp.task('default', ['build']);
