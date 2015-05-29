@@ -317,6 +317,13 @@ def compile_stylesheets():
         with cd('assembl/static/widget/video/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
+@task
+def compile_javascript():
+    """
+    Generates and minifies javascript
+    """
+    with cd(env.projectpath):
+        run('node_modules/gulp/bin/gulp.js build')
 
 @task
 def minify_javascript_maybe():
@@ -447,6 +454,7 @@ def app_update_dependencies():
     execute(update_compass)
     execute(update_bower)
     execute(bower_update)
+    execute(npm_update)
 
 
 @task
@@ -482,6 +490,7 @@ def app_compile_nodbupdate():
     execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
+    execute(compile_javascript)
     execute(minify_javascript_maybe)
 
 
@@ -608,6 +617,11 @@ def bower_update():
     """ Normally not called manually """
     execute(_bower_foreach_do, 'update')
 
+@task
+def npm_update():
+    """ Normally not called manually """
+    with cd(env.projectpath):
+        run('npm update')
 
 @task
 def install_builddeps():
