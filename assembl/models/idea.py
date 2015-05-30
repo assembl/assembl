@@ -12,7 +12,6 @@ from sqlalchemy.orm import (
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql import text, column
 from sqlalchemy.sql.expression import union_all
-from sqlalchemy.types import TIMESTAMP
 from sqlalchemy import (
     Column,
     Boolean,
@@ -26,7 +25,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.associationproxy import association_proxy
 from virtuoso.vmapping import IriClass
-from virtuoso.alchemy import SparqlClause
+from virtuoso.alchemy import SparqlClause, Timestamp
 
 from ..lib import config
 from ..nlp.wordcounter import WordCounter
@@ -119,7 +118,7 @@ class Idea(Tombstonable, DiscussionBoundBase):
         UnicodeText,
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
     hidden = Column(Boolean, server_default='0')
-    last_modified = Column(TIMESTAMP)
+    last_modified = Column(Timestamp)
 
     id = Column(
         Integer, primary_key=True,
