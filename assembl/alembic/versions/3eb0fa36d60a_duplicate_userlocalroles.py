@@ -31,7 +31,7 @@ def upgrade(pyramid_env):
             return (ulr.user_id, ulr.discussion_id, ulr.role_id)
         for ulr in ulrs:
             ulrs_k[key(ulr)].append(ulr)
-        for kl in ulrs.values():
+        for kl in ulrs_k.values():
             if len(kl) > 1:
                 kl.sort(key = lambda m: m.id)
                 for ulr in kl[1:]:
