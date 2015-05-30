@@ -27,7 +27,7 @@ def upgrade(pyramid_env):
             'last_modified', sa.types.TIMESTAMP))
         op.add_column('idea_idea_link', sa.Column(
             'rdf_type', sa.String(60), nullable=False,
-            server_default='idea:GenericIdeaNode'))
+            server_default='idea:InclusionRelation'))
         op.drop_table("root_idea")
 
     with context.begin_transaction():
