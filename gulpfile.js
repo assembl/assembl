@@ -56,11 +56,11 @@ gulp.task('browserify-build', function() {
         debug: true
     });
     return b.bundle()
+        .on('error', gutil.log)
         .pipe(source('index.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(uglify())
-        .on('error', gutil.log)
         .pipe(rename('app.js'))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(jsPath+'/build/'))
@@ -72,29 +72,26 @@ gulp.task('browserify-build', function() {
  * */
 gulp.task('libs', function() {
   return gulp.src([
-        jsPath+'/bower/underscore/underscore-min.js',
-        jsPath+'/bower/jquery/dist/jquery.min.js',
+        jsPath+'/bower/underscore/underscore.js',
+        jsPath+'/bower/jquery/dist/jquery.js',
         jsPath+'/bower/backbone/backbone.js',
-        jsPath+'/bower/marionette/lib/backbone.marionette.min.js',
-        jsPath+'/bower/backbone-modal/backbone.modal-min.js',
-        jsPath+'/bower/sockjs/sockjs.min.js',
+        jsPath+'/bower/marionette/lib/backbone.marionette.js',
+        jsPath+'/bower/backbone-modal/backbone.modal.js',
+        jsPath+'/bower/sockjs/sockjs.js',
         jsPath+'/bower/ckeditor/ckeditor.js',
-        jsPath+'/bower/jquery.dotdotdot/src/js/jquery.dotdotdot.min.js',
+        jsPath+'/bower/jquery.dotdotdot/src/js/jquery.dotdotdot.js',
         jsPath+'/bower/jquery-oembed-all/jquery.oembed.js',
-        jsPath+'/bower/bootstrap-growl/jquery.bootstrap-growl.min.js',
-        jsPath+'/bower/jQuery-linkify/dist/jquery.linkify.min.js',
+        jsPath+'/bower/bootstrap-growl/jquery.bootstrap-growl.js',
+        jsPath+'/bower/jQuery-linkify/dist/jquery.linkify.js',
         jsPath+'/lib/bootstrap.js',
         jsPath+'/lib/dropdown.js',
-        jsPath+'/lib/annotator/annotator-full.min.js'
+        jsPath+'/lib/annotator/annotator-full.js'
   ])
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(uglify('infrastructure.min.js',{
-          compress: false
-      }))
-    .pipe(size())
-    .pipe(sourcemaps.write('./'))
+    .pipe(uglify('infrastructure.min.js', {
+       compress: false,
+       inSourceMap: true
+     }))
     .pipe(gulp.dest(jsPath+'/build/'))
-    .pipe(exit());
 });
 
 /**
