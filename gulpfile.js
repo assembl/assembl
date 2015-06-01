@@ -16,20 +16,21 @@ var watchify = require('watchify');
 var gutil = require('gulp-util');
 var concat = require('gulp-concat');
 var autoprefixer = require('gulp-autoprefixer');
-var minifycss = require('gulp-minify-css');
+var minifyCss = require('gulp-minify-css');
 var sourcemaps = require('gulp-sourcemaps');
 var exit = require('gulp-exit');
 var mocha = require('gulp-mocha');
 
 var jsPath = './assembl/static/js';
-var sassFiles = ["./assembl/static/css/themes/_assembl_base_styles.scss"];
 
 var b = watchify(browserify({
     entries: jsPath+'/app/index.js',
     debug: true
 }));
 
-// Browserify
+/***
+ * build assembl for development
+ */
 gulp.task('browserify', bundle);
 b.on('update', bundle);
 b.on('log', gutil.log);
@@ -42,6 +43,26 @@ function bundle(done){
       .pipe(sourcemaps.write(jsPath+'/build/'))
       .pipe(gulp.dest(jsPath+'/build/'))
 }
+
+/***
+ * build assembl for production
+ */
+gulp.task('browserify-build', function() {
+    var b = browserify({
+        entries: './assembl/static/js/app/index.js',
+        debug: true
+    });
+    return b.bundle()
+        .on('error', function(err){
+            console.error('Browserify failed :', err.message);
+            this.emit('end');
+        })
+        .pipe(source('index.js'))
+        .pipe(uglify())
+        .pipe(rename('app.js'))
+        .pipe(gulp.dest('./assembl/static/js/build/'))
+        .pipe(exit());
+});
 
 //Infrastructure
 gulp.task('libs', function() {
@@ -77,28 +98,24 @@ gulp.task('tests', function() {
         }))
 });
 
-/***
- * build assembl
- */
-gulp.task('browserify-build', function() {
-    var b = browserify({
-        entries: './assembl/static/js/app/index.js',
-        debug: true
-    });
-    return b.bundle()
-        .on('error', function(err){
-            console.error('Browserify failed :', err.message);
-            this.emit('end');
-        })
-        .pipe(source('index.js'))
-        .pipe(uglify())
-        .pipe(rename('app.js'))
-        .pipe(gulp.dest('./assembl/static/js/build/'))
-        .pipe(exit());
+/**
+ * Compile Sass file
+ * not work for now, we need to delete all @include in sass file
+ * */
+gulp.task('sass', function() {
+    return gulp.src('./assembl/static/css/**/*.scss')
+        .pipe(sass())
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
+        //.pipe(minifyCss())
+        .pipe(gulp.dest('./assembl/static/css'));
 });
 
 
+
 // Tasks
-gulp.task('run', ['browserify']);
-gulp.task('build', ['libs','browserify-build']);
-gulp.task('default', ['run']);
+gulp.task('build:dev', ['browserify']);
+gulp.task('build:prod', ['libs','browserify-build']);
+gulp.task('default', ['build:dev']);
