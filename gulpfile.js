@@ -38,12 +38,12 @@ b.on('log', gutil.log);
 
 function bundle(){
     return b.bundle()
-      .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+      .on('error', gutil.log)
       .pipe(source('index.js'))
       .pipe(buffer())
       .pipe(sourcemaps.init({loadMaps: true}))
-      .pipe(sourcemaps.write(jsPath))
       .pipe(rename('app.js'))
+      .pipe(sourcemaps.write('/maps'))
       .pipe(gulp.dest(jsPath+'/build/'))
 }
 
@@ -60,16 +60,16 @@ gulp.task('browserify-build', function() {
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(uglify())
-        .on('error', function(err){
-            console.error('Browserify failed :', err.message);
-            this.emit('end');
-        })
+        .on('error', gutil.log)
         .pipe(rename('app.js'))
-        .pipe(gulp.dest('./assembl/static/js/build/'))
+        .pipe(sourcemaps.write('/maps'))
+        .pipe(gulp.dest(jsPath+'/build/'))
         .pipe(exit());
 });
 
-//Infrastructure
+/**
+ * Infrastructure
+ * */
 gulp.task('libs', function() {
   return gulp.src([
         jsPath+'/bower/underscore/underscore-min.js',
@@ -95,7 +95,9 @@ gulp.task('libs', function() {
     .pipe(exit());
 });
 
-//run test
+/**
+ * Run test
+ * */
 gulp.task('tests', function() {
     return gulp.src(['./assembl/static/js/app/tests/*.spec.js'], {read: false})
         .pipe(mocha({
@@ -119,8 +121,9 @@ gulp.task('sass', function() {
 });
 
 
-
-// Tasks
+/**
+ * Tasks
+ * */
 gulp.task('build:dev', ['browserify']);
 gulp.task('build:prod', ['libs','browserify-build']);
 gulp.task('default', ['build:dev']);
