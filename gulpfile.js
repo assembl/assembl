@@ -20,6 +20,7 @@ var minifyCss = require('gulp-minify-css');
 var sourcemaps = require('gulp-sourcemaps');
 var exit = require('gulp-exit');
 var mocha = require('gulp-mocha');
+var buffer = require('vinyl-buffer');
 
 var jsPath = './assembl/static/js';
 
@@ -35,12 +36,14 @@ gulp.task('browserify', bundle);
 b.on('update', bundle);
 b.on('log', gutil.log);
 
-function bundle(done){
+function bundle(){
     return b.bundle()
-      .pipe(source('index.js'))
       .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+      .pipe(source('index.js'))
+      .pipe(buffer())
+      .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(sourcemaps.write(jsPath))
       .pipe(rename('app.js'))
-      .pipe(sourcemaps.write(jsPath+'/build/'))
       .pipe(gulp.dest(jsPath+'/build/'))
 }
 
@@ -53,12 +56,14 @@ gulp.task('browserify-build', function() {
         debug: true
     });
     return b.bundle()
+        .pipe(source('index.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(uglify())
         .on('error', function(err){
             console.error('Browserify failed :', err.message);
             this.emit('end');
         })
-        .pipe(source('index.js'))
-        .pipe(uglify())
         .pipe(rename('app.js'))
         .pipe(gulp.dest('./assembl/static/js/build/'))
         .pipe(exit());

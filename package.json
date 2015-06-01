@@ -45,6 +45,7 @@
     "moment": "^2.10.3",
     "raven-js": "^1.1.18",
     "uglify-js": "^2.4.23",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.1"
   },
