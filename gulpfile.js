@@ -41,9 +41,9 @@ function bundle(){
       .on('error', gutil.log)
       .pipe(source('index.js'))
       .pipe(buffer())
-      .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(sourcemaps.init())
       .pipe(rename('app.js'))
-      .pipe(sourcemaps.write('/maps'))
+      .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(jsPath+'/build/'))
 }
 
@@ -58,11 +58,11 @@ gulp.task('browserify-build', function() {
     return b.bundle()
         .pipe(source('index.js'))
         .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(sourcemaps.init())
         .pipe(uglify())
         .on('error', gutil.log)
         .pipe(rename('app.js'))
-        .pipe(sourcemaps.write('/maps'))
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(jsPath+'/build/'))
         .pipe(exit());
 });
@@ -87,10 +87,12 @@ gulp.task('libs', function() {
         jsPath+'/lib/dropdown.js',
         jsPath+'/lib/annotator/annotator-full.min.js'
   ])
+    .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(uglify('infrastructure.min.js',{
           compress: false
       }))
     .pipe(size())
+    .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(jsPath+'/build/'))
     .pipe(exit());
 });
