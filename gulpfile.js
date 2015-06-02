@@ -58,11 +58,9 @@ gulp.task('browserify-build', function() {
     return b.bundle()
         .on('error', gutil.log)
         .pipe(source('index.js'))
-        .pipe(buffer())
-        .pipe(sourcemaps.init())
-        .pipe(uglify())
-        .pipe(rename('app.js'))
-        .pipe(sourcemaps.write('./'))
+        .pipe(uglify('app.js',{
+            outSourceMap: true
+        }))
         .pipe(gulp.dest(jsPath+'/build/'))
         .pipe(exit());
 });
@@ -83,6 +81,7 @@ gulp.task('libs', function() {
         jsPath+'/bower/jquery-oembed-all/jquery.oembed.js',
         jsPath+'/bower/bootstrap-growl/jquery.bootstrap-growl.js',
         jsPath+'/bower/jQuery-linkify/dist/jquery.linkify.js',
+        jsPath+'/bower/jquery-highlight/jquery.highlight.js',
         jsPath+'/lib/bootstrap.js',
         jsPath+'/lib/dropdown.js',
         jsPath+'/lib/annotator/annotator-full.js'
