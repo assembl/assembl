@@ -293,10 +293,9 @@ class NotificationSubscription(DiscussionBoundBase):
             if status != self.status:
                 self.status = status
                 self.last_status_change_date = datetime.utcnow()
-        duplicate = self.find_duplicate()
-        if duplicate is not None:
-            raise HTTPBadRequest("Duplicate of <%s> created" % (duplicate.uri()))
-        return self
+        return self.handle_duplication(
+                json, parse_def, aliases, ctx, permissions, user_id,
+                duplicate_error)
 
     def unique_query(self):
         # documented in lib/sqla

@@ -29,7 +29,16 @@ voteApp.controller('indexCtl',
           if ( el.criteria && el.criteria.length ){
             _.each(el.criteria, function(el2){
               VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_criterion_fields);
+              
+              if ( "type" in el2 && el2.type in VoteWidgetService.mandatory_typed_criterion_fields ){
+                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_typed_criterion_fields[el2.type]);
+              }
+
               VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_criterion_fields);
+
+              if ( "type" in el2 && el2.type in VoteWidgetService.optional_typed_criterion_fields ){
+                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_typed_criterion_fields[el2.type]);
+              }
             });
           }
         });
@@ -360,11 +369,12 @@ voteApp.controller('indexCtl',
     // Position on the X coordinates of the center of the gauge, in the created SVG
     $scope.drawVerticalGauge = function(destination, item_data, xPosCenter){
       console.log("drawVerticalGauge()");
-      //console.log("item_data:");
-      //console.log(item_data);
+      console.log("item_data:");
+      console.log(item_data);
       var config = $scope.settings;
       var criterion = item_data.criteria[0];
-      var criterionValue = (criterion.valueDefault || criterion.valueDefault === 0.0) ? criterion.valueDefault : criterion.valueMin;
+      var criterionValue = (("valueDefault" in criterion) && (criterion.valueDefault || criterion.valueDefault === 0.0)) ? criterion.valueDefault : (("valueMin" in criterion) ? criterion.valueMin : 0);
+      console.log("criterionValue: ", criterionValue);
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
 
       // create the graph, as a SVG in the d3 container div

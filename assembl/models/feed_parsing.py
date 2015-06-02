@@ -340,10 +340,10 @@ class FeedSourceReader(PullSourceReader):
                 if not account.find_duplicate(True, True):
                     self.source.db.add(account)
                 if not post.find_duplicate(True, True):
-                    self.source.add(post)
-                self.source.commit()
+                    self.source.db.add(post)
+                self.source.db.commit()
             except Exception as e:
-                self.source.rollback()
+                self.source.db.rollback()
                 raise ReaderError(e)
             finally:
                 self.source = FeedPostSource.get(self.source_id)

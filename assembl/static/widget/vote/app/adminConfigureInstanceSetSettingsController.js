@@ -10,9 +10,9 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   $scope.widget_uri = null; // "local:Widget/24"
   $scope.widget_endpoint = null; // "/data/Widget/24"
   $scope.widget = null;
-  $scope.discussion_uri = null; // "local:Discussion/1"
-  $scope.criteria_url = null; // "local:Discussion/1/widgets/66/criteria"
-  $scope.criteria_endpoint = null; // "/data/Discussion/1/widgets/66/criteria"
+  //$scope.discussion_uri = null; // "local:Discussion/1"
+  //$scope.criteria_url = null; // "local:Discussion/1/widgets/66/criteria"
+  //$scope.criteria_endpoint = null; // "/data/Discussion/1/widgets/66/criteria"
   $scope.criteria = null; // array of ideas (their full structure)
 
 
@@ -99,12 +99,19 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     $scope.widget.settings.items[item_index].criteria.push(criterion);
   };
 
+  $scope.resetCriterionFromType = function(item_index, criterion_index) {
+    console.log("resetCriterionFromType()");
+    var criterion = $scope.widget.settings.items[item_index].criteria[criterion_index];
+    VoteWidgetService.resetCriterionFromType(criterion);
+  };
+
   $scope.addCriterionField = function(item_index, criterion_index, field_name){
     //console.log("addCriterionField(): ", item_index, criterion_index, field_name);
     if ( field_name ){
       //$scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_criterion_fields, field_name, true);
       var current_criterion = $scope.widget.settings.items[item_index].criteria[criterion_index];
-      var defaultValue = VoteWidgetService.getFieldDefaultValue($scope.aggregated_optional_criterion_fields_by_type[current_criterion.type], field_name, true);
+      var defaultValue = null;
+      defaultValue = VoteWidgetService.getFieldDefaultValue($scope.aggregated_optional_criterion_fields_by_type[current_criterion.type], field_name, true);
       //console.log("defaultValue: ", defaultValue);
       $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = defaultValue;
       //console.log("settings items after: ", $scope.widget.settings.items);
@@ -138,9 +145,9 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     console.log("$scope.widget.settings:");
     console.log($scope.widget.settings);
 
-    $scope.discussion_uri = $scope.widget.discussion;
-    $scope.criteria_url = $scope.widget.criteria_url;
-    $scope.criteria_endpoint = AssemblToolsService.resourceToUrl($scope.criteria_url);
+    //$scope.discussion_uri = $scope.widget.discussion;
+    //$scope.criteria_url = $scope.widget.criteria_url;
+    //$scope.criteria_endpoint = AssemblToolsService.resourceToUrl($scope.criteria_url);
     $scope.criteria = $scope.widget.criteria;
     console.log("$scope.criteria:");
     console.log($scope.criteria);

@@ -1159,24 +1159,30 @@ class BaseOps(object):
                     instance = context.get_instance_of_class(target_class)
                 if instance is not None:
                     setattr(self, reln.key, instance)
-        if is_created:
-            # Issue: unique_query MAY trigger a flush, which will
-            # trigger an error if columns are missing, including in a call above.
-            # But without the flush, some relations will not be interpreted
-            # correctly. Strive to avoid the flush in most cases.
-            unique_query, usable = self.unique_query()
-            if usable:
-                other = unique_query.first()
-                if other and other is not self:
-                    if inspect(self).pending:
-                        other.db.expunge(self)
-                    if duplicate_error:
-                        raise HTTPBadRequest("Duplicate of <%s> created" % (other.uri()))
-                    else:
-                        # TODO: Check if there's a risk of infinite recursion here?
-                        return other._do_update_from_json(
-                            json, parse_def, aliases, context, permissions,
-                            user_id, duplicate_error)
+        return self.handle_duplication(
+            json, parse_def, aliases, context, permissions, user_id,
+            duplicate_error)
+
+    def handle_duplication(
+                self, json, parse_def, aliases, context, permissions, user_id,
+                duplicate_error):
+        # Issue: unique_query MAY trigger a flush, which will
+        # trigger an error if columns are missing, including in a call above.
+        # But without the flush, some relations will not be interpreted
+        # correctly. Strive to avoid the flush in most cases.
+        unique_query, usable = self.unique_query()
+        if usable:
+            other = unique_query.first()
+            if other and other is not self:
+                if inspect(self).pending:
+                    other.db.expunge(self)
+                if duplicate_error:
+                    raise HTTPBadRequest("Duplicate of <%s> created" % (other.uri()))
+                else:
+                    # TODO: Check if there's a risk of infinite recursion here?
+                    return other._do_update_from_json(
+                        json, parse_def, aliases, context, permissions,
+                        user_id, duplicate_error)
         return self
 
     def unique_query(self):
