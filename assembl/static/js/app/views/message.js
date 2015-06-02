@@ -974,8 +974,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              */
             markAsUnread: function (ev) {
                 ev.stopPropagation();
+                var target = this.$('.readUnreadIndicator');
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-                this.model.setRead(false);
+                this.model.setRead(false, target);
             },
 
             /**
@@ -983,8 +984,9 @@ define(['backbone.marionette','backbone', 'underscore', 'ckeditor', 'app', 'comm
              */
             markAsRead: function (ev) {
                 ev.stopPropagation();
+                var target = this.$('.readUnreadIndicator');
                 Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-                this.model.setRead(true);
+                this.model.setRead(true, target);
             },
 
             onReplyBoxFocus: function(e){

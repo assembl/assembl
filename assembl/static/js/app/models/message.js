@@ -154,7 +154,9 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
              * Set the `read` property
              * @param {Boolean} value
              */
-            setRead: function (value) {
+            setRead: function (value, target) {
+                target.removeClass('readUnreadIndicator').addClass('is-loading');
+
                 var user = Ctx.getCurrentUser(),
                     that = this;
 
@@ -173,6 +175,7 @@ define(['underscore', 'jquery', 'app', 'common/context', 'models/base', 'bluebir
                 this.url = Ctx.getApiUrl('post_read/') + this.getId();
                 this.save({'read': value},{
                     success: function(model, resp){
+                        target.addClass('readUnreadIndicator').removeClass('is-loading');
                         that.trigger('change:read', [value]);
                         that.trigger('change', that);
                         Assembl.reqres.request('ideas:update', resp.ideas); // this seems to cost a lot of performance. maybe we should update only the ideas related to this message

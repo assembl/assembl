@@ -19,6 +19,6 @@
 
     display: block;
     content: "";
-    background: rgba(0, 0, 0, .15) url(#{$img-dir}/panel/loading.gif) no-repeat center center;
+    background: transparent url(#{$img-dir}/panel/loading.gif) no-repeat center center;
   }
 }
