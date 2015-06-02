@@ -58,6 +58,7 @@ gulp.task('browserify-build', function() {
     return b.bundle()
         .on('error', gutil.log)
         .pipe(source('index.js'))
+        .pipe(buffer())
         .pipe(uglify('app.js',{
             outSourceMap: true
         }))
