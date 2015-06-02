@@ -88,8 +88,7 @@ gulp.task('libs', function() {
         jsPath+'/lib/annotator/annotator-full.js'
   ])
     .pipe(uglify('infrastructure.min.js', {
-       compress: false,
-       inSourceMap: true
+          outSourceMap: true
      }))
     .pipe(gulp.dest(jsPath+'/build/'))
 });
