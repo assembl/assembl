@@ -30,7 +30,7 @@ var b = watchify(browserify({
 /***
  * build assembl for development
  */
-gulp.task('browserify', bundle);
+gulp.task('browserify:dev', ['clean:app'],bundle);
 b.on('update', bundle);
 b.on('log', gutil.log);
 
@@ -48,7 +48,7 @@ function bundle(){
 /***
  * build assembl for production
  */
-gulp.task('browserify-build', function() {
+gulp.task('browserify:prod',['clean:app'] ,function() {
     var b = browserify({
         entries: path.js+'/app/index.js',
         debug: true
@@ -58,7 +58,9 @@ gulp.task('browserify-build', function() {
         .pipe(source('app.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init())
-        .pipe(uglify({compress: false }))
+        .pipe(uglify({
+            compress: false
+         }))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.js+'/build/'))
         .pipe(exit());
@@ -67,7 +69,7 @@ gulp.task('browserify-build', function() {
 /**
  * Infrastructure
  * */
-gulp.task('libs', function() {
+gulp.task('libs',['clean:infrastructure'], function() {
   return gulp.src([
       path.js+'/bower/jquery/dist/jquery.js',
       path.js+'/bower/underscore/underscore.js',
@@ -119,10 +121,22 @@ gulp.task('sass', function() {
         .pipe(gulp.dest(path.css));
 });
 
+
+/**
+ * Delete files before rebuild new one
+ * */
+gulp.task('clean:app', function (cb) {
+    del([path.js+'/build/app.js',path.js+'/build/app.js.map'], cb);
+});
+
+gulp.task('clean:infrastructure', function (cb) {
+    del([path.js+'/build/infrastructure.min.js',path.js+'/build/infrastructure.min.js.map'], cb);
+});
+
 /**
  * Tasks
  * */
 
-gulp.task('build:source', ['libs','browserify']);
-gulp.task('build:prod', ['browserify-build', 'libs']);
-gulp.task('default', ['browserify']);
+gulp.task('build:source', ['libs','browserify:dev']);
+gulp.task('build:prod', ['browserify:prod', 'libs']);
+gulp.task('default', ['browserify:dev']);

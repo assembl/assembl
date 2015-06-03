@@ -324,7 +324,7 @@ def compile_javascript():
     """
     with cd(env.projectpath):
         with cd('assembl'):
-            run('../node_modules/gulp/bin/gulp.js browserify-build')
+            run('../node_modules/gulp/bin/gulp.js browserify:prod')
             run('../node_modules/gulp/bin/gulp.js libs')
 
 
