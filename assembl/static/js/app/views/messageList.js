@@ -552,8 +552,8 @@ var MessageList = AssemblPanel.extend({
       var returnedDataOffsets = {},
           len = _.size(this.resultMessageIdCollection);
 
-      if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
-          (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
+      if ((this.currentViewStyle === this.ViewStyles.THREADED) ||
+          (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES)) {
         returnedDataOffsets = this._calculateThreadedMessagesOffsets(this.visitorViewData, this.visitorOrderLookupTable, requestedOffsets);
       } else {
         returnedDataOffsets['offsetStart'] = _.isUndefined(requestedOffsets['offsetStart']) ? 0 : requestedOffsets['offsetStart'];
@@ -682,8 +682,8 @@ var MessageList = AssemblPanel.extend({
     getMessageIdsToShow: function (requestedOffsets) {
       var messageIdsToShow = [],
           returnedOffsets = this.calculateMessagesOffsets(requestedOffsets);
-      if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
-          (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
+      if ((this.currentViewStyle === this.ViewStyles.THREADED) ||
+          (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES)) {
         messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']+1);
       } else {
         if (this.debugPaging) {
@@ -1078,7 +1078,7 @@ var MessageList = AssemblPanel.extend({
           partialMessage = MessagesInProgress.getMessage(partialMessageContext);
 
       if (Ctx.debugRender) {
-        console.log("messageList:render_real() is firing for render id:", renderId);
+        console.log("messageList:render_real() is firing for render id:", renderId, "the current view style is:", this.currentViewStyle);
       }
 
       if (!(Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT))) {
@@ -1692,46 +1692,47 @@ var MessageList = AssemblPanel.extend({
      *
      */
     setViewStyle: function (viewStyle) {
-        if (!viewStyle) {
-            //If invalid, set global default
-            viewStyle = this.ViewStyles.NEW_MESSAGES;
-        }
+      //console.log("setViewStyle called with: ", viewStyle, "interface type: ", Ctx.getCurrentInterfaceType(), "current user is unknown?:", Ctx.getCurrentUser().isUnknownUser());
+      if (!viewStyle) {
+          //If invalid, set global default
+          viewStyle = this.ViewStyles.NEW_MESSAGES;
+      }
 
-        if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-            if (Ctx.getCurrentUser().isUnknownUser() && (viewStyle != this.ViewStyles.THREADED)) {
-                //Only threaded view makes sence for annonymous users
-                viewStyle = this.ViewStyles.THREADED;
-            }
-            else if ((viewStyle != this.ViewStyles.NEW_MESSAGES) && (viewStyle != this.ViewStyles.REVERSE_CHRONOLOGICAL)) {//THREADED used to be allowed
-                //New messages is default view
-                viewStyle = this.ViewStyles.NEW_MESSAGES;
-            }
-        }
+      if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
+          if (Ctx.getCurrentUser().isUnknownUser()) {
+              //Only threaded view makes sense for annonymous users
+              viewStyle = this.ViewStyles.THREADED;
+          }
+          else if ((viewStyle !== this.ViewStyles.NEW_MESSAGES) && (viewStyle !== this.ViewStyles.REVERSE_CHRONOLOGICAL)) {//THREADED used to be allowed
+              //New messages is default view
+              viewStyle = this.ViewStyles.NEW_MESSAGES;
+          }
+      }
 
-        if (viewStyle === this.ViewStyles.THREADED) {
-            this.currentViewStyle = this.ViewStyles.THREADED;
-            this.currentQuery.setView(this.currentQuery.availableViews.THREADED);
-        }
-        else if (viewStyle === this.ViewStyles.REVERSE_CHRONOLOGICAL) {
-            this.currentViewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
-            this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
-        }
-        else if (viewStyle === this.ViewStyles.CHRONOLOGICAL) {
-            this.currentViewStyle = this.ViewStyles.CHRONOLOGICAL;
-            this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL);
-        }
-        else if (viewStyle === this.ViewStyles.NEW_MESSAGES) {
-            this.currentViewStyle = this.ViewStyles.NEW_MESSAGES;
-            this.currentQuery.setView(this.currentQuery.availableViews.THREADED);
-        }
-        else {
-            throw new Error("Unsupported view style");
-        }
-        if (this.storedMessageListConfig.viewStyleId != viewStyle.id) {
-            this.storedMessageListConfig.viewStyleId = viewStyle.id;
-            Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
-        }
-
+      if (viewStyle === this.ViewStyles.THREADED) {
+          this.currentViewStyle = viewStyle;
+          this.currentQuery.setView(this.currentQuery.availableViews.THREADED);
+      }
+      else if (viewStyle === this.ViewStyles.REVERSE_CHRONOLOGICAL) {
+          this.currentViewStyle = viewStyle;
+          this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
+      }
+      else if (viewStyle === this.ViewStyles.CHRONOLOGICAL) {
+          this.currentViewStyle = viewStyle;
+          this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL);
+      }
+      else if (viewStyle === this.ViewStyles.NEW_MESSAGES) {
+          this.currentViewStyle = viewStyle;
+          this.currentQuery.setView(this.currentQuery.availableViews.THREADED);
+      }
+      else {
+          throw new Error("Unsupported view style");
+      }
+      if (this.storedMessageListConfig.viewStyleId != viewStyle.id) {
+          this.storedMessageListConfig.viewStyleId = viewStyle.id;
+          Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
+      }
+      //console.log("setViewStyle finished, currentViewStyle:", this.currentViewStyle, "stored viewStyleId: ", this.storedMessageListConfig.viewStyleId);
     },
 
     getTargetMessageViewStyleFromMessageListConfig: function (messageView) {
@@ -1775,8 +1776,7 @@ var MessageList = AssemblPanel.extend({
      */
     setIndividualMessageViewStyleForMessageListViewStyle: function (messageViewStyle) {
         // ex: Chronological, Threaded, etc.
-        var that = this,
-            messageListViewStyle = this.currentViewStyle;
+        var that = this;
 
         _.each(this.renderedMessageViewsCurrent, function (messageView) {
             var targetMessageViewStyle = that.getTargetMessageViewStyleFromMessageListConfig(messageView);
@@ -1818,8 +1818,8 @@ var MessageList = AssemblPanel.extend({
      */
     getMessageOffset: function (messageId, visitorOrderLookupTable, resultMessageIdCollection) {
       var messageOffset;
-      if ((this.currentViewStyle == this.ViewStyles.THREADED) ||
-          (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES)) {
+      if ((this.currentViewStyle === this.ViewStyles.THREADED) ||
+          (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES)) {
         try {
           if (!this.visitorViewData[messageId]) {
             throw new Error("visitor data for message is missing");
@@ -1995,6 +1995,8 @@ var MessageList = AssemblPanel.extend({
           }
           var real_callback = function () {
             if (shouldHighlightMessageSelected) {
+              //console.log(that.currentViewStyle);
+              //console.log(el);
               el.highlight();
             }
             if (_.isFunction(callback)) {
