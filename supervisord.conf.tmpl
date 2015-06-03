@@ -120,8 +120,8 @@ autostart = %(autostart_compass)s
 autorestart = true
 
 [program:gulp]
-directory = %(here)s
-command = ./node_modules/gulp/bin/gulp.js run
+directory = %(here)s/assembl
+command = %(here)s/node_modules/gulp/bin/gulp.js
 autostart = %(autostart_gulp)s
 autorestart = true
 

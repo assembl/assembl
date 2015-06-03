@@ -58,7 +58,7 @@ gulp.task('browserify-build', function() {
         .pipe(source('app.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init())
-        .pipe(uglify())
+        .pipe(uglify({compress: false }))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.js+'/build/'))
         .pipe(exit());
@@ -87,7 +87,7 @@ gulp.task('libs', function() {
   ], { base: path.js })
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(concat('infrastructure.concat.js'))
-    .pipe(uglify())
+    .pipe(uglify({compress: false }))
     .pipe(rename('infrastructure.min.js'))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(path.js+'/build/'))

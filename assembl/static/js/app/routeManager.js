@@ -134,6 +134,11 @@ var routeManager = Marionette.Object.extend({
         //window.history.pushState('object or string', 'Title', '../');
         Backbone.history.navigate('/', {replace: true});
     },
+    
+    sentryTest: function () {
+      //This crashes on purpose
+      crashme();
+  },
 
     loadCurrentUser: function () {
         var user = null;

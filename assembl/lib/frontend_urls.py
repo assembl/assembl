@@ -17,6 +17,7 @@ class FrontendUrls():
         'user_notifications': '/user/notifications',
         'profile': '/user/profile',
         'account': '/user/account',
+        'sentrytest': '/sentrytest',
         'purl_posts': '/posts*remainder',
         'purl_idea': '/idea*remainder'
     }
