@@ -1,32 +1,34 @@
 'use strict';
 
-define(['common/context', 'views/idea', 'underscore'], function (Ctx, IdeaView, _) {
+var Ctx = require('../common/context.js'),
+    IdeaView = require('./idea.js'),
+    _ = require('../shims/underscore.js');
 
-    var otherInIdeaList = IdeaView.extend({
-        template: Ctx.loadTemplate('otherInIdeaList'),
-        render: function () {
-            Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-            var hasOrphanPosts = this.model.get('num_orphan_posts'),
-                hasSynthesisPosts = this.model.get('num_synthesis_posts');
+var otherInIdeaList = IdeaView.extend({
+    template: Ctx.loadTemplate('otherInIdeaList'),
+    render: function () {
+        Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-            var subMenu = _.find([hasOrphanPosts, hasSynthesisPosts], function (num) {
-                return num !== 0;
-            });
+        var hasOrphanPosts = this.model.get('num_orphan_posts'),
+            hasSynthesisPosts = this.model.get('num_synthesis_posts');
 
-            if (typeof subMenu === 'undefined') {
+        var subMenu = _.find([hasOrphanPosts, hasSynthesisPosts], function (num) {
+            return num !== 0;
+        });
 
-                this.$el.addClass('hidden');
-            } else {
-                this.$el.removeClass('hidden');
-            }
+        if (typeof subMenu === 'undefined') {
 
-            this.$el.html(this.template);
-            Ctx.initTooltips(this.$el);
-            return this;
+            this.$el.addClass('hidden');
+        } else {
+            this.$el.removeClass('hidden');
         }
-    });
 
-
-    return otherInIdeaList;
+        this.$el.html(this.template);
+        Ctx.initTooltips(this.$el);
+        return this;
+    }
 });
+
+
+module.exports = otherInIdeaList;

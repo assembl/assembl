@@ -317,31 +317,15 @@ def compile_stylesheets():
         with cd('assembl/static/widget/video/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
-
 @task
-def minify_javascript_maybe():
-    config = get_config()
-    try:
-        minify = config.get('app:assembl', 'minified_js')
-        print minify
-        if minify == 'debug':
-            execute(minify_javascript_debug)
-        elif minify and minify != 'false':
-            execute(minify_javascript)
-    except NoOptionError:
-        pass
-
-
-@task
-def minify_javascript():
-    with cd(join(env.projectpath, 'assembl', 'static', 'js')):
-        run('node r.js -o build.js')
-
-
-@task
-def minify_javascript_debug():
-    with cd(join(env.projectpath, 'assembl', 'static', 'js')):
-        run('node r.js -o build_with_map.js')
+def compile_javascript():
+    """
+    Generates and minifies javascript
+    """
+    with cd(env.projectpath):
+        with cd('assembl'):
+            run('../node_modules/gulp/bin/gulp.js browserify:prod')
+            run('../node_modules/gulp/bin/gulp.js libs')
 
 
 def tests():
@@ -447,6 +431,7 @@ def app_update_dependencies():
     execute(update_compass)
     execute(update_bower)
     execute(bower_update)
+    execute(npm_update)
 
 
 @task
@@ -482,8 +467,7 @@ def app_compile_nodbupdate():
     execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
-    execute(minify_javascript_maybe)
-
+    execute(compile_javascript)
 
 @task
 def webservers_reload():
@@ -608,6 +592,11 @@ def bower_update():
     """ Normally not called manually """
     execute(_bower_foreach_do, 'update')
 
+@task
+def npm_update():
+    """ Normally not called manually """
+    with cd(env.projectpath):
+        run('npm update')
 
 @task
 def install_builddeps():

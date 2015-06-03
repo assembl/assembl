@@ -1,20 +1,23 @@
 'use strict';
 
-define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird', 'views/postFilters'],
-    function (Ctx, i18n, CollectionManager, Promise, PostFilters) {
+var Ctx = require('../common/context.js'),
+    i18n = require('../utils/i18n.js'),
+    CollectionManager = require('../common/collectionManager.js'),
+    Promise = require('bluebird'),
+    _ = require('../shims/underscore.js');
 
-  /**
-   * @class PostQuery
-   *
-   * Manages querying, filtering and sorting posts.  Abstracts out client and
-   * server side filtering (The client should re-call execute on the query
-   * to sort or modify filters.  Any client-side processing to optimize should
-   * be done inside this class, to ease unit testing and code clarity.
-   */
-  var PostQuery = function () {
+/**
+* @class PostQuery
+*
+* Manages querying, filtering and sorting posts.  Abstracts out client and
+* server side filtering (The client should re-call execute on the query
+* to sort or modify filters.  Any client-side processing to optimize should
+* be done inside this class, to ease unit testing and code clarity.
+*/
+var PostQuery = function () {
     var collectionManager = new CollectionManager();
 
-    this.availableFilters = PostFilters;
+    this.availableFilters = require('./postFilters.js');
     /**
      * Has a property with the id each active
      * filter, and the filter object as value
@@ -468,6 +471,5 @@ define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird', 
 
   };
 
-  return PostQuery;
+module.exports = PostQuery;
 
-});

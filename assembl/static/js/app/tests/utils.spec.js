@@ -1,27 +1,28 @@
-define(['jasmine', 'jquery', 'utils/panelSpecTypes', 'chai'], function (jasmine, $, PanelSpecTypes, chai) {
 
-    var expect = chai.expect;
+var $ = require('../shims/jquery.js'),
+    PanelSpecTypes = require('../utils/panelSpecTypes.js'),
+    expect = require('chai').expect;
 
-    return describe('Utils module', function () {
+var expect = chai.expect;
 
-        describe('panelSpecType', function(){
+return describe('Utils module', function () {
 
-            it('getByRawId should throw error if PanelSpecTypes id undefined', function(){
-                var panel = function(){
-                    return PanelSpecTypes.getByRawId('toto');
-                }
-                expect(panel).to.throw();
-            });
-        })
+    describe('panelSpecType', function(){
 
-        describe('socket', function(){
-          // testing socket event etc...
-
-          it('socket should work perfect', function(){
-             expect(true).to.be.true;
-          })
-
+        it('getByRawId should throw error if PanelSpecTypes id undefined', function(){
+            var panel = function(){
+                return PanelSpecTypes.getByRawId('toto');
+            }
+            expect(panel).to.throw();
         });
+    })
+
+    describe('socket', function(){
+      // testing socket event etc...
+
+      it('socket should work perfect', function(){
+         expect(true).to.be.true;
+      })
 
     });
 

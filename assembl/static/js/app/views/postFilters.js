@@ -1,8 +1,12 @@
 'use strict';
 
-define(['common/context', 'utils/i18n', 'common/collectionManager', 'bluebird'],
-function (Ctx, i18n, CollectionManager, Promise) {
-  var collectionManager = new CollectionManager();
+var Ctx = require('../common/context.js'),
+    i18n = require('../utils/i18n.js'),
+    CollectionManager = require('../common/collectionManager.js'),
+    Promise = require('bluebird');
+
+
+var collectionManager = new CollectionManager();
   
   /** Base interface of all filters */
   function AbstractFilter(){
@@ -140,7 +144,7 @@ function (Ctx, i18n, CollectionManager, Promise) {
         }
       }
       return AbstractFilter.prototype.addValue.call(this, value);
-    },
+    }
     
 
   });
@@ -537,7 +541,6 @@ function (Ctx, i18n, CollectionManager, Promise) {
     POST_REPONDS_TO: FilterPostReplyToUser,
     POST_REPONDS_TO_ME: FilterPostReplyToMe
   };
-  
-  return availableFilters;
 
-});
+
+  module.exports = availableFilters;

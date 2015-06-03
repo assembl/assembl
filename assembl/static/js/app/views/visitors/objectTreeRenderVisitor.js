@@ -1,20 +1,19 @@
 'use strict';
 
-define(function () {
-  /** A visitor function to be passed to to a visit function such as
-   * Idea.visitBreadthFirst or MessageCollection.visitDepthFirst
-   *
-   * @param data_by_object: output param, dict containing for each object traversed the
-   *    render information indexed by the object id.  See the data variable inside
-   *    the function body for definition of the structure
-   * @param order_lookup_table output param, a list containing every object id retained
-   * indexed by traversal order
-   * @param roots: output param. The objects that have no parents in the set
-   * @param filter_function:  The object is passed to this callback.  If it returns:
-   *  - false the object won't be part of the returned set.
-   *  - 0 instead of false, all descendants of the object will also be excluded
-   */
-  function objectTreeRenderVisitor(data_by_object, order_lookup_table, roots, filter_function) {
+/** A visitor function to be passed to to a visit function such as
+* Idea.visitBreadthFirst or MessageCollection.visitDepthFirst
+*
+* @param data_by_object: output param, dict containing for each object traversed the
+*    render information indexed by the object id.  See the data variable inside
+*    the function body for definition of the structure
+* @param order_lookup_table output param, a list containing every object id retained
+* indexed by traversal order
+* @param roots: output param. The objects that have no parents in the set
+* @param filter_function:  The object is passed to this callback.  If it returns:
+*  - false the object won't be part of the returned set.
+*  - 0 instead of false, all descendants of the object will also be excluded
+*/
+function objectTreeRenderVisitor(data_by_object, order_lookup_table, roots, filter_function) {
     if (filter_function === undefined) {
       filter_function = function (node) {
         return true;
@@ -65,8 +64,6 @@ define(function () {
       // This allows you to return 0 vs false and cut recursion short.
       return filter_result !== 0;
     };
-  }
+}
 
-  return objectTreeRenderVisitor;
-
-})
+module.exports = objectTreeRenderVisitor;

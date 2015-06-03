@@ -102,7 +102,7 @@ stopwaitsecs = 60
 killasgroup = true
 
 [group:dev]
-programs = pserve, compass
+programs = pserve, compass, gulp
 
 [group:prod]
 programs = uwsgi
@@ -117,6 +117,12 @@ autorestart = false
 directory = %(here)s
 command = bundle exec compass watch
 autostart = %(autostart_compass)s
+autorestart = true
+
+[program:gulp]
+directory = %(here)s/assembl
+command = %(here)s/node_modules/gulp/bin/gulp.js
+autostart = %(autostart_gulp)s
 autorestart = true
 
 [program:uwsgi]

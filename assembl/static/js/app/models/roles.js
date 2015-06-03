@@ -1,40 +1,40 @@
 'use strict';
 
-define(['models/base', 'common/context'], function (Base, Ctx) {
+var Base = require('./base.js'),
+    Ctx = require('../common/context.js');
 
-    var roleModel = Base.Model.extend({
-        urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/" + Ctx.getCurrentUserId() + "/local_roles"),
+var roleModel = Base.Model.extend({
+    urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/" + Ctx.getCurrentUserId() + "/local_roles"),
 
-        defaults: {
-            'requested': false,
-            'discussion': null,
-            'role': null,
-            'user': null,
-            '@id': null,
-            '@type': null,
-            '@view': null
-        },
+    defaults: {
+        'requested': false,
+        'discussion': null,
+        'role': null,
+        'user': null,
+        '@id': null,
+        '@type': null,
+        '@view': null
+    },
 
-        isUserSubscribed: function () {
-            return (this.get('discussion') === null) ? false : true;
-        },
+    isUserSubscribed: function () {
+        return (this.get('discussion') === null) ? false : true;
+    },
 
-        validate: function(attrs, options){
-            /**
-             * check typeof variable
-             * */
+    validate: function(attrs, options){
+        /**
+         * check typeof variable
+         * */
 
-        }
+    }
 
-    });
-
-    var roleCollection = Base.Collection.extend({
-        url: Ctx.getApiV2DiscussionUrl("/all_users/" + Ctx.getCurrentUserId() + "/local_roles"),
-        model: roleModel
-    });
-
-    return {
-        Model: roleModel,
-        Collection: roleCollection
-    };
 });
+
+var roleCollection = Base.Collection.extend({
+    url: Ctx.getApiV2DiscussionUrl("/all_users/" + Ctx.getCurrentUserId() + "/local_roles"),
+    model: roleModel
+});
+
+module.exports = {
+    Model: roleModel,
+    Collection: roleCollection
+};

@@ -104,9 +104,6 @@
 {% endblock %}
 
 {% block main_js %}
-    {% if minified_js == 'true' or minified_js == 'debug' %}
-        <script src="{{ STATIC_URL }}/js/dist/app/main.js"></script>
-    {% else %}
-        <script data-main="{{ STATIC_URL }}/js/app/main.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
-    {% endif %}
+    <script src="{{ STATIC_URL }}/js/build/infrastructure.min.js"></script>
+    <script src="{{ STATIC_URL }}/js/build/app.js"></script>
 {% endblock %}

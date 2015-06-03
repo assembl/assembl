@@ -1,67 +1,67 @@
 'use strict';
 
-define(['backbone.marionette', 'models/groupSpec', 'common/context'],
-    function (Marionette, groupSpec, Ctx) {
+var Marionette = require('../shims/marionette.js'),
+    groupSpec = require('../models/groupSpec.js'),
+    Ctx = require('../common/context.js');
 
-        var storage = Marionette.Object.extend({
+var storage = Marionette.Object.extend({
 
-            _store: window.localStorage,
+    _store: window.localStorage,
 
-            getStoragePrefix: function () {
-                var interfaceType = Ctx.getCurrentInterfaceType(),
-                    storagePrefix;
-                if (interfaceType === Ctx.InterfaceTypes.SIMPLE) {
-                    storagePrefix = "simpleInterface";
-                }
-                else if (interfaceType === Ctx.InterfaceTypes.EXPERT) {
-                    storagePrefix = "expertInterface";
-                }
-                else {
-                    console.log("storage::initialize unknown interface type: ", interfaceType);
-                }
-                return storagePrefix;
-            },
+    getStoragePrefix: function () {
+        var interfaceType = Ctx.getCurrentInterfaceType(),
+            storagePrefix;
+        if (interfaceType === Ctx.InterfaceTypes.SIMPLE) {
+            storagePrefix = "simpleInterface";
+        }
+        else if (interfaceType === Ctx.InterfaceTypes.EXPERT) {
+            storagePrefix = "expertInterface";
+        }
+        else {
+            console.log("storage::initialize unknown interface type: ", interfaceType);
+        }
+        return storagePrefix;
+    },
 
-            bindGroupSpecs: function (groupSpecs) {
-                var that = this;
-                this.groupSpecs = groupSpecs;
-                this.listenTo(groupSpecs, 'add', this.addGroupSpec);
-                this.listenTo(groupSpecs, 'remove', this.removeGroupSpec);
-                this.listenTo(groupSpecs, 'reset change', this.saveGroupSpecs);
-                groupSpecs.models.forEach(function (m) {
-                    that.listenTo(m.attributes.panels, 'add remove reset change', that.saveGroupSpecs);
-                });
-            },
+    bindGroupSpecs: function (groupSpecs) {
+        var that = this;
+        this.groupSpecs = groupSpecs;
+        this.listenTo(groupSpecs, 'add', this.addGroupSpec);
+        this.listenTo(groupSpecs, 'remove', this.removeGroupSpec);
+        this.listenTo(groupSpecs, 'reset change', this.saveGroupSpecs);
+        groupSpecs.models.forEach(function (m) {
+            that.listenTo(m.attributes.panels, 'add remove reset change', that.saveGroupSpecs);
+        });
+    },
 
-            addGroupSpec: function (groupSpec, groupSpecs) {
-                this.listenTo(groupSpec.attributes.panels, 'add remove reset change', this.saveGroupSpecs);
-                this.saveGroupSpecs();
-            },
+    addGroupSpec: function (groupSpec, groupSpecs) {
+        this.listenTo(groupSpec.attributes.panels, 'add remove reset change', this.saveGroupSpecs);
+        this.saveGroupSpecs();
+    },
 
-            removeGroupSpec: function (groupSpec, groupSpecs) {
-                this.stopListening(groupSpec);
-                this.saveGroupSpecs();
-            },
+    removeGroupSpec: function (groupSpec, groupSpecs) {
+        this.stopListening(groupSpec);
+        this.saveGroupSpecs();
+    },
 
-            saveGroupSpecs: function () {
-                this._store.setItem(this.getStoragePrefix() + 'groupItems', JSON.stringify(this.groupSpecs));
-                this._store.setItem(this.getStoragePrefix() + 'lastViewSave', Date.now());
-            },
+    saveGroupSpecs: function () {
+        this._store.setItem(this.getStoragePrefix() + 'groupItems', JSON.stringify(this.groupSpecs));
+        this._store.setItem(this.getStoragePrefix() + 'lastViewSave', Date.now());
+    },
 
-            getDateOfLastViewSave: function () {
-                var lastSave = this._store.getItem(this.getStoragePrefix() + 'lastViewSave');
-                if (lastSave) {
-                    return new Date(lastSave);
-                }
-            },
+    getDateOfLastViewSave: function () {
+        var lastSave = this._store.getItem(this.getStoragePrefix() + 'lastViewSave');
+        if (lastSave) {
+            return new Date(lastSave);
+        }
+    },
 
-            getStorageGroupItem: function () {
-                if (this._store.getItem(this.getStoragePrefix() + 'groupItems')) {
-                    return JSON.parse(this._store.getItem(this.getStoragePrefix() + 'groupItems'));
-                }
-            }
+    getStorageGroupItem: function () {
+        if (this._store.getItem(this.getStoragePrefix() + 'groupItems')) {
+            return JSON.parse(this._store.getItem(this.getStoragePrefix() + 'groupItems'));
+        }
+    }
 
-        })
+})
 
-        return new storage();
-    });
+module.exports = new storage();

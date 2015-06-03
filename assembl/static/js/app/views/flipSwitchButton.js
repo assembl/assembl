@@ -1,46 +1,46 @@
 'use strict';
 
-define(['backbone', 'underscore', 'jquery', 'app', 'common/context', 'utils/i18n', 'models/flipSwitchButton'],
-    function (Backbone, _, $, Assembl, Ctx, i18n, FlipSwitchButtonModel) {
+var Marionette = require('../shims/marionette.js');
 
-        var FlipSwitchButton = Marionette.ItemView.extend({
-            template: '#tmpl-flipSwitchButton',
-            className: 'flipSwitchButton',
 
-            ui: {
-                toggleButton: '.js_toggleButton'
-            },
+var FlipSwitchButton = Marionette.ItemView.extend({
+    template: '#tmpl-flipSwitchButton',
+    className: 'flipSwitchButton',
 
-            events: {
-                'click @ui.toggleButton': 'onToggle'
-            },
+    ui: {
+        toggleButton: '.js_toggleButton'
+    },
 
-            modelEvents: {
-                'change:isOn': 'updateState' // this is the same as writing this.listenTo(this.model, 'change:isOn', this.updateState); in the initialize() method
-            },
+    events: {
+        'click @ui.toggleButton': 'onToggle'
+    },
 
-            // the serializeData() method is not needed because model attributes are sent automatically to the template
+    modelEvents: {
+        'change:isOn': 'updateState' // this is the same as writing this.listenTo(this.model, 'change:isOn', this.updateState); in the initialize() method
+    },
 
-            onToggle: function(){
-                this.model.set('isOn', !this.model.get('isOn'));
-                //this.updateState(); // will be done automatically thanks to modelEvents
-            },
+    // the serializeData() method is not needed because model attributes are sent automatically to the template
 
-            // does a smooth re-render (so that CSS animations are shown)
-            updateState: function(){
-                console.log("flipSwitchButton::updateState()");
-                if ( this.model.get('isOn') )
-                {
-                    this.ui.toggleButton.removeClass("flipswitch-no");
-                    this.ui.toggleButton.addClass("flipswitch-yes");
-                }
-                else {
-                    this.ui.toggleButton.removeClass("flipswitch-yes");
-                    this.ui.toggleButton.addClass("flipswitch-no");
-                }
-            }
+    onToggle: function(){
+        this.model.set('isOn', !this.model.get('isOn'));
+        //this.updateState(); // will be done automatically thanks to modelEvents
+    },
 
-        });
+    // does a smooth re-render (so that CSS animations are shown)
+    updateState: function(){
+        console.log("flipSwitchButton::updateState()");
+        if ( this.model.get('isOn') )
+        {
+            this.ui.toggleButton.removeClass("flipswitch-no");
+            this.ui.toggleButton.addClass("flipswitch-yes");
+        }
+        else {
+            this.ui.toggleButton.removeClass("flipswitch-yes");
+            this.ui.toggleButton.addClass("flipswitch-no");
+        }
+    }
 
-        return FlipSwitchButton;
-    });
+});
+
+
+module.exports = FlipSwitchButton;

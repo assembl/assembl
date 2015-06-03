@@ -1,9 +1,19 @@
 'use strict';
 
-define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18n', 'utils/permissions', 'views/ckeditorField', 'views/messageSend', 'objects/messagesInProgress', 'common/collectionManager', 'bluebird'],
-    function (Marionette , _, Assembl, Ctx, i18n, Permissions, CKEditorField, MessageSendView, MessagesInProgress, CollectionManager, Promise) {
+var Marionette = require('../shims/marionette.js'),
+    _ = require('../shims/underscore.js'),
+    Assembl = require('../app.js'),
+    Ctx = require('../common/context.js'),
+    i18n = require('../utils/i18n.js'),
+    Permissions = require('../utils/permissions.js'),
+    CKEditorField = require('./ckeditorField.js'),
+    MessageSendView = require('./messageSend.js'),
+    MessagesInProgress = require('../objects/messagesInProgress.js'),
+    CollectionManager = require('../common/collectionManager.js'),
+    Promise = require('bluebird');
 
-  var IdeaInSynthesisView = Marionette.ItemView.extend({
+
+var IdeaInSynthesisView = Marionette.ItemView.extend({
     synthesis: null,
     /**
      * The template
@@ -198,7 +208,7 @@ define(['backbone.marionette', 'underscore', 'app', 'common/context', 'utils/i18
       }
     }
 
-  });
-
-  return IdeaInSynthesisView;
 });
+
+
+module.exports = IdeaInSynthesisView;
