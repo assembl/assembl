@@ -2,7 +2,7 @@ var requirejs_config = {
     urlArgs: urlArgs,
     waitSeconds: 20,
     paths: {
-        'jquery': "../bower/jquery/dist/jquery",
+        'jquery': "../bower/jquery/jquery",
         'jquery-highlight': '../lib/jquery-highlight/jquery.highlight',
         'jquery.dotdotdot': '../bower/jquery.dotdotdot/src/js/jquery.dotdotdot',
         'jquery-autosize': '../bower/jquery-autosize/jquery.autosize',
