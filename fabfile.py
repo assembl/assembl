@@ -408,7 +408,6 @@ def app_fullupdate():
     execute(database_dump)
     execute(updatemaincode)
     execute(app_compile)
-    execute(compile_javascript)
 
 
 @task
