@@ -39,7 +39,7 @@ function bundle(){
       .on('error', gutil.log)
       .pipe(source('index.js'))
       .pipe(buffer())
-      .pipe(sourcemaps.init())
+      .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(rename('app.js'))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(path.js+'/build/'))
@@ -57,7 +57,7 @@ gulp.task('browserify:prod',['clean:app'] ,function() {
         .on('error', gutil.log)
         .pipe(source('app.js'))
         .pipe(buffer())
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(uglify({
             compress: false
          }))
