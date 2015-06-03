@@ -323,7 +323,8 @@ def compile_javascript():
     Generates and minifies javascript
     """
     with cd(env.projectpath):
-        run('node_modules/gulp/bin/gulp.js build:prod')
+        with cd('assembl'):
+            run('../node_modules/gulp/bin/gulp.js build:prod')
 
 
 def tests():
