@@ -9,6 +9,7 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var gutil = require('gulp-util');
 var concat = require('gulp-concat');
+var del = require('del');
 var autoprefixer = require('gulp-autoprefixer');
 var minifyCss = require('gulp-minify-css');
 var sourcemaps = require('gulp-sourcemaps');
