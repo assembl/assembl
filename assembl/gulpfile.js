@@ -96,6 +96,7 @@ gulp.task('libs', function() {
     .pipe(rename('infrastructure.min.js'))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(path.js+'/build/'))
+    .pipe(exit());
 });
 
 /**
