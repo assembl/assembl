@@ -47,7 +47,7 @@ appSession.controller('sessionCtl',
             $scope.getSubIdeaFromIdea = function () {
 
                 var
-                    rootUrl = utils.urlApi($scope.widget.ideas_url),
+                    rootUrl = utils.urlApiSession($scope.widget.ideas_url),
                     ideas = [];
 
                 $scope.parentIdeaTitle = $scope.widget.base_idea.shortTitle;
@@ -55,10 +55,8 @@ appSession.controller('sessionCtl',
                 $http.get(rootUrl).then(function (response) {
 
                     angular.forEach(response.data, function (item) {
-
                         if (item.widget_add_post_endpoint) {
-
-                            item.widget_add_post_endpoint = utils.urlApi(_.values(item.widget_add_post_endpoint));
+                            item.widget_add_post_endpoint = utils.urlApiSession(_.values(item.widget_add_post_endpoint));
                             item.creationDate = moment(item.creationDate).fromNow();
                             ideas.push(item);
                         }
@@ -69,7 +67,7 @@ appSession.controller('sessionCtl',
                 }).then(function (ideas) {
 
                     angular.forEach(ideas, function (idea) {
-                        var urlRoot = utils.urlApi(idea.proposed_in_post.idCreator);
+                        var urlRoot = utils.urlApiSession(idea.proposed_in_post.idCreator);
 
                         $http.get(urlRoot).then(function (response) {
                             idea.username = response.data.name;
@@ -90,7 +88,7 @@ appSession.controller('sessionCtl',
             $scope.sendSubIdea = function () {
                 if ($scope.formData) {
 
-                    var rootUrl = utils.urlApi($scope.widget.ideas_url);
+                    var rootUrl = utils.urlApiSession($scope.widget.ideas_url);
                     var random_index = angular.element('.random_index');
 
                     $scope.formData.type = 'Idea';
@@ -184,7 +182,7 @@ appSession.controller('ratingCtl',
             $scope.getSubIdeaForVote = function () {
 
                 var
-                    rootUrl = utils.urlApi(Widget.ideas_url),
+                    rootUrl = utils.urlApiSession(Widget.ideas_url),
                     ideas = [];
 
                 $http.get(rootUrl).then(function (response) {
@@ -203,7 +201,7 @@ appSession.controller('ratingCtl',
 
                 }).then(function (ideas) {
 
-                    var urlRoot = utils.urlApi(Widget.user_states_url);
+                    var urlRoot = utils.urlApiSession(Widget.user_states_url);
 
                     $http.get(urlRoot).then(function (response) {
 
@@ -247,8 +245,8 @@ appSession.controller('ratingCtl',
                     commentSelected = [],
                     subIdea = angular.element('#postVote .sub-idea'),
                     commentSubIdea = angular.element('#postVote .comment-to-sub-idea'),
-                    rootUrlSubIdea = utils.urlApi(Widget.confirm_ideas_url),
-                    rootUrlMessage = utils.urlApi(Widget.confirm_messages_url);
+                    rootUrlSubIdea = utils.urlApiSession(Widget.confirm_ideas_url),
+                    rootUrlMessage = utils.urlApiSession(Widget.confirm_messages_url);
 
                 $scope.$watch('message', function (value) {
                     //TODO: find a good translation for confirm that the catching sub idea is valid
@@ -339,8 +337,8 @@ appSession.controller('editCtl',
             $scope.widget = configService.data.widget;
 
             $scope.formData = {};
-            $scope.urlRoot = utils.urlApi($scope.widget.widget_settings_url);
-            $scope.urlEdit = utils.urlApi($routeParams.config);
+            $scope.urlRoot = utils.urlApiSession($scope.widget.widget_settings_url);
+            $scope.urlEdit = utils.urlApiSession($routeParams.config);
 
             if (angular.isDefined($scope.widget.settings.session)) {
 

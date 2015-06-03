@@ -22,7 +22,7 @@ appSession.factory('configService', function ($q, $http, utils) {
 
             if (!url) defer.reject({message: 'invalid url configuration'});
 
-            var urlRoot = utils.urlApi(url);
+            var urlRoot = utils.urlApiSession(url);
 
             $http.get(urlRoot).success(function (response) {
                 data.widget = response;

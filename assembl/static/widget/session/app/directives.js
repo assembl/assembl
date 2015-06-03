@@ -16,7 +16,7 @@ appSession.directive('vote', function($http, $rootScope, utils){
                 user_state = _.isUndefined($scope.widget.user_state) ? [] : JSON.parse($scope.widget.user_state.session_user_vote),
                 id_idea = $scope.idea['@id'].split('/')[1];
 
-            var userStateUrl = utils.urlApi($scope.widget.user_state_url);
+            var userStateUrl = utils.urlApiSession($scope.widget.user_state_url);
 
             /**
              * compare state_json content and the idea id to check the rate
@@ -164,7 +164,7 @@ appSession.directive('comments', function($http, $rootScope, utils){
 
                     angular.forEach(commments, function(c){
 
-                        var urlRoot = utils.urlApi(c.idCreator);
+                        var urlRoot = utils.urlApiSession(c.idCreator);
 
                         $http.get(urlRoot).then(function(response){
 
@@ -246,7 +246,7 @@ appSession.directive('rating', function($http, utils){
             $scope.getCommentsForRating = function(){
 
                 var
-                    rootUrl = utils.urlApi(_.values($scope.comment.widget_add_post_endpoint)),
+                    rootUrl = utils.urlApiSession(_.values($scope.comment.widget_add_post_endpoint)),
                     comments = [];
 
                 if(rootUrl){
