@@ -55,13 +55,10 @@ gulp.task('browserify-build', function() {
     });
     return b.bundle()
         .on('error', gutil.log)
-        .pipe(source('index.js'))
+        .pipe(source('app.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init())
-        .pipe(uglify({
-            outSourceMap: 'app.js.map'
-        }))
-        .pipe(rename('app.js'))
+        .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.js+'/build/'))
         .pipe(exit());
@@ -90,9 +87,7 @@ gulp.task('libs', function() {
   ], { base: path.js })
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(concat('infrastructure.concat.js'))
-    .pipe(uglify({
-          compress: false
-      }))
+    .pipe(uglify())
     .pipe(rename('infrastructure.min.js'))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(path.js+'/build/'))
@@ -127,7 +122,7 @@ gulp.task('sass', function() {
 /**
  * Tasks
  * */
-gulp.task('build:dev', ['browserify']);
+
 gulp.task('build:source', ['libs','browserify']);
-gulp.task('build:prod', ['libs','browserify-build']);
-gulp.task('default', ['build:dev']);
+gulp.task('build:prod', ['browserify-build', 'libs']);
+gulp.task('default', ['browserify']);
