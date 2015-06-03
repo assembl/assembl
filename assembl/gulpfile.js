@@ -57,9 +57,12 @@ gulp.task('browserify-build', function() {
         .on('error', gutil.log)
         .pipe(source('index.js'))
         .pipe(buffer())
-        .pipe(uglify('app.js',{
-            outSourceMap: true
+        .pipe(sourcemaps.init())
+        .pipe(uglify({
+            outSourceMap: 'app.js.map'
         }))
+        .pipe(rename('app.js'))
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.js+'/build/'))
         .pipe(exit());
 });
