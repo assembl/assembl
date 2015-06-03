@@ -19,7 +19,7 @@ var uglify = require('gulp-uglify');
 
 var path = {
         js: 'static/js',
-        css: ''
+        css: 'static/css'
     }
 
 var b = watchify(browserify({
@@ -114,16 +114,15 @@ gulp.task('tests', function() {
  * not work for now, we need to delete all @include in sass file
  * */
 gulp.task('sass', function() {
-    return gulp.src('./assembl/static/css/**/*.scss')
+    return gulp.src(path.css+'/**/*.scss')
         .pipe(sass())
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
         }))
         //.pipe(minifyCss())
-        .pipe(gulp.dest('./assembl/static/css'));
+        .pipe(gulp.dest(path.css));
 });
-
 
 /**
  * Tasks
