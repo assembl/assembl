@@ -1,0 +1,13 @@
+# Save as .codeclimate.yml (note leading .) in project root directory
+languages:
+  Ruby: true
+  JavaScript: true
+  PHP: true
+  Python: true
+exclude_paths:
+- "assembl/static/widget/*"
+- "test_*.py"
+- "assembl/static/js/*/tests/*"
+- "assembl/alembic/versions/*"
+- "assembl/static/js/lib/annotator/*"
+
