@@ -348,6 +348,7 @@ var navBar = Marionette.LayoutView.extend({
                         template: modalTemplate,
                         className: modalClassName,
                         cancelEl: '.close, .js_close',
+                        submitEl: '.js_subscribe',
 
                         model: model,
                         initialize: function () {
@@ -365,7 +366,7 @@ var navBar = Marionette.LayoutView.extend({
                                 urlNotifications: '/' + Ctx.getDiscussionSlug() + '/user/notifications'
                             }
                         },
-                        subscription: function () {
+                        submit: function (ev) {
                             var that = this;
 
                             if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
@@ -379,7 +380,6 @@ var navBar = Marionette.LayoutView.extend({
                                         // TODO: Is there a simpler way to do this? MAP
                                         self.navBarRight.currentView.ui.joinDiscussion.css('visibility', 'hidden');
                                         self._store.removeItem('needJoinDiscussion');
-                                        that.triggerSubmit();
 
                                         // reload user data and its permissions (so for example now when he clicks on the "reply" button of a message, it should not show "Before you can reply to this message..." anymore)
                                         try { // we try to be a good Single Page Application and update user data without reloading the whole page
@@ -396,7 +396,7 @@ var navBar = Marionette.LayoutView.extend({
                             }
                         },
 
-                        closeModal: function () {
+                        cancel: function () {
                             self._store.removeItem('needJoinDiscussion');
                         }
                     });
