@@ -143,7 +143,7 @@ var MessageList = AssemblPanel.extend({
       this.listenTo(Assembl.vent, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
           that.getPanelWrapper().filterThroughPanelLock(
               function () {
-                  that.addFilterIsRelatedToIdea(idea, only_unread)
+                  that.addFilterIsRelatedToIdea(idea, only_unread);
               }, 'syncWithCurrentIdea');
       });
 
@@ -270,8 +270,8 @@ var MessageList = AssemblPanel.extend({
         var messageFields = this.$('.js_messageSend-body');
 
         function not_empty(b) {
-            return b.value.length != 0;
-        };
+            return b.value.length !== 0;
+        }
 
         messageFields = _.filter(messageFields, not_empty);
 
@@ -293,7 +293,7 @@ var MessageList = AssemblPanel.extend({
      */
     getViewStyleDefById: function (viewStyleId) {
         var retval = _.find(this.ViewStyles, function (viewStyle) {
-            return viewStyle.id == viewStyleId;
+            return viewStyle.id === viewStyleId;
         });
         return retval;
     },
@@ -348,36 +348,38 @@ var MessageList = AssemblPanel.extend({
     },
 
     showInspireMeIfAvailable: function(){
-        var currentIdea = this.getContainingGroup().getCurrentIdea();
-        if ( !currentIdea )
-          return;
-        var that = this;
+      var currentIdea = this.getContainingGroup().getCurrentIdea();
+      if ( !currentIdea ) {
+        return;
+      }
+      var that = this;
 
-        var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(currentIdea.getId());
-        that.ui.inspireMe.addClass('hidden');
-        //that.ui.inspireMe.hide();
-        promise.done(
-            function (data) {
-                //console.log("showInspireMeIfAvailable getWidgetDataAssociatedToIdeaPromise received data: ", data);
-                if ("inspiration_widget_url" in data && data.inspiration_widget_url) {
-                    that.inspireMeLink = data.inspiration_widget_url;
-                    //console.log("change the href of the inspireMe link");
-                    that.ui.inspireMeAnchor.attr("href", that.inspireMeLink);
-                    //that.render();
-                }
-                else
-                    that.inspireMeLink = null;
+      var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(currentIdea.getId());
+      that.ui.inspireMe.addClass('hidden');
+      //that.ui.inspireMe.hide();
+      promise.done(
+          function (data) {
+              //console.log("showInspireMeIfAvailable getWidgetDataAssociatedToIdeaPromise received data: ", data);
+              if ("inspiration_widget_url" in data && data.inspiration_widget_url) {
+                  that.inspireMeLink = data.inspiration_widget_url;
+                  //console.log("change the href of the inspireMe link");
+                  that.ui.inspireMeAnchor.attr("href", that.inspireMeLink);
+                  //that.render();
+              }
+              else {
+                that.inspireMeLink = null;
+              }
 
-                if (!that.inspireMeLink) {
-                    that.ui.inspireMe.addClass('hidden');
-                    //that.ui.inspireMe.hide();
-                }
-                else {
-                    that.ui.inspireMe.removeClass('hidden');
-                    //that.ui.inspireMe.show();
-                }
-            }
-        );
+              if (!that.inspireMeLink) {
+                  that.ui.inspireMe.addClass('hidden');
+                  //that.ui.inspireMe.hide();
+              }
+              else {
+                  that.ui.inspireMe.removeClass('hidden');
+                  //that.ui.inspireMe.show();
+              }
+          }
+      );
     },
 
     /**
@@ -502,7 +504,7 @@ var MessageList = AssemblPanel.extend({
 
       if (previousScrollTarget) {
         if(debug){
-          console.log("scrollToPreviousScrollTarget(): Trying to scroll to:", previousScrollTarget)
+          console.log("scrollToPreviousScrollTarget(): Trying to scroll to:", previousScrollTarget);
         }
         //We may have been called on the first render, so we have to check
         if (this.ui.panelBody.offset() !== undefined) {
@@ -556,14 +558,14 @@ var MessageList = AssemblPanel.extend({
           (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES)) {
         returnedDataOffsets = this._calculateThreadedMessagesOffsets(this.visitorViewData, this.visitorOrderLookupTable, requestedOffsets);
       } else {
-        returnedDataOffsets['offsetStart'] = _.isUndefined(requestedOffsets['offsetStart']) ? 0 : requestedOffsets['offsetStart'];
-        returnedDataOffsets['offsetEnd'] = _.isUndefined(requestedOffsets['offsetEnd']) ? MORE_PAGES_NUMBER : requestedOffsets['offsetEnd'];
-        if (returnedDataOffsets['offsetEnd'] < len) {
+        returnedDataOffsets.offsetStart = _.isUndefined(requestedOffsets.offsetStart) ? 0 : requestedOffsets.offsetStart;
+        returnedDataOffsets.offsetEnd = _.isUndefined(requestedOffsets.offsetEnd) ? MORE_PAGES_NUMBER : requestedOffsets.offsetEnd;
+        if (returnedDataOffsets.offsetEnd < len) {
             // if offsetEnd is bigger or equal than len, do not use it
-            len = returnedDataOffsets['offsetEnd'] + 1;
+            len = returnedDataOffsets.offsetEnd + 1;
         }
         else {
-            returnedDataOffsets['offsetEnd'] = len - 1;
+            returnedDataOffsets.offsetEnd = len - 1;
         }
       }
       if (this.debugPaging) {
@@ -581,36 +583,36 @@ var MessageList = AssemblPanel.extend({
         //It is not possible that we do not find one if there is
         //at least one message
         //Gaby: Never declare an incremental variable "i" out of loop, it's a memory leak
-        for (var i = requestedOffsets['offsetStart']; i >= 0; i--) {
+        for (var i = requestedOffsets.offsetStart; i >= 0; i--) {
           if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
-            returnedDataOffsets['offsetStart'] = i;
+            returnedDataOffsets.offsetStart = i;
             break;
           }
         }
       }
       else {
-        returnedDataOffsets['offsetStart'] = 0;
+        returnedDataOffsets.offsetStart = 0;
       }
-      if (requestedOffsets['offsetEnd'] > (numMessages - 1)) {
-        returnedDataOffsets['offsetEnd'] = (numMessages - 1);
+      if (requestedOffsets.offsetEnd > (numMessages - 1)) {
+        returnedDataOffsets.offsetEnd = (numMessages - 1);
       }
       else {
-        if (data_by_object[order_lookup_table[requestedOffsets['offsetEnd']]]['last_ancestor_id'] === null) {
-          returnedDataOffsets['offsetEnd'] = requestedOffsets['offsetEnd'];
+        if (data_by_object[order_lookup_table[requestedOffsets.offsetEnd]]['last_ancestor_id'] === null) {
+          returnedDataOffsets.offsetEnd = requestedOffsets.offsetEnd;
         }
         else {
           //If the requested offsetEnd isn't a root, find next root message, and stop just
           //before it
 
-          for (var i = requestedOffsets['offsetEnd']; i < numMessages; i++) {
+          for (var i = requestedOffsets.offsetEnd; i < numMessages; i++) {
             if (data_by_object[order_lookup_table[i]]['last_ancestor_id'] === null) {
-              returnedDataOffsets['offsetEnd'] = i;
+              returnedDataOffsets.offsetEnd = i;
               break;
             }
           }
-          if (returnedDataOffsets['offsetEnd'] === undefined) {
+          if (returnedDataOffsets.offsetEnd === undefined) {
             //It's possible we didn't find a root, if we are at the very end of the list
-            returnedDataOffsets['offsetEnd'] = numMessages;
+            returnedDataOffsets.offsetEnd = numMessages;
           }
         }
       }
@@ -633,36 +635,36 @@ var MessageList = AssemblPanel.extend({
         var requestedOffsets = {},
             requestedOffsets;
 
-        requestedOffsets['offsetStart'] = null;
-        requestedOffsets['offsetEnd'] = null;
+        requestedOffsets.offsetStart = null;
+        requestedOffsets.offsetEnd = null;
 
         if (this._offsetStart !== undefined && (messageOffset < this._offsetStart) && (messageOffset > (this._offsetStart - MAX_MESSAGES_IN_DISPLAY))) {
             //If within allowable messages currently onscreen, we "extend" the view
-            requestedOffsets['offsetStart'] = messageOffset;
-            if (this._offsetEnd - requestedOffsets['offsetStart'] <= MAX_MESSAGES_IN_DISPLAY) {
-                requestedOffsets['offsetEnd'] = this._offsetEnd;
+            requestedOffsets.offsetStart = messageOffset;
+            if (this._offsetEnd - requestedOffsets.offsetStart <= MAX_MESSAGES_IN_DISPLAY) {
+                requestedOffsets.offsetEnd = this._offsetEnd;
             }
             else {
-                requestedOffsets['offsetEnd'] = requestedOffsets['offsetStart'] + MAX_MESSAGES_IN_DISPLAY;
+                requestedOffsets.offsetEnd = requestedOffsets.offsetStart + MAX_MESSAGES_IN_DISPLAY;
             }
         }
         else if (this._offsetEnd !== undefined && (messageOffset > this._offsetEnd) && (messageOffset < (this._offsetEnd + MAX_MESSAGES_IN_DISPLAY))) {
             //If within allowable messages currently onscreen, we "extend" the view
-            requestedOffsets['offsetEnd'] = messageOffset;
-            if (requestedOffsets['offsetEnd'] - this._offsetStart <= MAX_MESSAGES_IN_DISPLAY) {
-                requestedOffsets['offsetStart'] = this._offsetStart;
+            requestedOffsets.offsetEnd = messageOffset;
+            if (requestedOffsets.offsetEnd - this._offsetStart <= MAX_MESSAGES_IN_DISPLAY) {
+                requestedOffsets.offsetStart = this._offsetStart;
             }
             else {
-                requestedOffsets['offsetStart'] = requestedOffsets['offsetEnd'] - MAX_MESSAGES_IN_DISPLAY;
+                requestedOffsets.offsetStart = requestedOffsets.offsetEnd - MAX_MESSAGES_IN_DISPLAY;
             }
         }
         else {
             //Else we request an offset centered on the message
-            requestedOffsets['offsetStart'] = messageOffset - Math.floor(MORE_PAGES_NUMBER / 2);
-            if (requestedOffsets['offsetStart'] < 0) {
-                requestedOffsets['offsetStart'] = 0;
+            requestedOffsets.offsetStart = messageOffset - Math.floor(MORE_PAGES_NUMBER / 2);
+            if (requestedOffsets.offsetStart < 0) {
+                requestedOffsets.offsetStart = 0;
             }
-            requestedOffsets['offsetEnd'] = requestedOffsets['offsetStart'] + MORE_PAGES_NUMBER;
+            requestedOffsets.offsetEnd = requestedOffsets.offsetStart + MORE_PAGES_NUMBER;
         }
 
         return requestedOffsets;
@@ -684,12 +686,12 @@ var MessageList = AssemblPanel.extend({
           returnedOffsets = this.calculateMessagesOffsets(requestedOffsets);
       if ((this.currentViewStyle === this.ViewStyles.THREADED) ||
           (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES)) {
-        messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']+1);
+        messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets.offsetStart, returnedOffsets.offsetEnd+1);
       } else {
         if (this.debugPaging) {
           console.log("getMessageIdsToShow() about to slice collection", this.resultMessageIdCollection);
         }
-        messageIdsToShow = this.resultMessageIdCollection.slice(returnedOffsets['offsetStart'], returnedOffsets['offsetEnd']+1);
+        messageIdsToShow = this.resultMessageIdCollection.slice(returnedOffsets.offsetStart, returnedOffsets.offsetEnd+1);
       }
       if (this.debugPaging) {
         console.log("getMessageIdsToShow() called with requestedOffsets:", requestedOffsets, " returning ", _.size(messageIdsToShow), "/", _.size(this.resultMessageIdCollection), " message ids: ", messageIdsToShow);
@@ -765,8 +767,8 @@ var MessageList = AssemblPanel.extend({
           views_promise = this.getRenderedMessagesFlatPromise(messageIdsToShow);
         }
 
-        this._offsetStart = returnedOffsets['offsetStart'];
-        this._offsetEnd = returnedOffsets['offsetEnd'];
+        this._offsetStart = returnedOffsets.offsetStart;
+        this._offsetEnd = returnedOffsets.offsetEnd;
 
         return views_promise.then(function (views) {
             if (that.debugPaging) {
@@ -973,13 +975,13 @@ var MessageList = AssemblPanel.extend({
     getNextMessagesRequestedOffsets: function () {
         var retval = {};
 
-        retval['offsetEnd'] = this._offsetEnd + MORE_PAGES_NUMBER;
+        retval.offsetEnd = this._offsetEnd + MORE_PAGES_NUMBER;
 
-        if ((retval['offsetEnd'] - this._offsetStart) > MAX_MESSAGES_IN_DISPLAY) {
-            retval['offsetStart'] = this._offsetStart + ((retval['offsetEnd'] - this._offsetStart) - MAX_MESSAGES_IN_DISPLAY)
+        if ((retval.offsetEnd - this._offsetStart) > MAX_MESSAGES_IN_DISPLAY) {
+            retval.offsetStart = this._offsetStart + ((retval.offsetEnd - this._offsetStart) - MAX_MESSAGES_IN_DISPLAY)
         }
         else {
-            retval['offsetStart'] = this._offsetStart;
+            retval.offsetStart = this._offsetStart;
         }
         retval['scrollTransitionWasAtOffset'] = this._offsetEnd;
         return retval;
@@ -993,19 +995,19 @@ var MessageList = AssemblPanel.extend({
         var messagesInDisplay,
             retval = {};
 
-        retval['offsetStart'] = this._offsetStart - MORE_PAGES_NUMBER;
-        if (retval['offsetStart'] < 0) {
-            retval['offsetStart'] = 0;
+        retval.offsetStart = this._offsetStart - MORE_PAGES_NUMBER;
+        if (retval.offsetStart < 0) {
+            retval.offsetStart = 0;
         }
 
 
-        if (this._offsetEnd - retval['offsetStart'] > MAX_MESSAGES_IN_DISPLAY) {
-            retval['offsetEnd'] = this._offsetEnd - ((this._offsetEnd - retval['offsetStart']) - MAX_MESSAGES_IN_DISPLAY)
+        if (this._offsetEnd - retval.offsetStart > MAX_MESSAGES_IN_DISPLAY) {
+            retval.offsetEnd = this._offsetEnd - ((this._offsetEnd - retval.offsetStart) - MAX_MESSAGES_IN_DISPLAY)
         }
         else {
-            retval['offsetEnd'] = this._offsetEnd;
+            retval.offsetEnd = this._offsetEnd;
         }
-        retval['scrollTransitionWasAtOffset'] = this._offsetStart;
+        retval.scrollTransitionWasAtOffset = this._offsetStart;
         return retval;
     },
 

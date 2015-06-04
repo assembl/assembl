@@ -3,14 +3,12 @@
 var Marionette = require('../shims/marionette.js'),
     Backbone = require('../shims/backbone.js'),
     _ = require('../shims/underscore.js'),
-    ckeditor = require('ckeditor'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     Permissions = require('../utils/permissions.js'),
     MessageSendView = require('./messageSend.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
-    Agents = require('../models/agents.js'),
     CollectionManager = require('../common/collectionManager.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     $ = require('../shims/jquery.js'),
@@ -170,8 +168,8 @@ var MessageView = Marionette.ItemView.extend({
             metadata_json = this.model.get('metadata_json'), // this property needs to exist to display the inspiration source of a message (creativity widget)
             bodyFormat = this.model.get('bodyMimeType');
 
-        if (this.viewStyle == this.availableMessageViewStyles.PREVIEW || this.viewStyle == this.availableMessageViewStyles.TITLE_ONLY) {
-            if (bodyFormat == "text/html") {
+        if (this.viewStyle === this.availableMessageViewStyles.PREVIEW || this.viewStyle === this.availableMessageViewStyles.TITLE_ONLY) {
+            if (bodyFormat === "text/html") {
                 //Strip HTML from preview
                 bodyFormat = "text/plain";
                 body = this.generateBodyPreview(this.model.get('body'));
@@ -209,7 +207,7 @@ var MessageView = Marionette.ItemView.extend({
             nuggets: _.size(this.model.get('extracts')),
             direct_link_relative_url: direct_link_relative_url,
             share_link_url: share_link_url
-        }
+        };
     },
 
     /**
@@ -223,8 +221,8 @@ var MessageView = Marionette.ItemView.extend({
         if (Ctx.debugRender) {
             console.log("message:render() is firing for message", this.model.id);
         }
-        if (this.template == '#tmpl-message') {
-          if(partialMessage['body']) {
+        if (this.template === '#tmpl-message') {
+          if(partialMessage.body) {
             //Somebody started writing a message and didn't finish, make sure they see it.
             //console.log("Opening in full view because of reply in progress: ", partialMessage['body'])
             this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
@@ -250,7 +248,7 @@ var MessageView = Marionette.ItemView.extend({
             }
 
           Ctx.initTooltips(this.$el);
-          if ( this.viewStyle == this.availableMessageViewStyles.FULL_BODY ){
+          if ( this.viewStyle === this.availableMessageViewStyles.FULL_BODY ){
               Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
               Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
           }
@@ -264,7 +262,7 @@ var MessageView = Marionette.ItemView.extend({
               subject_label: null,
               mandatory_body_missing_msg: i18n.gettext('You did not type a response yet...'),
               messageList: that.messageListView,
-              msg_in_progress_body: partialMessage['body'],
+              msg_in_progress_body: partialMessage.body,
               msg_in_progress_ctx: modelId,
               mandatory_subject_missing_msg: null
           });
@@ -272,27 +270,28 @@ var MessageView = Marionette.ItemView.extend({
 
           this.postRender();
 
-          if (this.replyBoxShown || partialMessage['body']) {
+          if (this.replyBoxShown || partialMessage.body) {
             this.ui.messageReplyBox.removeClass('hidden');
-              if ( this.replyBoxHasFocus )
-                  this.focusReplyBox();
+              if ( this.replyBoxHasFocus ) {
+                this.focusReplyBox();
+              }
           }
           else {
             this.ui.messageReplyBox.addClass('hidden');
           }
 
-          if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY) {
+          if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
               //Only the full body view uses annotator
               this.messageListView.requestAnnotatorRefresh();
           }
 
-          if (this.viewStyle == that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle != this.availableMessageViewStyles.FULL_BODY) {
+          if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle !== this.availableMessageViewStyles.FULL_BODY) {
               this.showReadLess();
           }
 
 
-          if(this.messageListView.isViewStyleThreadedType()
-              && that.messageFamilyView.currentLevel !== 1) {
+          if(this.messageListView.isViewStyleThreadedType() && 
+              that.messageFamilyView.currentLevel !== 1) {
               this.model.getParentPromise().then(function(parentMessageModel){
                   //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
                   if(parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe() ) {
@@ -303,7 +302,7 @@ var MessageView = Marionette.ItemView.extend({
           }
 
 
-          if (this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+          if (this.viewStyle === this.availableMessageViewStyles.PREVIEW) {
 
               var applyEllipsis = function(){
                   /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
@@ -354,7 +353,7 @@ var MessageView = Marionette.ItemView.extend({
                       //console.log("Initializing ellipsis on message", that.model.id);
                       var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
                       //console.log("current_navigation_state:", current_navigation_state);
-                      if ( current_navigation_state == 'about' )
+                      if ( current_navigation_state === 'about' )
                       {
                           that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
                           return;
@@ -380,7 +379,7 @@ var MessageView = Marionette.ItemView.extend({
                   //console.log('Setting listener on navigation:selected');
                   that.listenTo(Assembl.vent, 'navigation:selected', function(navSection) {
                       //console.log('New navigation has just been selected:', navSection);
-                      if(navSection == 'debate') {
+                      if(navSection === 'debate') {
                           //console.log('Updating dotdotdot because debate has just been selected');
                           that.messageListView.requestPostRenderSlowCallback(function () {
                               that.$(".ellipsis").trigger('update.dot');
@@ -456,8 +455,8 @@ var MessageView = Marionette.ItemView.extend({
      * Safe to call multiple times, will not double load annotations.
      */
     loadAnnotations: function () {
-        var that = this,
-            annotationsToLoad;
+        var that = this;
+
         if (this.annotator && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY)) {
             this.getAnnotationsToLoadPromise().done(function (annotationsToLoad) {
                 // Loading the annotations
@@ -529,7 +528,7 @@ var MessageView = Marionette.ItemView.extend({
                                 Assembl.vent.trigger('DEPRECATEDsegmentList:showSegment', segment);
                             }
                             else {
-                                console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ")
+                                console.log("TODO:  NOT implemented yet.  Should pop panel in a lightbox.  See example at the end of Modal object in navigation.js ");
                             }
                         }
 
@@ -566,7 +565,7 @@ var MessageView = Marionette.ItemView.extend({
      * @event
      * param Annotator object
      */
-    onAnnotatorInitComplete: function (annotator) {
+    onAnnotatorInitComplete: function () {
         this.annotator = annotator;
 
         //Normally render has been called by this point, no need for a full render
@@ -576,7 +575,7 @@ var MessageView = Marionette.ItemView.extend({
     /**
      * @event
      */
-    onAnnotatorDestroy: function (annotator) {
+    onAnnotatorDestroy: function () {
         this.annotator = null;
 
         // Resets loaded annotations to initial
@@ -669,7 +668,7 @@ var MessageView = Marionette.ItemView.extend({
       var el = this.replyView.ui.messageBody;
       if ( el.length ){
         if(!el.is(':visible')) {
-          console.error("Element not yet visible...")
+          console.error("Element not yet visible...");
         }
 
         setTimeout(function () {
@@ -727,20 +726,20 @@ var MessageView = Marionette.ItemView.extend({
      * You need to re-render after this
      */
     setViewStyle: function (style) {
-        if (style == this.availableMessageViewStyles.TITLE_ONLY) {
+        if (style === this.availableMessageViewStyles.TITLE_ONLY) {
             this.$el.removeClass(this.availableMessageViewStyles.FULL_BODY.id);
             this.$el.removeClass(this.availableMessageViewStyles.PREVIEW.id);
             this.$el.addClass(this.availableMessageViewStyles.TITLE_ONLY.id);
             this.viewStyle = style;
         }
-        else if (style == this.availableMessageViewStyles.FULL_BODY) {
+        else if (style === this.availableMessageViewStyles.FULL_BODY) {
             this.$el.removeClass(this.availableMessageViewStyles.TITLE_ONLY.id);
             this.$el.removeClass(this.availableMessageViewStyles.PREVIEW.id);
             this.$el.addClass(this.availableMessageViewStyles.FULL_BODY.id);
             this.viewStyle = style;
 
         }
-        else if (style == this.availableMessageViewStyles.PREVIEW) {
+        else if (style === this.availableMessageViewStyles.PREVIEW) {
             this.$el.removeClass(this.availableMessageViewStyles.TITLE_ONLY.id);
             this.$el.removeClass(this.availableMessageViewStyles.FULL_BODY.id);
             this.$el.addClass(this.availableMessageViewStyles.PREVIEW.id);
@@ -774,9 +773,7 @@ var MessageView = Marionette.ItemView.extend({
         this.replyBoxShown = true;
         this.render();
       }
-      else {
-        //Message is already in the right state
-      }
+
       var read = this.model.get('read');
       if (read === false) {
         this.model.setRead(true);
@@ -792,9 +789,6 @@ var MessageView = Marionette.ItemView.extend({
         this.setViewStyle(this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this));
         this.replyBoxShown = false;
         this.render();
-      }
-      else {
-        //Message is already in the right state
       }
     },
 
@@ -813,8 +807,9 @@ var MessageView = Marionette.ItemView.extend({
         if(e) {
           var target = $(e.target);
           if(target.is('a') && !(
-              target.hasClass('js_readMore') || target.hasClass('js_readLess')))
+              target.hasClass('js_readMore') || target.hasClass('js_readLess'))) {
             return;
+          }
           e.stopPropagation();
           e.preventDefault();
         }
@@ -914,8 +909,12 @@ var MessageView = Marionette.ItemView.extend({
               : ('selection' in document)
               ? document.selection
                   : null;
-          if ('removeAllRanges' in selection) selection.removeAllRanges();
-          else if ('empty' in selection) selection.empty();
+          if ('removeAllRanges' in selection) {
+            selection.removeAllRanges();
+          }
+          else if ('empty' in selection) {
+            selection.empty();
+          }
         })();
       }
 
