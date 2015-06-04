@@ -565,7 +565,7 @@ var MessageView = Marionette.ItemView.extend({
      * @event
      * param Annotator object
      */
-    onAnnotatorInitComplete: function () {
+    onAnnotatorInitComplete: function (annotator) {
         this.annotator = annotator;
 
         //Normally render has been called by this point, no need for a full render
@@ -575,7 +575,7 @@ var MessageView = Marionette.ItemView.extend({
     /**
      * @event
      */
-    onAnnotatorDestroy: function () {
+    onAnnotatorDestroy: function (annotator) {
         this.annotator = null;
 
         // Resets loaded annotations to initial
@@ -775,8 +775,10 @@ var MessageView = Marionette.ItemView.extend({
       }
 
       var read = this.model.get('read');
-      if (read === false) {
-        this.model.setRead(true);
+      if (read === false && Ctx.getCurrentUser().isUnknownUser() === false) {
+        console.log(Ctx.getCurrentUser().isUnknownUser());
+        var target = this.$('.readUnreadIndicator');
+        this.model.setRead(true, target);
       }
     },
 
