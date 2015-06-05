@@ -19,8 +19,7 @@
         "preferred_email": false,
         "was_created_on_current_discussion": false,
         "is_first_visit": false,
-        "email_accounts": [":default"],
-        "identity_accounts": [":default"]
+        "accounts": [":default"]
     },
     "User": {
         "@extends": "AgentProfile",

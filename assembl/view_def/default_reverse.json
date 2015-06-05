@@ -13,6 +13,7 @@
         "real_name": "name",
         "post_count": false,
         "email_accounts": false,
+        "accounts": false,
         "identity_accounts": false,
         "was_created_on_current_discussion": false,
         "is_first_visit": false,
