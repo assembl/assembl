@@ -53,6 +53,8 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 ._*
 .sass-cache
 assembl/static/css/*.css
+/var/dogpile_cache.*
+/.anaconda
 
 # ruby
 vendor/
@@ -62,8 +64,10 @@ Gemfile.lock
 
 # node
 node_modules/
-assembl/static/js/bower/
-assembl/widget/creativity/bower_components/
+/assembl/static/js/bower/
+/assembl/static/widget/*/bower_components/
+/assembl/static/widget/*/assembl/static/js/bower
+/assembl/static/js/build
 
 # Vagrant
 .bash_profile
@@ -88,3 +92,6 @@ assembl-virtuoso-backup.bp
 #test 
 junit.xml
 htmlcov/
+
+#tox
+.tox
