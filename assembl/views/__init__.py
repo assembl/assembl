@@ -4,6 +4,7 @@ import os.path
 import codecs
 from collections import defaultdict
 
+import simplejson as json
 from pyramid.view import view_config
 from pyramid.response import Response
 from velruse.exceptions import CSRFError
@@ -11,7 +12,7 @@ from pyramid.httpexceptions import (
     HTTPException, HTTPInternalServerError, HTTPMovedPermanently,
     HTTPBadRequest)
 from pyramid.i18n import TranslationStringFactory
-from pyramid.settings import asbool
+from pyramid.settings import asbool, aslist
 
 from ..lib.json import json_renderer_factory
 from ..lib import config
@@ -98,6 +99,7 @@ def get_default_context(request):
             os.path.dirname(__file__), '..', 'locale',
             get_language(localizer.locale_name), 'LC_MESSAGES', 'assembl.jed.json')
     assert os.path.exists(jedfilename)
+    providers = aslist(config.get('login_providers'))
 
     return dict(
         default_context,
@@ -115,10 +117,8 @@ def get_default_context(request):
         help_url=help_url,
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
         raven_url=config.get('raven_url') or '',
+        providers=json.dumps(providers),
         translations=codecs.open(jedfilename, encoding='utf-8').read()
-        #TODO:  batch strip json not from js files
-        #translations=json.dumps({
-        #    id:localizer.translate(_(id)) for id in JS_MESSAGE_IDS}))
         )
 
 
