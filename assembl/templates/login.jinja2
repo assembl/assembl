@@ -35,19 +35,9 @@
   {% endfor %}
 
   {% if name == "openid" %}
-  		{# Need to be refactored #}
-      {#<div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />#}
+      <div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />
   {% endif %}
-  {% if name == "google" %}
-     <button type="submit" class="g-bg mbs">{{title}}</button>
-  {% endif %}
-  {% if name == "twitter" %}
-     <button type="submit" class="twi-bg mbs">{{title}}</button>
-  {% endif %}
-  {% if name == "facebook" %}
-     <button type="submit" class="fb-bg mbs">{{title}}</button>
-  {% endif %}
-
+     <button type="submit" class="{{name}}-bg mbs">{{title}}</button>
   </form>
   {% endif %}
 {% endmacro %}
@@ -73,7 +63,8 @@
             {{form('live', gettext('Login with Windows Live'), false)}}
             {{form('github', gettext('Login with Github'), false)}}
             {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
-            {{form('openid', gettext('Login with OpenID'), true)}}
+            {# Need to be refactored #}
+            {# {form('openid', gettext('Login with OpenID'), true)} #}
         </div>
 
         

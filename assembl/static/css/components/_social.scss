@@ -1,5 +1,5 @@
 /* Facebook */
-.fb-bg {
+.facebook-bg {
   font-family: $baseFontFamily;
   background-color: #3b5998;
   display: block;
@@ -29,16 +29,16 @@
   }
 }
 
-.fb-bg:hover {
+.facebook-bg:hover {
   cursor: pointer;
 }
 
-.fb-bg:active {
+.facebook-bg:active {
   background: #354f88;
 }
 
 /* Twitter */
-.twi-bg {
+.twitter-bg {
   background-color: #45b0e3;
   display: block;
   height: 37px;
@@ -67,16 +67,16 @@
   }
 }
 
-.twi-bg:hover {
+.twitter-bg:hover {
   cursor: pointer;
 }
-
-.twi-bg:active {
+t
+.twitter-bg:active {
   background: #40a2d1;
 }
 
 /* Google+ */
-.g-bg {
+.google-bg {
   background-color: #de4c34;
   display: block;
   height: 37px;
@@ -105,11 +105,11 @@
   }
 }
 
-.g-bg:hover {
+.google-bg:hover {
   cursor: pointer;
 }
 
-.g-bg:active {
+.google-bg:active {
   background: #ce3e26;
 }
 
