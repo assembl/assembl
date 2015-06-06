@@ -177,7 +177,7 @@ var NavigationView = AssemblPanel.extend({
                     nav: true
                 });
                 this.debate.show(idealist);
-                if ( this.getContainingGroup().getCurrentIdea() ) {
+                if ( this.getGroupState().get('currentIdea') ) {
                     this.getContainingGroup().resetDebateState();
                 }
                 else {

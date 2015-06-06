@@ -354,7 +354,6 @@ var SegmentListPanel = AssemblPanel.extend({
      */
     showSegment: function (segment) {
         //TODO: add a new behavior for this (popin...)
-        //Ctx.openPanel(assembl.segmentListPanel);
         this.highlightSegment(segment);
     },
 

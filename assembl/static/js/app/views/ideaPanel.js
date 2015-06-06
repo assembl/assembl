@@ -39,11 +39,11 @@ var IdeaPanel = AssemblPanel.extend({
         this.editingTitle = false;
 
         if (!this.model) {
-            this.model = null;
+            this.model = this.getGroupState().get('currentIdea');
         }
 
-        this.listenTo(this.getContainingGroup(), "idea:set", function (idea) {
-            that.setIdeaModel(idea);
+        this.listenTo(this.getGroupState(), "change:currentIdea", function (state, currentIdea) {
+          that.setIdeaModel(currentIdea);
         });
 
         this.listenTo(Assembl.vent, 'DEPRECATEDideaPanel:showSegment', function (segment) {
@@ -377,17 +377,11 @@ var IdeaPanel = AssemblPanel.extend({
                     that.setIdeaModel(model, reason);
                 });
                 if (this.model.id) {
-                    //Ctx.openPanel(assembl.ideaPanel);
-                    //console.log("ideaPanel::setIdeaModel() fetching models");
-                    //this.populateAssociatedWidgetData();
-
                     this.fetchModelAndRender();
                 }
             } else {
                 //TODO: More sophisticated behaviour here, depending
                 //on if the panel was opened by selection, or by something else.
-                //app.closePanel(app.ideaPanel);
-                //this.resetView();
               //If we don't call render here, the panel will not refresh if we delete an idea.
               this.render();
             }

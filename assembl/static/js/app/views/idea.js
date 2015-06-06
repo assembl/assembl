@@ -36,19 +36,22 @@ var IdeaView = Backbone.View.extend({
     initialize: function (options, view_data) {
         var that = this;
         this.view_data = view_data;
-        this.parentView = options.parentView;
+        this.parentPanel = options.parentPanel;
+        if(this.parentPanel === undefined) {
+          throw new Error("parentPanel is mandatory");
+        }
         if(options.groupContent) {
           this._groupContent = options.groupContent;
         }
         else {
-          throw new Error("groupContent must be passes in constructor options");
+          throw new Error("groupContent must be passed in constructor options");
         }
 
         this.listenTo(this.model, 'change change:inNextSynthesis', this.render);
         this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
-        this.listenTo(this._groupContent, 'idea:set', function (idea, reason, doScroll) {
-            that.onIsSelectedChange(idea, reason, doScroll);
+        this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function (state, currentIdea) {
+          that.onIsSelectedChange(currentIdea);
         });
     },
 
@@ -86,7 +89,8 @@ var IdeaView = Backbone.View.extend({
 
         this.$el.addClass('idealist-item');
         Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-        this.onIsSelectedChange(this._groupContent.getCurrentIdea());
+
+        this.onIsSelectedChange(this.parentPanel.getGroupState().get('currentIdea'));
 
         if (data.isOpen === true) {
             this.$el.addClass('is-open');
@@ -107,7 +111,7 @@ var IdeaView = Backbone.View.extend({
         Ctx.initTooltips(this.$el);
         var rendered_children = [];
         _.each(data['children'], function (idea, i) {
-            var ideaView = new IdeaView({model: idea, groupContent: that._groupContent}, view_data);
+            var ideaView = new IdeaView({model: idea, parentPanel: that.parentPanel, groupContent: that._groupContent}, view_data);
             rendered_children.push(ideaView.render().el);
         });
         this.$('.idealist-children').append(rendered_children);
@@ -134,7 +138,7 @@ var IdeaView = Backbone.View.extend({
     /**
      * @event
      */
-    onIsSelectedChange: function (idea, reason, doScroll) {
+    onIsSelectedChange: function (idea) {
         //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
         if (idea === this.model) {
             this.$el.addClass('is-selected');
@@ -185,7 +189,7 @@ var IdeaView = Backbone.View.extend({
         else {
           //messageListView.triggerMethod('messageList:clearAllFilters');
         }
-        if (this.model === this._groupContent.getCurrentIdea()) {
+        if (this.model === this.parentPanel.getGroupState().get('currentIdea')) {
             // We want to avoid the "All messages" state,
             // unless the user clicks explicitly on "All messages".
             // TODO benoitg: Review this decision.

@@ -117,16 +117,16 @@ var MessageList = AssemblPanel.extend({
               }
           );
 
-      this.listenTo(this.getContainingGroup(), 'idea:set', function (idea) {
-          if (idea) {
-              if (idea.id) {
-                  if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
+      this.listenTo(this.getGroupState(), "change:currentIdea", function (state, currentIdea) {
+          if (currentIdea) {
+              if (currentIdea.id) {
+                  if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
                       //Filter is already in sync
                       //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
                       return;
                   }
               } else {
-                  that.listenToOnce(idea, "acquiredId", function () {
+                  that.listenToOnce(currentIdea, "acquiredId", function () {
                       that.ideaChanged();
                   });
                   return;
@@ -258,7 +258,7 @@ var MessageList = AssemblPanel.extend({
     numRenderInhibitedDuringRendering: 0,
 
 
-    storedMessageListConfig: Ctx.getMessageListConfigFromStorage(),
+    storedMessageListConfig: Ctx.DEPRECATEDgetMessageListConfigFromStorage(),
 
     inspireMeLink: null,
 
@@ -310,12 +310,10 @@ var MessageList = AssemblPanel.extend({
      * Synchronizes the panel with the currently selected idea (possibly none)
      */
     syncWithCurrentIdea: function () {
-      var currentIdea = this.getContainingGroup().getCurrentIdea(),
+      var currentIdea = this.getGroupState().get('currentIdea'),
       filterValue,
       snapshot = this.currentQuery.getFilterConfigSnapshot();
 
-      //Ctx.openPanel(this);
-      //!currentIdea?filterValue=null:filterValue=currentIdea.getId();
       //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea, this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, filterValue));
       //TODO benoitg - this logic should really be in postQuery, not here - 2014-07-29
       if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
@@ -335,7 +333,6 @@ var MessageList = AssemblPanel.extend({
         if (currentIdea) {
           this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
           this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId());
-          //app.openPanel(app.messageList);
         }
         if(this.currentQuery.isFilterConfigSameAsSnapshot(snapshot) === false) {
           if (Ctx.debugRender) {
@@ -348,7 +345,7 @@ var MessageList = AssemblPanel.extend({
     },
 
     showInspireMeIfAvailable: function(){
-      var currentIdea = this.getContainingGroup().getCurrentIdea();
+      var currentIdea = this.getGroupState().get('currentIdea');
       if ( !currentIdea ) {
         return;
       }
@@ -1105,7 +1102,7 @@ var MessageList = AssemblPanel.extend({
         'show_target_context_with_choice': true
       };
 
-      var currentIdea = this.getContainingGroup().getCurrentIdea();
+      var currentIdea = this.getGroupState().get('currentIdea');
 
       if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
         options.reply_idea = currentIdea;
@@ -1732,7 +1729,7 @@ var MessageList = AssemblPanel.extend({
       }
       if (this.storedMessageListConfig.viewStyleId != viewStyle.id) {
           this.storedMessageListConfig.viewStyleId = viewStyle.id;
-          Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
+          Ctx.DEPRECATEDsetMessageListConfigToStorage(this.storedMessageListConfig);
       }
       //console.log("setViewStyle finished, currentViewStyle:", this.currentViewStyle, "stored viewStyleId: ", this.storedMessageListConfig.viewStyleId);
     },
@@ -1790,7 +1787,7 @@ var MessageList = AssemblPanel.extend({
 
         if (this.storedMessageListConfig.messageStyleId != messageViewStyle.id) {
             this.storedMessageListConfig.messageStyleId = messageViewStyle.id;
-            Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
+            Ctx.DEPRECATEDsetMessageListConfigToStorage(this.storedMessageListConfig);
         }
     },
 

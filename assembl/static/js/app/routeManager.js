@@ -127,7 +127,7 @@ var routeManager = Marionette.Object.extend({
             //TODO: fix this horrible hack
             //We really need to address panels explicitely
             Assembl.vent.trigger("navigation:selected", 'debate');
-            Assembl.vent.trigger('ideaList:selectIdea', id, "from_url", true);
+            Assembl.vent.trigger('DEPRECATEDideaList:selectIdea', id, "from_url", true);
         }, 0);
         //TODO: fix this horrible hack that prevents calling
         //showMessageById over and over.

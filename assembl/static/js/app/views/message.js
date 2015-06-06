@@ -483,7 +483,7 @@ var MessageView = Marionette.ItemView.extend({
      */
     showSegmentByAnnotation: function (annotation) {
         var that = this,
-            currentIdea = this.messageListView.getContainingGroup().getCurrentIdea(),
+            currentIdea = this.messageListView.getGroupState().get('currentIdea'),
             collectionManager = new CollectionManager();
         if (annotation.idIdea == null || (
             currentIdea != null && currentIdea.id == annotation.idIdea))

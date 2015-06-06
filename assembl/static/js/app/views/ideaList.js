@@ -105,7 +105,7 @@ var IdeaList = AssemblPanel.extend({
             that.scrollInterval = null;
         });
 
-        this.listenTo(Assembl.vent, 'ideaList:selectIdea', function (ideaId, reason, doScroll) {
+        this.listenTo(Assembl.vent, 'DEPRECATEDideaList:selectIdea', function (ideaId, reason, doScroll) {
             collectionManager.getAllIdeasCollectionPromise()
                 .done(function (allIdeasCollection) {
                 var idea = allIdeasCollection.get(ideaId);
@@ -120,13 +120,11 @@ var IdeaList = AssemblPanel.extend({
 
         this.listenTo(this, 'scrollToIdea', this.onScrollToIdea);
 
-
-        // why is there idea:set and ideaList:selectIdea ?
-        this.listenTo(this.getContainingGroup(), 'idea:set', function (idea, reason, doScroll) {
-            //console.log("ideaList heared a idea:set event");
-            if (idea && doScroll) {
-                that.onScrollToIdea(idea);
-            }
+        this.listenTo(this.getGroupState(), "change:currentIdea", function (state, currentIdea) {
+          //console.log("ideaList heard a change:currentIdea event");
+          if (currentIdea) {
+              that.onScrollToIdea(currentIdea);
+          }
         });
 
         $('html').on('dragover', function(e){
@@ -221,6 +219,7 @@ var IdeaList = AssemblPanel.extend({
           _.each(roots, function (idea) {
               var ideaView = new IdeaView({
                   model: idea,
+                  parentPanel: that,
                   groupContent: that.getContainingGroup(),
                   parentView: that
               }, view_data);
@@ -231,6 +230,7 @@ var IdeaList = AssemblPanel.extend({
           //sub menu other
           var OtherView = new OtherInIdeaListView({
               model: rootIdea,
+              parentPanel: that,
               groupContent: that.getContainingGroup()
           });
           that.otherView.show(OtherView);
@@ -238,6 +238,7 @@ var IdeaList = AssemblPanel.extend({
           // Synthesis posts pseudo-idea
           var synthesisView = new SynthesisInIdeaListView({
               model: rootIdea,
+              parentPanel: that,
               groupContent: that.getContainingGroup()
           });
           that.synthesisView.show(synthesisView);
@@ -245,6 +246,7 @@ var IdeaList = AssemblPanel.extend({
           // Orphan messages pseudo-idea
           var orphanView = new OrphanMessagesInIdeaListView({
               model: rootIdea,
+              parentPanel: that,
               groupContent: that.getContainingGroup()
           });
           that.orphanView.show(orphanView);
@@ -252,6 +254,7 @@ var IdeaList = AssemblPanel.extend({
           // All posts pseudo-idea
           var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
               model: rootIdea,
+              parentPanel: that,
               groupContent: that.getContainingGroup()
           });
           that.allMessagesView.show(allMessagesInIdeaListView);
@@ -379,7 +382,7 @@ var IdeaList = AssemblPanel.extend({
      * If no idea is selected, add it at the root level ( no parent )
      */
     addChildToSelected: function () {
-        var currentIdea = this.getContainingGroup().getCurrentIdea(),
+        var currentIdea = this.getGroupState().get('currentIdea'),
             newIdea = new Idea.Model(),
             that = this,
             collectionManager = new CollectionManager();

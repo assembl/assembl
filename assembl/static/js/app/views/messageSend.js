@@ -259,7 +259,7 @@ var messageSend = Marionette.ItemView.extend({
                     if (el.length > 0)
                         el[0].text = '';
 
-                    var current_idea = that.messageList.getContainingGroup().getCurrentIdea();
+                    var current_idea = that.messageList.getGroupState().get('currentIdea');
                     // if the user was top-posting into the current idea or answering to someone or top-posting from the general conversation context, scroll to his message
                     if ( reply_idea_id || reply_message_id || (!current_idea && !reply_message_id && !reply_idea_id) ) {
                       Assembl.vent.trigger('messageList:showMessageById', model.id);
