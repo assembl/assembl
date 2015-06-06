@@ -1,3 +1,4 @@
+import pytest
 
 def test_front_page(browser, test_server, db_default_data):
     """Test using real browser."""
@@ -5,7 +6,8 @@ def test_front_page(browser, test_server, db_default_data):
     assert browser.title == 'Assembl'
 
 
-def test_jasmine(browser, test_server, discussion, test_session):
+@pytest.mark.xfail
+def test_mocha(browser, test_server, discussion, test_session):
     """Test using real browser."""
     from jasmine_runner.commands import run_specs_with_browser
     url = "%s/%s/test" % (test_server.url, discussion.slug)
