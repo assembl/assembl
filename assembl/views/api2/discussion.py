@@ -1,11 +1,14 @@
 from functools import partial
 import re
 import base64
+from cStringIO import StringIO
 from os import urandom
+from itertools import chain
 
 from pyramid.response import Response
 from pyramid.view import view_config
-from pyramid.httpexceptions import (HTTPOk, HTTPBadRequest, HTTPUnauthorized)
+from pyramid.httpexceptions import (
+    HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable)
 from pyramid_dogpile_cache import get_region
 from pyramid.security import authenticated_userid
 from pyramid.renderers import JSONP_VALID_CALLBACK
@@ -190,3 +193,39 @@ def user_private_view_jsonld(request):
     else:
         content_type = "application/ld+json"
     return Response(body=jdata, content_type=content_type)
+
+
+pygraphviz_formats = {
+    'text/vnd.graphviz': 'dot',
+    'image/gif': 'gif',
+    'application/vnd.hp-hpgl': 'hpgl',
+    'image/jpeg': 'jpeg',
+    'application/vnd.mif': 'mif',
+    'application/vnd.hp-pcl': 'pcl',
+    'application/pdf': 'pdf',
+    'image/x-pict': 'pic',
+    'image/png': 'png',
+    'application/postscript': 'ps',
+    'image/svg+xml': 'svg',
+    'model/vrml': 'vrml',
+}
+
+@view_config(context=InstanceContext, name="mindmap",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_READ)
+def as_mind_map(request):
+    for mimetype in request.GET.getall('mimetype'):
+        mimetype = mimetype.encode('utf-8')
+        if mimetype in pygraphviz_formats:
+            break
+    else:
+        mimetype = request.accept.best_match(pygraphviz_formats.keys())
+        if not mimetype:
+            raise HTTPNotAcceptable("Not known to pygraphviz: "+mimetype)
+    discussion = request.context._instance
+    G = discussion.as_mind_map()
+    G.layout(prog='twopi')
+    io=StringIO()
+    G.draw(io, format=pygraphviz_formats[mimetype])
+    io.seek(0)
+    return Response(body_file=io, content_type=mimetype)
