@@ -1,13 +1,14 @@
 from abc import abstractmethod, ABCMeta
 
-from sqlalchemy import (Column, Boolean)
+from sqlalchemy import (
+    Column, DateTime, Integer, UniqueConstraint, event, Table, ForeignKey)
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
 from ..lib.abc import abstractclassmethod
 from ..lib.sqla import (
     Base, TimestampedBase, get_metadata, get_session_maker,
     get_named_object, get_database_id, Tombstone, UPDATE_OP, DELETE_OP)
-from ..lib.history_meta import declare_history_mappers
+from ..lib.history_mixin import HistoryMixin
 
 
 class DeclarativeAbstractMeta(DeclarativeMeta, ABCMeta):
@@ -48,20 +49,6 @@ class DiscussionBoundBase(Base):
 
     def tombstone(self):
         return DiscussionBoundTombstone(self)
-
-
-class Tombstonable(object):
-    # Marker class for objects with the tombstone flag
-    is_tombstone = Column(Boolean, server_default='0', default=False)
-
-    @classmethod
-    def base_conditions(cls, alias=None, alias_maker=None):
-        return (cls.tombstone_condition(alias),)
-
-    @classmethod
-    def tombstone_condition(cls, alias=None):
-        cls = alias or cls
-        return cls.is_tombstone == False
 
 
 class DiscussionBoundTombstone(Tombstone):
@@ -210,5 +197,3 @@ from .edgesense_drupal import (
     SourceSpecificAccount,
     SourceSpecificPost,
 )
-
-declare_history_mappers()

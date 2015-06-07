@@ -459,7 +459,7 @@ def test_inspiration_widget(
 def test_voting_widget(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,
         criterion_3, admin_user, participant1_user, lickert_range,
-        test_session):
+        test_session, request):
     # Post the initial configuration
     db = discussion.db
     criteria = (criterion_1, criterion_2, criterion_3)
@@ -559,6 +559,13 @@ def test_voting_widget(
     ideas_data = test_app.get('/api/v1/discussion/%d/ideas' % discussion.id)
     assert ideas_data.status_code == 200
     print ideas_data
+    def fin():
+        print "finalizer test_voting_widget"
+        for vote in db.query(AbstractIdeaVote).filter_by(voter_id=admin_user.id):
+            vote.delete()
+        test_session.flush()
+    request.addfinalizer(fin)
+
     # TODO Look for an idea with 
     # "widget_data": [{
     #   "widget": "/widget/vote/?config=local:Widget/4",

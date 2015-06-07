@@ -124,6 +124,7 @@
         "topic": true
     },
     "Idea": {
+        "original_uri": true,
         "longTitle": "long_title",
         "shortTitle": "short_title",
         "definition": true,
@@ -157,6 +158,7 @@
         "@extends": "Idea"
     },
     "IdeaLink": {
+        "original_uri": true,
         "target": true,
         "source": true,
         "order": true

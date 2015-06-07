@@ -44,6 +44,7 @@ var IdeaModel = Base.Model.extend({
         isOpen: true,
         hidden: false,
         hasCheckbox: false,
+        original_uri: null,
         is_tombstone: false,
         featured: false,
         active: false,

@@ -202,12 +202,12 @@
     "Idea": {
         "longTitle": "long_title",
         "shortTitle": "short_title",
+        "original_uri": true,
         "definition": true,
         "creationDate": "creation_date",
         "order": "&get_order_from_first_parent",
         "discussion": false,
         "hidden": true,
-        "is_tombstone": true,
         "parents": true,
         "is_tombstone": true,
         "parentId": "&get_first_parent_uri",
@@ -239,6 +239,7 @@
         "num_synthesis_posts": true
     },
     "IdeaLink": {
+        "original_uri": true,
         "target": true,
         "source": true,
         "is_tombstone": true,
@@ -264,7 +265,6 @@
         "introduction": true,
         "conclusion": true,
         "is_next_synthesis": true,
-        "published_in_post": true
         "published_in_post": true,
         "ideas": [":tombstones"]
     },
@@ -352,6 +352,7 @@
         "criterion": true,
         "widget": true,
         "value": true,
+        "original_uri": true,
         "voter": true
     },
     "BinaryIdeaVote": {

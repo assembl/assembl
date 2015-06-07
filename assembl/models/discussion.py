@@ -405,9 +405,9 @@ class Discussion(DiscussionBoundBase):
         from datetime import datetime
         from assembl.models import Idea, IdeaLink, RootIdea
         ideas = self.db.query(Idea).filter_by(
-            is_tombstone=False, discussion_id=self.id).all()
+            tombstone_date=None, discussion_id=self.id).all()
         links = self.db.query(IdeaLink).filter_by(
-            is_tombstone=False).join(Idea, IdeaLink.source_id==Idea.id).filter(
+            tombstone_date=None).join(Idea, IdeaLink.source_id==Idea.id).filter(
             Idea.discussion_id==self.id).all()
         G = pygraphviz.AGraph()
         G.graph_attr['overlap']='prism'

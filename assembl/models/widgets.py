@@ -238,7 +238,7 @@ class BaseIdeaCollection(CollectionDefinition):
 class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
     descendants = text("""SELECT id from (SELECT target_id as id FROM (
                 SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
-                    target_id, source_id FROM idea_idea_link WHERE is_tombstone=0
+                    target_id, source_id FROM idea_idea_link WHERE tombstone_date IS NULL
                 ) il
             WHERE il.source_id = :base_idea_id
             UNION SELECT :base_idea_id as id) recid"""

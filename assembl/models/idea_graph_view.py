@@ -106,7 +106,7 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
         idea_alias = alias_maker.alias_from_relns(cls.idea)
         # Assume tombstone status of target is similar to source, for now.
         conditions = [(idea_assoc.idea_id == idea_alias.id),
-                      (idea_alias.is_tombstone == 0)]
+                      (idea_alias.tombstone_date == None)]
         if discussion_id:
             conditions.append((idea_alias.discussion_id == discussion_id))
         return [
@@ -168,7 +168,7 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
         idea_link_alias = alias_maker.alias_from_relns(cls.idea_link)
         # Assume tombstone status of target is similar to source, for now.
         conditions = [(idea_link_assoc.idea_link_id == idea_link_alias.id),
-                      (idea_link_alias.is_tombstone == 0)]
+                      (idea_link_alias.tombstone_date == None)]
         if discussion_id:
             conditions.extend(cls.get_discussion_conditions(
                 discussion_id, alias_maker))

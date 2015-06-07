@@ -178,6 +178,7 @@ def save_idea(request):
                 current_parent = parent_link
             parent_link.db.expire(parent_link.source, ['target_links'])
             parent_link.source.send_to_changes()
+            parent_link.db.flush()
             
         if current_parent is None:
             link = IdeaLink(source=parent, target=idea, order=order)

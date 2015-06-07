@@ -272,7 +272,10 @@ class AssemblClassPatternExtractor(ClassPatternExtractor):
             if isinstance(column, RelationshipProperty):
                 column = self.property_as_reference(column, alias_maker)
             elif column.foreign_keys:
-                column = self.column_as_reference(column)
+                try:
+                    column = self.column_as_reference(column)
+                except AssertionError:
+                    return None
         qmp = qmp.clone_with_defaults(
             subject_pattern, column, for_graph.name, name, None, rdf_sections)
         if not qmp.exclude_base_condition:
@@ -360,7 +363,7 @@ class AssemblQuadStorageManager(object):
     sections = {section.name: section for section in chain(*(
         storage.sections for storage in storages))}
     global_graph = QUADNAMES.global_graph
-    current_discussion_storage_version = 8
+    current_discussion_storage_version = 9
 
     def __init__(self, session=None, nsm=None):
         self.session = session or get_session()
