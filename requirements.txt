@@ -32,12 +32,12 @@ beautifulsoup4==4.3.2
 billiard==3.3.0.20
 celery==3.1.18
 chroma==0.2.0
-cffi==1.0.3
+cffi==1.1.0
 colander==1.0
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 cov-core==1.15.0
 coverage==3.7.1
-cryptography==0.9
+cryptography==0.9.1
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 dogpile.cache==0.5.6
 dogpile.core==0.4.1
@@ -47,7 +47,9 @@ enum34==1.0.4
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
 greenlet==0.4.7
 html5lib==0.99999
+idna==2.0
 imaplib2==2.43.0
+ipaddress==1.0.7
 isodate==0.5.1
 iso639==0.1.1
 iso8601==0.1.10
@@ -58,6 +60,7 @@ lingua==3.10
 lxml==3.4.4
 meld3==1.0.2
 mock==1.0.1
+ndg_httpsclient==0.4.0
 oauthlib==0.7.2
 paramiko==1.15.2
 pinocchio==0.4.2
@@ -65,6 +68,7 @@ polib==1.0.6
 premailer==2.9.0
 py==1.4.28
 pyOpenSSL==0.15.1
+pyasn1==0.1.7
 pycparser==2.13
 pycrypto==2.6.1
 -e git+https://github.com/michaelherold/pyIsEmail@v1.3.0#egg=pyIsEmail
@@ -75,7 +79,7 @@ pyparsing==2.0.3
 pygraphviz==1.2
 pyramid==1.5.7
 pyramid-beaker==0.8
-pyramid-debugtoolbar==2.3
+pyramid-debugtoolbar==2.4
 -e git+https://github.com/jvanasco/pyramid_debugtoolbar_ajax.git#egg=pyramid-debugtoolbar-ajax
 pyramid_dogpile_cache==0.0.4
 pyramid-jinja2==2.5
@@ -85,7 +89,7 @@ pyramid-tm==0.12
 pytest==2.7.1
 pytest-cov==1.8.1
 pytest-localserver==0.3.4
-pytest-mock==0.5.0
+pytest-mock==0.6.0
 pytest-splinter==1.3.6
 python-openid==2.2.5
 pytz==2015.4
@@ -100,8 +104,8 @@ repoze.lru==0.6
 repoze.sendmail==4.1  # rq.filter: <4.2
 requests==2.7.0
 requests-oauthlib==0.5.0
-selenium==2.45.0
-simplejson==3.7.2
+selenium==2.46.0
+simplejson==3.7.3
 six==1.9.0
 snowballstemmer==1.2.0
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
@@ -117,7 +121,7 @@ uwsgitop==0.8
 venusian==1.0
 -e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
 waitress==0.8.9
-zope.component==4.2.1
+zope.component==4.2.2
 zope.event==4.0.3
 zope.deprecation==4.1.2
 zope.interface==4.1.2
