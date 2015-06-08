@@ -130,10 +130,12 @@ var SynthesisPanel = AssemblPanel.extend({
             order_lookup_table = [],
             roots = [],
             collectionManager = new CollectionManager(),
-            canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
+            canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS),
+            synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
 
         Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
+        console.log("WRITEME:  Use the synthesisIdeasCollection below.", synthesisIdeasCollection);
         Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
             collectionManager.getAllIdeasCollectionPromise(),
             function (synthesisCollection, allIdeasCollection) {
