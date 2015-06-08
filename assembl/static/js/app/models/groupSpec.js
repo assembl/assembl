@@ -21,7 +21,12 @@ var GroupSpecModel = Base.Model.extend({
   
   parse: function (model) {
     model.panels = new panelSpec.Collection(model.panels, {parse: true});
-    model.states = new groupState.Collection(model.states, {parse: true});
+    if(model.states && model.states.length > 0) {
+      model.states = new groupState.Collection(model.states, {parse: true});
+    }
+    else {
+      model.states = this.defaults().states;
+    }
     return model;
   },
   /**
