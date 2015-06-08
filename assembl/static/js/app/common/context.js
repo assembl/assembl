@@ -4,7 +4,7 @@ var $ = require('../shims/jquery.js'),
     _ = require('../shims/underscore.js'),
     Moment = require('moment'),
     Promise = require('bluebird'),
-    App =  require('../app.js'),
+    Assembl =  require('../app.js'),
     Permissions =  require('../utils/permissions.js'),
     Roles =  require('../utils/roles.js'),
     i18n =  require('../utils/i18n.js');
@@ -589,26 +589,28 @@ Context.prototype = {
 
     // TODO: do it also for the vote widgets (not only the creativity widgets), and use this promise where we need vote widgets
     getWidgetDataAssociatedToIdeaPromise: function (idea_id) {
-        //console.log("getWidgetDataAssociatedToIdeaPromise()");
-        var returned_data = {};
-        var that = this;
-        var deferred = $.Deferred();
+        var returned_data = {},
+            that = this;
 
         if (idea_id in that.cachedWidgetDataAssociatedToIdeasPromises && that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] != null) {
             //console.log("getWidgetDataAssociatedToIdeaPromise(): we will serve the cached promise");
             that.cachedWidgetDataAssociatedToIdeasPromises[idea_id].done(function (data) {
-                deferred.resolve(data);
+               return Promise.resolve(data);
             });
-            return deferred.promise();
         }
 
         // Get inspiration widgets associated to this idea, via "ancestor_inspiration_widgets"
         // And compute a link to create an inspiration widget
 
-        var inspiration_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/ancestor_inspiration_widgets");
-        var inspiration_widgets = null;
-        var inspiration_widget_url = null;
-        var inspiration_widget_configure_url = null;
+        var inspiration_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/ancestor_inspiration_widgets"),
+            inspiration_widgets = null,
+            inspiration_widget_url = null,
+            inspiration_widget_configure_url = null;
+
+        var session_widgets = null,
+            session_widget_url = null,
+            session_widget_configure_url = null;
+
         var vote_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/votable_by_widget");
 
         var locale_parameter = "&locale=" + assembl_locale;
@@ -620,27 +622,26 @@ Context.prototype = {
         var vote_widget_create_url = "/static/widget/vote/?admin=1#/admin/create_from_idea?idea=" + encodeURIComponent(idea_id + "?view=creativity_widget"); //TODO: add locale_parameter?
         returned_data["vote_widget_create_url"] = vote_widget_create_url;
 
+        var session_widget_create_url = "/static/widget/session/?admin=1#/index?idea=" + encodeURIComponent(idea_id + "?view=creativity_widget");
+        returned_data["session_widget_create_url"] = session_widget_create_url;
 
-        $.when(
-            $.getJSON(inspiration_widgets_url),
-            $.getJSON(vote_widgets_url)
-        ).done(function(result, result2){
-            // done() callback parameters are [data, textStatus, jqXHR], so we extract data
-            var data = result[0];
-            var data2 = result2[0];
+        return Promise.join($.get(inspiration_widgets_url), $.get(vote_widgets_url), $.get(session_widget_url),
+            function(result, result2, result3){
 
-            if (data
-                && data instanceof Array
-                && data.length > 0
-                ) {
-                inspiration_widgets = data;
+            var inspiration_result = result[0],
+                vote_result = result2[0],
+                session_result = result3[0];
+
+            if (inspiration_result && inspiration_result instanceof Array && inspiration_result.length > 0) {
+                inspiration_widgets = inspiration_result;
                 returned_data["inspiration_widgets"] = inspiration_widgets;
                 var inspiration_widget_uri = null;
-                if ( "@id" in inspiration_widgets[inspiration_widgets.length - 1] )
-                {
+
+                if ( "@id" in inspiration_widgets[inspiration_widgets.length - 1] ){
+
                     inspiration_widget_uri = inspiration_widgets[inspiration_widgets.length - 1]["@id"]; // for example: "local:Widget/52"
 
-                    console.log("inspiration_widget_uri: ", inspiration_widget_uri);
+                    //console.log("inspiration_widget_uri: ", inspiration_widget_uri);
 
                     inspiration_widget_url = "/static/widget/creativity/?config="
                         + Ctx.getUrlFromUri(inspiration_widget_uri)
@@ -658,45 +659,68 @@ Context.prototype = {
                         + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
                     returned_data["inspiration_widget_configure_url"] = inspiration_widget_configure_url;
                 }
-                else
-                {
+                else{
                     console.log("error: inspiration widget has no @id field");
                 }
             }
 
-            if (data2
-                && data2 instanceof Array
-                && data2.length > 0
-                ) {
+            if (vote_result && vote_result instanceof Array && vote_result.length > 0) {
                 var vote_widgets = [];
-                for ( var i = 0; i < data2.length; ++i )
-                {
-                    if ( "@id" in data2[i] )
-                    {
-                        var widget_uri = data2[i]["@id"]; // for example: "local:Widget/52"
+
+                for ( var i = 0; i < vote_result.length; ++i ){
+
+                    if ( "@id" in vote_result[i] ){
+                        var widget_uri = vote_result[i]["@id"]; // for example: "local:Widget/52"
                         vote_widgets.push({
                             widget_uri: widget_uri,
                             vote_url: "/static/widget/vote/?config=" + widget_uri +encodeURIComponent("?target="+idea_id),
                             configure_url: "/static/widget/vote/?admin=1#/admin/configure_instance?widget_uri=" +widget_uri + "&target=" + idea_id
                         });
                     }
-                    else
-                    {
+                    else{
                         console.log("error: vote widget has no @id field");
                     }
                 }
                 returned_data["vote_widgets"] = vote_widgets;
             }
 
+            if (session_result && session_result instanceof Array && session_result.length > 0) {
+                session_widgets = session_result;
+                returned_data["session_widgets"] = session_widgets;
+
+                if ( "@id" in session_widgets[session_widgets.length - 1] ){
+
+                    var session_widget_uri = session_widgets[session_widgets.length - 1]["@id"]; // for example: "local:Widget/52"
+
+                    session_widget_configure_url = "/static/widget/session/?config="
+                        + Ctx.getUrlFromUri(session_widget_uri)
+                        + "&target="
+                        + idea_id
+                        + locale_parameter; // example: "http://localhost:6543/widget/session/?config=/data/Widget/43&target=local:Idea/3#/"
+                    returned_data["session_widget_configure_url"] = session_widget_configure_url;
+
+                    session_widget_configure_url = "/static/widget/session/?admin=1"
+                        + locale_parameter
+                        + "#/admin/configure_instance?widget_uri="
+                        + Ctx.getUrlFromUri(session_widget_uri)
+                        + "&target="
+                        + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
+                    returned_data["session_widget_configure_url"] = session_widget_configure_url;
+                }
+                else{
+                    console.log("error: inspiration widget has no @id field");
+                }
+
+            }
+
+
+            return Promise.resolve(returned_data);
+
             //deferred.resolve(returned_data); // we rather resolve even if a request failed, so that we still get the widget instanciation links
-        }).always(function(){
-            deferred.resolve(returned_data);
-        });
+        })
 
-        that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = deferred;
+        that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = Promise;
 
-
-        return deferred.promise();
     },
 
 
