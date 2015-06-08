@@ -55,7 +55,7 @@ creativityApp.config(['$translateProvider', function ($translateProvider) {
         'de-DE': 'en',
         'de-CH': 'en',
         'fr_FR': 'fr',
-        'fr-fr': 'fr',
+        'fr-fr': 'fr'
     });
 
     //$translateProvider.preferredLanguage('fr'); // no, we want to use one of the available languages

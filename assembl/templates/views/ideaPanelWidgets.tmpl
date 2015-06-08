@@ -47,17 +47,19 @@
 } %>
 
 
-{# 
-  Show a widget creation link (inspiration/creativity and vote) from this idea
-#}
-<% /* if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE){ */
-  if ( canCreateWidgets && idea ) {
-    if ( vote_widget_create_url ) {
-      print("<a href=\""+vote_widget_create_url+"\" target=\"_blank\" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title=\"{{gettext('Create a vote widget on this idea')}}\">{{gettext('Create a vote widget on this idea')}}</a>");
-    }
+{# Show a widget creation link (inspiration/creativity and vote) from this idea #}
 
-    if ( inspiration_widget_create_url ) {
-      print("<a href=\"" + inspiration_widget_create_url + "\" target=\"_blank\" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title=\"{{gettext('Create a creativity widget on this idea')}}\">{{gettext('Create a creativity widget on this idea')}}</a>");
-    }
+<% if ( canCreateWidgets && idea ) {
+    if ( vote_widget_create_url ) { %>
+      <a href="<%= vote_widget_create_url %>" target="_blank" class="dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea" data-modal-title="{{gettext('Create a vote widget on this idea')}}">{{gettext('Create a vote widget on this idea')}}</a>
+    <% } %>
+
+    <% if ( inspiration_widget_create_url ) { %>
+      <a href="<%= inspiration_widget_create_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="{{gettext('Create a creativity widget on this idea')}}">{{gettext('Create a creativity widget on this idea')}}</a>
+   <% }
+
+    if ( session_widget_create_url ) { %>
+    <a href="<%= session_widget_create_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="{{gettext('Create a creativity session widget on this idea')}}">{{gettext('Create a creativity session widget on this idea')}}</a>
+    <% }
   }
-/* } */ %>
+%>

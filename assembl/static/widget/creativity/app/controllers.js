@@ -159,7 +159,7 @@ creativityApp.controller('adminConfigureInstanceSetAssociatedIdeasCtl',
 
     $http({
       method: 'GET',
-      url: $scope.widget_endpoint,
+      url: $scope.widget_endpoint
     }).success(function(data, status, headers){
       console.log(data);
       $scope.widget = data;
@@ -242,13 +242,13 @@ creativityApp.controller('adminCreateFromIdeaCtl',
                 // fill widget creation form
                 // TODO: handle error cases (no URL parameter given, server answer is not/bad JSON, etc)
 
-                console.log($routeParams.idea);
+                //console.log($routeParams.idea);
                 $scope.url_parameter_idea = $routeParams.idea;
                 $http({
                     method: 'GET',
                     url: AssemblToolsService.resourceToUrl($scope.url_parameter_idea)
                 }).success(function (data, status, headers) {
-                    console.log(data);
+                    //console.log(data);
                     $scope.idea = data;
                     $scope.discussion_uri = data.discussion;
 
@@ -256,7 +256,7 @@ creativityApp.controller('adminCreateFromIdeaCtl',
                         method: 'GET',
                         url: AssemblToolsService.resourceToUrl($scope.discussion_uri)
                     }).success(function (data, status, headers) {
-                        console.log(data);
+                       // console.log(data);
                         $scope.discussion = data;
                         $scope.widget_creation_endpoint = $scope.discussion.widget_collection_url;
                         $scope.current_step = 2;

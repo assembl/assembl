@@ -18,7 +18,7 @@ var IdeaWidgets = Marionette.ItemView.extend({
     inspiration_widget_configure_url: null,
     vote_widget_create_url: null,
     vote_widgets: null,
-
+    session_widget_create_url: null,
 
     // overwritten properties and methods
 
@@ -64,7 +64,10 @@ var IdeaWidgets = Marionette.ItemView.extend({
             inspiration_widget_url: this.inspiration_widget_url,
             inspiration_widget_configure_url: this.inspiration_widget_configure_url,
             vote_widget_create_url: this.vote_widget_create_url,
-            vote_widgets: this.vote_widgets
+            vote_widgets: this.vote_widgets,
+            session_widgets: this.session_widgets,
+            session_widget_configure_url: this.session_widget_configure_url,
+            session_widget_create_url: this.session_widget_create_url
         };
     },
 
@@ -102,12 +105,21 @@ var IdeaWidgets = Marionette.ItemView.extend({
             previous.inspiration_widgets = that.inspiration_widgets;
             previous.inspiration_widget_url = that.inspiration_widget_url;
             previous.inspiration_widget_configure_url = that.inspiration_widget_configure_url;
+
             previous.vote_widget_create_url = that.vote_widget_create_url;
             previous.vote_widgets = that.vote_widgets;
+
+            previous.session_widgets = that.session_widgets;
+            previous.session_widget_configure_url = that.session_widget_configure_url;
+            previous.session_widget_create_url = that.session_widget_create_url;
+
+
+
             var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(this.model.getId());
-            promise.done(
-                function (data) {
-                    //console.log("populateAssociatedWidgetData received data: ", data);
+
+            promise.then(function (data) {
+
+                    console.log("populateAssociatedWidgetData received data: ", data);
 
                     that.resetAssociatedWidgetData();
 
@@ -138,14 +150,29 @@ var IdeaWidgets = Marionette.ItemView.extend({
                         //console.log("vote_widgets: ", data.vote_widgets);
                     }
 
-                    if (
-                        previous.inspiration_widget_create_url != that.inspiration_widget_create_url
+                    if ("session_widget" in data) {
+                        that.session_widgets = data.session_widgets;
+                    }
+
+                    if ("session_widget_configure_url" in data) {
+                        that.session_widget_configure_url = data.session_widget_configure_url;
+                    }
+
+                    if ("session_widget_create_url" in data) {
+                        that.session_widget_create_url = data.session_widget_create_url;
+                    }
+
+                    if ( previous.inspiration_widget_create_url != that.inspiration_widget_create_url
                         || previous.inspiration_widgets != that.inspiration_widgets
                         || previous.inspiration_widget_url != that.inspiration_widget_url
                         || previous.inspiration_widget_configure_url != that.inspiration_widget_configure_url
+
                         || previous.vote_widget_create_url != that.vote_widget_create_url
                         || previous.vote_widgets != that.vote_widgets
-                    ) {
+
+                        || previous.session_widgets != that.session_widgets
+                        || previous.session_widget_configure_url != that.session_widget_configure_url
+                        || previous.session_widget_create_url != that.session_widget_create_url ){
 
                         that.render();
                     }
