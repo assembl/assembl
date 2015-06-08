@@ -118,21 +118,26 @@ var MessageList = AssemblPanel.extend({
           );
 
       this.listenTo(this.getGroupState(), "change:currentIdea", function (state, currentIdea) {
-          if (currentIdea) {
-              if (currentIdea.id) {
-                  if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
-                      //Filter is already in sync
-                      //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
-                      return;
-                  }
-              } else {
-                  that.listenToOnce(currentIdea, "acquiredId", function () {
-                      that.ideaChanged();
-                  });
-                  return;
-              }
+        if (currentIdea) {
+          if (currentIdea.id) {
+            if(that.currentQuery.isQueryValid() === false) {
+              //This will occur upon loading the panel, untill we truly serialize the query
+              console.log("WRITEME:  Real query serialization in groupstate");
+              that.ideaChanged();
+            }
+            else if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
+              //Filter is already in sync
+              //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+              return;
+            }
+          } else {
+            that.listenToOnce(currentIdea, "acquiredId", function () {
+              that.ideaChanged();
+            });
+            return;
           }
-          this.ideaChanged();
+        }
+        this.ideaChanged();
       });
 
       this.listenTo(Assembl.vent, 'messageList:showMessageById', function (id, callback) {
@@ -1185,72 +1190,74 @@ var MessageList = AssemblPanel.extend({
         this._offsetStart = undefined;
         this._offsetEnd = undefined;
 
-        /* TODO:  Most of this should be a listen to the returned collection */
-        Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
-            this.currentQuery.getResultMessageIdCollectionPromise(),
-            function (messageStructureCollection, resultMessageIdCollection) {
+        if(this.currentQuery.isQueryValid()) {
+          /* TODO:  Most of this should be a listen to the returned collection */
+          Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+              this.currentQuery.getResultMessageIdCollectionPromise(),
+              function (messageStructureCollection, resultMessageIdCollection) {
 
-          var resultMessageIdCollectionReference = resultMessageIdCollection;
+            var resultMessageIdCollectionReference = resultMessageIdCollection;
 
-          function inFilter(message) {
-                return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
+            function inFilter(message) {
+              return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
             };
-          if (Ctx.debugRender) {
+            if (Ctx.debugRender) {
               console.log("messageList:onRender() structure collection ready for render id:", renderId);
-          }
-          if (renderId != that._renderId) {
-            console.log("messageList:onRender() structure collection arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
-            return;
-          }
-          that.destroyAnnotator();
-          //Some messages may be present from before
-          that.ui.messageList.empty();
-          // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
-          // In particular, message.loadAnnotations gets called with different views on the same model,
-          // including zombie views, and we get nested annotator tags as a result.
-          // (Annotator looks at fresh DOM every time).  Is that still the case?  Benoitg - 2014-09-19
-          // TODO long term: Keep them with a real CompositeView.
-          that.resultMessageIdCollection = resultMessageIdCollection;
-          that.visitorViewData = {};
-          that.visitorOrderLookupTable = [];
-          that.visitorRootMessagesToDisplay = [];
+            }
+            if (renderId != that._renderId) {
+              console.log("messageList:onRender() structure collection arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
+              return;
+            }
+            that.destroyAnnotator();
+            //Some messages may be present from before
+            that.ui.messageList.empty();
+            // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
+            // In particular, message.loadAnnotations gets called with different views on the same model,
+            // including zombie views, and we get nested annotator tags as a result.
+            // (Annotator looks at fresh DOM every time).  Is that still the case?  Benoitg - 2014-09-19
+            // TODO long term: Keep them with a real CompositeView.
+            that.resultMessageIdCollection = resultMessageIdCollection;
+            that.visitorViewData = {};
+            that.visitorOrderLookupTable = [];
+            that.visitorRootMessagesToDisplay = [];
 
-          messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
+            messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
 
-          that.visitorOrderLookupTable = [];
-          that.visitorRootMessagesToDisplay = [];
-          objectTreeRenderVisitorReSort(
-              that.visitorViewData,
-              that.visitorOrderLookupTable,
-              that.visitorRootMessagesToDisplay,
-              function (message) {
-                return message.get('date');
-              });
-          that.render_real();
-          that.showInspireMeIfAvailable();
-          that.renderMessageListHeader();
-          that.ui.panelBody.scroll(function () {
+            that.visitorOrderLookupTable = [];
+            that.visitorRootMessagesToDisplay = [];
+            objectTreeRenderVisitorReSort(
+                that.visitorViewData,
+                that.visitorOrderLookupTable,
+                that.visitorRootMessagesToDisplay,
+                function (message) {
+                  return message.get('date');
+                });
+            that.render_real();
+            that.showInspireMeIfAvailable();
+            that.renderMessageListHeader();
+            that.ui.panelBody.scroll(function () {
 
-            var msgBox = that.$('.messagelist-replybox').height(),
-                scrollH = $(this)[0].scrollHeight - (msgBox + 25),
-                panelScrollTop = $(this).scrollTop() + $(this).innerHeight();
+              var msgBox = that.$('.messagelist-replybox').height(),
+              scrollH = $(this)[0].scrollHeight - (msgBox + 25),
+              panelScrollTop = $(this).scrollTop() + $(this).innerHeight();
 
-            if (panelScrollTop >= scrollH) {
+              if (panelScrollTop >= scrollH) {
                 that.ui.stickyBar.fadeOut();
-            } else {
+              } else {
                 if ( !that.aReplyBoxHasFocus ){
                   that.ui.stickyBar.fadeIn();
                 }
-            }
+              }
 
-            //This event cannot be bound in ui, because backbone binds to
-            //the top element and scroll does not propagate
-            that.$(".panel-body").scroll(that, that.scrollLogger);
+              //This event cannot be bound in ui, because backbone binds to
+              //the top element and scroll does not propagate
+              that.$(".panel-body").scroll(that, that.scrollLogger);
 
             });
-        });
+          });
 
-      this.blockPanel();
+          this.blockPanel();
+        };
     },
 
     // FIXME: this seems to be not used anymore, so I (Quentin) commented it out

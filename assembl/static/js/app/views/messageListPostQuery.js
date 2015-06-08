@@ -22,7 +22,7 @@ var PostQuery = function () {
      * Has a property with the id each active
      * filter, and the filter object as value
      */
-    this._query = {};
+    this._query = undefined;
 
     this._resultIds = [];
 
@@ -96,7 +96,10 @@ var PostQuery = function () {
       var retval = false;
       var filterDef = new filterDef();
       //console.log("isFilterInQuery() called with:", filterDef.getId(), value, this._query)
-      if (filterDef.getId() in this._query) {
+      if(!this.isQueryValid()) {
+        retval = false;
+      }
+      else if (filterDef.getId() in this._query) {
         if (value === null) {
           retval = true;
         }
@@ -118,11 +121,14 @@ var PostQuery = function () {
     this.addFilter = function (filterDef, value) {
       //console.log("addFilter called with: ", filterDef.name, value);
       var retval = true,
-      valueWasReplaced = false,
-      filter = null,
-      candidate_filter = new filterDef(),
-      filterId = candidate_filter.getId();
+          valueWasReplaced = false,
+          filter = null,
+          candidate_filter = new filterDef(),
+          filterId = candidate_filter.getId();
 
+      if(this.isQueryValid() === false) {
+        this.initialize();
+      }
       if(this.isFilterInQuery(filterDef, value)) {
         if (value === null) {
           delete this._query[filterId];
@@ -154,7 +160,9 @@ var PostQuery = function () {
     };
 
     /**
-     * Remove all filter from the query
+     * Remove all filter from the query.  Effectively returns all messages
+     * 
+     * Same as initializing the query.  
      */
     this.clearAllFilters = function () {
       this.invalidateResults();
@@ -179,7 +187,18 @@ var PostQuery = function () {
       //console.log("isFilterConfigSameAsSnapshot returning",retval);
       return retval;
     };
+
+    this.initialize = function () {
+      return this.clearAllFilters();
+    };
     
+    /**
+     * Has the query been properly initialized?
+     */
+    this.isQueryValid = function () {
+      return this._query !== undefined;
+    };
+
     /**
      * invalidate the Results
      */
@@ -202,7 +221,10 @@ var PostQuery = function () {
       filterObject = new filterDef(),
       filterId = filterObject.getId();
      // console.log("clearFilter called with ",filterId, valueIndex)
-      if (filterId in this._query) {
+      if(this.isQueryValid() === false) {
+        this.initialize();
+      }
+      else if (filterId in this._query) {
         var filter = this._query[filterId],
             filterValues = filter.getValues();
 
@@ -273,6 +295,9 @@ var PostQuery = function () {
       id = null,
       value = null;
 
+      if (this._query === undefined) {
+        throw new Error("Query isn't initialized");
+      }
       if (this._resultsAreValid) {
         return Promise.resolve(that._resultIds);
 
