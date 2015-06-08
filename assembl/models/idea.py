@@ -1009,6 +1009,6 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA)
 
     discussion = relationship(
-        Discussion, viewonly=True, uselist=False,
+        Discussion, viewonly=True, uselist=False, backref="idea_links",
         secondary=Idea.__table__, primaryjoin=(source_id == Idea.id),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
