@@ -268,11 +268,16 @@ var IdeaModel = Base.Model.extend({
         return counter;
     },
 
-
-    visitDepthFirst: function (visitor, ancestry) {
+    /**
+     * @param idea_links The collection of idea_links to navigate
+     * @param visitor Visitor function
+     * @param ancestry Internal recursion parameter, do not set or use
+     */
+    visitDepthFirst: function (idea_links, visitor, ancestry) {
         if (ancestry === undefined) {
             ancestry = [];
         }
+        //console.log(idea_links);
         if (visitor(this, ancestry)) {
             ancestry = ancestry.slice(0);
             ancestry.push(this);
@@ -280,12 +285,17 @@ var IdeaModel = Base.Model.extend({
                 return child.get('order');
             });
             for (var i in children) {
-                children[i].visitDepthFirst(visitor, ancestry);
+                children[i].visitDepthFirst(idea_links, visitor, ancestry);
             }
         }
     },
 
-    visitBreadthFirst: function (visitor, ancestry) {
+    /**
+     * @param idea_links The collection of idea_links to navigate
+     * @param visitor Visitor function
+     * @param ancestry Internal recursion parameter, do not set or use
+     */
+    visitBreadthFirst: function (idea_links, visitor, ancestry) {
         var continue_visit = true
         if (ancestry === undefined) {
             ancestry = [];
@@ -305,7 +315,7 @@ var IdeaModel = Base.Model.extend({
                 }
             }
             for (var i in children_to_visit) {
-                children_to_visit[i].visitBreadthFirst(visitor, ancestry);
+                children_to_visit[i].visitBreadthFirst(idea_links, visitor, ancestry);
             }
         }
     },

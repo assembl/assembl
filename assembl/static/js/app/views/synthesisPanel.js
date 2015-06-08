@@ -7,6 +7,7 @@ var objectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     MessageModel = require('../models/message.js'),
+    ideaLink = require('../models/ideaLink.js'),
     Synthesis = require('../models/synthesis.js'),
     Idea = require('../models/idea.js'),
     Permissions = require('../utils/permissions.js'),
@@ -166,7 +167,8 @@ var SynthesisPanel = AssemblPanel.extend({
                     return retval
                 };
                 if (rootIdea) {
-                    rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis));
+                  var synthesisIdeaLinks = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
+                  rootIdea.visitDepthFirst(synthesisIdeaLinks, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis));
                 }
                 _.each(roots, function append_recursive(idea) {
                     var rendered_idea_view = new IdeaFamilyView({

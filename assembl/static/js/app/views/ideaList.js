@@ -17,7 +17,8 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     CollectionManager = require('../common/collectionManager.js'),
     i18n = require('../utils/i18n.js'),
     OtherInIdeaListView = require('./otherInIdeaList.js'),
-    $ = require('../shims/jquery.js');
+    $ = require('../shims/jquery.js'),
+    Promise = require('bluebird');
 
 
 var FEATURED = 'featured',
@@ -194,8 +195,9 @@ var IdeaList = AssemblPanel.extend({
         }
 
         var list = document.createDocumentFragment();
-        collectionManager.getAllIdeasCollectionPromise()
-            .then(function (allIdeasCollection) {
+        Promise.join(collectionManager.getAllIdeasCollectionPromise(),
+                     collectionManager.getAllIdeaLinksCollectionPromise(),
+                     function (allIdeasCollection, allIdeaLinksCollection) {
           rootIdea = allIdeasCollection.getRootIdea();
           if (Object.keys(filter).length > 0) {
               rootIdeaDirectChildrenModels = allIdeasCollection.where(filter);
@@ -213,8 +215,8 @@ var IdeaList = AssemblPanel.extend({
               return idea.get('order');
           });
 
-          rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
-          rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
+          rootIdea.visitDepthFirst(allIdeaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
+          rootIdea.visitDepthFirst(allIdeaLinksCollection, ideaSiblingChainVisitor(view_data));
           //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
           _.each(roots, function (idea) {
               var ideaView = new IdeaView({

@@ -447,7 +447,7 @@ var CollectionManager = Marionette.Controller.extend({
 
         this._allIdeaLinksCollection = new IdeaLink.Collection();
         this._allIdeaLinksCollection.collectionManager = this;
-        this._allIdeaLinksCollectionPromise = Promise.resolve(this._allIdeaLinksCollection)
+        this._allIdeaLinksCollectionPromise = Promise.resolve(this._allIdeaLinksCollection.fetch())
             .thenReturn(this._allIdeaLinksCollection)
             .catch(function(e){
                 console.error(e.statusText);
