@@ -67,8 +67,17 @@ var IdeaList = AssemblPanel.extend({
             .then(function (allIdeasCollection) {
                 var events = ['reset', 'change:parentId', 'change:@id', 'remove', 'add', 'destroy'];
                 that.listenTo(allIdeasCollection, events.join(' '), that.render);
-                that.template = '#tmpl-ideaList'
+                that.template = '#tmpl-ideaList';
                 that.collection = allIdeasCollection;
+                that.render();
+            });
+
+        collectionManager.getAllIdeaLinksCollectionPromise()
+            .then(function (allIdeaLinksCollection) {
+                var events = ['reset', 'change:source', 'change:target', 'change:order', 'remove', 'add', 'destroy'];
+                that.listenTo(allIdeaLinksCollection, events.join(' '), that.render);
+                that.template = '#tmpl-ideaList';
+                that.links_collection = allIdeaLinksCollection;
                 that.render();
             });
 
