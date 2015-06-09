@@ -42,6 +42,10 @@
              <% } %>
             <% } %>
 
+            <% if (user_is_connected) { %>
+              <li><a href="#" class="dropdown-listitem js_message-export-facebook">{{gettext("Harvest from facebook")}}</a></li>
+            <% }%>
+
             <% if( parentId ){ %>
             <li><a href="#" class="js_message-jumptoparentbtn">{{gettext("Jump to this message's parent in current view (if possible, will not clear filters)")}}</a></li>
             <% } %>
@@ -51,7 +55,7 @@
             <% if( messageListView.isViewStyleThreadedType() === true ){ %>
             <li><a href="#" class="js_message-jump-to-message-in-reverse-chronological">{{gettext("Show this message in the full Newest first view (clears all filters)")}}</a></li>
             <% } %>
-            
+
             <% if( isHoisted === true ){ %>
             <li><a href="#" class="message-hoistbtn" data-id="<%= escape(message.get('@id')) %>">{{gettext('Go back to the entire topic thread')}}</a></li>
             <% } else { %>

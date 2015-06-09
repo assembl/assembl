@@ -58,7 +58,8 @@ def get_language(locale):
 def get_country(locale):
     locale = use_underscore(locale)
     if '_' in locale:
-        return locale.split('_')[1]
+        import string
+        return string.upper(locale.split('_')[1])
     # otherwise None
 
 def ensure_locale_has_country(locale):
@@ -70,7 +71,10 @@ def ensure_locale_has_country(locale):
         available = settings.get('available_languages', 'en_CA fr_CA').split()
         avail_langs = {get_language(loc): loc for loc in reversed(available) if '_' in loc}
         locale_with_country = avail_langs.get(locale, None)
-        if locale_with_country:
-            return locale_with_country
+        if not locale_with_country:
+            if is_valid639_1(locale):
+                return locale
+            return None
+        return locale_with_country
         # TODO: Default countries for languages. Look in pycountry?
     return locale

@@ -1,0 +1,26 @@
+<div class="control-group">
+  <label for="targetLocation" class="control-label">
+    {{ gettext("Pick where to post to") }}:
+  </label>
+  <div class="controls">
+    <select id="fb-supportedList" class='js_fb-supportedList'>
+      <option value='null'></option>
+      <option value="me">{{ gettext("Your Wall") }}</option>
+      <option value="page">{{ gettext("Your Pages") }}</option>
+      <option value="group">{{ gettext("Your Groups") }}</option>
+    </select>
+    <span>*</span>
+  </div>
+</div>
+
+<div class="fb-targeted-form"></div>
+<div class="control-group"></div>
+<div class='fb-post-privacy'>
+  <div class='fb-privacy-container'>
+    <select>
+      <option value='everyone'>{{ gettext("Everyone")}} </option>
+      <option value='friends'>{{ gettext("Friends")}} </option>
+      <option value='friends_of_friends'>{{ gettext("Friends of Friends")}} </option>
+    </select>
+  </div>
+</div>

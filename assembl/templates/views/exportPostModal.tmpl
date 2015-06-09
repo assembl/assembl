@@ -1,0 +1,63 @@
+<div class='popin-header'>
+  {{ gettext("Export post by ") }} <%= creator %>
+</div>
+<div class="popin-body">
+    <div class="content">
+        <form class="core-form">
+          <fieldset>
+            <div class="control-group">
+              <label for="export-supportedList" class="control-label">
+                {{gettext("Select your desired export location") }}:
+              </label>
+              <div class="controls">
+                <select id="export-supportedList" class='js_export_supportedList'>
+                    <option value="null"></option>
+                  {% for supported_export in social_settings.supported_exports%}
+                    <option value="{{ supported_export }}">{{ supported_export }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <!-- This is where the specific source's form goes (ie fb, twitter, reddit, etc) -->
+            <div class='js_source-specific-form'></div>
+
+
+            <!-- This is where the message preview would go -->
+            <div class="form-break mts">{{ gettext("Suggested preview") }}:</div>
+
+            <div class="imagePlaceHolder mts">
+              {{ gettext("This is where some sexy image would go") }}
+            </div>
+
+            <div class="control-group mts">
+              <label for="attachmentName" class="control-label">{{ gettext("Suggested Name") }}:</label>
+              <div class="controls">
+                <input type="text" id="attachmentName" class="input-large">
+              </div>
+            </div>
+
+            <div class="control-group mts">
+              <label for="attachmentCaption" class="control-label">{{ gettext("Suggested Caption") }}:</label>
+              <div class="controls">
+                <input type="text" id="attachmentCaption" class="input-large">
+              </div>
+            </div>
+
+            <div class="control-group mts">
+              <label for="attachmentDescription" class="control-label">{{ gettext("Suggested Description") }}:</label>
+              <div class="controls">
+                <textarea rows=3 id="attachmentDescription" class="input-large"></textarea>
+              </div>
+            </div>
+
+          </fieldset>
+        </form>
+    </div>
+    <div class="clr"></div>
+</div>
+
+<div class="popin-footer">
+    <button class="btn btn-cancel btn-sm fl js_close">{{ gettext('Cancel') }}</button>
+    <button class="btn btn-primary btn-sm fr js_ok_submit" type='submit'>{{ gettext('Ok') }}</button>
+</div>

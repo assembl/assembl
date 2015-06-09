@@ -1,0 +1,28 @@
+<script type="text/javascript">
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : "{{ social_settings.fb_app_id }}",
+      xfbml      : false,
+      version    : 'v2.2',
+      status     : false
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     var sdkSource = function(locale){
+        return "//connect.facebook.net/" + locale + "/sdk.js";
+     }
+     {% if fb_lang_exists %}
+     js.src = sdkSource("{{ fb_locale }}")
+     {% else %}
+     js.src = sdkSource("en_US");
+     {% endif %}
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+
+</script>

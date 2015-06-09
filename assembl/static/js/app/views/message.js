@@ -12,6 +12,7 @@ var Marionette = require('../shims/marionette.js'),
     CollectionManager = require('../common/collectionManager.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     $ = require('../shims/jquery.js'),
+    facebook = require('views/facebookModal'),
     Promise = require('bluebird');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
@@ -144,6 +145,7 @@ var MessageView = Marionette.ItemView.extend({
         // menu
         'click .js_message-markasunread': 'markAsUnread',
         'click .js_message-markasread': 'markAsRead',
+        'click .js_message-export-facebook': 'exportToFacebook',
 
         'click .js_openTargetInPopOver': 'openTargetInPopOver'
     },
@@ -1026,8 +1028,71 @@ var MessageView = Marionette.ItemView.extend({
     openTargetInPopOver: function (evt) {
         console.log("message openTargetInPopOver(evt: ", evt);
         return Ctx.openTargetInPopOver(evt);
-    }
+    },
 
+    /**
+     * [exportToFacebook global function that
+     *  uses the facebook javascript sdk to push
+     *  to facebook]
+     * @param  {event}
+     * @return {null}
+     */
+    exportToFacebook: function(event) {
+      //var that = this; //message context
+      var Modal = Backbone.Modal.extend({
+          template: '#tmpl-loader',
+          className: 'group-modal popin-wrapper',
+          cancelEl: '.js_close',
+          keyControl: false,
+          initialize: function (options) {
+            this.$('.bbm-modal').addClass('popin');
+            this.messageCreator = null;
+            var that = this; //modal view context
+            console.log('modal being initialized');
+            options.model.getCreatorPromise().then(function(user){
+              that.messageCreator = user;
+              that.template = '#tmpl-exportPostModal';
+              that.render();
+            });
+          },
+          events: {
+            'change .js_export_supportedList': 'generateView'
+          },
+          serializeData: function() {
+            if (this.messageCreator) {
+              return {
+                creator: this.messageCreator.get('name')
+              }
+            }
+          },
+          generateView: function(event) {
+            var value = this.$(event.currentTarget)
+                            .find('option:selected')
+                            .val();
+            console.log('the facebook module', facebook);
+            switch(value){
+              case 'facebook':
+                if (! (facebook.status == facebook.statusEnum.CONNECTED)) {
+                  this.$('.js_source-specific-form').html(
+                    new facebook.error({message: facebook.statusMessage}).render().el);
+                  break;
+                }
+                else {
+                  var fbView = new facebook.root();
+                  this.$('.js_source-specific-form').html(fbView.render().el);
+                  break;
+
+                }
+              default:
+                this.$('.js_source-specific-form').html("");
+                break;
+            }
+          }
+      });
+
+      var modal = new Modal({model: this.model})
+      $('#slider').html(modal.render().el)
+  }
 
 });
 

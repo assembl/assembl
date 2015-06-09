@@ -184,6 +184,7 @@ from .notification import (
     NotificationOnPost,
     NotificationOnPostCreated,
 )
+
 from .feed_parsing import (
     FeedPostSource,
     LoomioPostSource,
@@ -196,4 +197,11 @@ from .edgesense_drupal import (
     EdgeSenseDrupalSource,
     SourceSpecificAccount,
     SourceSpecificPost,
+)
+from .facebook_integration import (
+    FacebookUser,
+    FacebookGenericSource,
+    FacebookGroupSource,
+    FacebookGroupSourceFromUser,
+    FacebookPost
 )

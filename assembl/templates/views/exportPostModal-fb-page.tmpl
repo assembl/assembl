@@ -1,0 +1,17 @@
+<div class="control-group mts">
+  <label for="fb-pageInfo" class="control-label">{{ gettext("Enter Page Name") }}:</label>
+  <div class="controls">
+    <input type="text" id="fb-pageInfo" class="input-large">
+  </div>
+</div>
+
+<div class='control-group mts'>
+  <label for='fb-page-postAs' class='control-label'>{{ gettext("Post as")}}: </label>
+  <div class='controls'>
+    <select id='fb-page-postAs'>
+      <% _.each(userManagedPagesList, function(page){ %>
+        <option value='<% page.value %>'> <%= page.description %> </option>
+      <% }); %>
+    </select>
+  </div>
+</div>

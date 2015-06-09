@@ -310,6 +310,8 @@ class AbstractAgentAccount(Base):
     # Note: we could also have a FOAF.mbox, but we'd have to make
     # them into URLs with mailto:
 
+    full_name = Column(CoerceUnicode(512))
+
     def signature(self):
         "Identity of signature implies identity of underlying account"
         return ('abstract_agent_account', self.id)
@@ -493,12 +495,15 @@ class IdentityProviderAccount(AbstractAgentAccount):
         return self.provider.name
 
     def real_name(self):
-        info = self.profile_info_json
-        name = info['name']
-        if name.get('formatted', None):
-            return name['formatted']
-        if 'givenName' in name and 'familyName' in name:
-            return ' '.join((name['givenName'], name['familyName']))
+        if not self.full_name:
+            info = self.profile_info_json
+            name = info['name']
+            if name.get('formatted', None):
+                return name['formatted']
+            if 'givenName' in name and 'familyName' in name:
+                return ' '.join((name['givenName'], name['familyName']))
+        else:
+            return self.full_name
 
     def populate_picture(self, profile):
         if 'photos' in profile:  # google, facebook
@@ -557,6 +562,13 @@ class IdentityProviderAccount(AbstractAgentAccount):
     def profile_info_json(self, val):
         self.profile_info = json.dumps(val)
         self.interpret_profile(val)
+
+
+class FacebookAccount(IdentityProviderAccount):
+    __mapper_args__ = {
+        'polymorphic_identity': 'facebook_account',
+    }
+    account_provider_name = "facebook"
 
 
 class AgentStatusInDiscussion(DiscussionBoundBase):

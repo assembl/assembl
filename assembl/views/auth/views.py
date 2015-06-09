@@ -494,7 +494,14 @@ def velruse_login_complete_view(request):
         for idp_account in idp_accounts:
             idp_account.profile_info_json = velruse_profile
     else:
-        idp_account = IdentityProviderAccount(
+        idp_class = IdentityProviderAccount
+        for cls in idp_class.get_subclasses():
+            if cls == idp_class:
+                continue
+            if cls.account_provider_name == provider.name:
+                idp_class = cls
+                break
+        idp_account = idp_class(
             provider=provider,
             profile_info_json=velruse_profile,
             domain=velruse_account.get('domain'),

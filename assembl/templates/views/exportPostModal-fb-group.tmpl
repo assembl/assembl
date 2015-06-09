@@ -1,0 +1,17 @@
+<div class="control-group mts">
+  <label for="fb-groupInfo" class="control-label">{{ gettext("Enter Group Name") }}:</label>
+  <div class="controls">
+    <input type="text" id="fb-groupInfo" class="input-large">
+  </div>
+</div>
+
+<div class='control-group mts'>
+  <label for='fb-group-postAs' class='control-label'>{{ gettext("Post as")}}: </label>
+  <div class='controls'>
+    <select id='fb-group-postAs'>
+      <% _.each(userManagedGroupList, function(group){ %>
+        <option value='<% group.value %>'> <%= group.description %> </option>
+      <% }); %>
+    </select>
+  </div>
+</div>
