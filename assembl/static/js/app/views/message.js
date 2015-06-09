@@ -12,7 +12,7 @@ var Marionette = require('../shims/marionette.js'),
     CollectionManager = require('../common/collectionManager.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     $ = require('../shims/jquery.js'),
-    facebook = require('views/facebookModal'),
+    facebook = require('./facebookModal.js'),
     Promise = require('bluebird');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
