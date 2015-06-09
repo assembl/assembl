@@ -18,7 +18,7 @@ function ideaSiblingChainVisitor(data_by_idea) {
             var ancestor_id, last_ancestor_id = null;
             var last_sibling_chain = [];
             for (var i in ancestry) {
-                ancestor_id = ancestry[i].getId();
+                var ancestor_id = ancestry[i];
                 if (data_by_idea.hasOwnProperty(ancestor_id)) {
                     last_sibling_chain.push(data_by_idea[ancestor_id]['is_last_sibling']);
                 }

@@ -215,8 +215,8 @@ var IdeaList = AssemblPanel.extend({
               return idea.get('order');
           });
 
-          rootIdea.visitDepthFirst(allIdeaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
-          rootIdea.visitDepthFirst(allIdeaLinksCollection, ideaSiblingChainVisitor(view_data));
+          allIdeasCollection.visitDepthFirst(allIdeaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot), rootIdea.getId());
+          allIdeasCollection.visitDepthFirst(allIdeaLinksCollection, ideaSiblingChainVisitor(view_data), rootIdea.getId());
           //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
           _.each(roots, function (idea) {
               var ideaView = new IdeaView({

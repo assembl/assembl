@@ -131,11 +131,14 @@ var SynthesisPanel = AssemblPanel.extend({
             roots = [],
             collectionManager = new CollectionManager(),
             canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS),
-            synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
+            synthesisIdeasCollection = this.ideas;
+            if (this.model !== null) {
+                synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
+                synthesisIdeasCollection.collectionManager = collectionManager;
+            }
 
         Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-        console.log("WRITEME:  Use the synthesisIdeasCollection below.", synthesisIdeasCollection);
         Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
             collectionManager.getAllIdeasCollectionPromise(),
             function (synthesisCollection, allIdeasCollection) {
@@ -163,14 +166,14 @@ var SynthesisPanel = AssemblPanel.extend({
                         retval = idea != rootIdea && idea.get('inNextSynthesis')
                     }
                     else {
-                        retval = idea != rootIdea && that.ideas.contains(idea)
+                        retval = idea != rootIdea && synthesisIdeasCollection.contains(idea)
                     }
                     //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
                     return retval
                 };
                 if (rootIdea) {
                   var synthesisIdeaLinks = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
-                  rootIdea.visitDepthFirst(synthesisIdeaLinks, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis));
+                  synthesisIdeasCollection.visitDepthFirst(synthesisIdeaLinks, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId());
                 }
                 _.each(roots, function append_recursive(idea) {
                     var rendered_idea_view = new IdeaFamilyView({

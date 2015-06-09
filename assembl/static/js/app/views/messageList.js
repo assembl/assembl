@@ -2003,7 +2003,11 @@ var MessageList = AssemblPanel.extend({
             if (shouldHighlightMessageSelected) {
               //console.log(that.currentViewStyle);
               //console.log(el);
-              el.highlight();
+              try {
+                el.highlight();
+              } catch (e) {
+                console.log(e);
+              }
             }
             if (_.isFunction(callback)) {
               callback();

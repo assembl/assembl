@@ -67,7 +67,7 @@ var MessageModel = Base.Model.extend({
     },
 
     visitDepthFirst: function (visitor) {
-        var ancestry = [this];
+        var ancestry = [this.getId()];
         this.collection.visitDepthFirst(visitor, this, ancestry);
     },
 
@@ -252,7 +252,7 @@ var MessageCollection = Base.Collection.extend({
         if (visitor(message, ancestry)) {
             //Copy ancestry
             ancestry = ancestry.slice(0);
-            ancestry.push(message);
+            ancestry.push(message.getId());
             var children = _.sortBy(message.getChildren(), function (child) {
                 return child.get('date');
             });
