@@ -38,10 +38,11 @@ var SynthesisPanel = AssemblPanel.extend({
         //This is used if the panel is displayed as part of a message
         // that publishes this synthesis
         this.messageListView = obj.messageListView;
-        this.ideas = new Idea.Collection();
         Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
                     collectionManager.getAllIdeasCollectionPromise(),
-            function (synthesisCollection, allIdeasCollection) {
+                    collectionManager.getAllIdeaLinksCollectionPromise(),
+            function (synthesisCollection, allIdeasCollection, allIdeaLinksCollection) {
+                that.ideas = allIdeasCollection;
                 var rootIdea = allIdeasCollection.getRootIdea(),
                     raw_ideas;
 
@@ -51,23 +52,8 @@ var SynthesisPanel = AssemblPanel.extend({
                         return model.get('is_next_synthesis');
                     });
                 }
-                raw_ideas = that.model.get('ideas');
-                //console.log("Raw Ideas from model: ", raw_ideas)
-                if (raw_ideas) {
-                    var ideas = [];
-                    _.each(raw_ideas, function (raw_idea) {
-                        //console.log(raw_idea);
-                        var idea = allIdeasCollection.get(raw_idea['@id']);
-                        if (idea) {
-                            ideas.push(idea);
-                        }
-                        else {
-                            console.log("synthesisPanel:render():  This shoudn't happen, fix toombstone support?")
-                        }
-                    });
-                    that.ideas.reset(ideas);
-                }
                 that.listenTo(that.ideas, 'add remove reset', that.render);
+                that.listenTo(allIdeaLinksCollection, 'reset change:source change:target change:order remove add destroy', that.render);
 
                 //modelEvents should handler this
                 //that.listenTo(that.model, 'reset change', that.render);
@@ -94,6 +80,12 @@ var SynthesisPanel = AssemblPanel.extend({
      * @type {Synthesis}
      */
     model: null,
+
+    /**
+     * The ideas collection
+     * @type {Ideas.Collection}
+     */
+    ideas: null,
 
     /**
      * Flag
@@ -125,36 +117,27 @@ var SynthesisPanel = AssemblPanel.extend({
         if (Ctx.debugRender) {
             console.log("synthesisPanel:onRender() is firing");
         }
-        var that = this,
-            view_data = {},
+        var that = this;
+        if (this.model === null || this.ideas === null) {
+            window.setTimeout(function () {
+                that.render();
+            }, 30);
+            return;
+        }
+        var view_data = {},
             order_lookup_table = [],
             roots = [],
             collectionManager = new CollectionManager(),
-            canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS),
-            synthesisIdeasCollection = this.ideas;
-            if (this.model !== null) {
-                if (this.model.is_next_synthesis)
-                synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
-                synthesisIdeasCollection.collectionManager = collectionManager;
-            }
+            canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
 
         Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-        Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
-            collectionManager.getAllIdeasCollectionPromise(),
-            collectionManager.getAllIdeaLinksCollectionPromise(),
-            function (synthesisCollection, allIdeasCollection, allIdeaLinksCollection) {
+            function renderSynthesis(ideasCollection, ideaLinksCollection) {
                 // Getting the scroll position
-                if (!that.model) {
-                    window.setTimeout(function () {
-                        that.render();
-                    }, 30);
-                    return;
-                }
                 var body = that.$('.body-synthesis'),
                     y = body.get(0) ? body.get(0).scrollTop : 0,
                     synthesis_is_published = that.model.get("published_in_post"),
-                    rootIdea = allIdeasCollection.getRootIdea();
+                    rootIdea = that.ideas.getRootIdea();
 
                 Ctx.initTooltips(that.$el);
                 function inSynthesis(idea) {
@@ -165,19 +148,16 @@ var SynthesisPanel = AssemblPanel.extend({
                     if (that.model.get('is_next_synthesis')) {
                         //This special case is so we get instant feedback before
                         //the socket sends changes
-                        retval = idea != rootIdea && idea.get('inNextSynthesis')
+                        retval = idea != rootIdea && idea.get('inNextSynthesis');
                     }
                     else {
-                        retval = idea != rootIdea && synthesisIdeasCollection.contains(idea)
+                        retval = idea != rootIdea && ideasCollection.contains(idea);
                     }
                     //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
                     return retval;
-                };
+                }
                 if (rootIdea) {
-                    var link_collection = allIdeaLinksCollection;
-                    if (!that.model.get('is_next_synthesis'))
-                        link_collection = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
-                    synthesisIdeasCollection.visitDepthFirst(link_collection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId(), true);
+                    ideasCollection.visitDepthFirst(ideaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId(), true);
                 }
                 _.each(roots, function append_recursive(idea) {
                     var rendered_idea_view = new IdeaFamilyView({
@@ -216,7 +196,20 @@ var SynthesisPanel = AssemblPanel.extend({
                     that.$('.synthesisPanel-introduction').html(that.model.get('introduction'));
                     that.$('.synthesisPanel-conclusion').html(that.model.get('conclusion'));
                 }
-            });
+            }
+
+        if (this.model.get('is_next_synthesis')) {
+            Promise.join(
+                collectionManager.getAllIdeasCollectionPromise(),
+                collectionManager.getAllIdeaLinksCollectionPromise(),
+                renderSynthesis);
+        } else {
+            var synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
+            synthesisIdeasCollection.collectionManager = collectionManager;
+            var synthesisIdeaLinksCollection = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
+            synthesisIdeaLinksCollection.collectionManager = collectionManager;
+            renderSynthesis(synthesisIdeasCollection, synthesisIdeaLinksCollection);
+        }
 
         return this;
     },
