@@ -133,6 +133,7 @@ var SynthesisPanel = AssemblPanel.extend({
             canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS),
             synthesisIdeasCollection = this.ideas;
             if (this.model !== null) {
+                if (this.model.is_next_synthesis)
                 synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
                 synthesisIdeasCollection.collectionManager = collectionManager;
             }
@@ -141,7 +142,8 @@ var SynthesisPanel = AssemblPanel.extend({
 
         Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
             collectionManager.getAllIdeasCollectionPromise(),
-            function (synthesisCollection, allIdeasCollection) {
+            collectionManager.getAllIdeaLinksCollectionPromise(),
+            function (synthesisCollection, allIdeasCollection, allIdeaLinksCollection) {
                 // Getting the scroll position
                 if (!that.model) {
                     window.setTimeout(function () {
@@ -172,8 +174,10 @@ var SynthesisPanel = AssemblPanel.extend({
                     return retval
                 };
                 if (rootIdea) {
-                  var synthesisIdeaLinks = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
-                  synthesisIdeasCollection.visitDepthFirst(synthesisIdeaLinks, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId());
+                    var link_collection = allIdeaLinksCollection;
+                    if (!that.model.get('is_next_synthesis'))
+                        link_collection = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
+                    synthesisIdeasCollection.visitDepthFirst(link_collection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId());
                 }
                 _.each(roots, function append_recursive(idea) {
                     var rendered_idea_view = new IdeaFamilyView({
