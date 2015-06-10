@@ -3,7 +3,8 @@ var Backbone = require('../shims/backbone.js'),
     i18n = require('../utils/i18n.js')
     $ = require('../shims/jquery.js'),
     _ = require('../shims/underscore.js'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    facebook = require('./facebookModal.js');
 
 var Modal = Backbone.Modal.extend({
     template: '#tmpl-loader',
@@ -35,24 +36,35 @@ var Modal = Backbone.Modal.extend({
       var value = this.$(event.currentTarget)
                       .find('option:selected')
                       .val();
-      console.log('the facebook module', facebook);
+
       switch(value){
         case 'facebook':
-          var status = facebook.state();
-          console.log('In modal, after status call', status);
+          facebook.resolveState(function(fbState) {
+            if (fbState.fbStatus === facebook.fbStates.CONNECTED) {
+              console.log('Instantiating errorView for user in connected state');
+              var fbView = new facebook.root();
+              this.$('.js_source-specific-form').html(fbView.render().el);
+            }
+            else {
+              if (fbState.fbStatus === facebook.fbStates.OFFLINE){
+                this.$('.js_source-specific-form').html(
+                  new facebook.error({
+                    message: fbState.msg,
+                    subMessage: fbState.submsg
+                  }).render().el);
+              }
+              else {
+                this.$('.js_source-specific-form').html(
+                  new facebook.error({
+                    message: fbState.msg,
+                    subMessage: fbState.submsg
+                  }).render().el);
+              }
+            }
+          });
+          
+          break;
 
-          //if (! (facebook.status == facebook.statusEnum.CONNECTED)) {
-          if (true) {
-            this.$('.js_source-specific-form').html(
-              new facebook.error({message: 'whatever'}).render().el);
-            break;
-          }
-          else {
-            var fbView = new facebook.root();
-            this.$('.js_source-specific-form').html(fbView.render().el);
-            break;
-
-          }
         default:
           this.$('.js_source-specific-form').html("");
           break;
