@@ -1,4 +1,4 @@
-appSession.controller('sessionCtl',
+SessionApp.controller('sessionCtl',
     ['$scope', 'cardGameService', '$rootScope', '$timeout', '$http', 'growl', 'configService', '$sce', 'utils',
         function ($scope, cardGameService, $rootScope, $timeout, $http, growl, configService, $sce, utils) {
 
@@ -158,7 +158,7 @@ appSession.controller('sessionCtl',
 
         }]);
 
-appSession.controller('ratingCtl',
+SessionApp.controller('ratingCtl',
     ['$scope', '$rootScope', '$timeout', '$http', 'growl', 'utils', 'configService',
         function ($scope, $rootScope, $timeout, $http, growl, utils, configService) {
 
@@ -326,7 +326,7 @@ appSession.controller('ratingCtl',
 
         }]);
 
-appSession.controller('editCtl',
+SessionApp.controller('editCtl',
     ['$scope', '$http', 'configService', 'utils', 'growl', '$routeParams', 'cardGameService',
         function ($scope, $http, configService, utils, growl, $routeParams, cardGameService) {
 
@@ -426,7 +426,7 @@ appSession.controller('editCtl',
 
         }]);
 
-appSession.controller('navigation', ['$scope', function ($scope) {
+SessionApp.controller('navigation', ['$scope', function ($scope) {
 
     var config = 'local:Widget/2';
 

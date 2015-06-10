@@ -1,6 +1,6 @@
 "use strict";
 
-appSession.factory('utils', function($translate, $rootScope, $timeout, $window){
+SessionApp.factory('UtilsService', function($translate, $rootScope, $timeout, $window){
 
     var fn = {};
 

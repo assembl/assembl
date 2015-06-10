@@ -1,43 +1,56 @@
 "use strict";
 
-var appSession = angular.module('appSession',
-    ['ngRoute','ngSanitize', 'pascalprecht.translate','angular-growl','mgcrea.ngStrap.datepicker']);
+var SessionApp = angular.module('appSession', [
+    'TopMenuModule',
+    'AdminModule',
+    'HomeModule',
+    'RateModule',
+    'ngSanitize',
+    'ngResource',
+    'ui.router',
+    'pascalprecht.translate',
+    'angular-growl',
+    'mgcrea.ngStrap.datepicker']);
 
-appSession.config(['$routeProvider','$translateProvider','$locationProvider','growlProvider',
-    function($routeProvider, $translateProvider, $locationProvider, growlProvider){
 
-    //$locationProvider.html5Mode(true);
+SessionApp.run(['$rootScope', '$state', '$stateParams',
+    function($rootScope, $state, $stateParams) {
 
-    $routeProvider.
-        when('/index', {
-            templateUrl:'partials/session.html',
-            controller:'sessionCtl',
-            resolve: {
-                app: function($route, configService) {
-                    return configService.getWidget($route.current.params.config);
-                }
-            }
-        }).
-        when('/edit',{
-            templateUrl:'partials/edit.html',
-            controller:'editCtl',
-            resolve: {
-                app: function($route, configService) {
-                    return configService.getWidget($route.current.params.config);
-                }
-            }
-        }).
-        when('/rating',{
-            templateUrl:'partials/rating.html',
-            controller:'ratingCtl',
-            resolve: {
-                app: function($route, configService) {
-                    return configService.getWidget($route.current.params.config);
-                }
-            }
-        }).
-        otherwise({
-            redirectTo: '/index'
+        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState) {
+
+            //console.debug('$stateChangeSuccess', toState, toParams, fromState)
+
+        });
+
+        // Make state information available to $rootScope, and thus $scope in our controllers
+        $rootScope.$state = $state;
+        $rootScope.$stateParams = $stateParams;
+
+        $state.go('session.admin');
+
+}]);
+
+
+SessionApp.config(['$resourceProvider', '$stateProvider', '$urlRouterProvider','$translateProvider','$locationProvider','growlProvider',
+    function($resourceProvider, $stateProvider, $urlRouterProvider, $translateProvider, $locationProvider, growlProvider){
+
+    // Don't strip trailing slashes from REST URLs
+    //$resourceProvider.defaults.stripTrailingSlashes = false;
+
+    $stateProvider
+        .state('session',{
+           url: '',
+           abstract: true,
+           views: {
+             'topMenu@':{
+                templateUrl:'app/shared/topMenu/TopMenuView.html',
+                controller:'TopMenuController'
+             },
+             '': {
+                templateUrl: 'index.html'
+             }
+           }
+
         });
 
     $translateProvider.useStaticFilesLoader({

@@ -1,6 +1,6 @@
 "use strict";
 
-appSession.directive('vote', function($http, $rootScope, utils){
+SessionApp.directive('vote', function($http, $rootScope, utils){
     return{
         restrict:'E',
         scope: {
@@ -116,7 +116,7 @@ appSession.directive('vote', function($http, $rootScope, utils){
     }
 })
 
-appSession.directive('comments', function($http, $rootScope, utils){
+SessionApp.directive('comments', function($http, $rootScope, utils){
     return {
         restrict:'E',
         scope: {
@@ -234,7 +234,7 @@ appSession.directive('comments', function($http, $rootScope, utils){
     }
 })
 
-appSession.directive('rating', function($http, utils){
+SessionApp.directive('rating', function($http, utils){
     return {
         restrict:'E',
         scope: {

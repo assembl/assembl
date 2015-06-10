@@ -12,39 +12,18 @@
 
 </head>
 <body ng-app="appSession">
-<nav ng-controller="navigation">
-    <ul class="nav nav-tabs">
-        <li><a class="home" href="{{home}}">Session</a></li>
-        <li><a class="rating" href="{{rating}}">Rating</a></li>
-        <li><a class="edit" href="{{edition}}">Edition</a></li>
-    </ul>
-</nav>
-<div class="container-fluid widget-container">
-    <div class="row">
-        <div class="tab-content">
-            <div ng-view></div>
-        </div>
-    </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">{{'connect'| translate}}</h4>
-                </div>
-                <div class="modal-body">
-                    <p>{{'needToConnect'| translate: {time: counter} }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div growl></div>
-</div>
+
+<div ui-view="topMenu"></div>
+<div ui-view></div>
 
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+<script src="bower_components/angular-route/angular-route.min.js"></script>
+
+<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+
 <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 <script src="bower_components/angular-translate/angular-translate.min.js"></script>
 <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
@@ -53,11 +32,34 @@
 <script src="bower_components/lodash/dist/lodash.min.js"></script>
 <script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
 <script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
+
 <script src="app/app.js"></script>
-<script src="app/services.js"></script>
+
+<script src="app/shared/topMenu/TopMenuModule.js"></script>
+<script src="app/shared/topMenu/TopMenuController.js"></script>
+
+<script src="app/components/admin/AdminModule.js"></script>
+<script src="app/components/admin/AdminController.js"></script>
+<script src="app/components/admin/CreateController.js"></script>
+
+<script src="app/components/home/HomeModule.js"></script>
+<script src="app/components/home/HomeController.js"></script>
+
+<script src="app/components/rate/RateModule.js"></script>
+<script src="app/components/rate/RateController.js"></script>
+
+<script src="app/shared/services/ConfigService.js"></script>
+<script src="app/shared/services/UtilsService.js"></script>
+<script src="app/shared/services/CardGameService.js"></script>
+<script src="app/shared/services/IdeaService.js"></script>
+
+<script src="app/shared/services/WidgetService.js"></script>
+
+
+<!--<script src="app/services.js"></script>
 <script src="app/controllers.js"></script>
 <script src="app/factory.js"></script>
-<script src="app/directives.js"></script>
+<script src="app/directives.js"></script>-->
 
 </body>
 </html>
