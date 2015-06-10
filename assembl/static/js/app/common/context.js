@@ -622,7 +622,7 @@ Context.prototype = {
         var vote_widget_create_url = "/static/widget/vote/?admin=1#/admin/create_from_idea?idea=" + encodeURIComponent(idea_id + "?view=creativity_widget"); //TODO: add locale_parameter?
         returned_data["vote_widget_create_url"] = vote_widget_create_url;
 
-        var session_widget_create_url = "/static/widget/session/?admin=1#/index?idea=" + encodeURIComponent(idea_id + "?view=creativity_widget");
+        var session_widget_create_url = "/static/widget/session/#/admin/create_from_idea?admin=1&idea=" + encodeURIComponent(idea_id) +"&view=creativity_widget";
         returned_data["session_widget_create_url"] = session_widget_create_url;
 
         return Promise.join($.get(inspiration_widgets_url), $.get(vote_widgets_url), $.get(session_widget_url),
