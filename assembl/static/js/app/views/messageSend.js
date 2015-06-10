@@ -262,7 +262,7 @@ var messageSend = Marionette.ItemView.extend({
                     var current_idea = that.messageList.getGroupState().get('currentIdea');
                     // if the user was top-posting into the current idea or answering to someone or top-posting from the general conversation context, scroll to his message
                     if ( reply_idea_id || reply_message_id || (!current_idea && !reply_message_id && !reply_idea_id) ) {
-                      Assembl.vent.trigger('messageList:showMessageById', model.id);
+                      that.messageList.showMessageById(model.id);
                     }
                     // if the user was top-posting into the general conversation from an idea (versus answering to someone or top-posting into the current idea)
                     else if ( current_idea && !reply_idea_id ) {
@@ -280,8 +280,9 @@ var messageSend = Marionette.ItemView.extend({
                         that.messageList.triggerMethod('messageList:clearAllFilters');
                         //that.messageList.triggerMethod('messageList:addFilterIsOrphanMessage');
                         groupContent.resetDebateState();
+                        //FIXME:  Remove this magic delay.  Benoitg - 2015-06-09
                         setTimeout(function(){
-                          Assembl.vent.trigger('messageList:showMessageById', model.id);
+                          that.messageList.showMessageById(model.id);
                         }, 500);
                       }
 

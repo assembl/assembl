@@ -142,10 +142,10 @@ var MessageList = AssemblPanel.extend({
 
       this.listenTo(Assembl.vent, 'messageList:showMessageById', function (id, callback) {
         //console.log("Calling showMessageById from messageList:showMessageById with params:", id, callback);
-          that.showMessageById(id, callback);
+        that.showMessageById(id, callback);
       });
 
-      this.listenTo(Assembl.vent, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
+      this.listenTo(this, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
           that.getPanelWrapper().filterThroughPanelLock(
               function () {
                   that.addFilterIsRelatedToIdea(idea, only_unread);

@@ -175,31 +175,26 @@ var IdeaView = Backbone.View.extend({
         Assembl.commands.execute('synthesisPanel:render');
     },
 
+    doIdeaChange: function (unread_only) {
+      var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+
+      this._groupContent.setCurrentIdea(this.model);
+      if(messageListView) {
+        //Syncing with current idea below isn't sufficient, as we need to set/unset the unread filter
+        messageListView.triggerMethod('messageList:clearAllFilters');
+        messageListView.trigger('messageList:addFilterIsRelatedToIdea', this.model, unread_only);
+      }
+      // Why is this call here?  benoitg - 2015-06-09
+      this._groupContent.resetDebateState(false);
+    },
+
     /**
      * @event
      * Select this idea as the current idea
      */
     onTitleClick: function (e) {
-        var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);;
-        e.stopPropagation();
-        //console.log("idea::onTitleClick with groupcontent",this._groupContent.cid);
-        if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE && messageListView) {
-            messageListView.triggerMethod('messageList:clearAllFilters');
-        }
-        else {
-          //messageListView.triggerMethod('messageList:clearAllFilters');
-        }
-        if (this.model === this.parentPanel.getGroupState().get('currentIdea')) {
-            // We want to avoid the "All messages" state,
-            // unless the user clicks explicitly on "All messages".
-            // TODO benoitg: Review this decision.
-            //this._groupContent.setCurrentIdea(null);
-            //This is so the messageList refreshes.
-        } else {
-          Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, null);
-          this._groupContent.setCurrentIdea(this.model);
-        }
-        this._groupContent.resetDebateState(false);
+      e.stopPropagation();
+      this.doIdeaChange(false);
     },
 
     /**
@@ -208,10 +203,7 @@ var IdeaView = Backbone.View.extend({
      */
     onUnreadCountClick: function (e) {
         e.stopPropagation();
-
-        Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, true);
-        this._groupContent.setCurrentIdea(this.model);
-        this._groupContent.resetDebateState(false);
+        this.doIdeaChange(true);
     },
 
     /**

@@ -48,7 +48,7 @@ var groupContent = Marionette.CompositeView.extend({
      * @param  {Idea} [idea]
      */
     setCurrentIdea: function (idea, reason, doScroll) {
-      console.log("setCurrentIdea() fired", idea, reason, doScroll);
+      //console.log("setCurrentIdea() fired", idea, reason, doScroll);
       //console.log(this.model);
 
       if (idea !== this._getCurrentIdea()) {
@@ -365,9 +365,10 @@ var groupContent = Marionette.CompositeView.extend({
                 return;
             return view;
         }
-        else {
+        /*else {
             console.log("findWrapperByType: WARNING: unable to find a wrapper for type", panelSpecType);
-        }
+        }*/
+        return undefined;
     },
 
     findViewByType: function (panelSpecType) {
@@ -375,9 +376,9 @@ var groupContent = Marionette.CompositeView.extend({
         if (wrapper != null && wrapper.contents !== undefined) {
             return wrapper.contents.currentView;
         }
-        else {
+        /*else {
             console.log("findViewByType: WARNING: unable to find a view for type", panelSpecType);
-        }
+        }*/
         return undefined;
     },
 
