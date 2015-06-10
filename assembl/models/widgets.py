@@ -871,7 +871,7 @@ MultiCriterionVotingWidget.votable_ideas = relationship(
 
 class IdeaCreativitySessionWidgetLink(BaseIdeaWidgetLink, IdeaShowingWidgetLink):
     __mapper_args__ = {
-        'polymorphic_identity': 'votable_idea_widget_link',
+        'polymorphic_identity': 'idea_creativity_session_widget_link',
     }
 
 
