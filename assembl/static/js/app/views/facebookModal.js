@@ -8,8 +8,7 @@ var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird');
 
 //var that = this,
-var fb = window.FB,
-    status = null;
+var fb = window.FB
 
 var FbStatus = {
   OFFLINE: 'user not logged in',
@@ -21,6 +20,30 @@ var fbState = function(r, s, m){
   this.ready = r;
   this.fbStatus = s;
   this.msg = m;
+}
+
+var checkState = function() {
+  fb.getLoginStatus(function(resp){
+    console.log('the facebook response happening', resp);
+    if (resp.status == 'not_authorized'){
+      var statusMessage = i18n.gettext("We are sorry, but Assembl does not have your permission to continue. ") +
+        i18n.gettext("Below are a summary of permissions that Assembl requires in order to continue.");
+      // ready = false;
+      // status = FbStatus.UNAUTHORIZED;
+      // statusMessage = statusMessage;
+      return new fbState(false, FbStatus.UNAUTHORIZED, statusMessage);
+    }
+    else if (resp.status == 'connected') {
+      // ready = true,
+      // status = FbStatus.CONNECTED;
+      return new fbState(true, FbStatus.CONNECTED, '');
+    }
+    else {
+      // ready = false;
+      // status = FbStatus.OFFLINE;
+      return new fbState(false, FbStatus.OFFLINE, i18n.gettext("You are currently not logged into facebook."));
+    }
+  });
 }
 
 var errorView = Marionette.ItemView.extend({
@@ -71,28 +94,6 @@ var fbLayout = Marionette.LayoutView.extend({
     initialize: function(options) {
       var msg = options.errorMessage;
       console.log('facebook root view initializing');
-      //check that the user is logged into facebook
-      fb.getLoginStatus(function(resp){
-        console.log('the facebook response happening', resp);
-        if (resp.status == 'not_authorized'){
-          var statusMessage = i18n.gettext("We are sorry, but Assembl does not have your permission to continue. ") +
-            i18n.gettext("Below are a summary of permissions that Assembl requires in order to continue.");
-          // ready = false;
-          // status = FbStatus.UNAUTHORIZED;
-          // statusMessage = statusMessage;
-          status = new fbState(false, FbStatus.UNAUTHORIZED, statusMessage);
-        }
-        else if (resp.status == 'connected') {
-          // ready = true,
-          // status = FbStatus.CONNECTED;
-          status = new fbState(true, FbStatus.CONNECTED, '');
-        }
-        else {
-          // ready = false;
-          // status = FbStatus.OFFLINE;
-          status = new fbState(false, FbStatus.OFFLINE, i18n.gettext("You are currently not logged into facebook."));
-        }
-      });
     },
     getToken: function(event) {
       console.log('I will get the access token!', event);
@@ -126,5 +127,5 @@ module.exports = {
   group: groupView,
   page: pageView,
   error: errorView,
-  state: status
+  state: checkState
 }
