@@ -120,6 +120,7 @@ def get_default_context(request):
         return map(lambda s: s.strip(), ls.split(","))
 
     social_settings = {
+        'fb_debug': config.get('facebook.debug_mode'),
         'fb_app_id': config.get('facebook.consumer_key'),
         'supported_exports': process_export_list(
             config.get('supported_exports_list'))

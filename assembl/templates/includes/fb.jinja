@@ -14,7 +14,11 @@
      if (d.getElementById(id)) {return;}
      js = d.createElement(s); js.id = id;
      var sdkSource = function(locale){
+      {% if not social_settings.fb_debug %}
         return "//connect.facebook.net/" + locale + "/sdk.js";
+      {% else %}
+        return "//connect.facebook.net/" + locale +"/sdk/debug.js";
+      {% endif %}
      }
      {% if fb_lang_exists %}
      js.src = sdkSource("{{ fb_locale }}")
