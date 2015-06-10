@@ -235,6 +235,7 @@ class BaseIdeaCollection(CollectionDefinition):
                 widget).filter(widget.id == parent_instance.id).filter(
                     widget.idea_links.of_type(BaseIdeaWidgetLink))
 
+
 class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
     descendants = text("""SELECT id from (SELECT target_id as id FROM (
                 SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
@@ -461,6 +462,16 @@ class CreativitySessionWidget(IdeaCreatingWidget):
     def get_ui_endpoint_base(cls):
         # TODO: Make this configurable.
         return "/static/widget/session/"
+
+    def set_base_idea_id(self, id):
+        idea = Idea.get_instance(id)
+        if self.base_idea_link:
+            self.base_idea_link.idea_id = id
+        else:
+            self.base_idea_link = IdeaCreativitySessionWidgetLink(widget=self, idea=idea)
+            self.db.add(self.base_idea_link)
+        # This is wrong, but not doing it fails.
+        self.base_idea = idea
 
     def notification_data(self, data):
         end = data.get('end', None)
@@ -841,7 +852,30 @@ IdeaCreatingWidget.generated_ideas = relationship(
     secondaryjoin=GeneratedIdeaWidgetLink.idea)
 
 
-class VotableIdeaWidgetLink(IdeaWidgetLink):
+class IdeaShowingWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_showing_widget_link',
+    }
+
+Widget.showing_idea_links = relationship(
+    IdeaShowingWidgetLink)
+Idea.has_showing_widget_links = relationship(IdeaShowingWidgetLink)
+
+MultiCriterionVotingWidget.votable_ideas = relationship(
+    Idea, viewonly=True, secondary=IdeaShowingWidgetLink.__table__,
+    primaryjoin=MultiCriterionVotingWidget.idea_links.of_type(
+        IdeaShowingWidgetLink), secondaryjoin=IdeaShowingWidgetLink.idea,
+    backref='showing_widget')
+
+
+
+class IdeaCreativitySessionWidgetLink(BaseIdeaWidgetLink, IdeaShowingWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'votable_idea_widget_link',
+    }
+
+
+class VotableIdeaWidgetLink(IdeaShowingWidgetLink):
     __mapper_args__ = {
         'polymorphic_identity': 'votable_idea_widget_link',
     }

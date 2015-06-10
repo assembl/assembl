@@ -510,7 +510,7 @@ Context.prototype = {
         var inspiration_widgets = null;
         var inspiration_widget_url = null;
         var inspiration_widget_configure_url = null;
-        var vote_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/votable_by_widget");
+        var showing_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/showing_widget");
 
         var locale_parameter = "&locale=" + assembl_locale;
 
@@ -521,10 +521,11 @@ Context.prototype = {
         var vote_widget_create_url = "/static/widget/vote/?admin=1#/admin/create_from_idea?idea=" + encodeURIComponent(idea_id + "?view=creativity_widget"); //TODO: add locale_parameter?
         returned_data["vote_widget_create_url"] = vote_widget_create_url;
 
+        // TODO: Add creativity session creation URLs.
 
         $.when(
             $.getJSON(inspiration_widgets_url),
-            $.getJSON(vote_widgets_url)
+            $.getJSON(showing_widgets_url)
         ).done(function(result, result2){
             // done() callback parameters are [data, textStatus, jqXHR], so we extract data
             var data = result[0];
