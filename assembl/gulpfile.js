@@ -38,6 +38,10 @@ b.on('log', gutil.log);
 function bundle(){
     return b.bundle()
       .on('error', gutil.log)
+      .on('error', function(cb) {
+        console.log("Compile failed, deleting output");
+        clean_app();
+      })
       .pipe(source('index.js'))
       .pipe(buffer())
       .pipe(sourcemaps.init({loadMaps: true}))
@@ -122,13 +126,13 @@ gulp.task('sass', function() {
         .pipe(gulp.dest(path.css));
 });
 
-
+function clean_app (cb) {
+  del([path.js+'/build/app.js',path.js+'/build/app.js.map'], cb);
+}
 /**
  * Delete files before rebuild new one
  * */
-gulp.task('clean:app', function (cb) {
-    del([path.js+'/build/app.js',path.js+'/build/app.js.map'], cb);
-});
+gulp.task('clean:app', clean_app);
 
 gulp.task('clean:infrastructure', function (cb) {
     del([path.js+'/build/infrastructure.min.js',path.js+'/build/infrastructure.min.js.map'], cb);
