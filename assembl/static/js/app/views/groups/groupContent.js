@@ -289,13 +289,6 @@ var groupContent = Marionette.CompositeView.extend({
         var nav = this.findNavigationSidebarPanelSpec(),
             ideaPanel = this.findWrapperByType(PanelSpecTypes.IDEA_PANEL);
         this.resetMessagePanelWidth();
-        if (ideaPanel != null && !ideaPanel.model.get('locked') && (!nav || this.model.get('navigationState') == 'debate')) {
-          if (this._getCurrentIdea()) {
-            ideaPanel.unminimizePanel();
-          } else {
-            ideaPanel.minimizePanel();
-          }
-        }
     },
 
     // not used?

@@ -57,8 +57,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
         this.gridSize = this.contentsView.gridSize || AssemblPanel.prototype.DEFAULT_GRID_SIZE;
         this.minWidth = this.contentsView.minWidth || AssemblPanel.prototype.DEFAULT_MIN_SIZE;
         Marionette.bindEntityEvents(this, this.model, this.modelEvents);
-
-        this.model.set('minimized', false); // TODO: memorize previous state and apply it
     },
     serializeData: function () {
 

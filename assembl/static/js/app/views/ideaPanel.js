@@ -34,7 +34,7 @@ var IdeaPanel = AssemblPanel.extend({
     initialize: function (options) {
         Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
         var that = this;
-
+        this.panelWrapper = options.panelWrapper;
         this.editingDefinition = false;
         this.editingTitle = false;
 
@@ -372,6 +372,7 @@ var IdeaPanel = AssemblPanel.extend({
           //this.resetView();
           this.template = '#tmpl-loader';
           this.render();
+          this.panelWrapper.unminimizePanel();
           this.listenTo(this.model, 'acquiredId', function (m) {
             // model has acquired an ID. Reset everything.
             var model = that.model;
@@ -387,6 +388,7 @@ var IdeaPanel = AssemblPanel.extend({
           //on if the panel was opened by selection, or by something else.
           //If we don't call render here, the panel will not refresh if we delete an idea.
           this.template = '#tmpl-ideaPanel';
+          this.panelWrapper.minimizePanel();
           this.render();
         }
       }
