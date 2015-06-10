@@ -63,21 +63,18 @@ var IdeaList = AssemblPanel.extend({
         var that = this,
             collectionManager = new CollectionManager();
 
-        collectionManager.getAllIdeasCollectionPromise()
-            .then(function (allIdeasCollection) {
+        Promise.join(collectionManager.getAllIdeasCollectionPromise(),
+            collectionManager.getAllIdeaLinksCollectionPromise(),
+            function (allIdeasCollection, allIdeaLinksCollection) {
                 var events = ['reset', 'change:parentId', 'change:@id', 'remove', 'add', 'destroy'];
                 that.listenTo(allIdeasCollection, events.join(' '), that.render);
-                that.template = '#tmpl-ideaList';
-                that.collection = allIdeasCollection;
-                that.render();
-            });
+                that.allIdeasCollection = allIdeasCollection;
 
-        collectionManager.getAllIdeaLinksCollectionPromise()
-            .then(function (allIdeaLinksCollection) {
                 var events = ['reset', 'change:source', 'change:target', 'change:order', 'remove', 'add', 'destroy'];
                 that.listenTo(allIdeaLinksCollection, events.join(' '), that.render);
+                that.allIdeaLinksCollection = allIdeaLinksCollection;
+
                 that.template = '#tmpl-ideaList';
-                that.links_collection = allIdeaLinksCollection;
                 that.render();
             });
 
@@ -87,7 +84,7 @@ var IdeaList = AssemblPanel.extend({
                 // is associated with the idea, the idea itself will receive a change event
                 // on the socket (unless it causes problem with local additions?)
                 //that.listenTo(allExtractsCollection, 'add change reset', that.render);
-            });
+            }); 
 
         this.listenTo(Assembl.vent, 'ideaList:removeIdea', function (idea) {
             that.removeIdea(idea);
@@ -170,7 +167,7 @@ var IdeaList = AssemblPanel.extend({
 
     onRender: function () {
       if (Ctx.debugRender) {
-          console.log("ideaList:render() is firing");
+        console.log("ideaList:render() is firing");
       }
       Ctx.removeCurrentlyDisplayedTooltips(this.$el);
       this.body = this.$('.panel-body');
@@ -185,96 +182,93 @@ var IdeaList = AssemblPanel.extend({
           collectionManager = new CollectionManager();
 
       function excludeRoot(idea) {
-          return idea != rootIdea && !idea.hidden;
+        return idea != rootIdea && !idea.hidden;
       }
 
       if (this.body.get(0)) {
-          y = this.body.get(0).scrollTop;
+        y = this.body.get(0).scrollTop;
       }
 
       if (this.template != '#tmpl-loader') {
-        if (!that.collection) {
+        if (!this.allIdeasCollection || !this.allIdeaLinksCollection) {
           throw new Error("loader has been cleared, but ideas aren't available yet");
         }
         if (this.filter === FEATURED) {
-            filter.featured = true;
+          filter.featured = true;
         }
         else if (this.filter === IN_SYNTHESIS) {
-            filter.inNextSynthesis = true;
+          filter.inNextSynthesis = true;
         }
 
         var list = document.createDocumentFragment();
-        Promise.join(collectionManager.getAllIdeasCollectionPromise(),
-                     collectionManager.getAllIdeaLinksCollectionPromise(),
-                     function (allIdeasCollection, allIdeaLinksCollection) {
-          rootIdea = allIdeasCollection.getRootIdea();
-          if (Object.keys(filter).length > 0) {
-              rootIdeaDirectChildrenModels = allIdeasCollection.where(filter);
-          }
-          else {
-              rootIdeaDirectChildrenModels = allIdeasCollection.models;
-          }
 
-          rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function (idea) {
-                  return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id);
-              }
-          );
+        rootIdea = this.allIdeasCollection.getRootIdea();
+        if (Object.keys(filter).length > 0) {
+          rootIdeaDirectChildrenModels = this.allIdeasCollection.where(filter);
+        }
+        else {
+          rootIdeaDirectChildrenModels = this.allIdeasCollection.models;
+        }
 
-          rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function (idea) {
-              return idea.get('order');
-          });
+        rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function (idea) {
+          return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id);
+        }
+        );
 
-          allIdeasCollection.visitDepthFirst(allIdeaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot), rootIdea.getId());
-          allIdeasCollection.visitDepthFirst(allIdeaLinksCollection, ideaSiblingChainVisitor(view_data), rootIdea.getId());
-          //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
-          _.each(roots, function (idea) {
-              var ideaView = new IdeaView({
-                  model: idea,
-                  parentPanel: that,
-                  groupContent: that.getContainingGroup(),
-                  parentView: that
-              }, view_data);
-              list.appendChild(ideaView.render().el);
-          });
-          that.$('.ideaView').html(list);
-
-          //sub menu other
-          var OtherView = new OtherInIdeaListView({
-              model: rootIdea,
-              parentPanel: that,
-              groupContent: that.getContainingGroup()
-          });
-          that.otherView.show(OtherView);
-
-          // Synthesis posts pseudo-idea
-          var synthesisView = new SynthesisInIdeaListView({
-              model: rootIdea,
-              parentPanel: that,
-              groupContent: that.getContainingGroup()
-          });
-          that.synthesisView.show(synthesisView);
-
-          // Orphan messages pseudo-idea
-          var orphanView = new OrphanMessagesInIdeaListView({
-              model: rootIdea,
-              parentPanel: that,
-              groupContent: that.getContainingGroup()
-          });
-          that.orphanView.show(orphanView);
-
-          // All posts pseudo-idea
-          var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
-              model: rootIdea,
-              parentPanel: that,
-              groupContent: that.getContainingGroup()
-          });
-          that.allMessagesView.show(allMessagesInIdeaListView);
-
-          Ctx.initTooltips(that.$el);
-
-          that.body = that.$('.panel-body');
-          that.body.get(0).scrollTop = y;
+        rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function (idea) {
+          return idea.get('order');
         });
+
+        this.allIdeasCollection.visitDepthFirst(this.allIdeaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot), rootIdea.getId());
+        this.allIdeasCollection.visitDepthFirst(this.allIdeaLinksCollection, ideaSiblingChainVisitor(view_data), rootIdea.getId());
+        //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
+        _.each(roots, function (idea) {
+          var ideaView = new IdeaView({
+            model: idea,
+            parentPanel: that,
+            groupContent: that.getContainingGroup(),
+            parentView: that
+          }, view_data);
+          list.appendChild(ideaView.render().el);
+        });
+        that.$('.ideaView').html(list);
+
+        //sub menu other
+        var OtherView = new OtherInIdeaListView({
+          model: rootIdea,
+          parentPanel: that,
+          groupContent: that.getContainingGroup()
+        });
+        that.otherView.show(OtherView);
+
+        // Synthesis posts pseudo-idea
+        var synthesisView = new SynthesisInIdeaListView({
+          model: rootIdea,
+          parentPanel: that,
+          groupContent: that.getContainingGroup()
+        });
+        that.synthesisView.show(synthesisView);
+
+        // Orphan messages pseudo-idea
+        var orphanView = new OrphanMessagesInIdeaListView({
+          model: rootIdea,
+          parentPanel: that,
+          groupContent: that.getContainingGroup()
+        });
+        that.orphanView.show(orphanView);
+
+        // All posts pseudo-idea
+        var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
+          model: rootIdea,
+          parentPanel: that,
+          groupContent: that.getContainingGroup()
+        });
+        that.allMessagesView.show(allMessagesInIdeaListView);
+
+        Ctx.initTooltips(that.$el);
+
+        that.body = that.$('.panel-body');
+        that.body.get(0).scrollTop = y;
       }
     },
 
