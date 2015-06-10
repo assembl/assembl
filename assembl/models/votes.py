@@ -6,7 +6,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 from pyramid.settings import asbool
 
-from . import (Base, DiscussionBoundBase, Tombstonable)
+from . import (Base, DiscussionBoundBase, HistoryMixin)
 from .discussion import Discussion
 from .idea import Idea
 from .auth import User
@@ -16,11 +16,8 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
 
 
-class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
+class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
     __tablename__ = "idea_vote"
-
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
     type = Column(String(60), nullable=False)
 
@@ -36,10 +33,13 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
         nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.subject_node)}
     )
+    idea_ts = relationship(
+        Idea, foreign_keys=(idea_id,))
     idea = relationship(
         Idea,
         primaryjoin=and_(Idea.id == idea_id,
-                         Idea.is_tombstone == False),
+                         Idea.tombstone_date == None),
+        foreign_keys=(idea_id,),
         backref=backref("votes", cascade="all, delete-orphan"))
 
     criterion_id = Column(
@@ -48,10 +48,13 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
         nullable=True,
         info={'rdf': QuadMapPatternS(None, VOTE.voting_criterion)}
     )
+    criterion_ts = relationship(
+        Idea, foreign_keys=(criterion_id,))
     criterion = relationship(
         Idea,
         primaryjoin=and_(Idea.id == criterion_id,
-                         Idea.is_tombstone == False),
+                         Idea.tombstone_date == None),
+        foreign_keys=(criterion_id,),
         backref="votes_using_this_criterion")
 
     vote_date = Column(DateTime, default=datetime.utcnow,
@@ -82,11 +85,11 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     widget = relationship(
         MultiCriterionVotingWidget,
         primaryjoin="and_(MultiCriterionVotingWidget.id==AbstractIdeaVote.widget_id, "
-                         "AbstractIdeaVote.is_tombstone==False)",
+                         "AbstractIdeaVote.tombstone_date == None)",
         backref=backref("votes", cascade="all, delete-orphan"))
 
     def get_discussion_id(self):
-        return self.idea.discussion_id
+        return self.idea_ts.discussion_id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -105,6 +108,18 @@ class AbstractIdeaVote(DiscussionBoundBase, Tombstonable):
     @abstractproperty
     def value(self):
         pass
+
+    def copy(self, tombstone=None, **kwargs):
+        kwargs.update(
+            tombstone=tombstone,
+            widget=self.widget,
+            discussion=self.discussion,
+            voter=self.voter,
+            idea=self.idea,
+            criterion=self.criterion,
+            vote_date=self.vote_date,
+        )
+        return super(AbstractIdeaVote, self).copy(**kwargs)
 
     def unique_query(self):
         idea_id = self.idea_id or (self.idea.id if self.idea else None)
@@ -141,6 +156,7 @@ class LickertRange(Base):
 
 class LickertIdeaVote(AbstractIdeaVote):
     __tablename__ = "lickert_idea_vote"
+    __table_args__ = ()
     rdf_class = VOTE.LickertVote
     __mapper_args__ = {
         'polymorphic_identity': 'lickert_idea_vote',
@@ -183,6 +199,15 @@ class LickertIdeaVote(AbstractIdeaVote):
     def value(self):
         return self.vote_value
 
+    def copy(self, tombstone=None, **kwargs):
+        kwargs.update(
+            tombstone=tombstone,
+            lickert_range=self.lickert_range,
+            vote_value=self.vote_value
+        )
+        return super(LickertIdeaVote, self).copy(**kwargs)
+
+
     @value.setter
     def value(self, val):
         val = float(val)
@@ -194,6 +219,7 @@ class LickertIdeaVote(AbstractIdeaVote):
 class BinaryIdeaVote(AbstractIdeaVote):
     rdf_class = VOTE.BinaryVote
     __tablename__ = "binary_idea_vote"
+    __table_args__ = ()
     __mapper_args__ = {
         'polymorphic_identity': 'binary_idea_vote',
     }
@@ -228,3 +254,10 @@ class BinaryIdeaVote(AbstractIdeaVote):
     @value.setter
     def value(self, val):
         self.vote_value = asbool(val)
+
+    def copy(self, tombstone=None, **kwargs):
+        kwargs.update(
+            tombstone=tombstone,
+            vote_value=self.vote_value
+        )
+        return super(BinaryIdeaVote, self).copy(**kwargs)

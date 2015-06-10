@@ -49,13 +49,11 @@ var groupContent = Marionette.CompositeView.extend({
      */
     setCurrentIdea: function (idea, reason, doScroll) {
       //console.log("setCurrentIdea() fired", idea, reason, doScroll);
-      if (idea === undefined) {
-        throw new Error("Setting the idea undefined isn't allowed.  Perhaps you meant null?");
-      }
-      if (idea != this.getCurrentIdea()) {
-        // console.log("About to set current idea on group:", this.cid);
-        this._currentIdea = idea;
-        this.trigger("idea:set", idea, reason, doScroll);
+      //console.log(this.model);
+
+      if (idea !== this._getCurrentIdea()) {
+        console.log("About to set current idea on group:", this.cid);
+        this.model.get('states').at(0).set({currentIdea: idea}, {validate: true});
       }
     },
 
@@ -64,8 +62,9 @@ var groupContent = Marionette.CompositeView.extend({
      * null if it was explicitely set to no idea.
      *
      */
-    getCurrentIdea: function () {
-      return this._currentIdea;
+    _getCurrentIdea: function () {
+      //console.log("_getCurrentIdea() fired, returning", this.model.get('states').at(0).get('currentIdea'));
+      return this.model.get('states').at(0).get('currentIdea');
     },
 
     closeGroup: function () {
@@ -291,7 +290,7 @@ var groupContent = Marionette.CompositeView.extend({
             ideaPanel = this.findWrapperByType(PanelSpecTypes.IDEA_PANEL);
         this.resetMessagePanelWidth();
         if (ideaPanel != null && !ideaPanel.model.get('locked') && (!nav || this.model.get('navigationState') == 'debate')) {
-          if (this.getCurrentIdea()) {
+          if (this._getCurrentIdea()) {
             ideaPanel.unminimizePanel();
           } else {
             ideaPanel.minimizePanel();
@@ -366,9 +365,10 @@ var groupContent = Marionette.CompositeView.extend({
                 return;
             return view;
         }
-        else {
+        /*else {
             console.log("findWrapperByType: WARNING: unable to find a wrapper for type", panelSpecType);
-        }
+        }*/
+        return undefined;
     },
 
     findViewByType: function (panelSpecType) {
@@ -376,9 +376,9 @@ var groupContent = Marionette.CompositeView.extend({
         if (wrapper != null && wrapper.contents !== undefined) {
             return wrapper.contents.currentView;
         }
-        else {
+        /*else {
             console.log("findViewByType: WARNING: unable to find a view for type", panelSpecType);
-        }
+        }*/
         return undefined;
     },
 

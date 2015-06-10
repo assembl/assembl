@@ -268,108 +268,9 @@ Context.prototype = {
      },*/
 
     /**
-     * Show or hide the given panel
-     * @param  {String} panelName
-     */
-    togglePanel: function (panelName) {
-        var panel = assembl[panelName],
-            ctx = new Context();
-
-        if (panel === undefined) {
-            return false;
-        }
-        if (panel.$el.hasClass('is-visible')) {
-            ctx.closePanel(panel);
-        } else {
-            ctx.openPanel(panel);
-        }
-    },
-
-    /**
-     * Close the given panel
-     * @param {backbone.View} panel
-     */
-    closePanel: function (panel) {
-        if (!panel.$el.hasClass('is-visible')) {
-            return false;
-        }
-
-        assembl.openedPanels -= 1;
-        $(document.body).attr('data-panel-qty', assembl.openedPanels);
-
-        if (this.isInFullscreen()) {
-            $(document.body).addClass('is-fullscreen');
-        }
-
-        panel.$el.removeClass('is-visible');
-
-        this.removePanelFromStorage(panel.el.id);
-
-        if (panel.button) {
-            panel.button.removeClass('active');
-        }
-        Assembl.vent.trigger("panel:close", [panel]);
-    },
-
-    /**
-     * Open the given panel
-     * @param {backbone.View} panel
-     */
-    /*openPanel: function (panel) {
-        if (panel.$el.hasClass('is-visible')) {
-            return false;
-        }
-        this.openedPanels += 1;
-        $(document.body).attr('data-panel-qty', this.openedPanels);
-        $(document.body).removeClass('is-fullscreen');
-        panel.$el.addClass('is-visible');
-
-        this.addPanelToStorage(panel.el.id);
-
-        if (panel.button) {
-            panel.button.addClass('active');
-        }
-        Assembl.vent.trigger("panel:open", [panel]);
-    },*/
-
-    /**
-     * @return {Object} The Object with all panels in the localStorage
-     */
-    getPanelsFromStorage: function () {
-        var panels = JSON.parse(localStorage.getItem('panels')) || {};
-        return panels;
-    },
-
-    /**
-     * Adds a panel in the localStoage
-     * @param {string} panelId
-     * @return {Object} The current object
-     */
-    /*addPanelToStorage: function (panelId) {
-        var panels = this.getPanelsFromStorage();
-        panels[panelId] = 'open';
-        localStorage.setItem('panels', JSON.stringify(panels));
-
-        return panels;
-    },*/
-
-    /**
-     * Remove a panel from the localStorage by its id
-     * @param  {string} panelId
-     * @return {Object} The remaining panels
-     */
-    removePanelFromStorage: function (panelId) {
-        var panels = this.getPanelsFromStorage();
-        delete panels[panelId];
-        localStorage.setItem('panels', JSON.stringify(panels));
-
-        return panels;
-    },
-
-    /**
      * @return {Object} The Object with mesagelistconfig in the localStorage
      */
-    getMessageListConfigFromStorage: function () {
+    DEPRECATEDgetMessageListConfigFromStorage: function () {
         var messageListConfig = JSON.parse(localStorage.getItem('messageListConfig')) || {};
         return messageListConfig;
     },
@@ -379,7 +280,7 @@ Context.prototype = {
      * @param {Object} The Object with mesagelistconfig in the localStorage
      * @return {Object} The Object with mesagelistconfig in the localStorage
      */
-    setMessageListConfigToStorage: function (messageListConfig) {
+    DEPRECATEDsetMessageListConfigToStorage: function (messageListConfig) {
         localStorage.setItem('messageListConfig', JSON.stringify(messageListConfig));
         return messageListConfig;
     },

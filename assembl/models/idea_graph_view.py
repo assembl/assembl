@@ -20,7 +20,7 @@ from .discussion import Discussion
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADMIN_DISC, P_EDIT_SYNTHESIS)
-from .idea import Idea, IdeaLink
+from .idea import Idea, IdeaLink, RootIdea
 from ..semantic.namespaces import (
     SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES)
 from assembl.views.traversal import AbstractCollectionDefinition
@@ -106,7 +106,7 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
         idea_alias = alias_maker.alias_from_relns(cls.idea)
         # Assume tombstone status of target is similar to source, for now.
         conditions = [(idea_assoc.idea_id == idea_alias.id),
-                      (idea_alias.is_tombstone == 0)]
+                      (idea_alias.tombstone_date == None)]
         if discussion_id:
             conditions.append((idea_alias.discussion_id == discussion_id))
         return [
@@ -168,7 +168,7 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
         idea_link_alias = alias_maker.alias_from_relns(cls.idea_link)
         # Assume tombstone status of target is similar to source, for now.
         conditions = [(idea_link_assoc.idea_link_id == idea_link_alias.id),
-                      (idea_link_alias.is_tombstone == 0)]
+                      (idea_link_alias.tombstone_date == None)]
         if discussion_id:
             conditions.extend(cls.get_discussion_conditions(
                 discussion_id, alias_maker))
@@ -232,7 +232,7 @@ class ExplicitSubGraphView(IdeaGraphView):
 
     def copy(self):
         retval = IdeaGraphView.copy(self)
-        retval.ideas = self.ideas
+        # retval.ideas = self.ideas
         return retval
 
     def get_idea_links(self):
@@ -383,19 +383,51 @@ class Synthesis(ExplicitSubGraphView):
 
     def publish(self):
         """ Publication is the end of a synthesis's lifecycle.
-        It creates a new next_synthesis, copied from this one.
-        Return's the new discussion next_synthesis """
-        next_synthesis = self.copy()
-        self.db.add(next_synthesis)
+        It creates and returns a frozen copy of its state 
+        using tombstones for ideas and links."""
+        frozen_synthesis = self.copy()
+        self.db.add(frozen_synthesis)
+        self.db.flush()
 
-        #Copy tombstoned versions of all idea links in the current discussion
+        # Copy tombstoned versions of all idea links and relevant ideas in the current synthesis
         links = Idea.get_all_idea_links(self.discussion_id)
+        synthesis_idea_ids = {idea.id for idea in self.ideas}
+        # Do not copy the root
+        root = self.discussion.root_idea
+        idea_copies = {root.id: root}
+        # Also copies ideas between two synthesis ideas
+        relevant_idea_ids = synthesis_idea_ids.copy()
+        def add_ancestors_between(idea, path=None):
+            if isinstance(idea, RootIdea):
+                return
+            path = path[:] if path else []
+            if idea.id in synthesis_idea_ids:
+                relevant_idea_ids.update({i.id for i in path})
+            else:
+                path.append(idea)
+            for parent in idea.parents:
+                add_ancestors_between(parent, path)
+        for idea in self.ideas:
+            for parent in idea.parents:
+                add_ancestors_between(parent)
         for link in links:
-            new_link = link.copy()
-            new_link.is_tombstone = True
-            self.idea_links.append(new_link)
-        self.db.add(self)
-        return next_synthesis
+            new_link = link.copy(tombstone=True)
+            frozen_synthesis.idea_links.append(new_link)
+            if link.source_id in relevant_idea_ids:
+                if link.source_id not in idea_copies:
+                    new_idea = link.source_ts.copy(tombstone=True)
+                    idea_copies[link.source_id] = new_idea
+                    if link.source_id in synthesis_idea_ids:
+                        frozen_synthesis.ideas.append(new_idea)
+                new_link.source_ts = idea_copies[link.source_id]
+            if link.target_id in relevant_idea_ids:
+                if link.target_id not in idea_copies:
+                    new_idea = link.target_ts.copy(tombstone=True)
+                    idea_copies[link.target_id] = new_idea
+                    if link.target_id in synthesis_idea_ids:
+                        frozen_synthesis.ideas.append(new_idea)
+                new_link.target_ts = idea_copies[link.target_id]
+        return frozen_synthesis
 
     @property
     def is_next_synthesis(self):

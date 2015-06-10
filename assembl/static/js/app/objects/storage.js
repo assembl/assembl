@@ -31,6 +31,7 @@ var storage = Marionette.Object.extend({
         this.listenTo(groupSpecs, 'reset change', this.saveGroupSpecs);
         groupSpecs.models.forEach(function (m) {
             that.listenTo(m.attributes.panels, 'add remove reset change', that.saveGroupSpecs);
+            that.listenTo(m.attributes.states, 'add remove reset change', that.saveGroupSpecs);
         });
     },
 
@@ -45,8 +46,10 @@ var storage = Marionette.Object.extend({
     },
 
     saveGroupSpecs: function () {
+        //console.log("saveGroupSpecs:", JSON.stringify(this.groupSpecs));
         this._store.setItem(this.getStoragePrefix() + 'groupItems', JSON.stringify(this.groupSpecs));
         this._store.setItem(this.getStoragePrefix() + 'lastViewSave', Date.now());
+        console.log("saveGroupSpecs, store is now: ", this._store);
     },
 
     getDateOfLastViewSave: function () {

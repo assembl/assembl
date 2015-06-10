@@ -39,11 +39,11 @@ var IdeaPanel = AssemblPanel.extend({
         this.editingTitle = false;
 
         if (!this.model) {
-            this.model = null;
+            this.model = this.getGroupState().get('currentIdea');
         }
 
-        this.listenTo(this.getContainingGroup(), "idea:set", function (idea) {
-            that.setIdeaModel(idea);
+        this.listenTo(this.getGroupState(), "change:currentIdea", function (state, currentIdea) {
+          that.setIdeaModel(currentIdea);
         });
 
         this.listenTo(Assembl.vent, 'DEPRECATEDideaPanel:showSegment', function (segment) {
@@ -342,56 +342,54 @@ var IdeaPanel = AssemblPanel.extend({
      * @param  {Idea} [idea=null]
      */
     setIdeaModel: function (idea, reason) {
-        var that = this;
+      var that = this;
 
-        if ( reason === "created" ){
-            this.focusShortTitle = true;
-        }else {
-            this.focusShortTitle = false;
+      if ( reason === "created" ){
+        this.focusShortTitle = true;
+      }
+      else {
+        this.focusShortTitle = false;
+      }
+
+      //console.log("setIdeaModel called with", idea);
+      if (idea !== this.model) {
+        if (this.model !== null) {
+          this.stopListening(this.model);
         }
-
-        //console.log("setIdeaModel called with", idea);
-        if (idea !== this.model) {
-            if (this.model !== null) {
-                this.stopListening(this.model);
-            }
-            this.model = idea;
-            this.editingDefinition = false;
-            this.editingTitle = false;
-            //console.log("this.extractListSubset before setIdea:", this.extractListSubset);
-            if (this.extractListSubset) {
-                this.stopListening(this.extractListSubset);
-                this.extractListSubset = null;
-            }
-            if (this.extractListView) {
-                this.extractListView.unbind();
-                this.extractListView = null;
-            }
-            if (this.model) {
-                //this.resetView();
-
-                this.listenTo(this.model, 'acquiredId', function (m) {
-                    // model has acquired an ID. Reset everything.
-                    var model = that.model;
-                    that.model = null;
-                    that.setIdeaModel(model, reason);
-                });
-                if (this.model.id) {
-                    //Ctx.openPanel(assembl.ideaPanel);
-                    //console.log("ideaPanel::setIdeaModel() fetching models");
-                    //this.populateAssociatedWidgetData();
-
-                    this.fetchModelAndRender();
-                }
-            } else {
-                //TODO: More sophisticated behaviour here, depending
-                //on if the panel was opened by selection, or by something else.
-                //app.closePanel(app.ideaPanel);
-                //this.resetView();
-              //If we don't call render here, the panel will not refresh if we delete an idea.
-              this.render();
-            }
+        this.model = idea;
+        this.editingDefinition = false;
+        this.editingTitle = false;
+        //console.log("this.extractListSubset before setIdea:", this.extractListSubset);
+        if (this.extractListSubset) {
+          this.stopListening(this.extractListSubset);
+          this.extractListSubset = null;
         }
+        if (this.extractListView) {
+          this.extractListView.unbind();
+          this.extractListView = null;
+        }
+        if (this.model) {
+          //this.resetView();
+          this.template = '#tmpl-loader';
+          this.render();
+          this.listenTo(this.model, 'acquiredId', function (m) {
+            // model has acquired an ID. Reset everything.
+            var model = that.model;
+            that.model = null;
+            that.setIdeaModel(model, reason);
+          });
+          if (this.model.id) {
+            this.fetchModelAndRender();
+          }
+        } 
+        else {
+          //TODO: More sophisticated behaviour here, depending
+          //on if the panel was opened by selection, or by something else.
+          //If we don't call render here, the panel will not refresh if we delete an idea.
+          this.template = '#tmpl-ideaPanel';
+          this.render();
+        }
+      }
     },
 
     fetchModelAndRender: function(){
@@ -407,6 +405,7 @@ var IdeaPanel = AssemblPanel.extend({
                 });
                 that.listenTo(that.extractListSubset, "add remove reset change", that.renderTemplateGetExtractsLabel);
                 //console.log("The region:", that.segmentList);
+                that.template = '#tmpl-ideaPanel';
                 that.render();
                 /*that.listenTo(that.model, 'change', function (m) {
                   // console.log("ideaPanel::change callback about to call render");

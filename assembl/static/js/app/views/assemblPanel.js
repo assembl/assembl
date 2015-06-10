@@ -60,6 +60,16 @@ var AssemblPanel = Marionette.LayoutView.extend({
     },
 
     /**
+     * Get the groupState for this panel.  You CAN hold a reference to this.
+     * @return a groupContent object, or throws an exception.
+     */
+    getGroupState: function () {
+      var state = this.getContainingGroup().model.get('states');
+      //console.log("getGroupState returning", state, this.getContainingGroup().model);
+      return this.getContainingGroup().model.get('states').at(0);
+    },
+
+    /**
      * Show the panel is currently loading data
      */
     blockPanel: function () {

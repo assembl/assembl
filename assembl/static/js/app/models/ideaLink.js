@@ -1,7 +1,8 @@
 'use strict';
 
 var _ = require('../shims/underscore.js'),
-    Base = require('./base.js');
+    Base = require('./base.js'),
+    Ctx = require('../common/context.js');
 
 /**
  * @class IdeaModel
@@ -22,10 +23,12 @@ var IdeaLinkModel = Base.Model.extend({
     defaults: {
         source: '',
         target: '',
+        original_uri: null,
+        is_tombstone: false,
         order: 1
     },
 
-    correctParentBug: function () {
+    /*correctParentBug: function () {
         var child = this.collection.collectionManager._allIdeasCollection.get(this.get('target'));
         if (!child) {
             console.log("correct parent bug: unknown child");
@@ -36,7 +39,7 @@ var IdeaLinkModel = Base.Model.extend({
             child.set('parentId', this.get('source'));
             child.get('parents').push(this.get('source'));
         }
-    },
+    },*/
 
     validate: function(attrs, options){
         /**
@@ -59,10 +62,16 @@ var IdeaLinkCollection = Base.Collection.extend({
     model: IdeaLinkModel,
 
     /**
+     * Url
+     * @type {String}
+     */
+    url: Ctx.getApiV2DiscussionUrl("idea_links"),
+
+    /**
      * add function
      * @type {IdeaModel}
      */
-    add: function (models, options) {
+    /*add: function (models, options) {
         models = Backbone.Collection.prototype.set.call(this, models, options);
         if (_.isArray(models)) {
             _.each(models, function (m) {
@@ -72,7 +81,7 @@ var IdeaLinkCollection = Base.Collection.extend({
             models.correctParentBug();
         }
         return models;
-    }
+    }*/
 });
 
 module.exports = {

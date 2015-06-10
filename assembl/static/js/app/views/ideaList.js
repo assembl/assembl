@@ -17,7 +17,8 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     CollectionManager = require('../common/collectionManager.js'),
     i18n = require('../utils/i18n.js'),
     OtherInIdeaListView = require('./otherInIdeaList.js'),
-    $ = require('../shims/jquery.js');
+    $ = require('../shims/jquery.js'),
+    Promise = require('bluebird');
 
 
 var FEATURED = 'featured',
@@ -62,12 +63,18 @@ var IdeaList = AssemblPanel.extend({
         var that = this,
             collectionManager = new CollectionManager();
 
-        collectionManager.getAllIdeasCollectionPromise()
-            .then(function (allIdeasCollection) {
+        Promise.join(collectionManager.getAllIdeasCollectionPromise(),
+            collectionManager.getAllIdeaLinksCollectionPromise(),
+            function (allIdeasCollection, allIdeaLinksCollection) {
                 var events = ['reset', 'change:parentId', 'change:@id', 'remove', 'add', 'destroy'];
                 that.listenTo(allIdeasCollection, events.join(' '), that.render);
-                that.template = '#tmpl-ideaList'
-                that.collection = allIdeasCollection;
+                that.allIdeasCollection = allIdeasCollection;
+
+                var events = ['reset', 'change:source', 'change:target', 'change:order', 'remove', 'add', 'destroy'];
+                that.listenTo(allIdeaLinksCollection, events.join(' '), that.render);
+                that.allIdeaLinksCollection = allIdeaLinksCollection;
+
+                that.template = '#tmpl-ideaList';
                 that.render();
             });
 
@@ -77,7 +84,7 @@ var IdeaList = AssemblPanel.extend({
                 // is associated with the idea, the idea itself will receive a change event
                 // on the socket (unless it causes problem with local additions?)
                 //that.listenTo(allExtractsCollection, 'add change reset', that.render);
-            });
+            }); 
 
         this.listenTo(Assembl.vent, 'ideaList:removeIdea', function (idea) {
             that.removeIdea(idea);
@@ -105,7 +112,7 @@ var IdeaList = AssemblPanel.extend({
             that.scrollInterval = null;
         });
 
-        this.listenTo(Assembl.vent, 'ideaList:selectIdea', function (ideaId, reason, doScroll) {
+        this.listenTo(Assembl.vent, 'DEPRECATEDideaList:selectIdea', function (ideaId, reason, doScroll) {
             collectionManager.getAllIdeasCollectionPromise()
                 .done(function (allIdeasCollection) {
                 var idea = allIdeasCollection.get(ideaId);
@@ -120,13 +127,11 @@ var IdeaList = AssemblPanel.extend({
 
         this.listenTo(this, 'scrollToIdea', this.onScrollToIdea);
 
-
-        // why is there idea:set and ideaList:selectIdea ?
-        this.listenTo(this.getContainingGroup(), 'idea:set', function (idea, reason, doScroll) {
-            //console.log("ideaList heared a idea:set event");
-            if (idea && doScroll) {
-                that.onScrollToIdea(idea);
-            }
+        this.listenTo(this.getGroupState(), "change:currentIdea", function (state, currentIdea) {
+          //console.log("ideaList heard a change:currentIdea event");
+          if (currentIdea) {
+              that.onScrollToIdea(currentIdea);
+          }
         });
 
         $('html').on('dragover', function(e){
@@ -162,7 +167,7 @@ var IdeaList = AssemblPanel.extend({
 
     onRender: function () {
       if (Ctx.debugRender) {
-          console.log("ideaList:render() is firing");
+        console.log("ideaList:render() is firing");
       }
       Ctx.removeCurrentlyDisplayedTooltips(this.$el);
       this.body = this.$('.panel-body');
@@ -177,90 +182,93 @@ var IdeaList = AssemblPanel.extend({
           collectionManager = new CollectionManager();
 
       function excludeRoot(idea) {
-          return idea != rootIdea && !idea.hidden;
+        return idea != rootIdea && !idea.hidden;
       }
 
       if (this.body.get(0)) {
-          y = this.body.get(0).scrollTop;
+        y = this.body.get(0).scrollTop;
       }
 
       if (this.template != '#tmpl-loader') {
-        if (!that.collection) {
+        if (!this.allIdeasCollection || !this.allIdeaLinksCollection) {
           throw new Error("loader has been cleared, but ideas aren't available yet");
         }
         if (this.filter === FEATURED) {
-            filter.featured = true;
+          filter.featured = true;
         }
         else if (this.filter === IN_SYNTHESIS) {
-            filter.inNextSynthesis = true;
+          filter.inNextSynthesis = true;
         }
 
         var list = document.createDocumentFragment();
-        collectionManager.getAllIdeasCollectionPromise()
-            .then(function (allIdeasCollection) {
-          rootIdea = allIdeasCollection.getRootIdea();
-          if (Object.keys(filter).length > 0) {
-              rootIdeaDirectChildrenModels = allIdeasCollection.where(filter);
-          }
-          else {
-              rootIdeaDirectChildrenModels = allIdeasCollection.models;
-          }
 
-          rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function (idea) {
-                  return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id);
-              }
-          );
+        rootIdea = this.allIdeasCollection.getRootIdea();
+        if (Object.keys(filter).length > 0) {
+          rootIdeaDirectChildrenModels = this.allIdeasCollection.where(filter);
+        }
+        else {
+          rootIdeaDirectChildrenModels = this.allIdeasCollection.models;
+        }
 
-          rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function (idea) {
-              return idea.get('order');
-          });
+        rootIdeaDirectChildrenModels = rootIdeaDirectChildrenModels.filter(function (idea) {
+          return (idea.get("parentId") == rootIdea.id) || (idea.get("parentId") == null && idea.id != rootIdea.id);
+        }
+        );
 
-          rootIdea.visitDepthFirst(objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot));
-          rootIdea.visitDepthFirst(ideaSiblingChainVisitor(view_data));
-          //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
-          _.each(roots, function (idea) {
-              var ideaView = new IdeaView({
-                  model: idea,
-                  groupContent: that.getContainingGroup(),
-                  parentView: that
-              }, view_data);
-              list.appendChild(ideaView.render().el);
-          });
-          that.$('.ideaView').html(list);
-
-          //sub menu other
-          var OtherView = new OtherInIdeaListView({
-              model: rootIdea,
-              groupContent: that.getContainingGroup()
-          });
-          that.otherView.show(OtherView);
-
-          // Synthesis posts pseudo-idea
-          var synthesisView = new SynthesisInIdeaListView({
-              model: rootIdea,
-              groupContent: that.getContainingGroup()
-          });
-          that.synthesisView.show(synthesisView);
-
-          // Orphan messages pseudo-idea
-          var orphanView = new OrphanMessagesInIdeaListView({
-              model: rootIdea,
-              groupContent: that.getContainingGroup()
-          });
-          that.orphanView.show(orphanView);
-
-          // All posts pseudo-idea
-          var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
-              model: rootIdea,
-              groupContent: that.getContainingGroup()
-          });
-          that.allMessagesView.show(allMessagesInIdeaListView);
-
-          Ctx.initTooltips(that.$el);
-
-          that.body = that.$('.panel-body');
-          that.body.get(0).scrollTop = y;
+        rootIdeaDirectChildrenModels = _.sortBy(rootIdeaDirectChildrenModels, function (idea) {
+          return idea.get('order');
         });
+
+        this.allIdeasCollection.visitDepthFirst(this.allIdeaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot), rootIdea.getId());
+        this.allIdeasCollection.visitDepthFirst(this.allIdeaLinksCollection, ideaSiblingChainVisitor(view_data), rootIdea.getId());
+        //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
+        _.each(roots, function (idea) {
+          var ideaView = new IdeaView({
+            model: idea,
+            parentPanel: that,
+            groupContent: that.getContainingGroup(),
+            parentView: that
+          }, view_data);
+          list.appendChild(ideaView.render().el);
+        });
+        that.$('.ideaView').html(list);
+
+        //sub menu other
+        var OtherView = new OtherInIdeaListView({
+          model: rootIdea,
+          parentPanel: that,
+          groupContent: that.getContainingGroup()
+        });
+        that.otherView.show(OtherView);
+
+        // Synthesis posts pseudo-idea
+        var synthesisView = new SynthesisInIdeaListView({
+          model: rootIdea,
+          parentPanel: that,
+          groupContent: that.getContainingGroup()
+        });
+        that.synthesisView.show(synthesisView);
+
+        // Orphan messages pseudo-idea
+        var orphanView = new OrphanMessagesInIdeaListView({
+          model: rootIdea,
+          parentPanel: that,
+          groupContent: that.getContainingGroup()
+        });
+        that.orphanView.show(orphanView);
+
+        // All posts pseudo-idea
+        var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
+          model: rootIdea,
+          parentPanel: that,
+          groupContent: that.getContainingGroup()
+        });
+        that.allMessagesView.show(allMessagesInIdeaListView);
+
+        Ctx.initTooltips(that.$el);
+
+        that.body = that.$('.panel-body');
+        that.body.get(0).scrollTop = y;
       }
     },
 
@@ -379,7 +387,7 @@ var IdeaList = AssemblPanel.extend({
      * If no idea is selected, add it at the root level ( no parent )
      */
     addChildToSelected: function () {
-        var currentIdea = this.getContainingGroup().getCurrentIdea(),
+        var currentIdea = this.getGroupState().get('currentIdea'),
             newIdea = new Idea.Model(),
             that = this,
             collectionManager = new CollectionManager();

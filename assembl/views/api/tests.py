@@ -126,6 +126,8 @@ def test_get_ideas(discussion, test_app, test_session):
         discussion=discussion
     )
     test_session.add(idea)
+    test_session.flush()
+    test_session.commit()
     url = get_url(discussion, 'ideas')
     res = test_app.get(url)
     assert res.status_code == 200

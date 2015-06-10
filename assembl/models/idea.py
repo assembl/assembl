@@ -29,7 +29,7 @@ from virtuoso.alchemy import SparqlClause, Timestamp
 
 from ..lib import config
 from ..nlp.wordcounter import WordCounter
-from . import DiscussionBoundBase, Tombstonable
+from . import DiscussionBoundBase, HistoryMixin
 from .discussion import Discussion
 from ..semantic.virtuoso_mapping import (
     QuadMapPatternS, AssemblQuadStorageManager)
@@ -98,7 +98,7 @@ class WordCountVisitor(IdeaVisitor):
         return self.counter.best(num)
 
 
-class Idea(Tombstonable, DiscussionBoundBase):
+class Idea(HistoryMixin, DiscussionBoundBase):
     """
     A core concept taken from the associated discussion
     """
@@ -120,9 +120,6 @@ class Idea(Tombstonable, DiscussionBoundBase):
     hidden = Column(Boolean, server_default='0')
     last_modified = Column(Timestamp)
 
-    id = Column(
-        Integer, primary_key=True,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     creation_date = Column(
         DateTime, nullable=False, default=datetime.utcnow,
         info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
@@ -176,6 +173,17 @@ class Idea(Tombstonable, DiscussionBoundBase):
     def widget_add_post_endpoint(self):
         return self.widget_ancestor_endpoints()
 
+    def copy(self, tombstone=None, **kwargs):
+        kwargs.update(
+            tombstone=tombstone,
+            long_title=self.long_title,
+            short_title=self.short_title,
+            definition=self.definition,
+            hidden=self.hidden,
+            creation_date=self.creation_date,
+            discussion=self.discussion)
+        return super(Idea, self).copy(**kwargs)
+
     def widget_ancestor_endpoints(self, target_idea=None):
         # HACK. Review consequences after test.
         target_idea = target_idea or self
@@ -196,7 +204,7 @@ class Idea(Tombstonable, DiscussionBoundBase):
         sql = '''SELECT * FROM idea JOIN (
                   SELECT source_id FROM (
                     SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES
-                        source_id, target_id FROM idea_idea_link WHERE is_tombstone=0) ia
+                        source_id, target_id FROM idea_idea_link WHERE tombstone_date IS NULL) ia
                   JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
                   WHERE dag_idea.discussion_id = :discussion_id
                   AND ia.target_id=:idea_id) x on (id=source_id)'''
@@ -233,7 +241,7 @@ class Idea(Tombstonable, DiscussionBoundBase):
             where_clause = ':root_idea_id'
         return """(SELECT source_id, target_id FROM (
             SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES
-                        source_id, target_id FROM idea_idea_link WHERE is_tombstone=0
+                        source_id, target_id FROM idea_idea_link WHERE tombstone_date IS NULL
                 UNION SELECT id as source_id, id as target_id FROM idea
             ) ia
             JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
@@ -282,7 +290,7 @@ JOIN post AS family_posts ON (
               JOIN idea_content_positive_link ON (idea_content_positive_link.id = idea_content_link.id)
               JOIN idea ON (idea_content_link.idea_id = idea.id)
              WHERE idea.discussion_id = :discussion_id
-             AND idea.is_tombstone = 0 AND idea.hidden = 0)"""
+             AND idea.tombstone_date IS NULL AND idea.hidden = 0)"""
 
     @staticmethod
     def _get_count_orphan_posts_statement():
@@ -624,7 +632,7 @@ JOIN post AS family_posts ON (
             target, target.id == IdeaLink.target_id).filter(
             target.discussion_id == discussion_id).filter(
             source.discussion_id == discussion_id).filter(
-            IdeaLink.is_tombstone == False).all()
+            IdeaLink.tombstone_date == None).all()
 
     @classmethod
     def extra_collections(cls):
@@ -666,7 +674,7 @@ JOIN post AS family_posts ON (
             # For widgets which represent general configuration.
             ancestry = text("""SELECT id from (SELECT source_id as id FROM (
                         SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
-                            source_id, target_id FROM idea_idea_link WHERE is_tombstone=0
+                            source_id, target_id FROM idea_idea_link WHERE tombstone_date IS NULL
                         ) il
                     WHERE il.target_id = :idea_id
                     UNION SELECT :idea_id as id) recid""").columns(column('id'))
@@ -799,13 +807,14 @@ JOIN post AS family_posts ON (
                     if isinstance(inst, AbstractIdeaVote):
                         other_votes = instance.db.query(AbstractIdeaVote).filter_by(
                             voter_id=user_id, idea_id=inst.idea.id,
-                            criterion_id=parent_instance.id, is_tombstone=False
+                            criterion_id=parent_instance.id, tombstone_date=None
                             ).options(joinedload(AbstractIdeaVote.idea)).all()
                         for other_vote in other_votes:
                             if other_vote == inst:
                                 # probably never happens
                                 continue
-                            other_vote.is_tombstone = True
+                            other_vote.tombstone_date = inst.vote_date or datetime.now()
+                            inst.base_id = other_vote.base_id
                         assocs.append(VotedIdeaWidgetLink(
                             widget=widgets_coll.parent_instance,
                             idea=inst.idea,
@@ -875,7 +884,7 @@ class RootIdea(Idea):
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
 
-class IdeaLink(Tombstonable, DiscussionBoundBase):
+class IdeaLink(HistoryMixin, DiscussionBoundBase):
     """
     A generic link between two ideas
 
@@ -884,9 +893,6 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
     """
     __tablename__ = 'idea_idea_link'
     rdf_class = IDEA.InclusionRelation
-    id = Column(
-        Integer, primary_key=True,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     rdf_type = Column(
         String(60), nullable=False, server_default='idea:InclusionRelation')
     source_id = Column(
@@ -900,15 +906,15 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
     source = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
-                    "IdeaLink.is_tombstone==False, "
-                    "Idea.is_tombstone==False)",
+                    "IdeaLink.tombstone_date == None, "
+                    "Idea.tombstone_date == None)",
         backref=backref('target_links', cascade="all, delete-orphan"),
         foreign_keys=(source_id))
     target = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.target_id, "
-                    "IdeaLink.is_tombstone==False, "
-                    "Idea.is_tombstone==False)",
+                    "IdeaLink.tombstone_date == None, "
+                    "Idea.tombstone_date == None)",
         backref=backref('source_links', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     source_ts = relationship(
@@ -933,9 +939,9 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
             source_idea = alias_maker.alias_from_relns(idea_link.source)
 
         # Assume tombstone status of target is similar to source, for now.
-        return ((idea_link.is_tombstone == 0),
+        return ((idea_link.tombstone_date == None),
                 (idea_link.source_id == source_idea.id),
-                (source_idea.is_tombstone == 0))
+                (source_idea.tombstone_date == None))
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
@@ -944,7 +950,7 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
         source_alias = alias_maker.alias_from_relns(cls.source)
         # Assume tombstone status of target is similar to source, for now.
         conditions = [(idea_link.target_id == target_alias.id),
-                      (target_alias.is_tombstone == 0)]
+                      (target_alias.tombstone_date == None)]
         if discussion_id:
             conditions.append((target_alias.discussion_id == discussion_id))
         return [
@@ -973,13 +979,12 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
                 name=QUADNAMES.class_IdeaLink_class),
         ]
 
-    def copy(self):
-        retval = self.__class__(source_id=self.source_id,
-                                target_id=self.target_id,
-                                is_tombstone=self.is_tombstone
-                                )
-        self.db.add(retval)
-        return retval
+    def copy(self, tombstone=None, **kwargs):
+        kwargs.update(
+            tombstone=tombstone,
+            source_id=self.source_id,
+            target_id=self.target_id)
+        return super(IdeaLink, self).copy(**kwargs)
 
     def get_discussion_id(self):
         if inspect(self).attrs.source_ts.loaded_value != NO_VALUE:
@@ -1009,6 +1014,6 @@ class IdeaLink(Tombstonable, DiscussionBoundBase):
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA)
 
     discussion = relationship(
-        Discussion, viewonly=True, uselist=False,
+        Discussion, viewonly=True, uselist=False, backref="idea_links",
         secondary=Idea.__table__, primaryjoin=(source_id == Idea.id),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})

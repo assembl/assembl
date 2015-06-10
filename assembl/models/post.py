@@ -290,7 +290,7 @@ class SynthesisPost(AssemblPost):
 
     def __init__(self, *args, **kwargs):
         super(SynthesisPost, self).__init__(*args, **kwargs)
-        self.publishes_synthesis.publish()
+        self.publishes_synthesis = self.publishes_synthesis.publish()
 
     def get_body_mime_type(self):
         return "text/html"

@@ -21,7 +21,6 @@ from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..lib.sqla import (UPDATE_OP, DELETE_OP, INSERT_OP, get_model_watcher)
 from .discussion import Discussion
-from .auth import AgentProfile
 from .idea import Idea
 from .generic import Content
 from .post import Post
@@ -48,9 +47,9 @@ class IdeaContentLink(DiscussionBoundBase):
 
     # This is nullable, because in the case of extracts, the idea can be
     # attached later.
-    idea_id = Column(Integer, ForeignKey('idea.id'),
+    idea_id = Column(Integer, ForeignKey(Idea.id),
                      nullable=True, index=True)
-    idea = relationship('Idea', active_history=True)
+    idea = relationship(Idea, active_history=True)
 
     content_id = Column(Integer, ForeignKey(
         'content.id', ondelete="CASCADE", onupdate="CASCADE"),
@@ -81,18 +80,18 @@ class IdeaContentLink(DiscussionBoundBase):
     }
 
     def get_discussion_id(self):
-        if self.idea:
-            return self.idea.get_discussion_id()
-        elif self.idea_id:
-            return Idea.get(self.idea_id).get_discussion_id()
+        if self.content:
+            return self.content.get_discussion_id()
+        elif self.content_id:
+            return Content.get(self.content_id).get_discussion_id()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        return ((cls.idea_id == Idea.id),
-                (Idea.discussion_id == discussion_id))
+        return ((cls.content_id == Content.id),
+                (Content.discussion_id == discussion_id))
 
     discussion = relationship(
-        Discussion, viewonly=True, uselist=False, secondary=Idea.__table__,
+        Discussion, viewonly=True, uselist=False, secondary=Content.__table__,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
 
@@ -105,7 +104,7 @@ class IdeaContentLink(DiscussionBoundBase):
             idea_content_link = alias or alias_maker.alias_from_class(cls)
             idea = alias_maker.alias_from_relns(idea_content_link.idea)
         return ((idea_content_link.idea_id != None),
-                (idea.is_tombstone == 0))
+                (idea.tombstone_date == None))
 
     crud_permissions = CrudPermissions(
             P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
@@ -258,7 +257,7 @@ class Extract(IdeaContentPositiveLink):
                 cls.graph_iri_class.apply(cls.id),
                 name=QUADNAMES.oa_hasBody,
                 conditions=((cls.idea_id != None),
-                            (Idea.is_tombstone == 0))),
+                            (Idea.tombstone_date == None))),
             QuadMapPatternS(
                 #Content.iri_class().apply(cls.content_id),
                 cls.specific_resource_iri.apply(cls.id),
@@ -268,7 +267,7 @@ class Extract(IdeaContentPositiveLink):
                 Idea.iri_class().apply(cls.idea_id),
                 name=QUADNAMES.assembl_postExtractRelatedToIdea,
                 conditions=((cls.idea_id != None),
-                            (Idea.is_tombstone == 0)
+                            (Idea.tombstone_date == None)
                    # and it's a post extract... treat webpages separately.
                 )),
             QuadMapPatternS(

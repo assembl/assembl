@@ -163,7 +163,7 @@ class ClassContext(TraversalContext):
         return self.__parent__.get_default_view()
 
     def create_query(self, id_only=True, tombstones=False):
-        from assembl.models import Tombstonable
+        from assembl.models import HistoryMixin
         cls = self._class
         self.class_alias = alias = aliased(cls)
         if id_only:
@@ -171,7 +171,7 @@ class ClassContext(TraversalContext):
         else:
             query = self._class.default_db.query(alias)
         # TODO: Distinguish tombstone condition from other base_conditions
-        if issubclass(cls, Tombstonable) and not tombstones:
+        if issubclass(cls, HistoryMixin) and not tombstones:
             query = query.filter(and_(*cls.base_conditions(alias)))
         return query
 
@@ -385,12 +385,12 @@ class CollectionContext(TraversalContext):
 
     def decorate_query(self, query, last_alias, ctx, tombstones=False):
         # This will decorate a query with a join on the relation.
-        from assembl.models import Tombstonable
+        from assembl.models import HistoryMixin
         self.collection_class_alias = last_alias
         query = self.collection.decorate_query(
             query, last_alias, self.parent_instance, ctx)
         cls = self.collection_class
-        if issubclass(cls, Tombstonable) and not tombstones:
+        if issubclass(cls, HistoryMixin) and not tombstones:
             query = query.filter(cls.tombstone_condition(last_alias))
         return self.__parent__.decorate_query(
             query, self.collection.owner_alias, ctx, tombstones)

@@ -142,6 +142,8 @@
         "creationDate": "creation_date",
         "discussion": false,
         "inNextSynthesis": "is_in_next_synthesis",
+        "original_uri": false,
+        "is_tombstone": false,
         "numChildIdea": false,
         "num_posts": false,
         "num_read_posts": false,
@@ -155,6 +157,13 @@
         "@extends": "Idea",
         "root": "'true",
         "parentId": false
+    },
+    "IdeaLink": {
+        "original_uri": false,
+        "target": true,
+        "source": true,
+        "is_tombstone": false,
+        "order": true
     },
     "IdeaGraphView": {
         "discussion": false
@@ -230,6 +239,8 @@
         "role": "&get_role_name"
     },
     "AbstractIdeaVote": {
+        "original_uri": false,
+        "is_tombstone": false,
         "value": true
     },
     "LickertIdeaVote": {

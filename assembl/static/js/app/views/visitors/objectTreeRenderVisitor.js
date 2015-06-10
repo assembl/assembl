@@ -29,7 +29,7 @@ function objectTreeRenderVisitor(data_by_object, order_lookup_table, roots, filt
         var ancestor_id, last_ancestor_id = null;
         var true_sibling = true;
         for (var i in ancestry) {
-          ancestor_id = ancestry[i].getId();
+          var ancestor_id = ancestry[i];
           in_ancestry = data_by_object.hasOwnProperty(ancestor_id);
           if (in_ancestry) {
             level++;

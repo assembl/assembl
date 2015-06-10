@@ -117,30 +117,35 @@ var MessageList = AssemblPanel.extend({
               }
           );
 
-      this.listenTo(this.getContainingGroup(), 'idea:set', function (idea) {
-          if (idea) {
-              if (idea.id) {
-                  if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, idea.getId())) {
-                      //Filter is already in sync
-                      //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
-                      return;
-                  }
-              } else {
-                  that.listenToOnce(idea, "acquiredId", function () {
-                      that.ideaChanged();
-                  });
-                  return;
-              }
+      this.listenTo(this.getGroupState(), "change:currentIdea", function (state, currentIdea) {
+        if (currentIdea) {
+          if (currentIdea.id) {
+            if(that.currentQuery.isQueryValid() === false) {
+              //This will occur upon loading the panel, untill we truly serialize the query
+              console.log("WRITEME:  Real query serialization in groupstate");
+              that.ideaChanged();
+            }
+            else if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
+              //Filter is already in sync
+              //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+              return;
+            }
+          } else {
+            that.listenToOnce(currentIdea, "acquiredId", function () {
+              that.ideaChanged();
+            });
+            return;
           }
-          this.ideaChanged();
+        }
+        this.ideaChanged();
       });
 
       this.listenTo(Assembl.vent, 'messageList:showMessageById', function (id, callback) {
         //console.log("Calling showMessageById from messageList:showMessageById with params:", id, callback);
-          that.showMessageById(id, callback);
+        that.showMessageById(id, callback);
       });
 
-      this.listenTo(Assembl.vent, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
+      this.listenTo(this, 'messageList:addFilterIsRelatedToIdea', function (idea, only_unread) {
           that.getPanelWrapper().filterThroughPanelLock(
               function () {
                   that.addFilterIsRelatedToIdea(idea, only_unread);
@@ -258,7 +263,7 @@ var MessageList = AssemblPanel.extend({
     numRenderInhibitedDuringRendering: 0,
 
 
-    storedMessageListConfig: Ctx.getMessageListConfigFromStorage(),
+    storedMessageListConfig: Ctx.DEPRECATEDgetMessageListConfigFromStorage(),
 
     inspireMeLink: null,
 
@@ -310,12 +315,10 @@ var MessageList = AssemblPanel.extend({
      * Synchronizes the panel with the currently selected idea (possibly none)
      */
     syncWithCurrentIdea: function () {
-      var currentIdea = this.getContainingGroup().getCurrentIdea(),
+      var currentIdea = this.getGroupState().get('currentIdea'),
       filterValue,
       snapshot = this.currentQuery.getFilterConfigSnapshot();
 
-      //Ctx.openPanel(this);
-      //!currentIdea?filterValue=null:filterValue=currentIdea.getId();
       //console.log("messageList:syncWithCurrentIdea(): New idea is now: ",currentIdea, this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, filterValue));
       //TODO benoitg - this logic should really be in postQuery, not here - 2014-07-29
       if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
@@ -335,7 +338,6 @@ var MessageList = AssemblPanel.extend({
         if (currentIdea) {
           this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_ORPHAN, null);
           this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId());
-          //app.openPanel(app.messageList);
         }
         if(this.currentQuery.isFilterConfigSameAsSnapshot(snapshot) === false) {
           if (Ctx.debugRender) {
@@ -348,7 +350,7 @@ var MessageList = AssemblPanel.extend({
     },
 
     showInspireMeIfAvailable: function(){
-      var currentIdea = this.getContainingGroup().getCurrentIdea();
+      var currentIdea = this.getGroupState().get('currentIdea');
       if ( !currentIdea ) {
         return;
       }
@@ -1105,7 +1107,7 @@ var MessageList = AssemblPanel.extend({
         'show_target_context_with_choice': true
       };
 
-      var currentIdea = this.getContainingGroup().getCurrentIdea();
+      var currentIdea = this.getGroupState().get('currentIdea');
 
       if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
         options.reply_idea = currentIdea;
@@ -1188,72 +1190,74 @@ var MessageList = AssemblPanel.extend({
         this._offsetStart = undefined;
         this._offsetEnd = undefined;
 
-        /* TODO:  Most of this should be a listen to the returned collection */
-        Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
-            this.currentQuery.getResultMessageIdCollectionPromise(),
-            function (messageStructureCollection, resultMessageIdCollection) {
+        if(this.currentQuery.isQueryValid()) {
+          /* TODO:  Most of this should be a listen to the returned collection */
+          Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+              this.currentQuery.getResultMessageIdCollectionPromise(),
+              function (messageStructureCollection, resultMessageIdCollection) {
 
-          var resultMessageIdCollectionReference = resultMessageIdCollection;
+            var resultMessageIdCollectionReference = resultMessageIdCollection;
 
-          function inFilter(message) {
-                return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
+            function inFilter(message) {
+              return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
             };
-          if (Ctx.debugRender) {
+            if (Ctx.debugRender) {
               console.log("messageList:onRender() structure collection ready for render id:", renderId);
-          }
-          if (renderId != that._renderId) {
-            console.log("messageList:onRender() structure collection arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
-            return;
-          }
-          that.destroyAnnotator();
-          //Some messages may be present from before
-          that.ui.messageList.empty();
-          // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
-          // In particular, message.loadAnnotations gets called with different views on the same model,
-          // including zombie views, and we get nested annotator tags as a result.
-          // (Annotator looks at fresh DOM every time).  Is that still the case?  Benoitg - 2014-09-19
-          // TODO long term: Keep them with a real CompositeView.
-          that.resultMessageIdCollection = resultMessageIdCollection;
-          that.visitorViewData = {};
-          that.visitorOrderLookupTable = [];
-          that.visitorRootMessagesToDisplay = [];
+            }
+            if (renderId != that._renderId) {
+              console.log("messageList:onRender() structure collection arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
+              return;
+            }
+            that.destroyAnnotator();
+            //Some messages may be present from before
+            that.ui.messageList.empty();
+            // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
+            // In particular, message.loadAnnotations gets called with different views on the same model,
+            // including zombie views, and we get nested annotator tags as a result.
+            // (Annotator looks at fresh DOM every time).  Is that still the case?  Benoitg - 2014-09-19
+            // TODO long term: Keep them with a real CompositeView.
+            that.resultMessageIdCollection = resultMessageIdCollection;
+            that.visitorViewData = {};
+            that.visitorOrderLookupTable = [];
+            that.visitorRootMessagesToDisplay = [];
 
-          messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
+            messageStructureCollection.visitDepthFirst(objectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
 
-          that.visitorOrderLookupTable = [];
-          that.visitorRootMessagesToDisplay = [];
-          objectTreeRenderVisitorReSort(
-              that.visitorViewData,
-              that.visitorOrderLookupTable,
-              that.visitorRootMessagesToDisplay,
-              function (message) {
-                return message.get('date');
-              });
-          that.render_real();
-          that.showInspireMeIfAvailable();
-          that.renderMessageListHeader();
-          that.ui.panelBody.scroll(function () {
+            that.visitorOrderLookupTable = [];
+            that.visitorRootMessagesToDisplay = [];
+            objectTreeRenderVisitorReSort(
+                that.visitorViewData,
+                that.visitorOrderLookupTable,
+                that.visitorRootMessagesToDisplay,
+                function (message) {
+                  return message.get('date');
+                });
+            that.render_real();
+            that.showInspireMeIfAvailable();
+            that.renderMessageListHeader();
+            that.ui.panelBody.scroll(function () {
 
-            var msgBox = that.$('.messagelist-replybox').height(),
-                scrollH = $(this)[0].scrollHeight - (msgBox + 25),
-                panelScrollTop = $(this).scrollTop() + $(this).innerHeight();
+              var msgBox = that.$('.messagelist-replybox').height(),
+              scrollH = $(this)[0].scrollHeight - (msgBox + 25),
+              panelScrollTop = $(this).scrollTop() + $(this).innerHeight();
 
-            if (panelScrollTop >= scrollH) {
+              if (panelScrollTop >= scrollH) {
                 that.ui.stickyBar.fadeOut();
-            } else {
+              } else {
                 if ( !that.aReplyBoxHasFocus ){
                   that.ui.stickyBar.fadeIn();
                 }
-            }
+              }
 
-            //This event cannot be bound in ui, because backbone binds to
-            //the top element and scroll does not propagate
-            that.$(".panel-body").scroll(that, that.scrollLogger);
+              //This event cannot be bound in ui, because backbone binds to
+              //the top element and scroll does not propagate
+              that.$(".panel-body").scroll(that, that.scrollLogger);
 
             });
-        });
+          });
 
-      this.blockPanel();
+          this.blockPanel();
+        };
     },
 
     // FIXME: this seems to be not used anymore, so I (Quentin) commented it out
@@ -1732,7 +1736,7 @@ var MessageList = AssemblPanel.extend({
       }
       if (this.storedMessageListConfig.viewStyleId != viewStyle.id) {
           this.storedMessageListConfig.viewStyleId = viewStyle.id;
-          Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
+          Ctx.DEPRECATEDsetMessageListConfigToStorage(this.storedMessageListConfig);
       }
       //console.log("setViewStyle finished, currentViewStyle:", this.currentViewStyle, "stored viewStyleId: ", this.storedMessageListConfig.viewStyleId);
     },
@@ -1790,7 +1794,7 @@ var MessageList = AssemblPanel.extend({
 
         if (this.storedMessageListConfig.messageStyleId != messageViewStyle.id) {
             this.storedMessageListConfig.messageStyleId = messageViewStyle.id;
-            Ctx.setMessageListConfigToStorage(this.storedMessageListConfig);
+            Ctx.DEPRECATEDsetMessageListConfigToStorage(this.storedMessageListConfig);
         }
     },
 
@@ -1999,7 +2003,11 @@ var MessageList = AssemblPanel.extend({
             if (shouldHighlightMessageSelected) {
               //console.log(that.currentViewStyle);
               //console.log(el);
-              el.highlight();
+              try {
+                el.highlight();
+              } catch (e) {
+                console.log(e);
+              }
             }
             if (_.isFunction(callback)) {
               callback();

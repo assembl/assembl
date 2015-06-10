@@ -36,19 +36,22 @@ var IdeaView = Backbone.View.extend({
     initialize: function (options, view_data) {
         var that = this;
         this.view_data = view_data;
-        this.parentView = options.parentView;
+        this.parentPanel = options.parentPanel;
+        if(this.parentPanel === undefined) {
+          throw new Error("parentPanel is mandatory");
+        }
         if(options.groupContent) {
           this._groupContent = options.groupContent;
         }
         else {
-          throw new Error("groupContent must be passes in constructor options");
+          throw new Error("groupContent must be passed in constructor options");
         }
 
         this.listenTo(this.model, 'change change:inNextSynthesis', this.render);
         this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
-        this.listenTo(this._groupContent, 'idea:set', function (idea, reason, doScroll) {
-            that.onIsSelectedChange(idea, reason, doScroll);
+        this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function (state, currentIdea) {
+          that.onIsSelectedChange(currentIdea);
         });
     },
 
@@ -86,7 +89,8 @@ var IdeaView = Backbone.View.extend({
 
         this.$el.addClass('idealist-item');
         Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-        this.onIsSelectedChange(this._groupContent.getCurrentIdea());
+
+        this.onIsSelectedChange(this.parentPanel.getGroupState().get('currentIdea'));
 
         if (data.isOpen === true) {
             this.$el.addClass('is-open');
@@ -107,7 +111,7 @@ var IdeaView = Backbone.View.extend({
         Ctx.initTooltips(this.$el);
         var rendered_children = [];
         _.each(data['children'], function (idea, i) {
-            var ideaView = new IdeaView({model: idea, groupContent: that._groupContent}, view_data);
+            var ideaView = new IdeaView({model: idea, parentPanel: that.parentPanel, groupContent: that._groupContent}, view_data);
             rendered_children.push(ideaView.render().el);
         });
         this.$('.idealist-children').append(rendered_children);
@@ -134,7 +138,7 @@ var IdeaView = Backbone.View.extend({
     /**
      * @event
      */
-    onIsSelectedChange: function (idea, reason, doScroll) {
+    onIsSelectedChange: function (idea) {
         //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
         if (idea === this.model) {
             this.$el.addClass('is-selected');
@@ -171,31 +175,26 @@ var IdeaView = Backbone.View.extend({
         Assembl.commands.execute('synthesisPanel:render');
     },
 
+    doIdeaChange: function (unread_only) {
+      var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+
+      this._groupContent.setCurrentIdea(this.model);
+      if(messageListView) {
+        //Syncing with current idea below isn't sufficient, as we need to set/unset the unread filter
+        messageListView.triggerMethod('messageList:clearAllFilters');
+        messageListView.trigger('messageList:addFilterIsRelatedToIdea', this.model, unread_only);
+      }
+      // Why is this call here?  benoitg - 2015-06-09
+      this._groupContent.resetDebateState(false);
+    },
+
     /**
      * @event
      * Select this idea as the current idea
      */
     onTitleClick: function (e) {
-        var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);;
-        e.stopPropagation();
-        //console.log("idea::onTitleClick with groupcontent",this._groupContent.cid);
-        if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE && messageListView) {
-            messageListView.triggerMethod('messageList:clearAllFilters');
-        }
-        else {
-          //messageListView.triggerMethod('messageList:clearAllFilters');
-        }
-        if (this.model === this._groupContent.getCurrentIdea()) {
-            // We want to avoid the "All messages" state,
-            // unless the user clicks explicitly on "All messages".
-            // TODO benoitg: Review this decision.
-            //this._groupContent.setCurrentIdea(null);
-            //This is so the messageList refreshes.
-        } else {
-          Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, null);
-          this._groupContent.setCurrentIdea(this.model);
-        }
-        this._groupContent.resetDebateState(false);
+      e.stopPropagation();
+      this.doIdeaChange(false);
     },
 
     /**
@@ -204,10 +203,7 @@ var IdeaView = Backbone.View.extend({
      */
     onUnreadCountClick: function (e) {
         e.stopPropagation();
-
-        Assembl.vent.trigger('messageList:addFilterIsRelatedToIdea', this.model, true);
-        this._groupContent.setCurrentIdea(this.model);
-        this._groupContent.resetDebateState(false);
+        this.doIdeaChange(true);
     },
 
     /**

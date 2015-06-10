@@ -162,38 +162,28 @@ def save_idea(request):
         if not parent:
             raise HTTPNotFound("Missing parentId %s" % (idea_data['parentId']))
 
-        current_parent = None
         for parent_link in idea.source_links:
-            pl_ancestors = parent_link.source.get_all_ancestors()
+            # still assuming there's only one.
+            pl_parent = parent_link.source
+            pl_ancestors = pl_parent.get_all_ancestors()
             new_ancestors.update(pl_ancestors)
             if parent_link.source != parent:
-                parent_link.is_tombstone=True
-                idea.db.expire(idea, ['source_links'])
+                parent_link.copy(True)
+                parent_link.source = parent
+                parent.db.expire(parent, ['target_links'])
+                parent.db.expire(pl_parent, ['target_links'])
                 for ancestor in pl_ancestors:
                     if ancestor in prev_ancestors:
                         break
                     ancestor.send_to_changes()
-            else:
-                parent_link.order = order
-                current_parent = parent_link
+                for ancestor in prev_ancestors:
+                    if ancestor in new_ancestors:
+                        break
+                    ancestor.send_to_changes()
+            parent_link.order = order
             parent_link.db.expire(parent_link.source, ['target_links'])
             parent_link.source.send_to_changes()
-            
-        if current_parent is None:
-            link = IdeaLink(source=parent, target=idea, order=order)
-            parent.db.add(link)
-            # None of these 3 calls should be necessary, but they do help with 
-            # the parents being available (the "empty parent" bug).
-            # The root cause is somewhere  IdeaLink, or in sqlalchemy proper
-            # but I can't seem to find it - benoitg - 2014-05-27
-            parent.db.flush()
-            parent.db.expire(parent, ['target_links'])
-            parent.db.expire(idea, ['source_links'])
-            parent.send_to_changes()
-            for ancestor in prev_ancestors:
-                if ancestor in new_ancestors:
-                    break
-                ancestor.send_to_changes()
+            parent_link.db.flush()
 
     idea.is_in_next_synthesis = idea_data.get('inNextSynthesis', False)
     idea.send_to_changes()
