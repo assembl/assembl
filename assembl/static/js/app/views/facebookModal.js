@@ -42,8 +42,22 @@ var checkState = function(renderView) {
   });
 }
 
+//Delete function for loggin user in. Will need this if user logs out of
+//of facebook when form is active
+var loginUser = function(state) {
+  var scope = $('#js_fb-permissions-list')
+              .html()
+              .trim();
+  window.FB.login(function(resp){
+    console.log('login response', resp);
+  },{scope: scope });
+}
+
 var errorView = Marionette.ItemView.extend({
+  template: '#tmpl-exportPostModal-fb-token-error',
   initialize: function(options){
+    console.log('initializing errorView with options', options);
+    this.state = options.state;
     this.msg = options.message;
     this.subMsg = options.subMessage;
   },
@@ -53,7 +67,13 @@ var errorView = Marionette.ItemView.extend({
       subMessage: this.subMsg
     }
   },
-  template: '#tmpl-exportPostModal-fb-token-error'
+  events: {
+    'click a': 'userLogin'
+  },
+  userLogin: function(event) {
+    console.log('clicked on link to log user in');
+    loginUser(this.state);
+  }
 });
 
 var groupView = Marionette.ItemView.extend({
@@ -86,14 +106,10 @@ var fbLayout = Marionette.LayoutView.extend({
       subform: '.fb-targeted-form'
     },
     events: {
-      'change .js_fb-supportedList': 'defineView',
-      'click .js_fb-get-permissions': 'getToken'
+      'change .js_fb-supportedList': 'defineView'
     },
     initialize: function(options) {
-      console.log('facebook root view initializing');
-    },
-    getToken: function(event) {
-      console.log('I will get the access token!', event);
+      console.log('facebook root view initializing with options', options);
     },
     defineView: function(event){
       var value = this.$(event.currentTarget)
