@@ -175,14 +175,20 @@ var IdeaView = Backbone.View.extend({
         Assembl.commands.execute('synthesisPanel:render');
     },
 
-    doIdeaChange: function (unread_only) {
+    /**
+     * @param is_unread:  Filter on the unread status of messages 
+     *                      false: only read messages
+     *                      true: only unread messages
+     *                      null: don't filter
+     */
+    doIdeaChange: function (is_unread) {
       var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
 
       this._groupContent.setCurrentIdea(this.model);
       if(messageListView) {
         //Syncing with current idea below isn't sufficient, as we need to set/unset the unread filter
         messageListView.triggerMethod('messageList:clearAllFilters');
-        messageListView.trigger('messageList:addFilterIsRelatedToIdea', this.model, unread_only);
+        messageListView.trigger('messageList:addFilterIsRelatedToIdea', this.model, is_unread);
       }
       // Why is this call here?  benoitg - 2015-06-09
       this._groupContent.resetDebateState(false);
@@ -194,7 +200,7 @@ var IdeaView = Backbone.View.extend({
      */
     onTitleClick: function (e) {
       e.stopPropagation();
-      this.doIdeaChange(false);
+      this.doIdeaChange(null);
     },
 
     /**
