@@ -2,7 +2,6 @@
 
 var Marionette = require('../shims/marionette.js'),
     _ = require('../shims/underscore.js'),
-    ckeditor = require('ckeditor'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Types = require('../utils/types.js'),

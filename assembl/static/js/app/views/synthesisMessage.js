@@ -1,7 +1,6 @@
 'use strict';
 
-var ckeditor = require('ckeditor'),
-    Ctx = require('../common/context.js'),
+var Ctx = require('../common/context.js'),
     MessageView = require('./message.js'),
     Synthesis = require('../models/synthesis.js'),
     SynthesisPanel = require('./synthesisPanel.js'),

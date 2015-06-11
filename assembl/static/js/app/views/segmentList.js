@@ -13,7 +13,7 @@ var Marionette = require('../shims/marionette.js'),
     CollectionManager = require('../common/collectionManager.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     AssemblPanel = require('./assemblPanel.js'),
-    Subset = require('backbone.subset'),
+    //Subset = require('backbone.subset'),
     Promise = require('bluebird');
 
 
