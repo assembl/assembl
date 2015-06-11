@@ -16,6 +16,20 @@
 <div ui-view="topMenu"></div>
 <div ui-view></div>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">{{'connect'| translate}}</h4>
+            </div>
+            <div class="modal-body">
+                <p>{{'needToConnect'| translate: {time: counter} }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div growl></div>
+
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/angular/angular.js"></script>

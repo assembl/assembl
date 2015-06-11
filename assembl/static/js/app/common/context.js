@@ -512,7 +512,7 @@ Context.prototype = {
             session_widget_url = null,
             session_widget_configure_url = null;
 
-        var vote_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/votable_by_widget");
+        var showing_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/showing_widget");
 
         var locale_parameter = "&locale=" + assembl_locale;
 
@@ -526,7 +526,7 @@ Context.prototype = {
         var session_widget_create_url = "/static/widget/session/#/admin/create_from_idea?admin=1&idea=" + encodeURIComponent(idea_id) +"&view=creativity_widget";
         returned_data["session_widget_create_url"] = session_widget_create_url;
 
-        return Promise.join($.get(inspiration_widgets_url), $.get(vote_widgets_url), $.get(session_widget_url),
+        return Promise.join($.get(inspiration_widgets_url), $.get(showing_widgets_url), $.get(session_widget_url),
             function(result, result2, result3){
 
             var inspiration_result = result[0],
@@ -614,10 +614,8 @@ Context.prototype = {
 
             }
 
-
             return Promise.resolve(returned_data);
 
-            //deferred.resolve(returned_data); // we rather resolve even if a request failed, so that we still get the widget instanciation links
         })
 
         that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = Promise;

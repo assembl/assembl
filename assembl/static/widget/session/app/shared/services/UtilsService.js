@@ -11,7 +11,7 @@ SessionApp.factory('UtilsService', function($translate, $rootScope, $timeout, $w
     /**
      * Transform in safe mode raw url
      * */
-    fn.urlApiSession = function(url){
+    fn.getURL = function(url){
         if(!url) return;
 
         var api = url.toString(),

@@ -12,51 +12,33 @@ AdminModule.controller('AdminController',
 
     function($rootScope, $scope, $http, growl, CardGameService, ConfigService, UtilsService, config) {
 
-        //console.debug('AdminController', config);
+        console.debug('AdminController', config);
 
         $scope.widget = config;
 
+        $scope.home = config['@id'];
+
         $scope.formData = {};
-        $scope.urlRoot = UtilsService.urlApiSession($scope.widget.widget_settings_url);
-        $scope.urlEdit = UtilsService.urlApiSession(config['@id']);
 
+        $scope.goToDiscussion = function (){
+            $scope.config_status = 1;
+        }
 
-        /**
-         * Load config card
-         * params {int} which is the id of the card game config/game_{int}.json
-         */
-        CardGameService.getCards(1).success(function (data) {
-            $scope.game = data.game;
-        });
+        if (angular.isDefined($scope.widget.settings)) {
 
-        $http.get($scope.urlEdit).then(function (session) {
-            if (session.data.length)
-                $scope.widgetInstance = session.data;
-
-
-            console.debug(session)
-
-
-        });
-
-
-        if (angular.isDefined($scope.widget.settings.session)) {
-
-            if ($scope.widget.settings.session.question)
-                $scope.formData.question = $scope.widget.settings.session.question;
+            if ($scope.widget.settings.question)
+                $scope.formData.question = $scope.widget.settings.question;
             else
                 $scope.formData.question = "";
 
-            /*if ($scope.widget.settings.session.number)
-                $scope.formData.number = $scope.widget.settings.session.number;
-            else
-                $scope.formData.number = 0;*/
+            if ($scope.widget.settings.startDate)
+                $scope.formData.startDate = $scope.widget.settings.startDate;
 
-            if ($scope.widget.settings.session.startDate)
-                $scope.formData.startDate = $scope.widget.settings.session.startDate;
+            if ($scope.widget.settings.endDate)
+                $scope.formData.endDate = $scope.widget.settings.endDate;
 
-            if ($scope.widget.settings.session.endDate)
-                $scope.formData.endDate = $scope.widget.settings.session.endDate;
+            //Need to display button if there is a minimal config
+            $scope.goToDiscussion();
 
         }
 
@@ -82,23 +64,20 @@ AdminModule.controller('AdminController',
 
         $scope.setSettings = function () {
 
-            if ($scope.formData.number &&
-                $scope.formData.startDate &&
-                $scope.formData.endDate) {
+            if ($scope.formData.startDate && $scope.formData.endDate) {
 
-                $scope.formData.startDate = new Date($scope.formData.startDate);
-                $scope.formData.endDate = new Date($scope.formData.endDate);
+                $scope.formData.startDate = $scope.formData.startDate;
+                $scope.formData.endDate = $scope.formData.endDate;
 
                 var data = {};
 
-                data.session = $scope.formData;
-
-                console.debug(data);
-
-                return;
+                data.startDate = $scope.formData.startDate;
+                data.endDate = $scope.formData.endDate;
+                data.question = $scope.formData.question;
+                data.idea = config.settings.idea;
 
                 $http({
-                    url: $scope.urlRoot,
+                    url: UtilsService.getURL($scope.widget.widget_settings_url),
                     method: 'PUT',
                     data: data,
                     headers: {
@@ -108,6 +87,7 @@ AdminModule.controller('AdminController',
                 }).success(function (data, status) {
 
                     $scope.message = "createQuestion:success";
+                    $scope.goToDiscussion();
 
                 }).error(function (data, status) {
 

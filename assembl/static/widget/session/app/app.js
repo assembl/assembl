@@ -13,12 +13,20 @@ var SessionApp = angular.module('appSession', [
     'mgcrea.ngStrap.datepicker']);
 
 
-SessionApp.run(['$rootScope', '$state', '$stateParams',
-    function($rootScope, $state, $stateParams) {
+SessionApp.run(['$rootScope', '$state', '$stateParams', 'IdeaService',
+    function($rootScope, $state, $stateParams, IdeaService) {
 
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState) {
 
-            //console.debug('$stateChangeSuccess', toState, toParams, fromState)
+            if(toParams.idea){
+
+                var id =  toParams.idea.split('/')[1],
+                    ideaService = IdeaService.get({id: id}).$promise;
+
+                ideaService.then(function(idea){
+                    $rootScope.idea = idea;
+                })
+            }
 
         });
 

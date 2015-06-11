@@ -6,15 +6,11 @@
     </div>
 
     <div id="step_create_widget" ng-show="current_step == 2">
-        <h4>{{'adminCreateFromIdeaTitle' | translate}}</h4>
+        <h4 class="text-center">{{'adminCreateFromIdeaTitle' | translate}}</h4>
 
-        <p>
-            {{'Create a widget on idea' | translate}} <strong>"{{idea.shortTitle }}"</strong>.
-            <button ng-click="expert_mode = !expert_mode" ng-show="expert_mode == 0" class="btn btn-default">{{'showDetails' | translate}}</button>
-            <button ng-click="expert_mode = !expert_mode" ng-show="expert_mode == 1" class="btn btn-default">{{'hideDetails' | translate}}</button>
-        </p>
+        <p class="text-center">{{'Create a widget on idea' | translate}} <strong>"{{idea.shortTitle }}"</strong></p>
 
-        <div ng-show="expert_mode == 1">
+        <div>
             <form class="form-horizontal" method="POST">
                 <div class="form-group">
                     <label for="widget_endpoint" class="col-sm-2 control-label">{{'widgetCreationEndpoint' | translate}}</label>
@@ -50,7 +46,7 @@
 
         <p>
             {{'Configure your widget' | translate}}
-            <a ui-sref="session.admin({config: 'local:Widget/40'})">{{'here' | translate}}</a>
+            <a ui-sref="session.admin({config: created_widget_uri })">{{'here' | translate}}</a>
         </p>
 
         <p>

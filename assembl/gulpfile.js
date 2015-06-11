@@ -31,7 +31,7 @@ var b = watchify(browserify({
 /***
  * build assembl for development
  */
-gulp.task('browserify:dev', ['clean:app'],bundle);
+gulp.task('browserify:dev', ['clean:app'], bundle);
 b.on('update', bundle);
 b.on('log', gutil.log);
 

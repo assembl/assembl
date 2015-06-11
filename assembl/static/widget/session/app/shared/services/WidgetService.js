@@ -21,7 +21,7 @@ SessionApp.factory('WidgetService',['$resource', function ($resource) {
 
             if (!url) defer.reject({message: 'invalid url configuration'});
 
-            var urlRoot = UtilsService.urlApiSession(url);
+            var urlRoot = UtilsService.getURL(url);
 
             $http.get(urlRoot).success(function (response) {
                 data.widget = response;

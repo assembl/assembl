@@ -1,6 +1,6 @@
 'use strict';
 
-TopMenuModule.controller('TopMenuController', ['$scope', function($scope){
+TopMenuModule.controller('TopMenuController', ['$scope','$rootScope', function($scope, $rootScope){
 
     var config = 'local:Widget/2';
 

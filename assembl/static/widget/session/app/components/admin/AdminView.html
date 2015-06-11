@@ -1,9 +1,6 @@
 <div class="edit-container">
     <section id="settings-edit">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">{{widget.base_idea.shortTitle}}</h4>
-            </div>
             <div class="panel-body">
                 <div class="panel-form">
                     <form ng-submit="setSettings()">
@@ -26,6 +23,9 @@
                         </div>
                         <button class="btn btn-default pull-right" type="submit">{{'valid' | translate}}</button>
                     </form>
+                </div>
+                <div ng-show="config_status == 1">
+                    <a ui-sref="session.home({config: home})" class="btn btn-primary">{{'Access to the discussion widget' | translate}}</a>
                 </div>
             </div>
         </div>

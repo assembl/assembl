@@ -9,9 +9,11 @@ AdminModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             templateUrl: 'app/components/admin/AdminView.html',
             controller: 'AdminController',
             resolve: {
-                config: ['WidgetService', '$rootScope','$stateParams', function(WidgetService, $rootScope, $stateParams){
-                    var id = $stateParams.config.split('/')[1];
-                    return WidgetService.get({id: id}).$promise;
+                config: ['WidgetService','$stateParams', function(WidgetService, $stateParams){
+                    if($stateParams.config){
+                        var id = decodeURIComponent($stateParams.config).split('/')[1];
+                        return WidgetService.get({id: id}).$promise;
+                    }
                 }]
             }
         })
@@ -21,7 +23,7 @@ AdminModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             controller: 'CreateController',
             resolve: {
                 idea: ['IdeaService', '$stateParams', function(IdeaService, $stateParams){
-                    var id = $stateParams.idea.split('/')[1];
+                    var id =  $stateParams.idea.split('/')[1];
                     return IdeaService.get({id: id}).$promise
                 }]
             }

@@ -34,18 +34,16 @@ AdminModule.controller('CreateController', ['$rootScope','$scope', '$stateParams
         $scope.createSessionWidget = function(widget) {
             $scope.master = angular.copy(widget);
 
-            $scope.current_step = 3;
-
-            /*$scope.createWidgetInstance(
+            $scope.createWidgetInstance(
                 $scope.master.widget_collection_url,
                 $scope.master.type,
                 $scope.master.idea
-            );*/
+            );
 
         };
 
         // settings can be null
-        $scope.createWidgetInstance = function (endpoint, widget_type, settings, result_holder) {
+        $scope.createWidgetInstance = function (endpoint, widget_type, settings) {
 
             var post_data = {
                 "type": widget_type
@@ -88,15 +86,13 @@ AdminModule.controller('CreateController', ['$rootScope','$scope', '$stateParams
 
                 $scope.created_widget_uri = created_widget;
                 $scope.created_widget_endpoint = '/data/'+ $scope.created_widget_uri.split(':')[1];
-                result_holder.text("Success! Location: " + created_widget);
 
-                //$scope.updateOnceWidgetIsCreated();
+                $scope.updateOnceWidgetIsCreated();
 
             }).error(function (status, headers) {
 
                 console.debug("error");
 
-                result_holder.text("Error");
             });
         };
 
