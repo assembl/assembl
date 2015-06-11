@@ -81,6 +81,7 @@ gulp.task('libs',['clean:infrastructure'], function() {
       path.js+'/bower/backbone/backbone.js',
       path.js+'/bower/marionette/lib/backbone.marionette.js',
       path.js+'/bower/backbone-modal/backbone.modal.js',
+      path.js+'/bower/Backbone.Subset/backbone.subset.js',
       path.js+'/bower/sockjs/sockjs.js',
       path.js+'/bower/ckeditor/ckeditor.js',
       path.js+'/bower/jquery.dotdotdot/src/js/jquery.dotdotdot.js',
@@ -90,11 +91,13 @@ gulp.task('libs',['clean:infrastructure'], function() {
       path.js+'/bower/jquery-highlight/jquery.highlight.js',
       path.js+'/lib/bootstrap.js',
       path.js+'/lib/dropdown.js',
-      path.js+'/lib/annotator/annotator-full.js'
+      path.js+'/lib/annotator/annotator-full.js',
+      path.js+'/lib/ckeditor-sharedcontainer/plugin.js'
+
   ], { base: path.js })
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(concat('infrastructure.concat.js'))
-    .pipe(uglify({compress: false }))
+    //.pipe(uglify({compress: false }))
     .pipe(rename('infrastructure.min.js'))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(path.js+'/build/'))

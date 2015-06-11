@@ -52,22 +52,10 @@
   },
   "devDependencies": {},
   "browser": {
-    "backbone.subset": "./assembl/static/js/bower/Backbone.Subset/backbone.subset.js",
-    "jit": "./assembl/static/js/bower/jit/jit/jit.js",
-    "ckeditor": "./assembl/static/js/bower/ckeditor/ckeditor.js",
-    "ckeditor-sharedspace": "./assembl/static/js/lib/ckeditor-sharedcontainer/plugin.js"
+    "jit": "./assembl/static/js/bower/jit/jit/jit.js"
   },
   "browserify-shim": {
-    "jit": "$jit",
-    "ckeditor": {
-      "exports": "CKEDITOR"
-    },
-    "ckeditor-sharedspace": {
-      "depends": [
-        "ckeditor"
-      ],
-      "exports": "CKEDITOR"
-    }
+    "jit": "$jit"
   },
   "browserify": {
     "transform": [
