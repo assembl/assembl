@@ -4,8 +4,8 @@ var Marionette = require('../shims/marionette.js'),
     _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
     Assembl = require('../app.js'),
-    Ctx = require('../common/context.js'),
-    ckeditor = require('ckeditor-sharedspace');
+    Ctx = require('../common/context.js');
+    //ckeditor = require('ckeditor-sharedspace');
 
 
 var cKEditorField = Marionette.ItemView.extend({
@@ -104,7 +104,9 @@ var cKEditorField = Marionette.ItemView.extend({
             sharedSpaces: { top: this.topId, bottom: this.bottomId }
         });
 
-        this.ckInstance = ckeditor.inline(editingArea, config);
+        CKEDITOR.basePath = window.location.origin +'/static/js/bower/ckeditor/';
+
+        this.ckInstance = CKEDITOR.inline(editingArea, config);
 
         setTimeout(function () {
             editingArea.focus();
