@@ -14,13 +14,24 @@
 </div>
 
 <div class="fb-targeted-form"></div>
-<div class="control-group"></div>
-<div class='fb-post-privacy'>
-  <div class='fb-privacy-container'>
-    <select>
-      <option value='everyone'>{{ gettext("Everyone")}} </option>
-      <option value='friends'>{{ gettext("Friends")}} </option>
-      <option value='friends_of_friends'>{{ gettext("Friends of Friends")}} </option>
-    </select>
+
+<div class="control-group mts">
+  <div class='fb-post-privacy'>
+    <div class='fb-privacy-container'>
+      <select>
+        <option value='everyone'>{{ gettext("Everyone")}} </option>
+        <option value='friends'>{{ gettext("Friends")}} </option>
+        <option value='friends_of_friends'>{{ gettext("Friends of Friends")}} </option>
+      </select>
+    </div>
   </div>
+</div>
+
+<div class='controls mts mbs'>
+  <div class='fb-merge-accounts'>
+    <label class='checkbox'>
+      <input type='checkbox' value='fb-merge-accounts' id='fb-merge-accounts'>
+        {{ gettext("Connect your Facebook account with your current Assembl account") }}
+    </label>
+  </div>  
 </div>

@@ -14,9 +14,10 @@ var Modal = Backbone.Modal.extend({
     initialize: function (options) {
       this.$('.bbm-modal').addClass('popin');
       this.messageCreator = null;
+      this.model = options.model;
       var that = this; //modal view context
       console.log('modal being initialized');
-      options.model.getCreatorPromise().then(function(user){
+      this.model.getCreatorPromise().then(function(user){
         that.messageCreator = user;
         that.template = '#tmpl-exportPostModal';
         that.render();
@@ -39,27 +40,21 @@ var Modal = Backbone.Modal.extend({
 
       switch(value){
         case 'facebook':
+          var that = this;
           facebook.resolveState(function(fbState) {
-            if (fbState.fbStatus === facebook.fbStates.CONNECTED) {
-              console.log('Instantiating errorView for user in connected state');
-              var fbView = new facebook.root();
-              this.$('.js_source-specific-form').html(fbView.render().el);
+            if (fbState.ready) {
+              var fbView = new facebook.root({
+                model: that.model
+              });
+              this.$('.js_source-specific-form').html(fbView.render().el);  
             }
             else {
-              if (fbState.fbStatus === facebook.fbStates.OFFLINE){
-                this.$('.js_source-specific-form').html(
-                  new facebook.error({
-                    message: fbState.msg,
-                    subMessage: fbState.submsg
-                  }).render().el);
-              }
-              else {
-                this.$('.js_source-specific-form').html(
-                  new facebook.error({
-                    message: fbState.msg,
-                    subMessage: fbState.submsg
-                  }).render().el);
-              }
+              this.$('.js_source-specific-form').html(
+                new facebook.error({
+                  message: fbState.msg,
+                  subMessage: fbState.submsg,
+                  model: that.model
+                }).render().el);
             }
           });
           

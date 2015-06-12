@@ -5,7 +5,8 @@ var Marionette = require('../shims/marionette.js'),
     _ = require('../shims/underscore.js'),
     i18n = require('../utils/i18n.js'),
     $ = require('../shims/jquery.js'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    Social = require('../models/social.js');
 
 var FbStatus = {
   OFFLINE: 'user not logged in',
@@ -22,10 +23,10 @@ var fbState = function(r, s, m, sm){
 
 var checkState = function(renderView) {
   window.FB.getLoginStatus(function(resp){
+    console.log('Check facebook status response:', resp);
     if (resp.status === 'connected') {
       var currentState = new fbState(true, FbStatus.CONNECTED, null, null);
       renderView(currentState);
-      
     }
     else if (resp.status == 'not_authorized') {
       var statusMessage = i18n.gettext("We are sorry, but Assembl does not have your permission to continue. Below are a summary of permissions that Assembl requires in order to continue.");
@@ -39,17 +40,33 @@ var checkState = function(renderView) {
       var currentState = new fbState(false, FbStatus.OFFLINE, msg, sub);
       renderView(currentState);
     }
-  });
+  }, true); //true to force 
 }
 
 //Delete function for loggin user in. Will need this if user logs out of
 //of facebook when form is active
-var loginUser = function(state) {
+var loginUser = function(state, model) {
+  //Permissions are pre-rendered from the back-end
+  //into a hidden div.
   var scope = $('#js_fb-permissions-list')
               .html()
               .trim();
   window.FB.login(function(resp){
     console.log('login response', resp);
+    //Check list of permissions given to see if it matches what we asked.
+    //If not, cannot continue
+    //If yes, re-render the view.
+    //Add event handlers for if things change
+    if (resp.status === 'connected') {
+      //window.FB.api('')
+      var token = new Social.Facebook({
+        user_id: null,
+        token: null,
+        expiration: null,
+        tokenType: null,
+        object_name: null
+      });
+    }
   },{scope: scope });
 }
 
@@ -60,6 +77,7 @@ var errorView = Marionette.ItemView.extend({
     this.state = options.state;
     this.msg = options.message;
     this.subMsg = options.subMessage;
+    this.msgModel = options.model;
   },
   serializeData: function() {
     return {
@@ -68,11 +86,11 @@ var errorView = Marionette.ItemView.extend({
     }
   },
   events: {
-    'click a': 'userLogin'
+    'click .js_fb-get-permissions': 'userLogin',
   },
   userLogin: function(event) {
     console.log('clicked on link to log user in');
-    loginUser(this.state);
+    loginUser(this.state, this.msgModel);
   }
 });
 
