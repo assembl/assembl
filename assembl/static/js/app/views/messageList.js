@@ -86,6 +86,7 @@ var MessageList = AssemblPanel.extend({
       this.renderedMessageViewsCurrent = {};
       this._nbPendingMessage = 0;
       this.aReplyBoxHasFocus = false;
+      this.currentQuery = new PostQuery();
 
       this.expertViewIsAvailable = !Ctx.getCurrentUser().isUnknownUser(); // TODO: enable it also for logged out visitors (but for this we need to disable user-related filters, like read)
       this.isUsingExpertView = (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT); // TODO?: have a dedicated flag
@@ -435,7 +436,7 @@ var MessageList = AssemblPanel.extend({
      * The current server-side query applied to messages
      * @type {Object}
      */
-    currentQuery: new PostQuery(),
+    currentQuery: null,
 
     /**
      * Note:  this.renderedMEssageViewsCurrent must not have been
