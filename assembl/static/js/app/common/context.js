@@ -986,7 +986,9 @@ Context.prototype = {
      * @return {String} The new string without html tags
      */
     stripHtml: function (html) {
-        return html ? $.trim($('<div>' + html + '</div>').text()) : html;
+      var retval = $.trim($('<div>' + html + '</div>').text());
+      //console.log("stripHtml called with", html, "returning ", retval);
+      return retval;
     },
 
     /** Convert all applicable characters to HTML entities
