@@ -508,8 +508,8 @@ Context.prototype = {
             inspiration_widget_url = null,
             inspiration_widget_configure_url = null;
 
-        var session_widgets = null,
-            session_widget_url = null,
+        var session_widget = null,
+            session_widget_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id)),
             session_widget_configure_url = null;
 
         var showing_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/showing_widget");
@@ -526,96 +526,103 @@ Context.prototype = {
         var session_widget_create_url = "/static/widget/session/#/admin/create_from_idea?admin=1&idea=" + encodeURIComponent(idea_id) +"&view=creativity_widget";
         returned_data["session_widget_create_url"] = session_widget_create_url;
 
-        return Promise.join($.get(inspiration_widgets_url), $.get(showing_widgets_url), $.get(session_widget_url),
-            function(result, result2, result3){
+        return Promise.join($.get(inspiration_widgets_url), $.get(showing_widgets_url),
+            function(result, showing_widgets){
 
-            var inspiration_result = result[0],
-                vote_result = result2[0],
-                session_result = result3[0];
+            var widgets = showing_widgets;
 
-            if (inspiration_result && inspiration_result instanceof Array && inspiration_result.length > 0) {
-                inspiration_widgets = inspiration_result;
-                returned_data["inspiration_widgets"] = inspiration_widgets;
-                var inspiration_widget_uri = null;
+            widgets.forEach(function(widget){
 
-                if ( "@id" in inspiration_widgets[inspiration_widgets.length - 1] ){
+                switch(widget['@type']){
 
-                    inspiration_widget_uri = inspiration_widgets[inspiration_widgets.length - 1]["@id"]; // for example: "local:Widget/52"
+                    case 'CreativitySessionWidget':
+                        session_widget = widget;
+                        returned_data["session_widgets"] = session_widget;
 
-                    //console.log("inspiration_widget_uri: ", inspiration_widget_uri);
+                        if (session_widget['@id']){
 
-                    inspiration_widget_url = "/static/widget/creativity/?config="
-                        + Ctx.getUrlFromUri(inspiration_widget_uri)
-                        + "&target="
-                        + idea_id
-                        + locale_parameter; // example: "http://localhost:6543/widget/creativity/?config=/data/Widget/43&target=local:Idea/3#/"
-                    //console.log("inspiration_widget_url: ", inspiration_widget_url);
-                    returned_data["inspiration_widget_url"] = inspiration_widget_url;
+                            var session_widget_uri = session_widget["@id"]; // for example: "local:Widget/52"
 
-                    inspiration_widget_configure_url = "/static/widget/creativity/?admin=1"
-                        + locale_parameter
-                        + "#/admin/configure_instance?widget_uri="
-                        + Ctx.getUrlFromUri(inspiration_widget_uri)
-                        + "&target="
-                        + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
-                    returned_data["inspiration_widget_configure_url"] = inspiration_widget_configure_url;
+                            session_widget_configure_url = "/static/widget/session/?config="
+                                + Ctx.getUrlFromUri(session_widget_uri)
+                                + "&target="
+                                + idea_id
+                                + locale_parameter; // example: "http://localhost:6543/widget/session/?config=/data/Widget/43&target=local:Idea/3#/"
+                            returned_data["session_widget_configure_url"] = session_widget_configure_url;
+
+                            session_widget_configure_url = "/static/widget/session/?admin=1"
+                                + locale_parameter
+                                + "#/admin/configure_instance?widget_uri="
+                                + Ctx.getUrlFromUri(session_widget_uri)
+                                + "&target="
+                                + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
+                            returned_data["session_widget_configure_url"] = session_widget_configure_url;
+                        }
+                        else{
+                            console.log("error: inspiration widget has no @id field");
+                        }
+
+                    break;
+
+                    case 'MultiCriterionVotingWidget':
+
+                        var vote_widgets = [];
+
+                        for (var i = 0; i < widget.length; ++i) {
+
+                            if ("@id" in widget[i]) {
+                                var widget_uri = widget[i]["@id"]; // for example: "local:Widget/52"
+                                vote_widgets.push({
+                                    widget_uri: widget_uri,
+                                    vote_url: "/static/widget/vote/?config=" + widget_uri + encodeURIComponent("?target=" + idea_id),
+                                    configure_url: "/static/widget/vote/?admin=1#/admin/configure_instance?widget_uri=" + widget_uri + "&target=" + idea_id
+                                });
+                            }
+                            else {
+                                console.log("error: vote widget has no @id field");
+                            }
+                        }
+                        returned_data["vote_widgets"] = vote_widgets;
+
+
+
+                        break;
+                    case 'InspirationWidget':
+
+                        inspiration_widgets = widget;
+                        returned_data["inspiration_widgets"] = inspiration_widgets;
+                        var inspiration_widget_uri = null;
+
+                        if ( inspiration_widgets["@id"] ){
+
+                            inspiration_widget_uri = inspiration_widgets["@id"]; // for example: "local:Widget/52"
+
+                            inspiration_widget_url = "/static/widget/creativity/?config="
+                                + Ctx.getUrlFromUri(inspiration_widget_uri)
+                                + "&target="
+                                + idea_id
+                                + locale_parameter; // example: "http://localhost:6543/widget/creativity/?config=/data/Widget/43&target=local:Idea/3#/"
+                            //console.log("inspiration_widget_url: ", inspiration_widget_url);
+                            returned_data["inspiration_widget_url"] = inspiration_widget_url;
+
+                            inspiration_widget_configure_url = "/static/widget/creativity/?admin=1"
+                                + locale_parameter
+                                + "#/admin/configure_instance?widget_uri="
+                                + Ctx.getUrlFromUri(inspiration_widget_uri)
+                                + "&target="
+                                + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
+                            returned_data["inspiration_widget_configure_url"] = inspiration_widget_configure_url;
+                        }
+                        else{
+                            console.log("error: inspiration widget has no @id field");
+                        }
+
+                        break;
                 }
-                else{
-                    console.log("error: inspiration widget has no @id field");
-                }
-            }
 
-            if (vote_result && vote_result instanceof Array && vote_result.length > 0) {
-                var vote_widgets = [];
-
-                for ( var i = 0; i < vote_result.length; ++i ){
-
-                    if ( "@id" in vote_result[i] ){
-                        var widget_uri = vote_result[i]["@id"]; // for example: "local:Widget/52"
-                        vote_widgets.push({
-                            widget_uri: widget_uri,
-                            vote_url: "/static/widget/vote/?config=" + widget_uri +encodeURIComponent("?target="+idea_id),
-                            configure_url: "/static/widget/vote/?admin=1#/admin/configure_instance?widget_uri=" +widget_uri + "&target=" + idea_id
-                        });
-                    }
-                    else{
-                        console.log("error: vote widget has no @id field");
-                    }
-                }
-                returned_data["vote_widgets"] = vote_widgets;
-            }
-
-            if (session_result && session_result instanceof Array && session_result.length > 0) {
-                session_widgets = session_result;
-                returned_data["session_widgets"] = session_widgets;
-
-                if ( "@id" in session_widgets[session_widgets.length - 1] ){
-
-                    var session_widget_uri = session_widgets[session_widgets.length - 1]["@id"]; // for example: "local:Widget/52"
-
-                    session_widget_configure_url = "/static/widget/session/?config="
-                        + Ctx.getUrlFromUri(session_widget_uri)
-                        + "&target="
-                        + idea_id
-                        + locale_parameter; // example: "http://localhost:6543/widget/session/?config=/data/Widget/43&target=local:Idea/3#/"
-                    returned_data["session_widget_configure_url"] = session_widget_configure_url;
-
-                    session_widget_configure_url = "/static/widget/session/?admin=1"
-                        + locale_parameter
-                        + "#/admin/configure_instance?widget_uri="
-                        + Ctx.getUrlFromUri(session_widget_uri)
-                        + "&target="
-                        + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
-                    returned_data["session_widget_configure_url"] = session_widget_configure_url;
-                }
-                else{
-                    console.log("error: inspiration widget has no @id field");
-                }
-
-            }
+            })
 
             return Promise.resolve(returned_data);
-
         })
 
         that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = Promise;
