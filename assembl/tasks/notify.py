@@ -119,18 +119,18 @@ def process_pending_notifications():
     from ..models.notification import (
         Notification, NotificationDeliveryStateType)
     sys.stderr.write("process_pending_notifications called")
-    with transaction.manager:
-        retryable_notifications = Notification.default_db.query(Notification).filter(
-            Notification.delivery_state not in
-            NotificationDeliveryStateType.getNonRetryableDeliveryStates())
-        for notification in retryable_notifications:
-            try:
+    retryable_notifications = Notification.default_db.query(Notification).filter(
+        Notification.delivery_state not in
+        NotificationDeliveryStateType.getNonRetryableDeliveryStates())
+    for notification in retryable_notifications:
+        try:
+            with transaction.manager:
                 process_notification(notification)
-            except:
-                if raven_client:
-                    raven_client.client.captureException()
-                else:
-                    print_exc()
+        except:
+            if raven_client:
+                raven_client.client.captureException()
+            else:
+                print_exc()
 
 
 def includeme(config):
