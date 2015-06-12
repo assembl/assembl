@@ -11,22 +11,12 @@ var mocha = require('mocha'),
     chai = require('chai'),
     chaiJquery = require('chai-jquery');
 
-(function(){
-    chai.use(chaiJquery);
+require('tests/routes.spec');
+require('tests/context.spec');
+require('tests/models.spec');
+require('tests/utils.spec');
+require('tests/objects.spec');
 
-    //mocha.setup('bdd');
-    //mocha.bail(false);
-
-    require([
-        //'tests/views.spec',
-        'tests/routes.spec',
-        'tests/context.spec',
-        'tests/models.spec',
-        'tests/utils.spec',
-        'tests/objects.spec'
-    ], function(require) {
-        mocha.run();
-    });
-
-})();
+chai.use(chaiJquery);
+mocha.run();
 
