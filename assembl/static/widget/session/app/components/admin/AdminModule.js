@@ -13,6 +13,8 @@ AdminModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     if($stateParams.config){
                         var id = decodeURIComponent($stateParams.config).split('/')[1];
                         return WidgetService.get({id: id}).$promise;
+                    }else{
+                        console.warn('no config param set');
                     }
                 }]
             }
@@ -23,8 +25,12 @@ AdminModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             controller: 'CreateController',
             resolve: {
                 idea: ['IdeaService', '$stateParams', function(IdeaService, $stateParams){
-                    var id =  $stateParams.idea.split('/')[1];
-                    return IdeaService.get({id: id}).$promise
+                    if($stateParams.idea){
+                        var id =  $stateParams.idea.split('/')[1];
+                        return IdeaService.get({id: id}).$promise
+                    }else{
+                        console.warn('no idea param set');
+                    }
                 }]
             }
         });

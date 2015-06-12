@@ -1,7 +1,9 @@
 <div class="sub-comment">
     <form ng-submit="commentSubIdea()">
-       <textarea rows="1" ng-model="formData.comment" ng-keyup="expand($event)" class="text-comment" placeholder="{{'comment'| translate }}" autocomplete="off" required></textarea>
-       <button class="send-comment" type="submit"><i class="fa fa-paper-plane"></i></button>
+        <div class="form-group">
+            <textarea rows="1" ng-model="formData.comment" ng-keyup="expand($event)" class="text-comment" placeholder="{{'comment'| translate }}" autocomplete="off" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-default btn-xs">Submit</button>
     </form>
 </div>
 

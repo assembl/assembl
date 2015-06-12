@@ -12,8 +12,6 @@ AdminModule.controller('AdminController',
 
     function($rootScope, $scope, $http, growl, CardGameService, ConfigService, UtilsService, config) {
 
-        console.debug('AdminController', config);
-
         $scope.widget = config;
 
         $scope.home = config['@id'];

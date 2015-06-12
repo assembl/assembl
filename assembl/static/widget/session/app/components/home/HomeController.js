@@ -1,14 +1,20 @@
 'use strict';
 
-HomeModule.controller('HomeController', ['$scope','config','CardGameService', '$timeout', '$sce', 'UtilsService',
-    function($scope, config, CardGameService, $timeout, $sce, UtilsService) {
+HomeModule.controller('HomeController', [
+    '$scope',
+    'config',
+    'CardGameService',
+    '$timeout',
+    '$sce',
+    'UtilsService',
+    '$http',
+    'growl',
+    function($scope, config, CardGameService, $timeout, $sce, UtilsService, $http, growl) {
 
         $scope.widget = config;
         $scope.formData = {};
         $scope.displayed_cards = [];
         $scope.displayed_card_index = 0;
-
-        //console.debug('HomeController', config)
 
         $scope.$watch("message", function (value) {
 
@@ -30,10 +36,6 @@ HomeModule.controller('HomeController', ['$scope','config','CardGameService', '$
          */
         $scope.getSubIdeaFromIdea = function () {
 
-
-            console.debug($scope.widget)
-
-
             var rootUrl = UtilsService.getURL($scope.widget.ideas_url),
                 ideas = [];
 
@@ -41,11 +43,9 @@ HomeModule.controller('HomeController', ['$scope','config','CardGameService', '$
 
             $http.get(rootUrl).then(function (response) {
 
-                console.debug('response', response)
-
                 angular.forEach(response.data, function (item) {
                     if (item.widget_add_post_endpoint) {
-                        item.widget_add_post_endpoint = utils.getURL(_.values(item.widget_add_post_endpoint));
+                        item.widget_add_post_endpoint = UtilsService.getURL(_.values(item.widget_add_post_endpoint));
                         item.creationDate = moment(item.creationDate).fromNow();
                         ideas.push(item);
                     }
@@ -56,7 +56,7 @@ HomeModule.controller('HomeController', ['$scope','config','CardGameService', '$
             }).then(function (ideas) {
 
                 angular.forEach(ideas, function (idea) {
-                    var urlRoot = utils.getURL(idea.proposed_in_post.idCreator);
+                    var urlRoot = UtilsService.getURL(idea.proposed_in_post.idCreator);
 
                     $http.get(urlRoot).then(function (response) {
                         idea.username = response.data.name;
@@ -78,19 +78,18 @@ HomeModule.controller('HomeController', ['$scope','config','CardGameService', '$
         $scope.sendSubIdea = function () {
             if ($scope.formData) {
 
-                var rootUrl = utils.getURL($scope.widget.ideas_url);
+                var rootUrl = UtilsService.getURL($scope.widget.ideas_url);
                 var random_index = angular.element('.random_index');
 
                 $scope.formData.type = 'Idea';
 
                 //console.log($scope.formData)
                 //console.log(random_index.val());
-                //return;
 
                 $http({
                     method: 'POST',
                     url: rootUrl,
-                    data: $.param($scope.formData),
+                    data: $scope.formData,
                     headers: {'Content-Type': 'application/json'}
                 }).success(function () {
 
@@ -128,8 +127,8 @@ HomeModule.controller('HomeController', ['$scope','config','CardGameService', '$
                 $scope.game.splice($scope.random_index, 1);
 
 
-                console.log('random_index', $scope.random_index)
-                console.log('$scope.displayed_card_index', $scope.displayed_card_index)
+                //console.log('random_index', $scope.random_index)
+                //console.log('$scope.displayed_card_index', $scope.displayed_card_index)
             }
 
         }
@@ -141,7 +140,7 @@ HomeModule.controller('HomeController', ['$scope','config','CardGameService', '$
 
             $scope.getSubIdeaFromIdea();
 
-            $scope.setJeton();
+            //$scope.setJeton();
 
         }, 1000);
 
