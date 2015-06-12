@@ -16,7 +16,7 @@ var SessionApp = angular.module('appSession', [
 SessionApp.run(['$rootScope', '$state', '$stateParams', 'IdeaService',
     function($rootScope, $state, $stateParams, IdeaService) {
 
-        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState) {
+        /*$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState) {
 
             if(toParams.idea){
 
@@ -28,7 +28,7 @@ SessionApp.run(['$rootScope', '$state', '$stateParams', 'IdeaService',
                 })
             }
 
-        });
+        });*/
 
         // Make state information available to $rootScope, and thus $scope in our controllers
         $rootScope.$state = $state;

@@ -1,11 +1,9 @@
 'use strict';
 
-TopMenuModule.controller('TopMenuController', ['$scope','$rootScope', function($scope, $rootScope){
+TopMenuModule.controller('TopMenuController', ['$scope','$stateParams', function($scope, $stateParams){
 
-    var config = 'local:Widget/2';
+    //console.debug($scope.$parent.$state.params.config);
 
-    $scope.home = '#/index?config=' + config;
-    $scope.rating = '#/rating?config=' + config;
-    $scope.edition = '#/edit?config=' + config;
+    $scope.urlLink = $scope.$parent.$state.params.config;
 
 }]);
