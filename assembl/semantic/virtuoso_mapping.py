@@ -1,5 +1,5 @@
 from os import listdir
-from os.path import join, dirname
+from os.path import join
 from inspect import isabstract
 from threading import Lock
 import re
@@ -11,6 +11,7 @@ from sqlalchemy.orm.properties import RelationshipProperty
 from rdflib import Graph, ConjunctiveGraph, URIRef
 import simplejson as json
 
+from . import (context_url, ontology_dir, local_context_loc)
 from ..lib.config import get_config
 from ..lib.sqla import class_registry, Base
 from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST, SIOC, FOAF)
@@ -102,10 +103,6 @@ iri_definition_stmts = {
         returns varchar
     """
 }
-
-context_url = 'http://purl.org/catalyst/jsonld'
-ontology_dir = join(dirname(__file__), 'ontology')
-local_context_loc = join(ontology_dir, 'context.jsonld')
 
 
 def load_ontologies(session, reload=None):
