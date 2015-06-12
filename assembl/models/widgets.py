@@ -865,7 +865,7 @@ Widget.showing_idea_links = relationship(
     IdeaShowingWidgetLink)
 Idea.has_showing_widget_links = relationship(IdeaShowingWidgetLink)
 
-MultiCriterionVotingWidget.votable_ideas = relationship(
+Widget.showing_ideas = relationship(
     Idea, viewonly=True, secondary=IdeaShowingWidgetLink.__table__,
     primaryjoin=MultiCriterionVotingWidget.id == with_polymorphic(
         IdeaShowingWidgetLink, '*').widget_id,
