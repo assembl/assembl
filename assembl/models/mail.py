@@ -457,6 +457,8 @@ class AbstractMailbox(PostSource):
                 subject=subject,
                 creation_date=creation_date,
                 source_post_id=new_message_id,
+                message_id = self.get_default_prepended_id() + \
+                    new_message_id,
                 in_reply_to=new_in_reply_to,
                 body=body,
                 body_mime_type = mimeType,
