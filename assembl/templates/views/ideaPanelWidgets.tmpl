@@ -56,10 +56,15 @@
 
     <% if ( inspiration_widget_create_url ) { %>
       <a href="<%= inspiration_widget_create_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="{{gettext('Create a creativity widget on this idea')}}">{{gettext('Create a creativity widget on this idea')}}</a>
-   <% }
+    <% }
 
     if ( session_widget_create_url ) { %>
     <a href="<%= session_widget_create_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="{{gettext('Create a creativity session widget on this idea')}}">{{gettext('Create a creativity session widget on this idea')}}</a>
     <% }
+
   }
 %>
+
+<% if ( session_widget_url ) { %>
+<a href="<%= session_widget_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="{{gettext('Access to the creativity session widget on this idea')}}">{{gettext('Access to the creativity session widget on this idea')}}</a>
+<% } %>

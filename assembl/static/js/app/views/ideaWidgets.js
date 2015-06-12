@@ -46,11 +46,18 @@ var IdeaWidgets = Marionette.ItemView.extend({
     serializeData: function () {
         var currentUser = Ctx.getCurrentUser(),
             idea = null,
-            i18n_vote = i18n.gettext('Vote on the \'%s\' idea'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in ideaPanelWidgets.tmpl)
+            i18n_vote = i18n.gettext('Vote on the \'%s\' idea'),
+            session_url = null; // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in ideaPanelWidgets.tmpl)
 
         if (this.model) {
             //console.log("there is a model");
             idea = this.model;
+        }
+
+        if(currentUser.can(Permissions.ADMIN_DISCUSSION)){
+            session_url = this.session_widget_admin_url
+        }else{
+            session_url = this.session_widget_user_url
         }
 
         return {
@@ -67,7 +74,8 @@ var IdeaWidgets = Marionette.ItemView.extend({
             vote_widgets: this.vote_widgets,
             session_widgets: this.session_widgets,
             session_widget_configure_url: this.session_widget_configure_url,
-            session_widget_create_url: this.session_widget_create_url
+            session_widget_create_url: this.session_widget_create_url,
+            session_widget_url: session_url
         };
     },
 
@@ -110,16 +118,15 @@ var IdeaWidgets = Marionette.ItemView.extend({
             previous.vote_widgets = that.vote_widgets;
 
             previous.session_widgets = that.session_widgets;
-            previous.session_widget_configure_url = that.session_widget_configure_url;
+            previous.session_widget_admin_url = that.session_widget_admin_url;
             previous.session_widget_create_url = that.session_widget_create_url;
-
-
+            previous.session_widget_user_url = that.session_widget_user_url;
 
             var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(this.model.getId());
 
             promise.then(function (data) {
 
-                    //console.log("populateAssociatedWidgetData received data: ", data);
+                    console.debug("populateAssociatedWidgetData received data: ", data);
 
                     that.resetAssociatedWidgetData();
 
@@ -154,12 +161,16 @@ var IdeaWidgets = Marionette.ItemView.extend({
                         that.session_widgets = data.session_widgets;
                     }
 
-                    if ("session_widget_configure_url" in data) {
-                        that.session_widget_configure_url = data.session_widget_configure_url;
+                    if ("session_widget_admin_url" in data) {
+                        that.session_widget_admin_url = data.session_widget_admin_url;
                     }
 
                     if ("session_widget_create_url" in data) {
                         that.session_widget_create_url = data.session_widget_create_url;
+                    }
+
+                    if ("session_widget_user_url" in data) {
+                        that.session_widget_user_url = data.session_widget_user_url;
                     }
 
                     if ( previous.inspiration_widget_create_url != that.inspiration_widget_create_url
@@ -171,8 +182,9 @@ var IdeaWidgets = Marionette.ItemView.extend({
                         || previous.vote_widgets != that.vote_widgets
 
                         || previous.session_widgets != that.session_widgets
-                        || previous.session_widget_configure_url != that.session_widget_configure_url
-                        || previous.session_widget_create_url != that.session_widget_create_url ){
+                        || previous.session_widget_user_url != that.session_widget_user_url
+                        || previous.session_widget_create_url != that.session_widget_create_url
+                        || previous.session_widget_admin_url != that.session_widget_admin_url){
 
                         that.render();
                     }

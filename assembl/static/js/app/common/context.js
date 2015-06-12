@@ -509,8 +509,10 @@ Context.prototype = {
             inspiration_widget_configure_url = null;
 
         var session_widget = null,
-            session_widget_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id)),
+            session_widget_admin_url = null,
+            session_widget_user_url = null,
             session_widget_configure_url = null;
+
 
         var showing_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/showing_widget");
 
@@ -543,20 +545,11 @@ Context.prototype = {
 
                             var session_widget_uri = session_widget["@id"]; // for example: "local:Widget/52"
 
-                            session_widget_configure_url = "/static/widget/session/?config="
-                                + Ctx.getUrlFromUri(session_widget_uri)
-                                + "&target="
-                                + idea_id
-                                + locale_parameter; // example: "http://localhost:6543/widget/session/?config=/data/Widget/43&target=local:Idea/3#/"
-                            returned_data["session_widget_configure_url"] = session_widget_configure_url;
+                            session_widget_admin_url = "/static/widget/session/#/home?admin=1&config="+ session_widget_uri;
+                            session_widget_user_url = "/static/widget/session/#/home?config="+ session_widget_uri;
 
-                            session_widget_configure_url = "/static/widget/session/?admin=1"
-                                + locale_parameter
-                                + "#/admin/configure_instance?widget_uri="
-                                + Ctx.getUrlFromUri(session_widget_uri)
-                                + "&target="
-                                + idea_id; // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
-                            returned_data["session_widget_configure_url"] = session_widget_configure_url;
+                            returned_data["session_widget_admin_url"] = session_widget_admin_url;
+                            returned_data["session_widget_user_url"] = session_widget_user_url;
                         }
                         else{
                             console.log("error: inspiration widget has no @id field");
@@ -583,8 +576,6 @@ Context.prototype = {
                             }
                         }
                         returned_data["vote_widgets"] = vote_widgets;
-
-
 
                         break;
                     case 'InspirationWidget':
@@ -626,7 +617,6 @@ Context.prototype = {
         })
 
         that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = Promise;
-
     },
 
 
