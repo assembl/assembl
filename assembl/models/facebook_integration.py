@@ -24,6 +24,7 @@ from .auth import (
     IdentityProviderAccount,
 )
 
+from ..auth import (CrudPermissions, P_EXPORT, P_SYSADMIN)
 from ..lib.config import get_config
 from ..lib.sqla import Base
 from ..tasks.source_reader import PullSourceReader, ReaderStatus
@@ -690,6 +691,17 @@ class FacebookAccessTokens(Base):
     def expiration(self):
         now = datetime.datetime.utcnow()
         return now > self.expiration
+
+    def is_owner(self, user_id):
+        return self.user.profile_id == user_id
+
+    @classmethod
+    def restrict_to_owners(cls, query, user_id):
+        "filter query according to object owners"
+        return query.join(cls.user).filter(FacebookUser.profile_id == user_id)
+
+    crud_permissions = CrudPermissions(P_EXPORT, P_SYSADMIN, read_owned=P_EXPORT)
+
 
 
 class FacebookPost(ImportedPost):
