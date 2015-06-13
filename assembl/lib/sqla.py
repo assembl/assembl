@@ -748,23 +748,24 @@ class BaseOps(object):
             return None
         target_id = json.get('@id', None)
         if target_id is not None:
-            target_id = aliases.get(target_id, target_id)
             if isinstance(target_id, (str, unicode)):
-                instance = get_named_object(
-                    target_id, target_cls.external_typename())
-            else:
-                instance = target_id
+                instance = aliases.get(target_id, None)
+                if instance is None:
+                    instance = get_named_object(
+                        target_id, target_cls.external_typename())
+                    if instance is not None:
+                        aliases[target_id] = instance
         if instance is not None:
             instance._do_update_from_json(
                 json, parse_def, aliases, context,
                 user_id, False)
-        if instance is None:
+        else:
             instance = target_cls._do_create_from_json(
                 json, parse_def, aliases, context, user_id, False)
-        if instance is None:
-            raise HTTPBadRequest(
-                "Could not find or create object %s" % (
-                    dumps(json),))
+            if instance is None:
+                raise HTTPBadRequest(
+                    "Could not find or create object %s" % (
+                        dumps(json),))
         if target_id is not None:
             aliases[target_id] = instance
         return instance
@@ -926,7 +927,7 @@ class BaseOps(object):
                 if not col.foreign_keys:
                     if isinstance(value, (str, unicode)):
                         target_type = col.type.__class__
-                        if col.type.__class__ == DateTime:
+                        if target_type == DateTime:
                             value = iso8601.parse_date(value, None)
                             assert value
                             setattr(self, key, value)
@@ -1012,12 +1013,16 @@ class BaseOps(object):
             c_context = ChainingContext(context, self)
             if isinstance(value, (str, unicode)):
                 assert not must_be_list
-                target_id = aliases.get(value, value)
+                target_id = value
                 if target_cls is not None and \
                         isinstance(target_id, (str, unicode)):
+                    instance = aliases.get(target_id, None)
                     # TODO: Keys spanning multiple columns
-                    instance = get_named_object(
-                        target_id, target_cls.external_typename())
+                    if instance is None:
+                        instance = get_named_object(
+                            target_id, target_cls.external_typename())
+                        if instance is not None:
+                            aliases[target_id] = instance
                     if instance is None:
                         raise HTTPBadRequest("Could not find object "+value)
                 else:
@@ -1038,9 +1043,12 @@ class BaseOps(object):
                 assert can_be_list
                 for subval in value:
                     if isinstance(subval, (str, unicode)):
-                        subval = aliases.get(subval, subval)
-                        instance = get_named_object(
-                            subval, target_cls.external_typename())
+                        instance = aliases.get(subval, None)
+                        if instance is None:
+                            instance = get_named_object(
+                                subval, target_cls.external_typename())
+                            if instance is not None:
+                                aliases[target_id] = instance
                         if instance is None:
                             raise HTTPBadRequest(
                                 "Could not find object %s" % (
