@@ -751,7 +751,7 @@ class BaseOps(object):
             target_id = aliases.get(target_id, target_id)
             if isinstance(target_id, (str, unicode)):
                 instance = get_named_object(
-                    target_cls.external_typename(), target_id)
+                    target_id, target_cls.external_typename())
             else:
                 instance = target_id
         if instance is not None:
@@ -776,8 +776,10 @@ class BaseOps(object):
     @classmethod
     def create_from_json(
             cls, json, user_id=None, context=None,
+            aliases = None,
             parse_def_name='default_reverse'):
         from ..auth.util import get_permissions
+        aliases = aliases or {}
         parse_def = get_view_def(parse_def_name)
         context = context or cls.dummy_context
         user_id = user_id or Everyone
@@ -788,7 +790,7 @@ class BaseOps(object):
         with cls.default_db.no_autoflush:
             # We need this to allow db.is_modified to work well
             return cls._do_create_from_json(
-                json, parse_def, {}, context, permissions, user_id)
+                json, parse_def, aliases, context, permissions, user_id)
 
     @classmethod
     def _do_create_from_json(
@@ -1015,7 +1017,7 @@ class BaseOps(object):
                         isinstance(target_id, (str, unicode)):
                     # TODO: Keys spanning multiple columns
                     instance = get_named_object(
-                        target_cls.external_typename(), target_id)
+                        target_id, target_cls.external_typename())
                     if instance is None:
                         raise HTTPBadRequest("Could not find object "+value)
                 else:
@@ -1038,7 +1040,7 @@ class BaseOps(object):
                     if isinstance(subval, (str, unicode)):
                         subval = aliases.get(subval, subval)
                         instance = get_named_object(
-                            target_cls.external_typename(), subval)
+                            subval, target_cls.external_typename())
                         if instance is None:
                             raise HTTPBadRequest(
                                 "Could not find object %s" % (
@@ -1512,9 +1514,10 @@ def get_named_class(typename):
 
 
 # In theory, the identifier should be enough... at some point.
-def get_named_object(typename, identifier):
+def get_named_object(identifier, typename=None):
     "Get an object given a typename and identifier"
-    # A numeric identifier will often be accepted.
+    if typename is None:
+        typename = identifier.split('/')[-2]
     cls = get_named_class(typename)
     if cls:
         return cls.get_instance(identifier)

@@ -6,9 +6,6 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.sql.expression import join
 from sqlalchemy.orm import relationship
 
-from ..lib.sqla import (
-    Base, TimestampedBase, get_metadata, get_session_maker,
-    get_named_object, get_database_id, Tombstone, UPDATE_OP, DELETE_OP)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import ASSEMBL
 
