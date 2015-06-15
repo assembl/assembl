@@ -11,7 +11,7 @@ var Marionette = require('../../shims/marionette.js'),
     RolesModel = require('../../models/roles.js'),
     i18n = require('../../utils/i18n.js'),
     Roles = require('../../utils/roles.js'),
-    emailAccounts = require('../../models/emailAccounts.js');
+    Accounts = require('../../models/accounts.js');
 
 /**
  * User notification
@@ -329,7 +329,7 @@ var userNotificationSubscriptions = Marionette.LayoutView.extend({
 
             });
 
-       var emailAccount = new emailAccounts.Collection();
+       var emailAccount = new Accounts.Collection();
        var notificationByEmails = new NotificationByEmails({
            collection: emailAccount
        });

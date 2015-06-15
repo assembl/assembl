@@ -3,8 +3,7 @@
 var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
-var emailAccount = Base.Model.extend({
-    urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/current/accounts"),
+var Account = Base.Model.extend({
     defaults: {
       //E-mail account specifics
       will_merge_if_validated: false,
@@ -31,12 +30,13 @@ var emailAccount = Base.Model.extend({
 
 });
 
-var emailAccounts = Base.Collection.extend({
+
+var Accounts = Base.Collection.extend({
     url: Ctx.getApiV2DiscussionUrl("/all_users/current/accounts"),
-    model: emailAccount
+    model: Account
 });
 
 module.exports = {
-    Model: emailAccount,
-    Collection: emailAccounts
+    Model: Account,
+    Collection: Accounts
 };
