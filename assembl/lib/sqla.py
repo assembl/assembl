@@ -755,8 +755,6 @@ class BaseOps(object):
                         target_id, target_cls.external_typename())
                     if instance is not None:
                         aliases[target_id] = instance
-                # Here also we look at objects we could build from the CIF.
-                # Beware circular dependencies.
         if instance is not None:
             instance._do_update_from_json(
                 json, parse_def, aliases, context,
@@ -857,6 +855,7 @@ class BaseOps(object):
             self, json, parse_def, aliases, context, permissions,
             user_id, duplicate_error=True, jsonld=None):
         assert isinstance(json, dict)
+        jsonld = jsonld or {}
         is_created = self.id is None
         typename = json.get("@type", None)
         if typename and typename != self.external_typename() and \
@@ -1027,8 +1026,11 @@ class BaseOps(object):
                             target_id, target_cls.external_typename())
                         if instance is not None:
                             aliases[target_id] = instance
-                    # OK. Here we look at objects we could build from the CIF.
-                    # Beware circular dependencies. (have a list of in-progress objects?)
+                    if instance is None and target_id in jsonld:
+                        instance = _create_subobject_from_json(
+                            jsonld[target_id], target_cls, parse_def,
+                            aliases, c_context, user_id, accessor, jsonld)
+                        aliases[target_id] = instance
                     if instance is None:
                         raise HTTPBadRequest("Could not find object "+value)
                 else:
@@ -1054,9 +1056,12 @@ class BaseOps(object):
                             instance = get_named_object(
                                 subval, target_cls.external_typename())
                             if instance is not None:
-                                aliases[target_id] = instance
-                        # Here also we look at objects we could build from the CIF.
-                        # Beware circular dependencies.
+                                aliases[subval] = instance
+                        if instance is None and subval in jsonld:
+                            instance = _create_subobject_from_json(
+                                jsonld[subval], target_cls, parse_def,
+                                aliases, c_context, user_id, accessor, jsonld)
+                            aliases[subval] = instance
                         if instance is None:
                             raise HTTPBadRequest(
                                 "Could not find object %s" % (
