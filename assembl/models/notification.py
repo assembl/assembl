@@ -242,7 +242,7 @@ class NotificationSubscription(DiscussionBoundBase):
 
     def _do_update_from_json(
                 self, json, parse_def, aliases, ctx, permissions,
-                user_id, duplicate_error=True):
+                user_id, duplicate_error=True, jsonld=None):
         from ..auth.util import user_has_permission
         target_user_id = user_id
         user = ctx.get_instance_of_class(User)
@@ -281,7 +281,7 @@ class NotificationSubscription(DiscussionBoundBase):
             new_instance = self.change_class(new_type)
             return new_instance._do_update_from_json(
                 json, parse_def, aliases, ctx, permissions,
-                user_id)
+                user_id, True, jsonld)
         creation_origin = json.get('creation_origin', "USER_REQUESTED")
         if creation_origin is not None:
             self.creation_origin = NotificationCreationOrigin.from_string(creation_origin)
@@ -432,11 +432,11 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
-            user_id, duplicate_error=True):
+            user_id, duplicate_error=True, jsonld=None):
         updated = super(
             NotificationSubscriptionOnPost, self)._do_update_from_json(
                 json, parse_def, aliases, ctx, permissions,
-                user_id, duplicate_error)
+                user_id, duplicate_error, jsonld)
         if updated == self:
             self.post_id = json.get('post_id', self.post_id)
         return updated
@@ -472,11 +472,11 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
-            user_id, duplicate_error=True):
+            user_id, duplicate_error=True, jsonld=None):
         updated = super(
             NotificationSubscriptionOnIdea, self)._do_update_from_json(
                 json, parse_def, aliases, ctx, permissions,
-                user_id, duplicate_error)
+                user_id, duplicate_error, jsonld)
         if updated == self:
             self.idea_id = json.get('idea_id', self.idea_id)
         return updated
@@ -512,11 +512,11 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
-            user_id, duplicate_error=True):
+            user_id, duplicate_error=True, jsonld=None):
         updated = super(
             NotificationSubscriptionOnExtract, self)._do_update_from_json(
                 json, parse_def, aliases, ctx, permissions,
-                user_id, duplicate_error)
+                user_id, duplicate_error, jsonld)
         if updated == self:
             self.extract_id = json.get('extract_id', self.extract_id)
         return updated
@@ -552,11 +552,11 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
-            user_id, duplicate_error=True):
+            user_id, duplicate_error=True, jsonld=None):
         updated = super(
             NotificationSubscriptionOnUserAccount, self)._do_update_from_json(
                 json, parse_def, aliases, ctx, permissions,
-                user_id, duplicate_error)
+                user_id, duplicate_error, jsonld)
         if updated == self:
             self.on_user_id = json.get('on_user_id', self.on_user_id)
         return updated

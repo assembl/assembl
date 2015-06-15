@@ -731,7 +731,7 @@ class BaseOps(object):
 
     def _create_subobject_from_json(
             self, json, target_cls, parse_def, aliases,
-            context, user_id, accessor_name):
+            context, user_id, accessor_name, jsonld=None):
         instance = None
         target_type = json.get('@type', None)
         if target_type:
@@ -755,13 +755,15 @@ class BaseOps(object):
                         target_id, target_cls.external_typename())
                     if instance is not None:
                         aliases[target_id] = instance
+                # Here also we look at objects we could build from the CIF.
+                # Beware circular dependencies.
         if instance is not None:
             instance._do_update_from_json(
                 json, parse_def, aliases, context,
-                user_id, False)
+                user_id, False, jsonld)
         else:
             instance = target_cls._do_create_from_json(
-                json, parse_def, aliases, context, user_id, False)
+                json, parse_def, aliases, context, user_id, False, jsonld)
             if instance is None:
                 raise HTTPBadRequest(
                     "Could not find or create object %s" % (
@@ -777,7 +779,7 @@ class BaseOps(object):
     @classmethod
     def create_from_json(
             cls, json, user_id=None, context=None,
-            aliases = None,
+            aliases=None, jsonld=None,
             parse_def_name='default_reverse'):
         from ..auth.util import get_permissions
         aliases = aliases or {}
@@ -791,12 +793,13 @@ class BaseOps(object):
         with cls.default_db.no_autoflush:
             # We need this to allow db.is_modified to work well
             return cls._do_create_from_json(
-                json, parse_def, aliases, context, permissions, user_id)
+                json, parse_def, aliases, context, permissions,
+                user_id, True, jsonld)
 
     @classmethod
     def _do_create_from_json(
             cls, json, parse_def, aliases, context, permissions,
-            user_id, duplicate_error=True):
+            user_id, duplicate_error=True, jsonld=None):
         can_create = cls.user_can_cls(
             user_id, CrudPermissions.CREATE, permissions)
         if duplicate_error and not can_create:
@@ -807,7 +810,7 @@ class BaseOps(object):
         inst = cls()
         result = inst._do_update_from_json(
             json, parse_def, aliases, context, permissions,
-            user_id, duplicate_error)
+            user_id, duplicate_error, jsonld)
         if result is inst and not can_create:
             raise HTTPUnauthorized(
                 "User id <%s> cannot create a <%s> object" % (
@@ -827,7 +830,7 @@ class BaseOps(object):
         return result
 
     def update_from_json(
-                self, json, user_id=None, context=None,
+                self, json, user_id=None, context=None, jsonld=None,
                 parse_def_name='default_reverse'):
         from ..auth.util import get_permissions
         parse_def = get_view_def(parse_def_name)
@@ -845,13 +848,14 @@ class BaseOps(object):
         with self.db.no_autoflush:
             # We need this to allow db.is_modified to work well
             return self._do_update_from_json(
-                json, parse_def, {}, context, permissions, user_id)
+                json, parse_def, {}, context, permissions, user_id,
+                True, jsonld)
 
     # TODO: Add security by attribute?
     # Some attributes may be settable only on create.
     def _do_update_from_json(
             self, json, parse_def, aliases, context, permissions,
-            user_id, duplicate_error=True):
+            user_id, duplicate_error=True, jsonld=None):
         assert isinstance(json, dict)
         is_created = self.id is None
         typename = json.get("@type", None)
@@ -862,7 +866,7 @@ class BaseOps(object):
             recast = self.change_class(new_cls, json)
             return recast._do_update_from_json(
                 json, parse_def, aliases, context, permissions,
-                user_id, duplicate_error)
+                user_id, duplicate_error, jsonld)
         local_view = self.expand_view_def(parse_def)
         # False means it's illegal to get this.
         assert local_view is not False
@@ -1023,6 +1027,8 @@ class BaseOps(object):
                             target_id, target_cls.external_typename())
                         if instance is not None:
                             aliases[target_id] = instance
+                    # OK. Here we look at objects we could build from the CIF.
+                    # Beware circular dependencies. (have a list of in-progress objects?)
                     if instance is None:
                         raise HTTPBadRequest("Could not find object "+value)
                 else:
@@ -1032,7 +1038,7 @@ class BaseOps(object):
                 assert not must_be_list
                 instance = self._create_subobject_from_json(
                     value, target_cls, parse_def, aliases,
-                    c_context, user_id, accessor_name)
+                    c_context, user_id, accessor_name, jsonld)
                 if instance is None:
                     if isinstance(accessor, property):
                         # It may not be an object after all
@@ -1049,6 +1055,8 @@ class BaseOps(object):
                                 subval, target_cls.external_typename())
                             if instance is not None:
                                 aliases[target_id] = instance
+                        # Here also we look at objects we could build from the CIF.
+                        # Beware circular dependencies.
                         if instance is None:
                             raise HTTPBadRequest(
                                 "Could not find object %s" % (
@@ -1057,7 +1065,7 @@ class BaseOps(object):
                     elif isinstance(subval, dict):
                         instance = self._create_subobject_from_json(
                             subval, target_cls, parse_def, aliases,
-                            c_context, user_id, accessor_name)
+                            c_context, user_id, accessor_name, jsonld)
                         if instance is None:
                             raise HTTPBadRequest("No @class in "+dumps(subval))
                     else:
@@ -1192,7 +1200,7 @@ class BaseOps(object):
                     # TODO: Check if there's a risk of infinite recursion here?
                     return other._do_update_from_json(
                         json, parse_def, aliases, context, permissions,
-                        user_id, duplicate_error)
+                        user_id, duplicate_error, jsonld)
         return self
 
     def unique_query(self):

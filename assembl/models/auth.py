@@ -348,14 +348,14 @@ class AbstractAgentAccount(Base):
             user_id, operation, permissions)
 
     def update_from_json(
-            self, json, user_id=None, context=None,
+            self, json, user_id=None, context=None, jsonld=None,
             parse_def_name='default_reverse'):
         # DO NOT update email... but we still want
         # to allow to set it on create.
         if 'email' in json:
             del json['email']
         return super(AbstractAgentAccount, self).update_from_json(
-            json, user_id, context, parse_def_name)
+            json, user_id, context, jsonld, parse_def_name)
 
 
 class EmailAccount(AbstractAgentAccount):
@@ -1051,7 +1051,7 @@ class LocalUserRole(DiscussionBoundBase):
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
-            user_id, duplicate_error=True):
+            user_id, duplicate_error=True, jsonld=None):
         json_user_id = json.get('user', None)
         if json_user_id is None:
             json_user_id = user_id

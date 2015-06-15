@@ -133,7 +133,8 @@ class Widget(DiscussionBoundBase):
             self.db.add(state)
         state.state_json = user_state
 
-    def update_from_json(self, json, user_id=Everyone, ctx=None):
+    def update_from_json(self, json, user_id=Everyone, ctx=None, jsonld=None,
+                         parse_def_name='default_reverse'):
         from ..auth.util import user_has_permission
         if user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
             new_type = json.get('@type', self.type)
@@ -143,7 +144,8 @@ class Widget(DiscussionBoundBase):
                     return None
                 new_type = polymap[new_type].class_
                 new_instance = self.change_class(new_type)
-                return new_instance.update_from_json(json, user_id, ctx)
+                return new_instance.update_from_json(
+                    json, user_id, ctx, jsonld, parse_def_name)
             if 'settings' in json:
                 self.settings_json = json['settings']
             if 'discussion' in json:
