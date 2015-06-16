@@ -21,7 +21,7 @@ var groupContainer = Marionette.CollectionView.extend({
         // boilerplate in marionette if you listen m/c here, use collectionEvents or modelEvents
         //this.listenTo(this.collection, 'change reset add remove', this.adjustGridSize);
 
-        // Shouldn't this be in onRender, or better wait untill all groups have rendered?
+        // Shouldn't this be in onRender, or better wait until all groups have rendered?
         // benoitg-2015-05-27
         setTimeout(function () {
             that.resizeAllPanels();

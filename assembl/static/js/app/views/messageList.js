@@ -1192,6 +1192,7 @@ var MessageList = AssemblPanel.extend({
         this._offsetEnd = undefined;
 
         if(this.currentQuery.isQueryValid()) {
+          this.blockPanel();
           /* TODO:  Most of this should be a listen to the returned collection */
           Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
               this.currentQuery.getResultMessageIdCollectionPromise(),
@@ -1256,9 +1257,16 @@ var MessageList = AssemblPanel.extend({
 
             });
           });
-
-          this.blockPanel();
-        };
+        }
+        else {
+          //Query isn't valid
+          if(this.getGroupState().get('currentIdea') !== null) {
+            this.syncWithCurrentIdea();
+          }
+          else {
+            console.log("WRITEME:  Display information panel");
+          }
+        }
     },
 
     // FIXME: this seems to be not used anymore, so I (Quentin) commented it out

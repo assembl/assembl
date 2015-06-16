@@ -10,6 +10,10 @@ var Marionette = require('../shims/marionette.js'),
     MessageSendView = require('./messageSend.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     CollectionManager = require('../common/collectionManager.js'),
+    panelSpec = require('../models/panelSpec'),
+    PanelSpecTypes = require('../utils/panelSpecTypes'),
+    viewsFactory = require('../objects/viewsFactory'),
+    groupSpec = require('../models/groupSpec'),
     Promise = require('bluebird');
 
 
@@ -211,13 +215,24 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
         panel.getContainingGroup().setCurrentIdea(this.model);
       }
       else {
-        console.log('WRITEME ideaInSysthesis: navigateToIdea called, and we are not the primary navigation panel');
-
+        //navigateToIdea called, and we are not the primary navigation panel
+        //Let's open in a modal Group
         var ModalGroup = require('./groups/modalGroup.js');
-        var modal = new ModalGroup();
-
+        var defaults = {
+            panels: new panelSpec.Collection([
+                    {type: PanelSpecTypes.IDEA_PANEL.id, minimized: false},
+                    {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
+                ],
+                {'viewsFactory': viewsFactory }),
+            navigationState: 'debate'
+        };
+        var groupSpecModel = new groupSpec.Model(defaults);
+        var setResult = groupSpecModel.get('states').at(0).set({currentIdea: this.model}, {validate: true});
+        if (!setResult) {
+          throw new Error("Unable to set currentIdea on modal Group");
+        }
+        var modal = new ModalGroup({model: groupSpecModel});
         Assembl.slider.show(modal);
-
       }
     },
 

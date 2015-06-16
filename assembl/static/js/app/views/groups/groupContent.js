@@ -372,17 +372,17 @@ var groupContent = Marionette.CompositeView.extend({
     },
 
     findViewByType: function (panelSpecType) {
-      var wrapper = this.findPanelWrapperByType(panelSpecType);
+      var retval = undefined,
+          wrapper = this.findPanelWrapperByType(panelSpecType);
+
       if (wrapper != null) {
         if(wrapper.contents === undefined) {
           throw new Error("PanelWrapper doesn't have any content");
         }
-        return wrapper.contents.currentView;
+        retval = wrapper.contents.currentView;
       }
-      else {
-        console.log("findViewByType: WARNING: unable to find a view for type", panelSpecType);
-      }
-      return undefined;
+      //console.log("findViewByType: returning ", retval, " for type", panelSpecType);
+      return retval;
     },
 
     /**

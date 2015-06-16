@@ -5,9 +5,9 @@ var Marionette = require('../../shims/marionette.js'),
     Assembl = require('../../app.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
-    panelSpec = require('../../models/panelSpec'),
-    PanelSpecTypes = require('../../utils/panelSpecTypes'),
-    viewsFactory = require('../../objects/viewsFactory'),
+    //panelSpec = require('../../models/panelSpec'),
+    //PanelSpecTypes = require('../../utils/panelSpecTypes'),
+    //viewsFactory = require('../../objects/viewsFactory'),
     groupSpec = require('../../models/groupSpec'),
     GroupContainer = require('../groups/groupContainer');
 
@@ -20,8 +20,15 @@ var ModalGroup = Backbone.Modal.extend({
 
   keyControl: false,
 
+  /** Takes a groupSpec as model
+   * 
+   */
   initialize: function () {
     this.$('.bbm-modal').addClass('popin');
+    var groupSpecCollection = new groupSpec.Collection([this.model]);
+    this.groupsView = new GroupContainer({
+      collection: groupSpecCollection
+    });
   },
 
   events: {
@@ -29,22 +36,14 @@ var ModalGroup = Backbone.Modal.extend({
   },
 
   onRender: function() {
-    var defaults = {
-        panels: new panelSpec.Collection([
-                {type: PanelSpecTypes.IDEA_PANEL.id, minimized: false},
-                {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
-            ],
-            {'viewsFactory': viewsFactory }),
-        navigationState: 'debate'
-    };
-    var groupSpecModel = new groupSpec.Model(defaults, {'viewsFactory': viewsFactory });
-    console.log(groupSpecModel.get('states'));
-    var groupSpecCollection = new groupSpec.Collection([groupSpecModel]);
-    var groupsView = new GroupContainer({
-      collection: groupSpecCollection
-    });
-    groupsView.render();
-    this.$('.popin-body').html(groupsView.el);
+    this.groupsView.render();
+    this.$('.popin-body').html(this.groupsView.el);
+  },
+
+  getGroupContentView: function() {
+    console.log("Looking for model:", this.model, "in:", _.clone(this.groupsView.children.indexByModel));
+    console.log("Result: ", this.groupsView.children.findByModel(this.groupSpecModel))
+    return this.groupsView.children.findByModel(this.groupSpecModel);
   }
 
 });
