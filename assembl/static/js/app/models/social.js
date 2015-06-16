@@ -16,7 +16,7 @@ var FacebookAccessToken = Base.Model.extend({
         user_id: null,
         token: null,
         expiration: null,
-        tokenType: null,
+        token_type: null,
         object_name: null,
         '@view': null,
         '@type': null
