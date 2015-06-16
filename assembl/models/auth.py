@@ -564,13 +564,6 @@ class IdentityProviderAccount(AbstractAgentAccount):
         self.interpret_profile(val)
 
 
-class FacebookAccount(IdentityProviderAccount):
-    __mapper_args__ = {
-        'polymorphic_identity': 'facebook_account',
-    }
-    account_provider_name = "facebook"
-
-
 class AgentStatusInDiscussion(DiscussionBoundBase):
     __tablename__ = 'agent_status_in_discussion'
     __table_args__ = (

@@ -199,7 +199,7 @@ from .edgesense_drupal import (
     SourceSpecificPost,
 )
 from .facebook_integration import (
-    FacebookUser,
+    FacebookAccount,
     FacebookGenericSource,
     FacebookGroupSource,
     FacebookGroupSourceFromUser,

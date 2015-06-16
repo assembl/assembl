@@ -22,7 +22,7 @@ from assembl.lib import config
 def upgrade(pyramid_env):
     with context.begin_transaction():
         op.create_table(
-            'facebook_user',
+            'facebook_account',
             sa.Column(
                 'id', sa.Integer, sa.ForeignKey(
                     'idprovider_agent_account.id',
@@ -37,7 +37,7 @@ def upgrade(pyramid_env):
             sa.Column('fb_source_id', sa.String(512), nullable=False),
             sa.Column('url_path', sa.String(1024)),
             sa.Column('creator_id', sa.Integer,
-                      sa.ForeignKey('facebook_user.id',
+                      sa.ForeignKey('facebook_account.id',
                                     onupdate='CASCADE', ondelete='CASCADE')))
 
         op.create_table(
@@ -52,7 +52,7 @@ def upgrade(pyramid_env):
         op.create_table('facebook_access_tokens',
             sa.Column('id', sa.Integer, primary_key=True),
             sa.Column('user_id', sa.Integer, sa.ForeignKey(
-                      'facebook_user.id',
+                      'facebook_account.id',
                       onupdate='CASCADE', ondelete='CASCADE')),
             sa.Column('token', sa.String(512), unique=True),
             sa.Column('expiration', sa.DateTime),
@@ -73,4 +73,4 @@ def downgrade(pyramid_env):
         op.drop_table('facebook_access_tokens')
         op.drop_table('facebook_post')
         op.drop_table('facebook_source')
-        op.drop_table('facebook_user')
+        op.drop_table('facebook_account')

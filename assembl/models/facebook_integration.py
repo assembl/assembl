@@ -150,6 +150,25 @@ class FacebookAPI(object):
         res = self.api.extend_access_token(self._app_id, self._app_secret)
         return res['access_token'], res['expires']
 
+    def get_expiration_time(self, token):
+        args = {
+            'input_token': token,
+            'access_token': self._app_access_token
+        }
+        try:
+            tmp = self._api.request('debug_token', args)
+            data = tmp.json.get('data')
+            if not data:
+                return None
+            expires = data.get('expires_at', None)
+            if not expires:
+                return None
+            return datetime.fromtimestamp(int(expires))
+
+        except:
+            return None
+
+
 
 class FacebookParser(object):
     # The main object to interact with to get source endpoints
@@ -389,9 +408,9 @@ class FacebookGenericSource(PostSource):
 
     fb_source_id = Column(String(512), nullable=False)
     url_path = Column(String(1024))
-    creator_id = Column(Integer, ForeignKey('facebook_user.id',
+    creator_id = Column(Integer, ForeignKey('facebook_account.id',
                         onupdate='CASCADE', ondelete='CASCADE'))
-    creator = relationship('FacebookUser',
+    creator = relationship('FacebookAccount',
                            backref=backref('sources',
                                            cascade="all, delete-orphan"))
 
@@ -439,7 +458,7 @@ class FacebookGenericSource(PostSource):
     def _create_fb_user(self, user, db):
         if user['id'] not in db:
             # avatar_url = self.parser.get_user_profile_photo(user)
-            new_user = FacebookUser.create(
+            new_user = FacebookAccount.create(
                 user,
                 self.provider,
                 self.parser.get_app_id()
@@ -627,11 +646,13 @@ class FacebookSinglePostSource(FacebookGenericSource):
         self.single_post(limit)
 
 
-class FacebookUser(IdentityProviderAccount):
-    __tablename__ = 'facebook_user'
+class FacebookAccount(IdentityProviderAccount):
+    __tablename__ = 'facebook_account'
     __mapper_args__ = {
-        'polymorphic_identity': 'facebook_user'
+        'polymorphic_identity': 'facebook_account'
     }
+
+    account_provider_name = "facebook"
 
     id = Column(Integer, ForeignKey(
         'idprovider_agent_account.id',
@@ -665,16 +686,17 @@ class FacebookAccessTokens(Base):
     __tablename__ = 'facebook_access_tokens'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('facebook_user.id',
+    user_id = Column(Integer, ForeignKey('facebook_account.id',
                      onupdate='CASCADE', ondelete='CASCADE'))
 
-    user = relationship('FacebookUser',
+    user = relationship('FacebookAccount',
         backref=backref('access_tokens', cascade='all, delete-orphan'))
 
     token = Column(String(512), unique=True)
     expiration = Column(DateTime)
-    token_type = Column(String(50))
     # ['page', 'group', 'user', 'app'...]
+    token_type = Column(String(50))
+    # Object_name: The name of the group/page 
     object_name = Column(String(512))
 
     @property
@@ -695,10 +717,19 @@ class FacebookAccessTokens(Base):
     def is_owner(self, user_id):
         return self.user.profile_id == user_id
 
+    def get_token_expiration(self):
+        # Makes external call. This is not async.
+        api = FacebookAPI()
+        return api.get_expiration_time(self.token)
+
+    def convert_to_iso(self):
+        # return ISO 8601 form
+        return self.expiration.isoformat()
+
     @classmethod
     def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
-        return query.join(cls.user).filter(FacebookUser.profile_id == user_id)
+        return query.join(cls.user).filter(FacebookAccount.profile_id == user_id)
 
     crud_permissions = CrudPermissions(P_EXPORT, P_SYSADMIN, read_owned=P_EXPORT)
 
