@@ -16,14 +16,13 @@ from sqlalchemy import (
 )
 
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy.types import Text
 from virtuoso.vmapping import IriClass
 
-from . import Base, DiscussionBoundBase, DiscussionBoundTombstone
+from . import DiscussionBoundBase, DiscussionBoundTombstone
 from ..semantic.namespaces import (
-    SIOC, ASSEMBL, CATALYST, QUADNAMES, VERSION, FOAF, DCTERMS, RDF, VirtRDF)
-from ..semantic.virtuoso_mapping import QuadMapPatternS, USER_SECTION
-from .auth import User
+    ASSEMBL, QUADNAMES, VERSION, RDF, VirtRDF)
+from ..semantic.virtuoso_mapping import QuadMapPatternS
+from .auth import User, AgentProfile
 from .generic import Content
 from .discussion import Discussion
 
@@ -48,7 +47,8 @@ class Action(DiscussionBoundBase):
         Integer,
         ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False,
-        info={'rdf': QuadMapPatternS(None, VERSION.who)}
+        info={'rdf': QuadMapPatternS(
+            None, VERSION.who, AgentProfile.agent_as_account_iri.apply(None))}
     )
 
     actor = relationship(
