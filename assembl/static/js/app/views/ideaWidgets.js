@@ -80,6 +80,7 @@ var IdeaWidgets = Marionette.ItemView.extend({
     },
 
     onRender: function(){
+        //console.log("ideaWidgets::onRender()");
         this.populateAssociatedWidgetData();
     },
 
@@ -109,18 +110,23 @@ var IdeaWidgets = Marionette.ItemView.extend({
         if (this.model) {
             var that = this;
             var previous = {};
-            previous.inspiration_widget_create_url = that.inspiration_widget_create_url;
-            previous.inspiration_widgets = that.inspiration_widgets;
-            previous.inspiration_widget_url = that.inspiration_widget_url;
-            previous.inspiration_widget_configure_url = that.inspiration_widget_configure_url;
 
-            previous.vote_widget_create_url = that.vote_widget_create_url;
-            previous.vote_widgets = that.vote_widgets;
+            var expected_properties = [
+                "inspiration_widget_create_url",
+                "inspiration_widgets",
+                "inspiration_widget_url",
+                "inspiration_widget_configure_url",
+                "vote_widget_create_url",
+                "vote_widgets",
+                "session_widgets", // or "session_widget"?
+                "session_widget_admin_url",
+                "session_widget_create_url",
+                "session_widget_user_url"
+            ];
 
-            previous.session_widgets = that.session_widgets;
-            previous.session_widget_admin_url = that.session_widget_admin_url;
-            previous.session_widget_create_url = that.session_widget_create_url;
-            previous.session_widget_user_url = that.session_widget_user_url;
+            expected_properties.forEach(function(el){
+                previous[el] = that[el];
+            });
 
             var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(this.model.getId());
 
@@ -130,62 +136,29 @@ var IdeaWidgets = Marionette.ItemView.extend({
 
                     that.resetAssociatedWidgetData();
 
-                    if ("inspiration_widget_create_url" in data) {
-                        that.inspiration_widget_create_url = data.inspiration_widget_create_url;
-                    }
+                    var received_properties = {};
+                    var changed = false;
+                    expected_properties.forEach(function(el){
+                        if (el in data) {
+                            received_properties[el] = data[el];
+                            that[el] = received_properties[el];
+                            if ( previous[el] != received_properties[el]
+                                && !(
+                                    $.isArray(previous[el]) && previous[el].length == 0
+                                    && $.isArray(received_properties[el]) && received_properties[el].length == 0
+                                )
+                                && !( el == "inspiration_widgets" ) // special case: this is an object
+                            ){
+                                console.log("item " + el + " has changed");
+                                console.log("old value: ", previous[el]);
+                                console.log("new value: ", received_properties[el]);
+                                changed = true;
+                            }
+                        }
+                    });
 
-                    if ("inspiration_widgets" in data) {
-                        that.inspiration_widgets = data.inspiration_widgets;
-                    }
-
-                    if ("inspiration_widget_url" in data) {
-                        that.inspiration_widget_url = data.inspiration_widget_url;
-                    }
-
-                    if ("inspiration_widget_configure_url" in data) {
-                        that.inspiration_widget_configure_url = data.inspiration_widget_configure_url;
-                        //console.log("inspiration_widget_configure_url: ", data.inspiration_widget_configure_url);
-                    }
-
-                    if ("vote_widget_create_url" in data) {
-                        that.vote_widget_create_url = data.vote_widget_create_url;
-                        //console.log("vote_widget_create_url: ", data.vote_widget_create_url);
-                    }
-
-                    if ("vote_widgets" in data) {
-                        that.vote_widgets = data.vote_widgets;
-                        //console.log("vote_widgets: ", data.vote_widgets);
-                    }
-
-                    if ("session_widget" in data) {
-                        that.session_widgets = data.session_widgets;
-                    }
-
-                    if ("session_widget_admin_url" in data) {
-                        that.session_widget_admin_url = data.session_widget_admin_url;
-                    }
-
-                    if ("session_widget_create_url" in data) {
-                        that.session_widget_create_url = data.session_widget_create_url;
-                    }
-
-                    if ("session_widget_user_url" in data) {
-                        that.session_widget_user_url = data.session_widget_user_url;
-                    }
-
-                    if ( previous.inspiration_widget_create_url != that.inspiration_widget_create_url
-                        || previous.inspiration_widgets != that.inspiration_widgets
-                        || previous.inspiration_widget_url != that.inspiration_widget_url
-                        || previous.inspiration_widget_configure_url != that.inspiration_widget_configure_url
-
-                        || previous.vote_widget_create_url != that.vote_widget_create_url
-                        || previous.vote_widgets != that.vote_widgets
-
-                        || previous.session_widgets != that.session_widgets
-                        || previous.session_widget_user_url != that.session_widget_user_url
-                        || previous.session_widget_create_url != that.session_widget_create_url
-                        || previous.session_widget_admin_url != that.session_widget_admin_url){
-
+                    if ( changed ){
+                        console.log("content changed => we have to re-render");
                         that.render();
                     }
                 }
