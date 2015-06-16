@@ -81,12 +81,9 @@
         "username": true,
         "picture_url": true
     },
-    "FacebookUser": {
+    "FacebookAccount": {
         "@extends": "IdentityProviderAccount",
-        "oauth_token": true,
-        "oauth_token_longlived": true,
-        "oauth_expiry": false,
-        "app_id": true
+        "app_id": false
     },
     "IdentityProvider": {
         "name": true,
@@ -464,5 +461,12 @@
         "requested": true,
         "role": "&get_role_name",
         "discussion": true
+    },
+    "FacebookAccessTokens": {
+        "user_id": true,
+        "token": true,
+        "expiration": "&convert_to_iso",
+        "token_type": true,
+        "object_name": true
     }
 }

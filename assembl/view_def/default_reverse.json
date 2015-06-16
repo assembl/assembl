@@ -48,11 +48,8 @@
         "username": false,
         "picture_url": false
     },
-    "FacebookUser": {
+    "FacebookAccount": {
         "@extends": "IdentityProviderAccount",
-        "oauth_token": false,
-        "oauth_token_longlived": false,
-        "oauth_expiry": false,
         "app_id": false
     },
     "ContentSource": {
@@ -300,5 +297,12 @@
     },
     "BinaryIdeaVote": {
         "@extends": "AbstractIdeaVote"
+    },
+    "FacebookAccessTokens": {
+        "user_id": true,
+        "token": true,
+        "expiration": "&get_token_expiration",
+        "token_type": true,
+        "object_name": true
     }
 }
