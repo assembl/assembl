@@ -4,6 +4,7 @@ from datetime import datetime
 from urlparse import urlparse, parse_qs
 import re
 
+import facebook
 from sqlalchemy import (
     Column,
     ForeignKey,
@@ -12,9 +13,8 @@ from sqlalchemy import (
     Boolean,
     DateTime
 )
-import dateutil.parser
-import facebook
 import simplejson as json
+from dateutil.parser import parse as parse_datetime
 from sqlalchemy.orm import relationship, backref
 from virtuoso.alchemy import CoerceUnicode
 
@@ -696,8 +696,25 @@ class FacebookAccessTokens(Base):
     expiration = Column(DateTime)
     # ['page', 'group', 'user', 'app'...]
     token_type = Column(String(50))
-    # Object_name: The name of the group/page 
+    # Object_name: The name of the group/page
     object_name = Column(String(512))
+
+    def __init__(self, *args, **kwargs):
+        try:       
+            if 'expiration' in kwargs:
+                val = kwargs['expiration']
+                if isinstance(val, basestring):
+                    # If a string is passed through, then it MUST be in
+                    # ISO 8601 format
+                    kwargs['expiration'] = parse_datetime(val)
+            else:
+                # There is no expiration sent. Go fetch it.
+                # If errors out, put nothing
+                kwargs['expiration'] = self.get_token_expiration()
+        except:
+            # TODO: Log the error and move on
+            pass
+        super(FacebookAccessTokens, self).__init__(args, kwargs)
 
     @property
     def expires(self):
@@ -722,8 +739,8 @@ class FacebookAccessTokens(Base):
         api = FacebookAPI()
         return api.get_expiration_time(self.token)
 
-    def convert_to_iso(self):
-        # return ISO 8601 form
+    def convert_expiration_to_iso(self):
+        # return the expiration date in ISO 8601 form
         return self.expiration.isoformat()
 
     @classmethod
@@ -759,7 +776,7 @@ class FacebookPost(ImportedPost):
         import_date = datetime.utcnow()
         source_post_id = post.get('id')
         source = source
-        creation_date = dateutil.parser.parse(post.get('created_time'))
+        creation_date = parse_datetime(post.get('created_time'))
         discussion = source.discussion
         creator_agent = user.profile
         blob = json.dumps(post)

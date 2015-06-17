@@ -465,7 +465,7 @@
     "FacebookAccessTokens": {
         "user_id": true,
         "token": true,
-        "expiration": "&convert_to_iso",
+        "expiration": true,
         "token_type": true,
         "object_name": true
     }
