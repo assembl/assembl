@@ -249,4 +249,4 @@ If you use vagrant, we have a few processes that expect to use socket files in %
 
 ## Internationalization
 
-See (doc/localization.md)
+See [localization](https://github.com/ImaginationForPeople/assembl/blob/develop/doc/localization.md)
