@@ -1,7 +1,8 @@
 from __future__ import absolute_import
 import abc
 
-#From http://stackoverflow.com/questions/11217878/python-2-7-combine-abc-abstractmethod-and-classmethod
+# From http://stackoverflow.com/questions/11217878/python-2-7-combine-abc-abstractmethod-and-classmethod
+
 
 class instancemethodwrapper(object):
     def __init__(self, callable):
@@ -14,26 +15,29 @@ class instancemethodwrapper(object):
     def __call__(self, *args, **kwargs):
         if self.__dontcall__:
             raise TypeError('Attempted to call abstract method.')
-        return self.callable(*args,**kwargs)
+        return self.callable(*args, **kwargs)
+
 
 class newclassmethod(classmethod):
     def __init__(self, func):
         super(newclassmethod, self).__init__(func)
-        isabstractmethod = getattr(func,'__isabstractmethod__',False)
+        isabstractmethod = getattr(func, '__isabstractmethod__', False)
         if isabstractmethod:
             self.__isabstractmethod__ = isabstractmethod
 
     def __get__(self, instance, owner):
-        result = instancemethodwrapper(super(newclassmethod, self).__get__(instance, owner))
-        isabstractmethod = getattr(self,'__isabstractmethod__',False)
+        result = instancemethodwrapper(
+            super(newclassmethod, self).__get__(instance, owner))
+        isabstractmethod = getattr(self, '__isabstractmethod__', False)
         if isabstractmethod:
             result.__isabstractmethod__ = isabstractmethod
-            abstractmethods = getattr(owner,'__abstractmethods__',None)
+            abstractmethods = getattr(owner, '__abstractmethods__', None)
             if abstractmethods and result.__name__ in abstractmethods:
                 result.__dontcall__ = True
         return result
 
+
 class abstractclassmethod(newclassmethod):
     def __init__(self, func):
         func = abc.abstractmethod(func)
-        super(abstractclassmethod,self).__init__(func)
+        super(abstractclassmethod, self).__init__(func)
