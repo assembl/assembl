@@ -336,21 +336,28 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     //console.log("getFieldDefaultValue(): ", default_fields, field_name, for_admin);
     // var default_value = ''; // /!\ setting it to an empty string does not create the property!
     var default_value = "something";
-    var optional_field = default_fields.find(function(e){
-      return ( e.key == field_name );
-    });
-    if ( optional_field != undefined ){
-      if ( for_admin == true && optional_field.hasOwnProperty("defaultAdmin") )
-        default_value = optional_field.defaultAdmin;
-      else if ( optional_field.hasOwnProperty("default") )
-        default_value = optional_field.default;
-      else if ( optional_field.hasOwnProperty("type") )
-      {
-        if ( optional_field.type == "integer" )
-          default_value = 0;
+    try {
+      if ( !(default_fields instanceof Array) )
+        return default_value;
+
+      var optional_field = default_fields.find(function(e){
+        return ( e.key == field_name );
+      });
+      if ( optional_field != undefined ){
+        if ( for_admin == true && optional_field.hasOwnProperty("defaultAdmin") )
+          default_value = optional_field.defaultAdmin;
+        else if ( optional_field.hasOwnProperty("default") )
+          default_value = optional_field.default;
+        else if ( optional_field.hasOwnProperty("type") )
+        {
+          if ( optional_field.type == "integer" )
+            default_value = 0;
+        }
       }
     }
-    return default_value;
+    finally {
+      return default_value;
+    }
   };
 
   this.sendJson = function(method, endpoint, post_data, result_holder){
