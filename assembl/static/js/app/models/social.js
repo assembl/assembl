@@ -7,9 +7,6 @@ var $ = require('../shims/jquery.js'),
     Agents = require('./agents.js');
 
 var FacebookAccessToken = Base.Model.extend({
-    //Things to add: Promise function to get the agent model
-    //represented by this model.
-    
     urlRoot: Ctx.getApiV2Url('/FacebookAccessTokens'),
 
     defaults: {
@@ -20,11 +17,22 @@ var FacebookAccessToken = Base.Model.extend({
         object_name: null,
         '@view': null,
         '@type': null
-    }
+    }    
+});
+
+var FacebookAccessTokens = Base.Collection.extend({
+    //Things to add: Promise function to get the agent model
+    //represented by this model.
+    model: FacebookAccessToken
 });
 
 module.exports = {
-  Facebook: FacebookAccessToken
+  Facebook: {
+    Token: {
+        Model: FacebookAccessToken,
+        Collection: FacebookAccessTokens
+    } 
+  }
 }
 
 

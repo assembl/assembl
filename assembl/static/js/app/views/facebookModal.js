@@ -59,10 +59,10 @@ var loginUser = function(state, model) {
     //Add event handlers for if things change
     if (resp.status === 'connected') {
       //window.FB.api('')
-      var token = new Social.Facebook({
+      var token = new Social.Facebook.Token({
         user_id: null,
-        token: null,
-        expiration: null,
+        token: resp.authResponse.accessToken,
+        expiration: resp.authResponse.expiresIn,
         tokenType: null,
         object_name: null
       });
