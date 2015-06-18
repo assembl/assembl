@@ -686,6 +686,7 @@ class FacebookAccessTokens(Base):
     __tablename__ = 'facebook_access_tokens'
 
     id = Column(Integer, primary_key=True)
+    # TODO: Rename to account_id and account, or even facebook_account
     user_id = Column(Integer, ForeignKey('facebook_account.id',
                      onupdate='CASCADE', ondelete='CASCADE'))
 
@@ -699,23 +700,6 @@ class FacebookAccessTokens(Base):
     # Object_name: The name of the group/page
     object_name = Column(String(512))
 
-    def __init__(self, *args, **kwargs):
-        try:       
-            if 'expiration' in kwargs:
-                val = kwargs['expiration']
-                if isinstance(val, basestring):
-                    # If a string is passed through, then it MUST be in
-                    # ISO 8601 format
-                    kwargs['expiration'] = parse_datetime(val)
-            else:
-                # There is no expiration sent. Go fetch it.
-                # If errors out, put nothing
-                kwargs['expiration'] = self.get_token_expiration()
-        except:
-            # TODO: Log the error and move on
-            pass
-        super(FacebookAccessTokens, self).__init__(args, kwargs)
-
     @property
     def expires(self):
         return self.expiration
@@ -727,6 +711,7 @@ class FacebookAccessTokens(Base):
         else:
             pass
 
+    # This method hides the expiration column
     def expiration(self):
         now = datetime.datetime.utcnow()
         return now > self.expiration
