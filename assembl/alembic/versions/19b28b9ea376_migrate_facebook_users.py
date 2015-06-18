@@ -16,7 +16,7 @@ import transaction
 
 
 from assembl.lib import config
-
+from assembl.lib.sqla import mark_changed
 
 def upgrade(pyramid_env):
     # Do stuff with the app's models here.
@@ -28,8 +28,10 @@ def upgrade(pyramid_env):
             ).join(m.IdentityProviderAccount.__table__
             ).join(m.IdentityProvider.__table__
             ).filter(m.IdentityProvider.name == u'facebook')
+        db.execute(m.FacebookAccount.__table__.insert().from_select(['id'], q))
         db.execute(aaat.update().where(
             aaat.c.id.in_(q)).values(type="facebook_account"))
+        mark_changed()
 
 
 def downgrade(pyramid_env):
@@ -39,3 +41,5 @@ def downgrade(pyramid_env):
         aaat = m.AbstractAgentAccount.__table__
         db.execute(aaat.update().where(aaat.c.type == u'facebook_account'
             ).values(type="idprovider_agent_account"))
+        db.execute('delete from facebook_account')
+        mark_changed()
