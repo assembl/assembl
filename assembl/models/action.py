@@ -173,7 +173,7 @@ Content.like_count = column_property(
         & (_actt.c.type ==
            LikedPost.__mapper_args__['polymorphic_identity'])
         & (_actt.c.tombstone_date == None)
-        ))
+        ).correlate_except(_actt, _lpt))
 
 
 class ExpandPost(ActionOnPost):
