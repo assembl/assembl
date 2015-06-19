@@ -164,14 +164,16 @@ class LikedPost(ActionOnPost):
 
     verb = 'liked'
 
-
+_lpt = LikedPost.__table__
+_actt = Action.__table__
 Content.like_count = column_property(
-    select([func.count(LikedPost.id)]).where(
-        (LikedPost.post_id == Content.id)
-        & (LikedPost.type ==
+    select([func.count(_actt.c.id)]).where(
+        (_lpt.c.id == _actt.c.id)
+        & (_lpt.c.post_id == Content.__table__.c.id)
+        & (_actt.c.type ==
            LikedPost.__mapper_args__['polymorphic_identity'])
-        & (LikedPost.tombstone_date == None)
-        ).correlate_except(LikedPost))
+        & (_actt.c.tombstone_date == None)
+        ))
 
 
 class ExpandPost(ActionOnPost):
