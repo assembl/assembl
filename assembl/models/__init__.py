@@ -200,6 +200,7 @@ from .edgesense_drupal import (
 )
 from .facebook_integration import (
     FacebookAccount,
+    FacebookAccessToken,
     FacebookGenericSource,
     FacebookGroupSource,
     FacebookGroupSourceFromUser,

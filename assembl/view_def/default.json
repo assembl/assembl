@@ -83,7 +83,8 @@
     },
     "FacebookAccount": {
         "@extends": "IdentityProviderAccount",
-        "app_id": false
+        "app_id": false,
+        "access_tokens": [":default"]
     },
     "IdentityProvider": {
         "name": true,
@@ -463,7 +464,7 @@
         "discussion": true
     },
     "FacebookAccessTokens": {
-        "user_id": true,
+        "fb_account_id": "&get_facebook_account_uri",
         "token": true,
         "expiration": true,
         "token_type": true,

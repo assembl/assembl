@@ -299,9 +299,9 @@
         "@extends": "AbstractIdeaVote"
     },
     "FacebookAccessTokens": {
-        "user_id": true,
+        "fb_account_id": true,
         "token": true,
-        "expiration": "&convert_expiration_to_iso",
+        "expiration": true,
         "token_type": true,
         "object_name": true
     }
