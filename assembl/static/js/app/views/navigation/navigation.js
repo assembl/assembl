@@ -147,78 +147,56 @@ var NavigationView = AssemblPanel.extend({
      * @param options: { show_help: boolean }
      */
     loadView: function (view, options) {
-        // clear aspects of current state
-        switch (this.getContainingGroup().model.get('navigationState')) {
-            case 'synthesis':
-                var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
-                if (messageListView) {
-                    messageListView.currentQuery.clearAllFilters();
-                    if (view === 'debate') {
-                      messageListView.render();
-                    }
-                }
-                break;
-        }
-        this.getContainingGroup().model.set('navigationState', view);
-        // set new state
-        switch (view) {
-            case 'about':
-                var aboutNavPanel = new AboutNavPanel({
-                    groupContent: this.getContainingGroup(),
-                    panelWrapper: this.getPanelWrapper()
-                });
-                this.about.show(aboutNavPanel);
-                this.getContainingGroup().NavigationResetContextState();
-                break;
-            case 'debate':
-                var idealist = new IdeaList({
-                    groupContent: this.getContainingGroup(),
-                    panelWrapper: this.getPanelWrapper(),
-                    nav: true
-                });
-                this.debate.show(idealist);
-                if ( this.getGroupState().get('currentIdea') ) {
-                    this.getContainingGroup().NavigationResetDebateState();
-                }
-                else {
-                    var that = this;
-                    if ( options && 'show_help' in options ){
-                        if ( options.show_help )
-                            that.getContainingGroup().NavigationResetDebateState(false, true);
-                        else
-                            that.getContainingGroup().NavigationResetDebateState();
-                    }
-                    else {
-                        var collectionManager = new CollectionManager();
-                        collectionManager.getDiscussionModelPromise().then(function (discussion){
-                            if ( discussion.get("show_help_in_debate_section") ){
-                                that.getContainingGroup().NavigationResetDebateState(false, true);
-                            }
-                            else {
-                                that.getContainingGroup().NavigationResetDebateState();
-                            }
-                        });
-                    }
-                }
-                break;
-            case 'synthesis':
-                var synthesisInNavigationPanel = new SynthesisInNavigationPanel({
-                    groupContent: this.getContainingGroup(),
-                    panelWrapper: this.getPanelWrapper()
-                });
-                this.synthesis.show(synthesisInNavigationPanel);
-                this.getContainingGroup().NavigationResetSynthesisMessagesState(synthesisInNavigationPanel);
-                break;
-            case 'visualizations':
-                var visualizationListPanel = new LinkListView({
-                    groupContent: this.getContainingGroup(),
-                    collection: this.visualizationItems
-                });
-                this.visualizationList.show(visualizationListPanel);
-                break;
-            default:
-                break
-        }
+      // clear aspects of current state
+      switch (this.getContainingGroup().model.get('navigationState')) {
+        case 'synthesis':
+          var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
+          if (messageListView) {
+            messageListView.currentQuery.uninitialize();
+            if (view === 'debate') {
+              messageListView.render();
+            }
+          }
+          break;
+      }
+      this.getContainingGroup().model.set('navigationState', view);
+      // set new state
+      switch (view) {
+        case 'about':
+          var aboutNavPanel = new AboutNavPanel({
+            groupContent: this.getContainingGroup(),
+            panelWrapper: this.getPanelWrapper()
+          });
+          this.about.show(aboutNavPanel);
+          this.getContainingGroup().NavigationResetContextState();
+          break;
+        case 'debate':
+          var idealist = new IdeaList({
+            groupContent: this.getContainingGroup(),
+            panelWrapper: this.getPanelWrapper(),
+            nav: true
+          });
+          this.debate.show(idealist);
+          this.getContainingGroup().NavigationResetDebateState();
+          break;
+        case 'synthesis':
+          var synthesisInNavigationPanel = new SynthesisInNavigationPanel({
+            groupContent: this.getContainingGroup(),
+            panelWrapper: this.getPanelWrapper()
+          });
+          this.synthesis.show(synthesisInNavigationPanel);
+          this.getContainingGroup().NavigationResetSynthesisMessagesState(synthesisInNavigationPanel);
+          break;
+        case 'visualizations':
+          var visualizationListPanel = new LinkListView({
+            groupContent: this.getContainingGroup(),
+            collection: this.visualizationItems
+          });
+          this.visualizationList.show(visualizationListPanel);
+          break;
+        default:
+          break
+      }
     },
 
     // This method needs the DOM elements of the View to be rendered. So it should not be called in onRender(), but rather in onShow() or onDomRefresh()

@@ -41,7 +41,7 @@ var DIV_ANNOTATOR_HELP = Ctx.format("<div class='annotator-draganddrop-help'>{0}
  * @class views.MessageList
  */
 var MessageList = AssemblPanel.extend({
-    template: '#tmpl-messageList',
+    template: '#tmpl-loader',
     panelType: PanelSpecTypes.MESSAGE_LIST,
     className: 'panel messageList',
     lockable: true,
@@ -1167,16 +1167,37 @@ var MessageList = AssemblPanel.extend({
     },
 
     onBeforeRender: function () {
-        this.saveMessagesInProgress();
-        this._clearPostRenderSlowCallbacksCallbackProcessing();
-        Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-        this._previousScrollTarget = this.getPreviousScrollTarget();
+      //Save some state from the previous render
+      this.saveMessagesInProgress();
+      this._clearPostRenderSlowCallbacksCallbackProcessing();
+      this._previousScrollTarget = this.getPreviousScrollTarget();
+
+      //Cleanup
+      Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+
+      if(this.currentQuery.isQueryValid()) {
+        this.template = '#tmpl-messageList';
+      }
+      else if(this.getGroupState().get('currentIdea') !== null) {
+        this.template = '#tmpl-messageList';
+        //We will sync with current idea in onRender
+      }
+      else {
+        //Display the help message to select an idea
+        this.template = '#tmpl-helperDebate';
+        //This used to be conditional, but makes no sense now as there would be 
+        // nothing to display unless we chose to diaplay all messages
+        /*
+         * var collectionManager = new CollectionManager();
+                        collectionManager.getDiscussionModelPromise().then(function (discussion){
+                            if ( discussion.get("show_help_in_debate_section") ){
+
+                            }
+                        });
+         */
+      }
     },
 
-    /**
-     * The render function
-     * @return {views.Message}
-     */
     onRender: function () {
         var that = this,
             collectionManager = new CollectionManager();
@@ -1186,7 +1207,7 @@ var MessageList = AssemblPanel.extend({
         if (Ctx.debugRender) {
             console.log("messageList:onRender() is firing for render id:", renderId);
         }
-;
+
         //Clear internal state
         this._offsetStart = undefined;
         this._offsetEnd = undefined;
@@ -1258,14 +1279,11 @@ var MessageList = AssemblPanel.extend({
             });
           });
         }
+        else if(this.getGroupState().get('currentIdea') !== null) {
+          this.syncWithCurrentIdea();
+        }
         else {
-          //Query isn't valid
-          if(this.getGroupState().get('currentIdea') !== null) {
-            this.syncWithCurrentIdea();
-          }
-          else {
-            console.log("WRITEME:  Display information panel");
-          }
+          //console.log("We should have rendered the help message:", this.template);
         }
     },
 

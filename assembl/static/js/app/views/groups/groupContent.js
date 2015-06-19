@@ -6,8 +6,7 @@ var Marionette = require('../../shims/marionette.js'),
     panelSpec = require('../../models/panelSpec.js'),
     AssemblPanel = require('../assemblPanel.js'),
     PanelWrapper = require('./panelWrapper.js'),
-    PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    helperDebate = require('../helperDebate.js');
+    PanelSpecTypes = require('../../utils/panelSpecTypes.js');
 
 
 /** Represents the entire content of a single panel group */
@@ -201,39 +200,26 @@ var groupContent = Marionette.CompositeView.extend({
 
     /**
      * Specific to the simple interface.  Does nothing if there is no
-     * navigation sidebar panel in this group
+     * navigation sidebar panel in this group.
+     * If there is, get's it back to the default debate view
      */
-    NavigationResetDebateState: function (skip_animation, show_debate_help) {        // Ensure that the simple view is in debate state, and coherent.
-        if (this.findNavigationSidebarPanelSpec()) {
-            this.groupContainer.suspendResize();
-            this.model.set('navigationState', 'debate');
+    NavigationResetDebateState: function (skip_animation) {
+      if (this.findNavigationSidebarPanelSpec()) {
+        this.groupContainer.suspendResize();
+        this.model.set('navigationState', 'debate');
 
-            if ( show_debate_help ){
+        this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
+        this.SimpleUIResetMessageAndIdeaPanelState();
 
-                this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-                this.SimpleUIResetMessageAndIdeaPanelState();
+        var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
 
-                var helper = new helperDebate();
-
-                var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-                conversationPanel.showAlternativeContent(helper.render().el);
-            }
-            else {
-                this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-                this.SimpleUIResetMessageAndIdeaPanelState();
-
-                var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-                conversationPanel.hideAlternativeContent();
-            }
-
-            if (skip_animation === false) {
-                this.groupContainer.resumeResize(false);
-            }
-            else {
-                this.groupContainer.resumeResize(true);
-            }
-
+        if (skip_animation === false) {
+          this.groupContainer.resumeResize(false);
         }
+        else {
+          this.groupContainer.resumeResize(true);
+        }
+      }
     },
 
     NavigationResetContextState: function () {
@@ -249,14 +235,12 @@ var groupContent = Marionette.CompositeView.extend({
     NavigationResetSynthesisMessagesState: function (synthesisInNavigationPanel) {
         if (this.findNavigationSidebarPanelSpec()) {
             this.groupContainer.suspendResize();
+            this.setCurrentIdea(null);
             this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
             this.ensurePanelsVisible(PanelSpecTypes.MESSAGE_LIST);
             this.ensurePanelsHidden(PanelSpecTypes.IDEA_PANEL);
             this.resetMessagePanelWidth();
             this.groupContainer.resumeResize(true);
-
-            var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-            conversationPanel.hideAlternativeContent();
         }
     },
 

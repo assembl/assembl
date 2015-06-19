@@ -91,22 +91,6 @@ var AssemblPanel = Marionette.LayoutView.extend({
         this.$el.removeClass('is-loading');
     },
 
-    getParentGroup: function () {
-      throw new Error("Unimplemented");
-    },
-
-    showAlternativeContent: function(el) {
-        this.$el.hide();
-        if ( this.$el.next() )
-            this.$el.next().remove();
-        this.$el.parent().append(el);
-    },
-
-    hideAlternativeContent: function() {
-        if ( this.$el.next() )
-            this.$el.next().remove();
-        this.$el.show();
-    }
 });
 
 

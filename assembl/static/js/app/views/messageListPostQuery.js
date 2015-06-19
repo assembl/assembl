@@ -192,6 +192,11 @@ var PostQuery = function () {
       return this.clearAllFilters();
     };
     
+    this.uninitialize = function() {
+      this._query = undefined;
+      return true;
+    };
+    
     /**
      * Has the query been properly initialized?
      */
