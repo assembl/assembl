@@ -18,6 +18,9 @@ but there is a magic URL to obtain the list:
 Another special case is when the collection name is actually a singleton.
 In that case, one is allowed to use `-` instead of a database ID which one may not know.
 
+A final special case is the collection /data/Discussion/<N>/all_users, which has a shortcut to the logged-in user,
+if any: /data/Discussion/<N>/all_users/current
+
 This module defines generic behaviour, but more specific views can be defined
 through new view predicates: Look at `add_view_predicate` in `..traversal`, and there is an example in 
 the widget collection view in `.widget`. 

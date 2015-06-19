@@ -88,6 +88,7 @@ from .action import (
     ActionOnPost,
     CollapsePost,
     ExpandPost,
+    LikedPost,
     ViewPost,
 )
 from .discussion import Discussion
