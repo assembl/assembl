@@ -26,6 +26,7 @@
     "angular-mocks": "~1.2.17",
     "jasmine": "~2.0.0",
     "angular-strap": "~2.2.4",
-    "angular-ui-router": "~0.2.15"
+    "angular-ui-router": "~0.2.15",
+    "bootstrap": "~3.3.5"
   }
 }
