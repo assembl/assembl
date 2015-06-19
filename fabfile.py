@@ -613,7 +613,7 @@ def install_builddeps():
         if not run('brew link libevent', quiet=True):
             sudo('brew link libevent')
         run('brew install memcached zeromq redis libtool libmemcached gawk')
-        run('brew tap services')
+        run('brew tap homebrew/services')
         sudo('brew services start memcached')
         sudo('brew services start redis')
         if not exists('/usr/local/bin/node'):
