@@ -32,7 +32,7 @@ def test_load_messages(
     button = accordeon_buttons[u'debate']
     if not button.has_class('active'):
         button.click()
-    assert browser.is_element_present_by_css('.allMessagesView .idealist-title', wait_time=1)
+    assert browser.is_element_present_by_css('.allMessagesView .idealist-title', wait_time=2)
     all_messages_button = browser.find_by_css('.allMessagesView .idealist-title')
     all_messages_button.click()
     assert browser.is_element_present_by_css('.message', wait_time=1)
