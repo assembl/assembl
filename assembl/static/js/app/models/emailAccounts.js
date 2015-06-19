@@ -4,7 +4,7 @@ var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
 var emailAccount = Base.Model.extend({
-    urlRoot: '/data/User/'+ Ctx.getCurrentUserId() +'/accounts',
+    urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/current/accounts"),
     defaults: {
       will_merge_if_validated: false,
       verified: false,
@@ -24,7 +24,7 @@ var emailAccount = Base.Model.extend({
 });
 
 var emailAccounts = Base.Collection.extend({
-    url: '/data/User/'+ Ctx.getCurrentUserId() +'/accounts',
+    url: Ctx.getApiV2DiscussionUrl("/all_users/current/accounts"),
     model: emailAccount
 });
 

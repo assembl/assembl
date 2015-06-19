@@ -4,7 +4,7 @@ var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
 var roleModel = Base.Model.extend({
-    urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/" + Ctx.getCurrentUserId() + "/local_roles"),
+    urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/current/local_roles"),
 
     defaults: {
         'requested': false,
@@ -30,7 +30,7 @@ var roleModel = Base.Model.extend({
 });
 
 var roleCollection = Base.Collection.extend({
-    url: Ctx.getApiV2DiscussionUrl("/all_users/" + Ctx.getCurrentUserId() + "/local_roles"),
+    url: Ctx.getApiV2DiscussionUrl("/all_users/current/local_roles"),
     model: roleModel
 });
 

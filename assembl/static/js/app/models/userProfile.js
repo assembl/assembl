@@ -6,7 +6,7 @@ var $ = require('../shims/jquery.js'),
 
 
 var userProfile = Base.Model.extend({
-    url: Ctx.getApiV2DiscussionUrl()+'all_users/'+Ctx.getCurrentUserId(),
+    url: Ctx.getApiV2DiscussionUrl()+'all_users/current',
     defaults: {
         username: '',
         name: '',
