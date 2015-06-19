@@ -21,6 +21,19 @@
         "is_first_visit": false,
         "accounts": [":default"]
     },
+    "Action": {
+        "user": "actor"
+    },
+    "ActionOnPost": {
+        "@extends": "Action",
+        "post": true
+    },
+    "LikedPost": {
+        "@extends": "ActionOnPost"
+    },
+    "ViewPost": {
+        "@extends": "ActionOnPost"
+    },
     "User": {
         "@extends": "AgentProfile",
         "creation_date": true,

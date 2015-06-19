@@ -121,6 +121,19 @@
         "full_message": false,
         "in_reply_to": false
     },
+    "Action": {
+        "user": "actor"
+    },
+    "ActionOnPost": {
+        "@extends": "Action",
+        "post": true
+    },
+    "LikedPost": {
+        "@extends": "ActionOnPost"
+    },
+    "ViewPost": {
+        "@extends": "ActionOnPost"
+    },
     "Discussion": {
         "settings": "settings_json",
         "permissions": false,

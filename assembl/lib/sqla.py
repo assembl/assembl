@@ -434,6 +434,9 @@ class BaseOps(object):
         for cls in cls.mro():
             if cls.__name__ == 'Base':
                 return None
+            if not issubclass(cls, BaseOps):
+                # mixin
+                continue
             my_typename = cls.external_typename()
             local_view = view_def.get(my_typename, None)
             if local_view is False:

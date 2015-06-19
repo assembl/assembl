@@ -25,7 +25,7 @@ from .generic import Content
 from .discussion import Discussion
 
 
-class Action(DiscussionBoundBase, TombstonableMixin):
+class Action(TombstonableMixin, DiscussionBoundBase):
     """
     An action that can be taken by an actor.
     """
@@ -121,7 +121,19 @@ class ActionOnPost(Action):
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
 
-class ViewPost(ActionOnPost):
+class UniqueActionOnPost(ActionOnPost):
+    "An action that should be unique of its subclass for a post, user pair"
+    def unique_query(self):
+        # inheritance leads in trouble
+        query = self.db.query(self.__class__)
+        actor_id = self.actor_id or self.actor.id
+        post_id = self.post_id or self.post.id
+        return query.filter_by(
+            actor_id=actor_id, type=self.type, post_id=post_id,
+            tombstone_date=self.tombstone_date), True
+
+
+class ViewPost(UniqueActionOnPost):
     """
     A view action on a post.
     """
@@ -143,7 +155,7 @@ class ViewPost(ActionOnPost):
     verb = 'viewed'
 
 
-class LikedPost(ActionOnPost):
+class LikedPost(UniqueActionOnPost):
     """
     A like action on a post.
     """
@@ -176,7 +188,7 @@ Content.like_count = column_property(
         ).correlate_except(_actt, _lpt))
 
 
-class ExpandPost(ActionOnPost):
+class ExpandPost(UniqueActionOnPost):
     """
     An expansion action on a post.
     """
@@ -187,7 +199,7 @@ class ExpandPost(ActionOnPost):
     verb = 'expanded'
 
 
-class CollapsePost(ActionOnPost):
+class CollapsePost(UniqueActionOnPost):
     """
     A collapse action on a post.
     """

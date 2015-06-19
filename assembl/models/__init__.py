@@ -1,7 +1,6 @@
 from abc import abstractmethod, ABCMeta
 
-from sqlalchemy import (
-    Column, DateTime, Integer, UniqueConstraint, event, Table, ForeignKey)
+from sqlalchemy import and_
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
 from ..lib.abc import abstractclassmethod
@@ -22,7 +21,7 @@ class DiscussionBoundBase(Base):
     @abstractmethod
     def get_discussion_id(self):
         "Get the ID of an associated discussion object, if any."
-        return self.discussion_id
+        return self.discussion_id or self.discussion.id
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP):
         if not connection:
@@ -40,11 +39,9 @@ class DiscussionBoundBase(Base):
 
     def unique_query(self):
         query, usable = super(DiscussionBoundBase, self).unique_query()
-        discussion_id = self.discussion_id
-        if not discussion_id and self.discussion:
-            discussion_id = self.discussion.id
+        discussion_id = self.get_discussion_id()
         if discussion_id:
-            query = query.filter_by(discussion_id=discussion_id)
+            query.filter(and_(*self.get_discussion_conditions(discussion_id)))
         return (query, usable)
 
     def tombstone(self):
