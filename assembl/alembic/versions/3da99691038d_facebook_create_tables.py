@@ -51,7 +51,7 @@ def upgrade(pyramid_env):
 
         op.create_table('facebook_access_tokens',
             sa.Column('id', sa.Integer, primary_key=True),
-            sa.Column('user_id', sa.Integer, sa.ForeignKey(
+            sa.Column('fb_account_id', sa.Integer, sa.ForeignKey(
                       'facebook_account.id',
                       onupdate='CASCADE', ondelete='CASCADE')),
             sa.Column('token', sa.String(512), unique=True),

@@ -687,11 +687,10 @@ class FacebookAccessTokens(Base):
     __tablename__ = 'facebook_access_tokens'
 
     id = Column(Integer, primary_key=True)
-    # TODO: Rename to account_id and account, or even facebook_account
-    user_id = Column(Integer, ForeignKey('facebook_account.id',
+    fb_account_id = Column(Integer, ForeignKey('facebook_account.id',
                      onupdate='CASCADE', ondelete='CASCADE'))
 
-    user = relationship('FacebookAccount',
+    fb_account = relationship('FacebookAccount',
         backref=backref('access_tokens', cascade='all, delete-orphan'))
 
     token = Column(String(512), unique=True)
@@ -712,8 +711,10 @@ class FacebookAccessTokens(Base):
         else:
             pass
 
-    # This method hides the expiration column
-    def expiration(self):
+    def get_facebook_account_uri(self):
+        return self.fb_account.uri()
+
+    def is_expired(self):
         now = datetime.datetime.utcnow()
         return now > self.expiration
 
