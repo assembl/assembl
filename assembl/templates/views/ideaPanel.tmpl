@@ -44,7 +44,7 @@
         <% } %>
 
         <div class="ideaPanel-seeMore mts">
-          <a href="#" class="seeMore js_seeMore hidden">{{ gettext('See more') }}<i class="icon-arrowdown"></i></a>
+          <a href="#" class="seeMoreOrLess js_seeMoreOrLess">{{ gettext('See more') }}<i class="icon-arrowdown"></i></a>
           <a href="#" class="seeLess js_seeLess hidden">{{ gettext('See less') }}<i class="icon-arrowup"></i></a>
         </div>
         <p class="text-muted">{% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}</p>
