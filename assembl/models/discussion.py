@@ -333,6 +333,20 @@ class Discussion(DiscussionBoundBase):
             def contains(self, parent_instance, instance):
                 return True
 
+            def get_instance(self, key, parent_instance):
+                if key == 'current':
+                    from pyramid.threadlocal import get_current_request
+                    from pyramid.httpexceptions import HTTPUnauthorized
+                    request = get_current_request()
+                    if request is not None:
+                        key = request.authenticated_userid
+                        if key is None or key == Everyone:
+                            raise HTTPUnauthorized()
+                    else:
+                        raise RuntimeError()
+                return super(AllUsersCollection, self).get_instance(
+                    key, parent_instance)
+
         return {'all_users': AllUsersCollection(cls)}
 
     all_participants = relationship(

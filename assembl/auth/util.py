@@ -95,7 +95,8 @@ def discussion_from_request(request):
             if not discussion:
                 raise HTTPNotFound("No discussion named %s" % (slug,))
             return discussion
-    if request.context and isinstance(request.context, TraversalContext):
+    if getattr(request, "context", None) and isinstance(
+            request.context, TraversalContext):
         if getattr(request.context, 'get_instance_of_class', None) is not None:
             return request.context.get_instance_of_class(Discussion)
 

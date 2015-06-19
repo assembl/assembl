@@ -235,17 +235,3 @@ def post_email_account(request):
     instance = request.context.collection_class.get_instance(response.location)
     send_confirmation_email(request, instance)
     return response
-
-
-@view_config(context=CollectionContext, ctx_collection_class=User,
-             name="current", request_method="GET", permission=P_READ,
-             renderer='json')
-def get_current_user(request):
-    user_id = authenticated_userid(request)
-    if user_id == Everyone:
-        raise HTTPUnauthorized()
-    ctx = request.context
-    user = User.get(user_id)
-    permissions = get_permissions(user_id, ctx.get_discussion_id())
-    view = request.GET.get('view', None) or ctx.get_default_view() or 'default'
-    return user.generic_json(view, user_id, permissions)
