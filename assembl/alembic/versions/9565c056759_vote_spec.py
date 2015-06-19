@@ -71,5 +71,5 @@ def downgrade(pyramid_env):
         op.drop_table("multiple_choice_idea_vote")
         op.drop_table("multiple_choice_vote_specification")
         op.drop_table("lickert_vote_specification")
+        op.drop_column("idea_vote", "vote_spec_id")
         op.drop_table("vote_specification")
-        # op.drop_column("abstract_idea_vote", "vote_spec_id")
