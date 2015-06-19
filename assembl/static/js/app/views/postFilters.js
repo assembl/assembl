@@ -335,7 +335,7 @@ var collectionManager = new CollectionManager();
       return Promise.resolve(i18n.gettext('Replies to'));
     },
     getHelpText: function() {
-      return i18n.gettext('Only include messages that replies to a specific user.');
+      return i18n.gettext('Only include messages that reply to a specific user.');
     },
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
       return collectionManager.getAllUsersCollectionPromise(individualFilterValue).then(function(users) {
