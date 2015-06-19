@@ -683,8 +683,8 @@ class FacebookAccount(IdentityProviderAccount):
     user = relationship(AgentProfile, backref='facebook_accounts')
 
 
-class FacebookAccessTokens(Base):
-    __tablename__ = 'facebook_access_tokens'
+class FacebookAccessToken(Base):
+    __tablename__ = 'facebook_access_token'
 
     id = Column(Integer, primary_key=True)
     fb_account_id = Column(Integer, ForeignKey('facebook_account.id',

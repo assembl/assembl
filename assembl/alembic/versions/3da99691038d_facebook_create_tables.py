@@ -49,7 +49,7 @@ def upgrade(pyramid_env):
             sa.Column('link_name', CoerceUnicode(1024)),
             sa.Column('post_type', sa.String(20)))
 
-        op.create_table('facebook_access_tokens',
+        op.create_table('facebook_access_token',
             sa.Column('id', sa.Integer, primary_key=True),
             sa.Column('fb_account_id', sa.Integer, sa.ForeignKey(
                       'facebook_account.id',
@@ -70,7 +70,7 @@ def upgrade(pyramid_env):
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        op.drop_table('facebook_access_tokens')
+        op.drop_table('facebook_access_token')
         op.drop_table('facebook_post')
         op.drop_table('facebook_source')
         op.drop_table('facebook_account')
