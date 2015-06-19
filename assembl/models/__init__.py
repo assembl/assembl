@@ -8,7 +8,7 @@ from ..lib.abc import abstractclassmethod
 from ..lib.sqla import (
     Base, TimestampedBase, get_metadata, get_session_maker,
     get_named_object, get_database_id, Tombstone, UPDATE_OP, DELETE_OP)
-from ..lib.history_mixin import HistoryMixin
+from ..lib.history_mixin import TombstonableMixin, HistoryMixin
 
 
 class DeclarativeAbstractMeta(DeclarativeMeta, ABCMeta):

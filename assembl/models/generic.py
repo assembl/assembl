@@ -1,7 +1,6 @@
 from datetime import datetime
 import logging
 
-from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
     Integer,
@@ -12,19 +11,18 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
 )
+from sqlalchemy.orm import relationship, backref
 from virtuoso.alchemy import CoerceUnicode
-from virtuoso.textindex import TextIndex, TableWithTextIndex
+# from virtuoso.textindex import TextIndex, TableWithTextIndex
 
+from ..lib.sqla import (INSERT_OP, UPDATE_OP, get_model_watcher, Base)
 from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
-    CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
-    P_EDIT_POST, P_ADMIN_DISC)
-from ..lib.sqla import (INSERT_OP, UPDATE_OP, get_model_watcher)
-from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
+    CrudPermissions, P_ADD_POST, P_READ, P_ADMIN_DISC, P_EDIT_POST)
+from ..semantic.namespaces import SIOC, CATALYST, ASSEMBL, DCTERMS, QUADNAMES
 from .discussion import Discussion
-from ..lib.sqla import Base
-#from ..lib.history_meta import Versioned
+
 
 log = logging.getLogger('assembl')
 
@@ -204,7 +202,7 @@ class Content(DiscussionBoundBase):
     optimize the most common case.
     """
     __tablename__ = "content"
-    __table_cls__ = TableWithTextIndex
+    # __table_cls__ = TableWithTextIndex
 
     rdf_class = SIOC.Post
 

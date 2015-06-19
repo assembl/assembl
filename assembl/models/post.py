@@ -3,8 +3,6 @@ from abc import ABCMeta, abstractmethod
 
 from bs4 import BeautifulSoup
 import simplejson as json
-from sqlalchemy.orm import relationship, backref, aliased, deferred
-from sqlalchemy.sql import func
 from sqlalchemy import (
     Column,
     UniqueConstraint,
@@ -12,23 +10,25 @@ from sqlalchemy import (
     DateTime,
     String,
     ForeignKey,
-    UnicodeText,
     Binary,
     Text,
     or_,
     event,
+    func
 )
+from sqlalchemy.orm import relationship, backref, deferred
 
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from virtuoso.alchemy import CoerceUnicode
-from .generic import Content, ContentSource
+from .generic import Content
 from .auth import AgentProfile
-from ..semantic.namespaces import  SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES
+from ..semantic.namespaces import SIOC, ASSEMBL, QUADNAMES
 
 
 class PostVisitor(object):
     CUT_VISIT = object()
     __metaclass__ = ABCMeta
+
     @abstractmethod
     def visit_post(self, post):
         pass

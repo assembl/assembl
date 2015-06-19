@@ -74,6 +74,7 @@
     "Content": {
         "date": "creation_date",
         "hidden": true,
+        "like_count": true,
         "discussion": true,
         "import_date": false,
         "widget_ideas": "&widget_ideas"

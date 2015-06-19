@@ -10,7 +10,36 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import ASSEMBL
 
 
-class HistoryMixin(object):
+class TombstonableMixin(object):
+    # Mixin class for objects that can be tombstoned
+
+    # Note on tombstone_date: Virtuoso can test for its being null, but not non-null.
+    tombstone_date = Column(DateTime, server_default=None)
+
+    @property
+    def is_tombstone(self):
+        return self.tombstone_date is not None
+
+    @is_tombstone.setter
+    def is_tombstone(self, value):
+        # No necromancy
+        if not value:
+            assert self.tombstone_date is None
+            return
+        if self.tombstone_date is None:
+            self.tombstone_date = datetime.utcnow()
+
+    @classmethod
+    def base_conditions(cls, alias=None, alias_maker=None):
+        return (cls.tombstone_condition(alias),)
+
+    @classmethod
+    def tombstone_condition(cls, alias=None):
+        cls = alias or cls
+        return cls.tombstone_date == None
+
+
+class HistoryMixin(TombstonableMixin):
     # Mixin class for objects with history
 
     @declared_attr
@@ -33,8 +62,6 @@ class HistoryMixin(object):
 
     id = Column(Integer, primary_key=True)
 
-    # Note on tombstone_date: Virtuoso can test for its being null, but not non-null.
-    tombstone_date = Column(DateTime, server_default=None)
     @declared_attr
     def base_id(cls):
         return Column(Integer,
@@ -75,28 +102,6 @@ class HistoryMixin(object):
     @property
     def original_uri(self):
         return self.uri_generic(self.base_id)
-
-    @property
-    def is_tombstone(self):
-        return self.tombstone_date is not None
-
-    @is_tombstone.setter
-    def is_tombstone(self, value):
-        # No necromancy
-        if not value:
-            assert self.tombstone_date is None
-            return
-        if self.tombstone_date is None:
-            self.tombstone_date = datetime.utcnow()
-
-    @classmethod
-    def base_conditions(cls, alias=None, alias_maker=None):
-        return (cls.tombstone_condition(alias),)
-
-    @classmethod
-    def tombstone_condition(cls, alias=None):
-        cls = alias or cls
-        return cls.tombstone_date == None
 
     @declared_attr
     def live(cls):

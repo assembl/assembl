@@ -7,18 +7,16 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
     Unicode,
-    UnicodeText,
     DateTime,
-    Time,
-    Binary,
     desc,
-    Index
+    select,
+    func,
 )
 
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, column_property
 from virtuoso.vmapping import IriClass
 
-from . import DiscussionBoundBase, DiscussionBoundTombstone
+from . import DiscussionBoundBase, DiscussionBoundTombstone, TombstonableMixin
 from ..semantic.namespaces import (
     ASSEMBL, QUADNAMES, VERSION, RDF, VirtRDF)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
@@ -26,7 +24,8 @@ from .auth import User, AgentProfile
 from .generic import Content
 from .discussion import Discussion
 
-class Action(DiscussionBoundBase):
+
+class Action(DiscussionBoundBase, TombstonableMixin):
     """
     An action that can be taken by an actor.
     """
@@ -142,6 +141,37 @@ class ViewPost(ActionOnPost):
     )
 
     verb = 'viewed'
+
+
+class LikedPost(ActionOnPost):
+    """
+    A like action on a post.
+    """
+    __mapper_args__ = {
+        'polymorphic_identity': 'vote:BinaryVote'
+    }
+
+    def tombstone(self):
+        from .generic import Content
+        return DiscussionBoundTombstone(
+            self, post=Content.uri_generic(self.post_id),
+            actor=User.uri_generic(self.actor_id))
+
+    post_from_like = relationship(
+        'Content',
+        backref=backref('was_liked'),
+    )
+
+    verb = 'liked'
+
+
+Content.like_count = column_property(
+    select([func.count(LikedPost.id)]).where(
+        (LikedPost.post_id == Content.id)
+        & (LikedPost.type ==
+           LikedPost.__mapper_args__['polymorphic_identity'])
+        & (LikedPost.tombstone_date == None)
+        ).correlate_except(LikedPost))
 
 
 class ExpandPost(ActionOnPost):

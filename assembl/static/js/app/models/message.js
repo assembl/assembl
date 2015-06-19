@@ -29,6 +29,7 @@ var MessageModel = Base.Model.extend({
         read: false,
         parentId: null,
         subject: null,
+        like_count: 0,
         hidden: false,
         body: null,
         idCreator: null,

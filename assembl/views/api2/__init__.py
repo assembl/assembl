@@ -54,7 +54,7 @@ from assembl.auth import (
 from assembl.auth.util import get_roles, get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
-    AbstractIdeaVote, User, DiscussionBoundBase, Discussion, HistoryMixin)
+    AbstractIdeaVote, User, DiscussionBoundBase, Discussion, TombstonableMixin)
 from assembl.lib.decl_enums import DeclEnumType
 
 FIXTURE_DIR = os.path.join(
@@ -313,7 +313,7 @@ def instance_del(request):
     instance = ctx._instance
     if not instance.user_can(user_id, CrudPermissions.DELETE, permissions):
         return HTTPUnauthorized()
-    if isinstance(instance, HistoryMixin):
+    if isinstance(instance, TombstonableMixin):
         instance.is_tombstone = True
     else:
         instance.db.delete(instance)
