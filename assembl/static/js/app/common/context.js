@@ -490,6 +490,7 @@ Context.prototype = {
 
     // TODO: do it also for the vote widgets (not only the creativity widgets), and use this promise where we need vote widgets
     getWidgetDataAssociatedToIdeaPromise: function (idea_id) {
+        // console.log("getWidgetDataAssociatedToIdeaPromise()");
         var returned_data = {},
             that = this;
 
@@ -529,9 +530,13 @@ Context.prototype = {
         returned_data["session_widget_create_url"] = session_widget_create_url;
 
         return Promise.join($.get(inspiration_widgets_url), $.get(showing_widgets_url),
-            function(result, showing_widgets){
+            function(inspiration_widgets, showing_widgets){
+            // console.log("promise received data");
+            // console.log(inspiration_widgets);
+            // console.log(showing_widgets);
 
-            var widgets = showing_widgets;
+            var vote_widgets = [];
+            var widgets = showing_widgets.concat(inspiration_widgets);
 
             widgets.forEach(function(widget){
 
@@ -555,31 +560,24 @@ Context.prototype = {
                             console.log("error: inspiration widget has no @id field");
                         }
 
-                    break;
+                        break;
 
                     case 'MultiCriterionVotingWidget':
-
-                        var vote_widgets = [];
-
-                        for (var i = 0; i < widget.length; ++i) {
-
-                            if ("@id" in widget[i]) {
-                                var widget_uri = widget[i]["@id"]; // for example: "local:Widget/52"
-                                vote_widgets.push({
-                                    widget_uri: widget_uri,
-                                    vote_url: "/static/widget/vote/?config=" + widget_uri + encodeURIComponent("?target=" + idea_id),
-                                    configure_url: "/static/widget/vote/?admin=1#/admin/configure_instance?widget_uri=" + widget_uri + "&target=" + idea_id
-                                });
-                            }
-                            else {
-                                console.log("error: vote widget has no @id field");
-                            }
+                        if ("@id" in widget) {
+                            var widget_uri = widget["@id"]; // for example: "local:Widget/52"
+                            vote_widgets.push({
+                                widget_uri: widget_uri,
+                                vote_url: "/static/widget/vote/?config=" + widget_uri + encodeURIComponent("?target=" + idea_id),
+                                configure_url: "/static/widget/vote/?admin=1#/admin/configure_instance?widget_uri=" + widget_uri + "&target=" + idea_id
+                            });
                         }
-                        returned_data["vote_widgets"] = vote_widgets;
+                        else {
+                            console.log("error: vote widget has no @id field");
+                        }
 
                         break;
+                    
                     case 'InspirationWidget':
-
                         inspiration_widgets = widget;
                         returned_data["inspiration_widgets"] = inspiration_widgets;
                         var inspiration_widget_uri = null;
@@ -611,10 +609,13 @@ Context.prototype = {
                         break;
                 }
 
-            })
+            });
+            returned_data["vote_widgets"] = vote_widgets;
 
+            // console.log("data which is going to be returned:");
+            // console.log(returned_data);
             return Promise.resolve(returned_data);
-        })
+        });
 
         that.cachedWidgetDataAssociatedToIdeasPromises[idea_id] = Promise;
     },

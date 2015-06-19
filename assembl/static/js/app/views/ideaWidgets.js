@@ -5,7 +5,8 @@ var Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js') ,
     CollectionManager = require('../common/collectionManager.js'),
     Marionette = require('../shims/marionette.js'),
-    $ = require('../shims/jquery.js');
+    $ = require('../shims/jquery.js'),
+    _ = require('../shims/underscore.js');
 
 
 var IdeaWidgets = Marionette.ItemView.extend({
@@ -19,6 +20,7 @@ var IdeaWidgets = Marionette.ItemView.extend({
     vote_widget_create_url: null,
     vote_widgets: null,
     session_widget_create_url: null,
+    renders_due_to_widgets: 0,
 
     // overwritten properties and methods
 
@@ -31,6 +33,7 @@ var IdeaWidgets = Marionette.ItemView.extend({
         if ( "template" in options && options.template ){
             this.template = options.template;
         }
+        this.renders_due_to_widgets = 0;
     },
 
     modelEvents: {
@@ -132,34 +135,58 @@ var IdeaWidgets = Marionette.ItemView.extend({
 
             promise.then(function (data) {
 
-                    console.debug("populateAssociatedWidgetData received data: ", data);
+                    // console.debug("populateAssociatedWidgetData received data: ", data);
 
                     that.resetAssociatedWidgetData();
 
                     var received_properties = {};
                     var changed = false;
+                    var areArraysAndHaveSameContent = function (a, b){
+                        if ( !$.isArray(a) || !$.isArray(b) )
+                            return false;
+                        if ( a.length != b.length )
+                            return false;
+                        return (JSON.stringify(a) == JSON.stringify(b));
+                    };
                     expected_properties.forEach(function(el){
                         if (el in data) {
+                            // console.log("analysing property: " + el);
                             received_properties[el] = data[el];
                             that[el] = received_properties[el];
-                            if ( previous[el] != received_properties[el]
-                                && !(
-                                    $.isArray(previous[el]) && previous[el].length == 0
-                                    && $.isArray(received_properties[el]) && received_properties[el].length == 0
-                                )
-                                && !( el == "inspiration_widgets" ) // special case: this is an object
-                            ){
-                                console.log("item " + el + " has changed");
-                                console.log("old value: ", previous[el]);
-                                console.log("new value: ", received_properties[el]);
-                                changed = true;
+                            if ( previous[el] != received_properties[el] ){
+                                if ( el == "inspiration_widgets" ){ // special case: this is an object
+                                    if ( _.isObject(previous[el]) && _.isObject(received_properties[el]) ){
+                                        if ( !_.isEqual(previous[el], received_properties[el]) ){
+                                            // console.log("property " + el + " has changed");
+                                            // console.log("old value: ", previous[el]);
+                                            // console.log("new value: ", received_properties[el]);
+                                            changed = true;
+                                        }
+                                    } else {
+                                        // console.log("property " + el + " has changed");
+                                        // console.log("old value: ", previous[el]);
+                                        // console.log("new value: ", received_properties[el]);
+                                        changed = true;
+                                    }
+                                }
+                                else {
+                                    if ( !areArraysAndHaveSameContent(previous[el], received_properties[el]) ){
+                                        // console.log("property " + el + " has changed");
+                                        // console.log("old value: ", previous[el]);
+                                        // console.log("new value: ", received_properties[el]);
+                                        changed = true;
+                                    }
+                                }
                             }
                         }
                     });
 
                     if ( changed ){
                         console.log("content changed => we have to re-render");
-                        that.render();
+                        if ( ++that.renders_due_to_widgets < 10 )
+                            that.render();
+                        else
+                            console.log("we will not re-render, because we have tried too many times");
                     }
                 }
             );
