@@ -680,6 +680,7 @@ class FacebookAccount(IdentityProviderAccount):
             app_id=app_id,
             picture_url=avatar
         )
+    user = relationship(AgentProfile, backref='facebook_accounts')
 
 
 class FacebookAccessTokens(Base):
