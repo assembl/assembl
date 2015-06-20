@@ -60,7 +60,11 @@ gulp.task('browserify:prod',['clean:app'] ,function() {
     });
     return b.bundle()
         .on('error', gutil.log)
-        .pipe(source('app.js'))
+        .on('error', function(cb) {
+          console.log("Compile failed, deleting output");
+          clean_app();
+        })
+        .pipe(source('index.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(uglify({

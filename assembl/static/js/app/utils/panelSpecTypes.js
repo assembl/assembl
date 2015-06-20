@@ -42,7 +42,14 @@ var PanelSpecTypes = {
         return _.find(this, function (panelSpecTypeFromObject) {
             return panelSpecTypeFromObject === panelSpecType;
         });
+    },
+    
+    getNavigationPanelTypes: function () {
+      return [PanelSpecTypes.NAV_SIDEBAR,
+       PanelSpecTypes.TABLE_OF_IDEAS,
+       PanelSpecTypes.SYNTHESIS_EDITOR];
     }
+    
 }
 
 module.exports = PanelSpecTypes;

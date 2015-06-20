@@ -90,7 +90,18 @@ $marginLinkbis: 30px;
     }
 }
 
+.synthesis-idea:not(.canEdit) {
+  cursor: pointer;
+  &:hover {
+    background-color: $green1;
+    border-right: 4px solid $green;
+  }
+}
 
+.synthesis-idea.is-selected {
+  background-color: $green1;
+  border-right: 4px solid $green;
+}
 
 
 // The child list

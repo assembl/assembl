@@ -23,7 +23,8 @@ var objectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
 
 
 var SynthesisPanel = AssemblPanel.extend({
-    template: '#tmpl-synthesisPanel',
+    template: '#tmpl-loader',
+    realTemplate: '#tmpl-synthesisPanel',
     panelType: PanelSpecTypes.SYNTHESIS_EDITOR,
     className: 'synthesisPanel',
     gridSize: AssemblPanel.prototype.SYNTHESIS_PANEL_GRID_SIZE,
@@ -34,6 +35,10 @@ var SynthesisPanel = AssemblPanel.extend({
         Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
         var that = this,
             collectionManager = new CollectionManager();
+
+        if(obj.template) {
+          this.realTemplate = obj.template;
+        }
 
         //This is used if the panel is displayed as part of a message
         // that publishes this synthesis
@@ -54,7 +59,8 @@ var SynthesisPanel = AssemblPanel.extend({
                 }
                 that.listenTo(that.ideas, 'add remove reset', that.render);
                 that.listenTo(allIdeaLinksCollection, 'reset change:source change:target change:order remove add destroy', that.render);
-
+                that.template = that.realTemplate;
+                that.render();
                 //modelEvents should handler this
                 //that.listenTo(that.model, 'reset change', that.render);
             });
@@ -114,104 +120,105 @@ var SynthesisPanel = AssemblPanel.extend({
      * @return {SynthesisPanel}
      */
     onRender: function () {
-        if (Ctx.debugRender) {
-            console.log("synthesisPanel:onRender() is firing");
+      if (Ctx.debugRender) {
+        console.log("synthesisPanel:onRender() is firing");
+      }
+      var that = this;
+      if (this.model === null || this.ideas === null) {
+        window.setTimeout(function () {
+          that.render();
+        }, 30);
+        return;
+      }
+      var view_data = {},
+      order_lookup_table = [],
+      roots = [],
+      collectionManager = new CollectionManager(),
+      canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
+
+      Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+
+      function renderSynthesis(ideasCollection, ideaLinksCollection) {
+        // Getting the scroll position
+        var body = that.$('.body-synthesis'),
+        y = body.get(0) ? body.get(0).scrollTop : 0,
+            synthesis_is_published = that.model.get("published_in_post"),
+            rootIdea = that.ideas.getRootIdea();
+
+        Ctx.initTooltips(that.$el);
+        function inSynthesis(idea) {
+          if (idea.hidden) {
+            return false;
+          }
+          var retval;
+          if (that.model.get('is_next_synthesis')) {
+            //This special case is so we get instant feedback before
+            //the socket sends changes
+            retval = idea != rootIdea && idea.get('inNextSynthesis');
+          }
+          else {
+            retval = idea != rootIdea && ideasCollection.contains(idea);
+          }
+          //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
+          return retval;
         }
-        var that = this;
-        if (this.model === null || this.ideas === null) {
-            window.setTimeout(function () {
-                that.render();
-            }, 30);
-            return;
+        if (rootIdea) {
+          ideasCollection.visitDepthFirst(ideaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId(), true);
         }
-        var view_data = {},
-            order_lookup_table = [],
-            roots = [],
-            collectionManager = new CollectionManager(),
-            canEdit = Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS);
-
-        Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-
-            function renderSynthesis(ideasCollection, ideaLinksCollection) {
-                // Getting the scroll position
-                var body = that.$('.body-synthesis'),
-                    y = body.get(0) ? body.get(0).scrollTop : 0,
-                    synthesis_is_published = that.model.get("published_in_post"),
-                    rootIdea = that.ideas.getRootIdea();
-
-                Ctx.initTooltips(that.$el);
-                function inSynthesis(idea) {
-                    if (idea.hidden) {
-                        return false;
-                    }
-                    var retval;
-                    if (that.model.get('is_next_synthesis')) {
-                        //This special case is so we get instant feedback before
-                        //the socket sends changes
-                        retval = idea != rootIdea && idea.get('inNextSynthesis');
-                    }
-                    else {
-                        retval = idea != rootIdea && ideasCollection.contains(idea);
-                    }
-                    //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
-                    return retval;
-                }
-                if (rootIdea) {
-                    ideasCollection.visitDepthFirst(ideaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId(), true);
-                }
-                _.each(roots, function append_recursive(idea) {
-                    var rendered_idea_view = new IdeaFamilyView({
-                            model: idea,
-                            innerViewClass: IdeaInSynthesisView,
-                            innerViewClassInitializeParams: {
-                                synthesis: that.model,
-                                messageListView: that.messageListView
-                            }
-                        }
-                        , view_data);
-                    that.$('.synthesisPanel-ideas').append(rendered_idea_view.render().el);
-                });
-                that.$('.body-synthesis').get(0).scrollTop = y;
-                if (canEdit && !synthesis_is_published) {
-                    var titleField = new EditableField({
-                        model: that.model,
-                        modelProp: 'subject'
-                    });
-                    titleField.renderTo(that.$('.synthesisPanel-title'));
-
-                    var introductionField = new CKEditorField({
-                        model: that.model,
-                        modelProp: 'introduction'
-                    });
-                    introductionField.renderTo(that.$('.synthesisPanel-introduction'));
-
-                    var conclusionField = new CKEditorField({
-                        model: that.model,
-                        modelProp: 'conclusion'
-                    });
-                    conclusionField.renderTo(that.$('.synthesisPanel-conclusion'));
-                }
-                else {
-                    that.$('.synthesisPanel-title').html(that.model.get('subject'));
-                    that.$('.synthesisPanel-introduction').html(that.model.get('introduction'));
-                    that.$('.synthesisPanel-conclusion').html(that.model.get('conclusion'));
-                }
+        _.each(roots, function append_recursive(idea) {
+          var rendered_idea_view = new IdeaFamilyView({
+            model: idea,
+            innerViewClass: IdeaInSynthesisView,
+            innerViewClassInitializeParams: {
+              synthesis: that.model,
+              messageListView: that.messageListView,
+              parentPanel: that
             }
+          }
+          , view_data);
+          that.$('.synthesisPanel-ideas').append(rendered_idea_view.render().el);
+        });
+        that.$('.body-synthesis').get(0).scrollTop = y;
+        if (canEdit && !synthesis_is_published) {
+          var titleField = new EditableField({
+            model: that.model,
+            modelProp: 'subject'
+          });
+          titleField.renderTo(that.$('.synthesisPanel-title'));
 
-        if (this.model.get('is_next_synthesis')) {
-            Promise.join(
-                collectionManager.getAllIdeasCollectionPromise(),
-                collectionManager.getAllIdeaLinksCollectionPromise(),
-                renderSynthesis);
-        } else {
-            var synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
-            synthesisIdeasCollection.collectionManager = collectionManager;
-            var synthesisIdeaLinksCollection = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
-            synthesisIdeaLinksCollection.collectionManager = collectionManager;
-            renderSynthesis(synthesisIdeasCollection, synthesisIdeaLinksCollection);
+          var introductionField = new CKEditorField({
+            model: that.model,
+            modelProp: 'introduction'
+          });
+          introductionField.renderTo(that.$('.synthesisPanel-introduction'));
+
+          var conclusionField = new CKEditorField({
+            model: that.model,
+            modelProp: 'conclusion'
+          });
+          conclusionField.renderTo(that.$('.synthesisPanel-conclusion'));
         }
+        else {
+          that.$('.synthesisPanel-title').html(that.model.get('subject'));
+          that.$('.synthesisPanel-introduction').html(that.model.get('introduction'));
+          that.$('.synthesisPanel-conclusion').html(that.model.get('conclusion'));
+        }
+      }
 
-        return this;
+      if (this.model.get('is_next_synthesis')) {
+        Promise.join(
+            collectionManager.getAllIdeasCollectionPromise(),
+            collectionManager.getAllIdeaLinksCollectionPromise(),
+            renderSynthesis);
+      } else {
+        var synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
+        synthesisIdeasCollection.collectionManager = collectionManager;
+        var synthesisIdeaLinksCollection = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
+        synthesisIdeaLinksCollection.collectionManager = collectionManager;
+        renderSynthesis(synthesisIdeasCollection, synthesisIdeaLinksCollection);
+      }
+
+      return this;
     },
 
     /**

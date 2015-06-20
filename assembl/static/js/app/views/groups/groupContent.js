@@ -51,7 +51,7 @@ var groupContent = Marionette.CompositeView.extend({
       //console.log(this.model);
 
       if (idea !== this._getCurrentIdea()) {
-        console.log("About to set current idea on group:", this.cid);
+        //console.log("About to set current idea on group:", this.cid);
         this.model.get('states').at(0).set({currentIdea: idea}, {validate: true});
       }
     },
@@ -369,7 +369,16 @@ var groupContent = Marionette.CompositeView.extend({
       return retval;
     },
 
-    /**
+    getNavigationPanel: function (panelSpecType) {
+      var retval = undefined,
+          navigationPanelSpec = this.model.findNavigationPanelSpec();
+      if(navigationPanelSpec) {
+        retval = this.findViewByType(navigationPanelSpec);
+      }
+      return retval;
+    },
+
+    /** 
      * ensure only the listed panels, are visible
      * However, all panels are created if necessary
      * @params list of panel names

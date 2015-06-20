@@ -34,6 +34,11 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       this.editing = false;
       this.authors = [];
 
+      this.parentPanel = options.parentPanel;
+      if(this.parentPanel === undefined) {
+        throw new Error("parentPanel is mandatory");
+      }
+
       var that = this,
       collectionManager = new CollectionManager();
 
@@ -55,6 +60,10 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
         that.template = '#tmpl-ideaInSynthesis';
         that.render();
       });
+
+      this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function (state, currentIdea) {
+        that.onIsSelectedChange(currentIdea);
+      });
     },
 
     /**
@@ -63,6 +72,8 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
      */
     events: {
       'click .js_synthesis-expression': 'onTitleClick',
+      'click .js_synthesisIdea': 'navigateToIdea',
+      'click .js_selectIdea': 'navigateToIdea',
       'click .synthesisIdea-replybox-openbtn': 'focusReplyBox',
       'click .messageSend-cancelbtn': 'closeReplyBox'
     },
@@ -95,9 +106,12 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
 
       Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-      this.$el.addClass('synthesis-idea');
+      if(this.canEdit()) {
+        this.$el.addClass('canEdit');
+      }
       this.$el.attr('id', 'synthesis-idea-' + this.model.id);
 
+      this.onIsSelectedChange(this.parentPanel.getGroupState().get('currentIdea'));
       Ctx.initTooltips(this.$el);
       if (this.editing && !this.model.get('synthesis_is_published')) {
         this.renderCKEditorIdea();
@@ -192,25 +206,30 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
     /**
      * @event
      */
+    onIsSelectedChange: function (idea) {
+        //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
+        if (idea === this.model) {
+            this.$el.addClass('is-selected');
+        } else {
+            this.$el.removeClass('is-selected');
+        }
+    },
+
+    /**
+     * @event
+     */
     onTitleClick: function (ev) {
       if (this.canEdit()) {
         this.makeEditable();
       }
-      else {
-        this.navigateToIdea();
-      }
     },
 
     getPanel: function () {
-      if (!this.messageListView) {
-        throw new Error("WRITEME:  We are not in a messagelist, and I don't know how to find the panel");
-      }
-      return this.messageListView;
+      return this.parentPanel;
     },
     
     navigateToIdea: function () {
       var panel = this.getPanel();
-      
       if(panel.isPrimaryNavigationPanel()) {
         panel.getContainingGroup().setCurrentIdea(this.model);
       }

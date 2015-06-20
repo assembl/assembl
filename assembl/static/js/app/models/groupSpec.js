@@ -56,7 +56,24 @@ var GroupSpecModel = Base.Model.extend({
 
   /**
    * Return the part of the groupSpec that contains the navigation panel
-   * (if any)
+   * (if any).
+   * That is, any panel in the first position that has the capacity to alter
+   * the global group state
+   * @return PanelSpecType, or undefined if none
+   */
+  findNavigationPanelSpec: function () {
+    var navigationTypes = PanelSpecTypes.getNavigationPanelTypes(),
+        panelAtFirstPositionTypeId = this.get('panels').at(0).get('type');
+
+    var panelSpecType = _.find(navigationTypes, function(navigationType){ return navigationType.id === panelAtFirstPositionTypeId; });
+    //console.log(panelSpecType);
+    return panelSpecType;
+  },
+  
+  
+  /**
+   * Return the part of the groupSpec that contains the simple interface 
+   * navigation panel (if any)
    */
   findNavigationSidebarPanelSpec: function () {
     return this.get('panels').findWhere({type: PanelSpecTypes.NAV_SIDEBAR.id});

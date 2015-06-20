@@ -66,9 +66,9 @@ var SynthesisMessageView = MessageView.extend({
               model: synthesis,
               messageListView: that.messageListView,
               panelWrapper: that.messageListView.getPanelWrapper(),
-              el: that.$('.message-body')
+              el: that.$('.message-body'),
+              template: '#tmpl-synthesisPanelMessage'
             });
-            that.synthesisPanel.template = Ctx.loadTemplate('synthesisPanelMessage');
             that.synthesisPanel.render();
           }
         });

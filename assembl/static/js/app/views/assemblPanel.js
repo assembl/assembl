@@ -46,10 +46,12 @@ var AssemblPanel = Marionette.LayoutView.extend({
 
     /**
      * Is this panel the primary navigation panel for it's group?
-     * @return trur or false
+     * @return true or false
      */
     isPrimaryNavigationPanel: function () {
-      return false;
+      var navPanel = this.getContainingGroup().getNavigationPanel();
+      //console.log(navPanel, this, navPanel === this);
+      return navPanel === this;
     },
 
     /**
