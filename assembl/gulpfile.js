@@ -70,6 +70,7 @@ gulp.task('browserify:prod',['clean:app'] ,function() {
         .pipe(uglify({
             compress: false
          }))
+        .pipe(rename('app.js'))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.js+'/build/'))
         .pipe(exit());
