@@ -208,9 +208,18 @@
         "permission": "&permission_name",
         "role": "&role_name"
     },
+    "Action": {
+        "user": "actor"
+    },
+    "ActionOnPost": {
+        "@extends": "Action",
+        "target": "post"
+    },
+    "LikedPost": {
+        "@extends": "ActionOnPost"
+    },
     "ViewPost": {
-        "actor": true,
-        "post": true
+        "@extends": "ActionOnPost"
     },
     "Widget": {
         "discussion": true,

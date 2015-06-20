@@ -122,11 +122,12 @@
         "in_reply_to": false
     },
     "Action": {
-        "user": "actor"
+        "user": "actor",
+        "target_type": false
     },
     "ActionOnPost": {
         "@extends": "Action",
-        "post": true
+        "target": "post"
     },
     "LikedPost": {
         "@extends": "ActionOnPost"

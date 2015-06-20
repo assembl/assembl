@@ -26,7 +26,8 @@
     },
     "ActionOnPost": {
         "@extends": "Action",
-        "post": true
+        "target": "post",
+        "target_type": "'\"Content\""
     },
     "LikedPost": {
         "@extends": "ActionOnPost"
@@ -326,10 +327,6 @@
         "discussion": true,
         "permission": "&permission_name",
         "role": "&role_name"
-    },
-    "ViewPost": {
-        "actor": true,
-        "post": true
     },
     "Widget": {
         "discussion": true,

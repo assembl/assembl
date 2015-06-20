@@ -226,10 +226,6 @@
         "permission": "&permission_name",
         "role": "&role_name"
     },
-    "ViewPost": {
-        "actor": true,
-        "post": true
-    },
     "PartnerOrganization": {
             "name": true,
             "description": true,
