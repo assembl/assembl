@@ -56,7 +56,7 @@ var IdeaPanel = AssemblPanel.extend({
         'postIt': '.postitlist',
         'definition': '.js_editDefinition',
         'longTitle': '.js_editLongTitle',
-        'seeMore': '.js_seeMore',
+        'seeMoreOrLess': '.js_seeMoreOrLess',
         'seeLess': '.js_seeLess',
         'deleteIdea': '.js_ideaPanel-deleteBtn',
         'clearIdea': '.js_ideaPanel-clearBtn',
@@ -76,8 +76,8 @@ var IdeaPanel = AssemblPanel.extend({
         'click @ui.closeExtract': 'onSegmentCloseButtonClick',
         'click @ui.clearIdea': 'onClearAllClick',
         'click @ui.deleteIdea': 'onDeleteButtonClick',
-        'click @ui.seeMore': 'seeMoreOrLess',
-        'click @ui.seeLess': 'seeMoreOrLess',
+        'click @ui.seeMoreOrLess': 'seeMoreOrLessContent',
+        'click @ui.seeLess': 'seeLessContent',
         'click @ui.definition': 'editDefinition',
         'click @ui.longTitle': 'editTitle',
         'click .js_openTargetInPopOver': 'openTargetInPopOver'
@@ -180,6 +180,8 @@ var IdeaPanel = AssemblPanel.extend({
     },
 
     onRender: function () {
+        var that = this;
+
         if (Ctx.debugRender) {
             console.log("ideaPanel::onRender()");
         }
@@ -201,7 +203,7 @@ var IdeaPanel = AssemblPanel.extend({
 
             this.displayEditableFields();
 
-            this.onTruncate();
+            //this.onTruncate();
 
             if (this.editingDefinition) {
                 this.renderCKEditorDescription();
@@ -210,6 +212,12 @@ var IdeaPanel = AssemblPanel.extend({
             if (this.editingTitle) {
                 this.renderCKEditorLongTitle();
             }
+
+            setTimeout(function(){
+                that.applyEllipsisToSection('.ideaPanel-definition', that.ui.seeMoreOrLess);
+                //that.applyEllipsisToSection('.context-objective', that.ui.seeMoreObjectives);
+            },0);
+
 
             var ideaWidgets = new IdeaWidgets({model: this.model});
             this.widgetsInteraction.show(ideaWidgets);
@@ -631,6 +639,47 @@ var IdeaPanel = AssemblPanel.extend({
             seeMore.removeClass('hidden');
         }
     },
+
+    applyEllipsisToSection: function(sectionSelector, seemoreUi){
+        /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
+         * Read More links for introduction preview
+         */
+        $(sectionSelector).dotdotdot({
+            after: seemoreUi,
+            height: 170,
+            callback: function (isTruncated, orgContent) {
+                if (isTruncated) {
+                    seemoreUi.show();
+                }
+                else {
+                    seemoreUi.hide();
+                }
+            },
+            watch: "window"
+        });
+
+    },
+
+    seeMoreOrLessContent: function(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        $(".ideaPanel-definition").trigger('destroy');
+
+        this.ui.seeLess.removeClass('hidden');
+    },
+
+    seeLessContent: function(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        console.debug('update');
+
+        this.applyEllipsisToSection('.ideaPanel-definition', this.ui.seeMoreOrLess);
+
+        this.ui.seeLess.addClass('hidden');
+    },
+
 
     editDefinition: function () {
         if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
