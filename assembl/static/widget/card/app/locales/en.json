@@ -26,5 +26,13 @@
     "resumeInspirationButton": "Continue searching for inspiration",
     "exitButton": "Return to the debate",
     "doesThisCardInspireYou": "Does this card inspire you? Write your idea below.",
-    "canNotPostBecauseNoEndpoint": "This idea is not linked to a video creativity widget, so you can't post an inspired message."
+    "canNotPostBecauseNoEndpoint": "This idea is not linked to a video creativity widget, so you can't post an inspired message.",
+    "adminConfigureInstanceTitle": "Configuration of the card module (of a creativity widget)",
+    "adminConfigureInstanceCurrent": "Currently selected widget is",
+    "adminConfigureInstanceCurrentUse": "The URL for a user to interact with this widget (on one of its associated ideas) is",
+    "adminConfigureInstanceCurrentUseHere": "here",
+    "adminConfigureInstanceSetDeckTitle": "Deck of cards",
+    "adminConfigureInstanceSetDeckDetails": "Choose here which deck of cards will be displayed to the user.",
+    "adminConfigureInstanceValidate": "Save",
+    "historyBack": "Back"
 }

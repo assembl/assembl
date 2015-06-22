@@ -33,6 +33,37 @@ widgetServices.factory('localConfig', function ($http) {
 
 });
 
+widgetServices.service('WidgetService', ['$window', '$rootScope', '$log', '$http', function ($window, $rootScope, $log, $http) {
+
+    this.putJson = function (endpoint, post_data, result_holder) {
+        console.log("putJson()");
+
+        $http({
+            method: 'PUT',
+            url: endpoint,
+            data: post_data,
+            //data: $.param(post_data),
+            headers: {'Content-Type': 'application/json'}
+            //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (data, status, headers) {
+            console.log("success");
+            if (result_holder)
+                result_holder.text("Success!");
+            console.log("data:");
+            console.log(data);
+            console.log("status:");
+            console.log(status);
+            console.log("headers:");
+            console.log(headers);
+        }).error(function (status, headers) {
+            console.log("error");
+            if (result_holder)
+                result_holder.text("Error");
+        });
+    };
+
+}]);
+
 /**
  * CARD GAME
  * */
@@ -41,8 +72,26 @@ widgetServices.factory('cardGameService', function ($http) {
         getCards: function (number) {
             var url = 'config/game_' + number + '.json';
             return $http.get(url);
-        }
-    }
+        },
+        getGenericDeck: function(pseudo_url) {
+            var url = pseudo_url;
+            if ( /^http:\/\//.test(url) )
+                url = url.slice(5); // so that the url starts with "//" and so is fine with a widget hosted both on a http and https server
+            else if ( /^https:\/\//.test(url) )
+                url = url.slice(6); // same
+            return $http.get(url);
+        },
+        available_decks: [
+            {
+                "label": "Deck 1",
+                "url": "config/game_1.json"
+            }/*,
+            {
+                "label": "Deck 2",
+                "url": "config/game_2.json"
+            }*/
+        ]
+    };
 });
 
 /**
@@ -52,12 +101,17 @@ widgetServices.factory('configService', function ($q, $http, utils, AssemblTools
     return {
         data: {},
         populateFromUrl: function (url, fieldname) {
+            console.log("populateFromUrl(", url, " ", fieldname);
             var defer = $q.defer(),
                 data = this.data;
 
-            if (!url) defer.reject({message: 'invalid url configuration'});
+            if (!url){
+                defer.reject({message: 'invalid url configuration'});
+                return defer.promise;
+            }
 
             var urlRoot = utils.urlApi(url);
+            console.log("urlRoot: ", urlRoot);
 
             $http.get(urlRoot).success(function (response) {
                 if ( fieldname )

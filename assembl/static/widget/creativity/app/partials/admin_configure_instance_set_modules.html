@@ -30,7 +30,7 @@
             <form id="widget_set_modules" method="POST">
                 <label>
                     <input type="checkbox" name="modules" value="card" ng-model="widget.settings.active_modules.card">
-                    {{'creativityModuleTitleCards' | translate}}
+                    {{'creativityModuleTitleCards' | translate}} <span ng-show="widget.settings.active_modules.card"> - <a href="../card/?admin=1&locale=fr_CA#/admin_configure_instance?config={{ widget_uri }}&idea={{ target }}">{{'adminConfigureInstanceSetModulesConfigureModule' | translate}}</a></span>
                 </label>
 
                 <br/>

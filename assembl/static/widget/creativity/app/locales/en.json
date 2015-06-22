@@ -28,5 +28,6 @@
     "historyBack": "Back",
     "adminConfigureInstanceSetModulesTitle": "Select modules",
     "adminConfigureInstanceSetModulesDetails": "Please select the creativity modules which will be listed to the user and which he will be able to select and use.",
-    "adminConfigureInstanceSetModulesValidate": "Validate these modules"
+    "adminConfigureInstanceSetModulesValidate": "Validate these modules",
+    "adminConfigureInstanceSetModulesConfigureModule": "Configure this module"
 }

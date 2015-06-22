@@ -28,5 +28,6 @@
     "historyBack": "Retour",
     "adminConfigureInstanceSetModulesTitle": "Sélectionner les modules activés",
     "adminConfigureInstanceSetModulesDetails": "Veuillez sélectionner les modules de créativité qui seront listés à l'utilisateur et qu'il pourra utiliser pour être inspiré.",
-    "adminConfigureInstanceSetModulesValidate": "Valider la sélection"
+    "adminConfigureInstanceSetModulesValidate": "Valider la sélection",
+    "adminConfigureInstanceSetModulesConfigureModule": "Configurer ce module"
 }

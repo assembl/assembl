@@ -14,10 +14,12 @@ appCards.factory('utils', function ($translate, $rootScope, $timeout, $window) {
     fn.urlApi = function (url) {
         if (!url) return;
 
-        var
-            api = url.toString();
-        api = api.split(':')[1],
-            api = '/data/' + api;
+        var api = url.toString();
+        if ( /^\/.*/.test(api) )
+            return api;
+        
+        api = api.split(':')[1];
+        api = '/data/' + api;
 
         return api;
     }

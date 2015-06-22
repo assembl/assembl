@@ -8,25 +8,45 @@ appCards.config(['$routeProvider', '$translateProvider', '$locationProvider', 'g
 
         $locationProvider.html5Mode(false);
 
+        var appResolver = function ($route, configService, $q) {
+            console.log("$route.current.params:", $route.current.params);
+
+            if ( "config" in $route.current.params ){
+                if ( "idea" in $route.current.params ){
+                    var promise = $q.all([
+                        configService.populateFromUrl($route.current.params.config, 'widget'),
+                        configService.populateFromUrl($route.current.params.idea, 'idea')
+                    ]);
+                    return promise;
+                } else {
+                    return configService.populateFromUrl($route.current.params.config, 'widget');
+                }
+            }
+            else if ( "idea" in $route.current.params )
+                return configService.populateFromUrl($route.current.params.idea, 'idea');
+                
+            console.log("Error: no 'config' or 'idea' URL parameter given");
+            return null;
+        };
+
         $routeProvider
             .when('/', {
                 templateUrl: 'app/partials/cards.html',
                 controller: 'cardsCtl',
                 resolve: {
-                    app: function ($route, configService) {
-                        console.log("$route.current.params:", $route.current.params);
-                        if ( "idea" in $route.current.params )
-                            return configService.populateFromUrl($route.current.params.idea, 'idea');
-                        if ( "config" in $route.current.params )
-                            return configService.populateFromUrl($route.current.params.config, 'widget');
-                        console.log("Error: no 'config' or 'idea' URL parameter given");
-                        return null;
-                    }
+                    app: appResolver
                 }
             })
             .when('/card', {
                 templateUrl: 'app/partials/card.html',
                 controller: 'cardCtl'
+            })
+            .when('/admin_configure_instance', {
+                templateUrl: 'app/partials/admin_configure_instance.html',
+                controller: 'adminConfigureInstanceCtl',
+                resolve: {
+                    app: appResolver
+                }
             });
 
         /**

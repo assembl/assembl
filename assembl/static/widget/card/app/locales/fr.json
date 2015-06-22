@@ -26,5 +26,13 @@
     "resumeInspirationButton": "Continuer à chercher l'inspiration",
     "exitButton": "Retourner au débat",
     "doesThisCardInspireYou": "Cette carte vous inspire ? Écrivez votre idée ci-dessous.",
-    "canNotPostBecauseNoEndpoint": "Cette idée n'a pas été associée à un widget de créativité, donc vous ne pouvez pas poster de message inspiré."
+    "canNotPostBecauseNoEndpoint": "Cette idée n'a pas été associée à un widget de créativité, donc vous ne pouvez pas poster de message inspiré.",
+    "adminConfigureInstanceTitle": "Configuration du module de cartes (d'un widget de créativité)",
+    "adminConfigureInstanceCurrent": "Le widget actuellement sélectionné est",
+    "adminConfigureInstanceCurrentUse": "L'URL pour que l'utilisateur interagisse avec ce widget (sur l'une de ses idées associées) est",
+    "adminConfigureInstanceCurrentUseHere": "ici",
+    "adminConfigureInstanceSetDeckTitle": "Jeu de cartes affiché",
+    "adminConfigureInstanceSetDeckDetails": "Choisissez ici quel jeu de cartes sera affiché à l'utilisateur.",
+    "adminConfigureInstanceValidate": "Sauvegarder",
+    "historyBack": "Retour"
 }
