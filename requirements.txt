@@ -3,7 +3,7 @@ Beaker>=1.6.5
 Chameleon==2.22
 ColanderAlchemy==0.3.1
 DateTime==4.0.1
-Fabric==1.10.1
+Fabric==1.10.2
 IMAPClient==0.12
 Jinja2==2.7.3
 Mako==1.0.1
@@ -16,11 +16,11 @@ Pygments==2.0.2
 SPARQLWrapper==1.6.4
 SQLAlchemy==1.0.5
 Sphinx==1.3.1
-Unidecode==0.04.17
+Unidecode==0.04.18
 WebOb==1.4.1
 WebTest==2.0.18
 Werkzeug==0.10.4
-alabaster==0.7.4
+alabaster==0.7.5
 -e git+https://github.com/imaginationforpeople/alembic.git#egg=alembic
 amqp==1.4.6
 anyjson==0.3.3
@@ -32,7 +32,7 @@ beautifulsoup4==4.3.2
 billiard==3.3.0.20
 celery==3.1.18
 chroma==0.2.0
-cffi==1.1.1
+cffi==1.1.2
 colander==1.0
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 cov-core==1.15.0
@@ -48,7 +48,7 @@ enum34==1.0.4
 greenlet==0.4.7
 html5lib==0.99999
 idna==2.0
-imaplib2==2.43.0
+imaplib2==2.45.0
 ipaddress==1.0.7
 isodate==0.5.1
 iso639==0.1.1
@@ -65,11 +65,11 @@ oauthlib==0.7.2
 paramiko==1.15.2
 pinocchio==0.4.2
 polib==1.0.6
-premailer==2.9.0
+premailer==2.9.2
 py==1.4.28
 pyOpenSSL==0.15.1
-pyasn1==0.1.7
-pycparser==2.13
+pyasn1==0.1.8
+pycparser==2.14
 pycrypto==2.6.1
 -e git+https://github.com/michaelherold/pyIsEmail@v1.3.0#egg=pyIsEmail
 dnspython==1.12.0   # must come after pyisemail?
@@ -90,10 +90,10 @@ pytest==2.7.1
 pytest-cov==1.8.1
 pytest-localserver==0.3.4
 pytest-mock==0.6.0
-pytest-splinter==1.3.6
+pytest-splinter==1.4.0
 python-openid==2.2.5
 pytz==2015.4
-pyzmq==14.6.0
+pyzmq==14.7.0
 rdflib==4.2.0
 rdflib-jsonld==0.3
 redis==2.10.3
