@@ -76,7 +76,7 @@ var IdeaPanel = AssemblPanel.extend({
         'click @ui.closeExtract': 'onSegmentCloseButtonClick',
         'click @ui.clearIdea': 'onClearAllClick',
         'click @ui.deleteIdea': 'onDeleteButtonClick',
-        'click @ui.seeMoreOrLess': 'seeMoreOrLessContent',
+        'click @ui.seeMoreOrLess': 'seeMoreContent',
         'click @ui.seeLess': 'seeLessContent',
         'click @ui.definition': 'editDefinition',
         'click @ui.longTitle': 'editTitle',
@@ -203,8 +203,6 @@ var IdeaPanel = AssemblPanel.extend({
 
             this.displayEditableFields();
 
-            //this.onTruncate();
-
             if (this.editingDefinition) {
                 this.renderCKEditorDescription();
             }
@@ -214,8 +212,7 @@ var IdeaPanel = AssemblPanel.extend({
             }
 
             setTimeout(function(){
-                that.applyEllipsisToSection('.ideaPanel-definition', that.ui.seeMoreOrLess);
-                //that.applyEllipsisToSection('.context-objective', that.ui.seeMoreObjectives);
+                that.ellipsis('.ideaPanel-definition', that.ui.seeMoreOrLess);
             },0);
 
 
@@ -620,39 +617,23 @@ var IdeaPanel = AssemblPanel.extend({
         }
     },
 
-    onTruncate: function () {
-
-        var definition = this.model.get('definition').length,
-            body = this.$('.ideaPanel-definition').text(),
-            seeMore = this.$('.seeMore'),
-
-            showChar = 300;
-
-        if (definition > showChar) {
-
-            var content = body.substr(0, showChar) + '<span class="lesscontent">...</span>',
-                hiddenContent = body.substr(showChar, definition - showChar),
-                html = content + '<span class="morecontent hidden">' + hiddenContent + '</span>';
-
-            this.$('.ideaPanel-definition').html(html);
-
-            seeMore.removeClass('hidden');
-        }
-    },
-
-    applyEllipsisToSection: function(sectionSelector, seemoreUi){
+    ellipsis: function(sectionSelector, seemoreUi){
         /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
          * Read More links for introduction preview
          */
+
         $(sectionSelector).dotdotdot({
             after: seemoreUi,
             height: 170,
             callback: function (isTruncated, orgContent) {
+
                 if (isTruncated) {
-                    seemoreUi.show();
+
+                    //seemoreUi.removeClass('hidden');
+
                 }
                 else {
-                    seemoreUi.hide();
+                    //seemoreUi.hide();
                 }
             },
             watch: "window"
@@ -660,7 +641,7 @@ var IdeaPanel = AssemblPanel.extend({
 
     },
 
-    seeMoreOrLessContent: function(e){
+    seeMoreContent: function(e){
         e.stopPropagation();
         e.preventDefault();
 
@@ -673,11 +654,9 @@ var IdeaPanel = AssemblPanel.extend({
         e.stopPropagation();
         e.preventDefault();
 
-        console.debug('update');
-
-        this.applyEllipsisToSection('.ideaPanel-definition', this.ui.seeMoreOrLess);
-
         this.ui.seeLess.addClass('hidden');
+
+        this.ellipsis('.ideaPanel-definition', this.ui.seeMoreOrLess);
     },
 
 

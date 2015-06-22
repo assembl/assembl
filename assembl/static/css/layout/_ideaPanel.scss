@@ -7,15 +7,9 @@
 .ideaPanel-seeMore {
   .seeMore,
   .seeLess {
-    color: $white;
     cursor: pointer;
     text-decoration: none;
     float: right;
-    font-size: 11px;
-    i.icon-arrowdown,
-    i.icon-arrowup {
-      color: $black;
-    }
   }
 }
 
