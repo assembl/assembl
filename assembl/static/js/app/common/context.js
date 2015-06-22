@@ -1424,6 +1424,25 @@ Context.prototype = {
         }
     },
     /**
+     * This assumes that the there is a 1:1 relationship
+     * between the AgentProfile (the user) and FacebookAccount
+     * 
+     * @return {[String || undefined]} [Will either return the @id of
+     * the fbAccount if it exists, else returns undefined]
+     */
+    getCurrentUserFacebookAccountId: function(){
+        var currentUser = this.getCurrentUser();
+        var accounts = currentUser.get('accounts');
+        var fbAccount = _.find(accounts, function(account){
+            return (account['@type'] === "FacebookAccount");
+        });
+        console.log('fbAccount', fbAccount);
+        if (fbAccount) {
+            return fbAccount['@id'];
+        }
+        else { return undefined; }
+    },
+    /**
      * Executor of lazy code
      * ex :
      *
