@@ -41,7 +41,7 @@ class DiscussionBoundBase(Base):
         query, usable = super(DiscussionBoundBase, self).unique_query()
         discussion_id = self.get_discussion_id()
         if discussion_id:
-            query.filter(and_(*self.get_discussion_conditions(discussion_id)))
+            query = query.filter(and_(*self.get_discussion_conditions(discussion_id)))
         return (query, usable)
 
     def tombstone(self):
