@@ -300,8 +300,8 @@
     },
     "FacebookAccessTokens": {
         "fb_account_id": true,
-        "token": true,
-        "expiration": true,
+        "token": "&long_lived_access_token",
+        "expiration": false,
         "token_type": true,
         "object_name": true
     }

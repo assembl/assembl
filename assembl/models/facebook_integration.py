@@ -711,6 +711,24 @@ class FacebookAccessToken(Base):
         else:
             pass
 
+    @property
+    def long_lived_access_token(self):
+        return self.token
+
+    @long_lived_access_token.setter
+    def long_lived_access_token(self, short_token):
+        # Make an API call to get the long term token
+        # Also will need to update the expiration
+        # field as well.
+        
+        api = FacebookAPI(short_token)
+        try:
+            long_token, expiration = api.extend_token()
+            self.expiration = expiration
+            return long_token
+        except:
+            return short_token
+
     def get_facebook_account_uri(self):
         return self.fb_account.uri()
 
