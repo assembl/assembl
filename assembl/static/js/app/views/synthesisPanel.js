@@ -249,8 +249,7 @@ var SynthesisPanel = AssemblPanel.extend({
         synthesisMessage.save(null, {
             success: function (model, resp) {
                 alert(i18n.gettext("Synthesis has been successfully published!"));
-                that.model = new Synthesis.Model({'@id': 'next_synthesis'});
-                that.model.fetch();
+                // The next_synthesis is the same idea as before, so no need to reload.
                 that.unblockPanel();
             },
             error: function (model, resp) {
