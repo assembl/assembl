@@ -32,7 +32,7 @@ var GroupStateModel = Base.Model.extend({
   
   toJSON:  function (options) {
     var json = Base.Model.prototype.toJSON.apply(this, arguments);
-    if(json.currentIdea !== null) {
+    if(json.currentIdea !== null && json.currentIdea instanceof Idea.Model) {
       json.currentIdea = json.currentIdea.get("@id");
     }
     return json;
