@@ -85,11 +85,11 @@ widgetServices.factory('cardGameService', function ($http) {
             {
                 "label": "Deck 1",
                 "url": "config/game_1.json"
-            }/*,
+            },
             {
                 "label": "Deck 2",
                 "url": "config/game_2.json"
-            }*/
+            }
         ]
     };
 });
