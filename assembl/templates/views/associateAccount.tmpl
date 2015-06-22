@@ -1,16 +1,13 @@
 <% if(email.get('@type') === 'IdentityProviderAccount'){ %>
-	<% if(email.get('provider') === 'google'){ %>
-    <i class="icon-gplus mrs"></i><%= email.get('email') %>
-		<span>
-			{#<a class="btn btn-cancel btn-sm"><i class="icon-checkbox"></i>&nbsp;&nbsp;{{ gettext('dissociate') }}</a>#}
-		</span>
-	<% } %>
-	<% if(email.get('provider') === 'facebook'){ %>
-    <i class="icon-facebook mrs"></i><%= email.get('email') %>
-		<span>
-			{#<a class="btn btn-cancel btn-sm"><i class="icon-checkbox"></i>&nbsp;&nbsp;{{ gettext('dissociate') }}</a>#}
-		</span>
-	<% } %>
+    <i class="icon-<%= email.get('provider') %> mrs"></i>
+    <% if(email.get('email')){
+    	print(email.get('email'));
+    } else {
+    	print(email.get('username'));
+    } %>
+	<span>
+		{#<a class="btn btn-cancel btn-sm"><i class="icon-checkbox"></i>&nbsp;&nbsp;{{ gettext('dissociate') }}</a>#}
+	</span>
 <% }else{ %>
    	<i class="icon-mail mrs"></i><%= email.get('email') %>
    	<% if(email.get('verified')){ %>
