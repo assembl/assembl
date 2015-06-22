@@ -34,6 +34,9 @@ var Modal = Backbone.Modal.extend({
       }
     },
     generateView: function(event) {
+      //Whilst checking for accessTokens, make the region where
+      //facebook will be rendered a loader
+
       var value = this.$(event.currentTarget)
                       .find('option:selected')
                       .val();
@@ -44,7 +47,8 @@ var Modal = Backbone.Modal.extend({
           facebook.resolveState(function(fbState) {
             if (fbState.ready) {
               var fbView = new facebook.root({
-                model: that.model
+                model: that.model,
+                token: fbState.token
               });
               this.$('.js_source-specific-form').html(fbView.render().el);  
             }
