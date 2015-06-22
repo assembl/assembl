@@ -870,6 +870,21 @@ def database_upload():
 
 
 @task
+def database_delete():
+    """
+    Restores the database backed up on the remote server
+    """
+    if(env.is_production_env is True):
+        abort(red("You are not allowed to delete the database of a production " +
+                "environment.  If this is a server restore situation, you " +
+                "have to temporarily declare env.is_production_env = False " +
+                "in the environment"))
+    execute(ensure_virtuoso_not_running)
+    with cd(virtuoso_db_directory())
+        run('rm -f *.db *.trx *.lck *.trx *.pxa')
+
+
+@task
 def database_restore():
     """
     Restores the database backed up on the remote server
