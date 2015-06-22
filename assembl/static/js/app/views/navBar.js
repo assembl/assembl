@@ -329,7 +329,8 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                         });
 
                         // we show the popin only if there are default notifications
-                        if ( model.notificationsToShow && model.notificationsToShow.length ){
+                        // Actually we want the modal either way; commenting the condition for now. MAP
+                        //if ( model.notificationsToShow && model.notificationsToShow.length ){
 
                             var Modal = Backbone.Modal.extend({
                                 template: modalTemplate,
@@ -388,7 +389,7 @@ define(['backbone.marionette', 'jquery', 'underscore', 'app', 'common/context', 
                                 }
                             });
                             Assembl.slider.show(new Modal());
-                        }
+                        //}
                     }
                 );
 
