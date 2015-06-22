@@ -49,6 +49,18 @@ var emailList = Marionette.CompositeView.extend({
     childViewContainer:'.controls'
 });
 
+
+var socialProvidersList = Marionette.ItemView.extend({
+    template: '#tmpl-socialProviders',
+    initialize: function(options) {
+        this.providers = options.providers;
+    },
+    serializeData: function() {
+        return {providers: this.providers};
+    }
+});
+
+
 var userAccount =  Marionette.ItemView.extend({
     template: '#tmpl-userAccountForm',
     ui: {
@@ -134,7 +146,8 @@ var account = Marionette.LayoutView.extend({
     template: '#tmpl-userAccount',
     className: 'admin-account',
     regions: {
-      'accounts':'#associate_account',
+      'accounts':'#associate_accounts',
+      'social_accounts':'#associate_social_accounts',
       'accountForm': '#userAccountForm'
     },
     ui: {
@@ -143,16 +156,23 @@ var account = Marionette.LayoutView.extend({
     initialize: function(){
         this.emailCollection = new emailAccounts.Collection();
         this.userAcount = new userProfile.Model();
+        this.providers = Ctx.getJsonFromScriptTag('login-providers');
     },
     events: {
         'click @ui.addEmail': 'addEmail'
     },
     onBeforeShow: function(){
-        var account = new emailList({
+        var accounts = new emailList({
             collection: this.emailCollection
         });
         this.emailCollection.fetch();
-        this.getRegion('accounts').show(account);
+        this.getRegion('accounts').show(accounts);
+
+        var providers = new socialProvidersList({
+            providers: this.providers
+        });
+        // disable until I complete the work
+        //this.getRegion('social_accounts').show(providers);
 
         var userAccountForm = new userAccount({
             model: this.userAcount

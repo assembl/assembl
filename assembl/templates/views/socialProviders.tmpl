@@ -1,0 +1,13 @@
+<form class="form-horizontal core-form">
+    <div class="control-group">
+        <p><label for="optionsCheckboxList" class="control-label">{{ gettext('Add a social account') }}</label></p>
+        <div class="controls">
+        <% for (var i in providers) {
+        var provider = providers[i]; %>
+        <form id="<%= provider %>" class="mts" method="post" action="/login/<%= provider %>">
+         <button type="submit" class="<%= provider %>-bg mbs">Connect with <%= provider %></button>
+        </form>
+        <% } %>
+        </div>
+    </div>
+</form>

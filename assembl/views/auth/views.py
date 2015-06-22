@@ -571,7 +571,13 @@ def velruse_login_complete_view(request):
     for email_d in velruse_profile.get('emails', []):
         if isinstance(email_d, dict):
             email = email_d['value']
-            if verified_email != email:
+            if email in email_accounts:
+                email_account = email_accounts[email]
+                if provider.trust_emails or email_account.verified:
+                    if email_account.preferred:
+                        idp_account.preferred = True
+                    email_account.delete()
+            elif verified_email != email:
                 # create an unverified email account.
                 email = EmailAccount(
                     email=email,
