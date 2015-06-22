@@ -31,6 +31,7 @@ var AgentModel = Base.Model.extend({
         verified: false,
         avatar_url_base: null,
         creation_date: null,
+        is_first_visit: false,
         real_name: null,
         '@type': null,
         '@view': null
