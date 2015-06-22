@@ -880,7 +880,7 @@ def database_delete():
                 "have to temporarily declare env.is_production_env = False " +
                 "in the environment"))
     execute(ensure_virtuoso_not_running)
-    with cd(virtuoso_db_directory())
+    with cd(virtuoso_db_directory()):
         run('rm -f *.db *.trx *.lck *.trx *.pxa')
 
 
