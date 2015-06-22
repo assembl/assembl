@@ -83,6 +83,14 @@ def add_local_role(request):
 
 
 @view_config(
+    context=InstanceContext, request_method="PATCH",
+    ctx_named_collection_instance="Discussion.local_user_roles",
+    header=JSON_HEADER, renderer='json')
+@view_config(
+    context=InstanceContext, request_method="PATCH",
+    ctx_named_collection_instance="User.local_roles",
+    header=JSON_HEADER, renderer='json')
+@view_config(
     context=InstanceContext, request_method="PUT",
     ctx_named_collection_instance="Discussion.local_user_roles",
     header=JSON_HEADER, renderer='json')
@@ -207,6 +215,9 @@ def delete_abstract_agent_account(request):
     return {}
 
 
+@view_config(context=InstanceContext, request_method='PATCH',
+             header=JSON_HEADER, ctx_instance_class=AbstractAgentAccount,
+             renderer='json')
 @view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER,
              ctx_instance_class=AbstractAgentAccount, renderer='json')
 def put_abstract_agent_account(request):

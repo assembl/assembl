@@ -82,6 +82,10 @@ def widget_userstate_get(request):
     return request.context._instance.get_user_state(user_id)
 
 
+@view_config(context=InstanceContext, request_method='PATCH',
+             ctx_instance_class=Widget, permission=P_READ,
+             # TODO @maparent: with permission=P_ADD_POST we had problems
+             header=JSON_HEADER, name="user_state")
 @view_config(context=InstanceContext, request_method='PUT',
              ctx_instance_class=Widget, permission=P_READ,
              # TODO @maparent: with permission=P_ADD_POST we had problems
@@ -106,6 +110,9 @@ def widget_settings_get(request):
     return request.context._instance.settings_json
 
 
+@view_config(context=InstanceContext, request_method='PATCH',
+             ctx_instance_class=Widget, permission=P_ADMIN_DISC,
+             header=JSON_HEADER, name="settings")
 @view_config(context=InstanceContext, request_method='PUT',
              ctx_instance_class=Widget, permission=P_ADMIN_DISC,
              header=JSON_HEADER, name="settings")
@@ -122,6 +129,9 @@ def widget_state_get(request):
     return request.context._instance.state_json
 
 
+@view_config(context=InstanceContext, request_method='PATCH',
+             ctx_instance_class=Widget, permission=P_ADD_POST,
+             header=JSON_HEADER, name="state")
 @view_config(context=InstanceContext, request_method='PUT',
              ctx_instance_class=Widget, permission=P_ADD_POST,
              header=JSON_HEADER, name="state")
@@ -301,7 +311,11 @@ def delete_vote_votable(request):
 # So we have to PUT into "targets" instead of "votable_ideas"
 # (which is the collection used below) => FIXME: solve this strange thing
 @view_config(
-    context=CollectionContext, request_method="PUT", 
+    context=CollectionContext, request_method="PATCH",
+    ctx_named_collection="VotableCollection.votable_ideas",
+    permission=P_ADMIN_DISC, header=JSON_HEADER)
+@view_config(
+    context=CollectionContext, request_method="PUT",
     ctx_named_collection="VotableCollection.votable_ideas",
     permission=P_ADMIN_DISC, header=JSON_HEADER)
 def set_vote_votables(request):
@@ -313,7 +327,11 @@ def set_vote_votables(request):
 
 
 @view_config(
-    context=CollectionContext, request_method="PUT", 
+    context=CollectionContext, request_method="PATCH",
+    ctx_named_collection="CriterionCollection.criteria",
+    permission=P_ADMIN_DISC, header=JSON_HEADER)
+@view_config(
+    context=CollectionContext, request_method="PUT",
     ctx_named_collection="CriterionCollection.criteria",
     permission=P_ADMIN_DISC, header=JSON_HEADER)
 def set_idea_criteria(request):

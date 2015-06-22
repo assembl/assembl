@@ -220,6 +220,8 @@ def instance_post(request):
     raise HTTPBadRequest()
 
 
+@view_config(context=InstanceContext, request_method='PATCH', header=JSON_HEADER,
+             renderer='json')
 @view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER,
              renderer='json')
 def instance_put_json(request):

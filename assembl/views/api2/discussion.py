@@ -30,6 +30,9 @@ def discussion_settings_get(request):
     return request.context._instance.settings_json
 
 
+@view_config(context=InstanceContext, request_method='PATCH',
+             ctx_instance_class=Discussion, permission=P_ADMIN_DISC,
+             header=JSON_HEADER, name="settings")
 @view_config(context=InstanceContext, request_method='PUT',
              ctx_instance_class=Discussion, permission=P_ADMIN_DISC,
              header=JSON_HEADER, name="settings")

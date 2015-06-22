@@ -6,7 +6,7 @@ We'll have identifiers (RDF and RESTful read endpoints) of the form
 
 http://<server>/data/<type name>/<numeric-id>/
 
-It is generally possible to GET/PUT/DELETE at those identifiers.
+It is generally possible to GET/PUT/DELETE/PATCH at those identifiers. (PATCH and PUT are treated the same.)
 
 (Note: "type name" refers to JSON-LD abbreviations of RDF class name, which will generally correspond with the python classname but maybe not. The correspondance will be guaranteed by `assembl.lib.sqla.get_named_class`.)
 However, though it MAY be possible to POST at http://server/data/<type name>/ positions, we will instead use traversal to give more information at one point.

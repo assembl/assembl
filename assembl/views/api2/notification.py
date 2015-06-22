@@ -115,6 +115,9 @@ def process_all_now(request):
 @view_config(context=InstanceContext, request_method='PUT',
     ctx_instance_class=NotificationSubscription,
     header=JSON_HEADER, renderer='json')
+@view_config(context=InstanceContext, request_method='PATCH',
+    ctx_instance_class=NotificationSubscription,
+    header=JSON_HEADER, renderer='json')
 def put_notification_request(request):
     result = instance_put_json(request)
     templates = request.context.find_collection(
