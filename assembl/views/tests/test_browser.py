@@ -35,5 +35,5 @@ def test_load_messages(
     assert browser.is_element_present_by_css('.allMessagesView .idealist-title', wait_time=2)
     all_messages_button = browser.find_by_css('.allMessagesView .idealist-title')
     all_messages_button.click()
-    assert browser.is_element_present_by_css('.message', wait_time=1)
+    assert browser.is_element_present_by_css('.message', wait_time=2)
     assert 20 == len(browser.find_by_css('.message'))
