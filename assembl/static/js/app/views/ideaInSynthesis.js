@@ -33,6 +33,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       this.messageListView = options.messageListView;
       this.editing = false;
       this.authors = [];
+      this.original_idea = this.model;
 
       this.parentPanel = options.parentPanel;
       if(this.parentPanel === undefined) {
@@ -41,11 +42,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
 
       var that = this,
       collectionManager = new CollectionManager();
-
-      Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
-          collectionManager.getAllUsersCollectionPromise(),
-          this.model.getExtractsPromise(),
-          function (allMessageStructureCollection, allUsersCollection, ideaExtracts) {
+      function render_with_info(allMessageStructureCollection, allUsersCollection, ideaExtracts) {
 
         ideaExtracts.forEach(function (segment) {
           var post = allMessageStructureCollection.get(segment.get('idPost'));
@@ -59,7 +56,28 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
 
         that.template = '#tmpl-ideaInSynthesis';
         that.render();
-      });
+      }
+      if (this.synthesis.get('is_next_synthesis')) {
+        Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+            collectionManager.getAllUsersCollectionPromise(),
+            this.model.getExtractsPromise(),
+            render_with_info);
+      } else {
+        // idea is a tombstone; get the original
+        Promise.resolve(collectionManager.getAllIdeasCollectionPromise()).then(
+          function(ideas) {
+            var original_idea = ideas.get(that.model.get('original_uri'));
+            if (original_idea) {
+              // original may be null if idea deleted.
+              that.original_idea = original_idea;
+            }
+            Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+                collectionManager.getAllUsersCollectionPromise(),
+                that.original_idea.getExtractsPromise(),
+                render_with_info);
+          });
+      }
+
 
       this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function (state, currentIdea) {
         that.onIsSelectedChange(currentIdea);
@@ -155,18 +173,18 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       partialMessage = MessagesInProgress.getMessage(partialCtx),
       send_callback = function () {
         Assembl.vent.trigger('messageList:currentQuery');
-        that.getPanel().getContainingGroup().setCurrentIdea(that.model);
+        that.getPanel().getContainingGroup().setCurrentIdea(that.original_idea);
       };
 
       var replyView = new MessageSendView({
         'allow_setting_subject': false,
         'reply_message_id': this.synthesis.get('published_in_post'),
-        'reply_idea': this.model,
+        'reply_idea': this.original_idea,
         'body_help_message': i18n.gettext('Type your response here...'),
         'cancel_button_label': null,
         'send_button_label': i18n.gettext('Send your reply'),
         'subject_label': null,
-        'default_subject': 'Re: ' + Ctx.stripHtml(this.model.getLongTitleDisplayText()).substring(0, 50),
+        'default_subject': 'Re: ' + Ctx.stripHtml(this.original_idea.getLongTitleDisplayText()).substring(0, 50),
         'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
         'mandatory_subject_missing_msg': null,
         'msg_in_progress_body': partialMessage['body'],
@@ -208,7 +226,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
      */
     onIsSelectedChange: function (idea) {
         //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
-        if (idea === this.model) {
+        if (idea === this.model || idea === this.original_idea) {
             this.$el.addClass('is-selected');
         } else {
             this.$el.removeClass('is-selected');
@@ -231,7 +249,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
     navigateToIdea: function () {
       var panel = this.getPanel();
       if(panel.isPrimaryNavigationPanel()) {
-        panel.getContainingGroup().setCurrentIdea(this.model);
+        panel.getContainingGroup().setCurrentIdea(this.original_idea);
       }
       else {
         //navigateToIdea called, and we are not the primary navigation panel
@@ -246,7 +264,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
             navigationState: 'debate'
         };
         var groupSpecModel = new groupSpec.Model(defaults);
-        var setResult = groupSpecModel.get('states').at(0).set({currentIdea: this.model}, {validate: true});
+        var setResult = groupSpecModel.get('states').at(0).set({currentIdea: this.original_idea}, {validate: true});
         if (!setResult) {
           throw new Error("Unable to set currentIdea on modal Group");
         }

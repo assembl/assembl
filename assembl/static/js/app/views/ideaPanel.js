@@ -50,7 +50,12 @@ var IdeaPanel = AssemblPanel.extend({
             that.showSegment(segment);
         });
 
-
+        setTimeout(function() {
+            // initial model loading
+            var model = that.model;
+            that.model = null;
+            that.setIdeaModel(model, "created");
+        }, 200);
     },
     ui: {
         'postIt': '.postitlist',
