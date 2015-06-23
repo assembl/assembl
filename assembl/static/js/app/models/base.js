@@ -246,6 +246,7 @@ var BaseCollection = Backbone.Collection.extend({
                 }
                 this.remove(model);
             }
+            return;
         }
         else if (model === null || model === undefined) {
             // oops, doesn't exist
@@ -269,8 +270,7 @@ var BaseCollection = Backbone.Collection.extend({
             }
         }
         if (debug) {
-            console.log("collection is now:");
-            console.log(this);
+            console.log("collection is now:", this);
         }
     }
 

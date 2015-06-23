@@ -179,6 +179,7 @@
         "introduction": true,
         "conclusion": true,
         "is_next_synthesis": true,
+        "published_in_post": true,
         "ideas": [":partial"],
         "idea_links": [":partial"]
     },

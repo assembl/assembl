@@ -58,7 +58,26 @@ var SynthesisCollection = Base.Collection.extend({
      * The model
      * @type {SynthesisModel}
      */
-    model: SynthesisModel
+    model: SynthesisModel,
+
+    getPublishedSyntheses: function() {
+      return this.filter(function(model){ return model.get('published_in_post') != null; });
+    },
+
+    /** Get the last published synthesis
+     * @return Message.Model or null
+     */
+    getLastPublisedSynthesis: function () {
+      var publishedSyntheses = this.getPublishedSyntheses(),
+          lastSynthesis = null;
+      if (publishedSyntheses.length > 0) {
+        _.sortBy(publishedSyntheses, function (model) {
+          return model.get('creation_date');
+        });
+        lastSynthesis = _.last(publishedSyntheses);
+      }
+      return lastSynthesis;
+    },
 });
 
 module.exports = {

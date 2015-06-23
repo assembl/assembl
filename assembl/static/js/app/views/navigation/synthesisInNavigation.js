@@ -14,20 +14,17 @@ var Marionette = require('../../shims/marionette.js'),
 var SynthesisItem = Marionette.ItemView.extend({
     template: '#tmpl-synthesisItemInNavigation',
     initialize: function(options){
-        this.allSynthesisCollection = options.allSynthesisCollection;
         this.panel = options.panel;
     },
     events:{
        'click .js_synthesisList': 'onSelectedSynthesis'
     },
     serializeData: function(){
-        var synthesis = this.allSynthesisCollection.get(this.model.get('publishes_synthesis'));
-
-        return{
-            id:this.model.id,
-            subject: synthesis.get('subject'),
-            date: Ctx.formatDate(this.model.get('date'))
-        }
+      return {
+        id: this.model.get('published_in_post'),
+        subject: this.model.get('subject'),
+        date: Ctx.formatDate(this.model.get('creation_date'))
+      };
     },
 
     onSelectedSynthesis: function (e) {
@@ -41,17 +38,16 @@ var SynthesisList = Marionette.CollectionView.extend({
     childView: SynthesisItem,
     initialize: function(options){
 
-        var synthesisMessages = this.collection.where({'@type': Types.SYNTHESIS_POST});
+        var publishedSyntheses = this.collection.getPublishedSyntheses();
 
-        _.sortBy(synthesisMessages, function (message) {
-            return message.get('date');
+        _.sortBy(publishedSyntheses, function (message) {
+            return message.get('creation_date');
         });
-        synthesisMessages.reverse();
+        publishedSyntheses.reverse();
 
-        this.collection = new Backbone.Collection(synthesisMessages);
+        this.collection = new Backbone.Collection(publishedSyntheses);
 
         this.childViewOptions = {
-            allSynthesisCollection: options.allSynthesisCollection,
             panel: options.panel
         }
     }
@@ -59,7 +55,7 @@ var SynthesisList = Marionette.CollectionView.extend({
 });
 
 var SynthesisInNavigationPanel = AssemblPanel.extend({
-    template: '#tmpl-synthesisInNavigationPanel',
+    template: '#tmpl-loader',
     panelType: PanelSpecTypes.NAVIGATION_PANEL_SYNTHESIS_SECTION,
     className: 'synthesisNavPanel',
     ui: {
@@ -91,32 +87,39 @@ var SynthesisInNavigationPanel = AssemblPanel.extend({
         this.selectSynthesisInMenu(messageId);
     },
 
+    displaySynthesisList: function (allMessageStructureCollection, allSynthesisCollection) {
+      var lastPublisedSynthesis = allSynthesisCollection.getLastPublisedSynthesis();
+
+      if (lastPublisedSynthesis) {
+
+        var synthesisList = new SynthesisList({
+          collection: allSynthesisCollection,
+          panel: this
+        });
+
+        this.getRegion('synthesisContainer').show(synthesisList);
+        this.displaySynthesis(lastPublisedSynthesis.get('published_in_post'));
+      }
+      else {
+        this.ui.synthesisListHeader.html(i18n.gettext("No synthesis of the discussion has been published yet"));
+      }
+    },
+  
     onBeforeShow: function(){
-        var that = this,
-            collectionManager = new CollectionManager();
+      var that = this,
+      collectionManager = new CollectionManager();
 
-        Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
-            collectionManager.getAllSynthesisCollectionPromise(),
-            function (allMessageStructureCollection, allSynthesisCollection) {
-
-                var synthesisMessages = allMessageStructureCollection.where({'@type': Types.SYNTHESIS_POST});
-
-                if (synthesisMessages.length > 0) {
-
-                    var synthesisList = new SynthesisList({
-                        collection: allMessageStructureCollection,
-                        allSynthesisCollection: allSynthesisCollection,
-                        panel: that
-                    });
-
-                    that.getRegion('synthesisContainer').show(synthesisList);
-                    that.displaySynthesis(allMessageStructureCollection.getLastSynthesisPost().id);
-                }
-                else {
-                    that.ui.synthesisListHeader.html(i18n.gettext("No synthesis of the discussion has been published yet"));
-                }
-            })
-
+      Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+          collectionManager.getAllSynthesisCollectionPromise(),
+          function (allMessageStructureCollection, allSynthesisCollection) {
+            that.template = '#tmpl-synthesisInNavigationPanel';
+            that.render();
+            that.displaySynthesisList(allMessageStructureCollection, allSynthesisCollection);
+            that.listenTo(allSynthesisCollection, 'add reset', function() {
+              //console.log("Re-displaying synthesis list from collection update...", allSynthesisCollection.length);
+              that.displaySynthesisList(allMessageStructureCollection, allSynthesisCollection);
+            });
+          });
     }
 
 });

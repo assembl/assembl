@@ -87,7 +87,7 @@ Socket.prototype.processData = function (item) {
         collPromise = collectionManager.getCollectionPromiseByType(item);
 
     if (Ctx.debugSocket) {
-        console.log(item['@id'] || item['@type'], item);
+        console.log(item['@id'], item['@type'], item);
     }
 
     if (collPromise === null) {

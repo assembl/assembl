@@ -63,7 +63,7 @@ var Synthesis = Marionette.ItemView.extend({
       var that = this;
 
       this.model = new Backbone.Model();
-
+      //WRITEME:  Add a listenTo on allSynthesisCollection to get an updated synthesis
       var synthesisMessage = options.allMessageStructureCollection.getLastSynthesisPost();
       if (synthesisMessage) {
         var synthesis = options.allSynthesisCollection.get(synthesisMessage.get('publishes_synthesis'));
