@@ -280,8 +280,7 @@
         "introduction": true,
         "conclusion": true,
         "is_next_synthesis": true,
-        "published_in_post": true,
-        "ideas": [":tombstones"]
+        "published_in_post": true
     },
     "IdeaContentLink": {
         "idea": true,
