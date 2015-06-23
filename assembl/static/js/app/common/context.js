@@ -3,6 +3,7 @@
 var $ = require('../shims/jquery.js'),
     _ = require('../shims/underscore.js'),
     Moment = require('moment'),
+    MomentLocaleFr = require('moment/locale/fr.js'),
     Promise = require('bluebird'),
     Assembl =  require('../app.js'),
     Permissions =  require('../utils/permissions.js'),
