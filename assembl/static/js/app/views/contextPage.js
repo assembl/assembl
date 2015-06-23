@@ -1326,7 +1326,7 @@ var Introduction = Marionette.ItemView.extend({
       setTimeout(function(){
         that.applyEllipsisToSection('.context-introduction', that.ui.seeMoreIntro);
         that.applyEllipsisToSection('.context-objective', that.ui.seeMoreObjectives);
-      },0);
+      }, 200);
     },
 
     seeMore: function (e) {
