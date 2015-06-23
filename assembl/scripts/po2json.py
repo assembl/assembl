@@ -27,7 +27,7 @@ def po2json(fname):
     jed_filename = fname[:-3]+".jed.json"
     with open(jspo_filename, 'wb') as f:
         write_po(f, po)
-    r = subprocess.call([po2json_script, "--format", "jed", jspo_filename, jed_filename])
+    r = subprocess.call([po2json_script, "--format", "jed1.x", jspo_filename, jed_filename])
     os.unlink(jspo_filename)
     return r
 

@@ -517,7 +517,7 @@ Context.prototype = {
 
         var showing_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/showing_widget");
 
-        var locale_parameter = "&locale=" + assembl_locale;
+        var locale_parameter = "&locale=" + assembl_locale.split('_')[0];
 
         var inspiration_widget_create_url = "/static/widget/creativity/?admin=1" + locale_parameter + "#/admin/create_from_idea?idea="
             + encodeURIComponent(idea_id + "?view=creativity_widget"); // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
@@ -1313,13 +1313,16 @@ Context.prototype = {
         }
 
     },
+    getLocale: function() {
+      return assembl_locale.split('_')[0];
+    },
     /**
      * @init
      * inits ALL app components
      */
     init: function () {
         //this.loadCurrentUser();
-        Moment.locale(assembl_locale);
+        Moment.locale(this.getLocale());
 
         $(document.body).removeClass('preload');
         this.__createAnnotatorSelectionTooltipDiv();

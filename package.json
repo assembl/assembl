@@ -44,6 +44,7 @@
     "js-fixtures": "^1.5.3",
     "mocha": "^2.2.5",
     "moment": "^2.10.3",
+    "po2json": "~0.4.1",
     "raven-js": "^1.1.18",
     "uglify-js": "^2.4.23",
     "vinyl-buffer": "^1.0.0",

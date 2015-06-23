@@ -76,7 +76,7 @@ var NavigationView = AssemblPanel.extend({
                 if (visualization_items.length === 0)
                     return;
                 try {
-                    jed = new Jed(settings['translations'][assembl_locale]);
+                    jed = new Jed(settings['translations'][Ctx.getLocale()]);
                 } catch (e) {
                     // console.error(e);
                     jed = new Jed({});
