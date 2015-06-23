@@ -1,73 +1,73 @@
 {
     "game": [
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Qu'est‐ce que nous ne savons pas, mais aimerions connaître à propos de cette situation ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Qu'est‐ce que nous ne savons pas, mais aimerions connaître à propos de cette situation ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Quelles solutions ont déjà été essayées ou considérées ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Quelles solutions ont déjà été essayées ou considérées ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Qui pourrait être (positivement/négativement) affecté par cette solution ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Qui pourrait être (positivement/négativement) affecté par cette solution ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Quelles seront les conséquences potentielles si rien n'est fait ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Quelles seront les conséquences potentielles si rien n'est fait ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Qu’est-ce que Nelson Mandela penserait de cette problématique ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Qu’est-ce que Nelson Mandela penserait de cette problématique ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Qu’est-ce que Gandhi penserait de cette problématique ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Qu’est-ce que Gandhi penserait de cette problématique ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Qu’est-ce que John Lennon penserait de cette problématique ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Qu’est-ce que John Lennon penserait de cette problématique ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Qu’est-ce qui nous empêche d'atteindre une solution ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Qu’est-ce qui nous empêche d'atteindre une solution ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Quelle serait l'anti-solution à cette problématique ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Quelle serait l'anti-solution à cette problématique ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Comment est-ce que ce problème est similaire à ______ ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Comment est-ce que ce problème est similaire à ______ ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Comment pourrait-on résoudre ce problème avec/sans ______ ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Comment pourrait-on résoudre ce problème avec/sans ______ ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Quelles sont les caractéristiques de la solution idéale ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Quelles sont les caractéristiques de la solution idéale ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>La une du journal si on réussit ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>La une du journal si on réussit ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Quel est le best-case scenario ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Quel est le best-case scenario ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Quel est le worst-case scenario ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Quel est le worst-case scenario ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Quelles sont les principales « forces for change » ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Quelles sont les principales « forces for change » ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Quelles sont les principales « forces against change » ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Quelles sont les principales « forces against change » ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Quelles alternatives existent actuellement pour résoudre ce problème et quelles sont leurs forces/faiblesses ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Quelles alternatives existent actuellement pour résoudre ce problème et quelles sont leurs forces/faiblesses ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Si vous aviez une baguette magique, que changeriez-vous, ou que feriez-vous apparaître/disparaître ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Si vous aviez une baguette magique, que changeriez-vous, ou que feriez-vous apparaître/disparaître ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Comment expliqueriez-vous la problématique/la solution à un enfant de 5 ans/un martien ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Comment expliqueriez-vous la problématique/la solution à un enfant de 5 ans/un martien ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Qu’est‐ce que nous supposons ou prenons pour acquis, peut‐être inutilement ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Qu’est‐ce que nous supposons ou prenons pour acquis, peut‐être inutilement ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Quels nouveaux problèmes est-ce que la solution pourrait engendrer ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Quels nouveaux problèmes est-ce que la solution pourrait engendrer ?</p></section>"
         },
         {
-            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color:#ffffff;font-size: 32px;line-height: 30px;margin-bottom: 0.5em;text-shadow:0px 1px 0px #000000;'>Qu’est-ce que les principales parties prenantes affectées ne savent/réalisent peut-être pas à propos de cette idée ?</p></section>"
+            "body": "<section style='background-color:#7a67ae;padding: 20px;height: 390px;text-align: left;'><p style='color: #ffffff; font-size: 22px; line-height: 32px; margin-bottom: 0.5em; text-shadow: 0px 1px 0px #000000;'>Qu’est-ce que les principales parties prenantes affectées ne savent/réalisent peut-être pas à propos de cette idée ?</p></section>"
         }
 
 
