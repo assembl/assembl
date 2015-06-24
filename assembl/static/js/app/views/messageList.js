@@ -2029,7 +2029,7 @@ var MessageList = AssemblPanel.extend({
           var real_callback = function () {
             if (shouldHighlightMessageSelected) {
               //console.log(that.currentViewStyle);
-              console.log("el1: ", el);
+              //console.log("el1: ", el);
               try {
                 el.highlight();
               } catch (e) {
