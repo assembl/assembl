@@ -568,9 +568,8 @@ JOIN post AS family_posts ON (
         return [int(id) for (id,) in cls.default_db.execute(SparqlClause(
             '''select distinct ?idea where {
                 %s sioc:reply_of* ?post .
-                ?fragment oa:hasSource ?post .
-                ?fragment assembl:resourceExpressesIdea ?ideaF .
-                ?idea idea:includes* ?ideaF  }''' % (post_uri.n3(),),
+                ?post assembl:postLinkedToIdea ?ideaP .
+                ?idea idea:includes* ?ideaP  }''' % (post_uri.n3(),),
             quad_storage=discussion_storage.n3()))]
 
     @classmethod
@@ -588,10 +587,9 @@ JOIN post AS family_posts ON (
         for idea_id in idea_ids:
             ((read,),) = list(cls.default_db.execute(SparqlClause(
             """select count(distinct ?change) where {
-            %s idea:includes* ?ideaF .
-            ?fragment assembl:resourceExpressesIdea ?ideaF .
-            ?fragment oa:hasSource ?postF .
-            ?post sioc:reply_of* ?postF .
+            %s idea:includes* ?ideaP .
+            ?postP assembl:postLinkedToIdea ?ideaP .
+            ?post sioc:reply_of* ?postP .
             ?change a version:ReadStatusChange;
                 version:who %s ;
                 version:what ?post }""" % (
