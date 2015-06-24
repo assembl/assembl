@@ -178,6 +178,17 @@ var NavigationView = AssemblPanel.extend({
           });
           this.debate.show(idealist);
           this.getContainingGroup().NavigationResetDebateState();
+          // FIXME: This is absolutely horrible. But I could not find better yet.
+          if ("show_help" in options && options.show_help === false) {
+            var group = this.getContainingGroup(),
+                messageListView = group.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+                messageListView.triggerMethod('messageList:clearAllFilters');
+                // The old currentIdea is not yet set, so setting it to null now fails.
+                setTimeout(function() {
+                    group.setCurrentIdea(null);
+                    messageListView.render();
+                }, 1000);
+          }
           break;
         case 'synthesis':
           var synthesisInNavigationPanel = new SynthesisInNavigationPanel({
