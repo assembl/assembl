@@ -10,7 +10,7 @@ from pyramid.response import Response
 from velruse.exceptions import CSRFError
 from pyramid.httpexceptions import (
     HTTPException, HTTPInternalServerError, HTTPMovedPermanently,
-    HTTPBadRequest)
+    HTTPBadRequest, HTTPFound)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.settings import asbool, aslist
 
@@ -23,7 +23,10 @@ default_context = {
     'STATIC_URL': '/static'
 }
 
-TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
+
+TEMPLATE_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)), 'templates')
+
 
 def backbone_include(config):
     FrontendUrls.register_frontend_routes(config)
@@ -32,11 +35,11 @@ def backbone_include(config):
     config.add_route('graph_view', '/graph')
 
 
-
 def get_theme(discussion):
-    theme_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'css', 'themes')
+    theme_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                              'static', 'css', 'themes')
     default_theme = config.get('default_theme') or 'default'
-    #default_folder = os.path.realpath(os.path.join(theme_path, default_theme))
+    # default_folder = os.path.realpath(os.path.join(theme_path, default_theme))
     if not discussion:
         return default_theme
     try:
@@ -46,6 +49,7 @@ def get_theme(discussion):
     except NameError:
         return default_theme
     return default_theme
+
 
 def get_default_context(request):
     from ..auth.util import get_user, get_current_discussion
@@ -61,10 +65,14 @@ def get_default_context(request):
     else:
         user_profile_edit_url = None
 
-    web_analytics_piwik_script = config.get('web_analytics_piwik_script') or False
+    web_analytics_piwik_script = config.get(
+        'web_analytics_piwik_script') or False
     discussion = get_current_discussion()
-    if web_analytics_piwik_script and discussion and discussion.web_analytics_piwik_id_site:
-        web_analytics_piwik_script = web_analytics_piwik_script % ( discussion.web_analytics_piwik_id_site, discussion.web_analytics_piwik_id_site )
+    if (web_analytics_piwik_script and discussion
+            and discussion.web_analytics_piwik_id_site):
+        web_analytics_piwik_script = web_analytics_piwik_script % (
+            discussion.web_analytics_piwik_id_site,
+            discussion.web_analytics_piwik_id_site)
     else:
         web_analytics_piwik_script = False
 
@@ -76,7 +84,8 @@ def get_default_context(request):
 
     first_login_after_auto_subscribe_to_notifications = False
     # FIXME: user.is_first_visit does not seem to work, as it is always false, to right now first_login_after_auto_subscribe_to_notifications can never become True and so the popin can never be shown
-    if user and discussion and discussion.id and user.is_first_visit and discussion.subscribe_to_notifications_on_signup:
+    if (user and discussion and discussion.id and user.is_first_visit
+            and discussion.subscribe_to_notifications_on_signup):
         # set session variable, so that we show the popin only once in the session
         # TODO: use a different flag for each discussion, so that if the user joins several auto-subscribing discussions during the same logged-in session, we show one popin for every discussion
         if not request.session.get('first_login_after_auto_subscribe_to_notifications_popin_has_been_shown', False):
@@ -97,7 +106,8 @@ def get_default_context(request):
     if not os.path.exists(jedfilename) and '_' in localizer.locale_name:
         jedfilename = os.path.join(
             os.path.dirname(__file__), '..', 'locale',
-            get_language(localizer.locale_name), 'LC_MESSAGES', 'assembl.jed.json')
+            get_language(localizer.locale_name), 'LC_MESSAGES',
+            'assembl.jed.json')
     assert os.path.exists(jedfilename)
     providers = aslist(config.get('login_providers'))
 
@@ -200,11 +210,22 @@ def error_view(exc, request):
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
 
+    settings = config.get_settings()
+
     config.add_renderer('json', json_renderer_factory)
     config.include('.traversal')
 
-    config.add_route('discussion_list', '/')
-    
+    default_discussion = settings.get('default_discussion', None)
+    if default_discussion:
+        config.add_route('discussion_list', '/discussions')
+        config.add_view(
+            lambda req: HTTPFound('/'+default_discussion),
+            route_name='default_disc_redirect')
+
+        config.add_route('default_disc_redirect', '/')
+    else:
+        config.add_route('discussion_list', '/')
+
     config.include(backbone_include, route_prefix='/{discussion_slug}')
 
     if asbool(config.get_settings().get('assembl_handle_exceptions', 'true')):
@@ -218,7 +239,7 @@ def includeme(config):
 
     config.include('.home')
     config.include('.admin')
-    
+
     config.add_route('home', '/{discussion_slug}')
     config.add_route('home-auto', '/{discussion_slug}/')
     def redirector(request):
