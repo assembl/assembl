@@ -2013,8 +2013,8 @@ var MessageList = AssemblPanel.extend({
       }
       var animate_message = function (message) {
         var el = that.getMessageSelector(message.id);
-
-        if (el[0]) {
+        //console.log("el0: ", el);
+        if (el.length && el[0]) {
           if (shouldOpenMessageSelected) {
             // console.log("showMessageById(): sending openWithFullBodyView
             // to message", message.id);
@@ -2029,10 +2029,11 @@ var MessageList = AssemblPanel.extend({
           var real_callback = function () {
             if (shouldHighlightMessageSelected) {
               //console.log(that.currentViewStyle);
-              //console.log(el);
+              console.log("el1: ", el);
               try {
                 el.highlight();
               } catch (e) {
+                console.log("Error: could not highlight message. Details of the error are given below.");
                 console.log(e);
               }
             }

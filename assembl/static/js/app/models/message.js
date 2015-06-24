@@ -3,7 +3,7 @@
 var _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
     Promise = require('bluebird'),
-    App = require('../app.js'),
+    Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Base = require('./base.js'),
     Types = require('../utils/types.js');
