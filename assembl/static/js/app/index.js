@@ -5,7 +5,7 @@ var App = require('./app.js'),
     Ctx = require('./common/context.js'),
     Socket = require('./utils/socket.js'),
     Taketour = require('./utils/taketour.js'),
-    CollectionManager = require('./common/CollectionManager.js'),
+    CollectionManager = require('./common/collectionManager.js'),
     Raven = require('raven-js');
 
 require('./utils/taketour.js');
