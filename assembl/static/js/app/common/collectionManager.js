@@ -614,6 +614,8 @@ var CollectionManager = Marionette.Controller.extend({
         return this._allDiscussionSourceCollectionPromise;
     },
 
+    /*
+    This is handled in Ctx.
     getCurrentUser: function(){
         if (this._currentUserModelPromise) {
             return this._currentUserModelPromise;
@@ -625,11 +627,15 @@ var CollectionManager = Marionette.Controller.extend({
         this._currentUserModelPromise = Promise.resolve(this._currentUserModel.fetch())
             .thenReturn(this._currentUserModel)
             .catch(function(e){
-                console.error(e.statusText);
+              // we never get here for some reason?
+              // currentUser may return a 401.
+              return Agents.Collection.getUnknownUser();
+                // console.error(e.statusText);
             });
 
         return this._currentUserModelPromise;
     }
+    */
 
 });
 

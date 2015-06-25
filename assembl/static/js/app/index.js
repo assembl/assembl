@@ -30,23 +30,14 @@ App.start();
 // available in simple interface
 if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE){
 
-    var collectionManager = new CollectionManager();
-
-    collectionManager.getCurrentUser().then(function(currentUser){
-
-        if(!currentUser.get('is_first_visit')){
-
-            // start take tour due to the dom latencies
-            setTimeout(function(){
-
-                Taketour.init();
-
-            }, 4000);
-
-        }
-
-    });
-
+    var collectionManager = new CollectionManager(),
+        currentUser = Ctx.getCurrentUser();
+    if(currentUser.isUnknownUser() || currentUser.get('is_first_visit')){
+        // start take tour due to the dom latencies
+        setTimeout(function(){
+            Taketour.init();
+        }, 4000);
+    }
 }
 
 
