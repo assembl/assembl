@@ -30,7 +30,8 @@
     "underscore": "~1.7.0",
     "backbone-modal": "~1.1.5",
     "sockjs": "~0.3.4",
-    "jQuery-linkify": "https://github.com/SoapBox/jQuery-linkify.git#~1.1.7"
+    "jQuery-linkify": "https://github.com/SoapBox/jQuery-linkify.git#~1.1.7",
+    "hopscotch": "~0.2.4"
   },
   "resolutions": {
     "underscore": "~1.7.0"

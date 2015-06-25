@@ -12,6 +12,7 @@ var userProfile = Base.Model.extend({
         name: '',
         post_count: 0,
         preferred_email: '',
+        is_first_visit: '',
         verified: false,
         avatar_url_base: '',
         creation_date: '',

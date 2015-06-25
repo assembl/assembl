@@ -1,7 +1,7 @@
 {% macro showShareButton() -%}
 <a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_openTargetInPopOver" data-popover-width="300" data-popover-height="71" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
 {%- endmacro %}
-<div class="panel-body">
+<div class="panel-body" id="tour_step_0">
     <% if( idea ) { %>
     <fieldset id="ideaPanel-section-summary" class="panel-section mtn">
         <div id="ideaPanel-shorttitle" class="mbs" data-toggle="tooltip" title="{{gettext('The name of this idea in the table of ideas')}}"></div>
@@ -73,8 +73,8 @@
       </div>
     </fieldset>
     <% } %>
-    {#
-    <fieldset id="ideaPanel-section-subideas" class="panel-section">
+
+    {#<fieldset id="ideaPanel-section-subideas" class="panel-section">
         <legend data-toggle="tooltip" title="{{gettext('The children of this idea.')}}">
             <span><% print(getSubIdeasLabel(subIdeas)) %></span>
         </legend>
@@ -83,8 +83,7 @@
                 <div class='subidea'><% print(subIdea.getShortTitleDisplayText()); %></div>
             <% }); %>
         </div>
-    </fieldset>
-    #}
+    </fieldset>#}
 
     <fieldset id="ideaPanel-section-segments" class="panel-section">
       <% if(canAddExtracts){ %>
@@ -97,7 +96,7 @@
       </div>
       <% } %>
 
-      <div class="postitlist"></div>
+      <div id="tour_step_3" class="postitlist"></div>
 
       <% if (canAddExtracts) { %>
       <div class="mbs">

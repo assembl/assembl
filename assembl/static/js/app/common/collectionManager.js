@@ -19,7 +19,8 @@ var Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js'),
     LocalRole = require('../models/roles.js'),
     Discussion = require('../models/discussion.js'),
-    DiscussionSource = require('../models/discussionSource.js');
+    DiscussionSource = require('../models/discussionSource.js'),
+    UserProfile = require('../models/userProfile.js');
 
 /**
  * @class CollectionManager
@@ -127,6 +128,10 @@ var CollectionManager = Marionette.Controller.extend({
 
     _allDiscussionSourceCollection: undefined,
     _allDiscussionSourceCollectionPromise: undefined,
+
+
+    _currentUserModel: undefined,
+    _currentUserModelPromise: undefined,
 
     /**
      * Returns the collection from the giving object's @type .
@@ -607,6 +612,23 @@ var CollectionManager = Marionette.Controller.extend({
             });
 
         return this._allDiscussionSourceCollectionPromise;
+    },
+
+    getCurrentUser: function(){
+        if (this._currentUserModelPromise) {
+            return this._currentUserModelPromise;
+        }
+
+        this._currentUserModel = new UserProfile.Model();
+        this._currentUserModel.collectionManager = this;
+
+        this._currentUserModelPromise = Promise.resolve(this._currentUserModel.fetch())
+            .thenReturn(this._currentUserModel)
+            .catch(function(e){
+                console.error(e.statusText);
+            });
+
+        return this._currentUserModelPromise;
     }
 
 });

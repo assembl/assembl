@@ -31,7 +31,7 @@
     {% endif %}
     <li class="sub fl mrs">
         {% if user %}
-        <div class="dropdown">
+        <div class="dropdown" id="tour_step_6">
             <a href="#" class="dropdown-toggle username" data-toggle="dropdown" aria-expanded="false">{{ user.display_name() }}</a>
             <ul class="dropdown-menu">
                 {% if user_profile_edit_url %}
