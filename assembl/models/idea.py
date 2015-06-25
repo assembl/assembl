@@ -980,6 +980,7 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
     def copy(self, tombstone=None, **kwargs):
         kwargs.update(
             tombstone=tombstone,
+            order=self.order,
             source_id=self.source_id,
             target_id=self.target_id)
         return super(IdeaLink, self).copy(**kwargs)
