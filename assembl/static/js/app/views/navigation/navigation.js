@@ -179,7 +179,7 @@ var NavigationView = AssemblPanel.extend({
           this.debate.show(idealist);
           this.getContainingGroup().NavigationResetDebateState();
           // FIXME: This is absolutely horrible. But I could not find better yet.
-          if ("show_help" in options && options.show_help === false) {
+          if ((options !== undefined) && (options.show_help === false)) {
             var group = this.getContainingGroup(),
                 messageListView = group.findViewByType(PanelSpecTypes.MESSAGE_LIST);
                 messageListView.triggerMethod('messageList:clearAllFilters');
