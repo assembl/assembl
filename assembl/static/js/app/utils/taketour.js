@@ -68,11 +68,13 @@ var Taketour = {
             onNext:function(){
                 // need to scroll messageListPanel there.
             },
-            i18n.nextBtn: i18n.gettext('Next'),
-            i18n.prevBtn: i18n.gettext('Back'),
-            i18n.doneBtn: i18n.gettext('Done'),
-            i18n.skipBtn: i18n.gettext('Skip'),
-            i18n.closeTooltip: i18n.gettext('Close')
+            i18n: {
+                nextBtn: i18n.gettext('Next'),
+                prevBtn: i18n.gettext('Back'),
+                doneBtn: i18n.gettext('Done'),
+                skipBtn: i18n.gettext('Skip'),
+                closeTooltip: i18n.gettext('Close')
+            }
         });
 
         return hopscotch.startTour(this.tour, 0);

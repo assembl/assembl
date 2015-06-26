@@ -290,10 +290,8 @@ msgstr ""
 "Vous pouvez choisir ici vos options de notification (fréquence, etc.)."
 
 #: assembl/static/js/app/utils/taketour.js:71
-#, fuzzy
-#| msgid "Context"
 msgid "Next"
-msgstr "Contexte"
+msgstr "Suivant"
 
 #: assembl/static/js/app/utils/taketour.js:72
 msgid "Back"
