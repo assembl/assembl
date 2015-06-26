@@ -20,6 +20,7 @@ $previewNumLines: 4;
   height: auto;
   color: $gray2;
   //border-top: solid 1px $gray3;
+  @include transition(background-color 0.4s);
 
   &.is-highlighted {
     background-color: $orange;
