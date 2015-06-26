@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from urlparse import urlparse, parse_qs
 import re
 
@@ -147,8 +147,8 @@ class FacebookAPI(object):
         self._api.access_token(token, self._app_secret)
 
     def extend_token(self):
-        res = self.api.extend_access_token(self._app_id, self._app_secret)
-        return res['access_token'], res['expires']
+        res = self._api.extend_access_token(self._app_id, self._app_secret)
+        return res.get('access_token', None), res.get('expires', 0)
 
     def get_expiration_time(self, token):
         args = {
@@ -720,14 +720,25 @@ class FacebookAccessToken(Base):
         # Make an API call to get the long term token
         # Also will need to update the expiration
         # field as well.
-        
+
         api = FacebookAPI(short_token)
         try:
-            long_token, expiration = api.extend_token()
-            self.expiration = expiration
-            return long_token
+            long_token, expires_in_seconds = api.extend_token()
+            self.expiration = datetime.utcnow() + \
+                timedelta(seconds=int(expires_in_seconds))
+            self.token = long_token
+
         except:
-            return short_token
+            # In case of failure, the fallback is to store the
+            # short term token and make a calculated estimate that
+            # the token is alive for min 30 minutes (usually they are
+            # for 1 hour).
+
+            # Cause the front end to request a new token and
+            # try again in
+            self.expiration = datetime.utcnow() + \
+                timedelta(minutes=30)
+            self.token = short_token
 
     def get_facebook_account_uri(self):
         return self.fb_account.uri()
