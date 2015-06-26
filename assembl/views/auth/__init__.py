@@ -12,6 +12,7 @@ def includeme(config):
             config.add_route(name, route)
 
     contextual_route('login', '/login')
+    contextual_route('login_forceproviders', '/login_showallproviders')
     contextual_route('logout', '/logout')
     # type in u(sername), id, email, {velruse-id-type}
     config.add_route('profile_user', '/user/{type}/{identifier}')

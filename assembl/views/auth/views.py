@@ -41,7 +41,7 @@ from .. import get_default_context, JSONError
 _ = TranslationStringFactory('assembl')
 
 
-def get_login_context(request):
+def get_login_context(request, force_show_providers=False):
     slug = request.matchdict.get('discussion_slug', None)
     if slug:
         p_slug = "/" + slug
@@ -49,10 +49,19 @@ def get_login_context(request):
     else:
         p_slug = ""
         request.session.pop('discussion')
+    providers = request.registry.settings['login_providers'][:]
+    if not force_show_providers:
+        hide_providers = request.registry.settings.get(
+            'hide_login_providers', ())
+
+        if isinstance(hide_providers, (str, unicode)):
+            hide_providers = (hide_providers, )
+        for provider in hide_providers:
+            providers.remove(provider)
     return dict(get_default_context(request), **{
         'login_url': login_url,
         'slug_prefix': p_slug,
-        'providers': request.registry.settings['login_providers'],
+        'providers': providers,
         'google_consumer_key': request.registry.settings.get(
             'google.consumer_key', ''),
         'next_view': handle_next_view(request)
@@ -124,8 +133,14 @@ def logout(request):
     request_method='GET', http_cache=60,
     renderer='assembl:templates/login.jinja2',
 )
+@view_config(
+    route_name='login_forceproviders',
+    request_method='GET', http_cache=60,
+    renderer='assembl:templates/login.jinja2',
+)
 def login_view(request):
-    return get_login_context(request)
+    return get_login_context(
+        request, request.matched_route.name == 'login_forceproviders')
 
 
 def get_profile(request):
