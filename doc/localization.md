@@ -72,8 +72,6 @@ tx push --translations -l fr
 Specifically, commit the following files:
 ```
 git add assembl/locale/assembl.pot
-git add assembl/locale/en/LC_MESSAGES/assembl.po
-git add assembl/locale/en_TOSYNCWITHCODE/LC_MESSAGES/assembl.po
-git add assembl/locale/fr/LC_MESSAGES/assembl.po
+git add assembl/locale/*/LC_MESSAGES/assembl.po
 git commit -m"update i18n"
 ```
