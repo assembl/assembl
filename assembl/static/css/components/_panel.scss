@@ -219,16 +219,17 @@
 
 /* CSS hack to target specificly IE >= 10 (see browserhacks.com). IE uses wrong 100% value in previous rule */
 _:-ms-input-placeholder, :root .groupBody .groupPanel header ~ .panelContents {
-  @include calc(height, "100vh - #{$theme_header_height} - #{$group_header_height} - 15px");
-}
-
-_:-ms-input-placeholder, :root .editable.groupBody .groupPanel header ~ .panelContents {
-  @include calc(height, "100vh - #{$theme_header_height} - #{$group_editable_header_height} - 15px");
+  @include calc(height, "100vh - #{$theme_header_height} - #{$group_header_height} - 45px");
 }
 
 .groupBody.editable .groupPanel header ~ .panelContents {
   //@include calc(height, "100vh - #{$theme_header_height} - #{$group_header_height}"); need hack safari
   @include calc(height, "100% - #{$theme_header_height} - #{$group_header_height}"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+}
+
+/* CSS hack to target specificly IE >= 10 (see browserhacks.com). IE uses wrong 100% value in previous rule */
+_:-ms-input-placeholder, :root .groupBody.editable .groupPanel header ~ .panelContents {
+  @include calc(height, "100vh - #{$theme_header_height} - #{$group_editable_header_height} - 45px");
 }
 
 .panelContents > div {
