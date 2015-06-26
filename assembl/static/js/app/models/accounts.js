@@ -26,6 +26,10 @@ var Account = Base.Model.extend({
          * check typeof variable
          * */
 
+    },
+
+    isFacebookAccount: function(){
+      return (this.get("@type") === 'FacebookAccount');
     }
 
 });
@@ -33,7 +37,15 @@ var Account = Base.Model.extend({
 
 var Accounts = Base.Collection.extend({
     url: Ctx.getApiV2DiscussionUrl("/all_users/current/accounts"),
-    model: Account
+    model: Account,
+
+    hasFacebookAccount: function(){
+      var tmp = this.find(function(model){
+        return model.isFacebookAccount();
+      });
+      if (!tmp) return false;
+      else return true;
+    }
 });
 
 module.exports = {

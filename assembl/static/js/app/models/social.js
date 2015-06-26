@@ -8,6 +8,17 @@ var $ = require('../shims/jquery.js'),
     Moment = require('moment');
 
 var FacebookAccessToken = Base.Model.extend({
+    urlRoot: function(){
+        var fbId = Ctx.getCurrentUserFacebookAccountId();
+        if (!fbId) {
+            throw new Error("There is no Facebook Account for this user");
+        }
+        else {
+            var route = Ctx.getApiV2DiscussionUrl('/all_users/current/accounts/') +
+                Ctx.extractId(fbId) + "/access_tokens";
+            return route;
+        }
+    },
     defaults: {
         fb_account_id: null,
         token: null,
@@ -25,15 +36,15 @@ var FacebookAccessToken = Base.Model.extend({
     },
 
     isUserToken: function(){
-        return this.token_type === 'user';
+        return this.get('token_type') === 'user';
     },
 
     isPageToken: function(){
-        return this.token_type === 'page';
+        return this.get('token_type') === 'page';
     }, 
 
     isGroupToken: function(){
-        return this.token_type === 'group';
+        return this.get('token_type') === 'group';
     }
 });
 
@@ -48,9 +59,20 @@ var FacebookAccessTokens = Base.Collection.extend({
         }
         else {
             var route = Ctx.getApiV2DiscussionUrl('/all_users/current/accounts/') +
-                Ctx.extractId(fbId) + "/access_tokens"; 
+                Ctx.extractId(fbId) + "/access_tokens";
             return route;
         }
+    },
+    getUserToken: function(){
+        var tmp = this.find(function(model){ return model.isUserToken(); });
+        if (!tmp) return null;
+        else return tmp;
+    },
+
+    hasUserToken: function(){
+        var tmp = this.find(function(model){ return model.isUserToken(); });
+        if (!tmp) return false;
+        else return true;
     }
 });
 

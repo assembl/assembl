@@ -1436,7 +1436,6 @@ Context.prototype = {
         var fbAccount = _.find(accounts, function(account){
             return (account['@type'] === "FacebookAccount");
         });
-        console.log('fbAccount', fbAccount);
         if (fbAccount) {
             return fbAccount['@id'];
         }
