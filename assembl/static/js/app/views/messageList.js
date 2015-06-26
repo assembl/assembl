@@ -782,6 +782,10 @@ var MessageList = AssemblPanel.extend({
                 //TODO:  This is probably where https://app.asana.com/0/15264711598672/20633284646643 occurs
                 that.ui.messageList.html(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
             } else {
+
+                // dynamically add id to the first view of message to enable take tour
+                $(views[0]).attr('id', 'tour_step_1');
+
                 that.ui.messageList.html(views);
             }
             that.scrollToPreviousScrollTarget();
@@ -1446,6 +1450,8 @@ var MessageList = AssemblPanel.extend({
         return Promise.join(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.getId()),
             function (subviews, sibblingsviews, messageFullModel) {
 
+
+
             view = new MessageFamilyView({
                 model: messageFullModel,
                 messageListView: that,
@@ -1458,6 +1464,7 @@ var MessageList = AssemblPanel.extend({
             //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
             //view.hasChildren = (subviews.length > 0);
             list.push(view.render().el);
+
             view.$('.messagelist-children').append(subviews);
 
             /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.

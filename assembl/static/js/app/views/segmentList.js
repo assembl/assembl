@@ -69,6 +69,12 @@ var SegmentView = Marionette.ItemView.extend({
     onRender: function () {
         Ctx.initTooltips(this.$el);
         Ctx.convertUrlsToLinks(this.ui.postItFooter);
+
+        if( !_.isUndefined(this.model.get('firstInlist')) ){
+
+            this.$el.attr('id', 'tour_step_3');
+        }
+
     },
 
     onDragStart: function (ev) {
@@ -143,6 +149,12 @@ var SegmentView = Marionette.ItemView.extend({
 var SegmentListView = Marionette.CollectionView.extend({
     childView: SegmentView,
     initialize: function (options) {
+
+        if(this.collection.models.length){
+            var firstelm = this.collection.models[0];
+            firstelm.attributes.firstInlist = true;
+        }
+
         this.childViewOptions = {
             allUsersCollection: options.allUsersCollection,
             allMessagesCollection: options.allMessagesCollection,
