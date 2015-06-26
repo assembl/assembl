@@ -127,7 +127,7 @@
     @include no-selection;
   }
   @include z-index("float");
-  height: 40px;
+  height: #{$theme_header_height};
   padding: 0; /* required for minimized state */
   position: relative;
   background-color: $theme_header_panel;
