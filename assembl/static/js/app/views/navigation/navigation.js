@@ -42,7 +42,7 @@ var NavigationView = AssemblPanel.extend({
         ideaFromIdealist: '.js_addIdeaFromIdeaList',
         level: 'div.second-level',
         visualization_tab: '#visualization_tab',
-        synthesis_tab: '#synthesis_tab'
+        synthesis_tab: '.js_synthesis_tab'
     },
     events: {
         'click @ui.navigation': 'toggleMenuByEvent',
