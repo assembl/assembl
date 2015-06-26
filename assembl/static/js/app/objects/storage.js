@@ -55,7 +55,7 @@ var storage = Marionette.Object.extend({
     getDateOfLastViewSave: function () {
         var lastSave = this._store.getItem(this.getStoragePrefix() + 'lastViewSave');
         if (lastSave) {
-            return new Date(lastSave);
+            return new Date(parseInt(lastSave));
         }
     },
 
