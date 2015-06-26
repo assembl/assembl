@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-26 10:08-0400\n"
+"POT-Creation-Date: 2015-06-26 11:06-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,11 +64,11 @@ msgstr ""
 msgid "SYNTHESIS: "
 msgstr ""
 
-#: assembl/static/js/app/routeManager.js:204
+#: assembl/static/js/app/routeManager.js:221
 msgid "You must be logged in to access this page."
 msgstr ""
 
-#: assembl/static/js/app/routeManager.js:226
+#: assembl/static/js/app/routeManager.js:243
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr ""
 
@@ -2002,6 +2002,15 @@ msgstr ""
 
 #: assembl/templates/views/messageSend.tmpl:26
 msgid "Your message will be posted:"
+msgstr ""
+
+#: assembl/templates/views/messageSend.tmpl:27
+#, python-format
+msgid "Under the idea \"%s\""
+msgstr ""
+
+#: assembl/templates/views/messageSend.tmpl:29
+msgid "In the general conversation"
 msgstr ""
 
 #: assembl/templates/views/messageSend.tmpl:31

@@ -24,9 +24,9 @@
           <div class="messageSend-target txt-gray1">
               <% if(reply_idea) { %>
                 <p class="mvxs">{{gettext('Your message will be posted:')}}</p>
-                <label class="mbxs dispib"><input type="radio" class="vat man mrxs" name="messageSend-target-idea" value="<%= reply_idea.getId() %>" checked /><%= i18n.sprintf(i18n.gettext('Under the idea "%s"'), reply_idea.getShortTitleDisplayText()) %></label>
+                <label class="mbxs dispib"><input type="radio" class="vat man mrxs" name="messageSend-target-idea" value="<%= reply_idea.getId() %>" checked /><%= i18n.sprintf("{{gettext('Under the idea "%s"')}}", reply_idea.getShortTitleDisplayText()) %></label>
                 <br/>
-                <label class="mbxs dispib"><input type="radio" class="vat man mrxs" name="messageSend-target-idea" value="" /><%= i18n.gettext('In the general conversation') %></label>
+                <label class="mbxs dispib"><input type="radio" class="vat man mrxs" name="messageSend-target-idea" value="" />{{ gettext('In the general conversation') }}</label>
               <% } else if ( reply_message_id ) { %>
                 <p>{{gettext('Your message will be posted as a child of the previous message.')}}</p>
               <% } else { %>
