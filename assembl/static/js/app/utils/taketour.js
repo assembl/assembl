@@ -11,7 +11,7 @@ var Taketour = {
                 target: "tour_step_0",
                 placement: "right",
                 title: i18n.gettext("Welcome!"),
-                content: i18n.gettext("Hi, I’m the community manager for this discussion. We’ve created a 30 second tour to help you get started using Assembl")
+                content: i18n.gettext("Welcome to this discussion. We’ve created a 30 second tour to help you get started using Assembl")
             },
             {
                 target: "tour_step_1",

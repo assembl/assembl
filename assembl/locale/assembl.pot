@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-26 09:52-0400\n"
+"POT-Creation-Date: 2015-06-26 10:08-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,8 +186,8 @@ msgstr ""
 
 #: assembl/static/js/app/utils/taketour.js:14
 msgid ""
-"Hi, I’m [insert name], I’m the community manager for this discussion. We’ve "
-"created a 30 second tour to help you get started using Assembl"
+"Welcome to this discussion. We’ve created a 30 second tour to help you get "
+"started using Assembl"
 msgstr ""
 
 #: assembl/static/js/app/utils/taketour.js:19
