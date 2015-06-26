@@ -18,7 +18,17 @@ var Taketour = {
                 placement: "left",
                 title: i18n.gettext("Join the discussion"),
                 content: i18n.gettext("This is the conversation panel, where the discussion takes place. You can reply to messages directly, or create an entirely new message by clicking ‘react to the discussion’ at the bottom of the panel."),
-                xOffset: 20
+                xOffset: 20,
+                onNext: function() {
+                    // this should be a onBeforShow on next step...
+                    var element = document.getElementById('tour_step_2');
+                    while (element && element.className.split(' ').indexOf('panel-body') < 0) {
+                        element = element.parentNode;
+                    }
+                    if (element) {
+                        element.scrollTop = 0;
+                    }
+                }
             },
             {
                 target: "tour_step_2",
@@ -26,7 +36,7 @@ var Taketour = {
                 title: i18n.gettext("Customize your view"),
                 content: i18n.gettext("You can view the discussion in many different ways using the filters at the top, or under ‘more options’ in each message."),
                 yOffset: -20,
-                xOffset: 40
+                xOffset: 30
             },
             {
                 target: "tour_step_3",
