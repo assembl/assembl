@@ -47,6 +47,7 @@ var Taketour = {
                 target: "tour_step_5",
                 placement: "bottom",
                 title: i18n.gettext("Catch up on what’s been said"),
+                yOffset: -15,
                 content: i18n.gettext("Periodically an executive summary of the discussion is created to give you a quick overview of what was said since the last executive summary")
             },
             {
