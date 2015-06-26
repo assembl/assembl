@@ -1,4 +1,4 @@
-#groupsContainer {
+#groupContainer > .groupsContainer {
   position: absolute;
   top: $theme_header_height;
   right: 0;
@@ -13,10 +13,14 @@
   }
 }
 
-#groupsContainer.hasNotification {
+#groupContainer > .groupsContainer.hasNotification {
   position: absolute;
   top: $theme_header_height + 39px;
   @include calc(height, "100% - #{$theme_header_height} - 39px");
+}
+
+.popin-body > .groupsContainer {
+  height: 70vh;
 }
 
 .groupContent {

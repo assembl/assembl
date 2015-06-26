@@ -238,7 +238,7 @@ _:-ms-input-placeholder, :root .groupBody.editable .groupPanel header ~ .panelCo
   //height: 100vh; need hack safari
 }
 
-#groupsContainer {
+#groupContainer > .groupsContainer {
   width: 100%;
 }
 

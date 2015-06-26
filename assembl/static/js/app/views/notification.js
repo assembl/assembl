@@ -28,7 +28,7 @@ var Notification = Marionette.LayoutView.extend({
 
         var modalView = new Modal();
         $('.popin-container').html(modalView.render().el);
-        this.$('#groupsContainer').addClass('hasNotification');
+        this.$('.groupsContainer').addClass('hasNotification');
     },
 
     closeNotification: function () {
@@ -40,10 +40,10 @@ var Notification = Marionette.LayoutView.extend({
         this.remove();
         this.unbind();
 
-        $('#wrapper #groupsContainer').animate({
+        $('#wrapper .groupsContainer').animate({
             top: '36px'
         }, 500);
-        this.$('#groupsContainer').removeClass('hasNotification');
+        this.$('.groupsContainer').removeClass('hasNotification');
     }
 });
 

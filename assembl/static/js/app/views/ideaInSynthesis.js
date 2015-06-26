@@ -268,7 +268,13 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
         if (!setResult) {
           throw new Error("Unable to set currentIdea on modal Group");
         }
-        var modal = new ModalGroup({model: groupSpecModel});
+        var modal_title_template = i18n.gettext("Exploring idea \"%s\"");
+        console.log("modal_title_template:", modal_title_template);
+        var modal_title = null;
+        if ( modal_title_template )
+          modal_title = i18n.sprintf(i18n.gettext("Exploring idea \"%s\""), this.model.getLongTitleDisplayText() );
+        console.log("modal_title:", modal_title);
+        var modal = new ModalGroup({"model": groupSpecModel, "title": modal_title});
         Assembl.slider.show(modal);
       }
     },

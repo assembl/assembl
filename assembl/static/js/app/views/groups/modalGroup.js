@@ -20,10 +20,14 @@ var ModalGroup = Backbone.Modal.extend({
 
   keyControl: false,
 
+  title: null,
+
   /** Takes a groupSpec as model
    * 
    */
-  initialize: function () {
+  initialize: function (options) {
+    if ( options && "title" in options )
+      this.title = options.title;
     this.$('.bbm-modal').addClass('popin');
     var groupSpecCollection = new groupSpec.Collection([this.model]);
     this.groupsView = new GroupContainer({
@@ -38,6 +42,12 @@ var ModalGroup = Backbone.Modal.extend({
   onRender: function() {
     this.groupsView.render();
     this.$('.popin-body').html(this.groupsView.el);
+  },
+
+  serializeData: function(){
+    return {
+      "title": this.title
+    };
   },
 
   getGroupContentView: function() {

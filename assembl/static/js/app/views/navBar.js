@@ -302,8 +302,8 @@ var navBar = Marionette.LayoutView.extend({
 
             },
             scrollToRight: function () {
-                var right = $('#groupsContainer').width();
-                $('#groupsContainer').animate({
+                var right = $('.groupsContainer').width();
+                $('.groupsContainer').animate({
                     scrollLeft: right
                 }, 1000);
             }
