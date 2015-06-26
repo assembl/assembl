@@ -1,7 +1,7 @@
 {% macro showShareButton() -%}
 <a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_openTargetInPopOver" data-popover-width="300" data-popover-height="71" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
 {%- endmacro %}
-<div class="panel-body" id="tour_step_0">
+<div class="panel-body">
     <% if( idea ) { %>
     <fieldset id="ideaPanel-section-summary" class="panel-section mtn">
         <div id="ideaPanel-shorttitle" class="mbs" data-toggle="tooltip" title="{{gettext('The name of this idea in the table of ideas')}}"></div>
