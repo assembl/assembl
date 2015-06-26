@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-26 11:06-0400\n"
+"POT-Creation-Date: 2015-06-26 14:16-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -201,57 +201,78 @@ msgid ""
 "‘react to the discussion’ at the bottom of the panel."
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:25
+#: assembl/static/js/app/utils/taketour.js:26
 msgid "Customize your view"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:26
+#: assembl/static/js/app/utils/taketour.js:27
 msgid ""
 "You can view the discussion in many different ways using the filters at the "
 "top, or under ‘more options’ in each message."
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:31
+#: assembl/static/js/app/utils/taketour.js:34
 msgid "Find messages easily"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:32
+#: assembl/static/js/app/utils/taketour.js:35
 msgid ""
 "Excerpts from these messages are harvested and are organized to help you find"
 " messages you are interested in. Click on ‘see in context’ to view the "
 "message related to the excerpt."
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:37
+#: assembl/static/js/app/utils/taketour.js:42
 msgid "Navigate quickly through the conversations"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:38
+#: assembl/static/js/app/utils/taketour.js:43
 msgid ""
 "You can find the topics that are currently being discussed in this table of "
 "contents. Clicking on a topic will filter the conversation to only show "
 "messages that have been harvested under that topic."
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:43
+#: assembl/static/js/app/utils/taketour.js:49
 msgid "Catch up on what’s been said"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:44
+#: assembl/static/js/app/utils/taketour.js:50
 msgid ""
 "Periodically an executive summary of the discussion is created to give you a "
 "quick overview of what was said since the last executive summary"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:49
+#: assembl/static/js/app/utils/taketour.js:55
 msgid "Stay informed"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:50
+#: assembl/static/js/app/utils/taketour.js:56
 msgid ""
 "Notifications are set to go to your email. If you aren’t receiving them, make"
 " sure to check your spam folder! You can update your notification settings "
 "here."
+msgstr ""
+
+#: assembl/static/js/app/utils/taketour.js:71
+msgid "Next"
+msgstr ""
+
+#: assembl/static/js/app/utils/taketour.js:72
+msgid "Back"
+msgstr ""
+
+#: assembl/static/js/app/utils/taketour.js:73
+msgid "Done"
+msgstr ""
+
+#: assembl/static/js/app/utils/taketour.js:74
+msgid "Skip"
+msgstr ""
+
+#: assembl/static/js/app/utils/taketour.js:75
+#: assembl/templates/views/groupModal.tmpl:9
+msgid "Close"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:77
@@ -386,6 +407,12 @@ msgstr ""
 msgid "You did not type a response yet..."
 msgstr ""
 
+#: assembl/static/js/app/views/ideaInSynthesis.js:274
+#: assembl/static/js/app/views/ideaInSynthesis.js:278
+#, python-format
+msgid "Exploring idea \"%s\""
+msgstr ""
+
 #: assembl/static/js/app/views/ideaList.js:174
 #: assembl/templates/views/create-group.tmpl:42
 #: assembl/templates/views/ideaList.tmpl:8
@@ -446,7 +473,7 @@ msgid "Send your comment"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaPanel.js:280
-#: assembl/static/js/app/views/messageList.js:1102
+#: assembl/static/js/app/views/messageList.js:1106
 msgid "You need to type a comment first..."
 msgstr ""
 
@@ -509,30 +536,30 @@ msgstr ""
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1099
+#: assembl/static/js/app/views/messageList.js:1103
 #: assembl/static/js/app/views/messageSend.js:109
 #: assembl/templates/do_password_change.jinja2:18
 #: assembl/templates/request_password_change.jinja2:26
 msgid "Send"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1100
+#: assembl/static/js/app/views/messageList.js:1104
 msgid "Subject"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1101
+#: assembl/static/js/app/views/messageList.js:1105
 msgid "Add a subject above and start a new topic here"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1103
+#: assembl/static/js/app/views/messageList.js:1107
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1535
+#: assembl/static/js/app/views/messageList.js:1542
 msgid "Send to clipboard"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1537
+#: assembl/static/js/app/views/messageList.js:1544
 #: assembl/static/js/app/views/messageSend.js:108
 #: assembl/templates/styleguide/components/Dialogs.jinja2:119
 #: assembl/templates/views/adminPartnerEditForm.tmpl:65
@@ -546,16 +573,16 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1568
+#: assembl/static/js/app/views/messageList.js:1575
 #, python-format
 msgid "This extract was organized in the idea \"%s\" by the facilitator of the debate"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1571
+#: assembl/static/js/app/views/messageList.js:1578
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:2277
+#: assembl/static/js/app/views/messageList.js:2284
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
@@ -831,18 +858,18 @@ msgstr ""
 msgid "Only include posts created after the last synthesis."
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:249
-#: assembl/static/js/app/views/segmentList.js:293
-#: assembl/static/js/app/views/segmentList.js:296
+#: assembl/static/js/app/views/segmentList.js:261
+#: assembl/static/js/app/views/segmentList.js:305
+#: assembl/static/js/app/views/segmentList.js:308
 #: assembl/templates/views/create-group.tmpl:85
 msgid "Clipboard"
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:296
+#: assembl/static/js/app/views/segmentList.js:308
 msgid "empty"
 msgstr ""
 
-#: assembl/static/js/app/views/segmentList.js:462
+#: assembl/static/js/app/views/segmentList.js:474
 msgid "Are you sure you want to empty your entire clipboard?"
 msgstr ""
 
@@ -1682,10 +1709,6 @@ msgstr ""
 msgid "Receive notifications"
 msgstr ""
 
-#: assembl/templates/views/groupModal.tmpl:9
-msgid "Close"
-msgstr ""
-
 #: assembl/templates/views/helperDebate.tmpl:4
 msgid "Pick a topic and start contributing"
 msgstr ""
@@ -2314,24 +2337,24 @@ msgstr ""
 msgid "This is not a valid email"
 msgstr ""
 
-#: assembl/views/api/post.py:60 assembl/views/api/post.py:393
+#: assembl/views/api/post.py:60 assembl/views/api/post.py:394
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr ""
 
-#: assembl/views/api/post.py:140
+#: assembl/views/api/post.py:141
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:147
+#: assembl/views/api/post.py:148
 msgid "Getting non-orphan posts isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:208
+#: assembl/views/api/post.py:209
 msgid "You must be logged in to view which posts are read"
 msgstr ""
 
-#: assembl/views/api/post.py:376
+#: assembl/views/api/post.py:377
 msgid "Your message is empty"
 msgstr ""
 
