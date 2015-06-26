@@ -165,8 +165,25 @@ var routeManager = Marionette.Object.extend({
             var groupsView = new GroupContainer({
                 collection: groupSpecs
             });
-            var lastSave = Storage.getDateOfLastViewSave();
-            if (!lastSave
+            var lastSave = Storage.getDateOfLastViewSave(),
+                currentUser = Ctx.getCurrentUser();
+            if (lastSave && !lastSave.getDate()) {
+                // case of Invalid Date
+                lastSave = null;
+            }
+            if (!lastSave && (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))) {
+                var collectionManager = CollectionManager();
+                collectionManager.getAllIdeasCollectionPromise().then(function(ideas) {
+                    ideas = ideas.getRootIdea().getChildren();
+                    if (ideas.length) {
+                        ideas = _.sortBy(ideas, function(i) {
+                            return i.get('order')
+                        });
+                        Assembl.vent.trigger('DEPRECATEDideaList:selectIdea', ideas[0].id);
+                    }
+                });
+            }
+            else if (!lastSave
                 || (Date.now() - lastSave.getTime() > (7 * 24 * 60 * 60 * 1000))
                 ) {
                 /* Reset the context of the user view, if it's too old to be
