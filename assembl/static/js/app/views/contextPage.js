@@ -1464,37 +1464,60 @@ var ContextPage = Marionette.LayoutView.extend({
             collectionManager.getAllSynthesisCollectionPromise(),
 
             function (DiscussionModel, AllPartner, allMessageStructureCollection, allSynthesisCollection) {
+                try {
+                    var partnerInstigator =  AllPartner.find(function (partner) {
+                        return partner.get('is_initiator');
+                    });
 
-            var partnerInstigator =  AllPartner.find(function (partner) {
-                return partner.get('is_initiator');
-            });
+                    /*
+                    From Marionette doc for LayoutView:
+                    <<
+                    Once you've rendered the layoutView, you now have direct access
+                    to all of the specified regions as region managers.
 
-            var introduction = new Introduction({
-                model: DiscussionModel
-            });
-            that.getRegion('introductions').show(introduction);
+                    layoutView.getRegion('menu').show(new MenuView());
+                    >>
+                    This means layoutView.getRegion('...').show(...) has to be called after the layoutview has been rendered.
+                    So it has to be called in an onRender() method, or in an onBeforeShow() or onShow() method.
+                    But when the page http://localhost:6543/sandbox/posts/local%3AContent%2F568 is accessed using Chromium, we get this error:
+                    TypeError: Cannot read property 'show' of undefined
+                    So, getRegion() does not seem to always find the region, why?
+                    This current onBeforeShow() method seems to be called twice, so maybe the view is destroyed or replaced before getting the result of the promise.
+                    This answer http://stackoverflow.com/questions/25070398/re-rendering-of-backbone-marionette-template-on-trigger-event suggests that we should use listeners instead.
+                    We may have to dig in this direction. Until then, and because the view is rendered correctly the second time, we simply ignore the problem, using a try/catch.
+                    */
 
-            var instigator = new Instigator({
-                model: partnerInstigator
-            });
-            that.getRegion('instigator').show(instigator);
+                    var introduction = new Introduction({
+                        model: DiscussionModel
+                    });
+                    that.getRegion('introductions').show(introduction);
 
-            that.getRegion('statistics').show(new Statistics());
+                    var instigator = new Instigator({
+                        model: partnerInstigator
+                    });
+                    that.getRegion('instigator').show(instigator);
 
-            var synthesis = new Synthesis({
-                allMessageStructureCollection: allMessageStructureCollection,
-                allSynthesisCollection: allSynthesisCollection
-            });
-            that.getRegion('synthesis').show(synthesis);
+                    that.getRegion('statistics').show(new Statistics());
 
-            var partners = new PartnerList({
-                nbOrganisations: _.size(AllPartner),
-                collection: AllPartner
-            });
-            that.getRegion('organizations').show(partners);
+                    var synthesis = new Synthesis({
+                        allMessageStructureCollection: allMessageStructureCollection,
+                        allSynthesisCollection: allSynthesisCollection
+                    });
+                    that.getRegion('synthesis').show(synthesis);
 
-        });
+                    var partners = new PartnerList({
+                        nbOrganisations: _.size(AllPartner),
+                        collection: AllPartner
+                    });
+                    that.getRegion('organizations').show(partners);
 
+                } catch(e){
+                    console.log("Aborting rendering of ContextPanel's regions, probably because the view was replaced since.");
+                    //console.log("Here is the error:");
+                    //console.log(e);
+                }
+            }
+        );
     }
 
 });
