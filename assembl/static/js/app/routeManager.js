@@ -39,7 +39,7 @@ var routeManager = Marionette.Object.extend({
 
     home: function () {
         Ctx.isNewUser();
-        this.restoreViews();
+        this.restoreViews(true);
     },
 
     edition: function () {
@@ -154,7 +154,7 @@ var routeManager = Marionette.Object.extend({
         Ctx.loadCsrfToken(true);
     },
 
-    restoreViews: function () {
+    restoreViews: function (from_home) {
         Assembl.headerRegions.show(new NavBar());
         /**
          * Render the current group of views
@@ -165,13 +165,17 @@ var routeManager = Marionette.Object.extend({
             var groupsView = new GroupContainer({
                 collection: groupSpecs
             });
+            if (!from_home) {
+                activate_tour = false;
+            }
             var lastSave = Storage.getDateOfLastViewSave(),
                 currentUser = Ctx.getCurrentUser();
             if (lastSave && !lastSave.getDate()) {
                 // case of Invalid Date
                 lastSave = null;
             }
-            if (!lastSave && (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))) {
+            if (from_home && !lastSave && (
+                    currentUser.isUnknownUser() || currentUser.get('is_first_visit'))) {
                 var collectionManager = CollectionManager();
                 collectionManager.getAllIdeasCollectionPromise().then(function(ideas) {
                     ideas = ideas.getRootIdea().getChildren();

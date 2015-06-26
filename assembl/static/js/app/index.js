@@ -33,7 +33,10 @@ if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE){
     if(activate_tour && (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))){
         // start take tour due to the dom latencies
         setTimeout(function(){
-            Taketour.init();
+            // may have been disabled by the router
+            if (activate_tour) {
+                Taketour.init();
+            }
         }, 4000);
     }
 }
