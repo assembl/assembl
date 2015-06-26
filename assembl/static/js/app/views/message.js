@@ -1039,9 +1039,12 @@ var MessageView = Marionette.ItemView.extend({
      * @return {null}
      */
     exportToFacebook: function(event) {
+      //Create an Event Aggregator for the export module
+      var vent = _.extend({}, Backbone.Events);
       var modal = new messageExport({
         model: this.model,
-        messageView: this
+        messageView: this,
+        vent: vent
       });
       $('#slider').html(modal.render().el);
   }
