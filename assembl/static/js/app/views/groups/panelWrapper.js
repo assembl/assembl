@@ -333,7 +333,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
         this.$el.addClass("animating");
     },
 
-    animateTowardsPixels: function (pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units, skip_animation) {
+    animateTowardsPixels: function (pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units, total_pixels, skip_animation) {
         var that = this;
         var animationDuration = 1000;
         var panelContents = this.$el.children(".panelContents");

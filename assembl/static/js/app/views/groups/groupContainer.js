@@ -113,18 +113,26 @@ var groupContainer = Marionette.CollectionView.extend({
         if (isNaN(num_units))
             console.log("error in num_units");
         this.useCurrentSize(); // get current sizes and override min/% with current size
-        var window_width = window.innerWidth;
         var total_min_size = this.calculateMinWidth();
         if (isNaN(total_min_size))
             console.log("error in total_min_size");
-        var total_pixel_size = total_min_size + extra_pixels + min_idea_pixels;
-        var unit_pixels = (window_width - extra_pixels) / num_units;
+        //var total_pixel_size = total_min_size + extra_pixels + min_idea_pixels;
+        
+        var total_pixels = null;
+        if ( this.$el.parent() && this.$el.parent().attr("id") == "groupContainer" ){ // is it the main groupContainer or an inner one? (case of a popin)
+            //console.log("we are in the main groupContainer case");
+            total_pixels = window.innerWidth;
+        } else {
+            //console.log("we are in the inner groupContainer case");
+            total_pixels = this.$el.parent() && this.$el.parent().width();
+        }
+        var unit_pixels = (total_pixels - extra_pixels) / num_units;
         // console.log("window_width:", window_width);
         // console.log("total_pixel_size:", total_pixel_size);
         // console.log("total_min_size:", total_min_size, "extra_pixels:", extra_pixels, "min_idea_pixels:", min_idea_pixels);
         // console.log("num_units:", num_units);
         // console.log("unit_pixels", unit_pixels);
-        this.animateTowardsPixels(unit_pixels, 100.0 / num_units, extra_pixels, num_units, skip_animation); // reestablish min_pixels, and % width based on param. (remove size)
+        this.animateTowardsPixels(unit_pixels, 100.0 / num_units, extra_pixels, num_units, total_pixels, skip_animation); // reestablish min_pixels, and % width based on param. (remove size)
     },
 
 
@@ -170,9 +178,9 @@ var groupContainer = Marionette.CollectionView.extend({
         return min_width;
     },
 
-    animateTowardsPixels: function (pixels_per_unit, percent_per_unit, extra_pixels, num_units, skip_animation) {
+    animateTowardsPixels: function (pixels_per_unit, percent_per_unit, extra_pixels, num_units, total_pixels, skip_animation) {
         this.children.each(function (child) {
-            child.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, skip_animation);
+            child.animateTowardsPixels(pixels_per_unit, percent_per_unit, extra_pixels, num_units, total_pixels, skip_animation);
         });
     }
 

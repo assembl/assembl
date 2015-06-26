@@ -126,13 +126,13 @@ var groupContent = Marionette.CompositeView.extend({
         this.$el.addClass("animating");
     },
 
-    animateTowardsPixels: function (pixels_per_unit, percent_per_unit, extra_pixels, num_units, skip_animation) {
+    animateTowardsPixels: function (pixels_per_unit, percent_per_unit, extra_pixels, num_units, total_pixels, skip_animation) {
         var that = this,
             group_extra_pixels = this.getExtraPixels(false),
             group_units = this.calculateGridSize(),
             myCorrection = group_extra_pixels - (extra_pixels * group_units / num_units),
             width = (100 * group_units / num_units) + "%",
-            target = window.innerWidth * group_units / num_units,
+            target = total_pixels * group_units / num_units,
             group_min_size = this.calculateMinWidth(),
             animationDuration = 1000;
 
@@ -174,7 +174,7 @@ var groupContent = Marionette.CompositeView.extend({
         this.children.each(function (panelWrapper) {
             if (panelWrapper.model.get('hidden'))
                 return;
-            panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, group_extra_pixels, num_units, group_units, skipAnimation);
+            panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, group_extra_pixels, num_units, group_units, total_pixels, skipAnimation);
         });
     },
 
