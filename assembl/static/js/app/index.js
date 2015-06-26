@@ -32,7 +32,7 @@ if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE){
 
     var collectionManager = new CollectionManager(),
         currentUser = Ctx.getCurrentUser();
-    if(currentUser.isUnknownUser() || currentUser.get('is_first_visit')){
+    if(activate_tour && (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))){
         // start take tour due to the dom latencies
         setTimeout(function(){
             Taketour.init();
