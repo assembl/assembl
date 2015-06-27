@@ -72,7 +72,7 @@ var SegmentView = Marionette.ItemView.extend({
 
         if( !_.isUndefined(this.model.get('firstInlist')) ){
 
-            this.$el.attr('id', 'tour_step_3');
+            this.$el.attr('id', 'tour_step_segment');
         }
 
     },

@@ -784,7 +784,7 @@ var MessageList = AssemblPanel.extend({
             } else {
 
                 // dynamically add id to the first view of message to enable take tour
-                $(views[0]).attr('id', 'tour_step_1');
+                $(views[0]).attr('id', 'tour_step_message');
 
                 that.ui.messageList.html(views);
             }
