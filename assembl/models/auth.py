@@ -1115,7 +1115,7 @@ class LocalUserRole(DiscussionBoundBase):
 
     crud_permissions = CrudPermissions(
         P_SELF_REGISTER, P_READ, P_ADMIN_DISC, P_ADMIN_DISC,
-        P_SELF_REGISTER, P_SELF_REGISTER)
+        P_SELF_REGISTER, P_SELF_REGISTER, P_READ)
 
     @classmethod
     def user_can_cls(cls, user_id, operation, permissions):
