@@ -14,13 +14,13 @@ PyLD==0.6.8
 PyStemmer==1.3.0
 Pygments==2.0.2
 SPARQLWrapper==1.6.4
-SQLAlchemy==1.0.5
+SQLAlchemy==1.0.6
 Sphinx==1.3.1
 Unidecode==0.04.18
 WebOb==1.4.1
 WebTest==2.0.18
 Werkzeug==0.10.4
-alabaster==0.7.5
+alabaster==0.7.6
 -e git+https://github.com/imaginationforpeople/alembic.git#egg=alembic
 amqp==1.4.6
 anyjson==0.3.3
@@ -66,14 +66,14 @@ paramiko==1.15.2
 pinocchio==0.4.2
 polib==1.0.6
 premailer==2.9.2
-py==1.4.28
+py==1.4.30
 pyOpenSSL==0.15.1
 pyasn1==0.1.8
 pycparser==2.14
 pycrypto==2.6.1
 -e git+https://github.com/michaelherold/pyIsEmail@v1.3.0#egg=pyIsEmail
 dnspython==1.12.0   # must come after pyisemail?
-pylibmc==1.4.3
+pylibmc==1.5.0
 -e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 pyparsing==2.0.3
 pygraphviz==1.2
@@ -86,7 +86,7 @@ pyramid-jinja2==2.5
 pyramid-mailer==0.14.1
 pyramid-mako==1.0.2
 pyramid-tm==0.12
-pytest==2.7.1
+pytest==2.7.2
 pytest-cov==1.8.1
 pytest-localserver==0.3.4
 pytest-mock==0.6.0
@@ -109,7 +109,7 @@ simplejson==3.7.3
 six==1.9.0
 snowballstemmer==1.2.0
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
-sphinx-bootstrap-theme==0.4.6
+sphinx-bootstrap-theme==0.4.7
 splinter==0.7.2
 supervisor==3.1.3
 tornado==4.2
