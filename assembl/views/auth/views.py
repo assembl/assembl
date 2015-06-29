@@ -578,14 +578,18 @@ def velruse_login_complete_view(request):
     verified_email = None
     if 'verifiedEmail' in velruse_profile:
         verified_email = velruse_profile['verifiedEmail']
+        idp_account.email = verified_email
         if verified_email in email_accounts and provider.trust_emails:
             email_account = email_accounts[verified_email]
             if email_account.preferred:
                 idp_account.preferred = True
             email_account.delete()
-    for email_d in velruse_profile.get('emails', []):
+    for num, email_d in enumerate(velruse_profile.get('emails', [])):
         if isinstance(email_d, dict):
             email = email_d['value']
+            if num == 0 and not idp_account.email and provider.trust_emails:
+                # pick the first email. Only if we are going to trust it.
+                idp_account.email = email
             if email in email_accounts:
                 email_account = email_accounts[email]
                 if provider.trust_emails or email_account.verified:
@@ -593,12 +597,14 @@ def velruse_login_complete_view(request):
                         idp_account.preferred = True
                     email_account.delete()
             elif verified_email != email:
-                # create an unverified email account.
-                email = EmailAccount(
-                    email=email,
-                    profile=profile
-                )
-                session.add(email)
+                if email != idp_account.email:
+                    # create an email account for other emails.
+                    email = EmailAccount(
+                        email=email,
+                        profile=profile,
+                        verified=provider.trust_emails
+                    )
+                    session.add(email)
             else:
                 if email_d.get('preferred', False):
                     # maybe TODO: make the idp_account preferred,
