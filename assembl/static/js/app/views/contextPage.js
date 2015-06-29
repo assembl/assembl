@@ -119,6 +119,21 @@ var Statistics = Marionette.ItemView.extend({
         this.draw();
     },
 
+    // this has been implemented for analysis only (this should not be called in production)
+    messagesPerDayToCsv: function() {
+        if ( !this.messages_per_day_for_line_graph || !this.messages_per_day_for_line_graph.length ){
+            console.log("no data");
+            return;
+        }
+        var s = "day,messages";
+        this.messages_per_day_for_line_graph.forEach(function(el){
+            var date_s = el.date.toISOString();
+            date_s = date_s.substring(0, date_s.indexOf('T'));
+            s += "\n" + date_s + "," + el.value;
+        });
+        return s;
+    },
+
     draw: function () {
         // -----
         // show results
@@ -129,7 +144,16 @@ var Statistics = Marionette.ItemView.extend({
         var stats = this.stats;
         var t = this.lineChartIsCumulative ? i18n.gettext("Evolution of the total number of messages") : i18n.gettext("Evolution of the number of messages posted");
         this.ui.statistics.html("<h2>" + i18n.gettext("Statistics") + "</h2><p class='stats_messages'>" + t + "</p>");
+
+        if ( false ){ // for analysis only
+            var csv = this.messagesPerDayToCsv();
+            console.log("messages per day:");
+            console.log(csv);
+        }
+
         this.drawLineGraph(this.messages_per_day_for_line_graph);
+
+
         this.drawPieChart(this.pie_chart_data, this.pie_chart_default_legend_data, this.legend_squares_data);
     },
 
