@@ -329,6 +329,7 @@ def root_post_1(request, participant1_user, discussion, test_session):
     p = Post(
         discussion=discussion, creator=participant1_user,
         subject=u"a root post", body=u"post body",
+        creation_date=datetime(year=2000, month=1, day=1),
         type="post", message_id="msg1")
     test_session.add(p)
     test_session.flush()
@@ -350,6 +351,7 @@ def discussion2_root_post_1(request, participant1_user, discussion2, test_sessio
     p = Post(
         discussion=discussion2, creator=participant1_user,
         subject=u"a root post", body=u"post body",
+        creation_date=datetime(year=2000, month=1, day=2),
         type="post", message_id="msg1")
     test_session.add(p)
     test_session.flush()
@@ -369,6 +371,7 @@ def synthesis_post_1(request, participant1_user, discussion, test_session, synth
         discussion=discussion, creator=participant1_user,
         subject=u"a synthesis post", body=u"post body (unused, it's a synthesis...)",
         message_id="msg1",
+        creation_date=datetime(year=2000, month=1, day=3),
         publishes_synthesis = synthesis_1)
     test_session.add(p)
     test_session.flush()
@@ -391,6 +394,7 @@ def reply_post_1(request, participant2_user, discussion,
     p = Post(
         discussion=discussion, creator=participant2_user,
         subject=u"re1: root post", body=u"post body",
+        creation_date=datetime(year=2000, month=1, day=4),
         type="post", message_id="msg2")
     test_session.add(p)
     test_session.flush()
@@ -415,6 +419,7 @@ def reply_post_2(request, participant1_user, discussion,
     p = Post(
         discussion=discussion, creator=participant1_user,
         subject=u"re2: root post", body=u"post body",
+        creation_date=datetime(year=2000, month=1, day=5),
         type="post", message_id="msg3")
     test_session.add(p)
     test_session.flush()
