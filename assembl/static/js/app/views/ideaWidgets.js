@@ -25,6 +25,7 @@ var IdeaWidgets = Marionette.ItemView.extend({
     // overwritten properties and methods
 
     template: '#tmpl-ideaPanelWidgets',
+    className: 'tac',
     initialize: function (options) {
         //console.log("IdeaWidgets::initialize()");
         if (!this.model) {

@@ -35,7 +35,7 @@ SessionApp.directive('comments', ['$http', '$rootScope', 'UtilsService', functio
                         var user_id = com.idCreator.split('/')[1];
 
                         com.date = moment(com.date).fromNow();
-                        com.avatar = '/user/id/'+ user_id +'/avatar/20';
+                        com.avatar = '/user/id/'+ user_id +'/avatar/30';
 
                         comments.push(com);
                     })

@@ -5,21 +5,20 @@
   margin: 0 auto;
   padding-top: 20px;
   .session-comment {
-    padding: 1.24em 0 0 0;
+    padding: 0;
     height: 660px;
     overflow-y: auto;
     .thumbnail{
       border:none;
+      background: transparent;
     }
     .sub-comment {
-      //border: 1px solid #CCCCCC;
       margin-right: 5px;
       .text-comment {
-        height: 24px;
-        border-radius: 0;
+        border-radius: 3px;
         resize : none;
         overflow-y: hidden;
-        width: 96%;
+        width: 100%;
         border: none;
         vertical-align: top;
         &:focus {
@@ -67,14 +66,14 @@
         margin:0;
       }
       .commentToSubIdea {
-        .media-comment {
-          border-bottom: 1px solid #ffffff;
-        }
         .showCommentSubIdea {
           color:#c7c2dd;
           cursor:pointer;
           font-weight: bold;
         }
+      }
+      .options-comment{
+         margin-bottom: 10px;
       }
     }
     .icon-lamp {
@@ -101,7 +100,18 @@
       margin-top: 0px;
     }
 
+    .user-comment{
+        background-color: #ebeaea;
+        border-radius: 4px;
+        padding: 5px;
+    }
+
+    .time{
+       font-size: 12px;
+    }
+
   }
+
   .session-cards{
     width: auto;
     font-size: 12px;

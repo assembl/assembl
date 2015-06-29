@@ -9,6 +9,7 @@ HomeModule.controller('HomeController', [
     'UtilsService',
     '$http',
     'growl',
+
     function($scope, config, CardGameService, $timeout, $sce, UtilsService, $http, growl) {
 
         $scope.widget = config;
@@ -46,7 +47,7 @@ HomeModule.controller('HomeController', [
                 angular.forEach(response.data, function (item) {
                     if (item.widget_add_post_endpoint) {
                         item.widget_add_post_endpoint = UtilsService.getURL(_.values(item.widget_add_post_endpoint));
-                        item.creationDate = moment(item.creationDate).fromNow();
+                        item.creationDate = moment(new Date(item.creationDate)).fromNow();
                         ideas.push(item);
                     }
                 });
@@ -65,7 +66,7 @@ HomeModule.controller('HomeController', [
 
                 });
 
-                $scope.ideas = ideas.reverse();
+                $scope.ideas = ideas;
             });
         }
 
@@ -131,7 +132,8 @@ HomeModule.controller('HomeController', [
                 //console.log('$scope.displayed_card_index', $scope.displayed_card_index)
             }
 
-        }
+        },
+
 
         /**
          * Due to the latency to init $rootScope we need a delay

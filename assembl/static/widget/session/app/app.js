@@ -13,22 +13,11 @@ var SessionApp = angular.module('appSession', [
     'mgcrea.ngStrap.datepicker']);
 
 
-SessionApp.run(['$rootScope', '$state', '$stateParams', 'IdeaService',
-    function($rootScope, $state, $stateParams, IdeaService) {
+SessionApp.run(['$rootScope', '$state', '$stateParams',
+    function($rootScope, $state, $stateParams) {
 
-        /*$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState) {
-
-            if(toParams.idea){
-
-                var id =  toParams.idea.split('/')[1],
-                    ideaService = IdeaService.get({id: id}).$promise;
-
-                ideaService.then(function(idea){
-                    $rootScope.idea = idea;
-                })
-            }
-
-        });*/
+        var locale = window.navigator.userLanguage || window.navigator.language;
+        moment.locale(locale);
 
         // Make state information available to $rootScope, and thus $scope in our controllers
         $rootScope.$state = $state;
@@ -58,7 +47,6 @@ SessionApp.config(['$resourceProvider', '$stateProvider', '$urlRouterProvider','
                 templateUrl: 'index.html'
              }
            }
-
         });
 
     $translateProvider.useStaticFilesLoader({

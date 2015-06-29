@@ -45,13 +45,17 @@
             <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'firstToPost'| translate}}</p>
         </div>
         <div class="session-comment">
-            <div class="media" ng-if="ideas.length > 0" ng-repeat="idea in ideas">
+            <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:reverse ">
                 <div class="pull-left thumbnail">
                     <img class="media-object" ng-src="{{idea.avatar}}" alt="30x30" style="width: 30px; height: 30px;">
                 </div>
                 <div class="media-body">
-                    <h5 class="media-heading pull-left">{{idea.username}}</h5>&nbsp;
-                    <span class="pull-left"><i class="icon-lamp"></i>{{idea.shortTitle}}</span>
+                    <div>
+                        <h5 class="media-heading">{{idea.username}}</h5>
+                        <i class="text-info time">{{idea.creationDate}}</i>
+                    </div>
+                    <div><h4>{{idea.shortTitle}}</h4></div>
+                    <span class="pull-left"><i class="icon-lamp"></i></span>
                     <span class="pull-right">
                         <!-- Vote directive -->
                         <vote idea="idea" widget="widget"></vote>
@@ -59,10 +63,8 @@
                     <div class="row">
                         <div class="col-md-12 comment-idea">
                             <p>{{idea.definition}}</p>
-                            <i class="text-info">{{idea.creationDate}}</i>
                         </div>
                     </div>
-
                     <!-- Comments directive -->
                     <comments idea="idea"></comments>
                 </div>
