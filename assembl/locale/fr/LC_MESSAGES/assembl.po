@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-26 14:16-0400\n"
-"PO-Revision-Date: 2015-06-26 15:08+0000\n"
+"POT-Creation-Date: 2015-06-29 05:40-0400\n"
+"PO-Revision-Date: 2015-06-26 18:30+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language-Team: French "
 "(http://www.transifex.com/projects/p/assembl/language/fr/)\n"
@@ -70,11 +70,11 @@ msgstr "Quelqu'un répond directement à un de vos messages"
 msgid "SYNTHESIS: "
 msgstr "SYNTHÈSE: "
 
-#: assembl/static/js/app/routeManager.js:221
+#: assembl/static/js/app/routeManager.js:225
 msgid "You must be logged in to access this page."
 msgstr "Vous devez être connecté pour accéder à cette page."
 
-#: assembl/static/js/app/routeManager.js:243
+#: assembl/static/js/app/routeManager.js:247
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr ""
 "Votre niveau de permissions ne vous permet pas de voir le reste ce de "
@@ -220,11 +220,11 @@ msgstr ""
 "répondre à chaque message ou créer un nouveau message en cliquant sur "
 "“Lancez un nouveau sujet de discussion” tout en bas du panneau. "
 
-#: assembl/static/js/app/utils/taketour.js:26
+#: assembl/static/js/app/utils/taketour.js:36
 msgid "Customize your view"
 msgstr "Choisissez votre vue"
 
-#: assembl/static/js/app/utils/taketour.js:27
+#: assembl/static/js/app/utils/taketour.js:37
 msgid ""
 "You can view the discussion in many different ways using the filters at "
 "the top, or under ‘more options’ in each message."
@@ -233,11 +233,11 @@ msgstr ""
 "des filtres ou en cliquant sur “plus d’options” en haut à droite de "
 "chaque message. "
 
-#: assembl/static/js/app/utils/taketour.js:34
+#: assembl/static/js/app/utils/taketour.js:44
 msgid "Find messages easily"
 msgstr "Repérez en un clin d’oeil les meilleures citations"
 
-#: assembl/static/js/app/utils/taketour.js:35
+#: assembl/static/js/app/utils/taketour.js:45
 msgid ""
 "Excerpts from these messages are harvested and are organized to help you "
 "find messages you are interested in. Click on ‘see in context’ to view "
@@ -248,11 +248,11 @@ msgstr ""
 "Cliquez sur “voir dans son contexte d’origine” pour identifier le message"
 " dont l’extrait est tiré."
 
-#: assembl/static/js/app/utils/taketour.js:42
+#: assembl/static/js/app/utils/taketour.js:52
 msgid "Navigate quickly through the conversations"
 msgstr "Utilisez cette table des idées comme outil de navigation"
 
-#: assembl/static/js/app/utils/taketour.js:43
+#: assembl/static/js/app/utils/taketour.js:53
 msgid ""
 "You can find the topics that are currently being discussed in this table "
 "of contents. Clicking on a topic will filter the conversation to only "
@@ -263,11 +263,11 @@ msgstr ""
 " messages échangés par la communauté mentionnant ce thème et ses sous-"
 "thèmes."
 
-#: assembl/static/js/app/utils/taketour.js:49
+#: assembl/static/js/app/utils/taketour.js:59
 msgid "Catch up on what’s been said"
 msgstr "Ayez un aperçu rapide de l’état de la discussion"
 
-#: assembl/static/js/app/utils/taketour.js:50
+#: assembl/static/js/app/utils/taketour.js:61
 msgid ""
 "Periodically an executive summary of the discussion is created to give "
 "you a quick overview of what was said since the last executive summary"
@@ -275,11 +275,11 @@ msgstr ""
 "À périodes régulières, une synthèse de la discussion est produite "
 "résumant ce qui a évolué dans le débat sur la dernière période. "
 
-#: assembl/static/js/app/utils/taketour.js:55
+#: assembl/static/js/app/utils/taketour.js:66
 msgid "Stay informed"
 msgstr "Restez informés"
 
-#: assembl/static/js/app/utils/taketour.js:56
+#: assembl/static/js/app/utils/taketour.js:67
 msgid ""
 "Notifications are set to go to your email. If you aren’t receiving them, "
 "make sure to check your spam folder! You can update your notification "
@@ -289,23 +289,23 @@ msgstr ""
 "pour vous inscrire). Si vous ne les recevez pas, vérifiez vos spams ! "
 "Vous pouvez choisir ici vos options de notification (fréquence, etc.)."
 
-#: assembl/static/js/app/utils/taketour.js:71
+#: assembl/static/js/app/utils/taketour.js:83
 msgid "Next"
 msgstr "Suivant"
 
-#: assembl/static/js/app/utils/taketour.js:72
+#: assembl/static/js/app/utils/taketour.js:84
 msgid "Back"
 msgstr "Retour"
 
-#: assembl/static/js/app/utils/taketour.js:73
+#: assembl/static/js/app/utils/taketour.js:85
 msgid "Done"
 msgstr "Terminé"
 
-#: assembl/static/js/app/utils/taketour.js:74
+#: assembl/static/js/app/utils/taketour.js:86
 msgid "Skip"
 msgstr "Sauter"
 
-#: assembl/static/js/app/utils/taketour.js:75
+#: assembl/static/js/app/utils/taketour.js:87
 #: assembl/templates/views/groupModal.tmpl:9
 msgid "Close"
 msgstr "Fermer"
@@ -315,111 +315,111 @@ msgstr "Fermer"
 msgid "No synthesis of the discussion has been published yet"
 msgstr "Aucune synthèse de cette discussion n'a été publiée"
 
-#: assembl/static/js/app/views/contextPage.js:130
+#: assembl/static/js/app/views/contextPage.js:145
 msgid "Evolution of the total number of messages"
 msgstr "Évolution du nombre total de messages"
 
-#: assembl/static/js/app/views/contextPage.js:130
+#: assembl/static/js/app/views/contextPage.js:145
 msgid "Evolution of the number of messages posted"
 msgstr "Évolution du nombre de messages postés"
 
-#: assembl/static/js/app/views/contextPage.js:131
+#: assembl/static/js/app/views/contextPage.js:146
 #: assembl/templates/views/navigation.tmpl:25
 #: assembl/templates/views/statistics.tmpl:5
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: assembl/static/js/app/views/contextPage.js:428
+#: assembl/static/js/app/views/contextPage.js:452
 msgid "messages"
 msgstr "messages"
 
-#: assembl/static/js/app/views/contextPage.js:656
-#: assembl/static/js/app/views/contextPage.js:668
+#: assembl/static/js/app/views/contextPage.js:680
+#: assembl/static/js/app/views/contextPage.js:692
 msgid "messages, posted by"
 msgstr "messages, postés par"
 
-#: assembl/static/js/app/views/contextPage.js:821
+#: assembl/static/js/app/views/contextPage.js:845
 msgid "Not enough data yet."
 msgstr "Pas encore de données disponibles."
 
-#: assembl/static/js/app/views/contextPage.js:881
+#: assembl/static/js/app/views/contextPage.js:905
 msgid "last week"
 msgstr "la semaine dernière"
 
-#: assembl/static/js/app/views/contextPage.js:884
+#: assembl/static/js/app/views/contextPage.js:908
 msgid "last 2 weeks"
 msgstr "les 2 dernières semaines"
 
-#: assembl/static/js/app/views/contextPage.js:887
+#: assembl/static/js/app/views/contextPage.js:911
 msgid "last month"
 msgstr "le mois dernier"
 
-#: assembl/static/js/app/views/contextPage.js:890
+#: assembl/static/js/app/views/contextPage.js:914
 msgid "last 3 months"
 msgstr "les 3 derniers mois"
 
-#: assembl/static/js/app/views/contextPage.js:893
+#: assembl/static/js/app/views/contextPage.js:917
 msgid "last 6 months"
 msgstr "les 6 derniers mois"
 
-#: assembl/static/js/app/views/contextPage.js:896
+#: assembl/static/js/app/views/contextPage.js:920
 msgid "last year"
 msgstr "l'année dernière"
 
-#: assembl/static/js/app/views/contextPage.js:1048
+#: assembl/static/js/app/views/contextPage.js:1072
 #, python-format
 msgid "%d participant has contributed in the %s"
 msgid_plural "%d participants have contributed in the %s"
 msgstr[0] "%d participant a contribué pendant %s"
 msgstr[1] "%d participants ont contribué pendant %s"
 
-#: assembl/static/js/app/views/contextPage.js:1057
+#: assembl/static/js/app/views/contextPage.js:1081
 #, python-format
 msgid "%d new participant started contributing in the %s"
 msgid_plural "%d new participants started contributing in the %s"
 msgstr[0] "%d nouveau participant a commencé à contribuer pendant %s"
 msgstr[1] "%d nouveaux participants ont commencé à contribuer pendant %s"
 
-#: assembl/static/js/app/views/contextPage.js:1067
+#: assembl/static/js/app/views/contextPage.js:1091
 #, python-format
 msgid "%d active participant had contributed before %s"
 msgid_plural "%d active participants had contributed before %s"
 msgstr[0] "%d contributeur avait contribué lors %s et demeure toujours actif."
 msgstr[1] "%d contributeurs avaient contribué avant %s et demeurent toujours actifs."
 
-#: assembl/static/js/app/views/contextPage.js:1080
+#: assembl/static/js/app/views/contextPage.js:1104
 #, python-format
 msgid "%d participant's last contribution was prior to %s"
 msgid_plural "%d participants' last contribution was prior to %s"
 msgstr[0] "La dernière contribution de %d participant date d'avant %s"
 msgstr[1] "La dernière contribution de %d participants date d'avant %s"
 
-#: assembl/static/js/app/views/contextPage.js:1095
+#: assembl/static/js/app/views/contextPage.js:1119
 #, python-format
 msgid "%d participant has contributed since the beginning of the discussion"
 msgid_plural "%d participants have contributed since the beginning of the discussion"
 msgstr[0] "%d participant a contribué depuis le début de la discussion"
 msgstr[1] "%d participants ont contribué depuis le début de la discussion"
 
-#: assembl/static/js/app/views/contextPage.js:1107
+#: assembl/static/js/app/views/contextPage.js:1131
 msgid "Contributors active recently"
 msgstr "Participants actifs récemment"
 
-#: assembl/static/js/app/views/contextPage.js:1111
+#: assembl/static/js/app/views/contextPage.js:1135
 msgid "Contributors inactive recently"
 msgstr "Participants non actifs récemment"
 
-#: assembl/static/js/app/views/contextPage.js:1343
+#: assembl/static/js/app/views/contextPage.js:1367
 #: assembl/templates/views/introductions.tmpl:22
 msgid "Context"
 msgstr "Contexte"
 
-#: assembl/static/js/app/views/contextPage.js:1349
+#: assembl/static/js/app/views/contextPage.js:1373
 #: assembl/templates/views/introductions.tmpl:37
 msgid "Discussion objectives"
 msgstr "Objectifs de la discussion"
 
-#: assembl/static/js/app/views/contextPage.js:1446
+#: assembl/static/js/app/views/contextPage.js:1470
 msgid "Home"
 msgstr "Accueil"
 
@@ -1141,7 +1141,7 @@ msgstr "Vous avez déjà un compte ?"
 msgid "Email or username"
 msgstr "Courriel ou identifiant"
 
-#: assembl/templates/login.jinja2:88 assembl/views/auth/views.py:747
+#: assembl/templates/login.jinja2:88 assembl/views/auth/views.py:753
 msgid "Log in"
 msgstr "Se connecter"
 
@@ -2215,6 +2215,9 @@ msgid "Help"
 msgstr "Aide"
 
 #: assembl/templates/views/navBarRight.tmpl:13
+msgid "Join this discussion"
+msgstr "Rejoignez la discussion"
+
 #: assembl/templates/views/navBarRight.tmpl:19
 #: assembl/templates/views/userSubscriber.tmpl:13
 msgid "Join this group"
@@ -2489,7 +2492,7 @@ msgid "The username %s is already used"
 msgstr "L'identifiant %s est déjà pris"
 
 #: assembl/views/api/agent.py:113 assembl/views/auth/views.py:235
-#: assembl/views/auth/views.py:943
+#: assembl/views/auth/views.py:949
 msgid "The passwords are not identical"
 msgstr "Les mots de passe ne correspondent pas"
 
@@ -2498,26 +2501,26 @@ msgstr "Les mots de passe ne correspondent pas"
 msgid "This is not a valid email"
 msgstr "Ce n'est pas une adresse de courriel valide"
 
-#: assembl/views/api/post.py:60 assembl/views/api/post.py:394
+#: assembl/views/api/post.py:60 assembl/views/api/post.py:393
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr "Aucune discussion trouvée avec l'id=%s"
 
-#: assembl/views/api/post.py:141
+#: assembl/views/api/post.py:140
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr ""
 "Il n'est pas possible d'obtenir les messages orphelins d'une idée "
 "spécifique."
 
-#: assembl/views/api/post.py:148
+#: assembl/views/api/post.py:147
 msgid "Getting non-orphan posts isn't supported."
 msgstr "Il n'est pas (encore) possible d'obtenir les messages non-orphelins."
 
-#: assembl/views/api/post.py:209
+#: assembl/views/api/post.py:208
 msgid "You must be logged in to view which posts are read"
 msgstr "Vous devez être connecté pour voir quels messages ont été lus"
 
-#: assembl/views/api/post.py:377
+#: assembl/views/api/post.py:376
 msgid "Your message is empty"
 msgstr "Votre message est vide"
 
@@ -2537,7 +2540,7 @@ msgstr ""
 "Désolé, cette adresse courriel existe déjà. Veuillez en choisir une autre"
 " ou retourner à la page de connexion."
 
-#: assembl/views/auth/views.py:426 assembl/views/auth/views.py:845
+#: assembl/views/auth/views.py:426 assembl/views/auth/views.py:851
 msgid "This user cannot be found"
 msgstr "Cet utilisateur n'a pas été trouvé"
 
@@ -2545,11 +2548,11 @@ msgstr "Cet utilisateur n'a pas été trouvé"
 msgid "Invalid user and password"
 msgstr "Utilisateur et mot de passe invalides."
 
-#: assembl/views/auth/views.py:648 assembl/views/auth/views.py:808
+#: assembl/views/auth/views.py:654 assembl/views/auth/views.py:814
 msgid "Confirmation requested"
 msgstr "Confirmation requise"
 
-#: assembl/views/auth/views.py:649 assembl/views/auth/views.py:809
+#: assembl/views/auth/views.py:655 assembl/views/auth/views.py:815
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your"
 " inbox in a few minutes. Please follow the confirmation link in order to "
@@ -2559,16 +2562,16 @@ msgstr ""
 "qu'il n'arrive dans votre boite de réception que dans quelques minutes.\n"
 "Veuillez cliquer sur le lien pour valider votre adresse courriel."
 
-#: assembl/views/auth/views.py:686
+#: assembl/views/auth/views.py:692
 msgid "Wrong email token."
 msgstr "Mauvais jeton de courriel."
 
-#: assembl/views/auth/views.py:703
+#: assembl/views/auth/views.py:709
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr "L'adresse email <%s> est déjà confirmée"
 
-#: assembl/views/auth/views.py:736
+#: assembl/views/auth/views.py:742
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
@@ -2577,34 +2580,34 @@ msgstr ""
 "Votre adresse email %s a bien été confirmée, et vous êtes maintenant "
 "abonné(e) aux notifications par défaut de la discussion."
 
-#: assembl/views/auth/views.py:741
+#: assembl/views/auth/views.py:747
 #, python-format
 msgid "Your email address %s has been confirmed, you can now log in."
 msgstr ""
 "Votre adresse email %s a bien été confirmée, vous pouvez maintenant vous "
 "identifier."
 
-#: assembl/views/auth/views.py:748
+#: assembl/views/auth/views.py:754
 msgid "Your account is now active!"
 msgstr "Votre compte est maintenant actif !"
 
-#: assembl/views/auth/views.py:762
+#: assembl/views/auth/views.py:768
 msgid "Login failed, try again"
 msgstr "Échec de connexion, veuillez réessayer."
 
-#: assembl/views/auth/views.py:816
+#: assembl/views/auth/views.py:822
 msgid "We do not know about this email."
 msgstr "Nous ne connaissons pas ce courriel."
 
-#: assembl/views/auth/views.py:835 assembl/views/auth/views.py:846
+#: assembl/views/auth/views.py:841 assembl/views/auth/views.py:852
 msgid "I forgot my password"
 msgstr "Mot de passe oublié ?"
 
-#: assembl/views/auth/views.py:879
+#: assembl/views/auth/views.py:885
 msgid "Password change requested"
 msgstr "Changement de mot de passe requis"
 
-#: assembl/views/auth/views.py:880
+#: assembl/views/auth/views.py:886
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
@@ -2613,33 +2616,33 @@ msgstr ""
 " Veuillez utiliser ce lien pour vous connecter et changer votre mot de "
 "passe."
 
-#: assembl/views/auth/views.py:902
+#: assembl/views/auth/views.py:908
 msgid "Wrong password token."
 msgstr "Jeton invalide"
 
-#: assembl/views/auth/views.py:907
+#: assembl/views/auth/views.py:913
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 "Ce jeton n'est plus valide. Voulez-vous que nous vous en renvoyons un "
 "autre?"
 
-#: assembl/views/auth/views.py:919
+#: assembl/views/auth/views.py:925
 msgid "Change your password"
 msgstr "Changer votre mot de passe"
 
-#: assembl/views/auth/views.py:950
+#: assembl/views/auth/views.py:956
 msgid "Password changed"
 msgstr "Mot de passe modifié"
 
-#: assembl/views/auth/views.py:962
+#: assembl/views/auth/views.py:968
 msgid "email"
 msgstr "courriel"
 
-#: assembl/views/auth/views.py:964
+#: assembl/views/auth/views.py:970
 msgid "account"
 msgstr "compte"
 
-#: assembl/views/auth/views.py:965
+#: assembl/views/auth/views.py:971
 msgid ""
 "Hello, ${name}, and welcome to ${assembl}!\n"
 "\n"
@@ -2660,7 +2663,7 @@ msgstr ""
 "Cordialement,\n"
 "L'équipe ${assembl}"
 
-#: assembl/views/auth/views.py:972
+#: assembl/views/auth/views.py:978
 msgid ""
 "<p>Hello, ${name}, and welcome to ${assembl}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">click here to confirm your email "
@@ -2674,7 +2677,7 @@ msgstr ""
 "\n"
 "<p>Cordialement,<br />L'équipe ${assembl}</p>"
 
-#: assembl/views/auth/views.py:977
+#: assembl/views/auth/views.py:983
 msgid ""
 "Hello, ${name}!\n"
 "\n"
@@ -2694,7 +2697,7 @@ msgstr ""
 "Cordialement,\n"
 "L'équipe ${assembl}"
 
-#: assembl/views/auth/views.py:984
+#: assembl/views/auth/views.py:990
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">click here to confirm your new email"
@@ -2708,15 +2711,15 @@ msgstr ""
 "\n"
 "<p>Cordialement,<br />L'équipe ${assembl}</p>"
 
-#: assembl/views/auth/views.py:1000
+#: assembl/views/auth/views.py:1006
 msgid "Please confirm your ${confirm_what} with ${assembl}"
 msgstr "Veuillez confirmer votre ${confirm_what} auprès de ${assembl}"
 
-#: assembl/views/auth/views.py:1022
+#: assembl/views/auth/views.py:1028
 msgid "Request for password change"
 msgstr "Requête de changement de mot de passe"
 
-#: assembl/views/auth/views.py:1026
+#: assembl/views/auth/views.py:1032
 msgid ""
 "Hello, ${name}!\n"
 "We have received a request to change the password on your ${assembl} "
@@ -2742,7 +2745,7 @@ msgstr ""
 "Cordialement,\n"
 "L'équipe ${assembl}\n"
 
-#: assembl/views/auth/views.py:1036
+#: assembl/views/auth/views.py:1042
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>We have received a request to change the password on your ${assembl} "
