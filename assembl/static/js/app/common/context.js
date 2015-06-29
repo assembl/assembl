@@ -1349,9 +1349,10 @@ Context.prototype = {
             user = this.getCurrentUser();
             user.fetch({
                 success: function(model, resp) {
-                    //that.setCurrentUser(user);
-                    user.fetchPermissionsToScriptTag();
-                    user.toScriptTag('current-user-json');
+                    that.setCurrentUser(user);
+                    user.fetchPermissions();
+                    //user.fetchPermissionsToScriptTag();
+                    //user.toScriptTag('current-user-json');
                     that.loadCsrfToken(true);
                 }
             });
