@@ -2,13 +2,19 @@ SessionApp.directive('comments', ['$http', '$rootScope', 'UtilsService', functio
     return {
         restrict:'E',
         scope: {
-            idea:'=idea'
+            idea:'=idea',
+            widget:'=widget'
         },
         templateUrl: 'app/shared/directives/comments/comments.html',
         link: function($scope, element){
 
             $scope.formData = {};
             $scope.comments = [];
+
+            // when the session end up, switch to read only mode
+            if($scope.widget.settings.endDate){
+                $scope.readOnly = new Date().getTime() > new Date($scope.widget.settings.endDate).getTime();
+            }
 
             $scope.$watch('message', function(value){
 

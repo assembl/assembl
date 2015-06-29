@@ -1,5 +1,6 @@
 <div class="options-comment">
-    <span><a ng-init="displayBox=false" ng-click="displayBox = !displayBox">Commenter</a></span>&nbsp; <span><a ng-init="showComments=true" ng-click="showComments = !showComments"><i class="fa fa-comment-o"></i>&nbsp;{{comments.length}}</a></span>
+    <span><a ng-init="displayBox=false" ng-click="displayBox = !displayBox" ng-hide="readOnly">Commenter</a></span>&nbsp;
+    <span><a ng-init="showComments=true" ng-click="showComments = !showComments"><i class="fa fa-comment-o"></i>&nbsp;{{comments.length}}</a></span>
 </div>
 <div class="sub-comment" ng-show="displayBox">
     <form ng-submit="commentSubIdea()">
@@ -13,7 +14,6 @@
 <div style="clear: right;"></div>
 
 <div class="commentToSubIdea" ng-show="showComments">
-    <!--<span class="showCommentSubIdea" ng-show="comments.length > 0">{{'comments' | translate}}</span>-->
 
     <div class="media media-comment" ng-if="comments.length > 0" ng-repeat="com in comments">
         <a class="pull-left" href="#">
@@ -21,7 +21,7 @@
         </a>
         <div class="media-body">
             <div>
-                <h5 class="media-heading">{{com.username}}</h5>
+                <h6 class="media-heading">{{com.username}}</h6>
                 <i class="text-info time">{{com.date}}</i>
             </div>
             <div>{{com.body}}</div>

@@ -27,7 +27,7 @@
                 </p>
             </div>
         </div>
-        <div class="card-comment">
+        <div class="card-comment" ng-hide="readOnly">
             <form role="form" ng-submit="sendSubIdea()">
                 <div class="form-group">
                     <input type="text" ng-model="formData.short_title" class="form-control" id="inputEmail1" placeholder="{{'title' | translate}}" required>
@@ -45,13 +45,13 @@
             <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'firstToPost'| translate}}</p>
         </div>
         <div class="session-comment">
-            <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:reverse ">
+            <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:reverse">
                 <div class="pull-left thumbnail">
                     <img class="media-object" ng-src="{{idea.avatar}}" alt="30x30" style="width: 30px; height: 30px;">
                 </div>
                 <div class="media-body">
                     <div>
-                        <h5 class="media-heading">{{idea.username}}</h5>
+                        <h6 class="media-heading">{{idea.username}}</h6>
                         <i class="text-info time">{{idea.creationDate}}</i>
                     </div>
                     <div><h4>{{idea.shortTitle}}</h4></div>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <!-- Comments directive -->
-                    <comments idea="idea"></comments>
+                    <comments idea="idea" widget="widget"></comments>
                 </div>
             </div>
         </div>

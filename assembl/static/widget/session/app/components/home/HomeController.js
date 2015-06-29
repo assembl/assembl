@@ -17,6 +17,11 @@ HomeModule.controller('HomeController', [
         $scope.displayed_cards = [];
         $scope.displayed_card_index = 0;
 
+        // when the session end up, switch to read only mode
+        if(config.settings.endDate){
+            $scope.readOnly = new Date().getTime() > new Date(config.settings.endDate).getTime();
+        }
+
         $scope.$watch("message", function (value) {
 
             switch (value) {
