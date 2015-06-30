@@ -14,19 +14,6 @@ var GroupStateModel = Base.Model.extend({
   defaults: {
     currentIdea: null
   },
-
-  parse: function (model) {
-    var that = this;
-    if (model.currentIdea !== null) {
-      var currentIdeaId = model.currentIdea
-      var CollectionManager = require('../common/collectionManager.js');
-      var collectionManager = new CollectionManager();
-      model.currentIdea = null;
-      var idea = this.collection.allIdeasCollection.get(currentIdeaId);
-      that.set('currentIdea', idea);
-    }
-    return model;
-  },
   
   toJSON:  function (options) {
     var json = Base.Model.prototype.toJSON.apply(this, arguments);
@@ -53,13 +40,6 @@ var GroupStateModel = Base.Model.extend({
 
 var GroupStates = Base.Collection.extend({
   model: GroupStateModel,
-
-  initialize: function (models, options) {
-    if (!options.allIdeasCollection) {
-      throw new Error("GroupStates.Collection: Passing the allIdeasCollection in options is mandatory");
-    }
-    this.allIdeasCollection = options.allIdeasCollection;
-  },
 
   validate: function () {
     var invalid = [];

@@ -526,17 +526,33 @@ var CollectionManager = Marionette.Controller.extend({
 
     },
 
+    
+    _parseGroupStates: function (models, allIdeasCollection) {
+      var that = this;
+      _.each(models, function(model) {
+        _.each(model.states, function(state) {
+          if (state.currentIdea !== undefined && state.currentIdea !== null) {
+            var currentIdeaId = state.currentIdea;
+            state.currentIdea = allIdeasCollection.get(currentIdeaId);
+          }
+        });
+      });
+      return models;
+    },
+
     /* Gets the stored configuration of groups and panels
      */
     getGroupSpecsCollectionPromise: function (viewsFactory) {
       var that = this;
 
       if (this._allGroupSpecsCollectionPromise === undefined) {
+        //FIXME:  This is slow.  Investigate fetching the single idea and adding it to the collection before fetching the whole collection
         return this.getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
           var collection,
           data = Storage.getStorageGroupItem();
           if (data !== undefined) {
-            collection = new groupSpec.Collection(data, {'parse': true, 'viewsFactory': viewsFactory, 'allIdeasCollection': allIdeasCollection});
+            data = that._parseGroupStates(data, allIdeasCollection);
+            collection = new groupSpec.Collection(data, {parse: true});
             if (!collection.validate()) {
               console.error("getGroupSpecsCollectionPromise(): Collection in local storage is invalid, will return a new one");
               collection = undefined;
@@ -546,6 +562,7 @@ var CollectionManager = Marionette.Controller.extend({
             collection = new groupSpec.Collection();
             var panelSpec = require('../models/panelSpec.js');
             var PanelSpecTypes = require('../utils/panelSpecTypes.js');
+            var groupState = require('../models/groupState.js');
             var defaults = {
                 panels: new panelSpec.Collection([
                                                   {type: PanelSpecTypes.NAV_SIDEBAR.id },
@@ -553,14 +570,14 @@ var CollectionManager = Marionette.Controller.extend({
                                                   {type: PanelSpecTypes.MESSAGE_LIST.id}
                                                   ],
                                                   {'viewsFactory': viewsFactory }),
-                                                  navigationState: 'debate'
+                navigationState: 'debate',
+                states: new groupState.Collection([new groupState.Model()])
             };
-            collection.add(new groupSpec.Model(defaults, {'viewsFactory': viewsFactory }));
+            collection.add(new groupSpec.Model(defaults));
 
           }
-          collection.collectionManager = this;
+          collection.collectionManager = that;
           Storage.bindGroupSpecs(collection);
-
           that._allGroupSpecsCollectionPromise = Promise.resolve(collection);
           return that._allGroupSpecsCollectionPromise;
         });

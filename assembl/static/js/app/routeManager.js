@@ -180,6 +180,9 @@ var routeManager = Marionette.Object.extend({
                 // case of Invalid Date
                 lastSave = null;
             }
+
+            groupsView.render(); //So children can be used
+
             if (from_home && !lastSave && (
                     currentUser.isUnknownUser() || currentUser.get('is_first_visit'))) {
                 var collectionManager = CollectionManager();
@@ -209,8 +212,6 @@ var routeManager = Marionette.Object.extend({
                     });
                 }
             }
-            //console.log(group);
-            groupsView.render(); //So children can be used
 
             Assembl.groupContainer.show(groupsView);
 

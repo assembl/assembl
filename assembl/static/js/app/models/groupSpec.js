@@ -12,17 +12,19 @@ var Base = require('./base.js'),
  * added, the matching views (groupContainerView) will be instanciated
  */
 var GroupSpecModel = Base.Model.extend({
+
   defaults: function () {
-    return {
+    /*console.log(this.allIdeasCollection);
+     return {
     "panels": new panelSpec.Collection(),
-    "states": new groupState.Collection([new groupState.Model()], {allIdeasCollection: this.collection.allIdeasCollection})
-    };
+    "states": new groupState.Collection([new groupState.Model()], {allIdeasCollection: this.allIdeasCollection})
+    };*/
   },
 
   parse: function (model) {
     model.panels = new panelSpec.Collection(model.panels, {parse: true});
     if(model.states && model.states.length > 0) {
-      model.states = new groupState.Collection(model.states, {parse: true, allIdeasCollection: this.collection.allIdeasCollection});
+      model.states = new groupState.Collection(model.states, {parse: true});
     }
     else {
       model.states = this.defaults().states;
@@ -150,13 +152,6 @@ var GroupSpecModel = Base.Model.extend({
 
 var GroupSpecs = Base.Collection.extend({
   model: GroupSpecModel,
-
-  initialize: function (models, options) {
-    if (!options.allIdeasCollection) {
-      throw new Error("GroupSpecs.Collection: Passing the allIdeasCollection in options is mandatory");
-    }
-    this.allIdeasCollection = options.allIdeasCollection;
-  },
 
   validate: function () {
     var invalid = [];

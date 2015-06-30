@@ -26,14 +26,14 @@ def test_load_messages(
     url = "%s/%s/" % (test_server.url, discussion.slug)
     test_session.commit()
     browser.visit(url)
-    assert browser.is_element_present_by_css('.js_navigation', wait_time=1)
+    assert browser.is_element_present_by_css('.js_navigation', wait_time=10)
     accordeon_buttons = browser.find_by_css('.js_navigation')
     accordeon_buttons = {b['data-view']: b for b in accordeon_buttons}
     button = accordeon_buttons[u'debate']
     if not button.has_class('active'):
         button.click()
-    assert browser.is_element_present_by_css('.allMessagesView .idealist-title', wait_time=2)
+    assert browser.is_element_present_by_css('.allMessagesView .idealist-title', wait_time=10)
     all_messages_button = browser.find_by_css('.allMessagesView .idealist-title')
     all_messages_button.click()
-    assert browser.is_element_present_by_css('.message', wait_time=2)
+    assert browser.is_element_present_by_css('.message', wait_time=10)
     assert 20 == len(browser.find_by_css('.message'))

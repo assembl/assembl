@@ -356,9 +356,12 @@ var groupContent = Marionette.CompositeView.extend({
         var model = this.model.getPanelSpecByType(panelSpecType);
         if (model !== undefined) {
             var view = this.children.findByModel(model);
-            if (view == null)
-                return undefined;
-            return view;
+            if (view == null) {
+              return undefined;
+            }
+            else {
+              return view;
+            }
         }
         /*else {
             console.log("findPanelWrapperByType: WARNING: unable to find a wrapper for type", panelSpecType);
