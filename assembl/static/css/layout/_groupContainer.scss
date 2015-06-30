@@ -1,3 +1,9 @@
+#main {
+  height: 100%;
+}
+#groupContainer {
+  height: 100%;
+}
 #groupContainer > .groupsContainer {
   position: absolute;
   top: $theme_header_height;

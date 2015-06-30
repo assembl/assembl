@@ -5,6 +5,7 @@ var Marionette = require('./shims/marionette.js'),
     Ctx = require('./common/context.js'),
     Agents = require('./models/agents.js'),
     Storage = require('./objects/storage.js'),
+    Loader = require('./views/loader.js'),
     NavBar = require('./views/navBar.js'),
     GroupContainer = require('./views/groups/groupContainer.js'),
     PanelSpecTypes = require('./utils/panelSpecTypes.js'),
@@ -160,6 +161,7 @@ var routeManager = Marionette.Object.extend({
      */
     restoreViews: function (from_home) {
         Assembl.headerRegions.show(new NavBar());
+        Assembl.groupContainer.show(new Loader());
         /**
          * Render the current group of views
          * */
