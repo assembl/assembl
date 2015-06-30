@@ -276,6 +276,7 @@
     "MultiCriterionVotingWidget": {
         "@extends": "Widget",
         "criteria_url": true,
+        "votespecs_url": true,
         "votables_url": true,
         "criteria": ":",
         "votable_ideas": ":id_only"
@@ -320,5 +321,24 @@
     "DiscussionMilestone": {
         "@extends": "TimelineEvent",
         "start": true
+    },
+    "AbstractVoteSpecification": {
+        "widget": true,
+        "criterion_idea": true,
+        "question_id": true,
+        "settings": "settings_json",
+        "vote_class": "&get_vote_classname"
+    },
+    "LickertVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "minimum": true,
+        "maximum": true
+    },
+    "MultipleChoiceVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "num_choices": true
+    },
+    "BinaryVoteSpecification": {
+        "@extends": "AbstractVoteSpecification"
     }
 }

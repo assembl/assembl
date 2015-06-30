@@ -49,13 +49,18 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     settings = Column(Text)  # JSON blob
 
     widget = relationship(
-        MultiCriterionVotingWidget, backref="vote_specifications")
+        MultiCriterionVotingWidget, backref=backref(
+            "vote_specifications", cascade="all, delete-orphan"))
     criterion_idea = relationship(
         Idea, backref="criterion_for")
 
     @abstractclassmethod
     def get_vote_class(cls):
         pass
+
+    @classmethod
+    def get_vote_classname(cls):
+        return cls.get_vote_class().__name__
 
     def is_valid_vote(self, vote):
         if not issubclass(vote.__class__, self.get_vote_class()):
@@ -97,6 +102,7 @@ class LickertVoteSpecification(AbstractVoteSpecification):
     maximum = Column(Integer, default=10,
                      info={'rdf': QuadMapPatternS(None, VOTE.max)})
 
+    @classmethod
     def get_vote_class(cls):
         return LickertIdeaVote
 
@@ -111,6 +117,7 @@ class BinaryVoteSpecification(AbstractVoteSpecification):
         'polymorphic_identity': 'binary_vote_specification'
     }
 
+    @classmethod
     def get_vote_class(cls):
         return BinaryIdeaVote
 
@@ -126,6 +133,7 @@ class MultipleChoiceVoteSpecification(AbstractVoteSpecification):
 
     num_choices = Column(Integer, nullable=False)
 
+    @classmethod
     def get_vote_class(cls):
         return MultipleChoiceIdeaVote
 

@@ -140,9 +140,13 @@ from .idea_graph_view import (
 )
 from .votes import (
     AbstractIdeaVote,
+    AbstractVoteSpecification,
     BinaryIdeaVote,
+    BinaryVoteSpecification,
     LickertIdeaVote,
     LickertRange,
+    LickertVoteSpecification,
+    MultipleChoiceVoteSpecification,
 )
 from .annotation import (
     Webpage,

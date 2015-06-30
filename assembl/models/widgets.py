@@ -599,6 +599,11 @@ class MultiCriterionVotingWidget(Widget):
             self.discussion_id, self.id)
 
     @property
+    def votespecs_url(self):
+        return 'local:Discussion/%d/widgets/%d/vote_specifications' % (
+            self.discussion_id, self.id)
+
+    @property
     def votables_url(self):
         return 'local:Discussion/%d/widgets/%d/targets/' % (
             self.discussion_id, self.id)
