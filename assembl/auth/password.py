@@ -24,7 +24,9 @@ def hash_password(password, encoding=HashEncoding.BINARY, salt_size=SALT_SIZE):
     """
     salt = urandom(salt_size)
     hasher = hashlib.new(config.get('security.hash_algorithm') or 'sha256')
-    hasher.update(password)
+    if not isinstance(password, unicode):
+        password = password.decode('utf-8')
+    hasher.update(password.encode('utf-8'))
     hasher.update(salt)
     if encoding == HashEncoding.BINARY:
         return salt + hasher.digest()
@@ -53,7 +55,9 @@ def verify_password(password, hash, encoding=HashEncoding.BINARY,
         raise ValueError()
 
     hasher = hashlib.new(config.get('security.hash_algorithm') or 'sha256')
-    hasher.update(password)
+    if not isinstance(password, unicode):
+        password = password.decode('utf-8')
+    hasher.update(password.encode('utf-8'))
     hasher.update(salt)
     return hasher.digest() == hash
 
