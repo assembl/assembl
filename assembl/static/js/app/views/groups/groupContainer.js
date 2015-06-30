@@ -21,11 +21,6 @@ var groupContainer = Marionette.CollectionView.extend({
         // boilerplate in marionette if you listen m/c here, use collectionEvents or modelEvents
         //this.listenTo(this.collection, 'change reset add remove', this.adjustGridSize);
 
-        // Shouldn't this be in onRender, or better wait until all groups have rendered?
-        // benoitg-2015-05-27
-        setTimeout(function () {
-            that.resizeAllPanels();
-        }, 200);
     },
 
     /*
@@ -39,14 +34,21 @@ var groupContainer = Marionette.CollectionView.extend({
         console.log("getGroupContent(): WRITEME!")
     },
 
-    /*
+    /* NOT YET TESTED - benoitg- 2015-06-29
      * @param viewClass A view (such as a messageList) for
      * which we want the matching groupContent to send events or manipulate
      * state.
      * @return Possibly empty array of panels
      */
-    findPanelInstance: function (viewClass) {
-        console.log("getGroupContent(): WRITEME!")
+    findGroupsWithPanelInstance: function (panelSpecType) {
+        var groups = [];
+        var group = this.children.each(function(group){
+          messageList = group.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+          if (messageList) {
+            groups.push(group);
+          }
+        });
+        return groups;
     },
 
     childViewOptions: function (child, index) {
@@ -55,12 +57,17 @@ var groupContainer = Marionette.CollectionView.extend({
         }
     },
 
-    onRender: function () {
-        if (window.localStorage.getItem('showNotification')) {
-            this.$el.addClass('hasNotification');
-            Assembl.notificationRegion.show(new Notification());
-        }
+    onshow: function() {
+       this.resizeAllPanels();
     },
+
+    onRender: function () {
+      if (window.localStorage.getItem('showNotification')) {
+        this.$el.addClass('hasNotification');
+        Assembl.notificationRegion.show(new Notification());
+      }
+    },
+
     collectionEvents: {
         'reset add remove': 'adjustGridSize'
     },

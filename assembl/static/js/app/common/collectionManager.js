@@ -526,45 +526,48 @@ var CollectionManager = Marionette.Controller.extend({
 
     },
 
-    /* TODO:  Bluebirdify
-     * Gets the stored configuration of groups and panels
+    /* Gets the stored configuration of groups and panels
      */
     getGroupSpecsCollectionPromise: function (viewsFactory) {
-        var deferred = $.Deferred();
+      var that = this;
 
-        if (this._allGroupSpecsCollectionPromise === undefined) {
-            var collection,
-                data = Storage.getStorageGroupItem();
-            if (data !== undefined) {
-                collection = new groupSpec.Collection(data, {'parse': true, 'viewsFactory': viewsFactory});
-                if (!collection.validate()) {
-                    console.error("getGroupSpecsCollectionPromise(): Collection in local storage is invalid, will return a new one");
-                    collection = undefined;
-                }
+      if (this._allGroupSpecsCollectionPromise === undefined) {
+        return this.getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
+          var collection,
+          data = Storage.getStorageGroupItem();
+          if (data !== undefined) {
+            collection = new groupSpec.Collection(data, {'parse': true, 'viewsFactory': viewsFactory, 'allIdeasCollection': allIdeasCollection});
+            if (!collection.validate()) {
+              console.error("getGroupSpecsCollectionPromise(): Collection in local storage is invalid, will return a new one");
+              collection = undefined;
             }
-            if (collection === undefined) {
-                collection = new groupSpec.Collection();
-                var panelSpec = require('../models/panelSpec.js');
-                var PanelSpecTypes = require('../utils/panelSpecTypes.js');
-                var defaults = {
-                    panels: new panelSpec.Collection([
-                            {type: PanelSpecTypes.NAV_SIDEBAR.id },
-                            {type: PanelSpecTypes.IDEA_PANEL.id, minimized: true},
-                            {type: PanelSpecTypes.MESSAGE_LIST.id}
-                        ],
-                        {'viewsFactory': viewsFactory }),
-                    navigationState: 'debate'
-                };
-                collection.add(new groupSpec.Model(defaults, {'viewsFactory': viewsFactory }));
+          }
+          if (collection === undefined) {
+            collection = new groupSpec.Collection();
+            var panelSpec = require('../models/panelSpec.js');
+            var PanelSpecTypes = require('../utils/panelSpecTypes.js');
+            var defaults = {
+                panels: new panelSpec.Collection([
+                                                  {type: PanelSpecTypes.NAV_SIDEBAR.id },
+                                                  {type: PanelSpecTypes.IDEA_PANEL.id, minimized: true},
+                                                  {type: PanelSpecTypes.MESSAGE_LIST.id}
+                                                  ],
+                                                  {'viewsFactory': viewsFactory }),
+                                                  navigationState: 'debate'
+            };
+            collection.add(new groupSpec.Model(defaults, {'viewsFactory': viewsFactory }));
 
-            }
-            collection.collectionManager = this;
-            Storage.bindGroupSpecs(collection);
+          }
+          collection.collectionManager = this;
+          Storage.bindGroupSpecs(collection);
 
-            this._allGroupSpecsCollectionPromise = deferred.promise();
-            deferred.resolve(collection);
-        }
+          that._allGroupSpecsCollectionPromise = Promise.resolve(collection);
+          return that._allGroupSpecsCollectionPromise;
+        });
+      }
+      else {
         return this._allGroupSpecsCollectionPromise;
+      }
     },
 
     getLocalRoleCollectionPromise: function () {

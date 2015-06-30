@@ -15,20 +15,21 @@ var GroupSpecModel = Base.Model.extend({
   defaults: function () {
     return {
     "panels": new panelSpec.Collection(),
-    "states": new groupState.Collection([new groupState.Model()])
+    "states": new groupState.Collection([new groupState.Model()], {allIdeasCollection: this.collection.allIdeasCollection})
     };
   },
-  
+
   parse: function (model) {
     model.panels = new panelSpec.Collection(model.panels, {parse: true});
     if(model.states && model.states.length > 0) {
-      model.states = new groupState.Collection(model.states, {parse: true});
+      model.states = new groupState.Collection(model.states, {parse: true, allIdeasCollection: this.collection.allIdeasCollection});
     }
     else {
       model.states = this.defaults().states;
     }
     return model;
   },
+
   /**
    * @params list of panelSpecTypes
    */
@@ -149,6 +150,14 @@ var GroupSpecModel = Base.Model.extend({
 
 var GroupSpecs = Base.Collection.extend({
   model: GroupSpecModel,
+
+  initialize: function (models, options) {
+    if (!options.allIdeasCollection) {
+      throw new Error("GroupSpecs.Collection: Passing the allIdeasCollection in options is mandatory");
+    }
+    this.allIdeasCollection = options.allIdeasCollection;
+  },
+
   validate: function () {
     var invalid = [];
     this.each(function (groupSpec) {

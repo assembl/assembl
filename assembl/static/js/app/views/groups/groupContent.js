@@ -49,10 +49,12 @@ var groupContent = Marionette.CompositeView.extend({
     setCurrentIdea: function (idea, reason, doScroll) {
       //console.log("setCurrentIdea() fired", idea, reason, doScroll);
       //console.log(this.model);
-
+      //console.log("current state was: ", this.model.get('states').at(0));
       if (idea !== this._getCurrentIdea()) {
         //console.log("About to set current idea on group:", this.cid);
-        this.model.get('states').at(0).set({currentIdea: idea}, {validate: true});
+        //console.log("currentIdea was: ", this.model.get('states').at(0).get('currentIdea'));
+        var setReturn = this.model.get('states').at(0).set({currentIdea: idea}, {validate: true});
+        //console.log("Return was:", setReturn, "currentIdea is now: ", this.model.get('states').at(0).get('currentIdea'));
       }
     },
 
@@ -196,6 +198,15 @@ var groupContent = Marionette.CompositeView.extend({
 
     findNavigationSidebarPanelSpec: function () {
         return this.model.findNavigationSidebarPanelSpec();
+    },
+
+    isSimpleInterface: function () {
+      if(this.findNavigationSidebarPanelSpec()) {
+        return true;
+      }
+      else {
+        return false;
+      }
     },
 
     /**

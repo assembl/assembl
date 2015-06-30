@@ -1200,6 +1200,7 @@ var MessageList = AssemblPanel.extend({
                         });
          */
       }
+      //console.log("onBeforeRender:  template is now:", this.template);
     },
 
     onRender: function () {
@@ -1288,6 +1289,8 @@ var MessageList = AssemblPanel.extend({
         }
         else {
           //console.log("We should have rendered the help message:", this.template);
+          that.renderIsComplete = true;
+          that.trigger("messageList:render_complete", "Render complete");
         }
     },
 
@@ -2137,6 +2140,16 @@ var MessageList = AssemblPanel.extend({
       shouldRecurseMaxMoreTimes = (typeof shouldRecurseMaxMoreTimes === "undefined") ? 3 : shouldRecurseMaxMoreTimes;
       shouldRecurse = shouldRecurseMaxMoreTimes > 0;
 
+
+      if (!this.currentQuery.isQueryValid()) {
+        //It may be that we had no query before
+        this.currentQuery.initialize();
+        if (debug) {
+          console.log("Calling render manually after initializing query");
+        }
+        this.render();
+      }
+
       if (!this.renderIsComplete) {
           // If there is already a render in progress, really weird things
           // can happen.  Wait untill things calm down.
@@ -2196,6 +2209,7 @@ var MessageList = AssemblPanel.extend({
                       that.listenToOnce(that, "messageList:render_complete", success);
                   }
                   else {
+                    console.log("Message not in colllection:  id collection was: ", resultMessageIdCollection);
                     Raven.context(function() {
                       throw new Error("showMessageById:  Message is not in query results, and we are not allowed to recurse");
                       },

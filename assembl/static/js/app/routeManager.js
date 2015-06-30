@@ -7,6 +7,7 @@ var Marionette = require('./shims/marionette.js'),
     Storage = require('./objects/storage.js'),
     NavBar = require('./views/navBar.js'),
     GroupContainer = require('./views/groups/groupContainer.js'),
+    PanelSpecTypes = require('./utils/panelSpecTypes.js'),
     CollectionManager = require('./common/collectionManager.js'),
     ViewsFactory = require('./objects/viewsFactory.js'),
     AdminDiscussion = require('./views/admin/adminDiscussion.js'),
@@ -100,23 +101,22 @@ var routeManager = Marionette.Object.extend({
 
     post: function (id) {
         //TODO: add new behavior to show messageList Panel
-        this.restoreViews();
-
-        // test if this issue fixed
-        Assembl.vent.trigger("navigation:selected", 'debate', { show_help: false });
+      this.restoreViews().then(function(groups) {
+        var firstGroup = groups.children.first();
+        var messageList = firstGroup.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+        if(!messageList) {
+          if(firstGroup.isSimpleInterface()) {
+            Assembl.vent.trigger("navigation:selected", 'debate', { show_help: false });
+          }
+          else {
+            throw new Error("WRITEME:  There was no group with a messagelist available");
+          }
+        }
+        firstGroup.setCurrentIdea(null);
         Assembl.vent.trigger('messageList:showMessageById', id);
 
-        /*setTimeout(function () {
-            //TODO: fix this horrible hack
-            //We really need to address panels explicitely
-            Assembl.vent.trigger("navigation:selected", 'debate');
-            Assembl.vent.trigger('messageList:showMessageById', id);
-        }, 0);*/
-        //TODO: fix this horrible hack that prevents calling
-        //showMessageById over and over.
-        //window.history.pushState('object or string', 'Title', '../');
-        console.log("DEFAULT ");
-        Backbone.history.navigate('/', {replace: true});
+        //Backbone.history.navigate('/', {replace: true});
+      });
     },
 
     idea: function (id) {
@@ -154,6 +154,10 @@ var routeManager = Marionette.Object.extend({
         Ctx.loadCsrfToken(true);
     },
 
+    /**
+     * @param from_home:  If true, the function was called from the home view
+     * @return promise to a GroupContainer
+     */
     restoreViews: function (from_home) {
         Assembl.headerRegions.show(new NavBar());
         /**
@@ -161,7 +165,7 @@ var routeManager = Marionette.Object.extend({
          * */
         var groupSpecsP = this.collectionManager.getGroupSpecsCollectionPromise(ViewsFactory);
 
-        groupSpecsP.done(function (groupSpecs) {
+        return groupSpecsP.then(function (groupSpecs) {
             var groupsView = new GroupContainer({
                 collection: groupSpecs
             });
@@ -204,10 +208,11 @@ var routeManager = Marionette.Object.extend({
                 }
             }
             //console.log(group);
-            //Will the following line work?  The group isn't in the dom yet...
-            // benoitg - 2015-05-28
-            groupsView.resizeAllPanels();
+            groupsView.render(); //So children can be used
+
             Assembl.groupContainer.show(groupsView);
+
+            return groupsView;
         });
     },
 

@@ -22,10 +22,8 @@ var GroupStateModel = Base.Model.extend({
       var CollectionManager = require('../common/collectionManager.js');
       var collectionManager = new CollectionManager();
       model.currentIdea = null;
-      collectionManager.getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
-        var idea = allIdeasCollection.get(currentIdeaId);
-        that.set('currentIdea', idea);
-      });
+      var idea = this.collection.allIdeasCollection.get(currentIdeaId);
+      that.set('currentIdea', idea);
     }
     return model;
   },
@@ -55,6 +53,14 @@ var GroupStateModel = Base.Model.extend({
 
 var GroupStates = Base.Collection.extend({
   model: GroupStateModel,
+
+  initialize: function (models, options) {
+    if (!options.allIdeasCollection) {
+      throw new Error("GroupStates.Collection: Passing the allIdeasCollection in options is mandatory");
+    }
+    this.allIdeasCollection = options.allIdeasCollection;
+  },
+
   validate: function () {
     var invalid = [];
     this.each(function (groupState) {

@@ -50,62 +50,66 @@ var NavigationView = AssemblPanel.extend({
     },
     initialize: function (options) {
         Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
-        var that = this,
-            collectionManager = new CollectionManager();
-
-        $(window).resize(function () {
-            that.setSideBarHeight();
-        });
 
         this._accordionContentHeight = null;
         this._accordionHeightTries = 0;
         this.visualizationItems = new Backbone.Collection();
         this.num_items = 2;
 
-        collectionManager.getDiscussionModelPromise()
-            .then(function(discussion) {
 
-            var settings = discussion.get('settings'),
-                jed;
-
-            try {
-                // temporary hack
-                if (settings.navigation_sections === undefined)
-                    return;
-                var visualization_items = settings.navigation_sections[0].navigation_content.items;
-                if (visualization_items.length === 0)
-                    return;
-                try {
-                    jed = new Jed(settings['translations'][Ctx.getLocale()]);
-                } catch (e) {
-                    // console.error(e);
-                    jed = new Jed({});
-                }
-                that.visualizationItems.reset(_.map(visualization_items, function(item) {
-                    return new Backbone.Model({
-                        "url": item.url,
-                        "title": jed.gettext(item.title),
-                        "description": jed.gettext(item.description)
-                    });
-                }));
-                that.num_items += 1;
-                that.ui.visualization_tab.show();
-            } catch (e) {
-                // console.log(e);
-            }
-        }).delay(500).then(function() {that.setSideBarHeight();});
-        collectionManager.getAllMessageStructureCollectionPromise()
-            .then(function(allMessageStructureCollection) {
-                if (allMessageStructureCollection.getLastSynthesisPost()){
-                  that.num_items += 1;
-                  that.ui.synthesis_tab.show();
-                  that.ui.synthesis_tab[0].id = 'tour_step_synthesis';
-                }
-              }).delay(500).then(function() {that.setSideBarHeight();});
         this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
     },
-    onShow:function () {
-      this.setSideBarHeight();
+    onAttach:function () {
+      var that = this,
+          collectionManager = new CollectionManager();
+
+      $(window).resize(function () {
+        that.setSideBarHeight();
+      });
+
+      collectionManager.getDiscussionModelPromise()
+      .then(function(discussion) {
+
+        var settings = discussion.get('settings'),
+            jed;
+
+        try {
+          // temporary hack
+          if (settings.navigation_sections === undefined)
+            return;
+          var visualization_items = settings.navigation_sections[0].navigation_content.items;
+          if (visualization_items.length === 0)
+            return;
+          try {
+            jed = new Jed(settings['translations'][Ctx.getLocale()]);
+          } catch (e) {
+            // console.error(e);
+            jed = new Jed({});
+          }
+          that.visualizationItems.reset(_.map(visualization_items, function(item) {
+            return new Backbone.Model({
+              "url": item.url,
+              "title": jed.gettext(item.title),
+              "description": jed.gettext(item.description)
+            });
+          }));
+          that.num_items += 1;
+          that.ui.visualization_tab.show();
+        } catch (e) {
+          console.log(e);
+        }
+      }).delay(500).then(function() {
+        that.setSideBarHeight();
+        });
+      
+      collectionManager.getAllMessageStructureCollectionPromise()
+      .then(function(allMessageStructureCollection) {
+        if (allMessageStructureCollection.getLastSynthesisPost()){
+          that.num_items += 1;
+          that.ui.synthesis_tab.show();
+          that.ui.synthesis_tab[0].id = 'tour_step_synthesis';
+        }
+      }).delay(500).then(function() {that.setSideBarHeight();});
     },
     toggleMenuByName: function (itemName, options) {
         var elm = this.$('.nav[data-view=' + itemName + ']');
@@ -118,6 +122,7 @@ var NavigationView = AssemblPanel.extend({
             view = elm.attr('data-view');
         Assembl.vent.trigger("navigation:selected", view);
     },
+
     /**
      * Toggle a navigation accordion item
      * @param  {jQuery selection of a DOM element} elm
@@ -179,17 +184,6 @@ var NavigationView = AssemblPanel.extend({
           });
           this.debate.show(idealist);
           this.getContainingGroup().NavigationResetDebateState();
-          // FIXME: This is absolutely horrible. But I could not find better yet.
-          if ((options !== undefined) && (options.show_help === false)) {
-            var group = this.getContainingGroup(),
-                messageListView = group.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-                messageListView.triggerMethod('messageList:clearAllFilters');
-                // The old currentIdea is not yet set, so setting it to null now fails.
-                setTimeout(function() {
-                    group.setCurrentIdea(null);
-                    messageListView.render();
-                }, 1000);
-          }
           break;
         case 'synthesis':
           var synthesisInNavigationPanel = new SynthesisInNavigationPanel({

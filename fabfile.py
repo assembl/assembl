@@ -188,6 +188,7 @@ def app_reload():
         print(cyan('Asking supervisor to restart %(projectname)s' % env))
         run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
     else:
+        venvcmd("supervisorctl stop dev:")
         #supervisor config file may have changed
         venvcmd("supervisorctl reread")
         venvcmd("supervisorctl update")
