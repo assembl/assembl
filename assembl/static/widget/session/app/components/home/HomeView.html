@@ -45,14 +45,14 @@
             <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'firstToPost'| translate}}</p>
         </div>
         <div class="session-comment">
-            <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:reverse">
+            <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:'creationDate':'reverse' ">
                 <div class="pull-left thumbnail">
                     <img class="media-object img-circle" ng-src="{{idea.avatar}}" alt="30x30" style="width: 30px; height: 30px;">
                 </div>
                 <div class="media-body">
                     <div>
                         <h6 class="media-heading">{{idea.username}}</h6>
-                        <i class="text-info time">{{idea.creationDate}}</i>
+                        <i class="text-info time">{{idea.beautify_date}}</i>
                     </div>
                     <div><h4>{{idea.shortTitle}}</h4></div>
                     <span class="pull-left"><i class="icon-lamp"></i></span>

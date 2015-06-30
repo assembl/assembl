@@ -52,7 +52,7 @@ HomeModule.controller('HomeController', [
                 angular.forEach(response.data, function (item) {
                     if (item.widget_add_post_endpoint) {
                         item.widget_add_post_endpoint = UtilsService.getURL(_.values(item.widget_add_post_endpoint));
-                        item.creationDate = moment(new Date(item.creationDate)).fromNow();
+                        item.beautify_date = moment(new Date(item.creationDate)).fromNow();
                         ideas.push(item);
                     }
                 });
@@ -71,6 +71,9 @@ HomeModule.controller('HomeController', [
 
                 });
 
+                console.debug(ideas)
+
+
                 $scope.ideas = ideas;
             });
         }
@@ -84,13 +87,10 @@ HomeModule.controller('HomeController', [
         $scope.sendSubIdea = function () {
             if ($scope.formData) {
 
-                var rootUrl = UtilsService.getURL($scope.widget.ideas_url);
-                var random_index = angular.element('.random_index');
+                var rootUrl = UtilsService.getURL($scope.widget.ideas_url),
+                    random_index = angular.element('.random_index');
 
                 $scope.formData.type = 'Idea';
-
-                //console.log($scope.formData)
-                //console.log(random_index.val());
 
                 $http({
                     method: 'POST',
