@@ -41,9 +41,11 @@ var groupContainer = Marionette.CollectionView.extend({
      * @return Possibly empty array of panels
      */
     findGroupsWithPanelInstance: function (panelSpecType) {
+        if ( !panelSpecType )
+            panelSpecType = PanelSpecTypes.MESSAGE_LIST;
         var groups = [];
         var group = this.children.each(function(group){
-          messageList = group.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+          messageList = group.findViewByType(panelSpecType);
           if (messageList) {
             groups.push(group);
           }
