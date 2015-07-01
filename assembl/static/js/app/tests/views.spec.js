@@ -4,9 +4,6 @@ var expect = require('chai').expect,
     $ = require('../shims/jquery.js'),
     fixtures = require('fixtures');
 
-
-var expect = chai.expect;
-
 var view,fixNav;
 
 function getView(){
@@ -19,23 +16,26 @@ function getView(){
     return nav;
 }
 
-return describe('Views Specs', function () {
+module.exports = function() {
 
-    describe('Navigation barre', function(){
+    return describe('Views Specs', function () {
 
-        beforeEach(function(){
-            view = getView();
+        describe('Navigation barre', function () {
+
+            beforeEach(function () {
+                view = getView();
+            });
+
+            it('Views should exist', function () {
+                //view.ui.joinDiscussion.click()
+                //expect($('#slider')).to.have.html('<div class="generic-modal popin-wrapper modal-joinDiscussion bbm-wrapper"></div>');
+            });
+
+            afterEach(function () {
+                fixtures.cleanUp();
+            });
+
         });
 
-        it('Views should exist', function () {
-            //view.ui.joinDiscussion.click()
-            //expect($('#slider')).to.have.html('<div class="generic-modal popin-wrapper modal-joinDiscussion bbm-wrapper"></div>');
-        });
-
-        afterEach(function(){
-            fixtures.cleanUp();
-        });
-
-    });
-
-});
+    })
+}

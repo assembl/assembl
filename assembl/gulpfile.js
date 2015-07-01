@@ -18,6 +18,9 @@ var mocha = require('gulp-mocha');
 var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 
+var mochify = require('mochify');
+//var phantomjs = require('phantomjs');
+
 var path = {
         js: 'static/js',
         css: 'static/css'
@@ -113,12 +116,20 @@ gulp.task('libs',['clean:infrastructure'], function() {
 /**
  * Run test
  * */
-gulp.task('tests', function() {
-    return gulp.src(['./assembl/static/js/app/tests/*.spec.js'], {read: false})
+/*gulp.task('tests', function() {
+    return gulp.src([path.js+'/app/tests/*.spec.js'], {read: false})
         .pipe(mocha({
             reporter:'spec'
         }))
-});
+});*/
+
+gulp.task('tests', function() {
+    return mochify(path.js+'/app/tests/*.spec.js', {
+        reporter : 'tap',
+        cover    : true
+    }).bundle();
+
+ });
 
 /**
  * Compile Sass file

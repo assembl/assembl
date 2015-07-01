@@ -43,11 +43,12 @@
 {% block main_js %}
 
 
-<script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine.js"></script>
+<!--<script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine.js"></script>
 <script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine-html.js"></script>
-<script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/boot.js"></script>
+<script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/boot.js"></script>-->
 
-<script data-main="{{ STATIC_URL }}/js/app/init.js" src="{{ STATIC_URL }}/js/bower/requirejs/require.js"></script>
+<script src="{{ STATIC_URL }}/js/build/infrastructure.min.js"></script>
+<script src="{{ STATIC_URL }}/js/app/init.js"></script>
 {% endblock main_js %}
 
 
