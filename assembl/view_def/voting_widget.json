@@ -278,7 +278,7 @@
         "criteria_url": true,
         "votespecs_url": true,
         "votables_url": true,
-        "criteria": ":",
+        "vote_specifications": ":",
         "votable_ideas": ":id_only"
     },
     "AbstractIdeaVote": {
@@ -327,6 +327,7 @@
         "criterion_idea": true,
         "question_id": true,
         "settings": "settings_json",
+        "voting_urls": "&get_voting_urls",
         "vote_class": "&get_vote_classname"
     },
     "LickertVoteSpecification": {

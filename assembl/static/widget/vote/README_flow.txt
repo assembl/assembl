@@ -39,14 +39,19 @@ The configuration panel of a widget instance can be accessed by different ways:
 This configuration page shows a menu with several options.
 
 
-### Set vote criteria
+### Define vote specifications
 
 The URL of this page looks like
-http://localhost:6543/static/widget/vote/?admin=1#/admin/configure_instance_set_criteria?widget_uri=http:%2F%2Flocalhost:6543%2Fdata%2FWidget%2F4&target=local:Idea%2F120
+?http://localhost:6543/static/widget/vote/?admin=1#/admin/configure_instance_set_criteria?widget_uri=http:%2F%2Flocalhost:6543%2Fdata%2FWidget%2F4&target=local:Idea%2F120
 
 This page makes a GET request to the value of the widget_uri parameter, which looks like
 http://localhost:6543/data/Widget/4
-The response is a JSON with fields like "discussion", "criteria_url", "criteria", which are needed by the page.
+The response is a JSON with fields like "discussion", "votespecs_url", which are needed by the page.
+
+The widget successively POSTs json descriptions of the vote specs on the votespecs_url endpoint.
+On return, each of these will have a "voting_urls" field which looks like
+{"local:Idea/120":"local:Discussion/4/widgets/5/vote_specifications/121/vote_targets/120/votes","local:Idea/184":"local:Discussion/4/widgets/5/vote_specifications/184/vote_targets/120/votes"}
+
 
 The page then makes a GET request to AssemblToolsService.resourceToUrl($scope.discussion_uri) + '/ideas?view=default', which looks like
 http://localhost:6543/data/Discussion/4/ideas?view=default
@@ -114,7 +119,14 @@ This page makes a GET request to
 http://localhost:6543/data/Widget/5?target=local:Idea/120
 which returns a JSON with fields. Response fields which are used by this page are "user", "user_votes_url", "settings", and "voting_urls".
 The content of the "voting_urls" field looks like
-{"local:Idea/120":"local:Discussion/4/widgets/5/criteria/120/vote_targets/120/votes","local:Idea/184":"local:Discussion/4/widgets/5/criteria/184/vote_targets/120/votes"}
+{"local:AbstractVoteSpecification/200":"local:Discussion/4/widgets/5/vote_specifications/200/vote_targets/120/votes","local:AbstractVoteSpecification/184":"local:Discussion/4/widgets/5/vote_specifications/184/vote_targets/120/votes"}
+
+Alternatively, we could ask for 
+http://localhost:6543/data/Widget/5/vote_specifications/200
+and get the voting_urls field giving the url for each target
+{"local:Idea/120":"local:Discussion/4/widgets/5/vote_specifications/200/vote_targets/120/votes","local:Idea/184":"local:Discussion/4/widgets/5/vote_specifications/200/vote_targets/184/votes"}
+
+
 It is a JSON Object used as an associative array: the key is the id of a criterion, and the value is the URI where the voter can POST his vote to (for this criterion). So these voting URLs are built by the server depending on the value given in the "target" GET parameter.
 The content of the "settings" field is the JSON of configuration of the appearance, which has been set by the creator of the widget. The page parses this content and displays votable items and their criteria accordingly.
 The content of the "user" field is optionnaly used by the page to display as which registered account the user is voting.
@@ -141,6 +153,7 @@ But if the response header status not a 201 code but rather an error code, the p
 
 
 
+To add: For a discussion, ask for active Widget sessions.
 
 
 

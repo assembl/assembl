@@ -4,7 +4,7 @@ import simplejson as json
 
 from sqlalchemy import (
     Column, Integer, ForeignKey, Boolean, String, Float, DateTime, Text, and_)
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import (relationship, backref, joinedload, aliased)
 from pyramid.settings import asbool
 
 from . import (Base, DiscussionBoundBase, HistoryMixin)
@@ -13,9 +13,9 @@ from .discussion import Discussion
 from .idea import Idea
 from .auth import User
 from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
-from .widgets import MultiCriterionVotingWidget
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
+from ..views.traversal import AbstractCollectionDefinition
 
 
 class AbstractVoteSpecification(DiscussionBoundBase):
@@ -35,7 +35,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     }
 
     widget_id = Column(Integer, ForeignKey(
-        MultiCriterionVotingWidget.id), nullable=False)
+        "widget.id"), nullable=False)
     "Used by a voting widget"
 
     criterion_idea_id = Column(Integer, ForeignKey(
@@ -49,10 +49,85 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     settings = Column(Text)  # JSON blob
 
     widget = relationship(
-        MultiCriterionVotingWidget, backref=backref(
+        "MultiCriterionVotingWidget", backref=backref(
             "vote_specifications", cascade="all, delete-orphan"))
     criterion_idea = relationship(
         Idea, backref="criterion_for")
+
+    def get_voting_urls(self):
+        return {
+            Idea.uri_generic(votable.id):
+            'local:Discussion/%d/widgets/%d/vote_specifications/%d/vote_targets/%d/votes' % (
+                votable.discussion_id, self.widget_id, self.id,
+                votable.id)
+            for votable in self.widget.votable_ideas
+        }
+
+    @classmethod
+    def extra_collections(cls):
+        from .widgets import (VotedIdeaWidgetLink)
+
+        class VoteTargetsCollection(AbstractCollectionDefinition):
+            # The set of voting target ideas.
+            # Fake: There is no DB link here.
+            def __init__(self, cls):
+                super(VoteTargetsCollection, self).__init__(cls, Idea)
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                from .widgets import (
+                    MultiCriterionVotingWidget, VotableIdeaWidgetLink)
+                # TODO : Why did this work?
+                # return query.filter(
+                #     last_alias.discussion_id == parent_instance.discussion_id
+                #     ).filter(last_alias.hidden==False)
+                spec_alias = self.owner_alias
+                widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
+                widget_alias = aliased(MultiCriterionVotingWidget)
+                votable_link_alias = aliased(VotableIdeaWidgetLink)
+                idea_alias = last_alias
+                return query.join(
+                        votable_link_alias,
+                        votable_link_alias.idea_id == idea_alias.id
+                    ).join(
+                        widget_alias,
+                        (widget_alias.id == votable_link_alias.widget_id)
+                        & (widget_alias.id == widget.id)
+                    ).join(
+                        spec_alias,
+                        spec_alias.id == self.instance.id
+                    )
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx,
+                    kwargs):
+                for inst in assocs[:]:
+                    widgets_coll = ctx.find_collection(
+                        'MultiCriterionVotingWidget.vote_specifications')
+                    if isinstance(inst, AbstractIdeaVote):
+                        inst.vote_spec = parent_instance
+                        other_votes = instance.db.query(
+                            AbstractIdeaVote).filter_by(
+                                voter_id=user_id, idea_id=inst.idea.id,
+                                vote_spec_id=parent_instance.id,
+                                tombstone_date=None).options(
+                            joinedload(AbstractIdeaVote.idea)).all()
+                        for other_vote in other_votes:
+                            if other_vote == inst:
+                                # probably never happens
+                                continue
+                            other_vote.tombstone_date = (
+                                inst.vote_date or datetime.now())
+                            inst.base_id = other_vote.base_id
+                        assocs.append(VotedIdeaWidgetLink(
+                            widget=widgets_coll.parent_instance,
+                            idea=inst.idea,
+                            **self.filter_kwargs(
+                                VotedIdeaWidgetLink, kwargs)))
+
+            def contains(self, parent_instance, instance):
+                return isinstance(instance, Idea)
+
+        return {'vote_targets': VoteTargetsCollection(cls)}
 
     @abstractclassmethod
     def get_vote_class(cls):
@@ -81,6 +156,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        from .widgets import MultiCriterionVotingWidget
         return ((cls.widget_id == MultiCriterionVotingWidget.id),
                 (MultiCriterionVotingWidget.discussion_id == discussion_id))
 
@@ -170,7 +246,9 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
                    ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False
     )
-    vote_spec_ts = relationship(AbstractVoteSpecification)
+    vote_spec = relationship(
+        AbstractVoteSpecification,
+        backref=backref("votes", cascade="all, delete-orphan"))
 
     criterion_id = Column(
         Integer,
@@ -212,11 +290,11 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
     # Do we still need this? Can access through vote_spec
     widget_id = Column(
         Integer,
-        ForeignKey(MultiCriterionVotingWidget.id,
+        ForeignKey("widget.id",
                    ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False)
     widget = relationship(
-        MultiCriterionVotingWidget,
+        "MultiCriterionVotingWidget",
         primaryjoin="and_(MultiCriterionVotingWidget.id==AbstractIdeaVote.widget_id, "
                          "AbstractIdeaVote.tombstone_date == None)",
         backref=backref("votes", cascade="all, delete-orphan"))

@@ -16,8 +16,12 @@ from ...models import (
     IdeaContentWidgetLink,
     LickertRange,
     GeneratedIdeaWidgetLink,
-    BaseIdeaWidgetLink
+    BaseIdeaWidgetLink,
+    AbstractVoteSpecification
 )
+
+
+JSON_HEADER = {"Content-Type": "application/json"}
 
 
 def local_to_absolute(uri):
@@ -123,7 +127,7 @@ def test_widget_settings(
         widget_rep['widget_settings_url'])
     result = test_app.put(
         widget_settings_endpoint, settings_s,
-        headers={"Content-Type": "application/json"})
+        headers=JSON_HEADER)
     assert result.status_code in (200, 204)
     # Get it back
     result = test_app.get(
@@ -162,7 +166,7 @@ def test_widget_user_state(
         widget_rep['user_state_url'])
     result = test_app.put(
         widget_user_state_endpoint, state_s,
-        headers={"Content-Type": "application/json"})
+        headers=JSON_HEADER)
     assert result.status_code in (200, 204)
     # Get it back
     result = test_app.get(
@@ -183,7 +187,7 @@ def test_widget_user_state(
     # Put the user state
     result = test_app.put(
         widget_user_state_endpoint, state_s,
-        headers={"Content-Type": "application/json"})
+        headers=JSON_HEADER)
     # Get it back
     result = test_app.get(
         widget_user_state_endpoint,
@@ -224,13 +228,14 @@ def test_creativity_session_widget(
     assert new_widget.base_idea == subidea_1
     widget_id = new_widget.id
     # There should be a link
+    widget_uri = new_widget.uri()
     widget_link = discussion.db.query(BaseIdeaWidgetLink).filter_by(
         idea_id=subidea_1.id, widget_id=widget_id).all()
     assert widget_link
     assert len(widget_link) == 1
     # Get the widget from the api
     widget_rep = test_app.get(
-        local_to_absolute(new_widget.uri()),
+        local_to_absolute(widget_uri),
         headers={"Accept": "application/json"}
     )
     assert widget_rep.status_code == 200
@@ -421,7 +426,7 @@ def test_inspiration_widget(
     assert len(widget_link) == 1
     # Get the widget from the api
     widget_rep = test_app.get(
-        local_to_absolute(new_widget.uri()),
+        local_to_absolute(widget_uri),
         headers={"Accept": "application/json"}
     )
     assert widget_rep.status_code == 200
@@ -455,7 +460,7 @@ def test_inspiration_widget(
             "body": "body", "creator_id": participant1_user.id,
             "metadata_raw": '{"inspiration_url": "https://www.youtube.com/watch?v=7E2FUSYO374"}'})
 
-@pytest.mark.xfail
+
 def test_voting_widget(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,
         criterion_3, admin_user, participant1_user, lickert_range,
@@ -463,71 +468,105 @@ def test_voting_widget(
     # Post the initial configuration
     db = discussion.db
     criteria = (criterion_1, criterion_2, criterion_3)
-    criteria_def = [
-        {
-            "@id": criterion.uri(),
-            "short_title": criterion.short_title
-        } for criterion in criteria
-    ]
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
             'type': 'MultiCriterionVotingWidget',
             'settings': json.dumps({
-                "criteria": criteria_def,
                 "votable_root_id": subidea_1_1.uri()
             })
         })
     assert new_widget_loc.status_code == 201
     # Get the widget from the db
     db.flush()
-    new_widget = Widget.get_instance(new_widget_loc.location)
+    widget_uri = new_widget_loc.location
+    new_widget = Widget.get_instance(widget_uri)
     assert new_widget
-    db.expire(new_widget, ('criteria', 'votable_ideas'))
+    db.expire(new_widget, ('criteria', 'votable_ideas', 'vote_specifications'))
     # Get the widget from the api
     widget_rep = test_app.get(
-        local_to_absolute(new_widget.uri()),
+        local_to_absolute(widget_uri),
+        headers={"Accept": "application/json"}
+    )
+    assert widget_rep.status_code == 200
+    widget_rep = widget_rep.json
+    votespecs_url = widget_rep.get('votespecs_url', None)
+    assert votespecs_url
+    votespecs_url = local_to_absolute(votespecs_url)
+    # Add a first criterion
+    vote_spec_1 = {
+        '@type': 'LickertVoteSpecification',
+        'minimum': 0,
+        'maximum': 1,
+        'criterion_idea': criterion_1.uri()
+    }
+    new_vote_spec_loc = test_app.post(
+        votespecs_url, json.dumps(vote_spec_1),
+        headers=JSON_HEADER)
+    assert new_vote_spec_loc.status_code == 201
+    new_vote_spec_uri = new_vote_spec_loc.location
+    new_vote_spec = AbstractVoteSpecification.get_instance(new_vote_spec_uri)
+    assert new_vote_spec
+    # and another one
+    vote_spec_2 = {
+        '@type': 'BinaryVoteSpecification',
+        'criterion_idea': criterion_3.uri()
+    }
+    new_vote_spec_loc = test_app.post(
+        votespecs_url, json.dumps(vote_spec_2),
+        headers=JSON_HEADER)
+    assert new_vote_spec_loc.status_code == 201
+    new_vote_spec_uri = new_vote_spec_loc.location
+    new_vote_spec = AbstractVoteSpecification.get_instance(new_vote_spec_uri)
+    assert new_vote_spec
+
+    # Get an updated widget_rep with target
+    widget_rep = test_app.get(
+        local_to_absolute(widget_uri),
         {'target': subidea_1_1.uri()},
         headers={"Accept": "application/json"}
     )
     assert widget_rep.status_code == 200
     widget_rep = widget_rep.json
     voting_urls = widget_rep['voting_urls']
+    vote_spec_reps = widget_rep['vote_specifications']
     assert voting_urls
-    assert widget_rep['criteria']
-    assert widget_rep['criteria_url']
-    # Note: At this point, we have two copies of the criteria in the rep.
-    # One is the full ideas in widget_rep['criteria'], the other is
-    # as specified originally in widget_rep['settings']['criteria'].
-    # In what follows I'll use the former.
 
-    # The criteria should also be in the criteria url
-    criteria_url = local_to_absolute(widget_rep['criteria_url'])
-    test = test_app.get(criteria_url)
-    assert test.status_code == 200
-    assert len(test.json) == 3
-    # This fails: I get the votable_idea_widget_link as well,
-    assert test.json == widget_rep['criteria']
     # User votes should be empty
     user_votes_url = local_to_absolute(widget_rep['user_votes_url'])
     test = test_app.get(user_votes_url)
     assert test.status_code == 200
     assert len(test.json) == 0
+
     # Get the voting endpoint for each criterion, and post a vote
-    voting_urls = widget_rep['voting_urls']
-    for i, criterion in enumerate(criteria):
-        key = criterion.uri()
-        assert key in voting_urls
-        voting_url = local_to_absolute(voting_urls[key])
+    for i, (vote_spec_id, voting_url) in enumerate(voting_urls.iteritems()):
+        voting_url = local_to_absolute(voting_url)
+        for spec in vote_spec_reps:
+            if spec['@id'] == vote_spec_id:
+                break
+        else:
+            assert False, "vote spec %s in voting_urls "\
+                "but not in vote_specifications" % (vote_spec_id)
         # TODO: Put lickert_range id in voter config. Or create one?
-        test = test_app.post(voting_url, {
-            "type": "LickertIdeaVote",
-            "value": i+1,
-        })
+        vote_type = spec['vote_class']
+        if vote_type == 'LickertIdeaVote':
+            vote_range = spec['maximum'] - spec['minimum']
+            value = spec['minimum'] + (i % vote_range)
+        elif vote_type == 'BinaryIdeaVote':
+            value = True
+        elif vote_type == 'MultipleChoiceIdeaVote':
+            value = (i % spec['num_choices'])
+
+        test = test_app.post(voting_url, json.dumps({
+            "@type": vote_type,
+            "value": value,
+        }), headers=JSON_HEADER)
         assert test.status_code == 201
     # Get them back
     test = test_app.get(user_votes_url)
     assert test.status_code == 200
-    assert len(test.json) == 3
+    assert len(test.json) == len(vote_spec_reps)
+    # So far so good, rest to be done.
+    return
     # Add votes for another user
     # TODO
     # Get vote results.
@@ -581,7 +620,7 @@ def test_voting_widget(
     #  "@type": "voted"}]
 
 
-def test_voting_widget_criteria(
+def test0_voting_widget_criteria(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,
         criterion_3, admin_user, participant1_user, lickert_range,
         test_session):
@@ -640,7 +679,7 @@ def test_voting_widget_criteria(
         } for criterion in criteria
     ]
     test_app.put(criteria_url, json.dumps(criteria_def),
-        headers={"Content-Type": "application/json"})
+        headers=JSON_HEADER)
     db.flush()
     db.expire(new_widget, ('criteria', ))
     # Get them back

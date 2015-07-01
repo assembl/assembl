@@ -787,51 +787,12 @@ JOIN post AS family_posts ON (
                     content=instance, idea=parent_instance
                     ).count() > 0
 
-        class VoteTargetsCollection(AbstractCollectionDefinition):
-            # The set of voting target ideas.
-            # Fake: There is no DB link here.
-            def __init__(self, cls):
-                super(VoteTargetsCollection, self).__init__(cls, Idea)
-
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
-                assert parent_instance.has_criterion_links
-                return query.filter(
-                    last_alias.discussion_id == parent_instance.discussion_id
-                    ).filter(last_alias.hidden==False)
-
-            def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx,
-                    kwargs):
-                for inst in assocs[:]:
-                    widgets_coll = ctx.find_collection(
-                        'CriterionCollection.criteria')
-                    if isinstance(inst, AbstractIdeaVote):
-                        other_votes = instance.db.query(AbstractIdeaVote).filter_by(
-                            voter_id=user_id, idea_id=inst.idea.id,
-                            criterion_id=parent_instance.id, tombstone_date=None
-                            ).options(joinedload(AbstractIdeaVote.idea)).all()
-                        for other_vote in other_votes:
-                            if other_vote == inst:
-                                # probably never happens
-                                continue
-                            other_vote.tombstone_date = inst.vote_date or datetime.now()
-                            inst.base_id = other_vote.base_id
-                        assocs.append(VotedIdeaWidgetLink(
-                            widget=widgets_coll.parent_instance,
-                            idea=inst.idea,
-                            **self.filter_kwargs(
-                                VotedIdeaWidgetLink, kwargs)))
-
-            def contains(self, parent_instance, instance):
-                return isinstance(instance, Idea)
-
         return {'children': ChildIdeaCollectionDefinition(cls),
                 'linkedposts': LinkedPostCollectionDefinition(cls),
                 'widgetposts': WidgetPostCollectionDefinition(cls),
                 'ancestor_widgets': AncestorWidgetsCollectionDefinition(cls),
                 'ancestor_inspiration_widgets': AncestorWidgetsCollectionDefinition(
-                    cls, InspirationWidget),
-                'vote_targets': VoteTargetsCollection(cls)}
+                    cls, InspirationWidget)}
 
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,
