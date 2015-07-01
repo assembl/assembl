@@ -1,6 +1,8 @@
-from abc import abstractproperty
+from abc import abstractproperty, abstractmethod
 from datetime import datetime
 import simplejson as json
+import math
+from collections import defaultdict
 
 from sqlalchemy import (
     Column, Integer, ForeignKey, Boolean, String, Float, DateTime, Text, and_)
@@ -61,6 +63,32 @@ class AbstractVoteSpecification(DiscussionBoundBase):
                 votable.discussion_id, self.widget_id, self.id,
                 votable.id)
             for votable in self.widget.votable_ideas
+        }
+
+    def get_vote_results_url(self):
+        'local:Discussion/%d/widgets/%d/vote_specifications/%d/vote_results' % (
+            self.widget.discussion_id, self.widget_id, self.id)
+
+    # Do we want an URL to get the vote result on a specific spec+target combination?
+
+    @abstractmethod
+    def results_for(self, voting_results):
+        return {
+            "n": len(voting_results)
+        }
+
+    def voting_results(self):
+        vote_cls = self.get_vote_class()
+        voting_results = self.db.query(vote_cls).filter_by(
+            vote_spec_id=self.id,
+            tombstone_date=None)
+        by_idea = defaultdict(list)
+        for vote in voting_results:
+            by_idea[vote.idea_id].append(vote)
+        return {
+            Idea.uri_generic(votable_id):
+            self.results_for(voting_results)
+            for (votable_id, voting_results) in by_idea.iteritems()
         }
 
     @classmethod
@@ -182,6 +210,16 @@ class LickertVoteSpecification(AbstractVoteSpecification):
     def get_vote_class(cls):
         return LickertIdeaVote
 
+    def results_for(self, voting_results):
+        base = super(LickertVoteSpecification, self).results_for(voting_results)
+        n = len(voting_results)
+        avg = sum((r.vote_value for r in voting_results)) / n
+        moment2 = sum((r.vote_value**2 for r in voting_results)) / n
+        var = moment2 - avg**2
+        std_dev = math.sqrt(var)
+        base.update(dict(avg=avg, std_dev=std_dev))
+        return base
+
     def is_valid_vote(self, vote):
         if not super(LickertVoteSpecification, self).is_valid_vote(vote):
             return False
@@ -192,6 +230,14 @@ class BinaryVoteSpecification(AbstractVoteSpecification):
     __mapper_args__ = {
         'polymorphic_identity': 'binary_vote_specification'
     }
+
+    def results_for(self, voting_results):
+        base = super(BinaryVoteSpecification, self).results_for(voting_results)
+        n = len(voting_results)
+        positive = len([r for r in voting_results if r.vote_value])
+        base["yes"] = positive
+        base["no"] = n - positive
+        return base
 
     @classmethod
     def get_vote_class(cls):
@@ -208,6 +254,15 @@ class MultipleChoiceVoteSpecification(AbstractVoteSpecification):
         Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
 
     num_choices = Column(Integer, nullable=False)
+
+    def results_for(self, voting_results):
+        base = super(
+            MultipleChoiceVoteSpecification, self).results_for(voting_results)
+        by_result = defaultdict(int)
+        for r in voting_results:
+            by_result[r.vote_value] += 1
+        base['results'] = dict(by_result)
+        return base
 
     @classmethod
     def get_vote_class(cls):

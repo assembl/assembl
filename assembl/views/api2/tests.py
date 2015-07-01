@@ -537,7 +537,10 @@ def test_voting_widget(
     assert test.status_code == 200
     assert len(test.json) == 0
 
-    # Get the voting endpoint for each criterion, and post a vote
+    # Get the voting endpoint for each criterion, and post a vote.
+    # Here we're using the voting_urls of the widget based on a single target;
+    # The alternative is to look at the voting_urls of a vote_spec
+    # and to get an url per target. The end result should be the same.
     for i, (vote_spec_id, voting_url) in enumerate(voting_urls.iteritems()):
         voting_url = local_to_absolute(voting_url)
         for spec in vote_spec_reps:
@@ -565,19 +568,24 @@ def test_voting_widget(
     test = test_app.get(user_votes_url)
     assert test.status_code == 200
     assert len(test.json) == len(vote_spec_reps)
-    # So far so good, rest to be done.
-    return
+
     # Add votes for another user
     # TODO
     # Get vote results.
-    vote_results_url = local_to_absolute(widget_rep['vote_results_url'])
-    vote_results = test_app.get(vote_results_url)
-    assert vote_results.status_code == 200
-    vote_results = vote_results.json
-    for i, criterion in enumerate(criteria):
-        key = criterion.uri()
-        assert key in vote_results
-        assert vote_results[key] == i+1
+    vote_results_urls = widget_rep['voting_results_by_spec_url']
+    for spec_rep in vote_spec_reps:
+        assert spec_rep['@id'] in vote_results_urls
+        vote_results_url = vote_results_urls.get(spec_rep['@id'], None)
+        assert vote_results_url
+        vote_results = test_app.get(local_to_absolute(vote_results_url))
+        assert vote_results.status_code == 200
+        vote_results = vote_results.json
+        assert vote_results[subidea_1_1.uri()]['n'] == 1
+        if spec_rep['@type'] == "LickertVoteSpecification":
+            assert vote_results[subidea_1_1.uri()]['avg'] == 0
+    return
+    # So far so good, rest to be done.
+
     # Change my mind
     criterion_key = criteria[0].uri()
     voting_url = local_to_absolute(voting_urls[criterion_key])
@@ -591,33 +599,28 @@ def test_voting_widget(
     for v in votes:
         assert v.widget_id == new_widget.id
     # Get vote results again.
-    vote_results_url = local_to_absolute(widget_rep['vote_results_url'])
-    vote_results = test_app.get(vote_results_url)
-    assert vote_results.status_code == 200
-    vote_results = vote_results.json
-    assert vote_results[criterion_key] == 10
-    ideas_data = test_app.get('/api/v1/discussion/%d/ideas' % discussion.id)
-    assert ideas_data.status_code == 200
-    print ideas_data
+    vote_results_urls = widget_rep['voting_results_by_spec_url']
+    for spec_rep in vote_spec_reps:
+        assert spec_rep['@id'] in vote_results_urls
+        vote_results_url = vote_results_urls.get(spec_rep['@id'], None)
+        assert vote_results_url
+        vote_results = test_app.get(local_to_absolute(vote_results_url))
+        assert vote_results.status_code == 200
+        vote_results = vote_results.json
+        assert vote_results[subidea_1_1.uri()]['n'] == 1
+        if spec_rep['@type'] == "LickertVoteSpecification":
+            assert vote_results[subidea_1_1.uri()]['avg'] == 10
+
+    # ideas_data = test_app.get('/api/v1/discussion/%d/ideas' % discussion.id)
+    # assert ideas_data.status_code == 200
+    # print ideas_data
+
     def fin():
         print "finalizer test_voting_widget"
-        for vote in db.query(AbstractIdeaVote).filter_by(voter_id=admin_user.id):
-            vote.delete()
+        new_widget.delete()
+        # this should cascade to specs and votes
         test_session.flush()
     request.addfinalizer(fin)
-
-    # TODO Look for an idea with 
-    # "widget_data": [{
-    #   "widget": "/widget/vote/?config=local:Widget/4",
-    #   "state": {
-    #      "voter": "local:AgentProfile/10",
-    #      "idea": "local:Idea/31",
-    #      "vote_value": 10.0,
-    #      "@id": "local:IdeaVote/4",
-    #      "@type": "LickertIdeaVote",
-    #      "@view": "default"
-    #  }, "idea": "local:Idea/31",
-    #  "@type": "voted"}]
 
 
 def test0_voting_widget_criteria(

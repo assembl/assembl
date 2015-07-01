@@ -621,6 +621,7 @@ class MultiCriterionVotingWidget(Widget):
             self.discussion_id, self.id, Idea.get_database_id(idea_id))
 
     def get_voting_urls(self, target_idea_id):
+        # TODO: Does not work yet.
         return {
             AbstractVoteSpecification.uri_generic(vote_spec.id):
             'local:Discussion/%d/widgets/%d/vote_specifications/%d/vote_targets/%d/votes' % (
@@ -628,6 +629,15 @@ class MultiCriterionVotingWidget(Widget):
                 Idea.get_database_id(target_idea_id))
             for vote_spec in self.vote_specifications
         }
+
+    def get_voting_results_by_spec_url(self):
+        return {
+            AbstractVoteSpecification.uri_generic(vote_spec.id):
+            'local:Discussion/%d/widgets/%d/vote_specifications/%d/vote_results' % (
+                self.discussion_id, self.id, vote_spec.id)
+            for vote_spec in self.vote_specifications
+        }
+
 
     def add_criterion(self, idea):
         if idea not in self.criteria:

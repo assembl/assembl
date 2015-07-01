@@ -42,22 +42,20 @@ import inspect as pyinspect
 from sqlalchemy import inspect
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
-    HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPOk, HTTPNotFound)
+    HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPNotFound)
 from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyramid.settings import asbool
-from pyld import jsonld
 from simplejson import dumps
 
 from ..traversal import (
     InstanceContext, CollectionContext, ClassContext, Api2Context)
 from assembl.auth import (
-    P_READ, P_SYSADMIN, P_ADMIN_DISC, R_SYSADMIN, P_ADD_POST,
-    IF_OWNED, Everyone, CrudPermissions)
-from assembl.auth.util import get_roles, get_permissions
+    P_READ, IF_OWNED, Everyone, CrudPermissions)
+from assembl.auth.util import get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
-    AbstractIdeaVote, User, DiscussionBoundBase, Discussion, TombstonableMixin)
+    User, Discussion, TombstonableMixin)
 from assembl.lib.decl_enums import DeclEnumType
 
 FIXTURE_DIR = os.path.join(
@@ -395,88 +393,3 @@ def collection_add_json(request):
             dumps(first.generic_json(view, user_id, permissions)),
             location=first.uri_generic(first.id),
             status_code=201)
-
-
-# Votes are private
-# @view_config(context=CollectionContext, renderer='json',
-#              request_method='GET', permission=P_READ,
-#              ctx_collection_class=AbstractIdeaVote)
-# def votes_collection_view(request):
-#     ctx = request.context
-#     user_id = authenticated_userid(request)
-#     if user_id == Everyone:
-#         raise HTTPUnauthorized
-#     view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
-#     tombstones = asbool(request.GET.get('tombstones', False))
-#     q = ctx.create_query(view == 'id_only', tombstones).join(
-#         User).filter(User.id==user_id)
-#     if view == 'id_only':
-#         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
-#     else:
-#         return [i.generic_json(view) for i in q.all()]
-
-
-@view_config(context=CollectionContext, request_method='POST',
-             header=JSON_HEADER,  # permission=P_ADD_VOTE?,
-             ctx_collection_class=AbstractIdeaVote)
-def votes_collection_add_json(request):
-    ctx = request.context
-    user_id = authenticated_userid(request)
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
-    check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
-    typename = ctx.collection_class.external_typename()
-    typename = request.json_body.get(
-        '@type', ctx.collection_class.external_typename())
-    json = request.json_body
-    json['voter'] = User.uri_generic(user_id)
-    try:
-        instances = ctx.create_object(typename, json, user_id)
-    except Exception as e:
-        raise HTTPBadRequest(e)
-    if instances:
-        first = instances[0]
-        db = first.db
-        for instance in instances:
-            db.add(instance)
-        db.flush()
-        view = request.GET.get('view', None) or 'default'
-        return Response(
-            dumps(first.generic_json(view, user_id, permissions)),
-            location=first.uri_generic(first.id),
-            status_code=201)
-
-
-@view_config(context=CollectionContext, request_method='POST',
-             header=FORM_HEADER, ctx_collection_class=AbstractIdeaVote)
-def votes_collection_add(request):
-    ctx = request.context
-    user_id = authenticated_userid(request)
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
-    check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
-    args = request.params
-    if 'type' in args:
-        args = dict(args)
-        typename = args['type']
-        del args['type']
-    else:
-        typename = ctx.collection_class.external_typename()
-    args['voter_id'] = user_id
-    try:
-        instances = ctx.create_object(typename, None, user_id, **args)
-    except Exception as e:
-        raise HTTPBadRequest(e)
-    if instances:
-        first = instances[0]
-        db = first.db
-        for instance in instances:
-            db.add(instance)
-        print "before flush"
-        db.flush()
-        print "after flush"
-        return Response(
-            dumps(first.generic_json('default', user_id, permissions)),
-            location=first.uri_generic(first.id),
-            status_code=201)
-    raise HTTPBadRequest()
