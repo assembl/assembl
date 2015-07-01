@@ -91,7 +91,8 @@ gulp.task('libs',['clean:infrastructure'], function() {
       path.js+'/bower/backbone-modal/backbone.modal.js',
       path.js+'/bower/Backbone.Subset/backbone.subset.js',
       path.js+'/bower/sockjs/sockjs.js',
-      path.js+'/bower/ckeditor/ckeditor.js',
+      //path.js+'/lib/ckeditor/ckeditor.js',
+      //path.js+'/bower/ckeditor/ckeditor.js',
       path.js+'/bower/jquery.dotdotdot/src/js/jquery.dotdotdot.js',
       path.js+'/bower/jquery-oembed-all/jquery.oembed.js',
       path.js+'/bower/bootstrap-growl/jquery.bootstrap-growl.js',
@@ -124,9 +125,11 @@ gulp.task('libs',['clean:infrastructure'], function() {
 });*/
 
 gulp.task('tests', function() {
-    return mochify(path.js+'/app/tests/*.spec.js', {
-        reporter : 'tap',
-        cover    : true
+    return mochify(path.js+'/app/tests/context.spec.js', {
+        reporter : 'spec',
+        phantomjs: '../node_modules/phantomjs/bin/phantomjs',
+        node: true,
+        require:['./static/js/app/shims/jquery.js']
     }).bundle();
 
  });

@@ -5,8 +5,6 @@ var Marionette = require('../shims/marionette.js'),
     $ = require('../shims/jquery.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js');
-    //ckeditor = require('ckeditor-sharedspace');
-
 
 var cKEditorField = Marionette.ItemView.extend({
     template: '#tmpl-ckeditorField',
@@ -97,14 +95,14 @@ var cKEditorField = Marionette.ItemView.extend({
      * set the templace in editing mode
      */
     startEditing: function () {
-        var editingArea = this.$('#' + this.fieldId).get(0);
-        var that = this;
+        var editingArea = this.$('#' + this.fieldId).get(0),
+            that = this;
 
         var config = _.extend({}, this.CKEDITOR_CONFIG, {
             sharedSpaces: { top: this.topId, bottom: this.bottomId }
         });
 
-        CKEDITOR.basePath = window.location.origin +'/static/js/bower/ckeditor/';
+        //CKEDITOR.basePath = window.location.origin +'/static/js/bower/ckeditor/';
 
         this.ckInstance = CKEDITOR.inline(editingArea, config);
 
