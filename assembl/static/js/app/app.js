@@ -55,4 +55,25 @@ App.on('start', function(){
 
 });
 
+_.extend(Backbone.Marionette.View.prototype, {
+  /*
+   * Use to check if you should (re)render
+   */
+  isViewRenderedAndNotYetDestroyed: function() {
+    if (this.isRendered === true && this.isDestroyed === false) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
+  /*
+   * Use to check if you should (re)render
+   */
+  isViewDestroyed: function() {
+    return this.isDestroyed;
+  },
+});
+
 module.exports = App;

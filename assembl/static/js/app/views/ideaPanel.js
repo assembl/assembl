@@ -43,19 +43,21 @@ var IdeaPanel = AssemblPanel.extend({
         }
 
         this.listenTo(this.getGroupState(), "change:currentIdea", function (state, currentIdea) {
-          that.setIdeaModel(currentIdea);
+          if(!this.isViewDestroyed()) {
+            that.setIdeaModel(currentIdea);
+          }
         });
 
         this.listenTo(Assembl.vent, 'DEPRECATEDideaPanel:showSegment', function (segment) {
             that.showSegment(segment);
         });
 
-        setTimeout(function() {
-            // initial model loading
-            var model = that.model;
-            that.model = null;
-            that.setIdeaModel(model, "created");
-        }, 200);
+        if(this.model) {
+          //This is a silly hack to go through setIdeaModel properly - benoitg
+          var model = that.model;
+          this.model = null;
+          this.setIdeaModel(model);
+        }
     },
     ui: {
         'postIt': '.postitlist',
@@ -353,7 +355,6 @@ var IdeaPanel = AssemblPanel.extend({
      */
     setIdeaModel: function (idea, reason) {
       var that = this;
-
       if ( reason === "created" ){
         this.focusShortTitle = true;
       }
@@ -361,7 +362,7 @@ var IdeaPanel = AssemblPanel.extend({
         this.focusShortTitle = false;
       }
 
-      //console.log("setIdeaModel called with", idea);
+      //console.log("setIdeaModel called with", idea.id, reason);
       if (idea !== this.model) {
         if (this.model !== null) {
           this.stopListening(this.model);
@@ -380,51 +381,60 @@ var IdeaPanel = AssemblPanel.extend({
         }
         if (this.model) {
           //this.resetView();
+          //console.log("setIdeaModel:  we have a model ")
           this.template = '#tmpl-loader';
-          this.render();
-          this.panelWrapper.unminimizePanel();
-          this.listenTo(this.model, 'acquiredId', function (m) {
-            // model has acquired an ID. Reset everything.
-            var model = that.model;
-            that.model = null;
-            that.setIdeaModel(model, reason);
-          });
-          if (this.model.id) {
-            this.fetchModelAndRender();
+          if(this.isViewRenderedAndNotYetDestroyed) {
+            if(!this.model.id) {
+              //console.log("setIdeaModel:  we have a model, but no id ")
+              this.render();
+              this.panelWrapper.unminimizePanel();
+              this.listenTo(this.model, 'acquiredId', function (m) {
+                // model has acquired an ID. Reset everything.
+                if(!this.isViewDestroyed()) {
+                  var model = that.model;
+                  that.model = null;
+                  that.setIdeaModel(model, reason);
+                }
+              });
+            }
+            else {
+              //console.log("setIdeaModel:  we have a model, and an id ")
+              this.fetchModelAndRender();
+            }
           }
         } 
         else {
           //TODO: More sophisticated behaviour here, depending
           //on if the panel was opened by selection, or by something else.
           //If we don't call render here, the panel will not refresh if we delete an idea.
+          if(this.isViewRenderedAndNotYetDestroyed) {
           this.template = '#tmpl-ideaPanel';
           this.panelWrapper.minimizePanel();
           this.render();
+          }
         }
       }
     },
 
     fetchModelAndRender: function(){
-        var that = this,
-            collectionManager = new CollectionManager();
-        var fetchPromise = this.model.fetch({ data: $.param({ view: 'contributors'}) });
+      var that = this,
+      collectionManager = new CollectionManager(),
+      fetchPromise = this.model.fetch({ data: $.param({ view: 'contributors'}) });
 
-        Promise.join(collectionManager.getAllExtractsCollectionPromise(), fetchPromise,
-            function (allExtractsCollection, fetchedJQHR) {
-                that.extractListSubset = new SegmentList.IdeaSegmentListSubset([], {
-                    parent: allExtractsCollection,
-                    ideaId: that.model.id
-                });
-                that.listenTo(that.extractListSubset, "add remove reset change", that.renderTemplateGetExtractsLabel);
-                //console.log("The region:", that.segmentList);
-                that.template = '#tmpl-ideaPanel';
-                that.render();
-                /*that.listenTo(that.model, 'change', function (m) {
-                  // console.log("ideaPanel::change callback about to call render");
-                  that.render();
-                });*/
+      Promise.join(collectionManager.getAllExtractsCollectionPromise(), fetchPromise,
+          function (allExtractsCollection, fetchedJQHR) {
+            if(that.isViewRenderedAndNotYetDestroyed()) {
+              that.extractListSubset = new SegmentList.IdeaSegmentListSubset([], {
+                parent: allExtractsCollection,
+                ideaId: that.model.id
+              });
+              that.listenTo(that.extractListSubset, "add remove reset change", that.renderTemplateGetExtractsLabel);
+              //console.log("The region:", that.segmentList);
+              that.template = '#tmpl-ideaPanel';
+              that.render();
             }
-        );
+          }
+      );
     },
 
     deleteCurrentIdea: function () {
