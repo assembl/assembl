@@ -287,13 +287,14 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
         info={'rdf': QuadMapPatternS(None, VOTE.subject_node)}
     )
     idea_ts = relationship(
-        Idea, foreign_keys=(idea_id,))
+        Idea, foreign_keys=(idea_id,),
+        backref=backref("votes_ts", cascade="all, delete-orphan"))
     idea = relationship(
         Idea,
-        primaryjoin=and_(Idea.id == idea_id,
-                         Idea.tombstone_date == None),
-        foreign_keys=(idea_id,),
-        backref=backref("votes", cascade="all, delete-orphan"))
+        primaryjoin="and_(Idea.id == AbstractIdeaVote.idea_id,"
+                         "Idea.tombstone_date == None,"
+                         "AbstractIdeaVote.tombstone_date == None)",
+        foreign_keys=(idea_id,), backref="votes")
 
     vote_spec_id = Column(
         Integer,
@@ -301,9 +302,14 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
                    ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False
     )
+    vote_spec_ts = relationship(
+        AbstractVoteSpecification,
+        backref=backref("votes_ts", cascade="all, delete-orphan"))
     vote_spec = relationship(
         AbstractVoteSpecification,
-        backref=backref("votes", cascade="all, delete-orphan"))
+        primaryjoin="and_(AbstractVoteSpecification.id==AbstractIdeaVote.vote_spec_id, "
+                         "AbstractIdeaVote.tombstone_date == None)",
+        backref=backref("votes"))
 
     criterion_id = Column(
         Integer,
@@ -331,8 +337,13 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
         nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.voter)}
     )
+    voter_ts = relationship(
+        User, backref=backref("votes_ts", cascade="all, delete-orphan"))
     voter = relationship(
-        User, backref=backref("votes", cascade="all, delete-orphan"))
+        User,
+        primaryjoin="and_(User.id==AbstractIdeaVote.voter_id, "
+                         "AbstractIdeaVote.tombstone_date == None)",
+        backref="votes")
 
     def is_owner(self, user_id):
         return self.voter_id == user_id
@@ -352,7 +363,10 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
         "MultiCriterionVotingWidget",
         primaryjoin="and_(MultiCriterionVotingWidget.id==AbstractIdeaVote.widget_id, "
                          "AbstractIdeaVote.tombstone_date == None)",
-        backref=backref("votes", cascade="all, delete-orphan"))
+        backref="votes")
+    widget_ts = relationship(
+        "MultiCriterionVotingWidget",
+        backref=backref("votes_ts", cascade="all, delete-orphan"))
 
     def get_discussion_id(self):
         return self.idea_ts.discussion_id
@@ -396,14 +410,6 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
 
     crud_permissions = CrudPermissions(
         P_VOTE, P_ADMIN_DISC, P_SYSADMIN, P_SYSADMIN, P_VOTE, P_VOTE, P_READ)
-
-
-AbstractIdeaVote.vote_spec = relationship(
-    AbstractVoteSpecification,
-    primaryjoin=and_(
-        AbstractVoteSpecification.id == AbstractIdeaVote.vote_spec_id,
-        AbstractIdeaVote.tombstone_date == None),
-    backref="votes")
 
 
 class LickertRange(Base):

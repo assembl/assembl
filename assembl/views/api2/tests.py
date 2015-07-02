@@ -537,7 +537,7 @@ def test_voting_widget(
     assert test.status_code == 200
     assert len(test.json) == 0
 
-    # Get the voting endpoint for each criterion, and post a vote.
+    # Get the voting endpoint for each vote_spec, and post a vote.
     # Here we're using the voting_urls of the widget based on a single target;
     # The alternative is to look at the voting_urls of a vote_spec
     # and to get an url per target. The end result should be the same.
