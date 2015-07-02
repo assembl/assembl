@@ -19,7 +19,6 @@ var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 
 var mochify = require('mochify');
-//var phantomjs = require('phantomjs');
 
 var path = {
         js: 'static/js',
@@ -91,7 +90,7 @@ gulp.task('libs',['clean:infrastructure'], function() {
       path.js+'/bower/backbone-modal/backbone.modal.js',
       path.js+'/bower/Backbone.Subset/backbone.subset.js',
       path.js+'/bower/sockjs/sockjs.js',
-      //path.js+'/lib/ckeditor/ckeditor.js',
+      //path.js+'/lib/ckeditor/ckeditor.js',// need a proper solution to make CKEDITOR global var
       //path.js+'/bower/ckeditor/ckeditor.js',
       path.js+'/bower/jquery.dotdotdot/src/js/jquery.dotdotdot.js',
       path.js+'/bower/jquery-oembed-all/jquery.oembed.js',
@@ -117,22 +116,40 @@ gulp.task('libs',['clean:infrastructure'], function() {
 /**
  * Run test
  * */
-/*gulp.task('tests', function() {
-    return gulp.src([path.js+'/app/tests/*.spec.js'], {read: false})
-        .pipe(mocha({
-            reporter:'spec'
+gulp.task('test', function() {
+    return gulp.src(path.js+'/app/build/tests/specs.js', {read: false})
+        .pipe(mocha())
+        .once('error', function(){
+           process.exit(1);
+        })
+        .once('end', function(){
+           process.exit();
+        });
+});
+
+gulp.task('build:test', function() {
+
+    var b = browserify({
+        entries: path.js+'/app/tests.js',
+        debug: true
+    });
+    return b.bundle()
+        .on('error', function() {
+            console.log("Compile failed, deleting output");
+            clean_app();
+        })
+        .pipe(source('init.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(uglify({
+            compress: false,
+            mangle: false
         }))
-});*/
-
-gulp.task('tests', function() {
-    return mochify(path.js+'/app/tests/context.spec.js', {
-        reporter : 'spec',
-        phantomjs: '../node_modules/phantomjs/bin/phantomjs',
-        node: true,
-        require:['./static/js/app/shims/jquery.js']
-    }).bundle();
-
- });
+        .pipe(rename('specs.js'))
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(path.js+'/build/tests'))
+        .pipe(exit());
+});
 
 /**
  * Compile Sass file

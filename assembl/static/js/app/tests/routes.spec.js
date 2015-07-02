@@ -2,9 +2,7 @@
 var Router = require('../router.js'),
     expect = require('chai').expect;
 
-module.exports = function() {
-
-    return describe('Routes Specs', function () {
+describe('Routes Specs', function () {
 
         var route = undefined;
 
@@ -50,4 +48,3 @@ module.exports = function() {
         });
 
     })
-}

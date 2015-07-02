@@ -2,10 +2,7 @@
 var panelViewByPanelSpec = require('../objects/viewsFactory.js'),
     expect = require('chai').expect;
 
-
-module.exports = function() {
-
-    return describe('Objects Specs', function () {
+describe('Objects Specs', function () {
 
         describe('viewFactory', function () {
             var model = undefined;
@@ -28,4 +25,3 @@ module.exports = function() {
         });
 
     })
-}

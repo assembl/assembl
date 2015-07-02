@@ -3,9 +3,7 @@ var $ = require('../shims/jquery.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     expect = require('chai').expect;
 
-module.exports = function() {
-
-    return describe('Utils module', function () {
+describe('Utils module', function () {
 
         describe('panelSpecType', function () {
 
@@ -27,4 +25,3 @@ module.exports = function() {
         });
 
     })
-}

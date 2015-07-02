@@ -8,9 +8,7 @@ var $ = require('../shims/jquery.js'),
 var txt = '<script id="tmpl-test" type="text/template">test something</script>';
 $('body').append(txt);
 
-module.exports = function(){
-
-    return describe('Modules Specs', function () {
+describe('Modules Specs', function () {
 
         describe('Context', function () {
 
@@ -44,6 +42,5 @@ module.exports = function(){
 
         })
 
-    });
+});
 
-}

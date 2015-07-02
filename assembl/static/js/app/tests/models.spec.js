@@ -3,9 +3,7 @@ var _ = require('../shims/underscore.js'),
     Agent = require('../models/agents.js'),
     expect = require('chai').expect;
 
-module.exports = function() {
-
-    return describe('Models Specs', function () {
+describe('Models Specs', function () {
 
         describe('Agents model', function () {
             var agent = undefined;
@@ -132,4 +130,3 @@ module.exports = function() {
 
     })
 
-}

@@ -16,9 +16,7 @@ function getView(){
     return nav;
 }
 
-module.exports = function() {
-
-    return describe('Views Specs', function () {
+describe('Views Specs', function () {
 
         describe('Navigation barre', function () {
 
@@ -38,4 +36,3 @@ module.exports = function() {
         });
 
     })
-}
