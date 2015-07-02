@@ -320,7 +320,7 @@ var MessageListHeader = Marionette.ItemView.extend({
             console.log("This viewstyle is unknown in user mode:", this.currentViewStyle);
         }
         this.currentQuery.getResultNumTotal() === undefined ? resultNumTotal = '' : resultNumTotal = i18n.sprintf("%d", this.currentQuery.getResultNumTotal());
-        this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('All %s'), resultNumTotal));
+        this.ui.userThreadedViewButton.html(i18n.sprintf(i18n.gettext('New messages threaded'), resultNumTotal));
         this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread = '' : resultNumUnread = i18n.sprintf("%d", this.currentQuery.getResultNumUnread());
 
         /* We (Quentin & François) have decided that showing the number of messages in tab title is not useful, because it is already shown in the first line of content
