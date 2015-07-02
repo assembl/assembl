@@ -222,7 +222,7 @@ $previewNumLines: 4;
     }
 
     .message-subject, .message-date {
-      color: $txtGray1;
+      color: $txtGray2;
     }
 
     .message-body {
@@ -230,7 +230,7 @@ $previewNumLines: 4;
       padding: 0px;
       //max-height: $previewNumLines * $mesageBodyLineHeight * $messageBodyFontSize;
       overflow: hidden;
-      color: $txtGray1;
+      color: $txtGray2;
     }
 
     .message-body.body_format_text_plain > .elipsis > div {
