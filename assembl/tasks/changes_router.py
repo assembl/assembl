@@ -77,14 +77,20 @@ class ZMQRouter(SockJSConnection):
                 raven_client.captureException()
             raise
 
+    def do_close(self):
+        self.close()
+        self.socket = None
+        if self.loop:
+            self.loop.stop_on_recv()
+            self.loop.close()
+            self.loop = None
+
     def on_message(self, msg):
         try:
             if getattr(self, 'socket', None):
                 print "closing old socket"
-                self.loop.stop_on_recv()
-                self.loop.close()
-                self.socket = None
-                self.loop = None
+                self.loop.add_callback(self.do_close)
+                return
             if msg.startswith('discussion:') and self.valid:
                 self.discussion = msg.split(':', 1)[1]
             if msg.startswith('token:') and self.valid:
@@ -115,14 +121,10 @@ class ZMQRouter(SockJSConnection):
                 raven_client.captureException()
             raise
 
-
     def on_close(self):
         try:
-            self.loop.stop_on_recv()
-            self.loop.close()
-            self.socket = None
-            self.loop = None
             print "closing"
+            self.do_close()
         except Exception:
             if raven_client:
                 raven_client.captureException()
