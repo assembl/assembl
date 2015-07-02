@@ -8,16 +8,17 @@
 {%- endmacro %}
 
 <% if (!isUsingExpertView) { %>
-  <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
     <div class="options-filter">
       <div class="options-filter-items">
-        <div class="messageListViewStyleUserHighlightNew <%= availableViewStyles.NEW_MESSAGES.css_class %> option tac pas"></div>
-        {# <div class="messageListViewStyleUserThreaded <%= availableViewStyles.THREADED.css_class %> option tac pas"></div> #}
+          <% if (Ctx.getCurrentUser().isUnknownUser()) { %>
+            <div class="messageListViewStyleUserThreaded <%= availableViewStyles.THREADED.css_class %> option tac pas"></div>
+          <% } else { %>
+            <div class="messageListViewStyleUserHighlightNew <%= availableViewStyles.NEW_MESSAGES.css_class %> option tac pas"></div>
+          <% } %>
         <div class="js_messageListViewStyleUserActivityFeed <%= availableViewStyles.REVERSE_CHRONOLOGICAL.css_class %> option tac pas"></div>
       </div>
       {{ expert_view_toggle_button() }}
     </div>
-  <% } %>
 <% } else { %>
   <div class="view-config pll pvxs">
     <ul class="config pan man ptxs">
