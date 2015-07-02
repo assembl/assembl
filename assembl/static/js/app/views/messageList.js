@@ -1226,7 +1226,7 @@ var MessageList = AssemblPanel.extend({
                 if(!that.isViewDestroyed()) {
                   var resultMessageIdCollectionReference = resultMessageIdCollection;
 
-                  function inFilter(message) {
+                  var inFilter = function(message) {
                     return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
                   };
                   if (Ctx.debugRender) {
