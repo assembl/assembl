@@ -35,7 +35,7 @@ import transaction
 from ..lib import config
 from ..lib.sqla import (
     UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
-from . import Base, DiscussionBoundBase
+from . import Base, DiscussionBoundBase, PrivateObjectMixin
 from ..auth import *
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, QUADNAMES, FOAF, DCTERMS, RDF)
@@ -967,7 +967,7 @@ def populate_default_roles(session):
         session.add(Role(name=role))
 
 
-class UserRole(Base):
+class UserRole(Base, PrivateObjectMixin):
     """roles that a user has globally (eg admin.)"""
     __tablename__ = 'user_role'
     rdf_sections = (USER_SECTION,)
@@ -982,6 +982,9 @@ class UserRole(Base):
     role_id = Column(Integer, ForeignKey(
         'role.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     role = relationship(Role)
+
+    def get_user_uri(self):
+        return User.uri_generic(self.user_id)
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
@@ -1001,7 +1004,7 @@ class UserRole(Base):
             ]
 
 
-class LocalUserRole(DiscussionBoundBase):
+class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
     """The role that a user has in the context of a discussion"""
     __tablename__ = 'local_user_role'
     rdf_sections = (USER_SECTION,)
@@ -1048,6 +1051,9 @@ class LocalUserRole(DiscussionBoundBase):
         role_id = self.role_id or self.role.id
         return query.filter_by(
             user_id=user_id, role_id=role_id), True
+
+    def get_user_uri(self):
+        return User.uri_generic(self.user_id)
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,

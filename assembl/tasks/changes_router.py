@@ -5,6 +5,7 @@ from os import makedirs
 from os.path import exists, dirname
 import ConfigParser
 
+import simplejson as json
 import zmq
 from zmq.eventloop import ioloop
 from zmq.eventloop import zmqstream
@@ -65,13 +66,22 @@ class ZMQRouter(SockJSConnection):
 
     token = None
     discussion = None
+    userId = None
 
     def on_open(self, request):
         self.valid = True
 
     def on_recv(self, data):
         try:
-            self.send(data[-1])
+            data = data[-1]
+            if '@private' in data:
+                jsondata = json.loads(data)
+                jsondata = [x for x in jsondata
+                            if x.get('@private', self.userId) == self.userId]
+                if not jsondata:
+                    return
+                data = json.dumps(jsondata)
+            self.send(data)
         except Exception:
             if raven_client:
                 raven_client.captureException()
@@ -97,6 +107,8 @@ class ZMQRouter(SockJSConnection):
                 try:
                     self.token = decode_token(
                         msg.split(':', 1)[1], TOKEN_SECRET)
+                    self.userId = 'local:AgentProfile/' + str(
+                        self.token['userId'])
                 except TokenInvalid:
                     pass
             if self.token and self.discussion:

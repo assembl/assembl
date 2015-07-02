@@ -9,6 +9,7 @@ import inspect as pyinspect
 import types
 from collections import Iterable, defaultdict
 import atexit
+from abc import abstractmethod
 
 from anyjson import dumps, loads
 import iso8601
@@ -1390,11 +1391,20 @@ def set_session_maker_type(zope_tr):
     _session_maker = get_typed_session_maker(zope_tr)
 
 
+class PrivateObjectMixin(object):
+    "marker class for objects that should be sent to owner"
+    @abstractmethod
+    def get_user_uri(self):
+        return ""
+
+
 class Tombstone(object):
     def __init__(self, ob, **kwargs):
         self.typename = ob.external_typename()
         self.uri = ob.uri()
         self.extra_args = kwargs
+        if isinstance(ob, PrivateObjectMixin):
+            self.extra_args['@private'] = ob.get_user_uri()
 
     def generic_json(self, *vargs, **kwargs):
         args = {"@type": self.typename,

@@ -233,5 +233,14 @@
             "homepage": true,
             "logo": true,
             "is_initiator": true
+    },
+    "UserRole": {
+        "@private": "user",
+        "role": "&get_role_name"
+    },
+    "LocalUserRole": {
+        "@private": "user",
+        "discussion": true,
+        "role": "&get_role_name"
     }
 }

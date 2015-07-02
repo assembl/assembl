@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 
 from ..lib.abc import abstractclassmethod
 from ..lib.sqla import (
-    Base, TimestampedBase, get_metadata, get_session_maker,
+    Base, TimestampedBase, get_metadata, get_session_maker, PrivateObjectMixin,
     get_named_object, get_database_id, Tombstone, UPDATE_OP, DELETE_OP)
 from ..lib.history_mixin import TombstonableMixin, HistoryMixin
 
