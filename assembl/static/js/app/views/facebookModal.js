@@ -10,12 +10,6 @@ var Marionette = require('../shims/marionette.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Social = require('../models/social.js');
 
-var FbStatus = {
-  OFFLINE: 'user not logged in',
-  CONNECTED: 'user is connected',
-  UNAUTHORIZED: 'user has not authenticated assembl'
-}
-
 var _allFacebookPermissions = undefined; 
 var getAllFacebookPermissions = function() {
   if (_allFacebookPermissions){ return _allFacebookPermissions;}
@@ -298,25 +292,77 @@ var checkState = function(renderView) {
     // })
 // }
 
-var _getAllPaginatedEntities = function(endPoint, dataName){
-  window.FB.api(endPoint, function(firstPage){
-    var results = [];
-    var data = firstPage[dataName];
-    for (d in data) {
-      results.push(d);
+//This is probably very inefficient
+// var _getAllPaginatedEntities = function(endPoint, dataName, success){
+//   window.FB.api(endPoint, function(firstPage){
+//     var results = [];
+//     var data = firstPage[dataName];
+//     for (d in data) {
+//       results.push(d);
+//     }
+//     var paging = firstpage.paging;
+//     var that = this;
+//     while (paging.hasOwnProperty('next')) {
+//       var nextPage = paging.next;
+//       $.getJSON(nextPage, function(newPage){
+//         var data = newPage[dataName];
+//         for (d in data) {
+//           that.results.push(d);
+//         }
+//         that.paging = newPage.paging;
+//       });
+//     }
+//   });
+// }
+
+//Might cause a stack overflow if the data is very large, or many many pages....
+var getAllPaginatedEntities = function(endPoint, options, success){
+  var extractData = function(resp){
+    var set = {}
+    resp.data.forEach(function(d, i, arr){
+      set[d.id] = d;
+    });
+    return set;
+  }
+
+  /**
+   * Appends the values from set2 into set1
+   * @param  {[Object]} set1 Obj with key of {fb_id: data}
+   * @param  {[Object]} set2 Obj with key of {fb_id: data}
+   * @return {[Object]}      Obj with unique objects of {fb_id: data}
+   */
+  var _appendSet = function (set1, set2){
+    var tmp = _.clone(set1); //Shallow copy okay?
+    _.each(set2, function(v, k, l){
+      if (!set1.hasOwnProperty(k)){
+        tmp[k] = v;
+      }
+    });
+    return tmp;
+  }
+
+  var _toArray = function(set){
+    return _.values(set);
+  }
+
+  var getData = function(resp, data, uniqueSet){
+    console.log('getData is called.');
+    var paging = resp.paging;
+    if (!paging.hasOwnProperty('next')){
+      var results = _appendSet(data, extractData(resp)); 
+      success(_toArray(results));
+      return;
     }
-    var paging = firstpage.paging;
-    var that = this;
-    while (paging.hasOwnProperty('next')) {
-      var nextPage = paging.next;
-      $.getJSON(nextPage, function(newPage){
-        var data = newPage[dataName];
-        for (d in data) {
-          that.results.push(d);
-        }
-        that.paging = newPage.paging;
+    else {
+      window.FB.api(resp.paging.next, 'get', options, function(resp){
+        getData(resp, _appendSet(data, extractData(resp)));
       });
     }
+  }
+
+  window.FB.api(endPoint, 'get', options, function(resp){
+    console.log('first set of data', resp);
+    getData(resp, extractData(resp));
   });
 }
 
@@ -414,13 +460,53 @@ var pageView = Marionette.ItemView.extend({
       //window.FB.api()
       this.bundle = options.bundle;
 
+      //Set up pushing the page access tokens
+      //
+      //Very important
+
       var that = this;
-      window.FB.api("me/likes", function(resp){
-        console.log("the user pages", resp);
-        that.userPages = resp.data;
-        that.template = "#tmpl-exportPostModal-fb-page";
-        that.render();
+      getAllPaginatedEntities("me/accounts", {
+        access_token: window.USER_TOKEN.token,
+        fields: 'id,access_token,name'
+      }, function(adminData){
+        //The admin data is passed in.
+        that.userAdmins = adminData; 
+        getAllPaginatedEntities("me/likes", {
+          access_token: window.USER_TOKEN.token,
+          fields: 'id,name'
+        }, function(pageData){
+          var _extraToAdd = [];
+          that.userAdmins.forEach(function(admin, i, array){
+            var p = _.find(pageData, function(page){
+              return (page.id === admin.id)
+            });
+            if (!p) {
+              _extraToAdd.push(admin);
+            }
+          });
+          that.userPages = pageData.concat(_extraToAdd);
+          console.log('The admin pages', that.userAdmins);
+          that.template = '#tmpl-exportPostModal-fb-page';
+          that.render();
+        })
       });
+
+      // //Paginate this call
+      // window.FB.api("me/accounts", 'get', {
+      //   fields: 'id, access_token, name'
+      // }, function(resp){
+      //   that.userAdmins = resp.data;
+      // });
+      // //Paginate this call
+      // window.FB.api("me/likes", 'get', {
+      //   fields: ''
+      // }, function(resp){
+      //   console.log("the user pages", resp);
+      //   that.userPages = resp.data;
+      //   that.template = "#tmpl-exportPostModal-fb-page";
+      //   that.render();
+      // });
+
     },
     events: {
       'blur .js_fb-page-id': 'updatePageId',
@@ -432,10 +518,11 @@ var pageView = Marionette.ItemView.extend({
       });
     },
     updateSender: function(e) {
-      var a = $(e.target);
-      console.log('option change event', e);
-      console.log('option change name', a.val());
-      console.log('option change value', a.attr('value'));
+      var value = this.$(event.currentTarget)
+                      .find('option:selected')
+                      .val();
+
+      console.log('The options:selected', value);
       // _updateBundledData(this.bundle, {
       //   sender: {
       //     name: $(e.target).val()
@@ -443,14 +530,23 @@ var pageView = Marionette.ItemView.extend({
       // });
     },
     serializeData: function() {
-      return {
-        userManagedPagesList: [
+      var tmp = [
           {value: 'null', description: ''},
           {value: 'self', description: 'Yourself'}
-          //Add more after API call made
-        ]
-      }
-    },
+        ];
+
+      var extras = _.map(this.userAdmins, function(admin){
+        return {
+          value: admin.id,
+          description: admin.name
+        };
+      });
+      console.log('The extras', extras);
+      return {
+        userManagedPagesList: tmp.concat(extras)
+      };
+    }
+
 });
 
 var fbLayout = Marionette.LayoutView.extend({
@@ -477,13 +573,22 @@ var fbLayout = Marionette.LayoutView.extend({
         attachDesc: null,
         sender: null,
       };
-      console.log('facebook root view initializing with options', options);
 
       this.vent.on("submitFacebook", this.submitForm, this);
     },
+    serializeData: function(){
+      return {
+        messageBody: this.model.get('body')
+      }
+    },
     test: function(e) {
-      loginUser(function(){
-        console.log('Successfully logged in and received a Facebook access token.');
+      // loginUser(function(){
+      //   console.log('Successfully logged in and received a Facebook access token.');
+      // });
+      _getAllPaginatedEntities("me/likes", {
+        access_token: window.USER_TOKEN.token
+      }, function(data){
+        console.log('I was able to paginate properly! ', data);
       });
 
     },

@@ -10,7 +10,7 @@
   <div class='controls'>
     <select id='fb-page-postAs' class='js_fb-page-voice'>
       <% _.each(userManagedPagesList, function(page){ %>
-        <option value='<% page.value %>'> <%= page.description %> </option>
+        <option value='<%= page.value %>'> <%= page.description %> </option>
       <% }); %>
     </select>
   </div>

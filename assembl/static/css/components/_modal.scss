@@ -28,7 +28,8 @@
 .popin, .bbm-modal {
   margin: auto;
   width: auto;
-  max-width: 90%;
+  max-width: 50%;
+  min-width: 40%;
   margin: 15px auto 0;
   box-shadow: 0 0 12px rgba($black, (25/100));
   -webkit-animation: popin-fadein 0.15s;
