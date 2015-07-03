@@ -276,8 +276,8 @@ class BaseOps(object):
             connection = self.db.connection()
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
-        connection.info['cdict'][self.uri()] = (
-            discussion_id, self, view_def)
+        connection.info['cdict'][(self.uri(), view_def)] = (
+            discussion_id, self)
 
     @classmethod
     def external_typename(cls):
@@ -1419,8 +1419,8 @@ class Tombstone(object):
         assert connection
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
-        connection.info['cdict'][self.uri] = (
-            discussion_id, self, view_def)
+        connection.info['cdict'][(self.uri, view_def)] = (
+            discussion_id, self)
 
 
 def orm_update_listener(mapper, connection, target):
@@ -1452,7 +1452,8 @@ def before_commit_listener(session):
     info = session.connection().info
     if 'cdict' in info:
         changes = defaultdict(list)
-        for (uri, (discussion, target, view_def)) in info['cdict'].iteritems():
+        for ((uri, view_def), (discussion, target)) in \
+                info['cdict'].iteritems():
             discussion = bytes(discussion or "*")
             json = target.generic_json(view_def)
             if json:

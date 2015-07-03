@@ -31,8 +31,8 @@ class DiscussionBoundBase(Base):
             connection = self.db.connection()
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
-        connection.info['cdict'][self.uri()] = (
-            discussion_id or self.get_discussion_id(), self, view_def)
+        connection.info['cdict'][(self.uri(), view_def)] = (
+            discussion_id or self.get_discussion_id(), self)
 
     @abstractclassmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -59,8 +59,8 @@ class DiscussionBoundTombstone(Tombstone):
         assert connection
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
-        connection.info['cdict'][self.uri] = (
-            discussion_id or self.discussion_id, self, view_def)
+        connection.info['cdict'][(self.uri, view_def)] = (
+            discussion_id or self.discussion_id, self)
 
 
 from .auth import (

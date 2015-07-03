@@ -1,0 +1,92 @@
+{
+    "_default": {
+        "id": false,
+        "type": false,
+        "@id": "self",
+        "@type": "&external_typename",
+        "@view": "@view",
+        "_default": false
+    },
+    "Permission": {
+        "name": true
+    },
+    "AgentProfile": {
+        "description": true,
+        "@private": "self",
+        "avatar_url_base": "&external_avatar_url",
+        "name": "&display_name",
+        "real_name": "&real_name",
+        "post_count": "&count_posts_in_current_discussion",
+        "preferred_email": false,
+        "was_created_on_current_discussion": false,
+        "is_first_visit": false,
+        "accounts": [":default"]
+    },
+    "Action": {
+        "@private": "actor",
+        "user": "actor"
+    },
+    "ActionOnPost": {
+        "@extends": "Action",
+        "target": "post",
+        "target_type": "'\"Content\""
+    },
+    "LikedPost": {
+        "@extends": "ActionOnPost"
+    },
+    "ViewPost": {
+        "@extends": "ActionOnPost"
+    },
+    "User": {
+        "@extends": "AgentProfile",
+        "creation_date": true,
+        "last_login": true,
+        "login_failures": false,
+        "password": false,
+        "verified": true,
+        "is_first_visit": true,
+        "was_created_on_current_discussion": true,
+        "permissions": "permissions_for_current_discussion",
+        "username": "username_p"
+    },
+    "UserTemplate": {
+        "@extends": "User",
+        "discussion": true,
+        "for_role": ":"
+    },
+    "AbstractAgentAccount": {
+        "@private": "profile",
+        "preferred": true,
+        "email": true,
+        "verified": true,
+        "profile": true
+    },
+    "EmailAccount": {
+        "@extends": "AbstractAgentAccount",
+        "will_merge_if_validated": "'false"
+    },
+    "WebLinkAccount": {
+        "@extends": "AbstractAgentAccount",
+        "user_link": true
+    },
+    "LoomioAccount": {
+        "@extends": "WebLinkAccount"
+    },
+    "SourceSpecificAccount": {
+        "@extends": "AbstractAgentAccount",
+        "user_link": true,
+        "user_id": true,
+        "source_id": true
+    },
+    "IdentityProviderAccount": {
+        "@extends": "AbstractAgentAccount",
+        "provider": "&get_provider_name",
+        "username": true,
+        "picture_url": true
+    },
+    "IdentityProvider": {
+        "name": true,
+        "provider_type": true,
+        "trust_emails": true
+    }
+}

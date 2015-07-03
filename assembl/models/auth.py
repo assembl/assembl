@@ -1019,7 +1019,7 @@ class UserRole(Base, PrivateObjectMixin):
 @event.listens_for(UserRole, 'after_insert', propagate=True)
 @event.listens_for(UserRole, 'after_delete', propagate=True)
 def send_user_to_socket_for_user_role(mapper, connection, target):
-    #target.user.send_to_changes(connection, UPDATE_OP, view_def="private")
+    target.user.send_to_changes(connection, UPDATE_OP, view_def="private")
     target.user.send_to_changes(connection, UPDATE_OP)
 
 
@@ -1159,7 +1159,8 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
 def send_user_to_socket_for_local_user_role(
         mapper, connection, target):
     target.user.send_to_changes(connection, UPDATE_OP, target.discussion_id)
-    #target.user.send_to_changes(connection, UPDATE_OP, target.discussion_id, "private")
+    target.user.send_to_changes(
+        connection, UPDATE_OP, target.discussion_id, "private")
 
 
 class Permission(Base):
