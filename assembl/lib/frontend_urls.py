@@ -18,6 +18,7 @@ class FrontendUrls():
         'profile': '/user/profile',
         'account': '/user/account',
         'sentrytest': '/sentrytest',
+        'groupSpec': '/G*remainder',
         'purl_posts': '/posts*remainder',
         'purl_idea': '/idea*remainder'
     }

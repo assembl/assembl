@@ -7,6 +7,7 @@ var Marionette = require('./shims/marionette.js'),
     Storage = require('./objects/storage.js'),
     Loader = require('./views/loader.js'),
     NavBar = require('./views/navBar.js'),
+    UrlParser = require('./url/url.js'),
     GroupContainer = require('./views/groups/groupContainer.js'),
     PanelSpecTypes = require('./utils/panelSpecTypes.js'),
     CollectionManager = require('./common/collectionManager.js'),
@@ -139,7 +140,7 @@ var routeManager = Marionette.Object.extend({
     sentryTest: function () {
       //This crashes on purpose
       crashme();
-  },
+    },
 
     loadCurrentUser: function () {
         var user = null;
@@ -153,6 +154,18 @@ var routeManager = Marionette.Object.extend({
         user.fetchPermissionsFromScriptTag();
         Ctx.setCurrentUser(user);
         Ctx.loadCsrfToken(true);
+    },
+
+    groupSpec: function(path) {
+        console.log(path);
+        try {
+            var structure = UrlParser.parse("/"+path);
+            console.log(structure);
+        } catch (err) {
+            console.log(err);
+        }
+        Ctx.isNewUser();
+        this.restoreViews(true);
     },
 
     /**

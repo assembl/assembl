@@ -18,6 +18,7 @@ var Router = Marionette.AppRouter.extend({
         "user/account": "account",
         "posts/:id": "post",
         "idea/:id": "idea",
+        "G/*path": "groupSpec",
         "*actions": "defaults"
     }
 
