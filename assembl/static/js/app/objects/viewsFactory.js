@@ -11,6 +11,7 @@ var _ = require('../shims/underscore.js'),
     SegmentList = require('../views/segmentList.js'),
     SynthesisNavPanel = require('../views/navigation/synthesisInNavigation.js'),
     SynthesisPanel = require('../views/synthesisPanel.js'),
+    CollectionManager = require('../common/collectionManager.js'),
     ExternalVisualizationPanel = require('../views/externalVisualization.js');
 
 /*
@@ -56,4 +57,14 @@ function panelViewByPanelSpec(panelSpecModel) {
     }
 }
 
-module.exports = {byPanelSpec: panelViewByPanelSpec, typeByCode: typeByCode };
+function decodeUrlData(code, data) {
+    if (code == 'i') {
+      var ideasCollection = new CollectionManager().getAllIdeasCollectionPromise();
+      return ideasCollection.then(function(ideas) {
+        var idea = ideas.get("local:Idea/" + data);
+        return ["currentIdea", idea];
+      });
+    }
+}
+
+module.exports = {byPanelSpec: panelViewByPanelSpec, typeByCode: typeByCode, decodeUrlData: decodeUrlData };

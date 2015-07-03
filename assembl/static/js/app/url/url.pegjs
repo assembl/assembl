@@ -68,7 +68,7 @@ groupSpecInfos = gsis:( semicolon gsi:groupSpecInfo {return gsi;} )* {
         var gsi = gsis[i],
             specCode = gsi[0],
             specData = gsi[1],
-            promise = groupState.Model.prototype.decodeUrlData(specCode, specData);
+            promise = viewsFactory.decodeUrlData(specCode, specData);
         if (promise) {
             promises.push(promise);
         }
