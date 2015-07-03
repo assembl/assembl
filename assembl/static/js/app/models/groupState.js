@@ -1,8 +1,8 @@
 'use strict';
 
 var Base = require('./base.js'),
-    Idea = require('./idea.js');
-
+    Idea = require('./idea.js'),
+    CollectionManager = require('../common/CollectionManager');
 
 /**
  * @class GroupStateModel
@@ -15,9 +15,13 @@ var GroupStateModel = Base.Model.extend({
     currentIdea: null
   },
   
-  decodeUrlData: function(code, data, result) {
+  decodeUrlData: function(code, data) {
     if (code == 'i') {
-      result.currentId = "local:Idea/" + data;
+      var ideasCollection = new CollectionManager().getAllIdeasCollectionPromise();
+      return ideasCollection.then(function(ideas) {
+        var idea = ideas.get("local:Idea/" + data);
+        return ["currentIdea", idea];
+      });
     }
   },
 

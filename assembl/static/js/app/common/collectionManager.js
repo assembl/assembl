@@ -541,12 +541,17 @@ var CollectionManager = Marionette.Controller.extend({
 
     /* Gets the stored configuration of groups and panels
      */
-    getGroupSpecsCollectionPromise: function (viewsFactory, url_structure) {
+    getGroupSpecsCollectionPromise: function (viewsFactory, url_structure_promise) {
       var that = this;
 
       if (this._allGroupSpecsCollectionPromise === undefined) {
         //FIXME:  This is slow.  Investigate fetching the single idea and adding it to the collection before fetching the whole collection
-        return this.getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
+        var allIdeasCollectionPromise = this.getAllIdeasCollectionPromise();
+        if (url_structure_promise === undefined) {
+          url_structure_promise = Promise.resolve(undefined);
+        }
+        return Promise.join(allIdeasCollectionPromise, url_structure_promise,
+          function(allIdeasCollection, url_structure) {
           var collection, data;
           if (url_structure !== undefined) {
             collection = url_structure;

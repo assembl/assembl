@@ -37,20 +37,26 @@ module.exports = (function() {
         peg$c2 = function(spec) {return spec;},
         peg$c3 = null,
         peg$c4 = function(specs) {
-            var coll = new groupSpec.Collection();
-            for (var i in specs) {
-                coll.add(specs[i]);
-            }
-            return coll;
+            return Promise.all(specs).then(function(specs) {
+                var coll = new groupSpec.Collection();
+                for (var i in specs) {
+                    coll.add(specs[i]);
+                }
+                return coll;
+            });
         },
         peg$c5 = "/",
         peg$c6 = { type: "literal", value: "/", description: "\"/\"" },
         peg$c7 = ";",
         peg$c8 = { type: "literal", value: ";", description: "\";\"" },
         peg$c9 = function(pdl, gsid) {
-            return new groupSpec.Model({
-                panels: new panelSpec.Collection(pdl, {'viewsFactory': viewsFactory }),
-                states: new groupState.Collection([gsid])
+            pdl.push(gsid);
+            return Promise.all(pdl).then(function(result) {
+                gsid = result.pop();
+                return new groupSpec.Model({
+                    panels: new panelSpec.Collection(result, {'viewsFactory': viewsFactory }),
+                    states: new groupState.Collection([gsid])
+                });
             });
         },
         peg$c10 = "{",
@@ -58,24 +64,49 @@ module.exports = (function() {
         peg$c12 = "}",
         peg$c13 = { type: "literal", value: "}", description: "\"}\"" },
         peg$c14 = function(panelId, spec) {
-            return new panelSpec.Model({
-                    "type": viewsFactory.typeByCode[panelId.toUpperCase()],
-                    "minimized": panelId.toUpperCase() != panelId,
-                    "subSpec": spec?spec[1]:null,
+            if (spec) {
+                return spec[1].then(function(spec){
+                    return {
+                            "type": viewsFactory.typeByCode[panelId.toUpperCase()],
+                            "minimized": panelId.toUpperCase() != panelId,
+                            "subSpec": spec,
+                        };
                 });
+            } else {
+                return Promise.resolve({
+                        "type": viewsFactory.typeByCode[panelId.toUpperCase()],
+                        "minimized": panelId.toUpperCase() != panelId
+                    });
+            }
         },
         peg$c15 = /^[A-Za-z]/,
         peg$c16 = { type: "class", value: "[A-Za-z]", description: "[A-Za-z]" },
         peg$c17 = function(gsi) {return gsi;},
         peg$c18 = function(gsis) {
-            gsid = {};
+            var promises = [];
             for (var i in gsis) {
                 var gsi = gsis[i],
                     specCode = gsi[0],
-                    specData = gsi[1];
-                groupState.Model.prototype.decodeUrlData(specCode, specData, gsid);
+                    specData = gsi[1],
+                    promise = groupState.Model.prototype.decodeUrlData(specCode, specData);
+                if (promise) {
+                    promises.push(promise);
+                }
             }
-            return new groupState.Model(gsid);
+            if (promises.length > 0) {
+                return Promise.all(promises).then(function(promises) {
+                    var defaults = {};
+                    for (var i in promises) {
+                        var promise = promises[i],
+                            key = promise[0],
+                            value = promise[1];
+                        defaults[key] = value;
+                    }
+                    return new groupState.Model(defaults);
+                });
+            } else {
+                return new groupState.Model();
+            }
         },
         peg$c19 = function(gsi, data) {
             return [gsi, data];
@@ -596,6 +627,7 @@ module.exports = (function() {
         var groupSpec = require("../models/groupSpec.js"),
             panelSpec = require("../models/panelSpec.js"),
             groupState = require("../models/groupState.js"),
+            Promise = require('bluebird'),
             viewsFactory = require("../objects/viewsFactory.js");
 
 
