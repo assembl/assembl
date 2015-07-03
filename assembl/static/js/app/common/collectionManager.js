@@ -526,7 +526,6 @@ var CollectionManager = Marionette.Controller.extend({
 
     },
 
-    
     _parseGroupStates: function (models, allIdeasCollection) {
       var that = this;
       _.each(models, function(model) {
@@ -542,16 +541,22 @@ var CollectionManager = Marionette.Controller.extend({
 
     /* Gets the stored configuration of groups and panels
      */
-    getGroupSpecsCollectionPromise: function (viewsFactory) {
+    getGroupSpecsCollectionPromise: function (viewsFactory, url_structure) {
       var that = this;
 
       if (this._allGroupSpecsCollectionPromise === undefined) {
         //FIXME:  This is slow.  Investigate fetching the single idea and adding it to the collection before fetching the whole collection
         return this.getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
-          var collection,
-          data = Storage.getStorageGroupItem();
+          var collection, data;
+          if (url_structure !== undefined) {
+            collection = url_structure;
+          } else {
+            data = Storage.getStorageGroupItem();
+            if (data !== undefined) {
+              data = that._parseGroupStates(data, allIdeasCollection);
+            }
+          }
           if (data !== undefined) {
-            data = that._parseGroupStates(data, allIdeasCollection);
             collection = new groupSpec.Collection(data, {parse: true});
             if (!collection.validate()) {
               console.error("getGroupSpecsCollectionPromise(): Collection in local storage is invalid, will return a new one");

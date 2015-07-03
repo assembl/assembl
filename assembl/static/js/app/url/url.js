@@ -37,27 +37,32 @@ module.exports = (function() {
         peg$c2 = function(spec) {return spec;},
         peg$c3 = null,
         peg$c4 = function(specs) {
-            return specs;
+            var coll = new groupSpec.Collection();
+            for (var i in specs) {
+                coll.add(specs[i]);
+            }
+            return coll;
         },
         peg$c5 = "/",
         peg$c6 = { type: "literal", value: "/", description: "\"/\"" },
         peg$c7 = ";",
         peg$c8 = { type: "literal", value: ";", description: "\";\"" },
         peg$c9 = function(pdl, gsid) {
-            return {
-                "panels": pdl,
-                "data": gsid
-            };
+            return new groupSpec.Model({
+                panels: new panelSpec.Collection(pdl, {'viewsFactory': viewsFactory }),
+                states: new groupState.Collection([gsid])
+            });
         },
         peg$c10 = "{",
         peg$c11 = { type: "literal", value: "{", description: "\"{\"" },
         peg$c12 = "}",
         peg$c13 = { type: "literal", value: "}", description: "\"}\"" },
         peg$c14 = function(panelId, spec) {
-            return {
-                "panelId": panelId,
-                "spec": spec?spec[1]:null,
-            };
+            return new panelSpec.Model({
+                    "type": viewsFactory.typeByCode[panelId.toUpperCase()],
+                    "minimized": panelId.toUpperCase() != panelId,
+                    "subSpec": spec?spec[1]:null,
+                });
         },
         peg$c15 = /^[A-Za-z]/,
         peg$c16 = { type: "class", value: "[A-Za-z]", description: "[A-Za-z]" },
@@ -65,10 +70,12 @@ module.exports = (function() {
         peg$c18 = function(gsis) {
             gsid = {};
             for (var i in gsis) {
-                var gsi = gsis[i];
-                gsid[gsi[0]] = gsi[1];
+                var gsi = gsis[i],
+                    specCode = gsi[0],
+                    specData = gsi[1];
+                groupState.Model.decodeUrlData(specCode, specData, gsid);
             }
-            return gsid;
+            return new groupState.Model(gsid);
         },
         peg$c19 = function(gsi, data) {
             return [gsi, data];
@@ -584,6 +591,13 @@ module.exports = (function() {
 
       return s0;
     }
+
+
+        var groupSpec = require("../models/groupSpec.js"),
+            panelSpec = require("../models/panelSpec.js"),
+            groupState = require("../models/groupState.js"),
+            viewsFactory = require("../objects/viewsFactory.js");
+
 
     peg$result = peg$startRuleFunction();
 

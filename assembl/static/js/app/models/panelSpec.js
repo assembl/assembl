@@ -24,7 +24,7 @@ var PanelSpecModel = Base.Model.extend({
         }
         var view;
         try {
-            view = viewsFactory(this);
+            view = viewsFactory.byPanelSpec(this);
             if (view === undefined) {
                 return "The view is undefined";
             }

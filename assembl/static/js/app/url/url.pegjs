@@ -1,5 +1,17 @@
+{
+    var groupSpec = require("../models/groupSpec.js"),
+        panelSpec = require("../models/panelSpec.js"),
+        groupState = require("../models/groupState.js"),
+        viewsFactory = require("../objects/viewsFactory.js");
+}
+
+
 start = specs:( slash spec:specification0 {return spec;} )+ slash? {
-    return specs;
+    var coll = new groupSpec.Collection();
+    for (var i in specs) {
+        coll.add(specs[i]);
+    }
+    return coll;
 }
 
 slash = "/"
@@ -7,24 +19,25 @@ slash = "/"
 semicolon = ";"
 
 specification0 = pdl:panelData+ gsid:groupSpecInfos {
-    return {
-        "panels": pdl,
-        "data": gsid
-    };
+    return new groupSpec.Model({
+        panels: new panelSpec.Collection(pdl, {'viewsFactory': viewsFactory }),
+        states: new groupState.Collection([gsid])
+    });
 }
 
 specification = pdl:panelData* gsid:groupSpecInfos {
-    return {
-        "panels": pdl,
-        "data": gsid
-    };
+    return new groupSpec.Model({
+        panels: new panelSpec.Collection(pdl, {'viewsFactory': viewsFactory }),
+        states: new groupState.Collection([gsid])
+    });
 }
 
 panelData = panelId:panelId spec:("{" specification "}" )? {
-    return {
-        "panelId": panelId,
-        "spec": spec?spec[1]:null,
-    };
+    return new panelSpec.Model({
+            "type": viewsFactory.typeByCode[panelId.toUpperCase()],
+            "minimized": panelId.toUpperCase() != panelId,
+            "subSpec": spec?spec[1]:null,
+        });
 }
 
 panelId = [A-Za-z]
@@ -32,10 +45,12 @@ panelId = [A-Za-z]
 groupSpecInfos = gsis:( semicolon gsi:groupSpecInfo {return gsi;} )* {
     gsid = {};
     for (var i in gsis) {
-        var gsi = gsis[i];
-        gsid[gsi[0]] = gsi[1];
+        var gsi = gsis[i],
+            specCode = gsi[0],
+            specData = gsi[1];
+        groupState.Model.decodeUrlData(specCode, specData, gsid);
     }
-    return gsid;
+    return new groupState.Model(gsid);
 }
 
 groupSpecInfo = gsi:groupSpecId data:data {

@@ -15,6 +15,12 @@ var GroupStateModel = Base.Model.extend({
     currentIdea: null
   },
   
+  decodeUrlData: function(code, data, result) {
+    if (code == 'i') {
+      result.currentId = "local:Idea/" + data;
+    }
+  },
+
   toJSON:  function (options) {
     var json = Base.Model.prototype.toJSON.apply(this, arguments);
     if(json.currentIdea !== null && json.currentIdea instanceof Idea.Model) {

@@ -17,7 +17,7 @@ describe('Objects Specs', function () {
 
             it('panelViewByPanelSpec should throw an error if invalidPanelSpecModel ', function () {
                 var panel = function () {
-                    return panelViewByPanelSpec(model);
+                    return panelViewByPanelSpec.byPanelSpec(model);
                 }
                 expect(panel).to.throw();
             });

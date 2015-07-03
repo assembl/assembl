@@ -46,7 +46,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
     panelUnlockedReason: null,
 
     initialize: function (options) {
-        var contentClass = panelViewByPanelSpec(options.contentSpec);
+        var contentClass = panelViewByPanelSpec.byPanelSpec(options.contentSpec);
         this.groupContent = options.groupContent;
         if (!this.groupContent) {
           throw new Error("The groupContent wasn't passed in the options");

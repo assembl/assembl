@@ -17,7 +17,8 @@ var _ = require('../shims/underscore.js'),
  * A registry of AssemblView subclasses implementing a panelSpec,
  * indexed by PanelSpec.id
  */
-var panelTypeRegistry = {};
+var panelTypeRegistry = {},
+    typeByCode = {};
 _.each([
     AboutNavPanel, ContextPanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList.SegmentListPanel, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanel
 ], function (panelClass) {
@@ -25,6 +26,7 @@ _.each([
     var panelType = panelClass.prototype.panelType;
     //console.log(panelClass.prototype.panelType);
     panelTypeRegistry[panelType.id] = panelClass;
+    typeByCode[panelType.code] = panelType.id;
 });
 //console.log("panelTypeRegistry:", panelTypeRegistry);
 
@@ -54,4 +56,4 @@ function panelViewByPanelSpec(panelSpecModel) {
     }
 }
 
-module.exports = panelViewByPanelSpec;
+module.exports = {byPanelSpec: panelViewByPanelSpec, typeByCode: typeByCode };

@@ -158,27 +158,28 @@ var routeManager = Marionette.Object.extend({
 
     groupSpec: function(path) {
         console.log(path);
+        Ctx.isNewUser();
         try {
             var structure = UrlParser.parse("/"+path);
             console.log(structure);
+            this.restoreViews(false, structure);
         } catch (err) {
-            console.log(err);
+            console.error(err);
+            this.restoreViews(true);
         }
-        Ctx.isNewUser();
-        this.restoreViews(true);
     },
 
     /**
      * @param from_home:  If true, the function was called from the home view
      * @return promise to a GroupContainer
      */
-    restoreViews: function (from_home) {
+    restoreViews: function (from_home, url_structure) {
         Assembl.headerRegions.show(new NavBar());
         Assembl.groupContainer.show(new Loader());
         /**
          * Render the current group of views
          * */
-        var groupSpecsP = this.collectionManager.getGroupSpecsCollectionPromise(ViewsFactory);
+        var groupSpecsP = this.collectionManager.getGroupSpecsCollectionPromise(ViewsFactory, url_structure);
 
         return groupSpecsP.then(function (groupSpecs) {
             var groupsView = new GroupContainer({
