@@ -18,6 +18,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref, deferred
 
+from ..lib.sqla import UPDATE_OP
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from virtuoso.alchemy import CoerceUnicode
 from .generic import Content
@@ -239,6 +240,13 @@ def orm_insert_listener(mapper, connection, target):
     isn't otherwise linked to the table of idea """
     if target.discussion.root_idea:
         target.discussion.root_idea.send_to_changes(connection)
+    # Check if this is the first post by this user in the discussion.
+    # In which case, tell the discussion about this new participant,
+    # which was not in Discussion.get_participants_query originally.
+    if target.db.query(Post).filter_by(
+            creator_id=target.creator_id,
+            discussion_id=target.discussion_id).count() <= 1:
+        target.creator.send_to_changes(connection, UPDATE_OP)
 
 event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
 

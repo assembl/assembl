@@ -18,6 +18,7 @@ from sqlalchemy import (
     Binary,
     inspect,
     desc,
+    event,
     Index,
     UniqueConstraint
 )
@@ -590,6 +591,12 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
         return (cls.id == discussion_id,)
 
 
+@event.listens_for(AgentStatusInDiscussion, 'after_insert', propagate=True)
+def send_user_to_socket_for_asid(mapper, connection, target):
+    # TODO: add a parameter for a private send. (discussion-specific)
+    target.agent_profile.send_to_changes(connection, UPDATE_OP)
+
+
 class User(AgentProfile):
     """
     A Human user.
@@ -986,6 +993,9 @@ class UserRole(Base, PrivateObjectMixin):
     def get_user_uri(self):
         return User.uri_generic(self.user_id)
 
+    def get_role_name(self):
+        return self.role.name
+
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
         role_alias = alias_maker.alias_from_relns(cls.role)
@@ -1002,6 +1012,14 @@ class UserRole(Base, PrivateObjectMixin):
                 SIOC.has_scope, URIRef(AssemblQuadStorageManager.local_uri()),
                 name=QUADNAMES.class_UserRole_globalscope, sections=(USER_SECTION,)),
             ]
+
+
+@event.listens_for(UserRole, 'after_insert', propagate=True)
+@event.listens_for(UserRole, 'after_delete', propagate=True)
+def send_user_to_socket_for_user_role(mapper, connection, target):
+    # TODO: add a parameter for a private send.
+    target.user.send_to_changes(connection, UPDATE_OP)
+
 
 
 class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
@@ -1132,6 +1150,15 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
             return True
         return super(LocalUserRole, cls).user_can_cls(
             user_id, operation, permissions)
+
+
+@event.listens_for(LocalUserRole, 'after_delete', propagate=True)
+@event.listens_for(LocalUserRole, 'after_insert', propagate=True)
+def send_user_to_socket_for_local_user_role(
+        mapper, connection, target):
+    # TODO: add a parameter for a private send.
+    import pdb; pdb.set_trace()
+    target.user.send_to_changes(connection, UPDATE_OP)
 
 
 class Permission(Base):
