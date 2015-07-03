@@ -593,8 +593,8 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
 
 @event.listens_for(AgentStatusInDiscussion, 'after_insert', propagate=True)
 def send_user_to_socket_for_asid(mapper, connection, target):
-    # TODO: add a parameter for a private send. (discussion-specific)
-    target.agent_profile.send_to_changes(connection, UPDATE_OP)
+    target.agent_profile.send_to_changes(
+        connection, UPDATE_OP, target.discussion_id)
 
 
 class User(AgentProfile):
@@ -1019,7 +1019,7 @@ class UserRole(Base, PrivateObjectMixin):
 @event.listens_for(UserRole, 'after_insert', propagate=True)
 @event.listens_for(UserRole, 'after_delete', propagate=True)
 def send_user_to_socket_for_user_role(mapper, connection, target):
-    # TODO: add a parameter for a private send.
+    #target.user.send_to_changes(connection, UPDATE_OP, view_def="private")
     target.user.send_to_changes(connection, UPDATE_OP)
 
 
@@ -1158,9 +1158,8 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
 @event.listens_for(LocalUserRole, 'after_insert', propagate=True)
 def send_user_to_socket_for_local_user_role(
         mapper, connection, target):
-    # TODO: add a parameter for a private send.
-    import pdb; pdb.set_trace()
-    target.user.send_to_changes(connection, UPDATE_OP)
+    target.user.send_to_changes(connection, UPDATE_OP, target.discussion_id)
+    #target.user.send_to_changes(connection, UPDATE_OP, target.discussion_id, "private")
 
 
 class Permission(Base):

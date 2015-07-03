@@ -246,7 +246,7 @@ def orm_insert_listener(mapper, connection, target):
     if target.db.query(Post).filter_by(
             creator_id=target.creator_id,
             discussion_id=target.discussion_id).count() <= 1:
-        target.creator.send_to_changes(connection, UPDATE_OP)
+        target.creator.send_to_changes(connection, UPDATE_OP, target.discussion_id)
 
 event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
 
