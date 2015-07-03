@@ -69,9 +69,9 @@ gulp.task('browserify:prod',['clean:app'] ,function() {
         .pipe(source('index.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(uglify({
+        /*.pipe(uglify({
             compress: false
-         }))
+         }))*/
         .pipe(rename('app.js'))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.js+'/build/'))
@@ -183,5 +183,5 @@ gulp.task('clean:infrastructure', function (cb) {
  * */
 
 gulp.task('build:source', ['libs','browserify:dev']);
-gulp.task('build:prod', ['browserify:prod', 'libs']);
+gulp.task('build:prod', ['libs','browserify:prod']);
 gulp.task('default', ['browserify:dev']);
