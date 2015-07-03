@@ -1023,12 +1023,11 @@ def virtuoso_reconstruct_db():
     execute(virtuoso_reconstruct_save_db)
     execute(virtuoso_reconstruct_restore_db)
 
-
 def virtuoso_install_or_upgrade():
     with settings(warn_only=True), hide('warnings', 'stdout', 'stderr'):
         ls_cmd = run("ls %s" % get_virtuoso_exec())
         ls_supervisord_conf_cmd = run("ls %s" % get_supervisord_conf())
-    if ls_cmd.failed or ls_supervisord_conf_cmd:
+    if ls_cmd.failed or ls_supervisord_conf_cmd.failed:
         print(red("Virtuso not installed, installing."))
         execute(virtuoso_source_install)
     else:
