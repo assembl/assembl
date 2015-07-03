@@ -23,7 +23,8 @@ class DiscussionBoundBase(Base):
         "Get the ID of an associated discussion object, if any."
         return self.discussion_id or self.discussion.id
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP):
+    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+                        discussion_id=None, view_def="changes"):
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
             # This should be the case in general, no need to add a transaction manager.
@@ -31,7 +32,7 @@ class DiscussionBoundBase(Base):
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
         connection.info['cdict'][self.uri()] = (
-            self.get_discussion_id(), self)
+            discussion_id or self.get_discussion_id(), self, changes)
 
     @abstractclassmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -53,12 +54,13 @@ class DiscussionBoundTombstone(Tombstone):
         super(DiscussionBoundTombstone, self).__init__(ob, **kwargs)
         self.discussion_id = ob.get_discussion_id()
 
-    def send_to_changes(self, connection, operation=DELETE_OP):
+    def send_to_changes(self, connection, operation=DELETE_OP,
+                        discussion_id=None, view_def="changes"):
         assert connection
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
         connection.info['cdict'][self.uri] = (
-            self.discussion_id, self)
+            discussion_id or self.discussion_id, self, view_def)
 
 
 from .auth import (

@@ -262,8 +262,10 @@ class Content(DiscussionBoundBase):
         """
         return "text/plain"
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP):
-        super(Content, self).send_to_changes(connection, operation)
+    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+                        discussion_id=None, view_def="changes"):
+        super(Content, self).send_to_changes(
+            connection, operation, discussion_id, view_def)
         watcher = get_model_watcher()
         if operation == INSERT_OP:
             watcher.processPostCreated(self.id)

@@ -268,7 +268,8 @@ class BaseOps(object):
     def tombstone(self):
         return Tombstone(self)
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP):
+    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+                        discussion_id=None, view_def="changes"):
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
             # This should be the case in general, no need to add a transaction manager.
@@ -276,7 +277,7 @@ class BaseOps(object):
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
         connection.info['cdict'][self.uri()] = (
-            None, self)
+            discussion_id, self, view_def)
 
     @classmethod
     def external_typename(cls):
@@ -1413,12 +1414,13 @@ class Tombstone(object):
         args.update(self.extra_args)
         return args
 
-    def send_to_changes(self, connection, operation=DELETE_OP):
+    def send_to_changes(self, connection, operation=DELETE_OP,
+                        discussion_id=None, view_def="changes"):
         assert connection
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
         connection.info['cdict'][self.uri] = (
-            None, self)
+            discussion_id, self, view_def)
 
 
 def orm_update_listener(mapper, connection, target):
@@ -1450,9 +1452,9 @@ def before_commit_listener(session):
     info = session.connection().info
     if 'cdict' in info:
         changes = defaultdict(list)
-        for (uri, (discussion, target)) in info['cdict'].iteritems():
+        for (uri, (discussion, target, view_def)) in info['cdict'].iteritems():
             discussion = bytes(discussion or "*")
-            json = target.generic_json('changes')
+            json = target.generic_json(view_def)
             if json:
                 changes[discussion].append(json)
         del info['cdict']

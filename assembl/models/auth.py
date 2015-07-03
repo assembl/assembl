@@ -755,8 +755,10 @@ class User(AgentProfile):
             for (d_id,) in self.db.query(Discussion.id)}
         return permissions
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP):
-        super(User, self).send_to_changes(connection, operation)
+    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+                        discussion_id=None, view_def="changes"):
+        super(User, self).send_to_changes(
+            connection, operation, discussion_id, view_def)
         watcher = get_model_watcher()
         if operation == UPDATE_OP:
             watcher.processAccountModified(self.id)

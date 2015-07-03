@@ -530,12 +530,15 @@ JOIN post AS family_posts ON (
             next_synthesis.ideas.remove(self)
             next_synthesis.send_to_changes()
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP):
+    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+                        discussion_id=None, view_def="changes"):
         connection = connection or self.db.connection()
         if self.is_tombstone:
-            self.tombstone().send_to_changes(connection)
+            self.tombstone().send_to_changes(
+                connection, DELETE_OP, discussion_id, view_def)
         else:
-            super(Idea, self).send_to_changes(connection)
+            super(Idea, self).send_to_changes(
+                connection, operation, discussion_id, view_def)
         watcher = get_model_watcher()
         if operation == UPDATE_OP:
             watcher.processIdeaModified(self.id, 0)  # no versions yet.
@@ -991,12 +994,15 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
         else:
             return self.object_session.query(Idea).get(self.source_id).get_discussion_id()
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP):
+    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+                        discussion_id=None, view_def="changes"):
         connection = connection or self.db.connection()
         if self.is_tombstone:
-            self.tombstone().send_to_changes(connection)
+            self.tombstone().send_to_changes(
+                connection, DELETE_OP, discussion_id, view_def)
         else:
-            super(IdeaLink, self).send_to_changes(connection)
+            super(IdeaLink, self).send_to_changes(
+                connection, operation, discussion_id, view_def)
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):

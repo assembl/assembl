@@ -370,8 +370,10 @@ class Extract(IdeaContentPositiveLink):
         tfi.offset_end = start+len(quote)
         return tfi
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP):
-        super(Extract, self).send_to_changes(connection, operation)
+    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+                        discussion_id=None, view_def="changes"):
+        super(Extract, self).send_to_changes(
+            connection, operation, discussion_id, view_def)
         watcher = get_model_watcher()
         if operation == UPDATE_OP:
             watcher.processExtractModified(self.id, 0)  # no versions yet.
