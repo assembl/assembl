@@ -32,7 +32,7 @@ class DiscussionBoundBase(Base):
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
         connection.info['cdict'][self.uri()] = (
-            discussion_id or self.get_discussion_id(), self, changes)
+            discussion_id or self.get_discussion_id(), self, view_def)
 
     @abstractclassmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
