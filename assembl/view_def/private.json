@@ -16,9 +16,7 @@
         "avatar_url_base": "&external_avatar_url",
         "name": "&display_name",
         "real_name": "&real_name",
-        "post_count": "&count_posts_in_current_discussion",
         "preferred_email": false,
-        "was_created_on_current_discussion": false,
         "is_first_visit": false,
         "accounts": [":default"]
     },
@@ -44,9 +42,7 @@
         "login_failures": false,
         "password": false,
         "verified": true,
-        "is_first_visit": true,
-        "was_created_on_current_discussion": true,
-        "permissions": "permissions_for_current_discussion",
+        "permissions": "&get_all_permissions",
         "username": "username_p"
     },
     "UserTemplate": {
