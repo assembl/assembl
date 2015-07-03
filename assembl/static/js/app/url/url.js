@@ -73,7 +73,7 @@ module.exports = (function() {
                 var gsi = gsis[i],
                     specCode = gsi[0],
                     specData = gsi[1];
-                groupState.Model.decodeUrlData(specCode, specData, gsid);
+                groupState.Model.prototype.decodeUrlData(specCode, specData, gsid);
             }
             return new groupState.Model(gsid);
         },
