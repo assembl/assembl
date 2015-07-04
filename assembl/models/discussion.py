@@ -1,6 +1,7 @@
 from itertools import groupby, chain
 import traceback
 from datetime import datetime
+from collections import defaultdict
 
 import simplejson as json
 from pyramid.security import Allow, ALL_PERMISSIONS
@@ -8,13 +9,13 @@ from sqlalchemy import (
     Column,
     Integer,
     UnicodeText,
-    SmallInteger,
     DateTime,
     Text,
     String,
     Boolean,
     event,
     and_,
+    func,
 )
 from sqlalchemy.orm import relationship, join, subqueryload_all
 
@@ -412,7 +413,30 @@ class Discussion(DiscussionBoundBase):
         from assembl.lib.frontend_urls import FrontendUrls
         frontendUrls = FrontendUrls(self)
         return frontendUrls.get_discussion_url()
-    
+
+    def count_contributions_per_agent(
+            self, start_date=None, end_date=None, as_agent=True):
+        from .post import Post
+        from .auth import AgentProfile
+        query = self.db.query(
+            func.count(Post.id), Post.creator_id).filter_by(
+                discussion_id=self.id)
+        if start_date:
+            query = query.filter(Post.creation_date >= start_date)
+        if end_date:
+            query = query.filter(Post.creation_date < end_date)
+        query = query.group_by(Post.creator_id)
+        results = query.all()
+        # from highest to lowest
+        results.sort(reverse=True)
+        if not as_agent:
+            return [(id, count) for (count, id) in results]
+        agent_ids = [ag for (c, ag) in results]
+        agents = self.db.query(AgentProfile).filter(
+            AgentProfile.id.in_(agent_ids))
+        agents_by_id = {ag.id: ag for ag in agents}
+        return [(agents_by_id[id], count) for (count, id) in results]
+
     def as_mind_map(self):
         import pygraphviz
         from chroma import Color
