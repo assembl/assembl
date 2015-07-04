@@ -1,0 +1,10 @@
+// should allow comments in this type of config
+{
+    "excludeFiles": [
+        "node_modules/**",
+        "assembl/static/js/build/**",
+        "assembl/static/js/bower/**",
+        "assembl/static/js/lib/**"
+    ],
+    "preset": "airbnb"
+}
