@@ -240,15 +240,16 @@ var MessageCollection = Base.Collection.extend({
      * @return {Object[]}
      */
     visitDepthFirst: function (visitor, message, ancestry) {
+        var that=this;
         if (ancestry === undefined) {
             ancestry = [];
         }
         if (message === undefined) {
             var rootMessages = this.where({ parentId: null });
-            for (var i in rootMessages) {
-                this.visitDepthFirst(visitor, rootMessages[i], ancestry);
-            }
-            return;
+            var results = _.map(rootMessages, function(rootMessage) {
+                that.visitDepthFirst(visitor, rootMessage, ancestry);
+            });
+            return visitor.post_visit(undefined, results);
         }
         if (visitor.visit(message, ancestry)) {
             //Copy ancestry
@@ -257,9 +258,10 @@ var MessageCollection = Base.Collection.extend({
             var children = _.sortBy(message.getChildren(), function (child) {
                 return child.get('date');
             });
-            for (var i in children) {
-                this.visitDepthFirst(visitor, children[i], ancestry);
-            }
+            var results = _.map(children, function(child) {
+                that.visitDepthFirst(visitor, child, ancestry);
+            });
+            return visitor.post_visit(this, results);
         }
     }
 

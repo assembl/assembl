@@ -480,7 +480,8 @@ var IdeaCollection = Base.Collection.extend({
             ancestry = [];
         }
         //console.log(idea_links);
-        var idea = this.get(origin_id);
+        var that = this,
+            idea = this.get(origin_id);
         if (idea !== undefined && idea.get('is_tombstone') && include_ts !== true) {
             return;
         }
@@ -496,9 +497,10 @@ var IdeaCollection = Base.Collection.extend({
             child_links = child_links.filter(function(l) {
                 return ancestry.indexOf(l.get('target')) === -1;
             });
-            for (var i in child_links) {
-                this.visitDepthFirst(idea_links, visitor, child_links[i].get('target'), include_ts, ancestry);
-            }
+            var results = _.map(child_links, function(child_link) {
+                return that.visitDepthFirst(idea_links, visitor, child_link.get('target'), include_ts, ancestry);
+            });
+            return visitor.post_visit(this, results);
         }
     },
 
@@ -508,8 +510,9 @@ var IdeaCollection = Base.Collection.extend({
      * @param ancestry Internal recursion parameter, do not set or use
      */
     visitBreadthFirst: function (idea_links, visitor, origin_id, include_ts, ancestry) {
-        var continue_visit = true;
-        var idea = this.get(origin_id);
+        var that = this,
+            continue_visit = true,
+            idea = this.get(origin_id);
         if (ancestry === undefined) {
             ancestry = [];
             if (idea !== undefined)
@@ -538,9 +541,10 @@ var IdeaCollection = Base.Collection.extend({
                     children_to_visit.push(target_id);
                 }
             }
-            for (var i in children_to_visit) {
-                this.visitBreadthFirst(idea_links, visitor, children_to_visit[i], include_ts, ancestry);
-            }
+            var results = _.map(children_to_visit, function(child) {
+                that.visitBreadthFirst(idea_links, visitor, child, include_ts, ancestry);
+            });
+            return visitor.post_visit(this, results);
         }
     },
 
