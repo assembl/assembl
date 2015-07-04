@@ -437,6 +437,34 @@ class Discussion(DiscussionBoundBase):
         agents_by_id = {ag.id: ag for ag in agents}
         return [(agents_by_id[id], count) for (count, id) in results]
 
+    def count_new_visitors(
+            self, start_date=None, end_date=None, as_agent=True):
+        from .auth import AgentStatusInDiscussion
+        query = self.db.query(
+            func.count(AgentStatusInDiscussion.id)).filter_by(
+            discussion_id=self.id)
+        if start_date:
+            query = query.filter(
+                AgentStatusInDiscussion.first_visit >= start_date)
+        if end_date:
+            query = query.filter(
+                AgentStatusInDiscussion.first_visit < end_date)
+        return query.first()[0]
+
+    def count_post_viewers(
+            self, start_date=None, end_date=None, as_agent=True):
+        from .post import Post
+        from .action import ViewPost
+        from sqlalchemy.sql.expression import distinct
+        query = self.db.query(
+            func.count(distinct(ViewPost.actor_id))).join(Post).filter(
+                Post.discussion_id == self.id)
+        if start_date:
+            query = query.filter(ViewPost.creation_date >= start_date)
+        if end_date:
+            query = query.filter(ViewPost.creation_date < end_date)
+        return query.first()[0]
+
     def as_mind_map(self):
         import pygraphviz
         from chroma import Color

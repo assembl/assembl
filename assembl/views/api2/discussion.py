@@ -228,7 +228,7 @@ def get_contribution_count(request):
         while start < end:
             this_end = min(start+interval, end)
             results.append(dict(
-                start=start, end=this_end,
+                start=start.isoformat(), end=this_end.isoformat(),
                 count=discussion.count_contributions_per_agent(
                     start, this_end)))
             start = this_end
@@ -239,16 +239,14 @@ def get_contribution_count(request):
             from sqlalchemy import func
             (start,) = discussion.db.query(func.min(Post.creation_date)
                 ).filter_by(discussion_id=discussion.id).first()
-        r["start"] = start
+        r["start"] = start.isoformat()
         if not end:
             end = datetime.now()
-        r["end"] = end
+        r["end"] = end.isoformat()
         results.append(r)
     if (request.GET.get('format', None) == 'json'
             or request.accept == 'application/json'):
         for v in results:
-            v['start'] = v['start'].isoformat()
-            v['end'] = v['end'].isoformat()
             v['count'] = {agent.display_name(): count
                           for (agent, count) in v['count']}
         return Response(json.dumps(results), content_type='application/json')
@@ -268,9 +266,9 @@ def get_contribution_count(request):
     output = StringIO()
     csv = writer(output)
     csv.writerow(['Start']+[
-        x['start'].isoformat() for x in results] + ['Total'])
+        x['start'] for x in results] + ['Total'])
     csv.writerow(['End']+[
-        x['end'].isoformat() for x in results] + [''])
+        x['end'] for x in results] + [''])
     for agent_id, total_count in count_list:
         agent = agents[agent_id]
         agent_name = (
@@ -278,6 +276,69 @@ def get_contribution_count(request):
             agent.get_preferred_email())
         csv.writerow([agent_name.encode('utf-8')] + [
             x['count'].get(agent_id, '') for x in results] + [total_count])
+    output.seek(0)
+    return Response(body_file=output, content_type='text/csv')
+
+
+@view_config(context=InstanceContext, name="visit_count",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_ADMIN_DISC)
+def get_visit_count(request):
+    import isodate
+    from datetime import datetime
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    interval = request.GET.get("interval", None)
+    discussion = request.context._instance
+    try:
+        if start:
+            start = isodate.parse_datetime(start)
+        if end:
+            end = isodate.parse_datetime(end)
+        if interval:
+            interval = isodate.parse_duration(interval)
+    except isodate.ISO8601Error as e:
+        raise HTTPBadRequest(e)
+    if interval and not start:
+        raise HTTPBadRequest("You cannot define an interval and no start")
+    if interval and not end:
+        end = datetime.now()
+    results = []
+    if interval:
+        while start < end:
+            this_end = min(start+interval, end)
+            results.append(dict(
+                start=start.isoformat(), end=this_end.isoformat(),
+                readers=discussion.count_post_viewers(
+                    start, this_end),
+                first_visitors=discussion.count_new_visitors(
+                    start, this_end)))
+            start = this_end
+    else:
+        r = dict(
+            readers=discussion.count_post_viewers(start, end),
+            first_visitors=discussion.count_new_visitors(start, end))
+        if not start:
+            from assembl.models import Post
+            from sqlalchemy import func
+            (start,) = discussion.db.query(func.min(Post.creation_date)
+                ).filter_by(discussion_id=discussion.id).first()
+        r["start"] = start.isoformat()
+        if not end:
+            end = datetime.now()
+        r["end"] = end.isoformat()
+        results.append(r)
+    if (request.GET.get('format', None) == 'json'
+            or request.accept == 'application/json'):
+        return Response(json.dumps(results), content_type='application/json')
+    # otherwise assume csv
+    from csv import DictWriter
+    output = StringIO()
+    csv = DictWriter(output, fieldnames=[
+        'start', 'end', 'first_visitors', 'readers'])
+    csv.writeheader()
+    for r in results:
+        csv.writerow(r)
     output.seek(0)
     return Response(body_file=output, content_type='text/csv')
 
