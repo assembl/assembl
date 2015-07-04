@@ -2,7 +2,8 @@
 # https://github.com/okfn/annotator-store/blob/master/annotator/auth.py
 import datetime
 
-import iso8601
+import isodate
+import pytz
 import jwt
 
 DEFAULT_TTL = 86400
@@ -34,7 +35,7 @@ def decode_token(token, secret='', ttl=DEFAULT_TTL, verify=True):
         if issue_time is None:
             raise TokenInvalid("'issuedAt' is missing from token")
 
-        issue_time = iso8601.parse_date(issue_time)
+        issue_time = isodate.parse_date(issue_time)
         expiry_time = issue_time + datetime.timedelta(seconds=ttl)
 
         if issue_time > _now():
@@ -46,4 +47,4 @@ def decode_token(token, secret='', ttl=DEFAULT_TTL, verify=True):
 
 
 def _now():
-    return datetime.datetime.now(iso8601.iso8601.UTC).replace(microsecond=0)
+    return datetime.datetime.now(pytz.UTC).replace(microsecond=0)

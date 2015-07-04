@@ -171,10 +171,10 @@ def get_posts(request):
         posts = posts.filter(Post.id.in_(ids))
 
     if posted_after_date:
-        import iso8601
+        import isodate
         try:
-            posted_after_date = iso8601.parse_date(posted_after_date)
-        except iso8601.ParseError as e:
+            posted_after_date = isodate.parse_date(posted_after_date)
+        except isodate.ISO8601Error as e:
             posted_after_date = None
             raise e 
         if posted_after_date:

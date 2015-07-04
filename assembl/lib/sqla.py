@@ -12,7 +12,7 @@ import atexit
 from abc import abstractmethod
 
 from anyjson import dumps, loads
-import iso8601
+import isodate
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
     DateTime, MetaData, engine_from_config, event, Column, Integer,
@@ -936,7 +936,7 @@ class BaseOps(object):
                     if isinstance(value, (str, unicode)):
                         target_type = col.type.__class__
                         if target_type == DateTime:
-                            value = iso8601.parse_date(value, None)
+                            value = isodate.parse_datetime(value)
                             assert value
                             setattr(self, key, value)
                         elif isinstance(col.type, DeclEnumType):

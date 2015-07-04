@@ -52,7 +52,6 @@ imaplib2==2.45.0
 ipaddress==1.0.7
 isodate==0.5.1
 iso639==0.1.1
-iso8601==0.1.10
 -e git+https://github.com/imaginationforpeople/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.26
