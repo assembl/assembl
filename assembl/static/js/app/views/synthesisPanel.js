@@ -1,6 +1,6 @@
 'use strict';
 
-var objectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
+var ObjectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     Raven = require('raven-js'),
     _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
@@ -163,7 +163,7 @@ var SynthesisPanel = AssemblPanel.extend({
           return retval;
         }
         if (rootIdea) {
-          ideasCollection.visitDepthFirst(ideaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId(), true);
+          ideasCollection.visitDepthFirst(ideaLinksCollection, new ObjectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId(), true);
         }
         _.each(roots, function append_recursive(idea) {
           var rendered_idea_view = new IdeaFamilyView({

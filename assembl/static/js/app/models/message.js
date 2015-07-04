@@ -250,7 +250,7 @@ var MessageCollection = Base.Collection.extend({
             }
             return;
         }
-        if (visitor(message, ancestry)) {
+        if (visitor.visit(message, ancestry)) {
             //Copy ancestry
             ancestry = ancestry.slice(0);
             ancestry.push(message.getId());

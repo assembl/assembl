@@ -484,7 +484,7 @@ var IdeaCollection = Base.Collection.extend({
         if (idea !== undefined && idea.get('is_tombstone') && include_ts !== true) {
             return;
         }
-        if (idea === undefined || visitor(idea, ancestry)) {
+        if (idea === undefined || visitor.visit(idea, ancestry)) {
             ancestry = ancestry.slice(0);
             ancestry.push(origin_id);
             var child_links = _.sortBy(
@@ -513,7 +513,7 @@ var IdeaCollection = Base.Collection.extend({
         if (ancestry === undefined) {
             ancestry = [];
             if (idea !== undefined)
-                continue_visit = visitor(idea, ancestry);
+                continue_visit = visitor.visit(idea, ancestry);
         }
         if (continue_visit) {
             ancestry = ancestry.slice(0);
@@ -534,7 +534,7 @@ var IdeaCollection = Base.Collection.extend({
                     target = this.get(target_id);
                 if (target.get('is_tombstone') && include_ts !== true)
                     continue;
-                if (visitor(target, ancestry)) {
+                if (visitor.visit(target, ancestry)) {
                     children_to_visit.push(target_id);
                 }
             }

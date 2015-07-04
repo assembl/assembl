@@ -4,8 +4,8 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     OrphanMessagesInIdeaListView = require('./orphanMessagesInIdeaList.js'),
     SynthesisInIdeaListView = require('./synthesisInIdeaList.js'),
     Permissions = require('../utils/permissions.js'),
-    objectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
-    ideaSiblingChainVisitor = require('./visitors/ideaSiblingChainVisitor'),
+    ObjectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
+    IdeaSiblingChainVisitor = require('./visitors/ideaSiblingChainVisitor'),
     Backbone = require('../shims/backbone.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
@@ -228,8 +228,8 @@ var IdeaList = AssemblPanel.extend({
           return idea.get('order');
         });
 
-        this.allIdeasCollection.visitDepthFirst(this.allIdeaLinksCollection, objectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot), rootIdea.getId());
-        this.allIdeasCollection.visitDepthFirst(this.allIdeaLinksCollection, ideaSiblingChainVisitor(view_data), rootIdea.getId());
+        this.allIdeasCollection.visitDepthFirst(this.allIdeaLinksCollection, new ObjectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot), rootIdea.getId());
+        this.allIdeasCollection.visitDepthFirst(this.allIdeaLinksCollection, new IdeaSiblingChainVisitor(view_data), rootIdea.getId());
         //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
         _.each(roots, function (idea) {
           var ideaView = new IdeaView({

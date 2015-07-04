@@ -1,8 +1,9 @@
 'use strict';
 
+var Visitor = require("./visitor.js");
 
 /**
-* Traversal function to re-visit the output of objectTreeRenderVisitor.
+* Traversal function to re-visit the output of an ObjectTreeRenderVisitor.
 * @param visitor visitor function.  If visitor returns true, traversal continues
 * @return {Object[]}
 */
@@ -22,7 +23,7 @@ function objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_compara
       }
       return;
     }
-    if (visitor(data)) {
+    if (visitor.visit(data)) {
       //Copy ancestry
       ancestry = ancestry.slice(0);
       ancestry.push(data);
@@ -43,20 +44,24 @@ function objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_compara
 * indexed by traversal order
 * @param roots: output param. The objects that have no parents in the set
 */
-function objectTreeRenderVisitorReSortVisitor(data_by_object, order_lookup_table, roots) {
-
-    return function (data, ancestry) {
-      //console.log("visited ", data['@id']);
-      order_lookup_table.push(data['@id']);
-      if(data.last_ancestor_id === null) {
-        roots.push(data.object);
-      }
-      return true;
-    };
+function ObjectTreeRenderVisitorReSortVisitor(order_lookup_table, roots) {
+  this.order_lookup_table = order_lookup_table;
+  this.roots = roots;
 }
 
+ObjectTreeRenderVisitorReSortVisitor.prototype = new Visitor();
 
-/** Re-sort the data_by_object of objectTreeRenderVisitor, using a sibbling sort
+ObjectTreeRenderVisitorReSortVisitor.prototype.visit = function (data, ancestry) {
+  //console.log("visited ", data['@id']);
+  this.order_lookup_table.push(data['@id']);
+  if(data.last_ancestor_id === null) {
+    this.roots.push(data.object);
+  }
+  return true;
+};
+
+
+/** Re-sort the data_by_object of an ObjectTreeRenderVisitor, using a sibling sort
 * function, and outputs the new order_lookup_table and the new (sorted) roots.
 * @paramo rder_lookup_table output param, a list containing every object id retained
 * indexed by traversal order
@@ -69,7 +74,7 @@ function objectTreeRenderVisitorReSort(data_by_object, order_lookup_table, roots
     if (sort_comparator_function === undefined) {
       throw new Error("There is no point in sorting without a comparator function.");
     }
-    var visitor = objectTreeRenderVisitorReSortVisitor(data_by_object, order_lookup_table, roots);
+    var visitor = new ObjectTreeRenderVisitorReSortVisitor(order_lookup_table, roots);
     objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function);
 }
 
