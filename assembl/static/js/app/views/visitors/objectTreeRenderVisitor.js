@@ -62,6 +62,7 @@ ObjectTreeRenderVisitor.prototype.visit = function (object, ancestry) {
         '@id': object_id,
         'object': object,
         'level': level,
+        'real_ancestor_count': ancestry.length,
         'skip_parent': level != 0 & !in_ancestry,
         'is_last_sibling': true,
         'true_sibling': true_sibling,
@@ -73,7 +74,41 @@ ObjectTreeRenderVisitor.prototype.visit = function (object, ancestry) {
     order_lookup_table.push(object_id);
   }
   // This allows you to return 0 vs false and cut recursion short.
+  //benoitg:  map, this has no effect anymore right?
   return filter_result !== 0;
+};
+
+ObjectTreeRenderVisitor.prototype.post_visit = function(object, children_data) {
+  //console.log(object, children_data);
+  var filtered_descendant_count = 0,
+      real_descendant_count = 0,
+      filter_result = false,
+      retval = {};
+  _.each(children_data, function(child_data) {
+    if(child_data !== undefined) {
+      filtered_descendant_count += child_data.filtered_descendant_count;
+      real_descendant_count += child_data.real_descendant_count;
+    }
+  });
+  //console.log(descendant_count);
+  //console.log(this.data_by_object, object);
+  if(object) {
+    filter_result = this.filter_function(object);
+    if(this.data_by_object[object.id]) {
+      //If the object wasn't in filter, it won't be in the data_by_object table
+      this.data_by_object[object.id].filtered_descendant_count = filtered_descendant_count;
+      this.data_by_object[object.id].real_descendant_count = real_descendant_count;
+    }
+  }
+  
+  if (filter_result) {
+    retval.filtered_descendant_count = filtered_descendant_count + 1;
+  }
+  else {
+    retval.filtered_descendant_count = filtered_descendant_count;
+  }
+  retval.real_descendant_count = real_descendant_count + 1;
+  return retval;
 };
 
 module.exports = ObjectTreeRenderVisitor;

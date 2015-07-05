@@ -74,7 +74,7 @@ var MessageModel = Base.Model.extend({
     },
 
     /**
-     * Return all children
+     * Return all direct children
      * @return {MessageModel[]}
      */
     getChildren: function () {
@@ -90,6 +90,16 @@ var MessageModel = Base.Model.extend({
         return this.collection.collectionManager.getMessageFullModelPromise(this.get('parentId'));
       }
       return this.get('parentId');
+    },
+
+    getAncestorCount() {
+      var parents = this.collection.where({ parentId: this.getId() });
+      if(parents.length) {
+        return parents[0].getAncestorCount() + 1
+      }
+      else {
+        return 0;
+      }
     },
 
     /**
@@ -248,11 +258,11 @@ var MessageCollection = Base.Collection.extend({
         if (message === undefined) {
             var rootMessages = this.where({ parentId: null });
             var results = _.map(rootMessages, function(rootMessage) {
-                that.visitDepthFirst(visitor, rootMessage, ancestry);
+                return that.visitDepthFirst(visitor, rootMessage, ancestry);
             });
             return visitor.post_visit(undefined, results);
         }
-        if (visitor.visit(message, ancestry)) {
+        else if (visitor.visit(message, ancestry)) {
             //Copy ancestry
             ancestry = ancestry.slice(0);
             ancestry.push(message.getId());
@@ -260,9 +270,13 @@ var MessageCollection = Base.Collection.extend({
                 return child.get('date');
             });
             var results = _.map(children, function(child) {
-                that.visitDepthFirst(visitor, child, ancestry);
+                return that.visitDepthFirst(visitor, child, ancestry);
             });
-            return visitor.post_visit(this, results);
+            return visitor.post_visit(message, results);
+        }
+        else {
+          console.log("Fallback case, returning undefined");
+          return undefined;
         }
     }
 

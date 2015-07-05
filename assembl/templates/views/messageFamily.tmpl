@@ -1,3 +1,10 @@
+
+<% if (hasParentsOrChildrenOutOfScope) { %>
+  <div class="message-conversation-block">
+    <a href="#" class="">View conversation</a> <%= (numAncestorsOutOfContext + numDescendantsOutOfContext) %>
+  </div>
+<% } %>
+
 <% if (level > 1) {
     if (last_sibling_chain[level-1]) { %>
             <img src="/static/img/messagelist/messagelist-link-last.png" class="link-img" />

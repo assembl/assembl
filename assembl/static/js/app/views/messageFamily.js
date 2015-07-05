@@ -54,11 +54,38 @@ var MessageFamilyView = Marionette.ItemView.extend({
     },
 
     serializeData: function(){
+      var hasParentsOrChildrenOutOfScope = false,
+          firstMessage = this.model,
+          numAncestors = undefined,
+          numDescendants = undefined,
+          visitorData = this.messageListView.visitorViewData[this.model.id],
+          numAncestorsOutOfContext = 0,
+          numDescendantsOutOfContext = 0;
+
+      console.log(this.model.id, visitorData);
+      if( this.messageListView.isViewStyleThreadedType() ) {
+        if( (visitorData.filtered_descendant_count !== visitorData.real_descendant_count) || visitorData.real_ancestor_count !== visitorData.level && firstMessage.get("parentId") && this.level === 1 ) {
+          hasParentsOrChildrenOutOfScope = true;
+          numAncestorsOutOfContext = visitorData.real_ancestor_count - visitorData.level;
+          numDescendantsOutOfContext = visitorData.real_descendant_count - visitorData.filtered_descendant_count;
+        }
+      }
+      else {
+        if( visitorData.real_descendant_count > 0 || visitorData.real_ancestor_count > 0 ) {
+          hasParentsOrChildrenOutOfScope = true;
+          numAncestorsOutOfContext = visitorData.real_ancestor_count;
+          numDescendantsOutOfContext = visitorData.real_descendant_count;
+        }
+      }
+
       return {
         id: this.model.get('@id'),
         level: this.level,
         last_sibling_chain: this.last_sibling_chain,
-        hasChildren: this.hasChildren
+        hasChildren: this.hasChildren,
+        hasParentsOrChildrenOutOfScope: hasParentsOrChildrenOutOfScope,
+        numAncestorsOutOfContext: numAncestorsOutOfContext,
+        numDescendantsOutOfContext: numDescendantsOutOfContext
       }
     },
 

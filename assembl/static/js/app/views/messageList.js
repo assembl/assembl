@@ -1249,7 +1249,8 @@ var MessageList = AssemblPanel.extend({
                   that.visitorOrderLookupTable = [];
                   that.visitorRootMessagesToDisplay = [];
 
-                  messageStructureCollection.visitDepthFirst(new ObjectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter));
+                  var visitorObject = new ObjectTreeRenderVisitor(that.visitorViewData, that.visitorOrderLookupTable, that.visitorRootMessagesToDisplay, inFilter);
+                  messageStructureCollection.visitDepthFirst(visitorObject);
 
                   that.visitorOrderLookupTable = [];
                   that.visitorRootMessagesToDisplay = [];

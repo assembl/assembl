@@ -543,7 +543,6 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   }
 }
 /* ------------------- Start of message family section ---------------------- */
-
 // The arrow
 // ------------
 .message-family-arrow.noarrow {
@@ -554,7 +553,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 
 .link-img {
   float: left;
-  margin-left: -13px;
+  margin-left: -13px; //$messageFamilyImageWidth -1px
   margin-top: 0;
 }
 
@@ -621,8 +620,17 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   padding-left: $messageFamilyImageWidth/2;
   margin-left: $messageFamilyImageWidth/2;
 
+  .message-conversation-block {
+    @include calc(width, "100% + #{$messageFamilyImageWidth/2}");
+    background-color: $gray6;
+    padding: $mesageSpacing;
+    //Undo paddings:
+    margin-left: -$messageFamilyImageWidth/2;
+    //margin-right:15
+  }
   &.bx {
     padding-top: 0;
+    padding-right: 0;
   }
 
   &.root {
