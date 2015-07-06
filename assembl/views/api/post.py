@@ -173,7 +173,10 @@ def get_posts(request):
     if posted_after_date:
         import isodate
         try:
-            posted_after_date = isodate.parse_date(posted_after_date)
+            if 'T' in posted_after_date:
+                posted_after_date = isodate.parse_datetime(posted_after_date)
+            else:
+                posted_after_date = isodate.parse_date(posted_after_date)
         except isodate.ISO8601Error as e:
             posted_after_date = None
             raise e 

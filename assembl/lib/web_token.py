@@ -35,7 +35,7 @@ def decode_token(token, secret='', ttl=DEFAULT_TTL, verify=True):
         if issue_time is None:
             raise TokenInvalid("'issuedAt' is missing from token")
 
-        issue_time = isodate.parse_date(issue_time)
+        issue_time = isodate.parse_datetime(issue_time)
         expiry_time = issue_time + datetime.timedelta(seconds=ttl)
 
         if issue_time > _now():
