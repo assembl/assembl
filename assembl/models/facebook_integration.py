@@ -57,6 +57,7 @@ def run_setup():
     if not facebook_sdk_locales.keys():
         fetch_facebook_sdk_locales()
 
+
 def language_sdk_existance(lang, default_locale_dict):
     def _check_fb_locale(lang, country=None):
         if not country:
@@ -93,12 +94,15 @@ def language_sdk_existance(lang, default_locale_dict):
 
             if lang in default_locale_dict:
                 tmp_country = _get_rand_country(lang, default_locale_dict)
-                if _check_fb_locale(lang, tmp_country):
+                if tmp_country and _check_fb_locale(lang, tmp_country):
                     return True, lang + '_' + tmp_country
 
             # language exists, but no country
             rand_country =  _get_rand_country(lang, facebook_sdk_locales)
-            return True, lang + '_' + rand_country
+            if rand_country:
+                return True, lang + '_' + rand_country
+            else:
+                return True, lang
 
         fb_countries = facebook_sdk_locales[lang]
         if country in fb_countries:
@@ -107,7 +111,10 @@ def language_sdk_existance(lang, default_locale_dict):
             return True, lang + '_US'
         else:
             rand_country = _get_rand_country(lang, facebook_sdk_locales)
-            return True, lang + '_' + rand_country
+            if rand_country:
+                return True, lang + '_' + rand_country
+            else:
+                return True, lang
 
     # If all else fails, drop down to US English
     else:
