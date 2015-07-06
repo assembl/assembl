@@ -3,9 +3,9 @@
 var Marionette = require('../../shims/marionette.js'),
     Jed = require('jed'),
     $ = require('../../shims/jquery.js'),
+    _ = require('../../shims/underscore.js'),
     Assembl = require('../../app.js'),
     IdeaList = require('../ideaList.js'),
-    sidebarNotification = require('../navigation/notification.js'),
     AboutNavPanel = require('../navigation/about.js'),
     SynthesisInNavigationPanel = require('../navigation/synthesisInNavigation.js'),
     LinkListView = require('../navigation/linkListView.js'),
@@ -75,33 +75,48 @@ var NavigationView = AssemblPanel.extend({
 
         try {
           // temporary hack
-          if (settings.navigation_sections === undefined)
+          if (settings.navigation_sections === undefined) {
             return;
-          var visualization_items = settings.navigation_sections[0].navigation_content.items;
-          if (visualization_items.length === 0)
-            return;
+          }
           try {
             jed = new Jed(settings['translations'][Ctx.getLocale()]);
           } catch (e) {
             // console.error(e);
             jed = new Jed({});
           }
-          that.visualizationItems.reset(_.map(visualization_items, function(item) {
-            return new Backbone.Model({
-              "url": item.url,
-              "title": jed.gettext(item.title),
-              "description": jed.gettext(item.description)
-            });
-          }));
-          that.num_items += 1;
-          that.ui.visualization_tab.show();
+          var new_navigation_items = 0;
+          for (var i in settings.navigation_sections) {
+            var navigation_section = settings.navigation_sections[i],
+                permission = navigation_section.requires_permission || Permissions.READ;
+            if (Ctx.getCurrentUser().can(permission)) {
+              var visualization_items = navigation_section.navigation_content.items;
+              visualization_items = _.filter(visualization_items, function(item) {
+                return Ctx.getCurrentUser().can(item.requires_permission || Permissions.READ);
+              });
+              if (visualization_items.length === 0)
+                continue;
+              that.visualizationItems.reset(_.map(visualization_items, function(item) {
+                return new Backbone.Model({
+                  "url": item.url,
+                  "title": jed.gettext(item.title),
+                  "description": jed.gettext(item.description)
+                });
+              }));
+              new_navigation_items += 1;
+            }
+          }
+          if (new_navigation_items) {
+            that.num_items += new_navigation_items;
+            that.ui.visualization_tab.show();
+            setTimeout(function() {
+              that.setSideBarHeight();
+            }, 500);
+          }
         } catch (e) {
           console.log(e);
         }
-      }).delay(500).then(function() {
-        that.setSideBarHeight();
-        });
-      
+      });
+
       collectionManager.getAllMessageStructureCollectionPromise()
       .then(function(allMessageStructureCollection) {
         if (allMessageStructureCollection.getLastSynthesisPost()){

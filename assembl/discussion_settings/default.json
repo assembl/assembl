@@ -1,0 +1,110 @@
+{
+  "navigation_sections": [
+    {
+      "requires_permission": "admin_discussion",
+      "navigation_content": {
+        "items": [
+          {
+            "url": "https://cidashboard.net/ui/visualisations/circlepacking.php?width=1000&height=1000&withposts=false&lang=<%= lang %>&url=<%= url %>&userurl=<%= user_url %>&timeout=60",
+            "requires_permission": "read",
+            "title": "Idea nesting",
+            "@type": "panelLoadingItem",
+            "description": "Idea nested within circles"
+          },
+          {
+            "url": "https://cidashboard.net/ui/visualisations/circlepacking.php?width=1000&height=1000&withposts=true&lang=<%= lang %>&url=<%= url %>&userurl=<%= user_url %>&timeout=60",
+            "requires_permission": "read",
+            "title": "Idea and post nesting",
+            "@type": "panelLoadingItem",
+            "description": "Idea and posts nested within circles"
+          },
+          {
+            "url": "https://cidashboard.net/ui/visualisations/fdgraph.php?width=1000&height=1000&withposts=true&lang=<%= lang %>&url=<%= url %>&userurl=<%= user_url %>&timeout=60",
+            "requires_permission": "read",
+            "title": "Conversation network",
+            "@type": "panelLoadingItem",
+            "description": "This visualisation display a network graph."
+          },
+          {
+            "url": "https://cidashboard.net/ui/visualisations/socialgraph.php?width=1000&height=1000&withposts=true&lang=<%= lang %>&url=<%= url %>&userurl=<%= user_url %>&timeout=60",
+            "requires_permission": "read",
+            "title": "Social network",
+            "@type": "panelLoadingItem",
+            "description": "This visualisation display a social graph based on a given network graph."
+          },
+          {
+            "url": "https://cidashboard.net/ui/visualisations/streamgraph.php?width=1000&height=1000&withposts=true&lang=<%= lang %>&url=<%= url %>&userurl=<%= user_url %>&timeout=60",
+            "requires_permission": "read",
+            "title": "Contribution Stream",
+            "@type": "panelLoadingItem",
+            "description": "This visualisations shows item creation over time for the various item types."
+          },
+          {
+            "url": "https://cidashboard.net/ui/visualisations/circlepackingattention.php?width=1000&height=1000&withposts=false&lang=<%= lang %>&url=<%= url %>&userurl=<%= user_url %>&timeout=60",
+            "requires_permission": "read",
+            "title": "Idea Attention Map",
+            "@type": "panelLoadingItem",
+            "description": "This visualisation shows a Conversation nested inside circles with colors denoting attention distribution across the contributions."
+          },
+          {
+            "url": "https://cidashboard.net/ui/visualisations/circlepackingattention.php?width=1000&height=1000&withposts=true&lang=<%= lang %>&url=<%= url %>&userurl=<%= user_url %>&timeout=60",
+            "requires_permission": "read",
+            "title": "Post Attention Map",
+            "@type": "panelLoadingItem",
+            "description": "This visualisation shows a Conversation nested inside circles with colors denoting attention distribution across the contributions."
+          },
+          {
+            "url": "https://cidashboard.net/ui/visualisations/topicspace.php?width=1000&height=1000&withposts=true&lang=<%= lang %>&url=<%= url %>&userurl=<%= user_url %>&timeout=60",
+            "requires_permission": "read",
+            "title": "Activity Bias",
+            "@type": "panelLoadingItem",
+            "description": "This visualisation clusters contributions based on similar activity patterns."
+          },
+          {
+            "url": "https://cidashboard.net/ui/visualisations/stackedarea.php?width=1000&height=1000&withposts=true&lang=<%= lang %>&url=<%= url %>&userurl=<%= user_url %>&timeout=60",
+            "requires_permission": "read",
+            "title": "Contribution River",
+            "@type": "panelLoadingItem",
+            "description": "This visualisations shows item creation over time for the various item types."
+          },
+          {
+            "url": "https://discussions.bluenove.com/edgesense/catalyst_embed.html?url=<%= url %>&userurl=<%= user_url %>",
+            "requires_permission": "read",
+            "title": "Edgesense",
+            "@type": "panelLoadingItem",
+            "description": "Social network analytics."
+          }
+        ],
+        "@type": "itemListPanel"
+      },
+      "description": "Visualization of conversation dynamics",
+      "title": "Discussion dashboard",
+      "first_panel": {
+        "title": "title text",
+        "@type": "templatePanel",
+        "template": "...",
+        "description": "desc text"
+      },
+      "@id": "visualizations",
+      "@type": "navigationSection"
+    }
+  ],
+  "translations": {
+    "fr": {
+      "domain": "messages",
+      "locale_data": {
+        "messages": {
+          "": {
+            "domain": "messages"
+          },
+          "Message titles": [
+            "Titres seulement"
+          ],
+          "Message previews": [
+            "Aperçu des messages"
+          ]
+        }
+      }
+    }
+  }
+}
