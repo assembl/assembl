@@ -1,14 +1,14 @@
 """facebook_update_fields
 
 Revision ID: 2df3bdfbc594
-Revises: 4e6b939229c3
+Revises: 49432c8ab71b
 Create Date: 2015-03-27 19:07:06.046621
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '2df3bdfbc594'
-down_revision = '4e6b939229c3'
+down_revision = '49432c8ab71b'
 
 from alembic import context, op
 import sqlalchemy as sa
