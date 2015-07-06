@@ -8,6 +8,12 @@ var App = require('./app.js'),
     CollectionManager = require('./common/collectionManager.js'),
     Raven = require('raven-js');
 
+/**
+ * Init current language
+ * */
+Ctx.initLocale();
+
+
 if (raven_url.length) {
     Raven.config(raven_url).install();
     Raven.setUserContext({id: Ctx.getCurrentUserId()});

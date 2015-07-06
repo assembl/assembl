@@ -3,7 +3,6 @@
 var $ = require('../shims/jquery.js'),
     _ = require('../shims/underscore.js'),
     Moment = require('moment'),
-    MomentLocaleFr = require('moment/locale/fr.js'),
     Promise = require('bluebird'),
     Assembl =  require('../app.js'),
     Permissions =  require('../utils/permissions.js'),
@@ -1326,13 +1325,31 @@ Context.prototype = {
     getLocale: function() {
       return assembl_locale.split('_')[0];
     },
+
+
+    initLocale: function(){
+
+        switch(this.getLocale()){
+            case 'en':
+                require('moment/locale/en-ca.js');
+                break;
+            default:
+                require('moment/locale/fr.js');
+                break;
+        }
+
+        Moment.locale(this.getLocale());
+    },
+
+
+
     /**
      * @init
      * inits ALL app components
      */
     init: function () {
-        //this.loadCurrentUser();
-        Moment.locale(this.getLocale());
+
+        //Moment.locale(this.getLocale());
 
         $(document.body).removeClass('preload');
         this.__createAnnotatorSelectionTooltipDiv();
