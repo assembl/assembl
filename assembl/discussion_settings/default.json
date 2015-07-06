@@ -1,7 +1,7 @@
 {
   "navigation_sections": [
     {
-      "requires_permission": "admin_discussion",
+      "requires_permission": "sysadmin",
       "navigation_content": {
         "items": [
           {
