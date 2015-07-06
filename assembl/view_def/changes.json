@@ -132,6 +132,7 @@
         "order": "&get_order_from_first_parent",
         "discussion": false,
         "parents": true,
+        "subtype": "rdf_type",
         "parentId": "&get_first_parent_uri",
         "inNextSynthesis": "is_in_next_synthesis",
         "numChildIdea": "&get_num_children",
@@ -145,22 +146,11 @@
         "num_orphan_posts": true,
         "num_synthesis_posts": true
     },
-    "Criterion": {
-        "@extends": "Idea"
-    },
-    "Issue": {
-        "@extends": "Idea"
-    },
-    "Argument": {
-        "@extends": "Idea"
-    },
-    "Proposal": {
-        "@extends": "Idea"
-    },
     "IdeaLink": {
         "original_uri": true,
         "target": true,
         "source": true,
+        "subtype": "rdf_type",
         "order": true
     },
     "IdeaGraphView": {

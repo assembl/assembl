@@ -144,22 +144,11 @@
         "numChildIdea": "&get_num_children",
         "creation_ctx_url": "&get_widget_creation_urls",
         "num_posts": true,
+        "subtype": "rdf_type",
         "num_read_posts": true,
         "notifications": "&get_notifications",
         "proposed_in_post": ":",
         "widget_add_post_endpoint": true
-    },
-    "Criterion": {
-        "@extends": "Idea"
-    },
-    "Issue": {
-        "@extends": "Idea"
-    },
-    "Argument": {
-        "@extends": "Idea"
-    },
-    "Proposal": {
-        "@extends": "Idea"
     },
     "RootIdea": {
         "@extends": "Idea",
@@ -173,6 +162,7 @@
     "IdeaLink": {
         "target": true,
         "source": true,
+        "subtype": "rdf_type",
         "order": true
     },
     "IdeaGraphView": {

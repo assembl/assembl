@@ -46,6 +46,7 @@ var IdeaModel = Base.Model.extend({
         hasCheckbox: false,
         original_uri: null,
         is_tombstone: false,
+        subtype: "idea:GenericIdeaNode",
         featured: false,
         active: false,
         inNextSynthesis: false,

@@ -31,6 +31,7 @@
         "discussion": false,
         "hidden": true,
         "parents": true,
+        "subtype": "rdf_type",
         "parentId": "&get_first_parent_uri",
         "inNextSynthesis": "is_in_next_synthesis",
         "numChildIdea": "&get_num_children",

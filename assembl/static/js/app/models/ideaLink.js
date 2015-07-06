@@ -25,6 +25,7 @@ var IdeaLinkModel = Base.Model.extend({
         target: '',
         original_uri: null,
         is_tombstone: false,
+        subtype: "idea:InclusionRelation",
         order: 1
     },
 

@@ -151,23 +151,12 @@
         "parentId": "&get_first_parent_uri",
         "inNextSynthesis": "is_in_next_synthesis",
         "numChildIdea": "&get_num_children",
+        "subtype": "rdf_type",
         "num_posts": true,
         "num_read_posts": true,
         "contributors": "&get_contributors:default",
         "notifications": "&get_notifications",
         "widget_add_post_endpoint": true
-    },
-    "Criterion": {
-        "@extends": "Idea"
-    },
-    "Issue": {
-        "@extends": "Idea"
-    },
-    "Argument": {
-        "@extends": "Idea"
-    },
-    "Proposal": {
-        "@extends": "Idea"
     },
     "RootIdea": {
         "@extends": "Idea",
@@ -181,6 +170,7 @@
     "IdeaLink": {
         "target": true,
         "source": true,
+        "subtype": "rdf_type",
         "order": true
     },
     "IdeaGraphView": {
