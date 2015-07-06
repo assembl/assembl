@@ -125,6 +125,7 @@ def home_view(request):
     user_id = authenticated_userid(request) or Everyone
     context = get_default_context(request)
     discussion = context["discussion"]
+    request.session["discussion"] = discussion.slug
     canRead = user_has_permission(discussion.id, user_id, P_READ)
     if not canRead and user_id == Everyone:
         # User isn't logged-in and discussion isn't public:
@@ -206,12 +207,6 @@ def styleguide_view(request):
 @view_config(route_name='test', request_method='GET', http_cache=60,
              renderer='assembl:templates/tests/index.jinja2')
 def frontend_test_view(request):
-    return get_default_context(request)
-
-
-@view_config(route_name='graph_view', request_method='GET', http_cache=60,
-             renderer='assembl:templates/infovis.jinja2')
-def graph_view(request):
     return get_default_context(request)
 
 

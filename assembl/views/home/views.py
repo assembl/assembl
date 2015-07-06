@@ -19,6 +19,7 @@ TEMPLATE_PATH = os.path.join(
     route_name='discussion_list', request_method='GET',
     renderer='assembl:templates/discussion_list.jinja2')
 def discussion_list_view(request):
+    request.session.pop('discussion')
     user_id = authenticated_userid(request) or Everyone
     user = None
     if user_id != Everyone:

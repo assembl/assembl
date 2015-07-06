@@ -444,6 +444,8 @@ def assembl_login_complete_view(request):
     headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
     discussion = discussion_from_request(request)
+    if discussion:
+        request.session['discussion'] = discussion.slug
     return HTTPFound(location=next_view)
 
 
@@ -617,6 +619,8 @@ def velruse_login_complete_view(request):
     user_id = profile.id
     headers = remember(request, user_id)
     request.response.headerlist.extend(headers)
+    if discussion:
+        request.session['discussion'] = discussion.slug
     # TODO: Store the OAuth etc. credentials.
     # Though that may be done by velruse?
     return HTTPFound(location=next_view)

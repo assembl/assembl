@@ -172,7 +172,7 @@ var account = Marionette.LayoutView.extend({
             providers: this.providers
         });
         // disable until I complete the work
-        //this.getRegion('social_accounts').show(providers);
+        this.getRegion('social_accounts').show(providers);
 
         var userAccountForm = new userAccount({
             model: this.userAcount
