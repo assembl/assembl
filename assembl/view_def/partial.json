@@ -224,6 +224,8 @@
     "Widget": {
         "discussion": true,
         "settings": "settings_json",
+        "start_date": true,
+        "end_date": true,
         "state": "state_json"
     },
     "BaseIdeaWidget": {

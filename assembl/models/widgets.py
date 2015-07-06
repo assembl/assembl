@@ -53,6 +53,9 @@ class Widget(DiscussionBoundBase):
         Discussion, backref=backref("widgets", cascade="all, delete-orphan"),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
+    start_date = Column(DateTime, server_default=None)
+    end_date = Column(DateTime, server_default=None)
+
     def __init__(self, *args, **kwargs):
         super(Widget, self).__init__(*args, **kwargs)
         self.interpret_settings(self.settings_json)
@@ -155,6 +158,23 @@ class Widget(DiscussionBoundBase):
         if user_id and user_id != Everyone and 'user_state' in json:
             self.set_user_state(json['user_state'], user_id)
         return self
+
+    @classmethod
+    def filter_started(cls, query):
+        return query.filter(
+            (cls.start_date == None) | (cls.start_date <= datetime.utcnow()))
+
+    @classmethod
+    def filter_active(cls, query):
+        return cls.filter_started(query).filter(
+            (cls.end_date == None) | (cls.end_date > datetime.utcnow()))
+
+    def is_started(self):
+        return self.start_date == None or self.start_date <= datetime.utcnow()
+
+    def is_active(self):
+        return self.is_started and (
+            self.end_date == None or self.end_date > datetime.utcnow())
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
