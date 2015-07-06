@@ -104,10 +104,9 @@
     </div>
   </div>
 
-<% } %>
+  {# more option now avalaible in both view full body and preview #}
+  {{ menuAction() }}
 
-<% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
-   {{ menuAction() }}
 <% } %>
 
 <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
