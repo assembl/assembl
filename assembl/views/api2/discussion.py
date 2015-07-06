@@ -244,8 +244,9 @@ def get_contribution_count(request):
             end = datetime.now()
         r["end"] = end.isoformat()
         results.append(r)
-    if (request.GET.get('format', None) == 'json'
-            or request.accept == 'application/json'):
+    if not (request.GET.get('format', None) == 'csv'
+            or request.accept == 'text/csv'):
+        # json default
         for v in results:
             v['count'] = {agent.display_name(): count
                           for (agent, count) in v['count']}
@@ -328,8 +329,9 @@ def get_visit_count(request):
             end = datetime.now()
         r["end"] = end.isoformat()
         results.append(r)
-    if (request.GET.get('format', None) == 'json'
-            or request.accept == 'application/json'):
+    if not (request.GET.get('format', None) == 'csv'
+            or request.accept == 'text/csv'):
+        # json default
         return Response(json.dumps(results), content_type='application/json')
     # otherwise assume csv
     from csv import DictWriter
