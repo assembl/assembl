@@ -27,6 +27,8 @@ var AllMessagesInIdeaListView = IdeaView.extend({
             this.$el.removeClass('hidden');
         }
 
+        data.Ctx = Ctx;
+
         this.$el.html(this.template(data));
         Ctx.initTooltips(this.$el);
         return this;

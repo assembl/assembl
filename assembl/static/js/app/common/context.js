@@ -1314,6 +1314,15 @@ Context.prototype = {
         }
 
     },
+
+    isUserConnected: function(){
+        if (this.currentUser.get('@id') !== Roles.EVERYONE) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
     getLocale: function() {
       return assembl_locale.split('_')[0];
     },
