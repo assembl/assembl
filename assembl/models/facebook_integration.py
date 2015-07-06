@@ -261,7 +261,7 @@ class FacebookParser(object):
     # ----------------------------- posts -------------------------------------
     def get_single_post(self, object_id, **kwargs):
         resp = self.api.get_object(object_id, **kwargs)
-        return None if 'id' not in resp else resp
+        return None if 'error' in resp else resp
 
     def get_posts(self, object_id, **kwargs):
         resp = self.api.get_connections(object_id, 'posts', **kwargs)
@@ -591,7 +591,23 @@ class FacebookGenericSource(PostSource):
                     return
 
     def single_post(self, limit=None):
-        raise NotImplementedError("To be developed after source/sink")
+        # Only use if the content source is a single post
+        # raise NotImplementedError("To be developed after source/sink")
+        users_db = self._get_current_users()
+        posts_db = self._get_current_posts()
+
+        # Get the post, then iterate through the comments of the post
+        post = self.parser.get_single_post(self.fb_source_id)
+        entity_id = post.get('from', {}).get('id', None)
+        assembl_post = self._manage_post(post, entity_id, posts_db, users_db)
+
+        if assembl_post:
+            for comment in self.parser.get_comments_paginated(post):
+                self._manage_comment_subcomments(comment, assembl_post,
+                                                 posts_db, users_db,
+                                                 True)
+                if self.read_status == ReaderStatus.SHUTDOWN:
+                    return
 
 
 class FacebookGroupSource(FacebookGenericSource):
@@ -699,6 +715,7 @@ class FacebookAccessToken(Base):
     token_type = Column(String(50))
     # Object_name: The name of the group/page
     object_name = Column(String(512))
+    object_fb_id = Column(String(512))
 
     @property
     def expires(self):
@@ -800,10 +817,14 @@ class FacebookPost(ImportedPost):
         post_type = post.get('type', None)
         subject, body, attachment, link_name = (None, None, None, None)
         if not post_type:
-            # Typically, a facebook comment
-            # Comments, even with links embedded, do not have an attachment
-            body = post.get('message')
-            post_type = 'comment'
+            has_attach = post.get('link', None)
+            if has_attach:
+                attachment = has_attach
+                body = post.get('message', "") + "\n" + post.get('link', "") \
+                    if 'message' in post else post.get('link', "")
+            else:
+                post_type = 'comment'
+                body = post.get('message')
 
         elif post_type is 'video' or 'photo':
             subject = post.get('story', None)
