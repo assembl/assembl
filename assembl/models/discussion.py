@@ -145,22 +145,31 @@ class Discussion(DiscussionBoundBase):
     def local_settings_json(self, val):
         self.settings = json.dumps(val)
 
+    def get_base_settings(self, settings_name):
+        from os.path import join, dirname, isfile
+        fname = join(dirname(dirname(__file__)), 'discussion_settings',
+                     settings_name + '.json')
+        if not isfile(fname):
+            return {}
+        with open(fname) as f:
+            settings = json.load(f)
+        basename = settings.get("@extends", None)
+        if basename:
+            base_settings = self.get_base_settings(basename)
+            base_settings.update(settings)
+            settings = base_settings
+        return settings
+
     @property
     def settings_json(self):
         if self.settings:
-            settings = json.loads(self.settings)
+            local_settings = json.loads(self.settings)
         else:
-            settings = {}
-        from os.path import join, dirname, isfile
-        fname = join(dirname(dirname(__file__)), 'discussion_settings',
-                     settings.get('@extends', 'default') + '.json')
-        if isfile(fname):
-            # TODO: Apply a template with server names etc.
-            with open(fname) as f:
-                base = json.load(f)
-            base.update(settings)
-            settings = base
-        return settings
+            local_settings = {}
+        base_settings = self.get_base_settings(
+            local_settings.get('@extends', 'default'))
+        base_settings.update(local_settings)
+        return base_settings
 
     def get_discussion_id(self):
         return self.id
