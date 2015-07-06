@@ -14,11 +14,10 @@ var Base = require('./base.js'),
 var GroupSpecModel = Base.Model.extend({
 
   defaults: function () {
-    /*console.log(this.allIdeasCollection);
      return {
     "panels": new panelSpec.Collection(),
-    "states": new groupState.Collection([new groupState.Model()], {allIdeasCollection: this.allIdeasCollection})
-    };*/
+    "states": new groupState.Collection([new groupState.Model()])
+    };
   },
 
   parse: function (model) {
