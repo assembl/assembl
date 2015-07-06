@@ -25,12 +25,13 @@ var FacebookAccessToken = Base.Model.extend({
         expiration: null,
         token_type: null,
         object_name: null,
+        object_fb_id: null,
         '@view': null,
         '@type': null
     },
 
     isExpired: function(){
-        var d = new Moment(this.expiration);
+        var d = new Moment().utc(this.expiration);
         var now = new Moment.utc();
         return now.isAfter(d);
     },

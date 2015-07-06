@@ -303,6 +303,7 @@
         "token": "long_lived_access_token",
         "expiration": false,
         "token_type": true,
-        "object_name": true
+        "object_name": true,
+        "object_fb_id": true
     }
 }

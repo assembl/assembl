@@ -13,6 +13,7 @@ var Modal = Backbone.Modal.extend({
     keyControl: false,
     initialize: function (options) {
       this.$('.bbm-modal').addClass('popin');
+      this.$('.js_export_error_message').empty(); //Clear any error message that may have been put there
       this.messageCreator = null;
       this.model = options.model;
       this.formType = undefined; 
@@ -80,7 +81,7 @@ var Modal = Backbone.Modal.extend({
             else {
               var errView = new facebook.error({
                   ready: fbState.ready,
-                  errorState: fbState.error,
+                  errorState: fbState.errorState,
                   vent: that.vent
               });
               that.$('.js_source-specific-form').html(errView.render().el);
@@ -92,6 +93,7 @@ var Modal = Backbone.Modal.extend({
 
         default:
           this.$('.js_source-specific-form').empty();
+          this.$('.js_export_error_message').empty();
           this.currentView = null;
           break;
       }

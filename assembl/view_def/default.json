@@ -468,6 +468,7 @@
         "token": true,
         "expiration": true,
         "token_type": true,
-        "object_name": true
+        "object_name": true,
+        "object_fb_id": true
     }
 }

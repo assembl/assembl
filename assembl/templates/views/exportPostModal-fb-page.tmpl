@@ -1,7 +1,12 @@
 <div class="control-group mts">
-  <label for="fb-pageInfo" class="control-label">{{ gettext("Enter Page Name") }}:</label>
+  <label for="fb-pageInfo" class="control-label">{{ gettext("Select Page") }}:</label>
   <div class="controls">
-    <input type="text" id="fb-pageInfo" class="input-large js_fb-page-id">
+    <select id="fb-pageInfo" class='js_fb-page-id'>
+      <% _.each(pages, function(page){ %>
+        <option value="<%= page.id %>"> <%= page.name %> </option>
+      <% });%>
+    </select>
+    <!-- <input type="text" id="fb-pageInfo" class="input-large js_fb-page-id"> -->
   </div>
 </div>
 
