@@ -57,7 +57,8 @@ def upgrade(pyramid_env):
             sa.Column('token', sa.String(512), unique=True),
             sa.Column('expiration', sa.DateTime),
             sa.Column('token_type', sa.String(50)),
-            sa.Column('object_name', sa.String(512))
+            sa.Column('object_name', sa.String(512)),
+            sa.Column('object_fb_id', sa.String(512))
         )
 
 
