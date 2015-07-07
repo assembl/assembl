@@ -4,6 +4,7 @@ var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
 var Account = Base.Model.extend({
+    urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/current/accounts"),
     defaults: {
       //E-mail account specifics
       will_merge_if_validated: false,
