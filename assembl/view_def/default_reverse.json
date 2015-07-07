@@ -168,7 +168,6 @@
     },
     "Discussion": {
         "settings": false,
-        "local_settings": "local_settings_json",
         "permissions": false,
         "widget_collection_url": false,
         "creation_date": false,

@@ -139,7 +139,7 @@ def test_session(request, db_default_data):
 @pytest.fixture(scope="function")
 def discussion(request, test_session):
     from assembl.models import Discussion
-    d = Discussion(topic=u"Jack Layton", slug="jacklayton2", settings="{}",
+    d = Discussion(topic=u"Jack Layton", slug="jacklayton2",
                    session=test_session)
     test_session.add(d)
     test_session.add(d.next_synthesis)
