@@ -589,31 +589,36 @@ def velruse_login_complete_view(request):
         verified_email = velruse_profile['verifiedEmail']
         idp_account.email = verified_email
         if verified_email in email_accounts and provider.trust_emails:
-            email_account = email_accounts[verified_email]
-            if email_account.preferred:
-                idp_account.preferred = True
-            email_account.delete()
+            # There may be multiple unverified
+            for email_account in profile.email_account:
+                if email_account.email == verified_email:
+                    if email_account.verified and email_account.preferred:
+                        idp_account.preferred = True
+                    email_account.delete()
     for num, email_d in enumerate(velruse_profile.get('emails', [])):
         if isinstance(email_d, dict):
             email = email_d['value']
             if num == 0 and not idp_account.email and provider.trust_emails:
                 # pick the first email. Only if we are going to trust it.
                 idp_account.email = email
-            if email in email_accounts:
-                email_account = email_accounts[email]
-                if provider.trust_emails or email_account.verified:
-                    if email_account.preferred:
-                        idp_account.preferred = True
-                    email_account.delete()
+                verified_email = email
+            if provider.trust_emails and email in email_accounts:
+                # There may be multiple unverified
+                accounts = [account for account in profile.email_accounts
+                            if account.email == email]
+                for n, account in enumerate(accounts):
+                    if n == 0 and email != verified_email:
+                        account.verified = True
+                    else:
+                        account.delete()
             elif verified_email != email:
-                if email != idp_account.email:
-                    # create an email account for other emails.
-                    email = EmailAccount(
-                        email=email,
-                        profile=profile,
-                        verified=provider.trust_emails
-                    )
-                    session.add(email)
+                # create an email account for other emails.
+                email = EmailAccount(
+                    email=email,
+                    profile=profile,
+                    verified=provider.trust_emails
+                )
+                session.add(email)
             else:
                 if email_d.get('preferred', False):
                     # maybe TODO: make the idp_account preferred,
