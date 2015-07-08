@@ -613,6 +613,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 // The link between an messagelist and its parent
 // --------------
 .message-family-container {
+  //box-sizing: border-box;
   // background: url(#{$img-dir}/messagelist/messagelist-link.png) -6 top no-repeat;
   display: block;
   position: relative; //So using 100% inside the message works...
@@ -621,11 +622,12 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   margin-left: $messageFamilyImageWidth/2;
 
   .message-conversation-block {
+    box-sizing: border-box;
     @include calc(width, "100% + #{$messageFamilyImageWidth/2}");
     background-color: $gray6;
     padding: $mesageSpacing;
     //Undo paddings:
-    margin-left: -$messageFamilyImageWidth/2;
+    margin-left: -$mesageSpacing;
     //margin-right:15
   }
   &.bx {
@@ -640,6 +642,12 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
       border-right-color: #999;
       border-right-color: rgba(0, 0, 0, .25);
       border-left-width: 0;
+    }
+    .message-conversation-block {
+      //Override width and margin calculation so block take the whole width
+      margin-left: -$mesageSpacing;
+      //width: 100% !important;  //!important to override calc(), which has a !important
+      @include calc(width, "100% + #{$mesageSpacing}");
     }
   }
 

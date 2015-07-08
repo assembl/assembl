@@ -1,5 +1,8 @@
 
 <% if (hasParentsOrChildrenOutOfScope) { %>
+  <% if (level > 1) { %>
+    <img src="/static/img/messagelist/messagelist-bar.png" class="link-img" />
+  <% } %>
   <div class="message-conversation-block">
     <a href="#" class="">View conversation</a> <%= (numAncestorsOutOfContext + numDescendantsOutOfContext) %>
   </div>
