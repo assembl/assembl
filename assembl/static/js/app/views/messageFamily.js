@@ -2,6 +2,7 @@
 
 var Marionette = require('../shims/marionette.js'),
     _ = require('../shims/underscore.js'),
+    i18n = require('../utils/i18n.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Types = require('../utils/types.js'),
@@ -142,8 +143,9 @@ var MessageFamilyView = Marionette.ItemView.extend({
     },
 
     events: {
-        'click >.message-family-arrow>.link-img': 'onIconbuttonClick'
-        //'click >.message-family-container>.message-family-arrow>.link-img': 'onIconbuttonClick',
+      'click >.message-family-arrow>.link-img': 'onIconbuttonClick',
+      //'click >.message-family-container>.message-family-arrow>.link-img': 'onIconbuttonClick',
+      'click >.message-conversation-block>.js_viewMessageFamilyConversation': 'onViewConversationClick'
     },
 
     /**
@@ -159,6 +161,29 @@ var MessageFamilyView = Marionette.ItemView.extend({
         this.onCollapsedChange();
     },
 
+    /**
+     * @event
+     * Collapse icon has been toggled
+     */
+    onViewConversationClick: function (ev) {
+      ev.preventDefault();
+      var panelSpec = require('../models/panelSpec.js');
+      var PanelSpecTypes = require('../utils/panelSpecTypes.js');
+      var ModalGroup = require('./groups/modalGroup.js');
+      var viewsFactory = require('../objects/viewsFactory');
+      var groupSpec = require('../models/groupSpec');
+
+      var defaults = {
+          panels: new panelSpec.Collection([
+                                            {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
+                                            ],
+                                            {'viewsFactory': viewsFactory })
+      };
+      var groupSpecModel = new groupSpec.Model(defaults);
+      var modal_title = i18n.sprintf(i18n.gettext("Zooming on the conversation around \"%s\""), this.model.get('subject'));
+      var modal = new ModalGroup({"model": groupSpecModel, "title": modal_title});
+      Assembl.slider.show(modal);
+    },
 
     /**
      * @event

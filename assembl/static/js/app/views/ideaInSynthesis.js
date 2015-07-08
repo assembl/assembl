@@ -265,8 +265,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
                     {type: PanelSpecTypes.IDEA_PANEL.id, minimized: false},
                     {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
                 ],
-                {'viewsFactory': viewsFactory }),
-            navigationState: 'debate'
+                {'viewsFactory': viewsFactory })
         };
         var groupSpecModel = new groupSpec.Model(defaults);
         var setResult = groupSpecModel.get('states').at(0).set({currentIdea: this.original_idea}, {validate: true});
@@ -274,7 +273,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
           throw new Error("Unable to set currentIdea on modal Group");
         }
 
-        var idea_title = Ctx.stripHtml(this.model.get('shortTitle')); // this.model.get('longTitle'); // this.model.getLongTitleDisplayText();
+        var idea_title = Ctx.stripHtml(this.model.getLongTitleDisplayText());
         //console.log("idea_title: ", idea_title);
         var modal_title_template = i18n.gettext("Exploring idea \"%s\"");
         //console.log("modal_title_template:", modal_title_template);
