@@ -1765,12 +1765,11 @@ var MessageList = AssemblPanel.extend({
         // Do we need still need this code ?
       if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
         if (Ctx.getCurrentUser().isUnknownUser()) {
-            //Only threaded view makes sense for annonymous users
             viewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
         }
         else if ((viewStyle !== this.ViewStyles.NEW_MESSAGES) && (viewStyle !== this.ViewStyles.REVERSE_CHRONOLOGICAL)) {//THREADED used to be allowed
             //New messages is default view
-            viewStyle = this.ViewStyles.NEW_MESSAGES;
+            viewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
         }
       }
 
