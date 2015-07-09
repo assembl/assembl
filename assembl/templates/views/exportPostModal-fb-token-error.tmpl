@@ -1,0 +1,15 @@
+<div class='js_fb-access-control mts'>
+  <%= message %>
+</div>
+<div class='js_fb-permission-reasons'>
+  <ul>
+    <li class='mts'><b>{{gettext("Basic")}}</b> - {{ gettext("We will need your permission to publish the message you are exporting on your behalf,  as well as permission to read the posts back in order to import them back into Assembl.") }}</li>
+    <li class='mts'><b>{{gettext("Groups")}}</b> - {{ gettext("We will need your permission to access the list of groups that you are a part of and to be able to post on them, both on your behalf, or if you are the group administrator, on behalf of the group itself. ") }}</li>
+    <li class='mts'><b>{{gettext("Pages")}}</b> - {{ gettext("We will need your permission to access the list of pages you have liked, as well as those in which you are an administrator, and to be able to post both on your behalf or, if you are the page administrator, on behalf of the page itself") }}</li>
+</div>
+<div class='fb-update-permissions mts'>
+  <!-- The <a> tag below will be used by javascript -->
+  <a href='#' class='js_fb-create-action'>
+    <%= subMessage %>
+  </a>
+</div>

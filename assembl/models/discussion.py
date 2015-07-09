@@ -14,7 +14,7 @@ from sqlalchemy import (
     String,
     Boolean,
     event,
-    and_,
+    ForeignKey,
     func,
 )
 from sqlalchemy.orm import relationship, join, subqueryload_all
@@ -29,6 +29,7 @@ from ..auth import (
 from .auth import (
     DiscussionPermission, Role, Permission, User, UserRole, LocalUserRole,
     UserTemplate)
+from .preferences import Preferences
 from ..semantic.namespaces import (CATALYST, ASSEMBL, DCTERMS)
 
 
@@ -53,12 +54,14 @@ class Discussion(DiscussionBoundBase):
     instigator = Column(UnicodeText)
     introduction = Column(UnicodeText)
     introductionDetails = Column(UnicodeText)
-    settings = Column(Text())  # JSON blob
     subscribe_to_notifications_on_signup = Column(Boolean, default=False)
     web_analytics_piwik_id_site = Column(Integer, nullable=True, default=None)
     help_url = Column(String, nullable=True, default=None)
     preferred_locales = Column(String)
     show_help_in_debate_section = Column(Boolean, default=True)
+    preferences_id = Column(Integer, ForeignKey(Preferences.id))
+
+    preferences = relationship(Preferences)
 
     @property
     def admin_source(self):
@@ -135,41 +138,10 @@ class Discussion(DiscussionBoundBase):
             slug=self.slug), True
 
     @property
-    def local_settings_json(self):
-        settings = {}
-        if self.settings:
-            settings = json.loads(self.settings)
-        return settings
-
-    @local_settings_json.setter
-    def local_settings_json(self, val):
-        self.settings = json.dumps(val)
-
-    def get_base_settings(self, settings_name):
-        from os.path import join, dirname, isfile
-        fname = join(dirname(dirname(__file__)), 'discussion_settings',
-                     settings_name + '.json')
-        if not isfile(fname):
-            return {}
-        with open(fname) as f:
-            settings = json.load(f)
-        basename = settings.get("@extends", None)
-        if basename:
-            base_settings = self.get_base_settings(basename)
-            base_settings.update(settings)
-            settings = base_settings
-        return settings
-
-    @property
     def settings_json(self):
-        if self.settings:
-            local_settings = json.loads(self.settings)
-        else:
-            local_settings = {}
-        base_settings = self.get_base_settings(
-            local_settings.get('@extends', 'default'))
-        base_settings.update(local_settings)
-        return base_settings
+        if not self.preferences:
+            return Preferences.property_defaults
+        return self.preferences.values_json
 
     def get_discussion_id(self):
         return self.id

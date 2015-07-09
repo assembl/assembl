@@ -1,0 +1,22 @@
+<div class="control-group mts">
+  <label for="fb-pageInfo" class="control-label">{{ gettext("Select Page") }}:</label>
+  <div class="controls">
+    <select id="fb-pageInfo" class='js_fb-page-id'>
+      <% _.each(pages, function(page){ %>
+        <option value="<%= page.value %>"> <%= page.name %> </option>
+      <% });%>
+    </select>
+    <!-- <input type="text" id="fb-pageInfo" class="input-large js_fb-page-id"> -->
+  </div>
+</div>
+
+<div class='control-group mts'>
+  <label for='fb-page-postAs' class='control-label'>{{ gettext("Post as")}}: </label>
+  <div class='controls'>
+    <select id='fb-page-postAs' class='js_fb-page-voice'>
+      <% _.each(userManagedPagesList, function(page){ %>
+        <option value='<%= page.value %>'> <%= page.description %> </option>
+      <% }); %>
+    </select>
+  </div>
+</div>

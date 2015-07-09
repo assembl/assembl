@@ -12,7 +12,9 @@ var Marionette = require('../shims/marionette.js'),
     CollectionManager = require('../common/collectionManager.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     $ = require('../shims/jquery.js'),
-    Promise = require('bluebird');
+    facebook = require('./facebookModal.js'),
+    Promise = require('bluebird'),
+    messageExport = require('./messageExportModal.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10;
@@ -128,7 +130,6 @@ var MessageView = Marionette.ItemView.extend({
         'click @ui.jumpToMessageInThreadButton': 'onMessageJumpToMessageInThreadClick',
         'click @ui.jumpToMessageInReverseChronologicalButton': 'onMessageJumpToMessageInReverseChronologicalClick',
         'click @ui.showAllMessagesByThisAuthorButton': 'onShowAllMessagesByThisAuthorClick',
-        'click .js_getContributions':'getContributions',
 
         //
         'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
@@ -1061,9 +1062,25 @@ var MessageView = Marionette.ItemView.extend({
                 Assembl.slider.show(new Modal());
 
             });
+    },
 
+    /**
+     * [exportToFacebook global function that
+     *  uses the facebook javascript sdk to push
+     *  to facebook]
+     * @param  {event}
+     * @return {null}
+     */
+    exportToFacebook: function(event) {
+      //Create an Event Aggregator for the export module
+      var vent = _.extend({}, Backbone.Events);
+      var modal = new messageExport({
+        model: this.model,
+        messageView: this,
+        vent: vent
+      });
+      $('#slider').html(modal.render().el);
     }
-
 
 });
 

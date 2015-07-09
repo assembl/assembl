@@ -16,7 +16,8 @@ var Permissions = {
     EDIT_SYNTHESIS: "edit_synthesis",
     SEND_SYNTHESIS: "send_synthesis",
     ADMIN_DISCUSSION: "admin_discussion",
-    SYSADMIN: "sysadmin"
+    SYSADMIN: "sysadmin",
+    EXPORT_POST: "export_post"
 };
 
 module.exports = Permissions;

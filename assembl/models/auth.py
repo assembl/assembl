@@ -310,6 +310,8 @@ class AbstractAgentAccount(Base):
     # Note: we could also have a FOAF.mbox, but we'd have to make
     # them into URLs with mailto:
 
+    full_name = Column(CoerceUnicode(512))
+
     def signature(self):
         "Identity of signature implies identity of underlying account"
         return ('abstract_agent_account', self.id)
@@ -493,12 +495,15 @@ class IdentityProviderAccount(AbstractAgentAccount):
         return self.provider.name
 
     def real_name(self):
-        info = self.profile_info_json
-        name = info['name']
-        if name.get('formatted', None):
-            return name['formatted']
-        if 'givenName' in name and 'familyName' in name:
-            return ' '.join((name['givenName'], name['familyName']))
+        if not self.full_name:
+            info = self.profile_info_json
+            name = info['name']
+            if name.get('formatted', None):
+                return name['formatted']
+            if 'givenName' in name and 'familyName' in name:
+                return ' '.join((name['givenName'], name['familyName']))
+        else:
+            return self.full_name
 
     def populate_picture(self, profile):
         if 'photos' in profile:  # google, facebook
@@ -593,7 +598,10 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
 
 @event.listens_for(AgentStatusInDiscussion, 'after_insert', propagate=True)
 def send_user_to_socket_for_asid(mapper, connection, target):
-    target.agent_profile.send_to_changes(
+    agent_profile = target.agent_profile
+    if not target.agent_profile:
+        agent_profile = AgentProfile.get(target.agent_profile_id)
+    agent_profile.send_to_changes(
         connection, UPDATE_OP, target.discussion_id)
 
 
@@ -1019,8 +1027,11 @@ class UserRole(Base, PrivateObjectMixin):
 @event.listens_for(UserRole, 'after_insert', propagate=True)
 @event.listens_for(UserRole, 'after_delete', propagate=True)
 def send_user_to_socket_for_user_role(mapper, connection, target):
-    target.user.send_to_changes(connection, UPDATE_OP, view_def="private")
-    target.user.send_to_changes(connection, UPDATE_OP)
+    user = target.user
+    if not target.user:
+        user = User.get(target.user_id)
+    user.send_to_changes(connection, UPDATE_OP, view_def="private")
+    user.send_to_changes(connection, UPDATE_OP)
 
 
 
@@ -1158,8 +1169,11 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
 @event.listens_for(LocalUserRole, 'after_insert', propagate=True)
 def send_user_to_socket_for_local_user_role(
         mapper, connection, target):
-    target.user.send_to_changes(connection, UPDATE_OP, target.discussion_id)
-    target.user.send_to_changes(
+    user = target.user
+    if not target.user:
+        user = User.get(target.user_id)
+    user.send_to_changes(connection, UPDATE_OP, target.discussion_id)
+    user.send_to_changes(
         connection, UPDATE_OP, target.discussion_id, "private")
 
 

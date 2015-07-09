@@ -20,7 +20,9 @@ var Marionette = require('../shims/marionette.js'),
     LocalRole = require('../models/roles.js'),
     Discussion = require('../models/discussion.js'),
     DiscussionSource = require('../models/discussionSource.js'),
-    UserProfile = require('../models/userProfile.js');
+    UserProfile = require('../models/userProfile.js'),
+    Social = require('../models/social.js'),
+    Account = require('../models/accounts.js');
 
 /**
  * @class CollectionManager
@@ -134,6 +136,21 @@ var CollectionManager = Marionette.Controller.extend({
 
     _allUserContributionsModel: undefined,
     _allUserContributionsModelPromise: undefined,
+
+    /**
+     * Collection of Facebook Access Tokens that 
+     * current user is permissible to view
+     */
+    _allFacebookAccessTokens: undefined,
+    _allFacebookAccessTokensPromise: undefined,
+
+    /**
+     * Collection of all the Accounts associated with the
+     * current User
+     * @type {[Account]}
+     */
+    _allUserAccounts: undefined,
+    _allUserAccountsPromise: undefined,
 
     /**
      * Returns the collection from the giving object's @type .
@@ -662,8 +679,35 @@ var CollectionManager = Marionette.Controller.extend({
             });
 
         return this._allUserContributionsModelPromise;
-    }
+    }, 
 
+    getFacebookAccessTokensPromise: function() {
+      if (this._allFacebookAccessTokensPromise) {
+        return this._allFacebookAccessTokensPromise;
+      }
+      this._allFacebookAccessTokens = new Social.Facebook.Token.Collection();
+      this._allFacebookAccessTokens.collectionManager = this;
+      this._allFacebookAccessTokensPromise = Promise.resolve(this._allFacebookAccessTokens.fetch())
+          .thenReturn(this._allFacebookAccessTokens)
+          .catch(function(e){
+              console.error(e.statusText);
+          });
+      return this._allFacebookAccessTokensPromise;
+    },
+
+    getAllUserAccountsPromise: function() {
+      if (this._allUserAccountsPromise) {
+        return this._allUserAccountsPromise;
+      }
+      this._allUserAccounts = new Account.Collection();
+      this._allUserAccounts.collectionManager = this;
+      this._allUserAccountsPromise = Promise.resolve(this._allUserAccounts.fetch())
+          .thenReturn(this._allUserAccounts)
+          .catch(function(e){
+              console.error(e.statusText);
+          });
+      return this._allUserAccountsPromise;
+    }
 });
 
 var _instance;

@@ -48,6 +48,10 @@
         "username": false,
         "picture_url": false
     },
+    "FacebookAccount": {
+        "@extends": "IdentityProviderAccount",
+        "app_id": false
+    },
     "ContentSource": {
         "discussion_id": "discussion",
         "name": true,
@@ -73,6 +77,27 @@
         "comment_source": true,
         "node_root": true,
         "post_id_prepend": false
+    },
+    "FacebookGenericSource": {
+        "@extends": "PostSource",
+        "fb_source_id": true,
+        "url_path": true,
+        "creator_id": true
+    },
+    "FacebookGroupSource": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookGroupSourceFromUser": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookPagePostsSource": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookPageFeedSource": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookSinglePostSource": {
+        "@extends": "FacebookGenericSource"
     },
     "AnnotatorSource": {
         "@extends": "ContentSource"
@@ -116,6 +141,12 @@
         "import_date": false,
         "bodyMimeType": "bodyMimeType"
     },
+    "FacebookPost": {
+        "@extends": "ImportedPost",
+        "attachment": true,
+        "link_name": true,
+        "post_type": true
+    },
     "Email": {
         "@extends": "ImportedPost",
         "full_message": false,
@@ -137,7 +168,6 @@
     },
     "Discussion": {
         "settings": false,
-        "local_settings": "local_settings_json",
         "permissions": false,
         "widget_collection_url": false,
         "creation_date": false,
@@ -222,6 +252,8 @@
     "Widget": {
         "settings": "settings_json",
         "state": "state_json",
+        "start_date": true,
+        "end_date": true,
         "user_states_url": "&get_user_states_url",
         "user_state_url": "&get_user_state_url",
         "widget_settings_url": "&get_settings_url",
@@ -266,5 +298,13 @@
     },
     "BinaryIdeaVote": {
         "@extends": "AbstractIdeaVote"
+    },
+    "FacebookAccessToken": {
+        "fb_account_id": true,
+        "token": "long_lived_access_token",
+        "expiration": false,
+        "token_type": true,
+        "object_name": true,
+        "object_fb_id": true
     }
 }

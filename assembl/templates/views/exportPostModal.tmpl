@@ -1,0 +1,35 @@
+<div class='popin-header'>
+  {{ gettext("Export post by ") }} <%= creator %>
+</div>
+<div class="popin-body">
+    <div class="content">
+        <form class="core-form">
+          <fieldset>
+            <div class="control-group">
+              <label for="export-supportedList" class="control-label">
+                {{gettext("Select your desired export location") }}:
+              </label>
+              <div class="controls">
+                <select id="export-supportedList" class='js_export_supportedList'>
+                    <option value="null"></option>
+                  {% for supported_export in social_settings.supported_exports%}
+                    <option value="{{ supported_export }}">{{ supported_export }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <!-- This is where the specific source's form goes (ie fb, twitter, reddit, etc) -->
+            <div class='js_source-specific-form'></div>
+
+            <div class='js_export_error_message mts error-message' style="padding-top: 5px"></div>
+          </fieldset>
+        </form>
+    </div>
+    <div class="clr"></div>
+</div>
+
+<div class="popin-footer">
+    <button class="btn btn-cancel btn-sm fl js_close">{{ gettext('Cancel') }}</button>
+    <button class="btn btn-primary btn-sm fr js_ok_submit" type='submit'>{{ gettext('Ok') }}</button>
+</div>

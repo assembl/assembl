@@ -73,7 +73,7 @@
 {% endblock %}
 
 {% block extra_js %}
-    {% if user %}   
+    {% if user %}
       {% set userId = user.id %}
     {% else %}
       {% set userId = 'system.Everyone' %}
@@ -109,3 +109,9 @@
     <script src="{{ STATIC_URL }}/js/build/infrastructure.min.js"></script>
     <script src="{{ STATIC_URL }}/js/build/app.js"></script>
 {% endblock %}
+
+{% block facebook_sdk_load %}
+    {%if user and 'export_post' in user.permissions_for_current_discussion[discussion.uri()] %}
+        {% include 'includes/fb.jinja' %}
+    {% endif%}
+{% endblock%}

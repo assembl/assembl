@@ -59,8 +59,9 @@ var groupContainer = Marionette.CollectionView.extend({
         }
     },
 
-    onshow: function() {
-       this.resizeAllPanels();
+    onAttach: function() {
+      //console.log("groupContainer:  onAttach");
+      this.resizeAllPanels();
     },
 
     onRender: function () {

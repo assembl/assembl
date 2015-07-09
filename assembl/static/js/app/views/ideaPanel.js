@@ -384,10 +384,11 @@ var IdeaPanel = AssemblPanel.extend({
           //console.log("setIdeaModel:  we have a model ")
           this.template = '#tmpl-loader';
           if(this.isViewRenderedAndNotYetDestroyed) {
+            this.panelWrapper.unminimizePanel();
             if(!this.model.id) {
               //console.log("setIdeaModel:  we have a model, but no id ")
               this.render();
-              this.panelWrapper.unminimizePanel();
+
               this.listenTo(this.model, 'acquiredId', function (m) {
                 // model has acquired an ID. Reset everything.
                 if(!this.isViewDestroyed()) {

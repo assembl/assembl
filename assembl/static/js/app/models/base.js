@@ -66,8 +66,11 @@ var BaseModel = Backbone.Model.extend({
     url: function () {
         var base =
             _.result(this, 'urlRoot') ||
-            _.result(this.collection, 'url') ||
-            urlError();
+            _.result(this.collection, 'url');
+        if (!base) {
+            // equivalent to private Backbone.urlError
+            throw new Error('A "url" property or function must be specified');
+        }
         if (this.isNew()) return base;
         return base.replace(/([^\/])$/, '$1/') + encodeURIComponent(this.getNumericId());
     },

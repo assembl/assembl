@@ -1,0 +1,11 @@
+<div class="control-group mts">
+  <label for="fb-groupInfo" class="control-label">{{ gettext("Select Group") }}:</label>
+  <div class="controls">
+      <select id="fb-groupInfo" class='js_fb-group-id'>
+      <% _.each(groups, function(group){ %>
+        <option value="<%= group.id %>"> <%= group.name %> </option>
+      <% });%>
+    </select>
+    <!-- <input type="text" id="fb-groupInfo" class="input-large"> -->
+  </div>
+</div>

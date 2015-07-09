@@ -81,6 +81,11 @@
         "username": true,
         "picture_url": true
     },
+    "FacebookAccount": {
+        "@extends": "IdentityProviderAccount",
+        "app_id": false,
+        "access_tokens": [":default"]
+    },
     "IdentityProvider": {
         "name": true,
         "provider_type": true,
@@ -103,6 +108,27 @@
     },
     "LoomioPostSource": {
         "@extends": "FeedPostSource"
+    },
+    "FacebookGenericSource": {
+        "@extends": "PostSource",
+        "fb_source_id": true,
+        "url_path": true,
+        "creator_id": true
+    },
+    "FacebookGroupSource": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookGroupSourceFromUser": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookPagePostsSource": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookPageFeedSource": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookSinglePostSource": {
+        "@extends": "FacebookGenericSource"
     },
     "AnnotatorSource": {
         "@extends": "ContentSource"
@@ -183,6 +209,12 @@
     "SourceSpecificPost": {
         "@extends": "ImportedPost"
     },
+    "FacebookPost": {
+        "@extends": "ImportedPost",
+        "attachment": true,
+        "link_name": true,
+        "post_type": true
+    },
     "Webpage": {
         "@extends": "Content",
         "last_modified_date": true,
@@ -201,7 +233,6 @@
         "slug": true,
         "topic": true,
         "settings": "settings_json",
-        "local_settings": "local_settings_json",
         "permissions": "&get_roles_by_permission",
         "widget_collection_url": true,
         "objectives": true,
@@ -322,6 +353,8 @@
         "discussion": true,
         "settings": "settings_json",
         "state": "state_json",
+        "start_date": true,
+        "end_date": true,
         "user_states_url": "&get_user_states_url",
         "user_state_url": "&get_user_state_url",
         "widget_settings_url": "&get_settings_url",
@@ -430,5 +463,13 @@
         "requested": true,
         "role": "&get_role_name",
         "discussion": true
+    },
+    "FacebookAccessToken": {
+        "fb_account_id": "&get_facebook_account_uri",
+        "token": true,
+        "expiration": true,
+        "token_type": true,
+        "object_name": true,
+        "object_fb_id": true
     }
 }

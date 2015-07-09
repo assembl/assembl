@@ -250,6 +250,8 @@
         "discussion": true,
         "settings": "settings_json",
         "state": "state_json",
+        "start_date": true,
+        "end_date": true,
         "user_states_url": "&get_user_states_url",
         "user_state_url": "&get_user_state_url",
         "widget_settings_url": "&get_settings_url",

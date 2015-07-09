@@ -1,4 +1,5 @@
 import pytest
+from flaky import flaky
 
 def test_front_page(browser, test_server, db_default_data):
     """Test using real browser."""
@@ -16,9 +17,7 @@ def test_mocha(browser, test_server, discussion, test_session):
     assert not num_failures
 
 
-# due to AgentStatusInDiscussion being created in the browser's sqla session
-# To be repaired later with some session magic,
-# or possibly webtest.sel.SeleniumApp
+@flaky(max_runs=3)
 def test_load_messages(
         browser, test_server, test_session, discussion,
         jack_layton_mailbox):

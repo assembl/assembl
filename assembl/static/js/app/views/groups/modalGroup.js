@@ -44,6 +44,10 @@ var ModalGroup = Backbone.Modal.extend({
     this.$('.popin-body').html(this.groupsView.el);
   },
 
+  onShow: function() {
+    this.groupsView.onAttach();
+  },
+
   serializeData: function(){
     return {
       "title": this.title

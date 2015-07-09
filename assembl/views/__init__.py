@@ -111,6 +111,22 @@ def get_default_context(request):
     assert os.path.exists(jedfilename)
     providers = aslist(config.get('login_providers'))
 
+    from ..models.facebook_integration import language_sdk_existance
+    fb_lang_exists, fb_locale = language_sdk_existance(get_language(localizer.locale_name),
+                                                    countries_for_locales)
+
+    def process_export_list(ls):
+        import string
+        return map(lambda s: s.strip(), ls.split(","))
+
+    social_settings = {
+        'fb_export_permissions': config.get('facebook.export_permissions'),
+        'fb_debug': config.get('facebook.debug_mode'),
+        'fb_app_id': config.get('facebook.consumer_key'),
+        'supported_exports': process_export_list(
+            config.get('supported_exports_list'))
+    }
+
     return dict(
         default_context,
         request=request,
@@ -120,6 +136,9 @@ def get_default_context(request):
         user_profile_edit_url=user_profile_edit_url,
         locale=localizer.locale_name,
         locales=locales,
+        fb_lang_exists=fb_lang_exists,
+        fb_locale=fb_locale,
+        social_settings=social_settings,
         show_locale_country=show_locale_country,
         theme=get_theme(discussion),
         minified_js=config.get('minified_js') or False,
