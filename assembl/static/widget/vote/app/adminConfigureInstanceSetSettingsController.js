@@ -220,6 +220,25 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     return object;
   };
 
+  $scope.ensurePropertiesTypes = function(object, fct_get_type){
+    for ( var property in object ) {
+      if ( object.hasOwnProperty(property) ) {
+        var object_type = "@type" in object ? object["@type"] : null;
+        var property_type = fct_get_type(object_type, property);
+        console.log("fct_get_type() => ", object_type, property, property_type);
+        if ( property_type != null ){
+          if ( property_type == "integer" ){
+            var to_integer = parseInt(object[property], 10);
+            if ( (typeof object[property] != "number") || object[property] !== to_integer ){
+              object[property] = to_integer;
+            }
+          }
+        }
+      }
+    }
+    return object;
+  };
+
   /*
   This method iterates over vote_specifications and for each element, looks for an id.
   If no id, POST the VoteSpec, get its new id, and set it in the id json field.
@@ -236,20 +255,55 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     var post_data = null;
     var endpoint = null;
     var result_holder = $("#step_criteria_groups_and_appearance_result");
+
+    var getCriterionPropertyType = function(criterion_type, property_name){
+      var el = null;
+
+      el = _.find(VoteWidgetService.mandatory_criterion_fields, function(el){
+        return "key" in el && el.key == property_name;
+      });
+      if ( el && "type" in el )
+        return el.type;
+
+      if ( criterion_type in VoteWidgetService.mandatory_typed_criterion_fields ){
+        el = _.find(VoteWidgetService.mandatory_typed_criterion_fields[criterion_type], function(el){
+          return "key" in el && el.key == property_name;
+        });
+        if ( el && "type" in el )
+          return el.type;
+      }
+
+      el = _.find(VoteWidgetService.optional_criterion_fields, function(el){
+        return "key" in el && el.key == property_name;
+      });
+      if ( el && "type" in el )
+        return el.type;
+
+      if ( criterion_type in VoteWidgetService.optional_typed_criterion_fields ){
+        el = _.find(VoteWidgetService.optional_typed_criterion_fields[criterion_type], function(el){
+          return "key" in el && el.key == property_name;
+        });
+        if ( el && "type" in el )
+          return el.type;
+      }
+
+      return null;
+    };
     
     if ( "items" in $scope.widget.settings ){
       $scope.widget.settings.items.forEach(function(item){
         if ( "vote_specifications" in item ){
           item.vote_specifications.forEach(function(el, index, ar){
             var known_properties = ["@type", "minimum", "maximum", "criterion_idea", "widget", "question_id", "settings"]; // TODO: the content of this array should depend on the value of VoteSpec["@type"]
-            if ( id_field in el ){
+            if ( id_field in el ){ // if it already exist in the backend, we update it using PUT
               var el2 = _.clone(el);
+              el2 = $scope.ensurePropertiesTypes(el2, getCriterionPropertyType);
               post_data = $scope.moveUnknownProperties(el2, known_properties, "settings");
 
               endpoint = AssemblToolsService.resourceToUrl(el[id_field]);
               VoteWidgetService.putJson(endpoint, post_data, result_holder);
             }
-            else {
+            else { // if it does not exist in the backend yet, we create it using POST
               var el2 = _.clone(el);
               post_data = $scope.moveUnknownProperties(el2, known_properties, "settings");
 
