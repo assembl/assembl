@@ -182,6 +182,11 @@ var MessageFamilyView = Marionette.ItemView.extend({
       var groupSpecModel = new groupSpec.Model(defaults);
       var modal_title = i18n.sprintf(i18n.gettext("Zooming on the conversation around \"%s\""), this.model.get('subject'));
       var modal = new ModalGroup({"model": groupSpecModel, "title": modal_title});
+      var group = modal.getGroup();
+      var messagePanel = group.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+      messagePanel.currentQuery.initialize();
+      console.log("About to manually trigger messagePanel render");
+      messagePanel.render();
       Assembl.slider.show(modal);
     },
 

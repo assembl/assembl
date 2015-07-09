@@ -22,6 +22,22 @@ var ModalGroup = Backbone.Modal.extend({
 
   title: null,
 
+  /**
+   * A modal group has only a single group
+   */
+  getGroup: function() {
+    if(!this.groupsView.isViewRendered() && !this.groupsView.isViewDestroyed()) {
+      //so children will work
+      this.groupsView.render();
+    }
+    var firstGroup = this.groupsView.children.first();
+    if(!firstGroup) {
+      console.log( this.groupsView.children);
+      throw new Error("There is no group in the modal!");
+    }
+    return firstGroup;
+  },
+
   /** Takes a groupSpec as model
    * 
    */
@@ -40,8 +56,12 @@ var ModalGroup = Backbone.Modal.extend({
   },
 
   onRender: function() {
-    this.groupsView.render();
-    this.$('.popin-body').html(this.groupsView.el);
+    if(!this.groupsView.isViewDestroyed()) {
+      if(!this.groupsView.isViewRendered()) {
+        this.groupsView.render();
+      }
+      this.$('.popin-body').html(this.groupsView.el);
+    }
   },
 
   onShow: function() {
