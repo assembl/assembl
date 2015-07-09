@@ -23,7 +23,8 @@ var discussionModel = Base.Model.extend({
         'subscribe_to_notifications_on_signup': false,
         'web_analytics_piwik_id_site': null,
         'help_url': null,
-        'show_help_in_debate_section': true
+        'show_help_in_debate_section': true,
+        posts: []
     },
     validate: function(attrs, options){
         /**
@@ -75,6 +76,11 @@ var discussionModel = Base.Model.extend({
 
       }
       return retval;
+    },
+
+
+    setUserContributions: function(){
+        this.url = Ctx.getApiUrl('posts');
     }
 
 });

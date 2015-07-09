@@ -128,6 +128,7 @@ var MessageView = Marionette.ItemView.extend({
         'click @ui.jumpToMessageInThreadButton': 'onMessageJumpToMessageInThreadClick',
         'click @ui.jumpToMessageInReverseChronologicalButton': 'onMessageJumpToMessageInReverseChronologicalClick',
         'click @ui.showAllMessagesByThisAuthorButton': 'onShowAllMessagesByThisAuthorClick',
+        'click .js_getContributions':'getContributions',
 
         //
         'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
@@ -1026,6 +1027,41 @@ var MessageView = Marionette.ItemView.extend({
     openTargetInPopOver: function (evt) {
         console.log("message openTargetInPopOver(evt: ", evt);
         return Ctx.openTargetInPopOver(evt);
+    },
+
+    getContributions: function(e){
+        e.stopPropagation();
+
+        var user_id = $(e.target).attr('data-user-id');
+
+        var collectionManager = new CollectionManager();
+
+            collectionManager.getUserContributionsPromise(user_id).then(function(contributions){
+
+                console.debug('contributions', contributions.get('posts'));
+
+                var Modal = Backbone.Modal.extend({
+                    template: _.template($('#tmpl-contributions').html()),
+                    className: 'generic-modal popin-wrapper',
+                    cancelEl: '.close, .btn-cancel',
+                    serializeData: function () {
+                        return {
+                           contributions: contributions.get('posts')
+                        }
+                    },
+                    initialize: function () {
+                        this.$('.bbm-modal').addClass('popin');
+                    },
+                    events: {
+
+                    }
+
+                });
+
+                Assembl.slider.show(new Modal());
+
+            });
+
     }
 
 

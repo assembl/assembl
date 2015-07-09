@@ -129,9 +129,11 @@ var CollectionManager = Marionette.Controller.extend({
     _allDiscussionSourceCollection: undefined,
     _allDiscussionSourceCollectionPromise: undefined,
 
-
     _currentUserModel: undefined,
     _currentUserModelPromise: undefined,
+
+    _allUserContributionsModel: undefined,
+    _allUserContributionsModelPromise: undefined,
 
     /**
      * Returns the collection from the giving object's @type .
@@ -642,7 +644,26 @@ var CollectionManager = Marionette.Controller.extend({
             });
 
         return this._allDiscussionSourceCollectionPromise;
+    },
+
+    getUserContributionsPromise: function (params) {
+
+        if (this._allUserContributionsModelPromise) {
+            return this._allUserContributionsModelPromise;
+        }
+
+        this._allUserContributionsModel = new Discussion.Model();
+        this._allUserContributionsModel.setUserContributions();
+        this._allUserContributionsModel.collectionManager = this;
+        this._allUserContributionsModelPromise = Promise.resolve(this._allUserContributionsModel.fetch({data: $.param({post_author: params}) }))
+            .thenReturn(this._allUserContributionsModel)
+            .catch(function(e){
+                console.error(e.statusText);
+            });
+
+        return this._allUserContributionsModelPromise;
     }
+
 });
 
 var _instance;

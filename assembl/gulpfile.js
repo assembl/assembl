@@ -18,8 +18,6 @@ var mocha = require('gulp-mocha');
 var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 
-var mochify = require('mochify');
-
 var path = {
         js: 'static/js',
         css: 'static/css'
@@ -46,7 +44,7 @@ function bundle(){
       })
       .pipe(source('index.js'))
       .pipe(buffer())
-      .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(sourcemaps.init())
       .pipe(rename('app.js'))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(path.js+'/build/'))
@@ -68,10 +66,7 @@ gulp.task('browserify:prod',['clean:app'] ,function() {
         })
         .pipe(source('index.js'))
         .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true}))
-        /*.pipe(uglify({
-            compress: false
-         }))*/
+        .pipe(sourcemaps.init())
         .pipe(rename('app.js'))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.js+'/build/'))
@@ -168,6 +163,7 @@ gulp.task('sass', function() {
 
 function clean_app (cb) {
   del([path.js+'/build/app.js',path.js+'/build/app.js.map'], cb);
+
 }
 /**
  * Delete files before rebuild new one
