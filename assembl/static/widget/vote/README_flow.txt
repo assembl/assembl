@@ -48,7 +48,8 @@ This page makes a GET request to the value of the widget_uri parameter, which lo
 http://localhost:6543/data/Widget/4
 The response is a JSON with fields like "discussion", "votespecs_url", which are needed by the page.
 
-The widget successively POSTs json descriptions of the vote specs on the votespecs_url endpoint.
+The widget successively POSTs JSON descriptions of the vote specs on the votespecs_url endpoint.
+A Vote spec description contains fields like "id", "type", "widget_id", "criterion_idea_id", "question_id", "settings", and other fields depending on the value of the "type" field.
 On return, each of these will have a "voting_urls" field which looks like
 {"local:Idea/120":"local:Discussion/4/widgets/5/vote_specifications/121/vote_targets/120/votes","local:Idea/184":"local:Discussion/4/widgets/5/vote_specifications/184/vote_targets/120/votes"}
 

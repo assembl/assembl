@@ -14,6 +14,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   //$scope.criteria_url = null; // "local:Discussion/1/widgets/66/criteria"
   //$scope.criteria_endpoint = null; // "/data/Discussion/1/widgets/66/criteria"
   $scope.criteria = null; // array of ideas (their full structure)
+  $scope.vote_specifications = null; // array of vote specs (descriptions of items)
 
 
   $scope.mandatory_settings_fields = VoteWidgetService.mandatory_settings_fields;
@@ -73,6 +74,8 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
       $scope.updateOnceWidgetIsReceived();
     });
 
+    // TODO: get all available ideas and put them into $scope.criteria, or code an idea picker component
+
   };
 
   $scope.getOptionalFieldCategoryName = function(key){
@@ -87,7 +90,8 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
 
   $scope.addItem = function(){
     var item = {
-      'criteria': []
+      'criteria': [],
+      'vote_specifications': []
     };
     VoteWidgetService.addDefaultFields(item, $scope.mandatory_item_fields);
     $scope.widget.settings.items.push(item);
@@ -96,12 +100,14 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   $scope.addCriterion = function(item_index){
     var criterion = {};
     VoteWidgetService.addDefaultFields(criterion, $scope.mandatory_criterion_fields);
-    $scope.widget.settings.items[item_index].criteria.push(criterion);
+    //$scope.widget.settings.items[item_index].criteria.push(criterion);
+    $scope.widget.settings.items[item_index].vote_specifications.push(criterion);
   };
 
   $scope.resetCriterionFromType = function(item_index, criterion_index) {
     console.log("resetCriterionFromType()");
-    var criterion = $scope.widget.settings.items[item_index].criteria[criterion_index];
+    //var criterion = $scope.widget.settings.items[item_index].criteria[criterion_index];
+    var criterion = $scope.widget.settings.items[item_index].vote_specifications[criterion_index];
     VoteWidgetService.resetCriterionFromType(criterion);
   };
 
@@ -109,11 +115,13 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     //console.log("addCriterionField(): ", item_index, criterion_index, field_name);
     if ( field_name ){
       //$scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_criterion_fields, field_name, true);
-      var current_criterion = $scope.widget.settings.items[item_index].criteria[criterion_index];
+      //var current_criterion = $scope.widget.settings.items[item_index].criteria[criterion_index];
+      var current_criterion = $scope.widget.settings.items[item_index].vote_specifications[criterion_index];
       var defaultValue = null;
-      defaultValue = VoteWidgetService.getFieldDefaultValue($scope.aggregated_optional_criterion_fields_by_type[current_criterion.type], field_name, true);
+      defaultValue = VoteWidgetService.getFieldDefaultValue($scope.aggregated_optional_criterion_fields_by_type[current_criterion["@type"]], field_name, true);
       //console.log("defaultValue: ", defaultValue);
-      $scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = defaultValue;
+      //$scope.widget.settings.items[item_index].criteria[criterion_index][field_name] = defaultValue;
+      $scope.widget.settings.items[item_index].vote_specifications[criterion_index][field_name] = defaultValue;
       //console.log("settings items after: ", $scope.widget.settings.items);
     }
   };
@@ -127,7 +135,8 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   };
 
   $scope.deleteCriterionField = function (item_index, criterion_index, field_name){
-    delete $scope.widget.settings.items[item_index].criteria[criterion_index][field_name];
+    //delete $scope.widget.settings.items[item_index].criteria[criterion_index][field_name];
+    delete $scope.widget.settings.items[item_index].vote_specifications[criterion_index][field_name];
   };
 
   $scope.deleteItemField = function (item_index, field_name){
@@ -148,11 +157,124 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     //$scope.discussion_uri = $scope.widget.discussion;
     //$scope.criteria_url = $scope.widget.criteria_url;
     //$scope.criteria_endpoint = AssemblToolsService.resourceToUrl($scope.criteria_url);
-    $scope.criteria = $scope.widget.criteria;
-    console.log("$scope.criteria:");
-    console.log($scope.criteria);
+    if ("criteria" in $scope.widget ){
+      $scope.criteria = $scope.widget.criteria;
+      console.log("$scope.criteria:");
+      console.log($scope.criteria);
+    }
+    else {
+      console.log("we did not receive any widget.criteria");
+    }
+
+    if ( "vote_specifications" in $scope.widget ){
+      $scope.vote_specifications = $scope.widget.vote_specifications;
+      console.log("$scope.vote_specifications:");
+      console.log($scope.vote_specifications);
+    }
+    else {
+      console.log("we did not receive any widget.vote_specifications");
+    }
 
     $scope.current_step = 2;
+  };
+
+  $scope.removeItem = function(index){
+    if ( confirm("Are you sure you want to delete this item?") ){
+      
+      // remove associated VoteSpecs
+      var item = $scope.widget.settings.items[index];
+      if ( "vote_specifications" in item){
+        item.vote_specifications.forEach(function(vote_spec){
+          if ( "@id" in vote_spec ){
+            $http({
+                method: 'DELETE',
+                url: AssemblToolsService.resourceToUrl(vote_spec["@id"]),
+                //data: $.param(post_data),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function(data, status, headers){
+                console.log("DELETE success");
+            }).error(function(status, headers){
+                console.log("DELETE error");
+            });
+          }
+        });
+      }
+
+      // now remove the item
+      $scope.widget.settings.items.splice(index,1);
+    }
+  };
+  
+  $scope.moveUnknownProperties = function(object, known_properties, target_property){
+    for ( var property in object ) {
+      if ( object.hasOwnProperty(property) ) {
+        if ( known_properties.indexOf(property) == -1 ){
+          if ( !(target_property in object) ) {
+            object[target_property] = {};
+          }
+          object[target_property][property] = object[property];
+          delete object[property];
+        }
+      }
+    }
+    return object;
+  };
+
+  /*
+  This method iterates over vote_specifications and for each element, looks for an id.
+  If no id, POST the VoteSpec, get its new id, and set it in the id json field.
+  If there is an id, PUT the already existing VoteSpec to replace it
+  */
+  $scope.updateVoteSpecifications = function(){
+    var id_field = "@id";
+    var collection = $scope.widget.settings.vote_specifications;
+    if ( !("votespecs_url" in $scope.widget) ){
+      console.log("error: no votespecs_url field in widget, so we can't POST/PUT to any endpoint");
+      return;
+    }
+    var collection_endpoint = AssemblToolsService.resourceToUrl($scope.widget.votespecs_url);
+    var post_data = null;
+    var endpoint = null;
+    var result_holder = $("#step_criteria_groups_and_appearance_result");
+    
+    if ( "items" in $scope.widget.settings ){
+      $scope.widget.settings.items.forEach(function(item){
+        if ( "vote_specifications" in item ){
+          item.vote_specifications.forEach(function(el, index, ar){
+            var known_properties = ["@type", "minimum", "maximum", "criterion_idea", "widget", "question_id", "settings"]; // TODO: the content of this array should depend on the value of VoteSpec["@type"]
+            if ( id_field in el ){
+              var el2 = _.clone(el);
+              post_data = $scope.moveUnknownProperties(el2, known_properties, "settings");
+
+              endpoint = AssemblToolsService.resourceToUrl(el[id_field]);
+              VoteWidgetService.putJson(endpoint, post_data, result_holder);
+            }
+            else {
+              var el2 = _.clone(el);
+              post_data = $scope.moveUnknownProperties(el2, known_properties, "settings");
+
+              endpoint = collection_endpoint;
+              var promise = VoteWidgetService.postJson(endpoint, post_data, result_holder);
+              promise.success(function(data, status, headers){
+                // set @id in current json
+                console.log("updateVoteSpecifications success:", data, status, headers);
+                if ( "@id" in data ){
+                  el["@id"] = data["@id"];
+                }
+                console.log("settings after:", $scope.widget.settings);
+                $scope.applyWidgetSettings(); // ugly!
+              });
+            }
+          });
+        }
+      });
+    }
+  };
+
+  $scope.saveWidgetSettings = function(){
+    // ugly!
+    $scope.applyWidgetSettings();
+    $scope.updateVoteSpecifications();
   };
 
   $scope.applyWidgetSettings = function(){
