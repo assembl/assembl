@@ -14,7 +14,7 @@ from kombu import BrokerConnection, Exchange, Queue
 from kombu.mixins import ConsumerMixin
 from kombu.utils.debug import setup_logging
 
-from assembl.tasks import configure
+from assembl.tasks import configure, raven_client
 from assembl.lib.config import set_config
 from assembl.lib.enum import OrderedEnum
 from assembl.lib.sqla import configure_engine
@@ -164,7 +164,9 @@ class SourceReader(Thread):
         self.source.error_description = None
         self.source.error_backoff_until = None
 
-    def new_error(self, reader_error, status=None):
+    def new_error(self, reader_error, status=None, expected=True):
+        if raven_client and not expected:
+            raven_client.captureException()
         status = status or reader_error.status
         if status != self.last_error_status:
             # Counter-intuitive, but either lighter or more severe errors
@@ -251,8 +253,7 @@ class SourceReader(Thread):
                     self.do_close()
                 continue
             except Exception as e:
-                log.error("Unexpected error: "+repr(e))
-                self.new_error(e, ReaderStatus.CLIENT_ERROR)
+                self.new_error(e, ReaderStatus.CLIENT_ERROR, expected=False)
                 self.do_close()
                 break
             while self.is_connected():
@@ -264,8 +265,7 @@ class SourceReader(Thread):
                     if self.status > ReaderStatus.TRANSIENT_ERROR:
                         self.do_close()
                 except Exception as e:
-                    log.error("Unexpected error: "+repr(e))
-                    self.new_error(e, ReaderStatus.CLIENT_ERROR)
+                    self.new_error(e, ReaderStatus.CLIENT_ERROR, expected=False)
                     self.do_close()
                     break
                 if not self.is_connected():
@@ -285,8 +285,7 @@ class SourceReader(Thread):
                                 self.end_wait_for_push()
                             break
                         except Exception as e:
-                            log.error("Unexpected error: "+repr(e))
-                            self.new_error(e, ReaderStatus.CLIENT_ERROR)
+                            self.new_error(e, ReaderStatus.CLIENT_ERROR, expected=False)
                             self.do_close()
                             break
                         if not self.is_connected():
