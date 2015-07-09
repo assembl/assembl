@@ -3,7 +3,7 @@
   <div class="controls">
     <select id="fb-pageInfo" class='js_fb-page-id'>
       <% _.each(pages, function(page){ %>
-        <option value="<%= page.id %>"> <%= page.name %> </option>
+        <option value="<%= page.value %>"> <%= page.name %> </option>
       <% });%>
     </select>
     <!-- <input type="text" id="fb-pageInfo" class="input-large js_fb-page-id"> -->

@@ -23,8 +23,8 @@ var Modal = Backbone.Modal.extend({
       //_.bindAll(this, "loadFbView"); //Useful for bind function
       this.vent.on("loadFbView", this.loadFbView, this);
       this.vent.on('submitted', this.submitted, this);
+      this.vent.on('clearError', this.clearError, this);
 
-      console.log('modal being initialized');
       var that = this;
       this.model.getCreatorPromise().then(function(user){
         that.messageCreator = user;
@@ -43,6 +43,9 @@ var Modal = Backbone.Modal.extend({
         }
       }
     },
+    clearError: function(){
+      this.$('.js_export_error_message').empty();
+    },
     loadFbView: function(token){
       var fbView = new facebook.root({
         creator: this.messageCreator,
@@ -50,8 +53,7 @@ var Modal = Backbone.Modal.extend({
         vent: this.vent,
         token: token
       });
-      //Is this the best way to remove everything from the previous view?
-      this.$el.empty();
+      
       this.$('.js_source-specific-form').html(fbView.render().el);
       this.currentView = fbView;
     },
@@ -103,12 +105,17 @@ var Modal = Backbone.Modal.extend({
       e.preventDefault();
       if (!this.formType) {
         console.log('Cannot continue. Form is incomplete.');
+        var er = i18n.gettext("Please select a destination to export to before continuing");
+        $('.js_export_error_message').text(er);
       }
       else {
         console.log('currentView', this.currentView);
         var that = this;
         this.currentView.submitForm(function(){
           that.destroy();
+        }, function(){
+          var text = i18n.gettext("Facebook was unable to create the post. Close the box and try again.")
+          that.$('.js_export_error_message').text(text);
         });
       }
     }

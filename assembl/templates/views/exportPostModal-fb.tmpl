@@ -9,25 +9,13 @@
       <option value="page">{{ gettext("Your Pages") }}</option>
       <option value="group">{{ gettext("Your Groups") }}</option>
     </select>
-    <span>*</span>
+    <!-- <span>*</span> -->
   </div>
 </div>
 
 <div class="fb-targeted-form"></div>
 
-<a class="fb-js_test_area mts" href='#'>Click me for test</a>
-
-<div class="control-group mts">
-  <div class='fb-post-privacy'>
-    <div class='fb-privacy-container'>
-      <select>
-        <option value='everyone'>{{ gettext("Everyone")}} </option>
-        <option value='friends'>{{ gettext("Friends")}} </option>
-        <option value='friends_of_friends'>{{ gettext("Friends of Friends")}} </option>
-      </select>
-    </div>
-  </div>
-</div>
+<a class="fb-js_test_area mts hidden" href='#'>Click me for test</a>
 
 <!-- This is where the message preview would go -->
 <div class="form-break mts">{{ gettext("Suggested preview") }}:</div>
@@ -46,19 +34,19 @@
 <div style="display: table; height: 170px;">
   <div class="control-group" style="float: right;">
     <div class="controls">
-      <input type="text" id="attachmentName" class="input-large js_fb-suggested-name" placeholder="{{ gettext("Name") }}">
+      <input type="text" id="attachmentName" class="input-large js_fb-suggested-name" placeholder="<%= suggestedName %>">
     </div>
   </div>
 
   <div class="control-group" style="float: right">
     <div class="controls">
-      <input type="text" class="input-large js_fb-suggested-caption" placeholder="{{ gettext("Caption") }}">
+      <input type="text" class="input-large js_fb-suggested-caption" placeholder="<%= suggestedCaption %>">
     </div>
   </div>
 
   <div class="control-group" style="float: right">
     <div class="controls">
-      <textarea rows=3 class="input-large js_fb-suggested-description" placeholder="{{ gettext("Description") }}"></textarea>
+      <textarea rows=3 class="input-large js_fb-suggested-description" placeholder="<%= suggestedDescription %>"></textarea>
     </div>
   </div>
 </div>
