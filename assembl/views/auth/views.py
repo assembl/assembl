@@ -2,6 +2,7 @@ from datetime import datetime
 import simplejson as json
 from urllib import quote
 from smtplib import SMTPRecipientsRefused
+import logging
 
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
@@ -11,6 +12,7 @@ from pyramid.renderers import render_to_response
 from pyramid.security import (
     remember,
     forget,
+    Everyone,
     authenticated_userid,
     NO_PERMISSION_REQUIRED)
 from pyramid.httpexceptions import (
@@ -39,6 +41,7 @@ from ...lib import config
 from .. import get_default_context, JSONError
 
 _ = TranslationStringFactory('assembl')
+log = logging.getLogger('assembl')
 
 
 def get_login_context(request, force_show_providers=False):
@@ -455,6 +458,7 @@ def assembl_login_complete_view(request):
 def velruse_login_complete_view(request):
     session = AgentProfile.default_db
     context = request.context
+    now = datetime.utcnow()
     velruse_profile = context.profile
     discussion = None
     slug = request.session.get('discussion', None)
@@ -467,14 +471,18 @@ def velruse_login_complete_view(request):
             slug=slug).first()
     next_view = handle_next_view(request, True)
     logged_in = authenticated_userid(request)
+    if logged_in:
+        logged_in = User.get(logged_in)
+    base_profile = logged_in
     provider = get_identity_provider(request)
     # find or create IDP_Accounts
     idp_accounts = []
-    new_idp_accounts = []
+    new_idp_account = None
     velruse_accounts = velruse_profile['accounts']
     old_autoflush = session.autoflush
     # sqla mislikes creating accounts before profiles, so delay
     session.autoflush = False
+    # Search for this social account
     for velruse_account in velruse_accounts:
         if 'userid' in velruse_account:
             idp_accounts.extend(session.query(
@@ -489,11 +497,21 @@ def velruse_login_complete_view(request):
                     domain=velruse_account['domain'],
                     username=velruse_account['username']).all())
         else:
-            raise HTTPServerError()
+            log.error("account needs username or email" + velruse_account)
+            raise HTTPServerError("account needs username or userid")
+    trusted_emails = set()
     if idp_accounts:
         for idp_account in idp_accounts:
             idp_account.profile_info_json = velruse_profile
+        if len(idp_accounts) > 1:
+            log.warn("multiple idp_accounts:" +
+                     ','.join((a.id for a in idp_accounts)) +
+                     " for " + velruse_accounts)
+            # We will just the last one from the loop for now.
+        trusted_emails.update([
+            a.email for a in idp_accounts if a.provider.trust_emails])
     else:
+        # Create it if not found
         idp_class = IdentityProviderAccount
         for cls in idp_class.get_subclasses():
             if cls == idp_class:
@@ -508,59 +526,83 @@ def velruse_login_complete_view(request):
             userid=velruse_account.get('userid'),
             username=velruse_account.get('username'))
         idp_accounts.append(idp_account)
-        new_idp_accounts.append(idp_account)
+        new_idp_account = base_account = idp_account
         session.add(idp_account)
-    # find AgentProfile
-    profile = None
-    user = None
-    profiles = [a.profile for a in idp_accounts if a.profile]
-    # Maybe we already have a profile based on email
-    if idp_account.email and idp_account.verified:
-        email = idp_account.email
-        other_account = session.query(AbstractAgentAccount).filter_by(
-            email=email, verified=True).first()
-        if other_account and other_account.profile \
-                and other_account.profile not in profiles:
-            profiles.append(other_account.profile)
-    profiles = list(set(profiles))
+    for account in idp_accounts:
+        if account.provider.trust_emails:
+            profile = (velruse_profile if account == new_idp_account
+                       else account.profile_info_json)
+            email = profile.get('verifiedEmail', None)
+            if email:
+                if account == new_idp_account:
+                    account.email = email
+                trusted_emails.add(email)
+            for email in profile.get('emails', ()):
+                if isinstance(email, dict):
+                    email = email.get('value', None)
+                if isinstance(email, (str, unicode)) and email:
+                    trusted_emails.add(email)
+                    if account == new_idp_account and not account.email:
+                        account.email = email
+        # else we have created an email-less account. Treat accordingly.
+    conflicting_profiles = {a.profile for a in idp_accounts if a.profile}
+    # Are there other accounts/profiles than the ones we know?
+    conflicting_accounts = set()
+    for email in trusted_emails:
+        other_accounts = session.query(AbstractAgentAccount).filter_by(
+            email=email)
+        for account in other_accounts:
+            conflicting_accounts.add(account)
+            if account.verified:
+                conflicting_profiles.update([
+                    a.profile for a in other_accounts])
+    # choose best known profile for base_account
     # prefer profiles with verified users, then users, then oldest profiles
-    profiles.sort(key=lambda p: (
+    profile_list = list(conflicting_profiles)
+    profile_list.sort(key=lambda p: (
         not(isinstance(p, User) and p.verified),
         not isinstance(p, User), p.id))
-    if logged_in:
-        # NOTE: Must make sure that login page not available when
-        # logged in as another account.
-        user = session.query(User).filter_by(id=logged_in).first()
-        if user:
-            if user in profiles:
-                profiles.remove(user)
-            profiles.insert(0, user)
-    username = None
-    if len(profiles):
-        # first is presumably best
-        profile = profiles.pop(0)
-        while len(profiles):
-            other = profiles.pop()
-            # Multiple profiles. We need to combine them to one.
-            profile.merge(other)
-            session.delete(other)
-        if isinstance(profile, User):
-            if profile.username:
-                username = profile.username.username
-            profile.last_login = datetime.utcnow()
-            if not profile.name:
-                profile.name = velruse_profile.get('displayName', None)
-    else:
-        # Create a new user
-        profile = User(
-            name=velruse_profile.get('displayName', ''),
-            verified=True,
-            last_login=datetime.utcnow(),
-            creation_date=datetime.utcnow(),
-            #timezone=velruse_profile['utcOffset'],   # TODO: needs parsing
-        )
-
-        session.add(profile)
+    if new_idp_account and profile_list:
+        base_profile = profile_list[0]
+    elif not new_idp_account:
+        base_account = [a for a in idp_accounts
+                        if a.profile == profile_list[0]][0]
+        if not logged_in:
+            base_profile = profile_list[0]
+    new_profile = None
+    if new_idp_account:
+        if not base_profile:
+            # Create a new user
+            base_profile = new_profile = User(
+                name=velruse_profile.get('displayName', ''),
+                verified=True,
+                creation_date=now)
+            session.add(new_profile)
+        # Upgrade a AgentProfile
+        if not isinstance(base_profile, User):
+            base_profile = base_profile.change_class(
+                User, None,
+                verified=True)
+        new_idp_account.profile = base_profile
+        base_profile.last_login = now
+        base_profile.verified = True
+        if not base_profile.name:
+            base_profile.name = velruse_profile.get('displayName', None)
+        # TODO (needs parsing)
+        # base_profile.timezone=velruse_profile['utcOffset']
+    # Now all accounts have a profile
+    session.autoflush = old_autoflush
+    session.flush()
+    # Merge other profiles with the same (validated) email
+    # TODO: Ask the user about doing this.
+    conflicting_profiles.discard(base_profile)
+    conflicting_accounts.discard(base_account)
+    for conflicting_profile in conflicting_profiles:
+        base_profile.merge(conflicting_profile)
+        session.delete(conflicting_profile)
+    # Set username
+    if not base_profile.username:
+        username = None
         usernames = set((a['preferredUsername'] for a in velruse_accounts
                          if 'preferredUsername' in a))
         for u in usernames:
@@ -568,73 +610,50 @@ def velruse_login_complete_view(request):
                 username = u
                 break
         if username:
-            session.add(Username(username=username, user=profile))
-        if discussion:
-            now = datetime.utcnow()
-            agent_status = AgentStatusInDiscussion(
-                agent_profile=profile, discussion=discussion,
-                user_created_on_this_discussion=True)
-            session.add(agent_status)
-    for idp_account in new_idp_accounts:
-        idp_account.profile = profile
-    # Now all accounts have a profile
-    session.autoflush = old_autoflush
-    session.flush()
-    if (not profiles) and maybe_auto_subscribe(profile, discussion):
+            session.add(Username(username=username, user=base_profile))
+    # Create AgentStatusInDiscussion
+    if new_profile and discussion:
+        agent_status = AgentStatusInDiscussion(
+            agent_profile=base_profile, discussion=discussion,
+            user_created_on_this_discussion=True)
+        session.add(agent_status)
+    if maybe_auto_subscribe(base_profile, discussion):
         next_view = "/%s/" % (slug,)
-    email_accounts = {ea.email: ea for ea in profile.email_accounts}
-    # There may be new emails in the accounts
-    verified_email = None
-    if 'verifiedEmail' in velruse_profile:
-        verified_email = velruse_profile['verifiedEmail']
-        idp_account.email = verified_email
-        if verified_email in email_accounts and provider.trust_emails:
-            # There may be multiple unverified
-            for email_account in profile.email_accounts:
-                if email_account.email == verified_email:
-                    if email_account.verified and email_account.preferred:
-                        idp_account.preferred = True
-                    email_account.delete()
-    for num, email_d in enumerate(velruse_profile.get('emails', [])):
-        if isinstance(email_d, dict):
-            email = email_d['value']
-            if num == 0 and not idp_account.email and provider.trust_emails:
-                # pick the first email. Only if we are going to trust it.
-                idp_account.email = email
-                verified_email = email
-            if provider.trust_emails and email in email_accounts:
-                # There may be multiple unverified
-                accounts = [account for account in profile.email_accounts
-                            if account.email == email]
-                for n, account in enumerate(accounts):
-                    if n == 0 and email != verified_email:
-                        account.verified = True
-                    else:
-                        account.delete()
-            elif verified_email != email:
-                # create an email account for other emails.
+    # Delete other (email) accounts
+    if base_account.provider.trust_emails:
+        for account in conflicting_accounts:
+            # Merge may have been confusing
+            session.expire(account)
+            account = AbstractAgentAccount.get(account.id)
+            if account.profile == base_profile:
+                if account.email == base_account.email:
+                    if account.verified and account.preferred:
+                        base_account.preferred = True
+                    account.delete()
+            else:
+                # If they're verified, they should have been merged.
+                if account.verified:
+                    log.error("account %d should not exist: " % (account.id,))
+                account.delete()
+                # TODO: What if no accounts left on profile?
+    session.expire(base_profile, ['accounts', 'email_accounts'])
+    # create an email account for other emails.
+    known_emails = {a.email for a in base_profile.accounts}
+    for email in trusted_emails:
+        if email not in known_emails:
                 email = EmailAccount(
                     email=email,
-                    profile=profile,
-                    verified=provider.trust_emails
+                    profile=base_profile,
+                    verified=base_account.provider.trust_emails
                 )
                 session.add(email)
-            else:
-                if email_d.get('preferred', False):
-                    # maybe TODO: make the idp_account preferred,
-                    # if no other account is preferred?
-                    pass
 
-    # Note that if an IdP account stops claiming an email, it "leaks".
     session.flush()
 
-    user_id = profile.id
-    headers = remember(request, user_id)
+    headers = remember(request, base_profile.id)
     request.response.headerlist.extend(headers)
     if discussion:
         request.session['discussion'] = discussion.slug
-    # TODO: Store the OAuth etc. credentials.
-    # Though that may be done by velruse?
     return HTTPFound(location=next_view)
 
 

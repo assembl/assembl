@@ -5,6 +5,7 @@ import hashlib
 import simplejson as json
 from collections import defaultdict
 from enum import IntEnum
+import logging
 
 from sqlalchemy import (
     Boolean,
@@ -43,6 +44,8 @@ from ..semantic.namespaces import (
 from ..semantic.virtuoso_mapping import (
     QuadMapPatternS, USER_SECTION, PRIVATE_USER_SECTION,
     AssemblQuadStorageManager)
+
+log = logging.getLogger('assembl')
 
 
 # None-tolerant min, max
@@ -133,6 +136,7 @@ class AgentProfile(Base):
                 return name
 
     def merge(self, other_profile):
+        log.warn("Merging AgentProfiles: %d <= %d" % (self.id, other_profile.id))
         session = self.db
         assert not (
             isinstance(other_profile, User) and not isinstance(self, User))
@@ -376,6 +380,7 @@ class EmailAccount(AbstractAgentAccount):
         return ('agent_email_account', self.email,)
 
     def merge(self, other):
+        log.warn("Merging EmailAccounts: %d, %d" % (self.id, other.id))
         if other.verified:
             self.verified = True
 
@@ -681,6 +686,7 @@ class User(AgentProfile):
         return super(User, self).get_preferred_email()
 
     def merge(self, other_user):
+        log.warn("Merging Users: %d <= %d" % (self.id, other_user.id))
         super(User, self).merge(other_user)
         if isinstance(other_user, User):
             session = self.db
