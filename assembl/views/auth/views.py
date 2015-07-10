@@ -575,13 +575,13 @@ def velruse_login_complete_view(request):
                 agent_profile=profile, discussion=discussion,
                 user_created_on_this_discussion=True)
             session.add(agent_status)
-        session.flush()
-        if maybe_auto_subscribe(profile, discussion):
-            next_view = "/%s/" % (slug,)
     for idp_account in new_idp_accounts:
         idp_account.profile = profile
     # Now all accounts have a profile
     session.autoflush = old_autoflush
+    session.flush()
+    if (not profiles) and maybe_auto_subscribe(profile, discussion):
+        next_view = "/%s/" % (slug,)
     email_accounts = {ea.email: ea for ea in profile.email_accounts}
     # There may be new emails in the accounts
     verified_email = None
@@ -590,7 +590,7 @@ def velruse_login_complete_view(request):
         idp_account.email = verified_email
         if verified_email in email_accounts and provider.trust_emails:
             # There may be multiple unverified
-            for email_account in profile.email_account:
+            for email_account in profile.email_accounts:
                 if email_account.email == verified_email:
                     if email_account.verified and email_account.preferred:
                         idp_account.preferred = True
