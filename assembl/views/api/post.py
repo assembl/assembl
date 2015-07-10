@@ -93,11 +93,15 @@ def get_posts(request):
     root_post_id = request.GET.getall('root_post_id')
     if root_post_id:
         root_post_id = get_database_id("Post", root_post_id[0])
+    family_post_id = request.GET.getall('family_post_id')
+    if family_post_id:
+        family_post_id = get_database_id("Post", family_post_id[0])
 
     root_idea_id = request.GET.getall('root_idea_id')
     if root_idea_id:
         root_idea_id = get_database_id("Idea", root_idea_id[0])
 
+    
     ids = request.GET.getall('ids[]')
     if ids:
         ids = [get_database_id("Post", id) for id in ids]
@@ -161,6 +165,18 @@ def get_posts(request):
             ))
             |
             (PostClass.id==root_post.id)
+            )
+    elif family_post_id:
+        root_post = Post.get(family_post_id)
+        ancestor_ids = root_post.ancestor_ids()
+        posts = posts.filter(
+            (Post.ancestry.like(
+            root_post.ancestry + cast(root_post.id, String) + ',%'
+            ))
+            |
+            (PostClass.id==root_post.id)
+            |
+            (PostClass.id.in_(ancestor_ids))
             )
     else:
         root_post = None

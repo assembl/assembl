@@ -1741,7 +1741,7 @@ var MessageList = AssemblPanel.extend({
      * Does NOT re-render
      *
      */
-    setViewStyle: function (viewStyle) {
+    setViewStyle: function (viewStyle, DEPRECATED_skip_storage) {
       //console.log("setViewStyle called with: ", viewStyle, "interface type: ", Ctx.getCurrentInterfaceType(), "current user is unknown?:", Ctx.getCurrentUser().isUnknownUser());
       if (!viewStyle) {
           //If invalid, set global default
@@ -1779,7 +1779,7 @@ var MessageList = AssemblPanel.extend({
         }
       }
 
-      if (this.storedMessageListConfig.viewStyleId != viewStyle.id) {
+      if (!DEPRECATED_skip_storage && this.storedMessageListConfig.viewStyleId != viewStyle.id) {
           this.storedMessageListConfig.viewStyleId = viewStyle.id;
           Ctx.DEPRECATEDsetMessageListConfigToStorage(this.storedMessageListConfig);
       }

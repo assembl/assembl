@@ -63,7 +63,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
           numAncestorsOutOfContext = 0,
           numDescendantsOutOfContext = 0;
 
-      console.log(this.model.id, visitorData);
+      //console.log(this.model.id, visitorData);
       if( this.messageListView.isViewStyleThreadedType() ) {
         if( (visitorData.filtered_descendant_count !== visitorData.real_descendant_count) || visitorData.real_ancestor_count !== visitorData.level && firstMessage.get("parentId") && this.level === 1 ) {
           hasParentsOrChildrenOutOfScope = true;
@@ -184,10 +184,12 @@ var MessageFamilyView = Marionette.ItemView.extend({
       var modal = new ModalGroup({"model": groupSpecModel, "title": modal_title});
       var group = modal.getGroup();
       var messagePanel = group.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-      messagePanel.currentQuery.initialize();
+      messagePanel.setViewStyle(messagePanel.ViewStyles.THREADED, true)
+      messagePanel.currentQuery.addFilter(this.messageListView.currentQuery.availableFilters.POST_IS_DESCENDENT_OR_ANCESTOR_OF_POST, this.model.id);
       console.log("About to manually trigger messagePanel render");
       messagePanel.render();
       Assembl.slider.show(modal);
+      messagePanel.showMessageById(this.model.id, undefined, true, true); 
     },
 
     /**

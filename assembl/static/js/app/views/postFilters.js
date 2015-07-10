@@ -268,6 +268,43 @@ var collectionManager = new CollectionManager();
     }
   });
 
+  function FilterPostIsDescendentOrAncestorOfPost() {
+    AbstractFilterSingleValue.call(this);
+  }
+  FilterPostIsDescendentOrAncestorOfPost.prototype = Object.create(AbstractFilterSingleValue.prototype);
+  _.extend(FilterPostIsDescendentOrAncestorOfPost.prototype, {
+    getId: function() {
+      return 'post_ancestry_and_thread';
+    },
+    getServerParam: function() {
+      return 'family_post_id';
+    },
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Part of the context of'));
+    },
+    getHelpText: function() {
+      return i18n.gettext('Only include messages that are in the specified post reply thread or ancestry.');
+    },
+    getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
+      return collectionManager.getMessageFullModelPromise(individualFilterValue).then(function(post) {
+        if(!post) {
+          throw new Error('Post ' + individualFilterValue + ' not found');
+        }
+        if (post.get('@type') === "SynthesisPost"){
+          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject'));
+        }
+        else {
+          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject'));
+        }
+      })
+    },
+    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+      return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+        return i18n.sprintf(i18n.gettext("Are in the context of: %s"), individualValuesButtons.join(i18n.gettext(' AND ')));
+      });
+    }
+  });
+
   function FilterPostIsFromUser() {
     AbstractFilterSingleValue.call(this);
   }
@@ -531,6 +568,7 @@ var collectionManager = new CollectionManager();
     POST_HAS_ID_IN: FilterPostHasIdIn,
     POST_IS_IN_CONTEXT_OF_IDEA: FilterPostIsInContextOfIdea,
     POST_IS_DESCENDENT_OF_POST: FilterPostIsDescendentOfPost,
+    POST_IS_DESCENDENT_OR_ANCESTOR_OF_POST: FilterPostIsDescendentOrAncestorOfPost,
     POST_IS_ORPHAN: FilterPostIsOrphan,
     POST_IS_SYNTHESIS: FilterPostIsSynthesis,
     POST_IS_UNREAD: FilterPostIsUnread,
