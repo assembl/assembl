@@ -54,8 +54,12 @@ def fetch_facebook_sdk_locales():
 
 
 def run_setup():
+    from requests.exceptions import ConnectionError
     if not facebook_sdk_locales.keys():
-        fetch_facebook_sdk_locales()
+        try:
+            fetch_facebook_sdk_locales()
+        except ConnectionError:
+            facebook_sdk_locales['en'].add('CA')
 
 
 def language_sdk_existance(lang, default_locale_dict):
