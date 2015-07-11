@@ -23,6 +23,7 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from .auth import User, AgentProfile
 from .generic import Content
 from .discussion import Discussion
+from .idea import Idea
 
 
 class Action(TombstonableMixin, DiscussionBoundBase):
@@ -103,6 +104,7 @@ class ActionOnPost(Action):
     def get_discussion_id(self):
         return self.post.get_discussion_id()
 
+    # This should not be necessary, but is.
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
         return [QuadMapPatternS(None,
@@ -208,3 +210,78 @@ class CollapsePost(UniqueActionOnPost):
     }
 
     verb = 'collapsed'
+
+
+class ActionOnIdea(Action):
+    """
+    An action that is taken on an idea. (Mixin)
+    """
+    __tablename__ = 'action_on_idea'
+    id = Column(
+        Integer,
+        ForeignKey(Action.id, ondelete="CASCADE", onupdate='CASCADE'),
+        primary_key=True
+    )
+
+    idea_id = Column(
+        Integer,
+        ForeignKey(Idea.id, ondelete="CASCADE", onupdate='CASCADE'),
+        nullable=False,
+        info={'rdf': QuadMapPatternS(None, VERSION.what)}
+    )
+
+    idea = relationship(
+        Idea,
+        backref=backref('actions', cascade="all, delete-orphan"),
+    )
+
+    object_type = 'idea'
+
+    # This should not be necessary, but is.
+    @classmethod
+    def special_quad_patterns(cls, alias_maker, discussion_id):
+        return [QuadMapPatternS(None,
+            RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Action.type),
+            name=QUADNAMES.class_ActionOnIdea_class)]
+
+    def get_discussion_id(self):
+        return self.idea.get_discussion_id()
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.id == Action.id),
+                (cls.idea_id == Idea.id),
+                (Idea.discussion_id == discussion_id))
+
+    discussion = relationship(
+        Discussion, viewonly=True, secondary=Idea.__table__, uselist=False,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+
+
+class UniqueActionOnIdea(ActionOnIdea):
+    "An action that should be unique of its subclass for an idea, user pair"
+    def unique_query(self):
+        # inheritance leads in trouble
+        query = self.db.query(self.__class__)
+        actor_id = self.actor_id or self.actor.id
+        idea_id = self.idea_id or self.idea.id
+        return query.filter_by(
+            actor_id=actor_id, type=self.type, idea_id=idea_id,
+            tombstone_date=self.tombstone_date), True
+
+
+class ViewIdea(ActionOnIdea):
+    """
+    A view action on an idea. (Not a status)
+    """
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:ReadStatusChange'
+    }
+
+    def tombstone(self):
+        from .generic import Content
+        return DiscussionBoundTombstone(
+            self, idea=Content.uri_generic(self.idea_id),
+            actor=User.uri_generic(self.actor_id))
+
+    verb = 'viewed'

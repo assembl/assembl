@@ -82,15 +82,8 @@ from .auth import (
     UserTemplate,
     Username,
 )
-from .action import (
-    Action,
-    ActionOnPost,
-    CollapsePost,
-    ExpandPost,
-    LikedPost,
-    ViewPost,
-)
 from .discussion import Discussion
+from .preferences import Preferences
 from .generic import (
     AnnotatorSource,
     Content,
@@ -117,6 +110,14 @@ from .idea import (
     Idea,
     IdeaLink,
     RootIdea,
+)
+from .action import (
+    Action,
+    ActionOnPost,
+    CollapsePost,
+    ExpandPost,
+    LikedPost,
+    ViewPost,
 )
 from .idea_content_link import (
     Extract,
