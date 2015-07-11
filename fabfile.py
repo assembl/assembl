@@ -539,7 +539,7 @@ def install_basetools():
     """
     print(cyan('Installing base tools'))
     if env.mac:
-        run('cd /tmp; curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py')
+        run('cd /tmp; curl -O https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py')
         sudo('python /tmp/get-pip.py')
         sudo('pip install virtualenv')
     else:
@@ -633,6 +633,11 @@ def install_builddeps():
         # glibtoolize, bison, flex, gperf are on osx by default.
         # brew does not know aclocal, autoheader... 
         # They exist on macports, but do we want to install that?
+        if not exists('/usr/local/lib/libiodbc.2.dylib'):
+            with cd('/tmp'):
+                run('wget http://assembl.coeus.ca/static/wheelhouse/iodbc.pkg')
+                sudo('/usr/sbin/installer -pkg iodbc.pkg -target /')
+                run('rm iodbc.pkg')
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
