@@ -456,6 +456,18 @@ def assembl_login_complete_view(request):
     context='velruse.AuthenticationComplete'
 )
 def velruse_login_complete_view(request):
+    # TODO: Write tests. Situations:
+    # 1. not logged in, Social login (no equivalent) -> create account and profile
+    # 2. assembl login, Social login -> attach social account
+    # 3. assembl login, Social login, social account present -> 0
+    # 4. assembl login, Social login, verified email account present -> delete email account
+    # 5. assembl login, Social login, A social account exists with same email in another profile -> merge (TODO)
+    # 6. not logged in, Social login, A verified email account exists elsewhere -> use that profile, delete email
+    # 4. not logged in, Social login, An unverified email account exists elsewhere -> use that profile , delete email, promote profile to user
+    # 7. not logged in, Social login, A social account exists with same email -> use that profile, add account
+    # 8. assembl login, Social login, A verified email account exists elsewhere -> merged.
+    # 9. assembl login, Social login, An unverified email account exists elsewhere -> account deleted.
+    # 10. assembl login, Social login, An unverified email account exists elsewhere as only account -> profile deleted.
     session = AgentProfile.default_db
     context = request.context
     now = datetime.utcnow()
@@ -627,15 +639,30 @@ def velruse_login_complete_view(request):
             account = AbstractAgentAccount.get(account.id)
             if account.profile == base_profile:
                 if account.email == base_account.email:
-                    if account.verified and account.preferred:
-                        base_account.preferred = True
-                    account.delete()
+                    if isinstance(account, EmailAccount):
+                        account.delete()
+                        if account.verified and account.preferred:
+                            base_account.preferred = True
+                    elif isinstance(account, IdentityProviderAccount):
+                        if account.provider_id == base_account.provider_id:
+                            log.error("This should have been caught earlier")
+                            account.delete()
+                        else:
+                            log.warning("Two accounts with same email," +
+                                        "different provider: %d, %d" % (
+                                            account.id, base_account.id))
             else:
                 # If they're verified, they should have been merged.
                 if account.verified:
                     log.error("account %d should not exist: " % (account.id,))
-                account.delete()
-                # TODO: What if no accounts left on profile?
+                else:
+                    other_profile = account.profile
+                    account.delete()
+                    session.flush()
+                    session.expire(other_profile, ["accounts"])
+                    if not len(other_profile.accounts):
+                        log.warning("deleting profile %d" % other_profile.id)
+                        other_profile.delete()
     session.expire(base_profile, ['accounts', 'email_accounts'])
     # create an email account for other emails.
     known_emails = {a.email for a in base_profile.accounts}
