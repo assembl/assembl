@@ -6,6 +6,7 @@ var Marionette = require('../../shims/marionette.js'),
     _ = require('../../shims/underscore.js'),
     Assembl = require('../../app.js'),
     IdeaList = require('../ideaList.js'),
+    Base = require('../../models/base.js'),
     AboutNavPanel = require('../navigation/about.js'),
     SynthesisInNavigationPanel = require('../navigation/synthesisInNavigation.js'),
     LinkListView = require('../navigation/linkListView.js'),
@@ -53,7 +54,7 @@ var NavigationView = AssemblPanel.extend({
 
         this._accordionContentHeight = null;
         this._accordionHeightTries = 0;
-        this.visualizationItems = new Backbone.Collection();
+        this.visualizationItems = new Base.Collection();
         this.num_items = 2;
 
 
@@ -70,7 +71,10 @@ var NavigationView = AssemblPanel.extend({
       collectionManager.getDiscussionModelPromise()
       .then(function(discussion) {
 
-        var settings = discussion.get('settings'),
+        var settings = discussion.get('settings') || {},
+            translations = settings.translations,
+            visualizations = settings.visualizations,
+            navigation_sections = settings.navigation_sections,
             jed;
 
         try {
@@ -79,27 +83,29 @@ var NavigationView = AssemblPanel.extend({
             return;
           }
           try {
-            jed = new Jed(settings['translations'][Ctx.getLocale()]);
+            jed = new Jed(translations[Ctx.getLocale()]);
           } catch (e) {
             // console.error(e);
             jed = new Jed({});
           }
           var new_navigation_items = 0;
-          for (var i in settings.navigation_sections) {
-            var navigation_section = settings.navigation_sections[i],
+          for (var i in navigation_sections) {
+            var navigation_section = navigation_sections[i],
                 permission = navigation_section.requires_permission || Permissions.READ;
             if (Ctx.getCurrentUser().can(permission)) {
               var visualization_items = navigation_section.navigation_content.items;
               visualization_items = _.filter(visualization_items, function(item) {
-                return Ctx.getCurrentUser().can(item.requires_permission || Permissions.READ);
+                return Ctx.getCurrentUser().can(item.requires_permission || Permissions.READ) &&
+                  visualizations[item.visualization] !== undefined;
               });
               if (visualization_items.length === 0)
                 continue;
               that.visualizationItems.reset(_.map(visualization_items, function(item) {
-                return new Backbone.Model({
-                  "url": item.url,
-                  "title": jed.gettext(item.title),
-                  "description": jed.gettext(item.description)
+                var visualization = visualizations[item.visualization];
+                return new Base.Model({
+                  "url": visualization.url,
+                  "title": jed.gettext(visualization.title),
+                  "description": jed.gettext(visualization.description)
                 });
               }));
               new_navigation_items += 1;
