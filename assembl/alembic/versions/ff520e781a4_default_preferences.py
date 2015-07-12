@@ -31,7 +31,7 @@ def upgrade(pyramid_env):
             db.add(p)
             db.flush()
             db.execute("""UPDATE discussion SET preferences_id = %d
-                WHERE id = %d""" % (d_id, p.id))
+                WHERE id = %d""" % (p.id, d_id))
 
 def downgrade(pyramid_env):
     pass
