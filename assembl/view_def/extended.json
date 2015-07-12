@@ -242,6 +242,7 @@
         "role": "&role_name"
     },
     "Action": {
+        "when": "creation_date",
         "user": "actor"
     },
     "ActionOnPost": {
@@ -254,6 +255,14 @@
     },
     "ViewPost": {
         "@extends": "ActionOnPost"
+    },
+    "ActionOnIdea": {
+        "@extends": "Action",
+        "target": "idea",
+        "target_type": "'\"Idea\""
+    },
+    "ViewIdea": {
+        "@extends": "ActionOnIdea"
     },
     "Widget": {
         "discussion": true,

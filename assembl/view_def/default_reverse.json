@@ -154,6 +154,7 @@
     },
     "Action": {
         "user": "actor",
+        "when": "creation_date",
         "target_type": false
     },
     "ActionOnPost": {
@@ -165,6 +166,13 @@
     },
     "ViewPost": {
         "@extends": "ActionOnPost"
+    },
+    "ActionOnIdea": {
+        "@extends": "Action",
+        "target": "idea"
+    },
+    "ViewIdea": {
+        "@extends": "ActionOnIdea"
     },
     "Discussion": {
         "settings": false,

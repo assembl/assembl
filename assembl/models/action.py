@@ -58,11 +58,12 @@ class Action(TombstonableMixin, DiscussionBoundBase):
 
     verb = 'did something to'
 
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(None,
-            RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Action.type),
-            name=QUADNAMES.class_Action_class)]
+    # Because abstract, do in concrete subclasses
+    # @classmethod
+    # def special_quad_patterns(cls, alias_maker, discussion_id):
+    #     return [QuadMapPatternS(None,
+    #         RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Action.type),
+    #         name=QUADNAMES.class_Action_class)]
 
     def __repr__(self):
 
@@ -104,7 +105,6 @@ class ActionOnPost(Action):
     def get_discussion_id(self):
         return self.post.get_discussion_id()
 
-    # This should not be necessary, but is.
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
         return [QuadMapPatternS(None,
@@ -275,7 +275,7 @@ class ViewIdea(ActionOnIdea):
     A view action on an idea. (Not a status)
     """
     __mapper_args__ = {
-        'polymorphic_identity': 'version:ReadStatusChange'
+        'polymorphic_identity': 'version:ReadStatusChange__I'
     }
 
     def tombstone(self):

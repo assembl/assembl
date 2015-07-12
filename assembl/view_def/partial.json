@@ -221,6 +221,13 @@
     "ViewPost": {
         "@extends": "ActionOnPost"
     },
+    "ActionOnIdea": {
+        "@extends": "Action",
+        "target": "idea"
+    },
+    "ViewIdea": {
+        "@extends": "ActionOnIdea"
+    },
     "Widget": {
         "discussion": true,
         "settings": "settings_json",
