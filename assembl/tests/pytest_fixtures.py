@@ -137,7 +137,22 @@ def test_session(request, db_default_data):
 
 
 @pytest.fixture(scope="function")
-def discussion(request, test_session):
+def default_preferences(request, test_session):
+    from assembl.models import Preferences
+    prefs = Preferences.get_default_preferences()
+    test_session.add(prefs)
+    test_session.flush()
+
+    def fin():
+        print "finalizer default_preferences"
+        test_session.delete(prefs)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return prefs
+
+
+@pytest.fixture(scope="function")
+def discussion(request, test_session, default_preferences):
     from assembl.models import Discussion
     d = Discussion(topic=u"Jack Layton", slug="jacklayton2",
                    session=test_session)
@@ -156,6 +171,9 @@ def discussion(request, test_session):
         test_session.delete(discussion.table_of_contents)
         test_session.delete(discussion.root_idea)
         test_session.delete(discussion.next_synthesis)
+        preferences = discussion.preferences
+        discussion.preferences = None
+        test_session.delete(preferences)
         test_session.delete(discussion)
         test_session.flush()
     request.addfinalizer(fin)

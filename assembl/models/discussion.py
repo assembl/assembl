@@ -129,8 +129,12 @@ class Discussion(DiscussionBoundBase):
             synthesis = Synthesis(discussion=self)
             session.add(synthesis)
         participant = session.query(Role).filter_by(name=R_PARTICIPANT).one()
-        participant_template = UserTemplate(discussion=self, for_role=participant)
+        participant_template = UserTemplate(
+            discussion=self, for_role=participant)
         session.add(participant_template)
+        self.preferences = Preferences(
+            name='discussion_'+kwargs['slug'],
+            cascade_preferences=Preferences.get_default_preferences())
 
     def unique_query(self):
         # DiscussionBoundBase is misleading here

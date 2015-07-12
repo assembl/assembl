@@ -26,12 +26,7 @@ def upgrade(pyramid_env):
                 config.get('db_user'),
                 "preferences_UNQC_name")),
             "preferences", ["name"])
-    # Do stuff with the app's models here.
-    # Create default prefs and discussion prefs
-    from assembl import models as m
-    db = m.get_session_maker()()
-    with transaction.manager:
-        pass
+
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
