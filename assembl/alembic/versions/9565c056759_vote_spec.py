@@ -128,22 +128,3 @@ def downgrade(pyramid_env):
         op.drop_table("lickert_vote_specification")
         op.drop_column("idea_vote", "vote_spec_id")
         op.drop_table("vote_specification")
-
-    # Do stuff with the app's models here.
-    from assembl import models as m
-    db = m.get_session_maker()()
-    with transaction.manager:
-        specs = {}
-        for criterion in db.query(m.VotingCriterionWidgetLink):
-            spec = m.LickertVoteSpecification(
-                widget=criterion.widget,
-                criterion_idea=criterion.idea,
-                minimum=0, maximum=1, question_id=0)
-            db.add(spec)
-            specs[(criterion.widget_id, criterion.idea_id)] = spec
-        db.flush()
-        for vote in db.query(m.LickertIdeaVote):
-            vote.vote_spec = specs[
-                (vote.get_discussion_id(), vote.criterion_id)]
-    # In a separate migration:
-    # op.drop_column('idea_vote', 'criterion_id')
