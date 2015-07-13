@@ -30,14 +30,14 @@ voteApp.controller('indexCtl',
             _.each(el.vote_specifications, function(el2){
               VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_criterion_fields);
               
-              if ( "type" in el2 && el2.type in VoteWidgetService.mandatory_typed_criterion_fields ){
-                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_typed_criterion_fields[el2.type]);
+              if ( "@type" in el2 && el2["@type"] in VoteWidgetService.mandatory_typed_criterion_fields ){
+                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_typed_criterion_fields[el2["@type"]]);
               }
 
               VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_criterion_fields);
 
-              if ( "type" in el2 && el2.type in VoteWidgetService.optional_typed_criterion_fields ){
-                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_typed_criterion_fields[el2.type]);
+              if ( "@type" in el2 && el2["@type"] in VoteWidgetService.optional_typed_criterion_fields ){
+                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_typed_criterion_fields[el2["@type"]]);
               }
             });
           }
@@ -81,14 +81,14 @@ voteApp.controller('indexCtl',
           _.each($scope.settings.items, function(item, item_index){
             if ( "vote_specifications" in item )
             _.each(item.vote_specifications, function(criterion, criterion_index){
-              var entity_id = criterion.entity_id;
+              var entity_id = criterion["@id"];
               var my_vote_for_this_criterion = _.findWhere(my_votes, {"criterion": entity_id});
               if ( my_vote_for_this_criterion )
               {
                 console.log("value found: " + my_vote_for_this_criterion.value);
                 var new_value = my_vote_for_this_criterion.value;
                 // interpret vote value differently depending on criterion type
-                if ( criterion.type == "BinaryIdeaVote" )
+                if ( criterion["@type"] == "BinaryIdeaVote" )
                 {
                   if ( my_vote_for_this_criterion.value === true || my_vote_for_this_criterion.value == "true" || my_vote_for_this_criterion.value === 1 || my_vote_for_this_criterion.value == "1" )
                   {
@@ -98,10 +98,10 @@ voteApp.controller('indexCtl',
                   {
                     new_value = 0;
                   }
-                } else // if ( criterion.type == "LickertIdeaVote" )
+                } else // if ( criterion["@type"] == "LickertIdeaVote" )
                 {
-                  var valueMin = parseFloat(criterion.valueMin);
-                  var valueMax = parseFloat(criterion.valueMax);
+                  var valueMin = "minimum" in criterion ? parseFloat(criterion.minimum) : 0;
+                  var valueMax = "maximum" in criterion ? parseFloat(criterion.maximum) : 100;
                   new_value = valueMin + my_vote_for_this_criterion.value * (valueMax - valueMin);
                 }
                 
@@ -218,12 +218,12 @@ voteApp.controller('indexCtl',
               {
                 for ( var j = 0; !found && j < $scope.settings.items[i].vote_specifications.length; ++j )
                 {
-                  if ( "entity_id" in $scope.settings.items[i].vote_specifications[j] && $scope.settings.items[i].vote_specifications[j].entity_id == k )
+                  if ( "@id" in $scope.settings.items[i].vote_specifications[j] && $scope.settings.items[i].vote_specifications[j].entity_id == k )
                   {
-                    if ( "type" in $scope.settings.items[i].vote_specifications[j] )
+                    if ( "@type" in $scope.settings.items[i].vote_specifications[j] )
                     {
                       found = true;
-                      vote_type = $scope.settings.items[i].vote_specifications[j].type;
+                      vote_type = $scope.settings.items[i].vote_specifications[j]["@type"];
                     }
                   }
                 }
@@ -379,8 +379,8 @@ voteApp.controller('indexCtl',
         return;
       }
       var criterion = item_data.vote_specifications[0];
-      var valueMin = ("valueMin" in criterion) ? criterion.valueMin : 0;
-      var valueMax = ("valueMax" in criterion) ? criterion.valueMax : 100;
+      var valueMin = ("minimum" in criterion) ? criterion.minimum : 0;
+      var valueMax = ("maximum" in criterion) ? criterion.maximum : 100;
       var valueDefault = ("valueDefault" in criterion) ? criterion.valueDefault : valueMin;
       var criterionValue = valueDefault;
       console.log("criterionValue: ", criterionValue);
@@ -397,15 +397,15 @@ voteApp.controller('indexCtl',
       svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name", criterion.name)
-        .attr("data-criterion-id", criterion["entity_id"]) // contains something like "local:Idea/3"
+        .attr("data-criterion-id", criterion["@id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionValue)
         .attr("data-criterion-value-min", valueMin)
         .attr("data-criterion-value-max", valueMax)
       ;
 
-      console.log("criterion.valueMin: ", criterion.valueMin);
+      console.log("criterion.minimum: ", ("minimum" in criterion ? criterion.minimum : "not defined"));
       console.log("valueMin: ", valueMin);
-      console.log("criterion.valueMax: ", criterion.valueMax);
+      console.log("criterion.maximum: ", ("maximum" in criterion ? criterion.maximum : "not defined"));
       console.log("valueMax: ", valueMax);
       console.log("item_data.height: ", item_data.height);
       console.log("config.padding: ", config.padding);
@@ -505,7 +505,7 @@ voteApp.controller('indexCtl',
           .attr("x", xPosCenter -gradientWidth/2 )
           .attr("y", config.padding-1 ) // this is the same as .attr("y", scale(criterion.valueMax) )
           .attr("width",gradientWidth)
-          .attr("height",scale(criterion.valueMin) - config.padding +1)
+          .attr("height",scale(valueMin) - config.padding +1)
           .attr("fill","url(#gradient_"+criterion.id+")");
       }
 
@@ -632,12 +632,12 @@ voteApp.controller('indexCtl',
         return;
       }
 
-      var criterionXValueMin = ("valueMin" in criteria[0]) ? criteria[0].valueMin : 0;
-      var criterionXValueMax = ("valueMax" in criteria[0]) ? criteria[0].valueMax : 100;
+      var criterionXValueMin = ("minimum" in criteria[0]) ? criteria[0].minimum : 0;
+      var criterionXValueMax = ("maximum" in criteria[0]) ? criteria[0].maximum : 100;
       var criterionXValueDefault = ("valueDefault" in criteria[0]) ? criteria[0].valueDefault : criterionXValueMin;
 
-      var criterionYValueMin = ("valueMin" in criteria[1]) ? criteria[1].valueMin : 0;
-      var criterionYValueMax = ("valueMax" in criteria[1]) ? criteria[1].valueMax : 100;
+      var criterionYValueMin = ("minimum" in criteria[1]) ? criteria[1].minimum : 0;
+      var criterionYValueMax = ("maximum" in criteria[1]) ? criteria[1].maximum : 100;
       var criterionYValueDefault = ("valueDefault" in criteria[1]) ? criteria[1].valueDefault : criterionYValueMin;
 
       var criterionXValue = criterionXValueDefault;
@@ -654,7 +654,7 @@ voteApp.controller('indexCtl',
       svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name", criteria[0].name)
-        .attr("data-criterion-id", criteria[0]["entity_id"]) // contains something like "local:Idea/3"
+        .attr("data-criterion-id", criteria[0]["@id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionXValue)
         .attr("data-criterion-value-min", criterionXValueMin)
         .attr("data-criterion-value-max", criterionXValueMax)
@@ -664,7 +664,7 @@ voteApp.controller('indexCtl',
       svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name", criteria[1].name)
-        .attr("data-criterion-id", criteria[1]["entity_id"]) // contains something like "local:Idea/3"
+        .attr("data-criterion-id", criteria[1]["@id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionYValue)
         .attr("data-criterion-value-min", criterionYValueMin)
         .attr("data-criterion-value-max", criterionYValueMax)
@@ -947,7 +947,7 @@ voteApp.controller('indexCtl',
       var div = $('<div>');
       div.attr({
         'class': 'criterion',
-        'data-criterion-id': criterion.entity_id,
+        'data-criterion-id': criterion["@id"],
         'data-criterion-name': criterion.name,
         'data-criterion-value': null
       });
@@ -955,7 +955,7 @@ voteApp.controller('indexCtl',
 
       // adapt data format from BinaryIdeaVote which has labelYes and labelNo, to PluralityIdeaVote which has possibleValues
       // criterion.possibleValues is like so: [ { label: 'Choice 1', value: 0 }, { label: 'Choice 2', value: 1} ]
-      if ( 'type' in criterion && criterion.type == 'BinaryIdeaVote' )
+      if ( '@type' in criterion && criterion["@type"] == 'BinaryIdeaVote' )
       {
         var labelYes = ( 'labelYes' in criterion ) ? criterion.labelYes : 'Yes';
         var labelNo = ( 'labelNo' in criterion ) ? criterion.labelNo : 'No';
@@ -1003,10 +1003,10 @@ voteApp.controller('indexCtl',
           {
             var option = $('<div>');
             var input = $('<input>');
-            var radio_id = 'radio_'+criterion.entity_id+'_'+item.value;
+            var radio_id = 'radio_'+criterion["@id"]+'_'+item.value;
             input.attr({
               type: 'radio',
-              name: criterion.entity_id, // criterion.name,
+              name: criterion["@id"], // criterion.name,
               value: item.value,
               id: radio_id
             });
