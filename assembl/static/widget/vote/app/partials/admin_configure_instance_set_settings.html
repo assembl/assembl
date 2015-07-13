@@ -127,7 +127,7 @@
                                 <div ng-if="criterion.hasOwnProperty(field.key)">
                                     <div ng-switch on="field.type">
                                         <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
-                                        <select ng-switch-when="idea_id" ng-model="criterion[field.key]" ng-options="c['@id'] as c.shortTitle for c in criteria"></select>
+                                        <select ng-switch-when="idea_id" ng-model="criterion[field.key]" ng-options="c['@id'] as c.shortTitle for c in ideas"></select>
                                         <input ng-switch-default type="text" ng-model="criterion[field.key]" />
                                         <button ng-click="deleteCriterionField(item_index, criterion_index, field.key);">{{'adminConfigureInstanceSetAppearanceDeleteField' | translate}}</button>
                                     </div>

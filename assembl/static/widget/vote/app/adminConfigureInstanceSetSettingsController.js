@@ -10,11 +10,12 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   $scope.widget_uri = null; // "local:Widget/24"
   $scope.widget_endpoint = null; // "/data/Widget/24"
   $scope.widget = null;
-  //$scope.discussion_uri = null; // "local:Discussion/1"
+  $scope.discussion_uri = null; // "local:Discussion/1"
   //$scope.criteria_url = null; // "local:Discussion/1/widgets/66/criteria"
   //$scope.criteria_endpoint = null; // "/data/Discussion/1/widgets/66/criteria"
   $scope.criteria = null; // array of ideas (their full structure)
   $scope.vote_specifications = null; // array of vote specs (descriptions of items)
+  $scope.ideas = null; // array of ideas
 
 
   $scope.mandatory_settings_fields = VoteWidgetService.mandatory_settings_fields;
@@ -73,8 +74,6 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
       $scope.widget = data;
       $scope.updateOnceWidgetIsReceived();
     });
-
-    // TODO: get all available ideas and put them into $scope.criteria, or code an idea picker component
 
   };
 
@@ -154,7 +153,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     console.log("$scope.widget.settings:");
     console.log($scope.widget.settings);
 
-    //$scope.discussion_uri = $scope.widget.discussion;
+    $scope.discussion_uri = "discussion" in $scope.widget ? $scope.widget.discussion : null;
     //$scope.criteria_url = $scope.widget.criteria_url;
     //$scope.criteria_endpoint = AssemblToolsService.resourceToUrl($scope.criteria_url);
     if ("criteria" in $scope.widget ){
@@ -173,6 +172,18 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     }
     else {
       console.log("we did not receive any widget.vote_specifications");
+    }
+
+    // get the list of ideas in this discussion
+    if ( $scope.discussion_uri ){
+      var ideas_endpoint_url = AssemblToolsService.resourceToUrl($scope.discussion_uri) + '/ideas?view=default';
+      $http({
+        method: 'GET',
+        url: ideas_endpoint_url
+      }).success(function(data, status, headers){
+        console.log("ideas received: ", data);
+        $scope.ideas = data;
+      });
     }
 
     $scope.current_step = 2;
