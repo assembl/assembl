@@ -74,7 +74,7 @@ voteApp.controller('indexCtl',
           method: 'GET',
           url: my_votes_endpoint_url,
         }).success(function(data, status, headers){
-          console.log(data);
+          console.log("user votes received: ", data);
           var my_votes = data;
           // override default value of given criteria
           if ( "items" in $scope.settings )
@@ -82,7 +82,7 @@ voteApp.controller('indexCtl',
             if ( "vote_specifications" in item )
             _.each(item.vote_specifications, function(criterion, criterion_index){
               var entity_id = criterion["@id"];
-              var my_vote_for_this_criterion = _.findWhere(my_votes, {"criterion": entity_id});
+              var my_vote_for_this_criterion = _.findWhere(my_votes, {"vote_spec": entity_id});
               if ( my_vote_for_this_criterion )
               {
                 console.log("value found: " + my_vote_for_this_criterion.value);
@@ -102,11 +102,15 @@ voteApp.controller('indexCtl',
                 {
                   var valueMin = "minimum" in criterion ? parseFloat(criterion.minimum) : 0;
                   var valueMax = "maximum" in criterion ? parseFloat(criterion.maximum) : 100;
-                  new_value = valueMin + my_vote_for_this_criterion.value * (valueMax - valueMin);
+
+                  //new_value = valueMin + my_vote_for_this_criterion.value * (valueMax - valueMin);
+                  new_value = my_vote_for_this_criterion.value;
                 }
                 
                 $scope.settings.items[item_index].vote_specifications[criterion_index].valueDefault = new_value;
                 console.log("value set: " + new_value);
+              } else {
+                console.log("error: we could not find a definition of this criterion for which the user has voted: ", entity_id);
               }
             });
           });
@@ -169,7 +173,10 @@ voteApp.controller('indexCtl',
         var valueMin = parseFloat($(this).attr("data-criterion-value-min"));
         var valueMax = parseFloat($(this).attr("data-criterion-value-max"));
         var value = parseFloat($(this).attr("data-criterion-value"));
-        var valueToPost = (value - valueMin) / (valueMax - valueMin); // the posted value has to be a float in [0;1]
+
+        //var valueToPost = (value - valueMin) / (valueMax - valueMin); // the posted value has to be a float in [0;1]
+        var valueToPost = value;
+
         $scope.myVotes[$(this).attr("data-criterion-id")] = valueToPost;
       });
 

@@ -288,6 +288,7 @@
         "widget": true,
         "value": true,
         "original_uri": true,
+        "vote_spec": true,
         "voter": true
     },
     "BinaryIdeaVote": {
