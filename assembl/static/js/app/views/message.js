@@ -147,6 +147,9 @@ var MessageView = Marionette.ItemView.extend({
         'click .js_message-markasunread': 'markAsUnread',
         'click .js_message-markasread': 'markAsRead',
 
+        'click .js_message-export-facebook': 'exportToFacebook',
+        'click .js_getContributions':'getContributions',
+
         'click .js_openTargetInPopOver': 'openTargetInPopOver'
     },
 
