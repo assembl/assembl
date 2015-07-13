@@ -108,7 +108,7 @@ class ActionOnPost(Action):
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
         return [QuadMapPatternS(None,
-            RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Action.type),
+            RDF.type, IriClass(VirtRDF.QNAME_ID_SUFFIX).apply(Action.type),
             name=QUADNAMES.class_ActionOnPost_class)]
 
     @classmethod
@@ -140,7 +140,7 @@ class ViewPost(UniqueActionOnPost):
     A view action on a post.
     """
     __mapper_args__ = {
-        'polymorphic_identity': 'version:ReadStatusChange'
+        'polymorphic_identity': 'version:ReadStatusChange_P'
     }
 
     def tombstone(self):
@@ -162,7 +162,7 @@ class LikedPost(UniqueActionOnPost):
     A like action on a post.
     """
     __mapper_args__ = {
-        'polymorphic_identity': 'vote:BinaryVote'
+        'polymorphic_identity': 'vote:BinaryVote_P'
     }
 
     def tombstone(self):
@@ -195,7 +195,7 @@ class ExpandPost(UniqueActionOnPost):
     An expansion action on a post.
     """
     __mapper_args__ = {
-        'polymorphic_identity': 'version:ExpandPost'
+        'polymorphic_identity': 'version:ExpandPost_P'
     }
 
     verb = 'expanded'
@@ -206,7 +206,7 @@ class CollapsePost(UniqueActionOnPost):
     A collapse action on a post.
     """
     __mapper_args__ = {
-        'polymorphic_identity': 'version:CollapsePost'
+        'polymorphic_identity': 'version:CollapsePost_P'
     }
 
     verb = 'collapsed'
@@ -241,7 +241,7 @@ class ActionOnIdea(Action):
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
         return [QuadMapPatternS(None,
-            RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Action.type),
+            RDF.type, IriClass(VirtRDF.QNAME_ID_SUFFIX).apply(Action.type),
             name=QUADNAMES.class_ActionOnIdea_class)]
 
     def get_discussion_id(self):
@@ -275,7 +275,7 @@ class ViewIdea(ActionOnIdea):
     A view action on an idea. (Not a status)
     """
     __mapper_args__ = {
-        'polymorphic_identity': 'version:ReadStatusChange__I'
+        'polymorphic_identity': 'version:ReadStatusChange_I'
     }
 
     def tombstone(self):
