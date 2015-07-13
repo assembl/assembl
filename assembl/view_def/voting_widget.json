@@ -287,6 +287,7 @@
         "criterion": true,
         "widget": true,
         "value": true,
+        "original_uri": true,
         "voter": true
     },
     "BinaryIdeaVote": {

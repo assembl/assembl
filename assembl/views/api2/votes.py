@@ -32,7 +32,7 @@ def votes_collection_view(request):
     if view == 'id_only':
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
     else:
-        return [i.generic_json(view) for i in q.all()]
+        return [i.generic_json(view, user_id) for i in q.all()]
 
 
 @view_config(context=CollectionContext, request_method='POST',
