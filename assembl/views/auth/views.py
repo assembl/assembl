@@ -577,10 +577,15 @@ def velruse_login_complete_view(request):
     if new_idp_account and profile_list:
         base_profile = profile_list[0]
     elif not new_idp_account:
-        base_account = [a for a in idp_accounts
-                        if a.profile == profile_list[0]][0]
+        # Take first appropriate
+        for profile in profile_list:
+            accounts = [
+                a for a in idp_accounts if a.profile == profile]
+            if accounts:
+                base_account = accounts[0]
+                break
         if not logged_in:
-            base_profile = profile_list[0]
+            base_profile = base_account.profile
     new_profile = None
     if new_idp_account:
         if not base_profile:
