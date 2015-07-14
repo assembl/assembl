@@ -56,6 +56,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     criterion_idea = relationship(
         Idea, backref="criterion_for")
 
+    retypeable_as = ("LickertVoteSpecification", "BinaryVoteSpecification",
+                     "MultipleChoiceVoteSpecification")
+
     def get_voting_urls(self):
         return {
             Idea.uri_generic(votable.id):
