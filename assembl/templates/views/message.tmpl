@@ -103,7 +103,7 @@
       <a class="img-left avatar  img-rounded mtxs" href="#"><img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}" width="30" height="30"></a>
       <% } %>
       <div class="bd">
-      <div class="message-author js_getContributions" data-user-id="<%= creator.get('@id') %>">{{ gettext('%(user)s')|format(user=userName)|safe }} {{ readUnreadIndicator() }}</div>
+      <div class="message-author wip_js_getContributions" data-user-id="<%= creator.get('@id') %>">{{ gettext('%(user)s')|format(user=userName)|safe }} {{ readUnreadIndicator() }}</div>
       <div class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }} {{ showInspirationSource() }}</div>
     </div>
   </div>
