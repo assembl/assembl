@@ -180,6 +180,7 @@
         "widget_collection_url": false,
         "creation_date": false,
         "slug": true,
+        "posts": false,
         "topic": true,
         "objectives": true,
         "introduction": true,
