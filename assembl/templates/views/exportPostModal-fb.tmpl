@@ -24,29 +24,36 @@
   <p><%= messageBody %></p>
 </div>
 
-<div class="imagePlaceHolder mts" style='width: 170px; height: 170px; overflow: hidden; float: left;'>
-  <img src='http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg' style="
-    margin-left: -700px;
-    margin-top: -70px;
-    ">
-</div>
+<div class="facebook-preview" style="border: 1px solid #ddd; margin: 5px; padding: 5px">
 
-<div style="display: table; height: 170px;">
-  <div class="control-group" style="float: right;">
-    <div class="controls">
-      <input type="text" id="attachmentName" class="input-large js_fb-suggested-name" placeholder="<%= suggestedName %>">
+  <div class="imagePlaceHolder mts" style='width: 170px; height: 170px; overflow: hidden; float: left; margin-right: 10px'>
+    <img src='http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg' style="
+      margin-left: -700px;
+      margin-top: -70px;
+      ">
+  </div>
+
+  <div style="">
+    <div class="control-group" style="">
+      <label for="attachmentName" class="control-label">{{ gettext("Title:") }}</label>
+      <div class="controls">
+        <input type="text" id="attachmentName" class="input-xlarge js_fb-suggested-name" placeholder="<%= suggestedName %>">
+      </div>
+    </div>
+
+    <div class="control-group" style="">
+      <label for="attachmentName" class="control-label">{{ gettext("Caption (URL):") }}</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge js_fb-suggested-caption" placeholder="<%= suggestedCaption %>">
+      </div>
+    </div>
+
+    <div class="control-group" style="">
+      <label for="attachmentName" class="control-label">{{ gettext("Description:") }}</label>
+      <div class="controls">
+        <textarea rows=3 class="input-xlarge js_fb-suggested-description" placeholder="<%= suggestedDescription %>"></textarea>
+      </div>
     </div>
   </div>
 
-  <div class="control-group" style="float: right">
-    <div class="controls">
-      <input type="text" class="input-large js_fb-suggested-caption" placeholder="<%= suggestedCaption %>">
-    </div>
-  </div>
-
-  <div class="control-group" style="float: right">
-    <div class="controls">
-      <textarea rows=3 class="input-large js_fb-suggested-description" placeholder="<%= suggestedDescription %>"></textarea>
-    </div>
-  </div>
 </div>
