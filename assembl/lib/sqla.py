@@ -1097,7 +1097,7 @@ class BaseOps(object):
                         extra = set(current_instances) - set(instances)
                         if extra:
                             assert len(accessor.remote_side) == 1
-                            remote = iter(next(accessor.remote_side))
+                            remote = next(iter(accessor.remote_side))
                             if remote.nullable:
                                 # TODO: check update permissions on that object.
                                 for inst in missing:
