@@ -50,6 +50,27 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     }
   }
 
+  // build an object of array
+  $scope.aggregated_mandatory_criterion_fields_by_type = {}; // will be like { "LickertIdeaVote": [ {"key": "description", "type": "all", ..}, {"key": "descriptionMin", "type": "LickertIdeaVote", ..}, .. ], .. }
+  for ( var j = 0; j < VoteWidgetService.criterion_types.length; ++j ) {
+    var type_key = VoteWidgetService.criterion_types[j].key;
+    $scope.aggregated_mandatory_criterion_fields_by_type[type_key] = [];
+    // general fields
+    for ( var i = 0; i < VoteWidgetService.mandatory_criterion_fields.length; ++i) {
+      var el = VoteWidgetService.mandatory_criterion_fields[i];
+      el.criterion_type = 'all';
+      $scope.aggregated_mandatory_criterion_fields_by_type[type_key].push(el);
+    }
+    // type-specific fields
+    if ( type_key in VoteWidgetService.mandatory_typed_criterion_fields ){ 
+      var val = VoteWidgetService.mandatory_typed_criterion_fields[type_key];
+      for ( var i = 0; i < val.length; ++i) {
+        val[i].criterion_type = type_key;
+        $scope.aggregated_mandatory_criterion_fields_by_type[type_key].push(val[i]);
+      }
+    }
+  }
+
 
 
   $scope.criterion_current_selected_field = null;
@@ -133,9 +154,23 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     $scope.widget.settings[field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_settings_fields, field_name, true);
   };
 
+  $scope.addCriterionFieldElement = function(item_index, criterion_index, field_name){
+    if ( !(field_name in $scope.widget.settings.items[item_index].vote_specifications[criterion_index]) ){
+      $scope.widget.settings.items[item_index].vote_specifications[criterion_index][field_name] = [];
+    }
+    $scope.widget.settings.items[item_index].vote_specifications[criterion_index][field_name].push('');
+    console.log("value of array after push: ", $scope.widget.settings.items[item_index].vote_specifications[criterion_index][field_name]);
+  };
+
   $scope.deleteCriterionField = function (item_index, criterion_index, field_name){
     //delete $scope.widget.settings.items[item_index].criteria[criterion_index][field_name];
     delete $scope.widget.settings.items[item_index].vote_specifications[criterion_index][field_name];
+  };
+
+  $scope.deleteCriterionFieldElement = function (item_index, criterion_index, field_name, element_index){
+    console.log("value of array before delete: ", $scope.widget.settings.items[item_index].vote_specifications[criterion_index][field_name]);
+    $scope.widget.settings.items[item_index].vote_specifications[criterion_index][field_name].splice(element_index, 1);
+    console.log("value of array after delete: ", $scope.widget.settings.items[item_index].vote_specifications[criterion_index][field_name]);
   };
 
   $scope.deleteItemField = function (item_index, field_name){
@@ -158,8 +193,8 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     //$scope.criteria_endpoint = AssemblToolsService.resourceToUrl($scope.criteria_url);
     if ("criteria" in $scope.widget ){
       $scope.criteria = $scope.widget.criteria;
-      console.log("$scope.criteria:");
-      console.log($scope.criteria);
+      //console.log("$scope.criteria:");
+      //console.log($scope.criteria);
     }
     else {
       console.log("we did not receive any widget.criteria");
@@ -181,7 +216,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
         method: 'GET',
         url: ideas_endpoint_url
       }).success(function(data, status, headers){
-        console.log("ideas received: ", data);
+        //console.log("ideas received: ", data);
         $scope.ideas = data;
       });
     }
@@ -305,7 +340,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
       $scope.widget.settings.items.forEach(function(item){
         if ( "vote_specifications" in item ){
           item.vote_specifications.forEach(function(el, index, ar){
-            var known_properties = ["@type", "minimum", "maximum", "criterion_idea", "widget", "question_id", "settings"]; // TODO: the content of this array should depend on the value of VoteSpec["@type"]
+            var known_properties = ["@type", "minimum", "maximum", "criterion_idea", "widget", "question_id", "num_choices", "settings"]; // TODO: the content of this array should depend on the value of VoteSpec["@type"]
             if ( id_field in el ){ // if it already exist in the backend, we update it using PUT
               var el2 = _.clone(el);
               el2 = $scope.ensurePropertiesTypes(el2, getCriterionPropertyType);

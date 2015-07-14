@@ -92,11 +92,9 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     },
     {
       "key": "radio",
-      //"label": "Radio buttons: needs 1 criterion (of type Binary or Plurality)",
-      "label": "Radio buttons: needs 1 criterion (of type Binary)",
+      "label": "Radio buttons: needs 1 criterion (of type Binary or MultipleChoice)",
       "number_of_criteria": 1,
-      //"allowed_criteria_types": ["BinaryIdeaVote", "PluralityIdeaVote"]
-      "allowed_criteria_types": ["BinaryVoteSpecification"]
+      "allowed_criteria_types": ["BinaryVoteSpecification", "MultipleChoiceVoteSpecification"]
     },
     {
       "key": "2_axes",
@@ -167,7 +165,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     {
       "key": "MultipleChoiceVoteSpecification",
       // "description": "",
-      "label": "Plurality"
+      "label": "Multiple choice"
     }
   ];
 
@@ -233,10 +231,29 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
         "default": "Yes",
         "storage": "settings"
       }
-    ]/*,
-    "PluralityIdeaVote": [ // http://en.wikipedia.org/wiki/Plurality_voting_system
-      possibleValues
-    ]*/
+    ],
+    "MultipleChoiceVoteSpecification": [ // http://en.wikipedia.org/wiki/Plurality_voting_system
+      {
+        "key": "candidates",
+        "label": "Candidates",
+        "type": "array",
+        "description": "The ordered list of candidates a voter can vote for.",
+        "default": [
+          "Candidate 1",
+          "Candidate 2",
+          "Candidate 3"
+        ],
+        "storage": "settings"
+      },
+      {
+        "key": "num_choices",
+        "label": "Number of candidates",
+        "type": "integer",
+        "description": "The number of candidates available.",
+        "default": 3,
+        "storage": "attribute"
+      }
+    ]
   };
 
   this.optional_criterion_fields = [
@@ -345,11 +362,26 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
 
     // add or reset mandatory typed criterion fields
     if ( criterion_type in this.mandatory_typed_criterion_fields){
+      console.log("this.mandatory_typed_criterion_fields[", criterion_type, this.mandatory_typed_criterion_fields[criterion_type]);
       var fields = this.mandatory_typed_criterion_fields[criterion_type];
       for ( var i = 0; i < fields.length; ++i ){
         if ( "default" in fields[i] ){
           //criterion_reset[fields[i].key] = fields[i].default;
           criterion[fields[i].key] = fields[i].default;
+        }
+      }
+    }
+
+    // remove non-mandatory (typed and non-typed) criterion fields
+    if ( criterion_type in this.mandatory_typed_criterion_fields){
+      for ( var field in criterion ){
+        if ( criterion.hasOwnProperty(field) ){
+          if ( !(
+            _.findWhere(this.mandatory_criterion_fields, { "key": field })
+            || _.findWhere(this.mandatory_typed_criterion_fields[criterion_type], { "key": field })
+          ) ){
+            delete criterion[field];
+          }
         }
       }
     }

@@ -100,10 +100,10 @@ voteApp.controller('indexCtl',
                   }
                 } else // if ( criterion["@type"] == "LickertIdeaVote" )
                 {
-                  var valueMin = "minimum" in criterion ? parseFloat(criterion.minimum) : 0;
-                  var valueMax = "maximum" in criterion ? parseFloat(criterion.maximum) : 100;
-
+                  //var valueMin = "minimum" in criterion ? parseFloat(criterion.minimum) : 0;
+                  //var valueMax = "maximum" in criterion ? parseFloat(criterion.maximum) : 100;
                   //new_value = valueMin + my_vote_for_this_criterion.value * (valueMax - valueMin);
+
                   new_value = my_vote_for_this_criterion.value;
                 }
                 
@@ -962,20 +962,31 @@ voteApp.controller('indexCtl',
 
       // adapt data format from BinaryIdeaVote which has labelYes and labelNo, to PluralityIdeaVote which has possibleValues
       // criterion.possibleValues is like so: [ { label: 'Choice 1', value: 0 }, { label: 'Choice 2', value: 1} ]
-      if ( '@type' in criterion && criterion["@type"] == 'BinaryIdeaVote' )
-      {
-        var labelYes = ( 'labelYes' in criterion ) ? criterion.labelYes : 'Yes';
-        var labelNo = ( 'labelNo' in criterion ) ? criterion.labelNo : 'No';
-        criterion.possibleValues = [
-          {
-            "label": labelNo,
-            "value": 0 // or false?
-          },
-          {
-            "label": labelYes,
-            "value": 1 // or true?
-          }
-        ];
+      if ( '@type' in criterion ){
+        if ( criterion["@type"] == 'BinaryVoteSpecification' ){
+          var labelYes = ( 'labelYes' in criterion ) ? criterion.labelYes : 'Yes';
+          var labelNo = ( 'labelNo' in criterion ) ? criterion.labelNo : 'No';
+          criterion.possibleValues = [
+            {
+              "label": labelNo,
+              "value": 0 // or false?
+            },
+            {
+              "label": labelYes,
+              "value": 1 // or true?
+            }
+          ];
+        } else if ( criterion["@type"] == 'MultipleChoiceVoteSpecification' ){
+          criterion.possibleValues = [];
+          var i = 0;
+          if ( "candidates" in criterion )
+          criterion.candidates.forEach(function(el){
+            criterion.possibleValues.push({
+              "label": el,
+              "value": i++
+            });
+          });
+        }
       }
 
       var updateSelectedValue = function(){

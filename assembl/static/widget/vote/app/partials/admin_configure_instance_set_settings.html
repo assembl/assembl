@@ -111,8 +111,19 @@
                                 <div ng-repeat="field in mandatory_typed_criterion_fields[criterion['@type']]">
                                     <div ng-switch on="field.type">
                                         <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
+                                        
                                         <select ng-switch-when="criterion" ng-model="criterion[field.key]" ng-options="c['@id'] as c.shortTitle for c in criteria"></select>
+                                        
                                         <select ng-switch-when="select" ng-model="criterion[field.key]" ng-options="v.key as v.label for v in field.options"></select>
+
+                                        <div ng-switch-when="array">
+                                            <div ng-repeat="candidate in criterion[field.key] track by $index">
+                                                <span ng-init="candidate_index = $index"></span>
+                                                <input type="text" ng-model="criterion[field.key][candidate_index]" /> <button ng-click="deleteCriterionFieldElement(item_index, criterion_index, field.key, candidate_index);">{{'adminConfigureInstanceSetAppearanceDeleteField' | translate}}</button>
+                                            </div>
+                                            <button ng-click="addCriterionFieldElement(item_index, criterion_index, field.key);">{{'Add' | translate}}</button>
+                                        </div>
+
                                         <input ng-switch-default type="text" ng-model="criterion[field.key]" />
                                     </div>
                                 </div>
