@@ -502,7 +502,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
     def real_name(self):
         if not self.full_name:
             info = self.profile_info_json
-            name = info['name']
+            name = info.get('name', {})
             if name.get('formatted', None):
                 self.full_name = name['formatted']
             elif 'givenName' in name and 'familyName' in name:
