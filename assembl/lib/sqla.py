@@ -1492,7 +1492,8 @@ event.listen(BaseOps, 'after_update', orm_update_listener, propagate=True)
 event.listen(BaseOps, 'after_delete', orm_delete_listener, propagate=True)
 
 
-def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None):
+def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
+                     **engine_kwargs):
     """Return an SQLAlchemy engine configured as per the provided config."""
     if session_maker is None:
         if session_maker_is_initialized():
@@ -1503,7 +1504,7 @@ def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None)
     engine = session_maker.session_factory.kw['bind']
     if engine:
         return engine
-    engine = engine_from_config(settings, 'sqlalchemy.')
+    engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
     session_maker.configure(bind=engine)
     global db_schema, _metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
     if settings['sqlalchemy.url'].startswith('virtuoso:'):
