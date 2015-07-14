@@ -456,18 +456,22 @@ def assembl_login_complete_view(request):
     context='velruse.AuthenticationComplete'
 )
 def velruse_login_complete_view(request):
-    # TODO: Write tests. Situations:
-    # 1. not logged in, Social login (no equivalent) -> create account and profile
-    # 2. assembl login, Social login -> attach social account
-    # 3. assembl login, Social login, social account present -> 0
-    # 4. assembl login, Social login, verified email account present -> delete email account
-    # 5. assembl login, Social login, A social account exists with same email in another profile -> merge (TODO)
-    # 6. not logged in, Social login, A verified email account exists elsewhere -> use that profile, delete email
-    # 4. not logged in, Social login, An unverified email account exists elsewhere -> use that profile , delete email, promote profile to user
-    # 7. not logged in, Social login, A social account exists with same email -> use that profile, add account
-    # 8. assembl login, Social login, A verified email account exists elsewhere -> merged.
-    # 9. assembl login, Social login, An unverified email account exists elsewhere -> account deleted.
-    # 10. assembl login, Social login, An unverified email account exists elsewhere as only account -> profile deleted.
+    # TODO: Write tests. Situations are a combinatorics of the folloing:
+    # 1. User action:
+    #     A. Social login
+    #     B. Logged in, add social account
+    #     C. Logged in, add email account (does not happen here)
+    # 2. Is there an existing account with that email?
+    #     A. No.
+    #     B. The social account already exists
+    #     C. A valid email account
+    #     D. An invalid email account, sole account of profile
+    #     E. An invalid email account, but profile has other accounts
+    #     F. A social account from a different provider
+    # 3. When we're logged in (1B, 1C), is the existing account
+    #     on the logged in profile or another?
+    # 4. If gmail account, is it an enterprise account?
+
     session = AgentProfile.default_db
     context = request.context
     now = datetime.utcnow()

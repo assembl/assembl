@@ -719,11 +719,14 @@ class User(AgentProfile):
                 role.user = self
             if other_user.username and not self.username:
                 self.username = other_user.username
+            old_autoflush = session.autoflush
+            session.autoflush = False
             for notification_subscription in \
                     other_user.notification_subscriptions:
                 notification_subscription.user = self
                 if notification_subscription.find_duplicate(False) is not None:
                     self.db.delete(notification_subscription)
+            session.autoflush = old_autoflush
 
     def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')
