@@ -654,7 +654,9 @@ JOIN post AS family_posts ON (
                 return query.join(
                     IdeaLink, IdeaLink.target_id == children.id).join(
                     parent, IdeaLink.source_id == parent.id).filter(
-                    IdeaLink.source_id == parent_instance.id)
+                    IdeaLink.source_id == parent_instance.id,
+                    IdeaLink.tombstone_date == None,
+                    children.tombstone_date == None)
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
