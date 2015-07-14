@@ -884,38 +884,40 @@ class BaseOps(object):
         for key, value in json.iteritems():
             if key in local_view:
                 parse_instruction = local_view[key]
-                if parse_instruction is False:
-                    # Ignore
-                    continue
-                elif parse_instruction is True:
-                    pass
-                elif isinstance(parse_instruction, list):
-                    # List specification is redundant in parse_defs.
-                    # These cases should always be handled as relations.
-                    raise NotImplementedError()
-                elif parse_instruction[0] == '&':
-                    setter = getattr(
-                        self.__class__, parse_instruction[1:], None)
-                    if not setter:
-                        raise HTTPBadRequest("No setter %s in class %s" % (
-                            parse_instruction[1:], self.__class__.__name__))
-                    if not pyinspect.ismethod(setter):
-                        raise HTTPBadRequest("Not a setter: %s in class %s" % (
-                            parse_instruction[1:], self.__class__.__name__))
-                    (args, varargs, keywords, defaults) = \
-                        pyinspect.getargspec(setter)
-                    if len(args) - len(defaults or ()) != 2:
-                        raise HTTPBadRequest(
-                            "Wrong number of args: %s(%d) in class %s" % (
-                                parse_instruction[1:], len(args),
-                                self.__class__.__name__))
-                    setter(self, value)
-                elif parse_instruction[0] == "'":
-                    if value != parse_instruction[1:]:
-                        raise HTTPBadRequest("%s should be %s'" % (
-                            key, parse_instruction))
-                else:
-                    key = parse_instruction
+            else:
+                parse_instruction = local_view.get('_default', False)
+            if parse_instruction is False:
+                # Ignore
+                continue
+            elif parse_instruction is True:
+                pass
+            elif isinstance(parse_instruction, list):
+                # List specification is redundant in parse_defs.
+                # These cases should always be handled as relations.
+                raise NotImplementedError()
+            elif parse_instruction[0] == '&':
+                setter = getattr(
+                    self.__class__, parse_instruction[1:], None)
+                if not setter:
+                    raise HTTPBadRequest("No setter %s in class %s" % (
+                        parse_instruction[1:], self.__class__.__name__))
+                if not pyinspect.ismethod(setter):
+                    raise HTTPBadRequest("Not a setter: %s in class %s" % (
+                        parse_instruction[1:], self.__class__.__name__))
+                (args, varargs, keywords, defaults) = \
+                    pyinspect.getargspec(setter)
+                if len(args) - len(defaults or ()) != 2:
+                    raise HTTPBadRequest(
+                        "Wrong number of args: %s(%d) in class %s" % (
+                            parse_instruction[1:], len(args),
+                            self.__class__.__name__))
+                setter(self, value)
+            elif parse_instruction[0] == "'":
+                if value != parse_instruction[1:]:
+                    raise HTTPBadRequest("%s should be %s'" % (
+                        key, parse_instruction))
+            else:
+                key = parse_instruction
             accessor = None
             accessor_name = key
             target_cls = None
