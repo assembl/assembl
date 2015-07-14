@@ -1105,13 +1105,14 @@ class BaseOps(object):
                                 for inst in missing:
                                     setattr(inst, remote.key, None)
                             else:
-                                if not inst.user_can(
-                                        user_id, CrudPermissions.DELETE,
-                                        permissions):
-                                    raise HTTPUnauthorized(
-                                        "Cannot delete object %s", inst.uri())
-                                else:
-                                    self.db.delete(inst)
+                                for inst in missing:
+                                    if not inst.user_can(
+                                            user_id, CrudPermissions.DELETE,
+                                            permissions):
+                                        raise HTTPUnauthorized(
+                                            "Cannot delete object %s", inst.uri())
+                                    else:
+                                        self.db.delete(inst)
                 elif isinstance(accessor, property):
                     setattr(self, accessor_name, instances)
                 elif isinstance(accessor, Column):
