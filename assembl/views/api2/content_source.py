@@ -3,11 +3,11 @@ from pyramid.view import view_config
 from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 
-from assembl.auth import (P_READ, P_ADMIN_DISC)
+from assembl.auth import (P_READ, P_ADMIN_DISC, P_EXPORT)
 from assembl.models import ContentSource
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext
-from . import FORM_HEADER
+from . import FORM_HEADER, JSON_HEADER
 from assembl.tasks.source_reader import wake
 
 @view_config(context=InstanceContext, request_method='POST',
@@ -40,3 +40,42 @@ def fetch_posts(request):
     wake(csource.id, reimport, force_restart, limit=limit)
     return {"message":"Source notified",
             "name": csource.name}
+
+
+@view_config(context=InstanceContext, request_method='POST',
+             ctx_instance_class=ContentSource, name='export_post',
+             permission=P_EXPORT, header=JSON_HEADER, renderer='json')
+def export_post(request): 
+    # Populate the assocation table
+    from ...models.generic import ContentSourceIDs
+    ctx = request.context
+    csource = ctx._instance
+    db = ContentSource.default_db
+    data = request.json_body
+    post_id = data.get('post_id', None)
+    fb_post_id = data.get('facebook_post_id', None)
+    force_restart = request.params.get('force_restart', False)
+    reimport = request.params.get('reimport', False)
+    limit = request.params.get('limit', None)
+
+    if not post_id or not fb_post_id:
+        return {"error": "Could not create a content \
+            sink because of improper json inputs"}
+
+    else:
+
+        try:
+            cs = ContentSourceIDs(source_id=csource.id,
+                                  post_id=post_id,
+                                  message_id_in_source=fb_post_id)
+
+            db.add(cs)
+            db.commit()
+        except:
+            db.rollback()
+            return {"error": "Failed on content sink transaction"}
+
+        wake(csource.id, reimport, force_restart, limit=limit)
+
+        return {"message": "Source notified",
+                "name": csource.name}

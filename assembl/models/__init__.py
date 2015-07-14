@@ -208,6 +208,8 @@ from .facebook_integration import (
     FacebookAccessToken,
     FacebookGenericSource,
     FacebookGroupSource,
-    FacebookGroupSourceFromUser,
+    FacebookPagePostsSource,
+    FacebookPageFeedSource,
+    FacebookSinglePostSource,
     FacebookPost
 )
