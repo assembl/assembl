@@ -724,9 +724,8 @@ class User(AgentProfile):
             for notification_subscription in \
                     other_user.notification_subscriptions:
                 notification_subscription.user = self
+                notification_subscription.user_id = self.id
                 if notification_subscription.find_duplicate(False) is not None:
-                    # invert to avoid a change
-                    notification_subscription.user = other_user
                     self.db.delete(notification_subscription)
             session.autoflush = old_autoflush
 
