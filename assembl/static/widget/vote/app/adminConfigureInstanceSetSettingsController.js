@@ -351,6 +351,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
             }
             else { // if it does not exist in the backend yet, we create it using POST
               var el2 = _.clone(el);
+              el2 = $scope.ensurePropertiesTypes(el2, getCriterionPropertyType);
               post_data = $scope.moveUnknownProperties(el2, known_properties, "settings");
 
               endpoint = collection_endpoint;
