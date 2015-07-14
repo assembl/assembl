@@ -565,9 +565,8 @@ def velruse_login_complete_view(request):
             email=email)
         for account in other_accounts:
             conflicting_accounts.add(account)
-            if account.verified:
-                conflicting_profiles.update([
-                    a.profile for a in other_accounts])
+            if account.verified or len(account.profile.accounts) == 1:
+                conflicting_profiles.add(account.profile)
     # choose best known profile for base_account
     # prefer profiles with verified users, then users, then oldest profiles
     profile_list = list(conflicting_profiles)
@@ -577,7 +576,7 @@ def velruse_login_complete_view(request):
     if new_idp_account and profile_list:
         base_profile = profile_list[0]
     elif not new_idp_account:
-        # Take first appropriate
+        # Take first appropriate. Should be the first, somehow not.
         for profile in profile_list:
             accounts = [
                 a for a in idp_accounts if a.profile == profile]
