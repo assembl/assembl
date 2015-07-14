@@ -31,7 +31,7 @@ var FacebookAccessToken = Base.Model.extend({
     },
 
     isExpired: function(){
-        var d = new Moment().utc(this.expiration);
+        var d = new Moment(this.expiration).utc();
         var now = new Moment.utc();
         return now.isAfter(d);
     },

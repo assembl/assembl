@@ -46,6 +46,14 @@ var Accounts = Base.Collection.extend({
       });
       if (!tmp) return false;
       else return true;
+    }, 
+
+    getFacebookAccount: function(){
+      var tmp = this.find(function(model){
+        return model.isFacebookAccount();
+      });
+      if (!tmp) return null;
+      else return tmp;
     }
 });
 
