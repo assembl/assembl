@@ -44,7 +44,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         Idea.id), nullable=True)
     "Optional: the specification may be tied to an idea"
 
-    question_id = Column(Integer, nullable=False)
+    question_id = Column(Integer, nullable=True)
     "Group vote specifications in questions."
     "The question is a front-end object."
 
