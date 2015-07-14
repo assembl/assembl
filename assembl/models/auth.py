@@ -504,11 +504,10 @@ class IdentityProviderAccount(AbstractAgentAccount):
             info = self.profile_info_json
             name = info['name']
             if name.get('formatted', None):
-                return name['formatted']
-            if 'givenName' in name and 'familyName' in name:
-                return ' '.join((name['givenName'], name['familyName']))
-        else:
-            return self.full_name
+                self.full_name = name['formatted']
+            elif 'givenName' in name and 'familyName' in name:
+                self.full_name = ' '.join((name['givenName'], name['familyName']))
+        return self.full_name
 
     def populate_picture(self, profile):
         if 'photos' in profile:  # google, facebook
