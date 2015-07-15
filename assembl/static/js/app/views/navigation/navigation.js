@@ -149,6 +149,7 @@ var NavigationView = AssemblPanel.extend({
      * @param  {jQuery selection of a DOM element} elm
      */
     toggleMenuByElement: function (elm, options) {
+        this.setSideBarHeight();
         var view = elm.attr('data-view');
 
         if (elm.next(this.ui.level).is(':hidden')) {
