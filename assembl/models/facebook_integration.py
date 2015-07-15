@@ -426,8 +426,8 @@ class FacebookGenericSource(PostSource):
     }
 
     @abstractmethod
-    def fetch_content(self, api, limit=None):
-        self._setup_reading(api)
+    def fetch_content(self, limit=None):
+        self._setup_reading()
 
     def make_reader(self):
         api = FacebookAPI()
@@ -441,6 +441,11 @@ class FacebookGenericSource(PostSource):
                    discussion=discussion, fb_source_id=fb_id,
                    url_path=url, last_import=last_import,
                    creator=creator)
+
+    def get_creator_uri(self):
+        if self.creator:
+            return self.creator.uri()
+        return None
 
     def _get_facebook_provider(self):
         if not self.provider:
@@ -636,6 +641,14 @@ class FacebookGenericSource(PostSource):
         return (csId is not None), csId
 
     def user_access_token(self):
+        """
+        Firstly, checks to ensure that a creator exists, otherwise, the
+        db query might return awkward results.
+        Then checks for user token existence and not-expired
+        """
+        if not self.creator:
+            return None
+
         token = self.db.query(FacebookAccessToken).\
             filter_by(fb_account_id=self.creator_id,
                       token_type='user').first()
@@ -650,7 +663,8 @@ class FacebookGenericSource(PostSource):
         token = self.user_access_token()
         if token and (not token.is_expired()):
             api = FacebookAPI(token.token)
-
+        else:
+            api = FacebookAPI()
         self.parser = FacebookParser(api)
 
 
@@ -790,6 +804,7 @@ class FacebookAccessToken(Base):
         # field as well.
 
         api = FacebookAPI(short_token)
+        # import pdb; pdb.set_trace()-
         try:
             long_token, expires_in_seconds = api.extend_token()
             self.expiration = datetime.utcnow() + \
@@ -974,4 +989,4 @@ class FacebookReader(PullSourceReader):
     def do_read(self):
         # TODO reimporting
         limit = self.extra_args.get('limit', None)
-        self.source.fetch_content(self.api, limit)
+        self.source.fetch_content(limit)
