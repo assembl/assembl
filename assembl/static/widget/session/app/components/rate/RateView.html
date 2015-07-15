@@ -29,7 +29,12 @@
                 <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'firstToPost'| translate}}</p>
             </div>
             <div class="session-comment">
+                <form id="postForm">
                 <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:'creationDate':'reverse' ">
+                    <div class="pull-left">
+                        <input type="checkbox" id="checkbox-{{idea['@id']}}"  value="{{idea['@id']}}" data-toggle="checkbox" class="sub-idea">
+                    </div>
+
                     <div class="pull-left thumbnail">
                         <img class="media-object img-circle" ng-src="{{idea.avatar}}" alt="30x30" style="width: 30px; height: 30px;">
                     </div>
@@ -53,15 +58,15 @@
                         <comments idea="idea" widget="widget"></comments>
                     </div>
                 </div>
+                </form>
             </div>
 
         </div>
 
         <div class="col-md-5 bloc-right">
-
+            <p>You have selected : </p>
+            <p>Do you want to send them to << toto >></p>
+            <button type="submit" class="btn btn-primary btn-sm pull-right" ng-click="validSelection()">{{'send' | translate}}</button>
         </div>
     </div>
-
-
-
 </section>

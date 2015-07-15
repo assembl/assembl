@@ -62,13 +62,13 @@ RateModule.controller('RateController', [
         /**
          * Valid votes and send to the server separetely
          * */
-        $scope.validVote = function () {
+        $scope.validSelection = function () {
 
             var
                 subIdeaSelected = [],
                 commentSelected = [],
-                subIdea = angular.element('#postVote .sub-idea'),
-                commentSubIdea = angular.element('#postVote .comment-to-sub-idea'),
+                subIdea = angular.element('#postForm .sub-idea'),
+                commentSubIdea = angular.element('#postForm .comment-to-sub-idea'),
                 rootUrlSubIdea = UtilsService.getURL($scope.widget.confirm_ideas_url),
                 rootUrlMessage = UtilsService.getURL($scope.widget.confirm_messages_url);
 
@@ -102,7 +102,7 @@ RateModule.controller('RateController', [
                 }
             })
 
-            if (commentSelected.length > 0) {
+           if (commentSelected.length > 0) {
 
                 var obj = {};
                 obj.ids = JSON.stringify(commentSelected);
