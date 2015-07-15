@@ -388,6 +388,7 @@
     },
     "MultiCriterionVotingWidget": {
         "@extends": "Widget",
+        "votespecs_url": true,
         "criteria_url": true
     },
     "AbstractIdeaVote": {
@@ -480,5 +481,24 @@
         "token_type": true,
         "object_name": true,
         "object_fb_id": true
+    },
+    "AbstractVoteSpecification": {
+        "widget": true,
+        "criterion_idea": true,
+        "question_id": true,
+        "settings": "settings_json",
+        "vote_class": "&get_vote_classname"
+    },
+    "LickertVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "minimum": true,
+        "maximum": true
+    },
+    "MultipleChoiceVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "num_choices": true
+    },
+    "BinaryVoteSpecification": {
+        "@extends": "AbstractVoteSpecification"
     }
 }

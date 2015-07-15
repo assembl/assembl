@@ -22,7 +22,8 @@ var Marionette = require('../shims/marionette.js'),
     DiscussionSource = require('../models/discussionSource.js'),
     UserProfile = require('../models/userProfile.js'),
     Social = require('../models/social.js'),
-    Account = require('../models/accounts.js');
+    Account = require('../models/accounts.js'),
+    DiscussionSources = require('../models/sources.js');
 
 /**
  * @class CollectionManager
@@ -143,6 +144,13 @@ var CollectionManager = Marionette.Controller.extend({
      */
     _allFacebookAccessTokens: undefined,
     _allFacebookAccessTokensPromise: undefined,
+
+    /**
+     * The super collection of all types of sources that the
+     * front end supports
+     */
+    _allDiscussionSourceCollection2: undefined,
+    _allDiscussionSourceCollection2Promise: undefined,
 
     /**
      * Collection of all the Accounts associated with the
@@ -661,6 +669,21 @@ var CollectionManager = Marionette.Controller.extend({
             });
 
         return this._allDiscussionSourceCollectionPromise;
+    },
+
+    getDiscussionSourceCollectionPromise2: function () {
+        if (this._allDiscussionSourceCollection2Promise) {
+            return this._allDiscussionSourceCollection2Promise;
+        }
+        this._allDiscussionSourceCollection2 = new DiscussionSource.Collection();
+        this._allDiscussionSourceCollection2.collectionManager = this;
+        this._allDiscussionSourceCollection2Promise = Promise.resolve(this._allDiscussionSourceCollection2.fetch())
+            .thenReturn(this._allDiscussionSourceCollection2)
+            .catch(function(e){
+                console.error(e.statusText);
+            });
+
+        return this._allDiscussionSourceCollection2Promise;
     },
 
     getUserContributionsPromise: function (params) {

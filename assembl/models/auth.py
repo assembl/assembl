@@ -502,13 +502,12 @@ class IdentityProviderAccount(AbstractAgentAccount):
     def real_name(self):
         if not self.full_name:
             info = self.profile_info_json
-            name = info['name']
+            name = info.get('name', {})
             if name.get('formatted', None):
-                return name['formatted']
-            if 'givenName' in name and 'familyName' in name:
-                return ' '.join((name['givenName'], name['familyName']))
-        else:
-            return self.full_name
+                self.full_name = name['formatted']
+            elif 'givenName' in name and 'familyName' in name:
+                self.full_name = ' '.join((name['givenName'], name['familyName']))
+        return self.full_name
 
     def populate_picture(self, profile):
         if 'photos' in profile:  # google, facebook
@@ -720,11 +719,15 @@ class User(AgentProfile):
                 role.user = self
             if other_user.username and not self.username:
                 self.username = other_user.username
+            old_autoflush = session.autoflush
+            session.autoflush = False
             for notification_subscription in \
                     other_user.notification_subscriptions:
                 notification_subscription.user = self
+                notification_subscription.user_id = self.id
                 if notification_subscription.find_duplicate(False) is not None:
                     self.db.delete(notification_subscription)
+            session.autoflush = old_autoflush
 
     def send_email(self, **kwargs):
         subject = kwargs.get('subject', '')

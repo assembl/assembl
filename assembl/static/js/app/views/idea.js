@@ -2,6 +2,7 @@
 
 var Backbone = require('../shims/backbone.js'),
     _ = require('../shims/underscore.js'),
+    $ = require('../shims/jquery.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js'),
@@ -201,6 +202,14 @@ var IdeaView = Backbone.View.extend({
     onTitleClick: function (e) {
       e.stopPropagation();
       this.doIdeaChange(null);
+      if (Ctx.getCurrentUserId()) {
+        // tell the backend that the idea was read
+        $.ajax("/data/Discussion/" + Ctx.getDiscussionId() + "/ideas/" + this.model.getNumericId() + "/actions", {
+            method: "POST",
+            contentType: "application/json",
+            data: '{"@type":"ViewIdea"}'
+        });
+      }
     },
 
     /**

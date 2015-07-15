@@ -253,6 +253,7 @@
         "user_states_url": "&get_user_states_url",
         "user_state_url": "&get_user_state_url",
         "widget_settings_url": "&get_settings_url",
+        "voting_results_by_spec_url": "&get_voting_results_by_spec_url",
         "widget_state_url": "&get_state_url"
     },
     "BaseIdeaWidget": {
@@ -276,8 +277,9 @@
     "MultiCriterionVotingWidget": {
         "@extends": "Widget",
         "criteria_url": true,
+        "votespecs_url": true,
         "votables_url": true,
-        "criteria": ":",
+        "vote_specifications": ":",
         "votable_ideas": ":id_only"
     },
     "AbstractIdeaVote": {
@@ -285,6 +287,8 @@
         "criterion": true,
         "widget": true,
         "value": true,
+        "original_uri": true,
+        "vote_spec": true,
         "voter": true
     },
     "BinaryIdeaVote": {
@@ -320,5 +324,25 @@
     "DiscussionMilestone": {
         "@extends": "TimelineEvent",
         "start": true
+    },
+    "AbstractVoteSpecification": {
+        "widget": true,
+        "criterion_idea": true,
+        "question_id": true,
+        "settings": "settings_json",
+        "voting_urls": "&get_voting_urls",
+        "vote_class": "&get_vote_classname"
+    },
+    "LickertVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "minimum": true,
+        "maximum": true
+    },
+    "MultipleChoiceVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "num_choices": true
+    },
+    "BinaryVoteSpecification": {
+        "@extends": "AbstractVoteSpecification"
     }
 }

@@ -59,7 +59,8 @@
     "watchify": "^3.2.1"
   },
   "devDependencies": {
-    "jscs": "~1.13"
+    "jscs": "~1.13",
+    "node-sass": "3.2.0"
   },
   "browser": {
     "jit": "./assembl/static/js/bower/jit/jit/jit.js"

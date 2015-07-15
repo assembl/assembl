@@ -1,19 +1,275 @@
-from abc import abstractproperty
+from abc import abstractproperty, abstractmethod
 from datetime import datetime
+import simplejson as json
+import math
+from collections import defaultdict
 
 from sqlalchemy import (
-    Column, Integer, ForeignKey, Boolean, String, Float, DateTime, and_)
-from sqlalchemy.orm import relationship, backref
+    Column, Integer, ForeignKey, Boolean, String, Float, DateTime, Text, and_)
+from sqlalchemy.orm import (relationship, backref, joinedload, aliased)
 from pyramid.settings import asbool
 
 from . import (Base, DiscussionBoundBase, HistoryMixin)
+from ..lib.abc import abstractclassmethod
 from .discussion import Discussion
 from .idea import Idea
 from .auth import User
 from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
-from .widgets import MultiCriterionVotingWidget
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
+from ..views.traversal import AbstractCollectionDefinition
+
+
+class AbstractVoteSpecification(DiscussionBoundBase):
+    """The representation of a way to vote on an idea.
+    There can be more than one VoteSpecification in a Question,
+    as in the case of a 2-D widget."""
+
+    __tablename__ = "vote_specification"
+
+    id = Column(Integer, primary_key=True)
+
+    type = Column(String(60), nullable=False)
+    __mapper_args__ = {
+        'polymorphic_identity': 'abstract_vote_specification',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
+    }
+
+    widget_id = Column(Integer, ForeignKey(
+        "widget.id"), nullable=False)
+    "Used by a voting widget"
+
+    criterion_idea_id = Column(Integer, ForeignKey(
+        Idea.id), nullable=True)
+    "Optional: the specification may be tied to an idea"
+
+    question_id = Column(Integer, nullable=True)
+    "Group vote specifications in questions."
+    "The question is a front-end object."
+
+    settings = Column(Text)  # JSON blob
+
+    widget = relationship(
+        "MultiCriterionVotingWidget", backref=backref(
+            "vote_specifications", cascade="all, delete-orphan"))
+    criterion_idea = relationship(
+        Idea, backref="criterion_for")
+
+    retypeable_as = ("LickertVoteSpecification", "BinaryVoteSpecification",
+                     "MultipleChoiceVoteSpecification")
+
+    def get_voting_urls(self):
+        return {
+            Idea.uri_generic(votable.id):
+            'local:Discussion/%d/widgets/%d/vote_specifications/%d/vote_targets/%d/votes' % (
+                votable.discussion_id, self.widget_id, self.id,
+                votable.id)
+            for votable in self.widget.votable_ideas
+        }
+
+    def get_vote_results_url(self):
+        'local:Discussion/%d/widgets/%d/vote_specifications/%d/vote_results' % (
+            self.widget.discussion_id, self.widget_id, self.id)
+
+    # Do we want an URL to get the vote result on a specific spec+target combination?
+
+    @abstractmethod
+    def results_for(self, voting_results):
+        return {
+            "n": len(voting_results)
+        }
+
+    def voting_results(self):
+        vote_cls = self.get_vote_class()
+        voting_results = self.db.query(vote_cls).filter_by(
+            vote_spec_id=self.id,
+            tombstone_date=None)
+        by_idea = defaultdict(list)
+        for vote in voting_results:
+            by_idea[vote.idea_id].append(vote)
+        return {
+            Idea.uri_generic(votable_id):
+            self.results_for(voting_results)
+            for (votable_id, voting_results) in by_idea.iteritems()
+        }
+
+    @classmethod
+    def extra_collections(cls):
+        from .widgets import (VotedIdeaWidgetLink)
+
+        class VoteTargetsCollection(AbstractCollectionDefinition):
+            # The set of voting target ideas.
+            # Fake: There is no DB link here.
+            def __init__(self, cls):
+                super(VoteTargetsCollection, self).__init__(cls, Idea)
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                from .widgets import (
+                    MultiCriterionVotingWidget, VotableIdeaWidgetLink)
+                # TODO : Why did this work?
+                # return query.filter(
+                #     last_alias.discussion_id == parent_instance.discussion_id
+                #     ).filter(last_alias.hidden==False)
+                spec_alias = self.owner_alias
+                widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
+                widget_alias = aliased(MultiCriterionVotingWidget)
+                votable_link_alias = aliased(VotableIdeaWidgetLink)
+                idea_alias = last_alias
+                return query.join(
+                        votable_link_alias,
+                        votable_link_alias.idea_id == idea_alias.id
+                    ).join(
+                        widget_alias,
+                        (widget_alias.id == votable_link_alias.widget_id)
+                        & (widget_alias.id == widget.id)
+                    ).join(
+                        spec_alias,
+                        spec_alias.id == self.instance.id
+                    )
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx,
+                    kwargs):
+                for inst in assocs[:]:
+                    widgets_coll = ctx.find_collection(
+                        'MultiCriterionVotingWidget.vote_specifications')
+                    if isinstance(inst, AbstractIdeaVote):
+                        inst.vote_spec = parent_instance
+                        other_votes = instance.db.query(
+                            AbstractIdeaVote).filter_by(
+                                voter_id=user_id, idea_id=inst.idea.id,
+                                vote_spec_id=parent_instance.id,
+                                tombstone_date=None).options(
+                            joinedload(AbstractIdeaVote.idea)).all()
+                        for other_vote in other_votes:
+                            if other_vote == inst:
+                                # probably never happens
+                                continue
+                            other_vote.tombstone_date = (
+                                inst.vote_date or datetime.now())
+                            inst.base_id = other_vote.base_id
+                        assocs.append(VotedIdeaWidgetLink(
+                            widget=widgets_coll.parent_instance,
+                            idea=inst.idea,
+                            **self.filter_kwargs(
+                                VotedIdeaWidgetLink, kwargs)))
+
+            def contains(self, parent_instance, instance):
+                return isinstance(instance, Idea)
+
+        return {'vote_targets': VoteTargetsCollection(cls)}
+
+    @abstractclassmethod
+    def get_vote_class(cls):
+        pass
+
+    @classmethod
+    def get_vote_classname(cls):
+        return cls.get_vote_class().__name__
+
+    def is_valid_vote(self, vote):
+        if not issubclass(vote.__class__, self.get_vote_class()):
+            return False
+
+    @property
+    def settings_json(self):
+        if self.settings:
+            return json.loads(self.settings)
+        return {}
+
+    @settings_json.setter
+    def settings_json(self, val):
+        self.settings = json.dumps(val)
+
+    def get_discussion_id(self):
+        return self.widget.discussion_id
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        from .widgets import MultiCriterionVotingWidget
+        return ((cls.widget_id == MultiCriterionVotingWidget.id),
+                (MultiCriterionVotingWidget.discussion_id == discussion_id))
+
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+
+
+class LickertVoteSpecification(AbstractVoteSpecification):
+    __tablename__ = "lickert_vote_specification"
+    rdf_class = VOTE.LickertRange
+    __mapper_args__ = {
+        'polymorphic_identity': 'lickert_vote_specification'
+    }
+
+    id = Column(
+        Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
+
+    minimum = Column(Integer, default=1,
+                     info={'rdf': QuadMapPatternS(None, VOTE.min)})
+    maximum = Column(Integer, default=10,
+                     info={'rdf': QuadMapPatternS(None, VOTE.max)})
+
+    @classmethod
+    def get_vote_class(cls):
+        return LickertIdeaVote
+
+    def results_for(self, voting_results):
+        base = super(LickertVoteSpecification, self).results_for(voting_results)
+        n = len(voting_results)
+        avg = sum((r.vote_value for r in voting_results)) / n
+        moment2 = sum((r.vote_value**2 for r in voting_results)) / n
+        var = moment2 - avg**2
+        std_dev = math.sqrt(var)
+        base.update(dict(avg=avg, std_dev=std_dev))
+        return base
+
+    def is_valid_vote(self, vote):
+        if not super(LickertVoteSpecification, self).is_valid_vote(vote):
+            return False
+        return self.min <= vote.vote_value <= vote.max
+
+
+class BinaryVoteSpecification(AbstractVoteSpecification):
+    __mapper_args__ = {
+        'polymorphic_identity': 'binary_vote_specification'
+    }
+
+    def results_for(self, voting_results):
+        base = super(BinaryVoteSpecification, self).results_for(voting_results)
+        n = len(voting_results)
+        positive = len([r for r in voting_results if r.vote_value])
+        base["yes"] = positive
+        base["no"] = n - positive
+        return base
+
+    @classmethod
+    def get_vote_class(cls):
+        return BinaryIdeaVote
+
+
+class MultipleChoiceVoteSpecification(AbstractVoteSpecification):
+    __tablename__ = "multiple_choice_vote_specification"
+    __mapper_args__ = {
+        'polymorphic_identity': 'multiple_choice_vote_specification'
+    }
+
+    id = Column(
+        Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
+
+    num_choices = Column(Integer, nullable=False)
+
+    def results_for(self, voting_results):
+        base = super(
+            MultipleChoiceVoteSpecification, self).results_for(voting_results)
+        by_result = defaultdict(int)
+        for r in voting_results:
+            by_result[r.vote_value] += 1
+        base['results'] = dict(by_result)
+        return base
+
+    @classmethod
+    def get_vote_class(cls):
+        return MultipleChoiceIdeaVote
 
 
 class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
@@ -34,13 +290,29 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
         info={'rdf': QuadMapPatternS(None, VOTE.subject_node)}
     )
     idea_ts = relationship(
-        Idea, foreign_keys=(idea_id,))
+        Idea, foreign_keys=(idea_id,),
+        backref=backref("votes_ts", cascade="all, delete-orphan"))
     idea = relationship(
         Idea,
-        primaryjoin=and_(Idea.id == idea_id,
-                         Idea.tombstone_date == None),
-        foreign_keys=(idea_id,),
-        backref=backref("votes", cascade="all, delete-orphan"))
+        primaryjoin="and_(Idea.id == AbstractIdeaVote.idea_id,"
+                         "Idea.tombstone_date == None,"
+                         "AbstractIdeaVote.tombstone_date == None)",
+        foreign_keys=(idea_id,), backref="votes")
+
+    vote_spec_id = Column(
+        Integer,
+        ForeignKey(AbstractVoteSpecification.id,
+                   ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False
+    )
+    vote_spec_ts = relationship(
+        AbstractVoteSpecification,
+        backref=backref("votes_ts", cascade="all, delete-orphan"))
+    vote_spec = relationship(
+        AbstractVoteSpecification,
+        primaryjoin="and_(AbstractVoteSpecification.id==AbstractIdeaVote.vote_spec_id, "
+                         "AbstractIdeaVote.tombstone_date == None)",
+        backref=backref("votes"))
 
     criterion_id = Column(
         Integer,
@@ -48,6 +320,8 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
         nullable=True,
         info={'rdf': QuadMapPatternS(None, VOTE.voting_criterion)}
     )
+
+    # This dies and becomes indirect through vote_spec
     criterion_ts = relationship(
         Idea, foreign_keys=(criterion_id,))
     criterion = relationship(
@@ -66,8 +340,13 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
         nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.voter)}
     )
+    voter_ts = relationship(
+        User, backref=backref("votes_ts", cascade="all, delete-orphan"))
     voter = relationship(
-        User, backref=backref("votes", cascade="all, delete-orphan"))
+        User,
+        primaryjoin="and_(User.id==AbstractIdeaVote.voter_id, "
+                         "AbstractIdeaVote.tombstone_date == None)",
+        backref="votes")
 
     def is_owner(self, user_id):
         return self.voter_id == user_id
@@ -77,16 +356,20 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
         "filter query according to object owners"
         return query.filter(cls.voter_id == user_id)
 
+    # Do we still need this? Can access through vote_spec
     widget_id = Column(
         Integer,
-        ForeignKey(MultiCriterionVotingWidget.id,
+        ForeignKey("widget.id",
                    ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False)
     widget = relationship(
-        MultiCriterionVotingWidget,
+        "MultiCriterionVotingWidget",
         primaryjoin="and_(MultiCriterionVotingWidget.id==AbstractIdeaVote.widget_id, "
                          "AbstractIdeaVote.tombstone_date == None)",
-        backref=backref("votes", cascade="all, delete-orphan"))
+        backref="votes")
+    widget_ts = relationship(
+        "MultiCriterionVotingWidget",
+        backref=backref("votes_ts", cascade="all, delete-orphan"))
 
     def get_discussion_id(self):
         return self.idea_ts.discussion_id
@@ -207,13 +490,29 @@ class LickertIdeaVote(AbstractIdeaVote):
         )
         return super(LickertIdeaVote, self).copy(**kwargs)
 
-
     @value.setter
     def value(self, val):
         val = float(val)
         # assert val <= self.lickert_range.maximum and \
         #     val >= self.lickert_range.minimum
         self.vote_value = val
+
+
+class MultipleChoiceIdeaVote(AbstractIdeaVote):
+    __tablename__ = "multiple_choice_idea_vote"
+    __table_args__ = ()
+    __mapper_args__ = {
+        'polymorphic_identity': 'multiple_choice_idea_vote',
+    }
+
+    id = Column(Integer, ForeignKey(
+        AbstractIdeaVote.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    vote_value = Column(
+        Integer, nullable=False)
 
 
 class BinaryIdeaVote(AbstractIdeaVote):

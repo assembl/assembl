@@ -78,7 +78,12 @@ class ContentSource(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
-    retypeable_as = ("IMAPMailbox", "MailingList", "AbstractMailbox")
+    retypeable_as = ("IMAPMailbox", "MailingList", "AbstractMailbox",
+                     "AbstractFilesystemMailbox", "AnnotatorSource",
+                     "PostSource", "FeedPostSource", "LoomioPostSource",
+                     "FacebookGenericSource", "FacebookGroupSource",
+                     "FacebookPagePostsSource", "FacebookPageFeedSource",
+                     "FacebookSinglePostSource", "EdgeSenseDrupalSource")
 
     def __repr__(self):
         return "<ContentSource %s>" % repr(self.name)
@@ -174,6 +179,12 @@ class AnnotatorSource(ContentSource):
 
 
 class ContentSourceIDs(Base):
+    """
+    A table that keeps track of the number of external identities that
+    an Assembl post can be exported to.
+
+    A stepping-stone to having Sinks
+    """
     __tablename__ = 'content_source_ids'
 
     id = Column(Integer, primary_key=True)
@@ -190,8 +201,8 @@ class ContentSourceIDs(Base):
             'content.id', onupdate='CASCADE', ondelete='CASCADE'),
         nullable=False)
     post = relationship('Content',
-                        backref=backref('source_ids',
-                        cascade='all, delete-orphan'))
+                        backref=backref('post_sink_associations',
+                                        cascade='all, delete-orphan'))
     message_id_in_source = Column(String(256), nullable=False)
 
 
@@ -272,6 +283,11 @@ class Content(DiscussionBoundBase):
 
     def get_discussion_id(self):
         return self.discussion_id
+
+    @property
+    def exported_to_sources(self):
+        return [ContentSource.uri_generic(s.source_id)
+                for s in self.post_sink_associations]
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):

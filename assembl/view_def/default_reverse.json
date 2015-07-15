@@ -180,6 +180,7 @@
         "widget_collection_url": false,
         "creation_date": false,
         "slug": true,
+        "posts": false,
         "topic": true,
         "objectives": true,
         "introduction": true,
@@ -314,5 +315,24 @@
         "token_type": true,
         "object_name": true,
         "object_fb_id": true
+    },
+    "AbstractVoteSpecification": {
+        "widget": true,
+        "criterion_idea": true,
+        "question_id": true,
+        "settings": "settings_json",
+        "vote_class": false
+    },
+    "LickertVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "minimum": true,
+        "maximum": true
+    },
+    "MultipleChoiceVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "num_choices": true
+    },
+    "BinaryVoteSpecification": {
+        "@extends": "AbstractVoteSpecification"
     }
 }

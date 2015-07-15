@@ -21,7 +21,7 @@ WebOb==1.4.1
 WebTest==2.0.18
 Werkzeug==0.10.4
 alabaster==0.7.6
--e git+https://github.com/imaginationforpeople/alembic.git#egg=alembic
+-e git+https://github.com/imaginationforpeople/alembic.git@virtuoso#egg=alembic
 amqp==1.4.6
 anyjson==0.3.3
 anykeystore==0.2

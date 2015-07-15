@@ -12,6 +12,7 @@ var Modal = Backbone.Modal.extend({
     cancelEl: '.js_close',
     keyControl: false,
     initialize: function (options) {
+      console.log('initializing Modal');
       this.$('.bbm-modal').addClass('popin');
       this.$('.js_export_error_message').empty(); //Clear any error message that may have been put there
       this.messageCreator = null;
@@ -53,7 +54,7 @@ var Modal = Backbone.Modal.extend({
         vent: this.vent,
         token: token
       });
-      
+
       this.$('.js_source-specific-form').html(fbView.render().el);
       this.currentView = fbView;
     },
@@ -67,10 +68,13 @@ var Modal = Backbone.Modal.extend({
 
       this.formType = value;
 
+      console.log('Generating the view', value);
+
       switch(value){
         case 'facebook':
           var that = this;
           facebook.resolveState(function(fbState) {
+            console.log('The state of the checkState function', fbState);
             if (fbState.ready) {
               var fbView = new facebook.root({
                 creator: that.messageCreator,
@@ -109,8 +113,8 @@ var Modal = Backbone.Modal.extend({
         $('.js_export_error_message').text(er);
       }
       else {
-        console.log('currentView', this.currentView);
         var that = this;
+        console.log('currentView', this.currentView);
         this.currentView.submitForm(function(){
           that.destroy();
         }, function(){

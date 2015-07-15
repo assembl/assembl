@@ -56,6 +56,8 @@ known_transitions = {
     },
     ReaderStatus.CLIENT_ERROR: {
         ReaderStatus.SHUTDOWN,
+        ReaderStatus.CLIENT_ERROR,
+        ReaderStatus.IRRECOVERABLE_ERROR,
         ReaderStatus.READING,
     },
     ReaderStatus.CLOSED: {
@@ -501,7 +503,7 @@ if __name__ == '__main__':
     set_config(settings)
     fileConfig(config_file_name)
     # set the basic session maker without zope or autoflush
-    configure_engine(settings, False, autoflush=False)
+    configure_engine(settings, False, autoflush=False, max_overflow=20)
     configure(registry, 'source_reader')
     url = settings.get('celery_tasks.imap.broker')
     with BrokerConnection(url) as conn:

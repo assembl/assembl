@@ -14,6 +14,7 @@ from sqlalchemy import (
     DateTime
 )
 import simplejson as json
+import pytz
 from dateutil.parser import parse as parse_datetime
 from sqlalchemy.orm import relationship, backref
 from virtuoso.alchemy import CoerceUnicode
@@ -134,10 +135,6 @@ class FacebookAPI(object):
         self._app_access_token = config['facebook.app_access_token']
         token = self._app_access_token if not user_token else user_token
         self._api = facebook.GraphAPI(token, DEFAULT_TIMEOUT, API_VERSION_USED)
-        # if not user_token:
-        #     self.api.access_token(self._app_access_token, self._app_secret)
-        # else:
-        #     self.api.access_token(user_token, self._app_secret)
 
     def api_caller(self):
         return self._api
@@ -178,7 +175,6 @@ class FacebookAPI(object):
 
         except:
             return None
-
 
 
 class FacebookParser(object):
@@ -438,17 +434,13 @@ class FacebookGenericSource(PostSource):
         return FacebookReader(self.id, api)
 
     @classmethod
-    def create_from(cls, discussion, url, fb_id, some_name):
+    def create_from(cls, discussion, fb_id, creator, url, some_name):
         created_date = datetime.utcnow()
         last_import = created_date
         return cls(name=some_name, creation_date=created_date,
                    discussion=discussion, fb_source_id=fb_id,
-                   url_path=url, last_import=last_import)
-
-    def _setup_reading(self, api):
-        self.provider = None
-        self._get_facebook_provider()
-        self.parser = FacebookParser(api)
+                   url_path=url, last_import=last_import,
+                   creator=creator)
 
     def _get_facebook_provider(self):
         if not self.provider:
@@ -620,14 +612,55 @@ class FacebookGenericSource(PostSource):
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     return
 
+    def single_post_comments_only(self, parent_post):
+        users_db = self._get_current_users()
+        posts_db = self._get_current_posts()
+
+        post = self.parser.get_single_post(self.fb_source_id)
+
+        # The root post will not be a FacebookPost, but all of the comments
+        # will be.
+
+        for comment in self.parser.get_comments_paginated(post):
+            self._manage_comment_subcomments(comment, parent_post,
+                                             posts_db, users_db,
+                                             True)
+            if self.read_status == ReaderStatus.SHUTDOWN:
+                return
+
+    def content_sink(self):
+        csId = self.db.query(ContentSourceIDs).\
+            filter_by(source_id=self.id,
+                      message_id_in_source=self.fb_source_id).first()
+
+        return (csId is not None), csId
+
+    def user_access_token(self):
+        token = self.db.query(FacebookAccessToken).\
+            filter_by(fb_account_id=self.creator_id,
+                      token_type='user').first()
+
+        if not token:
+            return None
+        return token
+
+    def _setup_reading(self):
+        self.provider = None
+        self._get_facebook_provider()
+        token = self.user_access_token()
+        if token and (not token.is_expired()):
+            api = FacebookAPI(token.token)
+
+        self.parser = FacebookParser(api)
+
 
 class FacebookGroupSource(FacebookGenericSource):
     __mapper_args__ = {
         'polymorphic_identity': 'facebook_open_group_source'
     }
 
-    def fetch_content(self, api, limit=None):
-        self._setup_reading(api)
+    def fetch_content(self, limit=None):
+        self._setup_reading()
         self.feed(limit)
 
 
@@ -636,8 +669,8 @@ class FacebookGroupSourceFromUser(FacebookGenericSource):
         'polymorphic_identity': 'facebook_private_group_source'
     }
 
-    def fetch_content(self, api, limit=None):
-        self._setup_reading(api)
+    def fetch_content(self, limit=None):
+        self._setup_reading()
         self.feed(limit)
 
 
@@ -646,8 +679,8 @@ class FacebookPagePostsSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_page_posts_source'
     }
 
-    def fetch_content(self, api, limit=None):
-        self._setup_reading(api)
+    def fetch_content(self, limit=None):
+        self._setup_reading()
         self.posts(limit)
 
 
@@ -656,8 +689,8 @@ class FacebookPageFeedSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_page_feed_source'
     }
 
-    def fetch_content(self, api, limit=None):
-        self._setup_reading(api)
+    def fetch_content(self, limit=None):
+        self._setup_reading()
         self.feed(limit)
 
 
@@ -666,11 +699,17 @@ class FacebookSinglePostSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_singlepost_source'
     }
 
-    def fetch_content(self, api, limit=None):
+    def fetch_content(self, limit=None):
         # Limit should not apply here, unless the limit is in reference to
         # number of comments brought in
-        self._setup_reading(api)
-        self.single_post(limit)
+        is_sink, cs = self.content_sink()
+        if is_sink:
+            parent_post = cs.post
+            self._setup_reading()
+            self.single_post_comments_only(parent_post)
+        else:
+            self._setup_reading()
+            self.single_post()
 
 
 class FacebookAccount(IdentityProviderAccount):
@@ -715,10 +754,11 @@ class FacebookAccessToken(Base):
 
     id = Column(Integer, primary_key=True)
     fb_account_id = Column(Integer, ForeignKey('facebook_account.id',
-                     onupdate='CASCADE', ondelete='CASCADE'))
+                           onupdate='CASCADE', ondelete='CASCADE'))
 
     fb_account = relationship('FacebookAccount',
-        backref=backref('access_tokens', cascade='all, delete-orphan'))
+                              backref=backref('access_tokens',
+                                              cascade='all, delete-orphan'))
 
     token = Column(String(512), unique=True)
     expiration = Column(DateTime)
@@ -772,7 +812,7 @@ class FacebookAccessToken(Base):
         return self.fb_account.uri()
 
     def is_expired(self):
-        now = datetime.datetime.utcnow()
+        now = datetime.utcnow()
         return now > self.expiration
 
     def is_owner(self, user_id):
@@ -790,10 +830,11 @@ class FacebookAccessToken(Base):
     @classmethod
     def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
-        return query.join(cls.user).filter(FacebookAccount.profile_id == user_id)
+        return query.join(cls.user).\
+            filter(FacebookAccount.profile_id == user_id)
 
-    crud_permissions = CrudPermissions(P_EXPORT, P_SYSADMIN, read_owned=P_EXPORT)
-
+    crud_permissions = CrudPermissions(P_EXPORT, P_SYSADMIN,
+                                       read_owned=P_EXPORT)
 
 
 class FacebookPost(ImportedPost):

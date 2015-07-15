@@ -88,21 +88,19 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "key": "vertical_gauge",
       "label": "Vertical gauge (aka lickert): needs 1 criterion (of type Lickert)",
       "number_of_criteria": 1,
-      "allowed_criteria_types": ["LickertIdeaVote"]
+      "allowed_criteria_types": ["LickertVoteSpecification"]
     },
     {
       "key": "radio",
-      //"label": "Radio buttons: needs 1 criterion (of type Binary or Plurality)",
-      "label": "Radio buttons: needs 1 criterion (of type Binary)",
+      "label": "Radio buttons: needs 1 criterion (of type Binary or MultipleChoice)",
       "number_of_criteria": 1,
-      //"allowed_criteria_types": ["BinaryIdeaVote", "PluralityIdeaVote"]
-      "allowed_criteria_types": ["BinaryIdeaVote"]
+      "allowed_criteria_types": ["BinaryVoteSpecification", "MultipleChoiceVoteSpecification"]
     },
     {
       "key": "2_axes",
       "label": "Two axes graph: needs 2 criteria (of type Lickert)",
       "number_of_criteria": 2,
-      "allowed_criteria_types": ["LickertIdeaVote"]
+      "allowed_criteria_types": ["LickertVoteSpecification"]
     }
   ];
 
@@ -143,41 +141,48 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "type": "integer",
       "label": "Height",
       "default": 300
+    },
+    {
+      "key": "question_id",
+      "type": "integer",
+      "label": "Order of appearance of the question",
+      "default": 0
     }
   ];
 
 
   this.criterion_types = [
     {
-      "key": "LickertIdeaVote",
+      "key": "LickertVoteSpecification",
       // "description": "",
       "label": "Lickert"
     },
     {
-      "key": "BinaryIdeaVote",
+      "key": "BinaryVoteSpecification",
       // "description": "",
       "label": "Binary"
-    }/*,
+    },
     {
-      "key": "PluralityIdeaVote",
+      "key": "MultipleChoiceVoteSpecification",
       // "description": "",
-      "label": "Plurality"
-    }*/
+      "label": "Multiple choice"
+    }
   ];
 
   this.mandatory_criterion_fields = [
-    {
+    /*{
       "key": "entity_id",
       "type": "criterion",
       "label": "Criterion entity id"
-    },
+    },*/
     {
       "key": "name",
       "type": "text",
-      "label": "Name"
+      "label": "Name",
+      "storage": "settings"
     },
     {
-      "key": "type",
+      "key": "@type",
       "type": "select",
       "label": "Criterion type",
       // "description": "",
@@ -194,96 +199,135 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
   };
   */
   this.mandatory_typed_criterion_fields = {
-    "LickertIdeaVote": [
+    "LickertVoteSpecification": [
       {
-        "key": "valueMin",
+        "key": "minimum",
         "type": "integer",
         "default": 0,
-        "description": "The minimum value which can be voted"
+        "description": "The minimum value which can be voted",
+        "storage": "attribute"
       },
       {
-        "key": "valueMax",
+        "key": "maximum",
         "type": "integer",
         "default": 100,
-        "description": "The maximum value which can be voted"
+        "description": "The maximum value which can be voted",
+        "storage": "attribute"
       }
     ],
-    "BinaryIdeaVote": [
+    "BinaryVoteSpecification": [
       //possibleValues
       {
         "key": "labelNo",
         "type": "text",
         "description": "Label for the 'no' option. This text will be shown next to its corresponding radio button.",
-        "default": "No"
+        "default": "No",
+        "storage": "settings"
       },
       {
         "key": "labelYes",
         "type": "text",
         "description": "Label for the 'yes' option. This text will be shown next to its corresponding radio button.",
-        "default": "Yes"
+        "default": "Yes",
+        "storage": "settings"
       }
-    ]/*,
-    "PluralityIdeaVote": [ // http://en.wikipedia.org/wiki/Plurality_voting_system
-      possibleValues
-    ]*/
+    ],
+    "MultipleChoiceVoteSpecification": [ // http://en.wikipedia.org/wiki/Plurality_voting_system
+      {
+        "key": "candidates",
+        "label": "Candidates",
+        "type": "array",
+        "description": "The ordered list of candidates a voter can vote for.",
+        "default": [
+          "Candidate 1",
+          "Candidate 2",
+          "Candidate 3"
+        ],
+        "storage": "settings"
+      },
+      {
+        "key": "num_choices",
+        "label": "Number of candidates",
+        "type": "integer",
+        "description": "The number of candidates available.",
+        "default": 3,
+        "storage": "attribute"
+      }
+    ]
   };
 
   this.optional_criterion_fields = [
     {
       "key": "description",
       "type": "text",
-      "description": "Text which will be shown around the votable item"
+      "description": "Text which will be shown around the votable item",
+      "storage": "settings"
+    },
+    {
+      "key": "criterion_idea",//"criterion_idea_id",
+      "type": "idea_id",
+      "label": "Criterion entity idea",
+      "default": null,
+      "storage": "attribute"
     }
   ];
 
   this.optional_typed_criterion_fields = {
-    "LickertIdeaVote": [
+    "LickertVoteSpecification": [
       {
         "key": "valueDefault",
         "type": "integer",
         "label": "default value",
-        "description": "Value on which the votable item will be initially set"
+        "description": "Value on which the votable item will be initially set",
+        "storage": "settings"
       },
       {
         "key": "descriptionMin",
         "type": "text",
-        "description": "Text which will be shown around the minimum value of the axis"
+        "description": "Text which will be shown around the minimum value of the axis",
+        "storage": "settings"
       },
       {
         "key": "descriptionMax",
         "type": "text",
-        "description": "Text which will be shown around the maximum value of the axis"
+        "description": "Text which will be shown around the maximum value of the axis",
+        "storage": "settings"
       },
       {
         "key": "ticks",
         "label": "number of ticks",
         "type": "integer",
         "default": 5,
-        "description": "Indicative number of ticks to be shown on the axis"
+        "description": "Indicative number of ticks to be shown on the axis",
+        "storage": "settings"
       },
       {
         "key": "colorMin",
         "type": "text",
         "description": "Color of the minimum value",
-        "defaultAdmin":"#ff0000"
+        "defaultAdmin":"#ff0000",
+        "storage": "settings"
       },
       {
         "key": "colorMax",
         "type": "text",
         "description": "Color of the maximum value",
-        "defaultAdmin":"#00ff00"
+        "defaultAdmin":"#00ff00",
+        "storage": "settings"
       },
       {
         "key": "colorAverage",
         "type": "text",
         "description": "Color of the average value",
-        "defaultAdmin":"#ffff00"
+        "defaultAdmin":"#ffff00",
+        "storage": "settings"
       },
       {
         "key": "colorCursor",
         "type": "text",
         "description": "Color of the draggable cursor",
-        "defaultAdmin":"#000000"
+        "defaultAdmin":"#000000",
+        "storage": "settings"
       }
     ]
   };
@@ -304,7 +348,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
 
   this.resetCriterionFromType = function(criterion){
     console.log("VoteWidgetService::resetCriterionFromType()");
-    var criterion_type = criterion.type;
+    var criterion_type = criterion["@type"];
     //var criterion_reset = {};
 
     // keep original mandatory fields (entity_id, name, type)
@@ -318,11 +362,26 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
 
     // add or reset mandatory typed criterion fields
     if ( criterion_type in this.mandatory_typed_criterion_fields){
+      console.log("this.mandatory_typed_criterion_fields[", criterion_type, this.mandatory_typed_criterion_fields[criterion_type]);
       var fields = this.mandatory_typed_criterion_fields[criterion_type];
       for ( var i = 0; i < fields.length; ++i ){
         if ( "default" in fields[i] ){
           //criterion_reset[fields[i].key] = fields[i].default;
           criterion[fields[i].key] = fields[i].default;
+        }
+      }
+    }
+
+    // remove non-mandatory (typed and non-typed) criterion fields
+    if ( criterion_type in this.mandatory_typed_criterion_fields){
+      for ( var field in criterion ){
+        if ( criterion.hasOwnProperty(field) ){
+          if ( !(
+            _.findWhere(this.mandatory_criterion_fields, { "key": field })
+            || _.findWhere(this.mandatory_typed_criterion_fields[criterion_type], { "key": field })
+          ) ){
+            delete criterion[field];
+          }
         }
       }
     }
@@ -363,7 +422,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
   this.sendJson = function(method, endpoint, post_data, result_holder){
     console.log("putJson()");
 
-    $http({
+    return $http({
         method: method,
         url: endpoint,
         data: post_data,
@@ -394,11 +453,11 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
   };
 
   this.putJson = function(endpoint, post_data, result_holder){
-    this.sendJson('PUT', endpoint, post_data, result_holder);
+    return this.sendJson('PUT', endpoint, post_data, result_holder);
   };
 
   this.postJson = function(endpoint, post_data, result_holder){
-    this.sendJson('POST', endpoint, post_data, result_holder);
+    return this.sendJson('POST', endpoint, post_data, result_holder);
   };
 
 }]);

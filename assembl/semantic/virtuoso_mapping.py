@@ -74,6 +74,16 @@ function_definition_stmts = {
         };
         return __xml_nsexpand_iristr(qname);
     }""",
+    "DB.DBA._EXPAND_QNAME_SUFFIX": """CREATE FUNCTION DB.DBA._EXPAND_QNAME_SUFFIX (
+        in qname varchar) returns IRI
+    {
+        declare exit handler for sqlstate '22023' {
+            return qname;
+        };
+        declare exp varchar;
+        exp := __xml_nsexpand_iristr(qname);
+        return substring(exp, 1, length(exp)-2);
+    }""",
     "DB.DBA._EXPAND_QNAME_INVERSE": """CREATE FUNCTION
         DB.DBA._EXPAND_QNAME_INVERSE (in iri IRI) returns varchar
     {
@@ -100,6 +110,11 @@ iri_definition_stmts = {
       function DB.DBA._EXPAND_QNAME (in id varchar)
         returns varchar,
       function DB.DBA._EXPAND_QNAME_INVERSE (in id_iri varchar)
+        returns varchar
+    """,
+    VirtRDF.QNAME_ID_SUFFIX: """SPARQL
+    create iri class virtrdf:QNAME_ID_SUFFIX using
+      function DB.DBA._EXPAND_QNAME_SUFFIX (in id varchar)
         returns varchar
     """
 }
@@ -360,7 +375,7 @@ class AssemblQuadStorageManager(object):
     sections = {section.name: section for section in chain(*(
         storage.sections for storage in storages))}
     global_graph = QUADNAMES.global_graph
-    current_discussion_storage_version = 11
+    current_discussion_storage_version = 12
 
     def __init__(self, session=None, nsm=None):
         self.session = session or get_session()

@@ -26,18 +26,18 @@ voteApp.controller('indexCtl',
         _.each($scope.settings.items, function(el){
           VoteWidgetService.addDefaultFields(el, VoteWidgetService.mandatory_item_fields);
           VoteWidgetService.addDefaultFields(el, VoteWidgetService.optional_item_fields);
-          if ( el.criteria && el.criteria.length ){
-            _.each(el.criteria, function(el2){
+          if ( "vote_specifications" in el && el.vote_specifications.length ){
+            _.each(el.vote_specifications, function(el2){
               VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_criterion_fields);
               
-              if ( "type" in el2 && el2.type in VoteWidgetService.mandatory_typed_criterion_fields ){
-                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_typed_criterion_fields[el2.type]);
+              if ( "@type" in el2 && el2["@type"] in VoteWidgetService.mandatory_typed_criterion_fields ){
+                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.mandatory_typed_criterion_fields[el2["@type"]]);
               }
 
               VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_criterion_fields);
 
-              if ( "type" in el2 && el2.type in VoteWidgetService.optional_typed_criterion_fields ){
-                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_typed_criterion_fields[el2.type]);
+              if ( "@type" in el2 && el2["@type"] in VoteWidgetService.optional_typed_criterion_fields ){
+                VoteWidgetService.addDefaultFields(el2, VoteWidgetService.optional_typed_criterion_fields[el2["@type"]]);
               }
             });
           }
@@ -74,19 +74,21 @@ voteApp.controller('indexCtl',
           method: 'GET',
           url: my_votes_endpoint_url,
         }).success(function(data, status, headers){
-          console.log(data);
+          console.log("user votes received: ", data);
           var my_votes = data;
           // override default value of given criteria
+          if ( "items" in $scope.settings )
           _.each($scope.settings.items, function(item, item_index){
-            _.each(item.criteria, function(criterion, criterion_index){
-              var entity_id = criterion.entity_id;
-              var my_vote_for_this_criterion = _.findWhere(my_votes, {"criterion": entity_id});
+            if ( "vote_specifications" in item )
+            _.each(item.vote_specifications, function(criterion, criterion_index){
+              var entity_id = criterion["@id"];
+              var my_vote_for_this_criterion = _.findWhere(my_votes, {"vote_spec": entity_id});
               if ( my_vote_for_this_criterion )
               {
                 console.log("value found: " + my_vote_for_this_criterion.value);
                 var new_value = my_vote_for_this_criterion.value;
                 // interpret vote value differently depending on criterion type
-                if ( criterion.type == "BinaryIdeaVote" )
+                if ( criterion["@type"] == "BinaryIdeaVote" )
                 {
                   if ( my_vote_for_this_criterion.value === true || my_vote_for_this_criterion.value == "true" || my_vote_for_this_criterion.value === 1 || my_vote_for_this_criterion.value == "1" )
                   {
@@ -96,15 +98,19 @@ voteApp.controller('indexCtl',
                   {
                     new_value = 0;
                   }
-                } else // if ( criterion.type == "LickertIdeaVote" )
+                } else // if ( criterion["@type"] == "LickertIdeaVote" )
                 {
-                  var valueMin = parseFloat(criterion.valueMin);
-                  var valueMax = parseFloat(criterion.valueMax);
-                  new_value = valueMin + my_vote_for_this_criterion.value * (valueMax - valueMin);
+                  //var valueMin = "minimum" in criterion ? parseFloat(criterion.minimum) : 0;
+                  //var valueMax = "maximum" in criterion ? parseFloat(criterion.maximum) : 100;
+                  //new_value = valueMin + my_vote_for_this_criterion.value * (valueMax - valueMin);
+
+                  new_value = my_vote_for_this_criterion.value;
                 }
                 
-                $scope.settings.items[item_index].criteria[criterion_index].valueDefault = new_value;
+                $scope.settings.items[item_index].vote_specifications[criterion_index].valueDefault = new_value;
                 console.log("value set: " + new_value);
+              } else {
+                console.log("error: we could not find a definition of this criterion for which the user has voted: ", entity_id);
               }
             });
           });
@@ -167,7 +173,10 @@ voteApp.controller('indexCtl',
         var valueMin = parseFloat($(this).attr("data-criterion-value-min"));
         var valueMax = parseFloat($(this).attr("data-criterion-value-max"));
         var value = parseFloat($(this).attr("data-criterion-value"));
-        var valueToPost = (value - valueMin) / (valueMax - valueMin); // the posted value has to be a float in [0;1]
+
+        //var valueToPost = (value - valueMin) / (valueMax - valueMin); // the posted value has to be a float in [0;1]
+        var valueToPost = value;
+
         $scope.myVotes[$(this).attr("data-criterion-id")] = valueToPost;
       });
 
@@ -212,16 +221,16 @@ voteApp.controller('indexCtl',
           {
             for ( var i = 0; !found && i < $scope.settings.items.length; ++i )
             {
-              if ( "criteria" in $scope.settings.items[i] )
+              if ( "vote_specifications" in $scope.settings.items[i] )
               {
-                for ( var j = 0; !found && j < $scope.settings.items[i].criteria.length; ++j )
+                for ( var j = 0; !found && j < $scope.settings.items[i].vote_specifications.length; ++j )
                 {
-                  if ( "entity_id" in $scope.settings.items[i].criteria[j] && $scope.settings.items[i].criteria[j].entity_id == k )
+                  if ( "@id" in $scope.settings.items[i].vote_specifications[j] && $scope.settings.items[i].vote_specifications[j].entity_id == k )
                   {
-                    if ( "type" in $scope.settings.items[i].criteria[j] )
+                    if ( "@type" in $scope.settings.items[i].vote_specifications[j] )
                     {
                       found = true;
-                      vote_type = $scope.settings.items[i].criteria[j].type;
+                      vote_type = $scope.settings.items[i].vote_specifications[j]["@type"];
                     }
                   }
                 }
@@ -372,10 +381,18 @@ voteApp.controller('indexCtl',
       console.log("item_data:");
       console.log(item_data);
       var config = $scope.settings;
-      var criterion = item_data.criteria[0];
-      var criterionValue = (("valueDefault" in criterion) && (criterion.valueDefault || criterion.valueDefault === 0.0)) ? criterion.valueDefault : (("valueMin" in criterion) ? criterion.valueMin : 0);
+      if ( !("vote_specifications" in item_data && item_data.vote_specifications.length > 0) ){
+        console.log("error: this item has no 'vote_specifications' field");
+        return;
+      }
+      var criterion = item_data.vote_specifications[0];
+      var valueMin = ("minimum" in criterion) ? criterion.minimum : 0;
+      var valueMax = ("maximum" in criterion) ? criterion.maximum : 100;
+      var valueDefault = ("valueDefault" in criterion) ? criterion.valueDefault : valueMin;
+      var criterionValue = valueDefault;
       console.log("criterionValue: ", criterionValue);
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
+      
 
       // create the graph, as a SVG in the d3 container div
       var svg = destination
@@ -387,16 +404,22 @@ voteApp.controller('indexCtl',
       svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name", criterion.name)
-        .attr("data-criterion-id", criterion["entity_id"]) // contains something like "local:Idea/3"
+        .attr("data-criterion-id", criterion["@id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionValue)
-        .attr("data-criterion-value-min", criterion.valueMin)
-        .attr("data-criterion-value-max", criterion.valueMax)
+        .attr("data-criterion-value-min", valueMin)
+        .attr("data-criterion-value-max", valueMax)
       ;
 
+      console.log("criterion.minimum: ", ("minimum" in criterion ? criterion.minimum : "not defined"));
+      console.log("valueMin: ", valueMin);
+      console.log("criterion.maximum: ", ("maximum" in criterion ? criterion.maximum : "not defined"));
+      console.log("valueMax: ", valueMax);
+      console.log("item_data.height: ", item_data.height);
+      console.log("config.padding: ", config.padding);
 
       // create vertical scale
       var scale = d3.scale.linear()
-        .domain([criterion.valueMin, criterion.valueMax])
+        .domain([valueMin, valueMax])
         .range([item_data.height - config.padding, config.padding])
         .clamp(true);
 
@@ -489,7 +512,7 @@ voteApp.controller('indexCtl',
           .attr("x", xPosCenter -gradientWidth/2 )
           .attr("y", config.padding-1 ) // this is the same as .attr("y", scale(criterion.valueMax) )
           .attr("width",gradientWidth)
-          .attr("height",scale(criterion.valueMin) - config.padding +1)
+          .attr("height",scale(valueMin) - config.padding +1)
           .attr("fill","url(#gradient_"+criterion.id+")");
       }
 
@@ -578,6 +601,9 @@ voteApp.controller('indexCtl',
           .text(criterion.descriptionMax);
       }
 
+      console.log("criterionValue: ", criterionValue);
+      console.log("scale(criterionValue): ", scale(criterionValue));
+
       // draw the cursor
       svg.append("circle")
         .attr("cx", xPosCenter)
@@ -601,7 +627,11 @@ voteApp.controller('indexCtl',
       //console.log("item_data:");
       //console.log(item_data);
       var config = $scope.settings;
-      var criteria = item_data.criteria;
+      if ( !("vote_specifications" in item_data && item_data.vote_specifications.length) ){
+        console.log("error: item has no 'vote_specifications' field");
+        return;
+      }
+      var criteria = item_data.vote_specifications;
 
       if ( criteria.length < 2 )
       {
@@ -609,8 +639,16 @@ voteApp.controller('indexCtl',
         return;
       }
 
-      var criterionXValue = (criteria[0].valueDefault || criteria[0].valueDefault === 0.0) ? criteria[0].valueDefault : criteria[0].valueMin;
-      var criterionYValue = (criteria[1].valueDefault || criteria[1].valueDefault === 0.0) ? criteria[1].valueDefault : criteria[1].valueMin;
+      var criterionXValueMin = ("minimum" in criteria[0]) ? criteria[0].minimum : 0;
+      var criterionXValueMax = ("maximum" in criteria[0]) ? criteria[0].maximum : 100;
+      var criterionXValueDefault = ("valueDefault" in criteria[0]) ? criteria[0].valueDefault : criterionXValueMin;
+
+      var criterionYValueMin = ("minimum" in criteria[1]) ? criteria[1].minimum : 0;
+      var criterionYValueMax = ("maximum" in criteria[1]) ? criteria[1].maximum : 100;
+      var criterionYValueDefault = ("valueDefault" in criteria[1]) ? criteria[1].valueDefault : criterionYValueMin;
+
+      var criterionXValue = criterionXValueDefault;
+      var criterionYValue = criterionYValueDefault;
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
 
       // create the graph, as a SVG in the d3 container div
@@ -623,32 +661,32 @@ voteApp.controller('indexCtl',
       svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name", criteria[0].name)
-        .attr("data-criterion-id", criteria[0]["entity_id"]) // contains something like "local:Idea/3"
+        .attr("data-criterion-id", criteria[0]["@id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionXValue)
-        .attr("data-criterion-value-min", criteria[0].valueMin)
-        .attr("data-criterion-value-max", criteria[0].valueMax)
+        .attr("data-criterion-value-min", criterionXValueMin)
+        .attr("data-criterion-value-max", criterionXValueMax)
         .attr("data-criterion-type", "x")
       ;
 
       svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name", criteria[1].name)
-        .attr("data-criterion-id", criteria[1]["entity_id"]) // contains something like "local:Idea/3"
+        .attr("data-criterion-id", criteria[1]["@id"]) // contains something like "local:Idea/3"
         .attr("data-criterion-value", criterionYValue)
-        .attr("data-criterion-value-min", criteria[1].valueMin)
-        .attr("data-criterion-value-max", criteria[1].valueMax)
+        .attr("data-criterion-value-min", criterionYValueMin)
+        .attr("data-criterion-value-max", criterionYValueMax)
         .attr("data-criterion-type", "y")
       ;
 
 
       // create X and Y scales
       var xScale = d3.scale.linear()
-        .domain([criteria[0].valueMin, criteria[0].valueMax])
+        .domain([criterionXValueMin, criterionXValueMax])
         .range([config.padding, item_data.width - config.padding])
         .clamp(true);
 
       var yScale = d3.scale.linear()
-        .domain([criteria[1].valueMin, criteria[1].valueMax])
+        .domain([criterionYValueMin, criterionYValueMax])
         .range([item_data.height - config.padding, config.padding])
         .clamp(true);
 
@@ -871,7 +909,8 @@ voteApp.controller('indexCtl',
       }
 
 
-
+      console.log("criterionXValue: ", criterionXValue);
+      console.log("criterionYValue: ", criterionYValue);
 
 
       // draw the cursor (inner disc)
@@ -905,13 +944,17 @@ voteApp.controller('indexCtl',
       console.log("item_data:");
       console.log(item_data);
       var config = $scope.settings;
-      var criterion = item_data.criteria[0];
+      if ( !("vote_specifications" in item_data && item_data.vote_specifications.length > 0) ){
+        console.log("error: item has no 'vote_specifications' field");
+        return;
+      }
+      var criterion = item_data.vote_specifications[0];
       var criterionValue = (criterion.valueDefault || criterion.valueDefault === 0) ? criterion.valueDefault : null;
 
       var div = $('<div>');
       div.attr({
         'class': 'criterion',
-        'data-criterion-id': criterion.entity_id,
+        'data-criterion-id': criterion["@id"],
         'data-criterion-name': criterion.name,
         'data-criterion-value': null
       });
@@ -919,20 +962,31 @@ voteApp.controller('indexCtl',
 
       // adapt data format from BinaryIdeaVote which has labelYes and labelNo, to PluralityIdeaVote which has possibleValues
       // criterion.possibleValues is like so: [ { label: 'Choice 1', value: 0 }, { label: 'Choice 2', value: 1} ]
-      if ( 'type' in criterion && criterion.type == 'BinaryIdeaVote' )
-      {
-        var labelYes = ( 'labelYes' in criterion ) ? criterion.labelYes : 'Yes';
-        var labelNo = ( 'labelNo' in criterion ) ? criterion.labelNo : 'No';
-        criterion.possibleValues = [
-          {
-            "label": labelNo,
-            "value": 0 // or false?
-          },
-          {
-            "label": labelYes,
-            "value": 1 // or true?
-          }
-        ];
+      if ( '@type' in criterion ){
+        if ( criterion["@type"] == 'BinaryVoteSpecification' ){
+          var labelYes = ( 'labelYes' in criterion ) ? criterion.labelYes : 'Yes';
+          var labelNo = ( 'labelNo' in criterion ) ? criterion.labelNo : 'No';
+          criterion.possibleValues = [
+            {
+              "label": labelNo,
+              "value": 0 // or false?
+            },
+            {
+              "label": labelYes,
+              "value": 1 // or true?
+            }
+          ];
+        } else if ( criterion["@type"] == 'MultipleChoiceVoteSpecification' ){
+          criterion.possibleValues = [];
+          var i = 0;
+          if ( "candidates" in criterion )
+          criterion.candidates.forEach(function(el){
+            criterion.possibleValues.push({
+              "label": el,
+              "value": i++
+            });
+          });
+        }
       }
 
       var updateSelectedValue = function(){
@@ -967,10 +1021,10 @@ voteApp.controller('indexCtl',
           {
             var option = $('<div>');
             var input = $('<input>');
-            var radio_id = 'radio_'+criterion.entity_id+'_'+item.value;
+            var radio_id = 'radio_'+criterion["@id"]+'_'+item.value;
             input.attr({
               type: 'radio',
-              name: criterion.entity_id, // criterion.name,
+              name: criterion["@id"], // criterion.name,
               value: item.value,
               id: radio_id
             });
@@ -1027,17 +1081,17 @@ voteApp.controller('indexCtl',
 
 
         var td = $("<th/>");
-        if ( item.criteria && item.criteria.length > 0 )
+        if ( item.vote_specifications && item.vote_specifications.length > 0 )
         {
-          if ( item.criteria.length == 1 && item.criteria[0].name )
-            td.text(item.criteria[0].name);
+          if ( item.vote_specifications.length == 1 && item.vote_specifications[0].name )
+            td.text(item.vote_specifications[0].name);
           else
           {
             var a = [];
-            for ( var j = 0; j < item.criteria.length; ++j )
+            for ( var j = 0; j < item.vote_specifications.length; ++j )
             {
-              if ( item.criteria[j].name )
-                a.push ( item.criteria[j].name );
+              if ( item.vote_specifications[j].name )
+                a.push ( item.vote_specifications[j].name );
             }
             td.text(a.join(" / "));
           }

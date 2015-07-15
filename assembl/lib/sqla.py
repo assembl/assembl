@@ -884,38 +884,40 @@ class BaseOps(object):
         for key, value in json.iteritems():
             if key in local_view:
                 parse_instruction = local_view[key]
-                if parse_instruction is False:
-                    # Ignore
-                    continue
-                elif parse_instruction is True:
-                    pass
-                elif isinstance(parse_instruction, list):
-                    # List specification is redundant in parse_defs.
-                    # These cases should always be handled as relations.
-                    raise NotImplementedError()
-                elif parse_instruction[0] == '&':
-                    setter = getattr(
-                        self.__class__, parse_instruction[1:], None)
-                    if not setter:
-                        raise HTTPBadRequest("No setter %s in class %s" % (
-                            parse_instruction[1:], self.__class__.__name__))
-                    if not pyinspect.ismethod(setter):
-                        raise HTTPBadRequest("Not a setter: %s in class %s" % (
-                            parse_instruction[1:], self.__class__.__name__))
-                    (args, varargs, keywords, defaults) = \
-                        pyinspect.getargspec(setter)
-                    if len(args) - len(defaults or ()) != 2:
-                        raise HTTPBadRequest(
-                            "Wrong number of args: %s(%d) in class %s" % (
-                                parse_instruction[1:], len(args),
-                                self.__class__.__name__))
-                    setter(self, value)
-                elif parse_instruction[0] == "'":
-                    if value != parse_instruction[1:]:
-                        raise HTTPBadRequest("%s should be %s'" % (
-                            key, parse_instruction))
-                else:
-                    key = parse_instruction
+            else:
+                parse_instruction = local_view.get('_default', False)
+            if parse_instruction is False:
+                # Ignore
+                continue
+            elif parse_instruction is True:
+                pass
+            elif isinstance(parse_instruction, list):
+                # List specification is redundant in parse_defs.
+                # These cases should always be handled as relations.
+                raise NotImplementedError()
+            elif parse_instruction[0] == '&':
+                setter = getattr(
+                    self.__class__, parse_instruction[1:], None)
+                if not setter:
+                    raise HTTPBadRequest("No setter %s in class %s" % (
+                        parse_instruction[1:], self.__class__.__name__))
+                if not pyinspect.ismethod(setter):
+                    raise HTTPBadRequest("Not a setter: %s in class %s" % (
+                        parse_instruction[1:], self.__class__.__name__))
+                (args, varargs, keywords, defaults) = \
+                    pyinspect.getargspec(setter)
+                if len(args) - len(defaults or ()) != 2:
+                    raise HTTPBadRequest(
+                        "Wrong number of args: %s(%d) in class %s" % (
+                            parse_instruction[1:], len(args),
+                            self.__class__.__name__))
+                setter(self, value)
+            elif parse_instruction[0] == "'":
+                if value != parse_instruction[1:]:
+                    raise HTTPBadRequest("%s should be %s'" % (
+                        key, parse_instruction))
+            else:
+                key = parse_instruction
             accessor = None
             accessor_name = key
             target_cls = None
@@ -1097,19 +1099,20 @@ class BaseOps(object):
                         extra = set(current_instances) - set(instances)
                         if extra:
                             assert len(accessor.remote_side) == 1
-                            remote = iter(next(accessor.remote_side))
+                            remote = next(iter(accessor.remote_side))
                             if remote.nullable:
                                 # TODO: check update permissions on that object.
                                 for inst in missing:
                                     setattr(inst, remote.key, None)
                             else:
-                                if not inst.user_can(
-                                        user_id, CrudPermissions.DELETE,
-                                        permissions):
-                                    raise HTTPUnauthorized(
-                                        "Cannot delete object %s", inst.uri())
-                                else:
-                                    self.db.delete(inst)
+                                for inst in missing:
+                                    if not inst.user_can(
+                                            user_id, CrudPermissions.DELETE,
+                                            permissions):
+                                        raise HTTPUnauthorized(
+                                            "Cannot delete object %s", inst.uri())
+                                    else:
+                                        self.db.delete(inst)
                 elif isinstance(accessor, property):
                     setattr(self, accessor_name, instances)
                 elif isinstance(accessor, Column):
@@ -1489,7 +1492,8 @@ event.listen(BaseOps, 'after_update', orm_update_listener, propagate=True)
 event.listen(BaseOps, 'after_delete', orm_delete_listener, propagate=True)
 
 
-def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None):
+def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
+                     **engine_kwargs):
     """Return an SQLAlchemy engine configured as per the provided config."""
     if session_maker is None:
         if session_maker_is_initialized():
@@ -1500,7 +1504,7 @@ def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None)
     engine = session_maker.session_factory.kw['bind']
     if engine:
         return engine
-    engine = engine_from_config(settings, 'sqlalchemy.')
+    engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
     session_maker.configure(bind=engine)
     global db_schema, _metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
     if settings['sqlalchemy.url'].startswith('virtuoso:'):
