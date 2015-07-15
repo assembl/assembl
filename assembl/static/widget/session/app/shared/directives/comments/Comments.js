@@ -51,11 +51,9 @@ SessionApp.directive('comments', [
                     return UserService.get({id: discussion_id}).$promise;
 
                 }).then(function(user){
-                    user.avatar_url_base = user.avatar_url_base + 30
+                    user.avatar_url_base = user.avatar_url_base + 30;
                     $scope.currentUser = user;
-
                 });
-
             }
 
             /**
