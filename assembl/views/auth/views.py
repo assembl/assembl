@@ -525,7 +525,8 @@ def velruse_login_complete_view(request):
                      " for " + velruse_accounts)
             # We will just the last one from the loop for now.
         trusted_emails.update([
-            a.email for a in idp_accounts if a.provider.trust_emails])
+            a.email for a in idp_accounts
+            if a.provider.trust_emails and a.email])
     else:
         # Create it if not found
         idp_class = IdentityProviderAccount
