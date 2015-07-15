@@ -68,6 +68,23 @@ _.extend(Backbone.Marionette.View.prototype, {
     }
   },
 
+  listenTo: function() {
+    // Often, we listen on a promise in the initalizer. The view may already be dead.
+    if (this.isViewDestroyed()) {
+      return;
+    }
+    Object.getPrototypeOf(Backbone.Marionette.View.prototype).listenTo.apply(this, arguments);
+  },
+
+  listenToOnce: function() {
+    // Often, we listen on a promise in the initalizer. The view may already be dead.
+    if (this.isViewDestroyed()) {
+      return;
+    }
+    Object.getPrototypeOf(Backbone.Marionette.View.prototype).listenToOnce.apply(this, arguments);
+  },
+
+
   /*
    * Use to check if you should (re)render
    */
