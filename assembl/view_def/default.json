@@ -122,7 +122,7 @@
         "@extends": "PostSource",
         "fb_source_id": true,
         "url_path": true,
-        "creator_id": true
+        "creator_id": "&get_creator_uri"
     },
     "FacebookGroupSource": {
         "@extends": "FacebookGenericSource"
