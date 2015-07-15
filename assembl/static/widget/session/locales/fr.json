@@ -29,5 +29,11 @@
     "emptyQuestion":"Veuillez ajouter une question dans le menu d'edition",
     "dateRange":"Plage de dates",
     "valid":"Validez",
-    "noIdeasForRating":"Aucune idée n'a encore été poster"
+    "noIdeasForRating":"Aucune idée n'a encore été poster",
+    "adminCreateFromIdeaTitle":"",
+    "adminCreateFromIdeaHelper":"",
+    "seeMoreDetail":"",
+    "settings":"",
+    "contribution":"",
+    "selection":""
 }

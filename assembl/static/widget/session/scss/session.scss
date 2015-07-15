@@ -1,9 +1,9 @@
 .session {
   font-family:'helvetica neue',helvetica,arial,'lucida grande',sans-serif;
   -webkit-font-smoothing: antialiased;
-  width: 95%;
+  //width: 95%;
   margin: 0 auto;
-  padding-top: 20px;
+  //padding-top: 20px;
   .session-comment {
     padding: 0;
     height: 660px;
@@ -101,7 +101,7 @@
     }
 
     .user-comment{
-        background-color: #ebeaea;
+        background-color: #FFFFFF;
         border-radius: 4px;
         padding: 5px;
     }
@@ -237,5 +237,18 @@
     i{
       color:#f1532e;
     }
+  }
+
+  .bloc-left, .bloc-right{
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .bloc-left{
+
+  }
+
+  .bloc-right {
+    background-color: #F3F3F3;
   }
 }

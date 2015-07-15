@@ -5,10 +5,15 @@ TopMenuModule.controller('TopMenuController', [
     '$stateParams',
     'UserService',
     'WidgetService',
+    '$location',
 
-    function($scope, $stateParams, UserService, WidgetService){
+    function($scope, $stateParams, UserService, WidgetService, $location){
 
         $scope.urlLink = $scope.$parent.$state.params.config;
+
+        $scope.isActive = function(route){
+            return route === $location.path();
+        }
 
         var id = decodeURIComponent($scope.urlLink).split('/')[1],
             widget = WidgetService.get({id: id}).$promise;
@@ -29,7 +34,5 @@ TopMenuModule.controller('TopMenuController', [
                 $scope.visibleMenu = true;
             }
         });
-
-    $scope.urlLink = $scope.$parent.$state.params.config;
 
 }]);

@@ -8,6 +8,7 @@ HomeModule.config(['$stateProvider', function($stateProvider) {
             url: '/home?config',
             templateUrl: 'app/components/home/HomeView.html',
             controller: 'HomeController',
+            activetab: 'home',
             resolve: {
                 config: ['WidgetService','$stateParams', function(WidgetService, $stateParams){
                     if($stateParams.config){

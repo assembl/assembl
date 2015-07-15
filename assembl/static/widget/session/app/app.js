@@ -19,6 +19,15 @@ SessionApp.run(['$rootScope', '$state', '$stateParams',
         var locale = window.navigator.userLanguage || window.navigator.language;
         moment.locale(locale);
 
+        $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
+            $rootScope.destinationState = toState;
+            $rootScope.destinationParams = toStateParams;
+        });
+
+        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState) {
+            $rootScope.destinationState = toState;
+        });
+
         // Make state information available to $rootScope, and thus $scope in our controllers
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
@@ -54,7 +63,7 @@ SessionApp.config(['$resourceProvider', '$stateProvider', '$urlRouterProvider','
         suffix: '.json'
     });
 
-    $translateProvider.preferredLanguage('fr');
+    $translateProvider.preferredLanguage('en');
 
     /**
      * Set growl position and timeout

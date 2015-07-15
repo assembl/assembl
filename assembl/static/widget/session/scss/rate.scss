@@ -1,7 +1,20 @@
 .rate-container{
-  width: 80%;
+  //width: 80%;
   margin:0 auto;
-  padding-top: 20px;
+  //padding-top: 20px;
+
+  .bloc-left, .bloc-right{
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .bloc-left{
+    background-color: #F3F3F3;
+  }
+
+  .bloc-right {
+    background-color: #FFFFFF;
+  }
 }
 
 li{

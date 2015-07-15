@@ -1,5 +1,5 @@
 <section class="rate-container">
-    <p>
+    <!--<p>
     <h3>{{'topIdea' | translate}}</h3>
     </p>
     <p ng-show="ideas.length < 1"><i class="fa fa-exclamation-triangle fa-lg"></i> {{'noIdeasForRating' | translate}}</p>
@@ -21,5 +21,47 @@
             </li>
         </ul>
         <button ng-show="ideas.length > 0" class="btn btn-primary btn-xs pull-right" ng-click="validVote()">{{'validateChoose' | translate}}</button>
-    </form>
+    </form>-->
+
+    <div class="session">
+        <div class="col-md-7 bloc-left">
+            <div class="msg" ng-show="ideas.length < 1">
+                <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'firstToPost'| translate}}</p>
+            </div>
+            <div class="session-comment">
+                <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:'creationDate':'reverse' ">
+                    <div class="pull-left thumbnail">
+                        <img class="media-object img-circle" ng-src="{{idea.avatar}}" alt="30x30" style="width: 30px; height: 30px;">
+                    </div>
+                    <div class="media-body">
+                        <div>
+                            <h6 class="media-heading">{{idea.username}}</h6>
+                            <i class="text-info time">{{idea.beautify_date}}</i>
+                        </div>
+                        <div><h4>{{idea.shortTitle}}</h4></div>
+                        <span class="pull-left"><i class="icon-lamp"></i></span>
+                    <span class="pull-right">
+                        <!-- Vote directive -->
+                        <vote idea="idea" widget="widget"></vote>
+                    </span>
+                        <div class="row">
+                            <div class="col-md-12 comment-idea">
+                                <p>{{idea.definition}}</p>
+                            </div>
+                        </div>
+                        <!-- Comments directive -->
+                        <comments idea="idea" widget="widget"></comments>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-5 bloc-right">
+
+        </div>
+    </div>
+
+
+
 </section>

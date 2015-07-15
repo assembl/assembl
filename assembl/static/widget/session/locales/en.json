@@ -21,7 +21,8 @@
     "proposeIdea":"Submit your idea to answer the question above :",
     "validateChoose":"Validate your choice",
     "session_question":"This issue will be visible above the card",
-    "session_question_title":"Question",
+    "session_question_title":"Write a question on which participants would react to",
+    "session_question_helper":"You're mobilizing participants on <<{{idea}}>>",
     "session_jeton_number":"Number of token",
     "session_jeton_title":"Token",
     "start_date":"Start of session",
@@ -29,5 +30,11 @@
     "emptyQuestion":"Please add a question in the edit menu",
     "dateRange":"Date range",
     "valid":"Valid",
-    "noIdeasForRating":"No idea has not yet been posted"
+    "noIdeasForRating":"No idea has not yet been posted",
+    "adminCreateFromIdeaTitle":"Would you like to create a creativity session on << {{idea}} >> ?",
+    "adminCreateFromIdeaHelper":"A creativity session helps rejuvenate the discussion by exposing participants to disruptive questions.",
+    "seeMoreDetail":"See more detail",
+    "settings":"Settings",
+    "contribution":"Contribution",
+    "selection":"Selection"
 }

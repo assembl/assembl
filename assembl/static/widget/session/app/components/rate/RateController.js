@@ -32,46 +32,25 @@ RateModule.controller('RateController', [
 
             $http.get(rootUrl).then(function (response) {
 
-                if (response.data.length) {
-                    angular.forEach(response.data, function (item) {
+                angular.forEach(response.data, function (item) {
+                    if (item.widget_add_post_endpoint) {
+                        item.widget_add_post_endpoint = UtilsService.getURL(_.values(item.widget_add_post_endpoint));
+                        item.beautify_date = moment(new Date(item.creationDate)).fromNow();
+                        ideas.push(item);
+                    }
+                });
 
-                        if (item.widget_add_post_endpoint) {
-
-                            ideas.push(item);
-                        }
-                    })
-
-                }
                 return ideas;
 
             }).then(function (ideas) {
 
-                var urlRoot = UtilsService.getURL($scope.widget.user_states_url);
+                angular.forEach(ideas, function (idea) {
+                    var urlRoot = UtilsService.getURL(idea.proposed_in_post.idCreator);
 
-                $http.get(urlRoot).then(function (response) {
-
-                    if (response.data.length) {
-                        var rate = JSON.parse(response.data[0].session_user_vote);
-
-                        angular.forEach(ideas, function (idea) {
-
-                            var id_idea = idea['@id'].split('/')[1],
-                                id_idea = parseInt(id_idea, 10);
-
-                            idea.rate = 0;
-
-                            angular.forEach(rate, function (r) {
-                                var id_rate = parseInt(_.keys(r), 10),
-                                    rate_value = _.values(r);
-                                //FIXME : need a default value for rating
-                                if (id_idea === id_rate) {
-
-                                    idea.rate = parseInt(rate_value, 10);
-                                }
-                            });
-                        });
-
-                    }
+                    $http.get(urlRoot).then(function (response) {
+                        idea.username = response.data.name;
+                        idea.avatar = response.data.avatar_url_base + '30';
+                    });
 
                 });
 

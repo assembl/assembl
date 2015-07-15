@@ -8,6 +8,7 @@ RateModule.config(['$stateProvider', function($stateProvider) {
             url: '/rate?config',
             templateUrl: 'app/components/rate/RateView.html',
             controller: 'RateController',
+            activetab: 'rate',
             resolve: {
                 config: ['WidgetService','$stateParams', function(WidgetService, $stateParams){
                     if($stateParams.config){

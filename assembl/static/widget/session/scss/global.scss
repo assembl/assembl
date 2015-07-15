@@ -2,6 +2,7 @@
 @import "rate";
 @import "edit";
 @import "admin";
+@import "topMenu";
 
 nav{
   display: block;
@@ -12,4 +13,17 @@ nav{
   border-bottom: none;
   width: 25%;
   margin: 0 auto;
+}
+
+::-webkit-scrollbar {
+    width:  .5em;
+    height: .5em;
+}
+
+::-webkit-scrollbar-thumb {
+    background: slategray;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
 }

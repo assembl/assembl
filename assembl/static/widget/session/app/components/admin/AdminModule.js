@@ -8,6 +8,7 @@ AdminModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             url: '/admin?config',
             templateUrl: 'app/components/admin/AdminView.html',
             controller: 'AdminController',
+            activetab: 'admin',
             resolve: {
                 config: ['WidgetService','$stateParams', function(WidgetService, $stateParams){
                     if($stateParams.config){
@@ -23,6 +24,7 @@ AdminModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             url: '/admin/create_from_idea?admin&idea&view',
             templateUrl: 'app/components/admin/CreateView.html',
             controller: 'CreateController',
+            activetab: 'create',
             resolve: {
                 idea: ['IdeaService', '$stateParams', function(IdeaService, $stateParams){
                     if($stateParams.idea){

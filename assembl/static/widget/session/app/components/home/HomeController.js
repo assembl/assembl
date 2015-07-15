@@ -71,9 +71,6 @@ HomeModule.controller('HomeController', [
 
                 });
 
-                console.debug(ideas)
-
-
                 $scope.ideas = ideas;
             });
         }
