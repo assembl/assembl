@@ -150,7 +150,7 @@ class AgentProfile(Base):
                 other_account.profile = self
         if other_profile.name and not self.name:
             self.name = other_profile.name
-        for post in other_user.posts_created:
+        for post in other_profile.posts_created:
             post.creator = self
             post.creator_id = self.id
         from .action import Action
