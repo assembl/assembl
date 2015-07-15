@@ -150,11 +150,14 @@ class AgentProfile(Base):
                 other_account.profile = self
         if other_profile.name and not self.name:
             self.name = other_profile.name
-        # TODO: similarly for posts
+        for post in other_user.posts_created:
+            post.creator = self
+            post.creator_id = self.id
         from .action import Action
         for action in session.query(Action).filter_by(
             actor_id=other_profile.id).all():
                 action.actor = self
+                action.actor_id = self.id
         my_status_by_discussion = {
             s.discussion_id: s for s in self.agent_status_in_discussion
         }
@@ -711,8 +714,6 @@ class User(AgentProfile):
                 extract.creator = self
             for extract in other_user.extracts_owned:
                 extract.owner = self
-            for post in other_user.posts_created:
-                post.creator = self
             for role in other_user.roles:
                 role.user = self
             for role in other_user.local_roles:
@@ -747,6 +748,8 @@ class User(AgentProfile):
         return super(User, self).display_name()
 
     def __repr__(self):
+        if inspect(self).detached:
+            return "Detached user"
         return "<User id=%d '%s'>" % (self.id, self.name)
 
     @property
