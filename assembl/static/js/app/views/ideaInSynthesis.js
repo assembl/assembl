@@ -248,7 +248,12 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
     
     navigateToIdea: function () {
       var panel = this.getPanel();
-      if(panel.isPrimaryNavigationPanel()) {
+      // If the current panel is a primary navigation panel (a synthesis editor is one), and that the panel group also has an idea panel of a conversation panel, then we consider that we can use them to show information associated to selected idea.
+      // Otherwise, we open a pop-in containing the idea panel and the conversation panel, showing information associated to selected idea.
+      // TODO: validate with the team that this is really what we want to do.
+      if( panel.isPrimaryNavigationPanel()
+        && (panel.getContainingGroup().findViewByType(PanelSpecTypes.IDEA_PANEL) || panel.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST))
+      ) {
         panel.getContainingGroup().setCurrentIdea(this.original_idea);
       }
       else {
