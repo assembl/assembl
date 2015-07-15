@@ -24,7 +24,7 @@ from .auth import User, AgentProfile
 from .generic import Content
 from .discussion import Discussion
 from .idea import Idea
-
+from ..auth import P_READ, P_SYSADMIN, CrudPermissions
 
 class Action(TombstonableMixin, DiscussionBoundBase):
     """
@@ -285,3 +285,4 @@ class ViewIdea(ActionOnIdea):
             actor=User.uri_generic(self.actor_id))
 
     verb = 'viewed'
+    crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN, P_SYSADMIN)
