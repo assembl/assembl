@@ -413,6 +413,7 @@ class CollectionContext(TraversalContext):
                     inst = cls(**dict(process_args(kwargs, cls)))
                 else:
                     inst = cls.create_from_json(json, user_id, self)
+                    kwargs.update(json)
             except Exception as e:
                 print_exc()
                 raise e
