@@ -128,10 +128,6 @@ HomeModule.controller('HomeController', [
                 $scope.displayed_card_index = $scope.displayed_cards.length - 1;
                 $scope.displayed_cards[$scope.displayed_card_index].body = $sce.trustAsHtml($scope.game[$scope.random_index].body);
                 $scope.game.splice($scope.random_index, 1);
-
-
-                //console.log('random_index', $scope.random_index)
-                //console.log('$scope.displayed_card_index', $scope.displayed_card_index)
             }
 
         },

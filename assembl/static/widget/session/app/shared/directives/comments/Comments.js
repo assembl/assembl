@@ -68,7 +68,6 @@ SessionApp.directive('comments', [
 
                 $http.get(rootUrl).then(function(response){
                     angular.forEach(response.data, function(com){
-
                         var user_id = com.idCreator.split('/')[1];
 
                         com.date = moment(com.date).fromNow();
@@ -118,8 +117,8 @@ SessionApp.directive('comments', [
                         method:'POST',
                         url: rootUrl,
                         data: $.param(data),
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        //headers: {'Content-Type': 'application/json'}
+                        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        headers: {'Content-Type': 'application/json'}
                     }).success(function(){
 
                         $scope.message = "commentSubIdea:success";

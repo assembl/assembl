@@ -112,7 +112,7 @@ RateModule.controller('RateController', [
                     url: rootUrlMessage,
                     data: $.param(obj),
                     async: true,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    headers: {'Content-Type': 'application/json'}
                 }).success(function (data, status, headers) {
 
                     $scope.message = 'validVote:success';
@@ -134,7 +134,7 @@ RateModule.controller('RateController', [
                     url: rootUrlSubIdea,
                     data: $.param(obj),
                     async: true,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    headers: {'Content-Type': 'application/json'}
                 }).success(function (data, status, headers) {
 
                     $scope.message = 'validVote:success';
