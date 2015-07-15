@@ -1,39 +1,34 @@
 {
-    "comment":"Écrire un commentaire...",
-    "acomment":"Commentaire",
-    "send":"Envoyez",
-    "reply":"Répondre",
-    "comments":"Voir les {{nb}} commentaires",
-    "vote":"Votez",
-    "title":"titre",
-    "cancel":"Annuler",
-    "validVote":"Validez vos votes",
-    "ideaPrompt":"Cette question est relative à l'idée \"{{parentIdeaTitle}} \". Inspirez-vous de la carte ci-dessous pour y répondre !",
-    "needToConnect":"Vous allez être redirigé vers la page de connexion dans {{time}}s ",
-    "connect":"Connectez-vous !",
-    "subIdeaPosted":"Votre sous-idée a bien été publiée",
-    "validVoteCatcher":"catching success",
-    "errorVoteCatcher":"catch error",
-    "topIdea":"Top des idées",
-    "shuffle":"Piocher une nouvelle carte",
-    "firstToPost":"Personne n'a encore contribué à cette nouvelle idée. La votre sera la première!",
-    "pointToShare":"Il vous reste {{wallet}} points à répartir sur les idées suivantes",
-    "proposeIdea":"Proposez votre idée pour répondre à la question posée :",
-    "validateChoose":"Valider votre choix",
-    "session_question":"Cette question sera visible au dessus de la carte",
-    "session_question_title":"Question",
-    "session_jeton_number":"Nombre de jetons",
-    "session_jeton_title":"Jetons",
-    "start_date":"Début de session",
-    "end_date":"Fin de session",
-    "emptyQuestion":"Veuillez ajouter une question dans le menu d'edition",
-    "dateRange":"Plage de dates",
-    "valid":"Validez",
-    "noIdeasForRating":"Aucune idée n'a encore été poster",
-    "adminCreateFromIdeaTitle":"",
-    "adminCreateFromIdeaHelper":"",
-    "seeMoreDetail":"",
-    "settings":"",
-    "contribution":"",
-    "selection":""
+  "settings":"",
+  "contribution":"",
+  "selection":"",
+  "confirm":"",
+  "first_post":"",
+
+  "CREATE":{
+    "create_from_idea_title":"",
+    "helper":"",
+    "see_more_detail":"",
+    "create": ""
+  },
+  "COMMENTS":{
+    "reply": ""
+  },
+  "HOME":{
+    "question_placeholder":"",
+    "question_title":"",
+    "question_helper":"",
+    "jeton_number":"",
+    "jeton_title":"",
+    "start_date":"",
+    "end_date":"",
+    "empty_question":"",
+    "shuffle":"",
+    "idea_prompt":"",
+    "send": ""
+  },
+  "RATE":{
+    "rateIdeaTitle":"",
+    "nbSelection":""
+  }
 }

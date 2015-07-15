@@ -1,5 +1,5 @@
 <div class="options-comment">
-    <span><a ng-init="displayBox=false" ng-click="displayBox = !displayBox" ng-hide="readOnly">{{'Reply'| translate }}</a></span>&nbsp;
+    <span><a ng-init="displayBox=false" ng-click="displayBox = !displayBox" ng-hide="readOnly">{{'COMMENTS.reply'| translate }}</a></span>&nbsp;
     <span><a ng-init="showComments=true" ng-click="showComments = !showComments"><i class="fa fa-comment-o"></i>&nbsp;{{comments.length}}</a></span>
 </div>
 <div class="sub-comment" ng-show="displayBox">
@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="media-body">
-                <textarea rows="1" ng-model="formData.comment" ng-keyup="expand($event)" class="media-heading text-comment" placeholder="{{'comment'| translate }}" autocomplete="off" required></textarea>
+                <textarea rows="1" ng-model="formData.comment" ng-keyup="expand($event)" class="media-heading text-comment" autocomplete="off" required></textarea>
             </div>
         </div>
         <button type="submit" class="btn btn-default btn-xs pull-right">Submit</button>

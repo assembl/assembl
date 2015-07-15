@@ -5,11 +5,11 @@
                 <div class="panel-form">
                     <form ng-submit="setSettings()">
                         <div class="form-group">
-                             <p translate="session_question_helper" translate-values="{ idea: idea.shortTitle }"></p>
+                             <p translate="HOME.question_helper" translate-values="{ idea: idea_title }"></p>
                         </div>
                         <div class="form-group">
-                            <label for="session_question" class="edit-title">{{'session_question_title' | translate}}</label>
-                            <input id="session_question" class="form-control" type="text" ng-model="formData.question" placeholder="{{'session_question' | translate}}">
+                            <label for="session_question" class="edit-title">{{'HOME.question_title' | translate}}</label>
+                            <input id="session_question" class="form-control" type="text" ng-model="formData.question" placeholder="{{'HOME.question_placeholder' | translate}}">
                         </div>
                         <!--<div class="form-group">
                             <label for="session_jeton" class="edit-title"><i class="fa fa-circle-o"></i> {{'session_jeton_title' | translate}}</label>
@@ -18,16 +18,16 @@
 
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="exampleInputName1">{{'startOfSession' | translate}}</label>
-                                <input type="text" class="form-control" ng-model="formData.startDate" id="exampleInputName1" data-date-format="yyyy-MM-dd" data-max-date="{{formData.endDate}}" placeholder="{{'start_date' | translate}}" bs-datepicker>
+                                <label for="exampleInputName1">{{'HOME.start_date' | translate}}</label>
+                                <input type="text" class="form-control" ng-model="formData.startDate" id="exampleInputName1" data-date-format="yyyy-MM-dd" data-max-date="{{formData.endDate}}" placeholder="{{'HOME.start_date' | translate}}" bs-datepicker>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="exampleInputName2">{{'endOfSession' | translate}}</label>
-                                <input type="text" class="form-control" ng-model="formData.endDate" id="exampleInputName2" data-date-format="yyyy-MM-dd" data-min-date="{{formData.startDate}}" placeholder="{{'end_date' | translate}}" bs-datepicker>
+                                <label for="exampleInputName2">{{'HOME.end_date' | translate}}</label>
+                                <input type="text" class="form-control" ng-model="formData.endDate" id="exampleInputName2" data-date-format="yyyy-MM-dd" data-min-date="{{formData.startDate}}" placeholder="{{'HOME.end_date' | translate}}" bs-datepicker>
                             </div>
                         </div>
 
-                        <button class="btn btn-default pull-right" type="submit">{{'valid' | translate}}</button>
+                        <button class="btn btn-default pull-right" type="submit">{{'confirm' | translate}}</button>
                     </form>
                 </div>
                 <!--<div ng-show="config_status == 1">

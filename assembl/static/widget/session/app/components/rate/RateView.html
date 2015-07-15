@@ -1,32 +1,8 @@
 <section class="rate-container">
-    <!--<p>
-    <h3>{{'topIdea' | translate}}</h3>
-    </p>
-    <p ng-show="ideas.length < 1"><i class="fa fa-exclamation-triangle fa-lg"></i> {{'noIdeasForRating' | translate}}</p>
-    <form id="postVote">
-        <ul class="bx-idea" ng-repeat="idea in ideas | orderBy:'rate':true ">
-            <li>
-                <label class="checkbox" for="{{idea['@id']}}">
-                    <span class="icons">
-                        <span class="first-icon fui-checkbox-unchecked"></span>
-                        <span class="second-icon fui-checkbox-checked"></span>
-                    </span>
-                    <input id="{{idea['@id']}}" class="sub-idea" type="checkbox" value="{{idea['@id']}}" data-toggle="checkbox">
-                    <h6 class="lead-text"><i class="icon-lamp"></i>{{idea.shortTitle}} <span class="badge">{{idea.rate}}</span></h6>
-                </label>
-                <small class="definition">{{idea.definition}}</small>
-                <div>
-                    <rating comment="idea"></rating>
-                </div>
-            </li>
-        </ul>
-        <button ng-show="ideas.length > 0" class="btn btn-primary btn-xs pull-right" ng-click="validVote()">{{'validateChoose' | translate}}</button>
-    </form>-->
-
     <div class="session">
         <div class="col-md-7 bloc-left">
             <div class="msg" ng-show="ideas.length < 1">
-                <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'firstToPost'| translate}}</p>
+                <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'first_post'| translate}}</p>
             </div>
             <div class="session-comment">
                 <form id="postForm">

@@ -13,9 +13,8 @@ AdminModule.controller('AdminController',
     function($rootScope, $scope, $http, growl, CardGameService, ConfigService, UtilsService, config) {
 
         $scope.widget = config;
-
+        $scope.idea_title = config.base_idea.shortTitle;
         $scope.home = config['@id'];
-
         $scope.formData = {};
 
         $scope.goToDiscussion = function (){

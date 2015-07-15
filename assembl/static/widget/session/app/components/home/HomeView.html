@@ -3,8 +3,8 @@
         <div class="session-cards">
             <div class="bloc-question">
                 <p ng-if="widget.settings.question">{{widget.settings.question}}</p>
-                <p ng-if="!widget.settings.question"><i class="fa fa-exclamation-triangle fa-lg"></i> {{'emptyQuestion'| translate}}</p>
-                <p>{{'ideaPrompt'| translate : {parentIdeaTitle: parentIdeaTitle} }}</p>
+                <p ng-if="!widget.settings.question"><i class="fa fa-exclamation-triangle fa-lg"></i> {{'HOME.empty_question'| translate}}</p>
+                <p>{{'HOME.idea_prompt'| translate : {parentIdeaTitle: parentIdeaTitle} }}</p>
             </div>
             <div class="card-container">
                 <div class="card">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="shuffle">
-                <button class="btn btn-default" ng-click="shuffle()">{{'shuffle' | translate}}</button>
+                <button class="btn btn-default" ng-click="shuffle()">{{'HOME.shuffle' | translate}}</button>
             </div>
             <div class="bs-callout">
                 <p>
@@ -35,14 +35,14 @@
                 <div class="form-group">
                     <textarea ng-model="formData.definition" class="form-control" rows="3" placeholder="description" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary btn-sm">{{'send' | translate}}</button>
+                <button type="submit" class="btn btn-primary btn-sm">{{'HOME.send' | translate}}</button>
             </form>
         </div>
     </div>
 
     <div class="col-md-7 bloc-right">
         <div class="msg" ng-show="ideas.length < 1">
-            <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'firstToPost'| translate}}</p>
+            <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'first_post'| translate}}</p>
         </div>
         <div class="session-comment">
             <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:'creationDate':'reverse' track by $index">
