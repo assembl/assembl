@@ -370,7 +370,6 @@ def class_add(request):
 @view_config(context=CollectionContext, request_method='POST',
              header=JSON_HEADER)
 def collection_add_json(request, json=None):
-    import pdb; pdb.set_trace()
     ctx = request.context
     json = request.json_body if json is None else json
     user_id = authenticated_userid(request)
