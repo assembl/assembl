@@ -1515,7 +1515,7 @@ var MessageList = AssemblPanel.extend({
                 .then(function (allExtractsCollection) {
                     var segment = allExtractsCollection.addAnnotationAsExtract(annotation, Ctx.currentAnnotationIdIdea);
                     if (!segment.isValid()) {
-                        annotator.deleteAnnotation(annotation);
+                        that.annotator.deleteAnnotation(annotation);
                     } else if (Ctx.currentAnnotationNewIdeaParentIdea) {
                         //We asked to create a new idea from segment
                       console.log("FIXME:  What's the proper behaviour here now that groups are separated?  " +
@@ -1573,7 +1573,12 @@ var MessageList = AssemblPanel.extend({
           //$(field).html("THIS IS A TEST");
           //console.log(annotation);
           collectionManager.getAllExtractsCollectionPromise().then(function(extracts){
-            return extracts.get(annotation['@id']).getAssociatedIdeaPromise().then(function(idea){
+            var id = annotation['@id'];
+            if (id === undefined) {
+              console.log("Missing @id", annotation);
+              return;
+            }
+            return extracts.get(id).getAssociatedIdeaPromise().then(function(idea){
               var txt = '';
               if(idea) {
                 txt = i18n.sprintf(i18n.gettext('This extract was organized in the idea "%s" by the facilitator of the debate'), idea.getShortTitleDisplayText());
