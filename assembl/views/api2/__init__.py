@@ -378,7 +378,7 @@ def collection_add_json(request, json=None):
     typename = ctx.collection_class.external_typename()
     typename = json.get(
         '@type', ctx.collection_class.external_typename())
-    cls = ctx.get_class(typename)
+    cls = ctx.get_collection_class(typename)
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE, cls)
     try:
         instances = ctx.create_object(typename, json, user_id)
