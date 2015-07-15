@@ -153,9 +153,20 @@ def view_confirmed_ideas(request):
 @view_config(
     context=InstanceContext, ctx_instance_class=IdeaCreatingWidget,
     request_method="POST", permission=P_ADMIN_DISC,
-    renderer="json", name="confirm_ideas")
+    renderer="json", name="confirm_ideas", header=FORM_HEADER)
 def set_confirmed_ideas(request):
     ids = loads(request.POST['ids'])
+    ctx = request.context
+    ctx._instance.set_confirmed_ideas(ids)
+    return "Ok"
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=IdeaCreatingWidget,
+    request_method="POST", permission=P_ADMIN_DISC,
+    renderer="json", name="confirm_ideas", header=JSON_HEADER)
+def set_confirmed_ideas_json(request):
+    ids = request.json_body.get('ids', ())
     ctx = request.context
     ctx._instance.set_confirmed_ideas(ids)
     return "Ok"
@@ -173,9 +184,20 @@ def view_confirmed_messages(request):
 @view_config(
     context=InstanceContext, ctx_instance_class=IdeaCreatingWidget,
     request_method="POST", permission=P_ADMIN_DISC,
-    renderer="json", name="confirm_messages")
+    renderer="json", name="confirm_messages", header=FORM_HEADER)
 def set_confirmed_messages(request):
     ids = loads(request.POST['ids'])
+    ctx = request.context
+    ctx._instance.set_confirmed_messages(ids)
+    return "Ok"
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=IdeaCreatingWidget,
+    request_method="POST", permission=P_ADMIN_DISC,
+    renderer="json", name="confirm_messages", header=JSON_HEADER)
+def set_confirmed_messages_json(request):
+    ids = request.json_body.get('ids', ())
     ctx = request.context
     ctx._instance.set_confirmed_messages(ids)
     return "Ok"

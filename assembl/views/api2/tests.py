@@ -338,8 +338,8 @@ def test_creativity_session_widget(
 
     # Approve the first but not the second idea
     confirm_idea_url = local_to_absolute(widget_rep['confirm_ideas_url'])
-    confirm = test_app.post(confirm_idea_url, {
-        "ids": json.dumps([new_idea1_id])})
+    confirm = test_app.post_json(confirm_idea_url, {
+        "ids": [new_idea1_id]})
     assert confirm.status_code == 200
     discussion.db.flush()
     # Get it back
@@ -364,8 +364,8 @@ def test_creativity_session_widget(
     # Approve the first but not the second idea
     confirm_messages_url = local_to_absolute(
         widget_rep['confirm_messages_url'])
-    confirm = test_app.post(confirm_messages_url, {
-        "ids": json.dumps([new_post1_id])})
+    confirm = test_app.post_json(confirm_messages_url, {
+        "ids": [new_post1_id]})
     assert confirm.status_code == 200
     discussion.db.flush()
     # Get it back
