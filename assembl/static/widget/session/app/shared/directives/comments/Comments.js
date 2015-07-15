@@ -1,4 +1,12 @@
-SessionApp.directive('comments', ['$http', '$rootScope', 'UtilsService', function($http, $rootScope, UtilsService){
+SessionApp.directive('comments', [
+    '$http',
+    '$rootScope',
+    'UtilsService',
+    'WidgetService',
+    'UserService',
+
+    function($http, $rootScope, UtilsService, WidgetService, UserService){
+
     return {
         restrict:'E',
         scope: {
@@ -26,6 +34,34 @@ SessionApp.directive('comments', ['$http', '$rootScope', 'UtilsService', functio
                         break;
                 }
             }, true);
+
+            $scope.getUserForComment = function(){
+
+                var config = $scope.$parent.$state.params.config;
+
+                var id = decodeURIComponent(config).split('/')[1],
+                    widget = WidgetService.get({id: id}).$promise;
+
+                widget.then(function(w){
+
+                    $scope.discussion = w.discussion;
+
+                    var discussion_id = w.discussion.split('/')[1];
+
+                    return UserService.get({id: discussion_id}).$promise;
+
+                }).then(function(user){
+
+                    user.avatar_url_base = user.avatar_url_base + 30
+
+                    console.debug(user)
+
+
+                    $scope.currentUser = user;
+
+                });
+
+            }
 
             /**
              * get all comments from a sub idea
@@ -115,6 +151,8 @@ SessionApp.directive('comments', ['$http', '$rootScope', 'UtilsService', functio
              * init method
              * */
             $scope.getCommentsFromSubIdea();
+
+            $scope.getUserForComment();
 
         }
     }

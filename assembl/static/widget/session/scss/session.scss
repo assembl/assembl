@@ -59,7 +59,6 @@
     .media-body {
       .media-heading {
         margin: 0 10px 2px 0;
-        font-weight: bold;
       }
       p, span{
         font-size: 12px;
@@ -74,6 +73,10 @@
       }
       .options-comment{
          margin-bottom: 10px;
+          a{
+            color: #4ac780;
+            font-weight: bold;
+          }
       }
     }
     .icon-lamp {
@@ -104,6 +107,7 @@
         background-color: #FFFFFF;
         border-radius: 4px;
         padding: 5px;
+        border: 1px solid #d1dce5;
     }
 
     .time{
