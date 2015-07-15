@@ -747,10 +747,7 @@ class User(AgentProfile):
         return super(User, self).display_name()
 
     def __repr__(self):
-        if self.username:
-            return "<User '%s'>" % self.username.username.encode('utf-8')
-        else:
-            return "<User id=%d>" % self.id
+        return "<User id=%d '%s'>" % (self.id, self.name)
 
     @property
     def permissions_for_current_discussion(self):
