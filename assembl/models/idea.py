@@ -326,7 +326,7 @@ JOIN post AS family_posts ON (
         join = """JOIN action_on_post ON (action_on_post.post_id = family_posts.id)
                   JOIN action ON (action.id = action_on_post.id)
                   WHERE action.actor_id = :user_id
-                  AND action.type = 'version:ReadStatusChange'"""
+                  AND action.type = 'version:ReadStatusChange_P'"""
 
         result = self.db.execute(text(
             Idea._get_count_related_posts_statement() + join),
