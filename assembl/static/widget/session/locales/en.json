@@ -36,5 +36,9 @@
     "seeMoreDetail":"See more detail",
     "settings":"Settings",
     "contribution":"Contribution",
-    "selection":"Selection"
+    "selection":"Selection",
+    "RATE":{
+      "rateIdeaTitle":"Do you want to send them to << {{title}} >>",
+      "nbSelection":"You have selected : {{nb}}"
+    }
 }

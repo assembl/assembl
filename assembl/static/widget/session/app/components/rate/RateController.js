@@ -12,14 +12,7 @@ RateModule.controller('RateController', [
     function($rootScope, $scope, config, growl, $timeout, UtilsService, $http) {
 
         $scope.widget = config;
-        /**
-         * Due to the latency to init $rootScope we need a delay
-         * */
-        $timeout(function () {
-
-            $scope.getSubIdeaForVote();
-
-        }, 800);
+        $scope.idea_title = config.base_idea.shortTitle;
 
         /**
          * Fetch all ideas newly added
@@ -84,7 +77,7 @@ RateModule.controller('RateController', [
                     default:
                         break;
                 }
-            })
+            });
 
             angular.forEach(subIdea, function (idea) {
 
@@ -92,7 +85,7 @@ RateModule.controller('RateController', [
 
                     subIdeaSelected.push($(idea).val());
                 }
-            })
+            });
 
             angular.forEach(commentSubIdea, function (comment) {
 
@@ -100,7 +93,7 @@ RateModule.controller('RateController', [
 
                     commentSelected.push($(comment).val());
                 }
-            })
+            });
 
            if (commentSelected.length > 0) {
 
@@ -124,7 +117,7 @@ RateModule.controller('RateController', [
 
             }
 
-            if (subIdeaSelected.length > 0) {
+           if (subIdeaSelected.length > 0) {
 
                 var obj = {};
                 obj.ids = JSON.stringify(subIdeaSelected);
@@ -147,5 +140,21 @@ RateModule.controller('RateController', [
 
         }
 
+        /**
+         *
+         * */
+        $scope.selectedItems = 0;
+        $scope.$watch('ideas', function(ideas){
+           var selectedItems = 0;
+            angular.forEach(ideas, function(idea){
+                selectedItems += idea.selected ? 1 : 0;
+            });
+            $scope.selectedItems = selectedItems;
+
+        }, true);
+
+
+        //init
+        $scope.getSubIdeaForVote();
 
     }]);
