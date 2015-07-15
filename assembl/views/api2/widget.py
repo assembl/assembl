@@ -14,7 +14,8 @@ from assembl.auth.util import get_permissions
 from assembl.auth import CrudPermissions
 from ..traversal import InstanceContext, CollectionContext
 from . import (
-    FORM_HEADER, JSON_HEADER, instance_put, collection_add, check_permissions)
+    FORM_HEADER, JSON_HEADER, instance_put, collection_add,
+    collection_add_json, check_permissions)
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
@@ -321,7 +322,7 @@ def delete_vote_votable(request):
 def set_vote_votables(request):
     ctx = request.context
     widget = ctx.parent_instance
-    ideas = [Idea.get_instance(idea['@id']) for idea in request.json]
+    ideas = [Idea.get_instance(idea['@id']) for idea in request.json_body]
     widget.set_votables(ideas)
     return HTTPOk()
 
@@ -337,7 +338,7 @@ def set_vote_votables(request):
 def set_idea_criteria(request):
     ctx = request.context
     widget = ctx.parent_instance
-    ideas = [Idea.get_instance(idea['@id']) for idea in request.json]
+    ideas = [Idea.get_instance(idea['@id']) for idea in request.json_body]
     widget.set_criteria(ideas)
     return HTTPOk()
 
@@ -353,3 +354,16 @@ def add_child_idea(request):
         args = NestedMultiDict(dict(GeneratedIdeaWidgetLink__context_url=v),
                                *args.dicts)
     return collection_add(request, args)
+
+
+@view_config(context=CollectionContext, request_method='POST',
+             ctx_named_collection="ChildIdeaCollectionDefinition",
+             permission=P_ADD_POST, header=JSON_HEADER)
+def add_child_idea_json(request):
+    json = request.json_body
+    if 'context_url' in json:
+        json = dict(json)
+        url = json['context_url']
+        # del request.json['context_url']
+        json['GeneratedIdeaWidgetLink__context_url'] = url
+    return collection_add_json(request, json)

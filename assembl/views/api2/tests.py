@@ -201,10 +201,10 @@ def test_creativity_session_widget(
         participant1_user, test_session, request):
     # Post the initial configuration
     format = lambda x: x.strftime('%Y-%m-%dT%H:%M:%S')
-    new_widget_loc = test_app.post(
+    new_widget_loc = test_app.post_json(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
-            'type': 'CreativitySessionWidget',
-            'settings': json.dumps({
+            '@type': 'CreativitySessionWidget',
+            'settings': {
                 'idea': 'local:Idea/%d' % (subidea_1.id),
                 'notifications': [
                     {
@@ -218,7 +218,7 @@ def test_creativity_session_widget(
                         'message': 'creativity_session'
                     }
                 ]
-            })
+            }
         })
     assert new_widget_loc.status_code == 201
     # Get the widget from the db
@@ -302,9 +302,9 @@ def test_creativity_session_widget(
             and post_endpoint[widget_rep["@id"]])
     post_endpoint = post_endpoint[widget_rep["@id"]]
     # Create a new post attached to the sub-idea
-    new_post_create = test_app.post(local_to_absolute(post_endpoint), {
-        "type": "Post", "message_id": 0,
-        "body": "body", "creator_id": participant1_user.id})
+    new_post_create = test_app.post_json(local_to_absolute(post_endpoint), {
+        "@type": "Post", "message_id": 0,
+        "body": "body", "idCreator": participant1_user.uri()})
     assert new_post_create.status_code == 201
     # Get the new post from the db
     discussion.db.flush()
@@ -329,8 +329,8 @@ def test_creativity_session_widget(
     print new_post1_rep.json
     assert new_idea1_id in new_post1_rep.json['widget_ideas']
     # Create a second idea
-    new_idea_create = test_app.post(idea_hiding_endpoint, {
-        "type": "Idea", "short_title": "This is another new idea"})
+    new_idea_create = test_app.post_json(idea_hiding_endpoint, {
+        "@type": "Idea", "short_title": "This is another new idea"})
     assert new_idea_create.status_code == 201
     # Get the sub-idea from the db
     discussion.db.flush()
@@ -355,9 +355,9 @@ def test_creativity_session_widget(
     # The second idea was not proposed in public
     assert new_idea2.proposed_in_post.hidden
     # Create a second post.
-    new_post_create = test_app.post(local_to_absolute(post_endpoint), {
-        "type": "Post", "message_id": 0,
-        "body": "body", "creator_id": participant1_user.id})
+    new_post_create = test_app.post_json(local_to_absolute(post_endpoint), {
+        "@type": "Post", "message_id": 0,
+        "body": "body", "idCreator": participant1_user.uri()})
     assert new_post_create.status_code == 201
     discussion.db.flush()
     new_post2_id = new_post_create.location

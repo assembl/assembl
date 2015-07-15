@@ -369,17 +369,18 @@ def class_add(request):
 
 @view_config(context=CollectionContext, request_method='POST',
              header=JSON_HEADER)
-def collection_add_json(request):
+def collection_add_json(request, json=None):
     ctx = request.context
+    json = request.json_body if json is None else json
     user_id = authenticated_userid(request)
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
     typename = ctx.collection_class.external_typename()
-    typename = request.json_body.get(
+    typename = json.get(
         '@type', ctx.collection_class.external_typename())
     try:
-        instances = ctx.create_object(typename, request.json_body, user_id)
+        instances = ctx.create_object(typename, json, user_id)
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:

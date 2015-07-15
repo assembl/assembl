@@ -127,6 +127,8 @@
         "date": "creation_date",
         "like_count": false,
         "bodyMimeType": false,
+        "body": true,
+        "title": true,
         "widget_ideas": false
     },
     "Post": {
