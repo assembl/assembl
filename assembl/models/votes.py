@@ -518,6 +518,10 @@ class MultipleChoiceIdeaVote(AbstractIdeaVote):
     def external_typename(cls):
         return cls.__name__
 
+    @property
+    def value(self):
+        return self.vote_value
+
 
 class BinaryIdeaVote(AbstractIdeaVote):
     rdf_class = VOTE.BinaryVote
