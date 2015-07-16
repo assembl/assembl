@@ -21,6 +21,7 @@ var Marionette = require('./shims/marionette.js'),
     Permissions = require('./utils/permissions.js'),
     Account = require('./views/user/account.js'),
     AdminDiscussionSettings = require('./views/admin/adminDiscussionSettings.js'),
+    FirstIdeaToShowVisitor = require('./views/visitors/firstIdeaToShowVisitor.js'),
     i18n = require('./utils/i18n.js');
 
 var routeManager = Marionette.Object.extend({
@@ -200,16 +201,18 @@ var routeManager = Marionette.Object.extend({
             if (from_home && !lastSave && (
                     currentUser.isUnknownUser() || currentUser.get('is_first_visit'))) {
                 var collectionManager = CollectionManager();
-                collectionManager.getAllIdeasCollectionPromise().then(function(ideas) {
-                    ideas = ideas.getRootIdea().getChildren();
-                    if (ideas.length) {
-                        ideas = _.sortBy(ideas, function(i) {
-                            return i.get('order')
-                        });
+                Promise.join(collectionManager.getAllIdeasCollectionPromise(),
+                             collectionManager.getAllExtractsCollectionPromise(),
+                             collectionManager.getAllIdeaLinksCollectionPromise(),
+                             function(ideas, extracts, links) {
+                    var visitor = new FirstIdeaToShowVisitor(extracts);
+                    ideas.visitBreadthFirst(links, visitor, ideas.getRootIdea().getId());
+                    var idea = visitor.ideaWithExtract || visitor.firstIdea;
+                    if (idea !== undefined) {
                         // the table of ideas view did not start listening yet.
                         // TODO: Break magic timeout.
                         setTimeout(function () {
-                            Assembl.vent.trigger('DEPRECATEDideaList:selectIdea', ideas[0].id);
+                            Assembl.vent.trigger('DEPRECATEDideaList:selectIdea', idea.id);
                         }, 250);
                     }
                 });
