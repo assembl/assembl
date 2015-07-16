@@ -318,15 +318,18 @@ class Discussion(DiscussionBoundBase):
 
     @classmethod
     def extra_collections(cls):
-        from assembl.views.traversal import AbstractCollectionDefinition
+        from assembl.views.traversal import (
+            CollectionDefinition, AbstractCollectionDefinition)
         from .notification import NotificationSubscription
+
         class AllUsersCollection(AbstractCollectionDefinition):
             def __init__(self, cls):
                 super(AllUsersCollection, self).__init__(cls, User)
 
             def decorate_query(self, query, last_alias, parent_instance, ctx):
                 # No real outerjoin in sqlalchemy. Use a dummy condition.
-                return query.outerjoin(self.owner_alias, self.owner_alias.id != None)
+                return query.outerjoin(
+                    self.owner_alias, self.owner_alias.id != None)
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
@@ -351,7 +354,26 @@ class Discussion(DiscussionBoundBase):
                 return super(AllUsersCollection, self).get_instance(
                     key, parent_instance)
 
-        return {'all_users': AllUsersCollection(cls)}
+        class ActiveWidgetsCollection(CollectionDefinition):
+
+            def __init__(self, cls):
+                super(ActiveWidgetsCollection, self).__init__(
+                    cls, Discussion.widgets)
+
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                from .widgets import Widget
+                query = super(ActiveWidgetsCollection, self).decorate_query(
+                    query, last_alias, parent_instance, ctx)
+                query = Widget.filter_active(query)
+                return query
+
+            def contains(self, parent_instance, instance):
+                return instance.is_active() and super(
+                    ActiveWidgetsCollection, self).contains(
+                    parent_instance, instance)
+
+        return {'all_users': AllUsersCollection(cls),
+                'active_widgets': ActiveWidgetsCollection(cls)}
 
     all_participants = relationship(
         User, viewonly=True, secondary=LocalUserRole.__table__,
