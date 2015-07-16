@@ -275,6 +275,7 @@ def delete_extract(request):
         return HTTPNoContent()
 
     with transaction.manager:
+        # TODO: Tombstonable extracts???
         Extract.default_db.delete(extract)
     request.response.status = HTTPNoContent.code
     return HTTPNoContent()

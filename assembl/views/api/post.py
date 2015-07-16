@@ -335,7 +335,7 @@ def mark_post_read(request):
                 Action.actor_id==user_id).first()
             if view:
                 change = True
-                db.delete(view)
+                view.is_tombstone = True
         else:
             count = db.query(ViewPost).filter(
                 ViewPost.post_id==post_id).filter(
