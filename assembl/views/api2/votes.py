@@ -12,7 +12,8 @@ from assembl.auth import (
 from assembl.auth.util import get_permissions
 from assembl.models import (
     AbstractIdeaVote, User, AbstractVoteSpecification,
-    MultiCriterionVotingWidget, get_named_class)
+    MultiCriterionVotingWidget)
+from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
 
 
