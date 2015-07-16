@@ -710,14 +710,22 @@ def confirm_emailid_sent(request):
     email = AbstractAgentAccount.get(id)
     if not email:
         raise HTTPNotFound()
-    if email.verified:
-        # TODO!: Your email is fine, why do you want to confirm it?
-        # Unlog and redirect to login.
-        pass
-    send_confirmation_email(request, email)
     localizer = request.localizer
     slug = request.matchdict.get('discussion_slug', None)
     slug_prefix = "/" + slug if slug else ""
+    if email.verified:
+        # Your email is fine, why do you want to confirm it?
+        # Temporary: explain, but it's a dead-end.
+        # TODO: Unlog and redirect to login.
+        return dict(
+            get_default_context(request),
+            slug_prefix=slug_prefix,
+            profile_id=email.profile_id,
+            email_account_id=request.matchdict.get('email_account_id'),
+            title=localizer.translate(_('This email address is already confirmed')),
+            description=localizer.translate(_(
+                'You do not need to confirm this email address, it is already confirmed.')))
+    send_confirmation_email(request, email)
     return dict(
         get_default_context(request),
         slug_prefix=slug_prefix,
