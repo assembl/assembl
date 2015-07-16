@@ -169,8 +169,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         return cls.get_vote_class().__name__
 
     def is_valid_vote(self, vote):
-        if not issubclass(vote.__class__, self.get_vote_class()):
-            return False
+        return issubclass(vote.__class__, self.get_vote_class())
 
     @property
     def settings_json(self):
@@ -226,7 +225,7 @@ class LickertVoteSpecification(AbstractVoteSpecification):
     def is_valid_vote(self, vote):
         if not super(LickertVoteSpecification, self).is_valid_vote(vote):
             return False
-        return self.min <= vote.vote_value <= self.max
+        return self.minimum <= vote.vote_value <= self.maximum
 
 
 class BinaryVoteSpecification(AbstractVoteSpecification):
