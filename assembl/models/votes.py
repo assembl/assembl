@@ -226,7 +226,7 @@ class LickertVoteSpecification(AbstractVoteSpecification):
     def is_valid_vote(self, vote):
         if not super(LickertVoteSpecification, self).is_valid_vote(vote):
             return False
-        return self.min <= vote.vote_value <= vote.max
+        return self.min <= vote.vote_value <= self.max
 
 
 class BinaryVoteSpecification(AbstractVoteSpecification):
@@ -270,6 +270,11 @@ class MultipleChoiceVoteSpecification(AbstractVoteSpecification):
     @classmethod
     def get_vote_class(cls):
         return MultipleChoiceIdeaVote
+
+    def is_valid_vote(self, vote):
+        if not super(LickertVoteSpecification, self).is_valid_vote(vote):
+            return False
+        return 0 <= vote.vote_value < self.num_choices
 
 
 class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
@@ -404,6 +409,9 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
         )
         return super(AbstractIdeaVote, self).copy(**kwargs)
 
+    def is_valid(self):
+        return self.vote_spec.is_valid_vote(self)
+
     def unique_query(self):
         idea_id = self.idea_id or (self.idea.id if self.idea else None)
         widget_id = self.widget_id or (self.widget.id if self.widget else None)
@@ -456,22 +464,12 @@ class LickertIdeaVote(AbstractIdeaVote):
         nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.lickert_in_range)}
     )
-    lickert_range = relationship(LickertRange)
 
     vote_value = Column(
         Float, nullable=False,
         info={'rdf': QuadMapPatternS(None, VOTE.lickert_value)})
 
     def __init__(self, **kwargs):
-        if not ('lickert_range' in kwargs or 'range_id' in kwargs):
-            kwargs['lickert_range'] = LickertRange.get_range()
-        if 'value' in kwargs:
-            # make sure lickert comes first
-            if 'range_id' in kwargs:
-                self.lickert_range = LickertRange.get_instance(
-                    kwargs['range_id'])
-            elif 'lickert_range' in kwargs:
-                self.lickert_range = kwargs['lickert_range']
         super(LickertIdeaVote, self).__init__(**kwargs)
 
     @classmethod
@@ -485,7 +483,6 @@ class LickertIdeaVote(AbstractIdeaVote):
     def copy(self, tombstone=None, **kwargs):
         kwargs.update(
             tombstone=tombstone,
-            lickert_range=self.lickert_range,
             vote_value=self.vote_value
         )
         return super(LickertIdeaVote, self).copy(**kwargs)
@@ -493,8 +490,6 @@ class LickertIdeaVote(AbstractIdeaVote):
     @value.setter
     def value(self, val):
         val = float(val)
-        # assert val <= self.lickert_range.maximum and \
-        #     val >= self.lickert_range.minimum
         self.vote_value = val
 
 
@@ -551,15 +546,6 @@ class BinaryIdeaVote(AbstractIdeaVote):
     @classmethod
     def external_typename(cls):
         return cls.__name__
-
-    @property
-    def safe_value(self):
-        return self.value
-
-    @safe_value.setter
-    def safe_value(self, val):
-        assert self.lickert_range.minimum <= val <= self.lickert_range.maximum
-        self.value = val
 
     @property
     def value(self):

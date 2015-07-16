@@ -66,6 +66,8 @@ def votes_collection_add_json(request):
         raise HTTPBadRequest(e)
     if instances:
         first = instances[0]
+        if not first.is_valid():
+            raise HTTPBadRequest("Invalid vote")
         db = first.db
         for instance in instances:
             db.add(instance)
@@ -108,6 +110,8 @@ def votes_collection_add(request):
         raise HTTPBadRequest(e)
     if instances:
         first = instances[0]
+        if not first.is_valid():
+            raise HTTPBadRequest("Invalid vote")
         db = first.db
         for instance in instances:
             db.add(instance)
