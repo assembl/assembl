@@ -44,7 +44,6 @@ def votes_collection_add_json(request):
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
-    typename = ctx.collection_class.external_typename()
     typename = request.json_body.get(
         '@type', ctx.collection_class.external_typename())
     json = request.json_body
@@ -55,6 +54,11 @@ def votes_collection_add_json(request):
         raise HTTPBadRequest(e)
     if instances:
         first = instances[0]
+        spec = ctx.get_instance_of_class(AbstractVoteSpecification)
+        if spec:
+            if not isinstance(first, spec.get_vote_class()):
+                raise HTTPBadRequest("Vote class is %s, should be in %s" % (
+                    first.__class__.__name__, spec.get_vote_class().__name__))
         db = first.db
         for instance in instances:
             db.add(instance)
@@ -88,6 +92,11 @@ def votes_collection_add(request):
         raise HTTPBadRequest(e)
     if instances:
         first = instances[0]
+        spec = ctx.get_instance_of_class(AbstractVoteSpecification)
+        if spec:
+            if not isinstance(first, spec.get_vote_class()):
+                raise HTTPBadRequest("Vote class is %s, should be in %s" % (
+                    first.__class__.__name__, spec.get_vote_class().__name__))
         db = first.db
         for instance in instances:
             db.add(instance)
