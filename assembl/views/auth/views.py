@@ -541,6 +541,7 @@ def velruse_login_complete_view(request):
             profile_info_json=velruse_profile,
             domain=velruse_account.get('domain'),
             userid=velruse_account.get('userid'),
+            verified=True,
             username=velruse_account.get('username'))
         idp_accounts.append(idp_account)
         new_idp_account = base_account = idp_account
