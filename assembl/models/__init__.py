@@ -146,6 +146,7 @@ from .votes import (
     LickertIdeaVote,
     LickertRange,
     LickertVoteSpecification,
+    MultipleChoiceIdeaVote,
     MultipleChoiceVoteSpecification,
 )
 from .annotation import (

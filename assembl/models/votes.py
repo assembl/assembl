@@ -514,6 +514,10 @@ class MultipleChoiceIdeaVote(AbstractIdeaVote):
     vote_value = Column(
         Integer, nullable=False)
 
+    @classmethod
+    def external_typename(cls):
+        return cls.__name__
+
 
 class BinaryIdeaVote(AbstractIdeaVote):
     rdf_class = VOTE.BinaryVote
