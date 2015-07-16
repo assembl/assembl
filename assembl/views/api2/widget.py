@@ -371,3 +371,20 @@ def add_child_idea_json(request):
         # del request.json['context_url']
         json['GeneratedIdeaWidgetLink__context_url'] = url
     return collection_add_json(request, json)
+
+
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=MultiCriterionVotingWidget,
+             accept="application/json", name="vote_results", renderer="json")
+def vote_results(request):
+    ctx = request.context
+    user_id = authenticated_userid(request)
+    widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
+    if not widget:
+        raise HTTPNotFound()
+    if False:
+        # TODO: If widget session not over,
+        # only admin can get intermediate results
+        permissions = get_permissions(user_id, ctx.get_discussion_id())
+        check_permissions(ctx, user_id, permissions, P_ADMIN_DISC)
+    return ctx._instance.all_voting_results()

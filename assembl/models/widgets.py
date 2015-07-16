@@ -612,6 +612,12 @@ class MultiCriterionVotingWidget(Widget):
         return 'local:Discussion/%d/widgets/%d/targets/%d/votes' % (
             self.discussion_id, self.id, Idea.get_database_id(idea_id))
 
+    def all_voting_results(self):
+        return {
+            spec.uri(): spec.voting_results()
+            for spec in self.vote_specifications
+        }
+
     def get_voting_urls(self, target_idea_id):
         # TODO: Does not work yet.
         return {
