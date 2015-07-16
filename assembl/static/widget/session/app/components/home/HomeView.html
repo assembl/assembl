@@ -35,12 +35,13 @@
                 <div class="form-group">
                     <textarea ng-model="formData.definition" class="form-control" rows="3" placeholder="description" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary btn-sm">{{'HOME.send' | translate}}</button>
+                <button type="submit" class="btn btn-primary btn-purple btn-sm pull-right">{{'HOME.send' | translate}}</button>
             </form>
         </div>
     </div>
 
     <div class="col-md-7 bloc-right">
+        <h6 translate="HOME.contributions" translate-values="{ nb: ideas.length }"></h6>
         <div class="msg" ng-show="ideas.length < 1">
             <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'first_post'| translate}}</p>
         </div>
