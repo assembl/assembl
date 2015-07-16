@@ -311,6 +311,9 @@
     "BinaryIdeaVote": {
         "@extends": "AbstractIdeaVote"
     },
+    "MultipleChoiceIdeaVote": {
+        "@extends": "AbstractIdeaVote"
+    },
     "FacebookAccessToken": {
         "fb_account_id": true,
         "token": "long_lived_access_token",

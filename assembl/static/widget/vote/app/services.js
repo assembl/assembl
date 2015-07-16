@@ -420,7 +420,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
   };
 
   this.sendJson = function(method, endpoint, post_data, result_holder){
-    console.log("putJson()");
+    console.log("sendJson()");
 
     return $http({
         method: method,
@@ -433,12 +433,12 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
         console.log("success");
         if ( result_holder )
           result_holder.text("Success!");
-        console.log("data:");
+        /*console.log("data:");
         console.log(data);
         console.log("status:");
         console.log(status);
         console.log("headers:");
-        console.log(headers);
+        console.log(headers);*/
     }).error(function(data, status, headers, config){
         console.log("error");
         if ( result_holder )

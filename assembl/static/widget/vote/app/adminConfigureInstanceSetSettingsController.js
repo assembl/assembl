@@ -337,9 +337,9 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     };
     
     if ( "items" in $scope.widget.settings ){
-      $scope.widget.settings.items.forEach(function(item){
+      $scope.widget.settings.items.forEach(function(item, item_index, item_ar){
         if ( "vote_specifications" in item ){
-          item.vote_specifications.forEach(function(el, index, ar){
+          item.vote_specifications.forEach(function(el, el_index, el_ar){
             var known_properties = ["@type", "minimum", "maximum", "criterion_idea", "widget", "question_id", "num_choices", "settings"]; // TODO: the content of this array should depend on the value of VoteSpec["@type"]
             if ( id_field in el ){ // if it already exist in the backend, we update it using PUT
               var el2 = _.clone(el);
@@ -360,7 +360,8 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
                 // set @id in current json
                 console.log("updateVoteSpecifications success:", data, status, headers);
                 if ( "@id" in data ){
-                  el["@id"] = data["@id"];
+                  //el["@id"] = data["@id"];
+                  $scope.widget.settings.items[item_index].vote_specifications[el_index]["@id"] = data["@id"];
                 }
                 console.log("settings after:", $scope.widget.settings);
                 $scope.applyWidgetSettings(); // ugly!

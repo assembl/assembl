@@ -522,6 +522,13 @@ class MultipleChoiceIdeaVote(AbstractIdeaVote):
     def value(self):
         return self.vote_value
 
+    @value.setter
+    def value(self, val):
+        val = int(val)
+        if self.vote_spec:
+            assert 0 <= val < self.vote_spec.num_choices
+        self.vote_value = val
+
 
 class BinaryIdeaVote(AbstractIdeaVote):
     rdf_class = VOTE.BinaryVote

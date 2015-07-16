@@ -402,6 +402,9 @@
     "BinaryIdeaVote": {
         "@extends": "AbstractIdeaVote"
     },
+    "MultipleChoiceIdeaVote": {
+        "@extends": "AbstractIdeaVote"
+    },
     "LickertIdeaVote": {
         "@extends": "AbstractIdeaVote"
     },

@@ -61,7 +61,7 @@ voteApp.controller('indexCtl',
       // TODO (when the API is implemented): check that the user has the right to participate in this vote
 
 
-      // try to get previous vote of the user
+      // try to get previous votes of the user
 
       if ( !configService.user_votes_url )
       {
@@ -88,8 +88,9 @@ voteApp.controller('indexCtl',
                 console.log("value found: " + my_vote_for_this_criterion.value);
                 var new_value = my_vote_for_this_criterion.value;
                 // interpret vote value differently depending on criterion type
-                if ( criterion["@type"] == "BinaryIdeaVote" )
+                if ( my_vote_for_this_criterion["@type"] == "BinaryIdeaVote" )
                 {
+                  console.log("criterion type is BinaryIdeaVote");
                   if ( my_vote_for_this_criterion.value === true || my_vote_for_this_criterion.value == "true" || my_vote_for_this_criterion.value === 1 || my_vote_for_this_criterion.value == "1" )
                   {
                     new_value = 1;
@@ -217,7 +218,7 @@ voteApp.controller('indexCtl',
           var vote_type = "LickertIdeaVote";
 
           var found = false;
-          if ( "items" in $scope.settings )
+          /*if ( "items" in $scope.settings )
           {
             for ( var i = 0; !found && i < $scope.settings.items.length; ++i )
             {
@@ -225,16 +226,22 @@ voteApp.controller('indexCtl',
               {
                 for ( var j = 0; !found && j < $scope.settings.items[i].vote_specifications.length; ++j )
                 {
-                  if ( "@id" in $scope.settings.items[i].vote_specifications[j] && $scope.settings.items[i].vote_specifications[j].entity_id == k )
+                  if ( "@id" in $scope.settings.items[i].vote_specifications[j] && $scope.settings.items[i].vote_specifications[j]["@id"] == k )
                   {
-                    if ( "@type" in $scope.settings.items[i].vote_specifications[j] )
+                    if ( "vote_class" in $scope.settings.items[i].vote_specifications[j] )
                     {
                       found = true;
-                      vote_type = $scope.settings.items[i].vote_specifications[j]["@type"];
+                      vote_type = $scope.settings.items[i].vote_specifications[j]["vote_class"];
                     }
                   }
                 }
               }
+            }
+          }*/
+          if ( "vote_specifications" in configService ){
+            var vote_spec = _.findWhere(configService.vote_specifications, { "@id": k});
+            if ( vote_spec && "vote_class" in vote_spec ){
+              vote_type = vote_spec.vote_class;
             }
           }
 
@@ -254,6 +261,13 @@ voteApp.controller('indexCtl',
             else
               value = $scope.myVotes[k];
             console.log("new value:", value);
+          }
+          else if ( vote_type == "MultipleChoiceIdeaVote" )
+          {
+            if ( typeof $scope.myVotes[k] == 'string' )
+              value = parseInt($scope.myVotes[k]);
+            else
+              value = $scope.myVotes[k];
           }
           else // if ( vote_type == "LickertIdeaVote" )
           {
@@ -950,7 +964,7 @@ voteApp.controller('indexCtl',
       }
       var criterion = item_data.vote_specifications[0];
       var criterionValue = (criterion.valueDefault || criterion.valueDefault === 0) ? criterion.valueDefault : null;
-
+      console.log("drawRadioVote criterion: ", criterion);
       var div = $('<div>');
       div.attr({
         'class': 'criterion',

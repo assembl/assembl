@@ -297,6 +297,9 @@
     "LickertIdeaVote": {
         "@extends": "AbstractIdeaVote"
     },
+    "MultipleChoiceIdeaVote": {
+        "@extends": "AbstractIdeaVote"
+    },
     "PartnerOrganization": {
         "name": true,
         "description": true,
