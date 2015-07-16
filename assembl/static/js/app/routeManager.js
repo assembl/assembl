@@ -206,7 +206,11 @@ var routeManager = Marionette.Object.extend({
                         ideas = _.sortBy(ideas, function(i) {
                             return i.get('order')
                         });
-                        Assembl.vent.trigger('DEPRECATEDideaList:selectIdea', ideas[0].id);
+                        // the table of ideas view did not start listening yet.
+                        // TODO: Break magic timeout.
+                        setTimeout(function () {
+                            Assembl.vent.trigger('DEPRECATEDideaList:selectIdea', ideas[0].id);
+                        }, 250);
                     }
                 });
             }
