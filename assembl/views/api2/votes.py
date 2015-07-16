@@ -12,7 +12,7 @@ from assembl.auth import (
 from assembl.auth.util import get_permissions
 from assembl.models import (
     AbstractIdeaVote, User, AbstractVoteSpecification,
-    MultiCriterionVotingWidget)
+    MultiCriterionVotingWidget, get_named_class)
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
 
 
@@ -44,8 +44,19 @@ def votes_collection_add_json(request):
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
-    typename = request.json_body.get(
-        '@type', ctx.collection_class.external_typename())
+    spec = ctx.get_instance_of_class(AbstractVoteSpecification)
+    if spec:
+        required = spec.get_vote_class()
+    else:
+        required = ctx.collection_class
+    typename = request.json_body.get('@type', None)
+    if typename:
+        cls = get_named_class(typename)
+        if not issubclass(cls, required):
+            raise HTTPBadRequest("@type is %s, should be in %s" % (
+                typename, spec.get_vote_class().__name__))
+    else:
+        typename = required.external_typename()
     json = request.json_body
     json['voter'] = User.uri_generic(user_id)
     try:
@@ -54,11 +65,6 @@ def votes_collection_add_json(request):
         raise HTTPBadRequest(e)
     if instances:
         first = instances[0]
-        spec = ctx.get_instance_of_class(AbstractVoteSpecification)
-        if spec:
-            if not isinstance(first, spec.get_vote_class()):
-                raise HTTPBadRequest("Vote class is %s, should be in %s" % (
-                    first.__class__.__name__, spec.get_vote_class().__name__))
         db = first.db
         for instance in instances:
             db.add(instance)
@@ -79,12 +85,21 @@ def votes_collection_add(request):
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
     args = request.params
+    spec = ctx.get_instance_of_class(AbstractVoteSpecification)
+    if spec:
+        required = spec.get_vote_class()
+    else:
+        required = ctx.collection_class
     if 'type' in args:
         args = dict(args)
         typename = args['type']
         del args['type']
+        cls = get_named_class(typename)
+        if not issubclass(cls, required):
+            raise HTTPBadRequest("@type is %s, should be in %s" % (
+                typename, spec.get_vote_class().__name__))
     else:
-        typename = ctx.collection_class.external_typename()
+        typename = required.external_typename()
     args['voter_id'] = user_id
     try:
         instances = ctx.create_object(typename, None, user_id, **args)
@@ -92,11 +107,6 @@ def votes_collection_add(request):
         raise HTTPBadRequest(e)
     if instances:
         first = instances[0]
-        spec = ctx.get_instance_of_class(AbstractVoteSpecification)
-        if spec:
-            if not isinstance(first, spec.get_vote_class()):
-                raise HTTPBadRequest("Vote class is %s, should be in %s" % (
-                    first.__class__.__name__, spec.get_vote_class().__name__))
         db = first.db
         for instance in instances:
             db.add(instance)
