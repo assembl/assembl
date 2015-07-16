@@ -156,7 +156,7 @@ class FacebookAPI(object):
 
     def extend_token(self):
         res = self._api.extend_access_token(self._app_id, self._app_secret)
-        return res.get('access_token', None), res.get('expires', 0)
+        return res.get('access_token', None), res.get('expires', None)
 
     def get_expiration_time(self, token):
         args = {
@@ -775,7 +775,7 @@ class FacebookAccessToken(Base):
                                               cascade='all, delete-orphan'))
 
     token = Column(String(512), unique=True)
-    expiration = Column(DateTime)
+    expiration = Column(DateTime)  # can be null is access_token is infinite
     # ['page', 'group', 'user', 'app'...]
     token_type = Column(String(50))
     # Object_name: The name of the group/page
@@ -804,11 +804,36 @@ class FacebookAccessToken(Base):
         # field as well.
 
         api = FacebookAPI(short_token)
-        # import pdb; pdb.set_trace()-
+
+        def debug_token(token):
+            try:
+                resp = api.request('debug_token', {'input_token': token,
+                                   'access_token': api._app_access_token})
+                return resp.get('data', None)
+            except:
+                return token
+
         try:
             long_token, expires_in_seconds = api.extend_token()
-            self.expiration = datetime.utcnow() + \
-                timedelta(seconds=int(expires_in_seconds))
+            if not expires_in_seconds:
+                # FB API sometimes does NOT pass in the expires_in
+                # field. Do a debug check of the token. Apparently,
+                # if the expires_at = 0 in debug mode, it must mean
+                # that the access token is infinite long?
+                data = debug_token(short_token)
+                if data and isinstance(data, dict):
+                    expires_at = data.get('expires_at', None)
+                    if not expires_at:
+                        raise TypeError('Debug token did not expires_at field')
+                    if expires_at is 0 or u'0':
+                        # This access_token is basically never ending
+                        self.expiration = None
+                elif isinstance(data, basestring):
+                    # Cannot get the expiration time of the time at all
+                    pass  # TODO
+            else:
+                self.expiration = datetime.utcnow() + \
+                    timedelta(seconds=int(expires_in_seconds))
             self.token = long_token
 
         except:
