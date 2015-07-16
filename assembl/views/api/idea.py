@@ -206,7 +206,8 @@ def delete_idea(request):
     num_extracts = len(idea.extracts)
     if num_extracts > 0:
         raise HTTPBadRequest("Idea cannot be deleted because it still has %d extracts." % num_extracts)
-    db = Idea.default_db
+    for link in idea.source_links:
+        link.is_tombstone = True
     idea.is_tombstone = True
     # Maybe return tombstone() ?
     request.response.status = HTTPNoContent.code
