@@ -4,6 +4,7 @@
   "selection":"",
   "confirm":"",
   "first_post":"",
+  "contributions":"",
 
   "CREATE":{
     "create_from_idea_title":"",
@@ -25,8 +26,7 @@
     "empty_question":"",
     "shuffle":"",
     "idea_prompt":"",
-    "send": "",
-    "contributions":""
+    "send": ""
   },
   "RATE":{
     "rateIdeaTitle":"",

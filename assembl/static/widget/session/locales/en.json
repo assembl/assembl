@@ -4,6 +4,7 @@
     "selection":"Selection",
     "confirm":"Confirm",
     "first_post":"No ideas have been posted to the creativity session. Your idea will be the first!",
+    "contributions":"{{nb}} contributions :",
 
     "CREATE":{
       "create_from_idea_title":"Would you like to create a creativity session on << {{idea}} >> ?",
@@ -25,8 +26,7 @@
       "empty_question":"Please add a question in the edit menu",
       "shuffle":"Draw a new card",
       "idea_prompt":"This question is relative to the idea \"{{parentIdeaTitle}}\". Please try to answer the question, by using one of the cards below to find inspiration:",
-      "send": "Send",
-      "contributions":"{{nb}} contributions :"
+      "send": "Send"
     },
     "RATE":{
       "rateIdeaTitle":"Do you want to send them to << {{title}} >>",
