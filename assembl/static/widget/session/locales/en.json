@@ -5,7 +5,6 @@
     "confirm":"Confirm",
     "first_post":"No ideas have been posted to the creativity session. Your idea will be the first!",
     "contributions":"{{nb}} contributions :",
-    "contribution":"{{nb}} contribution :",
 
     "CREATE":{
       "create_from_idea_title":"Would you like to create a creativity session on << {{idea}} >> ?",
