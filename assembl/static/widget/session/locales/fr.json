@@ -25,7 +25,8 @@
     "empty_question":"",
     "shuffle":"",
     "idea_prompt":"",
-    "send": ""
+    "send": "",
+    "contributions":""
   },
   "RATE":{
     "rateIdeaTitle":"",

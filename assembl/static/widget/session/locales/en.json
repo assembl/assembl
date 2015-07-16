@@ -25,7 +25,8 @@
       "empty_question":"Please add a question in the edit menu",
       "shuffle":"Draw a new card",
       "idea_prompt":"This question is relative to the idea \"{{parentIdeaTitle}}\". Please try to answer the question, by using one of the cards below to find inspiration:",
-      "send": "Send"
+      "send": "Send",
+      "contributions":"{{nb}} contributions :"
     },
     "RATE":{
       "rateIdeaTitle":"Do you want to send them to << {{title}} >>",
