@@ -12,6 +12,9 @@ var Source = Base.Model.extend({
         'creation_date': null,
         'discussion_id': null,
         'last_import': null,
+        'connection_error': null,
+        'error_description': null,
+        'error_backoff_until': null,
         'number_of_imported_posts': 0,
         '@type': 'ContentSource'
     },

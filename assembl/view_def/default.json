@@ -103,7 +103,10 @@
     "ContentSource": {
         "discussion_id": "discussion",
         "name": true,
-        "creation_date": true
+        "creation_date": true,
+        "connection_error": true,
+        "error_description": true,
+        "error_backoff_until": true
     },
     "PostSource": {
         "@extends": "ContentSource",
