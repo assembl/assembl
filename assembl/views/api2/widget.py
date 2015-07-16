@@ -219,22 +219,6 @@ def get_idea_sibling_criteria(request):
 
 
 @view_config(
-    context=InstanceContext, ctx_instance_class=Idea,
-    request_method="GET", permission=P_READ,
-    renderer="json", name="vote_results")
-def get_idea_vote_results(request):
-    return request.context._instance.get_voting_results()
-
-
-@view_config(
-    context=InstanceContext, ctx_instance_class=Idea,
-    request_method="GET", permission=P_READ,
-    renderer="json", name="vote_counts")
-def get_idea_vote_count(request):
-    return request.context._instance.get_vote_count()
-
-
-@view_config(
     context=InstanceContext, ctx_instance_class=Widget,
     request_method="GET", permission=P_READ,
     renderer="json", name="user_states")
@@ -267,8 +251,6 @@ def voting_widget_view(request):
     target_id = request.GET.get('target', None)
     if target_id and Idea.get_database_id(target_id):
         json['user_votes_url'] = widget.get_user_votes_url(target_id)
-        json['vote_results_url'] = widget.get_vote_results_url(target_id)
-        json['vote_count_url'] = widget.get_vote_counts_url(target_id)
         json['voting_urls'] = widget.get_voting_urls(target_id)
     json['criteria'] = [idea.generic_json(view, user_id, permissions)
                         for idea in widget.criteria]

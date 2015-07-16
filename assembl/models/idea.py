@@ -395,37 +395,6 @@ JOIN post AS family_posts ON (
             siblings.remove(self)
         return [c for c in siblings if isinstance(c, cls)]
 
-    def get_voting_results(self):
-        by_criterion = defaultdict(defaultdictlist)
-        latest_by_criterion = defaultdictlist()
-        for vote in self.votes:
-            by_criterion[vote.criterion][vote.voter_id].append(vote)
-        for criterion, by_user in by_criterion.iteritems():
-            for voter, votes in by_user.iteritems():
-                votes = sorted(votes, key=lambda vote: vote.vote_date)
-                latest_by_criterion[criterion].append(votes.pop())
-        return {
-            criterion.uri():
-            sum((v.vote_value for v in votes))/len(votes)
-            # If you want to combine average and count in one structure:
-            # (sum((v.vote_value for v in votes))/len(votes), len(votes))
-            for criterion, votes in latest_by_criterion.iteritems()
-        }
-
-    def get_vote_count(self):
-        by_criterion = defaultdict(defaultdictlist)
-        latest_by_criterion = defaultdictlist()
-        for vote in self.votes:
-            by_criterion[vote.criterion][vote.voter_id].append(vote)
-        for criterion, by_user in by_criterion.iteritems():
-            for voter, votes in by_user.iteritems():
-                votes = sorted(votes, key=lambda vote: vote.vote_date)
-                latest_by_criterion[criterion].append(votes.pop())
-        return {
-            criterion.uri(): len(votes)
-            for criterion, votes in latest_by_criterion.iteritems()
-        }
-
     def get_contributors(self):
         return self._get_contributors(True, False)
 
