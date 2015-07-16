@@ -7,6 +7,23 @@ var $ = require('../shims/jquery.js'),
     Agents = require('./agents.js'),
     Moment = require('moment');
 
+/**
+ * The function will attempt to convert a timezone-less
+ * ISO 8601 string to a UTC timezone.
+ * If string has a timezone, regardless of whether it is UTC
+ * or not, it will be returned.
+ * @param  {[String]} e ISO 8601 
+ * @return {[String]}   ISO 8601 with timezone (UTC if possible)
+ */
+var processTimeToUTC = function(e){
+    if (/[Z]$|([+-]\d{2}:\d{2})$/.test(e) ) {
+        return e;
+    }
+    else {
+        return e + 'Z'; //Z: is ISO 8601 way of stating timezone is UTC
+    }
+};
+
 var FacebookAccessToken = Base.Model.extend({
     urlRoot: function(){
         var fbId = Ctx.getCurrentUserFacebookAccountId();
@@ -31,7 +48,8 @@ var FacebookAccessToken = Base.Model.extend({
     },
 
     isExpired: function(){
-        var d = new Moment(this.expiration).utc();
+        var t = processTimeToUTC(this.get('expiration'));
+        var d = new Moment(t).utc();
         var now = new Moment.utc();
         return now.isAfter(d);
     },
@@ -81,7 +99,8 @@ module.exports = {
   Facebook: {
     Token: {
         Model: FacebookAccessToken,
-        Collection: FacebookAccessTokens
+        Collection: FacebookAccessTokens,
+        timeToUTC: processTimeToUTC
     } 
   }
 }

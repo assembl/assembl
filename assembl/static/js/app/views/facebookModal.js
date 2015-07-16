@@ -30,13 +30,13 @@ var _composeMessageBody = function(model, creator){
 
   msg += i18n.gettext("** Please be aware that comments below will be imported into an Assembl discussion **");
   return msg;
-}
+};
 
 var _updateBundledData = function(bundle, updates){
   //jQuery extend does deep copy
   //Nested object in bundle
   $.extend(bundle, updates);
-}
+};
 
 /**
  * Global token placeholder
@@ -55,7 +55,21 @@ var fb_token = function(){
   this.page = null;
   this.group = null;
   this.collectionManager = new CollectionManager();
-}
+  
+  this.setExpiration = function(e, success){
+    var time = null;
+    if (typeof e === 'number'){
+      //Ensure that the incoming datetime has no timezone information
+      //before adding the UTC timezone to it
+      time = new Moment().utc().add(e, 'seconds');
+    }
+    else {
+      var tzoneTime = Social.Facebook.Token.timeToUTC(e);
+      time = new Moment(tzoneTime).utc();
+    }
+    success(time);
+  };
+};
 
 fb_token.prototype = {
   setUserToken: function(token, expiration){
@@ -66,12 +80,10 @@ fb_token.prototype = {
       };
     }
     this.user.token = token;
-    if (typeof expiration === 'number') {
-      this.user.expiration = new Moment().utc().add(expiration, 'seconds');
-    }
-    else {
-      this.user.expiration = new Moment().utc(expiration);
-    }
+    var that = this;
+    this.setExpiration(expiration, function(value){
+      that.user.expiration = value;
+    });
   },
   setPageToken: function(pageId, token, expiration){
     if (!this.page){
@@ -81,12 +93,10 @@ fb_token.prototype = {
       this.page[pageId] = {};
     }
     this.page[pageId]['token'] = token;
-    if (typeof expiration === 'number') {
-      this.page[pageId]['expiration'] = new Moment().utc().add(expiration, 'seconds');
-    }
-    else {
-      this.page[pageId]['expiration'] = new Moment(expiration).utc();
-    }
+    var that = this;
+    this.setExpiration(expiration, function(value){
+      that.page[pageId]['expiration'] = value;
+    });
   },
   setGroupToken: function(groupId, token, expiration){
     if (!this.group){
@@ -95,16 +105,18 @@ fb_token.prototype = {
     if (!this.group[groupId]){
       this.group[groupId] = {};
     }
-    this.group[groupId]['token'] = token
-    if (typeof expiration === 'number') {
-      this.group[groupId]['expiration'] = new Moment().utc().add(expiration, 'seconds');
-    }
-    else {
-      this.group[groupId]['expiration'] = new Moment(expiration).utc();
-    }
+    this.group[groupId]['token'] = token;
+    this.setExpiration(expiration, function(value){
+      that.group[groupId]['expiration'] = value;
+    });
   },
   getUserToken: function(){
-    return this.user.token;
+    if (_.has(this.user, 'token')){
+      return this.user.token;
+    }
+    else {
+      return null;
+    }
   },
   getPageToken: function(pageId){
     if (!_.has(this.page, pageId)) {
@@ -141,7 +153,7 @@ fb_token.prototype = {
   },
   isPageTokenExpired: function(pageId){
     if (this.page.hasOwnProperty(pageId)){
-      var now = Moment().utc();
+      var now = new Moment().utc();
       return now.isAfter(this.page.expiration);
     }
     else {
@@ -150,14 +162,14 @@ fb_token.prototype = {
   },
   isGroupTokenExpired: function(groupId){
     if (this.group.hasOwnProperty(groupId)){
-      var now = Moment().utc();
+      var now = new Moment().utc();
       return now.isAfter(this.group.expiration);
     }
     else {
       return true;
     }    
   }
-}
+};
 
 //Is it important to type it to the window object? Not certain
 window.FB_TOKEN = new fb_token();
@@ -173,7 +185,7 @@ var fbState = function(r, e, t) {
   this.ready = r;
   this.errorState = e;
   this.token = t;
-} 
+};
 
 // ********************************** DEBUGGING FUNCTIONS ********************************************************
 var loginUser_fake = function(success){
@@ -189,7 +201,7 @@ var loginUser_fake = function(success){
       success();
     }
   });
-}
+};
 
 //For debugging purposes only
 var checkState_shim = function(renderer){ 
@@ -197,13 +209,13 @@ var checkState_shim = function(renderer){
     var state = new fbState(true, null);
     renderer(state);
   });
-}
+};
 
 //Also for debugging simple functions in the root view
 var checkState_shim_2 = function(renderer){ 
-  var state = new fbState(true, null);
+  var state = new fbState(true, null, null);
   renderer(state);
-}
+};
 
 // ***************************************************************************************************************
 
@@ -237,7 +249,7 @@ var fbApi = function(options, success, error){
       success(resp);
     }
   });
-}
+};
 
 //Might cause a stack overflow if the data is very large, or many many pages....
 var getAllPaginatedEntities = function(endPoint, options, success){
@@ -264,7 +276,7 @@ var getAllPaginatedEntities = function(endPoint, options, success){
   fbApi({endpoint: endPoint, fields: options}, function(resp){
     getData(resp, resp.data);
   });
-}
+};
 
 //Used to make a unique list from paginated data above.
 //Must have an ID field in order to create a unique list
@@ -276,7 +288,7 @@ var uniqify = function(data){
     }
   });
   return _.values(tmp);
-}
+};
 
 // var validatePermissionsAccepted = function(){
 //   getAllPaginatedEntities('me/permissions', {access_token: window.FB_TOKEN.getUserToken()}, function(permissions){
@@ -288,6 +300,75 @@ var uniqify = function(data){
 //     });
 //   });
 // }
+
+var _processLogin = function(resp, success, error){
+
+  window.FB_TOKEN.collectionManager.getFacebookAccessTokensPromise()
+    .then(function(tokens){
+      if (tokens.hasUserToken()) {
+        //At this point, the page/group tokens are not priority
+        //They will be dealt with by their respective views
+        //on instantiation, but must first store them in the 
+        //global token singleton
+        console.log('I need to be herE!!!');
+        console.log('The tokens', tokens);
+        _.each(tokens, function(t, i, arr){
+          console.log('Token number', i, t);
+        });
+
+        var token = tokens.getUserToken();
+        console.log('Currently existing user token', token);
+        token.save({
+          token: resp.authResponse.accessToken
+        }, {
+          patch: true,
+          success: function(model, resp, opt) {
+            console.log('Facebook Access Token updated successful.');
+            // console.log('Saved model', model);
+            // console.log('Resp object', resp);
+            // console.log('Options object', opt);
+            window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
+            success();
+          },
+          error: function(model, resp, opt){
+            console.log('Facebook Access Token save NOT updated successfully.');
+            // console.log('Saved model', model);
+            // console.log('Resp object', resp);
+            // console.log('Options object', opt);
+            error();
+          }
+        }); 
+      }
+      else {
+        //No user token, must make one
+        console.log('New token is being made...');
+        // console.log('The tokens', tokens);
+        // console.log('tokens have user token? ', tokens.hasUserToken());
+        var token = new Social.Facebook.Token.Model({
+          token: resp.authResponse.accessToken,
+          token_type: "user",
+          "@type": "FacebookAccessToken"
+        });
+        token.save(null, {
+          success: function(model, resp, opt){
+            console.log('New Facebook Access Token saved successfully.');
+            // console.log('Saved model', model);
+            // console.log('Resp object', resp);
+            // console.log('Options object', opt);
+            window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
+            success()
+          },
+          error: function(model, resp, opt){
+            console.log('New Facebook Access Token NOT saved successfully.');
+            // console.log('Saved model', model);
+            // console.log('Resp object', resp);
+            // console.log('Options object', opt);
+            error();
+          }
+        });
+    }
+  });
+};
 
 //Delete function for loggin user in. Will need this if user logs out of
 //of facebook when form is active
@@ -310,75 +391,99 @@ var loginUser = function(success) {
     }
 
     else {
+      _processLogin(resp, success);
       //Status is connected
       // console.log('Access token from login', resp.authResponse.accessToken);
       // console.log('Short term token expires in', resp.authResponse.expiresIn);
       //var collectionManager = new CollectionManager();
-      window.FB_TOKEN.collectionManager.getFacebookAccessTokensPromise()
-        .then(function(tokens){
-          if (tokens.hasUserToken()) {
-            //At this point, the page/group tokens are not priority
-            //They will be dealt with by their respective views
-            //on instantiation, but must first store them in the 
-            //global token singleton
-            console.log('I need to be herE!!!');
-            console.log('The tokens', tokens);
-            _.each(tokens, function(t, i, arr){
-              console.log('Token number', i, t);
-            });
+      // window.FB_TOKEN.collectionManager.getFacebookAccessTokensPromise()
+      //   .then(function(tokens){
+      //     if (tokens.hasUserToken()) {
+      //       //At this point, the page/group tokens are not priority
+      //       //They will be dealt with by their respective views
+      //       //on instantiation, but must first store them in the 
+      //       //global token singleton
+      //       console.log('I need to be herE!!!');
+      //       console.log('The tokens', tokens);
+      //       _.each(tokens, function(t, i, arr){
+      //         console.log('Token number', i, t);
+      //       });
 
-            var token = tokens.getUserToken();
-            console.log('Currently existing user token', token);
-            token.save({
-              token: resp.authResponse.accessToken
-            }, {
-              patch: true,
-              success: function(model, resp, opt) {
-                console.log('Facebook Access Token updated successful.');
-                // console.log('Saved model', model);
-                // console.log('Resp object', resp);
-                // console.log('Options object', opt);
-                window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
-              },
-              error: function(model, resp, opt){
-                console.log('Facebook Access Token save NOT updated successfully.');
-                // console.log('Saved model', model);
-                // console.log('Resp object', resp);
-                // console.log('Options object', opt);
-              }
-            }); 
-          }
-          else {
-            //No user token, must make one
-            console.log('New token is being made...');
-            // console.log('The tokens', tokens);
-            // console.log('tokens have user token? ', tokens.hasUserToken());
-            var token = new Social.Facebook.Token.Model({
-              token: resp.authResponse.accessToken,
-              token_type: "user",
-              "@type": "FacebookAccessToken"
-            });
-            token.save(null, {
-              success: function(model, resp, opt){
-                console.log('New Facebook Access Token saved successfully.');
-                // console.log('Saved model', model);
-                // console.log('Resp object', resp);
-                // console.log('Options object', opt);
-                window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
-                success()
-              },
-              error: function(model, resp, opt){
-                console.log('New Facebook Access Token NOT saved successfully.');
-                // console.log('Saved model', model);
-                // console.log('Resp object', resp);
-                // console.log('Options object', opt);
-              }
-            })
-          }
-        });
+      //       var token = tokens.getUserToken();
+      //       console.log('Currently existing user token', token);
+      //       token.save({
+      //         token: resp.authResponse.accessToken
+      //       }, {
+      //         patch: true,
+      //         success: function(model, resp, opt) {
+      //           console.log('Facebook Access Token updated successful.');
+      //           // console.log('Saved model', model);
+      //           // console.log('Resp object', resp);
+      //           // console.log('Options object', opt);
+      //           window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
+      //           success();
+      //         },
+      //         error: function(model, resp, opt){
+      //           console.log('Facebook Access Token save NOT updated successfully.');
+      //           // console.log('Saved model', model);
+      //           // console.log('Resp object', resp);
+      //           // console.log('Options object', opt);
+      //         }
+      //       }); 
+      //     }
+      //     else {
+      //       //No user token, must make one
+      //       console.log('New token is being made...');
+      //       // console.log('The tokens', tokens);
+      //       // console.log('tokens have user token? ', tokens.hasUserToken());
+      //       var token = new Social.Facebook.Token.Model({
+      //         token: resp.authResponse.accessToken,
+      //         token_type: "user",
+      //         "@type": "FacebookAccessToken"
+      //       });
+      //       token.save(null, {
+      //         success: function(model, resp, opt){
+      //           console.log('New Facebook Access Token saved successfully.');
+      //           // console.log('Saved model', model);
+      //           // console.log('Resp object', resp);
+      //           // console.log('Options object', opt);
+      //           window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
+      //           success()
+      //         },
+      //         error: function(model, resp, opt){
+      //           console.log('New Facebook Access Token NOT saved successfully.');
+      //           // console.log('Saved model', model);
+      //           // console.log('Resp object', resp);
+      //           // console.log('Options object', opt);
+      //         }
+      //       })
+      //     }
+      //   });
     }
   },{scope: scope });
-}
+};
+
+var checkLoginState = function(options){
+  //Instead of using login function, use the loginState api call, force to get facebook information.
+  //If they are not connected, ask to login with our permissions.
+  //If they are logged in already, then update the token field!
+  //If it fails, raise an error.
+  
+  window.FB.getLoginStatus(function(resp){
+    if (_.has(resp, 'error') ){
+      var errorMessage = i18n.gettext("There was an issue with getting your Facebook login status. Please close this box and contact your discussion administrator.");
+      $('.js_export_error_message').text(errorMessage);
+    }
+    else {
+      if (resp.status !== 'connected'){
+        options.error();
+      }
+      else {
+        _processLogin(resp, options.success, options.error);
+      }
+    }
+  }, true); //force to fetch status from server, instead of local cache
+};
 
 //Entry point in this module
 var checkState = function(renderView) {
@@ -433,6 +538,7 @@ var checkState = function(renderView) {
           var userToken = tokens.getUserToken();
           console.log('UserToken', userToken);
           if (!userToken) {
+            console.log('Need to ask for permissions');
             var state = new fbState(false, 'permissions',null);
             renderView(state);
           }
@@ -440,13 +546,24 @@ var checkState = function(renderView) {
             //Check token expiry
             if ( userToken.isExpired() ) {
               console.log('Token is expired!!!!', userToken);
-              loginUser(function(){
-                var state = new fbState(true, null, window.FB_TOKEN);
-                renderView(state);
+              // loginUser(function(){
+              //   var state = new fbState(true, null, window.FB_TOKEN);
+              //   renderView(state);
+              // });
+              checkLoginState({
+                success: function(){
+                  var state = new fbState(true, null, window.FB_TOKEN);
+                  renderView(state);
+                },
+                error: function(){
+                  var state = new fbState(false, 'update-permissions', null);
+                  renderView(state);
+                } 
               });
             }
             else {
               //Token not expired, serve it up
+              console.log('Token is not expired');
               window.FB_TOKEN.setUserToken(userToken.get('token'), userToken.get('expiration'));
               var state = new fbState(true, null, window.FB_TOKEN);
               renderView(state);
@@ -454,7 +571,7 @@ var checkState = function(renderView) {
           }
         }
     });
-}
+};
 
 var errorView = Marionette.ItemView.extend({
   template: '#tmpl-exportPostModal-fb-token-error',
@@ -465,6 +582,11 @@ var errorView = Marionette.ItemView.extend({
       if (options.errorState === 'permissions') {
         this.msg = i18n.gettext("Great! You already have a facebook account. Below are the list of permissions we need for the exportation process.");
         this.subMsg = i18n.gettext('Click here if you agree with these permissions.');
+        this.state = options.errorState;
+      }
+      else if (options.errorState === 'update-permissions'){
+        this.msg = i18n.gettext("It appears that your session was expired. Click below to refresh your session. As always, below are the permissions that Assembl would need to continue.");
+        this.subMsg = i18n.gettext('Click here to continue.');
         this.state = options.errorState;
       }
       else {
@@ -711,9 +833,14 @@ var fbLayout = Marionette.LayoutView.extend({
       }
     },
     test: function(e) {
-      checkState(function(state){
-        console.log('The resulting state is: ', state);
-      });
+      // checkState(function(state){
+      //   console.log('The resulting state is: ', state);
+      // });
+      var fakeToken = "This is a fake access token";
+      console.log('The utc time now is: ', Moment().utc().toString());
+      console.log('The string that will be used to create token is 2015-07-15T08:05:54');
+      window.FB_TOKEN.setPageToken('1234', fakeToken, "2015-07-15T08:05:54");
+      console.log('Done testing');
     },
     defineView: function(event){
       var value = this.$(event.currentTarget)
@@ -862,4 +989,4 @@ module.exports = {
   page: pageView,
   error: errorView,
   resolveState: checkState
-}
+};
