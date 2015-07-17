@@ -189,6 +189,9 @@ class LikedPost(UniqueActionOnPost):
 
     verb = 'liked'
 
+    crud_permissions = CrudPermissions(
+        P_READ, P_READ, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
+
 
 @event.listens_for(LikedPost, 'after_insert', propagate=True)
 def send_post_to_socket(mapper, connection, target):
