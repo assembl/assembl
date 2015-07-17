@@ -225,7 +225,7 @@ var SynthesisPanel = AssemblPanel.extend({
      * Publish the synthesis
      */
     publish: function () {
-        var ok = confirm(i18n.gettext("Do you want to publish the synthesis?"));
+        var ok = confirm(i18n.gettext("Are you sure you want to publish the synthesis? You will not be able to delete it afterwards, and participants who subscribed to notifications related to the synthesis will receive a notification by email."));
         if (ok) {
             this._publish();
         }
