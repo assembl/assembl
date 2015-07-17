@@ -59,7 +59,7 @@ def main():
         metrics_cl = config.get('metrics', 'metrics_cl')
         has_metrics_server = (
             metrics_code_dir and exists(metrics_code_dir)
-            and exists(metrics_cl))
+            and exists(metrics_cl.split()[0]))
     except NoSectionError:
         has_metrics_server = False
         metrics_cl = '/bin/ls'  # innocuous
