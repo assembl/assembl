@@ -153,11 +153,9 @@
       </div>
     <% } %>
 
-    {#
     <% if( (viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW) && user_is_connected ){ %>
       &nbsp;&nbsp;{{ showLikeButton() }}
     <% } %>
-    #}
 
     <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
       &nbsp;&nbsp;{{ showShareButton() }}

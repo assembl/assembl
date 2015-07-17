@@ -11,8 +11,9 @@ from sqlalchemy import (
     desc,
     select,
     func,
+    event,
 )
-
+from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import relationship, backref, column_property
 from virtuoso.vmapping import IriClass
 
@@ -187,6 +188,19 @@ class LikedPost(UniqueActionOnPost):
     )
 
     verb = 'liked'
+
+
+@event.listens_for(LikedPost, 'after_insert', propagate=True)
+def send_post_to_socket(mapper, connection, target):
+    target.post.send_to_changes()
+
+
+@event.listens_for(LikedPost, 'after_update', propagate=True)
+def send_post_to_socket_ts(mapper, connection, target):
+    if not inspect(target).unmodified_intersection(('tombstone_date')):
+        target.db.expire(target.post, ['like_count'])
+        target.post.send_to_changes()
+
 
 _lpt = LikedPost.__table__
 _actt = Action.__table__

@@ -103,7 +103,6 @@ var MessageView = Marionette.ItemView.extend({
     },
     modelEvents: {
       'replacedBy':'onReplaced',
-      'change:liked': 'onChangeLiked',
       'change':'render',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
     },
@@ -113,7 +112,8 @@ var MessageView = Marionette.ItemView.extend({
       jumpToMessageInThreadButton: ".js_message-jump-to-message-in-thread",
       jumpToMessageInReverseChronologicalButton: ".js_message-jump-to-message-in-reverse-chronological",
       showAllMessagesByThisAuthorButton: ".js_message-show-all-by-this-author",
-      messageReplyBox: ".message-replybox"
+      messageReplyBox: ".message-replybox",
+      likedLink: ".js_likeButton"
     },
 
 
@@ -416,22 +416,32 @@ var MessageView = Marionette.ItemView.extend({
         return;
     },
 
-    onClickLiked: function() {
-      if (this.model.get('liked')) {
-         $.ajax(Ctx.getUrlFromUri(this.model.get('liked')), {
-            method: "DELETE"});
+    onClickLiked: function(e) {
+      var that = this,
+          liked_uri = this.model.get('liked');
+      if (liked_uri) {
+        Promise.resolve($.ajax(Ctx.getUrlFromUri(this.model.get('liked')), {
+          method: "DELETE"})).then(function (data) {
+          that.model.set('liked', false);
+        }).catch(function(e) {
+          that.model.set('liked', liked_uri);
+          return false;
+        });
       } else {
-         $.ajax("/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/actions", {
-            method: "POST",
-            contentType: "application/json",
-            data: '{"@type":"LikedPost"}'
+        Promise.resolve($.ajax(
+          "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/actions", {
+          method: "POST",
+          contentType: "application/json",
+          data: '{"@type":"LikedPost"}'
+        })).then(function(data) {
+          data = JSON.parse(data);
+          that.model.set('liked', data['@id']);
+        }).catch(function(e) {
+          that.model.set('liked', false);
+          return false;
         });
       }
       return false;
-    },
-
-    onChangeLiked: function() {
-      console.log("onChangeLiked", arguments);
     },
 
     /**
