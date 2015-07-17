@@ -40,6 +40,7 @@ DOMAIN = 'facebook.com'
 
 facebook_sdk_locales = defaultdict(set)
 
+
 def fetch_facebook_sdk_locales():
     import requests as r
     from lxml import etree
@@ -130,11 +131,12 @@ class FacebookAPI(object):
     # Proxy object to the unofficial facebook sdk
     def __init__(self, user_token=None):
         config = get_config()
-        self._app_id = config['facebook.consumer_key']
-        self._app_secret = config['facebook.consumer_secret']
-        self._app_access_token = config['facebook.app_access_token']
+        self._app_id = config.get('facebook.consumer_key')
+        self._app_secret = config.get('facebook.consumer_secret')
+        self._app_access_token = config.get('facebook.app_access_token')
         token = self._app_access_token if not user_token else user_token
-        self._api = facebook.GraphAPI(token, DEFAULT_TIMEOUT, API_VERSION_USED)
+        version = config.get('facebook.api_version', None) or API_VERSION_USED
+        self._api = facebook.GraphAPI(token, DEFAULT_TIMEOUT, version)
 
     def api_caller(self):
         return self._api

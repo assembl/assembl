@@ -79,6 +79,7 @@ facebook.scope = public_profile,email
 facebook.app_access_token =
 facebook.export_permissions = public_profile, email, publish_actions, user_posts, user_likes, manage_pages, publish_pages, user_groups, user_managed_groups
 facebook.debug_mode = false
+facebook.api_version = 
 supported_exports_list =
 
 # https://dev.twitter.com/apps/new
