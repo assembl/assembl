@@ -97,7 +97,7 @@ HomeModule.controller('HomeController', [
                 }).success(function () {
 
                     $scope.message = "sendNewIdea:success";
-                    $scope.formData.short_title = null;
+                    $scope.formData.shortTitle = null;
                     $scope.formData.definition = null;
 
                 }).error(function () {

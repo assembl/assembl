@@ -19,8 +19,7 @@ RateModule.controller('RateController', [
          */
         $scope.getSubIdeaForVote = function () {
 
-            var
-                rootUrl = UtilsService.getURL($scope.widget.ideas_url),
+            var rootUrl = UtilsService.getURL($scope.widget.ideas_url),
                 ideas = [];
 
             $http.get(rootUrl).then(function (response) {
@@ -57,8 +56,7 @@ RateModule.controller('RateController', [
          * */
         $scope.validSelection = function () {
 
-            var
-                subIdeaSelected = [],
+            var subIdeaSelected = [],
                 commentSelected = [],
                 subIdea = angular.element('#postForm .sub-idea'),
                 commentSubIdea = angular.element('#postForm .comment-to-sub-idea'),
@@ -98,12 +96,12 @@ RateModule.controller('RateController', [
            if (commentSelected.length > 0) {
 
                 var obj = {};
-                obj.ids = JSON.stringify(commentSelected);
+                obj.ids = commentSelected;
 
                 $http({
                     method: 'POST',
                     url: rootUrlMessage,
-                    data: $.param(obj),
+                    data: obj,
                     async: true,
                     headers: {'Content-Type': 'application/json'}
                 }).success(function (data, status, headers) {
@@ -120,12 +118,12 @@ RateModule.controller('RateController', [
            if (subIdeaSelected.length > 0) {
 
                 var obj = {};
-                obj.ids = JSON.stringify(subIdeaSelected);
+                obj.ids = subIdeaSelected;
 
                 $http({
                     method: 'POST',
                     url: rootUrlSubIdea,
-                    data: $.param(obj),
+                    data: obj,
                     async: true,
                     headers: {'Content-Type': 'application/json'}
                 }).success(function (data, status, headers) {
@@ -152,7 +150,6 @@ RateModule.controller('RateController', [
             $scope.selectedItems = selectedItems;
 
         }, true);
-
 
         //init
         $scope.getSubIdeaForVote();

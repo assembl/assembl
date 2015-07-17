@@ -14,7 +14,7 @@ SessionApp.directive('comments', [
             widget:'=widget'
         },
         templateUrl: 'app/shared/directives/comments/comments.html',
-        link: function($scope, element){
+        link: function($scope, element, attrs){
 
             $scope.formData = {};
             $scope.comments = [];
@@ -23,6 +23,17 @@ SessionApp.directive('comments', [
             if($scope.widget.settings.endDate){
                 $scope.readOnly = new Date().getTime() > new Date($scope.widget.settings.endDate).getTime();
             }
+
+            $scope.$watch('idea.selected', function (checked) {
+                if (checked) {
+                    $scope.checked = true;
+                } else {
+                    $scope.checked = false;
+                }
+                angular.forEach($scope.comments, function (com) {
+                    com.selected = $scope.checked;
+                });
+            });
 
             $scope.$watch('message', function(value){
 

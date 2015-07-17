@@ -12,7 +12,6 @@
                     <div class="pull-left">
                         <input type="checkbox" id="checkbox-{{idea['@id']}}"  value="{{idea['@id']}}" data-toggle="checkbox" class="sub-idea" ng-model="idea.selected">
                     </div>
-
                     <div class="pull-left thumbnail">
                         <img class="media-object img-circle" ng-src="{{idea.avatar}}" alt="30x30" style="width: 30px; height: 30px;">
                     </div>
@@ -21,11 +20,11 @@
                             <h6 class="media-heading">{{idea.username}}</h6>
                             <i class="text-info time">{{idea.beautify_date}}</i>
                         </div>
-                        <div><h4>{{idea.shortTitle}}</h4></div>
+                        <div><h5>{{idea.shortTitle}}</h5></div>
                         <span class="pull-left"><i class="icon-lamp"></i></span>
                     <span class="pull-right">
                         <!-- Vote directive -->
-                        <vote idea="idea" widget="widget"></vote>
+                        <!-- <vote idea="idea" widget="widget"></vote> -->
                     </span>
                         <div class="row">
                             <div class="col-md-12 comment-idea">
