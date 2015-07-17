@@ -22,7 +22,7 @@ from assembl.auth.util import get_permissions
 from assembl.models import (
     get_database_id, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, Content, Idea, ViewPost, User, Action,
-    IdeaRelatedPostLink, Email, AgentProfile)
+    IdeaRelatedPostLink, Email, AgentProfile, LikedPost)
 import uuid
 from assembl.lib import config
 from jwzthreading import restrip_pat
@@ -197,8 +197,10 @@ def get_posts(request):
     if user_id:
         posts = posts.outerjoin(ViewPost,
                     and_(ViewPost.actor_id==user_id, ViewPost.post_id==PostClass.id)
+                ).outerjoin(LikedPost,
+                    and_(LikedPost.actor_id==user_id, LikedPost.post_id==PostClass.id)
                 )
-        posts = posts.add_entity(ViewPost)
+        posts = posts.add_entity(ViewPost).add_entity(LikedPost)
         
         if is_unread == "true":
             posts = posts.filter(ViewPost.id == None)
@@ -236,15 +238,15 @@ def get_posts(request):
 
     no_of_posts = 0
     no_of_posts_viewed_by_user = 0
-    
 
     for query_result in posts:
-        score, viewpost = None, None
+        score, viewpost, likedpost = None, None, None
         if not isinstance(query_result, (list, tuple)):
             query_result = [query_result]
         post = query_result[0]
         if user_id:
-            viewpost = query_result[-1]
+            viewpost = query_result[-2]
+            likedpost = query_result[-1]
         no_of_posts += 1
         serializable_post = post.generic_json(
             view_def, user_id, permissions) or {}
@@ -265,6 +267,7 @@ def get_posts(request):
             serializable_post['read'] = True
         else:
             serializable_post['read'] = False
+        serializable_post['liked'] = likedpost.uri() if likedpost else False
 
         post_data.append(serializable_post)
 
