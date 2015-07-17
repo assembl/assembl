@@ -25,6 +25,10 @@
 <a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_openTargetInPopOver" data-popover-width="300" data-popover-height="71" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
 {%- endmacro %}
 
+{% macro showLikeButton() -%}
+<a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_likeButton" data-popover-width="300" data-popover-height="71" data-popover-scrolling=""><% if (message.get('liked')) { %>{{ gettext("Unlike") }}<% } else { %>{{ gettext("Like") }}<% } %></a>
+{%- endmacro %}
+
 {% macro menuAction() -%}
    <div class="message-menu">
      <ul class="pan man">
@@ -149,8 +153,18 @@
       </div>
     <% } %>
 
+    {#
+    <% if( (viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW) && user_is_connected ){ %>
+      &nbsp;&nbsp;{{ showLikeButton() }}
+    <% } %>
+    #}
+
     <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
       &nbsp;&nbsp;{{ showShareButton() }}
+    <% } %>
+
+    <% if( (viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW) && message.get("like_count") > 0){ %>
+      &nbsp;&nbsp;<i class="icon-heart"></i><%= message.get("like_count") %>
     <% } %>
 
   </div>

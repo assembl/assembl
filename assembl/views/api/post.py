@@ -103,10 +103,9 @@ def get_posts(request):
         ids = [get_database_id("Post", id) for id in ids]
 
     view_def = request.GET.get('view') or 'default'
-    
 
     only_synthesis = request.GET.get('only_synthesis')
-    
+
     post_author_id = request.GET.get('post_author')
     if post_author_id:
         post_author_id = get_database_id("AgentProfile", post_author_id)
@@ -120,7 +119,6 @@ def get_posts(request):
     posted_after_date = request.GET.get('posted_after_date')
 
     PostClass = SynthesisPost if only_synthesis == "true" else Post
-    posts = discussion.db.query(PostClass)
     if order == 'score':
         posts = discussion.db.query(PostClass, Content.body_text_index.score_name)
     else:
@@ -132,7 +130,7 @@ def get_posts(request):
     ##no_of_posts_to_discussion = posts.count()
 
     post_data = []
-    
+
     only_orphan = request.GET.get('only_orphan')
     if only_orphan == "true":
         if root_idea_id:
@@ -166,7 +164,7 @@ def get_posts(request):
             )
     else:
         root_post = None
-    
+
     if ids:
         posts = posts.filter(Post.id.in_(ids))
 
@@ -195,13 +193,31 @@ def get_posts(request):
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
     if user_id:
-        posts = posts.outerjoin(ViewPost,
-                    and_(ViewPost.actor_id==user_id, ViewPost.post_id==PostClass.id)
-                ).outerjoin(LikedPost,
-                    and_(LikedPost.actor_id==user_id, LikedPost.post_id==PostClass.id)
-                )
-        posts = posts.add_entity(ViewPost).add_entity(LikedPost)
-        
+        # This is horrible, but the ORM way creates complex subqueries that
+        # virtuoso cannot decode properly.
+        content_table = Content.__table__
+        view_post_table = ViewPost.__table__
+        liked_post_table = LikedPost.__table__
+        action_table = Action.__table__
+        read_posts = {x for (x,) in discussion.db.query(
+            content_table.c.id).join(
+                view_post_table,
+                view_post_table.c.post_id == content_table.c.id
+            ).join(action_table, action_table.c.id == view_post_table.c.id
+            ).filter(content_table.c.discussion_id == discussion_id,
+                action_table.c.type == ViewPost.__mapper__.polymorphic_identity,
+                action_table.c.tombstone_date == None,
+                action_table.c.actor_id == user_id)}
+        liked_posts = {post_id: like_id for (post_id, like_id) in discussion.db.query(
+            content_table.c.id).join(
+            liked_post_table, liked_post_table.c.post_id == content_table.c.id
+            ).join(action_table, action_table.c.id == liked_post_table.c.id
+            ).filter(content_table.c.discussion_id == discussion_id,
+                action_table.c.type == LikedPost.__mapper__.polymorphic_identity,
+                action_table.c.tombstone_date == None,
+                action_table.c.actor_id == user_id
+                ).add_column(action_table.c.id)}
+
         if is_unread == "true":
             posts = posts.filter(ViewPost.id == None)
         elif is_unread == "false":
@@ -245,8 +261,8 @@ def get_posts(request):
             query_result = [query_result]
         post = query_result[0]
         if user_id:
-            viewpost = query_result[-2]
-            likedpost = query_result[-1]
+            viewpost = post.id in read_posts
+            likedpost = liked_posts.get(post.id, None)
         no_of_posts += 1
         serializable_post = post.generic_json(
             view_def, user_id, permissions) or {}
@@ -258,7 +274,7 @@ def get_posts(request):
             serializable_post['read'] = True
             no_of_posts_viewed_by_user += 1
         elif user_id and root_post is not None and root_post.id == post.id:
-            #Mark post read, we requested it explicitely
+            # Mark post read, we requested it explicitely
             viewed_post = ViewPost(
                 actor_id=user_id,
                 post=root_post
@@ -267,7 +283,8 @@ def get_posts(request):
             serializable_post['read'] = True
         else:
             serializable_post['read'] = False
-        serializable_post['liked'] = likedpost.uri() if likedpost else False
+        # serializable_post['liked'] = likedpost.uri() if likedpost else False
+        serializable_post['liked'] = LikedPost.uri_generic(likedpost) if likedpost else False
 
         post_data.append(serializable_post)
 

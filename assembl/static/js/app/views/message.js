@@ -103,6 +103,7 @@ var MessageView = Marionette.ItemView.extend({
     },
     modelEvents: {
       'replacedBy':'onReplaced',
+      'change:liked': 'onChangeLiked',
       'change':'render',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
     },
@@ -126,6 +127,7 @@ var MessageView = Marionette.ItemView.extend({
         'click .js_readMore': 'onMessageTitleClick',
         'click .js_readLess': 'onMessageTitleClick',
         'click .message-hoistbtn': 'onMessageHoistClick',
+        'click .js_likeButton': 'onClickLiked',
         'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
         'click @ui.jumpToMessageInThreadButton': 'onMessageJumpToMessageInThreadClick',
         'click @ui.jumpToMessageInReverseChronologicalButton': 'onMessageJumpToMessageInReverseChronologicalClick',
@@ -142,7 +144,7 @@ var MessageView = Marionette.ItemView.extend({
         'mousemove .js_messageBodyAnnotatorSelectionAllowed': 'updateAnnotatorTextSelection',
         'mouseleave .js_messageBodyAnnotatorSelectionAllowed': 'onMouseLeaveMessageBodyAnnotatorSelectionAllowed',
         'mouseenter .js_messageBodyAnnotatorSelectionAllowed': 'updateAnnotatorTextSelection',
-
+        
         // menu
         'click .js_message-markasunread': 'markAsUnread',
         'click .js_message-markasread': 'markAsRead',
@@ -412,6 +414,24 @@ var MessageView = Marionette.ItemView.extend({
      */
     postRender: function () {
         return;
+    },
+
+    onClickLiked: function() {
+      if (this.model.get('liked')) {
+         $.ajax(Ctx.getUrlFromUri(this.model.get('liked')), {
+            method: "DELETE"});
+      } else {
+         $.ajax("/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/actions", {
+            method: "POST",
+            contentType: "application/json",
+            data: '{"@type":"LikedPost"}'
+        });
+      }
+      return false;
+    },
+
+    onChangeLiked: function() {
+      console.log("onChangeLiked", arguments);
     },
 
     /**
