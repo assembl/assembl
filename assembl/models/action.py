@@ -76,6 +76,16 @@ class Action(TombstonableMixin, DiscussionBoundBase):
             ])
         )
 
+    def is_owner(self, user_id):
+        return self.actor_id == user_id
+
+    @classmethod
+    def restrict_to_owners(cls, q, user_id):
+        return q.filter(cls.actor_id == user_id)
+
+    crud_permissions = CrudPermissions(
+        P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
+
 
 class ActionOnPost(Action):
     """
@@ -285,4 +295,3 @@ class ViewIdea(ActionOnIdea):
             actor=User.uri_generic(self.actor_id))
 
     verb = 'viewed'
-    crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN, P_SYSADMIN)
