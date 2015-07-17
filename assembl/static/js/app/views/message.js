@@ -432,9 +432,9 @@ var MessageView = Marionette.ItemView.extend({
           "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/actions", {
           method: "POST",
           contentType: "application/json",
+          dataType: "json",
           data: '{"@type":"LikedPost"}'
         })).then(function(data) {
-          data = JSON.parse(data);
           that.model.set('liked', data['@id']);
         }).catch(function(e) {
           that.model.set('liked', false);
