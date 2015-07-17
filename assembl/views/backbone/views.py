@@ -141,16 +141,24 @@ def home_view(request):
     route_name = request.matched_route.name
     if route_name == "purl_posts":
         post_id = FrontendUrls.getRequestedPostId(request)
-        if post_id:
-            post = Post.get_instance(post_id)
-            if post and post.discussion_id == discussion.id:
-                context['post'] = post
+        if not post_id:
+            return HTTPSeeOther(request.route_url(
+                'home', discussion_slug=discussion.slug))
+        post = Post.get_instance(post_id)
+        if not post or post.discussion_id != discussion.id:
+            return HTTPSeeOther(request.route_url(
+                'home', discussion_slug=discussion.slug))
+        context['post'] = post
     elif route_name == "purl_idea":
         idea_id = FrontendUrls.getRequestedIdeaId(request)
-        if idea_id:
-            idea = Idea.get_instance(idea_id)
-            if idea and idea.discussion_id == discussion.id:
-                context['idea'] = idea
+        if not idea_id:
+            return HTTPSeeOther(request.route_url(
+                'home', discussion_slug=discussion.slug))
+        idea = Idea.get_instance(idea_id)
+        if not idea or idea.discussion_id != discussion.id:
+            return HTTPSeeOther(request.route_url(
+                'home', discussion_slug=discussion.slug))
+        context['idea'] = idea
 
     canAddExtract = user_has_permission(discussion.id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract
