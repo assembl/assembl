@@ -268,8 +268,8 @@ var BaseCollection = Backbone.Collection.extend({
             }
             this.add(item, {merge: true});
             if (debug) {
-                console.log("Item is now:");
-                console.log(item);
+                console.log("Model is now:");
+                console.log(model);
             }
         }
         if (debug) {
