@@ -4,10 +4,10 @@
     "selection":"Selection",
     "confirm":"Confirm",
     "first_post":"No ideas have been posted to the creativity session. Your idea will be the first!",
-    "contributions":"{{nb}} contributions :",
+    "contributions":"{{nb}} contributions:",
 
     "CREATE":{
-      "create_from_idea_title":"Would you like to create a creativity session on << {{idea}} >> ?",
+      "create_from_idea_title":"Would you like to create a creativity session on ‟{{idea}}” ?",
       "helper":"A creativity session helps rejuvenate the discussion by exposing participants to disruptive questions.",
       "see_more_detail":"See more detail",
       "create": "Create"
@@ -17,19 +17,19 @@
     },
     "HOME":{
       "question_placeholder":"This issue will be visible above the card",
-      "question_title":"Write a question on which participants would react to",
-      "question_helper":"You're mobilizing participants on << {{idea}} >>",
-      "jeton_number":"Number of token",
+      "question_title":"Write a question which participants would react to",
+      "question_helper":"You're mobilizing participants on ‟{{idea}}”",
+      "jeton_number":"Number of tokens",
       "jeton_title":"Token",
       "start_date":"Start of session",
       "end_date":"End of session",
       "empty_question":"Please add a question in the edit menu",
       "shuffle":"Draw a new card",
-      "idea_prompt":"This question is relative to the idea \"{{parentIdeaTitle}}\". Please try to answer the question, by using one of the cards below to find inspiration:",
+      "idea_prompt":"This question is relative to the idea ‟{{parentIdeaTitle}}”. Please try to answer the question, by using one of the cards below to find inspiration:",
       "send": "Send"
     },
     "RATE":{
-      "rateIdeaTitle":"Do you want to send them to << {{title}} >>",
+      "rateIdeaTitle":"Do you want to send them to ‟{{title}}”",
       "nbSelection":"You have selected : {{nb}}"
     }
 }
