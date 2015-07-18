@@ -193,30 +193,18 @@ def get_posts(request):
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
     if user_id:
-        # This is horrible, but the ORM way creates complex subqueries that
+        # This is horrible, but the join creates complex subqueries that
         # virtuoso cannot decode properly.
-        content_table = Content.__table__
-        view_post_table = ViewPost.__table__
-        liked_post_table = LikedPost.__table__
-        action_table = Action.__table__
-        read_posts = {x for (x,) in discussion.db.query(
-            content_table.c.id).join(
-                view_post_table,
-                view_post_table.c.post_id == content_table.c.id
-            ).join(action_table, action_table.c.id == view_post_table.c.id
-            ).filter(content_table.c.discussion_id == discussion_id,
-                action_table.c.type == ViewPost.__mapper__.polymorphic_identity,
-                action_table.c.tombstone_date == None,
-                action_table.c.actor_id == user_id)}
-        liked_posts = {post_id: like_id for (post_id, like_id) in discussion.db.query(
-            content_table.c.id).join(
-            liked_post_table, liked_post_table.c.post_id == content_table.c.id
-            ).join(action_table, action_table.c.id == liked_post_table.c.id
-            ).filter(content_table.c.discussion_id == discussion_id,
-                action_table.c.type == LikedPost.__mapper__.polymorphic_identity,
-                action_table.c.tombstone_date == None,
-                action_table.c.actor_id == user_id
-                ).add_column(action_table.c.id)}
+        read_posts = {v.post_id for v in discussion.db.query(
+            ViewPost).filter(
+                ViewPost.tombstone_condition(),
+                ViewPost.actor_id == user_id,
+                *ViewPost.get_discussion_conditions(discussion_id))}
+        liked_posts = {l.post_id: l.id for l in discussion.db.query(
+            LikedPost).filter(
+                LikedPost.tombstone_condition(),
+                LikedPost.actor_id == user_id,
+                *LikedPost.get_discussion_conditions(discussion_id))}
 
         if is_unread == "true":
             posts = posts.filter(ViewPost.id == None)
