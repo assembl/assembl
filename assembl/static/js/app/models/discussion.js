@@ -63,7 +63,7 @@ var discussionModel = Base.Model.extend({
         var rolesGrantingPermission = this.getRolesForPermission(permission);
         if(_.size(rolesGrantingPermission) > 0){
           if(_.contains(rolesGrantingPermission, Roles.PARTICIPANT) && _.contains(this.getRolesForPermission(Permissions.SELF_REGISTER), Roles.AUTHENTICATED)) {
-            retval = i18n.sprintf(i18n.gettext('you must Join this group'));
+            retval = i18n.sprintf(i18n.gettext('you must Join this discussion'));
           }
           else {
             //TODO:  Handle the case of self_register_req

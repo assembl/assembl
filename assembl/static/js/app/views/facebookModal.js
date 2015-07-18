@@ -590,7 +590,7 @@ var errorView = Marionette.ItemView.extend({
         this.state = options.errorState;
       }
       else {
-        this.msg = i18n.gettext("You must create an account. Warning: This will refersh the page");
+        this.msg = i18n.gettext("You must create an account. Warning: This will refresh the page");
         this.subMsg = i18n.gettext("Sign in using your Facebook account");
         this.state = options.errorState;
       }
