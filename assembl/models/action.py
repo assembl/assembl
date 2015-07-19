@@ -106,6 +106,17 @@ class ActionOnPost(Action):
         info={'rdf': QuadMapPatternS(None, VERSION.what)}
     )
 
+
+    post_ts = relationship(
+        Content, foreign_keys=(post_id,),
+        backref=backref("actions_ts", cascade="all, delete-orphan"))
+
+    post = relationship(
+        Content,
+        primaryjoin="and_(Content.id == ActionOnPost.post_id,"
+                         "ActionOnPost.tombstone_date == None)",
+        foreign_keys=(post_id,), backref="actions")
+
     post = relationship(
         'Content',
         backref=backref('actions', cascade="all, delete-orphan"),
@@ -257,10 +268,16 @@ class ActionOnIdea(Action):
         info={'rdf': QuadMapPatternS(None, VERSION.what)}
     )
 
+    idea_ts = relationship(
+        Idea, foreign_keys=(idea_id,),
+        backref=backref("actions_ts", cascade="all, delete-orphan"))
+
     idea = relationship(
         Idea,
-        backref=backref('actions', cascade="all, delete-orphan"),
-    )
+        primaryjoin="and_(Idea.id == ActionOnIdea.idea_id,"
+                         "Idea.tombstone_date == None,"
+                         "ActionOnIdea.tombstone_date == None)",
+        foreign_keys=(idea_id,), backref="actions")
 
     object_type = 'idea'
 
