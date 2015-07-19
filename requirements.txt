@@ -4,12 +4,12 @@ Chameleon==2.22
 ColanderAlchemy==0.3.1
 DateTime==4.0.1
 Fabric==1.10.2
-IMAPClient==0.12
+IMAPClient==0.13
 Jinja2==2.7.3
 Mako==1.0.1
 MarkupSafe==0.23
 PasteDeploy==1.5.2
-PyJWT==1.3.0
+PyJWT==1.4.0
 PyLD==0.6.8
 PyStemmer==1.3.0
 Pygments==2.0.2
@@ -28,7 +28,7 @@ anykeystore==0.2
 # Do not specify argparse, jenkins chokes on system version.
 # argparse==1.2.2
 backports.ssl-match-hostname==3.4.0.2
-beautifulsoup4==4.3.2
+beautifulsoup4==4.4.0
 billiard==3.3.0.20
 celery==3.1.18
 chroma==0.2.0
@@ -37,8 +37,9 @@ colander==1.0
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 cov-core==1.15.0
 coverage==3.7.1
-cryptography==0.9.1
+cryptography==0.9.3
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
+docutils==0.12
 dogpile.cache==0.5.6
 dogpile.core==0.4.1
 ecdsa==0.13
@@ -48,10 +49,10 @@ enum34==1.0.4
 flaky==2.1.1
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
 greenlet==0.4.7
-html5lib==0.99999
+html5lib==0.999999
 idna==2.0
 imaplib2==2.45.0
-ipaddress==1.0.7
+ipaddress==1.0.14
 isodate==0.5.1
 iso639==0.1.1
 -e git+https://github.com/imaginationforpeople/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
@@ -60,12 +61,12 @@ kombu==3.0.26
 lingua==3.10
 lxml==3.4.4
 meld3==1.0.2
-mock==1.0.1
+mock==1.2.0
 ndg_httpsclient==0.4.0
 oauthlib==0.7.2
 paramiko==1.15.2
 pinocchio==0.4.2
-polib==1.0.6
+polib==1.0.7
 premailer==2.9.2
 py==1.4.30
 pyOpenSSL==0.15.1
@@ -90,31 +91,30 @@ pyramid-tm==0.12
 pytest==2.7.2
 pytest-cov==1.8.1
 pytest-localserver==0.3.4
-pytest-mock==0.6.0
-pytest-splinter==1.4.0
+pytest-mock==0.7.0
+pytest-splinter==1.4.6
 python-dateutil==2.4.2
 python-openid==2.2.5
 pytz==2015.4
 pyzmq==14.7.0
+raven==5.4.4
 rdflib==4.2.0
 rdflib-jsonld==0.3
 redis==2.10.3
-docutils==0.12
-raven==5.3.1
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1  # rq.filter: <4.2
 requests==2.7.0
 requests-oauthlib==0.5.0
 selenium==2.46.0
-simplejson==3.7.3
+simplejson==3.8.0
 six==1.9.0
 snowballstemmer==1.2.0
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
 sphinx-bootstrap-theme==0.4.7
 splinter==0.7.2
 supervisor==3.1.3
-tornado==4.2
+tornado==4.2.1
 transaction==1.4.4
 translationstring==1.3
 uricore==0.1.2
