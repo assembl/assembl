@@ -162,6 +162,8 @@ class AgentProfile(Base):
             s.discussion_id: s for s in self.agent_status_in_discussion
         }
 
+        old_autoflush = session.autoflush
+        session.autoflush = False
         for status in other_profile.agent_status_in_discussion:
             if status.discussion_id in my_status_by_discussion:
                 my_status = my_status_by_discussion[status.discussion_id]
@@ -173,6 +175,7 @@ class AgentProfile(Base):
                 status.delete()
             else:
                 status.agent_profile = self
+        session.autoflush = old_autoflush
 
 
     def has_permission(self, verb, subject):
