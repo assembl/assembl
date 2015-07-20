@@ -189,7 +189,6 @@ def get_posts(request):
         parent_alias = aliased(PostClass)
         posts = posts.join(parent_alias, PostClass.parent)
         posts = posts.filter(parent_alias.creator_id == post_replies_to)
-        
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
     if user_id:
@@ -205,11 +204,16 @@ def get_posts(request):
                 LikedPost.tombstone_condition(),
                 LikedPost.actor_id == user_id,
                 *LikedPost.get_discussion_conditions(discussion_id))}
-
-        if is_unread == "true":
-            posts = posts.filter(ViewPost.id == None)
-        elif is_unread == "false":
-            posts = posts.filter(ViewPost.id != None)
+        if is_unread != None:
+            posts = posts.outerjoin(
+                ViewPost, and_(
+                    ViewPost.actor_id==user_id,
+                    ViewPost.post_id==PostClass.id,
+                    ViewPost.tombstone_date == None))
+            if is_unread == "true":
+                posts = posts.filter(ViewPost.id == None)
+            elif is_unread == "false":
+                posts = posts.filter(ViewPost.id != None)
     else:
         #If there is no user_id, all posts are always unread
         if is_unread == "false":
