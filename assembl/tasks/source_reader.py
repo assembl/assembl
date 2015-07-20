@@ -167,6 +167,8 @@ class SourceReader(Thread):
         self.source.error_backoff_until = None
 
     def new_error(self, reader_error, status=None, expected=True):
+        import traceback
+        log.error(traceback.format_exc())
         if raven_client and not expected:
             raven_client.captureException()
         status = status or reader_error.status
