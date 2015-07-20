@@ -39,8 +39,8 @@ def process_notification(notification):
     sys.stderr.write(
         "process_notification called with notification %d, state was %s" % (
             notification.id, notification.delivery_state))
-    if notification.delivery_state in \
-            NotificationDeliveryStateType.getNonRetryableDeliveryStates():
+    if notification.delivery_state not in \
+            NotificationDeliveryStateType.getRetryableDeliveryStates():
         sys.stderr.write(
             "Refusing to process notification "
             + str(notification.id)
@@ -120,8 +120,8 @@ def process_pending_notifications():
         Notification, NotificationDeliveryStateType)
     sys.stderr.write("process_pending_notifications called")
     retryable_notifications = Notification.default_db.query(Notification.id).filter(
-        Notification.delivery_state.notin_(
-        NotificationDeliveryStateType.getNonRetryableDeliveryStates()))
+        Notification.delivery_state.in_(
+        NotificationDeliveryStateType.getRetryableDeliveryStates()))
     for (notification_id,) in retryable_notifications:
         try:
             with transaction.manager:

@@ -748,12 +748,17 @@ class NotificationDeliveryStateType(DeclEnum):
     
     @classmethod
     def getNonRetryableDeliveryStates(cls):
+        # TODO benoitg: Validate that QUEUED is non-retryable
         return [cls.DELIVERY_IN_PROGRESS,
                 cls.DELIVERY_CONFIRMED,
                 cls.READ_CONFIRMED,
                 cls.DELIVERY_FAILURE,
                 cls.OBSOLETED,
                 cls.EXPIRED]
+
+    @classmethod
+    def getRetryableDeliveryStates(cls):
+        return [cls.DELIVERY_TEMPORARY_FAILURE]
 
 class NotificationDeliveryConfirmationType(DeclEnum):
     """
