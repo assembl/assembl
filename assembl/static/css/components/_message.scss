@@ -3,6 +3,7 @@ $messageFamilyImageWidth: 12px;
 $avatarSize: 30px;
 $readUnreadIndicatorSize: 7px;
 $mesageSpacing: 6px;
+$messagePaddingLR: 7px;
 $messageBodyFontSize: 13px;
 $mesageBodyLineHeight: $baseLineHeight;
 $ten: 10px;
@@ -12,9 +13,9 @@ $previewNumLines: 4;
 // A message block
 // ================
 .message {
-  //position: relative;
+  position: relative;
   box-sizing: border-box;
-  padding: 7px 10px;
+  padding: 7px $messagePaddingLR;
   //margin: 0px $mesageSpacing 0px $mesageSpacing; //TODO: fix scroolbar margin
   min-height: $avatarSize;
   height: auto;
@@ -326,7 +327,7 @@ $previewNumLines: 4;
     }
 
     .readUnreadIndicatorClickZone {
-      right: -10px;
+      right: -$messagePaddingLR;
       top: 8px;
     }
   }
@@ -334,7 +335,7 @@ $previewNumLines: 4;
   .readUnreadIndicatorClickZone {
     cursor: pointer;
     display: inline-block;
-    padding: 10px;
+    padding: $messagePaddingLR;
     position: absolute;
     z-index: 1000;
     right: 0;
@@ -386,7 +387,7 @@ $previewNumLines: 4;
     .message-subject {
       background-color: $theme_synthesis_header_bg;
       margin: 0;
-      padding: 10px;
+      padding: $messagePaddingLR;
       color: $white;
     }
     .message-body {
@@ -454,7 +455,7 @@ $previewNumLines: 4;
     &.viewStyleTitleOnly {
       .message-abstract {
         margin-left: 5px;
-        padding: 0 10px;
+        padding: 0 $messagePaddingLR;
         max-height: 27px;
         overflow: hidden;
       }
@@ -543,7 +544,6 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   }
 }
 /* ------------------- Start of message family section ---------------------- */
-
 // The arrow
 // ------------
 .message-family-arrow.noarrow {
@@ -554,7 +554,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 
 .link-img {
   float: left;
-  margin-left: -13px;
+  margin-left: -13px; //$messageFamilyImageWidth -1px
   margin-top: 0;
 }
 
@@ -614,6 +614,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 // The link between an messagelist and its parent
 // --------------
 .message-family-container {
+  //box-sizing: border-box;
   // background: url(#{$img-dir}/messagelist/messagelist-link.png) -6 top no-repeat;
   display: block;
   position: relative; //So using 100% inside the message works...
@@ -621,8 +622,32 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   padding-left: $messageFamilyImageWidth/2;
   margin-left: $messageFamilyImageWidth/2;
 
+  .message-conversation-block {
+    box-sizing: border-box;
+    @include calc(width, "100% + #{$messageFamilyImageWidth/2}");
+    background-color: $gray6;
+    padding: $mesageSpacing;
+    padding-left: ($messagePaddingLR + $mesageSpacing + $mesageSpacing + $mesageSpacing);
+    //Undo margins:
+    margin-left: -$mesageSpacing;
+    //margin-right:15
+    i {
+      vertical-align: middle;
+      //color: $green;
+      &.icon-comment {
+        font-size: 18px;
+        margin-right: -5px;
+        margin-left: -5px;
+      }
+      &.icon-user {
+        font-size: 12px;
+        margin-right: -2px;
+      }
+    }
+  }
   &.bx {
     padding-top: 0;
+    padding-right: 0;
   }
 
   &.root {
@@ -632,6 +657,12 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
       border-right-color: #999;
       border-right-color: rgba(0, 0, 0, .25);
       border-left-width: 0;
+    }
+    .message-conversation-block {
+      //Override width and margin calculation so block take the whole width
+      margin-left: -$mesageSpacing;
+      //width: 100% !important;  //!important to override calc(), which has a !important
+      @include calc(width, "100% + #{$mesageSpacing}");
     }
   }
 

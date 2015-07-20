@@ -91,6 +91,12 @@ _.extend(Backbone.Marionette.View.prototype, {
   isViewDestroyed: function() {
     return this.isDestroyed;
   },
+
+ /* Use to check if you already rendered at least once
+  */
+ isViewRendered: function() {
+   return this.isRendered;
+ },
 });
 
 module.exports = App;

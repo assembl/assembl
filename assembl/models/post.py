@@ -164,19 +164,22 @@ class Post(Content):
         )
 
         return query.scalar()
-
-    def ancestors(self):
+    
+    def ancestor_ids(self):
         ancestor_ids = [
             ancestor_id \
             for ancestor_id \
             in self.ancestry.split(',') \
             if ancestor_id
         ]
+        return ancestor_ids
+        
+    def ancestors(self):
 
         ancestors = [
             Post.get(ancestor_id) \
             for ancestor_id \
-            in ancestor_ids
+            in self.ancestor_ids
         ]
 
         return ancestors
