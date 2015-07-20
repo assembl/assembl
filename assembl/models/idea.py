@@ -11,7 +11,7 @@ from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload)
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql import text, column
-from sqlalchemy.sql.expression import union_all
+from sqlalchemy.sql.expression import union_all, bindparam
 from sqlalchemy import (
     Column,
     Boolean,
@@ -80,19 +80,34 @@ class GraphViewIdeaVisitor(IdeaVisitor):
 
 
 class WordCountVisitor(IdeaVisitor):
-    def __init__(self, langs):
+    def __init__(self, langs, count_posts=True):
         self.counter = WordCounter(langs)
+        self.count_posts = True
 
     def cleantext(self, text):
         return BeautifulSoup(text).get_text().strip()
 
     def visit_idea(self, idea, level, prev_result):
         if idea.short_title:
-            self.counter.add_text(self.cleantext(idea.short_title))
+            self.counter.add_text(self.cleantext(idea.short_title), 2)
         if idea.long_title:
             self.counter.add_text(self.cleantext(idea.long_title))
         if idea.definition:
             self.counter.add_text(self.cleantext(idea.definition))
+        if self.count_posts and level == 0:
+            from .generic import Content
+            related = text(
+                Idea._get_related_posts_statement(),
+                bindparams=[bindparam('root_idea_id', idea.id),
+                            bindparam('discussion_id', idea.discussion_id)]
+                ).columns(column('post_id')).alias('related')
+            for p in idea.db.query(Content).filter(Content.id.in_(related)):
+                titles = set()
+                self.counter.add_text(self.cleantext(p.get_body()), 0.5)
+                title = self.cleantext(p.get_title())
+                if title not in titles:
+                    self.counter.add_text(title)
+                    titles.add(title)
 
     def best(self, num=8):
         return self.counter.best(num)
@@ -335,7 +350,13 @@ JOIN post AS family_posts ON (
         return int(result.first()['total_count'])
 
     def prefetch_descendants(self):
-        pass  # TODO
+        # TODO: descendants only. Let's just prefetch all ideas.
+        self.db.query(Idea).filter_by(
+            discussion_id=self.discussion_id, tombstone_date=None).all()
+        self.db.query(IdeaLink).join(
+            Idea, IdeaLink.source_id == Idea.id).filter(
+            Idea.discussion_id == self.discussion_id,
+            IdeaLink.tombstone_date == None).all()
 
     def visit_ideas_depth_first(self, idea_visitor):
         self.prefetch_descendants()
