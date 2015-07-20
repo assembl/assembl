@@ -21,6 +21,10 @@ var getAllFacebookPermissions = function() {
 };
 
 //window.moment = Moment; //Purely debug
+var _convertTimeToISO8601 = function(time){
+  var m = new Moment().utc().add(time, 'seconds');
+  return m.toISOString();
+};
 
 var _composeMessageBody = function(model, creator){
   var msg = i18n.sprintf(i18n.gettext("The following message was posted by %s on Assembl:\n\n\n"), creator.get('name'));
@@ -64,7 +68,7 @@ var fb_token = function(){
       time = new Moment().utc().add(e, 'seconds');
     }
     else {
-      var tzoneTime = Social.Facebook.Token.timeToUTC(e);
+      var tzoneTime = new Social.Facebook.Time().processTimeToUTC(e);
       time = new Moment(tzoneTime).utc();
     }
     success(time);
@@ -319,22 +323,18 @@ var _processLogin = function(resp, success, error){
         var token = tokens.getUserToken();
         console.log('Currently existing user token', token);
         token.save({
-          token: resp.authResponse.accessToken
+          token: resp.authResponse.accessToken,
+          expiration: _convertTimeToISO8601(resp.authResponse.expiresIn)
         }, {
           patch: true,
           success: function(model, resp, opt) {
             console.log('Facebook Access Token updated successful.');
-            // console.log('Saved model', model);
-            // console.log('Resp object', resp);
-            // console.log('Options object', opt);
             window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
             success();
           },
           error: function(model, resp, opt){
             console.log('Facebook Access Token save NOT updated successfully.');
-            // console.log('Saved model', model);
-            // console.log('Resp object', resp);
-            // console.log('Options object', opt);
+            window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
             error();
           }
         }); 
@@ -342,27 +342,21 @@ var _processLogin = function(resp, success, error){
       else {
         //No user token, must make one
         console.log('New token is being made...');
-        // console.log('The tokens', tokens);
-        // console.log('tokens have user token? ', tokens.hasUserToken());
         var token = new Social.Facebook.Token.Model({
           token: resp.authResponse.accessToken,
+          expiration: _convertTimeToISO8601(resp.authResponse.expiresIn),
           token_type: "user",
           "@type": "FacebookAccessToken"
         });
         token.save(null, {
           success: function(model, resp, opt){
             console.log('New Facebook Access Token saved successfully.');
-            // console.log('Saved model', model);
-            // console.log('Resp object', resp);
-            // console.log('Options object', opt);
             window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
             success()
           },
           error: function(model, resp, opt){
             console.log('New Facebook Access Token NOT saved successfully.');
-            // console.log('Saved model', model);
-            // console.log('Resp object', resp);
-            // console.log('Options object', opt);
+            window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
             error();
           }
         });
@@ -489,9 +483,6 @@ var checkLoginState = function(options){
 var checkState = function(renderView) {
     //if this account IS a facebookAccount, then check for
     //permissions and move on
-    // if (!collectionManager) {
-    //   collectionManager = new CollectionManager();
-    // }
     var collectionManager = new CollectionManager();
 
     collectionManager.getAllUserAccountsPromise()
@@ -528,9 +519,6 @@ var checkState = function(renderView) {
             }
             else {
               //This might be unnecessary here
-              console.log('expiration', e);
-              console.log('Moment expiration', Moment(e));
-              console.log('Moment utc expriatoin', Moment().utc(e));
               window.FB_TOKEN.setUserToken(t,e);
             }
           });
@@ -543,6 +531,24 @@ var checkState = function(renderView) {
             renderView(state);
           }
           else {
+            // First check if it the user token is an infinite token
+            if ( userToken.isInfiniteToken() ) {
+              //window.FB_TOKEN.setUserToken()
+              console.log('Incomplete....');
+            }
+            // check to see if the token in DB is faulty (expiration = python's datetime.min)
+            if (userToken.isMinimumTime() ){
+              checkLoginState({
+                corruptToken: true, // TODO: Add guard in checkLoginState for corruptToken field
+                success: function(){
+                  var state = new fbState(true, null, window.FB_TOKEN);
+                  renderView(state);
+                },
+                error: function(){
+                  var state = new fbState(false, 'update-permissions', null);
+                },
+              });              
+            }
             //Check token expiry
             if ( userToken.isExpired() ) {
               console.log('Token is expired!!!!', userToken);

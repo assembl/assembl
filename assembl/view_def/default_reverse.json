@@ -317,7 +317,7 @@
     "FacebookAccessToken": {
         "fb_account_id": true,
         "token": "long_lived_access_token",
-        "expiration": false,
+        "expiration": true,
         "token_type": true,
         "object_name": true,
         "object_fb_id": true
