@@ -759,7 +759,7 @@ class NotificationDeliveryStateType(DeclEnum):
 
     @classmethod
     def getRetryableDeliveryStates(cls):
-        return [cls.DELIVERY_TEMPORARY_FAILURE]
+        return [cls.QUEUED, cls.DELIVERY_TEMPORARY_FAILURE]
 
 class NotificationDeliveryConfirmationType(DeclEnum):
     """
