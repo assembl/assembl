@@ -16,21 +16,6 @@ SessionApp.factory('ConfigService', function ($q, $http, UtilsService) {
             $http.get(urlRoot).success(function (response) {
                 data.widget = response;
 
-                /**
-                 *  Need more spec for this case
-                 *  03/09/14 Gaby Hourlier
-                 * */
-
-                /*var
-                 endDate = new Date(data.widget.settings.session.endDate),
-                 currentDate = new Date(),
-                 userPermission = data.widget.user_permissions;
-
-                 if((currentDate > endDate) &&
-                 !_.contains(userPermission, 'admin_discussion')){
-
-                 }*/
-
                 defer.resolve(data);
             }).error(function (data, status) {
 

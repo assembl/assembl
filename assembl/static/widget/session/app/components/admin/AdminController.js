@@ -22,7 +22,7 @@ AdminModule.controller('AdminController',
         }
 
         if (angular.isDefined($scope.widget.settings)) {
-
+            console.log("$scope.widget.settings: ", $scope.widget.settings);
             if ($scope.widget.settings.question)
                 $scope.formData.question = $scope.widget.settings.question;
             else
@@ -66,7 +66,7 @@ AdminModule.controller('AdminController',
                 $scope.formData.startDate = $scope.formData.startDate;
                 $scope.formData.endDate = $scope.formData.endDate;
 
-                var data = {};
+                var data = $scope.widget.settings || {};
 
                 data.startDate = $scope.formData.startDate;
                 data.endDate = $scope.formData.endDate;

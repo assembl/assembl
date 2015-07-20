@@ -73,7 +73,7 @@ HomeModule.controller('HomeController', [
 
                 $scope.ideas = ideas;
             });
-        }
+        };
 
 
         /**
@@ -105,15 +105,31 @@ HomeModule.controller('HomeController', [
                     $scope.message = "sendNewIdea:error";
                 });
             }
+        };
+
+
+        // download the deck of cards from widget settings, or from URL parameter
+        var available_decks = CardGameService.available_decks;
+        var default_deck_url = available_decks[0].url;
+        var deck_pseudo_url = default_deck_url; // for retro-compatibility
+        if ( $scope.widget && "settings" in $scope.widget && "card_module_settings" in $scope.widget.settings && "deck_pseudo_url" in $scope.widget.settings.card_module_settings ){
+            deck_pseudo_url = $scope.widget.settings.card_module_settings.deck_pseudo_url;
         }
 
-        /**
-         * Load config card
-         * params {int} which is the id of the card game config/game_{int}.json
-         */
-        CardGameService.getCards(1).success(function (data) {
-            $scope.game = data['game01'];
-            $scope.shuffle();
+        var deck_promise = CardGameService.getGenericDeck(deck_pseudo_url);
+
+        deck_promise.success(function (data) {
+            $scope.game = data.game;
+            $scope.shuffledCards = angular.copy($scope.game);
+            for ( var i = 0; i < $scope.shuffledCards.length; ++i )
+            {
+                $scope.shuffledCards[i].originalIndex = i;
+                $scope.shuffledCards[i].body = $sce.trustAsHtml($scope.shuffledCards[i].body);
+            }
+            $scope.shuffleArray($scope.shuffledCards);
+            $scope.pickNextCard();
+        }).error(function(){
+            alert("Error: Could not load requested deck of cards: " + deck_pseudo_url);
         });
 
         /**
@@ -129,8 +145,26 @@ HomeModule.controller('HomeController', [
                 $scope.displayed_cards[$scope.displayed_card_index].body = $sce.trustAsHtml($scope.game[$scope.random_index].body);
                 $scope.game.splice($scope.random_index, 1);
             }
+        };
 
-        },
+        //+ Jonas Raoni Soares Silva
+        //@ http://jsfromhell.com/array/shuffle [rev. #1]
+        $scope.shuffleArray = function(v){
+            for(var j, x, i = v.length; i; j = parseInt(Math.random() * i), x = v[--i], v[i] = v[j], v[j] = x);
+            return v;
+        };
+
+        $scope.pickNextCard = function () {
+            var n_cards = $scope.game.length;
+            if (n_cards > 0) {
+                $scope.game.splice(0, 1);
+                $scope.displayed_card_index = $scope.displayed_cards.length;
+                $scope.displayed_cards.push($scope.shuffledCards[$scope.displayed_card_index]);
+                
+            }
+            //console.log("$scope.displayed_cards: ", $scope.displayed_cards);
+            //console.log("$scope.displayed_card_index: ", $scope.displayed_card_index);
+        }
 
 
         /**

@@ -84,11 +84,11 @@ widgetServices.factory('cardGameService', function ($http) {
         available_decks: [
             {
                 "label": "Deck 1",
-                "url": "config/game_1.json"
+                "url": "/static/widget/card/config/game_1.json" // we use "/static/widget/card/config/game_1.json" instead of "config/game_1.json", because this way it can be accessed from the session widget
             },
             {
                 "label": "Deck 2",
-                "url": "config/game_2.json"
+                "url": "/static/widget/card/config/game_2.json"
             }
         ]
     };
