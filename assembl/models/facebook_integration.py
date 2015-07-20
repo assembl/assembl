@@ -832,22 +832,15 @@ class FacebookAccessToken(Base):
                         self.expiration = None
                 elif isinstance(data, basestring):
                     # Cannot get the expiration time of the time at all
-                    pass  # TODO
+                    self.expiration = datetime.min
             else:
                 self.expiration = datetime.utcnow() + \
                     timedelta(seconds=int(expires_in_seconds))
             self.token = long_token
 
         except:
-            # In case of failure, the fallback is to store the
-            # short term token and make a calculated estimate that
-            # the token is alive for min 30 minutes (usually they are
-            # for 1 hour).
-
-            # Cause the front end to request a new token and
-            # try again in
-            self.expiration = datetime.utcnow() + \
-                timedelta(minutes=30)
+            # In case of failure, keep the value as the short_token
+            # And do not mutate the passed in expiration time
             self.token = short_token
 
     def get_facebook_account_uri(self):
