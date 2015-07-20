@@ -349,7 +349,7 @@ def mark_post_read(request):
                 change = True
                 view.is_tombstone = True
         else:
-            id = db.query(ViewPost).filter_by(
+            count = db.query(ViewPost).filter_by(
                 post_id=post_id, actor_id=user_id,
                 tombstone_date=None).count()
             if not count:
