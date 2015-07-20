@@ -597,6 +597,8 @@ JOIN post AS family_posts ON (
         """Given a post and a user, give the total and read count
             of posts for each affected idea"""
         idea_ids = cls.get_idea_ids_showing_post(post_id)
+        if not idea_ids:
+            return []
         ideas = cls.default_db.query(cls).filter(cls.id.in_(idea_ids))
         return [(idea.id, idea.num_read_posts_for(user_id))
                 for idea in ideas]
