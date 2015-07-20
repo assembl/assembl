@@ -20,10 +20,12 @@
                             <div class="form-group col-md-6">
                                 <label for="exampleInputName1">{{'HOME.start_date' | translate}}</label>
                                 <input type="text" class="form-control" ng-model="formData.startDate" id="exampleInputName1" data-date-format="yyyy-MM-dd" data-max-date="{{formData.endDate}}" placeholder="{{'HOME.start_date' | translate}}" bs-datepicker required>
+                                <input type="text" size="8" class="form-control" ng-model="formData.startDate" data-time-format="h:mm:ss a" data-autoclose="1" placeholder="Time" bs-timepicker>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="exampleInputName2">{{'HOME.end_date' | translate}}</label>
                                 <input type="text" class="form-control" ng-model="formData.endDate" id="exampleInputName2" data-date-format="yyyy-MM-dd" data-min-date="{{formData.startDate}}" placeholder="{{'HOME.end_date' | translate}}" bs-datepicker required>
+                                <input type="text" size="8" class="form-control" ng-model="formData.endDate" data-time-format="h:mm:ss a" data-autoclose="1" placeholder="Time" bs-timepicker>
                             </div>
                         </div>
 

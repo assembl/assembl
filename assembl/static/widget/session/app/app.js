@@ -10,7 +10,8 @@ var SessionApp = angular.module('appSession', [
     'ui.router',
     'pascalprecht.translate',
     'angular-growl',
-    'mgcrea.ngStrap.datepicker']);
+    'mgcrea.ngStrap.datepicker',
+    'mgcrea.ngStrap.timepicker']);
 
 
 SessionApp.run(['$rootScope', '$state', '$stateParams',
