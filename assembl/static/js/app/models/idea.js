@@ -501,7 +501,7 @@ var IdeaCollection = Base.Collection.extend({
             var results = _.map(child_links, function(child_link) {
                 return that.visitDepthFirst(idea_links, visitor, child_link.get('target'), include_ts, ancestry);
             });
-            return visitor.post_visit(this, results);
+            return visitor.post_visit(idea, results);
         }
     },
 
@@ -545,7 +545,7 @@ var IdeaCollection = Base.Collection.extend({
             var results = _.map(children_to_visit, function(child) {
                 that.visitBreadthFirst(idea_links, visitor, child, include_ts, ancestry);
             });
-            return visitor.post_visit(this, results);
+            return visitor.post_visit(idea, results);
         }
     },
 

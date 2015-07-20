@@ -39,10 +39,20 @@ ObjectTreeRenderVisitor.prototype.visit = function (object, ancestry) {
     var in_ancestry = true;
     var ancestor_id, last_ancestor_id = null;
     var true_sibling = true;
+    var real_ancestor_authors_list = [];
+    var filtered_ancestor_authors_list = [];
+
     for (var i in ancestry) {
       var ancestor_id = ancestry[i];
+      var ancestor = object.collection.get(ancestor_id);
+      var authors = []
+      if(ancestor.get('idCreator')) {
+        authors = [ancestor.get('idCreator')];
+      }
       in_ancestry = data_by_object.hasOwnProperty(ancestor_id);
+      real_ancestor_authors_list = _.union(real_ancestor_authors_list, authors);
       if (in_ancestry) {
+        filtered_ancestor_authors_list  = _.union(filtered_ancestor_authors_list, authors);
         level++;
         last_ancestor_id = ancestor_id;
       }
@@ -68,7 +78,9 @@ ObjectTreeRenderVisitor.prototype.visit = function (object, ancestry) {
         'true_sibling': true_sibling,
         'children': [],
         'last_ancestor_id': last_ancestor_id,
-        'traversal_order': order_lookup_table.length
+        'traversal_order': order_lookup_table.length,
+        real_ancestor_authors_list: real_ancestor_authors_list,
+        filtered_ancestor_authors_list: filtered_ancestor_authors_list
     };
     data_by_object[object_id] = data;
     order_lookup_table.push(object_id);
@@ -82,12 +94,17 @@ ObjectTreeRenderVisitor.prototype.post_visit = function(object, children_data) {
   //console.log(object, children_data);
   var filtered_descendant_count = 0,
       real_descendant_count = 0,
+      filtered_descendant_authors_list = [],
+      real_descendant_authors_list = [],
       filter_result = false,
+      authors = [],
       retval = {};
   _.each(children_data, function(child_data) {
     if(child_data !== undefined) {
       filtered_descendant_count += child_data.filtered_descendant_count;
       real_descendant_count += child_data.real_descendant_count;
+      filtered_descendant_authors_list = _.union(filtered_descendant_authors_list, child_data.filtered_descendant_authors_list);
+      real_descendant_authors_list = _.union(real_descendant_authors_list, child_data.real_descendant_authors_list);
     }
   });
   //console.log(descendant_count);
@@ -98,16 +115,24 @@ ObjectTreeRenderVisitor.prototype.post_visit = function(object, children_data) {
       //If the object wasn't in filter, it won't be in the data_by_object table
       this.data_by_object[object.id].filtered_descendant_count = filtered_descendant_count;
       this.data_by_object[object.id].real_descendant_count = real_descendant_count;
+      this.data_by_object[object.id].filtered_descendant_authors_list = filtered_descendant_authors_list;
+      this.data_by_object[object.id].real_descendant_authors_list = real_descendant_authors_list;
+    }
+    if(object.get('idCreator')) {
+      authors = [object.get('idCreator')];
     }
   }
   
   if (filter_result) {
     retval.filtered_descendant_count = filtered_descendant_count + 1;
+    retval.filtered_descendant_authors_list = _.union(filtered_descendant_authors_list, authors);
   }
   else {
     retval.filtered_descendant_count = filtered_descendant_count;
+    retval.filtered_descendant_authors_list = filtered_descendant_authors_list;
   }
   retval.real_descendant_count = real_descendant_count + 1;
+  retval.real_descendant_authors_list = _.union(real_descendant_authors_list, authors);
   return retval;
 };
 

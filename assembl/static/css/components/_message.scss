@@ -629,6 +629,11 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
     //Undo paddings:
     margin-left: -$mesageSpacing;
     //margin-right:15
+    i {
+      vertical-align: middle;
+      //color: $green;
+      font-size: 18px;
+    }
   }
   &.bx {
     padding-top: 0;

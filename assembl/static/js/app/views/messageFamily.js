@@ -61,7 +61,8 @@ var MessageFamilyView = Marionette.ItemView.extend({
           numDescendants = undefined,
           visitorData = this.messageListView.visitorViewData[this.model.id],
           numAncestorsOutOfContext = 0,
-          numDescendantsOutOfContext = 0;
+          numDescendantsOutOfContext = 0,
+          numAuthorsOutOfContext = 0;
 
       //console.log(this.model.id, visitorData);
       if( this.messageListView.isViewStyleThreadedType() ) {
@@ -69,6 +70,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
           hasParentsOrChildrenOutOfScope = true;
           numAncestorsOutOfContext = visitorData.real_ancestor_count - visitorData.level;
           numDescendantsOutOfContext = visitorData.real_descendant_count - visitorData.filtered_descendant_count;
+          numAuthorsOutOfContext = visitorData.real_descendant_authors_list.length - visitorData.filtered_descendant_authors_list.length + visitorData.real_ancestor_authors_list.length - visitorData.filtered_ancestor_authors_list.length;
         }
       }
       else {
@@ -76,6 +78,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
           hasParentsOrChildrenOutOfScope = true;
           numAncestorsOutOfContext = visitorData.real_ancestor_count;
           numDescendantsOutOfContext = visitorData.real_descendant_count;
+          numAuthorsOutOfContext = _.union(visitorData.real_descendant_authors_list, visitorData.real_ancestor_authors_list, [this.model.get('idCreator')]).length - 1;
         }
       }
 
@@ -86,7 +89,9 @@ var MessageFamilyView = Marionette.ItemView.extend({
         hasChildren: this.hasChildren,
         hasParentsOrChildrenOutOfScope: hasParentsOrChildrenOutOfScope,
         numAncestorsOutOfContext: numAncestorsOutOfContext,
-        numDescendantsOutOfContext: numDescendantsOutOfContext
+        numDescendantsOutOfContext: numDescendantsOutOfContext,
+        numAuthorsOutOfContext: numAuthorsOutOfContext,
+        i18n: i18n
       }
     },
 
