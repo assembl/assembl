@@ -342,16 +342,16 @@ def mark_post_read(request):
     change = False
     with transaction.manager:
         if read_data.get('read', None) is False:
-            view = db.query(ViewPost).filter(
-                ViewPost.post_id==post_id).filter(
-                Action.actor_id==user_id).first()
+            view = db.query(ViewPost).filter_by(
+                post_id=post_id, actor_id=user_id,
+                tombstone_date=None).first()
             if view:
                 change = True
                 view.is_tombstone = True
         else:
-            count = db.query(ViewPost).filter(
-                ViewPost.post_id==post_id).filter(
-                Action.actor_id==user_id).count()
+            id = db.query(ViewPost).filter_by(
+                post_id=post_id, actor_id=user_id,
+                tombstone_date=None).count()
             if not count:
                 change = True
                 db.add(ViewPost(post=post, actor_id=user_id))
