@@ -7,21 +7,42 @@ var $ = require('../shims/jquery.js'),
     Agents = require('./agents.js'),
     Moment = require('moment');
 
-/**
- * The function will attempt to convert a timezone-less
- * ISO 8601 string to a UTC timezone.
- * If string has a timezone, regardless of whether it is UTC
- * or not, it will be returned.
- * @param  {[String]} e ISO 8601 
- * @return {[String]}   ISO 8601 with timezone (UTC if possible)
- */
-var processTimeToUTC = function(e){
-    if (/[Z]$|([+-]\d{2}:\d{2})$/.test(e) ) {
-        return e;
+var tokenTimeManager = function(){
+    this.minTime = new Moment('0001-01-01T00:00:00Z').utc() //datetime.min in python
+};
+
+tokenTimeManager.prototype = {
+    
+    /**
+     * The function will attempt to convert a timezone-less
+     * ISO 8601 string to a UTC timezone.
+     * If string has a timezone, regardless of whether it is UTC
+     * or not, it will be returned.
+     * @param  {[String]} e ISO 8601 
+     * @return {[String]}   ISO 8601 with timezone (UTC if possible)
+     */ 
+    processTimeToUTC: function(e){
+        if (/[Z]$|([+-]\d{2}:\d{2})$/.test(e) ) {
+            return e;
+        }
+        else {
+            return e + 'Z'; //Z: is ISO 8601 way of stating timezone is UTC
+        }
+    },
+    /**
+     * Compares a Moment object to the Python datetime.min time
+     * @param  {[Moment]}  t [Time to compare]
+     * @return {Boolean}   []
+     */
+    isMinTime: function(t){
+        var tmp; 
+        if (!Moment.isMoment(t)){
+            tmp = Moment(t).utc();            
+        }
+        else tmp = t;
+        return this.minTime.isSame(tmp);
     }
-    else {
-        return e + 'Z'; //Z: is ISO 8601 way of stating timezone is UTC
-    }
+
 };
 
 var FacebookAccessToken = Base.Model.extend({
@@ -48,10 +69,18 @@ var FacebookAccessToken = Base.Model.extend({
     },
 
     isExpired: function(){
-        var t = processTimeToUTC(this.get('expiration'));
+        var t = new tokenTimeManager().processTimeToUTC(this.get('expiration'));
         var d = new Moment(t).utc();
         var now = new Moment.utc();
         return now.isAfter(d);
+    },
+
+    isMinimumTime: function(){
+        return new Time().isMinTime(this.get('expiration'));
+    },
+
+    isInfiniteToken: function(){
+        return this.get('expiration') === null;
     },
 
     isUserToken: function(){
@@ -100,7 +129,7 @@ module.exports = {
     Token: {
         Model: FacebookAccessToken,
         Collection: FacebookAccessTokens,
-        timeToUTC: processTimeToUTC
+        Time: tokenTimeManager
     } 
   }
 }
