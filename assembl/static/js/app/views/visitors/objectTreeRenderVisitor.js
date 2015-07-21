@@ -45,6 +45,10 @@ ObjectTreeRenderVisitor.prototype.visit = function (object, ancestry) {
     for (var i in ancestry) {
       var ancestor_id = ancestry[i];
       var ancestor = object.collection.get(ancestor_id);
+      if (!ancestor) {
+        // in synthesis, not all ancestors present
+        continue;
+      }
       var authors = []
       if(ancestor.get('idCreator')) {
         authors = [ancestor.get('idCreator')];
