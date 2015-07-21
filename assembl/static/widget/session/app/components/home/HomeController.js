@@ -54,7 +54,8 @@ HomeModule.controller('HomeController', [
 
                 angular.forEach(response.data, function (item) {
                     if (item.widget_add_post_endpoint) {
-                        item.widget_add_post_endpoint = UtilsService.getURL(_.values(item.widget_add_post_endpoint));
+                        var widgetName = $scope.widget['@id'];
+                        item.widget_add_post_endpoint = UtilsService.getURL(item.widget_add_post_endpoint[widgetName]);
                         item.beautify_date = moment(new Date(item.creationDate)).fromNow();
                         ideas.push(item);
                     }
@@ -87,7 +88,7 @@ HomeModule.controller('HomeController', [
         $scope.sendSubIdea = function () {
             if ($scope.formData) {
 
-                var rootUrl = UtilsService.getURL($scope.widget.ideas_url),
+                var rootUrl = UtilsService.getURL($scope.widget.ideas_hiding_url),
                     random_index = angular.element('.random_index');
 
                 $scope.formData.type = 'Idea';

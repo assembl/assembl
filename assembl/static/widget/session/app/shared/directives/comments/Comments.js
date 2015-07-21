@@ -110,22 +110,21 @@ SessionApp.directive('comments', [
             $scope.commentSubIdea = function(){
 
                 var rootUrl = $scope.idea.widget_add_post_endpoint,
-                    user_id = $scope.idea.avatar.split('/')[3];
+                    user_id = $scope.widget.user['@id'];
 
                 var data = {
-                    "type": 'Post',
-                    "subject": 'test_message',
+                    "@type": 'Post',
+                    "subject": '',
                     "body": $scope.formData.comment,
-                    "creator_id": parseInt(user_id, 10),
-                    "message_id": 'bogus'
+                    "idCreator": user_id
                 }
 
-                if(data.body && data.creator_id && rootUrl) {
+                if(data.body && data.idCreator && rootUrl) {
 
                     $http({
                         method:'POST',
                         url: rootUrl,
-                        data: $.param(data),
+                        data: JSON.stringify(data),
                         //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         headers: {'Content-Type': 'application/json'}
                     }).success(function(){

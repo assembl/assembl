@@ -55,7 +55,7 @@ AdminModule.controller('CreateController', ['$rootScope','$scope', '$stateParams
 
             console.debug(post_data, endpoint)
 
-            /*@id: "local:Widget/40"
+            /* @id: "local:Widget/40"
             @type: "CreativitySessionWidget"
             @view: "default"
             confirm_ideas_url: "local:Discussion/1/widgets/40/confirm_ideas"
@@ -69,7 +69,7 @@ AdminModule.controller('CreateController', ['$rootScope','$scope', '$stateParams
                     Objectuser_state_url: "local:Widget/40/user_state"
             user_states_url: "local:Widget/40/user_states"
             widget_settings_url: "local:Widget/40/settings"
-            widget_state_url: "local:Widget/40/state"*/
+            widget_state_url: "local:Widget/40/state" */
 
             $http({
                 method: 'POST',
