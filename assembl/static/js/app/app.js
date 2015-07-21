@@ -2,6 +2,7 @@
 
 var Marionette = require('./shims/marionette.js'),
     $ = require('./shims/jquery.js'),
+    Raven = require('raven-js'),
     _ = require('./shims/underscore.js');
 
 var App = new Marionette.Application();
@@ -71,6 +72,8 @@ _.extend(Backbone.Marionette.View.prototype, {
   listenTo: function() {
     // Often, we listen on a promise in the initalizer. The view may already be dead.
     if (this.isViewDestroyed()) {
+      Raven.captureMessage("listenTo on a destroyed view", {tags: {
+        viewer: this.toString(), viewee: arguments[0].toString()}});
       return;
     }
     Object.getPrototypeOf(Backbone.Marionette.View.prototype).listenTo.apply(this, arguments);
@@ -79,6 +82,8 @@ _.extend(Backbone.Marionette.View.prototype, {
   listenToOnce: function() {
     // Often, we listen on a promise in the initalizer. The view may already be dead.
     if (this.isViewDestroyed()) {
+      Raven.captureMessage("listenToOnce on a destroyed view", {tags: {
+        viewer: this.toString(), viewee: arguments[0].toString()}});
       return;
     }
     Object.getPrototypeOf(Backbone.Marionette.View.prototype).listenToOnce.apply(this, arguments);
