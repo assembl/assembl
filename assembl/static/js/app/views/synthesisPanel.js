@@ -47,6 +47,9 @@ var SynthesisPanel = AssemblPanel.extend({
                     collectionManager.getAllIdeasCollectionPromise(),
                     collectionManager.getAllIdeaLinksCollectionPromise(),
             function (synthesisCollection, allIdeasCollection, allIdeaLinksCollection) {
+                if (that.isViewDestroyed()) {
+                  return;
+                }
                 that.ideas = allIdeasCollection;
                 var rootIdea = allIdeasCollection.getRootIdea(),
                     raw_ideas;
@@ -56,10 +59,12 @@ var SynthesisPanel = AssemblPanel.extend({
                     that.model = _.find(synthesisCollection.models, function (model) {
                         return model.get('is_next_synthesis');
                     });
+                    that.bindEntityEvents(that.model, that.getOption('modelEvents'));
                 }
                 that.listenTo(that.ideas, 'add remove reset', that.render);
                 that.listenTo(allIdeaLinksCollection, 'reset change:source change:target change:order remove add destroy', that.render);
                 that.template = that.realTemplate;
+                // Should we just send a render event instead?
                 that.render();
                 //modelEvents should handler this
                 //that.listenTo(that.model, 'reset change', that.render);
