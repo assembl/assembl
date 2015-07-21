@@ -62,5 +62,5 @@
 %>
 
 <% if ( session_widget_url ) { %>
-    <a href="<%= session_widget_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="{{gettext('Access to creativity session')}}">{{gettext('Access to creativity session')}}</a>
+    <a href="<%= session_widget_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="<% print(i18n.sprintf(i18n.gettext('Creativity session on %s'), ideaShortTitle)) %>">{{gettext('Access to creativity session on this idea')}}</a>
 <% } %>
