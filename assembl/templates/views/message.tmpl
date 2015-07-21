@@ -160,8 +160,8 @@
       &nbsp;&nbsp;{{ showShareButton() }}
     <% } %>
 
-    <% if( (viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW) && message.get("like_count") > 0){ %>
-      &nbsp;&nbsp;<i class="icon-heart"></i><%= message.get("like_count") %>
+    <% if( (viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW)){ %>
+      &nbsp;&nbsp;<span class="js_likeCount"><i class="icon-heart"></i><span class="js_likeCountI"><%= message.get("like_count") %></span></span>
     <% } %>
 
   </div>

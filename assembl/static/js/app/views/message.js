@@ -103,6 +103,7 @@ var MessageView = Marionette.ItemView.extend({
     },
     modelEvents: {
       'replacedBy':'onReplaced',
+      'change:like_count':'renderLikeCount',
       'change':'render',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
     },
@@ -113,7 +114,8 @@ var MessageView = Marionette.ItemView.extend({
       jumpToMessageInReverseChronologicalButton: ".js_message-jump-to-message-in-reverse-chronological",
       showAllMessagesByThisAuthorButton: ".js_message-show-all-by-this-author",
       messageReplyBox: ".message-replybox",
-      likedLink: ".js_likeButton"
+      likedLink: ".js_likeButton",
+      likeCounter: ".js_likeCount"
     },
 
 
@@ -217,6 +219,47 @@ var MessageView = Marionette.ItemView.extend({
         };
     },
 
+    renderLikeCount: function() {
+      // specialized render because we do not want a full render.
+      // it may kill a message being written.
+      if (Ctx.debugRender) {
+          console.log("message:renderLikeCount() is firing for message", this.model.id);
+      }
+      var count = this.model.get('like_count');
+      if (count > 0) {
+        this.ui.likeCounter.children(".js_likeCountI").text(String(count));
+        this.ui.likeCounter.show();
+      } else {
+        this.ui.likeCounter.hide();
+      }
+    },
+
+    changeIsPartialRender: function() {
+      var changedAttributes = this.model.changedAttributes();
+      for (var propName in changedAttributes) {
+        if (propName === "like_count") {
+          continue;
+        }
+        if (!changedAttributes.hasOwnProperty(propName)) {
+          continue;
+        }
+        // is __prototype__ in there? Not on chrome.
+        if (Ctx.debugRender) {
+          console.log("changeIsPartialRender found change in", propName);
+        }
+        return false;
+      }
+      return true;
+    },
+
+    render: function() {
+        if (this.changeIsPartialRender()) {
+            return;
+        }
+        Object.getPrototypeOf(Object.getPrototypeOf(this)).render.apply(this, arguments);
+    },
+
+
     /**
      * The render
      * @return {MessageView}
@@ -225,6 +268,11 @@ var MessageView = Marionette.ItemView.extend({
         var that = this,
             modelId = this.model.id,
             partialMessage = MessagesInProgress.getMessage(modelId);
+        // do not render the whole thing if only the like_count changed.
+        // it may kill the message being edited.
+        if (this.changeIsPartialRender()) {
+            return;
+        }
         if (Ctx.debugRender) {
             console.log("message:render() is firing for message", this.model.id);
         }
@@ -285,6 +333,12 @@ var MessageView = Marionette.ItemView.extend({
           }
           else {
             this.ui.messageReplyBox.addClass('hidden');
+          }
+
+          if (this.model.get('like_count') > 0) {
+            this.ui.likeCounter.show();
+          } else {
+            this.ui.likeCounter.hide();
           }
 
           if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
