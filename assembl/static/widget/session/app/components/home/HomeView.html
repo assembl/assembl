@@ -27,15 +27,20 @@
             </div>
         </div>
         <div class="card-comment" ng-hide="readOnly">
-            <form role="form" ng-submit="sendSubIdea()">
-                <div class="form-group">
-                    <input type="text" ng-model="formData.shortTitle" class="form-control" id="inputEmail1" placeholder="{{'title' | translate}}" required>
-                </div>
-                <div class="form-group">
-                    <textarea ng-model="formData.definition" class="form-control" rows="3" placeholder="description" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-purple btn-sm pull-right">{{'HOME.send' | translate}}</button>
-            </form>
+            <div style="display: inline-block;">
+                <img ng-src="{{ user_avatar_url }}" class="media-object img-circle" />
+            </div>
+            <div style="float: right; width: calc(100% - 30px); padding-left: 5px;">
+                <form role="form" ng-submit="sendSubIdea()">
+                    <div class="form-group">
+                        <input type="text" ng-model="formData.shortTitle" class="form-control" id="inputEmail1" placeholder="{{'title' | translate}}" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea ng-model="formData.definition" class="form-control" rows="3" placeholder="description" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-purple btn-sm pull-right">{{'HOME.send' | translate}}</button>
+                </form>
+            </div>
         </div>
     </div>
 

@@ -16,6 +16,9 @@ HomeModule.controller('HomeController', [
         $scope.formData = {};
         $scope.displayed_cards = [];
         $scope.displayed_card_index = 0;
+        $scope.avatar_size = 30;
+        $scope.user_avatar_url = (("user" in $scope.widget) && ("avatar_url_base" in $scope.widget.user)) ? $scope.widget.user.avatar_url_base + "" + $scope.avatar_size : null;
+
 
         // when the session end up, switch to read only mode
         if(config.settings.endDate){
