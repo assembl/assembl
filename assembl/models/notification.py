@@ -848,8 +848,7 @@ class Notification(Base):
         default = NotificationDeliveryConfirmationType.NONE)
     delivery_confirmation_date = Column(
         DateTime,
-        nullable = True,
-        default = datetime.utcnow)
+        nullable = True)
 
     threadlocals = threading.local()
 
