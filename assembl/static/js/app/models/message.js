@@ -92,7 +92,7 @@ var MessageModel = Base.Model.extend({
       return this.get('parentId');
     },
 
-    getAncestorCount() {
+    getAncestorCount: function() {
       var parents = this.collection.where({ parentId: this.getId() });
       if(parents.length) {
         return parents[0].getAncestorCount() + 1
