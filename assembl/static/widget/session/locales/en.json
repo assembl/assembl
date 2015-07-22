@@ -18,7 +18,8 @@
     "HOME":{
       "question_placeholder":"This issue will be visible above the card",
       "question_title":"Write a question which participants would react to",
-      "question_helper":"You're mobilizing participants on ‟{{idea}}”",
+      "question_helper":"You're mobilizing participants on ‟{{idea}}”.",
+      "step":"Step {{ n }}",
       "jeton_number":"Number of tokens",
       "jeton_title":"Token",
       "start_date":"Start of session",

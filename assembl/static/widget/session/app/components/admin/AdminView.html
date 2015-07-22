@@ -5,10 +5,11 @@
                 <div class="panel-form">
                     <form ng-submit="setSettings()">
                         <div class="form-group">
-                             <p translate="HOME.question_helper" translate-values="{ idea: idea_title }"></p>
+                            <p translate="HOME.question_helper" translate-values="{ idea: idea_title }"></p>
                         </div>
                         <div class="form-group">
-                            <label for="session_question" class="edit-title">{{'HOME.question_title' | translate}}</label>
+                            <h1 translate="HOME.step" translate-values="{ n: 1 }"></h1>
+                            <label for="session_question">{{'HOME.question_title' | translate}}</label>
                             <input id="session_question" class="form-control" type="text" ng-model="formData.question" placeholder="{{'HOME.question_placeholder' | translate}}">
                         </div>
                         <!--<div class="form-group">
@@ -19,13 +20,23 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="exampleInputName1">{{'HOME.start_date' | translate}}</label>
-                                <input type="text" class="form-control" ng-model="formData.startDate" id="exampleInputName1" data-date-format="yyyy-MM-dd" data-max-date="{{formData.endDate}}" placeholder="{{'HOME.start_date' | translate}}" bs-datepicker required>
-                                <input type="text" size="8" class="form-control" ng-model="formData.startDate" data-time-format="h:mm:ss a" data-autoclose="1" placeholder="Time" bs-timepicker>
+                                <br/>
+                                <div class="form-group col-xs-6">
+                                    <input type="text" class="form-control" ng-model="formData.startDate" id="exampleInputName1" data-date-format="yyyy-MM-dd" data-max-date="{{formData.endDate}}" placeholder="{{'HOME.start_date' | translate}}" data-container="body" data-autoclose="1" bs-datepicker required>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <input type="text" size="8" class="form-control" ng-model="formData.startDate" data-time-format="h:mm:ss a" data-container="body" data-autoclose="1" placeholder="Time" bs-timepicker>
+                                </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="exampleInputName2">{{'HOME.end_date' | translate}}</label>
-                                <input type="text" class="form-control" ng-model="formData.endDate" id="exampleInputName2" data-date-format="yyyy-MM-dd" data-min-date="{{formData.startDate}}" placeholder="{{'HOME.end_date' | translate}}" bs-datepicker required>
-                                <input type="text" size="8" class="form-control" ng-model="formData.endDate" data-time-format="h:mm:ss a" data-autoclose="1" placeholder="Time" bs-timepicker>
+                                <br/>
+                                <div class="form-group col-xs-6">
+                                    <input type="text" class="form-control" ng-model="formData.endDate" id="exampleInputName2" data-date-format="yyyy-MM-dd" data-min-date="{{formData.startDate}}" placeholder="{{'HOME.end_date' | translate}}" data-container="body" data-autoclose="1" bs-datepicker required>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <input type="text" size="8" class="form-control" ng-model="formData.endDate" data-time-format="h:mm:ss a" data-container="body" data-autoclose="1" placeholder="Time" bs-timepicker>
+                                </div>
                             </div>
                         </div>
 
@@ -33,10 +44,12 @@
                     </form>
                 </div>
                 <div>
+                    <h1 translate="HOME.step" translate-values="{ n: 2 }"></h1>
                     <a ng-href="/static/widget/card/?admin=1&locale=TODO#/admin_configure_instance?config={{home}}">Select the deck of cards which will be displayed</a>
-                <!--<div ng-show="config_status == 1">
-                    <a ui-sref="session.home({config: home})" class="btn btn-primary">{{'Access to the discussion widget' | translate}}</a>
-                </div>-->
+                    <!--<div ng-show="config_status == 1">
+                        <a ui-sref="session.home({config: home})" class="btn btn-primary">{{'Access to the discussion widget' | translate}}</a>
+                    </div>-->
+                </div>
             </div>
         </div>
     </section>

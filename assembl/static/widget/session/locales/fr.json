@@ -19,6 +19,7 @@
       "question_placeholder":"Cette question sera visible en haut de la carte",
       "question_title":"Écrivez une question à laquelle vous voulez faire réagir les participants",
       "question_helper":"Vous mobilisez les participants sur «{{idea}}»",
+      "step":"Étape {{ n }}",
       "jeton_number":"Nombre de jetons",
       "jeton_title":"Jeton",
       "start_date":"Début de la session",
