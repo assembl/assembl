@@ -256,7 +256,12 @@ var MessageView = Marionette.ItemView.extend({
         if (this.changeIsPartialRender()) {
             return;
         }
-        Object.getPrototypeOf(Object.getPrototypeOf(this)).render.apply(this, arguments);
+        var base_object = Object.getPrototypeOf(this),
+            base_render = base_object.render;
+        while (Object.getPrototypeOf(base_object).render === base_render) {
+          base_object = Object.getPrototypeOf(base_object);
+        }
+        Object.getPrototypeOf(base_object).render.apply(this, arguments);
     },
 
 
