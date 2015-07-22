@@ -2269,7 +2269,7 @@ var MessageList = AssemblPanel.extend({
       }
 
       _.each(messageDoms, function(messageSelector) {
-        if ( !messageSelector )
+        if ( !messageSelector || messageSelector.length == 0)
           return;
         var messageTop = messageSelector.offset().top,
             messageBottom = messageTop + messageSelector.height(),
