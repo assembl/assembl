@@ -41,22 +41,22 @@
 {# If available, show configuration link of the inspiration/creativity widget associated to this idea #}
 
 <% if ( canCreateWidgets && inspiration_widget_configure_url ){ %>
-    <a href="<%= inspiration_widget_configure_url %>" target="_blank" class="dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea" data-modal-title="{{gettext('Configure the creativity widget associated to this idea')}}">{{gettext('Configure the creativity widget associated to this idea')}}</a>
+    <a href="<%= inspiration_widget_configure_url %>" target="_blank" class="dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea" data-modal-title="{{gettext('Configure the inspiration module associated to this idea')}}">{{gettext('Configure the inspiration module associated to this idea')}}</a>
 <% } %>
 
 {# Show a widget creation link (inspiration/creativity and vote) from this idea #}
 
 <% if ( canCreateWidgets && idea ) {
     if ( vote_widget_create_url ) { %>
-      <a href="<%= vote_widget_create_url %>" target="_blank" class="dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea" data-modal-title="{{gettext('Create a vote widget on this idea')}}">{{gettext('Create a vote widget on this idea')}}</a>
+      <a href="<%= vote_widget_create_url %>" target="_blank" class="dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea" data-modal-title="{{gettext('Create a vote on this idea')}}">{{gettext('Create a vote on this idea')}}</a>
     <% } %>
 
     <% if ( inspiration_widget_create_url ) { %>
-      <a href="<%= inspiration_widget_create_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="{{gettext('Create a creativity widget on this idea')}}">{{gettext('Create a creativity widget on this idea')}}</a>
+      <a href="<%= inspiration_widget_create_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="{{gettext('Create an inspiration module on this idea')}}">{{gettext('Create an inspiration module on this idea')}}</a>
     <% }
 
     if ( session_widget_create_url ) { %>
-      <a href="<%= session_widget_create_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="{{gettext('Create a creativity session widget on this idea')}}">{{gettext('Create a creativity session widget on this idea')}}</a>
+      <a href="<%= session_widget_create_url %>" target="_blank" class='dispb mts js_openTargetInModal js_clearWidgetDataAssociatedToIdea' data-modal-title="{{gettext('Create a creativity session on this idea')}}">{{gettext('Create a creativity session on this idea')}}</a>
     <% }
   }
 %>
