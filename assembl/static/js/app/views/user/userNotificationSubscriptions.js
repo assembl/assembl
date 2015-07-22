@@ -199,11 +199,10 @@ var NotificationByEmail = Marionette.ItemView.extend({
 
         this.model.save(null, {
             success: function(){
-
-                console.debug('success');
+                console.log('success');
             },
             error: function(){
-                console.debug('error');
+                console.error('error');
             }
         })
 

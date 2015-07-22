@@ -17,6 +17,8 @@ Ctx.initLocale();
 if (raven_url.length) {
     Raven.config(raven_url).install();
     Raven.setUserContext({id: Ctx.getCurrentUserId()});
+    window.Raven = Raven;
+    require('raven-js/plugins/console.js');
 }
 else {
     //Disables raven for development

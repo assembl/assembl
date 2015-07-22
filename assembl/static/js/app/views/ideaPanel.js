@@ -300,7 +300,7 @@ var IdeaPanel = AssemblPanel.extend({
             that = this;
         segment.save('idIdea', id, {
             success: function (model, resp) {
-                //console.debug('SUCCESS: addSegment', resp);
+                //console.log('SUCCESS: addSegment', resp);
                 that.extractListView.render();
             },
             error: function (model, resp) {

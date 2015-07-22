@@ -136,7 +136,7 @@ var IdeaWidgets = Marionette.ItemView.extend({
 
             promise.then(function (data) {
 
-                    // console.debug("populateAssociatedWidgetData received data: ", data);
+                    // console.log("populateAssociatedWidgetData received data: ", data);
 
                     that.resetAssociatedWidgetData();
 

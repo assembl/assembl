@@ -1131,7 +1131,7 @@ var MessageView = Marionette.ItemView.extend({
 
             collectionManager.getUserContributionsPromise(user_id).then(function(contributions){
 
-                console.debug('contributions', contributions.get('posts'));
+                console.log('contributions', contributions.get('posts'));
 
                 var Modal = Backbone.Modal.extend({
                     template: _.template($('#tmpl-contributions').html()),

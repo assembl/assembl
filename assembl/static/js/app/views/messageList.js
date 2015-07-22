@@ -1142,7 +1142,7 @@ var MessageList = AssemblPanel.extend({
             that.renderIsComplete = true;//showMessageById will call showMessages and actually finish the render
             //We do not trigger the render_complete event here, the line above is just to un-inhibit showMessageById
             if (that.debugPaging) {
-              console.info("render_real: calling showMessageById to display the first unread message");
+              console.log("render_real: calling showMessageById to display the first unread message");
             }
             that.showMessageById(first_unread_id, undefined, undefined, false);
           }
@@ -1150,13 +1150,13 @@ var MessageList = AssemblPanel.extend({
             //If there is nothing currently onscreen
             //Would avoid rendering twice, and would allow showMessageById to just request showing messages systematically
             if (that.debugPaging) {
-              console.info("render_real: calling showMessages");
+              console.log("render_real: calling showMessages");
             }
             that.showMessages();
           }
           else {
             if (that.debugPaging) {
-              console.info("render_real: Already running showMessageById will finish the job");
+              console.log("render_real: Already running showMessageById will finish the job");
             }
             that.renderIsComplete = true;
             that.trigger("messageList:render_complete", "Render complete");
@@ -2016,7 +2016,7 @@ var MessageList = AssemblPanel.extend({
       }
       else if (originalRenderId !== this._renderId) {
         //This is a normal condition now
-        //console.info("scrollToMessage():  obsolete render, aborting for ", messageModel.id);
+        //console.log("scrollToMessage():  obsolete render, aborting for ", messageModel.id);
         //Raven.captureMessage("scrollToMessage():  obsolete render, aborting", {message_id: messageModel.id})
         if(this._scrollToMessageInProgressId === originalRenderId) {
           this._scrollToMessageInProgressId = false;

@@ -31,12 +31,12 @@ var email = Marionette.ItemView.extend({
         verify.save(null, {
             success: function(model, resp){
 
-                console.debug('success', resp)
+                console.log('success', resp)
 
             },
             error: function(model, resp){
 
-                console.debug('error', resp)
+                console.log('error', resp)
 
             }
         })
