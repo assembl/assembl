@@ -41,14 +41,14 @@ appCards.controller('cardsCtl',
             // download the deck of cards from widget settings, or from URL parameter
             var available_decks = cardGameService.available_decks;
             var default_deck_url = available_decks[0].url;
-            var deck_pseudo_url = default_deck_url; // for retro-compatibility
+            $scope.deck_pseudo_url = default_deck_url; // for retro-compatibility
             if ( $scope.config.widget && "settings" in $scope.config.widget && "card_module_settings" in $scope.config.widget.settings && "deck_pseudo_url" in $scope.config.widget.settings.card_module_settings ){
-                deck_pseudo_url = $scope.config.widget.settings.card_module_settings.deck_pseudo_url;
+                $scope.deck_pseudo_url = $scope.config.widget.settings.card_module_settings.deck_pseudo_url;
             } else if ( "deck" in $route.current.params ){
-                deck_pseudo_url = $route.current.params.deck;
+                $scope.deck_pseudo_url = $route.current.params.deck;
             }
 
-            var deck_promise = cardGameService.getGenericDeck(deck_pseudo_url);
+            var deck_promise = cardGameService.getGenericDeck($scope.deck_pseudo_url);
 
             deck_promise.success(function (data) {
                 $scope.cards = data.game;
@@ -61,7 +61,7 @@ appCards.controller('cardsCtl',
                 $scope.shuffleArray($scope.shuffledCards);
                 $scope.pickNextCard();
             }).error(function(){
-                alert("Error: Could not load requested deck of cards: " + deck_pseudo_url);
+                alert("Error: Could not load requested deck of cards: " + $scope.deck_pseudo_url);
             });
 
             // show previous and next card buttons when the mouse cursor is in the card zone
@@ -157,7 +157,7 @@ appCards.controller('cardsCtl',
                 if ( !messageSubject || !messageContent ){
                     return;
                 }
-                var inspirationSourceUrl = "/static/widget/card/?#/card?card=" + $scope.displayed_cards[$scope.displayed_card_index].originalIndex;
+                var inspirationSourceUrl = "/static/widget/card/?#/card?deck=" + $scope.deck_pseudo_url + "&card=" + $scope.displayed_cards[$scope.displayed_card_index].originalIndex;
                 //var inspirationSourceTitle = "TODO"; // TODO: use this piece of info
                 console.log("messageSubject: ", messageSubject);
                 console.log("messageContent: ", messageContent);
@@ -247,7 +247,14 @@ appCards.controller('cardCtl',
                     $scope.displayed_card_index = param;
             }
 
-            cardGameService.getCards(1).success(function (data) {
+            // deduce which deck of cards we should use
+            $scope.deck_pseudo_url = cardGameService.available_decks[0].url;
+            if ( "deck" in $route.current.params )
+            {
+                $scope.deck_pseudo_url = $route.current.params.deck;
+            }
+
+            cardGameService.getGenericDeck($scope.deck_pseudo_url).success(function (data) {
                 $scope.cards = data.game;
                 if ( $scope.displayed_card_index >= $scope.cards.length )
                     $scope.displayed_card_index = 0;
