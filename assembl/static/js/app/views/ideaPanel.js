@@ -54,10 +54,11 @@ var IdeaPanel = AssemblPanel.extend({
 
         if(this.model) {
           //This is a silly hack to go through setIdeaModel properly - benoitg
-          var model = that.model;
+          var model = this.model;
           this.model = null;
           this.setIdeaModel(model);
         }
+        console.log(this.model);
     },
     ui: {
         'postIt': '.postitlist',
@@ -716,22 +717,23 @@ var IdeaPanel = AssemblPanel.extend({
         var that = this,
             area = this.$('.ideaPanel-longtitle-editor');
 
+        console.log(this.model, this.model.getLongTitleDisplayText());
         var model = this.model.getLongTitleDisplayText();
 
         if (!model.length) return;
 
-        var shortTitle = new CKEditorField({
+        var ckeditor = new CKEditorField({
             'model': this.model,
             'modelProp': 'longTitle'
         });
 
-        this.listenTo(shortTitle, 'save cancel', function(){
+        this.listenTo(ckeditor, 'save cancel', function(){
             that.editingTitle = false;
             that.render();
         });
 
-        shortTitle.renderTo(area);
-        shortTitle.changeToEditMode();
+        ckeditor.renderTo(area);
+        ckeditor.changeToEditMode();
     },
 
     openTargetInPopOver: function (evt) {

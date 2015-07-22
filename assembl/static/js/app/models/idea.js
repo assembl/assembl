@@ -35,7 +35,7 @@ var IdeaModel = Base.Model.extend({
      * Defaults
      */
     defaults: {
-        shortTitle: null,
+        shortTitle: '',
         longTitle: '',
         definition: '',
         numChildIdea: 0,
@@ -92,22 +92,22 @@ var IdeaModel = Base.Model.extend({
      * @return {Text>}
      */
     getLongTitleDisplayText: function () {
-        if (this.get('root') === true) {
-            return i18n.gettext('The root idea will never be in the synthesis');
-        }
+      if (this.get('root') === true) {
+        return i18n.gettext('The root idea will never be in the synthesis');
+      }
 
-        if (Ctx.stripHtml(this.get('longTitle'))) {
-            return this.get('longTitle');
-        }
-        else if (Ctx.stripHtml(this.get('shortTitle'))) {
-            return this.get('shortTitle');
-        }
-        else if (Ctx.stripHtml(this.get('definition'))) {
-            return this.get('definition');
-        }
-        else {
-            return i18n.gettext('Add and expression for the next synthesis');
-        }
+      if (Ctx.stripHtml(this.get('longTitle'))) {
+        return this.get('longTitle');
+      }
+      else if (Ctx.stripHtml(this.get('shortTitle'))) {
+        return this.get('shortTitle');
+      }
+      else if (Ctx.stripHtml(this.get('definition'))) {
+        return this.get('definition');
+      }
+      else {
+        return i18n.gettext('You can add an expression for the next synthesis');
+      }
     },
 
     /**
