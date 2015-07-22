@@ -98,7 +98,7 @@ $marginLinkbis: 30px;
   }
 }
 
-.synthesis-idea.is-selected {
+.is-selected > .synthesis-idea {
   background-color: $green1;
   border-right: 4px solid $green;
 }

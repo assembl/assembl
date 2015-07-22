@@ -15,7 +15,7 @@
     <a href="#" class="synthesisIdea-replybox-openbtn icon-comment fr mrs">{#{{ gettext('comment') }}#}</a>
     <span class="synthesisIdea-replybox hidden"></span>
 </span>
-<% if( canEdit ) { %>
-        <a href="#" class="js_selectIdea synthesisIdea-viewIdeaLink">{{ gettext('View Idea') }}</a>
+<% if( isPrimaryNavigationPanel ) { %>
+    <a href="#" class="js_viewIdeaInModal synthesisIdea-viewIdeaLink">{{ gettext('View Idea in popup') }}</a>
 <% } %>
 </div>

@@ -91,7 +91,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
     events: {
       'click .js_synthesis-expression': 'onTitleClick',
       'click .js_synthesisIdea': 'navigateToIdea',
-      'click .js_selectIdea': 'navigateToIdea',
+      'click .js_viewIdeaInModal': 'showIdeaInModal',
       'click .synthesisIdea-replybox-openbtn': 'focusReplyBox',
       'click .messageSend-cancelbtn': 'closeReplyBox'
     },
@@ -111,7 +111,8 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
         longTitle: this.model.getLongTitleDisplayText(),
         authors: _.uniq(this.authors),
         subject: this.model.get('longTitle'),
-        canEdit: this.canEdit()
+        canEdit: this.canEdit(),
+        isPrimaryNavigationPanel: this.getPanel().isPrimaryNavigationPanel()
       }
     },
 
@@ -237,26 +238,31 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
      * @event
      */
     onTitleClick: function (ev) {
+      ev.stopPropagation();
       if (this.canEdit()) {
         this.makeEditable();
       }
+      this.navigateToIdea(ev);
     },
 
     getPanel: function () {
       return this.parentPanel;
     },
     
-    navigateToIdea: function () {
+    showIdeaInModal: function (ev) {
+      this.navigateToIdea(ev, true);
+    },
+    
+    navigateToIdea: function (ev, forcePopup) {
       var panel = this.getPanel();
-      // If the current panel is a primary navigation panel (a synthesis editor is one), and that the panel group also has an idea panel of a conversation panel, then we consider that we can use them to show information associated to selected idea.
-      // Otherwise, we open a pop-in containing the idea panel and the conversation panel, showing information associated to selected idea.
-      // TODO: validate with the team that this is really what we want to do.
-      if( panel.isPrimaryNavigationPanel()
-        && (panel.getContainingGroup().findViewByType(PanelSpecTypes.IDEA_PANEL) || panel.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST))
-      ) {
+
+      if( panel.isPrimaryNavigationPanel() ) {
         panel.getContainingGroup().setCurrentIdea(this.original_idea);
       }
-      else {
+      
+      // If the panel isn't the primary navigation panel, OR if we explicitly
+      // ask for a popup, we need to create a modal group to see the idea
+      if( !panel.isPrimaryNavigationPanel() || forcePopup ) {
         //navigateToIdea called, and we are not the primary navigation panel
         //Let's open in a modal Group
         var ModalGroup = require('./groups/modalGroup.js');
@@ -273,7 +279,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
           throw new Error("Unable to set currentIdea on modal Group");
         }
 
-        var idea_title = Ctx.stripHtml(this.model.getLongTitleDisplayText());
+        var idea_title = Ctx.stripHtml(this.model.getShortTitleDisplayText());
         //console.log("idea_title: ", idea_title);
         var modal_title_template = i18n.gettext("Exploring idea \"%s\"");
         //console.log("modal_title_template:", modal_title_template);
