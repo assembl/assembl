@@ -206,9 +206,9 @@ class NotificationSubscription(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
 
-    @abstractmethod
     def wouldCreateNotification(self, discussion_id, verb, object):
-        return False
+        discussion = Discussion.get(object.get_discussion_id())
+        return discussion_id == object.get_discussion_id() and discussion in self.user.participant_in_discussion
 
     @classmethod
     def findApplicableInstances(cls, discussion_id, verb, object, user=None):
@@ -383,10 +383,6 @@ class NotificationSubscriptionGlobal(NotificationSubscription):
         'polymorphic_identity': NotificationSubscriptionClasses.ABSTRACT_NOTIFICATION_SUBSCRIPTION_ON_DISCUSSION
     }
 
-    def wouldCreateNotification(self, discussion_id, verb, object):
-        discussion = Discussion.get(object.get_discussion_id())
-        return discussion_id == object.get_discussion_id() and discussion in self.user.participant_in_discussion
-    
     def followed_object(self):
         pass
 
