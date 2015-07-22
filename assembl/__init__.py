@@ -9,6 +9,7 @@ from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
 from pyramid.i18n import default_locale_negotiator
+from pyramid.settings import asbool
 from zope.component import getGlobalSiteManager
 import sqltap.wsgi
 
@@ -100,6 +101,6 @@ def main(global_config, **settings):
     config.include('.view_def')
 
     wsgi_app = config.make_wsgi_app()
-    if settings.get('sqltap', False):
+    if asbool(settings.get('sqltap', False)):
         wsgi_app = sqltap.wsgi.SQLTapMiddleware(wsgi_app)
     return wsgi_app
