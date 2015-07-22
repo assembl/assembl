@@ -556,6 +556,10 @@ var MessageView = Marionette.ItemView.extend({
                 // Loading the annotations
                 if (annotationsToLoad.length) {
                     // This call is synchronous I believe - benoitg
+                    if (!that.annotator) {
+                      console.error("missing annotation", that);
+                      return;
+                    }
                     that.annotator.loadAnnotations(_.clone(annotationsToLoad));
                     _.each(annotationsToLoad, function (annotation) {
                         that.loadedAnnotations[annotation['@id']] = annotation;
