@@ -831,7 +831,11 @@ var MessageList = AssemblPanel.extend({
     _postRenderSlowCallbackWorker: function (messageListView) {
         var that = this;
         //console.log("_postRenderSlowCallbackWorker fired, stack length: ", this._postRenderSlowCallbackStack.length)
-
+        if (this.isViewDestroyed()) {
+          // this case is hypothetical.
+          this._postRenderSlowCallbackStack = [];
+          return;
+        }
         if (this._postRenderSlowCallbackStack.length > 0) {
             //console.log("_postRenderSlowCallbackWorker fired with non-empty stack, popping a callback from stack of length: ", this._postRenderSlowCallbackStack.length)
             var callback = this._postRenderSlowCallbackStack.shift();
@@ -2218,6 +2222,10 @@ var MessageList = AssemblPanel.extend({
                   }
                   else {
                     console.log("Message not in colllection:  id collection was: ", resultMessageIdCollection);
+                    // TODO: benoitg, verify that this makes sense.
+                    // I did have a messageList that became unusable because showMessageByIdInProgress
+                    // did not revert.
+                    that.showMessageByIdInProgress = false;
                     Raven.context(function() {
                       throw new Error("showMessageById:  Message is not in query results, and we are not allowed to recurse");
                       },
@@ -2235,6 +2243,10 @@ var MessageList = AssemblPanel.extend({
               //console.log("showMessageById: DEBUG:  handing off to scrollToMessage");
               that.scrollToMessage(message, shouldHighlightMessageSelected, shouldOpenMessageSelected, real_callback);
               that.showMessageByIdInProgress = false;
+          }).error(function() {
+            // give up. This was actually seen.
+            console.error("showMessageById: promises failed.");
+            that.showMessageByIdInProgress = false;
           });
 
     },
