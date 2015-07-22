@@ -58,7 +58,6 @@ var IdeaPanel = AssemblPanel.extend({
           this.model = null;
           this.setIdeaModel(model);
         }
-        console.log(this.model);
     },
     ui: {
         'postIt': '.postitlist',
@@ -717,7 +716,6 @@ var IdeaPanel = AssemblPanel.extend({
         var that = this,
             area = this.$('.ideaPanel-longtitle-editor');
 
-        console.log(this.model, this.model.getLongTitleDisplayText());
         var model = this.model.getLongTitleDisplayText();
 
         if (!model.length) return;
