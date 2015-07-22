@@ -517,13 +517,13 @@ Context.prototype = {
 
         var showing_widgets_url = this.getApiV2DiscussionUrl("ideas/" + this.extractId(idea_id) + "/showing_widget");
 
-        var locale_parameter = "&locale=" + assembl_locale.split('_')[0];
+        var locale_parameter = "&locale=" + this.getLocale();
 
         var inspiration_widget_create_url = "/static/widget/creativity/?admin=1" + locale_parameter + "#/admin/create_from_idea?idea="
             + encodeURIComponent(idea_id + "?view=creativity_widget"); // example: "http://localhost:6543/widget/creativity/?admin=1#/admin/configure_instance?widget_uri=%2Fdata%2FWidget%2F43&target=local:Idea%2F3"
         returned_data["inspiration_widget_create_url"] = inspiration_widget_create_url;
 
-        var vote_widget_create_url = "/static/widget/vote/?admin=1#/admin/create_from_idea?idea=" + encodeURIComponent(idea_id + "?view=creativity_widget"); //TODO: add locale_parameter?
+        var vote_widget_create_url = "/static/widget/vote/?admin=1" + locale_parameter + "#/admin/create_from_idea?idea=" + encodeURIComponent(idea_id + "?view=creativity_widget");
         returned_data["vote_widget_create_url"] = vote_widget_create_url;
 
         var session_widget_create_url = "/static/widget/session/#/admin/create_from_idea?admin=1&idea=" + encodeURIComponent(idea_id) +"&view=creativity_widget";
@@ -550,8 +550,8 @@ Context.prototype = {
 
                             var session_widget_uri = session_widget["@id"]; // for example: "local:Widget/52"
 
-                            session_widget_admin_url = "/static/widget/session/#/home?admin=1&config="+ session_widget_uri;
-                            session_widget_user_url = "/static/widget/session/#/home?config="+ session_widget_uri;
+                            session_widget_admin_url = "/static/widget/session/?" + locale_parameter + "#/home?admin=1&config=" + session_widget_uri;
+                            session_widget_user_url = "/static/widget/session/?" + locale_parameter + "#/home?config=" + session_widget_uri;
 
                             returned_data["session_widget_admin_url"] = session_widget_admin_url;
                             returned_data["session_widget_user_url"] = session_widget_user_url;
