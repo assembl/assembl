@@ -11,8 +11,8 @@ pyramid.debug_notfound = false
 pyramid.debug_routematch = false
 pyramid.default_locale_name = en
 pyramid.includes =
-    pyramid_debugtoolbar
     pyramid_tm
+sqltap = false
 
 # Don't let cornice handle exceptions
 handle_exceptions = 

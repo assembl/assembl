@@ -10,6 +10,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
 from pyramid.i18n import default_locale_negotiator
 from zope.component import getGlobalSiteManager
+import sqltap.wsgi
 
 from .lib.sqla import configure_engine, session_maker_is_initialized
 from .lib.locale import to_posix_format, ensure_locale_has_country
@@ -98,4 +99,7 @@ def main(global_config, **settings):
 
     config.include('.view_def')
 
-    return config.make_wsgi_app()
+    wsgi_app = config.make_wsgi_app()
+    if settings.get('sqltap', False):
+        wsgi_app = sqltap.wsgi.SQLTapMiddleware(wsgi_app)
+    return wsgi_app

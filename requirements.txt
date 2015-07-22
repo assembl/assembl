@@ -14,7 +14,7 @@ PyLD==0.6.8
 PyStemmer==1.3.0
 Pygments==2.0.2
 SPARQLWrapper==1.6.4
-SQLAlchemy==1.0.6
+SQLAlchemy==1.0.7
 Sphinx==1.3.1
 Unidecode==0.04.18
 WebOb==1.4.1
@@ -113,6 +113,8 @@ snowballstemmer==1.2.0
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
 sphinx-bootstrap-theme==0.4.7
 splinter==0.7.2
+sqlparse==0.1.15
+-e git+https://github.com/imaginationforpeople/sqltap.git#egg=sqltap
 supervisor==3.1.3
 tornado==4.2.1
 transaction==1.4.4
