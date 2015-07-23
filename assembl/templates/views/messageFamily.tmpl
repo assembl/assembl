@@ -4,7 +4,7 @@
     <img src="/static/img/messagelist/messagelist-bar.png" class="link-img" />
   <% } %>
   <div class="message-conversation-block">
-    <a href="#" class="js_viewMessageFamilyConversation">View conversation</a>
+    <a href="#" class="js_viewMessageFamilyConversation">{{ gettext('View conversation') }}</a>
     <span class="maxs">&#x2022;{# Unicode bullet #}</span>
     <% if (numAncestorsOutOfContext + numDescendantsOutOfContext) { %>
       <span data-toggle="tooltip" title="" data-original-title="
