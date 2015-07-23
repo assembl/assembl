@@ -91,8 +91,16 @@ var MessageFamilyView = Marionette.ItemView.extend({
         numAncestorsOutOfContext: numAncestorsOutOfContext,
         numDescendantsOutOfContext: numDescendantsOutOfContext,
         numAuthorsOutOfContext: numAuthorsOutOfContext,
-        i18n: i18n
-      }
+        ctxMessageCountTooltip: i18n.sprintf(i18n.ngettext(
+          "%d more message is available in this message's full context.",
+          "%d more messages are available in this message's full context.",
+          (numAncestorsOutOfContext + numDescendantsOutOfContext)),
+          (numAncestorsOutOfContext + numDescendantsOutOfContext)),
+        ctxAuthorCountTooltip: i18n.sprintf(i18n.ngettext(
+          "Messages available in this message's full context are from %d more author.",
+          "Messages available in this message's full context are from %d more authors.",
+          numAuthorsOutOfContext), numAuthorsOutOfContext)
+      };
     },
 
     /**

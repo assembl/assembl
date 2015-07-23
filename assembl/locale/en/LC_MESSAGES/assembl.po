@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-07-22 22:37-0400\n"
+"POT-Creation-Date: 2015-07-22 23:03-0400\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -584,7 +584,26 @@ msgstr ""
 msgid "Facebook was unable to create the post. Close the box and try again."
 msgstr ""
 
-#: assembl/static/js/app/views/messageFamily.js:188
+#: assembl/static/js/app/views/messageFamily.js:97
+#, fuzzy, python-format
+#| msgid "%d  more message is available in this message's full context."
+#| msgid_plural "%d more messages are available in this message's full
+#| context."
+msgid "%d more message is available in this message's full context."
+msgid_plural "%d more messages are available in this message's full context."
+msgstr[0] ""
+msgstr[1] ""
+
+#: assembl/static/js/app/views/messageFamily.js:99
+#, python-format
+msgid "Messages available in this message's full context are from %d more author."
+msgid_plural ""
+"Messages available in this message's full context are from %d more "
+"authors."
+msgstr[0] ""
+msgstr[1] ""
+
+#: assembl/static/js/app/views/messageFamily.js:196
 #, python-format
 msgid "Zooming on the conversation around \"%s\""
 msgstr ""

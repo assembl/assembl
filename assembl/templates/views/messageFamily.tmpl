@@ -7,21 +7,10 @@
     <a href="#" class="js_viewMessageFamilyConversation">{{ gettext('View conversation') }}</a>
     <span class="maxs">&#x2022;{# Unicode bullet #}</span>
     <% if (numAncestorsOutOfContext + numDescendantsOutOfContext) { %>
-      <span data-toggle="tooltip" title="" data-original-title="
-      <% print(i18n.sprintf(
-                    i18n.ngettext("%d  more message is available in this message's full context.", "%d more messages are available in this message's full context.", (numAncestorsOutOfContext + numDescendantsOutOfContext)),
-                    (numAncestorsOutOfContext + numDescendantsOutOfContext)));
-                    %>
-        "><i class="icon icon-comment"></i> <%= (numAncestorsOutOfContext + numDescendantsOutOfContext) %></span>
+      <span data-toggle="tooltip" title="" data-original-title="<%= ctxMessageCountTooltip %>"><i class="icon icon-comment"></i> <%= (numAncestorsOutOfContext + numDescendantsOutOfContext) %></span>
     <% } %>
     <% if (numAuthorsOutOfContext) { %>
-      <span data-toggle="tooltip" title="" data-original-title="
-            <% print(i18n.sprintf(
-                    i18n.ngettext("Messages available in this message's full context are from %d more author.", "Messages available in this message's full context are from %d more authors.", numAuthorsOutOfContext),
-                    numAuthorsOutOfContext));
-                    %>
-                    
-         "><i class="icon icon-user"></i> <%= (numAuthorsOutOfContext) %></span>
+      <span data-toggle="tooltip" title="" data-original-title="<%= ctxAuthorCountTooltip %>"><i class="icon icon-user"></i> <%= (numAuthorsOutOfContext) %></span>
     <% } %>
   </div>
 <% } %>
