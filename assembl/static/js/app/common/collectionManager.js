@@ -568,9 +568,12 @@ var CollectionManager = Marionette.Controller.extend({
 
     /* Gets the stored configuration of groups and panels
      */
-    getGroupSpecsCollectionPromise: function (viewsFactory, url_structure_promise) {
+    getGroupSpecsCollectionPromise: function (viewsFactory, url_structure_promise, skip_group_state) {
       var that = this;
 
+      if(skip_group_state === undefined) {
+        skip_group_state = false;
+      }
       if (this._allGroupSpecsCollectionPromise === undefined) {
         //FIXME:  This is slow.  Investigate fetching the single idea and adding it to the collection before fetching the whole collection
         var allIdeasCollectionPromise = this.getAllIdeasCollectionPromise();
@@ -582,7 +585,7 @@ var CollectionManager = Marionette.Controller.extend({
           var collection, data;
           if (url_structure !== undefined) {
             collection = url_structure;
-          } else {
+          } else if (skip_group_state === false) {
             data = Storage.getStorageGroupItem();
             if (data !== undefined) {
               data = that._parseGroupStates(data, allIdeasCollection);

@@ -103,8 +103,9 @@ var routeManager = Marionette.Object.extend({
     },
 
     post: function (id) {
-        //TODO: add new behavior to show messageList Panel
-      this.restoreViews().then(function(groups) {
+      //TODO: add new behavior to show messageList Panel
+      // We are skiping restoring the group state
+      this.restoreViews(undefined, undefined, true).then(function(groups) {
         var firstGroup = groups.children.first();
         var messageList = firstGroup.findViewByType(PanelSpecTypes.MESSAGE_LIST);
         if(!messageList) {
@@ -115,10 +116,9 @@ var routeManager = Marionette.Object.extend({
             throw new Error("WRITEME:  There was no group with a messagelist available");
           }
         }
-        firstGroup.setCurrentIdea(null);
         Assembl.vent.trigger('messageList:showMessageById', id);
 
-        //Backbone.history.navigate('/', {replace: true});
+        Backbone.history.navigate('/', {replace: true});
       });
     },
 
@@ -174,13 +174,13 @@ var routeManager = Marionette.Object.extend({
      * @param from_home:  If true, the function was called from the home view
      * @return promise to a GroupContainer
      */
-    restoreViews: function (from_home, url_structure) {
+    restoreViews: function (from_home, url_structure, skip_group_state) {
         Assembl.headerRegions.show(new NavBar());
         Assembl.groupContainer.show(new Loader());
         /**
          * Render the current group of views
          * */
-        var groupSpecsP = this.collectionManager.getGroupSpecsCollectionPromise(ViewsFactory, url_structure);
+        var groupSpecsP = this.collectionManager.getGroupSpecsCollectionPromise(ViewsFactory, url_structure, skip_group_state);
 
         return groupSpecsP.then(function (groupSpecs) {
             var groupsView = new GroupContainer({
@@ -230,7 +230,7 @@ var routeManager = Marionette.Object.extend({
                     setTimeout(function () {
                         var groupContent = groupsView.children.findByModel(navigableGroupSpec);
                         groupContent.NavigationResetContextState();
-                    });
+                    }, 0);
                 }
             }
 
