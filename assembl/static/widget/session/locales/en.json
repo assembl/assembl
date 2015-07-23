@@ -3,7 +3,8 @@
     "contribution":"Contribution",
     "selection":"Selection",
     "confirm":"Confirm",
-    "first_post":"No ideas have been posted to the creativity session. Your idea will be the first!",
+    "first_post":"Be the first to comment!",
+    "contribution":"{{nb}} contribution:",
     "contributions":"{{nb}} contributions:",
 
     "CREATE":{
@@ -27,7 +28,8 @@
       "empty_question":"Please add a question in the edit menu",
       "shuffle":"Draw a new card",
       "idea_prompt":"This question is relative to the idea ‟{{parentIdeaTitle}}”. Please try to answer the question, by using one of the cards below to find inspiration:",
-      "send": "Send"
+      "send": "Send",
+      "propose_idea": "What does this card inspire you?"
     },
     "RATE":{
       "rateIdeaTitle":"Do you want to send them to ‟{{title}}”",

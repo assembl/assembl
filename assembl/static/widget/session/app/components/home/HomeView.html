@@ -22,7 +22,7 @@
             </div>
             <div class="bs-callout">
                 <p>
-                    &nbsp;&nbsp;{{'proposeIdea'| translate}}
+                    &nbsp;&nbsp;{{'HOME.propose_idea'| translate}}
                 </p>
             </div>
         </div>
@@ -45,9 +45,11 @@
     </div>
 
     <div class="col-md-7 bloc-right">
-        <h6 translate="contributions" translate-values="{ nb: ideas.length }"></h6>
+        <h6 ng-show="ideas.length > 1" translate="contributions" translate-values="{ nb: ideas.length }"></h6>
+        <h6 ng-show="ideas.length == 1" translate="contribution" translate-values="{ nb: ideas.length }"></h6>
+
         <div class="msg" ng-show="ideas.length < 1">
-            <p><i class="fa fa-exclamation-triangle fa-lg"></i> {{'first_post'| translate}}</p>
+            <p>{{'first_post'| translate}}</p>
         </div>
         <div class="session-comment">
             <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:'creationDate':'reverse' track by $index">
