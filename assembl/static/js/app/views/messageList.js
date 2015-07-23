@@ -2140,6 +2140,7 @@ var MessageList = AssemblPanel.extend({
       }
 
       if (this.showMessageByIdInProgress === true && shouldRecurseMaxMoreTimes === undefined) {
+        this.showMessageByIdInProgress = false;
         Raven.context(function() {
           throw new Error("showMessageById():   a showMessageById was already in progress, aborting")
         },
@@ -2202,6 +2203,7 @@ var MessageList = AssemblPanel.extend({
                       that.showMessages(requestedOffsets);
                   }
                   else {
+                    that.showMessageByIdInProgress = false;
                     Raven.context(function() {
                       throw new Error("showMessageById():  Message is in query results but not in current page, and we are not allowed to recurse");
                       },
@@ -2222,9 +2224,6 @@ var MessageList = AssemblPanel.extend({
                   }
                   else {
                     console.log("Message not in colllection:  id collection was: ", resultMessageIdCollection);
-                    // TODO: benoitg, verify that this makes sense.
-                    // I did have a messageList that became unusable because showMessageByIdInProgress
-                    // did not revert.
                     that.showMessageByIdInProgress = false;
                     Raven.context(function() {
                       throw new Error("showMessageById:  Message is not in query results, and we are not allowed to recurse");
