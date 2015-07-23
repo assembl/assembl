@@ -421,10 +421,10 @@ var IdeaPanel = AssemblPanel.extend({
       var that = this,
       collectionManager = new CollectionManager(),
       fetchPromise = this.model.fetch({ data: $.param({ view: 'contributors'}) });
-
       Promise.join(collectionManager.getAllExtractsCollectionPromise(), fetchPromise,
           function (allExtractsCollection, fetchedJQHR) {
-            if(that.isViewRenderedAndNotYetDestroyed()) {
+            //View could be gone, or model may have changed in the meantime
+            if(that.isViewRenderedAndNotYetDestroyed() && that.model) {
               that.extractListSubset = new SegmentList.IdeaSegmentListSubset([], {
                 parent: allExtractsCollection,
                 ideaId: that.model.id
