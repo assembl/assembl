@@ -16,6 +16,7 @@ from sqlalchemy import (
     event,
     ForeignKey,
     func,
+    inspect,
 )
 from sqlalchemy.orm import relationship, join, subqueryload_all
 
@@ -280,7 +281,9 @@ class Discussion(DiscussionBoundBase):
         return acls
 
     def __repr__(self):
-        return "<Discussion %s>" % repr(self.topic)
+        if inspect(self).detached:
+            return "<Discussion (detached)>"
+        return "<Discussion %d (%s)>" % (self.id, self.slug)
 
     def get_notifications(self):
         for widget in self.widgets:
