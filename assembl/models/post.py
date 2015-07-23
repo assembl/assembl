@@ -167,7 +167,7 @@ class Post(Content):
     
     def ancestor_ids(self):
         ancestor_ids = [
-            ancestor_id \
+            int(ancestor_id) \
             for ancestor_id \
             in self.ancestry.split(',') \
             if ancestor_id
