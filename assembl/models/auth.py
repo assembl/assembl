@@ -142,7 +142,7 @@ class AgentProfile(Base):
         assert not (
             isinstance(other_profile, User) and not isinstance(self, User))
         my_accounts = {a.signature(): a for a in self.accounts}
-        for other_account in other_profile.accounts:
+        for other_account in other_profile.accounts[:]:
             my_account = my_accounts.get(other_account.signature())
             if my_account:
                 my_account.merge(other_account)
@@ -151,7 +151,7 @@ class AgentProfile(Base):
                 other_account.profile = self
         if other_profile.name and not self.name:
             self.name = other_profile.name
-        for post in other_profile.posts_created:
+        for post in other_profile.posts_created[:]:
             post.creator = self
             post.creator_id = self.id
         from .action import Action
@@ -165,7 +165,7 @@ class AgentProfile(Base):
 
         old_autoflush = session.autoflush
         session.autoflush = False
-        for status in other_profile.agent_status_in_discussion:
+        for status in other_profile.agent_status_in_discussion[:]:
             if status.discussion_id in my_status_by_discussion:
                 my_status = my_status_by_discussion[status.discussion_id]
                 my_status.user_created_on_this_discussion |= status.user_created_on_this_discussion
@@ -714,20 +714,20 @@ class User(AgentProfile):
                         (not self.last_login)
                         or (other_user.last_login > self.last_login)):
                     self.password = other_user.password
-            for extract in other_user.extracts_created:
+            for extract in other_user.extracts_created[:]:
                 extract.creator = self
-            for extract in other_user.extracts_owned:
+            for extract in other_user.extracts_owned[:]:
                 extract.owner = self
-            for role in other_user.roles:
+            for role in other_user.roles[:]:
                 role.user = self
-            for role in other_user.local_roles:
+            for role in other_user.local_roles[:]:
                 role.user = self
             if other_user.username and not self.username:
                 self.username = other_user.username
             old_autoflush = session.autoflush
             session.autoflush = False
             for notification_subscription in \
-                    other_user.notification_subscriptions:
+                    other_user.notification_subscriptions[:]:
                 notification_subscription.user = self
                 notification_subscription.user_id = self.id
                 if notification_subscription.find_duplicate(False) is not None:
