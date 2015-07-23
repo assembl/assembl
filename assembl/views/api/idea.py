@@ -5,6 +5,7 @@ from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from pyramid.security import authenticated_userid
 from sqlalchemy import and_
+from sqlalchemy.orm import (joinedload_all, undefer)
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
@@ -87,6 +88,9 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     if ids:
         ids = [get_database_id("Idea", id) for id in ids]
         ideas = ideas.filter(Idea.id.in_(ids))
+    ideas = ideas.options(
+        joinedload_all(Idea.source_links),
+        undefer(Idea.num_children))
 
     permissions = get_permissions(user_id, discussion.id)
     retval = [idea.generic_json(view_def, user_id, permissions)

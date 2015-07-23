@@ -8,7 +8,8 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from rdflib import URIRef
 from sqlalchemy.orm import (
-    relationship, backref, aliased, contains_eager, joinedload)
+    relationship, backref, aliased, contains_eager, joinedload, deferred,
+    column_property)
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql import text, column
 from sqlalchemy.sql.expression import union_all, bindparam
@@ -22,6 +23,8 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     inspect,
+    select,
+    func,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
 from virtuoso.vmapping import IriClass
@@ -499,9 +502,6 @@ JOIN post AS family_posts ON (
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
 
-    def get_num_children(self):
-        return len(self.children)
-
     @property
     def is_in_next_synthesis(self):
         next_synthesis = self.discussion.get_next_synthesis()
@@ -978,3 +978,14 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
         Discussion, viewonly=True, uselist=False, backref="idea_links",
         secondary=Idea.__table__, primaryjoin=(source_id == Idea.id),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+
+
+_it = Idea.__table__
+_ilt = IdeaLink.__table__
+Idea.num_children = column_property(
+    select([func.count(_ilt.c.id)]).where(
+        (_ilt.c.source_id == _it.c.id)
+        & (_ilt.c.tombstone_date == None)
+        & (_it.c.tombstone_date == None)
+        ).correlate_except(_ilt),
+    deferred=True)
