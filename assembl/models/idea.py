@@ -473,7 +473,7 @@ JOIN post AS family_posts ON (
                 AgentProfile.id.in_(author_ids)).all()
 
     def get_discussion_id(self):
-        return self.discussion_id
+        return self.discussion_id or self.discussion.id
 
     def get_definition_preview(self):
         body = self.definition.strip()
@@ -945,10 +945,8 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
         return super(IdeaLink, self).copy(**kwargs)
 
     def get_discussion_id(self):
-        if inspect(self).attrs.source_ts.loaded_value != NO_VALUE:
-            return self.source_ts.get_discussion_id()
-        else:
-            return self.object_session.query(Idea).get(self.source_id).get_discussion_id()
+        source = self.source_ts or Idea.get(self.source_id)
+        return source.get_discussion_id()
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP,
                         discussion_id=None, view_def="changes"):

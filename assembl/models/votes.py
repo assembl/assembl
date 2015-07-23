@@ -182,7 +182,8 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         self.settings = json.dumps(val)
 
     def get_discussion_id(self):
-        return self.widget.discussion_id
+        widget = self.widget or Widget.get(self.widget_id)
+        return widget.get_discussion_id()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -376,7 +377,8 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
         backref=backref("votes_ts", cascade="all, delete-orphan"))
 
     def get_discussion_id(self):
-        return self.idea_ts.discussion_id
+        idea = self.idea_ts or Idea.get(self.idea_id)
+        return idea_ts.get_discussion_id()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):

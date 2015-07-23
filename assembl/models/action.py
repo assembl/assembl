@@ -125,7 +125,8 @@ class ActionOnPost(Action):
     object_type = 'post'
 
     def get_discussion_id(self):
-        return self.post.get_discussion_id()
+        post = self.post or Post.get(self.post_id)
+        return post.get_discussion_id()
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
@@ -289,7 +290,8 @@ class ActionOnIdea(Action):
             name=QUADNAMES.class_ActionOnIdea_class)]
 
     def get_discussion_id(self):
-        return self.idea.get_discussion_id()
+        idea = self.idea or Idea.get(self.idea_id)
+        return idea.get_discussion_id()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):

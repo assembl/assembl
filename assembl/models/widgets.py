@@ -794,7 +794,8 @@ class WidgetUserConfig(DiscussionBoundBase):
         self.state = json.dumps(val)
 
     def get_discussion_id(self):
-        return self.widget.discussion_id
+        widget = self.widget or Widget.get(self.widget_id)
+        return widget.get_discussion_id()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -835,10 +836,8 @@ class IdeaWidgetLink(DiscussionBoundBase):
     }
 
     def get_discussion_id(self):
-        if self.idea:
-            return self.idea.get_discussion_id()
-        elif self.idea_id:
-            return Idea.get(self.idea_id).get_discussion_id()
+        idea = self.idea or Idea.get(self.idea_id)
+        return idea.get_discussion_id()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):

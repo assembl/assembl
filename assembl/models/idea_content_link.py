@@ -80,10 +80,8 @@ class IdeaContentLink(DiscussionBoundBase):
     }
 
     def get_discussion_id(self):
-        if self.content:
-            return self.content.get_discussion_id()
-        elif self.content_id:
-            return Content.get(self.content_id).get_discussion_id()
+        content = self.content or Content.get(self.content_id)
+        return content.get_discussion_id()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -507,10 +505,9 @@ class TextFragmentIdentifier(DiscussionBoundBase):
         return None
 
     def get_discussion_id(self):
-        if self.extract:
-            return self.extract.get_discussion_id()
-        elif self.extract_id:
-            return Extract.get(self.extract_id).get_discussion_id()
+        if self.extract_id:
+            extract = self.extract or Extract.get(self.extract_id)
+            return extract.get_discussion_id()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):

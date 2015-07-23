@@ -599,7 +599,7 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
     user_created_on_this_discussion = Column(Boolean, server_default='0')
 
     def get_discussion_id(self):
-        return self.discussion_id
+        return self.discussion_id or self.discussion.id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -1079,7 +1079,7 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
     #     Index('user_discussion_idx', 'user_id', 'discussion_id'),)
 
     def get_discussion_id(self):
-        return self.discussion_id
+        return self.discussion_id or self.discussion.id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -1228,7 +1228,7 @@ class DiscussionPermission(DiscussionBoundBase):
         return self.permission.name
 
     def get_discussion_id(self):
-        return self.discussion_id
+        return self.discussion_id or self.discussion.id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -1293,7 +1293,8 @@ class AnonymousUser(DiscussionBoundBase, User):
     # Create an index for (discussion, role)?
 
     def get_discussion_id(self):
-        return self.source.discussion_id
+        source = self.source or ContentSource.get(self.source_id)
+        return source.discussion_id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -1337,7 +1338,7 @@ class UserTemplate(DiscussionBoundBase, User):
     # Create an index for (discussion, role)?
 
     def get_discussion_id(self):
-        return self.discussion_id
+        return self.discussion_id or self.discussion.id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -1450,7 +1451,7 @@ class PartnerOrganization(DiscussionBoundBase):
         return query.filter_by(name=self.name), True
 
     def get_discussion_id(self):
-        return self.discussion_id
+        return self.discussion_id or self.discussion.id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):

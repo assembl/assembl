@@ -96,7 +96,7 @@ class ContentSource(DiscussionBoundBase):
         return None
 
     def get_discussion_id(self):
-        return self.discussion_id
+        return self.discussion_id or self.discussion.id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -134,7 +134,7 @@ class PostSource(ContentSource):
         return "<PostSource %s>" % repr(self.name)
 
     def get_discussion_id(self):
-        return self.discussion_id
+        return self.discussion_id or self.discussion.id
 
     def get_default_prepended_id(self):
         # Used for PostSource's whose incoming posts cannot guarantee
@@ -282,7 +282,7 @@ class Content(DiscussionBoundBase):
             watcher.processPostCreated(self.id)
 
     def get_discussion_id(self):
-        return self.discussion_id
+        return self.discussion_id or self.discussion.id
 
     @property
     def exported_to_sources(self):
