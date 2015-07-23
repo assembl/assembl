@@ -378,7 +378,7 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
 
     def get_discussion_id(self):
         idea = self.idea_ts or Idea.get(self.idea_id)
-        return idea_ts.get_discussion_id()
+        return idea.get_discussion_id()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):

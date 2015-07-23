@@ -505,9 +505,8 @@ class TextFragmentIdentifier(DiscussionBoundBase):
         return None
 
     def get_discussion_id(self):
-        if self.extract_id:
-            extract = self.extract or Extract.get(self.extract_id)
-            return extract.get_discussion_id()
+        extract = self.extract or Extract.get(self.extract_id)
+        return extract.get_discussion_id()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
