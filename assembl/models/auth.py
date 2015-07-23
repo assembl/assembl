@@ -138,6 +138,7 @@ class AgentProfile(Base):
     def merge(self, other_profile):
         log.warn("Merging AgentProfiles: %d <= %d" % (self.id, other_profile.id))
         session = self.db
+        assert self.id
         assert not (
             isinstance(other_profile, User) and not isinstance(self, User))
         my_accounts = {a.signature(): a for a in self.accounts}
