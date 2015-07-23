@@ -2125,14 +2125,16 @@ var MessageList = AssemblPanel.extend({
      * @param {Function} [callback] Optional: The callback function to call if message is found
      * @param {Boolean} shouldHighlightMessageSelected, defaults to true
      */
-    showMessageById: function (id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes) {
+    showMessageById: function (id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes, originalRenderId) {
       var that = this,
           collectionManager = new CollectionManager(),
           shouldRecurse,
           debug=false;
 
+          originalRenderId = originalRenderId || _.clone(this._renderId);
+
       if(debug) {
-        console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes);
+        console.log("showMessageById called with args:", id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes, originalRenderId, "currently on render id: ", this._renderId);
         console.log("this.showMessageByIdInProgress:",this.showMessageByIdInProgress);
       }
       if(!id) {
@@ -2144,9 +2146,10 @@ var MessageList = AssemblPanel.extend({
         Raven.context(function() {
           throw new Error("showMessageById():   a showMessageById was already in progress, aborting")
         },
-        {requestes_message_id: id});
+        {requested_message_id: id});
       }
-      else if (shouldRecurseMaxMoreTimes === undefined) {
+
+      if (shouldRecurseMaxMoreTimes === undefined) {
           this.showMessageByIdInProgress = true;
       }
 
@@ -2173,7 +2176,7 @@ var MessageList = AssemblPanel.extend({
           if (debug) {
             console.log("showMessageById(): calling recursively after waiting for render to complete");
           }
-          that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes - 1);
+          that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes - 1, originalRenderId);
         });
         return;
       }
@@ -2186,13 +2189,20 @@ var MessageList = AssemblPanel.extend({
                   messageIsInFilter = that.isMessageIdInResults(id, resultMessageIdCollection),
                   requestedOffsets;
 
+              if (originalRenderId !== that._renderId) {
+                console.log("showMessageById():  Unable to complete because a new render is in progress, restarting from scratch for ", id);
+                Raven.captureMessage("showMessageById():  Unable to complete because a new render is in progress, restarting from scratch", {requested_message_id: id})
+                that.showMessageByIdInProgress = false;
+                that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, undefined, undefined);
+              }
+
               if (messageIsInFilter && !that.isMessageOnscreen(id)) {
                   if (shouldRecurse) {
                       var success = function () {
                         if(debug) {
                           console.log("showMessageById(): INFO: message " + id + " was in query results but not onscreen, we requested a page change and now call showMessageById() recursively after waiting for render to complete");
                         }
-                        that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, 0);
+                        that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, 0, originalRenderId);
                       };
                       requestedOffsets = that.calculateRequestedOffsetToShowMessage(id, that.visitorOrderLookupTable, resultMessageIdCollection);
                       that.requestMessages(requestedOffsets); //It may be that a render in progress that will actually use it
@@ -2218,7 +2228,7 @@ var MessageList = AssemblPanel.extend({
                       that.showAllMessages();
                       var success = function () {
                           console.log("showMessageById(): WARNING: message " + id + " not in query results, calling showMessageById() recursively after clearing filters");
-                          that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes - 1);
+                          that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes - 1, originalRenderId);
                       };
                       that.listenToOnce(that, "messageList:render_complete", success);
                   }
