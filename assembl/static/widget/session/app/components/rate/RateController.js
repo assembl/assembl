@@ -27,7 +27,7 @@ RateModule.controller('RateController', [
                 angular.forEach(response.data, function (item) {
                     if (item.widget_add_post_endpoint) {
                         item.widget_add_post_endpoint = UtilsService.getURL(_.values(item.widget_add_post_endpoint));
-                        item.beautify_date = moment(new Date(item.creationDate)).fromNow();
+                        item.beautify_date = UtilsService.getNiceDateTime(item.creationDate);
                         ideas.push(item);
                     }
                 });

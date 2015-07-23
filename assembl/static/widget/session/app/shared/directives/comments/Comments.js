@@ -79,7 +79,7 @@ SessionApp.directive('comments', [
                     angular.forEach(response.data, function(com){
                         var user_id = com.idCreator.split('/')[1];
 
-                        com.date = moment(com.date).fromNow();
+                        com.date = UtilsService.getNiceDateTime(com.date);
                         com.avatar = '/user/id/'+ user_id +'/avatar/30';
 
                         comments.push(com);
