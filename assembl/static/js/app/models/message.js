@@ -68,9 +68,9 @@ var MessageModel = Base.Model.extend({
         return count;
     },
 
-    visitDepthFirst: function (visitor) {
+    visitDepthFirst: function (visitor, includeHidden) {
         var ancestry = [this.getId()];
-        this.collection.visitDepthFirst(visitor, this, ancestry);
+        this.collection.visitDepthFirst(visitor, this, ancestry, includeHidden);
     },
 
     /**
@@ -250,7 +250,7 @@ var MessageCollection = Base.Collection.extend({
      * @param visitor visitor function.  If visitor returns true, traversal continues
      * @return {Object[]}
      */
-    visitDepthFirst: function (visitor, message, ancestry) {
+    visitDepthFirst: function (visitor, message, ancestry, includeHidden) {
         var that=this;
         if (ancestry === undefined) {
             ancestry = [];
@@ -258,9 +258,14 @@ var MessageCollection = Base.Collection.extend({
         if (message === undefined) {
             var rootMessages = this.where({ parentId: null });
             var results = _.map(rootMessages, function(rootMessage) {
-                return that.visitDepthFirst(visitor, rootMessage, ancestry);
+                return that.visitDepthFirst(visitor, rootMessage, ancestry, includeHidden);
             });
             return visitor.post_visit(undefined, results);
+        }
+        else if (includeHidden !== true && message.get('hidden')) {
+          // TODO: Do we want to recurse on children of hidden parents?
+          // It could be useful for moderation.
+          return undefined;
         }
         else if (visitor.visit(message, ancestry)) {
             //Copy ancestry
@@ -270,7 +275,7 @@ var MessageCollection = Base.Collection.extend({
                 return child.get('date');
             });
             var results = _.map(children, function(child) {
-                return that.visitDepthFirst(visitor, child, ancestry);
+                return that.visitDepthFirst(visitor, child, ancestry, includeHidden);
             });
             return visitor.post_visit(message, results);
         }
