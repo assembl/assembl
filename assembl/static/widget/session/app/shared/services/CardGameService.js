@@ -23,6 +23,10 @@ SessionApp.factory('CardGameService', function ($http) {
             {
                 "label": "Deck 2",
                 "url": "/static/widget/card/config/game_2.json"
+            },
+            {
+                "label": "Deck 3",
+                "url": "/static/widget/card/config/game_3.json"
             }
         ]
     };
