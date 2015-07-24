@@ -2,8 +2,7 @@
 
 var _ = require('../shims/underscore.js'),
     App = require('../app.js'),
-    Ctx = require('../common/context.js'),
-    CollectionManager = require('../common/collectionManager.js');
+    Ctx = require('../common/context.js');
 
 /**
  * @class Socket
@@ -85,7 +84,8 @@ Socket.prototype.onClose = function () {
  * @param  {Object]} item
  */
 Socket.prototype.processData = function (item) {
-    var collectionManager = new CollectionManager(),
+    var CollectionManager = require('../common/collectionManager.js'),
+        collectionManager = new CollectionManager(),
         collPromise = collectionManager.getCollectionPromiseByType(item);
 
     if (Ctx.debugSocket) {
