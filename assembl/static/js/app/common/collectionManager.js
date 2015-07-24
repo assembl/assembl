@@ -23,6 +23,7 @@ var Marionette = require('../shims/marionette.js'),
     UserProfile = require('../models/userProfile.js'),
     Social = require('../models/social.js'),
     Account = require('../models/accounts.js'),
+    Socket = require('../utils/socket.js'),
     DiscussionSources = require('../models/sources.js');
 
 /**
@@ -159,6 +160,13 @@ var CollectionManager = Marionette.Controller.extend({
      */
     _allUserAccounts: undefined,
     _allUserAccountsPromise: undefined,
+
+    /**
+     * Connected socket promise
+     * @type socket
+     */
+    _connectedSocketPromise: undefined,
+
 
     /**
      * Returns the collection from the giving object's @type .
@@ -733,6 +741,18 @@ var CollectionManager = Marionette.Controller.extend({
               console.error(e.statusText);
           });
       return this._allUserAccountsPromise;
+    },
+
+    getConnectedSocketPromise: function () {
+      if (this._connectedSocketPromise) {
+        return this._connectedSocketPromise;
+      }
+      var socket = null;
+      // Note: This does not solve the fact that the socket may disconnect.
+      return this._connectedSocketPromise = new Promise(
+        function (resolve) {
+          socket = new Socket(resolve);
+        });
     }
 });
 

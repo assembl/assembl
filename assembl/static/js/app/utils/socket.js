@@ -10,7 +10,8 @@ var _ = require('../shims/underscore.js'),
  *
  * @param {string} url
  */
-var Socket = function () {
+var Socket = function (connectCallback) {
+    this.connectCallback = connectCallback;
     if (start_application) {
         this.init();
     }
@@ -51,6 +52,7 @@ Socket.prototype.onOpen = function () {
  */
 Socket.prototype.onMessage = function (ev) {
     if (this.state == Socket.STATE_CONNECTING) {
+        this.connectCallback(this);
         App.commands.execute('socket:open');
         this.state = Socket.STATE_OPEN;
     }

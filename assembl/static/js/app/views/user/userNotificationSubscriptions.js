@@ -300,7 +300,8 @@ var userNotificationSubscriptions = Marionette.LayoutView.extend({
         Promise.join(collectionManager.getNotificationsUserCollectionPromise(),
                collectionManager.getNotificationsDiscussionCollectionPromise(),
                collectionManager.getLocalRoleCollectionPromise(),
-            function (NotificationsUser, notificationTemplates, allRoles) {
+               collectionManager.getConnectedSocketPromise(),
+            function (NotificationsUser, notificationTemplates, allRoles, socket) {
 
                 var role =  allRoles.find(function (local_role) {
                         return local_role.get('role') === Roles.PARTICIPANT;

@@ -27,7 +27,8 @@ else {
 }
 
 var router = new Router();
-var socket = new Socket();
+var collectionManager = new CollectionManager();
+var socket = collectionManager.getConnectedSocketPromise();
 
 window.Ctx = Ctx;
 
@@ -36,8 +37,7 @@ App.start();
 // available in simple interface
 if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE){
 
-    var collectionManager = new CollectionManager(),
-        currentUser = Ctx.getCurrentUser();
+    var currentUser = Ctx.getCurrentUser();
     if(activate_tour && (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))){
         // start take tour due to the dom latencies
         setTimeout(function(){
