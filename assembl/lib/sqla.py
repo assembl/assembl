@@ -231,6 +231,15 @@ class BaseOps(object):
     def delete(self):
         _session_maker.delete(self)
 
+    @classmethod
+    def polymorphic_identities(cls):
+        return [k for (k, v) in cls.__mapper__.polymorphic_map.iteritems()
+                if issubclass(v.class_, cls)]
+
+    @classmethod
+    def polymorphic_test(cls):
+        return cls.__mapper__.polymorphic_on.in_(cls.polymorphic_identities())
+
     def update(self, **values):
         fields = self._col_names()
         for name, value in values.iteritems():

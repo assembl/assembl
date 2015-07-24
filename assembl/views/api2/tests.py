@@ -226,6 +226,7 @@ def test_creativity_session_widget(
     new_widget = Widget.get_instance(new_widget_loc.location)
     assert new_widget
     assert new_widget.base_idea == subidea_1
+    assert not new_widget.generated_ideas
     widget_id = new_widget.id
     # There should be a link
     widget_uri = new_widget.uri()
@@ -360,6 +361,9 @@ def test_creativity_session_widget(
     assert new_idea2.proposed_in_post
     # The second idea was not proposed in public
     assert new_idea2.proposed_in_post.hidden
+    # The root ideas should not be hidden.
+    subidea_1 = Idea.get_instance(subidea_1.id)
+    assert not subidea_1.hidden
     # Create a second post.
     new_post_create = test_app.post_json(local_to_absolute(post_endpoint), {
         "@type": "Post", "message_id": 0,

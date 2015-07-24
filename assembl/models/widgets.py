@@ -869,8 +869,8 @@ BaseIdeaWidget.base_idea_link = relationship(
 
 BaseIdeaWidget.base_idea = relationship(
     Idea, viewonly=True, secondary=BaseIdeaWidgetLink.__table__,
-    primaryjoin=BaseIdeaWidget.id == with_polymorphic(
-        BaseIdeaWidgetLink, '*').widget_id,
+    primaryjoin=((BaseIdeaWidget.id == BaseIdeaWidgetLink.widget_id)
+                 & BaseIdeaWidget.polymorphic_test()),
     secondaryjoin=with_polymorphic(BaseIdeaWidgetLink, '*').idea,
     uselist=False)
 
@@ -884,9 +884,9 @@ IdeaCreatingWidget.generated_idea_links = relationship(GeneratedIdeaWidgetLink)
 
 IdeaCreatingWidget.generated_ideas = relationship(
     Idea, viewonly=True, secondary=GeneratedIdeaWidgetLink.__table__,
-    primaryjoin=IdeaCreatingWidget.id == with_polymorphic(
-        GeneratedIdeaWidgetLink, '*').widget_id,
-    secondaryjoin=with_polymorphic(GeneratedIdeaWidgetLink, '*').idea)
+    primaryjoin=((IdeaCreatingWidget.id == GeneratedIdeaWidgetLink.widget_id)
+                 & GeneratedIdeaWidgetLink.polymorphic_test()),
+    secondaryjoin=GeneratedIdeaWidgetLink.idea)
 
 
 class IdeaShowingWidgetLink(IdeaWidgetLink):
@@ -900,8 +900,8 @@ Idea.has_showing_widget_links = relationship(IdeaShowingWidgetLink)
 
 Widget.showing_ideas = relationship(
     Idea, viewonly=True, secondary=IdeaShowingWidgetLink.__table__,
-    primaryjoin=MultiCriterionVotingWidget.id == with_polymorphic(
-        IdeaShowingWidgetLink, '*').widget_id,
+    primaryjoin=((MultiCriterionVotingWidget.id == IdeaShowingWidgetLink.widget_id)
+                 & IdeaShowingWidgetLink.polymorphic_test()),
     secondaryjoin=with_polymorphic(IdeaShowingWidgetLink, '*').idea,
     backref='showing_widget')
 
@@ -924,8 +924,8 @@ Idea.has_votable_links = relationship(VotableIdeaWidgetLink)
 
 MultiCriterionVotingWidget.votable_ideas = relationship(
     Idea, viewonly=True, secondary=VotableIdeaWidgetLink.__table__,
-    primaryjoin=MultiCriterionVotingWidget.id == with_polymorphic(
-        VotableIdeaWidgetLink, '*').widget_id,
+    primaryjoin=((MultiCriterionVotingWidget.id == VotableIdeaWidgetLink.widget_id)
+                 & VotableIdeaWidgetLink.polymorphic_test()),
     secondaryjoin=with_polymorphic(VotableIdeaWidgetLink, '*').idea,
     backref='votable_by_widget')
 
@@ -940,8 +940,8 @@ MultiCriterionVotingWidget.voted_idea_links = relationship(
 
 MultiCriterionVotingWidget.voted_ideas = relationship(
     Idea, viewonly=True, secondary=VotedIdeaWidgetLink.__table__,
-    primaryjoin=MultiCriterionVotingWidget.id == with_polymorphic(
-        VotedIdeaWidgetLink, '*').widget_id,
+    primaryjoin=((MultiCriterionVotingWidget.id == VotedIdeaWidgetLink.widget_id)
+                 & VotedIdeaWidgetLink.polymorphic_test()),
     secondaryjoin=with_polymorphic(VotedIdeaWidgetLink, '*').idea,
     backref="voted_by_widget")
 
@@ -958,7 +958,7 @@ Idea.has_criterion_links = relationship(VotingCriterionWidgetLink)
 MultiCriterionVotingWidget.criteria = relationship(
     Idea,
     viewonly=True, secondary=VotingCriterionWidgetLink.__table__,
-    primaryjoin=MultiCriterionVotingWidget.id == with_polymorphic(
-        VotingCriterionWidgetLink, '*').widget_id,
+    primaryjoin=((MultiCriterionVotingWidget.id == VotingCriterionWidgetLink.widget_id)
+                 & VotingCriterionWidgetLink.polymorphic_test()),
     secondaryjoin=with_polymorphic(VotingCriterionWidgetLink, '*').idea,
     backref='criterion_of_widget')
