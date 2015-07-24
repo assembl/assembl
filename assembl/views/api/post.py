@@ -5,7 +5,7 @@ from cornice import Service
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest)
 from pyramid.i18n import TranslationStringFactory
-
+from pyramid.settings import asbool
 from pyramid.security import authenticated_userid
 
 from sqlalchemy import String, text
@@ -147,6 +147,11 @@ def get_posts(request):
     elif only_orphan == "false":
         raise HTTPBadRequest(localizer.translate(
             _("Getting non-orphan posts isn't supported.")))
+
+    # "true" means hidden only, "false" (default) means visible only. "any" means both.
+    hidden = request.GET.get('hidden_messages', "false")
+    if hidden != 'any':
+        posts = posts.filter_by(hidden=asbool(hidden))
 
     if root_idea_id:
         related = text(Idea._get_related_posts_statement(),
