@@ -10,7 +10,7 @@ import simplejson as json
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
-    HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable)
+    HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPFound)
 from pyramid_dogpile_cache import get_region
 from pyramid.security import authenticated_userid
 from pyramid.renderers import JSONP_VALID_CALLBACK
@@ -179,6 +179,8 @@ def discussion_instance_view_jsonld(request):
              ctx_instance_class=Discussion, request_method='GET',
              accept="application/ld+json")
 def user_private_view_jsonld(request):
+    if request.scheme == "http":
+        return HTTPFound("https://" + request.host + request.path_qs)
     discussion_id = request.context.get_discussion_id()
     user_id, permissions, salt = read_user_token(request)
     if P_READ not in permissions:
