@@ -2128,7 +2128,7 @@ msgstr "Par"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:19
 msgid "View Idea in popup"
-msgstr "Voir l'idée dans une fenêtre modale"
+msgstr "Voir l'idée dans une fenêtre contextuelle"
 
 #: assembl/templates/views/ideaList.tmpl:12
 msgid "Add idea"
