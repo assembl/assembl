@@ -14,6 +14,7 @@ from pyramid.httpexceptions import (
 from pyramid_dogpile_cache import get_region
 from pyramid.security import authenticated_userid
 from pyramid.renderers import JSONP_VALID_CALLBACK
+from pyramid.settings import asbool
 
 from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_SYSADMIN, Everyone)
@@ -179,7 +180,8 @@ def discussion_instance_view_jsonld(request):
              ctx_instance_class=Discussion, request_method='GET',
              accept="application/ld+json")
 def user_private_view_jsonld(request):
-    if request.scheme == "http":
+    if request.scheme == "http" and asbool(request.registry.settings.get(
+            'accept_secure_connection', False)):
         return HTTPFound("https://" + request.host + request.path_qs)
     discussion_id = request.context.get_discussion_id()
     user_id, permissions, salt = read_user_token(request)
