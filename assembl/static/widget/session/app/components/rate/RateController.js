@@ -26,7 +26,8 @@ RateModule.controller('RateController', [
 
                 angular.forEach(response.data, function (item) {
                     if (item.widget_add_post_endpoint) {
-                        item.widget_add_post_endpoint = UtilsService.getURL(_.values(item.widget_add_post_endpoint));
+                        var widgetName = $scope.widget['@id'];
+                        item.widget_add_post_endpoint = UtilsService.getURL(item.widget_add_post_endpoint[widgetName]);
                         item.beautify_date = UtilsService.getNiceDateTime(item.creationDate);
                         ideas.push(item);
                     }
