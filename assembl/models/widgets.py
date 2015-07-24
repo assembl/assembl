@@ -5,7 +5,7 @@ from sqlalchemy import (
     Column, Integer, ForeignKey, Text, String, DateTime, inspect)
 from sqlalchemy.sql import text, column
 from sqlalchemy.orm import (
-    relationship, backref, aliased, join, with_polymorphic)
+    relationship, backref, aliased, join)
 from sqlalchemy.ext.associationproxy import association_proxy
 import simplejson as json
 import uuid
@@ -257,7 +257,8 @@ class BaseIdeaCollection(CollectionDefinition):
             BaseIdeaWidgetLink,
             idea.id == BaseIdeaWidgetLink.idea_id).join(
                 widget).filter(widget.id == parent_instance.id).filter(
-                    widget.id == with_polymorphic(BaseIdeaWidgetLink, '*').widget_id)
+                    widget.id == BaseIdeaWidgetLink.widget_id,
+                    BaseIdeaWidgetLink.polymorphic_test())
 
 
 class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
@@ -864,47 +865,15 @@ class BaseIdeaWidgetLink(IdeaWidgetLink):
         'polymorphic_identity': 'base_idea_widget_link',
     }
 
-BaseIdeaWidget.base_idea_link = relationship(
-    BaseIdeaWidgetLink, uselist=False)
-
-BaseIdeaWidget.base_idea = relationship(
-    Idea, viewonly=True, secondary=BaseIdeaWidgetLink.__table__,
-    primaryjoin=((BaseIdeaWidget.id == BaseIdeaWidgetLink.widget_id)
-                 & BaseIdeaWidget.polymorphic_test()),
-    secondaryjoin=with_polymorphic(BaseIdeaWidgetLink, '*').idea,
-    uselist=False)
-
-
 class GeneratedIdeaWidgetLink(IdeaWidgetLink):
     __mapper_args__ = {
         'polymorphic_identity': 'generated_idea_widget_link',
     }
 
-IdeaCreatingWidget.generated_idea_links = relationship(GeneratedIdeaWidgetLink)
-
-IdeaCreatingWidget.generated_ideas = relationship(
-    Idea, viewonly=True, secondary=GeneratedIdeaWidgetLink.__table__,
-    primaryjoin=((IdeaCreatingWidget.id == GeneratedIdeaWidgetLink.widget_id)
-                 & GeneratedIdeaWidgetLink.polymorphic_test()),
-    secondaryjoin=GeneratedIdeaWidgetLink.idea)
-
-
 class IdeaShowingWidgetLink(IdeaWidgetLink):
     __mapper_args__ = {
         'polymorphic_identity': 'idea_showing_widget_link',
     }
-
-Widget.showing_idea_links = relationship(
-    IdeaShowingWidgetLink)
-Idea.has_showing_widget_links = relationship(IdeaShowingWidgetLink)
-
-Widget.showing_ideas = relationship(
-    Idea, viewonly=True, secondary=IdeaShowingWidgetLink.__table__,
-    primaryjoin=((MultiCriterionVotingWidget.id == IdeaShowingWidgetLink.widget_id)
-                 & IdeaShowingWidgetLink.polymorphic_test()),
-    secondaryjoin=with_polymorphic(IdeaShowingWidgetLink, '*').idea,
-    backref='showing_widget')
-
 
 
 class IdeaCreativitySessionWidgetLink(BaseIdeaWidgetLink, IdeaShowingWidgetLink):
@@ -918,6 +887,49 @@ class VotableIdeaWidgetLink(IdeaShowingWidgetLink):
         'polymorphic_identity': 'votable_idea_widget_link',
     }
 
+class VotedIdeaWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'voted_idea_widget_link',
+    }
+
+class VotingCriterionWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'criterion_widget_link',
+    }
+
+
+BaseIdeaWidget.base_idea_link = relationship(
+    BaseIdeaWidgetLink, uselist=False)
+
+BaseIdeaWidget.base_idea = relationship(
+    Idea, viewonly=True, secondary=BaseIdeaWidgetLink.__table__,
+    primaryjoin=((BaseIdeaWidget.id == BaseIdeaWidgetLink.widget_id)
+                 & BaseIdeaWidget.polymorphic_test()),
+    secondaryjoin=BaseIdeaWidgetLink.idea_id == Idea.id,
+    uselist=False)
+
+
+IdeaCreatingWidget.generated_idea_links = relationship(GeneratedIdeaWidgetLink)
+
+IdeaCreatingWidget.generated_ideas = relationship(
+    Idea, viewonly=True, secondary=GeneratedIdeaWidgetLink.__table__,
+    primaryjoin=((IdeaCreatingWidget.id == GeneratedIdeaWidgetLink.widget_id)
+                 & GeneratedIdeaWidgetLink.polymorphic_test()),
+    secondaryjoin=GeneratedIdeaWidgetLink.idea_id == Idea.id)
+
+
+Widget.showing_idea_links = relationship(
+    IdeaShowingWidgetLink)
+Idea.has_showing_widget_links = relationship(IdeaShowingWidgetLink)
+
+Widget.showing_ideas = relationship(
+    Idea, viewonly=True, secondary=IdeaShowingWidgetLink.__table__,
+    primaryjoin=((Widget.id == IdeaShowingWidgetLink.widget_id)
+                 & IdeaShowingWidgetLink.polymorphic_test()),
+    secondaryjoin=IdeaShowingWidgetLink.idea_id == Idea.id,
+    backref='showing_widget')
+
+
 MultiCriterionVotingWidget.votable_idea_links = relationship(
     VotableIdeaWidgetLink)
 Idea.has_votable_links = relationship(VotableIdeaWidgetLink)
@@ -926,14 +938,9 @@ MultiCriterionVotingWidget.votable_ideas = relationship(
     Idea, viewonly=True, secondary=VotableIdeaWidgetLink.__table__,
     primaryjoin=((MultiCriterionVotingWidget.id == VotableIdeaWidgetLink.widget_id)
                  & VotableIdeaWidgetLink.polymorphic_test()),
-    secondaryjoin=with_polymorphic(VotableIdeaWidgetLink, '*').idea,
+    secondaryjoin=VotableIdeaWidgetLink.idea_id == Idea.id,
     backref='votable_by_widget')
 
-
-class VotedIdeaWidgetLink(IdeaWidgetLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'voted_idea_widget_link',
-    }
 
 MultiCriterionVotingWidget.voted_idea_links = relationship(
     VotedIdeaWidgetLink)
@@ -942,14 +949,9 @@ MultiCriterionVotingWidget.voted_ideas = relationship(
     Idea, viewonly=True, secondary=VotedIdeaWidgetLink.__table__,
     primaryjoin=((MultiCriterionVotingWidget.id == VotedIdeaWidgetLink.widget_id)
                  & VotedIdeaWidgetLink.polymorphic_test()),
-    secondaryjoin=with_polymorphic(VotedIdeaWidgetLink, '*').idea,
+    secondaryjoin=VotedIdeaWidgetLink.idea_id == Idea.id,
     backref="voted_by_widget")
 
-
-class VotingCriterionWidgetLink(IdeaWidgetLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'criterion_widget_link',
-    }
 
 MultiCriterionVotingWidget.criteria_links = relationship(
     VotingCriterionWidgetLink, backref="voting_widget")
@@ -960,5 +962,5 @@ MultiCriterionVotingWidget.criteria = relationship(
     viewonly=True, secondary=VotingCriterionWidgetLink.__table__,
     primaryjoin=((MultiCriterionVotingWidget.id == VotingCriterionWidgetLink.widget_id)
                  & VotingCriterionWidgetLink.polymorphic_test()),
-    secondaryjoin=with_polymorphic(VotingCriterionWidgetLink, '*').idea,
+    secondaryjoin=VotingCriterionWidgetLink.idea_id == Idea.id,
     backref='criterion_of_widget')
