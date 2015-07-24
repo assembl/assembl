@@ -326,6 +326,15 @@ class WidgetPost(AssemblPost):
 
     metadata_raw = Column(Text)
 
+    # Make it nullable, if we delete widget.
+    widget_id = Column(Integer, ForeignKey(
+        "widget.id",
+        ondelete='SET NULL',
+        onupdate='CASCADE'
+    ), nullable=True)
+
+    widget = relationship("Widget", backref="posts")
+
     @property
     def metadata_json(self):
         if self.metadata_raw:
