@@ -476,7 +476,7 @@ var IdeaCollection = Base.Collection.extend({
      * @param origin_id the id of the root
      * @param ancestry Internal recursion parameter, do not set or use
      */
-    visitDepthFirst: function (idea_links, visitor, origin_id, include_ts, ancestry) {
+    visitDepthFirst: function (idea_links, visitor, origin_id, include_ts, ancestry, include_hidden) {
         if (ancestry === undefined) {
             ancestry = [];
         }
@@ -484,6 +484,9 @@ var IdeaCollection = Base.Collection.extend({
         var that = this,
             idea = this.get(origin_id);
         if (idea !== undefined && idea.get('is_tombstone') && include_ts !== true) {
+            return;
+        }
+        if (idea !== undefined && include_hidden !== true && idea.get('hidden')) {
             return;
         }
         if (idea === undefined || visitor.visit(idea, ancestry)) {
@@ -499,7 +502,7 @@ var IdeaCollection = Base.Collection.extend({
                 return ancestry.indexOf(l.get('target')) === -1;
             });
             var results = _.map(child_links, function(child_link) {
-                return that.visitDepthFirst(idea_links, visitor, child_link.get('target'), include_ts, ancestry);
+                return that.visitDepthFirst(idea_links, visitor, child_link.get('target'), include_ts, ancestry, include_hidden);
             });
             return visitor.post_visit(idea, results);
         }
@@ -510,14 +513,20 @@ var IdeaCollection = Base.Collection.extend({
      * @param visitor Visitor function
      * @param ancestry Internal recursion parameter, do not set or use
      */
-    visitBreadthFirst: function (idea_links, visitor, origin_id, include_ts, ancestry) {
+    visitBreadthFirst: function (idea_links, visitor, origin_id, include_ts, ancestry, include_hidden) {
         var that = this,
             continue_visit = true,
             idea = this.get(origin_id);
+
+        if (idea !== undefined && include_hidden !== true && idea.get(hidden)) {
+          return;
+        }
+
         if (ancestry === undefined) {
             ancestry = [];
-            if (idea !== undefined)
-                continue_visit = visitor.visit(idea, ancestry);
+            if (idea !== undefined) {
+              continue_visit = visitor.visit(idea, ancestry);
+            }
         }
         if (continue_visit) {
             ancestry = ancestry.slice(0);
@@ -543,7 +552,7 @@ var IdeaCollection = Base.Collection.extend({
                 }
             }
             var results = _.map(children_to_visit, function(child) {
-                that.visitBreadthFirst(idea_links, visitor, child, include_ts, ancestry);
+                that.visitBreadthFirst(idea_links, visitor, child, include_ts, ancestry, include_hidden);
             });
             return visitor.post_visit(idea, results);
         }
