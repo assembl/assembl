@@ -311,10 +311,11 @@ class SynthesisPost(AssemblPost):
         return self.publishes_synthesis.subject
 
 
-class PostWithMetadata(AssemblPost):
+class WidgetPost(AssemblPost):
     """
     A Post that comes from an inspiration widget
     """
+    # historical name
     __tablename__ = "post_with_metadata"
 
     id = Column(Integer, ForeignKey(
@@ -340,14 +341,14 @@ class PostWithMetadata(AssemblPost):
     }
 
 
-class IdeaProposalPost(PostWithMetadata):
+class IdeaProposalPost(WidgetPost):
     """
     A Post that proposes an Idea.
     """
     __tablename__ = "idea_proposal_post"
 
     id = Column(Integer, ForeignKey(
-        PostWithMetadata.id,
+        WidgetPost.id,
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)

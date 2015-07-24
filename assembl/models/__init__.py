@@ -95,7 +95,7 @@ from .post import (
     IdeaProposalPost,
     ImportedPost,
     Post,
-    PostWithMetadata,
+    WidgetPost,
     SynthesisPost,
 )
 from .mail import (

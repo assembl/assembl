@@ -96,12 +96,12 @@
     "AssemblPost": {
         "@extends": "Post"
     },
-    "PostWithMetadata": {
+    "WidgetPost": {
         "@extends": "AssemblPost",
         "metadata_json": true
     },
     "IdeaProposalPost": {
-        "@extends": "PostWithMetadata",
+        "@extends": "WidgetPost",
         "proposes_idea": true
     },
     "SynthesisPost": {

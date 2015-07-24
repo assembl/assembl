@@ -4722,7 +4722,7 @@
     </g>
     <g font-family="'Lucida Grande'" font-size="13" transform="matrix(1,0,0,1,20,20) translate(14401.4837,1025)">
       <image x="2" y="2" clip-path="url(#clipPath465)" width="16" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAEklEQVR42mNgGAWj&#10;YBSMAggAAAQQAAGvRYgsAAAAAElFTkSuQmCC" height="16" preserveAspectRatio="none"/>
-      <text text-rendering="geometricPrecision" x="21" xml:space="preserve" y="15" clip-path="url(#clipPath465)" stroke="none">assembl.models.post.PostWithMetadata</text>
+      <text text-rendering="geometricPrecision" x="21" xml:space="preserve" y="15" clip-path="url(#clipPath465)" stroke="none">assembl.models.post.WidgetPost</text>
     </g>
     <g fill="gray" font-size="13" font-family="'Lucida Grande'" transform="matrix(1,0,0,1,20,20) translate(7620.7753,0)" stroke="gray">
       <rect x="2" width="163" height="1" y="29" clip-path="url(#clipPath467)" stroke="none"/>

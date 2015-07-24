@@ -328,6 +328,12 @@ def test_creativity_session_widget(
     # It should mention its idea
     print new_post1_rep.json
     assert new_idea1_id in new_post1_rep.json['widget_ideas']
+
+    new_post1 = Post.get_instance(new_post1_id)
+    assert new_post1.hidden
+    new_idea1 = Idea.get_instance(new_idea1_id)
+    assert new_idea1.hidden
+
     # Create a second idea
     new_idea_create = test_app.post_json(idea_hiding_endpoint, {
         "@type": "Idea", "short_title": "This is another new idea"})
@@ -457,9 +463,10 @@ def test_inspiration_widget(
     # TODO. ajouter la collection descendant_ideas. Comment déduire cet URL du widget????
     test_app.post('/data/Discussion/%d/widgets/%d/base_idea_descendants/%d/linkedposts' % (
         discussion.id, widget_id, subidea_1_1.id), {
-            "type": "PostWithMetadata", "message_id": 0,
+            "type": "WidgetPost", "message_id": 0,
             "body": "body", "creator_id": participant1_user.id,
             "metadata_raw": '{"inspiration_url": "https://www.youtube.com/watch?v=7E2FUSYO374"}'})
+    # TODO: check it has the widget_id
 
 
 def test_voting_widget(

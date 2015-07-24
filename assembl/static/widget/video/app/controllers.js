@@ -514,7 +514,7 @@ videosApp.controller('videosCtl',
                     definition: messageContent
                 };*/
                 var message = {
-                    "type": "PostWithMetadata",
+                    "type": "WidgetPost",
                     "message_id": 0,
                     "subject": messageSubject,
                     "body": messageContent,
