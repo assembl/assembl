@@ -518,7 +518,7 @@ var IdeaCollection = Base.Collection.extend({
             continue_visit = true,
             idea = this.get(origin_id);
 
-        if (idea !== undefined && includeHidden !== true && idea.get(hidden)) {
+        if (idea !== undefined && includeHidden !== true && idea.get('hidden')) {
           return;
         }
 
