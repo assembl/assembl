@@ -202,10 +202,119 @@ class Widget(DiscussionBoundBase):
                 yield notification_data
 
 
+class IdeaWidgetLink(DiscussionBoundBase):
+    __tablename__ = 'idea_widget_link'
+
+    id = Column(Integer, primary_key=True,
+                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    type = Column(String(60))
+
+    idea_id = Column(Integer, ForeignKey(Idea.id),
+                     nullable=False, index=True)
+    idea = relationship(
+        Idea, primaryjoin=(Idea.id == idea_id),
+        backref=backref("widget_links", cascade="all, delete-orphan"))
+
+    widget_id = Column(Integer, ForeignKey(
+        Widget.id, ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True)
+    widget = relationship(Widget, backref=backref(
+        'idea_links', cascade="all, delete-orphan"))
+
+    context_url = Column(String())
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'abstract_idea_widget_link',
+        'polymorphic_on': type,
+        'with_polymorphic': '*'
+    }
+
+    def get_discussion_id(self):
+        idea = self.idea or Idea.get(self.idea_id)
+        return idea.get_discussion_id()
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.idea_id == Idea.id),
+                (Idea.discussion_id == discussion_id))
+
+    discussion = relationship(
+        Discussion, viewonly=True, uselist=False, secondary=Idea.__table__,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+
+    crud_permissions = CrudPermissions(
+        P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
+        P_EDIT_IDEA, P_EDIT_IDEA)
+
+
+# Note: declare all subclasses of IdeaWidgetLink here,
+# so we can use polymorphic_test later.
+
+class BaseIdeaWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'base_idea_widget_link',
+    }
+
+
+class GeneratedIdeaWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'generated_idea_widget_link',
+    }
+
+
+class IdeaShowingWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_showing_widget_link',
+    }
+
+
+class IdeaCreativitySessionWidgetLink(
+        BaseIdeaWidgetLink, IdeaShowingWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_creativity_session_widget_link',
+    }
+
+
+class VotableIdeaWidgetLink(IdeaShowingWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'votable_idea_widget_link',
+    }
+
+
+class VotedIdeaWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'voted_idea_widget_link',
+    }
+
+
+class VotingCriterionWidgetLink(IdeaWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'criterion_widget_link',
+    }
+
+
+# Then declare relationships
+
+Idea.widgets = association_proxy('widget_links', 'widget')
+
+Widget.showing_idea_links = relationship(
+    IdeaShowingWidgetLink)
+Idea.has_showing_widget_links = relationship(IdeaShowingWidgetLink)
+
+Widget.showing_ideas = relationship(
+    Idea, viewonly=True, secondary=IdeaShowingWidgetLink.__table__,
+    primaryjoin=((Widget.id == IdeaShowingWidgetLink.widget_id)
+                 & IdeaShowingWidgetLink.polymorphic_test()),
+    secondaryjoin=IdeaShowingWidgetLink.idea_id == Idea.id,
+    backref='showing_widget')
+
+
 class BaseIdeaWidget(Widget):
     __mapper_args__ = {
         'polymorphic_identity': 'idea_view_widget',
     }
+
+    base_idea_link = relationship(BaseIdeaWidgetLink, uselist=False)
 
     def interpret_settings(self, settings):
         if 'idea' in settings:
@@ -243,6 +352,14 @@ class BaseIdeaWidget(Widget):
     def extra_collections(cls):
         return {'base_idea': BaseIdeaCollection(),
                 'base_idea_descendants': BaseIdeaDescendantsCollection() }
+
+
+BaseIdeaWidget.base_idea = relationship(
+        Idea, viewonly=True, secondary=BaseIdeaWidgetLink.__table__,
+        primaryjoin=((BaseIdeaWidget.id == BaseIdeaWidgetLink.widget_id)
+                     & BaseIdeaWidgetLink.polymorphic_test()),
+        secondaryjoin=BaseIdeaWidgetLink.idea_id == Idea.id,
+        uselist=False)
 
 
 class BaseIdeaCollection(CollectionDefinition):
@@ -308,6 +425,8 @@ class IdeaCreatingWidget(BaseIdeaWidget):
     __mapper_args__ = {
         'polymorphic_identity': 'idea_creating_widget',
     }
+
+    generated_idea_links = relationship(GeneratedIdeaWidgetLink)
 
     def get_confirm_ideas_url(self):
         idea_uri = self.settings_json.get('idea', None)
@@ -456,9 +575,12 @@ class IdeaCreatingWidget(BaseIdeaWidget):
             base_idea_hiding=BaseIdeaHidingCollection(),
             base_idea_descendants=BaseIdeaDescendantsCollectionC())
 
-    # @property
-    # def generated_ideas(self):
-    #     return [l.idea for l in self.generated_idea_links]
+
+IdeaCreatingWidget.generated_ideas = relationship(
+    Idea, viewonly=True, secondary=GeneratedIdeaWidgetLink.__table__,
+    primaryjoin=((IdeaCreatingWidget.id == GeneratedIdeaWidgetLink.widget_id)
+                 & GeneratedIdeaWidgetLink.polymorphic_test()),
+    secondaryjoin=GeneratedIdeaWidgetLink.idea_id == Idea.id)
 
 
 class InspirationWidget(IdeaCreatingWidget):
@@ -531,6 +653,11 @@ class MultiCriterionVotingWidget(Widget):
     __mapper_args__ = {
         'polymorphic_identity': 'multicriterion_voting_widget',
     }
+
+    votable_idea_links = relationship(VotableIdeaWidgetLink)
+    voted_idea_links = relationship(VotedIdeaWidgetLink)
+    criteria_links = relationship(
+        VotingCriterionWidgetLink, backref="voting_widget")
 
     @classmethod
     def get_ui_endpoint_base(cls):
@@ -810,129 +937,9 @@ class WidgetUserConfig(DiscussionBoundBase):
     crud_permissions = CrudPermissions(P_ADD_POST)  # all participants...
 
 
-class IdeaWidgetLink(DiscussionBoundBase):
-    __tablename__ = 'idea_widget_link'
 
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
-    type = Column(String(60))
-
-    idea_id = Column(Integer, ForeignKey(Idea.id),
-                     nullable=False, index=True)
-    idea = relationship(
-        Idea, primaryjoin=(Idea.id == idea_id),
-        backref=backref("widget_links", cascade="all, delete-orphan"))
-
-    widget_id = Column(Integer, ForeignKey(
-        Widget.id, ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False, index=True)
-    #widget = relationship(Widget, backref='idea_links')
-
-    context_url = Column(String())
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'abstract_idea_widget_link',
-        'polymorphic_on': type,
-        'with_polymorphic': '*'
-    }
-
-    def get_discussion_id(self):
-        idea = self.idea or Idea.get(self.idea_id)
-        return idea.get_discussion_id()
-
-    @classmethod
-    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        return ((cls.idea_id == Idea.id),
-                (Idea.discussion_id == discussion_id))
-
-    discussion = relationship(
-        Discussion, viewonly=True, uselist=False, secondary=Idea.__table__,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
-
-    crud_permissions = CrudPermissions(
-        P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
-        P_EDIT_IDEA, P_EDIT_IDEA)
-
-Idea.widgets = association_proxy('widget_links', 'widget')
-Widget.idea_links = relationship(
-    IdeaWidgetLink,
-    backref=backref('widget', uselist=False),
-    cascade="all, delete-orphan")
-
-
-class BaseIdeaWidgetLink(IdeaWidgetLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'base_idea_widget_link',
-    }
-
-class GeneratedIdeaWidgetLink(IdeaWidgetLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'generated_idea_widget_link',
-    }
-
-class IdeaShowingWidgetLink(IdeaWidgetLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'idea_showing_widget_link',
-    }
-
-
-class IdeaCreativitySessionWidgetLink(BaseIdeaWidgetLink, IdeaShowingWidgetLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'idea_creativity_session_widget_link',
-    }
-
-
-class VotableIdeaWidgetLink(IdeaShowingWidgetLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'votable_idea_widget_link',
-    }
-
-class VotedIdeaWidgetLink(IdeaWidgetLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'voted_idea_widget_link',
-    }
-
-class VotingCriterionWidgetLink(IdeaWidgetLink):
-    __mapper_args__ = {
-        'polymorphic_identity': 'criterion_widget_link',
-    }
-
-
-BaseIdeaWidget.base_idea_link = relationship(
-    BaseIdeaWidgetLink, uselist=False)
-
-BaseIdeaWidget.base_idea = relationship(
-    Idea, viewonly=True, secondary=BaseIdeaWidgetLink.__table__,
-    primaryjoin=((BaseIdeaWidget.id == BaseIdeaWidgetLink.widget_id)
-                 & BaseIdeaWidget.polymorphic_test()),
-    secondaryjoin=BaseIdeaWidgetLink.idea_id == Idea.id,
-    uselist=False)
-
-
-IdeaCreatingWidget.generated_idea_links = relationship(GeneratedIdeaWidgetLink)
-
-IdeaCreatingWidget.generated_ideas = relationship(
-    Idea, viewonly=True, secondary=GeneratedIdeaWidgetLink.__table__,
-    primaryjoin=((IdeaCreatingWidget.id == GeneratedIdeaWidgetLink.widget_id)
-                 & GeneratedIdeaWidgetLink.polymorphic_test()),
-    secondaryjoin=GeneratedIdeaWidgetLink.idea_id == Idea.id)
-
-
-Widget.showing_idea_links = relationship(
-    IdeaShowingWidgetLink)
-Idea.has_showing_widget_links = relationship(IdeaShowingWidgetLink)
-
-Widget.showing_ideas = relationship(
-    Idea, viewonly=True, secondary=IdeaShowingWidgetLink.__table__,
-    primaryjoin=((Widget.id == IdeaShowingWidgetLink.widget_id)
-                 & IdeaShowingWidgetLink.polymorphic_test()),
-    secondaryjoin=IdeaShowingWidgetLink.idea_id == Idea.id,
-    backref='showing_widget')
-
-
-MultiCriterionVotingWidget.votable_idea_links = relationship(
-    VotableIdeaWidgetLink)
 Idea.has_votable_links = relationship(VotableIdeaWidgetLink)
+Idea.has_criterion_links = relationship(VotingCriterionWidgetLink)
 
 MultiCriterionVotingWidget.votable_ideas = relationship(
     Idea, viewonly=True, secondary=VotableIdeaWidgetLink.__table__,
@@ -941,21 +948,12 @@ MultiCriterionVotingWidget.votable_ideas = relationship(
     secondaryjoin=VotableIdeaWidgetLink.idea_id == Idea.id,
     backref='votable_by_widget')
 
-
-MultiCriterionVotingWidget.voted_idea_links = relationship(
-    VotedIdeaWidgetLink)
-
 MultiCriterionVotingWidget.voted_ideas = relationship(
     Idea, viewonly=True, secondary=VotedIdeaWidgetLink.__table__,
     primaryjoin=((MultiCriterionVotingWidget.id == VotedIdeaWidgetLink.widget_id)
                  & VotedIdeaWidgetLink.polymorphic_test()),
     secondaryjoin=VotedIdeaWidgetLink.idea_id == Idea.id,
     backref="voted_by_widget")
-
-
-MultiCriterionVotingWidget.criteria_links = relationship(
-    VotingCriterionWidgetLink, backref="voting_widget")
-Idea.has_criterion_links = relationship(VotingCriterionWidgetLink)
 
 MultiCriterionVotingWidget.criteria = relationship(
     Idea,
