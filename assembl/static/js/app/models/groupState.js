@@ -14,18 +14,19 @@ var GroupStateModel = Base.Model.extend({
     currentIdea: null
   },
 
-  toJSON:  function (options) {
+  toJSON:  function(options) {
     var json = Base.Model.prototype.toJSON.apply(this, arguments);
-    if(json.currentIdea !== null && json.currentIdea instanceof Idea.Model) {
+    if (json.currentIdea !== null && json.currentIdea instanceof Idea.Model) {
       json.currentIdea = json.currentIdea.get("@id");
     }
+
     return json;
   },
 
   /** This returns undefined if the model is valid */
-  validate: function (attributes, options) {
+  validate: function(attributes, options) {
     //console.log("groupState::validate called with", attributes, options);
-    if(attributes['currentIdea'] === null) {
+    if (attributes['currentIdea'] === null) {
       return; //Ok
     }
     else if (attributes['currentIdea'] === undefined) {
@@ -40,9 +41,9 @@ var GroupStateModel = Base.Model.extend({
 var GroupStates = Base.Collection.extend({
   model: GroupStateModel,
 
-  validate: function () {
+  validate: function() {
     var invalid = [];
-    this.each(function (groupState) {
+    this.each(function(groupState) {
       if (!groupState.validate()) {
         invalid.push(groupState);
       }
@@ -52,11 +53,12 @@ var GroupStates = Base.Collection.extend({
       this.remove(invalid);
       console.warn("GroupState.Collection: after removal, number of remaining valid groupStates: " + this.length);
     }
+
     return (this.length > 0);
   }
 });
 
 module.exports = {
-    Model: GroupStateModel,
-    Collection: GroupStates
+  Model: GroupStateModel,
+  Collection: GroupStates
 };

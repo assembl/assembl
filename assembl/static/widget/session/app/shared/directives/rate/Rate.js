@@ -1,33 +1,33 @@
-SessionApp.directive('Rate',['UtilsService', function($http, UtilsService){
-    return {
-        restrict:'E',
-        scope: {
-            comment:'=comment'
-        },
-        templateUrl:'app/shared/directives/rate/rate.html',
-        link: function($scope){
+SessionApp.directive('Rate', ['UtilsService', function($http, UtilsService) {
+  return {
+    restrict:'E',
+    scope: {
+      comment:'=comment'
+    },
+    templateUrl:'app/shared/directives/rate/rate.html',
+    link: function($scope) {
 
-            $scope.getCommentsForRating = function(){
+      $scope.getCommentsForRating = function() {
 
-                var
-                    rootUrl = UtilsService.getURL(_.values($scope.comment.widget_add_post_endpoint)),
-                    comments = [];
+        var
+            rootUrl = UtilsService.getURL(_.values($scope.comment.widget_add_post_endpoint)),
+            comments = [];
 
-                if(rootUrl){
+        if (rootUrl) {
 
-                    $http.get(rootUrl).then(function(response){
-                        angular.forEach(response.data, function(comment){
+          $http.get(rootUrl).then(function(response) {
+            angular.forEach(response.data, function(comment) {
 
-                            comments.push(comment);
-                        })
+              comments.push(comment);
+            })
 
-                        $scope.subIdeaComment = comments;
-                    });
-                }
-            }
-
-            $scope.getCommentsForRating();
+            $scope.subIdeaComment = comments;
+          });
         }
+      }
+
+      $scope.getCommentsForRating();
     }
+  }
 
 }]);

@@ -5,6 +5,7 @@ var Marionette = require('../../shims/marionette.js'),
     Assembl = require('../../app.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
+
     //panelSpec = require('../../models/panelSpec'),
     //PanelSpecTypes = require('../../utils/panelSpecTypes'),
     //viewsFactory = require('../../objects/viewsFactory'),
@@ -26,23 +27,25 @@ var ModalGroup = Backbone.Modal.extend({
    * A modal group has only a single group
    */
   getGroup: function() {
-    if(!this.groupsView.isViewRendered() && !this.groupsView.isViewDestroyed()) {
+    if (!this.groupsView.isViewRendered() && !this.groupsView.isViewDestroyed()) {
       //so children will work
       this.groupsView.render();
     }
+
     var firstGroup = this.groupsView.children.first();
-    if(!firstGroup) {
-      console.log( this.groupsView.children);
+    if (!firstGroup) {
+      console.log(this.groupsView.children);
       throw new Error("There is no group in the modal!");
     }
+
     return firstGroup;
   },
 
   /** Takes a groupSpec as model
    * 
    */
-  initialize: function (options) {
-    if ( options && "title" in options )
+  initialize: function(options) {
+    if (options && "title" in options)
       this.title = options.title;
     this.$('.bbm-modal').addClass('popin');
     var groupSpecCollection = new groupSpec.Collection([this.model]);
@@ -52,14 +55,15 @@ var ModalGroup = Backbone.Modal.extend({
   },
 
   events: {
-    'submit #partner-form' :'validatePartner'
+    'submit #partner-form':'validatePartner'
   },
 
   onRender: function() {
-    if(!this.groupsView.isViewDestroyed()) {
-      if(!this.groupsView.isViewRendered()) {
+    if (!this.groupsView.isViewDestroyed()) {
+      if (!this.groupsView.isViewRendered()) {
         this.groupsView.render();
       }
+
       this.$('.popin-body').html(this.groupsView.el);
     }
   },
@@ -68,7 +72,7 @@ var ModalGroup = Backbone.Modal.extend({
     this.groupsView.onAttach();
   },
 
-  serializeData: function(){
+  serializeData: function() {
     return {
       "title": this.title
     };

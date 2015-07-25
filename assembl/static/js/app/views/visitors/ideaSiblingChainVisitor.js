@@ -11,28 +11,30 @@ var Visitor = require("./visitor.js");
  *    render information indexed by the idea id.
  */
 var IdeaSiblingChainVisitor = function(data_by_idea) {
-    this.data_by_idea = data_by_idea;
+  this.data_by_idea = data_by_idea;
 };
 
 IdeaSiblingChainVisitor.prototype = new Visitor();
 
 IdeaSiblingChainVisitor.prototype.visit = function(idea, ancestry) {
-    var idea_id = idea.getId(),
-        data_by_idea = this.data_by_idea;
-    if (data_by_idea.hasOwnProperty(idea_id)) {
-        var level = 0;
-        var in_ancestry = true;
-        var ancestor_id, last_ancestor_id = null;
-        var last_sibling_chain = [];
-        for (var i in ancestry) {
-            ancestor_id = ancestry[i];
-            if (data_by_idea.hasOwnProperty(ancestor_id)) {
-                last_sibling_chain.push(data_by_idea[ancestor_id]['is_last_sibling']);
-            }
-        }
-        data_by_idea[idea_id]['last_sibling_chain'] = last_sibling_chain;
+  var idea_id = idea.getId(),
+      data_by_idea = this.data_by_idea;
+  if (data_by_idea.hasOwnProperty(idea_id)) {
+    var level = 0;
+    var in_ancestry = true;
+    var ancestor_id, last_ancestor_id = null;
+    var last_sibling_chain = [];
+    for (var i in ancestry) {
+      ancestor_id = ancestry[i];
+      if (data_by_idea.hasOwnProperty(ancestor_id)) {
+        last_sibling_chain.push(data_by_idea[ancestor_id]['is_last_sibling']);
+      }
     }
-    return true;
+
+    data_by_idea[idea_id]['last_sibling_chain'] = last_sibling_chain;
+  }
+
+  return true;
 };
 
 module.exports = IdeaSiblingChainVisitor;

@@ -4,35 +4,35 @@ var expect = require('chai').expect,
     $ = require('../shims/jquery.js'),
     fixtures = require('fixtures');
 
-var view,fixNav;
+var view, fixNav;
 
-function getView(){
-    var nav = new navBar();
+function getView() {
+  var nav = new navBar();
 
-    fixtures.load('<div id="slider"></div>');
-    fixtures.load('<div id="fix-nav"></div>');
-    fixNav = $('#fix-nav');
-    fixNav.append( nav.render().el );
-    return nav;
+  fixtures.load('<div id="slider"></div>');
+  fixtures.load('<div id="fix-nav"></div>');
+  fixNav = $('#fix-nav');
+  fixNav.append(nav.render().el);
+  return nav;
 }
 
-describe('Views Specs', function () {
+describe('Views Specs', function() {
 
-        describe('Navigation barre', function () {
+  describe('Navigation barre', function() {
 
-            beforeEach(function () {
-                view = getView();
-            });
+    beforeEach(function() {
+      view = getView();
+    });
 
-            it('Views should exist', function () {
-                //view.ui.joinDiscussion.click()
-                //expect($('#slider')).to.have.html('<div class="generic-modal popin-wrapper modal-joinDiscussion bbm-wrapper"></div>');
-            });
+    it('Views should exist', function() {
+      //view.ui.joinDiscussion.click()
+      //expect($('#slider')).to.have.html('<div class="generic-modal popin-wrapper modal-joinDiscussion bbm-wrapper"></div>');
+    });
 
-            afterEach(function () {
-                fixtures.cleanUp();
-            });
+    afterEach(function() {
+      fixtures.cleanUp();
+    });
 
-        });
+  });
 
-    })
+})

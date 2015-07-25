@@ -22,13 +22,15 @@ var panelTypeRegistry = {},
     typeByCode = {};
 _.each([
     AboutNavPanel, ContextPanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList.SegmentListPanel, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanel
-], function (panelClass) {
+], function(panelClass) {
 
-    var panelType = panelClass.prototype.panelType;
-    //console.log(panelClass.prototype.panelType);
-    panelTypeRegistry[panelType.id] = panelClass;
-    typeByCode[panelType.code] = panelType.id;
+  var panelType = panelClass.prototype.panelType;
+
+  //console.log(panelClass.prototype.panelType);
+  panelTypeRegistry[panelType.id] = panelClass;
+  typeByCode[panelType.code] = panelType.id;
 });
+
 //console.log("panelTypeRegistry:", panelTypeRegistry);
 
 /**
@@ -38,33 +40,35 @@ _.each([
  * @return <AssemblPanel> AssemblPanel view
  */
 function panelViewByPanelSpec(panelSpecModel) {
-    var panelClass,
-        id;
-    //console.log("panelViewByPanelSpec() called with ",panelSpecModel);
-    try {
-        id = panelSpecModel.getPanelSpecType().id;
-        panelClass = panelTypeRegistry[id];
+  var panelClass,
+      id;
 
-        if (!panelClass instanceof AssemblPanel) {
-            throw new Error("panelClass isn't an instance of AssemblPanel");
-        }
-        //console.log("panelViewByPanelSpec() returning ",panelClass, "for",panelSpecModel)
-        return panelClass;
+  //console.log("panelViewByPanelSpec() called with ",panelSpecModel);
+  try {
+    id = panelSpecModel.getPanelSpecType().id;
+    panelClass = panelTypeRegistry[id];
+
+    if (!panelClass instanceof AssemblPanel) {
+      throw new Error("panelClass isn't an instance of AssemblPanel");
     }
-    catch (err) {
-        //console.log('invalid spec:', panelSpecModel, "error was", err);
-        throw new Error("invalidPanelSpecModel");
-    }
+
+    //console.log("panelViewByPanelSpec() returning ",panelClass, "for",panelSpecModel)
+    return panelClass;
+  }
+  catch (err) {
+    //console.log('invalid spec:', panelSpecModel, "error was", err);
+    throw new Error("invalidPanelSpecModel");
+  }
 }
 
 function decodeUrlData(code, data) {
-    if (code == 'i') {
-      var ideasCollection = new CollectionManager().getAllIdeasCollectionPromise();
-      return ideasCollection.then(function(ideas) {
+  if (code == 'i') {
+    var ideasCollection = new CollectionManager().getAllIdeasCollectionPromise();
+    return ideasCollection.then(function(ideas) {
         var idea = ideas.get("local:Idea/" + data);
         return ["currentIdea", idea];
       });
-    }
+  }
 }
 
 module.exports = {byPanelSpec: panelViewByPanelSpec, typeByCode: typeByCode, decodeUrlData: decodeUrlData };

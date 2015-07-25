@@ -5,22 +5,23 @@ var Ctx = require('../common/context.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Promise = require('bluebird');
 
-
 var collectionManager = new CollectionManager();
   
-  /** Base interface of all filters */
-  function AbstractFilter(){
+/** Base interface of all filters */
+function AbstractFilter() {
     this._values = [];
   }
-  AbstractFilter.prototype = {
+
+AbstractFilter.prototype = {
     /**
      * @return true if a value was actually added to the filter, false otherwise
      * (tried to add a duplicate value)
      */
     addValue: function(value) {
-      if(!this.isValueInFilter(value)) {
+      if (!this.isValueInFilter(value)) {
         var index = _.sortedIndex(this._values, value);
         this._values.splice(index, 0, value)
+
         //console.log("AbstractFilter.addValue added value", value, "value are now:", this._values);
         return true;
       }
@@ -38,8 +39,9 @@ var collectionManager = new CollectionManager();
       var indexOfValue = _.indexOf(this._values, value, true);
       console.log(indexOfValue);
       
-      if(indexOfValue !== -1) {
+      if (indexOfValue !== -1) {
         this._values.splice(indexOfValue, 1);
+
         //console.log("deleteValue cleared something, values is now", this._values);
         return true
       }
@@ -55,8 +57,9 @@ var collectionManager = new CollectionManager();
     deleteValueAtIndex: function(valueIndex) {
       //console.log("deleteValueAtIndex called with",valueIndex, "on values", this._values);
       
-      if(valueIndex !== -1 && valueIndex !== null) {
+      if (valueIndex !== -1 && valueIndex !== null) {
         this._values.splice(valueIndex, 1)
+
         //console.log("deleteValueAtIndex cleared something, values is now", this._values);
         return true
       }
@@ -81,7 +84,7 @@ var collectionManager = new CollectionManager();
     
     /** Generates a unique CSS class for a button to add the filter */
     getAddButtonCssClass: function() {
-      return "js_filter-"+this.getId()+"-add-button";
+      return "js_filter-" + this.getId() + "-add-button";
     },
     
     getLabelPromise: function() {
@@ -106,7 +109,7 @@ var collectionManager = new CollectionManager();
       return Promise.resolve(individualFilterValue)
     },
     
-    getFilterDescriptionStringPromise: function(individualValuesButtonsPromises){
+    getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       var that = this;
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
         return that.getLabelPromise().then(function(label) {
@@ -123,14 +126,13 @@ var collectionManager = new CollectionManager();
     }
   }
 
-  
-  /** For filters who can only have a single value */
-  function AbstractFilterSingleValue() {
+/** For filters who can only have a single value */
+function AbstractFilterSingleValue() {
     AbstractFilter.call(this);
   }
   
-  AbstractFilterSingleValue.prototype = Object.create(AbstractFilter.prototype)
-  _.extend(AbstractFilterSingleValue.prototype, {
+AbstractFilterSingleValue.prototype = Object.create(AbstractFilter.prototype)
+_.extend(AbstractFilterSingleValue.prototype, {
     /** For filters who can only have a single, implicit value
      * Typically displayed in the filters menu */
     getImplicitValuePromise: function() {
@@ -138,32 +140,33 @@ var collectionManager = new CollectionManager();
     },
     
     addValue: function(value) {
-      if(!this.isValueInFilter(value)) {
-        if(_.size(this._values) !== 0) {
+      if (!this.isValueInFilter(value)) {
+        if (_.size(this._values) !== 0) {
           throw new Error("Filter can only have a single value, and we were provided" + value);
         }
       }
+
       return AbstractFilter.prototype.addValue.call(this, value);
     }
     
-
   });
   
-  /** For filters who can only have a single, true or false */
-  function AbstractFilterBooleanValue() {
+/** For filters who can only have a single, true or false */
+function AbstractFilterBooleanValue() {
     AbstractFilterSingleValue.call(this);
   }
   
-  AbstractFilterBooleanValue.prototype = Object.create(AbstractFilterSingleValue.prototype);
-  _.extend(AbstractFilterBooleanValue.prototype, {
+AbstractFilterBooleanValue.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(AbstractFilterBooleanValue.prototype, {
     addValue: function(value) {
       //console.log("AbstractFilterBooleanValue::addValue called with", value)
-      if(!this.isValueInFilter(value)) {
+      if (!this.isValueInFilter(value)) {
         if (!(value === true || value === false)) {
           console.log(value);
           throw new Error("Filter expects a boolean value, and we were provided with: " + value);
         }
       }
+
       return AbstractFilterSingleValue.prototype.addValue.call(this, value);
     },
 
@@ -176,11 +179,12 @@ var collectionManager = new CollectionManager();
     }
   });
   
-  function FilterPostHasIdIn() {
+function FilterPostHasIdIn() {
     AbstractFilter.call(this);
   }
-  FilterPostHasIdIn.prototype = Object.create(AbstractFilter.prototype);
-  _.extend(FilterPostHasIdIn.prototype, {
+
+FilterPostHasIdIn.prototype = Object.create(AbstractFilter.prototype);
+_.extend(FilterPostHasIdIn.prototype, {
     getId: function() {
       return 'post_has_id_in';
     },
@@ -196,12 +200,12 @@ var collectionManager = new CollectionManager();
     }
   });
 
-  
-  function FilterPostIsInContextOfIdea() {
+function FilterPostIsInContextOfIdea() {
     AbstractFilterSingleValue.call(this);
   }
-  FilterPostIsInContextOfIdea.prototype = Object.create(AbstractFilterSingleValue.prototype);
-  _.extend(FilterPostIsInContextOfIdea.prototype, {
+
+FilterPostIsInContextOfIdea.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostIsInContextOfIdea.prototype, {
     getId: function() {
       return 'post_in_context_of_idea';
     },
@@ -218,24 +222,26 @@ var collectionManager = new CollectionManager();
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
       return collectionManager.getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
         var idea = allIdeasCollection.get(individualFilterValue);
-        if(!idea) {
+        if (!idea) {
           throw new Error('Idea ' + individualFilterValue + ' not found');
         }
+
         return '"' + idea.get('shortTitle') + '"';
       })
     },
-    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+    getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
         return i18n.sprintf(i18n.ngettext("Discuss idea %s", "Discuss ideas: %s", individualValuesButtons.length), individualValuesButtons.join(i18n.gettext(' AND ')));
       });
     }
   });
   
-  function FilterPostIsDescendentOfPost() {
+function FilterPostIsDescendentOfPost() {
     AbstractFilterSingleValue.call(this);
   }
-  FilterPostIsDescendentOfPost.prototype = Object.create(AbstractFilterSingleValue.prototype);
-  _.extend(FilterPostIsDescendentOfPost.prototype, {
+
+FilterPostIsDescendentOfPost.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostIsDescendentOfPost.prototype, {
     getId: function() {
       return 'post_thread';
     },
@@ -250,10 +256,11 @@ var collectionManager = new CollectionManager();
     },
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
       return collectionManager.getMessageFullModelPromise(individualFilterValue).then(function(post) {
-        if(!post) {
+        if (!post) {
           throw new Error('Post ' + individualFilterValue + ' not found');
         }
-        if (post.get('@type') === "SynthesisPost"){
+
+        if (post.get('@type') === "SynthesisPost") {
           return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject'));
         }
         else {
@@ -261,18 +268,19 @@ var collectionManager = new CollectionManager();
         }
       })
     },
-    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+    getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
         return i18n.sprintf(i18n.gettext("Are in the conversation that follows: %s"), individualValuesButtons.join(i18n.gettext(' AND ')));
       });
     }
   });
 
-  function FilterPostIsDescendentOrAncestorOfPost() {
+function FilterPostIsDescendentOrAncestorOfPost() {
     AbstractFilterSingleValue.call(this);
   }
-  FilterPostIsDescendentOrAncestorOfPost.prototype = Object.create(AbstractFilterSingleValue.prototype);
-  _.extend(FilterPostIsDescendentOrAncestorOfPost.prototype, {
+
+FilterPostIsDescendentOrAncestorOfPost.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostIsDescendentOrAncestorOfPost.prototype, {
     getId: function() {
       return 'post_ancestry_and_thread';
     },
@@ -287,10 +295,11 @@ var collectionManager = new CollectionManager();
     },
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
       return collectionManager.getMessageFullModelPromise(individualFilterValue).then(function(post) {
-        if(!post) {
+        if (!post) {
           throw new Error('Post ' + individualFilterValue + ' not found');
         }
-        if (post.get('@type') === "SynthesisPost"){
+
+        if (post.get('@type') === "SynthesisPost") {
           return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject'));
         }
         else {
@@ -298,18 +307,19 @@ var collectionManager = new CollectionManager();
         }
       })
     },
-    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+    getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
         return i18n.sprintf(i18n.gettext("Are in the context of: %s"), individualValuesButtons.join(i18n.gettext(' AND ')));
       });
     }
   });
 
-  function FilterPostIsFromUser() {
+function FilterPostIsFromUser() {
     AbstractFilterSingleValue.call(this);
   }
-  FilterPostIsFromUser.prototype = Object.create(AbstractFilterSingleValue.prototype);
-  _.extend(FilterPostIsFromUser.prototype, {
+
+FilterPostIsFromUser.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostIsFromUser.prototype, {
     getId: function() {
       return 'post_is_from';
     },
@@ -325,24 +335,26 @@ var collectionManager = new CollectionManager();
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
       return collectionManager.getAllUsersCollectionPromise(individualFilterValue).then(function(users) {
         var user = users.get(individualFilterValue);
-        if(!user) {
+        if (!user) {
           throw new Error('User ' + individualFilterValue + ' not found');
         }
+
         return i18n.sprintf(i18n.gettext('"%s"'), user.get('name'));
       })
     },
-    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+    getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
         return i18n.sprintf(i18n.gettext("Are posted by: %s"), individualValuesButtons.join(i18n.gettext(' AND ')));
       });
     }
   });
 
-  function FilterPostIsOwnPost() {
+function FilterPostIsOwnPost() {
     FilterPostIsFromUser.call(this);
   }
-  FilterPostIsOwnPost.prototype = Object.create(FilterPostIsFromUser.prototype);
-  _.extend(FilterPostIsOwnPost.prototype, {
+
+FilterPostIsOwnPost.prototype = Object.create(FilterPostIsFromUser.prototype);
+_.extend(FilterPostIsOwnPost.prototype, {
     getId: function() {
       return 'only_own_posts';
     },
@@ -357,11 +369,12 @@ var collectionManager = new CollectionManager();
     }
   });
 
-  function FilterPostReplyToUser() {
+function FilterPostReplyToUser() {
     AbstractFilterSingleValue.call(this);
   }
-  FilterPostReplyToUser.prototype = Object.create(AbstractFilterSingleValue.prototype);
-  _.extend(FilterPostReplyToUser.prototype, {
+
+FilterPostReplyToUser.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostReplyToUser.prototype, {
     getId: function() {
       return 'post_replies_to_user';
     },
@@ -377,24 +390,26 @@ var collectionManager = new CollectionManager();
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
       return collectionManager.getAllUsersCollectionPromise(individualFilterValue).then(function(users) {
         var user = users.get(individualFilterValue);
-        if(!user) {
+        if (!user) {
           throw new Error('User ' + individualFilterValue + ' not found');
         }
+
         return i18n.sprintf(i18n.gettext('"%s"'), user.get('name'));
       })
     },
-    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+    getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
         return i18n.sprintf(i18n.gettext("Replies to: %s"), individualValuesButtons.join(i18n.gettext(' AND ')));
       });
     }
   });
   
-  function FilterPostReplyToMe() {
+function FilterPostReplyToMe() {
     FilterPostReplyToUser.call(this);
   }
-  FilterPostReplyToMe.prototype = Object.create(FilterPostReplyToUser.prototype);
-  _.extend(FilterPostReplyToMe.prototype, {
+
+FilterPostReplyToMe.prototype = Object.create(FilterPostReplyToUser.prototype);
+_.extend(FilterPostReplyToMe.prototype, {
     getId: function() {
       return 'post_replies_to_me';
     },
@@ -409,11 +424,12 @@ var collectionManager = new CollectionManager();
     }
   });
 
-  function FilterPostIsOrphan() {
+function FilterPostIsOrphan() {
     AbstractFilterBooleanValue.call(this);
   }
-  FilterPostIsOrphan.prototype = Object.create(AbstractFilterBooleanValue.prototype);
-  _.extend(FilterPostIsOrphan.prototype, {
+
+FilterPostIsOrphan.prototype = Object.create(AbstractFilterBooleanValue.prototype);
+_.extend(FilterPostIsOrphan.prototype, {
     getId: function() {
       return 'only_orphan_posts';
     },
@@ -431,11 +447,12 @@ var collectionManager = new CollectionManager();
     }
   });
   
-  function FilterPostIsSynthesis() {
+function FilterPostIsSynthesis() {
     AbstractFilterBooleanValue.call(this);
   }
-  FilterPostIsSynthesis.prototype = Object.create(AbstractFilterBooleanValue.prototype);
-  _.extend(FilterPostIsSynthesis.prototype, {
+
+FilterPostIsSynthesis.prototype = Object.create(AbstractFilterBooleanValue.prototype);
+_.extend(FilterPostIsSynthesis.prototype, {
     getId: function() {
       return 'only_synthesis_posts';
     },
@@ -451,16 +468,17 @@ var collectionManager = new CollectionManager();
     getHelpText: function() {
       return i18n.gettext('Only include messages that represent a synthesis of the discussion.');
     },
-    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+    getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       return this.getLabelPromise();
     }
   });
   
-  function FilterPostHasUnread() {
+function FilterPostHasUnread() {
     AbstractFilterBooleanValue.call(this);
   }
-  FilterPostHasUnread.prototype = Object.create(AbstractFilterBooleanValue.prototype);
-  _.extend(FilterPostHasUnread.prototype, {
+
+FilterPostHasUnread.prototype = Object.create(AbstractFilterBooleanValue.prototype);
+_.extend(FilterPostHasUnread.prototype, {
     getId: function() {
       return 'post_has_unread';
     },
@@ -481,20 +499,22 @@ var collectionManager = new CollectionManager();
       else {
         throw new Error("Value is not a boolean!")
       }
+
       return Promise.resolve(retval);
     },
-    getFilterDescriptionStringPromise: function (individualValuesButtonsPromises) {
+    getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
         return i18n.sprintf("%s", individualValuesButtons.join(''));
       });
     }
   });
   
-  function FilterPostIsUnread() {
+function FilterPostIsUnread() {
     FilterPostHasUnread.call(this);
   }
-  FilterPostIsUnread.prototype = Object.create(FilterPostHasUnread.prototype);
-  _.extend(FilterPostIsUnread.prototype, {
+
+FilterPostIsUnread.prototype = Object.create(FilterPostHasUnread.prototype);
+_.extend(FilterPostIsUnread.prototype, {
     getId: function() {
       return 'is_unread_post';
     },
@@ -509,11 +529,12 @@ var collectionManager = new CollectionManager();
     }
   });
 
-  function FilterPostIsRead() {
+function FilterPostIsRead() {
     FilterPostHasUnread.call(this);
   }
-  FilterPostIsRead.prototype = Object.create(FilterPostHasUnread.prototype);
-  _.extend(FilterPostIsRead.prototype, {
+
+FilterPostIsRead.prototype = Object.create(FilterPostHasUnread.prototype);
+_.extend(FilterPostIsRead.prototype, {
     getId: function() {
       return 'is_read_post';
     },
@@ -528,11 +549,12 @@ var collectionManager = new CollectionManager();
     }
   });
   
-  function FilterPostIsPostedSinceLastSynthesis() {
+function FilterPostIsPostedSinceLastSynthesis() {
     AbstractFilterSingleValue.call(this);
   }
-  FilterPostIsPostedSinceLastSynthesis.prototype = Object.create(AbstractFilterSingleValue.prototype);
-  _.extend(FilterPostIsPostedSinceLastSynthesis.prototype, {
+
+FilterPostIsPostedSinceLastSynthesis.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostIsPostedSinceLastSynthesis.prototype, {
     getId: function() {
       return 'is_posted_since_last_synthesis';
     },
@@ -543,7 +565,7 @@ var collectionManager = new CollectionManager();
       return collectionManager.getAllMessageStructureCollectionPromise().then(function(allMessageStructureCollection) {
         var date = null,
         lastSynthesisPost = allMessageStructureCollection.getLastSynthesisPost();
-        if(lastSynthesisPost) {
+        if (lastSynthesisPost) {
           return lastSynthesisPost.get('date');
         }
         else {
@@ -564,7 +586,7 @@ var collectionManager = new CollectionManager();
     }
   });
   
-  var availableFilters = {
+var availableFilters = {
     POST_HAS_ID_IN: FilterPostHasIdIn,
     POST_IS_IN_CONTEXT_OF_IDEA: FilterPostIsInContextOfIdea,
     POST_IS_DESCENDENT_OF_POST: FilterPostIsDescendentOfPost,
@@ -580,5 +602,4 @@ var collectionManager = new CollectionManager();
     POST_REPONDS_TO_ME: FilterPostReplyToMe
   };
 
-
-  module.exports = availableFilters;
+module.exports = availableFilters;

@@ -21,120 +21,124 @@ var ObjectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Promise = require('bluebird');
 
-
 var SynthesisPanel = AssemblPanel.extend({
-    template: '#tmpl-loader',
-    realTemplate: '#tmpl-synthesisPanel',
-    panelType: PanelSpecTypes.SYNTHESIS_EDITOR,
-    className: 'synthesisPanel',
-    gridSize: AssemblPanel.prototype.SYNTHESIS_PANEL_GRID_SIZE,
-    /**
-     * @init
-     */
-    initialize: function (obj) {
-        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
-        var that = this,
-            collectionManager = new CollectionManager();
+  template: '#tmpl-loader',
+  realTemplate: '#tmpl-synthesisPanel',
+  panelType: PanelSpecTypes.SYNTHESIS_EDITOR,
+  className: 'synthesisPanel',
+  gridSize: AssemblPanel.prototype.SYNTHESIS_PANEL_GRID_SIZE,
+  /**
+   * @init
+   */
+  initialize: function(obj) {
+    Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
+    var that = this,
+        collectionManager = new CollectionManager();
 
-        if(obj.template) {
-          this.realTemplate = obj.template;
-        }
+    if (obj.template) {
+      this.realTemplate = obj.template;
+    }
 
-        //This is used if the panel is displayed as part of a message
-        // that publishes this synthesis
-        this.messageListView = obj.messageListView;
-        Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
-                    collectionManager.getAllIdeasCollectionPromise(),
-                    collectionManager.getAllIdeaLinksCollectionPromise(),
-            function (synthesisCollection, allIdeasCollection, allIdeaLinksCollection) {
-                if (that.isViewDestroyed()) {
-                  return;
-                }
-                that.ideas = allIdeasCollection;
-                var rootIdea = allIdeasCollection.getRootIdea(),
-                    raw_ideas;
+    //This is used if the panel is displayed as part of a message
+    // that publishes this synthesis
+    this.messageListView = obj.messageListView;
+    Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
+                collectionManager.getAllIdeasCollectionPromise(),
+                collectionManager.getAllIdeaLinksCollectionPromise(),
+            function(synthesisCollection, allIdeasCollection, allIdeaLinksCollection) {
+              if (that.isViewDestroyed()) {
+                return;
+              }
 
-                if (!that.model) {
-                    //If unspecified, we find the next_synthesis
-                    that.model = _.find(synthesisCollection.models, function (model) {
-                        return model.get('is_next_synthesis');
-                    });
-                    that.bindEntityEvents(that.model, that.getOption('modelEvents'));
-                }
-                that.listenTo(that.ideas, 'add remove reset', that.render);
-                that.listenTo(allIdeaLinksCollection, 'reset change:source change:target change:order remove add destroy', that.render);
-                that.template = that.realTemplate;
-                // Should we just send a render event instead?
-                that.render();
-                //modelEvents should handler this
-                //that.listenTo(that.model, 'reset change', that.render);
+              that.ideas = allIdeasCollection;
+              var rootIdea = allIdeasCollection.getRootIdea(),
+                  raw_ideas;
+
+              if (!that.model) {
+                //If unspecified, we find the next_synthesis
+                that.model = _.find(synthesisCollection.models, function(model) {
+                  return model.get('is_next_synthesis');
+                });
+                that.bindEntityEvents(that.model, that.getOption('modelEvents'));
+              }
+
+              that.listenTo(that.ideas, 'add remove reset', that.render);
+              that.listenTo(allIdeaLinksCollection, 'reset change:source change:target change:order remove add destroy', that.render);
+              that.template = that.realTemplate;
+
+              // Should we just send a render event instead?
+              that.render();
+
+              //modelEvents should handler this
+              //that.listenTo(that.model, 'reset change', that.render);
             });
 
+    Assembl.commands.setHandler('synthesisPanel:render', this.render);
+  },
 
-        Assembl.commands.setHandler('synthesisPanel:render', this.render);
-    },
+  events: {
+    'click .synthesisPanel-publishButton': 'publish'
+  },
 
-    events: {
-        'click .synthesisPanel-publishButton': 'publish'
-    },
-
-    modelEvents:{
+  modelEvents:{
       'reset change':'render'
     },
 
-    getTitle: function () {
-        return i18n.gettext('Synthesis');
-    },
+  getTitle: function() {
+    return i18n.gettext('Synthesis');
+  },
 
-    /**
-     * The model
-     * @type {Synthesis}
-     */
-    model: null,
+  /**
+   * The model
+   * @type {Synthesis}
+   */
+  model: null,
 
-    /**
-     * The ideas collection
-     * @type {Ideas.Collection}
-     */
-    ideas: null,
+  /**
+   * The ideas collection
+   * @type {Ideas.Collection}
+   */
+  ideas: null,
 
-    /**
-     * Flag
-     * @type {Boolean}
-     */
-    collapsed: false,
+  /**
+   * Flag
+   * @type {Boolean}
+   */
+  collapsed: false,
 
-    serializeData: function () {
-        var currentUser = Ctx.getCurrentUser(),
-            canSend = currentUser.can(Permissions.SEND_SYNTHESIS),
-            canEdit = currentUser.can(Permissions.EDIT_SYNTHESIS),
+  serializeData: function() {
+    var currentUser = Ctx.getCurrentUser(),
+        canSend = currentUser.can(Permissions.SEND_SYNTHESIS),
+        canEdit = currentUser.can(Permissions.EDIT_SYNTHESIS),
             data = {
-                canSend: canSend,
-                canEdit: canEdit,
-                Ctx: Ctx
+              canSend: canSend,
+              canEdit: canEdit,
+              Ctx: Ctx
             };
 
-        if (this.model)
-            data = _.extend(this.model.toJSON(), data);
+    if (this.model)
+        data = _.extend(this.model.toJSON(), data);
 
-        return data;
-    },
+    return data;
+  },
 
-    /**
-     * The render
-     * @return {SynthesisPanel}
-     */
-    onRender: function () {
+  /**
+   * The render
+   * @return {SynthesisPanel}
+   */
+  onRender: function() {
       if (Ctx.debugRender) {
         console.log("synthesisPanel:onRender() is firing");
       }
+
       var that = this;
       if (this.model === null || this.ideas === null) {
-        window.setTimeout(function () {
+        window.setTimeout(function() {
           that.render();
         }, 30);
         return;
       }
+
       var view_data = {},
       order_lookup_table = [],
       roots = [],
@@ -155,6 +159,7 @@ var SynthesisPanel = AssemblPanel.extend({
           if (idea.hidden) {
             return false;
           }
+
           var retval;
           if (that.model.get('is_next_synthesis')) {
             //This special case is so we get instant feedback before
@@ -164,12 +169,15 @@ var SynthesisPanel = AssemblPanel.extend({
           else {
             retval = idea != rootIdea && ideasCollection.contains(idea);
           }
+
           //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
           return retval;
         }
+
         if (rootIdea) {
           ideasCollection.visitDepthFirst(ideaLinksCollection, new ObjectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId(), true);
         }
+
         _.each(roots, function append_recursive(idea) {
           var rendered_idea_view = new IdeaFamilyView({
             model: idea,
@@ -179,8 +187,7 @@ var SynthesisPanel = AssemblPanel.extend({
               messageListView: that.messageListView,
               parentPanel: that
             }
-          }
-          , view_data);
+          }, view_data);
           that.$('.synthesisPanel-ideas').append(rendered_idea_view.render().el);
         });
         that.$('.body-synthesis').get(0).scrollTop = y;
@@ -226,50 +233,50 @@ var SynthesisPanel = AssemblPanel.extend({
       return this;
     },
 
-    /**
-     * Publish the synthesis
-     */
-    publish: function () {
-        var ok = confirm(i18n.gettext("Are you sure you want to publish the synthesis? You will not be able to delete it afterwards, and participants who subscribed to notifications related to the synthesis will receive a notification by email."));
-        if (ok) {
-            this._publish();
-        }
-    },
-
-    /**
-     * Publishes the synthesis
-     */
-    _publish: function () {
-        this.blockPanel();
-
-        var publishes_synthesis_id = this.model.id,
-            that = this;
-
-        var synthesisMessage = new MessageModel.Model({
-            publishes_synthesis_id: publishes_synthesis_id,
-            subject: "Not used",
-            message: "Not used"
-        });
-
-        synthesisMessage.save(null, {
-            success: function (model, resp) {
-                alert(i18n.gettext("Synthesis has been successfully published!"));
-                // The next_synthesis is the same idea as before, so no need to reload.
-                that.unblockPanel();
-            },
-            error: function (model, resp) {
-                Raven.captureMessage('Failed publishing synthesis!');
-                alert(i18n.gettext("Failed publishing synthesis!"));
-                that.model = new Synthesis.Model({'@id': 'next_synthesis'});
-                that.model.fetch();
-                that.unblockPanel();
-            }
-        });
-
+  /**
+   * Publish the synthesis
+   */
+  publish: function() {
+    var ok = confirm(i18n.gettext("Are you sure you want to publish the synthesis? You will not be able to delete it afterwards, and participants who subscribed to notifications related to the synthesis will receive a notification by email."));
+    if (ok) {
+      this._publish();
     }
+  },
+
+  /**
+   * Publishes the synthesis
+   */
+  _publish: function() {
+    this.blockPanel();
+
+    var publishes_synthesis_id = this.model.id,
+        that = this;
+
+    var synthesisMessage = new MessageModel.Model({
+      publishes_synthesis_id: publishes_synthesis_id,
+      subject: "Not used",
+      message: "Not used"
+    });
+
+    synthesisMessage.save(null, {
+      success: function(model, resp) {
+        alert(i18n.gettext("Synthesis has been successfully published!"));
+
+        // The next_synthesis is the same idea as before, so no need to reload.
+        that.unblockPanel();
+      },
+      error: function(model, resp) {
+        Raven.captureMessage('Failed publishing synthesis!');
+        alert(i18n.gettext("Failed publishing synthesis!"));
+        that.model = new Synthesis.Model({'@id': 'next_synthesis'});
+        that.model.fetch();
+        that.unblockPanel();
+      }
+    });
+
+  }
 
 });
-
 
 module.exports = SynthesisPanel;
 

@@ -1,17 +1,17 @@
 var Backbone = require('../shims/backbone.js'),
     Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js')
-    $ = require('../shims/jquery.js'),
-    _ = require('../shims/underscore.js'),
-    Promise = require('bluebird'),
-    facebook = require('./facebookModal.js');
+$ = require('../shims/jquery.js'),
+_ = require('../shims/underscore.js'),
+Promise = require('bluebird'),
+facebook = require('./facebookModal.js');
 
 var Modal = Backbone.Modal.extend({
-    template: '#tmpl-loader',
-    className: 'group-modal popin-wrapper',
-    cancelEl: '.js_close',
-    keyControl: false,
-    initialize: function (options) {
+  template: '#tmpl-loader',
+  className: 'group-modal popin-wrapper',
+  cancelEl: '.js_close',
+  keyControl: false,
+  initialize: function(options) {
       console.log('initializing Modal');
       this.$('.bbm-modal').addClass('popin');
       this.$('.js_export_error_message').empty(); //Clear any error message that may have been put there
@@ -27,27 +27,27 @@ var Modal = Backbone.Modal.extend({
       this.vent.on('clearError', this.clearError, this);
 
       var that = this;
-      this.model.getCreatorPromise().then(function(user){
+      this.model.getCreatorPromise().then(function(user) {
         that.messageCreator = user;
         that.template = '#tmpl-exportPostModal';
         that.render();
       });
     },
-    events: {
+  events: {
       'change .js_export_supportedList': 'generateView',
       'click .js_ok_submit': 'submitForm'
     },
-    serializeData: function() {
+  serializeData: function() {
       if (this.messageCreator) {
         return {
           creator: this.messageCreator.get('name')
         }
       }
     },
-    clearError: function(){
+  clearError: function() {
       this.$('.js_export_error_message').empty();
     },
-    loadFbView: function(token){
+  loadFbView: function(token) {
       var fbView = new facebook.root({
         creator: this.messageCreator,
         model: this.model,
@@ -58,7 +58,7 @@ var Modal = Backbone.Modal.extend({
       this.$('.js_source-specific-form').html(fbView.render().el);
       this.currentView = fbView;
     },
-    generateView: function(event) {
+  generateView: function(event) {
       //Whilst checking for accessTokens, make the region where
       //facebook will be rendered a loader
 
@@ -70,7 +70,7 @@ var Modal = Backbone.Modal.extend({
 
       console.log('Generating the view', value);
 
-      switch(value){
+      switch (value){
         case 'facebook':
           var that = this;
           facebook.resolveState(function(fbState) {
@@ -86,9 +86,9 @@ var Modal = Backbone.Modal.extend({
             }
             else {
               var errView = new facebook.error({
-                  ready: fbState.ready,
-                  errorState: fbState.errorState,
-                  vent: that.vent
+                ready: fbState.ready,
+                errorState: fbState.errorState,
+                vent: that.vent
               });
               that.$('.js_source-specific-form').html(errView.render().el);
               that.currentView = errView;
@@ -104,7 +104,7 @@ var Modal = Backbone.Modal.extend({
           break;
       }
     },
-    submitForm: function(e){
+  submitForm: function(e) {
       console.log('submitting form');
       e.preventDefault();
       if (!this.formType) {
@@ -115,9 +115,9 @@ var Modal = Backbone.Modal.extend({
       else {
         var that = this;
         console.log('currentView', this.currentView);
-        this.currentView.submitForm(function(){
+        this.currentView.submitForm(function() {
           that.destroy();
-        }, function(){
+        }, function() {
           var text = i18n.gettext("Facebook was unable to create the post. Close the box and try again.")
           that.$('.js_export_error_message').text(text);
         });

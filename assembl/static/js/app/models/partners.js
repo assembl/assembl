@@ -10,50 +10,49 @@ var $ = require('../shims/jquery.js'),
  */
 var PartnerOrganizationModel = Base.Model.extend({
 
+  /**
+   * @type {String}
+   */
+  urlRoot: Ctx.getApiV2DiscussionUrl('partner_organizations'),
+
+  /**
+   * Defaults
+   * @type {Object}
+   */
+   
+  defaults: {
+    name: '',
+    description: '',
+    homepage: '',
+    logo: '',
+    is_initiator: false
+  },
+
+  validate: function(attrs, options) {
     /**
-     * @type {String}
-     */
-    urlRoot: Ctx.getApiV2DiscussionUrl('partner_organizations'),
-
-    /**
-     * Defaults
-     * @type {Object}
-     */
-
-    defaults: {
-        name: '',
-        description: '',
-        homepage: '',
-        logo: '',
-        is_initiator: false
-    },
-
-    validate: function(attrs, options){
-        /**
-         * check typeof variable
-         * */
-
-    }
+     * check typeof variable
+     * */
+     
+  }
 });
-
 
 /**
  * @class PartnerOrganizationCollection
  */
 var PartnerOrganizationCollection = Base.Collection.extend({
-    /**
-     * @type {String}
-     */
-    url: Ctx.getApiV2DiscussionUrl('partner_organizations'),
+  /**
+   * @type {String}
+   */
+  url: Ctx.getApiV2DiscussionUrl('partner_organizations'),
 
-    /**
-     * The model
-     * @type {PartnerOrganizationModel}
-     */
-    model: PartnerOrganizationModel
+  /**
+   * The model
+   * @type {PartnerOrganizationModel}
+   */
+  model: PartnerOrganizationModel
 });
 
 module.exports = {
-    Model: PartnerOrganizationModel,
-    Collection: PartnerOrganizationCollection
+  Model: PartnerOrganizationModel,
+  Collection: PartnerOrganizationCollection
 };

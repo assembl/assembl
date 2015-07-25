@@ -32,218 +32,216 @@ var Marionette = require('../shims/marionette.js'),
  * A singleton to manage lazy loading of server collections
  */
 var CollectionManager = Marionette.Controller.extend({
-    FETCH_WORKERS_LIFETIME: 30,
+  FETCH_WORKERS_LIFETIME: 30,
 
-    /**
-     * Send debugging output to console.log to observe the activity of lazy
-     * loading
-     * @type {boolean}
-     */
-    DEBUG_LAZY_LOADING: false,
+  /**
+   * Send debugging output to console.log to observe the activity of lazy
+   * loading
+   * @type {boolean}
+   */
+  DEBUG_LAZY_LOADING: false,
 
-    /**
-     * Collection with all users in the discussion.
-     * @type {UserCollection}
-     */
-    _allUsersCollection: undefined,
+  /**
+   * Collection with all users in the discussion.
+   * @type {UserCollection}
+   */
+  _allUsersCollection: undefined,
 
-    _allUsersCollectionPromise: undefined,
+  _allUsersCollectionPromise: undefined,
 
-    /**
-     * Collection with all messsages in the discussion.
-     * @type {MessageCollection}
-     */
-    _allMessageStructureCollection: undefined,
+  /**
+   * Collection with all messsages in the discussion.
+   * @type {MessageCollection}
+   */
+  _allMessageStructureCollection: undefined,
 
-    _allMessageStructureCollectionPromise: undefined,
+  _allMessageStructureCollectionPromise: undefined,
 
-    /**
-     * Collection with all synthesis in the discussion.
-     * @type {SynthesisCollection}
-     */
-    _allSynthesisCollection: undefined,
+  /**
+   * Collection with all synthesis in the discussion.
+   * @type {SynthesisCollection}
+   */
+  _allSynthesisCollection: undefined,
 
-    _allSynthesisCollectionPromise: undefined,
+  _allSynthesisCollectionPromise: undefined,
 
-    /**
-     * Collection with all ideas in the discussion.
-     * @type {SegmentCollection}
-     */
-    _allIdeasCollection: undefined,
+  /**
+   * Collection with all ideas in the discussion.
+   * @type {SegmentCollection}
+   */
+  _allIdeasCollection: undefined,
 
-    _allIdeasCollectionPromise: undefined,
+  _allIdeasCollectionPromise: undefined,
 
-    /**
-     * Collection with all idea links in the discussion.
-     * @type {MessageCollection}
-     */
-    _allIdeaLinksCollection: undefined,
+  /**
+   * Collection with all idea links in the discussion.
+   * @type {MessageCollection}
+   */
+  _allIdeaLinksCollection: undefined,
 
-    _allIdeaLinksCollectionPromise: undefined,
+  _allIdeaLinksCollectionPromise: undefined,
 
-    /**
-     * Collection with all extracts in the discussion.
-     * @type {SegmentCollection}
-     */
-    _allExtractsCollection: undefined,
+  /**
+   * Collection with all extracts in the discussion.
+   * @type {SegmentCollection}
+   */
+  _allExtractsCollection: undefined,
 
-    _allExtractsCollectionPromise: undefined,
+  _allExtractsCollectionPromise: undefined,
 
-    /**
-     * Collectin with a definition of the user's view
-     * @type {GroupSpec}
-     */
-    _allGroupSpecsCollection: undefined,
+  /**
+   * Collectin with a definition of the user's view
+   * @type {GroupSpec}
+   */
+  _allGroupSpecsCollection: undefined,
 
-    _allGroupSpecsCollectionPromise: undefined,
+  _allGroupSpecsCollectionPromise: undefined,
 
-    /**
-     * Collection with all partner organization in the discussion.
-     * @type {PartnerOrganizationCollection}
-     */
-    _allPartnerOrganizationCollection: undefined,
-    _allPartnerOrganizationCollectionPromise: undefined,
+  /**
+   * Collection with all partner organization in the discussion.
+   * @type {PartnerOrganizationCollection}
+   */
+  _allPartnerOrganizationCollection: undefined,
+  _allPartnerOrganizationCollectionPromise: undefined,
 
-    /**
-     *  Collection from discussion notifications.
-     * */
-    _allNotificationsDiscussionCollection: undefined,
-    _allNotificationsDiscussionCollectionPromise: undefined,
+  /**
+   *  Collection from discussion notifications.
+   * */
+  _allNotificationsDiscussionCollection: undefined,
+  _allNotificationsDiscussionCollectionPromise: undefined,
 
+  /**
+   *  Collection from user notifications
+   * */
+  _allNotificationsUserCollection: undefined,
+  _allNotificationsUserCollectionPromise: undefined,
 
-    /**
-     *  Collection from user notifications
-     * */
-    _allNotificationsUserCollection: undefined,
-    _allNotificationsUserCollectionPromise: undefined,
+  /**
+   *  Collection of user roles
+   * */
+  _allLocalRoleCollection: undefined,
+  _allLocalRoleCollectionPromise: undefined,
 
+  /**
+   *  Collection from discussion
+   * */
+  _allDiscussionModel: undefined,
+  _allDiscussionModelPromise: undefined,
 
-    /**
-     *  Collection of user roles
-     * */
-    _allLocalRoleCollection: undefined,
-    _allLocalRoleCollectionPromise: undefined,
+  _allDiscussionSourceCollection: undefined,
+  _allDiscussionSourceCollectionPromise: undefined,
 
-    /**
-     *  Collection from discussion
-     * */
-    _allDiscussionModel: undefined,
-    _allDiscussionModelPromise: undefined,
+  _currentUserModel: undefined,
+  _currentUserModelPromise: undefined,
 
-    _allDiscussionSourceCollection: undefined,
-    _allDiscussionSourceCollectionPromise: undefined,
+  _allUserContributionsModel: undefined,
+  _allUserContributionsModelPromise: undefined,
 
-    _currentUserModel: undefined,
-    _currentUserModelPromise: undefined,
+  /**
+   * Collection of Facebook Access Tokens that 
+   * current user is permissible to view
+   */
+  _allFacebookAccessTokens: undefined,
+  _allFacebookAccessTokensPromise: undefined,
 
-    _allUserContributionsModel: undefined,
-    _allUserContributionsModelPromise: undefined,
+  /**
+   * The super collection of all types of sources that the
+   * front end supports
+   */
+  _allDiscussionSourceCollection2: undefined,
+  _allDiscussionSourceCollection2Promise: undefined,
 
-    /**
-     * Collection of Facebook Access Tokens that 
-     * current user is permissible to view
-     */
-    _allFacebookAccessTokens: undefined,
-    _allFacebookAccessTokensPromise: undefined,
+  /**
+   * Collection of all the Accounts associated with the
+   * current User
+   * @type {[Account]}
+   */
+  _allUserAccounts: undefined,
+  _allUserAccountsPromise: undefined,
 
-    /**
-     * The super collection of all types of sources that the
-     * front end supports
-     */
-    _allDiscussionSourceCollection2: undefined,
-    _allDiscussionSourceCollection2Promise: undefined,
+  /**
+   * Connected socket promise
+   * @type socket
+   */
+  _connectedSocketPromise: undefined,
 
-    /**
-     * Collection of all the Accounts associated with the
-     * current User
-     * @type {[Account]}
-     */
-    _allUserAccounts: undefined,
-    _allUserAccountsPromise: undefined,
+  /**
+   * Returns the collection from the giving object's @type .
+   * Used by the socket to sync the collection.
+   * @param {BaseModel} item
+   * @param {String} [type=item['@type']] The model type
+   * @return {BaseCollection}
+   */
+  getCollectionPromiseByType: function(item, type) {
+    type = type || Types.getBaseType(item['@type']);
 
-    /**
-     * Connected socket promise
-     * @type socket
-     */
-    _connectedSocketPromise: undefined,
+    switch (type) {
+      case Types.EXTRACT:
+        return this.getAllExtractsCollectionPromise();
 
+      case Types.IDEA:
+        return this.getAllIdeasCollectionPromise();
 
-    /**
-     * Returns the collection from the giving object's @type .
-     * Used by the socket to sync the collection.
-     * @param {BaseModel} item
-     * @param {String} [type=item['@type']] The model type
-     * @return {BaseCollection}
-     */
-    getCollectionPromiseByType: function (item, type) {
-        type = type || Types.getBaseType(item['@type']);
+      case Types.IDEA_LINK:
+        return this.getAllIdeaLinksCollectionPromise();
 
-        switch (type) {
-            case Types.EXTRACT:
-                return this.getAllExtractsCollectionPromise();
+      case Types.POST:
+        return this.getAllMessageStructureCollectionPromise();
 
-            case Types.IDEA:
-                return this.getAllIdeasCollectionPromise();
+      case Types.USER:
+        return this.getAllUsersCollectionPromise();
 
-            case Types.IDEA_LINK:
-                return this.getAllIdeaLinksCollectionPromise();
+      case Types.SYNTHESIS:
+        return this.getAllSynthesisCollectionPromise();
 
-            case Types.POST:
-                return this.getAllMessageStructureCollectionPromise();
+      case Types.PARTNER_ORGANIZATION:
+        return this.getAllPartnerOrganizationCollectionPromise();
+    }
 
-            case Types.USER:
-                return this.getAllUsersCollectionPromise();
+    return null;
+  },
 
-            case Types.SYNTHESIS:
-                return this.getAllSynthesisCollectionPromise();
+  getAllUsersCollectionPromise: function() {
+    if (this._allUsersCollectionPromise) {
+      return this._allUsersCollectionPromise;
+    }
 
-            case Types.PARTNER_ORGANIZATION:
-                return this.getAllPartnerOrganizationCollectionPromise();
-        }
-
-        return null;
-    },
-
-    getAllUsersCollectionPromise: function () {
-        if (this._allUsersCollectionPromise) {
-            return this._allUsersCollectionPromise;
-        }
-
-        this._allUsersCollection = new Agents.Collection();
-        this._allUsersCollection.collectionManager = this;
-        this._allUsersCollectionPromise = Promise.resolve(this._allUsersCollection.fetchFromScriptTag('users-json'))
-            .thenReturn(this._allUsersCollection)
-            .catch(function(e){
-               console.error(e.statusText);
+    this._allUsersCollection = new Agents.Collection();
+    this._allUsersCollection.collectionManager = this;
+    this._allUsersCollectionPromise = Promise.resolve(this._allUsersCollection.fetchFromScriptTag('users-json'))
+        .thenReturn(this._allUsersCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allUsersCollectionPromise;
-    },
+    return this._allUsersCollectionPromise;
+  },
 
-    getAllMessageStructureCollectionPromise: function () {
-        if (this._allMessageStructureCollectionPromise) {
-            return this._allMessageStructureCollectionPromise;
-        }
-        this._allMessageStructureCollection = new Message.Collection();
-        this._allMessageStructureCollection.collectionManager = this;
-        this._allMessageStructureCollectionPromise = Promise.resolve(this._allMessageStructureCollection.fetch())
-            .thenReturn(this._allMessageStructureCollection)
-            .catch(function(e){
-                console.error(e.statusText);
+  getAllMessageStructureCollectionPromise: function() {
+    if (this._allMessageStructureCollectionPromise) {
+      return this._allMessageStructureCollectionPromise;
+    }
+
+    this._allMessageStructureCollection = new Message.Collection();
+    this._allMessageStructureCollection.collectionManager = this;
+    this._allMessageStructureCollectionPromise = Promise.resolve(this._allMessageStructureCollection.fetch())
+        .thenReturn(this._allMessageStructureCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allMessageStructureCollectionPromise;
-    },
+    return this._allMessageStructureCollectionPromise;
+  },
 
-    _waitingWorker: undefined,
+  _waitingWorker: undefined,
 
-    _messageFullModelRequests: {},
+  _messageFullModelRequests: {},
 
-    getMessageFullModelRequestWorker: function (collectionManager) {
+  getMessageFullModelRequestWorker: function(collectionManager) {
       this.collectionManager = collectionManager,
       this.requests = this.collectionManager._messageFullModelRequests,
 
-      this.addRequest = function (id) {
+      this.addRequest = function(id) {
         /* Emulates the defered pattern in bluebird, in this case we really do need it */
         function Defer() {
           var resolve, reject;
@@ -257,6 +255,7 @@ var CollectionManager = Marionette.Controller.extend({
             promise: promise
           };
         }
+
         var promiseResolver;
         if (this.requests[id] === undefined) {
           promiseResolver = new Defer();
@@ -270,18 +269,20 @@ var CollectionManager = Marionette.Controller.extend({
         }
 
         if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-            console.log("Added request for id:" + id + ", now ", this.requests[id]['count'], " requests for this id, queue size is now:" + _.size(this.requests));
+          console.log("Added request for id:" + id + ", now ", this.requests[id]['count'], " requests for this id, queue size is now:" + _.size(this.requests));
         }
+
         // Each id can take up to ~40 characters.  To not exceed
         // the 2048 characters unofficial limit for GET URLs,
         // (IE and others), we only request up to do up to:
         // 2000/40 ~= 50 id's at a time
-        var unservicedRequests = _.filter(this.requests, function(request){ return request['serverRequestInProgress'] === false; });
+        var unservicedRequests = _.filter(this.requests, function(request) { return request['serverRequestInProgress'] === false; });
         var numUnservicedRequests = _.size(unservicedRequests);
         if (numUnservicedRequests >= 50) {
           if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
             console.log("Executing unserviced request immediately, unserviced queue size is now:", numUnservicedRequests);
           }
+
           //TODO:  This is suboptimal, as the server can still be hammered
           //with concurrent requests for the same data, causing
           //database contention.  Like a bit below, we should remember
@@ -292,10 +293,11 @@ var CollectionManager = Marionette.Controller.extend({
 
           this.executeRequest();
         }
+
         return promiseResolver.promise;
       },
 
-      this.executeRequest = function () {
+      this.executeRequest = function() {
 
         var that = this,
             allMessageStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise(),
@@ -303,16 +305,17 @@ var CollectionManager = Marionette.Controller.extend({
         if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
           console.log("executeRequest fired, unregistering worker from collection Manager");
         }
+
         this.collectionManager._waitingWorker = undefined;
 
-        _.each(that.requests, function (request, id) {
+        _.each(that.requests, function(request, id) {
           //var structureModel = allMessageStructureCollection.get(id);
           if (request['serverRequestInProgress'] === false) {
             request['serverRequestInProgress'] = true;
             ids.push(id);
           }
         });
-        allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
+        allMessageStructureCollectionPromise.then(function(allMessageStructureCollection) {
           var PostQuery = require('../views/messageListPostQuery'),
               postQuery = new PostQuery(),
               viewDef = 'default';
@@ -321,11 +324,11 @@ var CollectionManager = Marionette.Controller.extend({
             postQuery.addFilter(postQuery.availableFilters.POST_HAS_ID_IN, ids);
             postQuery.setViewDef(viewDef); //We want the full messages
             if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-              console.log("requesting message data from server for "+ _.size(ids) + " messages");
+              console.log("requesting message data from server for " + _.size(ids) + " messages");
             }
 
-            postQuery.getResultRawDataPromise().then(function (results) {
-              _.each(results, function (jsonData) {
+            postQuery.getResultRawDataPromise().then(function(results) {
+              _.each(results, function(jsonData) {
                 var id = jsonData['@id'],
                     structureModel = allMessageStructureCollection.get(id),
                     deferredList = that.requests[id];
@@ -333,6 +336,7 @@ var CollectionManager = Marionette.Controller.extend({
                 if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
                   console.log("executeRequest resolving for id", id, deferredList['count'], " requests queued for that id");
                 }
+
                 structureModel.set(jsonData);
                 structureModel.viewDef = viewDef;
                 if (deferredList !== undefined) {
@@ -357,211 +361,220 @@ var CollectionManager = Marionette.Controller.extend({
 
       //Constructor
       if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-          console.log("Spawning new _getMessageFullModelsRequestWorker");
+        console.log("Spawning new _getMessageFullModelsRequestWorker");
       }
+
       var that = this;
-      this.executeTimeout = setTimeout(function () {
+      this.executeTimeout = setTimeout(function() {
         if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
           console.log("Executing unserviced request immediately (timeaout reached)");
         }
+
         that.executeRequest();
       }, collectionManager.FETCH_WORKERS_LIFETIME);
     },
 
-    /**
-     * Need to be refactor with bluebird
-     * */
-    getMessageFullModelPromise: function (id) {
-        var that = this,
-            allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
+  /**
+   * Need to be refactor with bluebird
+   * */
+  getMessageFullModelPromise: function(id) {
+    var that = this,
+        allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
 
-        if (!id) {
-          var msg = "getMessageFullModelPromise(): Tried to request full message model with a falsy id.";
-          console.error(msg);
-          return Promise.reject(msg);
+    if (!id) {
+      var msg = "getMessageFullModelPromise(): Tried to request full message model with a falsy id.";
+      console.error(msg);
+      return Promise.reject(msg);
+    }
+
+    return allMessageStructureCollectionPromise.then(function(allMessageStructureCollection) {
+      var structureModel = allMessageStructureCollection.get(id);
+
+      if (structureModel) {
+        if (structureModel.viewDef !== undefined && structureModel.viewDef == "default") {
+          if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+            console.log("getMessageFullModelPromise CACHE HIT!");
+          }
+
+          return Promise.resolve(structureModel);
         }
+        else {
+          if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
+            console.log("getMessageFullModelPromise CACHE MISS!");
+          }
 
-        return allMessageStructureCollectionPromise.then(function (allMessageStructureCollection) {
-            var structureModel = allMessageStructureCollection.get(id);
+          if (that._waitingWorker === undefined) {
+            that._waitingWorker = new that.getMessageFullModelRequestWorker(that);
+          }
 
-            if (structureModel) {
-                if (structureModel.viewDef !== undefined && structureModel.viewDef == "default") {
-                    if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                        console.log("getMessageFullModelPromise CACHE HIT!");
-                    }
-                    return Promise.resolve(structureModel);
-                }
-                else {
-                    if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-                        console.log("getMessageFullModelPromise CACHE MISS!");
-                    }
+          return that._waitingWorker.addRequest(id);
+        }
+      }
+      else {
+        var msg = "Structure model not in allMessageStructureCollection for id!" + id;
+        console.log(msg);
+        return Promise.reject(msg);
+      }
+    });
 
-                    if (that._waitingWorker === undefined) {
-                        that._waitingWorker = new that.getMessageFullModelRequestWorker(that);
-                    }
-                    return that._waitingWorker.addRequest(id);
-                }
-            }
-            else {
-              var msg = "Structure model not in allMessageStructureCollection for id!" + id;
-              console.log(msg);
-              return Promise.reject(msg);
-            }
-        });
+  },
 
-    },
-
-    /**
-     * Retrieve fully populated models for the list of id's given
-     * @param ids[] array of message id's
-     * @return Message.Model{}
-     */
-    getMessageFullModelsPromise: function (ids) {
+  /**
+   * Retrieve fully populated models for the list of id's given
+   * @param ids[] array of message id's
+   * @return Message.Model{}
+   */
+  getMessageFullModelsPromise: function(ids) {
       var that = this,
       returnedModelsPromises = [];
 
-      _.each(ids, function (id) {
+      _.each(ids, function(id) {
         var promise = that.getMessageFullModelPromise(id);
         returnedModelsPromises.push(promise);
       });
 
-      return Promise.all(returnedModelsPromises).then(function (models) {
+      return Promise.all(returnedModelsPromises).then(function(models) {
         //var args = Array.prototype.slice.call(arguments);
         //console.log("getMessageFullModelsPromise() resolved promises:", returnedModelsPromises);
         //console.log("getMessageFullModelsPromise() resolving with:", args);
         return Promise.resolve(models);
-      }).catch(function (e) {
+      }).catch(function(e) {
         console.error("getMessageFullModelsPromise: One or more of the id's couldn't be retrieved: ", e);
         return Promise.reject(e);
       });
     },
 
-    getAllSynthesisCollectionPromise: function () {
-        if (this._allSynthesisCollectionPromise) {
-            return this._allSynthesisCollectionPromise;
-        }
-        this._allSynthesisCollection = new Synthesis.Collection();
-        this._allSynthesisCollection.collectionManager = this;
-        this._allSynthesisCollectionPromise = Promise.resolve(this._allSynthesisCollection.fetch())
-            .thenReturn(this._allSynthesisCollection)
-            .catch(function(e){
-                console.error(e.statusText);
+  getAllSynthesisCollectionPromise: function() {
+    if (this._allSynthesisCollectionPromise) {
+      return this._allSynthesisCollectionPromise;
+    }
+
+    this._allSynthesisCollection = new Synthesis.Collection();
+    this._allSynthesisCollection.collectionManager = this;
+    this._allSynthesisCollectionPromise = Promise.resolve(this._allSynthesisCollection.fetch())
+        .thenReturn(this._allSynthesisCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allSynthesisCollectionPromise;
-    },
+    return this._allSynthesisCollectionPromise;
+  },
 
-    getAllIdeasCollectionPromise: function () {
-        var that = this;
-        if (this._allIdeasCollectionPromise) {
-            return this._allIdeasCollectionPromise;
-        }
+  getAllIdeasCollectionPromise: function() {
+    var that = this;
+    if (this._allIdeasCollectionPromise) {
+      return this._allIdeasCollectionPromise;
+    }
 
-        this._allIdeasCollection = new Idea.Collection();
-        this._allIdeasCollection.collectionManager = this;
-        this._allIdeasCollectionPromise = Promise.resolve(this._allIdeasCollection.fetch())
-            .thenReturn(this._allIdeasCollection)
-            .catch(function(e){
-                console.error(e.statusText);
+    this._allIdeasCollection = new Idea.Collection();
+    this._allIdeasCollection.collectionManager = this;
+    this._allIdeasCollectionPromise = Promise.resolve(this._allIdeasCollection.fetch())
+        .thenReturn(this._allIdeasCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        //Start listener setup
-        //This is so the unread count update when setting a message unread.
-        //See Message:setRead()
-        Assembl.reqres.setHandler('ideas:update', function (ideas) {
-            if (Ctx.debugRender) {
-                console.log("ideaList: triggering render because app.on('ideas:update') was triggered");
-            }
-            that._allIdeasCollection.add(ideas, {merge: true});
-        });
-        //End listener setup
+    //Start listener setup
+    //This is so the unread count update when setting a message unread.
+    //See Message:setRead()
+    Assembl.reqres.setHandler('ideas:update', function(ideas) {
+      if (Ctx.debugRender) {
+        console.log("ideaList: triggering render because app.on('ideas:update') was triggered");
+      }
 
-        return this._allIdeasCollectionPromise;
+      that._allIdeasCollection.add(ideas, {merge: true});
+    });
 
-    },
+    //End listener setup
 
-    getAllIdeaLinksCollectionPromise: function () {
-        if (this._allIdeaLinksCollectionPromise) {
-            return this._allIdeaLinksCollectionPromise;
-        }
+    return this._allIdeasCollectionPromise;
 
-        this._allIdeaLinksCollection = new IdeaLink.Collection();
-        this._allIdeaLinksCollection.collectionManager = this;
-        this._allIdeaLinksCollectionPromise = Promise.resolve(this._allIdeaLinksCollection.fetch())
-            .thenReturn(this._allIdeaLinksCollection)
-            .catch(function(e){
-                console.error(e.statusText);
+  },
+
+  getAllIdeaLinksCollectionPromise: function() {
+    if (this._allIdeaLinksCollectionPromise) {
+      return this._allIdeaLinksCollectionPromise;
+    }
+
+    this._allIdeaLinksCollection = new IdeaLink.Collection();
+    this._allIdeaLinksCollection.collectionManager = this;
+    this._allIdeaLinksCollectionPromise = Promise.resolve(this._allIdeaLinksCollection.fetch())
+        .thenReturn(this._allIdeaLinksCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allIdeaLinksCollectionPromise;
-    },
+    return this._allIdeaLinksCollectionPromise;
+  },
 
-    getAllExtractsCollectionPromise: function () {
-        if (this._allExtractsCollectionPromise) {
-            return this._allExtractsCollectionPromise;
-        }
+  getAllExtractsCollectionPromise: function() {
+    if (this._allExtractsCollectionPromise) {
+      return this._allExtractsCollectionPromise;
+    }
 
-        this._allExtractsCollection = new Segment.Collection();
-        this._allExtractsCollection.collectionManager = this;
-        this._allExtractsCollectionPromise = Promise.resolve(this._allExtractsCollection.fetchFromScriptTag('extracts-json'))
-            .thenReturn(this._allExtractsCollection)
-            .catch(function(e){
-                console.error(e.statusText);
+    this._allExtractsCollection = new Segment.Collection();
+    this._allExtractsCollection.collectionManager = this;
+    this._allExtractsCollectionPromise = Promise.resolve(this._allExtractsCollection.fetchFromScriptTag('extracts-json'))
+        .thenReturn(this._allExtractsCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allExtractsCollectionPromise;
-    },
+    return this._allExtractsCollectionPromise;
+  },
 
-    getAllPartnerOrganizationCollectionPromise: function () {
-        if (this._allPartnerOrganizationCollectionPromise) {
-            return this._allPartnerOrganizationCollectionPromise;
-        }
-        this._allPartnerOrganizationCollection = new Partners.Collection();
-        this._allPartnerOrganizationCollection.collectionManager = this;
-        this._allPartnerOrganizationCollectionPromise = Promise.resolve(this._allPartnerOrganizationCollection.fetch())
-            .thenReturn(this._allPartnerOrganizationCollection)
-            .catch(function(e){
-                console.error(e.statusText);
+  getAllPartnerOrganizationCollectionPromise: function() {
+    if (this._allPartnerOrganizationCollectionPromise) {
+      return this._allPartnerOrganizationCollectionPromise;
+    }
+
+    this._allPartnerOrganizationCollection = new Partners.Collection();
+    this._allPartnerOrganizationCollection.collectionManager = this;
+    this._allPartnerOrganizationCollectionPromise = Promise.resolve(this._allPartnerOrganizationCollection.fetch())
+        .thenReturn(this._allPartnerOrganizationCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allPartnerOrganizationCollectionPromise;
-    },
+    return this._allPartnerOrganizationCollectionPromise;
+  },
 
-    getNotificationsDiscussionCollectionPromise: function () {
-        if (this._allNotificationsDiscussionCollectionPromise) {
-            return this._allNotificationsDiscussionCollectionPromise;
-        }
-        this._allNotificationsDiscussionCollection = new NotificationSubscription.Collection();
-        this._allNotificationsDiscussionCollection.setUrlToDiscussionTemplateSubscriptions();
-        this._allNotificationsDiscussionCollection.collectionManager = this;
-        this._allNotificationsDiscussionCollectionPromise = Promise.resolve(this._allNotificationsDiscussionCollection.fetch())
-            .thenReturn(this._allNotificationsDiscussionCollection)
-            .catch(function(e){
-                console.error(e.statusText);
+  getNotificationsDiscussionCollectionPromise: function() {
+    if (this._allNotificationsDiscussionCollectionPromise) {
+      return this._allNotificationsDiscussionCollectionPromise;
+    }
+
+    this._allNotificationsDiscussionCollection = new NotificationSubscription.Collection();
+    this._allNotificationsDiscussionCollection.setUrlToDiscussionTemplateSubscriptions();
+    this._allNotificationsDiscussionCollection.collectionManager = this;
+    this._allNotificationsDiscussionCollectionPromise = Promise.resolve(this._allNotificationsDiscussionCollection.fetch())
+        .thenReturn(this._allNotificationsDiscussionCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             })
 
-        return this._allNotificationsDiscussionCollectionPromise;
-    },
+    return this._allNotificationsDiscussionCollectionPromise;
+  },
 
-    getNotificationsUserCollectionPromise: function () {
-        if (this._allNotificationsUserCollectionPromise) {
-            return this._allNotificationsUserCollectionPromise;
-        }
+  getNotificationsUserCollectionPromise: function() {
+    if (this._allNotificationsUserCollectionPromise) {
+      return this._allNotificationsUserCollectionPromise;
+    }
 
-        this._allNotificationsUserCollection = new NotificationSubscription.Collection();
-        this._allNotificationsUserCollection.setUrlToUserSubscription();
-        this._allNotificationsUserCollection.collectionManager = this;
-        this._allNotificationsUserCollectionPromise = Promise.resolve(this._allNotificationsUserCollection.fetch())
-            .thenReturn(this._allNotificationsUserCollection)
-            .catch(function(e){
-                console.error(e.statusText);
+    this._allNotificationsUserCollection = new NotificationSubscription.Collection();
+    this._allNotificationsUserCollection.setUrlToUserSubscription();
+    this._allNotificationsUserCollection.collectionManager = this;
+    this._allNotificationsUserCollectionPromise = Promise.resolve(this._allNotificationsUserCollection.fetch())
+        .thenReturn(this._allNotificationsUserCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allNotificationsUserCollectionPromise;
+    return this._allNotificationsUserCollectionPromise;
 
-    },
+  },
 
-    _parseGroupStates: function (models, allIdeasCollection) {
+  _parseGroupStates: function(models, allIdeasCollection) {
       var that = this;
       _.each(models, function(model) {
         _.each(model.states, function(state) {
@@ -574,20 +587,22 @@ var CollectionManager = Marionette.Controller.extend({
       return models;
     },
 
-    /* Gets the stored configuration of groups and panels
-     */
-    getGroupSpecsCollectionPromise: function (viewsFactory, url_structure_promise, skip_group_state) {
+  /* Gets the stored configuration of groups and panels
+   */
+  getGroupSpecsCollectionPromise: function(viewsFactory, url_structure_promise, skip_group_state) {
       var that = this;
 
-      if(skip_group_state === undefined) {
+      if (skip_group_state === undefined) {
         skip_group_state = false;
       }
+
       if (this._allGroupSpecsCollectionPromise === undefined) {
         //FIXME:  This is slow.  Investigate fetching the single idea and adding it to the collection before fetching the whole collection
         var allIdeasCollectionPromise = this.getAllIdeasCollectionPromise();
         if (url_structure_promise === undefined) {
           url_structure_promise = Promise.resolve(undefined);
         }
+
         return Promise.join(allIdeasCollectionPromise, url_structure_promise,
           function(allIdeasCollection, url_structure) {
           var collection, data;
@@ -599,6 +614,7 @@ var CollectionManager = Marionette.Controller.extend({
               data = that._parseGroupStates(data, allIdeasCollection);
             }
           }
+
           if (data !== undefined) {
             collection = new groupSpec.Collection(data, {parse: true});
             if (!collection.validate()) {
@@ -606,24 +622,26 @@ var CollectionManager = Marionette.Controller.extend({
               collection = undefined;
             }
           }
+
           if (collection === undefined) {
             collection = new groupSpec.Collection();
             var panelSpec = require('../models/panelSpec.js');
             var PanelSpecTypes = require('../utils/panelSpecTypes.js');
             var groupState = require('../models/groupState.js');
             var defaults = {
-                panels: new panelSpec.Collection([
-                                                  {type: PanelSpecTypes.NAV_SIDEBAR.id },
-                                                  {type: PanelSpecTypes.IDEA_PANEL.id, minimized: true},
-                                                  {type: PanelSpecTypes.MESSAGE_LIST.id}
-                                                  ],
-                                                  {'viewsFactory': viewsFactory }),
-                navigationState: 'debate',
-                states: new groupState.Collection([new groupState.Model()])
+              panels: new panelSpec.Collection([
+                                                {type: PanelSpecTypes.NAV_SIDEBAR.id },
+                                                {type: PanelSpecTypes.IDEA_PANEL.id, minimized: true},
+                                                {type: PanelSpecTypes.MESSAGE_LIST.id}
+                                                ],
+                                                {'viewsFactory': viewsFactory }),
+              navigationState: 'debate',
+              states: new groupState.Collection([new groupState.Model()])
             };
             collection.add(new groupSpec.Model(defaults));
 
           }
+
           collection.collectionManager = that;
           Storage.bindGroupSpecs(collection);
           that._allGroupSpecsCollectionPromise = Promise.resolve(collection);
@@ -635,122 +653,128 @@ var CollectionManager = Marionette.Controller.extend({
       }
     },
 
-    getLocalRoleCollectionPromise: function () {
-        if (this._allLocalRoleCollectionPromise) {
-            return this._allLocalRoleCollectionPromise;
-        }
+  getLocalRoleCollectionPromise: function() {
+    if (this._allLocalRoleCollectionPromise) {
+      return this._allLocalRoleCollectionPromise;
+    }
 
-        this._allLocalRoleCollection = new LocalRole.Collection();
-        this._allLocalRoleCollection.collectionManager = this;
-        this._allLocalRoleCollectionPromise = Promise.resolve(this._allLocalRoleCollection.fetch())
-            .thenReturn(this._allLocalRoleCollection)
-            .catch(function(e){
-                console.error(e.statusText);
+    this._allLocalRoleCollection = new LocalRole.Collection();
+    this._allLocalRoleCollection.collectionManager = this;
+    this._allLocalRoleCollectionPromise = Promise.resolve(this._allLocalRoleCollection.fetch())
+        .thenReturn(this._allLocalRoleCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allLocalRoleCollectionPromise;
-    },
+    return this._allLocalRoleCollectionPromise;
+  },
 
-    getDiscussionModelPromise: function () {
-        if (this._allDiscussionModelPromise) {
-            return this._allDiscussionModelPromise;
-        }
+  getDiscussionModelPromise: function() {
+    if (this._allDiscussionModelPromise) {
+      return this._allDiscussionModelPromise;
+    }
 
-        this._allDiscussionModel = new Discussion.Model();
-        this._allDiscussionModel.collectionManager = this;
-        this._allDiscussionModelPromise = Promise.resolve(this._allDiscussionModel.fetch())
-            .thenReturn(this._allDiscussionModel)
-            .catch(function(e){
-                console.error(e.statusText);
+    this._allDiscussionModel = new Discussion.Model();
+    this._allDiscussionModel.collectionManager = this;
+    this._allDiscussionModelPromise = Promise.resolve(this._allDiscussionModel.fetch())
+        .thenReturn(this._allDiscussionModel)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allDiscussionModelPromise;
-    },
+    return this._allDiscussionModelPromise;
+  },
 
-    getDiscussionSourceCollectionPromise: function () {
-        if (this._allDiscussionSourceCollectionPromise) {
-            return this._allDiscussionSourceCollectionPromise;
-        }
-        this._allDiscussionSourceCollection = new DiscussionSource.Collection();
-        this._allDiscussionSourceCollection.collectionManager = this;
-        this._allDiscussionSourceCollectionPromise = Promise.resolve(this._allDiscussionSourceCollection.fetch())
-            .thenReturn(this._allDiscussionSourceCollection)
-            .catch(function(e){
-                console.error(e.statusText);
+  getDiscussionSourceCollectionPromise: function() {
+    if (this._allDiscussionSourceCollectionPromise) {
+      return this._allDiscussionSourceCollectionPromise;
+    }
+
+    this._allDiscussionSourceCollection = new DiscussionSource.Collection();
+    this._allDiscussionSourceCollection.collectionManager = this;
+    this._allDiscussionSourceCollectionPromise = Promise.resolve(this._allDiscussionSourceCollection.fetch())
+        .thenReturn(this._allDiscussionSourceCollection)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allDiscussionSourceCollectionPromise;
-    },
+    return this._allDiscussionSourceCollectionPromise;
+  },
 
-    getDiscussionSourceCollectionPromise2: function () {
-        if (this._allDiscussionSourceCollection2Promise) {
-            return this._allDiscussionSourceCollection2Promise;
-        }
-        this._allDiscussionSourceCollection2 = new DiscussionSource.Collection();
-        this._allDiscussionSourceCollection2.collectionManager = this;
-        this._allDiscussionSourceCollection2Promise = Promise.resolve(this._allDiscussionSourceCollection2.fetch())
-            .thenReturn(this._allDiscussionSourceCollection2)
-            .catch(function(e){
-                console.error(e.statusText);
+  getDiscussionSourceCollectionPromise2: function() {
+    if (this._allDiscussionSourceCollection2Promise) {
+      return this._allDiscussionSourceCollection2Promise;
+    }
+
+    this._allDiscussionSourceCollection2 = new DiscussionSource.Collection();
+    this._allDiscussionSourceCollection2.collectionManager = this;
+    this._allDiscussionSourceCollection2Promise = Promise.resolve(this._allDiscussionSourceCollection2.fetch())
+        .thenReturn(this._allDiscussionSourceCollection2)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allDiscussionSourceCollection2Promise;
-    },
+    return this._allDiscussionSourceCollection2Promise;
+  },
 
-    getUserContributionsPromise: function (params) {
+  getUserContributionsPromise: function(params) {
 
-        if (this._allUserContributionsModelPromise) {
-            return this._allUserContributionsModelPromise;
-        }
+    if (this._allUserContributionsModelPromise) {
+      return this._allUserContributionsModelPromise;
+    }
 
-        this._allUserContributionsModel = new Discussion.Model();
-        this._allUserContributionsModel.setUserContributions();
-        this._allUserContributionsModel.collectionManager = this;
-        this._allUserContributionsModelPromise = Promise.resolve(this._allUserContributionsModel.fetch({data: $.param({post_author: params}) }))
-            .thenReturn(this._allUserContributionsModel)
-            .catch(function(e){
-                console.error(e.statusText);
+    this._allUserContributionsModel = new Discussion.Model();
+    this._allUserContributionsModel.setUserContributions();
+    this._allUserContributionsModel.collectionManager = this;
+    this._allUserContributionsModelPromise = Promise.resolve(this._allUserContributionsModel.fetch({data: $.param({post_author: params}) }))
+        .thenReturn(this._allUserContributionsModel)
+            .catch(function(e) {
+              console.error(e.statusText);
             });
 
-        return this._allUserContributionsModelPromise;
-    }, 
+    return this._allUserContributionsModelPromise;
+  }, 
 
-    getFacebookAccessTokensPromise: function() {
+  getFacebookAccessTokensPromise: function() {
       if (this._allFacebookAccessTokensPromise) {
         return this._allFacebookAccessTokensPromise;
       }
+
       this._allFacebookAccessTokens = new Social.Facebook.Token.Collection();
       this._allFacebookAccessTokens.collectionManager = this;
       this._allFacebookAccessTokensPromise = Promise.resolve(this._allFacebookAccessTokens.fetch())
           .thenReturn(this._allFacebookAccessTokens)
-          .catch(function(e){
-              console.error(e.statusText);
+          .catch(function(e) {
+            console.error(e.statusText);
           });
       return this._allFacebookAccessTokensPromise;
     },
 
-    getAllUserAccountsPromise: function() {
+  getAllUserAccountsPromise: function() {
       if (this._allUserAccountsPromise) {
         return this._allUserAccountsPromise;
       }
+
       this._allUserAccounts = new Account.Collection();
       this._allUserAccounts.collectionManager = this;
       this._allUserAccountsPromise = Promise.resolve(this._allUserAccounts.fetch())
           .thenReturn(this._allUserAccounts)
-          .catch(function(e){
-              console.error(e.statusText);
+          .catch(function(e) {
+            console.error(e.statusText);
           });
       return this._allUserAccountsPromise;
     },
 
-    getConnectedSocketPromise: function () {
+  getConnectedSocketPromise: function() {
       if (this._connectedSocketPromise) {
         return this._connectedSocketPromise;
       }
+
       var socket = null;
+
       // Note: This does not solve the fact that the socket may disconnect.
       return this._connectedSocketPromise = new Promise(
-        function (resolve) {
+        function(resolve) {
           socket = new Socket(resolve);
         });
     }
@@ -758,9 +782,10 @@ var CollectionManager = Marionette.Controller.extend({
 
 var _instance;
 
-module.exports = function () {
-    if (!_instance) {
-        _instance = new CollectionManager();
-    }
-    return _instance;
+module.exports = function() {
+  if (!_instance) {
+    _instance = new CollectionManager();
+  }
+
+  return _instance;
 };

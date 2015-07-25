@@ -16,19 +16,18 @@ var Marionette = require('../shims/marionette.js'),
     groupSpec = require('../models/groupSpec'),
     Promise = require('bluebird');
 
-
 var IdeaInSynthesisView = Marionette.ItemView.extend({
-    synthesis: null,
-    /**
-     * The template
-     * @type {[type]}
-     */
-    template: '#tmpl-loader',
+  synthesis: null,
+  /**
+   * The template
+   * @type {[type]}
+   */
+  template: '#tmpl-loader',
 
-    /**
-     * @init
-     */
-    initialize: function (options) {
+  /**
+   * @init
+   */
+  initialize: function(options) {
       this.synthesis = options.synthesis || null;
       this.messageListView = options.messageListView;
       this.editing = false;
@@ -36,7 +35,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       this.original_idea = this.model;
 
       this.parentPanel = options.parentPanel;
-      if(this.parentPanel === undefined) {
+      if (this.parentPanel === undefined) {
         throw new Error("parentPanel is mandatory");
       }
 
@@ -44,7 +43,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       collectionManager = new CollectionManager();
       function render_with_info(allMessageStructureCollection, allUsersCollection, ideaExtracts) {
 
-        ideaExtracts.forEach(function (segment) {
+        ideaExtracts.forEach(function(segment) {
           var post = allMessageStructureCollection.get(segment.get('idPost'));
           if (post) {
             var creator = allUsersCollection.get(post.get('idCreator'));
@@ -57,6 +56,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
         that.template = '#tmpl-ideaInSynthesis';
         that.render();
       }
+
       if (this.synthesis.get('is_next_synthesis')) {
         Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
             collectionManager.getAllUsersCollectionPromise(),
@@ -71,6 +71,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
               // original may be null if idea deleted.
               that.original_idea = original_idea;
             }
+
             Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
                 collectionManager.getAllUsersCollectionPromise(),
                 that.original_idea.getExtractsPromise(),
@@ -78,17 +79,16 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
           });
       }
 
-
-      this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function (state, currentIdea) {
+      this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function(state, currentIdea) {
         that.onIsSelectedChange(currentIdea);
       });
     },
 
-    /**
-     * The events
-     * @type {Object}
-     */
-    events: {
+  /**
+   * The events
+   * @type {Object}
+   */
+  events: {
       'click .js_synthesis-expression': 'onTitleClick',
       'click .js_synthesisIdea': 'navigateToIdea',
       'click .js_viewIdeaInModal': 'showIdeaInModal',
@@ -96,15 +96,15 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       'click .messageSend-cancelbtn': 'closeReplyBox'
     },
 
-    modelEvents: {
+  modelEvents: {
       'change:shortTitle change:longTitle change:segments':'render'
     },
 
-    canEdit: function() {
+  canEdit: function() {
       return Ctx.getCurrentUser().can(Permissions.EDIT_IDEA) && this.synthesis.get("published_in_post") === null;
     },
 
-    serializeData: function(){
+  serializeData: function() {
       return {
         id: this.model.getId(),
         editing: this.editing,
@@ -116,32 +116,34 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       }
     },
 
-    /**
-     * The render
-     * @param renderParams {}
-     * @return {IdeaInSynthesisView}
-     */
-    onRender: function () {
+  /**
+   * The render
+   * @param renderParams {}
+   * @return {IdeaInSynthesisView}
+   */
+  onRender: function() {
 
-      Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+    Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-      if(this.canEdit()) {
-        this.$el.addClass('canEdit');
-      }
-      this.$el.attr('id', 'synthesis-idea-' + this.model.id);
+    if (this.canEdit()) {
+      this.$el.addClass('canEdit');
+    }
 
-      this.onIsSelectedChange(this.parentPanel.getGroupState().get('currentIdea'));
-      Ctx.initTooltips(this.$el);
-      if (this.editing && !this.model.get('synthesis_is_published')) {
-        this.renderCKEditorIdea();
-      }
-      this.renderReplyView();
-    },
+    this.$el.attr('id', 'synthesis-idea-' + this.model.id);
 
-    /**
-     * renders the ckEditor if there is one editable field
-     */
-    renderCKEditorIdea: function () {
+    this.onIsSelectedChange(this.parentPanel.getGroupState().get('currentIdea'));
+    Ctx.initTooltips(this.$el);
+    if (this.editing && !this.model.get('synthesis_is_published')) {
+      this.renderCKEditorIdea();
+    }
+
+    this.renderReplyView();
+  },
+
+  /**
+   * renders the ckEditor if there is one editable field
+   */
+  renderCKEditorIdea: function() {
       var that = this,
       area = this.$('.synthesis-expression-editor');
 
@@ -156,7 +158,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
         'hideButton': true
       });
 
-      this.listenTo(this.ideaSynthesis, 'save cancel', function(){
+      this.listenTo(this.ideaSynthesis, 'save cancel', function() {
         that.editing = false;
         that.render();
       });
@@ -165,14 +167,14 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       this.ideaSynthesis.changeToEditMode();
     },
 
-    /**
-     * renders the reply interface
-     */
-    renderReplyView: function () {
+  /**
+   * renders the reply interface
+   */
+  renderReplyView: function() {
       var that = this,
       partialCtx = "synthesis-idea-" + this.model.getId(),
       partialMessage = MessagesInProgress.getMessage(partialCtx),
-      send_callback = function () {
+      send_callback = function() {
         Assembl.vent.trigger('messageList:currentQuery');
         that.getPanel().getContainingGroup().setCurrentIdea(that.original_idea);
       };
@@ -197,81 +199,82 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       this.$('.synthesisIdea-replybox').html(replyView.render().el);
     },
 
-    /**
-     *  Focus on the reply box, and open it if closed
-     **/
-    focusReplyBox: function () {
+  /**
+   *  Focus on the reply box, and open it if closed
+   **/
+  focusReplyBox: function() {
       this.openReplyBox();
 
       var that = this;
-      window.setTimeout(function () {
+      window.setTimeout(function() {
         that.$('.js_messageSend-body').focus();
       }, 100);
     },
-    /**
-     *  Opens the reply box the reply button
-     */
-    openReplyBox: function () {
+  /**
+   *  Opens the reply box the reply button
+   */
+  openReplyBox: function() {
       this.$('.synthesisIdea-replybox').removeClass("hidden");
     },
 
-    /**
-     *  Closes the reply box
-     */
-    closeReplyBox: function () {
+  /**
+   *  Closes the reply box
+   */
+  closeReplyBox: function() {
       this.$('.synthesisIdea-replybox').addClass("hidden");
     },
 
-    /**
-     * @event
-     */
-    onIsSelectedChange: function (idea) {
-        //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
-        if (idea === this.model || idea === this.original_idea) {
-            this.$el.addClass('is-selected');
-        } else {
-            this.$el.removeClass('is-selected');
-        }
-    },
+  /**
+   * @event
+   */
+  onIsSelectedChange: function(idea) {
+    //console.log("IdeaView:onIsSelectedChange(): new: ", idea, "current: ", this.model, this);
+    if (idea === this.model || idea === this.original_idea) {
+      this.$el.addClass('is-selected');
+    } else {
+      this.$el.removeClass('is-selected');
+    }
+  },
 
-    /**
-     * @event
-     */
-    onTitleClick: function (ev) {
+  /**
+   * @event
+   */
+  onTitleClick: function(ev) {
       ev.stopPropagation();
       if (this.canEdit()) {
         this.makeEditable();
       }
+
       this.navigateToIdea(ev);
     },
 
-    getPanel: function () {
+  getPanel: function() {
       return this.parentPanel;
     },
     
-    showIdeaInModal: function (ev) {
+  showIdeaInModal: function(ev) {
       this.navigateToIdea(ev, true);
     },
     
-    navigateToIdea: function (ev, forcePopup) {
+  navigateToIdea: function(ev, forcePopup) {
       var panel = this.getPanel();
 
-      if( panel.isPrimaryNavigationPanel() ) {
+      if (panel.isPrimaryNavigationPanel()) {
         panel.getContainingGroup().setCurrentIdea(this.original_idea);
       }
       
       // If the panel isn't the primary navigation panel, OR if we explicitly
       // ask for a popup, we need to create a modal group to see the idea
-      if( !panel.isPrimaryNavigationPanel() || forcePopup ) {
+      if (!panel.isPrimaryNavigationPanel() || forcePopup) {
         //navigateToIdea called, and we are not the primary navigation panel
         //Let's open in a modal Group
         var ModalGroup = require('./groups/modalGroup.js');
         var defaults = {
-            panels: new panelSpec.Collection([
-                    {type: PanelSpecTypes.IDEA_PANEL.id, minimized: false},
-                    {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
-                ],
-                {'viewsFactory': viewsFactory })
+          panels: new panelSpec.Collection([
+                  {type: PanelSpecTypes.IDEA_PANEL.id, minimized: false},
+                  {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
+              ],
+              {'viewsFactory': viewsFactory })
         };
         var groupSpecModel = new groupSpec.Model(defaults);
         var setResult = groupSpecModel.get('states').at(0).set({currentIdea: this.original_idea}, {validate: true});
@@ -280,19 +283,22 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
         }
 
         var idea_title = Ctx.stripHtml(this.model.getShortTitleDisplayText());
+
         //console.log("idea_title: ", idea_title);
         var modal_title_template = i18n.gettext("Exploring idea \"%s\"");
+
         //console.log("modal_title_template:", modal_title_template);
         var modal_title = null;
-        if ( modal_title_template && idea_title )
-          modal_title = i18n.sprintf(i18n.gettext("Exploring idea \"%s\""), idea_title );
+        if (modal_title_template && idea_title)
+          modal_title = i18n.sprintf(i18n.gettext("Exploring idea \"%s\""), idea_title);
+
         //console.log("modal_title:", modal_title);
         var modal = new ModalGroup({"model": groupSpecModel, "title": modal_title});
         Assembl.slider.show(modal);
       }
     },
 
-    makeEditable: function () {
+  makeEditable: function() {
       if (this.canEdit()) {
         this.editing = true;
         this.render();
@@ -300,6 +306,5 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
     }
 
 });
-
 
 module.exports = IdeaInSynthesisView;

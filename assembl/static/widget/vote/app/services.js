@@ -2,19 +2,20 @@
 
 var creativityServices = angular.module('creativityServices', ['ngResource']);
 
-creativityServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', function ($window, $rootScope, $log) {
+creativityServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', function($window, $rootScope, $log) {
   this.resourceToUrl = function(str)
   {
     var start = "local:";
-    if ( str.indexOf(start) == 0 )
+    if (str.indexOf(start) == 0)
     {
       str = "/data/" + str.slice(start.length);
     }
+
     return str;
   };
 }]);
 
-creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$http', function ($window, $rootScope, $log, $http) {
+creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$http', function($window, $rootScope, $log, $http) {
 
   this.mandatory_settings_fields = [];
 
@@ -122,6 +123,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "key": "type",
       "type": "select",
       "label": "Item type",
+
       //"description": "",
       //"default": "vertical_gauge", // we do not set default, because we use the change event to populate criterion list
       //"options": item_types_options
@@ -150,20 +152,22 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     }
   ];
 
-
   this.criterion_types = [
     {
       "key": "LickertVoteSpecification",
+
       // "description": "",
       "label": "Lickert"
     },
     {
       "key": "BinaryVoteSpecification",
+
       // "description": "",
       "label": "Binary"
     },
     {
       "key": "MultipleChoiceVoteSpecification",
+
       // "description": "",
       "label": "Multiple choice"
     }
@@ -185,6 +189,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "key": "@type",
       "type": "select",
       "label": "Criterion type",
+
       // "description": "",
       // "default": "LickertIdeaVote", // we will probably use the change event to display the right fields
       "options": this.criterion_types
@@ -216,6 +221,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       }
     ],
     "BinaryVoteSpecification": [
+
       //possibleValues
       {
         "key": "labelNo",
@@ -232,7 +238,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
         "storage": "settings"
       }
     ],
-    "MultipleChoiceVoteSpecification": [ // http://en.wikipedia.org/wiki/Plurality_voting_system
+    "MultipleChoiceVoteSpecification": [// http://en.wikipedia.org/wiki/Plurality_voting_system
       {
         "key": "candidates",
         "label": "Candidates",
@@ -332,23 +338,25 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     ]
   };
 
-  this.addDefaultFields = function(obj, default_fields){
+  this.addDefaultFields = function(obj, default_fields) {
     var sz = default_fields.length;
-    for ( var i = 0; i < sz; ++i )
+    for (var i = 0; i < sz; ++i)
     {
       var field = default_fields[i];
-      if ( !obj.hasOwnProperty(field.key)
-        && field.hasOwnProperty("default") )
+      if (!obj.hasOwnProperty(field.key)
+        && field.hasOwnProperty("default"))
       {
         obj[field.key] = field.default;
       }
     }
+
     return obj;
   };
 
-  this.resetCriterionFromType = function(criterion){
+  this.resetCriterionFromType = function(criterion) {
     console.log("VoteWidgetService::resetCriterionFromType()");
     var criterion_type = criterion["@type"];
+
     //var criterion_reset = {};
 
     // keep original mandatory fields (entity_id, name, type)
@@ -361,11 +369,11 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     */
 
     // add or reset mandatory typed criterion fields
-    if ( criterion_type in this.mandatory_typed_criterion_fields){
+    if (criterion_type in this.mandatory_typed_criterion_fields) {
       console.log("this.mandatory_typed_criterion_fields[", criterion_type, this.mandatory_typed_criterion_fields[criterion_type]);
       var fields = this.mandatory_typed_criterion_fields[criterion_type];
-      for ( var i = 0; i < fields.length; ++i ){
-        if ( "default" in fields[i] ){
+      for (var i = 0; i < fields.length; ++i) {
+        if ("default" in fields[i]) {
           //criterion_reset[fields[i].key] = fields[i].default;
           criterion[fields[i].key] = fields[i].default;
         }
@@ -373,13 +381,13 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     }
 
     // remove non-mandatory (typed and non-typed) criterion fields
-    if ( criterion_type in this.mandatory_typed_criterion_fields){
-      for ( var field in criterion ){
-        if ( criterion.hasOwnProperty(field) ){
-          if ( !(
+    if (criterion_type in this.mandatory_typed_criterion_fields) {
+      for (var field in criterion) {
+        if (criterion.hasOwnProperty(field)) {
+          if (!(
             _.findWhere(this.mandatory_criterion_fields, { "key": field })
             || _.findWhere(this.mandatory_typed_criterion_fields[criterion_type], { "key": field })
-          ) ){
+          )) {
             delete criterion[field];
           }
         }
@@ -387,29 +395,30 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     }
 
     console.log("criterion built: ", criterion);
+
     //console.log("criterion built: ", criterion_reset);
     //criterion = criterion_reset;
   };
 
-  this.getFieldDefaultValue = function (default_fields, field_name, for_admin){
+  this.getFieldDefaultValue = function(default_fields, field_name, for_admin) {
     //console.log("getFieldDefaultValue(): ", default_fields, field_name, for_admin);
     // var default_value = ''; // /!\ setting it to an empty string does not create the property!
     var default_value = "something";
     try {
-      if ( !(default_fields instanceof Array) )
+      if (!(default_fields instanceof Array))
         return default_value;
 
-      var optional_field = default_fields.find(function(e){
-        return ( e.key == field_name );
+      var optional_field = default_fields.find(function(e) {
+        return (e.key == field_name);
       });
-      if ( optional_field != undefined ){
-        if ( for_admin == true && optional_field.hasOwnProperty("defaultAdmin") )
+      if (optional_field != undefined) {
+        if (for_admin == true && optional_field.hasOwnProperty("defaultAdmin"))
           default_value = optional_field.defaultAdmin;
-        else if ( optional_field.hasOwnProperty("default") )
+        else if (optional_field.hasOwnProperty("default"))
           default_value = optional_field.default;
-        else if ( optional_field.hasOwnProperty("type") )
+        else if (optional_field.hasOwnProperty("type"))
         {
-          if ( optional_field.type == "integer" )
+          if (optional_field.type == "integer")
             default_value = 0;
         }
       }
@@ -419,97 +428,98 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     }
   };
 
-  this.sendJson = function(method, endpoint, post_data, result_holder){
+  this.sendJson = function(method, endpoint, post_data, result_holder) {
     console.log("sendJson()");
 
     return $http({
-        method: method,
-        url: endpoint,
-        data: post_data,
-        //data: $.param(post_data),
-        headers: {'Content-Type': 'application/json'}
-        //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(data, status, headers){
-        console.log("success");
-        if ( result_holder )
-          result_holder.text("Success!");
-        /*console.log("data:");
-        console.log(data);
-        console.log("status:");
-        console.log(status);
-        console.log("headers:");
-        console.log(headers);*/
-    }).error(function(data, status, headers, config){
-        console.log("error");
-        if ( result_holder )
-          result_holder.text("Error");
-        console.log("data:");
-        console.log(data);
-        console.log("status:");
-        console.log(status);
-        console.log("headers:");
-        console.log(headers);
+      method: method,
+      url: endpoint,
+      data: post_data,
+
+      //data: $.param(post_data),
+      headers: {'Content-Type': 'application/json'}
+
+      //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data, status, headers) {
+      console.log("success");
+      if (result_holder)
+        result_holder.text("Success!");
+      /*console.log("data:");
+      console.log(data);
+      console.log("status:");
+      console.log(status);
+      console.log("headers:");
+      console.log(headers);*/
+    }).error(function(data, status, headers, config) {
+      console.log("error");
+      if (result_holder)
+        result_holder.text("Error");
+      console.log("data:");
+      console.log(data);
+      console.log("status:");
+      console.log(status);
+      console.log("headers:");
+      console.log(headers);
     });
   };
 
-  this.putJson = function(endpoint, post_data, result_holder){
+  this.putJson = function(endpoint, post_data, result_holder) {
     return this.sendJson('PUT', endpoint, post_data, result_holder);
   };
 
-  this.postJson = function(endpoint, post_data, result_holder){
+  this.postJson = function(endpoint, post_data, result_holder) {
     return this.sendJson('POST', endpoint, post_data, result_holder);
   };
 
 }]);
 
+creativityServices.factory('globalConfig', function($http) {
 
+  var api_rest = 'test/config_test.json';
 
-creativityServices.factory('globalConfig', function($http){
-
-    var api_rest = 'test/config_test.json';
-
-    return {
-        fetch : function() {
-            return $http.get(api_rest);
-        }
+  return {
+    fetch: function() {
+      return $http.get(api_rest);
     }
+  }
 
 });
 
-
 //CONFIG
-creativityServices.factory('configTestingService', [function(){
+creativityServices.factory('configTestingService', [function() {
   return {
-    init: function(){
+    init: function() {
       
     },
-    testCall: function(){
+    testCall: function() {
       $.ajax({
         url:'http://localhost:6543/data/Discussion/1/widgets',
         type:'POST',
         data: {
-           type:'MultiCriterionVotingWidget',
-           settings: JSON.stringify({"idea":"local:Idea/2"})
+          type:'MultiCriterionVotingWidget',
+          settings: JSON.stringify({"idea":"local:Idea/2"})
         },
-        success: function(data, textStatus, jqXHR){
+        success: function(data, textStatus, jqXHR) {
 
-           getConfig(jqXHR.getResponseHeader('location'));
+          getConfig(jqXHR.getResponseHeader('location'));
         },
-        error: function(jqXHR, textStatus, errorThrown){
+        error: function(jqXHR, textStatus, errorThrown) {
 
-           console.log(jqXHR);
+          console.log(jqXHR);
 
         }
       });
 
-      function getConfig(value){
+      function getConfig(value) {
         var widget = value.split(':');
-        console.log('http://localhost:6543/data/'+widget[1]);
+        console.log('http://localhost:6543/data/' + widget[1]);
       }
     },
-    getConfiguration: function(url, fnSuccess, fnError){
-      fnSuccess = fnSuccess || function (data){console.log("data:");console.log(data);};
-      fnError = fnError || function(jqXHR, textStatus, errorThrown){};
+    getConfiguration: function(url, fnSuccess, fnError) {
+      fnSuccess = fnSuccess || function(data) {
+        console.log("data:");console.log(data);
+      };
+      fnError = fnError || function(jqXHR, textStatus, errorThrown) {};
       $.ajax({
         url:url,
         type:'GET',
@@ -522,16 +532,15 @@ creativityServices.factory('configTestingService', [function(){
 
 }]);
 
-
 //CARD inspire me: send an idea to assembl
-creativityServices.factory('sendIdeaService', ['$resource',function($resource){
-    return $resource('http://localhost:6543/api/v1/discussion/:discussionId/posts')
+creativityServices.factory('sendIdeaService', ['$resource', function($resource) {
+  return $resource('http://localhost:6543/api/v1/discussion/:discussionId/posts')
 }]);
 
 // WIP: use Angular's REST and Custom Services as our Model for Messages
-creativityServices.factory('Discussion', ['$resource', function($resource){
-    return $resource('http://localhost:6543/data/Discussion/:discussionId', {}, {
-        query: {method:'GET', params:{discussionId:'1'}, isArray:false}
-        });
+creativityServices.factory('Discussion', ['$resource', function($resource) {
+  return $resource('http://localhost:6543/data/Discussion/:discussionId', {}, {
+    query: {method:'GET', params:{discussionId:'1'}, isArray:false}
+  });
 }]);
 

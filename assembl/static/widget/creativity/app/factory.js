@@ -1,12 +1,12 @@
 "use strict";
 
-creativityApp.factory('utils', function ($translate) {
+creativityApp.factory('utils', function($translate) {
 
-    var fn = {};
+  var fn = {};
 
-    fn.changeLanguage = function (langKey) {
-        $translate.use(langKey);
-    }
+  fn.changeLanguage = function(langKey) {
+    $translate.use(langKey);
+  }
 
-    return fn;
+  return fn;
 });

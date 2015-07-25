@@ -7,6 +7,7 @@ module.exports = (function() {
 
   function peg$subclass(child, parent) {
     function ctor() { this.constructor = child; }
+
     ctor.prototype = parent.prototype;
     child.prototype = new ctor();
   }
@@ -37,79 +38,82 @@ module.exports = (function() {
         peg$c2 = function(spec) {return spec;},
         peg$c3 = null,
         peg$c4 = function(specs) {
-            return Promise.all(specs).then(function(specs) {
-                var coll = new groupSpec.Collection();
-                for (var i in specs) {
-                    coll.add(specs[i]);
-                }
-                return coll;
-            });
+          return Promise.all(specs).then(function(specs) {
+            var coll = new groupSpec.Collection();
+            for (var i in specs) {
+              coll.add(specs[i]);
+            }
+
+            return coll;
+          });
         },
         peg$c5 = "/",
         peg$c6 = { type: "literal", value: "/", description: "\"/\"" },
         peg$c7 = ";",
         peg$c8 = { type: "literal", value: ";", description: "\";\"" },
         peg$c9 = function(pdl, gsid) {
-            pdl.push(gsid);
-            return Promise.all(pdl).then(function(result) {
-                gsid = result.pop();
-                return new groupSpec.Model({
-                    panels: new panelSpec.Collection(result, {'viewsFactory': viewsFactory }),
-                    states: new groupState.Collection([gsid])
-                });
+          pdl.push(gsid);
+          return Promise.all(pdl).then(function(result) {
+            gsid = result.pop();
+            return new groupSpec.Model({
+              panels: new panelSpec.Collection(result, {'viewsFactory': viewsFactory }),
+              states: new groupState.Collection([gsid])
             });
+          });
         },
         peg$c10 = "{",
         peg$c11 = { type: "literal", value: "{", description: "\"{\"" },
         peg$c12 = "}",
         peg$c13 = { type: "literal", value: "}", description: "\"}\"" },
         peg$c14 = function(panelId, spec) {
-            if (spec) {
-                return spec[1].then(function(spec){
-                    return {
-                            "type": viewsFactory.typeByCode[panelId.toUpperCase()],
-                            "minimized": panelId.toUpperCase() != panelId,
-                            "subSpec": spec,
-                        };
-                });
-            } else {
-                return Promise.resolve({
-                        "type": viewsFactory.typeByCode[panelId.toUpperCase()],
-                        "minimized": panelId.toUpperCase() != panelId
-                    });
-            }
+          if (spec) {
+            return spec[1].then(function(spec) {
+              return {
+                "type": viewsFactory.typeByCode[panelId.toUpperCase()],
+                "minimized": panelId.toUpperCase() != panelId,
+                "subSpec": spec,
+              };
+            });
+          } else {
+            return Promise.resolve({
+              "type": viewsFactory.typeByCode[panelId.toUpperCase()],
+              "minimized": panelId.toUpperCase() != panelId
+            });
+          }
         },
         peg$c15 = /^[A-Za-z]/,
         peg$c16 = { type: "class", value: "[A-Za-z]", description: "[A-Za-z]" },
         peg$c17 = function(gsi) {return gsi;},
         peg$c18 = function(gsis) {
-            var promises = [];
-            for (var i in gsis) {
-                var gsi = gsis[i],
-                    specCode = gsi[0],
-                    specData = gsi[1],
-                    promise = viewsFactory.decodeUrlData(specCode, specData);
-                if (promise) {
-                    promises.push(promise);
-                }
+          var promises = [];
+          for (var i in gsis) {
+            var gsi = gsis[i],
+                specCode = gsi[0],
+                specData = gsi[1],
+                promise = viewsFactory.decodeUrlData(specCode, specData);
+            if (promise) {
+              promises.push(promise);
             }
-            if (promises.length > 0) {
-                return Promise.all(promises).then(function(promises) {
-                    var defaults = {};
-                    for (var i in promises) {
-                        var promise = promises[i],
-                            key = promise[0],
-                            value = promise[1];
-                        defaults[key] = value;
-                    }
-                    return new groupState.Model(defaults);
-                });
-            } else {
-                return new groupState.Model();
-            }
+          }
+
+          if (promises.length > 0) {
+            return Promise.all(promises).then(function(promises) {
+              var defaults = {};
+              for (var i in promises) {
+                var promise = promises[i],
+                    key = promise[0],
+                    value = promise[1];
+                defaults[key] = value;
+              }
+
+              return new groupState.Model(defaults);
+            });
+          } else {
+            return new groupState.Model();
+          }
         },
         peg$c19 = function(gsi, data) {
-            return [gsi, data];
+          return [gsi, data];
         },
         peg$c20 = /^[\-A-Za-z0-9._~]/,
         peg$c21 = { type: "class", value: "[\\-A-Za-z0-9._~]", description: "[\\-A-Za-z0-9._~]" },
@@ -169,6 +173,7 @@ module.exports = (function() {
           ch = input.charAt(p);
           if (ch === "\n") {
             if (!details.seenCR) { details.line++; }
+
             details.column = 1;
             details.seenCR = false;
           } else if (ch === "\r" || ch === "\u2028" || ch === "\u2029") {
@@ -187,6 +192,7 @@ module.exports = (function() {
           peg$cachedPos = 0;
           peg$cachedPosDetails = { line: 1, column: 1, seenCR: false };
         }
+
         advance(peg$cachedPosDetails, peg$cachedPos, pos);
         peg$cachedPos = pos;
       }
@@ -302,6 +308,7 @@ module.exports = (function() {
         peg$currPos = s2;
         s2 = peg$c0;
       }
+
       if (s2 !== peg$FAILED) {
         while (s2 !== peg$FAILED) {
           s1.push(s2);
@@ -325,11 +332,13 @@ module.exports = (function() {
       } else {
         s1 = peg$c0;
       }
+
       if (s1 !== peg$FAILED) {
         s2 = peg$parseslash();
         if (s2 === peg$FAILED) {
           s2 = peg$c3;
         }
+
         if (s2 !== peg$FAILED) {
           peg$reportedPos = s0;
           s1 = peg$c4(s1);
@@ -388,6 +397,7 @@ module.exports = (function() {
       } else {
         s1 = peg$c0;
       }
+
       if (s1 !== peg$FAILED) {
         s2 = peg$parsegroupSpecInfos();
         if (s2 !== peg$FAILED) {
@@ -416,6 +426,7 @@ module.exports = (function() {
         s1.push(s2);
         s2 = peg$parsepanelData();
       }
+
       if (s1 !== peg$FAILED) {
         s2 = peg$parsegroupSpecInfos();
         if (s2 !== peg$FAILED) {
@@ -448,6 +459,7 @@ module.exports = (function() {
           s3 = peg$FAILED;
           if (peg$silentFails === 0) { peg$fail(peg$c11); }
         }
+
         if (s3 !== peg$FAILED) {
           s4 = peg$parsespecification();
           if (s4 !== peg$FAILED) {
@@ -458,6 +470,7 @@ module.exports = (function() {
               s5 = peg$FAILED;
               if (peg$silentFails === 0) { peg$fail(peg$c13); }
             }
+
             if (s5 !== peg$FAILED) {
               s3 = [s3, s4, s5];
               s2 = s3;
@@ -473,9 +486,11 @@ module.exports = (function() {
           peg$currPos = s2;
           s2 = peg$c0;
         }
+
         if (s2 === peg$FAILED) {
           s2 = peg$c3;
         }
+
         if (s2 !== peg$FAILED) {
           peg$reportedPos = s0;
           s1 = peg$c14(s1, s2);
@@ -527,6 +542,7 @@ module.exports = (function() {
         peg$currPos = s2;
         s2 = peg$c0;
       }
+
       while (s2 !== peg$FAILED) {
         s1.push(s2);
         s2 = peg$currPos;
@@ -546,10 +562,12 @@ module.exports = (function() {
           s2 = peg$c0;
         }
       }
+
       if (s1 !== peg$FAILED) {
         peg$reportedPos = s0;
         s1 = peg$c18(s1);
       }
+
       s0 = s1;
 
       return s0;
@@ -604,6 +622,7 @@ module.exports = (function() {
         s2 = peg$FAILED;
         if (peg$silentFails === 0) { peg$fail(peg$c21); }
       }
+
       while (s2 !== peg$FAILED) {
         s1.push(s2);
         if (peg$c20.test(input.charAt(peg$currPos))) {
@@ -614,22 +633,22 @@ module.exports = (function() {
           if (peg$silentFails === 0) { peg$fail(peg$c21); }
         }
       }
+
       if (s1 !== peg$FAILED) {
         peg$reportedPos = s0;
         s1 = peg$c22(s1);
       }
+
       s0 = s1;
 
       return s0;
     }
 
-
-        var groupSpec = require("../models/groupSpec.js"),
-            panelSpec = require("../models/panelSpec.js"),
-            groupState = require("../models/groupState.js"),
-            Promise = require('bluebird'),
-            viewsFactory = require("../objects/viewsFactory.js");
-
+    var groupSpec = require("../models/groupSpec.js"),
+        panelSpec = require("../models/panelSpec.js"),
+        groupState = require("../models/groupState.js"),
+        Promise = require('bluebird'),
+        viewsFactory = require("../objects/viewsFactory.js");
 
     peg$result = peg$startRuleFunction();
 

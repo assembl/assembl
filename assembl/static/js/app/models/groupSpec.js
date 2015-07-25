@@ -13,38 +13,40 @@ var Base = require('./base.js'),
  */
 var GroupSpecModel = Base.Model.extend({
 
-  defaults: function () {
-     return {
-    "panels": new panelSpec.Collection(),
-    "states": new groupState.Collection([new groupState.Model()])
+  defaults: function() {
+    return {
+      "panels": new panelSpec.Collection(),
+      "states": new groupState.Collection([new groupState.Model()])
     };
   },
 
-  parse: function (model) {
+  parse: function(model) {
     model.panels = new panelSpec.Collection(model.panels, {parse: true});
-    if(model.states && model.states.length > 0) {
+    if (model.states && model.states.length > 0) {
       model.states = new groupState.Collection(model.states, {parse: true});
     }
     else {
       model.states = this.defaults().states;
     }
+
     return model;
   },
 
   /**
    * @params list of panelSpecTypes
    */
-  removePanels: function () {
+  removePanels: function() {
     var args = Array.prototype.slice.call(arguments);
     var panels = this.get('panels');
-    var panelsToRemove = _.filter(panels.models, function (el) {
+    var panelsToRemove = _.filter(panels.models, function(el) {
       return _.contains(args, el.getPanelSpecType());
     });
     if (_.size(args) !== _.size(panelsToRemove)) {
       //console.log("WARNING: groupSpec.Model.removePanels(): " + _.size(args) + " arguments, but found only " + _.size(panelsToRemove) + " panels to remove.");
       //console.log(args, panels, panelsToRemove);
     }
-    _.each(panelsToRemove, function (el) {
+
+    _.each(panelsToRemove, function(el) {
       panels.remove(el);
     });
   },
@@ -52,7 +54,7 @@ var GroupSpecModel = Base.Model.extend({
   /**
    * @aPanelSpec panelSpec of panel to remove
    */
-  removePanelByModel: function (aPanelSpec) {
+  removePanelByModel: function(aPanelSpec) {
     this.get('panels').remove(aPanelSpec);
   },
 
@@ -63,25 +65,25 @@ var GroupSpecModel = Base.Model.extend({
    * the global group state
    * @return PanelSpecType, or undefined if none
    */
-  findNavigationPanelSpec: function () {
+  findNavigationPanelSpec: function() {
     var navigationTypes = PanelSpecTypes.getNavigationPanelTypes(),
         panelAtFirstPositionTypeId = this.get('panels').at(0).get('type');
 
-    var panelSpecType = _.find(navigationTypes, function(navigationType){ return navigationType.id === panelAtFirstPositionTypeId; });
+    var panelSpecType = _.find(navigationTypes, function(navigationType) { return navigationType.id === panelAtFirstPositionTypeId; });
+
     //console.log(panelSpecType);
     return panelSpecType;
   },
-  
   
   /**
    * Return the part of the groupSpec that contains the simple interface 
    * navigation panel (if any)
    */
-  findNavigationSidebarPanelSpec: function () {
+  findNavigationSidebarPanelSpec: function() {
     return this.get('panels').findWhere({type: PanelSpecTypes.NAV_SIDEBAR.id});
   },
 
-  addPanel: function (options, position) {
+  addPanel: function(options, position) {
     var aPanelSpec = new panelSpec.Model(options);
     if (!aPanelSpec.isValid()) {
       throw new Error("Can't add an invalid panelSpec, error was: " + aPanelSpec.validationError);
@@ -89,6 +91,7 @@ var GroupSpecModel = Base.Model.extend({
     else {
       //console.log("added panelSpec ok:", aPanelSpec, aPanelSpec.isValid());
     }
+
     var panels = this.get('panels');
     if (position === undefined) {
       panels.add(aPanelSpec);
@@ -98,14 +101,15 @@ var GroupSpecModel = Base.Model.extend({
   },
 
   /* @param:  a panel spec type */
-  getPanelSpecByType: function (panelSpecType) {
+  getPanelSpecByType: function(panelSpecType) {
     //Ensure it's a real panelSpecType
     var validPanelSpecType = PanelSpecTypes.validate(panelSpecType);
     if (validPanelSpecType === undefined) {
       //console.error("getPanelSpecByType: the panelSpecType provided isn't valid panelSpecType:", panelSpecType);
       throw new Error("invalid panelSpecType");
     }
-    return _.find(this.get('panels').models, function (el) {
+
+    return _.find(this.get('panels').models, function(el) {
       return el.getPanelSpecType() === validPanelSpecType;
     });
   },
@@ -118,31 +122,36 @@ var GroupSpecModel = Base.Model.extend({
    * @position int order of first panel listed in sequence of panels
    * find or create panels at a given position
    */
-  ensurePanelsAt: function (list_of_options, position) {
+  ensurePanelsAt: function(list_of_options, position) {
     var that = this;
+
     //console.log("ensurePanelsAt() called with",list_of_options, position);
     if (!Array.isArray(list_of_options)) {
       list_of_options = [list_of_options];
     }
-    if (_.any(list_of_options, function (el) {
+
+    if (_.any(list_of_options, function(el) {
       return !(PanelSpecTypes.validate(el))
     })) {
       //console.error("One of the panelSpecTypes in the following options isn't valid: ", list_of_options);
       throw new Error("One of the panelSpecTypes in the option isn't valid");
     }
+
     var that = this;
-    _.each(list_of_options, function (option) {
+    _.each(list_of_options, function(option) {
       if (!that.getPanelSpecByType(option)) {
         that.addPanel({'type': option.id}, position++);
       }
     });
   },
-  validate: function () {
+  validate: function() {
     var navstate = this.get('navigationState');
+
     //Migrate old data
     if (navstate == 'home') {
       this.set('navigationState', 'about');
     }
+
     // check other values for validity?
     var panels = this.get('panels');
     return panels.validate();
@@ -152,9 +161,9 @@ var GroupSpecModel = Base.Model.extend({
 var GroupSpecs = Base.Collection.extend({
   model: GroupSpecModel,
 
-  validate: function () {
+  validate: function() {
     var invalid = [];
-    this.each(function (groupSpec) {
+    this.each(function(groupSpec) {
       if (!groupSpec.validate()) {
         invalid.push(groupSpec);
       }
@@ -164,6 +173,7 @@ var GroupSpecs = Base.Collection.extend({
       this.remove(invalid);
       console.log("GroupSpec.Collection: after removal, number of remaining valid groupSpecs: ", (this.length));
     }
+
     return (this.length > 0);
   }
 });
@@ -172,5 +182,4 @@ module.exports = {
   Model: GroupSpecModel,
   Collection: GroupSpecs
 };
-
 

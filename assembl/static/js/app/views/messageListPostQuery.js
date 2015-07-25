@@ -14,7 +14,7 @@ var Ctx = require('../common/context.js'),
 * to sort or modify filters.  Any client-side processing to optimize should
 * be done inside this class, to ease unit testing and code clarity.
 */
-var PostQuery = function () {
+var PostQuery = function() {
     var collectionManager = new CollectionManager();
 
     this.availableFilters = require('./postFilters.js');
@@ -29,7 +29,7 @@ var PostQuery = function () {
     this._resultsAreValid = false;
 
     this.availableViews = {
-        THREADED: {
+      THREADED: {
           id: 'threaded',
           name: i18n.gettext('Threaded view'),
           _supports_paging: false,
@@ -37,14 +37,14 @@ var PostQuery = function () {
           _client_side_implementation: null
         },
 
-        CHRONOLOGICAL: {
+      CHRONOLOGICAL: {
           id: 'chronological',
           name: i18n.gettext('Oldest first'),
           _supports_paging: true,
           _server_order_param_value: 'chronological',
           _client_side_implementation: null
         },
-        REVERSE_CHRONOLOGICAL: {
+      REVERSE_CHRONOLOGICAL: {
           id: 'reverse_chronological',
           name: i18n.gettext('Newest first'),
           _supports_paging: true,
@@ -74,7 +74,7 @@ var PostQuery = function () {
      * @param {filterDef.id}
      * @return {filterDef}
      */
-    this.getFilterDefById = function (filterDefId) {
+    this.getFilterDefById = function(filterDefId) {
       for (var filterDefPropName in this.availableFilters) {
         var filterDef = this.availableFilters[filterDefPropName];
         var filterObject = new filterDef();
@@ -82,6 +82,7 @@ var PostQuery = function () {
           return filterDef;
         }
       }
+
       throw new Error("getFilterDefById(): No filter definition with id " + filterDefId);
     }
 
@@ -92,11 +93,12 @@ var PostQuery = function () {
      *  will return true if any filter of that type is present.
      * @return true if present, false otherwise
      */
-    this.isFilterInQuery = function (filterDef, value) {
+    this.isFilterInQuery = function(filterDef, value) {
       var retval = false;
       var filterDef = new filterDef();
+
       //console.log("isFilterInQuery() called with:", filterDef.getId(), value, this._query)
-      if(!this.isQueryValid()) {
+      if (!this.isQueryValid()) {
         retval = false;
       }
       else if (filterDef.getId() in this._query) {
@@ -107,6 +109,7 @@ var PostQuery = function () {
           retval = this._query[filterDef.getId()].isValueInFilter(value);
         }
       }
+
       //console.log("isFilterInQuery() returning:",retval);
       return retval;
     }
@@ -118,7 +121,7 @@ var PostQuery = function () {
      * @param {String} value
      * @return true on success, false on failure
      */
-    this.addFilter = function (filterDef, value) {
+    this.addFilter = function(filterDef, value) {
       //console.log("addFilter called with: ", filterDef.name, value);
       var retval = true,
           valueWasReplaced = false,
@@ -126,10 +129,11 @@ var PostQuery = function () {
           candidate_filter = new filterDef(),
           filterId = candidate_filter.getId();
 
-      if(this.isQueryValid() === false) {
+      if (this.isQueryValid() === false) {
         this.initialize();
       }
-      if(this.isFilterInQuery(filterDef, value)) {
+
+      if (this.isFilterInQuery(filterDef, value)) {
         if (value === null) {
           delete this._query[filterId];
           this.invalidateResults();
@@ -139,7 +143,7 @@ var PostQuery = function () {
           retval = false;
         }
       }
-      else if(this.isFilterInQuery(filterDef, null)) {
+      else if (this.isFilterInQuery(filterDef, null)) {
         //Query of that type is already present
         filter = this._query[filterId];
       }
@@ -151,10 +155,11 @@ var PostQuery = function () {
       
       if (filter) {
         retval = filter.addValue(value)
-        if(retval) {
+        if (retval) {
           this.invalidateResults();
         }
       }
+
       //console.log("this._query after adding filter:", this._query);
       return retval;
     };
@@ -164,7 +169,7 @@ var PostQuery = function () {
      * 
      * Same as initializing the query.  
      */
-    this.clearAllFilters = function () {
+    this.clearAllFilters = function() {
       this.invalidateResults();
       this._query = {};
     };
@@ -173,22 +178,24 @@ var PostQuery = function () {
      * Get a snapshot of the current filter config, that can be compared or 
      * restored later
      */
-    this.getFilterConfigSnapshot = function () {
+    this.getFilterConfigSnapshot = function() {
       return JSON.stringify(this._query);
     };
     
     /**
      * Compare the current state with a filter config snapshot
      */
-    this.isFilterConfigSameAsSnapshot = function (snapshot) {
+    this.isFilterConfigSameAsSnapshot = function(snapshot) {
       var currentSnapshot = JSON.stringify(this._query);
+
       //console.log("isFilterConfigSameAsSnapshot comparing",currentSnapshot, snapshot);
       var retval = currentSnapshot === snapshot
+
       //console.log("isFilterConfigSameAsSnapshot returning",retval);
       return retval;
     };
 
-    this.initialize = function () {
+    this.initialize = function() {
       return this.clearAllFilters();
     };
     
@@ -200,14 +207,14 @@ var PostQuery = function () {
     /**
      * Has the query been properly initialized?
      */
-    this.isQueryValid = function () {
+    this.isQueryValid = function() {
       return this._query !== undefined;
     };
 
     /**
      * invalidate the Results
      */
-    this.invalidateResults = function () {
+    this.invalidateResults = function() {
       //console.log("messageListPostQuery:invalidateResults called");
       this._resultsAreValid = false;
     };
@@ -219,14 +226,15 @@ var PostQuery = function () {
      *  all values for that filter will be cleared.
      * @return true if filter(s) were cleared
      */
-    this.clearFilter = function (filterDef, valueIndex) {
+    this.clearFilter = function(filterDef, valueIndex) {
       var retval = false,
       i = 0,
       len,
       filterObject = new filterDef(),
       filterId = filterObject.getId();
-     // console.log("clearFilter called with ",filterId, valueIndex)
-      if(this.isQueryValid() === false) {
+
+      // console.log("clearFilter called with ",filterId, valueIndex)
+      if (this.isQueryValid() === false) {
         this.initialize();
       }
       else if (filterId in this._query) {
@@ -245,6 +253,7 @@ var PostQuery = function () {
           this.invalidateResults();
         }
       }
+
       return retval;
     };
 
@@ -253,18 +262,20 @@ var PostQuery = function () {
      * @param {viewDef} viewDef from this.availableViews
      * @return true on success, false on failure
      */
-    this.setView = function (view) {
+    this.setView = function(view) {
       var retval = false;
       if (view) {
         if (this._view._server_order_param_value !== view._server_order_param_value) {
           this._view = view;
           this.invalidateResults();
         }
+
         retval = true;
       }
       else {
         console.error(" setView() view is empty");
       }
+
       return retval;
     };
 
@@ -272,18 +283,20 @@ var PostQuery = function () {
      * @param {string} the name of a viewDef from assemal/view_defs
      * @return true on success, false on failure
      */
-    this.setViewDef = function (viewDef) {
+    this.setViewDef = function(viewDef) {
       var retval = false;
       if (viewDef) {
         if (this._viewDef !== viewDef) {
           this._viewDef = viewDef;
           this.invalidateResults();
         }
+
         retval = true;
       }
       else {
         console.error(" setViewDef() viewDef is empty");
       }
+
       return retval;
     };
     /**
@@ -292,7 +305,7 @@ var PostQuery = function () {
      * @param {function} success_data_changed callback to call when query is complete only
      * when the data actually changed.  Will be called before success
      */
-    this._execute = function () {
+    this._execute = function() {
       //console.log("messageListPostQuery:execute() called");
       var that = this,
       url = Ctx.getApiUrl('posts'),
@@ -303,6 +316,7 @@ var PostQuery = function () {
       if (this._query === undefined) {
         throw new Error("Query isn't initialized");
       }
+
       if (this._resultsAreValid) {
         return Promise.resolve(that._resultIds);
 
@@ -320,7 +334,7 @@ var PostQuery = function () {
         that._queryResultInfo = null;
 
         return Promise.resolve($.getJSON(url, params))
-        .then(function(data){
+        .then(function(data) {
 
           that._queryResultInfo = {};
           that._queryResultInfo.unread = data.unread;
@@ -330,7 +344,7 @@ var PostQuery = function () {
           that._queryResultInfo.maxPage = data.maxPage;
 
           var ids = [];
-          _.each(data.posts, function (post) {
+          _.each(data.posts, function(post) {
             ids.push(post['@id']);
           });
           that._resultIds = ids;
@@ -346,12 +360,12 @@ var PostQuery = function () {
     /**
      * Returns a promise that will resolve to a list of id's
      */
-    this.getResultMessageIdCollectionPromise = function () {
+    this.getResultMessageIdCollectionPromise = function() {
       if (this._resultsAreValid) {
         return Promise.resolve(this._resultIds);
       }
 
-      return this._execute().then(function(collection){
+      return this._execute().then(function(collection) {
         return Promise.resolve(collection);
       });
     };
@@ -359,20 +373,19 @@ var PostQuery = function () {
     /**
      * A promise for an array for JSON data, one per post
      */
-    this.getResultRawDataPromise = function () {
+    this.getResultRawDataPromise = function() {
       var that = this;
       if (this._resultsAreValid) {
         return Promise.resolve(this._rawResults);
       }
 
-      return this._execute().then(function(){
+      return this._execute().then(function() {
         return Promise.resolve(that._rawResults);
       });
     };
 
-
     /** @return undefined if query isn't complete */
-    this.getResultNumUnread = function () {
+    this.getResultNumUnread = function() {
       if (this._resultsAreValid) {
         return this._queryResultInfo.unread;
       }
@@ -382,7 +395,7 @@ var PostQuery = function () {
     };
 
     /** @return undefined if query isn't complete */
-    this.getResultNumTotal = function () {
+    this.getResultNumTotal = function() {
       if (this._resultsAreValid) {
         return this._queryResultInfo.total;
       }
@@ -394,7 +407,7 @@ var PostQuery = function () {
     /**
      * Return a promise to a HTML description of a single active query filter
      */
-    this._getHtmlFilterDescriptionPromise = function (filter) {
+    this._getHtmlFilterDescriptionPromise = function(filter) {
       var that = this,
       descriptionPromise,
       individualValuesButtonsPromises = [];
@@ -417,7 +430,7 @@ var PostQuery = function () {
     /**
      * Return a promise to a HTML description of the active query filters
      */
-    this._getHtmlFiltersDescriptionPromise = function () {
+    this._getHtmlFiltersDescriptionPromise = function() {
       var that = this,
       nActiveFilters = 0,
       filterDescriptionPromises = [];
@@ -435,6 +448,7 @@ var PostQuery = function () {
         if (nActiveFilters > 0) {
           retval += '<div class="actions"><a class="js_messageList-allmessages btn btn-cancel btn-xs">' + i18n.gettext("Clear filters") + '</a></div>';
         }
+
         return retval;
       });
 
@@ -443,7 +457,7 @@ var PostQuery = function () {
     /**
      * Return a HTML description of the query results shown to the user
      */
-    this.getHtmlDescriptionPromise = function () {
+    this.getHtmlDescriptionPromise = function() {
       var that = this;
 
       return this._getHtmlFiltersDescriptionPromise().then(function(filtersDescription) {
@@ -481,6 +495,7 @@ var PostQuery = function () {
                     that.getResultNumUnread());
               }
             }
+
             if (numActiveFilters > 0) {
               retval += i18n.sprintf(i18n.ngettext("Found %d message%s that:", "Found %d messages%s that:", that.getResultNumTotal()), that.getResultNumTotal(), unreadText);
             }
@@ -495,6 +510,7 @@ var PostQuery = function () {
         else {
           throw new Error("Query has been executed but results are invalid")
         }
+
         return retval;
       });
     };

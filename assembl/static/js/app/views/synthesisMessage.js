@@ -11,48 +11,50 @@ var Ctx = require('../common/context.js'),
  */
 var SynthesisMessageView = MessageView.extend({
 
-    /**
-     * @init
-     */
-    initialize: function (obj) {
-        MessageView.prototype.initialize.apply(this, arguments);
-        this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
-        this.synthesisId = this.model.get('publishes_synthesis');
-    },
+  /**
+   * @init
+   */
+  initialize: function(obj) {
+    MessageView.prototype.initialize.apply(this, arguments);
+    this.stopListening(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
+    this.synthesisId = this.model.get('publishes_synthesis');
+  },
 
-    /**
-     * The thread message template
-     * @type {_.template}
-     */
-    template: Ctx.loadTemplate('message'),
+  /**
+   * The thread message template
+   * @type {_.template}
+   */
+  template: Ctx.loadTemplate('message'),
 
-    /**
-     * Meant for derived classes to override
-     * @type {}
-     */
-    transformDataBeforeRender: function (data) {
-        data['subject'] = '';
-        data['body'] = '';
-        if (this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
-            data['bodyFormat'] = "text/plain";
-        }
-        return data;
-    },
-    /**
-     * Meant for derived classes to override
-     * @type {}
-     */
-    postRender: function () {
+  /**
+   * Meant for derived classes to override
+   * @type {}
+   */
+  transformDataBeforeRender: function(data) {
+    data['subject'] = '';
+    data['body'] = '';
+    if (this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+      data['bodyFormat'] = "text/plain";
+    }
+
+    return data;
+  },
+  /**
+   * Meant for derived classes to override
+   * @type {}
+   */
+  postRender: function() {
       var that = this,
           body,
           collectionManager = new CollectionManager();
 
       collectionManager.getAllSynthesisCollectionPromise()
-        .then(function (allSynthesisCollection) {
+        .then(function(allSynthesisCollection) {
           var synthesis = allSynthesisCollection.get(that.synthesisId);
           if (!synthesis) {
             throw Error("BUG: Could not get synthesis after post. Maybe too early.")
           }
+
           that.$('.message-subject').html(synthesis.get('subject'));
           if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
             //Strip HTML from preview
@@ -78,7 +80,6 @@ var SynthesisMessageView = MessageView.extend({
     }
 
 });
-
 
 module.exports = SynthesisMessageView;
 

@@ -13,48 +13,49 @@ var Marionette = require('../shims/marionette.js'),
  * @class views.MessageFamilyView
  */
 var MessageFamilyView = Marionette.ItemView.extend({
-    template: '#tmpl-messageFamily',
-    /**
-     * @type {String}
-     */
-    className: 'message-family-container',
+  template: '#tmpl-messageFamily',
+  /**
+   * @type {String}
+   */
+  className: 'message-family-container',
 
-    /**
-     * Stores the current level
-     * @type {Number}
-     */
-    currentLevel: null,
+  /**
+   * Stores the current level
+   * @type {Number}
+   */
+  currentLevel: null,
 
-    /**
-     * @init
-     * @param {MessageModel} obj the model
-     * @param {Array[boolean]} options.last_sibling_chain which of the view's ancestors
-     *   are the last child of their respective parents.
-     */
-    initialize: function (options) {
+  /**
+   * @init
+   * @param {MessageModel} obj the model
+   * @param {Array[boolean]} options.last_sibling_chain which of the view's ancestors
+   *   are the last child of their respective parents.
+   */
+  initialize: function(options) {
 
-        if (_.isUndefined(options.last_sibling_chain)) {
-          this.last_sibling_chain = [];
-        }
-        else {
-          this.last_sibling_chain = options.last_sibling_chain;
-        }
+    if (_.isUndefined(options.last_sibling_chain)) {
+      this.last_sibling_chain = [];
+    }
+    else {
+      this.last_sibling_chain = options.last_sibling_chain;
+    }
 
-        this.messageListView = options.messageListView;
-        this.collapsed = options.collapsed;
-        this.currentLevel = options.currentLevel;
-        this.hasChildren = (_.size(options.hasChildren) > 0);
-        //this.model.on('change:collapsed', this.onCollapsedChange, this);
-        //this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
+    this.messageListView = options.messageListView;
+    this.collapsed = options.collapsed;
+    this.currentLevel = options.currentLevel;
+    this.hasChildren = (_.size(options.hasChildren) > 0);
 
-        this.level = this.currentLevel !== null ? this.currentLevel : 1;
+    //this.model.on('change:collapsed', this.onCollapsedChange, this);
+    //this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
 
-        if (!_.isUndefined(this.level)) {
-            this.currentLevel = this.level;
-        }
-    },
+    this.level = this.currentLevel !== null ? this.currentLevel : 1;
 
-    serializeData: function(){
+    if (!_.isUndefined(this.level)) {
+      this.currentLevel = this.level;
+    }
+  },
+
+  serializeData: function() {
       var hasParentsOrChildrenOutOfScope = false,
           firstMessage = this.model,
           numAncestors = undefined,
@@ -65,8 +66,8 @@ var MessageFamilyView = Marionette.ItemView.extend({
           numAuthorsOutOfContext = 0;
 
       //console.log(this.model.id, visitorData);
-      if( this.messageListView.isViewStyleThreadedType() ) {
-        if( (visitorData.filtered_descendant_count !== visitorData.real_descendant_count) || visitorData.real_ancestor_count !== visitorData.level && firstMessage.get("parentId") && this.level === 1 ) {
+      if (this.messageListView.isViewStyleThreadedType()) {
+        if ((visitorData.filtered_descendant_count !== visitorData.real_descendant_count) || visitorData.real_ancestor_count !== visitorData.level && firstMessage.get("parentId") && this.level === 1) {
           hasParentsOrChildrenOutOfScope = true;
           numAncestorsOutOfContext = visitorData.real_ancestor_count - visitorData.level;
           numDescendantsOutOfContext = visitorData.real_descendant_count - visitorData.filtered_descendant_count;
@@ -74,7 +75,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
         }
       }
       else {
-        if( visitorData.real_descendant_count > 0 || visitorData.real_ancestor_count > 0 ) {
+        if (visitorData.real_descendant_count > 0 || visitorData.real_ancestor_count > 0) {
           hasParentsOrChildrenOutOfScope = true;
           numAncestorsOutOfContext = visitorData.real_ancestor_count;
           numDescendantsOutOfContext = visitorData.real_descendant_count;
@@ -103,82 +104,84 @@ var MessageFamilyView = Marionette.ItemView.extend({
       };
     },
 
-    /**
-     * The render
-     * @param {Number} [level] The hierarchy level
-     * @return {MessageView}
-     */
-    onRender: function () {
-        var messageView;
+  /**
+   * The render
+   * @param {Number} [level] The hierarchy level
+   * @return {MessageView}
+   */
+  onRender: function() {
+    var messageView;
 
-        Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+    Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-        var messageViewClass = MessageView;
-        if (!this.model.isInstance(Types.POST)) {
-            console.error("not a post?");
-        }
-        if (this.model.getBEType() == Types.SYNTHESIS_POST) {
-            messageViewClass = SynthesisMessageView;
-        }
+    var messageViewClass = MessageView;
+    if (!this.model.isInstance(Types.POST)) {
+      console.error("not a post?");
+    }
 
-        messageView = new messageViewClass({
-            model: this.model,
-            messageListView: this.messageListView,
-            messageFamilyView: this
-        });
+    if (this.model.getBEType() == Types.SYNTHESIS_POST) {
+      messageViewClass = SynthesisMessageView;
+    }
 
-        messageView.triggerMethod("render");
-        this.messageListView.renderedMessageViewsCurrent[this.model.id] = messageView;
+    messageView = new messageViewClass({
+      model: this.model,
+      messageListView: this.messageListView,
+      messageFamilyView: this
+    });
 
-        //data['id'] = data['@id'];
-        //data['level'] = level;
-        //data['last_sibling_chain'] = this.last_sibling_chain;
-        //data['hasChildren'] = this.hasChildren;
+    messageView.triggerMethod("render");
+    this.messageListView.renderedMessageViewsCurrent[this.model.id] = messageView;
 
-        if (this.level > 1) {
-            if (this.last_sibling_chain[this.level - 1]) {
-                this.$el.addClass('last-child');
-            } else {
-                this.$el.addClass('child');
-            }
-        } else {
-            this.$el.addClass('bx bx-default root');
-        }
+    //data['id'] = data['@id'];
+    //data['level'] = level;
+    //data['last_sibling_chain'] = this.last_sibling_chain;
+    //data['hasChildren'] = this.hasChildren;
 
-        this.el.setAttribute('data-message-level',  this.level);
+    if (this.level > 1) {
+      if (this.last_sibling_chain[this.level - 1]) {
+        this.$el.addClass('last-child');
+      } else {
+        this.$el.addClass('child');
+      }
+    } else {
+      this.$el.addClass('bx bx-default root');
+    }
 
-        //this.$el.html(this.template(data));
-        Ctx.initTooltips(this.$el);
-        this.$el.find('>.message-family-arrow>.message').replaceWith(messageView.el);
+    this.el.setAttribute('data-message-level',  this.level);
 
-        this.onCollapsedChange();
+    //this.$el.html(this.template(data));
+    Ctx.initTooltips(this.$el);
+    this.$el.find('>.message-family-arrow>.message').replaceWith(messageView.el);
 
-    },
+    this.onCollapsedChange();
 
-    events: {
+  },
+
+  events: {
       'click >.message-family-arrow>.link-img': 'onIconbuttonClick',
+
       //'click >.message-family-container>.message-family-arrow>.link-img': 'onIconbuttonClick',
       'click >.message-conversation-block>.js_viewMessageFamilyConversation': 'onViewConversationClick'
     },
 
-    /**
-     * @event
-     * Collapse icon has been toggled
-     */
-    onIconbuttonClick: function (ev) {
-        //var collapsed = this.model.get('collapsed');
-        //this.model.set('collapsed', !collapsed);
+  /**
+   * @event
+   * Collapse icon has been toggled
+   */
+  onIconbuttonClick: function(ev) {
+    //var collapsed = this.model.get('collapsed');
+    //this.model.set('collapsed', !collapsed);
 
-        this.collapsed = !this.collapsed;
+    this.collapsed = !this.collapsed;
 
-        this.onCollapsedChange();
-    },
+    this.onCollapsedChange();
+  },
 
-    /**
-     * @event
-     * Collapse icon has been toggled
-     */
-    onViewConversationClick: function (ev) {
+  /**
+   * @event
+   * Collapse icon has been toggled
+   */
+  onViewConversationClick: function(ev) {
       ev.preventDefault();
       var panelSpec = require('../models/panelSpec.js');
       var PanelSpecTypes = require('../utils/panelSpecTypes.js');
@@ -187,10 +190,10 @@ var MessageFamilyView = Marionette.ItemView.extend({
       var groupSpec = require('../models/groupSpec');
 
       var defaults = {
-          panels: new panelSpec.Collection([
-                                            {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
-                                            ],
-                                            {'viewsFactory': viewsFactory })
+        panels: new panelSpec.Collection([
+                                          {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
+                                          ],
+                                          {'viewsFactory': viewsFactory })
       };
       var groupSpecModel = new groupSpec.Model(defaults);
       var modal_title = i18n.sprintf(i18n.gettext("Zooming on the conversation around \"%s\""), this.model.get('subject'));
@@ -205,22 +208,21 @@ var MessageFamilyView = Marionette.ItemView.extend({
       messagePanel.showMessageById(this.model.id, undefined, true, true); 
     },
 
-    /**
-     * @event
-     */
-    onCollapsedChange: function () {
-        var collapsed = this.collapsed,
-            target = this.$el,
-            children = target.find(">.messagelist-children").last();
-        if (collapsed) {
-            this.$el.removeClass('message--expanded');
-            children.hide();
-        } else {
-            this.$el.addClass('message--expanded');
-            children.show();
-        }
+  /**
+   * @event
+   */
+  onCollapsedChange: function() {
+    var collapsed = this.collapsed,
+        target = this.$el,
+        children = target.find(">.messagelist-children").last();
+    if (collapsed) {
+      this.$el.removeClass('message--expanded');
+      children.hide();
+    } else {
+      this.$el.addClass('message--expanded');
+      children.show();
     }
+  }
 });
-
 
 module.exports = MessageFamilyView;

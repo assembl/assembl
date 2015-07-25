@@ -13,17 +13,16 @@ var App = require('./app.js'),
  * */
 Ctx.initLocale();
 
-
 if (raven_url.length) {
-    Raven.config(raven_url).install();
-    Raven.setUserContext({id: Ctx.getCurrentUserId()});
-    window.Raven = Raven;
-    require('raven-js/plugins/console.js');
+  Raven.config(raven_url).install();
+  Raven.setUserContext({id: Ctx.getCurrentUserId()});
+  window.Raven = Raven;
+  require('raven-js/plugins/console.js');
 }
 else {
-    //Disables raven for development
-    Raven.config(false);
-    Raven.debug = false;
+  //Disables raven for development
+  Raven.config(false);
+  Raven.debug = false;
 }
 
 var router = new Router();
@@ -35,25 +34,17 @@ window.Ctx = Ctx;
 App.start();
 
 // available in simple interface
-if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE){
+if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
 
-    var currentUser = Ctx.getCurrentUser();
-    if(activate_tour && (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))){
-        // start take tour due to the dom latencies
-        setTimeout(function(){
-            // may have been disabled by the router
-            if (activate_tour) {
-                Taketour.init();
-            }
-        }, 4000);
-    }
+  var currentUser = Ctx.getCurrentUser();
+  if (activate_tour && (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))) {
+    // start take tour due to the dom latencies
+    setTimeout(function() {
+      // may have been disabled by the router
+      if (activate_tour) {
+        Taketour.init();
+      }
+    }, 4000);
+  }
 }
-
-
-
-
-
-
-
-
 

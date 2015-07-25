@@ -10,16 +10,15 @@ var Marionette = require('../../shims/marionette.js'),
     i18n = require('../../utils/i18n.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js');
 
-
 var SynthesisItem = Marionette.ItemView.extend({
-    template: '#tmpl-synthesisItemInNavigation',
-    initialize: function(options){
-        this.panel = options.panel;
-    },
-    events:{
-       'click .js_synthesisList': 'onSelectedSynthesis'
-    },
-    serializeData: function(){
+  template: '#tmpl-synthesisItemInNavigation',
+  initialize: function(options) {
+    this.panel = options.panel;
+  },
+  events:{
+    'click .js_synthesisList': 'onSelectedSynthesis'
+  },
+  serializeData: function() {
       return {
         id: this.model.get('published_in_post'),
         subject: this.model.get('subject'),
@@ -27,67 +26,67 @@ var SynthesisItem = Marionette.ItemView.extend({
       };
     },
 
-    onSelectedSynthesis: function (e) {
-        var messageId =  $(e.currentTarget).attr('data-message-id');
-        this.panel.displaySynthesis(messageId);
-    }
+  onSelectedSynthesis: function(e) {
+    var messageId =  $(e.currentTarget).attr('data-message-id');
+    this.panel.displaySynthesis(messageId);
+  }
 
 });
 
 var SynthesisList = Marionette.CollectionView.extend({
-    childView: SynthesisItem,
-    initialize: function(options){
+  childView: SynthesisItem,
+  initialize: function(options) {
 
-        var publishedSyntheses = this.collection.getPublishedSyntheses();
+    var publishedSyntheses = this.collection.getPublishedSyntheses();
 
-        _.sortBy(publishedSyntheses, function (message) {
-            return message.get('creation_date');
-        });
-        publishedSyntheses.reverse();
+    _.sortBy(publishedSyntheses, function(message) {
+      return message.get('creation_date');
+    });
+    publishedSyntheses.reverse();
 
-        this.collection = new Backbone.Collection(publishedSyntheses);
+    this.collection = new Backbone.Collection(publishedSyntheses);
 
-        this.childViewOptions = {
-            panel: options.panel
-        }
+    this.childViewOptions = {
+      panel: options.panel
     }
+  }
 
 });
 
 var SynthesisInNavigationPanel = AssemblPanel.extend({
-    template: '#tmpl-loader',
-    panelType: PanelSpecTypes.NAVIGATION_PANEL_SYNTHESIS_SECTION,
-    className: 'synthesisNavPanel',
-    ui: {
-        synthesisListHeader: ".synthesisListHeader"
-    },
-    regions:{
-        synthesisContainer: '.synthesisList'
-    },
+  template: '#tmpl-loader',
+  panelType: PanelSpecTypes.NAVIGATION_PANEL_SYNTHESIS_SECTION,
+  className: 'synthesisNavPanel',
+  ui: {
+    synthesisListHeader: ".synthesisListHeader"
+  },
+  regions:{
+    synthesisContainer: '.synthesisList'
+  },
 
-    initialize: function (options) {
+  initialize: function(options) {
       Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
     },
 
-    selectSynthesisInMenu: function (messageId) {
+  selectSynthesisInMenu: function(messageId) {
       $(".synthesisItem").closest('li').removeClass("selected");
       this.$(".synthesisItem[data-message-id=\"" + messageId + "\"]").addClass("selected");
     },
 
-    displaySynthesis: function (messageId) {
-        var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
-        messageListView.currentQuery.clearAllFilters();
-        messageListView.toggleFilterByPostId(messageId);
-        messageListView.showMessageById(messageId, undefined, false);
+  displaySynthesis: function(messageId) {
+    var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
+    messageListView.currentQuery.clearAllFilters();
+    messageListView.toggleFilterByPostId(messageId);
+    messageListView.showMessageById(messageId, undefined, false);
 
-        messageListView.ui.stickyBar.addClass('hidden');
-        messageListView.ui.replyBox.addClass('hidden');
+    messageListView.ui.stickyBar.addClass('hidden');
+    messageListView.ui.replyBox.addClass('hidden');
 
-        // Show that entry is selected
-        this.selectSynthesisInMenu(messageId);
-    },
+    // Show that entry is selected
+    this.selectSynthesisInMenu(messageId);
+  },
 
-    displaySynthesisList: function (allMessageStructureCollection, allSynthesisCollection) {
+  displaySynthesisList: function(allMessageStructureCollection, allSynthesisCollection) {
       var lastPublisedSynthesis = allSynthesisCollection.getLastPublisedSynthesis();
 
       if (lastPublisedSynthesis) {
@@ -105,13 +104,13 @@ var SynthesisInNavigationPanel = AssemblPanel.extend({
       }
     },
   
-    onBeforeShow: function(){
+  onBeforeShow: function() {
       var that = this,
       collectionManager = new CollectionManager();
 
       Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
           collectionManager.getAllSynthesisCollectionPromise(),
-          function (allMessageStructureCollection, allSynthesisCollection) {
+          function(allMessageStructureCollection, allSynthesisCollection) {
             that.template = '#tmpl-synthesisInNavigationPanel';
             that.render();
             that.displaySynthesisList(allMessageStructureCollection, allSynthesisCollection);

@@ -3,7 +3,7 @@
 var Visitor = function() {};
 
 Visitor.prototype.visit = function(object, ancestry) {
-    return true;
+  return true;
 };
 
 /**
@@ -12,7 +12,7 @@ Visitor.prototype.visit = function(object, ancestry) {
  * 
  */
 Visitor.prototype.post_visit = function(object, children_data) {
-    return undefined;
+  return undefined;
 };
 
 module.exports = Visitor;

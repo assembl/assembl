@@ -13,20 +13,20 @@ var Marionette = require('../shims/marionette.js'),
 
 var _allFacebookPermissions = undefined; 
 var getAllFacebookPermissions = function() {
-  if (_allFacebookPermissions){ return _allFacebookPermissions;}
-  else{
+  if (_allFacebookPermissions) { return _allFacebookPermissions;}
+  else {
     _allFacebookPermissions = $('#js_fb-permissions-list').html().trim();
     return _allFacebookPermissions;
   }
 };
 
 //window.moment = Moment; //Purely debug
-var _convertTimeToISO8601 = function(time){
+var _convertTimeToISO8601 = function(time) {
   var m = new Moment().utc().add(time, 'seconds');
   return m.toISOString();
 };
 
-var _composeMessageBody = function(model, creator){
+var _composeMessageBody = function(model, creator) {
   var msg = i18n.sprintf(i18n.gettext("The following message was posted by %s on Assembl:\n\n\n"), creator.get('name'));
 
   msg += model.get('body');
@@ -36,7 +36,7 @@ var _composeMessageBody = function(model, creator){
   return msg;
 };
 
-var _updateBundledData = function(bundle, updates){
+var _updateBundledData = function(bundle, updates) {
   //jQuery extend does deep copy
   //Nested object in bundle
   $.extend(bundle, updates);
@@ -54,15 +54,15 @@ var _updateBundledData = function(bundle, updates){
  * }
  * @type {Object}
  */
-var fb_token = function(){
+var fb_token = function() {
   this.user = null;
   this.page = null;
   this.group = null;
   this.collectionManager = new CollectionManager();
   
-  this.setExpiration = function(e, success){
+  this.setExpiration = function(e, success) {
     var time = null;
-    if (typeof e === 'number'){
+    if (typeof e === 'number') {
       //Ensure that the incoming datetime has no timezone information
       //before adding the UTC timezone to it
       time = new Moment().utc().add(e, 'seconds');
@@ -71,58 +71,64 @@ var fb_token = function(){
       var tzoneTime = new Social.Facebook.Time().processTimeToUTC(e);
       time = new Moment(tzoneTime).utc();
     }
+
     success(time);
   };
 };
 
 fb_token.prototype = {
-  setUserToken: function(token, expiration){
+  setUserToken: function(token, expiration) {
     if (!this.user) {
       this.user = {
         token: null,
         expiration: null
       };
     }
+
     this.user.token = token;
     var that = this;
-    this.setExpiration(expiration, function(value){
+    this.setExpiration(expiration, function(value) {
       that.user.expiration = value;
     });
   },
-  setPageToken: function(pageId, token, expiration){
-    if (!this.page){
+  setPageToken: function(pageId, token, expiration) {
+    if (!this.page) {
       this.page = {};
     }
+
     if (!this.page[pageId]) {
       this.page[pageId] = {};
     }
+
     this.page[pageId]['token'] = token;
     var that = this;
-    this.setExpiration(expiration, function(value){
+    this.setExpiration(expiration, function(value) {
       that.page[pageId]['expiration'] = value;
     });
   },
-  setGroupToken: function(groupId, token, expiration){
-    if (!this.group){
+  setGroupToken: function(groupId, token, expiration) {
+    if (!this.group) {
       this.group = {};
     }
-    if (!this.group[groupId]){
+
+    if (!this.group[groupId]) {
       this.group[groupId] = {};
     }
+
     this.group[groupId]['token'] = token;
-    this.setExpiration(expiration, function(value){
+    this.setExpiration(expiration, function(value) {
       that.group[groupId]['expiration'] = value;
     });
   },
-  getUserToken: function(){
-    if (_.has(this.user, 'token')){
+  getUserToken: function() {
+    if (_.has(this.user, 'token')) {
       return this.user.token;
     }
     else {
       return null;
     }
   },
-  getPageToken: function(pageId){
+  getPageToken: function(pageId) {
     if (!_.has(this.page, pageId)) {
       return null;
     }
@@ -130,7 +136,7 @@ fb_token.prototype = {
       return this.page[pageId].token;
     }
   },
-  getGroupToken: function(groupId){
+  getGroupToken: function(groupId) {
     if (!_.has(this.group, groupId)) {
       return null;
     }
@@ -138,14 +144,14 @@ fb_token.prototype = {
       return this.group[groupId].token;
     }
   },
-  getAllPageTokens: function(){
+  getAllPageTokens: function() {
     return this.page;
   },
-  getAllGroupTokens: function(){
+  getAllGroupTokens: function() {
     return this.group;
   },
-  isUserTokenExpired: function(){
-    if (this.user){
+  isUserTokenExpired: function() {
+    if (this.user) {
       var now = Moment().utc();
       return now.isAfter(this.user.expiration);
     }
@@ -155,8 +161,8 @@ fb_token.prototype = {
       return true;
     }
   },
-  isPageTokenExpired: function(pageId){
-    if (this.page.hasOwnProperty(pageId)){
+  isPageTokenExpired: function(pageId) {
+    if (this.page.hasOwnProperty(pageId)) {
       var now = new Moment().utc();
       return now.isAfter(this.page.expiration);
     }
@@ -164,8 +170,8 @@ fb_token.prototype = {
       return true;
     }
   },
-  isGroupTokenExpired: function(groupId){
-    if (this.group.hasOwnProperty(groupId)){
+  isGroupTokenExpired: function(groupId) {
+    if (this.group.hasOwnProperty(groupId)) {
       var now = new Moment().utc();
       return now.isAfter(this.group.expiration);
     }
@@ -192,10 +198,10 @@ var fbState = function(r, e, t) {
 };
 
 // ********************************** DEBUGGING FUNCTIONS ********************************************************
-var loginUser_fake = function(success){
+var loginUser_fake = function(success) {
   var scope = getAllFacebookPermissions();
-  window.FB.login(function(resp){
-    if (resp.status !== 'connected'){
+  window.FB.login(function(resp) {
+    if (resp.status !== 'connected') {
       console.error("Fuck you for not accepting.");
     }
     else {
@@ -208,23 +214,22 @@ var loginUser_fake = function(success){
 };
 
 //For debugging purposes only
-var checkState_shim = function(renderer){ 
-  loginUser_fake(function(){
+var checkState_shim = function(renderer) { 
+  loginUser_fake(function() {
     var state = new fbState(true, null);
     renderer(state);
   });
 };
 
 //Also for debugging simple functions in the root view
-var checkState_shim_2 = function(renderer){ 
+var checkState_shim_2 = function(renderer) { 
   var state = new fbState(true, null, null);
   renderer(state);
 };
 
 // ***************************************************************************************************************
 
-
-var fbApi = function(options, success, error){
+var fbApi = function(options, success, error) {
   var source = options.endpoint,
       httpType = options.http || 'get',
       qs = options.fields;
@@ -235,10 +240,10 @@ var fbApi = function(options, success, error){
   // console.log('fields', qs);
   // console.log('The error', error);
   // console.log('The qs', qs);
-  window.FB.api(source, httpType, qs, function(resp){
+  window.FB.api(source, httpType, qs, function(resp) {
     //console.log('API call response', resp);
-    if (_.has(resp, 'error')){
-      if (error !== 'function'){
+    if (_.has(resp, 'error')) {
+      if (error !== 'function') {
         //console.log('The error is undefined', error);
         var eMessage = i18n.gettext('An error occured whilst communicating with Facebook. Close the box and try again.');
         $('.js_export_error_message').text(eMessage);
@@ -249,14 +254,14 @@ var fbApi = function(options, success, error){
         error(resp); 
       }
     }
-    else{
+    else {
       success(resp);
     }
   });
 };
 
 //Might cause a stack overflow if the data is very large, or many many pages....
-var getAllPaginatedEntities = function(endPoint, options, success){
+var getAllPaginatedEntities = function(endPoint, options, success) {
   /**
    * Appends the values from set2 into set1
    * @param  {[Object]} set1 Obj with key of {fb_id: data}
@@ -264,9 +269,9 @@ var getAllPaginatedEntities = function(endPoint, options, success){
    * @return {[Object]}      Obj with unique objects of {fb_id: data}
    */
 
-  var getData = function(resp, data){
-    if (_.has(resp, 'paging') && _.has(resp.paging, 'next') ){
-      fbApi({endpoint: resp.paging.next, fields: options}, function(resp){
+  var getData = function(resp, data) {
+    if (_.has(resp, 'paging') && _.has(resp.paging, 'next')) {
+      fbApi({endpoint: resp.paging.next, fields: options}, function(resp) {
         getData(resp, data.concat(resp.data));
       });
     }
@@ -277,17 +282,17 @@ var getAllPaginatedEntities = function(endPoint, options, success){
     }
   };
 
-  fbApi({endpoint: endPoint, fields: options}, function(resp){
+  fbApi({endpoint: endPoint, fields: options}, function(resp) {
     getData(resp, resp.data);
   });
 };
 
 //Used to make a unique list from paginated data above.
 //Must have an ID field in order to create a unique list
-var uniqify = function(data){
+var uniqify = function(data) {
   var tmp = {};
-  _.each(data, function(d,i,a){
-    if ( !(_.has(tmp, d.id)) ){
+  _.each(data, function(d, i, a) {
+    if (!(_.has(tmp, d.id))) {
       tmp[d.id] = d;
     }
   });
@@ -305,10 +310,10 @@ var uniqify = function(data){
 //   });
 // }
 
-var _processLogin = function(resp, success, error){
+var _processLogin = function(resp, success, error) {
 
   window.FB_TOKEN.collectionManager.getFacebookAccessTokensPromise()
-    .then(function(tokens){
+    .then(function(tokens) {
       if (tokens.hasUserToken()) {
         //At this point, the page/group tokens are not priority
         //They will be dealt with by their respective views
@@ -316,7 +321,7 @@ var _processLogin = function(resp, success, error){
         //global token singleton
         console.log('I need to be herE!!!');
         console.log('The tokens', tokens);
-        _.each(tokens, function(t, i, arr){
+        _.each(tokens, function(t, i, arr) {
           console.log('Token number', i, t);
         });
 
@@ -332,7 +337,7 @@ var _processLogin = function(resp, success, error){
             window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
             success();
           },
-          error: function(model, resp, opt){
+          error: function(model, resp, opt) {
             console.log('Facebook Access Token save NOT updated successfully.');
             window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
             error();
@@ -349,19 +354,19 @@ var _processLogin = function(resp, success, error){
           "@type": "FacebookAccessToken"
         });
         token.save(null, {
-          success: function(model, resp, opt){
+          success: function(model, resp, opt) {
             console.log('New Facebook Access Token saved successfully.');
             window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
             success()
           },
-          error: function(model, resp, opt){
+          error: function(model, resp, opt) {
             console.log('New Facebook Access Token NOT saved successfully.');
             window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
             error();
           }
         });
-    }
-  });
+      }
+    });
 };
 
 //Delete function for loggin user in. Will need this if user logs out of
@@ -371,7 +376,7 @@ var loginUser = function(success) {
   //into a hidden div.
   console.log('Attempting to login');
   var scope = getAllFacebookPermissions();
-  window.FB.login(function(resp){
+  window.FB.login(function(resp) {
     //console.log('login response', resp);
     //Check list of permissions given to see if it matches what we asked.
     //If not, cannot continue
@@ -379,13 +384,15 @@ var loginUser = function(success) {
     //Add event handlers for if things change
     
     console.log('Logged in', resp);
-    if (resp.status !== 'connected'){
+    if (resp.status !== 'connected') {
       console.error("Facebook could not log in ")
+
       //Maybe add a red warning under the errorView that the login process failed
     }
 
     else {
       _processLogin(resp, success);
+
       //Status is connected
       // console.log('Access token from login', resp.authResponse.accessToken);
       // console.log('Short term token expires in', resp.authResponse.expiresIn);
@@ -454,22 +461,22 @@ var loginUser = function(success) {
       //     }
       //   });
     }
-  },{scope: scope });
+  }, {scope: scope });
 };
 
-var checkLoginState = function(options){
+var checkLoginState = function(options) {
   //Instead of using login function, use the loginState api call, force to get facebook information.
   //If they are not connected, ask to login with our permissions.
   //If they are logged in already, then update the token field!
   //If it fails, raise an error.
   
-  window.FB.getLoginStatus(function(resp){
-    if (_.has(resp, 'error') ){
+  window.FB.getLoginStatus(function(resp) {
+    if (_.has(resp, 'error')) {
       var errorMessage = i18n.gettext("There was an issue with getting your Facebook login status. Please close this box and contact your discussion administrator.");
       $('.js_export_error_message').text(errorMessage);
     }
     else {
-      if (resp.status !== 'connected'){
+      if (resp.status !== 'connected') {
         options.error();
       }
       else {
@@ -481,15 +488,16 @@ var checkLoginState = function(options){
 
 //Entry point in this module
 var checkState = function(renderView) {
-    //if this account IS a facebookAccount, then check for
-    //permissions and move on
-    var collectionManager = new CollectionManager();
+  //if this account IS a facebookAccount, then check for
+  //permissions and move on
+  var collectionManager = new CollectionManager();
 
-    collectionManager.getAllUserAccountsPromise()
-      .then(function(accounts){
+  collectionManager.getAllUserAccountsPromise()
+      .then(function(accounts) {
         console.log('Checking for the accounts', accounts);
+
         // Assumes that there is only 1 facebook account per user
-        if ( !accounts.hasFacebookAccount() ) {
+        if (!accounts.hasFacebookAccount()) {
           var state = new fbState(false, 'create', null);
           renderView(state);
           return false;
@@ -498,28 +506,29 @@ var checkState = function(renderView) {
           return collectionManager.getFacebookAccessTokensPromise()
         }
       })
-      .then(function(tokens){
+      .then(function(tokens) {
         console.log('The returned token', tokens);
         if (tokens === false) {
           console.log('Do nothing, you have made a facebook error view');
+
           //Maybe send them to the login page to sign up with facebook?
         }
         else {
           //Cache all current tokens, then update userToken accordingly.
-          tokens.each(function(token,i,arr){
+          tokens.each(function(token, i, arr) {
             var fb_id = token.get('object_fb_id'),
                 t = token.get('token'),
                 e = token.get('expiration');
 
-            if (token.isPageToken()){
+            if (token.isPageToken()) {
               window.FB_TOKEN.setPageToken(fb_id, t, e);
             }
-            else if(token.isGroupToken()){
+            else if (token.isGroupToken()) {
               window.FB_TOKEN.setGroupToken(fb_id, t, e);
             }
             else {
               //This might be unnecessary here
-              window.FB_TOKEN.setUserToken(t,e);
+              window.FB_TOKEN.setUserToken(t, e);
             }
           });
           console.log("Here are the access tokens", tokens);
@@ -527,41 +536,44 @@ var checkState = function(renderView) {
           console.log('UserToken', userToken);
           if (!userToken) {
             console.log('Need to ask for permissions');
-            var state = new fbState(false, 'permissions',null);
+            var state = new fbState(false, 'permissions', null);
             renderView(state);
           }
           else {
             // First check if it the user token is an infinite token
-            if ( userToken.isInfiniteToken() ) {
+            if (userToken.isInfiniteToken()) {
               //window.FB_TOKEN.setUserToken()
               console.log('Incomplete....');
             }
+
             // check to see if the token in DB is faulty (expiration = python's datetime.min)
-            if (userToken.isMinimumTime() ){
+            if (userToken.isMinimumTime()) {
               checkLoginState({
                 corruptToken: true, // TODO: Add guard in checkLoginState for corruptToken field
-                success: function(){
+                success: function() {
                   var state = new fbState(true, null, window.FB_TOKEN);
                   renderView(state);
                 },
-                error: function(){
+                error: function() {
                   var state = new fbState(false, 'update-permissions', null);
                 },
               });              
             }
+
             //Check token expiry
-            if ( userToken.isExpired() ) {
+            if (userToken.isExpired()) {
               console.log('Token is expired!!!!', userToken);
+
               // loginUser(function(){
               //   var state = new fbState(true, null, window.FB_TOKEN);
               //   renderView(state);
               // });
               checkLoginState({
-                success: function(){
+                success: function() {
                   var state = new fbState(true, null, window.FB_TOKEN);
                   renderView(state);
                 },
-                error: function(){
+                error: function() {
                   var state = new fbState(false, 'update-permissions', null);
                   renderView(state);
                 } 
@@ -576,12 +588,12 @@ var checkState = function(renderView) {
             }
           }
         }
-    });
+      });
 };
 
 var errorView = Marionette.ItemView.extend({
   template: '#tmpl-exportPostModal-fb-token-error',
-  initialize: function(options){
+  initialize: function(options) {
     this.vent = options.vent; //Event Aggregator
     console.log('initializing errorView with options', options);
     if (options.ready === false) {
@@ -590,7 +602,7 @@ var errorView = Marionette.ItemView.extend({
         this.subMsg = i18n.gettext('Click here if you agree with these permissions.');
         this.state = options.errorState;
       }
-      else if (options.errorState === 'update-permissions'){
+      else if (options.errorState === 'update-permissions') {
         this.msg = i18n.gettext("It appears that your session was expired. Click below to refresh your session. As always, below are the permissions that Assembl would need to continue.");
         this.subMsg = i18n.gettext('Click here to continue.');
         this.state = options.errorState;
@@ -614,24 +626,25 @@ var errorView = Marionette.ItemView.extend({
   events: {
     'click @ui.login': "checkAndLoginUser"
   },
-  checkAndLoginUser: function(event){
-    if (this.state === 'permissions' ) {
+  checkAndLoginUser: function(event) {
+    if (this.state === 'permissions') {
       console.log('clicked on link to log user in');
       var that = this;
-      loginUser(function(){
+      loginUser(function() {
         that.vent.trigger("loadFbView", window.FB_TOKEN);
       });
     }
-    else{
+    else {
       console.log('I will make an account');
     }
   }
 });
 
 var groupView = Marionette.ItemView.extend({
-    template: "#tmpl-loader",
-    //template: '#tmpl-exportPostModal-fb-group',
-    initialize: function(options) {
+  template: "#tmpl-loader",
+
+  //template: '#tmpl-exportPostModal-fb-group',
+  initialize: function(options) {
       this.bundle = options.bundle;
       this.vent = options.vent;
       var that = this;
@@ -641,7 +654,7 @@ var groupView = Marionette.ItemView.extend({
         fields: 'id,name'
       };
       console.log('the options', opts);
-      getAllPaginatedEntities("me/groups", opts, function(groupData){
+      getAllPaginatedEntities("me/groups", opts, function(groupData) {
         console.log('The group data', groupData);
         var cleanData = uniqify(groupData);
         console.log('The clean data', cleanData);
@@ -652,15 +665,15 @@ var groupView = Marionette.ItemView.extend({
         that.render();
       });
     },
-    events: {
+  events: {
       'change .js_fb-group-id': 'updateEndpoint'
     },
-    updateEndpoint: function(e){
+  updateEndpoint: function(e) {
       var value = $(e.currentTarget)
                   .find('option:selected')
                   .val();
 
-      if (value !== 'null'){
+      if (value !== 'null') {
         _updateBundledData(this.bundle, {
           endpoint: value + "/feed"
         });
@@ -670,16 +683,17 @@ var groupView = Marionette.ItemView.extend({
           endpoint: null
         });
       }
+
       //console.log('Group bundle', this.bundle);
       this.vent.trigger('clearError');
     },
-    serializeData: function() {
+  serializeData: function() {
       // var tmp = [
       //   {value: 'null', description: ''},
       //   {value: 'self', description: 'Yourself'}
       // ];
       var tmp = [{value: 'null', description: ''}];
-      var m = _.map(this.userGroups, function(g){
+      var m = _.map(this.userGroups, function(g) {
         return {id: g.id, name:g.name}
       });
 
@@ -688,9 +702,10 @@ var groupView = Marionette.ItemView.extend({
 });
 
 var pageView = Marionette.ItemView.extend({
-    template: '#tmpl-loader',
-    //template: '#tmpl-exportPostModal-fb-page',
-    initialize: function(options) {
+  template: '#tmpl-loader',
+
+  //template: '#tmpl-exportPostModal-fb-page',
+  initialize: function(options) {
       this.bundle = options.bundle;
       this.vent = options.vent;
       var that = this;
@@ -698,18 +713,18 @@ var pageView = Marionette.ItemView.extend({
         access_token: window.FB_TOKEN.getUserToken(),
         fields: 'id,name,access_token'
       };
-      getAllPaginatedEntities("me/accounts", accountOptions, function(adminData){
+      getAllPaginatedEntities("me/accounts", accountOptions, function(adminData) {
         var cleanData = uniqify(adminData);
         that.userPages = cleanData;
-        _.each(cleanData, function(d,i,a){
-          window.FB_TOKEN.setPageToken(d.id, d.access_token, 30*60); //hack - Give it a 30 min lifespan
+        _.each(cleanData, function(d, i, a) {
+          window.FB_TOKEN.setPageToken(d.id, d.access_token, 30 * 60); //hack - Give it a 30 min lifespan
         });
 
         var pageOptions = {
           access_token: window.FB_TOKEN.getUserToken(),
           fields: 'id,name'
         };
-        getAllPaginatedEntities("me/likes", pageOptions, function(pageData){
+        getAllPaginatedEntities("me/likes", pageOptions, function(pageData) {
           var cleanedPages = uniqify(pageData);
           that.pages = cleanedPages;
 
@@ -720,15 +735,15 @@ var pageView = Marionette.ItemView.extend({
       });
 
     },
-    events: {
+  events: {
       'change .js_fb-page-voice': 'updateSender',
       'change .js_fb-page-id': 'updateEndpoint'
     },
-    updateEndpoint: function(e){
+  updateEndpoint: function(e) {
       var value = this.$(e.currentTarget)
                       .find('option:selected')
                       .val();
-      if (value !== 'null'){
+      if (value !== 'null') {
         _updateBundledData(this.bundle, {
           endpoint: value + '/feed'
         });
@@ -738,15 +753,16 @@ var pageView = Marionette.ItemView.extend({
           endpoint: null
         });
       }
+
       //console.log('The bundle', this.bundle);
       this.vent.trigger('clearError');
     },
-    updateSender: function(e) {
+  updateSender: function(e) {
       var value = this.$(e.currentTarget)
                       .find('option:selected')
                       .val();
 
-      if (value === 'self' || value === 'null'){
+      if (value === 'self' || value === 'null') {
         console.log('value was self or null');
         var t = window.FB_TOKEN.getUserToken();
         console.log('credentials', t);
@@ -761,13 +777,13 @@ var pageView = Marionette.ItemView.extend({
         });
       }
     },
-    serializeData: function() {
+  serializeData: function() {
       var adminTmp = [
           {value: 'null', description: ''},
           {value: 'self', description: 'Yourself'}
         ];
 
-      var extras = _.map(this.userPages, function(admin){
+      var extras = _.map(this.userPages, function(admin) {
         return {
           value: admin.id,
           description: admin.name
@@ -775,7 +791,7 @@ var pageView = Marionette.ItemView.extend({
       });
 
       var pageTmp = [{value: 'null', name: ''}];
-      var pages = _.map(this.pages, function(page){
+      var pages = _.map(this.pages, function(page) {
         return {
           value: page.id,
           name: page.name
@@ -791,16 +807,17 @@ var pageView = Marionette.ItemView.extend({
 });
 
 var fbLayout = Marionette.LayoutView.extend({
-    template: '#tmpl-loader',
-    //template: "#tmpl-exportPostModal-fb",
-    regions: {
+  template: '#tmpl-loader',
+
+  //template: "#tmpl-exportPostModal-fb",
+  regions: {
       subform: '.fb-targeted-form'
     },
-    events: {
+  events: {
       'change .js_fb-supportedList': 'defineView',
       'click .fb-js_test_area': 'test',
     },
-    initialize: function(options) {
+  initialize: function(options) {
       console.log('initializing root view with options', options);
       this.token = options.token;
       this.model = options.model;
@@ -814,13 +831,14 @@ var fbLayout = Marionette.LayoutView.extend({
         attachSubject: null,
         attachCaption: null,
         attachDesc: null,
+
         //sender: null,
         
       };
 
       var that = this;
       var cm = new CollectionManager();
-      cm.getDiscussionModelPromise().then(function(d){
+      cm.getDiscussionModelPromise().then(function(d) {
         that.topic = d.get('topic');
         that.desc = i18n.gettext('Assembl is a collective intelligence tool designed to enable open, democratic discussions that lead to idea generation and innovation.');
         that.template = '#tmpl-exportPostModal-fb';
@@ -830,7 +848,7 @@ var fbLayout = Marionette.LayoutView.extend({
       });
 
     },
-    serializeData: function(){
+  serializeData: function() {
       return {
         messageBody: this.model.get('body'),
         suggestedName: this.topic,
@@ -838,7 +856,7 @@ var fbLayout = Marionette.LayoutView.extend({
         suggestedDescription: this.desc
       }
     },
-    test: function(e) {
+  test: function(e) {
       // checkState(function(state){
       //   console.log('The resulting state is: ', state);
       // });
@@ -848,13 +866,13 @@ var fbLayout = Marionette.LayoutView.extend({
       window.FB_TOKEN.setPageToken('1234', fakeToken, "2015-07-15T08:05:54");
       console.log('Done testing');
     },
-    defineView: function(event){
+  defineView: function(event) {
       var value = this.$(event.currentTarget)
                       .find('option:selected')
                       .val();
 
       console.log('The value selected', value);
-      switch(value) {
+      switch (value) {
         case 'page':
           this.getRegion('subform').show(new pageView({
             token: this.token,
@@ -876,6 +894,7 @@ var fbLayout = Marionette.LayoutView.extend({
           this.vent.trigger('clearError');
           break;
         default:
+
           //This might be the wrong approach to emptying the region
           this.getRegion('subform').reset();
           _updateBundledData(this.bundle, {
@@ -885,27 +904,30 @@ var fbLayout = Marionette.LayoutView.extend({
       }
 
     },
-    submitForm: function(success, error){
+  submitForm: function(success, error) {
       var that = this;
-      var getName = function(){
+      var getName = function() {
         var tmp = $('.js_fb-suggested-name').val();
-        if (!tmp){
+        if (!tmp) {
           return that.topic;
         }
+
         return tmp;
       };
-      var getCaption = function(){
+      var getCaption = function() {
         var tmp = $('.js_fb-suggested-caption').val();
-        if (!tmp){
+        if (!tmp) {
           return window.location.href;
         }
+
         return tmp;
       };
-      var getDescription = function(){
+      var getDescription = function() {
         var tmp = $('.js_fb-suggested-description').val();
-        if (!tmp){
+        if (!tmp) {
           return that.desc;
         }
+
         return tmp;
       };
 
@@ -914,39 +936,41 @@ var fbLayout = Marionette.LayoutView.extend({
       var args = {
         access_token: this.bundle.credentials,
         message: this.bundle.message,
-        link : window.location.href,
+        link: window.location.href,
+
         //picture : 'http://' + window.location.host +"/" + Ctx.getApiV2DiscussionUrl() + "/mindmap",
         picture: 'http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg', //Such a shit hack
-        name : getName(),
-        caption : getCaption(),
-        description : getDescription()
+        name: getName(),
+        caption: getCaption(),
+        description: getDescription()
       };
 
-      if (!endpoint){
+      if (!endpoint) {
         var er = i18n.gettext('Please select between pages, groups or your wall as the final destination to complete the form.');
         $('.js_export_error_message').text(er);
       }
       else {
-        fbApi({endpoint: endpoint, http:'post', fields: args}, function(resp){
+        fbApi({endpoint: endpoint, http:'post', fields: args}, function(resp) {
           console.log('resp', resp);
-          if (_.has(resp, 'error')){
+          if (_.has(resp, 'error')) {
             console.error('There was an error with creating the post', resp.error);
             error();
           }
-          else if (!(_.has(resp, 'id')) ){
+          else if (!(_.has(resp, 'id'))) {
             console.error('Facebook did not return the ID of the newly created post');
             error();
           } 
-          else{
+          else {
             var fbPostId = resp.id;
             var sender = null;
+
             // 1) Create the source
             // 2) Create the ContentsourceId
             // 3) POST for a newly created pull source reader
             // 4) Then call success
             
             var cm = new CollectionManager();
-            cm.getAllUserAccountsPromise().then(function(accounts){
+            cm.getAllUserAccountsPromise().then(function(accounts) {
               var fbAccount = accounts.getFacebookAccount();
               if (!fbAccount) {
                 console.error('This account does NOT have a facebook account');
@@ -955,6 +979,7 @@ var fbLayout = Marionette.LayoutView.extend({
               else {
                 sender = fbAccount;
               }
+
               var s = new Source.Model.Facebook({
                 'fb_source_id': fbPostId,
                 'creator_id': sender.get("@id"),
@@ -964,10 +989,11 @@ var fbLayout = Marionette.LayoutView.extend({
 
               console.log('The fb source model', s);
               s.save(null, {
-                success: function(model, resp, op){
+                success: function(model, resp, op) {
                   console.log('Facebook source created');
                   console.log('Making AJAX call to /export_post handler');
                   console.log('The url of the model', model.url());
+
                   // Promise.resolve($.ajax({
                   //   type: 'POST',
                   //   url: model.url() + "/export_post",
@@ -976,7 +1002,7 @@ var fbLayout = Marionette.LayoutView.extend({
                   success();
                 }, 
 
-                error: function(model, resp, op){
+                error: function(model, resp, op) {
                   console.error('Could not create a Facebook source');
                 }
               });

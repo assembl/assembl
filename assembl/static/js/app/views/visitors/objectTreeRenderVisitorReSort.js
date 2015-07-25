@@ -8,30 +8,34 @@ var Visitor = require("./visitor.js");
 * @return {Object[]}
 */
 function objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function, data, ancestry) {
-    var data_sort_comparator_function = function(data){
+  var data_sort_comparator_function = function(data) {
       return sort_comparator_function(data.object);
     };
-    if (ancestry === undefined) {
-      ancestry = [];
+  if (ancestry === undefined) {
+    ancestry = [];
+  }
+
+  if (data === undefined) {
+    var rootData = _.where(data_by_object, { last_ancestor_id: null });
+
+    //console.log("rootData", rootData);
+    rootData = _.sortBy(rootData, data_sort_comparator_function);
+    for (var i in rootData) {
+      objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function, rootData[i], ancestry);
     }
-    if (data === undefined) {
-      var rootData = _.where(data_by_object, { last_ancestor_id: null });
-      //console.log("rootData", rootData);
-      rootData = _.sortBy(rootData, data_sort_comparator_function);
-      for (var i in rootData) {
-        objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function, rootData[i], ancestry);
-      }
-      return;
+
+    return;
+  }
+
+  if (visitor.visit(data)) {
+    //Copy ancestry
+    ancestry = ancestry.slice(0);
+    ancestry.push(data);
+    var children = _.sortBy(data.children, sort_comparator_function);
+    for (var i in children) {
+      objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function, data_by_object[children[i].id], ancestry);
     }
-    if (visitor.visit(data)) {
-      //Copy ancestry
-      ancestry = ancestry.slice(0);
-      ancestry.push(data);
-      var children = _.sortBy(data.children, sort_comparator_function);
-      for (var i in children) {
-        objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function, data_by_object[children[i].id], ancestry);
-      }
-    }
+  }
 }
 
 /** A visitor function to be passed to to a visit function such as
@@ -51,15 +55,15 @@ function ObjectTreeRenderVisitorReSortVisitor(order_lookup_table, roots) {
 
 ObjectTreeRenderVisitorReSortVisitor.prototype = new Visitor();
 
-ObjectTreeRenderVisitorReSortVisitor.prototype.visit = function (data, ancestry) {
+ObjectTreeRenderVisitorReSortVisitor.prototype.visit = function(data, ancestry) {
   //console.log("visited ", data['@id']);
   this.order_lookup_table.push(data['@id']);
-  if(data.last_ancestor_id === null) {
+  if (data.last_ancestor_id === null) {
     this.roots.push(data.object);
   }
+
   return true;
 };
-
 
 /** Re-sort the data_by_object of an ObjectTreeRenderVisitor, using a sibling sort
 * function, and outputs the new order_lookup_table and the new (sorted) roots.
@@ -70,12 +74,13 @@ ObjectTreeRenderVisitorReSortVisitor.prototype.visit = function (data, ancestry)
 * @param sort_comparator_function:  The object is passed to this callback.
 */
 function objectTreeRenderVisitorReSort(data_by_object, order_lookup_table, roots, sort_comparator_function) {
-    //console.log(data_by_object);
-    if (sort_comparator_function === undefined) {
-      throw new Error("There is no point in sorting without a comparator function.");
-    }
-    var visitor = new ObjectTreeRenderVisitorReSortVisitor(order_lookup_table, roots);
-    objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function);
+  //console.log(data_by_object);
+  if (sort_comparator_function === undefined) {
+    throw new Error("There is no point in sorting without a comparator function.");
+  }
+
+  var visitor = new ObjectTreeRenderVisitorReSortVisitor(order_lookup_table, roots);
+  objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function);
 }
 
 module.exports = objectTreeRenderVisitorReSort;

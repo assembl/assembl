@@ -7,36 +7,36 @@ var Base = require('./base.js'),
     Roles = require('../utils/roles.js');
 
 var discussionModel = Base.Model.extend({
-    url: Ctx.getApiV2DiscussionUrl(),
-    defaults: {
-        'settings': {},
-        'introduction': '',
-        'objectives': '',
-        'creation_date': '',
-        'topic': '',
-        'introductionDetails': '',
-        '@type': '',
-        'widget_collection_url': '',
-        'slug': '',
-        '@view': '',
-        'permissions': {},
-        'subscribe_to_notifications_on_signup': false,
-        'web_analytics_piwik_id_site': null,
-        'help_url': null,
-        'show_help_in_debate_section': true,
-        posts: []
-    },
-    validate: function(attrs, options){
-        /**
-         * check typeof variable
-         * */
-    },
+  url: Ctx.getApiV2DiscussionUrl(),
+  defaults: {
+    'settings': {},
+    'introduction': '',
+    'objectives': '',
+    'creation_date': '',
+    'topic': '',
+    'introductionDetails': '',
+    '@type': '',
+    'widget_collection_url': '',
+    'slug': '',
+    '@view': '',
+    'permissions': {},
+    'subscribe_to_notifications_on_signup': false,
+    'web_analytics_piwik_id_site': null,
+    'help_url': null,
+    'show_help_in_debate_section': true,
+    posts: []
+  },
+  validate: function(attrs, options) {
+    /**
+     * check typeof variable
+     * */
+  },
 
-    getRolesForPermission: function(permission){
+  getRolesForPermission: function(permission) {
       var roles = undefined;
-      if(_.contains(Permissions, permission)) {
+      if (_.contains(Permissions, permission)) {
         roles = this.get('permissions')[permission];
-        if(roles) {
+        if (roles) {
           return roles;
         }
         else {
@@ -44,16 +44,16 @@ var discussionModel = Base.Model.extend({
         }
       }
       else {
-        throw Error("Permission "+permission+" does not exist");
+        throw Error("Permission " + permission + " does not exist");
       }
     },
 
-    /**
-     * @return A text message designed to replace X in the question "You cannot perform this operation because X"
-     */
-    getRolesMissingMessageForPermission: function(user, permission){
+  /**
+   * @return A text message designed to replace X in the question "You cannot perform this operation because X"
+   */
+  getRolesMissingMessageForPermission: function(user, permission) {
       var retval;
-      if(user.hasPermission(permission)) {
+      if (user.hasPermission(permission)) {
         retval = i18n.gettext('need no additional permissions');
       }
       else if (user.isUnknownUser()) {
@@ -61,8 +61,8 @@ var discussionModel = Base.Model.extend({
       }
       else {
         var rolesGrantingPermission = this.getRolesForPermission(permission);
-        if(_.size(rolesGrantingPermission) > 0){
-          if(_.contains(rolesGrantingPermission, Roles.PARTICIPANT) && _.contains(this.getRolesForPermission(Permissions.SELF_REGISTER), Roles.AUTHENTICATED)) {
+        if (_.size(rolesGrantingPermission) > 0) {
+          if (_.contains(rolesGrantingPermission, Roles.PARTICIPANT) && _.contains(this.getRolesForPermission(Permissions.SELF_REGISTER), Roles.AUTHENTICATED)) {
             retval = i18n.sprintf(i18n.gettext('you must Join this discussion'));
           }
           else {
@@ -75,22 +75,22 @@ var discussionModel = Base.Model.extend({
         }
 
       }
+
       return retval;
     },
 
-
-    setUserContributions: function(){
-        this.url = Ctx.getApiUrl('posts');
-    }
+  setUserContributions: function() {
+    this.url = Ctx.getApiUrl('posts');
+  }
 
 });
 
 var discussionCollection = Base.Collection.extend({
-    url: Ctx.getApiV2DiscussionUrl(),
-    model: discussionModel
+  url: Ctx.getApiV2DiscussionUrl(),
+  model: discussionModel
 });
 
 module.exports = {
-    Model: discussionModel,
-    Collection: discussionCollection
+  Model: discussionModel,
+  Collection: discussionCollection
 };
