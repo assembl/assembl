@@ -43,7 +43,8 @@ from ..auth import (
 from ..semantic.namespaces import (
     SIOC, IDEA, ASSEMBL, DCTERMS, QUADNAMES, FOAF, RDF, VirtRDF)
 from ..lib.sqla import (UPDATE_OP, DELETE_OP, INSERT_OP, get_model_watcher)
-from assembl.views.traversal import AbstractCollectionDefinition
+from assembl.views.traversal import (
+    AbstractCollectionDefinition, CollectionDefinition)
 
 
 class defaultdictlist(defaultdict):
@@ -795,12 +796,30 @@ JOIN post AS family_posts ON (
                     content=instance, idea=parent_instance
                     ).count() > 0
 
+        class ActiveShowingWidgetsCollection(CollectionDefinition):
+            def __init__(self, cls):
+                super(ActiveShowingWidgetsCollection, self).__init__(
+                    cls, cls.active_showing_widget_links)
+            def decorate_query(self, query, last_alias, parent_instance, ctx):
+                from .widgets import IdeaShowingWidgetLink
+                idea = self.owner_alias
+                widget_idea_link = last_alias
+                query = query.join(
+                    idea, widget_idea_link.idea).join(
+                    Widget, widget_idea_link.widget).filter(
+                    Widget.test_active(),
+                    widget_idea_link.type.in_(
+                        IdeaShowingWidgetLink.polymorphic_identities()),
+                    idea.id == parent_instance.id)
+                return query
+
         return {'children': ChildIdeaCollectionDefinition(cls),
                 'linkedposts': LinkedPostCollectionDefinition(cls),
                 'widgetposts': WidgetPostCollectionDefinition(cls),
                 'ancestor_widgets': AncestorWidgetsCollectionDefinition(cls),
                 'ancestor_inspiration_widgets': AncestorWidgetsCollectionDefinition(
-                    cls, InspirationWidget)}
+                    cls, InspirationWidget),
+                'active_showing_widget_links': ActiveShowingWidgetsCollection(cls)}
 
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,

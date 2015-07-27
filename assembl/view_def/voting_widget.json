@@ -244,6 +244,38 @@
     "ViewPost": {
         "@extends": "ActionOnPost"
     },
+    "WidgetIdeaLink": {
+        "widget": true,
+        "idea": true,
+        "context_url":true
+    },
+    "BaseIdeaWidgetLink": {
+        "@extends": "WidgetIdeaLink"
+    },
+    "GeneratedIdeaWidgetLink": {
+        "@extends": "WidgetIdeaLink"
+    },
+    "IdeaShowingWidgetLink": {
+        "@extends": "WidgetIdeaLink"
+    },
+    "IdeaDescendantsShowingWidgetLink": {
+        "@extends": "IdeaShowingWidgetLink"
+    },
+    "IdeaInspireMeWidgetLink": {
+        "@extends": "IdeaDescendantsShowingWidgetLink"
+    },
+    "IdeaCreativitySessionWidgetLink": {
+        "@extends": "IdeaShowingWidgetLink"
+    },
+    "VotableIdeaWidgetLink": {
+        "@extends": "IdeaShowingWidgetLink"
+    },
+    "VotedIdeaWidgetLink": {
+        "@extends": "WidgetIdeaLink"
+    },
+    "VotingCriterionWidgetLink": {
+        "@extends": "WidgetIdeaLink"
+    },
     "Widget": {
         "discussion": true,
         "settings": "settings_json",
