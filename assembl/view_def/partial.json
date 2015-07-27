@@ -231,6 +231,7 @@
     "Widget": {
         "discussion": true,
         "settings": "settings_json",
+        "activity_state": true,
         "start_date": true,
         "end_date": true,
         "state": "state_json"

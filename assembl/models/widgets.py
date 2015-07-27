@@ -181,6 +181,17 @@ class Widget(DiscussionBoundBase):
     def is_ended(self):
         return self.end_date != None and self.end_date < datetime.utcnow()
 
+    def is_active(self):
+        return self.is_started() and not self.is_ended()
+
+    @property
+    def activity_state(self):
+        if not self.is_started():
+            return "not started"
+        if self.is_ended():
+            return "ended"
+        return "active"
+
     @classmethod
     def test_ended(cls):
         return (cls.end_date != None) | (cls.end_date < datetime.utcnow())
