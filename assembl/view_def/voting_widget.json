@@ -253,7 +253,7 @@
         "user_states_url": "&get_user_states_url",
         "user_state_url": "&get_user_state_url",
         "widget_settings_url": "&get_settings_url",
-        "voting_results_by_spec_url": "&get_voting_results_by_spec_url",
+        "activity_notification": "&activity_notification",
         "widget_state_url": "&get_state_url"
     },
     "BaseIdeaWidget": {
@@ -280,6 +280,7 @@
         "votespecs_url": true,
         "votables_url": true,
         "vote_specifications": ":",
+        "voting_results_by_spec_url": "&get_voting_results_by_spec_url",
         "votable_ideas": ":id_only"
     },
     "AbstractIdeaVote": {
