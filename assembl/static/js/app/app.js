@@ -10,7 +10,7 @@ var App = new Marionette.Application();
 App.addInitializer(function() {
   App.addRegions({
     headerRegions: '#header',
-    notificationRegion: '#notification',
+    infobarRegion: '#infobar',
     groupContainer: '#groupContainer',
     contentContainer: '#content-container',
     slider: '#slider'

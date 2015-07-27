@@ -3,11 +3,11 @@
 var Marionette = require('../shims/marionette.js'),
     $ = require('../shims/jquery.js');
 
-var Notification = Marionette.LayoutView.extend({
-  template: '#tmpl-notification',
-  className: 'content-notification',
+var Infobar = Marionette.LayoutView.extend({
+  template: '#tmpl-infobar',
+  className: 'content-infobar',
   events: {
-    'click .js_closeNotification': 'closeNotification',
+    'click .js_closeInfobar': 'closeInfobar',
     'click .js_openSession': 'openSession'
   },
 
@@ -28,14 +28,14 @@ var Notification = Marionette.LayoutView.extend({
 
     var modalView = new Modal();
     $('.popin-container').html(modalView.render().el);
-    this.$('.groupsContainer').addClass('hasNotification');
+    this.$('.groupsContainer').addClass('hasInfobar');
   },
 
-  closeNotification: function() {
+  closeInfobar: function() {
     if (window.localStorage) {
-      //benoitg:  Not good, this will close every notification for every discussion!
+      //benoitg:  Not good, this will close every infobar for every discussion!
       // TODO: should be id idea
-      window.localStorage.removeItem('showNotification');
+      window.localStorage.removeItem('showInfobar');
     }
 
     this.remove();
@@ -44,8 +44,8 @@ var Notification = Marionette.LayoutView.extend({
     $('#wrapper .groupsContainer').animate({
       top: '36px'
     }, 500);
-    this.$('.groupsContainer').removeClass('hasNotification');
+    this.$('.groupsContainer').removeClass('hasInfobar');
   }
 });
 
-module.exports = Notification;
+module.exports = Infobar;

@@ -4,7 +4,7 @@ var Marionette = require('../../shims/marionette.js'),
     Assembl = require('../../app.js'),
     GroupContent = require('./groupContent.js'),
     AssemblPanel = require('../assemblPanel.js'),
-    Notification = require('../notification.js'),
+    Infobar = require('../infobar.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js');
 
 /**
@@ -66,9 +66,9 @@ var groupContainer = Marionette.CollectionView.extend({
     },
 
   onRender: function() {
-      if (window.localStorage.getItem('showNotification')) {
-        this.$el.addClass('hasNotification');
-        Assembl.notificationRegion.show(new Notification());
+      if (window.localStorage.getItem('showInfobar')) {
+        this.$el.addClass('hasInfobar');
+        Assembl.infobarRegion.show(new Infobar());
       }
     },
 
