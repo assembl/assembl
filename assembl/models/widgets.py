@@ -166,16 +166,24 @@ class Widget(DiscussionBoundBase):
             (cls.start_date == None) | (cls.start_date <= datetime.utcnow()))
 
     @classmethod
+    def test_active(cls):
+        now = datetime.utcnow()
+        return ((cls.end_date == None) | (cls.end_date > now)
+                & (cls.start_date == None) | (cls.start_date <= now))
+
+    @classmethod
     def filter_active(cls, query):
-        return cls.filter_started(query).filter(
-            (cls.end_date == None) | (cls.end_date > datetime.utcnow()))
+        return query.filter(cls.test_active())
 
     def is_started(self):
         return self.start_date == None or self.start_date <= datetime.utcnow()
 
-    def is_active(self):
-        return self.is_started and (
-            self.end_date == None or self.end_date > datetime.utcnow())
+    def is_ended(self):
+        return self.end_date != None and self.end_date < datetime.utcnow()
+
+    @classmethod
+    def test_ended(cls):
+        return (cls.end_date != None) | (cls.end_date < datetime.utcnow())
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -266,9 +274,26 @@ class GeneratedIdeaWidgetLink(IdeaWidgetLink):
 
 
 class IdeaShowingWidgetLink(IdeaWidgetLink):
+    "Widgets that should show up in the IdeaPanel"
     __mapper_args__ = {
         'polymorphic_identity': 'idea_showing_widget_link',
     }
+
+
+class IdeaDescendantsShowingWidgetLink(IdeaShowingWidgetLink):
+    "Widgets that should show up in the IdeaPanel "
+    "of an idea and its descendants"
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_desc_showing_widget_link',
+    }
+
+
+class IdeaInspireMeWidgetLink(
+        BaseIdeaWidgetLink, IdeaDescendantsShowingWidgetLink):
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_inspire_me_widget_link',
+    }
+
 
 
 class IdeaCreativitySessionWidgetLink(
@@ -310,6 +335,14 @@ Widget.showing_ideas = relationship(
                  & IdeaShowingWidgetLink.polymorphic_test()),
     secondaryjoin=IdeaShowingWidgetLink.idea_id == Idea.id,
     backref='showing_widget')
+
+
+Idea.active_showing_widget_links = relationship(
+    IdeaWidgetLink, viewonly=True,
+    primaryjoin=((IdeaShowingWidgetLink.idea_id == Idea.id)
+                 & IdeaShowingWidgetLink.polymorphic_test()
+                 & (IdeaShowingWidgetLink.widget_id == Widget.id)
+                 & Widget.test_active()))
 
 
 class BaseIdeaWidget(Widget):
