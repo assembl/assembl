@@ -375,7 +375,7 @@ class AssemblQuadStorageManager(object):
     sections = {section.name: section for section in chain(*(
         storage.sections for storage in storages))}
     global_graph = QUADNAMES.global_graph
-    current_discussion_storage_version = 12
+    current_discussion_storage_version = 13
 
     def __init__(self, session=None, nsm=None):
         self.session = session or get_session()

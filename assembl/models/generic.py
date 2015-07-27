@@ -8,11 +8,13 @@ from sqlalchemy import (
     Boolean,
     UnicodeText,
     String,
+    Unicode,
     DateTime,
     ForeignKey,
 )
 from sqlalchemy.orm import relationship, backref
 from virtuoso.alchemy import CoerceUnicode
+from virtuoso.vmapping import PatternIriClass
 # from virtuoso.textindex import TextIndex, TableWithTextIndex
 
 from ..lib.sqla import (INSERT_OP, UPDATE_OP, get_model_watcher, Base)
@@ -20,7 +22,8 @@ from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_ADMIN_DISC, P_EDIT_POST)
-from ..semantic.namespaces import SIOC, CATALYST, ASSEMBL, DCTERMS, QUADNAMES
+from ..semantic.namespaces import (
+    SIOC, CATALYST, ASSEMBL, DCTERMS, QUADNAMES, FOAF)
 from .discussion import Discussion
 
 
@@ -292,6 +295,20 @@ class Content(DiscussionBoundBase):
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
+
+    @classmethod
+    def special_quad_patterns(cls, alias_maker, discussion_id):
+        discussion_alias = alias_maker.get_reln_alias(cls.discussion)
+        return [
+            QuadMapPatternS(
+                None, FOAF.homepage,
+                PatternIriClass(
+                    QUADNAMES.post_external_link_iri,
+                    'http://%{WSHostName}U/%s/posts/local:Content/%d', None,
+                    ('slug', Unicode, False), ('id', Integer, False)).apply(
+                    discussion_alias.slug, cls.id),
+                name=QUADNAMES.post_external_link_map)
+        ]
 
     widget_idea_links = relationship('IdeaContentWidgetLink')
 

@@ -18,6 +18,7 @@ from sqlalchemy import (
     Boolean,
     Integer,
     String,
+    Unicode,
     Float,
     UnicodeText,
     DateTime,
@@ -27,7 +28,7 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
-from virtuoso.vmapping import IriClass
+from virtuoso.vmapping import IriClass, PatternIriClass
 from virtuoso.alchemy import SparqlClause, Timestamp
 
 from ..lib import config
@@ -40,7 +41,7 @@ from ..auth import (
     CrudPermissions, P_READ, P_ADMIN_DISC, P_EDIT_IDEA,
     P_ADD_IDEA)
 from ..semantic.namespaces import (
-    SIOC, IDEA, ASSEMBL, DCTERMS, QUADNAMES, RDF, VirtRDF)
+    SIOC, IDEA, ASSEMBL, DCTERMS, QUADNAMES, FOAF, RDF, VirtRDF)
 from ..lib.sqla import (UPDATE_OP, DELETE_OP, INSERT_OP, get_model_watcher)
 from assembl.views.traversal import AbstractCollectionDefinition
 
@@ -171,9 +172,21 @@ class Idea(HistoryMixin, DiscussionBoundBase):
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(
-            None, RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Idea.rdf_type),
-            name=QUADNAMES.class_Idea_class)]
+        discussion_alias = alias_maker.get_reln_alias(cls.discussion)
+        return [
+            QuadMapPatternS(
+                None, RDF.type,
+                IriClass(VirtRDF.QNAME_ID).apply(Idea.rdf_type),
+                name=QUADNAMES.class_Idea_class),
+            QuadMapPatternS(
+                None, FOAF.homepage,
+                PatternIriClass(
+                    QUADNAMES.idea_external_link_iri,
+                    'http://%{WSHostName}U/%s/idea/local:Idea/%d', None,
+                    ('slug', Unicode, False), ('id', Integer, False)).apply(
+                    discussion_alias.slug, cls.id),
+                name=QUADNAMES.idea_external_link_map)
+        ]
 
     parents = association_proxy(
         'source_links', 'source',

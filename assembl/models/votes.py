@@ -466,9 +466,8 @@ class LickertIdeaVote(AbstractIdeaVote):
         info={'rdf': QuadMapPatternS(None, VOTE.lickert_in_range)}
     )
 
-    vote_value = Column(
-        Float, nullable=False,
-        info={'rdf': QuadMapPatternS(None, VOTE.lickert_value)})
+    vote_value = Column(Float, nullable=False)
+    # info={'rdf': QuadMapPatternS(None, VOTE.lickert_value)}) private!
 
     def __init__(self, **kwargs):
         super(LickertIdeaVote, self).__init__(**kwargs)
