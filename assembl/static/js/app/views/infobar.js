@@ -13,44 +13,32 @@ var InfobarItem = Marionette.LayoutView.extend({
   className: 'content-infobar',
   events: {
     'click .js_closeInfobar': 'closeInfobar',
-    'click .js_openSession': 'openSession'
+    'click .js_openSession': 'openSession',
+    'click .js_openTargetInModal': 'openTargetInModal'
+  },
+
+  openTargetInModal: function(evt){
+    return Ctx.openTargetInModal(evt);
   },
 
   serializeModel: function(model) {
     var n = model.get("activity_notification"),
         widgetEndpoint = n.widget_endpoint;
     if (n.base_idea) {
-      widgetEndpoint = widgetEndpoint + "&target=" + n.base_id;
+      widgetEndpoint = widgetEndpoint + "&target=" + n.base_idea;
     }
     if (n.end_date) {
       n.end_date_moment = Moment(n.end_date).fromNow();
     } else {
       n.end_date_moment = '';
     }
-    
+
     return {
       message: i18n.sprintf(i18n.gettext(n.message), n),
       call_to_action_msg: i18n.sprintf(i18n.gettext(n.call_to_action_msg), n),
       widget_endpoint: widgetEndpoint,
       call_to_action_class: n.call_to_action_class,
     };
-  },
-
-  openSession: function(e, options) {
-
-    var model = this.model;
-    if (options)
-        model.set("view", options.view);
-    else
-        model.set("view", "index");
-
-    var Modal = Backbone.Modal.extend({
-      template: _.template($('#tmpl-session-modal').html()),
-      model: model
-    });
-
-    var modalView = new Modal();
-    $('.popin-container').html(modalView.render().el);
   },
 
   closeInfobar: function() {
