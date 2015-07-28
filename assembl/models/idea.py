@@ -207,14 +207,32 @@ class Idea(HistoryMixin, DiscussionBoundBase):
 
     @property
     def widget_add_post_endpoint(self):
-        # Only works through api v2
+        # Only for api v2
         from pyramid.threadlocal import get_current_request
         from .widgets import Widget
-        ctx = get_current_request().context
+        req = get_current_request() or {}
+        ctx = getattr(req, 'context', {})
         if getattr(ctx, 'get_instance_of_class', None):
+            # optional optimization
             widget = ctx.get_instance_of_class(Widget)
-            if widget and getattr(widget, 'get_add_post_endpoint', None):
-                return { widget.uri(): widget.get_add_post_endpoint(self) }
+            if widget:
+                if getattr(widget, 'get_add_post_endpoint', None):
+                    return {widget.uri(): widget.get_add_post_endpoint(self)}
+            else:
+                return self.widget_ancestor_endpoints(self)
+
+    def widget_ancestor_endpoints(self, target_idea=None):
+        # HACK. Review consequences after test.
+        target_idea = target_idea or self
+        inherited = dict()
+        for p in self.parents:
+            inherited.update(p.widget_ancestor_endpoints(target_idea))
+        inherited.update({
+            widget.uri(): widget.get_add_post_endpoint(target_idea)
+            for widget in self.widgets
+            if getattr(widget, 'get_add_post_endpoint', None)
+        })
+        return inherited
 
     def copy(self, tombstone=None, **kwargs):
         kwargs.update(
