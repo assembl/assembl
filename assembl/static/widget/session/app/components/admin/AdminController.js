@@ -8,7 +8,7 @@ AdminModule.controller('AdminController',
      'CardGameService',
      'ConfigService',
      'UtilsService',
-     'config',
+     'WidgetService',
 
     function($rootScope, $scope, $http, growl, CardGameService, ConfigService, UtilsService, config) {
 

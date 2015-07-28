@@ -14,11 +14,16 @@ var InfobarItem = Marionette.LayoutView.extend({
   events: {
     'click .js_closeInfobar': 'closeInfobar',
     'click .js_openSession': 'openSession',
-    'click .js_openTargetInModal': 'openTargetInModal'
+    'click .js_openTargetInModal': 'openTargetInModal',
+    'click .js_openVote': 'openVote'
   },
 
   openTargetInModal: function(evt){
     return Ctx.openTargetInModal(evt);
+  },
+
+  openVote: function(evt){
+    // TODO
   },
 
   serializeModel: function(model) {

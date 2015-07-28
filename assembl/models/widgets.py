@@ -655,7 +655,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
     @classmethod
     def get_ui_endpoint_base(cls):
         # TODO: Make this configurable.
-        return "/static/widget/session/"
+        return "/static/widget/session/#home"
 
     def set_base_idea_id(self, id):
         idea = Idea.get_instance(id)
@@ -705,7 +705,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
                     "A creativity session is ongoing; You have until %(end_date_moment)s to join"),
                 "call_to_action_msg": settings.get(
                     "infobar_action_message", "Join the session"),
-                "call_to_action_class": "js_openSession",
+                "call_to_action_class": "js_openTargetInModal",
                 "base_idea": self.base_idea.uri(),
                 "widget_type": self.external_typename(),
                 "widget_endpoint": self.get_ui_endpoint(),
@@ -960,7 +960,7 @@ class MultiCriterionVotingWidget(Widget):
                 "message": settings.get("infobar_message", default_message),
                 "call_to_action_msg": settings.get(
                     "infobar_action_message", "Vote"),
-                "call_to_action_class": "js_openSession",
+                "call_to_action_class": "js_openVote",
                 "widget_type": self.external_typename(),
                 "widget_endpoint": self.get_ui_endpoint(),
                 # "num_participants": self.num_participants(),
