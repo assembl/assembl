@@ -114,12 +114,12 @@ HomeModule.controller('HomeController', [
       // download the deck of cards from widget settings, or from URL parameter
       var available_decks = CardGameService.available_decks;
       var default_deck_url = available_decks[0].url;
-      var deck_pseudo_url = default_deck_url; // for retro-compatibility
+      $scope.deck_pseudo_url = default_deck_url; // for retro-compatibility
       if ($scope.widget && "settings" in $scope.widget && "card_module_settings" in $scope.widget.settings && "deck_pseudo_url" in $scope.widget.settings.card_module_settings) {
-        deck_pseudo_url = $scope.widget.settings.card_module_settings.deck_pseudo_url;
+        $scope.deck_pseudo_url = $scope.widget.settings.card_module_settings.deck_pseudo_url;
       }
 
-      var deck_promise = CardGameService.getGenericDeck(deck_pseudo_url);
+      var deck_promise = CardGameService.getGenericDeck($scope.deck_pseudo_url);
 
       deck_promise.success(function(data) {
         $scope.game = data.game;
@@ -133,7 +133,7 @@ HomeModule.controller('HomeController', [
         $scope.shuffleArray($scope.shuffledCards);
         $scope.pickNextCard();
       }).error(function() {
-        alert("Error: Could not load requested deck of cards: " + deck_pseudo_url);
+        alert("Error: Could not load requested deck of cards: " + $scope.deck_pseudo_url);
       });
 
       /**
