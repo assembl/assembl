@@ -19,10 +19,12 @@
   }
 }
 
-#groupContainer > .groupsContainer.hasInfobar {
+@for $i from 1 through 5 {
+#groupContainer.hasInfobar-#{$i} > .groupsContainer {
   position: absolute;
-  top: $theme_header_height + 39px;
-  @include calc(height, "100% - #{$theme_header_height} - 39px");
+  top: #{$theme_header_height + $i * $infobar_height};
+  @include calc(height, "100% - #{$theme_header_height} - #{$i * $infobar_height}");
+}
 }
 
 .popin-body > .groupsContainer {

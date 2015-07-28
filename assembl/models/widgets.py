@@ -702,7 +702,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
         if self.is_active() and settings.get('show_infobar', True):
             return {
                 "message": settings.get("infobar_message", 
-                    "A creativity session is ongoing; You have until %(end_date)s to join"),
+                    "A creativity session is ongoing; You have until %(end_date_moment)s to join"),
                 "call_to_action_msg": settings.get(
                     "infobar_action_message", "Join the session"),
                 "call_to_action_class": "js_openSession",
@@ -955,7 +955,7 @@ class MultiCriterionVotingWidget(Widget):
         if self.is_active() and settings.get('show_infobar', True):
             default_message = "A vote session is ongoing"
             if self.end_date:
-                default_message += "; You have until %(end_date)s to vote"
+                default_message += "; You have until %(end_date_moment)s to vote"
             return {
                 "message": settings.get("infobar_message", default_message),
                 "call_to_action_msg": settings.get(

@@ -21,6 +21,7 @@ var Marionette = require('../shims/marionette.js'),
     Discussion = require('../models/discussion.js'),
     DiscussionSource = require('../models/discussionSource.js'),
     UserProfile = require('../models/userProfile.js'),
+    Widget = require('../models/widget.js'),
     Social = require('../models/social.js'),
     Account = require('../models/accounts.js'),
     Socket = require('../utils/socket.js'),
@@ -158,6 +159,13 @@ var CollectionManager = Marionette.Controller.extend({
    */
   _allUserAccounts: undefined,
   _allUserAccountsPromise: undefined,
+
+  /**
+   * Collection of all the Active Widgets in the discussion
+   * @type {[Widget]}
+   */
+  _allActiveWidgets: undefined,
+  _allActiveWidgetsPromise: undefined,
 
   /**
    * Connected socket promise
@@ -763,6 +771,21 @@ var CollectionManager = Marionette.Controller.extend({
             console.error(e.statusText);
           });
       return this._allUserAccountsPromise;
+    },
+
+  getAllActiveWidgetsPromise: function() {
+      if (this._allActiveWidgetsPromise) {
+        return this._allActiveWidgetsPromise;
+      }
+
+      this._allActiveWidgets = new Widget.Collection();
+      this._allActiveWidgets.collectionManager = this;
+      this._allActiveWidgetsPromise = Promise.resolve(this._allActiveWidgets.fetch())
+          .thenReturn(this._allActiveWidgets)
+          .catch(function(e) {
+            console.error(e.statusText);
+          });
+      return this._allActiveWidgetsPromise;
     },
 
   getConnectedSocketPromise: function() {
