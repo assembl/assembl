@@ -135,7 +135,7 @@
         "creationDate": "creation_date",
         "order": "&get_order_from_first_parent",
         "discussion": false,
-        "parents": true,
+        "parents": "parent_uris",
         "subtype": "rdf_type",
         "parentId": "&get_first_parent_uri",
         "inNextSynthesis": "is_in_next_synthesis",

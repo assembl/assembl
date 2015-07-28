@@ -202,8 +202,19 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         creator=lambda idea: IdeaLink(target=idea))
 
     @property
+    def parent_uris(self):
+        return [Idea.uri_generic(l.source_id) for l in self.source_links]
+
+    @property
     def widget_add_post_endpoint(self):
-        return self.widget_ancestor_endpoints()
+        # Only works through api v2
+        from pyramid.threadlocal import get_current_request
+        from .widgets import Widget
+        ctx = get_current_request().context
+        if getattr(ctx, 'get_instance_of_class', None):
+            widget = ctx.get_instance_of_class(Widget)
+            if widget and getattr(widget, 'get_add_post_endpoint', None):
+                return { widget.uri(): widget.get_add_post_endpoint(self) }
 
     def copy(self, tombstone=None, **kwargs):
         kwargs.update(
@@ -215,19 +226,6 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             creation_date=self.creation_date,
             discussion=self.discussion)
         return super(Idea, self).copy(**kwargs)
-
-    def widget_ancestor_endpoints(self, target_idea=None):
-        # HACK. Review consequences after test.
-        target_idea = target_idea or self
-        inherited = dict()
-        for p in self.parents:
-            inherited.update(p.widget_ancestor_endpoints(target_idea))
-        inherited.update({
-            widget.uri(): widget.get_add_post_endpoint(target_idea)
-            for widget in self.widgets
-            if getattr(widget, 'get_add_post_endpoint', None)
-        })
-        return inherited
 
     def get_all_ancestors(self):
         """ Get all ancestors of this idea by following source links.
@@ -252,9 +250,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         return self.source_links_ts[0].order if self.source_links_ts else None
 
     def get_first_parent_uri(self):
-        return Idea.uri_generic(
-            self.source_links[0].source_id
-        ) if self.source_links else None
+        for link in self.source_links:
+            return Idea.uri_generic(link.source_id)
 
     def get_first_parent_uri_ts(self):
         return Idea.uri_generic(
