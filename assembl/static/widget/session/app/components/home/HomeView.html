@@ -52,7 +52,7 @@
             <p>{{'first_post'| translate}}</p>
         </div>
         <div class="session-comment">
-            <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:'creationDate':'reverse' track by $index">
+            <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:'creationDate':'reverse' track by idea['@id']">
                 <div class="pull-left thumbnail">
                     <img class="media-object img-circle" ng-src="{{idea.avatar}}" alt="30x30" style="width: 30px; height: 30px;">
                 </div>
