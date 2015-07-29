@@ -1,6 +1,7 @@
 'use strict';
 
 HomeModule.controller('HomeController', [
+    '$rootScope',
     '$scope',
     'config',
     'CardGameService',
@@ -10,8 +11,9 @@ HomeModule.controller('HomeController', [
     '$http',
     'growl',
 
-    function($scope, config, CardGameService, $timeout, $sce, UtilsService, $http, growl) {
+    function($rootScope, $scope, config, CardGameService, $timeout, $sce, UtilsService, $http, growl) {
 
+      $rootScope.selectedComments = undefined;
       $scope.widget = config;
       $scope.formData = {};
       $scope.displayed_cards = [];

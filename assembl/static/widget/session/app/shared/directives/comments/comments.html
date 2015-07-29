@@ -23,7 +23,7 @@
 <div class="commentToSubIdea" ng-show="showComments">
     <div class="media media-comment" ng-if="comments.length > 0" ng-repeat="com in comments track by $index">
         <div class="pull-left">
-            <input type="checkbox" id="checkbox-{{com['@id']}}"  value="{{com['@id']}}" data-toggle="checkbox" class="comment-to-sub-idea" ng-model="com.selected">
+            <input ng-if="com.showSelected" type="checkbox" id="checkbox-{{com['@id']}}"  value="{{com['@id']}}" data-toggle="checkbox" class="comment-to-sub-idea" ng-model="com.selected">
         </div>
         <div class="pull-left thumbnail">
             <img class="media-object img-circle" alt="30x30" ng-src="{{com.avatar}}">

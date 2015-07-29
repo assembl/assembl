@@ -14,6 +14,16 @@ RateModule.controller('RateController', [
       $scope.widget = config;
       $scope.idea_title = config.base_idea.shortTitle;
 
+
+      // First fetch selectedComments. TODO: Make sure the step in Comments.js
+      // follows this one; find a good way to transmit that information, other than
+      // using  a the rootScope as a global.
+      $http.get(UtilsService.getURL($scope.widget.confirm_messages_url)).then(
+        function(response) {
+          $rootScope.selectedComments = response.data;
+          console.log("loadCommentsDone");
+        });
+
       /**
        * Fetch all ideas newly added
        */

@@ -82,6 +82,14 @@ SessionApp.directive('comments', [
 
                 com.date = UtilsService.getNiceDateTime(com.date);
                 com.avatar = '/user/id/' + user_id + '/avatar/30';
+                console.log("checking loadComments");
+                // See comment in RateController to understand rootScope use.
+                if ($rootScope.selectedComments === undefined) {
+                  com.showSelected = false;
+                } else {
+                  com.showSelected = true;
+                  com.selected = $rootScope.selectedComments.indexOf(com['@id']) >= 0;
+                }
 
                 comments.push(com);
               })
