@@ -381,8 +381,6 @@ var navBar = Marionette.LayoutView.extend({
                         self.navBarRight.currentView.ui.joinDiscussion.css('visibility', 'hidden');
                         self._store.removeItem('needJoinDiscussion');
 
-                        window.location.href = '/' + Ctx.getDiscussionSlug() + '/user/notifications';
-
                         // reload user data and its permissions (so for example now when he clicks on the "reply" button of a message, it should not show "Before you can reply to this message..." anymore)
                         try { // we try to be a good Single Page Application and update user data without reloading the whole page
                           Ctx.updateCurrentUser();
