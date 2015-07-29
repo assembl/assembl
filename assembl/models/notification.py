@@ -660,7 +660,7 @@ def waiting_get(objectClass, objectId):
     # Waiting for an object to be flushed on another thread
     wait_time = 0.02
     # This amounts to ~5 seconds total, in 12 increasing steps
-    for while wait_time < 2:
+    while wait_time < 2:
         objectInstance = objectClass.get(objectId)
         if objectInstance is not None:
             return objectInstance
