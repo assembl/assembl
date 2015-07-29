@@ -780,6 +780,7 @@ JOIN post AS family_posts ON (
                     cls, Content)
 
             def decorate_query(self, query, last_alias, parent_instance, ctx):
+                from .post import IdeaProposalPost
                 idea = self.owner_alias
                 query = query.join(IdeaContentWidgetLink).join(
                     idea,
@@ -789,6 +790,9 @@ JOIN post AS family_posts ON (
                     query = query.options(
                         contains_eager(Content.widget_idea_links))
                         # contains_eager(Content.extracts) seems to slow things down instead
+                # Filter out idea proposal posts
+                query = query.filter(last_alias.type.notin_(
+                    IdeaProposalPost.polymorphic_identities()))
                 return query
 
             def decorate_instance(
