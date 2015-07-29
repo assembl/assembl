@@ -670,8 +670,8 @@ JOIN post AS family_posts ON (
             def __init__(self, cls):
                 super(ChildIdeaCollectionDefinition, self).__init__(cls, Idea)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
-                parent = self.owner_alias
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
+                parent = owner_alias
                 children = last_alias
                 return query.join(
                     IdeaLink, IdeaLink.target_id == children.id).join(
@@ -708,8 +708,8 @@ JOIN post AS family_posts ON (
                 super(AncestorWidgetsCollectionDefinition, self).__init__(cls, Widget)
                 self.widget_subclass = widget_subclass
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
-                parent = self.owner_alias
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
+                parent = owner_alias
                 widgets = last_alias
                 ancestry = self.ancestry.bindparams(
                     idea_id=parent_instance.id).alias('ancestry')
@@ -751,9 +751,8 @@ JOIN post AS family_posts ON (
                 super(LinkedPostCollectionDefinition, self).__init__(
                     cls, Content)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
-                idea = self.owner_alias
-                return query.join(IdeaRelatedPostLink, idea)
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
+                return query.join(IdeaRelatedPostLink, owner_alias)
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
@@ -779,9 +778,9 @@ JOIN post AS family_posts ON (
                 super(WidgetPostCollectionDefinition, self).__init__(
                     cls, Content)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 from .post import IdeaProposalPost
-                idea = self.owner_alias
+                idea = owner_alias
                 query = query.join(IdeaContentWidgetLink).join(
                     idea,
                     IdeaContentWidgetLink.idea_id == parent_instance.id)
@@ -821,9 +820,9 @@ JOIN post AS family_posts ON (
             def __init__(self, cls):
                 super(ActiveShowingWidgetsCollection, self).__init__(
                     cls, cls.active_showing_widget_links)
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 from .widgets import IdeaShowingWidgetLink
-                idea = self.owner_alias
+                idea = owner_alias
                 widget_idea_link = last_alias
                 query = query.join(
                     idea, widget_idea_link.idea).join(

@@ -414,8 +414,8 @@ class BaseIdeaCollection(CollectionDefinition):
         super(BaseIdeaCollection, self).__init__(
             BaseIdeaWidget, BaseIdeaWidget.base_idea)
 
-    def decorate_query(self, query, last_alias, parent_instance, ctx):
-        widget = self.owner_alias
+    def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
+        widget = owner_alias
         idea = last_alias
         return query.join(
             BaseIdeaWidgetLink,
@@ -438,8 +438,8 @@ class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
         super(BaseIdeaDescendantsCollection, self).__init__(
             BaseIdeaWidget, Idea)
 
-    def decorate_query(self, query, last_alias, parent_instance, ctx):
-        widget = self.owner_alias
+    def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
+        widget = owner_alias
         descendant = last_alias
         base_idea = aliased(Idea, name="base_idea")
         # using base_idea_id() is cheating, but a proper join fails.
@@ -451,7 +451,7 @@ class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
         return query
 
     def contains(self, parent_instance, instance):
-        widget = self.owner_alias
+        widget = owner_alias
         descendant = aliased(Idea, name="descendant")
         base_idea = aliased(Idea, name="base_idea")
         # using base_idea_id() is cheating, but a proper join fails.
@@ -537,9 +537,9 @@ class IdeaCreatingWidget(BaseIdeaWidget):
         class BaseIdeaCollectionC(BaseIdeaCollection):
             hide_proposed_ideas = False
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 query = super(BaseIdeaCollectionC, self).decorate_query(
-                    query, last_alias, parent_instance, ctx)
+                    query, owner_alias, last_alias, parent_instance, ctx)
                 children_ctx = ctx.find_collection(
                     'ChildIdeaCollectionDefinition')
                 if children_ctx:
@@ -547,11 +547,12 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                     query = query.join(
                         gen_idea_link,
                         (gen_idea_link.idea_id ==
-                            children_ctx.collection_class_alias.id))
+                            children_ctx.class_alias.id))
                 return query
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
                 super(BaseIdeaCollection, self).decorate_instance(
                     instance, parent_instance, assocs, user_id, ctx, kwargs)
                 for inst in assocs[:]:
@@ -582,9 +583,9 @@ class IdeaCreatingWidget(BaseIdeaWidget):
         class BaseIdeaDescendantsCollectionC(BaseIdeaDescendantsCollection):
             hide_proposed_ideas = False
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 query = super(BaseIdeaDescendantsCollectionC, self).decorate_query(
-                    query, last_alias, parent_instance, ctx)
+                    query, owner_alias, last_alias, parent_instance, ctx)
                 children_ctx = ctx.find_collection(
                     'ChildIdeaCollectionDefinition')
                 if children_ctx:
@@ -592,11 +593,12 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                     query = query.join(
                         gen_idea_link,
                         (gen_idea_link.idea_id ==
-                            children_ctx.collection_class_alias.id))
+                            children_ctx.class_alias.id))
                 return query
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
                 super(BaseIdeaDescendantsCollectionC, self).decorate_instance(
                     instance, parent_instance, assocs, user_id, ctx, kwargs)
                 for inst in assocs[:]:
@@ -892,8 +894,8 @@ class MultiCriterionVotingWidget(Widget):
                 super(CriterionCollection, self).__init__(
                     cls, cls.criteria)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
-                widget = self.owner_alias
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
+                widget = owner_alias
                 idea = last_alias
                 return query.join(idea.has_criterion_links).join(
                     widget).filter(widget.id == parent_instance.id)
@@ -925,8 +927,8 @@ class MultiCriterionVotingWidget(Widget):
                 super(VotableCollection, self).__init__(
                     cls, cls.votable_ideas)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
-                widget = self.owner_alias
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
+                widget = owner_alias
                 idea = last_alias
                 query = query.join(idea.has_votable_links).join(
                     widget).filter(widget.id == parent_instance.id)
@@ -934,7 +936,7 @@ class MultiCriterionVotingWidget(Widget):
                 vote_coll = ctx.find_collection('CollectionDefinition.votes')
                 if vote_coll:
                     query = query.filter(
-                        vote_coll.collection_class_alias.widget_id ==
+                        vote_coll.class_alias.widget_id ==
                         parent_instance.id)
                 return query
 

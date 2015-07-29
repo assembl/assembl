@@ -104,14 +104,14 @@ class AbstractVoteSpecification(DiscussionBoundBase):
             def __init__(self, cls):
                 super(VoteTargetsCollection, self).__init__(cls, Idea)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 from .widgets import (
                     MultiCriterionVotingWidget, VotableIdeaWidgetLink)
                 # TODO : Why did this work?
                 # return query.filter(
                 #     last_alias.discussion_id == parent_instance.discussion_id
                 #     ).filter(last_alias.hidden==False)
-                spec_alias = self.owner_alias
+                spec_alias = owner_alias
                 widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
                 widget_alias = aliased(MultiCriterionVotingWidget)
                 votable_link_alias = aliased(VotableIdeaWidgetLink)

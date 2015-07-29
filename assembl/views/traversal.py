@@ -80,7 +80,7 @@ class TraversalContext(object):
     def get_instance_of_class(self, cls):
         return None
 
-    def decorate_query(self, query, last_alias, ctx, tombstones=False):
+    def decorate_query(self, query, ctx, tombstones=False):
         # The buck stops here
         return query
 
@@ -146,6 +146,7 @@ class ClassContext(TraversalContext):
         # permission on class context are quite restrictive. review.
         super(ClassContext, self).__init__(parent)
         self._class = cls
+        self.class_alias = aliased(cls)
 
     def __getitem__(self, key):
         try:
@@ -165,7 +166,7 @@ class ClassContext(TraversalContext):
     def create_query(self, id_only=True, tombstones=False):
         from assembl.models import TombstonableMixin
         cls = self._class
-        self.class_alias = alias = aliased(cls)
+        alias = self.class_alias
         if id_only:
             query = self._class.default_db.query(alias.id)
         else:
@@ -183,6 +184,9 @@ class ClassContext(TraversalContext):
 
     def get_target_class(self):
         return self._class
+
+    def get_target_alias(self):
+        return self.class_alias
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_class(typename)
@@ -265,10 +269,9 @@ class InstanceContext(TraversalContext):
             raise KeyError()
         return CollectionContext(self, collection, self._instance)
 
-    def decorate_query(self, query, last_alias, ctx, tombstones=False):
+    def decorate_query(self, query, ctx, tombstones=False):
         # Leave that work to the collection
-        return self.__parent__.decorate_query(
-            query, last_alias, ctx, tombstones)
+        return self.__parent__.decorate_query(query, ctx, tombstones)
 
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         # if one of the objects has a non-list relation to this class, add it
@@ -285,7 +288,8 @@ class InstanceContext(TraversalContext):
                     #print "Setting3 ", inst, reln.key, self._instance
                     setattr(inst, reln.key, self._instance)
                     break
-        self.__parent__.decorate_instance(instance, assocs, user_id, ctx, kwargs)
+        self.__parent__.decorate_instance(
+            instance, assocs, user_id, ctx, kwargs)
 
     def find_collection(self, collection_class_name):
         return self.__parent__.find_collection(collection_class_name)
@@ -303,6 +307,9 @@ class InstanceContext(TraversalContext):
 
     def get_target_class(self):
         return self._instance.__class__
+
+    def get_target_alias(self):
+        return self.__parent__.get_target_alias()
 
 
 class InstanceContextPredicate(object):
@@ -346,6 +353,7 @@ class CollectionContext(TraversalContext):
         self.collection = collection
         self.parent_instance = instance
         self.collection_class = self.collection.collection_class
+        self.class_alias = aliased(self.collection_class)
 
     def get_default_view(self):
         my_default = self.collection.get_default_view()
@@ -368,37 +376,38 @@ class CollectionContext(TraversalContext):
     def get_target_class(self):
         return self.collection_class
 
+    def get_target_alias(self):
+        return self.class_alias
+
     def create_query(self, id_only=True, tombstones=False):
-        cls = self.collection_class
-        alias = aliased(cls)
+        alias = self.class_alias
         if id_only:
             query = self.parent_instance.db.query(alias.id)
-            return self.decorate_query(
-                query, alias, self, tombstones).distinct()
+            return self.decorate_query(query, self, tombstones).distinct()
         else:
             # There will be duplicates. But sqla takes care of them,
             # virtuoso won't allow distinct on full query,
             # and a distinct subquery takes forever.
             # Oh, and quietcast loses the distinct. Just great.
             query = self.parent_instance.db.query(alias)
-            return self.decorate_query(query, alias, self, tombstones)
+            return self.decorate_query(query, self, tombstones)
 
-    def decorate_query(self, query, last_alias, ctx, tombstones=False):
+    def decorate_query(self, query, ctx, tombstones=False):
         # This will decorate a query with a join on the relation.
         from assembl.models import TombstonableMixin
-        self.collection_class_alias = last_alias
         query = self.collection.decorate_query(
-            query, last_alias, self.parent_instance, ctx)
+            query, self.__parent__.get_target_alias(),
+            self.get_target_alias(), self.parent_instance, ctx)
         cls = self.collection_class
         if issubclass(cls, TombstonableMixin) and not tombstones:
-            query = query.filter(cls.tombstone_condition(last_alias))
-        return self.__parent__.decorate_query(
-            query, self.collection.owner_alias, ctx, tombstones)
+            query = query.filter(cls.tombstone_condition(self.class_alias))
+        return self.__parent__.decorate_query(query, ctx, tombstones)
 
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         self.collection.decorate_instance(
             instance, self.parent_instance, assocs, user_id, ctx, kwargs)
-        self.__parent__.decorate_instance(instance, assocs, user_id, ctx, kwargs)
+        self.__parent__.decorate_instance(
+            instance, assocs, user_id, ctx, kwargs)
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
@@ -501,7 +510,6 @@ class AbstractCollectionDefinition(object):
     def __init__(self, owner_class, collection_class):
         self.owner_class = owner_class
         self.collection_class = collection_class
-        self.owner_alias = aliased(owner_class)
 
     def get_instance(self, key, parent_instance):
         instance = self.collection_class.get_instance(key)
@@ -511,7 +519,8 @@ class AbstractCollectionDefinition(object):
         return instance
 
     @abstractmethod
-    def decorate_query(self, query, last_alias, parent_instance, ctx):
+    def decorate_query(
+            self, query, owner_alias, coll_alias, parent_instance, ctx):
         pass
 
     @abstractmethod
@@ -564,10 +573,8 @@ class CollectionDefinition(AbstractCollectionDefinition):
             # TODO: How to chose?
             self.back_property = back_properties.pop()
 
-    def decorate_query(self, query, last_alias, parent_instance, ctx):
+    def decorate_query(self, query, owner_alias, coll_alias, parent_instance, ctx):
         # This will decorate a query with a join on the relation.
-        coll_alias = last_alias or aliased(self.collection_class)
-        owner_alias = self.owner_alias
         inv = self.back_property
         if inv:
             query = query.join(owner_alias,
@@ -581,7 +588,8 @@ class CollectionDefinition(AbstractCollectionDefinition):
             query = query.filter(owner_alias.id == parent_instance.id)
         return query
 
-    def decorate_instance(self, instance, parent_instance, assocs, user_id, ctx, kwargs):
+    def decorate_instance(
+            self, instance, parent_instance, assocs, user_id, ctx, kwargs):
         if not isinstance(instance, self.collection_class):
             return
         # if the relation is through a helper class,

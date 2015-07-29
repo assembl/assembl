@@ -243,12 +243,13 @@ class ExplicitSubGraphView(IdeaGraphView):
             def __init__(self, cls):
                 super(IdeaCollectionDefinition, self).__init__(cls, Idea)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
-                view = self.owner_alias
-                return query.join(SubGraphIdeaAssociation, view)
+            def decorate_query(self, query, owner_alias, last_alias,
+                               parent_instance, ctx):
+                return query.join(SubGraphIdeaAssociation, owner_alias)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
                         assocs.append(SubGraphIdeaAssociation(
@@ -272,12 +273,13 @@ class ExplicitSubGraphView(IdeaGraphView):
             def __init__(self, cls):
                 super(IdeaLinkCollectionDefinition, self).__init__(cls, IdeaLink)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
-                view = self.owner_alias
-                return query.join(SubGraphIdeaLinkAssociation, view)
+            def decorate_query(self, query, owner_alias, last_alias,
+                               parent_instance, ctx):
+                return query.join(SubGraphIdeaLinkAssociation, owner_alias)
 
             def decorate_instance(
-                    self, instance, parent_instance, assocs, user_id, ctx, kwargs):
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
                 if isinstance(instance, IdeaLink):
                     assocs.append(
                         SubGraphIdeaLinkAssociation(

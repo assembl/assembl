@@ -329,10 +329,10 @@ class Discussion(DiscussionBoundBase):
             def __init__(self, cls):
                 super(AllUsersCollection, self).__init__(cls, User)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 # No real outerjoin in sqlalchemy. Use a dummy condition.
                 return query.outerjoin(
-                    self.owner_alias, self.owner_alias.id != None)
+                    owner_alias, owner_alias.id != None)
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
@@ -363,10 +363,10 @@ class Discussion(DiscussionBoundBase):
                 super(ActiveWidgetsCollection, self).__init__(
                     cls, Discussion.widgets)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 from .widgets import Widget
                 query = super(ActiveWidgetsCollection, self).decorate_query(
-                    query, last_alias, parent_instance, ctx)
+                    query, owner_alias, last_alias, parent_instance, ctx)
                 query = Widget.filter_active(query)
                 return query
 

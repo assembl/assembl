@@ -815,11 +815,11 @@ class User(AgentProfile):
                 super(NotificationSubscriptionCollection, self).__init__(
                     cls, User.notification_subscriptions.property)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
 
                 query = super(
                     NotificationSubscriptionCollection, self).decorate_query(
-                    query, last_alias, parent_instance, ctx)
+                    query, owner_alias, last_alias, parent_instance, ctx)
                 discussion = ctx.get_instance_of_class(Discussion)
                 if discussion is not None:
                     # Materialize active subscriptions... TODO: Make this batch,
@@ -835,8 +835,8 @@ class User(AgentProfile):
                     self, instance, parent_instance, assocs, user_id,
                     ctx, kwargs):
                 super(NotificationSubscriptionCollection,
-                      self).decorate_instance(instance, parent_instance, assocs, user_id,
-                    ctx, kwargs)
+                      self).decorate_instance(
+                      instance, parent_instance, assocs, user_id, ctx, kwargs)
 
             def contains(self, parent_instance, instance):
                 if not super(NotificationSubscriptionCollection, self).contains(
@@ -853,11 +853,11 @@ class User(AgentProfile):
                 super(LocalRoleCollection, self).__init__(
                     cls, User.local_roles.property)
 
-            def decorate_query(self, query, last_alias, parent_instance, ctx):
+            def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
 
                 query = super(
                     LocalRoleCollection, self).decorate_query(
-                    query, last_alias, parent_instance, ctx)
+                    query, owner_alias, last_alias, parent_instance, ctx)
                 discussion = ctx.get_instance_of_class(Discussion)
                 if discussion is not None:
                     query = query.filter(last_alias.discussion_id == discussion.id)
@@ -867,8 +867,8 @@ class User(AgentProfile):
                     self, instance, parent_instance, assocs, user_id,
                     ctx, kwargs):
                 super(LocalRoleCollection,
-                      self).decorate_instance(instance, parent_instance, assocs, user_id,
-                    ctx, kwargs)
+                      self).decorate_instance(
+                      instance, parent_instance, assocs, user_id, ctx, kwargs)
 
             def contains(self, parent_instance, instance):
                 if not super(LocalRoleCollection, self).contains(
