@@ -547,7 +547,8 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                     query = query.join(
                         gen_idea_link,
                         (gen_idea_link.idea_id ==
-                            children_ctx.class_alias.id))
+                            children_ctx.class_alias.id) & (
+                        gen_idea_link.widget_id == owner_alias.id))
                 return query
 
             def decorate_instance(
