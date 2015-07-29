@@ -506,7 +506,11 @@ class IdeaCreatingWidget(BaseIdeaWidget):
     def set_confirmed_ideas(self, idea_ids):
         for idea in self.generated_ideas:
             uri = idea.uri()
-            idea.hidden = (uri not in idea_ids)
+            hide = uri not in idea_ids
+            idea.hidden = hide
+            p = idea.proposed_in_post
+            if p:
+                p.hidden = hide
 
     def get_confirmed_messages(self):
         root_idea_id = self.base_idea_id()
@@ -552,7 +556,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                     instance, parent_instance, assocs, user_id, ctx, kwargs)
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
-                        inst.hidden = True
+                        inst.hidden = self.hide_proposed_ideas
                         post = IdeaProposalPost(
                             proposes_idea=inst, creator_id=user_id,
                             discussion_id=inst.discussion_id,
@@ -563,7 +567,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                                 IdeaProposalPost, kwargs))
                         assocs.append(post)
                         assocs.append(IdeaContentWidgetLink(
-                            content=post, idea=inst.parents[0],
+                            content=post, idea=inst,
                             creator_id=user_id,
                             **self.filter_kwargs(
                                 IdeaContentWidgetLink, kwargs)))
@@ -597,7 +601,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                     instance, parent_instance, assocs, user_id, ctx, kwargs)
                 for inst in assocs[:]:
                     if isinstance(inst, Idea):
-                        inst.hidden = True
+                        inst.hidden = self.hide_proposed_ideas
                         post = IdeaProposalPost(
                             proposes_idea=inst, creator_id=user_id,
                             discussion_id=inst.discussion_id,
@@ -608,7 +612,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                                 IdeaProposalPost, kwargs))
                         assocs.append(post)
                         assocs.append(IdeaContentWidgetLink(
-                            content=post, idea=inst.parents[0],
+                            content=post, idea=inst,
                             creator_id=user_id,
                             **self.filter_kwargs(
                                 IdeaContentWidgetLink, kwargs)))

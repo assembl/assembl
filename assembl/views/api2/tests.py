@@ -257,7 +257,7 @@ def test_creativity_session_widget(
     assert new_widget.base_idea == subidea_1
     ctx_url = "http://example.com/cardgame.xml#card_1"
     # Create a new sub-idea
-    new_idea_create = test_app.post_json(idea_endpoint, {
+    new_idea_create = test_app.post_json(idea_hiding_endpoint, {
         "@type": "Idea", "short_title": "This is a brand new idea",
         "context_url": ctx_url
         })
@@ -270,7 +270,7 @@ def test_creativity_session_widget(
     assert new_idea1.proposed_in_post
     assert new_idea1 in new_widget.generated_ideas
     assert new_idea1.hidden
-    assert not new_idea1.proposed_in_post.hidden
+    assert new_idea1.proposed_in_post.hidden
     assert not subidea_1.hidden
     # Get the sub-idea from the api
     new_idea1_rep = test_app.get(
@@ -288,6 +288,10 @@ def test_creativity_session_widget(
         idea_id=new_idea1.id, widget_id=widget_id).all()
     assert widget_link
     assert len(widget_link) == 1
+    # It should be linked to its creating post.
+    content_link = discussion.db.query(IdeaContentWidgetLink).filter_by(
+        idea_id=new_idea1.id, content_id=new_idea1.proposed_in_post.id).first()
+    assert content_link
     # The new idea should now be in the collection api
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
