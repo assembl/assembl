@@ -580,7 +580,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
             query = query.join(owner_alias,
                 getattr(coll_alias, inv.key))
         else:
-            query = query.join(last_alias,
+            query = query.join(coll_alias,
                 getattr(owner_alias, self.property.key))
         if inv and not uses_list(inv):
             query = query.filter(getattr(coll_alias, inv.key) == parent_instance)
