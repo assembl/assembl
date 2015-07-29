@@ -797,6 +797,8 @@ JOIN post AS family_posts ON (
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
                 if isinstance(instance, Content):
+                    if parent_instance.proposed_in_post:
+                        instance.set_parent(parent_instance.proposed_in_post)
                     assocs.append(
                         IdeaContentWidgetLink(
                             content=instance, idea=parent_instance,

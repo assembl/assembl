@@ -321,8 +321,13 @@ def test_creativity_session_widget(
         content_id=post.id, idea_id=new_idea1.id).one()
 
     # It should be linked to the idea.
+    content_link = discussion.db.query(IdeaContentWidgetLink).filter_by(
+        idea_id=new_idea1.id, content_id=post.id).first()
+    assert content_link
     # TODO: get the semantic data in tests.
     # assert subidea_1.id in Idea.get_idea_ids_showing_post(new_post1_id)
+    # It should be a child of the proposing post
+    assert post.parent == new_idea1.proposed_in_post
 
     # The new post should now be in the collection api
     test = test_app.get(local_to_absolute(post_endpoint))
