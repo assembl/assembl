@@ -8,31 +8,32 @@ AdminModule.controller('AdminController',
      'CardGameService',
      'ConfigService',
      'UtilsService',
-     'WidgetService',
+     'config',
 
-    function($rootScope, $scope, $http, growl, CardGameService, ConfigService, UtilsService, config) {
+    function($rootScope, $scope, $http, growl, CardGameService, ConfigService, UtilsService, widget) {
 
-      $scope.widget = config;
-      $scope.idea_title = config.base_idea.shortTitle;
-      $scope.home = config['@id'];
+      $scope.widget = widget;
+      // console.log("widget", widget);
+      $scope.idea_title = widget.base_idea.shortTitle;
+      $scope.home = widget['@id'];
       $scope.formData = {};
 
       $scope.goToDiscussion = function() {
         $scope.config_status = 1;
       }
 
-      if (angular.isDefined($scope.widget.settings)) {
-        console.log("$scope.widget.settings: ", $scope.widget.settings);
-        if ($scope.widget.settings.question)
-            $scope.formData.question = $scope.widget.settings.question;
+      if (angular.isDefined(widget.settings)) {
+        // console.log("widget.settings: ", widget.settings);
+        if (widget.settings.question)
+            $scope.formData.question = widget.settings.question;
         else
             $scope.formData.question = "";
 
-        if ($scope.widget.settings.startDate)
-            $scope.formData.startDate = $scope.widget.settings.startDate;
+        if (widget.settings.startDate)
+            $scope.formData.startDate = widget.settings.startDate;
 
-        if ($scope.widget.settings.endDate)
-            $scope.formData.endDate = $scope.widget.settings.endDate;
+        if (widget.settings.endDate)
+            $scope.formData.endDate = widget.settings.endDate;
 
         //Need to display button if there is a minimal config
         $scope.goToDiscussion();
@@ -69,7 +70,7 @@ AdminModule.controller('AdminController',
           data.startDate = $scope.formData.startDate;
           data.endDate = $scope.formData.endDate;
           data.question = $scope.formData.question;
-          data.idea = config.settings.idea;
+          data.idea = $scope.widget.settings.idea;
 
           $http({
             url: UtilsService.getURL($scope.widget.widget_settings_url),
