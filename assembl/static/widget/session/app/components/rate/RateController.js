@@ -36,7 +36,7 @@ RateModule.controller('RateController', [
           return ideas;
 
         }).then(function(ideas) {
-
+          // TODO: gather people and fetch once per author.
           angular.forEach(ideas, function(idea) {
             var urlRoot = UtilsService.getURL(idea.proposed_in_post.idCreator);
 
@@ -44,7 +44,12 @@ RateModule.controller('RateController', [
               idea.username = response.data.name;
               idea.avatar = response.data.avatar_url_base + '30';
             });
-
+            $http.get(UtilsService.getURL($scope.widget.confirm_ideas_url)).then(
+              function(response) {
+                angular.forEach(ideas, function(idea) {
+                  idea.selected = response.data.indexOf(idea['@id']) >= 0;
+                });
+              });
           });
 
           $scope.ideas = ideas;
