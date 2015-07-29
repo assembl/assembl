@@ -315,6 +315,11 @@ def test_creativity_session_widget(
     # It should have a widget link to the idea.
     post_widget_link = discussion.db.query(IdeaContentWidgetLink).filter_by(
         content_id=post.id, idea_id=new_idea1.id).one()
+
+    # It should be linked to the idea.
+    # TODO: get the semantic data in tests.
+    # assert subidea_1.id in Idea.get_idea_ids_showing_post(new_post1_id)
+
     # The new post should now be in the collection api
     test = test_app.get(local_to_absolute(post_endpoint))
     assert test.status_code == 200

@@ -123,27 +123,6 @@ def idea_content_link_idea_set_listener(target, value, oldvalue, initiator):
                 ancestor.send_to_changes()
 
 
-class IdeaContentWidgetLink(IdeaContentLink):
-    """
-    A link between an idea and a Content limited to a widget view.
-    Such links should not be traversed.
-    """
-    __tablename__ = 'idea_content_widget_link'
-
-    id = Column(Integer, ForeignKey(
-        'idea_content_link.id',
-        ondelete='CASCADE', onupdate='CASCADE'
-    ), primary_key=True)
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'assembl:postHiddenLinkedToIdea',
-    }
-
-Idea.widget_owned_contents = relationship(IdeaContentWidgetLink)
-Content.widget_idea_links = relationship(
-    IdeaContentWidgetLink, cascade="all, delete-orphan")
-
-
 class IdeaContentPositiveLink(IdeaContentLink):
     """
     A normal link between an idea and a Content.
@@ -168,6 +147,27 @@ class IdeaContentPositiveLink(IdeaContentLink):
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postLinkedToIdea_abstract',
     }
+
+
+class IdeaContentWidgetLink(IdeaContentPositiveLink):
+    """
+    A link between an idea and a Content limited to a widget view.
+    Such links should be traversed.
+    """
+    __tablename__ = 'idea_content_widget_link'
+
+    id = Column(Integer, ForeignKey(
+        'idea_content_positive_link.id',
+        ondelete='CASCADE', onupdate='CASCADE'
+    ), primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'assembl:postHiddenLinkedToIdea',
+    }
+
+Idea.widget_owned_contents = relationship(IdeaContentWidgetLink)
+Content.widget_idea_links = relationship(
+    IdeaContentWidgetLink, cascade="all, delete-orphan")
 
 
 class IdeaRelatedPostLink(IdeaContentPositiveLink):
