@@ -48,6 +48,7 @@ var InfobarItem = Marionette.LayoutView.extend({
 
   closeInfobar: function() {
     this.model.set("closeInfobar", true);
+    Assembl.vent.trigger('infobar:closeItem');
     //this.options.parentPanel.adjustInfobarSize();
   }
 });

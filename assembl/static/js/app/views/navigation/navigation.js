@@ -47,7 +47,7 @@ var NavigationView = AssemblPanel.extend({
   },
   events: {
     'click @ui.navigation': 'toggleMenuByEvent',
-    'click @ui.ideaFromIdealist': 'addIdeaFromIdeaList'
+    'click @ui.ideaFromIdealist': 'addIdeaFromIdeaList',
   },
   initialize: function(options) {
     Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
@@ -58,6 +58,7 @@ var NavigationView = AssemblPanel.extend({
     this.num_items = 2;
 
     this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
+    this.listenTo(Assembl.vent, 'infobar:closeItem', this.setSideBarHeight);
   },
   onAttach:function() {
       var that = this,
@@ -236,7 +237,7 @@ var NavigationView = AssemblPanel.extend({
   initVar: function() {
     // check wether DOM elements are already rendered
 
-    var _header = $('#header').height(),
+    var _header = $('#header').height() + $('#infobar').height(),
         _window = $(window).height(),
         _li = this.li_height * this.num_items,
         _headerGroup = ($(".groupHeader").first().hasClass('editable')) ? this.group_editable_header_height : this.group_header_height,
