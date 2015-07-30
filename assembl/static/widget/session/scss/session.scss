@@ -140,14 +140,14 @@
     }
     .slot-machine-session {
       cursor: pointer;
-      padding-top: 5em;
+      padding-top: 30px;
       box-sizing: border-box;
       float:left;
     }
     .card{
       position: relative;
-      height: 390px;
-      width: 340px;
+      /*height: 390px;*/
+      width: 450px;
       text-align: justify;
       margin: 1em 0 1em 0;
       border-left: #CCCCCC 1px solid !important;
@@ -171,7 +171,7 @@
       }
     }
     .card-container {
-      width: 420px;
+      width: 520px;
       margin: 0 auto;
     }
     .bloc-question {
