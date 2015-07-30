@@ -585,6 +585,7 @@ class AssemblQuadStorageManager(object):
     def update_all_storages(self):
         self.audit_metadata()
         self.declare_functions()
+        self.add_function_permissions()
         # drop old single-discussion storages
         self.drop_all_discussion_storages_but(None)
         for storage in self.storages:
@@ -617,6 +618,13 @@ class AssemblQuadStorageManager(object):
             % (name.n3(self.nsm), mapping_type.n3(self.nsm))
             ).first())
 
+    def add_function_permissions(self):
+        for name in ("DB.DBA.RL_I2ID_NP",):
+            self.make_function_public(name)
+
+    def make_function_public(self, fname):
+        self.session.execute('GRANT EXECUTE ON "%s" TO PUBLIC' % fname)
+
     def declare_functions(self):
         for name, stmt in function_definition_stmts.iteritems():
             exists = bool(self.session.execute(text(
@@ -624,7 +632,7 @@ class AssemblQuadStorageManager(object):
                 ).bindparams(name=name)).first()[0])
             if not exists:
                 self.session.execute(stmt)
-                self.session.execute('GRANT EXECUTE ON "%s" TO PUBLIC' % name)
+                self.make_function_public(name)
         for name, stmt in iri_definition_stmts.iteritems():
             if not self.mapping_exists(name, IriClass.mapping_type):
                 self.session.execute(stmt)
