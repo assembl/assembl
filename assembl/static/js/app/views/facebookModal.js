@@ -319,11 +319,6 @@ var _processLogin = function(resp, success, error) {
         //They will be dealt with by their respective views
         //on instantiation, but must first store them in the 
         //global token singleton
-        console.log('I need to be herE!!!');
-        console.log('The tokens', tokens);
-        _.each(tokens, function(t, i, arr) {
-          console.log('Token number', i, t);
-        });
 
         var token = tokens.getUserToken();
         console.log('Currently existing user token', token);
@@ -366,6 +361,11 @@ var _processLogin = function(resp, success, error) {
           }
         });
       }
+    })
+    .error(function(e){
+      // Cannot get the access tokens from db
+      console.error("Could not get the access tokens from the server");
+      error();
     });
 };
 
@@ -377,7 +377,6 @@ var loginUser = function(success) {
   console.log('Attempting to login');
   var scope = getAllFacebookPermissions();
   window.FB.login(function(resp) {
-    //console.log('login response', resp);
     //Check list of permissions given to see if it matches what we asked.
     //If not, cannot continue
     //If yes, re-render the view.
@@ -386,80 +385,11 @@ var loginUser = function(success) {
     console.log('Logged in', resp);
     if (resp.status !== 'connected') {
       console.error("Facebook could not log in ")
-
-      //Maybe add a red warning under the errorView that the login process failed
+      //Maybe add a red warning under the errorView that the login process failed ?
     }
 
     else {
       _processLogin(resp, success);
-
-      //Status is connected
-      // console.log('Access token from login', resp.authResponse.accessToken);
-      // console.log('Short term token expires in', resp.authResponse.expiresIn);
-      //var collectionManager = new CollectionManager();
-      // window.FB_TOKEN.collectionManager.getFacebookAccessTokensPromise()
-      //   .then(function(tokens){
-      //     if (tokens.hasUserToken()) {
-      //       //At this point, the page/group tokens are not priority
-      //       //They will be dealt with by their respective views
-      //       //on instantiation, but must first store them in the 
-      //       //global token singleton
-      //       console.log('I need to be herE!!!');
-      //       console.log('The tokens', tokens);
-      //       _.each(tokens, function(t, i, arr){
-      //         console.log('Token number', i, t);
-      //       });
-
-      //       var token = tokens.getUserToken();
-      //       console.log('Currently existing user token', token);
-      //       token.save({
-      //         token: resp.authResponse.accessToken
-      //       }, {
-      //         patch: true,
-      //         success: function(model, resp, opt) {
-      //           console.log('Facebook Access Token updated successful.');
-      //           // console.log('Saved model', model);
-      //           // console.log('Resp object', resp);
-      //           // console.log('Options object', opt);
-      //           window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
-      //           success();
-      //         },
-      //         error: function(model, resp, opt){
-      //           console.log('Facebook Access Token save NOT updated successfully.');
-      //           // console.log('Saved model', model);
-      //           // console.log('Resp object', resp);
-      //           // console.log('Options object', opt);
-      //         }
-      //       }); 
-      //     }
-      //     else {
-      //       //No user token, must make one
-      //       console.log('New token is being made...');
-      //       // console.log('The tokens', tokens);
-      //       // console.log('tokens have user token? ', tokens.hasUserToken());
-      //       var token = new Social.Facebook.Token.Model({
-      //         token: resp.authResponse.accessToken,
-      //         token_type: "user",
-      //         "@type": "FacebookAccessToken"
-      //       });
-      //       token.save(null, {
-      //         success: function(model, resp, opt){
-      //           console.log('New Facebook Access Token saved successfully.');
-      //           // console.log('Saved model', model);
-      //           // console.log('Resp object', resp);
-      //           // console.log('Options object', opt);
-      //           window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
-      //           success()
-      //         },
-      //         error: function(model, resp, opt){
-      //           console.log('New Facebook Access Token NOT saved successfully.');
-      //           // console.log('Saved model', model);
-      //           // console.log('Resp object', resp);
-      //           // console.log('Options object', opt);
-      //         }
-      //       })
-      //     }
-      //   });
     }
   }, {scope: scope });
 };
@@ -528,7 +458,10 @@ var checkState = function(renderView) {
             }
             else {
               //This might be unnecessary here
-              window.FB_TOKEN.setUserToken(t, e);
+              if (e === 'infinite'){
+                var oneYearInSeconds = 60*60*24*365;
+                window.FB_TOKEN.setUserToken(t,oneYearInSeconds);
+              }
             }
           });
           console.log("Here are the access tokens", tokens);
@@ -541,27 +474,15 @@ var checkState = function(renderView) {
           }
           else {
             // First check if it the user token is an infinite token
-            if (userToken.isInfiniteToken()) {
-              //window.FB_TOKEN.setUserToken()
-              console.log('Incomplete....');
-            }
-
-            // check to see if the token in DB is faulty (expiration = python's datetime.min)
-            if (userToken.isMinimumTime()) {
-              checkLoginState({
-                corruptToken: true, // TODO: Add guard in checkLoginState for corruptToken field
-                success: function() {
-                  var state = new fbState(true, null, window.FB_TOKEN);
-                  renderView(state);
-                },
-                error: function() {
-                  var state = new fbState(false, 'update-permissions', null);
-                },
-              });              
+            if ( userToken.isInfiniteToken() ) {
+              var oneYearInSeconds = 60*60*24*365; //Lazy hack
+              window.FB_TOKEN.setUserToken(userToken.get('token'), oneYearInSeconds);
+              var state = new fbState(true, null, window.FB_TOKEN);
+              renderView(state);
             }
 
             //Check token expiry
-            if (userToken.isExpired()) {
+            else if ( userToken.isExpired() ) {
               console.log('Token is expired!!!!', userToken);
 
               // loginUser(function(){
@@ -857,14 +778,8 @@ var fbLayout = Marionette.LayoutView.extend({
       }
     },
   test: function(e) {
-      // checkState(function(state){
-      //   console.log('The resulting state is: ', state);
-      // });
-      var fakeToken = "This is a fake access token";
-      console.log('The utc time now is: ', Moment().utc().toString());
-      console.log('The string that will be used to create token is 2015-07-15T08:05:54');
-      window.FB_TOKEN.setPageToken('1234', fakeToken, "2015-07-15T08:05:54");
-      console.log('Done testing');
+      var a = this.model.get('@id');
+      console.log('The message model id is: ', a);
     },
   defineView: function(event) {
       var value = this.$(event.currentTarget)
@@ -969,44 +884,59 @@ var fbLayout = Marionette.LayoutView.extend({
             // 3) POST for a newly created pull source reader
             // 4) Then call success
             
-            var cm = new CollectionManager();
-            cm.getAllUserAccountsPromise().then(function(accounts) {
+            var cm = new CollectionManager(),
+                errorDesc = i18n.gettext('Something went wrong on Assembl whilst creating your post. Please contact the Discussion administrator for more information.'),
+                errorNode = $('.js_export_error_message');
+            cm.getAllUserAccountsPromise().then(function(accounts){
               var fbAccount = accounts.getFacebookAccount();
               if (!fbAccount) {
                 console.error('This account does NOT have a facebook account');
-                $('.js_export_error_message').text(i18n.gettext('Something went wrong on Assembl whilst creating your post. Please contact the Discussion administrator for more information.'));
+                errorNode.text(errorDesc);
               }
               else {
                 sender = fbAccount;
+                var s = new Source.Model.Facebook({
+                  'fb_source_id': fbPostId,
+                  'creator_id': sender.get("@id"),
+                  'url_path': null, //This is not vital, it's only extra information
+                  '@type': 'FacebookSinglePostSource',
+                  'is_content_sink': true,
+                  'sink_data': {'post_id': that.model.id, 'facebook_post_id': fbPostId}
+                });
+
+                console.log('The fb source model', s);
+                s.save(null, {
+                  success: function(model, resp, op){
+                    console.log('Facebook source created');
+                    console.log('Making AJAX call to /export_post handler');
+                    console.log('The url of the model', model.url());
+                    Promise.resolve($.ajax({
+                      type: 'POST',
+                      dataType: 'json',
+                      url: model.url() + "/fetch_posts",
+                      contentType: 'application/x-www-form-urlencoded'
+                    })).then(function(resp){
+                      if ( _.has(resp, "message") ) {
+                        success();
+                      }
+                      else {
+                        console.error("There was a server-side error");
+                        errorNode.text(errorDesc);
+                        error()
+                      }
+                    }).error(function(error){
+                        console.error("There was an error creating the source");
+                        errorNode.text(errorDesc);
+                        error()
+                    });
+                  },
+
+                  error: function(model, resp, op){
+                    console.error('Could not create a Facebook source');
+                    errorNode.text(errorDesc);
+                  }
+                });
               }
-
-              var s = new Source.Model.Facebook({
-                'fb_source_id': fbPostId,
-                'creator_id': sender.get("@id"),
-                'url_path': null, //This is not vital, it's only extra information
-                '@type': 'FacebookSinglePostSource'
-              });
-
-              console.log('The fb source model', s);
-              s.save(null, {
-                success: function(model, resp, op) {
-                  console.log('Facebook source created');
-                  console.log('Making AJAX call to /export_post handler');
-                  console.log('The url of the model', model.url());
-
-                  // Promise.resolve($.ajax({
-                  //   type: 'POST',
-                  //   url: model.url() + "/export_post",
-                  //   dataType: 'json'
-                  // }))
-                  success();
-                }, 
-
-                error: function(model, resp, op) {
-                  console.error('Could not create a Facebook source');
-                }
-              });
-              
             });
           }
         });  
