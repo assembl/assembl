@@ -617,6 +617,8 @@ def install_builddeps():
         run('brew tap homebrew/services')
         sudo('brew services start memcached')
         sudo('brew services start redis')
+        if not exists('/usr/local/bin/pkg-config'):
+            run('brew install pkg-config')
         if not exists('/usr/local/bin/node'):
             run('brew install nodejs npm')
         if not exists('/usr/local/bin/autoconf'):
