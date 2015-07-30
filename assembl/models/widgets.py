@@ -582,6 +582,13 @@ class IdeaCreatingWidget(BaseIdeaWidget):
         class BaseIdeaHidingCollection(BaseIdeaCollectionC):
             hide_proposed_ideas = True
 
+            def ctx_permissions(self, permissions):
+                # permission loophoole: allow participants to create ideas in this case.
+                if P_ADD_POST in permissions and P_ADD_IDEA not in permissions:
+                    return [P_ADD_IDEA]
+                return super(BaseIdeaHidingCollection, self).ctx_permissions(permissions)
+
+
         class BaseIdeaDescendantsCollectionC(BaseIdeaDescendantsCollection):
             hide_proposed_ideas = False
 

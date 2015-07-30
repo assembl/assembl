@@ -792,7 +792,7 @@ class BaseOps(object):
     @classmethod
     def create_from_json(
             cls, json, user_id=None, context=None,
-            aliases=None, jsonld=None,
+            aliases=None, jsonld=None, permissions=None,
             parse_def_name='default_reverse'):
         from ..auth.util import get_permissions
         aliases = aliases or {}
@@ -801,7 +801,7 @@ class BaseOps(object):
         user_id = user_id or Everyone
         from assembl.models import Discussion
         discussion = context.get_instance_of_class(Discussion)
-        permissions = get_permissions(
+        permissions = permissions or get_permissions(
             user_id, discussion.id if discussion else None)
         with cls.default_db.no_autoflush:
             # We need this to allow db.is_modified to work well

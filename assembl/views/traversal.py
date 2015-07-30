@@ -11,6 +11,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from abc import ABCMeta, abstractmethod
 
 from assembl.auth import P_READ, R_SYSADMIN
+from assembl.auth.util import get_permissions
 from assembl.lib.sqla import *
 from assembl.lib.decl_enums import DeclEnumType
 
@@ -75,21 +76,23 @@ class TraversalContext(object):
         return None
 
     def get_discussion_id(self):
-        return None
+        return self.__parent__.get_discussion_id()
 
     def get_instance_of_class(self, cls):
-        return None
+        return self.__parent__.get_instance_of_class(cls)
 
     def decorate_query(self, query, ctx, tombstones=False):
-        # The buck stops here
-        return query
+        return self.__parent__.decorate_query(query, ctx, tombstones)
 
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
-        # and here
-        pass
+        self.__parent__.decorate_instance(
+            instance, assocs, user_id, ctx, kwargs)
 
     def get_target_class(self):
         return None
+
+    def ctx_permissions(self, permissions):
+        return self.__parent__.ctx_permissions(permissions)
 
 
 class Api2Context(TraversalContext):
@@ -111,6 +114,23 @@ class Api2Context(TraversalContext):
 
     def all_class_names(self):
         return [k for k in Base._decl_class_registry.iterkeys() if k[0] != '_']
+
+    def get_discussion_id(self):
+        return None
+
+    def get_instance_of_class(self, cls):
+        return None
+
+    def decorate_query(self, query, ctx, tombstones=False):
+        # The buck stops here
+        return query
+
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
+        # and here
+        pass
+
+    def ctx_permissions(self, permissions):
+        return []
 
 
 def process_args(args, cls):
@@ -269,10 +289,6 @@ class InstanceContext(TraversalContext):
             raise KeyError()
         return CollectionContext(self, collection, self._instance)
 
-    def decorate_query(self, query, ctx, tombstones=False):
-        # Leave that work to the collection
-        return self.__parent__.decorate_query(query, ctx, tombstones)
-
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         # if one of the objects has a non-list relation to this class, add it
         # Slightly dangerous...
@@ -288,7 +304,7 @@ class InstanceContext(TraversalContext):
                     #print "Setting3 ", inst, reln.key, self._instance
                     setattr(inst, reln.key, self._instance)
                     break
-        self.__parent__.decorate_instance(
+        super(InstanceContext, self).decorate_instance(
             instance, assocs, user_id, ctx, kwargs)
 
     def find_collection(self, collection_class_name):
@@ -298,7 +314,7 @@ class InstanceContext(TraversalContext):
         from assembl.models import DiscussionBoundBase
         if isinstance(self._instance, DiscussionBoundBase):
             return self._instance.get_discussion_id()
-        return self.__parent__.get_discussion_id()
+        return super(InstanceContext, self).get_discussion_id()
 
     def get_instance_of_class(self, cls):
         if isinstance(self._instance, cls):
@@ -401,16 +417,26 @@ class CollectionContext(TraversalContext):
         cls = self.collection_class
         if issubclass(cls, TombstonableMixin) and not tombstones:
             query = query.filter(cls.tombstone_condition(self.class_alias))
-        return self.__parent__.decorate_query(query, ctx, tombstones)
+        return super(CollectionContext, self).decorate_query(
+            query, ctx, tombstones=False)
 
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         self.collection.decorate_instance(
             instance, self.parent_instance, assocs, user_id, ctx, kwargs)
-        self.__parent__.decorate_instance(
+        super(CollectionContext, self).decorate_instance(
             instance, assocs, user_id, ctx, kwargs)
+
+    def ctx_permissions(self, permissions):
+        new_permissions = self.collection.ctx_permissions(permissions)
+        new_permissions.extend(super(
+            CollectionContext, self).ctx_permissions(permissions))
+        return new_permissions
 
     def create_object(self, typename=None, json=None, user_id=None, **kwargs):
         cls = self.get_collection_class(typename)
+        permissions = get_permissions(
+            user_id, self.get_discussion_id())
+        permissions.extend(self.ctx_permissions(permissions))
         with self.parent_instance.db.no_autoflush:
             try:
                 if json is None:
@@ -421,7 +447,8 @@ class CollectionContext(TraversalContext):
                             break
                     inst = cls(**dict(process_args(kwargs, cls)))
                 else:
-                    inst = cls.create_from_json(json, user_id, self)
+                    inst = cls.create_from_json(
+                        json, user_id, self, permissions=permissions)
                     kwargs.update(json)
             except Exception as e:
                 print_exc()
@@ -438,12 +465,6 @@ class CollectionContext(TraversalContext):
         if self.collection.name() == collection_class_name:
             return self
         return self.__parent__.find_collection(collection_class_name)
-
-    def get_discussion_id(self):
-        return self.__parent__.get_discussion_id()
-
-    def get_instance_of_class(self, cls):
-        return self.__parent__.get_instance_of_class(cls)
 
 
 class NamedCollectionContextPredicate(object):
@@ -537,6 +558,9 @@ class AbstractCollectionDefinition(object):
 
     def name(self):
         return self.__class__.__name__
+
+    def ctx_permissions(self, permissions):
+        return []
 
     @staticmethod
     def filter_kwargs(cls, kwargs):

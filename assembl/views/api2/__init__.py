@@ -74,6 +74,7 @@ def includeme(config):
 def check_permissions(
         ctx, user_id, permissions, operation, cls=None):
     cls = cls or ctx.get_target_class()
+    permissions.extend(ctx.ctx_permissions(permissions))
     allowed = cls.user_can_cls(user_id, operation, permissions)
     if not allowed or (allowed == IF_OWNED and user_id == Everyone):
         raise HTTPUnauthorized()
