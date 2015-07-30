@@ -193,9 +193,6 @@ var routeManager = Marionette.Object.extend({
       var groupsView = new GroupContainer({
         collection: groupSpecs
       });
-      if (!from_home) {
-        activate_tour = false;
-      }
 
       var lastSave = Storage.getDateOfLastViewSave(),
           currentUser = Ctx.getCurrentUser();
@@ -224,22 +221,24 @@ var routeManager = Marionette.Object.extend({
                                  }, 250);
                                }
                              });
-      }
-      else if (!lastSave
-          || (Date.now() - lastSave.getTime() > (7 * 24 * 60 * 60 * 1000))
-          ) {
-        /* Reset the context of the user view, if it's too old to be
-         usable, or if it wasn't initialized before */
-         
-        // Find if a group exists that has a navigation panel
-        var navigableGroupSpec = groupSpecs.find(function(aGroupSpec) {
-          return aGroupSpec.findNavigationSidebarPanelSpec();
-        });
-        if (navigableGroupSpec) {
-          setTimeout(function() {
-            var groupContent = groupsView.children.findByModel(navigableGroupSpec);
-            groupContent.NavigationResetContextState();
-          }, 0);
+      } else {
+        activate_tour = false;
+        if (!lastSave
+            || (Date.now() - lastSave.getTime() > (7 * 24 * 60 * 60 * 1000))
+            ) {
+          /* Reset the context of the user view, if it's too old to be
+           usable, or if it wasn't initialized before */
+           
+          // Find if a group exists that has a navigation panel
+          var navigableGroupSpec = groupSpecs.find(function(aGroupSpec) {
+            return aGroupSpec.findNavigationSidebarPanelSpec();
+          });
+          if (navigableGroupSpec) {
+            setTimeout(function() {
+              var groupContent = groupsView.children.findByModel(navigableGroupSpec);
+              groupContent.NavigationResetContextState();
+            }, 0);
+          }
         }
       }
 
