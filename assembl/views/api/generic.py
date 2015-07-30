@@ -1,5 +1,5 @@
 from pyramid.httpexceptions import HTTPNotFound
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone
 from cornice import Service
 
 import assembl.models
@@ -31,7 +31,7 @@ def get_object(request):
     if not get_view_def(view):
         raise HTTPNotFound("View '%s' not found." % view)
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     return obj.generic_json(view, user_id, permissions)

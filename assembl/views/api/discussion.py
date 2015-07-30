@@ -1,7 +1,7 @@
 import json
 
 from pyramid.httpexceptions import HTTPNotFound
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone
 
 from cornice import Service
 
@@ -25,7 +25,7 @@ def get_discussion(request):
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
     view_def = request.GET.get('view') or 'default'
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not discussion:

@@ -478,8 +478,9 @@ class BaseOps(object):
         return local_view
 
     def generic_json(
-            self, view_def_name='default', user_id=Everyone,
+            self, view_def_name='default', user_id=None,
             permissions=(P_READ, ), base_uri='local:'):
+        user_id = user_id or Everyone
         if not self.user_can(user_id, CrudPermissions.READ, permissions):
             return None
         view_def = get_view_def(view_def_name or 'default')
@@ -1279,11 +1280,13 @@ class BaseOps(object):
     @classmethod
     def user_can_cls(cls, user_id, operation, permissions):
         perm = cls.crud_permissions.can(operation, permissions)
+        user_id = user_id or Everyone
         if perm == IF_OWNED and user_id == Everyone:
             return False
         return perm
 
     def user_can(self, user_id, operation, permissions):
+        user_id = user_id or Everyone
         perm = self.crud_permissions.can(operation, permissions)
         if perm != IF_OWNED:
             return perm

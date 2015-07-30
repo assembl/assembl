@@ -24,7 +24,7 @@ from . import (FORM_HEADER, JSON_HEADER, check_permissions)
 def votes_collection_view(request):
     ctx = request.context
     user_id = authenticated_userid(request)
-    if user_id == Everyone:
+    if not user_id:
         raise HTTPUnauthorized
     view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
     tombstones = asbool(request.GET.get('tombstones', False))
@@ -42,6 +42,8 @@ def votes_collection_view(request):
 def votes_collection_add_json(request):
     ctx = request.context
     user_id = authenticated_userid(request)
+    if not user_id:
+        raise HTTPUnauthorized
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
@@ -84,6 +86,8 @@ def votes_collection_add_json(request):
 def votes_collection_add(request):
     ctx = request.context
     user_id = authenticated_userid(request)
+    if not user_id:
+        raise HTTPUnauthorized
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
@@ -131,6 +135,8 @@ def votes_collection_add(request):
 def vote_results(request):
     ctx = request.context
     user_id = authenticated_userid(request)
+    if not user_id:
+        raise HTTPUnauthorized
     widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
     if not widget:
         raise HTTPNotFound()

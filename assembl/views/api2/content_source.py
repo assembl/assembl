@@ -26,7 +26,7 @@ def fetch_posts(request):
             raise HTTPBadRequest("Non-numeric limit value: "+limit)
     if force_restart or reimport or limit:
         # Only discussion admins
-        user_id = authenticated_userid(request)
+        user_id = authenticated_userid(request) or Everyone
         permissions = get_permissions(
             user_id, ctx.get_discussion_id())
         if P_ADMIN_DISC not in permissions:

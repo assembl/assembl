@@ -1,12 +1,12 @@
 from simplejson import loads
 
 from pyramid.view import view_config
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
     HTTPOk, HTTPNoContent, HTTPNotFound, HTTPUnauthorized)
 
 from assembl.auth import (
-    P_READ, P_ADMIN_DISC, P_ADD_POST, Everyone)
+    P_READ, P_ADMIN_DISC, P_ADD_POST)
 from assembl.models import (
     Widget, User, Discussion, Idea, IdeaCreatingWidget,
     MultiCriterionVotingWidget)
@@ -25,23 +25,22 @@ from . import (
 def widget_view(request):
     # IF_OWNED not applicable for widgets... so far
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.READ)
-    if user_id == Everyone:
-        return HTTPUnauthorized()
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
     json = ctx._instance.generic_json(view, user_id, permissions)
-    user = User.get(user_id)
     # json['discussion'] = ...
-    json['user'] = user.generic_json(view, user_id, permissions)
-    json['user_permissions'] = get_permissions(
-        user_id, ctx._instance.get_discussion_id())
-    user_state = ctx._instance.get_user_state(user_id)
-    if user_state is not None:
-        json['user_state'] = user_state
+    if user_id != Everyone:
+        user = User.get(user_id)
+        user_state = ctx._instance.get_user_state(user_id)
+        json['user'] = user.generic_json(view, user_id, permissions)
+        json['user_permissions'] = get_permissions(
+            user_id, ctx._instance.get_discussion_id())
+        if user_state is not None:
+            json['user_state'] = user_state
     target_id = request.GET.get('target', None)
     if target_id:
         idea = Idea.get_instance(target_id)
@@ -58,6 +57,8 @@ def widget_instance_put(request):
     # IF_OWNED not applicable for widgets... so far
     ctx = request.context
     user_id = authenticated_userid(request)
+    if not user_id:
+        raise HTTPUnauthorized
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.UPDATE)
@@ -66,7 +67,6 @@ def widget_instance_put(request):
         del request.POST['user_state']
     response = instance_put(request)
     if user_state:
-        user_id = authenticated_userid(request)
         request.context._instance.set_user_state(
             user_state, user_id)
     return response
@@ -77,8 +77,8 @@ def widget_instance_put(request):
              accept="application/json", name="user_state",
              renderer='json')
 def widget_userstate_get(request):
-    user_id = authenticated_userid(request) or Everyone
-    if user_id == Everyone:
+    user_id = authenticated_userid(request)
+    if not user_id:
         raise HTTPUnauthorized()
     return request.context._instance.get_user_state(user_id)
 
@@ -95,8 +95,8 @@ def widget_userstate_put(request):
     # No further permission check for user_state
     user_state = request.json_body
     if user_state:
-        user_id = authenticated_userid(request) or Everyone
-        if user_id == Everyone:
+        user_id = authenticated_userid(request)
+        if not user_id:
             raise HTTPUnauthorized()
         request.context._instance.set_user_state(
             user_state, user_id)
@@ -211,7 +211,7 @@ def get_idea_sibling_criteria(request):
     ctx = request.context
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     return [cr.generic_json(view, user_id, permissions) for cr in
@@ -231,8 +231,6 @@ def get_all_users_states(request):
              accept="application/json")
 def voting_widget_view(request):
     user_id = authenticated_userid(request) or Everyone
-    if user_id == Everyone:
-        return HTTPUnauthorized()
     ctx = request.context
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
@@ -240,14 +238,15 @@ def voting_widget_view(request):
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     json = widget.generic_json(view, user_id, permissions)
-    user = User.get(user_id)
     #json['discussion'] = ...
-    json['user'] = user.generic_json(view, user_id, permissions)
-    json['user_permissions'] = get_permissions(
-        user_id, widget.get_discussion_id())
-    user_state = widget.get_user_state(user_id)
-    if user_state is not None:
-        json['user_state'] = user_state
+    if user_id != Everyone:
+        user = User.get(user_id)
+        json['user'] = user.generic_json(view, user_id, permissions)
+        json['user_permissions'] = get_permissions(
+            user_id, widget.get_discussion_id())
+        user_state = widget.get_user_state(user_id)
+        if user_state is not None:
+            json['user_state'] = user_state
     target_id = request.GET.get('target', None)
     if target_id and Idea.get_database_id(target_id):
         json['user_votes_url'] = widget.get_user_votes_url(target_id)
@@ -378,7 +377,7 @@ def add_child_idea_json(request):
              accept="application/json", name="vote_results", renderer="json")
 def vote_results(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
     if not widget:
         raise HTTPNotFound()

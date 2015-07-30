@@ -26,7 +26,8 @@ agent = Service(
     description="Retrieve a single agent", renderer='json')
 
 
-def _get_agents_real(discussion, user_id=Everyone, view_def='default'):
+def _get_agents_real(discussion, user_id=None, view_def='default'):
+    user_id = user_id or Everyone
     agents = discussion.get_participants_query()
     permissions = get_permissions(user_id, discussion.id)
     include_emails = P_ADMIN_DISC in permissions or P_SYSADMIN in permissions
@@ -63,12 +64,11 @@ def get_agent(request):
     if not agent:
       raise HTTPNotFound("Agent with id '%s' not found." % agent_id)
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     agent_json = agent.generic_json(view_def, user_id, permissions)
-    current_user = authenticated_userid(request)
-    if current_user == agent.id:
+    if user_id == agent.id:
         # We probably should add all profile info here.
         agent_json['preferred_email'] = agent.get_preferred_email()
     return agent_json
@@ -78,7 +78,7 @@ def get_agent(request):
 def post_agent(request):
     agent_id = request.matchdict['id']
     agent = AgentProfile.get_instance(agent_id)
-    current_user = authenticated_userid(request)
+    current_user = authenticated_userid(request) or Everyone
     if current_user != agent.id:
         # Only allow post by self.
         raise HTTPUnauthorized()

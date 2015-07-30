@@ -33,7 +33,7 @@ def add_local_role(request):
     # Do not use check_permissions, this is a special case
     ctx = request.context
     user_id = authenticated_userid(request)
-    if user_id == Everyone:
+    if not user_id:
         raise HTTPUnauthorized()
     discussion_id = ctx.get_discussion_id()
     user_uri = User.uri_generic(user_id)
@@ -103,7 +103,7 @@ def set_local_role(request):
     ctx = request.context
     instance = ctx._instance
     user_id = authenticated_userid(request)
-    if user_id == Everyone:
+    if not user_id:
         raise HTTPUnauthorized()
     discussion_id = ctx.get_discussion_id()
     user_uri = User.uri_generic(user_id)
@@ -196,7 +196,7 @@ def verify_password(request):
     request_method='DELETE', renderer='json')
 def delete_abstract_agent_account(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance

@@ -12,7 +12,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPFound)
 from pyramid_dogpile_cache import get_region
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone
 from pyramid.renderers import JSONP_VALID_CALLBACK
 from pyramid.settings import asbool
 
@@ -65,9 +65,9 @@ def userprivate_jsonld(discussion_id):
 
 def read_user_token(request):
     salt = None
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     discussion_id = request.context.get_discussion_id()
-    permissions = get_permissions(user_id or Everyone, discussion_id)
+    permissions = get_permissions(user_id, discussion_id)
     if P_READ in permissions:
         permissions.append(P_READ_PUBLIC_CIF)
 
@@ -90,7 +90,7 @@ def read_user_token(request):
             raise HTTPBadRequest("Invalid token")
         if discussion_id is not None and t_discussion_id != discussion_id:
             raise HTTPUnauthorized("Token for another discussion")
-        if user_id is None:
+        if user_id == Everyone:
             permissions = get_permissions(t_user_id, discussion_id)
             if P_READ in permissions:
                 permissions.append(P_READ_PUBLIC_CIF)
@@ -113,9 +113,9 @@ def handle_jsonp(callback_fn, json):
              accept="application/ld+json")
 def get_token(request):
     user_id = authenticated_userid(request)
-    discussion_id = request.context.get_discussion_id()
     if not user_id:
         raise HTTPUnauthorized()
+    discussion_id = request.context.get_discussion_id()
     req_permissions = request.GET.getall('permission') or [
         P_READ, P_READ_PUBLIC_CIF]
     random_seed = request.GET.get('seed', None)

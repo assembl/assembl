@@ -88,6 +88,7 @@ def discussion_edit(request):
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
     user_id = authenticated_userid(request)
+    assert user_id
     permissions = get_permissions(user_id, discussion_id)
     partners = json.dumps([p.generic_json(
         user_id=user_id, permissions=permissions
@@ -127,6 +128,7 @@ def discussion_edit(request):
 @view_config(route_name='discussion_permissions', permission=P_ADMIN_DISC)
 def discussion_permissions(request):
     user_id = authenticated_userid(request)
+    assert user_id
     db = Discussion.default_db
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
@@ -199,10 +201,10 @@ def discussion_permissions(request):
                 prefix = 'has_'+role+'_'
                 for name in request.POST:
                     if name.startswith(prefix):
-                        user_id = int(name[len(prefix):])
-                        if user_id not in user_ids:
-                            users.add(User.get_instance(user_id))
-                            user_ids.add(user_id)
+                        a_user_id = int(name[len(prefix):])
+                        if a_user_id not in user_ids:
+                            users.add(User.get_instance(a_user_id))
+                            user_ids.add(a_user_id)
                 for user in users:
                     has_role_text = 'has_%s_%d' % (role, user.id)
                     if (user.id, role) not in local_roles_as_set and \
@@ -274,6 +276,7 @@ def discussion_permissions(request):
 @view_config(route_name='general_permissions', permission=P_SYSADMIN)
 def general_permissions(request):
     user_id = authenticated_userid(request)
+    assert user_id
     db = Discussion.default_db
 
     roles = db.query(Role).all()
@@ -298,10 +301,10 @@ def general_permissions(request):
                 prefix = 'has_'+role+'_'
                 for name in request.POST:
                     if name.startswith(prefix):
-                        user_id = int(name[len(prefix):])
-                        if user_id not in user_ids:
-                            users.add(User.get_instance(user_id))
-                            user_ids.add(user_id)
+                        a_user_id = int(name[len(prefix):])
+                        if a_user_id not in user_ids:
+                            users.add(User.get_instance(a_user_id))
+                            user_ids.add(a_user_id)
                 for user in users:
                     has_role_text = 'has_%s_%d' % (role, user.id)
                     if (user.id, role) not in user_roles_as_set and \

@@ -1,7 +1,7 @@
 import json
 
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone
 from cornice import Service
 
 from . import API_DISCUSSION_PREFIX
@@ -24,7 +24,7 @@ def get_syntheses(request):
     discussion = Discussion.get(int(discussion_id))
     if not discussion:
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
     syntheses = discussion.get_all_syntheses()
     view_def = request.GET.get('view') or 'default'
@@ -47,7 +47,7 @@ def get_synthesis(request):
 
     view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     return synthesis.generic_json(view_def, user_id, permissions)

@@ -6,7 +6,7 @@ from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.settings import asbool
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone
 
 from sqlalchemy import String, text
 
@@ -61,7 +61,7 @@ def get_posts(request):
 
     discussion.import_from_sources()
 
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     DEFAULT_PAGE_SIZE = 25
@@ -212,7 +212,7 @@ def get_posts(request):
         posts = posts.filter(parent_alias.creator_id == post_replies_to)
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
-    if user_id:
+    if user_id != Everyone:
         # This is horrible, but the join creates complex subqueries that
         # virtuoso cannot decode properly.
         read_posts = {v.post_id for v in discussion.db.query(
@@ -273,7 +273,7 @@ def get_posts(request):
         if not isinstance(query_result, (list, tuple)):
             query_result = [query_result]
         post = query_result[0]
-        if user_id:
+        if user_id != Everyone:
             viewpost = post.id in read_posts
             likedpost = liked_posts.get(post.id, None)
         no_of_posts += 1
@@ -286,7 +286,7 @@ def get_posts(request):
         if viewpost:
             serializable_post['read'] = True
             no_of_posts_viewed_by_user += 1
-        elif user_id and root_post is not None and root_post.id == post.id:
+        elif user_id != Everyone and root_post is not None and root_post.id == post.id:
             # Mark post read, we requested it explicitely
             viewed_post = ViewPost(
                 actor_id=user_id,
@@ -340,7 +340,7 @@ def get_post(request):
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     return post.generic_json(view_def, user_id, permissions)
@@ -395,6 +395,9 @@ def create_post(request):
     localizer = request.localizer
     request_body = json.loads(request.body)
     user_id = authenticated_userid(request)
+    if not user_id:
+        raise HTTPUnauthorized()
+
     user = Post.default_db.query(User).filter_by(id=user_id).one()
 
     message = request_body.get('message', None)
@@ -403,9 +406,6 @@ def create_post(request):
     idea_id = request_body.get('idea_id', None)
     subject = request_body.get('subject', None)
     publishes_synthesis_id = request_body.get('publishes_synthesis_id', None)
-    
-    if not user_id:
-        raise HTTPUnauthorized()
 
     if not message:
         raise HTTPBadRequest(localizer.translate(

@@ -57,7 +57,7 @@ def get_extract(request):
     extract = Extract.get_instance(extract_id)
     view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if extract is None:
@@ -67,7 +67,8 @@ def get_extract(request):
     return extract.generic_json(view_def, user_id, permissions)
 
 
-def _get_extracts_real(discussion, view_def='default', ids=None, user_id=Everyone):
+def _get_extracts_real(discussion, view_def='default', ids=None, user_id=None):
+    user_id = user_id or Everyone
     all_extracts = discussion.db.query(Extract).filter(
         Extract.discussion_id == discussion.id
     )
@@ -117,13 +118,12 @@ def post_extract(request):
                 token, request.registry.settings['session.secret'])
             if token:
                 user_id = token['userId']
-    if not user_id:
-        user_id = Everyone
+    user_id = user_id or Everyone
     if not user_has_permission(discussion_id, user_id, P_ADD_EXTRACT):
         #TODO: maparent:  restore this code once it works:
         #return HTTPForbidden(result=ACLDenied(permission=P_ADD_EXTRACT))
         return HTTPForbidden()
-    if user_id == Everyone:
+    if not user_id or user_id == Everyone:
         # TODO: Create an anonymous user.
         raise HTTPServerError("Anonymous extracts are not implemeted yet.")
     content = None
@@ -215,8 +215,7 @@ def put_extract(request):
                 token, request.registry.settings['session.secret'])
             if token:
                 user_id = token['userId']
-    if not user_id:
-        user_id = Everyone
+    user_id = user_id or Everyone
 
     updated_extract_data = json.loads(request.body)
     extract = Extract.get_instance(extract_id)
@@ -260,8 +259,7 @@ def delete_extract(request):
                 token, request.registry.settings['session.secret'])
             if token:
                 user_id = token['userId']
-    if not user_id:
-        user_id = Everyone
+    user_id = user_id or Everyone
 
     extract_id = request.matchdict['id']
     extract = Extract.get_instance(extract_id)
@@ -286,7 +284,7 @@ def do_search_extracts(request):
     uri = request.GET['uri']
     view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not uri:

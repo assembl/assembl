@@ -39,6 +39,7 @@ def get_roles(user_id, discussion_id=None):
 
 
 def get_permissions(user_id, discussion_id):
+    user_id = user_id or Everyone
     session = get_session_maker()()
     if user_id == Everyone:
         if not discussion_id:
@@ -128,6 +129,7 @@ def authentication_callback(user_id, request):
 
 def discussions_with_access(userid, permission=P_READ):
     from ..models import Discussion
+    userid = userid or Everyone
     db = Discussion.default_db
     if userid == Everyone:
         return db.query(Discussion).join(
@@ -168,6 +170,7 @@ def discussions_with_access(userid, permission=P_READ):
 def user_has_permission(discussion_id, user_id, permission):
     from ..models import Discussion
     # assume all ids valid
+    user_id = user_id or Everyone
     db = Discussion.default_db
     if user_id == Everyone:
         permission = db.query(DiscussionPermission).join(

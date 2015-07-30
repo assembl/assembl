@@ -43,7 +43,7 @@ from sqlalchemy import inspect
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPBadRequest, HTTPNotImplemented, HTTPUnauthorized, HTTPNotFound)
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone
 from pyramid.response import Response
 from pyramid.settings import asbool
 from simplejson import dumps
@@ -84,7 +84,7 @@ def check_permissions(
              request_method='GET', permission=P_READ)
 def class_view(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check = check_permissions(ctx, user_id, permissions, CrudPermissions.READ)
@@ -92,7 +92,7 @@ def class_view(request):
     tombstones = asbool(request.GET.get('tombstones', False))
     q = ctx.create_query(view == 'id_only', tombstones)
     if check == IF_OWNED:
-        if not user_id:
+        if user_id == Everyone:
             raise HTTPUnauthorized()
         q = ctx.get_target_class().restrict_to_owners(q, user_id)
     if view == 'id_only':
@@ -112,7 +112,7 @@ def instance_view_jsonld(request):
     from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
     from rdflib import URIRef, ConjunctiveGraph
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
@@ -140,7 +140,7 @@ def instance_view_jsonld(request):
              request_method='GET', accept="application/json")
 def instance_view(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
@@ -155,7 +155,7 @@ def instance_view(request):
              request_method='GET')
 def collection_view(request, default_view='default'):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check = check_permissions(ctx, user_id, permissions, CrudPermissions.READ)
@@ -163,7 +163,7 @@ def collection_view(request, default_view='default'):
     tombstones = asbool(request.GET.get('tombstones', False))
     q = ctx.create_query(view == 'id_only', tombstones)
     if check == IF_OWNED:
-        if not user_id:
+        if user_id == Everyone:
             raise HTTPUnauthorized()
         q = ctx.get_target_class().restrict_to_owners(q, user_id)
     if view == 'id_only':
@@ -175,7 +175,7 @@ def collection_view(request, default_view='default'):
 
 def collection_add(request, args):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
@@ -224,7 +224,7 @@ def instance_post(request):
              renderer='json')
 def instance_put_json(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
@@ -246,7 +246,7 @@ def instance_put_json(request):
              renderer='json')
 def instance_put(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, ctx.get_discussion_id())
     instance = ctx._instance
     if not instance.user_can(user_id, CrudPermissions.UPDATE, permissions):
@@ -303,14 +303,14 @@ def instance_put(request):
     if view == 'id_only':
         return [instance.uri()]
     else:
-        user_id = authenticated_userid(request)
+        user_id = authenticated_userid(request) or Everyone
         return instance.generic_json(view, user_id, permissions)
 
 
 @view_config(context=InstanceContext, request_method='DELETE', renderer='json')
 def instance_del(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
@@ -339,7 +339,7 @@ def show_class_names(request):
 @view_config(context=ClassContext, request_method='POST', header=FORM_HEADER)
 def class_add(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
@@ -372,7 +372,7 @@ def class_add(request):
 def collection_add_json(request, json=None):
     ctx = request.context
     json = request.json_body if json is None else json
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     typename = ctx.collection_class.external_typename()

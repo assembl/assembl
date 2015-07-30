@@ -3,7 +3,7 @@ import transaction
 
 from cornice import Service
 
-from pyramid.security import authenticated_userid, Everyone, Authenticated
+from pyramid.security import Everyone, Authenticated
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 

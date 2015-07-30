@@ -3,7 +3,7 @@ from collections import defaultdict
 import simplejson as json
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, Everyone
 from sqlalchemy import and_
 from sqlalchemy.orm import (joinedload_all, undefer)
 
@@ -60,7 +60,7 @@ def get_idea(request):
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view')
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not idea:
@@ -70,6 +70,7 @@ def get_idea(request):
 
 
 def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
+    user_id = user_id or Everyone
     next_synthesis = discussion.get_next_synthesis()
     ideas = discussion.db.query(Idea).filter_by(
         discussion_id=discussion.id
@@ -116,7 +117,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
 
 @ideas.get(permission=P_READ)
 def get_ideas(request):
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(int(discussion_id))
     if not discussion:
@@ -224,7 +225,7 @@ def get_idea_extracts(request):
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not idea:

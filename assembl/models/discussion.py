@@ -350,7 +350,7 @@ class Discussion(DiscussionBoundBase):
                     request = get_current_request()
                     if request is not None:
                         key = request.authenticated_userid
-                        if key is None or key == Everyone:
+                        if key is None:
                             raise HTTPUnauthorized()
                     else:
                         raise RuntimeError()
