@@ -73,7 +73,7 @@ var IdeaList = AssemblPanel.extend({
     Promise.join(collectionManager.getAllIdeasCollectionPromise(),
         collectionManager.getAllIdeaLinksCollectionPromise(),
             function(allIdeasCollection, allIdeaLinksCollection) {
-              var events = ['reset', 'change:parentId', 'change:@id', 'remove', 'add', 'destroy'];
+              var events = ['reset', 'change:parentId', 'change:@id', 'change:hidden', 'remove', 'add', 'destroy'];
               that.listenTo(allIdeasCollection, events.join(' '), that.render);
               that.allIdeasCollection = allIdeasCollection;
 
