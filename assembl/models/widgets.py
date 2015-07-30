@@ -564,7 +564,8 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                             discussion_id=inst.discussion_id,
                             message_id=uuid.uuid1().urn,
                             hidden=self.hide_proposed_ideas,
-                            body="", subject=inst.short_title,
+                            subject=inst.short_title,
+                            body=instance.definition,  # repeated
                             **self.filter_kwargs(
                                 IdeaProposalPost, kwargs))
                         assocs.append(post)
