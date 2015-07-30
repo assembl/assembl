@@ -375,8 +375,50 @@ class Discussion(DiscussionBoundBase):
                     ActiveWidgetsCollection, self).contains(
                     parent_instance, instance)
 
+        class SourcesCollection(CollectionDefinition):
+            def __init__(self, cls):
+                super(SourcesCollection, self).__init__(
+                    cls, cls.sources)
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx,
+                    kwargs):
+
+                super(SourcesCollection, self).decorate_instance(
+                    instance, parent_instance, assocs, user_id, ctx, kwargs)
+
+                from .generic import Content, ContentSourceIDs
+                from .facebook_integration import FacebookGenericSource
+
+                for inst in assocs[:]:
+                    if isinstance(inst, FacebookGenericSource):
+                        if 'is_content_sink' in kwargs:
+                            is_sink = kwargs.get('is_content_sink', None)
+                            data = kwargs.get('sink_data', None)
+                            if is_sink and not data:
+                                raise ValueError("User must pass sink data")
+                            source = instance
+                            post_id = data.get('post_id', None)
+                            fb_post_id = data.get('facebook_post_id', None)
+
+                            if not post_id:
+                                raise ValueError("Could not create \
+                                    content because of improper data input")
+                            else:
+                                try:
+                                    post_object = Content.\
+                                        get_instance(post_id)
+                                    cs = ContentSourceIDs(source=source,
+                                        post=post_object,
+                                        message_id_in_source=fb_post_id)
+                                    assocs.append(cs)
+                                except:
+                                    raise ValueError("Failed on content sink transaction")
+
+
         return {'all_users': AllUsersCollection(cls),
-                'active_widgets': ActiveWidgetsCollection(cls)}
+                'active_widgets': ActiveWidgetsCollection(cls),
+                'sources': SourcesCollection(cls)}
 
     all_participants = relationship(
         User, viewonly=True, secondary=LocalUserRole.__table__,

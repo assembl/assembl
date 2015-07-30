@@ -26,6 +26,7 @@ from .auth import (
 )
 
 from ..auth import (CrudPermissions, P_EXPORT, P_SYSADMIN)
+from ..views.traversal import CollectionDefinition
 from ..lib.config import get_config
 from ..lib.sqla import Base
 from ..tasks.source_reader import PullSourceReader, ReaderStatus
@@ -636,6 +637,7 @@ class FacebookGenericSource(PostSource):
                 return
 
     def content_sink(self):
+        # Could use the backref? @TODO: Ask MAP about this
         csId = self.db.query(ContentSourceIDs).\
             filter_by(source_id=self.id,
                       message_id_in_source=self.fb_source_id).first()
@@ -828,7 +830,8 @@ class FacebookAccessToken(Base):
                     if not expires_at:
                         raise TypeError('Debug token did not expires_at field')
                     if expires_at is 0 or u'0':
-                        # This access_token is basically never ending
+                        # This access_token is basically never
+                        # ending (we believe)
                         self.expiration = None
                 elif isinstance(data, basestring):
                     # Cannot get the expiration time of the time at all
@@ -847,6 +850,12 @@ class FacebookAccessToken(Base):
         return self.fb_account.uri()
 
     def is_expired(self):
+        """
+        An access token is considered never-expiring when the expiration
+        is None.
+        """
+        if not self.expiration:
+            return False
         now = datetime.utcnow()
         return now > self.expiration
 
@@ -952,53 +961,6 @@ class FacebookPost(ImportedPost):
             subject=subject,
             body=body
         )
-
-
-class FacebookContent(object):
-    def __init__(self, body=None, attachment=None, extras=None):
-        print "Created the IFacebookContent"
-        self.body = body or ""
-        self.attachment = attachment
-        self.attachment_extras = extras or None
-
-    def get_body(self):
-        return self.body
-
-    def has_body(self):
-        return self.body is not ""
-
-    def has_attachment(self):
-        return self.attachment is not None
-
-    def get_attachment(self):
-        return self.attachment
-
-    def get_attachment_extras(self):
-        return self.attachment_extras
-
-
-class FacebookContentSink(object):
-    # An object that would push whatever content wanted to facebook
-    def __init__(self, api, user):
-        self.user = user
-        self.parser = FacebookParser(api)
-
-    def verify_access_token_valid(self):
-        # Check that the user access token has not expired
-        # yet
-        # Might need Velruse and front-end work to get to this stage
-        pass
-
-    def create_source_from_post(self, post_id, post_address, user):
-        # Create the source
-        # Check that the access token allows pushing
-        # If successfull push, create the source
-        # And read from it immediately
-
-        # Create a Source
-        # source = FacebookSinglePostSource()
-        # Create a ContentSourceIDs
-        pass
 
 
 class FacebookReader(PullSourceReader):

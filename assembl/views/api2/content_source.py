@@ -38,15 +38,20 @@ def fetch_posts(request):
             raise HTTPUnauthorized("Only discussion administrator can "+'and'.join(requested))
 
     wake(csource.id, reimport, force_restart, limit=limit)
-    return {"message":"Source notified",
+    return {"message": "Source notified",
             "name": csource.name}
 
 
 @view_config(context=InstanceContext, request_method='POST',
              ctx_instance_class=ContentSource, name='export_post',
              permission=P_EXPORT, header=JSON_HEADER, renderer='json')
-def export_post(request): 
+def export_post(request):
     # Populate the assocation table
+    # MUST pass in a JSON in the form of:
+    # {
+    #   post_id: "", URI String of the post that was pushed out
+    #   facebook_post_id: "" //String id of the post returned by Fb API
+    # }
     from ...models.generic import ContentSourceIDs
     ctx = request.context
     csource = ctx._instance
@@ -58,7 +63,10 @@ def export_post(request):
     reimport = request.params.get('reimport', False)
     limit = request.params.get('limit', None)
 
-    if not post_id or not fb_post_id:
+    if not post_id:  # or not fb_post_id:
+        # post_id is necessary to establish relationship between source
+        # and post. The ID of the sink, while important, might also
+        # exist in the source (eg. in case of Facebook)
         return {"error": "Could not create a content \
             sink because of improper json inputs"}
 
