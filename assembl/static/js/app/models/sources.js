@@ -10,13 +10,24 @@ var Source = Base.Model.extend({
   defaults: {
     'name': 'ContentSource_' + this.cid,
     'creation_date': null,
-    'discussion_id': null,
+    /*
+      'discussion_id': null,
+      If urlRoot of an object is a ClassInstance, then the front-end model
+      MUST pass the discussion_id explicitly. However, since the urlRoot
+      is an InstanceContext or CollectionContext after Discussion 
+      (eg. /data/Discussion/1/sources/ instead of /data/ContentSource),
+      the api v2 can infer the discussion_id through the context of the
+      traversal. POSTing with discussion_id: null yields a 400 Error from
+      backend.
+     */
     'last_import': null,
     'connection_error': null,
     'error_description': null,
     'error_backoff_until': null,
     'number_of_imported_posts': 0,
-    '@type': 'ContentSource'
+    '@type': 'ContentSource',
+    'is_content_sink': false // Used by API V2 as flag for side-effectful POST creation only.
+    // DO NOT use for any other scenario than creating facebook content_sinks
   },
   doReimport: function() {
     var url = this.url() + '/fetch_posts';
