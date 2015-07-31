@@ -1,11 +1,11 @@
-Babel==1.3
+Babel==2.0
 Beaker>=1.6.5
 Chameleon==2.22
-ColanderAlchemy==0.3.1
+ColanderAlchemy==0.3.3
 DateTime==4.0.1
 Fabric==1.10.2
 IMAPClient==0.13
-Jinja2==2.7.3
+Jinja2==2.8
 Mako==1.0.1
 MarkupSafe==0.23
 PasteDeploy==1.5.2
@@ -14,7 +14,7 @@ PyLD==0.6.8
 PyStemmer==1.3.0
 Pygments==2.0.2
 SPARQLWrapper==1.6.4
-SQLAlchemy==1.0.7
+SQLAlchemy==1.0.8
 Sphinx==1.3.1
 Unidecode==0.04.18
 WebOb==1.4.1
@@ -46,7 +46,7 @@ ecdsa==0.13
 enum34==1.0.4
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
-flaky==2.1.1
+flaky==2.1.2
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
 greenlet==0.4.7
 html5lib==0.999999
@@ -89,7 +89,7 @@ pyramid-mailer==0.14.1
 pyramid-mako==1.0.2
 pyramid-tm==0.12
 pytest==2.7.2
-pytest-cov==1.8.1
+pytest-cov==2.0.0
 pytest-localserver==0.3.4
 pytest-mock==0.7.0
 pytest-splinter==1.4.6
@@ -97,7 +97,7 @@ python-dateutil==2.4.2
 python-openid==2.2.5
 pytz==2015.4
 pyzmq==14.7.0
-raven==5.4.4
+raven==5.5.0
 rdflib==4.2.0
 rdflib-jsonld==0.3
 redis==2.10.3
@@ -106,14 +106,14 @@ repoze.lru==0.6
 repoze.sendmail==4.1  # rq.filter: <4.2
 requests==2.7.0
 requests-oauthlib==0.5.0
-selenium==2.46.0
+selenium==2.47.0
 simplejson==3.8.0
 six==1.9.0
 snowballstemmer==1.2.0
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
 sphinx-bootstrap-theme==0.4.7
 splinter==0.7.2
-sqlparse==0.1.15
+sqlparse==0.1.16
 -e git+https://github.com/imaginationforpeople/sqltap.git#egg=sqltap
 supervisor==3.1.3
 tornado==4.2.1
