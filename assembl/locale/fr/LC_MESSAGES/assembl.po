@@ -92,7 +92,7 @@ msgstr "Une session de créativité est en cours; Vous avez jusqu'au %(end_date
 
 #: assembl/static/js/app/dummy_translations.js:11
 msgid "Join the session"
-msgstr "Rejoindre la discussion"
+msgstr "Rejoindre la session"
 
 #: assembl/static/js/app/routeManager.js:262
 msgid "You must be logged in to access this page."
