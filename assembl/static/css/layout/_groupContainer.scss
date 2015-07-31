@@ -19,7 +19,7 @@
   }
 }
 
-@for $i from 1 through 5 {
+@for $i from 1 through 12 {
 #groupContainer.hasInfobar-#{$i} > .groupsContainer {
   position: absolute;
   top: #{$theme_header_height + $i * $infobar_height};

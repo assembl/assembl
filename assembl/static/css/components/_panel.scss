@@ -233,7 +233,7 @@ _:-ms-input-placeholder, :root .groupBody.editable .groupPanel header ~ .panelCo
   @include calc(height, "100vh - #{$theme_header_height} - #{$group_editable_header_height} - 45px");
 }
 
-@for $i from 1 through 5 {
+@for $i from 1 through 12 {
 #groupContainer.hasInfobar-#{$i} {
 
 .groupBody .groupPanel .panelContents {
