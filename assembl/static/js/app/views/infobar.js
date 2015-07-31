@@ -32,8 +32,9 @@ var InfobarItem = Marionette.LayoutView.extend({
     if (n.base_idea) {
       widgetEndpoint = widgetEndpoint + "&target=" + n.base_idea;
     }
-    if (n.end_date) {
-      n.end_date_moment = Moment(n.end_date).fromNow();
+    var end_date = model.get("end_date") || model.get("settings").endDate;
+    if (end_date) {
+      n.end_date_moment = Moment(end_date).fromNow();
     } else {
       n.end_date_moment = '';
     }

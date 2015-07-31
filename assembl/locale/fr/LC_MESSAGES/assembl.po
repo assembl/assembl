@@ -77,7 +77,7 @@ msgstr "Une session de vote est en cours"
 #: assembl/static/js/app/dummy_translations.js:8
 #, python-format
 msgid "; You have until %(end_date_moment)s to vote"
-msgstr "; vous avez jusqu'à %(end_date_moment)s pour voter"
+msgstr "; vous avez jusque %(end_date_moment)s pour voter"
 
 #: assembl/static/js/app/dummy_translations.js:9
 msgid "Vote"
@@ -88,7 +88,7 @@ msgstr "Voter"
 msgid ""
 "A creativity session is ongoing; You have until %(end_date_moment)s to "
 "join"
-msgstr "Une session de créativité est en cours; Vous avez jusqu'au %(end_date_moment)s pour vous y joindre"
+msgstr "Une session de créativité est en cours; Vous avez jusque %(end_date_moment)s pour vous y joindre"
 
 #: assembl/static/js/app/dummy_translations.js:11
 msgid "Join the session"
