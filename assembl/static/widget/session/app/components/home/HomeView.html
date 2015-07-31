@@ -28,7 +28,7 @@
         </div>
         <div class="card-comment" ng-hide="readOnly">
             <div style="display: inline-block;">
-                <img ng-src="{{ user_avatar_url }}" class="media-object img-circle" />
+                <img ng-src="{{ user_avatar_url }}" class="media-object img-circle" width="30" height="30"/>
             </div>
             <div style="float: right; width: calc(100% - 30px); padding-left: 5px;">
                 <form role="form" ng-submit="sendSubIdea()">
@@ -54,7 +54,7 @@
         <div class="session-comment">
             <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:'creationDate':'reverse' track by idea['@id']">
                 <div class="pull-left thumbnail">
-                    <img class="media-object img-circle" ng-src="{{idea.avatar}}" alt="30x30" style="width: 30px; height: 30px;">
+                    <img class="media-object img-circle" ng-src="{{idea.avatar}}" alt="30x30" width="30" height="30">
                 </div>
                 <div class="media-body">
                     <div>
