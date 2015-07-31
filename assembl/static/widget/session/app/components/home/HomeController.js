@@ -10,8 +10,9 @@ HomeModule.controller('HomeController', [
     'UtilsService',
     '$http',
     'growl',
+    '$translate',
 
-    function($rootScope, $scope, config, CardGameService, $timeout, $sce, UtilsService, $http, growl) {
+    function($rootScope, $scope, config, CardGameService, $timeout, $sce, UtilsService, $http, growl, $translate) {
 
       $rootScope.selectedComments = undefined;
       $scope.widget = config;
@@ -30,11 +31,15 @@ HomeModule.controller('HomeController', [
 
         switch (value) {
           case 'sendNewIdea:success':
-            growl.success('New sub idea posted');
+            $translate("Thank you for your contribution! Do you have more ideas?").then(function (tr) {
+              growl.success(tr);
+            });
             $scope.getSubIdeaFromIdea();
             break;
           case 'sendNewIdea:error':
-            growl.error('Something wrong');
+            $translate("Sorry, an error occured").then(function (tr) {
+              growl.error(tr);
+            });
             break;
 
         }

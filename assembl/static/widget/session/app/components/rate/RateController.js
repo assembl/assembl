@@ -5,11 +5,12 @@ RateModule.controller('RateController', [
     '$scope',
     'config',
     'growl',
+    '$translate',
     '$timeout',
     'UtilsService',
     '$http',
 
-    function($rootScope, $scope, config, growl, $timeout, UtilsService, $http) {
+    function($rootScope, $scope, config, growl, $translate, $timeout, UtilsService, $http) {
 
       $scope.widget = config;
       $scope.idea_title = config.base_idea.shortTitle;
@@ -83,10 +84,14 @@ RateModule.controller('RateController', [
           //TODO: find a good translation for confirm that the catching sub idea is valid
           switch (value) {
             case 'validVote:success':
-              growl.success('validVoteCatcher');
+              $translate("The selected messages were successfully sent.").then(function (tr) {
+                growl.success(tr);
+              });
               break;
             case 'validVote:error':
-              growl.error('errorVoteCatcher');
+              $translate("Sorry, an error occured").then(function (tr) {
+                growl.error(tr);
+              });
               break;
             default:
               break;

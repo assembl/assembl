@@ -5,12 +5,13 @@ AdminModule.controller('AdminController',
      '$scope',
      '$http',
      'growl',
+     '$translate',
      'CardGameService',
      'ConfigService',
      'UtilsService',
      'config',
 
-    function($rootScope, $scope, $http, growl, CardGameService, ConfigService, UtilsService, widget) {
+    function($rootScope, $scope, $http, growl, $translate, CardGameService, ConfigService, UtilsService, widget) {
 
       $scope.widget = widget;
       // console.log("widget", widget);
@@ -44,16 +45,20 @@ AdminModule.controller('AdminController',
 
         switch (value) {
           case 'createQuestion:success':
-            growl.success('Question configured');
+            $translate("The session was successfully configured").then(function (tr) {
+              growl.success(tr);
+            });
             break;
           case 'createQuestion:error':
-            growl.error('An error occur when you set the question');
+          case 'setJeton:error':
+            $translate("Sorry, an error occured").then(function (tr) {
+              growl.error(tr);
+            });
             break;
           case 'setJeton:success':
-            growl.success('jeton added');
-            break;
-          case 'setJeton:error':
-            growl.error('An error occur when you set the number of jeton');
+            $translate("Token added successfully").then(function (tr) {
+              growl.success(tr);
+            });
             break;
         }
       }, true);

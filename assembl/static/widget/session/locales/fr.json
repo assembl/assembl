@@ -6,7 +6,11 @@
     "first_post":"Soyez le premier à commenter !",
     "contribution":"{{nb}} contribution :",
     "contributions":"{{nb}} contributions :",
-
+    "Thank you for your contribution! Do you have more ideas?": "Merci pour votre contribution ! Avez-vous d'autres idées ?",
+    "The session was successfully configured" :"Bravo, la session a bien été configurée",
+    "Sorry, an error occured": "Désolé, une erreur vient de se produire",
+    "The selected messages were successfully sent.": "Bravo, les messages sélectionnés ont bien été envoyés.",
+    "Token added successfully": "Jetons ajoutés",
     "CREATE":{
       "create_from_idea_title":"Souhaitez-vous créer une session de créativité basée sur «{{idea}}» ?",
       "helper":"Une session de créativité aide à raviver la discussion en exposant les participants à des questions provocatrices.",
