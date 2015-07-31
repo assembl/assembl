@@ -78,7 +78,7 @@ var Infobars = Marionette.CollectionView.extend({
     var el = Assembl.groupContainer.$el;
     var n = this.collection.length;
 
-    for (var i = 1; i < 6; i++) {
+    for (var i = n - 2; i <= n + 2; i++) {
       if (i === n) {
         el.addClass("hasInfobar-" + String(i));
       } else {
