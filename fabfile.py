@@ -431,8 +431,8 @@ def app_update_dependencies():
     execute(update_requirements, force=False)
     execute(update_compass)
     execute(update_bower)
-    execute(bower_update)
-    execute(npm_update)
+    execute(bower_install)
+    execute(npm_install)
 
 
 @task
@@ -593,7 +593,11 @@ def bower_update():
     """ Normally not called manually """
     execute(_bower_foreach_do, 'update')
 
-@task
+def npm_install():
+    """ Normally not called manually """
+    with cd(env.projectpath):
+        run('npm install')
+
 def npm_update():
     """ Normally not called manually """
     with cd(env.projectpath):
