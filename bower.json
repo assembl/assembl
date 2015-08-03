@@ -18,11 +18,11 @@
   ],
   "dependencies": {
     "jquery.dotdotdot": "https://github.com/ImaginationForPeople/jQuery.dotdotdot.git#fix-paragraph-and-read-more-not-showing",
+    "jquery-oembed-all": "https://github.com/nfl/jquery-oembed-all.git#5f1f2c5b0b0fe8a0da167ed459d2318c09852e6b",
     "ckeditor": "^4.4.7",
     "jit": "~2.0.2",
     "Backbone.Subset": "https://github.com/ImaginationForPeople/Backbone.Subset.git#~0.1.1",
     "ink": "~1.0.5",
-    "jquery-oembed-all": "https://github.com/ImaginationForPeople/jquery-oembed-all.git",
     "bootstrap-growl": "~1.1.0",
     "jquery": "~2.1.4",
     "backbone": "~1.1.2",

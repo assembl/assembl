@@ -1227,7 +1227,7 @@ Context.prototype = {
       //popover.css('padding', '25px 50px');
       popover.show();
 
-      popover.Oembed($(this).attr("href"), {
+      popover.oembed($(this).attr("href"), {
         //initiallyVisible: false,
         embedMethod: "fill",
 
