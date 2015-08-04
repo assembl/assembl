@@ -137,28 +137,14 @@ class Widget(DiscussionBoundBase):
             self.db.add(state)
         state.state_json = user_state
 
-    def update_from_json(self, json, user_id=Everyone, ctx=None, jsonld=None,
+    def update_from_json(self, json, user_id=None, context=None, jsonld=None,
                          parse_def_name='default_reverse'):
-        from ..auth.util import user_has_permission
-        if user_has_permission(self.discussion_id, user_id, P_ADMIN_DISC):
-            new_type = json.get('@type', self.type)
-            if self.type != new_type:
-                polymap = inspect(self.__class__).polymorphic_identity
-                if new_type not in polymap:
-                    return None
-                new_type = polymap[new_type].class_
-                new_instance = self.change_class(new_type)
-                return new_instance.update_from_json(
-                    json, user_id, ctx, jsonld, parse_def_name)
-            if 'settings' in json:
-                self.settings_json = json['settings']
-            if 'discussion' in json:
-                self.discussion = Discussion.get_instance(json['discussion'])
-        if 'state' in json:
-            self.state_json = json['state']
+        modified = super(Widget, self).update_from_json(
+            json, user_id, context, jsonld, parse_def_name)
+
         if user_id and user_id != Everyone and 'user_state' in json:
-            self.set_user_state(json['user_state'], user_id)
-        return self
+            modified.set_user_state(json['user_state'], user_id)
+        return modified
 
     @classmethod
     def filter_started(cls, query):

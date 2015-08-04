@@ -267,10 +267,10 @@
         "start_date": true,
         "end_date": true,
         "activity_state": false,
-        "user_states_url": "&get_user_states_url",
-        "user_state_url": "&get_user_state_url",
-        "widget_settings_url": "&get_settings_url",
-        "widget_state_url": "&get_state_url"
+        "user_states_url": false,
+        "user_state_url": false,
+        "widget_settings_url": false,
+        "widget_state_url": false
     },
     "BaseIdeaWidget": {
         "@extends": "Widget",

@@ -70,10 +70,25 @@ AdminModule.controller('AdminController',
           $scope.formData.startDate = $scope.formData.startDate;
           $scope.formData.endDate = $scope.formData.endDate;
 
-          var data = $scope.widget.settings || {};
+          var data = $scope.widget.settings || {},
+              dates = {},
+              startDate = $scope.formData.startDate,
+              endDate = $scope.formData.endDate;
+          if (startDate) {
+            if (startDate instanceof Date) {
+              startDate = startDate.toISOString();
+            }
+            dates.start_date = startDate.substr(0, 19);
+          }
+          if ($scope.formData.endDate) {
+            if (endDate instanceof Date) {
+              endDate = endDate.toISOString();
+            }
+            dates.end_date = endDate.substr(0, 19);
+          }
 
-          data.startDate = $scope.formData.startDate;
-          data.endDate = $scope.formData.endDate;
+          data.startDate = startDate;
+          data.endDate = endDate;
           data.question = $scope.formData.question;
           data.idea = $scope.widget.settings.idea;
 
@@ -85,15 +100,22 @@ AdminModule.controller('AdminController',
               'Content-Type': 'application/json'
             }
 
+          }).error(function(data, status) {
+            $scope.message = "createQuestion:error";
+          });
+          $http({
+            url: UtilsService.getURL($scope.widget["@id"]),
+            method: "PATCH",
+            data: dates,
+            headers: {
+              "Content-Type": "application/json"
+            }
           }).success(function(data, status) {
-
             $scope.message = "createQuestion:success";
             $scope.goToDiscussion();
-
           }).error(function(data, status) {
-
             $scope.message = "createQuestion:error";
-          })
+          });
         }
       }
 

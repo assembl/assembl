@@ -875,6 +875,7 @@ class BaseOps(object):
         typename = json.get("@type", None)
         if typename and typename != self.external_typename() and \
                 typename in self.retypeable_as:
+            # MORE security checks?
             new_cls = get_named_class(typename)
             assert new_cls
             recast = self.change_class(new_cls, json)
