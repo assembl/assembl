@@ -19,9 +19,9 @@ from assembl.lib import config
 
 
 def upgrade(pyramid_env):
-    # with context.begin_transaction():
-    #     op.execute("""INSERT INTO idea_content_positive_link (id)
-    #         SELECT id FROM idea_content_widget_link""")
+    with context.begin_transaction():
+        op.execute("""INSERT INTO idea_content_positive_link (id)
+            SELECT id FROM idea_content_widget_link""")
     with context.begin_transaction():
         try:
             op.drop_constraint(
