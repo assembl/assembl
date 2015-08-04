@@ -65,7 +65,7 @@ var defaultNotification = Marionette.ItemView.extend({
 
       },
       error: function(model, resp) {
-        console.debug(model, resp);
+        console.error(model, resp);
       }
     })
   }

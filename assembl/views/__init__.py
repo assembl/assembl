@@ -119,9 +119,10 @@ def get_default_context(request):
         import string
         return map(lambda s: s.strip(), ls.split(","))
 
+    from pyramid.settings import asbool
     social_settings = {
         'fb_export_permissions': config.get('facebook.export_permissions'),
-        'fb_debug': config.get('facebook.debug_mode'),
+        'fb_debug': asbool(config.get('facebook.debug_mode')),
         'fb_app_id': config.get('facebook.consumer_key'),
         'supported_exports': process_export_list(
             config.get('supported_exports_list'))
