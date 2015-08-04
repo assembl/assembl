@@ -14,7 +14,12 @@ var App = require('./app.js'),
 Ctx.initLocale();
 
 if (raven_url.length) {
-  Raven.config(raven_url).install();
+  Raven.config(
+      raven_url,
+      {
+        ignoreErrors: ['AttributeError: \'ZMQRouter\' object has no attribute \'loop\''] //Squelch error untill https://github.com/mrjoes/sockjs-tornado/pull/67 goes through
+      }
+).install();
   Raven.setUserContext({id: Ctx.getCurrentUserId()});
   window.Raven = Raven;
   require('raven-js/plugins/console.js');
