@@ -114,7 +114,7 @@ RateModule.controller('RateController', [
           }
         });
 
-        if (commentSubIdea.length > 0) {
+        if (commentSelected.length > 0) {
 
           var obj = {};
           obj.ids = commentSelected;
@@ -136,7 +136,7 @@ RateModule.controller('RateController', [
 
         }
 
-        if (subIdea.length > 0) {
+        if (subIdeaSelected.length > 0) {
 
           var obj = {};
           obj.ids = subIdeaSelected;
