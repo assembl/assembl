@@ -21,10 +21,12 @@ var groupContent = Marionette.CompositeView.extend({
     this.collection = this.model.get('panels');
     this.groupContainer = options['groupContainer'];
     setTimeout(function() {
-      var navView = that.findViewByType(PanelSpecTypes.NAV_SIDEBAR);
-      if (navView) {
-        //navView.loadView(that.model.get('navigationState'));
-        navView.toggleMenuByName(that.model.get('navigationState'));
+      if (!that.isViewDestroyed()) {
+        var navView = that.findViewByType(PanelSpecTypes.NAV_SIDEBAR);
+        if (navView) {
+          //navView.loadView(that.model.get('navigationState'));
+          navView.toggleMenuByName(that.model.get('navigationState'));
+        }
       }
     }, 200);
   },

@@ -1,7 +1,7 @@
 'use strict';
 
 var Ctx = require('../common/context.js'),
-    IdeaView = require('./idea.js'),
+    IdeaView = require('./ideaInIdeaList.js'),
     _ = require('../shims/underscore.js');
 
 var otherInIdeaList = IdeaView.extend({

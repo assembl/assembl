@@ -1,6 +1,6 @@
 'use strict';
 
-var IdeaView = require('./idea.js'),
+var IdeaView = require('./ideaInIdeaList.js'),
     Ctx = require('../common/context.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js');
 

@@ -40,22 +40,25 @@ var IdeaPanel = AssemblPanel.extend({
     if (!this.model) {
       this.model = this.getGroupState().get('currentIdea');
     }
+    
+    if(!this.isViewDestroyed()) {
+      //Yes, it IS possible the view is already destroyed in initialize, so we check
+      this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
+        if (!this.isViewDestroyed()) {
+          that.setIdeaModel(currentIdea);
+        }
+      });
 
-    this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
-          if (!this.isViewDestroyed()) {
-            that.setIdeaModel(currentIdea);
-          }
-        });
+      this.listenTo(Assembl.vent, 'DEPRECATEDideaPanel:showSegment', function(segment) {
+        that.showSegment(segment);
+      });
 
-    this.listenTo(Assembl.vent, 'DEPRECATEDideaPanel:showSegment', function(segment) {
-      that.showSegment(segment);
-    });
-
-    if (this.model) {
-      //This is a silly hack to go through setIdeaModel properly - benoitg
-      var model = this.model;
-      this.model = null;
-      this.setIdeaModel(model);
+      if (this.model) {
+        //This is a silly hack to go through setIdeaModel properly - benoitg
+        var model = this.model;
+        this.model = null;
+        this.setIdeaModel(model);
+      }
     }
   },
   ui: {

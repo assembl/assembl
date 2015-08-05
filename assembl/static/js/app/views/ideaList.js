@@ -10,7 +10,7 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Idea = require('../models/idea.js'),
-    IdeaView = require('./idea.js'),
+    IdeaView = require('./ideaInIdeaList.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     AssemblPanel = require('./assemblPanel.js'),
     _ = require('../shims/underscore.js'),
@@ -73,16 +73,18 @@ var IdeaList = AssemblPanel.extend({
     Promise.join(collectionManager.getAllIdeasCollectionPromise(),
         collectionManager.getAllIdeaLinksCollectionPromise(),
             function(allIdeasCollection, allIdeaLinksCollection) {
-              var events = ['reset', 'change:parentId', 'change:@id', 'change:hidden', 'remove', 'add', 'destroy'];
-              that.listenTo(allIdeasCollection, events.join(' '), that.render);
-              that.allIdeasCollection = allIdeasCollection;
+              if(!that.isViewDestroyed()) {
+                var events = ['reset', 'change:parentId', 'change:@id', 'change:hidden', 'remove', 'add', 'destroy'];
+                that.listenTo(allIdeasCollection, events.join(' '), that.render);
+                that.allIdeasCollection = allIdeasCollection;
 
-              var events = ['reset', 'change:source', 'change:target', 'change:order', 'remove', 'add', 'destroy'];
-              that.listenTo(allIdeaLinksCollection, events.join(' '), that.render);
-              that.allIdeaLinksCollection = allIdeaLinksCollection;
+                var events = ['reset', 'change:source', 'change:target', 'change:order', 'remove', 'add', 'destroy'];
+                that.listenTo(allIdeaLinksCollection, events.join(' '), that.render);
+                that.allIdeaLinksCollection = allIdeaLinksCollection;
 
-              that.template = '#tmpl-ideaList';
-              that.render();
+                that.template = '#tmpl-ideaList';
+                that.render();
+              }
             });
 
     collectionManager.getAllExtractsCollectionPromise()
@@ -93,58 +95,61 @@ var IdeaList = AssemblPanel.extend({
               //that.listenTo(allExtractsCollection, 'add change reset', that.render);
             }); 
 
-    this.listenTo(Assembl.vent, 'ideaList:removeIdea', function(idea) {
-      that.removeIdea(idea);
-    });
+    if(!this.isViewDestroyed()) {
+      //Yes, it IS possible the view is already destroyed in initialize, so we check
+      this.listenTo(Assembl.vent, 'ideaList:removeIdea', function(idea) {
+        that.removeIdea(idea);
+      });
 
-    this.listenTo(Assembl.vent, 'ideaList:addChildToSelected', function() {
-      that.addChildToSelected();
-    });
+      this.listenTo(Assembl.vent, 'ideaList:addChildToSelected', function() {
+        that.addChildToSelected();
+      });
 
-    this.listenTo(Assembl.vent, 'idea:dragOver', function() {
-      that.mouseIsOutside = false;
-    });
-    this.listenTo(Assembl.vent, 'idea:dragStart', function() {
-      that.lastScrollTime = new Date().getTime();
-      that.scrollLastSpeed = 0;
-      that.scrollableElement = that.$('.panel-body');
+      this.listenTo(Assembl.vent, 'idea:dragOver', function() {
+        that.mouseIsOutside = false;
+      });
+      this.listenTo(Assembl.vent, 'idea:dragStart', function() {
+        that.lastScrollTime = new Date().getTime();
+        that.scrollLastSpeed = 0;
+        that.scrollableElement = that.$('.panel-body');
 
-      //console.log("that.scrollableElement: ", that.scrollableElement);
-      that.scrollableElementHeight = that.$('.panel-body').outerHeight();
-      that.scrollInterval = setInterval(function() {
-        that.scrollTowardsMouseIfNecessary();
-      }, 10);
-    });
-    this.listenTo(Assembl.vent, 'idea:dragEnd', function() {
-      clearInterval(that.scrollInterval);
-      that.scrollInterval = null;
-    });
+        //console.log("that.scrollableElement: ", that.scrollableElement);
+        that.scrollableElementHeight = that.$('.panel-body').outerHeight();
+        that.scrollInterval = setInterval(function() {
+          that.scrollTowardsMouseIfNecessary();
+        }, 10);
+      });
+      this.listenTo(Assembl.vent, 'idea:dragEnd', function() {
+        clearInterval(that.scrollInterval);
+        that.scrollInterval = null;
+      });
 
-    this.listenTo(Assembl.vent, 'DEPRECATEDideaList:selectIdea', function(ideaId, reason, doScroll) {
-      collectionManager.getAllIdeasCollectionPromise()
-                .done(function(allIdeasCollection) {
-                  var idea = allIdeasCollection.get(ideaId);
-                  if (idea) {
-                    that.getContainingGroup().setCurrentIdea(idea);
-                    that.getContainingGroup().NavigationResetDebateState();
-                    if (doScroll)
-                      that.onScrollToIdea(idea);
-                  }
-                });
-    });
-
-    this.listenTo(this, 'scrollToIdea', this.onScrollToIdea);
-
-    this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
-          //console.log("ideaList heard a change:currentIdea event");
-          if (currentIdea) {
-            that.onScrollToIdea(currentIdea);
+      this.listenTo(Assembl.vent, 'DEPRECATEDideaList:selectIdea', function(ideaId, reason, doScroll) {
+        collectionManager.getAllIdeasCollectionPromise()
+        .done(function(allIdeasCollection) {
+          var idea = allIdeasCollection.get(ideaId);
+          if (idea) {
+            that.getContainingGroup().setCurrentIdea(idea);
+            that.getContainingGroup().NavigationResetDebateState();
+            if (doScroll)
+              that.onScrollToIdea(idea);
           }
         });
+      });
 
-    $('html').on('dragover', function(e) {
-      that.onDocumentDragOver(e);
-    });
+      this.listenTo(this, 'scrollToIdea', this.onScrollToIdea);
+
+      this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
+        //console.log("ideaList heard a change:currentIdea event");
+        if (currentIdea) {
+          that.onScrollToIdea(currentIdea);
+        }
+      });
+
+      $('html').on('dragover', function(e) {
+        that.onDocumentDragOver(e);
+      });
+    }
   },
 
   'events': {

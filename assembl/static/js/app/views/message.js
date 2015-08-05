@@ -78,9 +78,12 @@ var MessageView = Marionette.ItemView.extend({
     this.messageFamilyView = options.messageFamilyView;
     this.viewStyle = this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this);
 
-    this.listenTo(this.messageListView, 'annotator:destroy', this.onAnnotatorDestroy);
-    this.listenTo(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
-    this.listenTo(this.messageListView, 'annotator:success', this.render);
+    if(!this.isViewDestroyed()) {
+      //Yes, it IS possible the view is already destroyed in initialize, so we check
+      this.listenTo(this.messageListView, 'annotator:destroy', this.onAnnotatorDestroy);
+      this.listenTo(this.messageListView, 'annotator:initComplete', this.onAnnotatorInitComplete);
+      this.listenTo(this.messageListView, 'annotator:success', this.render);
+    }
     /**
      * The collection of annotations loaded in annotator for this message.
      * They do not need to be re-loaded on render
@@ -96,9 +99,11 @@ var MessageView = Marionette.ItemView.extend({
 
     this.creator = undefined;
     this.model.getCreatorPromise().then(function(creator) {
-      that.creator = creator;
-      that.template = '#tmpl-message';
-      that.render();
+      if(!that.isViewDestroyed()) {
+        that.creator = creator;
+        that.template = '#tmpl-message';
+        that.render();
+      }
     });
   },
   modelEvents: {

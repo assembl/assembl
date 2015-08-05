@@ -96,107 +96,113 @@ var MessageList = AssemblPanel.extend({
 
       collectionManager.getAllMessageStructureCollectionPromise()
         .then(function(allMessageStructureCollection) {
+          if(!that.isViewDestroyed()) {
+             that.resetPendingMessages(allMessageStructureCollection);
 
-          that.resetPendingMessages(allMessageStructureCollection);
+            var callback = _.bind(function() {
+              //Here, this is the collection
+              var nbPendingMessage = this.length - that._initialLenAllMessageStructureCollection;
+              that.showPendingMessages(nbPendingMessage);
+            }, allMessageStructureCollection);
 
-          var callback = _.bind(function() {
-            //Here, this is the collection
-            var nbPendingMessage = this.length - that._initialLenAllMessageStructureCollection;
-            that.showPendingMessages(nbPendingMessage);
-          }, allMessageStructureCollection);
-
-          that.listenTo(allMessageStructureCollection, 'add', callback);
+            that.listenTo(allMessageStructureCollection, 'add', callback);
+          }
         }
 
       );
 
       collectionManager.getAllExtractsCollectionPromise()
           .then(function(allExtractsCollection) {
-            that.listenToOnce(allExtractsCollection, 'add remove reset', function(eventName) {
-                  // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
-                  that.initAnnotator();
-                });
+            if(!that.isViewDestroyed()) {
+              that.listenToOnce(allExtractsCollection, 'add remove reset', function(eventName) {
+                // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
+                that.initAnnotator();
+              });
+            }
           }
 
       );
 
-      this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
-        if (currentIdea) {
-          if (currentIdea.id) {
-            if (that.currentQuery.isQueryValid() === false) {
-              //This will occur upon loading the panel, untill we truly serialize the query
-              console.log("WRITEME:  Real query serialization in groupstate");
-              that.ideaChanged();
-            }
-            else if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
-              //Filter is already in sync
-              //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+      if(!this.isViewDestroyed()) {
+        //Yes, it IS possible the view is already destroyed in initialize, so we check
+        this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
+          if (currentIdea) {
+            if (currentIdea.id) {
+              if (that.currentQuery.isQueryValid() === false) {
+                //This will occur upon loading the panel, untill we truly serialize the query
+                console.log("WRITEME:  Real query serialization in groupstate");
+                that.ideaChanged();
+              }
+              else if (that.currentQuery.isFilterInQuery(that.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
+                //Filter is already in sync
+                //TODO:  Detect the case where there is no idea selected, and we already have no filter on ideas
+                return;
+              }
+            } else {
+              that.listenToOnce(currentIdea, "acquiredId", function() {
+                that.ideaChanged();
+              });
               return;
             }
-          } else {
-            that.listenToOnce(currentIdea, "acquiredId", function() {
-              that.ideaChanged();
-            });
-            return;
           }
-        }
-
-        this.ideaChanged();
-      });
-
-      this.listenTo(Assembl.vent, 'messageList:showMessageById', function(id, callback) {
-        //console.log("Calling showMessageById from messageList:showMessageById with params:", id, callback);
-        that.showMessageById(id, callback);
-      });
-
-      this.listenTo(this, 'messageList:addFilterIsRelatedToIdea', function(idea, only_unread) {
-        that.getPanelWrapper().filterThroughPanelLock(
-              function() {
-                that.addFilterIsRelatedToIdea(idea, only_unread);
-              }, 'syncWithCurrentIdea');
-      });
-
-      this.listenTo(this, 'messageList:clearAllFilters', function() {
-        that.getPanelWrapper().filterThroughPanelLock(
-              function() {
-                that.currentQuery.clearAllFilters();
-              }, 'clearAllFilters');
-      });
-
-      this.listenTo(this, 'messageList:addFilterIsOrphanMessage', function() {
-        that.getPanelWrapper().filterThroughPanelLock(
-              function() {
-                that.addFilterIsOrphanMessage();
-              }, 'syncWithCurrentIdea');
-      });
-
-      this.listenTo(this, 'messageList:addFilterIsSynthesisMessage', function() {
-        that.getPanelWrapper().filterThroughPanelLock(
-              function() {
-                that.addFilterIsSynthesMessage();
-              }, 'syncWithCurrentIdea');
-      });
-
-      this.listenTo(Assembl.vent, 'messageList:showAllMessages', function() {
-        that.getPanelWrapper().filterThroughPanelLock(
-              function() {
-                that.showAllMessages();
-              }, 'syncWithCurrentIdea');
-      });
-
-      this.listenTo(Assembl.vent, 'messageList:currentQuery', function() {
-        if (!that.getPanelWrapper().isPanelLocked()) {
-          that.currentQuery.clearAllFilters();
-        }
-      });
-
-      this.listenTo(Assembl.vent, 'messageList:replyBoxFocus', function() {
-        that.onReplyBoxFocus();
-      });
-
-      this.listenTo(Assembl.vent, 'messageList:replyBoxBlur', function() {
-        that.onReplyBoxBlur();
-      });
+  
+          this.ideaChanged();
+        });
+  
+        this.listenTo(Assembl.vent, 'messageList:showMessageById', function(id, callback) {
+          //console.log("Calling showMessageById from messageList:showMessageById with params:", id, callback);
+          that.showMessageById(id, callback);
+        });
+  
+        this.listenTo(this, 'messageList:addFilterIsRelatedToIdea', function(idea, only_unread) {
+          that.getPanelWrapper().filterThroughPanelLock(
+                function() {
+                  that.addFilterIsRelatedToIdea(idea, only_unread);
+                }, 'syncWithCurrentIdea');
+        });
+  
+        this.listenTo(this, 'messageList:clearAllFilters', function() {
+          that.getPanelWrapper().filterThroughPanelLock(
+                function() {
+                  that.currentQuery.clearAllFilters();
+                }, 'clearAllFilters');
+        });
+  
+        this.listenTo(this, 'messageList:addFilterIsOrphanMessage', function() {
+          that.getPanelWrapper().filterThroughPanelLock(
+                function() {
+                  that.addFilterIsOrphanMessage();
+                }, 'syncWithCurrentIdea');
+        });
+  
+        this.listenTo(this, 'messageList:addFilterIsSynthesisMessage', function() {
+          that.getPanelWrapper().filterThroughPanelLock(
+                function() {
+                  that.addFilterIsSynthesMessage();
+                }, 'syncWithCurrentIdea');
+        });
+  
+        this.listenTo(Assembl.vent, 'messageList:showAllMessages', function() {
+          that.getPanelWrapper().filterThroughPanelLock(
+                function() {
+                  that.showAllMessages();
+                }, 'syncWithCurrentIdea');
+        });
+  
+        this.listenTo(Assembl.vent, 'messageList:currentQuery', function() {
+          if (!that.getPanelWrapper().isPanelLocked()) {
+            that.currentQuery.clearAllFilters();
+          }
+        });
+  
+        this.listenTo(Assembl.vent, 'messageList:replyBoxFocus', function() {
+          that.onReplyBoxFocus();
+        });
+  
+        this.listenTo(Assembl.vent, 'messageList:replyBoxBlur', function() {
+          that.onReplyBoxBlur();
+        });
+      }
     },
 
   /**

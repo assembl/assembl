@@ -3,7 +3,7 @@
 var Ctx = require('../common/context.js'),
     Assembl = require('../app.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
-    IdeaView = require('./idea.js');
+    IdeaView = require('./ideaInIdeaList.js');
 
 var SynthesisIdeaView = IdeaView.extend({
   /**
