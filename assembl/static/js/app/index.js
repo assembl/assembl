@@ -20,7 +20,14 @@ if (raven_url.length) {
         ignoreErrors: ['AttributeError: \'ZMQRouter\' object has no attribute \'loop\''] //Squelch error untill https://github.com/mrjoes/sockjs-tornado/pull/67 goes through
       }
 ).install();
-  Raven.setUserContext({id: Ctx.getCurrentUserId()});
+  var userContext = {id: Ctx.getCurrentUserId()}
+  if (this.getCurrentUserId()) {
+    user = this.getCurrentUser();
+    userContext.name = user.get('name');
+    userContext.email = user.get('preferred_email');
+  }
+  Raven.setUserContext(userContext);
+
   window.Raven = Raven;
   require('raven-js/plugins/console.js');
 }

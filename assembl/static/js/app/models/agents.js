@@ -10,7 +10,7 @@ var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
 var UNKNOWN_USER_ID = Roles.EVERYONE;
 
 /**
- * @class UserModel
+ * @class AgentModel
  */
 var AgentModel = Base.Model.extend({
   /**

@@ -71,23 +71,25 @@ _.extend(Backbone.Marionette.View.prototype, {
   },
 
   listenTo: function() {
+    var that = this;
     // Often, we listen on a promise in the initalizer. The view may already be dead.
-    if (this.isViewDestroyed()) {
-      Raven.captureMessage("listenTo on a destroyed view", {tags: {
-        viewer: this.toString(), viewee: arguments[0].toString()}});
-      return;
-    }
+    Raven.context(function() {
+      if (that.isViewDestroyed()) {
+        throw new Error("listenTo on a destroyed view");
+      }
+    });
 
     Object.getPrototypeOf(Backbone.Marionette.View.prototype).listenTo.apply(this, arguments);
   },
 
   listenToOnce: function() {
+    var that = this;
     // Often, we listen on a promise in the initalizer. The view may already be dead.
-    if (this.isViewDestroyed()) {
-      Raven.captureMessage("listenToOnce on a destroyed view", {tags: {
-        viewer: this.toString(), viewee: arguments[0].toString()}});
-      return;
-    }
+    Raven.context(function() {
+      if (that.isViewDestroyed()) {
+        throw new Error("listenToOnce on a destroyed view");
+      }
+    });
 
     Object.getPrototypeOf(Backbone.Marionette.View.prototype).listenToOnce.apply(this, arguments);
   },
