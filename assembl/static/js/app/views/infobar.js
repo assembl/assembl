@@ -5,6 +5,7 @@ var Marionette = require('../shims/marionette.js'),
     i18n = require("../utils/i18n.js"),
     Moment = require('moment'),
     CollectionManager = require('../common/collectionManager.js'),
+    Ctx = require('../common/context.js'),
     $ = require('../shims/jquery.js');
 
 
@@ -44,6 +45,7 @@ var InfobarItem = Marionette.LayoutView.extend({
       call_to_action_msg: i18n.sprintf(i18n.gettext(n.call_to_action_msg), n),
       widget_endpoint: widgetEndpoint,
       call_to_action_class: n.call_to_action_class,
+      locale: Ctx.getLocale()
     };
   },
 

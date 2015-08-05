@@ -14,6 +14,7 @@ AdminModule.controller('AdminController',
     function($rootScope, $scope, $http, growl, $translate, CardGameService, ConfigService, UtilsService, widget) {
 
       $scope.widget = widget;
+      $scope.locale = $scope.locale || $rootScope.locale;
       // console.log("widget", widget);
       $scope.idea_title = widget.base_idea.shortTitle;
       $scope.home = widget['@id'];

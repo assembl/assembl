@@ -10,10 +10,11 @@ TopMenuModule.controller('TopMenuController', [
     function($scope, $stateParams, UserService, WidgetService, $location) {
 
       $scope.urlLink = $scope.$parent.$state.params.config;
+      $scope.locale = $scope.$parent.locale;
 
       $scope.isActive = function(route) {
         return route === $location.path();
-      }
+      };
 
       var id = decodeURIComponent($scope.urlLink).split('/')[1],
           widget = WidgetService.get({id: id}).$promise;

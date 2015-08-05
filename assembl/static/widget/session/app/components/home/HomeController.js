@@ -15,6 +15,7 @@ HomeModule.controller('HomeController', [
     function($rootScope, $scope, config, CardGameService, $timeout, $sce, UtilsService, $http, growl, $translate) {
 
       $rootScope.selectedComments = undefined;
+      $scope.locale = $scope.locale || $rootScope.locale;
       $scope.widget = config;
       $scope.formData = {};
       $scope.displayed_cards = [];

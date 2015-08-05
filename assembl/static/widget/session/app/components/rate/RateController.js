@@ -14,6 +14,7 @@ RateModule.controller('RateController', [
 
       $scope.widget = config;
       $scope.idea_title = config.base_idea.shortTitle;
+      $scope.locale = $scope.locale || $rootScope.locale;
 
 
       // First fetch selectedComments. TODO: Make sure the step in Comments.js

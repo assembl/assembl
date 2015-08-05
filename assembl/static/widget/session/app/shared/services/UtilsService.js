@@ -45,6 +45,7 @@ SessionApp.factory('UtilsService', function($translate, $rootScope, $timeout, $w
 
   fn.getNiceDateTime = function(date, precise, with_time, forbid_future) {
     var Moment = moment;
+    moment.locale($rootScope.locale);
 
     // set default values
     precise = (precise === undefined) ? false : precise;

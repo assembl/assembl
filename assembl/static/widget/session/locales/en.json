@@ -29,7 +29,7 @@
       "shuffle":"Draw a new card",
       "idea_prompt":"This question is relative to the idea ‟{{parentIdeaTitle}}”. Please try to answer the question, by using one of the cards below to find inspiration:",
       "send": "Send",
-      "propose_idea": "What does this card inspire you?",
+      "propose_idea": "What does this card inspire for you?",
       "start_end_dates_info": "Please write datetimes in UTC timezone."
     },
     "RATE":{

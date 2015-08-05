@@ -13,11 +13,64 @@ var SessionApp = angular.module('appSession', [
     'mgcrea.ngStrap.datepicker',
     'mgcrea.ngStrap.timepicker']);
 
+// returns the value of a given parameter in the URL of the current page
+function getUrlVariableValue(variable) {
+  var query = window.location.search.substring(1) || "";
+  // chrome seems to put the query in the hash.
+  if (query.length == 0 && window.location.hash.indexOf("?") >= 0) {
+    query = window.location.hash.split("?");
+    query.shift();
+    query = query.join("?");
+  }
+  var vars = query.split("&");
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return pair[1];
+    }
+  }
+  //alert('Query Variable ' + variable + ' not found');
+  return null;
+}
+
+// First declare locale functions.
+var knownLocales = ["fr", "en"];
+var fallbackLocale = "en";
+
+function getBrowserLocale() {
+  var nav = window.navigator;
+  return (nav.language || nav.browserLanguage || nav.systemLanguage || nav.userLanguage || '').split('-').join('_');
+}
+
+function localeOrFallback(locale) {
+  if (locale && locale.length && locale.length > 2) {
+    locale = locale.substring(0, 2);
+  }
+  locale = locale.toLowerCase();
+  if (knownLocales.indexOf(locale) < 0) {
+    locale = fallbackLocale;
+  }
+  return locale;
+}
+
+function getPreferredLocale() {
+  var locale;
+  var localeInUrl = getUrlVariableValue("locale");
+  // console.log("localeInUrl: ", localeInUrl);
+  if (localeInUrl)
+      locale = localeInUrl;
+  else
+      locale = getBrowserLocale();
+  locale = localeOrFallback(locale);
+  // console.log("=> locale used: ", locale);
+  return locale;
+}
+
 SessionApp.run(['$rootScope', '$state', '$stateParams',
     function($rootScope, $state, $stateParams) {
 
-      var locale = window.navigator.userLanguage || window.navigator.language;
-      moment.locale(locale);
+      var locale = getPreferredLocale();
+      $rootScope.locale = locale;
 
       $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
         $rootScope.destinationState = toState;
@@ -70,21 +123,6 @@ SessionApp.config(['$resourceProvider', '$stateProvider', '$urlRouterProvider', 
 
     }]);
 
-// returns the value of a given parameter in the URL of the current page
-function getUrlVariableValue(variable) {
-  var query = window.location.search.substring(1);
-  var vars = query.split("&");
-  for (var i = 0; i < vars.length; i++) {
-    var pair = vars[i].split("=");
-    if (pair[0] == variable) {
-      return pair[1];
-    }
-  }
-
-  //alert('Query Variable ' + variable + ' not found');
-  return null;
-}
-
 SessionApp.config(['$translateProvider', function($translateProvider) {
   $translateProvider.useStaticFilesLoader({
     prefix: 'locales/',
@@ -93,46 +131,18 @@ SessionApp.config(['$translateProvider', function($translateProvider) {
 
   // language detection and fallbacks
 
-  $translateProvider.fallbackLanguage('en');
-  $translateProvider.registerAvailableLanguageKeys(['en', 'fr'], {
+  $translateProvider.fallbackLanguage(fallbackLocale);
+  $translateProvider.registerAvailableLanguageKeys(knownLocales, {
     'en_US': 'en',
     'en_UK': 'en',
     'de_DE': 'en',
-    'de': 'en',
-    'de_CH': 'en',
     'en-US': 'en',
     'en-UK': 'en',
-    'de-DE': 'en',
-    'de-CH': 'en',
     'fr_FR': 'fr',
     'fr-fr': 'fr',
   });
 
   //$translateProvider.preferredLanguage('fr'); // no, we want to use one of the available languages
   //$translateProvider.determinePreferredLanguage(); // not enough: any language not listed in registerAvailableLanguageKeys() won't use fallback, resulting in translation keys appearing on the page
-  var getLocale = function() {
-      var nav = window.navigator;
-      return (nav.language || nav.browserLanguage || nav.systemLanguage || nav.userLanguage || '').split('-').join('_');
-    };
-  var localeOrFallback = function(locale) {
-    if (locale && locale.length && locale.length > 2)
-        locale = locale.substring(0, 2);
-    locale = locale.toLowerCase();
-    if (locale != 'fr')
-        locale = 'en';
-    return locale;
-  };
-  $translateProvider.determinePreferredLanguage(function() {
-    var locale;
-    var localeInUrl = getUrlVariableValue("locale");
-    console.log("localeInUrl: ", localeInUrl);
-    if (localeInUrl)
-        locale = localeInUrl;
-    else
-        locale = getLocale();
-    locale = localeOrFallback(locale);
-    console.log("=> locale used: ", locale);
-    return locale;
-  });
-
+  $translateProvider.determinePreferredLanguage(getPreferredLocale);
 }]);

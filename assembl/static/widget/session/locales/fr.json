@@ -12,6 +12,7 @@
     "The selected messages were successfully sent.": "Bravo, les messages sélectionnés ont bien été envoyés.",
     "Token added successfully": "Jetons ajoutés",
     "Send": "Envoyer",
+    "Select the deck of cards which will be displayed": "Choisissez le jeu de cartes qui sera montré",
     "CREATE":{
       "create_from_idea_title":"Souhaitez-vous créer une session de créativité basée sur «{{idea}}» ?",
       "helper":"Une session de créativité aide à raviver la discussion en exposant les participants à des questions provocatrices.",
@@ -38,7 +39,7 @@
       "start_end_dates_info": "Veuillez exprimer les dates et heures dans le fuseau horaire UTC."
     },
     "RATE":{
-      "rateIdeaTitle":"Voulez-wous les envoyer à «{{title}}»",
+      "rateIdeaTitle":"Voulez-vous les envoyer à «{{title}}»",
       "rateIncludeIdea": "Voulez-vous montrer cette contribution dans la table des idées?",
       "nbSelection":"Vous avez sélectionné: {{nb}}"
     }
