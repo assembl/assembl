@@ -22,7 +22,7 @@ if (raven_url.length) {
 ).install();
   var userContext = {id: Ctx.getCurrentUserId()}
   if (Ctx.getCurrentUserId()) {
-    user = Ctx.getCurrentUser();
+    var user = Ctx.getCurrentUser();
     userContext.name = user.get('name');
     userContext.email = user.get('preferred_email');
   }
