@@ -239,7 +239,7 @@ var messageSend = Marionette.ItemView.extend({
                             return (model.get('status') === 'ACTIVE');
                           });
 
-                          var agent = new Agents.Model();
+                          var agent = new Agents.Model({'@id': Ctx.getCurrentUserId()});
                           agent.getSingleUser();
                           agent.fetch({
                                 success: function(model, resp) {

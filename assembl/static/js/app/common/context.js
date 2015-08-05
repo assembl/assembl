@@ -1389,7 +1389,6 @@ Context.prototype = {
 
   /*
    * Get from database up-to-date information about current logged-in user.
-   * And update HTML script tags content accordingly.
    */
   updateCurrentUser: function() {
     var that = this;

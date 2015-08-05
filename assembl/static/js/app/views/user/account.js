@@ -4,7 +4,7 @@ var Marionette = require('../../shims/marionette.js'),
     $ = require('../../shims/jquery.js'),
     Accounts = require('../../models/accounts.js'),
     Ctx = require('../../common/context.js'),
-    userProfile = require('../../models/userProfile.js'),
+    Agents = require('../../models/agents.js'),
     i18n = require('../../utils/i18n.js');
 
 var email = Marionette.ItemView.extend({
@@ -152,7 +152,8 @@ var account = Marionette.LayoutView.extend({
     },
   initialize: function() {
     this.emailCollection = new Accounts.Collection();
-    this.userAcount = new userProfile.Model();
+    this.userAcount = new Agents.Model({'@id': Ctx.getCurrentUserId()});
+    this.userAcount.fetch();
     this.providers = Ctx.getJsonFromScriptTag('login-providers');
   },
   events: {
@@ -175,7 +176,6 @@ var account = Marionette.LayoutView.extend({
     var userAccountForm = new userAccount({
       model: this.userAcount
     });
-    this.userAcount.fetch();
     this.getRegion('accountForm').show(userAccountForm);
 
   },

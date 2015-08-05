@@ -16,8 +16,8 @@ var AgentModel = Base.Model.extend({
   /**
    * @type {String}
    */
-  urlRoot: Ctx.getApiUrl('agents/'),
-
+  //urlRoot: Ctx.getApiUrl('agents/'),
+  urlRoot:  Ctx.getApiV2DiscussionUrl() + 'all_users/',
   /**
    * Defaults
    * @type {Object}
@@ -32,6 +32,7 @@ var AgentModel = Base.Model.extend({
     creation_date: null,
     is_first_visit: false,
     real_name: null,
+    permissions: [],
     '@type': null,
     '@view': null
   },

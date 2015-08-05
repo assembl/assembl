@@ -2,7 +2,7 @@
 
 var Marionette = require('../../shims/marionette.js'),
     $ = require('../../shims/jquery.js'),
-    userProfile = require('../../models/userProfile.js'),
+    Agents = require('../../models/agents.js'),
     i18n = require('../../utils/i18n.js'),
     Ctx = require('../../common/context.js');
 
@@ -16,7 +16,7 @@ var profile = Marionette.ItemView.extend({
   },
 
   initialize: function() {
-    this.model = new userProfile.Model();
+    this.model = new Agents.Model({'@id': Ctx.getCurrentUserId()});
     this.model.fetch();
   },
 
