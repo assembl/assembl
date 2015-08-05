@@ -151,7 +151,7 @@ def get_posts(request):
     # "true" means hidden only, "false" (default) means visible only. "any" means both.
     hidden = request.GET.get('hidden_messages', "false")
     if hidden != 'any':
-        posts = posts.filter_by(hidden=asbool(hidden))
+        posts = posts.filter(PostClass.hidden==asbool(hidden))
 
     if root_idea_id:
         related = text(Idea._get_related_posts_statement(),
