@@ -720,7 +720,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
                 "call_to_action_msg": settings.get(
                     "infobar_action_message", "Join the session"),
                 "call_to_action_class": "js_openTargetInModal",
-                "base_idea": self.base_idea.uri(),
+                "base_idea": self.base_idea.uri() if self.base_id else None,
                 "widget_type": self.external_typename(),
                 "widget_endpoint": self.get_ui_endpoint(),
                 "num_participants": self.num_participants(),
