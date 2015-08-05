@@ -493,23 +493,37 @@ class IdeaCreatingWidget(BaseIdeaWidget):
             uri = idea.uri()
             hide = uri not in idea_ids
             idea.hidden = hide
-            p = idea.proposed_in_post
-            if p:
-                p.hidden = hide
+            # p = idea.proposed_in_post
+            # if p:
+            #     p.hidden = hide
 
     def get_confirmed_messages(self):
         root_idea_id = self.base_idea_id()
         ids = self.db.query(Content.id).join(
-            IdeaContentWidgetLink).join(Idea).join(
-                IdeaLink, IdeaLink.target_id == Idea.id).filter(
-                    IdeaLink.source_id == root_idea_id
-                ).filter(~Content.hidden).all()
+            IdeaContentWidgetLink).join(
+            Idea, IdeaContentWidgetLink.idea_id == Idea.id).join(
+            IdeaLink, IdeaLink.target_id == Idea.id).filter(
+            IdeaLink.source_id == root_idea_id, ~Content.hidden
+            ).union(
+                self.db.query(IdeaProposalPost.id).join(
+                    Idea, IdeaProposalPost.idea_id == Idea.id).join(
+                    IdeaLink, IdeaLink.target_id == Idea.id).filter(
+                    IdeaLink.source_id == root_idea_id,
+                    ~IdeaProposalPost.hidden)
+            ).all()
         return [Content.uri_generic(id) for (id,) in ids]
 
     def set_confirmed_messages(self, post_ids):
         root_idea_id = self.base_idea_id()
-        for post in self.db.query(Content).join(IdeaContentWidgetLink).join(
-                Idea).join(IdeaLink, IdeaLink.target_id == Idea.id).filter(
+        for post in self.db.query(Content).join(
+                IdeaContentWidgetLink).join(
+                Idea, IdeaContentWidgetLink.idea_id == Idea.id).join(
+                IdeaLink, IdeaLink.target_id == Idea.id).filter(
+                IdeaLink.source_id == root_idea_id).all():
+            post.hidden = (post.uri() not in post_ids)
+        for post in self.db.query(IdeaProposalPost).join(
+                Idea, IdeaProposalPost.idea_id == Idea.id).join(
+                IdeaLink, IdeaLink.target_id == Idea.id).filter(
                 IdeaLink.source_id == root_idea_id).all():
             post.hidden = (post.uri() not in post_ids)
 

@@ -24,7 +24,7 @@ SessionApp.directive('comments', [
             $scope.readOnly = new Date().getTime() > new Date($scope.widget.settings.endDate).getTime();
           }
 
-          $scope.$watch('idea.selected', function(checked) {
+          $scope.$watch('idea.proposed_in_post.selected', function(checked) {
             if (checked) {
               $scope.checked = true;
             } else {

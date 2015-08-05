@@ -10,7 +10,7 @@
                 <form id="postForm">
                 <div class="media user-comment" ng-if="ideas.length > 0" ng-repeat="idea in ideas | orderBy:'creationDate':'reverse' track by $index">
                     <div class="pull-left">
-                        <input type="checkbox" id="checkbox-{{idea['@id']}}"  value="{{idea['@id']}}" data-toggle="checkbox" class="sub-idea" ng-model="idea.selected">
+                        <input type="checkbox" id="checkbox-{{idea.proposed_in_post['@id']}}"  value="{{idea.proposed_in_post['@id']}}" data-toggle="checkbox" class="sub-idea-post" ng-model="idea.proposed_in_post.selected">
                     </div>
                     <div class="pull-left thumbnail">
                         <img class="media-object img-circle" ng-src="{{idea.avatar}}" alt="30x30" width="30" height="30">
@@ -22,14 +22,19 @@
                         </div>
                         <div><h5>{{idea.shortTitle}}</h5></div>
                         <span class="pull-left"><i class="icon-lamp"></i></span>
-                    <span class="pull-right">
-                        <!-- Vote directive -->
-                        <!-- <vote idea="idea" widget="widget"></vote> -->
-                    </span>
+                        <span class="pull-right">
+                            <!-- Vote directive -->
+                            <!-- <vote idea="idea" widget="widget"></vote> -->
+                        </span>
                         <div class="row">
                             <div class="col-md-12 comment-idea">
                                 <p>{{idea.definition}}</p>
                             </div>
+                        </div>
+                        <div class="row media-control">
+                            <!-- do we show idea? -->
+                            <span><input type="checkbox" id="checkbox-{{idea['@id']}}"  value="{{idea['@id']}}" data-toggle="checkbox" class="sub-idea" ng-model="idea.selected">
+                            <span translate="RATE.rateIncludeIdea"></span></span>
                         </div>
                         <!-- Comments directive -->
                         <comments idea="idea" widget="widget"></comments>

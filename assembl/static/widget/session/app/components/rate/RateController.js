@@ -26,6 +26,20 @@ RateModule.controller('RateController', [
         });
 
       /**
+       * make sure the proposed idea has right selected value
+       */
+      $scope.setSelectedProposalPost = function() {
+        if ($scope.selectedComments === undefined) {
+          setTimeout($scope.setSelectedProposalPost, 200);
+          return;
+        }
+        angular.forEach($scope.ideas, function(idea) {
+          idea.proposed_in_post.selected = ($scope.selectedComments.indexOf(
+            idea.proposed_in_post["@id"]) >= 0);
+        });
+      };
+
+      /**
        * Fetch all ideas newly added
        */
       $scope.getSubIdeaForVote = function() {
@@ -64,9 +78,9 @@ RateModule.controller('RateController', [
           });
 
           $scope.ideas = ideas;
-
+          $scope.setSelectedProposalPost();
         });
-      }
+      };
 
       /**
        * Valid votes and send to the server separetely
@@ -75,6 +89,7 @@ RateModule.controller('RateController', [
 
         var subIdeaSelected = [],
             commentSelected = [],
+            subIdeaPost = angular.element('#postForm .sub-idea-post'),
             subIdea = angular.element('#postForm .sub-idea'),
             commentSubIdea = angular.element('#postForm .comment-to-sub-idea'),
             rootUrlSubIdea = UtilsService.getURL($scope.widget.confirm_ideas_url),
@@ -106,6 +121,14 @@ RateModule.controller('RateController', [
           }
         });
 
+        angular.forEach(subIdeaPost, function(post) {
+
+          if ($(post).is(':checked')) {
+
+            commentSelected.push($(post).val());
+          }
+        });
+
         angular.forEach(commentSubIdea, function(comment) {
 
           if ($(comment).is(':checked')) {
@@ -114,7 +137,7 @@ RateModule.controller('RateController', [
           }
         });
 
-        if (commentSelected.length > 0) {
+        if (subIdea.length > 0) {
 
           var obj = {};
           obj.ids = commentSelected;
@@ -133,10 +156,6 @@ RateModule.controller('RateController', [
 
             $scope.message = 'validVote:error';
           });
-
-        }
-
-        if (subIdeaSelected.length > 0) {
 
           var obj = {};
           obj.ids = subIdeaSelected;

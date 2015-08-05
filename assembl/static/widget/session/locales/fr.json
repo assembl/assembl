@@ -39,6 +39,7 @@
     },
     "RATE":{
       "rateIdeaTitle":"Voulez-wous les envoyer à «{{title}}»",
+      "rateIncludeIdea": "Voulez-vous montrer cette contribution dans la table des idées?",
       "nbSelection":"Vous avez sélectionné: {{nb}}"
     }
 }
