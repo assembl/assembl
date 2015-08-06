@@ -91,6 +91,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
         ideas = ideas.filter(Idea.id.in_(ids))
     ideas = ideas.options(
         joinedload_all(Idea.source_links),
+        joinedload_all(Idea.has_showing_widget_links),
         undefer(Idea.num_children))
 
     permissions = get_permissions(user_id, discussion.id)

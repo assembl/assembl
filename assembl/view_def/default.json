@@ -275,7 +275,7 @@
         "numChildIdea": "num_children",
         "num_posts": true,
         "num_read_posts": true,
-        "active_widget_uris": "&active_widget_uris",
+        "widget_uris": "&widget_uris",
         "widget_add_post_endpoint": true
     },
     "RootIdea": {

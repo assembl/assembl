@@ -841,6 +841,10 @@ JOIN post AS family_posts ON (
                     cls, InspirationWidget),
                 'active_showing_widget_links': ActiveShowingWidgetsCollection(cls)}
 
+    def widget_uris(self):
+        from .widgets import Widget
+        return [Widget.uri_generic(l.widget_id) for l in self.has_showing_widget_links]
+
     def active_widget_uris(self):
         from .widgets import Widget
         return [Widget.uri_generic(l.widget_id) for l in self.active_showing_widget_links]
