@@ -328,6 +328,9 @@ var MessageView = Marionette.ItemView.extend({
         Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
         Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
       }
+      if (this.model.get('metadata_json')) {
+        Ctx.makeLinksShowOembedOnHover(this.$el.find(".inspirationSource"));
+      }
 
       that.replyView = new MessageSendView({
         allow_setting_subject: false,
