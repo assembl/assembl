@@ -4,7 +4,7 @@ var Backbone = require('../shims/backbone.js'),
 $ = require('../shims/jquery.js'),
 _ = require('../shims/underscore.js'),
 Promise = require('bluebird'),
-facebook = require('./facebookModal.js');
+Facebook = require('./facebookModal.js');
 
 var Modal = Backbone.Modal.extend({
   template: '#tmpl-loader',
@@ -48,7 +48,7 @@ var Modal = Backbone.Modal.extend({
       this.$('.js_export_error_message').empty();
     },
   loadFbView: function(token) {
-      var fbView = new facebook.root({
+      var fbView = new Facebook.root({
         creator: this.messageCreator,
         model: this.model,
         vent: this.vent,
@@ -73,10 +73,10 @@ var Modal = Backbone.Modal.extend({
       switch (value){
         case 'facebook':
           var that = this;
-          facebook.resolveState(function(fbState) {
+          Facebook.resolveState(function(fbState) {
             console.log('The state of the checkState function', fbState);
             if (fbState.ready) {
-              var fbView = new facebook.root({
+              var fbView = new Facebook.root({
                 creator: that.messageCreator,
                 model: that.model,
                 vent: that.vent
@@ -85,7 +85,7 @@ var Modal = Backbone.Modal.extend({
               that.currentView = fbView;  
             }
             else {
-              var errView = new facebook.error({
+              var errView = new Facebook.error({
                 ready: fbState.ready,
                 errorState: fbState.errorState,
                 vent: that.vent
