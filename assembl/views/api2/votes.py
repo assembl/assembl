@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPBadRequest, HTTPUnauthorized, HTTPNotFound)
@@ -137,12 +139,17 @@ def vote_results(request):
     user_id = authenticated_userid(request)
     if not user_id:
         raise HTTPUnauthorized
-    widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
-    if not widget:
-        raise HTTPNotFound()
-    if False:
-        # TODO: If widget session not over,
-        # only admin can get intermediate results
+    histogram = request.GET.get('histogram', None)
+    if histogram:
+        try:
+            histogram = int(histogram)
+        except ValueError as e:
+            raise HTTPBadRequest(e)
+        if histogram > 25:
+            raise HTTPBadRequest(
+                "Please select at most 25 bins in the histogram.")
+    widget = ctx._instance.widget
+    if not widget.end_date or datetime.utcnow() < widget.end_date:
         permissions = get_permissions(user_id, ctx.get_discussion_id())
         check_permissions(ctx, user_id, permissions, P_ADMIN_DISC)
-    return ctx._instance.voting_results()
+    return ctx._instance.voting_results(histogram)

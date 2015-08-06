@@ -75,12 +75,12 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     # Do we want an URL to get the vote result on a specific spec+target combination?
 
     @abstractmethod
-    def results_for(self, voting_results):
+    def results_for(self, voting_results, histogram_size=None):
         return {
             "n": len(voting_results)
         }
 
-    def voting_results(self):
+    def _gather_results(self):
         vote_cls = self.get_vote_class()
         voting_results = self.db.query(vote_cls).filter_by(
             vote_spec_id=self.id,
@@ -88,9 +88,13 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         by_idea = defaultdict(list)
         for vote in voting_results:
             by_idea[vote.idea_id].append(vote)
+        return by_idea
+
+    def voting_results(self, histogram_size=None):
+        by_idea = self._gather_results()
         return {
             Idea.uri_generic(votable_id):
-            self.results_for(voting_results)
+            self.results_for(voting_results, histogram_size)
             for (votable_id, voting_results) in by_idea.iteritems()
         }
 
@@ -194,6 +198,15 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
 
 
+def empty_matrix(size, dim):
+    if dim == 0:
+        return 0
+    if dim == 1:
+        # shortcut
+        return [0] * size
+    return [empty_matrix(size, dim-1) for i in range(size)]
+
+
 class LickertVoteSpecification(AbstractVoteSpecification):
     __tablename__ = "lickert_vote_specification"
     rdf_class = VOTE.LickertRange
@@ -213,7 +226,92 @@ class LickertVoteSpecification(AbstractVoteSpecification):
     def get_vote_class(cls):
         return LickertIdeaVote
 
-    def results_for(self, voting_results):
+    def voting_results(self, histogram_size=None):
+        if self.question_id:
+            group_specs = [vs for vs in self.widget.vote_specifications
+                           if vs.question_id == self.question_id
+                           and isinstance(vs, LickertVoteSpecification)]
+            assert self in group_specs
+            if len(group_specs) > 1:
+                # arbitrary but constant order
+                group_specs.sort(key=lambda s: s.id)
+                base_results = {
+                        spec.uri(): super(LickertVoteSpecification, spec
+                                    ).voting_results(histogram_size)
+                        for spec in group_specs
+                    }
+                if histogram_size:
+                    self.joint_histogram(
+                        group_specs, histogram_size, base_results)
+                print(base_results)
+                return base_results
+        return super(LickertVoteSpecification, self
+                     ).voting_results(histogram_size)
+
+    @classmethod
+    def joint_histogram(
+            cls, group_specs, histogram_size, joint_histograms,
+            votes_by_idea_user_spec=None):
+        if votes_by_idea_user_spec is None:
+            votes_by_idea_user_spec = defaultdict(lambda: defaultdict(dict))
+            for spec in group_specs:
+                votes_by_idea = spec._gather_results()
+                for idea_id, votes in votes_by_idea.iteritems():
+                    for vote in votes:
+                        votes_by_idea_user_spec[idea_id][
+                            vote.voter_id][spec] = vote
+        bin_sizes = {
+            spec: float(spec.maximum - spec.minimum) / histogram_size
+            for spec in group_specs
+        }
+        group_signature = ",".join([spec.uri() for spec in group_specs])
+        joint_histograms[group_signature] = histograms_by_idea = {}
+        sums = [0] * len(group_specs)
+        sum_squares = [0] * len(group_specs)
+        sum_prods = 0
+        for idea_id, votes_by_user_spec in votes_by_idea_user_spec.iteritems():
+            histogram = empty_matrix(histogram_size, len(group_specs))
+            results = dict(histogram=histogram)
+            histograms_by_idea[Idea.uri_generic(idea_id)] = results
+            n = 0
+            for votes_by_spec in votes_by_user_spec.itervalues():
+                if len(votes_by_spec) == len(group_specs):  # only full
+                    n += 1
+                    h = histogram
+                    prod = 1
+                    for gn, spec in enumerate(group_specs):
+                        vote_val = votes_by_spec[spec].vote_value
+                        sums[gn] += vote_val
+                        sum_squares[gn] += vote_val*vote_val
+                        prod *= vote_val
+                        bin_num = int((vote_val - spec.minimum)
+                                      / bin_sizes[spec])
+                        if gn == len(group_specs) - 1:
+                            h[bin_num] += 1
+                        else:
+                            h = h[bin_num]
+                    sum_prods += prod
+            results['n'] = n
+            if len(group_specs) == 2 and n > 1:
+                try:
+                    b1 = (sums[0]*sums[1] - n*sum_prods
+                          ) / (sums[0]*sums[0] - n*sum_squares[0])
+                    b0 = (sums[1] - b1*sums[0])/n
+                    results['b0'] = b0
+                    results['b1'] = b1
+                except ZeroDivisionError:
+                    pass
+
+        if len(group_specs) > 2:
+            # eliminate a dimension and recurse
+            for n in range(len(group_specs)):
+                sub_group_specs = group_specs[:n] + group_specs[n+1:]
+                cls.joint_histogram(
+                    sub_group_specs, histogram_size, joint_histograms,
+                    votes_by_idea_user_spec)
+            
+
+    def results_for(self, voting_results, histogram_size=None):
         base = super(LickertVoteSpecification, self).results_for(voting_results)
         n = len(voting_results)
         avg = sum((r.vote_value for r in voting_results)) / n
@@ -221,6 +319,13 @@ class LickertVoteSpecification(AbstractVoteSpecification):
         var = moment2 - avg**2
         std_dev = math.sqrt(var)
         base.update(dict(avg=avg, std_dev=std_dev))
+        if histogram_size:
+            histogram = [0] * histogram_size
+            bin_size = float(self.maximum - self.minimum) / histogram_size
+            for vote in voting_results:
+                bin_num = int((vote.vote_value - self.minimum) / bin_size)
+                histogram[bin_num] += 1
+            base['histogram'] = histogram
         return base
 
     def is_valid_vote(self, vote):
@@ -234,7 +339,7 @@ class BinaryVoteSpecification(AbstractVoteSpecification):
         'polymorphic_identity': 'binary_vote_specification'
     }
 
-    def results_for(self, voting_results):
+    def results_for(self, voting_results, histogram_size=None):
         base = super(BinaryVoteSpecification, self).results_for(voting_results)
         n = len(voting_results)
         positive = len([r for r in voting_results if r.vote_value])
@@ -258,7 +363,7 @@ class MultipleChoiceVoteSpecification(AbstractVoteSpecification):
 
     num_choices = Column(Integer, nullable=False)
 
-    def results_for(self, voting_results):
+    def results_for(self, voting_results, histogram_size=None):
         base = super(
             MultipleChoiceVoteSpecification, self).results_for(voting_results)
         by_result = defaultdict(int)
