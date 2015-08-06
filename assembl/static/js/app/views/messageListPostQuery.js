@@ -404,6 +404,16 @@ var PostQuery = function() {
       }
     };
 
+    this.getTotalNumMessages = function() {
+      //Resolve a promise for the total number of messages in a list.
+      var cm = new CollectionManager();
+      return Promise.resolve(cm.getAllMessageStructureCollectionPromise())
+        .then(function(messageCollection){
+          //The total number of messages is the length of the messageStructureCollection
+          return messageCollection.length;
+        });
+    };
+
     /**
      * Return a promise to a HTML description of a single active query filter
      */
@@ -459,8 +469,7 @@ var PostQuery = function() {
      */
     this.getHtmlDescriptionPromise = function() {
       var that = this;
-
-      return this._getHtmlFiltersDescriptionPromise().then(function(filtersDescription) {
+      return Promise.join(this._getHtmlFiltersDescriptionPromise(), this.getTotalNumMessages(), function(filtersDescription, totalMsgCount) {
         var retval = '',
         individualValuesButtons = [],
         numActiveFilters = _.keys(that._query).length;
@@ -497,10 +506,10 @@ var PostQuery = function() {
             }
 
             if (numActiveFilters > 0) {
-              retval += i18n.sprintf(i18n.ngettext("Found %d message%s that:", "Found %d messages%s that:", that.getResultNumTotal()), that.getResultNumTotal(), unreadText);
+              retval += i18n.sprintf(i18n.ngettext("Found %d message%s out of %d messages that:", "Found %d messages%s out of %d messages that:", that.getResultNumTotal(), totalMsgCount), that.getResultNumTotal(), unreadText, totalMsgCount);
             }
             else {
-              retval += i18n.sprintf(i18n.ngettext("Found %d message%s:", "Found %d messages%s:", that.getResultNumTotal()), that.getResultNumTotal(), unreadText);
+              retval += i18n.sprintf(i18n.ngettext("Found %d message%s out of %d messages:", "Found %d messages%s out of %d messages:", that.getResultNumTotal(), totalMsgCount), that.getResultNumTotal(), unreadText, totalMsgCount);
             }
           }
 
