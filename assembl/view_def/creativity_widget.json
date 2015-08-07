@@ -146,7 +146,7 @@
         "num_posts": true,
         "subtype": "rdf_type",
         "num_read_posts": true,
-        "widget_uris": "&widget_uris",
+        "widget_links": "&widget_link_signatures",
         "proposed_in_post": ":",
         "widget_add_post_endpoint": true
     },

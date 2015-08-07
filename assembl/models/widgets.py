@@ -320,8 +320,13 @@ class VotingCriterionWidgetLink(IdeaWidgetLink):
 Idea.widgets = association_proxy('widget_links', 'widget')
 
 Widget.showing_idea_links = relationship(
-    IdeaShowingWidgetLink)
-Idea.has_showing_widget_links = relationship(IdeaShowingWidgetLink)
+    IdeaWidgetLink,
+    primaryjoin=((Widget.id == IdeaShowingWidgetLink.widget_id)
+                 & IdeaShowingWidgetLink.polymorphic_test()))
+Idea.has_showing_widget_links = relationship(
+    IdeaWidgetLink,
+    primaryjoin=((Idea.id == IdeaShowingWidgetLink.idea_id)
+                 & IdeaShowingWidgetLink.polymorphic_test()))
 
 Widget.showing_ideas = relationship(
     Idea, viewonly=True, secondary=IdeaShowingWidgetLink.__table__,
@@ -345,6 +350,7 @@ class BaseIdeaWidget(Widget):
     }
 
     base_idea_link = relationship(BaseIdeaWidgetLink, uselist=False)
+    base_idea_link_class = BaseIdeaWidgetLink
 
     def interpret_settings(self, settings):
         if 'idea' in settings:
@@ -359,7 +365,8 @@ class BaseIdeaWidget(Widget):
         if self.base_idea_link:
             self.base_idea_link.idea_id = id
         else:
-            self.base_idea_link = BaseIdeaWidgetLink(widget=self, idea=idea)
+            self.base_idea_link = self.base_idea_link_class(
+                widget=self, idea=idea)
             self.db.add(self.base_idea_link)
         # This is wrong, but not doing it fails.
         self.base_idea = idea
@@ -628,6 +635,7 @@ class InspirationWidget(IdeaCreatingWidget):
     __mapper_args__ = {
         'polymorphic_identity': 'inspiration_widget',
     }
+    base_idea_link_class = IdeaInspireMeWidgetLink
 
     @classmethod
     def get_ui_endpoint_base(cls):

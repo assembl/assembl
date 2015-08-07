@@ -38,7 +38,7 @@
         "num_posts": true,
         "num_read_posts": true,
         "contributors": "&get_contributors:",
-        "widget_uris": "&widget_uris",
+        "widget_links": "&widget_link_signatures",
         "widget_add_post_endpoint": true
     }
 }

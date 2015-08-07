@@ -261,6 +261,19 @@ class Idea(HistoryMixin, DiscussionBoundBase):
 
         return ancestors.all()
 
+    def get_all_descendants(self, id_only=False):
+        sql = text("""SELECT target_id as id FROM (
+            SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
+                source_id, target_id FROM idea_idea_link WHERE tombstone_date IS NULL
+            UNION SELECT id as source_id, id as target_id from idea
+            ) il
+        WHERE il.source_id = :idea_id""").columns(column('idea_id'))
+        query = sql.bindparams(idea_id=self.id)
+        if id_only:
+            return list((id for (id,) in self.db.execute(query)))
+        else:
+            return self.db.query(Idea).filter(Idea.id.in_(query)).all()
+
     def get_order_from_first_parent(self):
         return self.source_links[0].order if self.source_links else None
 
@@ -637,13 +650,14 @@ JOIN post AS family_posts ON (
         return [wl.context_url for wl in self.widget_links
                 if isinstance(wl, GeneratedIdeaWidgetLink)]
 
-    def get_notifications(self):
-        from .widgets import BaseIdeaWidgetLink
-        for widget_link in self.widget_links:
-            if not isinstance(self, BaseIdeaWidgetLink):
-                continue
-            for n in widget_link.widget.has_notification():
-                yield n
+    # def get_notifications(self):
+    #     # Dead code?
+    #     from .widgets import BaseIdeaWidgetLink
+    #     for widget_link in self.widget_links:
+    #         if not isinstance(self, BaseIdeaWidgetLink):
+    #             continue
+    #         for n in widget_link.widget.has_notification():
+    #             yield n
 
     @classmethod
     def get_all_idea_links(cls, discussion_id):
@@ -841,13 +855,17 @@ JOIN post AS family_posts ON (
                     cls, InspirationWidget),
                 'active_showing_widget_links': ActiveShowingWidgetsCollection(cls)}
 
-    def widget_uris(self):
+    def widget_link_signatures(self):
         from .widgets import Widget
-        return [Widget.uri_generic(l.widget_id) for l in self.has_showing_widget_links]
+        return [
+            {'widget': Widget.uri_generic(l.widget_id),
+             '@type': l.external_typename()}
+            for l in self.has_showing_widget_links]
 
     def active_widget_uris(self):
         from .widgets import Widget
-        return [Widget.uri_generic(l.widget_id) for l in self.active_showing_widget_links]
+        return [Widget.uri_generic(l.widget_id)
+                for l in self.active_showing_widget_links]
 
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,

@@ -71,6 +71,27 @@ def get_idea(request):
 
 def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     user_id = user_id or Everyone
+    # optimization: Recursive widget links.
+    from assembl.models import (
+        Widget, IdeaWidgetLink, IdeaDescendantsShowingWidgetLink)
+    universal_widget_links = []
+    by_idea_widget_links = defaultdict(list)
+    widget_links = discussion.db.query(IdeaWidgetLink
+        ).join(Widget).join(Discussion).filter(
+        Widget.test_active(), Discussion.id == discussion.id,
+        IdeaDescendantsShowingWidgetLink.polymorphic_test()
+        ).options(joinedload_all(IdeaWidgetLink.idea)).all()
+    for wlink in widget_links:
+        if isinstance(wlink.idea, RootIdea):
+            universal_widget_links.append({
+                '@type': wlink.external_typename(),
+                'widget': Widget.uri_generic(wlink.widget_id)})
+        else:
+            for id in wlink.idea.get_all_descendants(True):
+                by_idea_widget_links[Idea.uri_generic(id)].append({
+                    '@type': wlink.external_typename(),
+                    'widget': Widget.uri_generic(wlink.widget_id)})
+
     next_synthesis = discussion.get_next_synthesis()
     ideas = discussion.db.query(Idea).filter_by(
         discussion_id=discussion.id
@@ -98,6 +119,12 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     retval = [idea.generic_json(view_def, user_id, permissions)
               for idea in ideas]
     retval = [x for x in retval if x is not None]
+    for r in retval:
+        if r.get('widget_links', None) is not None:
+            for l in universal_widget_links:
+                r['widget_links'].append(l)
+            for l in by_idea_widget_links[r['@id']]:
+                r['widget_links'].append(l)
     return retval
 
 @ideas.get(permission=P_READ)
