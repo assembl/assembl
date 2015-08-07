@@ -26,8 +26,8 @@ def upgrade(pyramid_env):
             WHERE id IN (
                 SELECT idea_widget_link.id FROM idea_widget_link
                     JOIN widget ON (widget.id = idea_widget_link.widget_id)
-                    WHERE widget.type = 'inspiration_widget'
-                    AND idea_widget_link.type = 'base_idea_widget_link' """)
+                    WHERE widget."type" = 'inspiration_widget'
+                    AND idea_widget_link."type" = 'base_idea_widget_link') """)
 
 
 def downgrade(pyramid_env):
