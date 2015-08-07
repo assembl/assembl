@@ -432,7 +432,7 @@ def app_update_dependencies():
     execute(update_compass)
     execute(update_bower)
     execute(bower_install)
-    execute(npm_install)
+    execute(npm_update)
 
 
 @task
