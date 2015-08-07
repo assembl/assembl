@@ -473,6 +473,7 @@ $previewNumLines: 4;
 
   //
   .message-menu {
+
     font-size: 1rem; //This should be rem or something - benoitg
     a {
       color: $gray4;
@@ -510,13 +511,15 @@ $previewNumLines: 4;
         right: 0;
         left: auto;
       }
-
       i.icon-mail {
         font-size: 12px; /* icon-mail needs to have a smaller font size (than original 16px) because the icon is big in the font */
       }
       a:link, a:visited {
         color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
         text-decoration: inherit;
+      }
+      > a:link, > a:visited {
+        color: $txtGray1;
       }
     }
 
@@ -643,6 +646,10 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
         font-size: 12px;
         margin-right: -2px;
       }
+    }
+
+    .collapsed-thread-information {
+      color: $txtGray1;
     }
   }
   &.bx {

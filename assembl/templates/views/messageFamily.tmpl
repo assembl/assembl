@@ -5,13 +5,15 @@
   <% } %>
   <div class="message-conversation-block">
     <a href="#" class="js_viewMessageFamilyConversation">{{ gettext('View conversation') }}</a>
-    <span class="maxs">&#x2022;{# Unicode bullet #}</span>
-    <% if (numAncestorsOutOfContext + numDescendantsOutOfContext) { %>
-      <span data-toggle="tooltip" title="" data-original-title="<%= ctxMessageCountTooltip %>"><i class="icon icon-comment"></i> <%= (numAncestorsOutOfContext + numDescendantsOutOfContext) %></span>
-    <% } %>
-    <% if (numAuthorsOutOfContext) { %>
-      <span data-toggle="tooltip" title="" data-original-title="<%= ctxAuthorCountTooltip %>"><i class="icon icon-user"></i> <%= (numAuthorsOutOfContext) %></span>
-    <% } %>
+    <span class="collapsed-thread-information">
+      <span class="maxs">&#x2022;{# Unicode bullet #}</span>
+      <% if (numAncestorsOutOfContext + numDescendantsOutOfContext) { %>
+        <span data-toggle="tooltip" title="" data-original-title="<%= ctxMessageCountTooltip %>"><i class="icon icon-comment"></i> <%= (numAncestorsOutOfContext + numDescendantsOutOfContext) %></span>
+      <% } %>
+      <% if (numAuthorsOutOfContext) { %>
+        <span data-toggle="tooltip" title="" data-original-title="<%= ctxAuthorCountTooltip %>"><i class="icon icon-user"></i> <%= (numAuthorsOutOfContext) %></span>
+      <% } %>
+    </span>
   </div>
 <% } %>
 
