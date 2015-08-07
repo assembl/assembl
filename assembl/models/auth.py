@@ -1011,7 +1011,7 @@ class UserRole(Base, PrivateObjectMixin):
     user = relationship(User, backref=backref("roles", cascade="all, delete-orphan"))
     role_id = Column(Integer, ForeignKey(
         'role.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    role = relationship(Role)
+    role = relationship(Role, lazy="joined")
 
     def get_user_uri(self):
         return User.uri_generic(self.user_id)
@@ -1069,7 +1069,7 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
     role_id = Column(Integer, ForeignKey(
         'role.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    role = relationship(Role)
+    role = relationship(Role, lazy="joined")
     requested = Column(Boolean, server_default='0', default=False)
     # BUG in virtuoso: It will often refuse to create an index
     # whose name exists in another schema. So having this index in
@@ -1216,11 +1216,11 @@ class DiscussionPermission(DiscussionBoundBase):
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
     role_id = Column(Integer, ForeignKey(
         'role.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    role = relationship(Role)
+    role = relationship(Role, lazy="joined")
     permission_id = Column(Integer, ForeignKey(
         'permission.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
-    permission = relationship(Permission)
+    permission = relationship(Permission, lazy="joined")
 
     def role_name(self):
         return self.role.name
