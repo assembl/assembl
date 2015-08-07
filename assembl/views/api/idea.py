@@ -98,22 +98,6 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     retval = [idea.generic_json(view_def, user_id, permissions)
               for idea in ideas]
     retval = [x for x in retval if x is not None]
-    widget_data = defaultdict(list)
-    for widget in discussion.widgets:
-        url = widget.get_ui_endpoint()
-        for data in widget.idea_data(user_id):
-            try:
-                data['widget_url'] = url
-                data['widget_uri'] = widget.uri()
-                widget_data[data['idea']].append(data)
-            except KeyError as e:
-                pass
-    for idea_rep in retval:
-        if '@id' not in idea_rep:
-            continue
-        data = widget_data[idea_rep['@id']]
-        if data:
-            idea_rep['widget_data'] = data
     return retval
 
 @ideas.get(permission=P_READ)

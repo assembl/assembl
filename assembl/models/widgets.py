@@ -61,9 +61,6 @@ class Widget(DiscussionBoundBase):
         super(Widget, self).__init__(*args, **kwargs)
         self.interpret_settings(self.settings_json)
 
-    def idea_data(self, user_id):
-        return []
-
     def interpret_settings(self, settings):
         pass
 
@@ -357,12 +354,6 @@ class BaseIdeaWidget(Widget):
         if self.base_idea_link:
             return self.base_idea_link.idea_id
 
-    def idea_data(self, user_id):
-        return [{
-            'idea': Idea.uri_generic(self.base_idea_id()),
-            '@type': 'base_idea_widget_link'
-        }]
-
     def set_base_idea_id(self, id):
         idea = Idea.get_instance(id)
         if self.base_idea_link:
@@ -475,18 +466,6 @@ class IdeaCreatingWidget(BaseIdeaWidget):
     def get_confirmed_ideas(self):
         # TODO : optimize
         return [idea.uri() for idea in self.generated_ideas if not idea.hidden]
-
-    def idea_data(self, user_id):
-        for id in super(IdeaCreatingWidget, self).idea_data(user_id):
-            yield id
-        for link in self.generated_idea_links:
-            yield {
-                'idea': Idea.uri_generic(link.idea_id),
-                '@type': 'created_idea',
-                'state': {
-                    'hidden': link.idea.hidden
-                }
-            }
 
     def set_confirmed_ideas(self, idea_ids):
         for idea in self.generated_ideas:
@@ -743,34 +722,6 @@ class MultiCriterionVotingWidget(Widget):
     def get_ui_endpoint_base(cls):
         # TODO: Make this configurable.
         return "/static/widget/vote/"
-
-    def idea_data(self, user_id):
-        for link in self.criteria_links:
-            yield {
-                'idea': Idea.uri_generic(link.idea_id),
-                '@type': 'criterion',
-            }
-        my_votes = []
-        vote_idea_ids = set()
-        if user_id:
-            my_votes = self.db.query(AbstractIdeaVote
-                ).join(AbstractIdeaVote.voter, AbstractIdeaVote.idea,
-                       VotedIdeaWidgetLink, Widget
-                ).filter(Widget.id == self.id, User.id==user_id).all()
-            vote_idea_ids = {vote.idea_id: vote for vote in my_votes}
-        for link in self.votable_idea_links:
-            if link.idea_id in vote_idea_ids:
-                yield {
-                    'idea': Idea.uri_generic(link.idea_id),
-                    '@type': 'voted',
-                    'state': vote_idea_ids[link.idea_id].generic_json(
-                        user_id=user_id)
-                }
-            else:
-                yield {
-                    'idea': Idea.uri_generic(link.idea_id),
-                    '@type': 'votable',
-                }
 
     def interpret_settings(self, settings):
         super(MultiCriterionVotingWidget, self).interpret_settings(settings)

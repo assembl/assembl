@@ -51,6 +51,7 @@ var IdeaModel = Base.Model.extend({
     active: false,
     inNextSynthesis: false,
     parentId: null,
+    widget_uris: [],
     order: 1
   },
   /* The following should be mostly in view code, but currently the
@@ -376,35 +377,6 @@ var IdeaModel = Base.Model.extend({
       return Backbone.Model.prototype.set.call(this, key, val, options);
     }
   },
-
-  /* not used anymore
-  getWidgets: function () {
-      //console.log("idea widgets: ", this.get('widget_data'));
-      return this.get('widget_data');
-  },
-  */
-  
-  /* not used anymore
-  getWidgetsOfType: function (type) {
-      var widget_data = this.getWidgets();
-      var widgets = _.filter(widget_data, function (o) {
-          return o["@type"] == type;
-      });
-      return widgets;
-  },
-  */
-  
-  /* not used anymore, because we are using Context::getWidgetDataAssociatedToIdeaPromise() instead
-  getVotableOnWhichWidgets: function () {
-      return this.getWidgetsOfType("votable");
-  },
-  */
-  
-  /* not used anymore, because we are using Context::getWidgetDataAssociatedToIdeaPromise() instead
-  getInspirationWidgets: function () {
-      return this.getWidgetsOfType("inspiration");
-  },
-  */
   
   validate: function(attrs, options) {
     /**
