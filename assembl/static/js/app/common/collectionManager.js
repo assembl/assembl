@@ -160,11 +160,11 @@ var CollectionManager = Marionette.Controller.extend({
   _allUserAccountsPromise: undefined,
 
   /**
-   * Collection of all the Active Widgets in the discussion
+   * Collection of all the Widgets in the discussion
    * @type {[Widget]}
    */
-  _allActiveWidgets: undefined,
-  _allActiveWidgetsPromise: undefined,
+  _allWidgets: undefined,
+  _allWidgetsPromise: undefined,
 
   /**
    * Connected socket promise
@@ -772,19 +772,19 @@ var CollectionManager = Marionette.Controller.extend({
       return this._allUserAccountsPromise;
     },
 
-  getAllActiveWidgetsPromise: function() {
-      if (this._allActiveWidgetsPromise) {
-        return this._allActiveWidgetsPromise;
+  getAllWidgetsPromise: function() {
+      if (this._allWidgetsPromise) {
+        return this._allWidgetsPromise;
       }
 
-      this._allActiveWidgets = new Widget.Collection();
-      this._allActiveWidgets.collectionManager = this;
-      this._allActiveWidgetsPromise = Promise.resolve(this._allActiveWidgets.fetch())
-          .thenReturn(this._allActiveWidgets)
+      this._allWidgets = new Widget.Collection();
+      this._allWidgets.collectionManager = this;
+      this._allWidgetsPromise = Promise.resolve(this._allWidgets.fetch())
+          .thenReturn(this._allWidgets)
           .catch(function(e) {
             console.error(e.statusText);
           });
-      return this._allActiveWidgetsPromise;
+      return this._allWidgetsPromise;
     },
 
   getConnectedSocketPromise: function() {

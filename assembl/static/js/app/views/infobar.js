@@ -58,7 +58,9 @@ var InfobarItem = Marionette.LayoutView.extend({
 
 var WidgetWithBroadcastSubset = Backbone.Subset.extend({
   sieve: function(widget) {
-    return widget.get("activity_notification") != null && !widget.get("closeInfobar");
+    return (widget.get("activity_notification") != null
+            && !widget.get("closeInfobar")
+            && widget.get("activity_state") === "active");
   },
   comparator: function(widget) {
     return widget.get("end_date");
@@ -93,8 +95,9 @@ var Infobars = Marionette.CollectionView.extend({
   // static methods
   getCollectionPromise: function() {
     var collectionManager = new CollectionManager();
-    return collectionManager.getAllActiveWidgetsPromise().then(function(widgets) {
+    return collectionManager.getAllWidgetsPromise().then(function(widgets) {
       // TODO: Convert widgets into Infobar items, and use that as model.
+      // Also add other sources for infobar items.
       return new WidgetWithBroadcastSubset([], {
         parent: widgets});
     });

@@ -41,5 +41,6 @@ var activeWidgetCollection = Base.Collection.extend({
 
 module.exports = {
   Model: widgetModel,
-  Collection: activeWidgetCollection
+  Collection: widgetCollection,
+  activeWidgetCollection: activeWidgetCollection
 };
