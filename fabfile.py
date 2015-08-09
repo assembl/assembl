@@ -639,11 +639,12 @@ def install_builddeps():
         # glibtoolize, bison, flex, gperf are on osx by default.
         # brew does not know aclocal, autoheader... 
         # They exist on macports, but do we want to install that?
-        if not exists('/usr/local/lib/libiodbc.2.dylib'):
-            with cd('/tmp'):
-                run('wget http://assembl.coeus.ca/static/wheelhouse/iodbc.pkg')
-                sudo('/usr/sbin/installer -pkg iodbc.pkg -target /')
-                run('rm iodbc.pkg')
+        if not (exists('/usr/lib/libiodbc.2.dylib') or
+                exists('/usr/local/lib/libiodbc.2.dylib')):
+            run('brew install libiodbc')
+            # may require a sudo
+            if not run('brew link libiodbc', quiet=True):
+                sudo('brew link libiodbc')
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
