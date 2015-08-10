@@ -13,3 +13,5 @@ http_generated_images_path = '/static/img/sprites'
 javascripts_dir = "js"
 
 sass_options = { :debug_info => true } # activates source maps
+sourcemap = true
+
