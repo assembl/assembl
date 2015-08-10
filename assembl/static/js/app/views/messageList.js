@@ -849,9 +849,10 @@ var MessageList = AssemblPanel.extend({
       that.trigger("messageList:render_complete", "Render complete");
       return true;
     }).catch(function(e) {
-          console.error("An error occured during rendering: ", e);
-          that.ui.messageList.html("<div class='error'>We are sorry, a technical error occured during rendering.</div>");
-        });
+      console.error("An error occured during rendering: ", e);
+      Raven.captureException(e);
+      that.ui.messageList.html("<div class='error'>We are sorry, a technical error occured during rendering.</div>");
+    });
 
   },
 
