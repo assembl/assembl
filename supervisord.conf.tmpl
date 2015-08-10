@@ -15,6 +15,7 @@ umask = 022
 identifier = supervisor
 nocleanup = true
 childlogdir = /tmp
+environment = VIRTUAL_ENV="%(VIRTUAL_ENV)s",PATH="%(VIRTUAL_ENV)s/bin:%%(ENV_PATH)s"
 
 [supervisorctl]
 serverurl = unix:///%(here)s/var/run/supervisor.sock

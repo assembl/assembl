@@ -1,6 +1,7 @@
 """ INI file generator """
 
 import sys
+import os
 from platform import system
 from os import listdir, mkdir
 from os.path import exists, join, dirname, abspath
@@ -117,6 +118,7 @@ def main():
             'supervisor', 'autostart_edgesense_server')
             if has_edgesense_server else 'false'),
         'edgesense_venv': edgesense_venv,
+        'VIRTUAL_ENV': os.environ['VIRTUAL_ENV'],
         'edgesense_code_dir': edgesense_code_dir,
     }
     print vars
