@@ -539,7 +539,7 @@ def test_voting_widget(
     # and another one
     vote_spec_2 = {
         '@type': 'BinaryVoteSpecification',
-        'criterion_idea': criterion_3.uri()
+        'criterion_idea': criterion_2.uri()
     }
     new_vote_spec_loc = test_app.post(
         votespecs_url, json.dumps(vote_spec_2),
@@ -548,6 +548,21 @@ def test_voting_widget(
     new_vote_spec_uri = new_vote_spec_loc.location
     new_vote_spec = AbstractVoteSpecification.get_instance(new_vote_spec_uri)
     assert new_vote_spec
+
+    # and another one
+    vote_spec_3 = {
+        '@type': 'MultipleChoiceVoteSpecification',
+        'num_choices': 5,
+        'criterion_idea': criterion_3.uri()
+    }
+    new_vote_spec_loc = test_app.post(
+        votespecs_url, json.dumps(vote_spec_3),
+        headers=JSON_HEADER)
+    assert new_vote_spec_loc.status_code == 201
+    new_vote_spec_uri = new_vote_spec_loc.location
+    new_vote_spec = AbstractVoteSpecification.get_instance(new_vote_spec_uri)
+    assert new_vote_spec
+
 
     # Get an updated widget_rep with target
     widget_rep = test_app.get(

@@ -377,7 +377,7 @@ class MultipleChoiceVoteSpecification(AbstractVoteSpecification):
         return MultipleChoiceIdeaVote
 
     def is_valid_vote(self, vote):
-        if not super(LickertVoteSpecification, self).is_valid_vote(vote):
+        if not super(MultipleChoiceVoteSpecification, self).is_valid_vote(vote):
             return False
         return 0 <= vote.vote_value < self.num_choices
 
