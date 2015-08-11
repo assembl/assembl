@@ -1,9 +1,10 @@
-from os import listdir
+from os import listdir, urandom
 from os.path import join
 from inspect import isabstract
 from threading import Lock
 import re
 from itertools import chain
+from base64 import urlsafe_b64encode, urlsafe_b64decode
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
@@ -20,6 +21,7 @@ from virtuoso.vmapping import (
     PatternGraphQuadMapPattern, ClassPatternExtractor, VirtRDF)
 from virtuoso.vstore import Virtuoso
 from virtuoso.alchemy import SparqlClause
+
 
 def get_session():
     admin_engine = create_engine('virtuoso://dba:dba@VOSU')
@@ -317,13 +319,28 @@ class AssemblGraphQuadMapPattern(GraphQuadMapPattern):
         self.section = section
 
 
-def hash_obfuscator(x, salt):
-    from base64 import urlsafe_b64encode
-    import hashlib
-    hasher = hashlib.new('sha256')
-    hasher.update(salt)
-    hasher.update(str(x))
-    return urlsafe_b64encode(hasher.digest())
+class AESObfuscator(object):
+    def __init__(self, key=None, blocklen=16):
+        key = key or urandom(blocklen)
+        self.key = self.pad(key, blocklen)
+        self.blocklen = blocklen
+        self.IV = ' ' * blocklen
+
+    def encrypt(self, text):
+        from Crypto.Cipher import AES
+        encoder = AES.new(self.key, AES.MODE_CFB, self.IV)
+        return urlsafe_b64encode(encoder.encrypt(text))
+
+    def decrypt(self, code):
+        from Crypto.Cipher import AES
+        encoder = AES.new(self.key, AES.MODE_CFB, self.IV)
+        code = code.encode('utf-8')
+        code = urlsafe_b64decode(code)
+        return encoder.decrypt(code)
+
+    def pad(self, key, blocklen=16, padding=' '):
+        return key + padding * (blocklen - (len(key) % blocklen))
+
 
 
 class AssemblPatternGraphQuadMapPattern(PatternGraphQuadMapPattern):
@@ -723,11 +740,16 @@ class AssemblQuadStorageManager(object):
         r = re.compile(r'((?:/data/|local:)(?:AgentProfile|AgentAccount|AbstractAgentAccount)/)(\d+)\b')
         if not obfuscator:
             # Random obfuscator
-            from functools import partial
-            from os import urandom
-            obfuscator = partial(hash_obfuscator, salt=urandom(8))
+            obfuscator = AESObfuscator().encrypt
         return r.sub(lambda matchob: (
             matchob.group(1) + obfuscator(matchob.group(2))), serialized_rdf)
+
+    @staticmethod
+    def deobfuscate(serialized_rdf, deobfuscator):
+        # Work in progress.
+        r = re.compile(r'((?:/data/|local:)(?:AgentProfile|AgentAccount|AbstractAgentAccount)(?:\\?)/)([-=\w]+)')
+        return r.sub(lambda matchob: (
+            matchob.group(1) + deobfuscator(matchob.group(2))), serialized_rdf)
 
     def discussion_as_quads(self, discussion_id):
         cg = self.discussion_as_graph(discussion_id)

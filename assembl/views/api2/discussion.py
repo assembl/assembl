@@ -177,9 +177,9 @@ def discussion_instance_view_jsonld(request):
     jdata = discussion_jsonld(discussion.id)
     if salt:
         from assembl.semantic.virtuoso_mapping import (
-            AssemblQuadStorageManager, hash_obfuscator)
-        obfuscator = partial(hash_obfuscator, salt=salt)
-        jdata = AssemblQuadStorageManager.obfuscate(jdata, obfuscator)
+            AssemblQuadStorageManager, AESObfuscator)
+        obfuscator = AESObfuscator(salt)
+        jdata = AssemblQuadStorageManager.obfuscate(jdata, obfuscator.encrypt)
     # TODO: Add age
     if "callback" in request.GET:
         jdata = handle_jsonp(request.GET['callback'], jdata)
@@ -206,9 +206,9 @@ def user_private_view_jsonld(request):
     jdata = userprivate_jsonld(discussion_id)
     if salt:
         from assembl.semantic.virtuoso_mapping import (
-            AssemblQuadStorageManager, hash_obfuscator)
-        obfuscator = partial(hash_obfuscator, salt=salt)
-        jdata = AssemblQuadStorageManager.obfuscate(jdata, obfuscator)
+            AssemblQuadStorageManager, AESObfuscator)
+        obfuscator = AESObfuscator(salt)
+        jdata = AssemblQuadStorageManager.obfuscate(jdata, obfuscator.encrypt)
     if "callback" in request.GET:
         jdata = handle_jsonp(request.GET['callback'], jdata)
         content_type = "application/json-p"
@@ -403,10 +403,13 @@ def as_mind_map(request):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_READ)
 def get_alerts(request):
+    from assembl.semantic.virtuoso_mapping import (
+        AssemblQuadStorageManager, AESObfuscator)
     discussion = request.context._instance
     user_id = authenticated_userid(request) or Everyone
     settings = request.registry.settings
-    metrics_server_endpoint = settings.get('metrics_server_endpoint',
+    metrics_server_endpoint = settings.get(
+        'metrics_server_endpoint',
         'https://discussions.bluenove.com/analytics/accept')
     discussion = request.context._instance
     protocol = 'https' if asbool(request.registry.settings.get(
@@ -416,6 +419,7 @@ def get_alerts(request):
         # TODO: public_secure_port?
         host += ':'+str(settings.get('public_port'))
     seed = urandom(8)
+    obfuscator = AESObfuscator(seed)
     token = permission_token(user_id, discussion.id, [P_READ_PUBLIC_CIF], seed)
     metrics_requests = [{
         "metric": "alerts",
@@ -429,6 +433,6 @@ def get_alerts(request):
         )
     alerts = requests.post(metrics_server_endpoint, data=dict(
         mapurl=mapurl, requests=json.dumps(metrics_requests), recency=60))
-    result = alerts.text
-    # TODO: Deobfuscator. Maybe use a reversible obfuscator?
+    result = AssemblQuadStorageManager.deobfuscate(
+        alerts.text, obfuscator.decrypt)
     return Response(body=result, content_type='application/json')
