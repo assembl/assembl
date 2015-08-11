@@ -1,3 +1,4 @@
+import os
 from functools import partial
 import re
 import base64
@@ -5,6 +6,8 @@ from cStringIO import StringIO
 from os import urandom
 from itertools import chain
 from collections import defaultdict
+import random
+
 
 import simplejson as json
 from pyramid.response import Response
@@ -15,7 +18,9 @@ from pyramid_dogpile_cache import get_region
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.renderers import JSONP_VALID_CALLBACK
 from pyramid.settings import asbool
+import requests
 
+from assembl.lib.config import get_config
 from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_SYSADMIN, Everyone)
 from assembl.auth.password import verify_data_token, data_token
@@ -60,7 +65,6 @@ def userprivate_jsonld(discussion_id):
     aqsm = AssemblQuadStorageManager()
     cg = aqsm.participants_private_as_graph(discussion_id)
     return aqsm.graph_as_jsonld(cg)
-
 
 
 def read_user_token(request):
@@ -108,6 +112,26 @@ def handle_jsonp(callback_fn, json):
     return "/**/{0}({1});".format(callback_fn.encode('ascii'), json)
 
 
+def permission_token(
+        user_id, discussion_id, req_permissions, random_str=None):
+    random_str = random_str or urandom(8)
+    if isinstance(req_permissions, list):
+        req_permissions = set(req_permissions)
+    else:
+        req_permissions = set((req_permissions,))
+    permissions = get_permissions(user_id, discussion_id)
+    if not req_permissions:
+        req_permissions = permissions
+    elif P_SYSADMIN not in permissions:
+        req_permissions = req_permissions.intersection(set(permissions))
+    req_permissions = list(req_permissions)
+    data = [str(user_id), str(discussion_id)]
+    data.extend([str(x) for (x,) in Permission.default_db.query(
+            Permission.id).filter(Permission.name.in_(req_permissions)).all()])
+    data = ','.join(data) + '.' + base64.urlsafe_b64encode(random_str)
+    return data_token(data)
+
+
 @view_config(context=InstanceContext, name="perm_token",
              ctx_instance_class=Discussion, request_method='GET',
              accept="application/ld+json")
@@ -118,33 +142,22 @@ def get_token(request):
     discussion_id = request.context.get_discussion_id()
     req_permissions = request.GET.getall('permission') or [
         P_READ, P_READ_PUBLIC_CIF]
+    if P_READ in permissions:
+        permissions.add(P_READ_PUBLIC_CIF)
     random_seed = request.GET.get('seed', None)
+    # TODO: Rewrite that crap so randomness is internal,
+    # give a pair of tokens.
     if random_seed:
         # We need some determinism
-        import random
         random.seed(random_seed)
-        random_str = ''.join([chr(random.randint(0,256)) for i in range(8)])
+        random_str = ''.join([chr(random.randint(0, 256)) for i in range(8)])
+        # Restore normal randomness
         random.seed(urandom(8))
     else:
         random_str = urandom(8)
-    if isinstance(req_permissions, list):
-        req_permissions = set(req_permissions)
-    else:
-        req_permissions = set((req_permissions,))
-    permissions = set(get_permissions(user_id, discussion_id))
-    if not req_permissions:
-        req_permissions = permissions
-    else:
-        if P_READ in permissions:
-            permissions.add(P_READ_PUBLIC_CIF)
-        if P_SYSADMIN not in permissions:
-            req_permissions = list(req_permissions.intersection(permissions))
-    req_permissions = list(req_permissions)
-    data = [str(user_id), str(discussion_id)]
-    data.extend([str(x) for (x,) in Permission.default_db.query(
-            Permission.id).filter(Permission.name.in_(req_permissions)).all()])
-    data = ','.join(data) + '.' + base64.urlsafe_b64encode(random_str)
-    return Response(body=data_token(data), content_type="text/text")
+    data = permission_token(
+        user_id, discussion_id, req_permissions, random_str)
+    return Response(body=data, content_type="text/text")
 
 
 @view_config(context=InstanceContext, name="jsonld",
@@ -364,6 +377,7 @@ pygraphviz_formats = {
     'model/vrml': 'vrml',
 }
 
+
 @view_config(context=InstanceContext, name="mindmap",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_READ)
@@ -383,3 +397,38 @@ def as_mind_map(request):
     G.draw(io, format=pygraphviz_formats[mimetype])
     io.seek(0)
     return Response(body_file=io, content_type=mimetype)
+
+
+@view_config(context=InstanceContext, name="alerts",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_READ)
+def get_alerts(request):
+    discussion = request.context._instance
+    user_id = authenticated_userid(request) or Everyone
+    settings = request.registry.settings
+    metrics_server_endpoint = settings.get('metrics_server_endpoint',
+        'https://discussions.bluenove.com/analytics/accept')
+    discussion = request.context._instance
+    protocol = 'https' if asbool(request.registry.settings.get(
+        'accept_secure_connection', False)) else 'http'
+    host = settings.get('public_hostname')
+    if settings.get('public_port', 80) != 80:
+        # TODO: public_secure_port?
+        host += ':'+str(settings.get('public_port'))
+    seed = urandom(8)
+    token = permission_token(user_id, discussion.id, [P_READ_PUBLIC_CIF], seed)
+    metrics_requests = [{
+        "metric": "alerts",
+        "types": [
+            "lurking_user", "inactive_user", "user_gone_inactive"]}]
+    mapurl = '%s://%s/data/Discussion/%d/jsonld?token=%s' % (
+        protocol,
+        host,
+        discussion.id,
+        token
+        )
+    alerts = requests.post(metrics_server_endpoint, data=dict(
+        mapurl=mapurl, requests=json.dumps(metrics_requests), recency=60))
+    result = alerts.text
+    # TODO: Deobfuscator. Maybe use a reversible obfuscator?
+    return Response(body=result, content_type='application/json')
