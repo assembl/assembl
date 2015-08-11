@@ -36,7 +36,8 @@ def get_nsm(session):
     return nsm
 
 
-def get_virtuoso(session, storage=ASSEMBL.discussion_storage):
+def get_virtuoso(session, storage=None):
+    storage = storage or AssemblQuadStorageManager.discussion_storage_name()
     v = Virtuoso(quad_storage=storage,
                  connection=session.connection())
     return v
