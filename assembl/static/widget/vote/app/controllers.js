@@ -144,15 +144,313 @@ voteApp.controller('resultsCtl',
       }
 
       $scope.user = configService.user;
+
+      $scope.drawUI();
+    };
+
+    $scope.getVoteSpecFieldInSettings = function(vote_spec, field_name){
+      if ( "settings" in vote_spec ){
+        if( field_name in vote_spec.settings ){
+          return vote_spec.settings[field_name];
+        }
+      }
+      return null;
+    };
+
+    $scope.getVoteSpecByURI = function(uri){
+      if ( "vote_specifications" in configService ){
+        if ( configService.vote_specifications.length ){
+          var sz = configService.vote_specifications.length;
+          for ( var i = 0; i < sz; ++i ){
+            var vote_spec = configService.vote_specifications[i];
+            if ( "@id" in vote_spec && vote_spec["@id"] == uri ){
+              return vote_spec;
+            }
+          }
+        }
+      }
+      return null;
+    };
+
+    $scope.getVoteSpecLabelByURI = function(uri){
+      var vote_spec = $scope.getVoteSpecByURI(uri);
+      if ( vote_spec )
+        return $scope.getVoteSpecFieldInSettings(vote_spec, "name");
+      return null;
+    };
+
+    $scope.drawUI = function() {
+      $scope.drawUIWithoutTable();
+    };
+
+    $scope.drawUIWithoutTable = function() {
+      console.log("drawUIWithoutTable()");
+      var widget = configService;
+      var results_uris = "voting_results_by_spec_url" in widget ? widget.voting_results_by_spec_url : null;
+      console.log("results_uris: ", results_uris);
+      var results_urls = {};
+      var results_promises = {};
+      var questions = window.getUrlVariableValue("questions"); // A "question" is a vote_spec of a vote widget. Here we get a comma-separated list of vote_spec URIs
+      if ( questions ){
+        questions = questions.split(",");
+      }
+      console.log("questions: ", questions);
+      var destination = d3.select("body");
+
+      var result_received = function(vote_spec_uri){
+        return function(vote_spec_result_data){
+          console.log("promise " + vote_spec_uri + " resolved to: ", vote_spec_result_data);
+          var filter_by_targets = null;
+          $scope.drawVoteSpecificationResults(destination, vote_spec_uri, vote_spec_result_data, filter_by_targets);
+        }
+      };
+
+      if ( results_uris ){
+        for ( var spec_uri in results_uris ){
+          results_urls[spec_uri] = AssemblToolsService.resourceToUrl(results_uris[spec_uri]) + "?histogram=10";
+          if ( !questions || (questions.indexOf(spec_uri) != -1) ){
+            results_promises[spec_uri] = $.ajax(results_urls[spec_uri]);
+            $.when(results_promises[spec_uri]).done(result_received(spec_uri));
+          }
+        }
+      }
+      console.log("results_urls: ", results_urls);
+      console.log("results_promises: ", results_promises);
+
+      console.log("drawUIWithoutTable() completed");
+    };
+
+    $scope.drawVoteSpecificationResults = function(destination, vote_spec_uri, vote_spec_result_data, filter_by_targets){
+      console.log("vote_spec_result_data: ", vote_spec_result_data);
+      if ( vote_spec_result_data ){
+        if ( $.isEmptyObject(vote_spec_result_data) ){ // there is no vote yet (on this vote_spec, on any of its available targets), but we have to show it instead of showing nothing
+          if ( !filter_by_targets ){
+            //$scope.drawVoteResult(destination, vote_spec_uri, {}, null);
+            var vote_spec_label = $scope.getVoteSpecLabelByURI(vote_spec_uri) || vote_spec_uri;
+            destination.append("p").html("There is no vote yet for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "\", on any of its target ideas.");
+          }
+        } else {
+          for ( var target in vote_spec_result_data ){
+            if ( !filter_by_targets || (filter_by_targets.indexOf(target) != -1) ){
+              $scope.drawVoteResult(destination, vote_spec_uri, vote_spec_result_data[target], target);
+            }
+          }
+        }
+      }
+    };
+
+    $scope.drawVoteResult = function(destination, vote_spec_uri, vote_spec_result_data_for_target, target){
+      console.log("drawing vote result for vote_spec_uri ", vote_spec_uri, " and target ", target, " which has data ", vote_spec_result_data_for_target);
+
+      var vote_spec = $scope.getVoteSpecByURI(vote_spec_uri);
+      var vote_spec_type = (vote_spec && "@type" in vote_spec) ? vote_spec["@type"] : "LickertVoteSpecification"; // can also be "MultipleChoiceVoteSpecification"
+
+      var data = null;
+      if ( vote_spec_type == "MultipleChoiceVoteSpecification" ){
       
-      // TODO (when the API is implemented): check that the user has the right to participate in this vote
+        var result_number_of_voters = 0;
+        if ( "n" in vote_spec_result_data_for_target )
+          result_number_of_voters = vote_spec_result_data_for_target.n;
 
-      $scope.vote_results_uri = configService.vote_results_url;
-      $scope.vote_count_uri = configService.vote_count_url;
+        data = [];
 
-      $scope.vote_results_endpoint = AssemblToolsService.resourceToUrl($scope.vote_results_uri);
-      $scope.vote_count_endpoint = AssemblToolsService.resourceToUrl($scope.vote_count_uri);
+        var candidates = $scope.getVoteSpecFieldInSettings(vote_spec, "candidates");
+        console.log("candidates: ", candidates);
 
+        // first, create empty data (because vote results do not contain candidates which received zero vote)
+        if ( candidates ){
+          for ( var i = 0; i < candidates.length; ++i ){
+            data.push({
+              "label": candidates[i],
+              "votes": 0,
+              "frequency": 0
+            });
+          }
+        }
+
+        // then, fill data with vote results
+        if ( "results" in vote_spec_result_data_for_target ){
+          for ( var key in vote_spec_result_data_for_target.results ){
+            console.log("key: ", key);
+            console.log("parseInt(key): ", parseInt(key));
+            console.log("candidates[parseInt(key)]: ", candidates[parseInt(key)]);
+            var label = candidates ? candidates[parseInt(key)] : key;
+            var votes = vote_spec_result_data_for_target.results[key];
+            var frequency = result_number_of_voters > 0 ? (votes / result_number_of_voters) : 0;
+            var data_item = _.findWhere(data, {"label": label});
+            if ( data_item ){
+              data_item.label = label;
+              data_item.votes = votes;
+              data_item.frequency = frequency;
+            } else {
+              data.push({
+                "label": label,
+                "votes": votes,
+                "frequency": frequency
+              });
+            }
+          }
+        }
+
+        console.log("final data: ", data);
+      
+      } else { // "LickertVoteSpecification"
+
+        var result_average = null;
+        if ( "avg" in vote_spec_result_data_for_target )
+          result_average = vote_spec_result_data_for_target.avg;
+
+        var result_number_of_voters = 0;
+        if ( "n" in vote_spec_result_data_for_target )
+          result_number_of_voters = vote_spec_result_data_for_target.n;
+
+        var result_standard_deviation = null;
+        if ( "std_dev" in vote_spec_result_data_for_target )
+          result_standard_deviation = vote_spec_result_data_for_target.std_dev;
+
+        var result_histogram_data = [];
+        var result_histogram = [];
+        var lickert_value_min = 0;
+        var lickert_value_max = 100;
+        var lickert_value_cur = lickert_value_min;
+        var histogram_size = null;
+        var histogram_step = 10;
+
+        if ( "histogram" in vote_spec_result_data_for_target ){
+          result_histogram = vote_spec_result_data_for_target.histogram;
+          
+          histogram_size = result_histogram.length;
+          console.log("histogram_size: ", histogram_size);
+        }
+
+        if ( histogram_size > 0 ){
+          var histogram_step = (lickert_value_max - lickert_value_min) / histogram_size;
+        } else {
+          // create empty data to show to the user
+          histogram_size = 10;
+          for ( var i = 0; i < histogram_size; ++i )
+            result_histogram.push(0);
+          result_number_of_voters = 0;
+        }
+        console.log("result_histogram: ", result_histogram);
+
+        result_histogram.forEach( function(number_of_voters_in_slice){
+          var label = "" + lickert_value_cur + "-" + (lickert_value_cur+histogram_step);
+
+          var frequency = 0;
+          if (result_number_of_voters > 0)
+            frequency = number_of_voters_in_slice / result_number_of_voters;
+
+          result_histogram_data.push({
+            "label": label,
+            "votes": number_of_voters_in_slice,
+            "frequency": frequency
+          });
+
+          lickert_value_cur += histogram_step;
+        } );
+
+        console.log("result_histogram_data: ", result_histogram_data);
+
+        data = result_histogram_data;
+      }
+
+
+      var margin = {
+        top: 40,
+        right: 20,
+        bottom: 30,
+        left: 40
+      };
+
+      var width = 500 - margin.left - margin.right;
+      var height = 300 - margin.top - margin.bottom;
+
+      var formatPercent = d3.format(".0%");
+
+      var x = d3.scale.ordinal()
+        .rangeRoundBands([0, width], .1);
+
+      var y = d3.scale.linear()
+        .range([height, 0]);
+
+      var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+      var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .tickFormat(formatPercent);
+
+
+      var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+          return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>"
+            + "<br/>" + "<strong>Votes:</strong> <span style='color:red'>" + d.votes + "</span>";
+        });
+
+      var vote_spec_label = $scope.getVoteSpecLabelByURI(vote_spec_uri) || vote_spec_uri;
+
+      var target_idea_url = AssemblToolsService.resourceToUrl(target);
+      var target_idea_promise = $.ajax(target_idea_url);
+      var target_idea_label = target; // using target URI as label while waiting for its real label
+
+      var result_info = destination.append("p");
+      result_info.classed("result-info");
+      var populateResultInfo = function(){
+        result_info.html("Vote result for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "</span>\" and target idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":");
+      };    
+
+      populateResultInfo();
+
+      $.when(target_idea_promise).done(function(data){
+        console.log("target_idea_promise data received: ", data);
+        if ( "shortTitle" in data ){
+          target_idea_label = data.shortTitle;
+          populateResultInfo();          
+        }
+      });
+
+      
+
+      var svg = destination.append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      svg.call(tip);
+
+      x.domain(data.map(function(d) { return d.label; }));
+      y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("Frequency");
+
+      svg.selectAll(".bar")
+        .data(data)
+        .enter()
+        .append("rect")
+          .attr("class", "bar")
+          .attr("x", function(d) { return x(d.label); })
+          .attr("width", x.rangeBand())
+          .attr("y", function(d) { return y(d.frequency); })
+          .attr("height", function(d) { return height - y(d.frequency); })
+          .on('mouseover', tip.show)
+          .on('mouseout', tip.hide);
     };
 
   }]);

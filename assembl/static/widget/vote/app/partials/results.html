@@ -3,16 +3,54 @@ In Firefox 29, when we make changes to this page and refresh, the old version is
 We have to clear the cache or force refresh of the exact URL of this template page in order to show it correctly.
 -->
 
+<style>
+body {
+  font: 10px sans-serif;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.bar {
+  fill: orange;
+}
+.bar:hover {
+  fill: orangered ;
+}
+.x.axis path {
+  display: none;
+}
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+</style>
+
 <div id="index" ng-controller="resultsCtl" ng-init="init()">
     <h1>Vote results</h1>
-
-     <ul>
-        <li>
-            <a href="{{ vote_count_endpoint }}">Number of voters</a>
-        </li>
-        <li>
-            <a href="{{ vote_results_endpoint }}">Average grade for each criterion</a>
-        </li>
-    </ul>
 
 </div>

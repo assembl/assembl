@@ -84,22 +84,24 @@ angular.element(document).ready(function() {
 
   // returns the value of a given parameter in the URL of the current page
   function getUrlVariableValue(variable) {
-      var query = window.location.search.substring(1);
-      var vars = query.split("&");
-      for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
-        if (pair[0] == variable) {
-          return pair[1];
-        }
-      } 
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split("=");
+      if (pair[0] == variable) {
+        return pair[1];
+      }
+    } 
 
-      //alert('Query Variable ' + variable + ' not found');
-      return null;
-    }
+    //alert('Query Variable ' + variable + ' not found');
+    return null;
+  }
+
+  window.getUrlVariableValue = getUrlVariableValue;
 
   function startAngularApplication() {
-      angular.bootstrap('#voteApp', ['voteApp']);
-    }
+    angular.bootstrap('#voteApp', ['voteApp']);
+  }
 
   // TODO: find a way to have only one such function somewhere instead of one here and one in services.js
   function resourceToUrl(str) {
