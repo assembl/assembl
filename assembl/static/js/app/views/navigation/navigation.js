@@ -173,12 +173,13 @@ var NavigationView = AssemblPanel.extend({
 
   setSideBarHeight: function() {
     var that = this;
-    _.debounce(function() {
+    var debouncedFunction = _.debounce(function() {
       if(that.isViewRenderedAndNotYetDestroyed()) {
         that.initVar();
         that.ui.level.height(that._accordionContentHeight);
       }
     }, 1000, true);
+    debouncedFunction();
   },
 
   /**
