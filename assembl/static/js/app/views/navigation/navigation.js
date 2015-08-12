@@ -61,80 +61,86 @@ var NavigationView = AssemblPanel.extend({
     this.listenTo(Assembl.vent, 'infobar:closeItem', this.setSideBarHeight);
   },
   onAttach:function() {
-      var that = this,
-          collectionManager = new CollectionManager();
+    var that = this,
+    collectionManager = new CollectionManager();
 
-      $(window).resize(function() {
-        that.setSideBarHeight();
-      });
+    $(window).on('resize', this.setSideBarHeight);
+    /*resize(function() {
+      that.setSideBarHeight();
+    });*/
 
-      collectionManager.getDiscussionModelPromise()
-      .then(function(discussion) {
+    collectionManager.getDiscussionModelPromise()
+    .then(function(discussion) {
 
-        var settings = discussion.get('settings') || {},
-            translations = settings.translations,
-            visualizations = settings.visualizations,
-            navigation_sections = settings.navigation_sections,
-            jed;
+      var settings = discussion.get('settings') || {},
+      translations = settings.translations,
+      visualizations = settings.visualizations,
+      navigation_sections = settings.navigation_sections,
+      jed;
+
+      try {
+        // temporary hack
+        if (settings.navigation_sections === undefined) {
+          return;
+        }
 
         try {
-          // temporary hack
-          if (settings.navigation_sections === undefined) {
-            return;
-          }
-
-          try {
-            jed = new Jed(translations[Ctx.getLocale()]);
-          } catch (e) {
-            // console.error(e);
-            jed = new Jed({});
-          }
-
-          var new_navigation_items = 0;
-          for (var i in navigation_sections) {
-            var navigation_section = navigation_sections[i],
-                permission = navigation_section.requires_permission || Permissions.READ;
-            if (Ctx.getCurrentUser().can(permission)) {
-              var visualization_items = navigation_section.navigation_content.items;
-              visualization_items = _.filter(visualization_items, function(item) {
-                return Ctx.getCurrentUser().can(item.requires_permission || Permissions.READ) &&
-                  visualizations[item.visualization] !== undefined;
-              });
-              if (visualization_items.length === 0)
-                continue;
-              that.visualizationItems.reset(_.map(visualization_items, function(item) {
-                var visualization = visualizations[item.visualization];
-                return new Base.Model({
-                  "url": visualization.url,
-                  "title": jed.gettext(visualization.title),
-                  "description": jed.gettext(visualization.description)
-                });
-              }));
-              new_navigation_items += 1;
-            }
-          }
-
-          if (new_navigation_items) {
-            that.num_items += new_navigation_items;
-            that.ui.visualization_tab.show();
-            setTimeout(function() {
-              that.setSideBarHeight();
-            }, 500);
-          }
+          jed = new Jed(translations[Ctx.getLocale()]);
         } catch (e) {
-          console.log(e);
+          // console.error(e);
+          jed = new Jed({});
         }
-      });
 
-      collectionManager.getAllMessageStructureCollectionPromise()
-      .then(function(allMessageStructureCollection) {
-        if (allMessageStructureCollection.getLastSynthesisPost()) {
-          that.num_items += 1;
-          that.ui.synthesis_tab.show();
-          that.ui.synthesis_tab[0].id = 'tour_step_synthesis';
+        var new_navigation_items = 0;
+        for (var i in navigation_sections) {
+          var navigation_section = navigation_sections[i],
+          permission = navigation_section.requires_permission || Permissions.READ;
+          if (Ctx.getCurrentUser().can(permission)) {
+            var visualization_items = navigation_section.navigation_content.items;
+            visualization_items = _.filter(visualization_items, function(item) {
+              return Ctx.getCurrentUser().can(item.requires_permission || Permissions.READ) &&
+              visualizations[item.visualization] !== undefined;
+            });
+            if (visualization_items.length === 0)
+              continue;
+            that.visualizationItems.reset(_.map(visualization_items, function(item) {
+              var visualization = visualizations[item.visualization];
+              return new Base.Model({
+                "url": visualization.url,
+                "title": jed.gettext(visualization.title),
+                "description": jed.gettext(visualization.description)
+              });
+            }));
+            new_navigation_items += 1;
+          }
         }
-      }).delay(500).then(function() {that.setSideBarHeight();});
+
+        if (new_navigation_items) {
+          that.num_items += new_navigation_items;
+          that.ui.visualization_tab.show();
+          setTimeout(function() {
+            that.setSideBarHeight();
+          }, 500);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    });
+
+    collectionManager.getAllMessageStructureCollectionPromise()
+    .then(function(allMessageStructureCollection) {
+      if (allMessageStructureCollection.getLastSynthesisPost()) {
+        that.num_items += 1;
+        that.ui.synthesis_tab.show();
+        that.ui.synthesis_tab[0].id = 'tour_step_synthesis';
+      }
+    }).delay(500).then(function() {that.setSideBarHeight();});
     },
+
+  onDestroy:function() {
+    $(window).off('resize', this.setSideBarHeight);
+  },
+
   toggleMenuByName: function(itemName, options) {
     var elm = this.$('.nav[data-view=' + itemName + ']');
     this.toggleMenuByElement(elm, options);
