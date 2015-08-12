@@ -64,10 +64,10 @@ var NavigationView = AssemblPanel.extend({
     var that = this,
     collectionManager = new CollectionManager();
 
-    $(window).on('resize', this.setSideBarHeight);
-    /*resize(function() {
-      that.setSideBarHeight();
-    });*/
+    var boundSetSideBarHeight = function(){ return that.setSideBarHeight(); };
+    boundSetSideBarHeight = _.bind(boundSetSideBarHeight, this);
+
+    $(window).on('resize', boundSetSideBarHeight);
 
     collectionManager.getDiscussionModelPromise()
     .then(function(discussion) {
@@ -170,15 +170,15 @@ var NavigationView = AssemblPanel.extend({
       this.loadView(view, options);
     }
   },
+
   setSideBarHeight: function() {
     var that = this;
-    this.initVar();
-
-    //setTimeout(function(){
-    that.ui.level.height(that._accordionContentHeight);
-
-    //}, 0);
-
+    _.debounce(function() {
+      if(that.isViewRenderedAndNotYetDestroyed()) {
+        that.initVar();
+        that.ui.level.height(that._accordionContentHeight);
+      }
+    }, 1000, true);
   },
 
   /**
