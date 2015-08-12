@@ -411,6 +411,7 @@ def get_alerts(request):
     metrics_server_endpoint = settings.get(
         'metrics_server_endpoint',
         'https://discussions.bluenove.com/analytics/accept')
+    verify_metrics = False  # weird SNI bug on some platforms
     discussion = request.context._instance
     protocol = 'https' if asbool(request.registry.settings.get(
         'accept_secure_connection', False)) else 'http'
@@ -432,7 +433,9 @@ def get_alerts(request):
         token
         )
     alerts = requests.post(metrics_server_endpoint, data=dict(
-        mapurl=mapurl, requests=json.dumps(metrics_requests), recency=60))
+        mapurl=mapurl, requests=json.dumps(metrics_requests), recency=60),
+        verify=verify_metrics)
     result = AssemblQuadStorageManager.deobfuscate(
         alerts.text, obfuscator.decrypt)
+    // Also change AgentAccount to Agent
     return Response(body=result, content_type='application/json')
