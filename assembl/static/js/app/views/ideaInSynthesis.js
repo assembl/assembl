@@ -105,6 +105,14 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
     },
 
   serializeData: function() {
+      //As all ideas in a previously posted synthesis are tombstoned, the original idea is 
+      //gathered from the original_uri attribute and view is re-rendered. Therefore, the 
+      //original idea is expected to be the one that contants the num_posts field.
+      var numMessages = this.original_idea.get('num_posts');
+      if (!numMessages) {
+        numMessages = 0;
+      }
+
       return {
         id: this.model.getId(),
         editing: this.editing,
@@ -112,7 +120,9 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
         authors: _.uniq(this.authors),
         subject: this.model.get('longTitle'),
         canEdit: this.canEdit(),
-        isPrimaryNavigationPanel: this.getPanel().isPrimaryNavigationPanel()
+        isPrimaryNavigationPanel: this.getPanel().isPrimaryNavigationPanel(),
+        ctxNumMessages: i18n.sprintf(i18n.gettext("%d message are available under this idea"), numMessages),
+        numMessages: numMessages
       }
     },
 

@@ -93,8 +93,14 @@ $marginLinkbis: 30px;
 .synthesis-idea:not(.canEdit) {
   cursor: pointer;
   &:hover {
-    background-color: $green1;
-    border-right: 4px solid $green;
+    background-color: $theme_idea_in_synthesis_hover;
+    border-right: 4px solid $theme_idea_in_synthesis_hover;
+    .maxs, .icon {
+      color: $theme_idea_in_synthesis_icon_hover;
+    }
+    .comment-text {
+      color: $theme_idea_in_synthesis_comment_hover;
+    }
   }
 }
 

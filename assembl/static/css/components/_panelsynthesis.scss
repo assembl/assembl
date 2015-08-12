@@ -33,6 +33,15 @@
       font-style: italic;
       text-decoration: none;
       cursor: default;
+      color: inherit;
+    }
+    .comment-info {
+      display: inline;
+      font-size: 11px;
+      color: $theme_idea_in_synthesis_comments_no_hover;
+      a {
+        color: $theme_idea_in_synthesis_comments_no_hover;
+      }
     }
   }
 }

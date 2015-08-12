@@ -152,7 +152,6 @@ var SynthesisPanel = AssemblPanel.extend({
             synthesis_is_published = that.model.get("published_in_post"),
             rootIdea = that.ideas.getRootIdea();
 
-        Ctx.initTooltips(that.$el);
         function inSynthesis(idea) {
           if (idea.hidden) {
             return false;
@@ -213,6 +212,8 @@ var SynthesisPanel = AssemblPanel.extend({
           that.$('.synthesisPanel-introduction').html(that.model.get('introduction'));
           that.$('.synthesisPanel-conclusion').html(that.model.get('conclusion'));
         }
+        
+        Ctx.initTooltips(that.$el);
       }
 
       if (this.model.get('is_next_synthesis')) {

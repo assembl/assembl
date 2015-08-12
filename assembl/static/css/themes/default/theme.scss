@@ -7,8 +7,11 @@ $th_purple1: #513850;
 $th_purple2: #f2ecf8;
 $th_purple3: #88698e;
 $th_purple4: #432b42;
+$th_purple5: #9013FE; 
 $th_gray: #7F8C8D;
 $th_gray1: #888888;
+$th_gray2: #CCCCCC;
+$th_gray3: #999999;
 $th_green: #4ac780;
 
 
@@ -67,8 +70,13 @@ $theme_extract_bg: $theme_navigation_bg;
 
 //idea panel
 $theme_idea_header_bg: $th_green;
-
 $theme_synthesis_header_bg: $th_green;
+
+//Synthesis panel
+$theme_idea_in_synthesis_comment_hover: $th_purple5;
+$theme_idea_in_synthesis_icon_hover: $th_gray3;
+$theme_idea_in_synthesis_hover: $th_gray2;
+$theme_idea_in_synthesis_comments_no_hover: $th_gray2;
 
 /* Theme standard CSS definitions (mainly logos and images).
    Maybe we don't need this at all, and could    use variables only */
