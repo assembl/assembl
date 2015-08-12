@@ -9,6 +9,9 @@ var $ = require('../shims/jquery.js'),
     Roles =  require('../utils/roles.js'),
     i18n =  require('../utils/i18n.js');
 
+require('linkifyjs');
+require('linkifyjs/jquery')($);
+
 var Context = function() {
 
   this.DISCUSSION_SLUG = $('#discussion-slug').val();

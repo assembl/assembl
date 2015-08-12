@@ -900,7 +900,6 @@ var MessageView = Marionette.ItemView.extend({
 
       var read = this.model.get('read');
       if (read === false && Ctx.getCurrentUser().isUnknownUser() === false) {
-        console.log(Ctx.getCurrentUser().isUnknownUser());
         var target = this.$('.readUnreadIndicator');
         this.model.setRead(true, target);
       }
