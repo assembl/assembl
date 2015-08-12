@@ -246,11 +246,11 @@ voteApp.controller('resultsCtl',
       var vote_spec_type = (vote_spec && "@type" in vote_spec) ? vote_spec["@type"] : "LickertVoteSpecification"; // can also be "MultipleChoiceVoteSpecification"
 
       var data = null;
+      var result_number_of_voters = 0;
+      if ( "n" in vote_spec_result_data_for_target )
+        result_number_of_voters = vote_spec_result_data_for_target.n;
+
       if ( vote_spec_type == "MultipleChoiceVoteSpecification" ){
-      
-        var result_number_of_voters = 0;
-        if ( "n" in vote_spec_result_data_for_target )
-          result_number_of_voters = vote_spec_result_data_for_target.n;
 
         data = [];
 
@@ -299,10 +299,6 @@ voteApp.controller('resultsCtl',
         var result_average = null;
         if ( "avg" in vote_spec_result_data_for_target )
           result_average = vote_spec_result_data_for_target.avg;
-
-        var result_number_of_voters = 0;
-        if ( "n" in vote_spec_result_data_for_target )
-          result_number_of_voters = vote_spec_result_data_for_target.n;
 
         var result_standard_deviation = null;
         if ( "std_dev" in vote_spec_result_data_for_target )
@@ -401,7 +397,18 @@ voteApp.controller('resultsCtl',
       var result_info = destination.append("p");
       result_info.classed("result-info");
       var populateResultInfo = function(){
-        result_info.html("Vote result for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "</span>\" and target idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":");
+        var text = "Vote result for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "</span>\" and target idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":";
+        var text_number_of_votes = "number of votes: " + result_number_of_voters;
+        if ( vote_spec_type == "MultipleChoiceVoteSpecification" ){
+          // add only the number of votes
+          text += "<br/>" + text_number_of_votes;
+        } else {
+          // add number of votes, average and standard deviation
+          var text_average = "average: " + result_average;
+          var text_standard_deviation = "standard deviation: " + result_standard_deviation;
+          text += "<br/>" + text_number_of_votes + "<br/>" + text_average + "<br/>" + text_standard_deviation;
+        }
+        result_info.html(text);
       };    
 
       populateResultInfo();
