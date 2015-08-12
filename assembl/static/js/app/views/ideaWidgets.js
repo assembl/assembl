@@ -184,10 +184,14 @@ var IdeaWidgets = Marionette.ItemView.extend({
 
         if (changed) {
           console.log("content changed => we have to re-render");
-          if (++that.renders_due_to_widgets < 10)
+          if (++that.renders_due_to_widgets < 10) {
+            if(!that.isViewDestroyed()) {
               that.render();
-          else
-              console.log("we will not re-render, because we have tried too many times");
+            }
+          }
+          else {
+            console.warn("we will not re-render, because we have tried too many times");
+          }
         }
       }
 
