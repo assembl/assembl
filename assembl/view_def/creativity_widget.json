@@ -293,7 +293,7 @@
         "@extends": "Widget",
         "ideas_url": "&get_ideas_url",
         "messages_url": "&get_messages_url",
-        "base_idea": ":"
+        "base_idea": ":default"
     },
     "IdeaCreatingWidget": {
         "@extends": "BaseIdeaWidget",
