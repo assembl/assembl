@@ -35,13 +35,16 @@
       cursor: default;
       color: inherit;
     }
-    .comment-info {
-      display: inline;
-      font-size: 11px;
-      color: $theme_idea_in_synthesis_comments_no_hover;
-      a {
-        color: $theme_idea_in_synthesis_comments_no_hover;
-      }
-    }
   }
+
+  .comment-info {
+      margin-top: 6px;
+      display: block;
+      font-size: 12px;
+      color: $theme_idea_in_synthesis_comments_no_hover;
+    }
+    .icon-comment {
+      font-style: normal;
+      font-size: 13px;
+    }
 }

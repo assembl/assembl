@@ -12,9 +12,10 @@
     <% _.each(authors, function(author, index, list) { %>
         <a href="#" class="authors"><%= author.get('name') %></a><% if( index < list.length-1 ) { %>,<% } %>
     <% }) %>
-    <br />
-    <span class="comment-info mts">
-        <span class="comment-text">{{ gettext("See the changes on this idea") }}</span>
+</span>
+<% if (!canEdit) { %>
+    <span class="comment-info">
+        <span class="comment-text">{{ gettext("View conversation on this idea") }}</span>
         <span class="maxs">&#x2022;{# Unicode bullet #}</span>
         <!-- hidden elements are there when we support users commenting on an idea extract -->
         <span class="synthesisIdea-replybox-openbtn icon-comment comment-text fr mrs hidden">{#{{ gettext('comment') }}#}</span>
@@ -24,7 +25,7 @@
         </span>
     </span>
     <span class="synthesisIdea-replybox hidden"></span>
-</span>
+<% } %>
 <% if( isPrimaryNavigationPanel ) { %>
     <a href="#" class="js_viewIdeaInModal synthesisIdea-viewIdeaLink">{{ gettext('View Idea in popup') }}</a>
 <% } %>

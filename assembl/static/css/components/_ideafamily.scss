@@ -91,6 +91,7 @@ $marginLinkbis: 30px;
 }
 
 .synthesis-idea:not(.canEdit) {
+  padding-left: 3px;
   cursor: pointer;
   &:hover {
     background-color: $theme_idea_in_synthesis_hover;
