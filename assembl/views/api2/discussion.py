@@ -438,5 +438,5 @@ def get_alerts(request):
     result = AssemblQuadStorageManager.deobfuscate(
         alerts.text, obfuscator.decrypt)
     # AgentAccount is a pseudo for AgentProfile
-    result = re.sub('local:AgentAccount/', 'local:AgentProfile/', result)
+    result = re.sub(r'local:AgentAccount\\/', r'local:AgentProfile\\/', result)
     return Response(body=result, content_type='application/json')
