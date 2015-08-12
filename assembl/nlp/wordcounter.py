@@ -111,6 +111,8 @@ class WordCounter(defaultdict):
         stopwords = set()
         for lang in langs:
             if lang not in known_languages:
+                if '_' in lang:
+                    lang = lang.split('_', 1)[0]
                 if len(lang) == 2:
                     lang = languages_by_iso2.get(lang, lang)
                 elif len(lang) == 3:
