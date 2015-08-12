@@ -160,7 +160,7 @@ def get_posts(request):
                     ).columns(column('post_id')).alias('related')
         #Virtuoso bug: This should work...
         #posts = posts.join(related, PostClass.id==related.c.post_id)
-        posts = posts.filter(PostClass.id.in_(related))
+        posts = posts.join(related, PostClass.id == related.c.post_id)
     if root_post_id:
         root_post = Post.get(root_post_id)
                 
