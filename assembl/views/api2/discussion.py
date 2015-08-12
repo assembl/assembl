@@ -437,5 +437,5 @@ def get_alerts(request):
         verify=verify_metrics)
     result = AssemblQuadStorageManager.deobfuscate(
         alerts.text, obfuscator.decrypt)
-    // Also change AgentAccount to Agent
+    # Also change AgentAccount to Agent
     return Response(body=result, content_type='application/json')
