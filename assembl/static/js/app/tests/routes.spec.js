@@ -36,11 +36,11 @@ describe('Routes Specs', function() {
   });
 
   it('Posts id route should exist', function() {
-    expect(route['posts/:id']).to.equal('post');
+    expect(route['posts/*id']).to.equal('post');
   });
 
   it('Idea id route should exist', function() {
-    expect(route['idea/:id']).to.equal('idea');
+    expect(route['idea/*id']).to.equal('idea');
   });
 
   it('Defaults route should exist', function() {
