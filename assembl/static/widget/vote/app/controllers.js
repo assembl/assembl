@@ -239,6 +239,9 @@ voteApp.controller('resultsCtl',
       }
     };
 
+    /*
+     * Bar chart is based on http://bl.ocks.org/Caged/6476579
+     */
     $scope.drawVoteResult = function(destination, vote_spec_uri, vote_spec_result_data_for_target, target){
       console.log("drawing vote result for vote_spec_uri ", vote_spec_uri, " and target ", target, " which has data ", vote_spec_result_data_for_target);
 
@@ -250,7 +253,27 @@ voteApp.controller('resultsCtl',
       if ( "n" in vote_spec_result_data_for_target )
         result_number_of_voters = vote_spec_result_data_for_target.n;
 
-      if ( vote_spec_type == "MultipleChoiceVoteSpecification" ){
+      if ( vote_spec_type == "BinaryVoteSpecification"){
+        
+        var labelYes = $scope.getVoteSpecFieldInSettings(vote_spec, "labelYes") || "Yes";
+        var labelNo = $scope.getVoteSpecFieldInSettings(vote_spec, "labelNo") || "No";
+
+        var votesYes = ("yes" in vote_spec_result_data_for_target) ? vote_spec_result_data_for_target.yes : 0;
+        var votesNo = ("no" in vote_spec_result_data_for_target) ? vote_spec_result_data_for_target.no : 0;
+        data = [
+          {
+            "label": labelYes,
+            "votes": votesYes,
+            "frequency": result_number_of_voters > 0 ? (votesYes / result_number_of_voters) : 0
+          },
+          {
+            "label": labelNo,
+            "votes": votesYes,
+            "frequency": result_number_of_voters > 0 ? (votesNo / result_number_of_voters) : 0
+          }
+        ];
+      }
+      else if ( vote_spec_type == "MultipleChoiceVoteSpecification" ){
 
         data = [];
 
@@ -399,7 +422,7 @@ voteApp.controller('resultsCtl',
       var populateResultInfo = function(){
         var text = "Vote result for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "</span>\" and target idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":";
         var text_number_of_votes = "number of votes: " + result_number_of_voters;
-        if ( vote_spec_type == "MultipleChoiceVoteSpecification" ){
+        if ( vote_spec_type == "MultipleChoiceVoteSpecification" || vote_spec_type == "BinaryVoteSpecification" ){
           // add only the number of votes
           text += "<br/>" + text_number_of_votes;
         } else {
