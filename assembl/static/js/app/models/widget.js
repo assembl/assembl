@@ -2,6 +2,8 @@
 
 var Base = require("./base.js"),
     _ = require('../shims/underscore.js'),
+    i18n = require('../utils/i18n.js'),
+    Moment = require('moment'),
     Ctx = require("../common/context.js");
 
 var WidgetModel = Base.Model.extend({
@@ -52,16 +54,32 @@ var WidgetModel = Base.Model.extend({
     }
   },
 
-  getConfigurationUrl: function(targetIdea) {
-    log.error("Widget.getConfigurationUrl: unknown type");
-  },
-
   getCreationUrl: function(ideaId, locale) {
     log.error("Widget.getCreationUrl: wrong type");
   },
 
-  getUrlForUser: function(targetIdea, page) {
-      log.error("Widget.getUrlForUser: wrong type");
+  getConfigurationUrl: function(targetIdeaId) {
+    log.error("Widget.getConfigurationUrl: unknown type");
+  },
+
+  getUrlForUser: function(targetIdeaId, page) {
+    // Is it the same as widget.get("ui_endpoint")?
+    log.error("Widget.getUrlForUser: wrong type");
+  },
+
+  getUrl: function(context, targetIdeaId, page) {
+    switch (context) {
+      case this.IDEA_PANEL_CONFIGURE_CTX:
+      case this.DISCUSSION_MENU_CONFIGURE_CTX:
+        return this.getConfigurationUrl(targetIdeaId);
+      case this.MESSAGE_LIST_INSPIREME_CTX:
+      case this.IDEA_PANEL_ACCESS_CTX:
+      case this.VOTE_REPORTS:
+        return this.getUrlForUser(targetIdeaId);
+      case this.TABLE_OF_IDEA_MARKERS:
+      default:
+        log.error("Widget.getUrlForUser: wrong context");
+    }
   }
 });
 
@@ -76,41 +94,66 @@ var VotingWidgetModel = WidgetModel.extend({
       + encodeURIComponent(ideaId + "?view=creativity_widget");
   },
 
-  getConfigurationUrl: function(targetIdea) {
+  getConfigurationUrl: function(targetIdeaId) {
     var base = this.baseUri, uri = this.getId(), locale = Ctx.getLocale();
     base = base + "?admin=1#/admin/configure_instance?widget_uri=" + uri;
-    if (targetIdea) {
-      base += "&target=" + encodeURIComponent(targetIdea);
+    if (targetIdeaId) {
+      base += "&target=" + encodeURIComponent(targetIdeaId);
     }
     return base;
   },
 
-  getUrlForUser: function(targetIdea, page) {
-    var base = this.baseUri, uri = this.getId(), locale = Ctx.getLocale();
-    base = base + "?config=" + uri + "&locale=" + locale;
-    if (targetIdea !== undefined) {
-      base += encodeURIComponent("?target=" + targetIdea);
+  getUrlForUser: function(targetIdeaId, page) {
+    var uri = this.getId(), locale = Ctx.getLocale(),
+        activityState = this.get("activity_state"),
+        base = this.baseUri + "?config=" + uri + "&locale=" + locale;
+    if (activityState == "ended") {
+      base += "&page=results";
+    }
+    if (targetIdeaId !== undefined) {
+      base += encodeURIComponent("?target=" + targetIdeaId);
     }
     return base;
+  },
+
+  getLinkText: function(context, idea) {
+    var locale = Ctx.getLocale(),
+        activityState = this.get("activity_state");
+    switch (context) {
+      case this.IDEA_PANEL_ACCESS_CTX:
+        switch (activityState) {
+          case "active":
+            return i18n.gettext("Vote on these ideas");
+          case "ended":
+            return i18n.gettext("See results from the vote of ") + Moment(this.get("end_date")).fromNow();
+        }
+      case this.IDEA_PANEL_CONFIGURE_CTX:
+          return i18n.gettext("Configure this voting widget");
+      case this.VOTE_REPORTS:
+          if (activityState == "ended") {
+            return i18n.gettext("See results from the vote of ") + Moment(this.get("end_date")).fromNow();
+          }
+    }
+    return "";
   },
 
   isRelevantFor: function(linkType, context, idea) {
     // TODO: This should depend on widget configuration.
-    var activity_state = this.get("activity_state");
+    var activityState = this.get("activity_state");
     switch (context) {
       case this.IDEA_PANEL_ACCESS_CTX:
         // assume non-root idea, relevant widget type
         return (linkType === "VotableIdeaWidgetLink"
-             && activity_state === "active");
+             && activityState === "active");
       case this.IDEA_PANEL_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type
         // Should we add config on votable?
         return linkType === "BaseIdeaWidgetLink";
       case this.VOTE_REPORTS:
-        return (activity_state === "ended");
+        return (activityState === "ended");
       case this.TABLE_OF_IDEA_MARKERS:
         return (linkType == "BaseIdeaWidgetLink"
-            && activity_state === "active");
+            && activityState === "active");
       default:
         return false;
     }
@@ -128,19 +171,33 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       + encodeURIComponent(ideaId) + "&view=creativity_widget";
   },
 
-  getConfigurationUrl: function(targetIdea) {
+  getConfigurationUrl: function(targetIdeaId) {
     var base = this.baseUri, uri = this.getId(), locale = Ctx.getLocale();
     return base + "?locale=" + locale + "#/home?admin=1&config=" + uri;
   },
 
-  getUrlForUser: function(targetIdea, page) {
+  getUrlForUser: function(targetIdeaId, page) {
     var base = this.baseUri, uri = this.getId(), locale = Ctx.getLocale();
     return base + "?locale=" + locale + "#/home?config=" + uri;
   },
 
+  getLinkText: function(context, idea) {
+    var locale = Ctx.getLocale(),
+        activityState = this.get("activity_state");
+    switch (context) {
+      case this.IDEA_PANEL_CONFIGURE_CTX:
+      case this.DISCUSSION_MENU_CONFIGURE_CTX:
+        // assume non-root idea, relevant widget type
+        return i18n.gettext("Configure the creativity session");
+      case this.IDEA_PANEL_ACCESS_CTX:
+        return i18n.gettext("Access the creativity session");
+    }
+    return "";
+  },
+
   isRelevantFor: function(linkType, context, idea) {
     // TODO: This should depend on widget configuration.
-    var activity_state = this.get("activity_state");
+    var activityState = this.get("activity_state");
     switch (context) {
       case this.IDEA_PANEL_CONFIGURE_CTX:
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
@@ -149,7 +206,7 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_ACCESS_CTX:
       case this.TABLE_OF_IDEA_MARKERS:
         return (linkType == "IdeaCreativitySessionWidgetLink"
-            && activity_state === "active");
+            && activityState === "active");
       default:
         return false;
     }
@@ -167,30 +224,44 @@ var InspirationWidgetModel = WidgetModel.extend({
       + encodeURIComponent(ideaId + "?view=creativity_widget");
   },
 
-  getConfigurationUrl: function(targetIdea) {
+  getConfigurationUrl: function(targetIdeaId) {
     var base = this.baseUri, uri = this.getId(), locale = Ctx.getLocale();
     base = base + "?admin=1&locale=" + locale
         + "#/admin/configure_instance?widget_uri=" + Ctx.getUrlFromUri(uri);
-    if (targetIdea) {
-      base += "&target=" + encodeURIComponent(targetIdea);
+    if (targetIdeaId) {
+      base += "&target=" + encodeURIComponent(targetIdeaId);
     }
     return base;
   },
 
-  getUrlForUser: function(targetIdea, page) {
+  getUrlForUser: function(targetIdeaId, page) {
     var base = this.baseUri, uri = this.getId(), locale = Ctx.getLocale();
     return base + "?config=" + Ctx.getUrlFromUri(uri)
-      + "&target=" + encodeURIComponent(targetIdea)
+      + "&target=" + encodeURIComponent(targetIdeaId)
       + "&locale=" + locale;
+  },
+
+  getLinkText: function(linkType, context, page) {
+    var locale = Ctx.getLocale(),
+        activityState = this.get("activity_state");
+    switch (context) {
+      case this.IDEA_PANEL_CONFIGURE_CTX:
+      case this.DISCUSSION_MENU_CONFIGURE_CTX:
+        // assume non-root idea, relevant widget type
+        return i18n.gettext("Configure the Inspiration tool");
+      case this.IDEA_PANEL_ACCESS_CTX:
+        return i18n.gettext("I need inspiration");
+    }
+    return "";
   },
 
   isRelevantFor: function(linkType, context, idea) {
     // TODO: This should depend on widget configuration.
     // Put in subclasses?
-    var activity_state = this.get("activity_state");
+    var activityState = this.get("activity_state");
     switch (context) {
       case this.MESSAGE_LIST_INSPIREME_CTX:
-        return (activity_state === "active");
+        return (activityState === "active");
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         // assume root idea
         return (linkType === "BaseIdeaWidgetLink");
@@ -268,28 +339,8 @@ var WidgetCollection = Base.Collection.extend({
     // Careful about permissions!
     var widgets = this.relevantWidgetsFor(idea, context),
         ideaId = idea.getId();
-    switch (context) {
-      case WidgetModel.MESSAGE_LIST_INSPIREME_CTX:
-        return _.map(widgets, function(w) {
-          return w.getUrlForUser(ideaId); });
-      case WidgetModel.IDEA_PANEL_ACCESS_CTX:
-        return _.map(widgets, function(w) {
-          return w.getUrlForUser(ideaId); });
-      case WidgetModel.IDEA_PANEL_CONFIGURE_CTX:
-        return _.map(widgets, function(w) {
-          return w.getConfigurationUrl(ideaId); });
-      case WidgetModel.DISCUSSION_MENU_CONFIGURE_CTX:
-        return _.map(widgets, function(w) {
-          return w.getConfigurationUrl(ideaId); });
-      case WidgetModel.VOTE_PANEL_ACTIVE_CTX:
-        return _.map(widgets, function(w) {
-          return w.getUrlForUser(ideaId); });
-      case WidgetModel.VOTE_PANEL_ENDED_CTX:
-        return _.map(widgets, function(w) {
-          return w.getUrlForUser(ideaId); });
-      default:
-        log.error("Widget.isRelevantFor: wrong context");
-    }
+    return _.map(widgets, function(w) {
+      return w.getUrl(context, ideaId); });
   }
 });
 

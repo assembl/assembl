@@ -10,7 +10,8 @@ var Assembl = require('../app.js'),
     MessageSendView = require('./messageSend.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     SegmentList = require('./segmentList.js'),
-    IdeaWidgets = require('./ideaWidgets.js'),
+    Widget = require('../models/widget.js'),
+    WidgetLinks = require('./widgetLinks.js'),
     CollectionManager = require('../common/collectionManager.js'),
     AssemblPanel = require('./assemblPanel.js'),
     Marionette = require('../shims/marionette.js'),
@@ -28,11 +29,12 @@ var IdeaPanel = AssemblPanel.extend({
   minWidth: 270,
   regions: {
     segmentList: ".postitlist",
-    widgetsInteraction: ".ideaPanel-section-widgets"
+    widgetsInteraction: ".ideaPanel-section-widgets",
+    widgetsConfigurationInteraction: ".ideaPanel-section-conf-widgets"
   },
   initialize: function(options) {
     Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
-    var that = this;
+    var that = this, collectionManager = new CollectionManager();
     this.panelWrapper = options.panelWrapper;
     this.editingDefinition = false;
     this.editingTitle = false;
@@ -40,6 +42,8 @@ var IdeaPanel = AssemblPanel.extend({
     if (!this.model) {
       this.model = this.getGroupState().get('currentIdea');
     }
+
+    collectionManager.getAllWidgetsPromise();
     
     if(!this.isViewDestroyed()) {
       //Yes, it IS possible the view is already destroyed in initialize, so we check
@@ -192,7 +196,7 @@ var IdeaPanel = AssemblPanel.extend({
   },
 
   onRender: function() {
-    var that = this;
+    var that = this, collectionManager = new CollectionManager();
 
     if (Ctx.debugRender) {
       console.log("ideaPanel::onRender()");
@@ -228,8 +232,23 @@ var IdeaPanel = AssemblPanel.extend({
         that.ellipsis('.ideaPanel-definition', that.ui.seeMoreOrLess);
       }, 0);
 
-      var ideaWidgets = new IdeaWidgets({model: this.model});
-      this.widgetsInteraction.show(ideaWidgets);
+      collectionManager.getAllWidgetsPromise().then(function (widgets) {
+        var currentUser = Ctx.getCurrentUser(),
+            subset = new WidgetLinks.WidgetLinkSubset([], {
+              parent: widgets,
+              context: Widget.Model.prototype.IDEA_PANEL_ACCESS_CTX,
+              idea: that.model});
+        that.widgetsInteraction.show(
+          new WidgetLinks.WidgetLinkListView({collection: subset}));
+        if (currentUser.can(Permissions.ADMIN_DISCUSSION)) {
+          subset = new WidgetLinks.WidgetLinkSubset([], {
+              parent: widgets,
+              context: Widget.Model.prototype.IDEA_PANEL_CONFIGURE_CTX,
+              idea: that.model});
+          that.widgetsConfigurationInteraction.show(
+            new WidgetLinks.WidgetLinkListView({collection: subset}));
+        }
+      });
     }
 
   },

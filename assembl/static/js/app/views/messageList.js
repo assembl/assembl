@@ -377,7 +377,8 @@ var MessageList = AssemblPanel.extend({
         if (relevantWidgets.length > 0) {
           _.first(relevantWidgets, function(widget) {
             // TODO : Handle multiple widgets.
-            that.inspireMeLink = widget.get("ui_endpoint");
+            that.inspireMeLink = widget.getUrl(
+              Widget.Model.prototype.MESSAGE_LIST_INSPIREME_CTX);
             that.ui.inspireMeAnchor.attr("href", that.inspireMeLink);
           });
           that.ui.inspireMe.removeClass("hidden");

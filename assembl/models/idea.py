@@ -862,7 +862,7 @@ JOIN post AS family_posts ON (
         return [
             {'widget': Widget.uri_generic(l.widget_id),
              '@type': l.external_typename()}
-            for l in self.has_showing_widget_links]
+            for l in self.widget_links]
 
     def active_widget_uris(self):
         from .widgets import Widget
