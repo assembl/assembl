@@ -268,7 +268,7 @@ voteApp.controller('resultsCtl',
           },
           {
             "label": labelNo,
-            "votes": votesYes,
+            "votes": votesNo,
             "frequency": result_number_of_voters > 0 ? (votesNo / result_number_of_voters) : 0
           }
         ];
