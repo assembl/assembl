@@ -110,6 +110,8 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     if ids:
         ids = [get_database_id("Idea", id) for id in ids]
         ideas = ideas.filter(Idea.id.in_(ids))
+    # remove tombstones
+    # ideas = ideas.filter(and_(*Idea.base_conditions()))
     ideas = ideas.options(
         joinedload_all(Idea.source_links),
         joinedload_all(Idea.has_showing_widget_links),
