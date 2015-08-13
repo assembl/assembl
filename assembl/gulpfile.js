@@ -108,19 +108,6 @@ gulp.task('libs',['clean:infrastructure'], function() {
     .pipe(exit());
 });
 
-/**
- * Run test
- * */
-gulp.task('test', function() {
-    return gulp.src(path.js+'/app/build/tests/specs.js', {read: false})
-        .pipe(mocha())
-        .once('error', function(){
-           process.exit(1);
-        })
-        .once('end', function(){
-           process.exit();
-        });
-});
 
 gulp.task('build:test', function() {
 

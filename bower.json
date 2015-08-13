@@ -30,7 +30,9 @@
     "underscore": "~1.7.0",
     "backbone-modal": "~1.1.5",
     "sockjs": "~0.3.4",
-    "hopscotch": "~0.2.4"
+    "hopscotch": "~0.2.4",
+    "mocha": "~2.2.5",
+    "chai": "~3.2.0"
   },
   "resolutions": {
     "underscore": "~1.7.0"

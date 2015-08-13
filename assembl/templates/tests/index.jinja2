@@ -42,14 +42,16 @@
 
 {% block main_js %}
 
-
-<!--<script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine.js"></script>
-<script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/jasmine-html.js"></script>
-<script src="{{ STATIC_URL }}/js/bower/jasmine/lib/jasmine-core/boot.js"></script>-->
-
+<script src="{{ STATIC_URL }}/js/lib/ckeditor/ckeditor.js"></script>
 <script src="{{ STATIC_URL }}/js/build/infrastructure.min.js"></script>
+
+<script src="{{ STATIC_URL }}/js/bower/chai/chai.js"></script>
+<script src="{{ STATIC_URL }}/js/bower/mocha/mocha.js"></script>
+
+<script> mocha.setup('bdd') </script>
+
 <script src="{{ STATIC_URL }}/js/build/tests/specs.js"></script>
+
+<script> mocha.run() </script>
+
 {% endblock main_js %}
-
-
-
