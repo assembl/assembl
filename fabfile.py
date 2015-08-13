@@ -327,6 +327,7 @@ def compile_javascript():
         with cd('assembl'):
             run('../node_modules/gulp/bin/gulp.js libs')
             run('../node_modules/gulp/bin/gulp.js browserify:prod')
+            run('../node_modules/gulp/bin/gulp.js build:test')
 
 
 def tests():
