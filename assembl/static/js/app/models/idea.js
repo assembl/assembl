@@ -51,7 +51,7 @@ var IdeaModel = Base.Model.extend({
     active: false,
     inNextSynthesis: false,
     parentId: null,
-    widget_uris: [],
+    widget_links: [],
     order: 1
   },
   /* The following should be mostly in view code, but currently the

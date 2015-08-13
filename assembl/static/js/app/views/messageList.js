@@ -19,6 +19,7 @@ var Backbone = require('../shims/backbone.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     AssemblPanel = require('./assemblPanel.js'),
     CollectionManager = require('../common/collectionManager.js'),
+    Widget = require('../models/widget.js'),
     Promise = require('bluebird');
 
 /**
@@ -362,45 +363,32 @@ var MessageList = AssemblPanel.extend({
     },
 
   showInspireMeIfAvailable: function() {
-      var currentIdea = this.getGroupState().get('currentIdea');
+      var currentIdea = this.getGroupState().get("currentIdea");
+
       if (!currentIdea) {
         return;
       }
-
-      var that = this;
-
-      var promise = Ctx.getWidgetDataAssociatedToIdeaPromise(currentIdea.getId());
-      that.ui.inspireMe.addClass('hidden');
-
-      //that.ui.inspireMe.hide();
-      promise.done(
-          function(data) {
-            //console.log("showInspireMeIfAvailable getWidgetDataAssociatedToIdeaPromise received data: ", data);
-            if ("inspiration_widget_url" in data && data.inspiration_widget_url) {
-              that.inspireMeLink = data.inspiration_widget_url;
-
-              //console.log("change the href of the inspireMe link");
-              that.ui.inspireMeAnchor.attr("href", that.inspireMeLink);
-
-              //that.render();
-            }
-            else {
-              that.inspireMeLink = null;
-            }
-
-            if (!that.inspireMeLink) {
-              that.ui.inspireMe.addClass('hidden');
-
-              //that.ui.inspireMe.hide();
-            }
-            else {
-              that.ui.inspireMe.removeClass('hidden');
-
-              //that.ui.inspireMe.show();
-            }
-          }
-
-      );
+      var that = this,
+          collectionManager = new CollectionManager();
+      collectionManager.getAllWidgetsPromise().then(function(widgets) {
+        var relevantWidgets = widgets.relevantWidgetsFor(
+          currentIdea, Widget.Model.MESSAGE_LIST_INSPIREME_CTX);
+        
+        if (relevantWidgets.length > 0) {
+          _.first(relevantWidgets, function(widget) {
+            // TODO : Handle multiple widgets.
+            that.inspireMeLink = widget.get("ui_endpoint");
+            that.ui.inspireMeAnchor.attr("href", that.inspireMeLink);
+          });
+          that.ui.inspireMe.removeClass("hidden");
+        } else {
+          that.inspireMeLink = null;
+          that.ui.inspireMe.addClass("hidden");
+        }
+      }).error(function() {
+        that.inspireMeLink = null;
+        that.ui.inspireMe.addClass("hidden");
+      });
     },
 
   /**
