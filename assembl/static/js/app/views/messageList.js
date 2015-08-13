@@ -372,8 +372,8 @@ var MessageList = AssemblPanel.extend({
           collectionManager = new CollectionManager();
       collectionManager.getAllWidgetsPromise().then(function(widgets) {
         var relevantWidgets = widgets.relevantWidgetsFor(
-          currentIdea, Widget.Model.MESSAGE_LIST_INSPIREME_CTX);
-        
+          currentIdea, Widget.Model.prototype.MESSAGE_LIST_INSPIREME_CTX);
+
         if (relevantWidgets.length > 0) {
           _.first(relevantWidgets, function(widget) {
             // TODO : Handle multiple widgets.
