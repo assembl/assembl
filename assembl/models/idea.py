@@ -90,7 +90,7 @@ class WordCountVisitor(IdeaVisitor):
         self.count_posts = True
 
     def cleantext(self, text):
-        return BeautifulSoup(text).get_text().strip()
+        return BeautifulSoup(text or '').get_text().strip()
 
     def visit_idea(self, idea, level, prev_result):
         if idea.short_title:
