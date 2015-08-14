@@ -1656,13 +1656,15 @@ var MessageList = AssemblPanel.extend({
             return extracts.get(id).getAssociatedIdeaPromise().then(function(idea) {
               var txt = '';
               if (idea) {
-                txt = i18n.sprintf(i18n.gettext('This extract was organized in the idea "%s" by the facilitator of the debate'), idea.getShortTitleDisplayText());
+                txt = i18n.sprintf(i18n.gettext('This extract was organized in the idea " %s " by the facilitator of the debate'), idea.getShortTitleDisplayText());
               }
               else {
                 txt = i18n.gettext('This extract is in a harvester\'s clipboard and hasn\' been sorted yet.');
               }
 
-              $(field).html(txt);
+              setTimeout(function(){
+                    $(field).html(txt);
+                }, 200);
 
             });
 
