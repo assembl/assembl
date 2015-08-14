@@ -45,9 +45,11 @@
     </div>
 
     <div class="col-md-7 bloc-right">
-        <h6 ng-show="ideas.length > 1" translate="contributions" translate-values="{ nb: ideas.length }"></h6>
-        <h6 ng-show="ideas.length == 1" translate="contribution" translate-values="{ nb: ideas.length }"></h6>
-
+        <ng-pluralize count="ideas.length"
+                      when="{'0':'{} {{&quot;contribution&quot;| translate}}',
+                          '1': '{} {{&quot;contribution&quot; | translate}}',
+                          'other': '{} {{&quot;contributions&quot; | translate}}' }">
+        </ng-pluralize>
         <div class="msg" ng-show="ideas.length < 1">
             <p>{{'first_post'| translate}}</p>
         </div>

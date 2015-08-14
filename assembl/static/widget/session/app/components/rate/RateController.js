@@ -186,7 +186,7 @@ RateModule.controller('RateController', [
       $scope.$watch('ideas', function(ideas) {
         var selectedItems = 0;
         angular.forEach(ideas, function(idea) {
-          selectedItems += idea.selected ? 1 : 0;
+          selectedItems += idea.proposed_in_post.selected ? 1 : 0;
         });
         $scope.selectedItems = selectedItems;
 

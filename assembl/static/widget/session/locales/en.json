@@ -35,6 +35,7 @@
     "RATE":{
       "rateIdeaTitle":"Do you want to send them to ‟{{title}}”",
       "rateIncludeIdea": "Do you want to show this contribution in the table of ideas?",
-      "nbSelection":"You have selected : {{nb}}"
+      "nbSelection":"You have selected : {{nb}}",
+      "nbSelections":"You have selected : {{nb}}"
     }
 }
