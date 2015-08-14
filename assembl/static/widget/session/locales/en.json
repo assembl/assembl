@@ -4,8 +4,8 @@
     "title_selection":"Selection",
     "confirm":"Confirm",
     "first_post":"Be the first to comment!",
-    "contribution":"{{nb}} contribution:",
-    "contributions":"{{nb}} contributions:",
+    "contribution":"contribution:",
+    "contributions":"contributions:",
 
     "CREATE":{
       "create_from_idea_title":"Would you like to create a creativity session on ‟{{idea}}” ?",
@@ -33,9 +33,8 @@
       "start_end_dates_info": "Please write datetimes in UTC timezone."
     },
     "RATE":{
-      "rateIdeaTitle":"Do you want to send them to ‟{{title}}”",
       "rateIncludeIdea": "Do you want to show this contribution in the table of ideas?",
-      "nbSelection":"You have selected : {{nb}}",
-      "nbSelections":"You have selected : {{nb}}"
+      "nbSelection": "{selectedItems, plural, =0 {You have not selected any contribution} one {You have selected one contribution} other {You have selected # contributions}}",
+      "rateIdeaTitle":"{selectedItems, plural, =0 { } one {Do you want to send it to ‟{title}”} other {Do you want to send them to ‟{title}”}}"
     }
 }

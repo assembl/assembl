@@ -128,6 +128,7 @@ SessionApp.config(['$translateProvider', function($translateProvider) {
     prefix: 'locales/',
     suffix: '.json'
   });
+  $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
 
   // language detection and fallbacks
 

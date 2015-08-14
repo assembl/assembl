@@ -50,12 +50,8 @@
         </div>
 
         <div class="col-md-5 bloc-right">
-            <ng-pluralize count="selectedItems"
-                          when="{'0':' {{&quot;RATE.nbSelection&quot;| translate}} {}',
-                          '1': '{{&quot;RATE.nbSelection&quot; | translate}} {}',
-                          'other': '{{&quot;RATE.nbSelection&quot; | translate}} {}' }">
-            </ng-pluralize>
-            <p translate="RATE.rateIdeaTitle" translate-values='{ title: idea_title }'></p>
+          <p translate="RATE.nbSelection" translate-values="{ selectedItems: selectedItems }" translate-interpolation="messageformat"></p>
+          <p translate="RATE.rateIdeaTitle" translate-values="{ selectedItems: selectedItems, title: idea_title }" translate-interpolation="messageformat"></p>
             <button type="submit" class="btn btn-primary btn-purple btn-sm pull-right" ng-click="validSelection()">{{'send' | translate}}</button>
         </div>
     </div>

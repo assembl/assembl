@@ -4,8 +4,8 @@
     "title_selection":"Sélection",
     "confirm":"Confirmer",
     "first_post":"Soyez le premier à commenter !",
-    "contribution":"{{nb}} contribution :",
-    "contributions":"{{nb}} contributions :",
+    "contribution":"contribution :",
+    "contributions":"contributions :",
     "Thank you for your contribution! Do you have more ideas?": "Merci pour votre contribution ! Avez-vous d'autres idées ?",
     "The session was successfully configured" :"Bravo, la session a bien été configurée",
     "Sorry, an error occured": "Désolé, une erreur vient de se produire",
@@ -39,9 +39,8 @@
       "start_end_dates_info": "Veuillez exprimer les dates et heures dans le fuseau horaire UTC."
     },
     "RATE":{
-      "rateIdeaTitle":"Voulez-vous les envoyer à «{{title}}»",
       "rateIncludeIdea": "Voulez-vous montrer cette contribution dans la table des idées?",
-      "nbSelection":"Vous avez sélectionné {{nb}} contribution",
-      "nbSelections":"Vous avez sélectionné {{nb}} contributions"
+      "nbSelection": "{selectedItems, plural, =0 {Vous n'avez pas sélectionné de contributions} one {Vous avez sélectionné une contribution} other {Vous avez sélectionné # contributions}}",
+      "rateIdeaTitle":"{selectedItems, plural, =0 { } one {Voulez-vous l'envoyer à «{title}»?} other {Voulez-vous les envoyer à «{title}»}}?"
     }
 }
