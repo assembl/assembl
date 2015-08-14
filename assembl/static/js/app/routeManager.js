@@ -21,6 +21,7 @@ var Marionette = require('./shims/marionette.js'),
     Authorization = require('./views/authorization.js'),
     Permissions = require('./utils/permissions.js'),
     Account = require('./views/user/account.js'),
+    Widget = require('./models/widget.js'),
     AdminDiscussionSettings = require('./views/admin/adminDiscussionSettings.js'),
     FirstIdeaToShowVisitor = require('./views/visitors/firstIdeaToShowVisitor.js'),
     i18n = require('./utils/i18n.js');
@@ -179,10 +180,13 @@ var routeManager = Marionette.Object.extend({
    * @return promise to a GroupContainer
    */
   restoreViews: function(from_home, url_structure, skip_group_state) {
+    var collectionManager = CollectionManager();
     Assembl.headerRegions.show(new NavBar());
-    Infobars.getCollectionPromise().then(function(coll) {
-      Assembl.infobarRegion.show(new Infobars({collection: coll}));
-    });
+    collectionManager.getWidgetsForContextPromise(
+      Widget.Model.prototype.INFO_BAR, null, ["closeInfobar"]).then(
+      function(coll) {
+        Assembl.infobarRegion.show(new Infobars({collection: coll}));
+      });
     Assembl.groupContainer.show(new Loader());
     /**
      * Render the current group of views
@@ -205,7 +209,6 @@ var routeManager = Marionette.Object.extend({
 
       if (from_home && !lastSave && (
               currentUser.isUnknownUser() || currentUser.get('is_first_visit'))) {
-        var collectionManager = CollectionManager();
         Promise.join(collectionManager.getAllIdeasCollectionPromise(),
                      collectionManager.getAllExtractsCollectionPromise(),
                      collectionManager.getAllIdeaLinksCollectionPromise(),

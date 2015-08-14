@@ -26,6 +26,7 @@ var Marionette = require('../shims/marionette.js'),
     Socket = require('../utils/socket.js'),
     DiscussionSources = require('../models/sources.js');
 
+
 /**
  * @class CollectionManager
  *
@@ -786,6 +787,18 @@ var CollectionManager = Marionette.Controller.extend({
           });
       return this._allWidgetsPromise;
     },
+
+  getWidgetsForContextPromise: function(context, idea, liveupdate_keys) {
+    return this.getAllWidgetsPromise().then(function(widgets) {
+      // TODO: Convert widgets into Infobar items, and use that as model.
+      // Also add other sources for infobar items.
+      return new Widget.WidgetSubset([], {
+        parent: widgets,
+        context: context,
+        idea: idea,
+        liveupdate_keys: liveupdate_keys});
+    });
+  },
 
   getConnectedSocketPromise: function() {
       if (this._connectedSocketPromise) {

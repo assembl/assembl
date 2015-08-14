@@ -196,7 +196,8 @@ var IdeaPanel = AssemblPanel.extend({
   },
 
   onRender: function() {
-    var that = this, collectionManager = new CollectionManager();
+    var that = this, collectionManager = new CollectionManager(),
+        currentUser = Ctx.getCurrentUser();
 
     if (Ctx.debugRender) {
       console.log("ideaPanel::onRender()");
@@ -232,23 +233,20 @@ var IdeaPanel = AssemblPanel.extend({
         that.ellipsis('.ideaPanel-definition', that.ui.seeMoreOrLess);
       }, 0);
 
-      collectionManager.getAllWidgetsPromise().then(function (widgets) {
-        var currentUser = Ctx.getCurrentUser(),
-            subset = new WidgetLinks.WidgetLinkSubset([], {
-              parent: widgets,
-              context: Widget.Model.prototype.IDEA_PANEL_ACCESS_CTX,
-              idea: that.model});
-        that.widgetsInteraction.show(
-          new WidgetLinks.WidgetLinkListView({collection: subset}));
-        if (currentUser.can(Permissions.ADMIN_DISCUSSION)) {
-          subset = new WidgetLinks.WidgetLinkSubset([], {
-              parent: widgets,
-              context: Widget.Model.prototype.IDEA_PANEL_CONFIGURE_CTX,
-              idea: that.model});
-          that.widgetsConfigurationInteraction.show(
+      collectionManager.getWidgetsForContextPromise(
+        Widget.Model.prototype.IDEA_PANEL_ACCESS_CTX,
+        that.model).then(function(subset) {
+          that.widgetsInteraction.show(
             new WidgetLinks.WidgetLinkListView({collection: subset}));
-        }
-      });
+        });
+      if (currentUser.can(Permissions.ADMIN_DISCUSSION)) {
+        collectionManager.getWidgetsForContextPromise(
+          Widget.Model.prototype.IDEA_PANEL_CONFIGURE_CTX,
+          that.model).then(function(subset) {
+            that.widgetsInteraction.show(
+              new WidgetLinks.WidgetLinkListView({collection: subset}));
+          });
+      }
     }
 
   },

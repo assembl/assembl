@@ -59,20 +59,7 @@ var WidgetLinkListView = Marionette.CollectionView.extend({
 });
 
 
-var WidgetLinkSubset = Backbone.Subset.extend({
-  beforeInitialize: function(models, options) {
-    this.context = options.context;
-    this.idea = options.idea;
-    this.widgets = options.parent.relevantWidgetsFor(options.idea, options.context);
-  },
-
-  sieve: function(widget) {
-    return _.contains(this.widgets, widget);
-  }
-});
-
 module.exports = {
   WidgetLinkView: WidgetLinkView,
-  WidgetLinkListView: WidgetLinkListView,
-  WidgetLinkSubset: WidgetLinkSubset
+  WidgetLinkListView: WidgetLinkListView
 };

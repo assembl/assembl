@@ -1,7 +1,8 @@
 'use strict';
 
-var Base = require("./base.js"),
-    _ = require('../shims/underscore.js'),
+var _ = require('../shims/underscore.js'),
+    Backbone = require("../shims/backbone.js"),
+    Base = require("./base.js"),
     i18n = require('../utils/i18n.js'),
     Moment = require('moment'),
     Ctx = require("../common/context.js");
@@ -36,9 +37,21 @@ var WidgetModel = Base.Model.extend({
   DISCUSSION_MENU_CONFIGURE_CTX: 4,
   VOTE_REPORTS: 5,
   TABLE_OF_IDEA_MARKERS: 6,
+  INFO_BAR: 7,
 
-  isRelevantFor: function(linkType, context, idea) {
+  isRelevantForLink: function(linkType, context, idea) {
     return false;
+  },
+
+  isRelevantFor: function(context, idea) {
+    if (idea === null) {
+      return this.isRelevantForLink(null, context, null);
+    }
+    var that = this, widgetLinks = idea.get("widget_links", []);
+    widgetLinks = _.filter(widgetLinks, function(link) {
+      return that.isRelevantForLink(link["@type"], context, idea);
+    });
+    return widgetLinks.length > 0;
   },
 
   getBaseUriFor: function(widgetType) {
@@ -75,6 +88,7 @@ var WidgetModel = Base.Model.extend({
       case this.MESSAGE_LIST_INSPIREME_CTX:
       case this.IDEA_PANEL_ACCESS_CTX:
       case this.VOTE_REPORTS:
+      case this.INFO_BAR:
         return this.getUrlForUser(targetIdeaId);
       case this.TABLE_OF_IDEA_MARKERS:
       default:
@@ -120,6 +134,12 @@ var VotingWidgetModel = WidgetModel.extend({
     var locale = Ctx.getLocale(),
         activityState = this.get("activity_state");
     switch (context) {
+      case this.INFO_BAR:
+        if (activityState == "active" && !this.get("closeInfobar")) {
+          var n = this.get("activity_notification");
+          return i18n.sprintf(i18n.gettext(n.call_to_action_msg), n);
+        }
+        break;
       case this.IDEA_PANEL_ACCESS_CTX:
         switch (activityState) {
           case "active":
@@ -137,10 +157,12 @@ var VotingWidgetModel = WidgetModel.extend({
     return "";
   },
 
-  isRelevantFor: function(linkType, context, idea) {
+  isRelevantForLink: function(linkType, context, idea) {
     // TODO: This should depend on widget configuration.
     var activityState = this.get("activity_state");
     switch (context) {
+      case this.INFO_BAR:
+        return (activityState == "active" && !this.get("closeInfobar") && this.get("activity_notification"));
       case this.IDEA_PANEL_ACCESS_CTX:
         // assume non-root idea, relevant widget type
         return (linkType === "VotableIdeaWidgetLink"
@@ -185,6 +207,12 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
     var locale = Ctx.getLocale(),
         activityState = this.get("activity_state");
     switch (context) {
+      case this.INFO_BAR:
+        if (activityState == "active" && !this.get("closeInfobar")) {
+          var n = this.get("activity_notification");
+          return i18n.sprintf(i18n.gettext(n.call_to_action_msg), n);
+        }
+        break;
       case this.IDEA_PANEL_CONFIGURE_CTX:
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type
@@ -195,10 +223,12 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
     return "";
   },
 
-  isRelevantFor: function(linkType, context, idea) {
+  isRelevantForLink: function(linkType, context, idea) {
     // TODO: This should depend on widget configuration.
     var activityState = this.get("activity_state");
     switch (context) {
+      case this.INFO_BAR:
+        return (activityState == "active" && !this.get("closeInfobar") && this.get("activity_notification"));
       case this.IDEA_PANEL_CONFIGURE_CTX:
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type
@@ -255,7 +285,7 @@ var InspirationWidgetModel = WidgetModel.extend({
     return "";
   },
 
-  isRelevantFor: function(linkType, context, idea) {
+  isRelevantForLink: function(linkType, context, idea) {
     // TODO: This should depend on widget configuration.
     // Put in subclasses?
     var activityState = this.get("activity_state");
@@ -289,17 +319,8 @@ var WidgetCollection = Base.Collection.extend({
   },
 
   relevantWidgetsFor: function(idea, context) {
-    var that = this, widgetLinks = idea.get("widget_links", []);
-    // TODO: voting widgets are not link-bound.
-    if (widgetLinks.length === 0) {
-      return widgetLinks;
-    }
-    var relevantWidgets = _.map(widgetLinks, function(link) {
-      var widget = that.get(link.widget);
-      return widget.isRelevantFor(link["@type"], context, idea) ? widget : null;
-    });
-    return _.filter(relevantWidgets, function(w) {
-      return w !== null;
+    return this.filter(function(widget) {
+      return widget.isRelevantFor(context, null);
     });
   },
 
@@ -349,8 +370,32 @@ var ActiveWidgetCollection = WidgetCollection.extend({
   url: Ctx.getApiV2DiscussionUrl("/active_widgets")
 });
 
+
+/**
+ * @class WidgetSubset
+ *
+ * A subset of the widgets relevant to a widget context
+ */
+var WidgetSubset = Backbone.Subset.extend({
+  beforeInitialize: function(models, options) {
+    this.context = options.context;
+    this.idea = options.idea;
+    this.liveupdate_keys = options.liveupdate_keys;
+  },
+
+  sieve: function(widget) {
+    return widget.isRelevantFor(this.context, this.idea);
+  },
+
+  comparator: function(widget) {
+    return widget.get("end_date");
+  }
+});
+
+
 module.exports = {
   Model: WidgetModel,
   Collection: WidgetCollection,
+  WidgetSubset: WidgetSubset,
   ActiveWidgetCollection: ActiveWidgetCollection
 };
