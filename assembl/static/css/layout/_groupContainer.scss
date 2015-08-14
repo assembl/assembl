@@ -190,8 +190,8 @@
 
           li:hover {
             cursor: pointer;
-            background-color: $green1;
-            border-right: 4px solid $green;
+            background-color: $theme_navigation_or_idea_bg_active;
+            //border-right: 4px solid $green;
           }
           li {
             margin: 0;

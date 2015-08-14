@@ -1,5 +1,7 @@
 $marginLink: -30px;
 $marginLinkbis: 30px;
+$idea_in_synthesis_icon_hover: $th_gray3;
+$idea_in_synthesis_comment_hover: $th_purple5;
 
 .ideafamily-title {
     display: block;
@@ -94,13 +96,13 @@ $marginLinkbis: 30px;
   padding-left: 3px;
   cursor: pointer;
   &:hover {
-    background-color: $theme_idea_in_synthesis_hover;
-    border-right: 4px solid $theme_idea_in_synthesis_hover;
+    background-color: $theme_navigation_or_idea_bg_active;
+    border-right: 4px solid $theme_navigation_or_idea_bg_active;
     .maxs, .icon {
-      color: $theme_idea_in_synthesis_icon_hover;
+      color: $idea_in_synthesis_icon_hover;
     }
     .comment-text {
-      color: $theme_idea_in_synthesis_comment_hover;
+      color: $idea_in_synthesis_comment_hover;
     }
   }
 }

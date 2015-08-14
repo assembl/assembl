@@ -73,8 +73,8 @@
   clear: both;
 
   &:hover {
-    background-color: $green1;
-    border-right: 4px solid $green;
+    background-color: $theme_navigation_or_idea_bg_active;
+    //border-right: 4px solid $green;
     .idealist-counter {
       color: $black;
     }

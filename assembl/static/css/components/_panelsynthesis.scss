@@ -1,6 +1,8 @@
 // The synthesis panel specific CSS
 // ===========================
 
+$idea_in_synthesis_no_hover: $th_gray5;
+
 .synthesis {
   position: relative;
   display: block;
@@ -41,7 +43,7 @@
       margin-top: 6px;
       display: block;
       font-size: 12px;
-      color: $theme_idea_in_synthesis_comments_no_hover;
+      color: $idea_in_synthesis_no_hover;
     }
     .icon-comment {
       font-style: normal;
