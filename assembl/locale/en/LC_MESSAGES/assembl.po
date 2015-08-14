@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-14 10:51-0400\n"
+"POT-Creation-Date: 2015-08-14 10:59-0400\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -525,26 +525,31 @@ msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:124
 #, fuzzy, python-format
-msgid "%d message are available under this idea"
-msgstr ""
+#| msgid "%d more message is available in this message's full context."
+#| msgid_plural "%d more messages are available in this message's full
+#| context."
+msgid "%d message is available under this idea"
+msgid_plural "%d message are available under this idea"
+msgstr[0] ""
+msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:196
+#: assembl/static/js/app/views/ideaInSynthesis.js:199
 #: assembl/static/js/app/views/message.js:338
 msgid "Type your response here..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:198
+#: assembl/static/js/app/views/ideaInSynthesis.js:201
 #: assembl/static/js/app/views/message.js:340
 msgid "Send your reply"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:201
+#: assembl/static/js/app/views/ideaInSynthesis.js:204
 #: assembl/static/js/app/views/message.js:342
 msgid "You did not type a response yet..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:298
-#: assembl/static/js/app/views/ideaInSynthesis.js:303
+#: assembl/static/js/app/views/ideaInSynthesis.js:301
+#: assembl/static/js/app/views/ideaInSynthesis.js:306
 #, python-format
 msgid "Exploring idea \"%s\""
 msgstr ""
@@ -3629,5 +3634,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Inspire me!"
+#~ msgstr ""
+
+#~ msgid "%d message are available under this idea"
 #~ msgstr ""
 

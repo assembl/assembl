@@ -121,7 +121,10 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
         subject: this.model.get('longTitle'),
         canEdit: this.canEdit(),
         isPrimaryNavigationPanel: this.getPanel().isPrimaryNavigationPanel(),
-        ctxNumMessages: i18n.sprintf(i18n.gettext("%d message are available under this idea"), numMessages),
+        ctxNumMessages: i18n.sprintf(i18n.ngettext(
+          "%d message is available under this idea",
+          "%d message are available under this idea",
+          numMessages), numMessages),
         numMessages: numMessages
       }
     },
