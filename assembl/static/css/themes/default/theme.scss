@@ -1,19 +1,30 @@
 /* ASSEMBL THEME */
 
-//variable
+/*
+  Variables
+  Ranked from light -> dark
+ */
 $th_white: #FFFFFF;
+
+//Purples
+$th_purple2: #f2ecf8; // almost white
 $th_purple: #B36FE0;
-$th_purple1: #513850;
-$th_purple2: #f2ecf8;
 $th_purple3: #88698e;
+$th_purple5: #9013FE; // saturated purple
+$th_purple1: #513850; 
 $th_purple4: #432b42;
-$th_purple5: #9013FE; 
-$th_gray: #7F8C8D;
-$th_gray1: #888888;
-$th_gray2: #EEEEEE;
-$th_gray3: #999999;
-$th_gray4: #F6F6F6;
+
+//Grays <- Why in American English!? 
+$th_gray4: #F6F6F6; // white
+$th_gray7: #ecf0f1; // almost white (cyan)
+$th_gray2: #EEEEEE; // almost white
 $th_gray5: #CCCCCC;
+$th_gray3: #999999;
+$th_gray: #7F8C8D; // grey, slightly cyan
+$th_gray1: #888888; // like above, less cyan
+$th_gray6: #484848;
+
+$th_green1: #CCEFDB; // almost white 
 $th_green: #4ac780;
 
 
@@ -44,7 +55,7 @@ $theme_header_panel_icon_color: $th_green;
 //Header
 $theme_header_debate_title_color: $th_purple;
 $theme_header_height: 40px;
-$theme_header_text_color: #484848;
+$theme_header_text_color: $th_gray6;
 $theme_header_bg_color: $th_white;
 $theme_header_logo: '../default/img/logo.png';
 
@@ -62,9 +73,12 @@ $theme_navigation_icon_color_active: $th_green;
 $theme_navigation_text_color: $th_white;
 $theme_navigation_text_color_active: $th_white;
 
+//Navigation + Synthesis panel
+$theme_navigation_or_idea_bg_active: $th_gray4;
+
 //Panel groups
 //$theme_panel_group_header_bg_color: $th_gray1;
-$theme_panel_group_header_bg_color: #ecf0f1;
+$theme_panel_group_header_bg_color: $th_gray7;
 $theme_panel_group_header_close_color: $theme_header_text_color;
 
 //extract
@@ -74,11 +88,6 @@ $theme_extract_bg: $theme_navigation_bg;
 $theme_idea_header_bg: $th_green;
 $theme_synthesis_header_bg: $th_green;
 
-//Synthesis panel
-$theme_idea_in_synthesis_comment_hover: $th_purple5;
-$theme_idea_in_synthesis_icon_hover: $th_gray3;
-$theme_idea_in_synthesis_hover: $th_gray4;
-$theme_idea_in_synthesis_comments_no_hover: $th_gray5;
 
 /* Theme standard CSS definitions (mainly logos and images).
    Maybe we don't need this at all, and could    use variables only */
