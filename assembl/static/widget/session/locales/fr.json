@@ -11,7 +11,7 @@
     "Sorry, an error occured": "Désolé, une erreur vient de se produire",
     "The selected messages were successfully sent.": "Bravo, les messages sélectionnés ont bien été envoyés.",
     "Token added successfully": "Jetons ajoutés",
-    "Send": "Envoyer",
+    "send": "Envoyer",
     "Select the deck of cards which will be displayed": "Choisissez le jeu de cartes qui sera montré",
     "CREATE":{
       "create_from_idea_title":"Souhaitez-vous créer une session de créativité basée sur «{{idea}}» ?",
