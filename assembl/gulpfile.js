@@ -14,7 +14,6 @@ var autoprefixer = require('gulp-autoprefixer');
 var minifyCss = require('gulp-minify-css');
 var sourcemaps = require('gulp-sourcemaps');
 var exit = require('gulp-exit');
-var mocha = require('gulp-mocha');
 var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 
