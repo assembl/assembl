@@ -231,7 +231,7 @@ var MessageList = AssemblPanel.extend({
     },
 
   getTitle: function() {
-    return i18n.gettext('Discussion');
+    return i18n.gettext('Messages');
   },
 
   ViewStyles: {
@@ -1664,7 +1664,7 @@ var MessageList = AssemblPanel.extend({
 
               setTimeout(function(){
                     $(field).html(txt);
-                }, 200);
+                }, 100);
 
             });
 
