@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-14 13:59+0200\n"
-"PO-Revision-Date: 2015-08-06 21:25+0000\n"
-"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
+"POT-Creation-Date: 2015-08-14 10:51-0400\n"
+"PO-Revision-Date: 2015-08-14 11:59+0000\n"
+"Last-Translator: hellsingblack <gaby.hourlier@i4p.org>\n"
 "Language-Team: French "
 "(http://www.transifex.com/assembl/assembl/language/fr/)\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -220,41 +220,29 @@ msgid "Add a conclusion"
 msgstr "Ajouter une conclusion"
 
 #: assembl/static/js/app/models/widget.js:126
-#, fuzzy
-#| msgid "Vote on this idea"
 msgid "Vote on these ideas"
-msgstr "Voter sur cette idée"
+msgstr ""
 
 #: assembl/static/js/app/models/widget.js:128
 #: assembl/static/js/app/models/widget.js:134
-#, fuzzy
-#| msgid "Part of the context of"
 msgid "See results from the vote of "
-msgstr "Partie du contexte de"
+msgstr ""
 
 #: assembl/static/js/app/models/widget.js:131
-#, fuzzy
-#| msgid "Configure this vote widget"
 msgid "Configure this voting widget"
-msgstr "Configurer ce module de vote"
+msgstr ""
 
 #: assembl/static/js/app/models/widget.js:191
-#, fuzzy
-#| msgid "Create a creativity session on this idea"
 msgid "Configure the creativity session"
-msgstr "Créer une session de créativité sur cette idée"
+msgstr ""
 
 #: assembl/static/js/app/models/widget.js:193
-#, fuzzy
-#| msgid "Access to creativity session on this idea"
 msgid "Access the creativity session"
-msgstr "Accéder à la session de créativité sur cette idée"
+msgstr ""
 
 #: assembl/static/js/app/models/widget.js:251
-#, fuzzy
-#| msgid "Configure the inspiration module associated to this idea"
 msgid "Configure the Inspiration tool"
-msgstr "Configurer le module d'inspiration associé à cette idée"
+msgstr ""
 
 #: assembl/static/js/app/models/widget.js:253
 #: assembl/templates/views/messageList.tmpl:32
@@ -597,12 +585,9 @@ msgstr ""
 "d'information."
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:124
-#, fuzzy, python-format
-#| msgid "%d more message is available in this message's full context."
-#| msgid_plural "%d more messages are available in this message's full
-#| context."
+#, python-format
 msgid "%d message are available under this idea"
-msgstr "%d message de plus est disponible dans la conversation autour de celui-ci."
+msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:196
 #: assembl/static/js/app/views/message.js:338
@@ -762,10 +747,8 @@ msgid "You can drag the segment above directly to the table of ideas"
 msgstr "Vous pouvez glisser l'extrait ci-dessus directement sur la table des idées"
 
 #: assembl/static/js/app/views/messageList.js:234
-#, fuzzy
-#| msgid "messages"
 msgid "Messages"
-msgstr "messages"
+msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:241
 msgid "Threaded"
@@ -828,13 +811,11 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: assembl/static/js/app/views/messageList.js:1659
-#, fuzzy, python-format
-#| msgid "" "This extract was organized in the idea \"%s\" by the facilitator
-#| of the " "debate"
+#, python-format
 msgid ""
 "This extract was organized in the idea \" %s \" by the facilitator of the"
 " debate"
-msgstr "Cet extrait a été organisé dans l'idée \"%s\" par le facilitateur du débat"
+msgstr ""
 
 #: assembl/static/js/app/views/messageList.js:1662
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
@@ -2223,10 +2204,8 @@ msgid "By"
 msgstr "Par"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:18
-#, fuzzy
-#| msgid "View conversation"
 msgid "View conversation on this idea"
-msgstr "Voir la conversation"
+msgstr ""
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:30
 msgid "View Idea in popup"
