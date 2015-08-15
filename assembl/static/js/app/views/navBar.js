@@ -15,8 +15,7 @@ var Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js'),
     Roles = require('../utils/roles.js'),
     Widget = require('../models/widget.js'),
-    WidgetLinks = require('./widgetLinks.js'),
-    IdeaWidgets = require('./ideaWidgets.js');
+    WidgetLinks = require('./widgetLinks.js');
 
 var navBarLeft = Marionette.LayoutView.extend({
   template: '#tmpl-navBarLeft',
