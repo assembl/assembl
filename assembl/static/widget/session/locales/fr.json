@@ -41,6 +41,6 @@
     "RATE":{
       "rateIncludeIdea": "Voulez-vous montrer cette contribution dans la table des idées?",
       "nbSelection": "{selectedItems, plural, =0 {Vous n'avez pas sélectionné de contributions} one {Vous avez sélectionné une contribution} other {Vous avez sélectionné # contributions}}",
-      "rateIdeaTitle":"{selectedItems, plural, =0 { } one {Voulez-vous l'envoyer à «{title}»?} other {Voulez-vous les envoyer à «{title}»}}?"
+      "rateIdeaTitle":"{selectedItems, plural, =0 { } one {Voulez-vous l'envoyer à «{title}»?} other {Voulez-vous les envoyer à «{title}»?}}"
     }
 }

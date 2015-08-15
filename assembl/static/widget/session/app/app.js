@@ -129,6 +129,7 @@ SessionApp.config(['$translateProvider', function($translateProvider) {
     suffix: '.json'
   });
   $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+  $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 
   // language detection and fallbacks
 
