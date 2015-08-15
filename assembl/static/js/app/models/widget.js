@@ -34,10 +34,12 @@ var WidgetModel = Base.Model.extend({
   MESSAGE_LIST_INSPIREME_CTX: 1,
   IDEA_PANEL_ACCESS_CTX: 2,
   IDEA_PANEL_CONFIGURE_CTX: 3,
-  DISCUSSION_MENU_CONFIGURE_CTX: 4,
-  VOTE_REPORTS: 5,
-  TABLE_OF_IDEA_MARKERS: 6,
-  INFO_BAR: 7,
+  IDEA_PANEL_CREATE_CTX: 4,
+  DISCUSSION_MENU_CONFIGURE_CTX: 5,
+  DISCUSSION_MENU_CREATE_CTX: 6,
+  VOTE_REPORTS: 7,
+  TABLE_OF_IDEA_MARKERS: 8,
+  INFO_BAR: 9,
 
   isRelevantForLink: function(linkType, context, idea) {
     return false;
@@ -63,25 +65,28 @@ var WidgetModel = Base.Model.extend({
       case "InspirationWidget":
         return InspirationWidgetModel.prototype.baseUri;
       default:
-        log.error("Widget.getBaseUriFor: wrong type");
+        console.error("Widget.getBaseUriFor: wrong type");
     }
   },
 
   getCreationUrl: function(ideaId, locale) {
-    log.error("Widget.getCreationUrl: wrong type");
+    console.error("Widget.getCreationUrl: wrong type");
   },
 
   getConfigurationUrl: function(targetIdeaId) {
-    log.error("Widget.getConfigurationUrl: unknown type");
+    console.error("Widget.getConfigurationUrl: unknown type");
   },
 
   getUrlForUser: function(targetIdeaId, page) {
     // Is it the same as widget.get("ui_endpoint")?
-    log.error("Widget.getUrlForUser: wrong type");
+    console.error("Widget.getUrlForUser: wrong type");
   },
 
   getUrl: function(context, targetIdeaId, page) {
     switch (context) {
+      case this.DISCUSSION_MENU_CREATE_CTX:
+      case this.IDEA_PANEL_CREATE_CTX:
+        return this.getCreationUrl(targetIdeaId);
       case this.IDEA_PANEL_CONFIGURE_CTX:
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         return this.getConfigurationUrl(targetIdeaId);
@@ -92,13 +97,16 @@ var WidgetModel = Base.Model.extend({
         return this.getUrlForUser(targetIdeaId);
       case this.TABLE_OF_IDEA_MARKERS:
       default:
-        log.error("Widget.getUrlForUser: wrong context");
+        console.error("Widget.getUrlForUser: wrong context");
     }
   }
 });
 
 var VotingWidgetModel = WidgetModel.extend({
   baseUri: "/static/widget/vote/",
+  defaults: {
+    '@type': 'MultiCriterionVotingWidget'
+  },
 
   getCreationUrl: function(ideaId, locale) {
     if (locale === undefined) {
@@ -134,8 +142,10 @@ var VotingWidgetModel = WidgetModel.extend({
     var locale = Ctx.getLocale(),
         activityState = this.get("activity_state");
     switch (context) {
+      case this.IDEA_PANEL_CREATE_CTX:
+        return i18n.gettext("Create a voting widget on this idea");
       case this.INFO_BAR:
-        if (activityState == "active" && !this.get("closeInfobar")) {
+        if (activityState === "active" && !this.get("closeInfobar")) {
           var n = this.get("activity_notification");
           return i18n.sprintf(i18n.gettext(n.call_to_action_msg), n);
         }
@@ -148,7 +158,7 @@ var VotingWidgetModel = WidgetModel.extend({
             return i18n.gettext("See results from the vote of ") + Moment(this.get("end_date")).fromNow();
         }
       case this.IDEA_PANEL_CONFIGURE_CTX:
-          return i18n.gettext("Configure this voting widget");
+          return i18n.gettext("Configure this vote widget");
       case this.VOTE_REPORTS:
           if (activityState == "ended") {
             return i18n.gettext("See results from the vote of ") + Moment(this.get("end_date")).fromNow();
@@ -162,7 +172,7 @@ var VotingWidgetModel = WidgetModel.extend({
     var activityState = this.get("activity_state");
     switch (context) {
       case this.INFO_BAR:
-        return (activityState == "active" && !this.get("closeInfobar") && this.get("activity_notification"));
+        return (activityState === "active" && !this.get("closeInfobar") && this.get("activity_notification"));
       case this.IDEA_PANEL_ACCESS_CTX:
         // assume non-root idea, relevant widget type
         return (linkType === "VotableIdeaWidgetLink"
@@ -174,7 +184,7 @@ var VotingWidgetModel = WidgetModel.extend({
       case this.VOTE_REPORTS:
         return (activityState === "ended");
       case this.TABLE_OF_IDEA_MARKERS:
-        return (linkType == "BaseIdeaWidgetLink"
+        return (linkType === "BaseIdeaWidgetLink"
             && activityState === "active");
       default:
         return false;
@@ -184,6 +194,9 @@ var VotingWidgetModel = WidgetModel.extend({
 
 var CreativitySessionWidgetModel = WidgetModel.extend({
   baseUri: "/static/widget/session/",
+  defaults: {
+    '@type': 'CreativitySessionWidget'
+  },
 
   getCreationUrl: function(ideaId, locale) {
     if (locale === undefined) {
@@ -207,6 +220,8 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
     var locale = Ctx.getLocale(),
         activityState = this.get("activity_state");
     switch (context) {
+      case this.IDEA_PANEL_CREATE_CTX:
+        return i18n.gettext('Create a creativity session on this idea');
       case this.INFO_BAR:
         if (activityState == "active" && !this.get("closeInfobar")) {
           var n = this.get("activity_notification");
@@ -216,9 +231,9 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_CONFIGURE_CTX:
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type
-        return i18n.gettext("Configure the creativity session");
+        return i18n.gettext("Configure the creativity session on this idea");
       case this.IDEA_PANEL_ACCESS_CTX:
-        return i18n.gettext("Access the creativity session");
+        return i18n.gettext("Access to creativity session on this idea");
     }
     return "";
   },
@@ -245,6 +260,9 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
 
 var InspirationWidgetModel = WidgetModel.extend({
   baseUri: "/static/widget/creativity/",
+  defaults: {
+    '@type': 'InspirationWidget'
+  },
 
   getCreationUrl: function(ideaId, locale) {
     if (locale === undefined) {
@@ -271,14 +289,18 @@ var InspirationWidgetModel = WidgetModel.extend({
       + "&locale=" + locale;
   },
 
-  getLinkText: function(linkType, context, page) {
+  getLinkText: function(context, idea) {
     var locale = Ctx.getLocale(),
         activityState = this.get("activity_state");
     switch (context) {
-      case this.IDEA_PANEL_CONFIGURE_CTX:
+      case this.IDEA_PANEL_CREATE_CTX:
+        return i18n.gettext("Create an inspiration module on this idea");
+      case this.DISCUSSION_MENU_CREATE_CTX:
+        return i18n.gettext("Create an inspiration module on this idea");
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
-        // assume non-root idea, relevant widget type
-        return i18n.gettext("Configure the Inspiration tool");
+        return i18n.gettext("Configure the inspiration module associated to the discussion");
+      case this.IDEA_PANEL_CONFIGURE_CTX:
+        return i18n.gettext("Configure the inspiration module associated to this idea");
       case this.IDEA_PANEL_ACCESS_CTX:
         return i18n.gettext("I need inspiration");
     }
@@ -302,6 +324,14 @@ var InspirationWidgetModel = WidgetModel.extend({
 });
 
 
+var localWidgetClassCollection = new Base.Collection([
+    new VotingWidgetModel(), new CreativitySessionWidgetModel(), new InspirationWidgetModel()
+  ]);
+
+var globalWidgetClassCollection = new Base.Collection([
+    new InspirationWidgetModel()
+  ]);
+
 var WidgetCollection = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl("/widgets"),
   model: function(attrs, options) {
@@ -313,15 +343,15 @@ var WidgetCollection = Base.Collection.extend({
       case "CreativitySessionWidget":
         return new CreativitySessionWidgetModel(attrs, options);
       default:
-        log.error("Unknown widget type:" + attrs["@type"]);
+        console.error("Unknown widget type:" + attrs["@type"]);
         return new WidgetModel(attrs, options);
     }
   },
 
   relevantWidgetsFor: function(idea, context) {
-    return this.filter(function(widget) {
-      return widget.isRelevantFor(context, null);
-    });
+      return this.filter(function(widget) {
+        return widget.isRelevantFor(context, null);
+      });
   },
 
   getCreationUrlForClass: function(cls, ideaId, locale) {
@@ -337,7 +367,7 @@ var WidgetCollection = Base.Collection.extend({
       case "CreativitySessionWidget":
         return CreativitySessionWidgetModel.getCreationUrl();
       default:
-        log.error("WidgetCollection.getCreationUrlForClass: wrong widget class");
+        console.error("WidgetCollection.getCreationUrlForClass: wrong widget class");
     }
   },
 
@@ -351,7 +381,7 @@ var WidgetCollection = Base.Collection.extend({
         this.getCreationUrlForClass("MultiCriterionVotingWidget"),
         this.getCreationUrlForClass("InspirationWidget")];
     default:
-        log.error("WidgetCollection.configurableWidgetsUris: wrong context");
+        console.error("WidgetCollection.configurableWidgetsUris: wrong context");
    }
   },
 
@@ -397,5 +427,7 @@ module.exports = {
   Model: WidgetModel,
   Collection: WidgetCollection,
   WidgetSubset: WidgetSubset,
+  localWidgetClassCollection: localWidgetClassCollection,
+  globalWidgetClassCollection: globalWidgetClassCollection,
   ActiveWidgetCollection: ActiveWidgetCollection
 };

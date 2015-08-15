@@ -29,8 +29,9 @@ var IdeaPanel = AssemblPanel.extend({
   minWidth: 270,
   regions: {
     segmentList: ".postitlist",
-    widgetsInteraction: ".ideaPanel-section-widgets",
-    widgetsConfigurationInteraction: ".ideaPanel-section-conf-widgets"
+    widgetsInteraction: ".ideaPanel-section-access-widgets",
+    widgetsConfigurationInteraction: ".ideaPanel-section-conf-widgets",
+    widgetsCreationInteraction: ".ideaPanel-section-create-widgets"
   },
   initialize: function(options) {
     Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
@@ -243,9 +244,15 @@ var IdeaPanel = AssemblPanel.extend({
         collectionManager.getWidgetsForContextPromise(
           Widget.Model.prototype.IDEA_PANEL_CONFIGURE_CTX,
           that.model).then(function(subset) {
-            that.widgetsInteraction.show(
+            that.widgetsConfigurationInteraction.show(
               new WidgetLinks.WidgetLinkListView({collection: subset}));
           });
+        that.widgetsCreationInteraction.show(
+          new WidgetLinks.WidgetLinkListView({
+            context: Widget.Model.prototype.IDEA_PANEL_CREATE_CTX,
+            collection: Widget.localWidgetClassCollection,
+            idea: that.model
+          }));
       }
     }
 

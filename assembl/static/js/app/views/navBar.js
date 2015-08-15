@@ -1,6 +1,7 @@
 'use strict';
 
 var Marionette = require('../shims/marionette.js'),
+    Promise = require('bluebird'),
     $ = require('../shims/jquery.js'),
     _ = require('../shims/underscore.js'),
     Assembl = require('../app.js'),
@@ -13,13 +14,19 @@ var Marionette = require('../shims/marionette.js'),
     Permissions = require('../utils/permissions.js'),
     i18n = require('../utils/i18n.js'),
     Roles = require('../utils/roles.js'),
+    Widget = require('../models/widget.js'),
+    WidgetLinks = require('./widgetLinks.js'),
     IdeaWidgets = require('./ideaWidgets.js');
 
-var navBarLeft = Marionette.ItemView.extend({
+var navBarLeft = Marionette.LayoutView.extend({
   template: '#tmpl-navBarLeft',
   className: 'navbar-left',
   initialize: function(options) {
     this.isAdminDiscussion = Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION);
+  },
+  regions: {
+    widgetMenuConfig: ".navbar-widget-configuration-links",
+    widgetMenuCreation: ".navbar-widget-creation-links"
   },
   onRender: function() {
     var that = this;
@@ -35,19 +42,32 @@ var navBarLeft = Marionette.ItemView.extend({
     if (this.isAdminDiscussion) {
       // find root idea
       var collectionManager = new CollectionManager();
-      collectionManager.getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
-        var rootIdea = allIdeasCollection.getRootIdea();
-        if (rootIdea) {
-          var ideaWidgets = new IdeaWidgets({
-            template: "#tmpl-rootIdeaWidgets",
-            model: rootIdea
-          });
-          var el = ideaWidgets.render().el;
-          that.$(".potential-discussion-dropdown-container").html(el);
-        } else {
-          console.log("rootIdea problem: ", rootIdea);
-        }
+      Promise.join(collectionManager.getAllIdeasCollectionPromise(),
+          collectionManager.getAllWidgetsPromise(),
+        function(allIdeasCollection, widgets) {
+          var rootIdea = allIdeasCollection.getRootIdea();
+          if (rootIdea) {
+            var confWidgets = new Widget.WidgetSubset([], {
+              parent: widgets,
+              context: Widget.Model.prototype.DISCUSSION_MENU_CONFIGURE_CTX,
+              idea: rootIdea});
+            if (confWidgets.length) {
+              var configuration = WidgetLinks.WidgetLinkListView({collection: confWidgets});
+              that.widgetMenuConfig.show(configuration);
+            }
+            var creation = new WidgetLinks.WidgetLinkListView({
+              collection: Widget.globalWidgetClassCollection,
+              context: Widget.Model.prototype.DISCUSSION_MENU_CREATE_CTX,
+              idea: rootIdea
+            });
+            that.widgetMenuCreation.show(creation);
+          } else {
+            console.log("rootIdea problem: ", rootIdea);
+            this.$el.find(".discussion-title-dropdown").addClass("hidden");
+          }
       });
+    } else {
+      this.$el.find(".discussion-title-dropdown").addClass("hidden");
     }
   },
   serializeData: function() {

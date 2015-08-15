@@ -8,6 +8,7 @@ var Backbone = require("../shims/backbone.js"),
 
 var WidgetLinkView = Marionette.ItemView.extend({
   template: "#tmpl-widgetLink",
+  tagName: 'li',
   initialize: function(options) {
     this.options = options;
   },
@@ -48,13 +49,15 @@ var WidgetLinkView = Marionette.ItemView.extend({
 
 var WidgetLinkListView = Marionette.CollectionView.extend({
   childView: WidgetLinkView,
-  tagName: "ul",
 
   initialize: function(options) {
     this.childViewOptions = {
-      context: options.collection.context,
-      idea: options.collection.idea
+      context: options.context || options.collection.context,
+      idea: options.idea || options.collection.idea
     };
+    if (this.childViewOptions.context === undefined) {
+      console.error("Undefined context in WidgetLinkListView");
+    }
   }
 });
 
