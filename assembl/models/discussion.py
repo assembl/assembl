@@ -324,6 +324,7 @@ class Discussion(DiscussionBoundBase):
         from assembl.views.traversal import (
             CollectionDefinition, AbstractCollectionDefinition)
         from .notification import NotificationSubscription
+        from ..views.traversal import UserNsDictCollection
 
         class AllUsersCollection(AbstractCollectionDefinition):
             def __init__(self, cls):
@@ -415,10 +416,10 @@ class Discussion(DiscussionBoundBase):
                                 except:
                                     raise ValueError("Failed on content sink transaction")
 
-
         return {'all_users': AllUsersCollection(cls),
                 'active_widgets': ActiveWidgetsCollection(cls),
-                'sources': SourcesCollection(cls)}
+                'sources': SourcesCollection(cls),
+                'user_ns_kv': UserNsDictCollection(cls)}
 
     all_participants = relationship(
         User, viewonly=True, secondary=LocalUserRole.__table__,

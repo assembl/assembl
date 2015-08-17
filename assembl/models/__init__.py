@@ -83,6 +83,13 @@ from .auth import (
     Username,
 )
 from .discussion import Discussion
+from .user_key_values import (
+    # AbstractNamespacedKeyValue,
+    # AbstractPerUserNamespacedKeyValue,
+    DiscussionPerUserNamespacedKeyValue,
+    # NamespacedUserKVCollection,
+    # UserNsDict,
+)
 from .preferences import Preferences
 from .generic import (
     AnnotatorSource,

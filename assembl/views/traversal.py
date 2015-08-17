@@ -15,7 +15,6 @@ from assembl.auth.util import get_permissions
 from assembl.lib.sqla import *
 from assembl.lib.decl_enums import DeclEnumType
 
-
 class DictContext(object):
     def __init__(self, acl, subobjects=None):
         self.subobjects = subobjects or {}
@@ -287,7 +286,7 @@ class InstanceContext(TraversalContext):
         collection = self._get_collections(cls).get(key, None)
         if not collection:
             raise KeyError()
-        return CollectionContext(self, collection, self._instance)
+        return collection.make_context(self)
 
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         # if one of the objects has a non-list relation to this class, add it
@@ -532,6 +531,9 @@ class AbstractCollectionDefinition(object):
         self.owner_class = owner_class
         self.collection_class = collection_class
 
+    def make_context(self, parent_ctx):
+        return CollectionContext(parent_ctx, self, parent_ctx._instance)
+
     def get_instance(self, key, parent_instance):
         instance = self.collection_class.get_instance(key)
         # Validate that the instance belongs to the collection...
@@ -682,6 +684,113 @@ class CollectionDefinition(AbstractCollectionDefinition):
             self.property.key,
             self.back_property.key if self.back_property else '',
             self.collection_class.__name__)
+
+
+class UserBoundNamespacedDictContext(TraversalContext):
+    # Represents the set of user-bound namespace-K-V items
+    def __init__(self, parent, collection):
+        # Do not call super, because it will set the acl.
+        self.collection = collection
+        self.__parent__ = parent
+        self.parent_instance = parent._instance
+
+    @property
+    def __acl__(self):
+        return self.__parent__.__acl__
+
+    def as_collection(self):
+        return self.collection.as_collection(self.parent_instance)
+
+    def __getitem__(self, namespace):
+        user_ns_b_kvdict = self.collection.get_instance(
+            namespace, self.parent_instance)
+        return UserNSBoundDictContext(user_ns_b_kvdict, self)
+
+    def get_target_class(self):
+        from assembl.models.user_key_values import UserNsDict
+        return UserNsDict
+
+
+class UserNSBoundDictContext(TraversalContext):
+    # Represents the set of user-bound, namespace-bound K-V items
+    def __init__(self, user_ns_b_kvdict, parent):
+        # Do not call super, because it will set the acl.
+        self.collection = user_ns_b_kvdict
+        self.__parent__ = parent
+        self.parent_instance = parent.parent_instance
+
+    @property
+    def __acl__(self):
+        return self.__parent__.__acl__
+
+    def __getitem__(self, key):
+        return UserNSKeyBoundDictItemContext(self.collection, self, key)
+
+    def get_target_class(self):
+        from assembl.models.user_key_values import NamespacedUserKVCollection
+        return NamespacedUserKVCollection
+
+
+class UserNSKeyBoundDictItemContext(TraversalContext):
+    # Represents a value which is bound to a user, namespace and key
+    def __init__(self, user_ns_b_kvdict, parent, key):
+        # Do not call super, because it will set the acl.
+        self.collection = user_ns_b_kvdict
+        self.__parent__ = parent
+        self.parent_instance = parent.parent_instance
+        self.key = key
+
+    @property
+    def __acl__(self):
+        return self.__parent__.__acl__
+
+    def __getitem__(self, key):
+        return None
+
+    def get_target_class(self):
+        return None
+
+
+class UserNsDictCollection(AbstractCollectionDefinition):
+    def __init__(self, cls):
+        from assembl.models.user_key_values import NamespacedUserKVCollection
+        super(UserNsDictCollection, self).__init__(
+            cls, NamespacedUserKVCollection)
+
+    def make_context(self, parent_context):
+        return UserBoundNamespacedDictContext(parent_context, self)
+
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
+        self.__parent__.decorate_instance(
+            self, instance, assocs, user_id, ctx, kwargs)
+
+    def decorate_query(
+            self, query, owner_alias, last_alias, parent_instance, ctx):
+        # No clue what to do here; UserKVCollection is not a sqla object
+        return query.outerjoin(
+            owner_alias, owner_alias.id != None)
+
+    def contains(self, parent_instance, namespace):
+        # all namespaces exist
+        return True
+
+    def as_collection(self, parent_instance):
+        from pyramid.threadlocal import get_current_request
+        from pyramid.httpexceptions import HTTPUnauthorized
+        from assembl.models.user_key_values import UserNsDict
+        request = get_current_request()
+        if request is not None:
+            user_id = request.authenticated_userid
+            if user_id is None:
+                raise HTTPUnauthorized()
+        else:
+            raise RuntimeError()
+        return UserNsDict(parent_instance, user_id)
+
+    def get_instance(self, namespace, parent_instance):
+        c = self.as_collection(parent_instance)
+        return c[namespace]
+
 
 def root_factory(request):
     # OK, this is the old code... I need to do better, but fix first.
