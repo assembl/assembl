@@ -143,9 +143,11 @@ var routeManager = Marionette.Object.extend({
   },
     
   sentryTest: function() {
-      //This crashes on purpose
-      crashme();
-    },
+    var Raven = require('raven-js');
+    Raven.captureMessage("This is a test, an uncaught non existent function call will follow.");
+    //This crashes on purpose
+    crashme();
+  },
 
   loadCurrentUser: function() {
     var user = null;
