@@ -357,17 +357,26 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
               var el2 = _.clone(el);
               el2 = $scope.ensurePropertiesTypes(el2, getCriterionPropertyType);
               post_data = $scope.moveUnknownProperties(el2, known_properties, "settings");
+              post_data["question_id"] = item_index;
 
               endpoint = AssemblToolsService.resourceToUrl(el[id_field]);
-              VoteWidgetService.putJson(endpoint, post_data, result_holder);
+
+              // Instead of using:
+              // VoteWidgetService.putJson(endpoint, post_data, result_holder);
+              // we delay each API call a bit more than the previous one, so that the server does not get overwhelmed.
+              // (by the use of the same question_id parameter for 2 criteria)
+              var putJson = _.bind(VoteWidgetService.putJson, VoteWidgetService);
+              _.delay(putJson, item_index * 500, endpoint, post_data, result_holder);
+              
             }
             else { // if it does not exist in the backend yet, we create it using POST
               var el2 = _.clone(el);
               el2 = $scope.ensurePropertiesTypes(el2, getCriterionPropertyType);
               post_data = $scope.moveUnknownProperties(el2, known_properties, "settings");
+              post_data["question_id"] = item_index;
 
               endpoint = collection_endpoint;
-              var promise = VoteWidgetService.postJson(endpoint, post_data, result_holder);
+              var promise = VoteWidgetService.postJson(endpoint, post_data, result_holder); // TODO: maybe we should delay this one also
               promise.success(function(data, status, headers) {
                 // set @id in current json
                 console.log("updateVoteSpecifications success:", data, status, headers);

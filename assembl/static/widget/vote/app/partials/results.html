@@ -8,21 +8,23 @@ We have to clear the cache or force refresh of the exact URL of this template pa
 body {
   font: 10px sans-serif;
 }
-.axis path,
-.axis line {
+svg.barchart .axis path,
+svg.barchart .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
-.bar {
+svg.barchart .bar {
   fill: orange;
 }
-.bar:hover {
+svg.barchart .bar:hover {
   fill: orangered ;
 }
-.x.axis path {
+svg.barchart .x.axis path {
   display: none;
 }
+
+
 .d3-tip {
   line-height: 1;
   font-weight: bold;
@@ -49,6 +51,26 @@ body {
   top: 100%;
   left: 0;
 }
+
+
+
+/* Heatmap is based on http://bl.ocks.org/mbostock/3202354 */
+
+.heatmap .label {
+  font-weight: bold;
+}
+
+.heatmap .tile {
+  shape-rendering: crispEdges;
+}
+
+.heatmap .axis path,
+.heatmap .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
 </style>
 
 <div id="index" ng-controller="resultsCtl" ng-init="init()">

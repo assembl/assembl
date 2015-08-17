@@ -9,6 +9,12 @@ voteApp.controller('indexCtl',
     $scope.init = function() {
       console.log("indexCtl::init()");
 
+      var target = window.getUrlVariableValue("target");
+      if ( !target ){
+        $scope.initVotingForAllTargets();
+        return;
+      }
+
       console.log("configService:");
       console.log(configService);
       $scope.settings = configService.settings;
@@ -123,6 +129,18 @@ voteApp.controller('indexCtl',
           $scope.drawUI();
         });
       }
+
+    };
+
+    $scope.initVotingForAllTargets = function(){
+      /*
+      TODO:
+      (this is not very nice, maybe the backend should send us directly all data in one API call)
+      - get all targets, by querying http://localhost:6543/data/Widget/16/targets
+      - for each target, query http://localhost:6543/data/Widget/16?target={target["@id"]}
+        - save/aggregate its content
+      - display each question/criterion, and for each of them display a vote item for each target
+      */
 
     };
 
