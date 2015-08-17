@@ -177,6 +177,23 @@ var MessageView = Marionette.ItemView.extend({
       return bodyWithoutNewLine.text().replace(/\s{2,}/g, ' ');
     },
 
+  /**
+   * @return string
+   */
+  generateSafeBody: function() {
+    var body;
+
+    if(this.model.get('bodyMimeType') === "text/html") {
+      //We assume that that HTML has been sanitized by the backend.
+      body = this.model.get('body');
+    }
+    else {
+      //Get rid of all tags, to avoid any layout problem
+      body = Ctx.stripHtml(this.model.get('body'));
+    }
+    return body;
+  },
+
   serializeData: function() {
     var bodyFormatClass,
         body,
@@ -191,7 +208,7 @@ var MessageView = Marionette.ItemView.extend({
       }
     }
 
-    body = (body) ? body : this.model.get('body');
+    body = (body) ? body : this.generateSafeBody();
 
     if (bodyFormat !== null) {
       bodyFormatClass = "body_format_" + this.model.get('bodyMimeType').replace("/", "_");
