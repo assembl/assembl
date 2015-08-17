@@ -50,8 +50,10 @@
     {% block extra_js %}{% endblock %}
     {% block main_js %}{% endblock %}
 
+    <script type="text/javascript"> var globalAnalytics = {};</script>
     {% if web_analytics_piwik_script %}
         {{ web_analytics_piwik_script|safe }}
+        <script type="text/javascript"> globalAnalytics['piwik'] = true; </script>
     {% endif %}
 
     {% block facebook_sdk_load%}{% endblock%}
