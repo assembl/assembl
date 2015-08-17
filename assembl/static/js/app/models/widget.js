@@ -133,7 +133,7 @@ var VotingWidgetModel = WidgetModel.extend({
       base += "&page=results";
     }
     if (targetIdeaId !== undefined) {
-      base += encodeURIComponent("?target=" + targetIdeaId);
+      base += "&target=" + encodeURIComponent(targetIdeaId);
     }
     return base;
   },
