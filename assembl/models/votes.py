@@ -69,7 +69,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         }
 
     def get_vote_results_url(self):
-        'local:Discussion/%d/widgets/%d/vote_specifications/%d/vote_results' % (
+        return 'local:Discussion/%d/widgets/%d/vote_specifications/%d/vote_results' % (
             self.widget.discussion_id, self.widget_id, self.id)
 
     # Do we want an URL to get the vote result on a specific spec+target combination?
