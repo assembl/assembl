@@ -2,6 +2,7 @@ from pyramid.paster import get_appsettings
 
 from .lib.sqla import (
     configure_engine, initialize_session_maker)
+from .lib.config import set_config
 from .tests.utils import log
 from .tests.pytest_fixtures import *
 
@@ -29,6 +30,7 @@ def pytest_configure(config):
     log.setLevel(config.getoption('logging_level'))
     app_settings_file = config.getoption('test_settings_file')
     app_settings = get_appsettings(app_settings_file, 'assembl')
+    set_config(app_settings)
     # Make the unzopish sessionmaker the default
     configure_engine(app_settings, session_maker=initialize_session_maker(False))
     # Then load the other one

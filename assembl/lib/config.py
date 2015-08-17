@@ -14,6 +14,7 @@ def set_config(settings):
 
 def get_config():
     """ Return the whole settings object. """
+    global _settings
     return _settings or get_current_registry().settings
 
 

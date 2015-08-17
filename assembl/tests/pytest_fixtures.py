@@ -17,6 +17,7 @@ from sqlalchemy import inspect
 import assembl
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
 from assembl.lib.sqla import get_typed_session_maker, set_session_maker_type
+from assembl.lib.config import get_config
 from assembl.tasks import configure as configure_tasks
 from .utils import clear_rows, drop_tables
 from assembl.auth import R_SYSADMIN, R_PARTICIPANT
@@ -36,15 +37,6 @@ def zopish_session_tween_factory(handler, registry):
 
 
 @pytest.fixture(scope="session")
-def app_settings(request):
-    from assembl.lib.config import set_config
-    app_settings_file = request.config.getoption('test_settings_file')
-    app_settings = get_appsettings(app_settings_file, 'assembl')
-    set_config(app_settings)
-    return app_settings
-
-
-@pytest.fixture(scope="session")
 def session_factory(request):
     # Get the zopeless session maker,
     # while the Webtest server will use the
@@ -59,14 +51,14 @@ def session_factory(request):
 
 
 @pytest.fixture(scope="session")
-def empty_db(request, app_settings, session_factory):
+def empty_db(request, session_factory):
     session = session_factory()
-    drop_tables(app_settings, session)
+    drop_tables(get_config(), session)
     return session_factory
 
 
 @pytest.fixture(scope="session")
-def db_tables(request, empty_db, app_settings):
+def db_tables(request, empty_db):
     app_settings_file = request.config.getoption('test_settings_file')
     assert app_settings_file
     from ..conftest import engine
@@ -76,38 +68,38 @@ def db_tables(request, empty_db, app_settings):
     def fin():
         print "finalizer db_tables"
         session = empty_db()
-        drop_tables(app_settings, session)
+        drop_tables(get_config(), session)
         transaction.commit()
     request.addfinalizer(fin)
     return empty_db  # session_factory
 
 
 @pytest.fixture(scope="session")
-def base_registry(request, app_settings):
+def base_registry(request):
     from assembl.views.traversal import root_factory
     from pyramid.config import Configurator
     from zope.component import getGlobalSiteManager
     registry = getGlobalSiteManager()
     config = Configurator(registry)
     config.setup_registry(
-        settings=app_settings, root_factory=root_factory)
+        settings=get_config(), root_factory=root_factory)
     configure_tasks(registry, 'assembl')
     config.add_tween('assembl.tests.pytest_fixtures.zopish_session_tween_factory')
     return registry
 
 
 @pytest.fixture(scope="module")
-def test_app_no_perm(request, app_settings, base_registry):
+def test_app_no_perm(request, base_registry):
     global_config = {
         '__file__': request.config.getoption('test_settings_file'),
         'here': get_distribution('assembl').location
     }
     return TestApp(assembl.main(
-        global_config, nosecurity=True, **app_settings))
+        global_config, nosecurity=True, **get_config()))
 
 
 @pytest.fixture(scope="module")
-def db_default_data(request, db_tables, app_settings, base_registry):
+def db_default_data(request, db_tables, base_registry):
     bootstrap_db_data(db_tables)
     #db_tables.commit()
     transaction.commit()
@@ -115,7 +107,7 @@ def db_default_data(request, db_tables, app_settings, base_registry):
     def fin():
         print "finalizer db_default_data"
         session = db_tables()
-        clear_rows(app_settings, session)
+        clear_rows(get_config(), session)
         transaction.commit()
     request.addfinalizer(fin)
     return db_tables  # session_factory
@@ -220,10 +212,10 @@ def admin_user(request, test_session, db_default_data):
 
 
 @pytest.fixture(scope="function")
-def test_app(request, admin_user, app_settings, test_app_no_perm):
+def test_app(request, admin_user, test_app_no_perm):
     config = testing.setUp(
         registry=test_app_no_perm.app.registry,
-        settings=app_settings,
+        settings=get_config(),
     )
     dummy_policy = config.testing_securitypolicy(
         userid=admin_user.id, permissive=True)
