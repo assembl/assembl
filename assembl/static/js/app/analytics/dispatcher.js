@@ -8,13 +8,17 @@ var _ = require('../shims/underscore.js'),
 
 
 var AnalyticsDispatcher = function(){
-  Wrapper.call(this, arguements); 
+  if(this.debug) {
+    console.log("AnalyticsDispatcher constructor called");
+  }
+  Wrapper.call(this, arguments); 
   this._observers = [];
 };
 
 AnalyticsDispatcher.prototype = Object.create(Wrapper.prototype);
 AnalyticsDispatcher.prototype.constructor = AnalyticsDispatcher;
-AnalyticsDispatcher.prototype = {
+_.extend(AnalyticsDispatcher.prototype, {
+
   registerObserver: function(observer) {
     this._observers.push(observer);
   },
@@ -24,16 +28,19 @@ AnalyticsDispatcher.prototype = {
   },
 
   notify: function(methodName, args, check_cb){
+    if(this.debug) {
+      console.log("dispatching " + methodName + " on " + this._observers.length + " observer(s) with:", args);
+    }
     _.each(this._observers, function(observer){
       try {
         if (check_cb !== 'undefined') {
           if (check_cb(observer)) {
-            console.log('Invoking method ' + methodName + 'and arguements ' + args + 'on observer' + observer);
+            console.log('Invoking method ' + methodName + 'and arguments ' + args + 'on observer' + observer);
             observer[methodName].apply(this, args);    
           }
         }
         else {
-          console.log('Invoking method ' + methodName + 'and arguements ' + args + 'on observer' + observer);
+          console.log('Invoking method ' + methodName + 'and arguments ' + args + 'on observer' + observer);
           observer[methodName].apply(this, args);
         }
       }
@@ -51,38 +58,41 @@ AnalyticsDispatcher.prototype = {
   },
 
   initialize: function(options){
-    this.notify('initialize', arguements);
+    if(this.debug  && this._observers.length < 1) {
+      console.warn("No observers registered for analytics");
+    }
+    this.notify('initialize', arguments);
   },
 
   changeCurrentPage: function(page, options) {
-    this.notify('changeCurrentPage', arguements);
+    this.notify('changeCurrentPage', arguments);
   },
 
   trackEvent: function(eventName, options) {
-    this.notify('trackEvent', arguements);
+    this.notify('trackEvent', arguments);
   },
 
   setCustomVariable: function(name, value, options){
-    this.notify('setCustomVariable', arguements);
+    this.notify('setCustomVariable', arguments);
   },
  
   deleteCustomVariable: function(options){
-    this.notify('deleteCustomVariable', arguements);
+    this.notify('deleteCustomVariable', arguments);
   },
 
   trackLink: function(urlPath, options){
-    this.notify('trackEvent', arguements);
+    this.notify('trackEvent', arguments);
   },
 
   trackDomElement: function(element) {
-    this.notify('trackDomElement', arguements);
+    this.notify('trackDomElement', arguments);
   },
 
   trackGoal: function(goalId, options){
-    this.notify('trackGoal', arguements, function(observer){
+    this.notify('trackGoal', arguments, function(observer){
       // To add more checks for other Observer types, must update this check_cb
       if (observer.constructor.name === 'Piwik') {
-        if _.has(globalAnalytics.piwik.goals, goalId){
+        if (_.has(globalAnalytics.piwik.goals, goalId)){
           return true;
         }
         else { return false; }
@@ -97,10 +107,7 @@ AnalyticsDispatcher.prototype = {
   setUserId: function(id) {
     this.notify('setUserId', [id]);
   }
-
-
-};
-
+});
 
 var _analytics;
 
@@ -108,14 +115,20 @@ module.exports = {
   /** A factory returning a completely setup singleton of a concrete analytics 
    * object.
    */
-  Analytics: function(){
+  getInstance: function(){
     if (!_analytics){
       _analytics = new AnalyticsDispatcher();
       if (_.has(window.globalAnalytics, 'piwik') && globalAnalytics.piwik.isActive) {
+        if(_analytics.debug) {
+          console.log("Registering piwik");
+        }
         var p = new Piwik();
         _analytics.registerObserver(p);
       }
       else if (_.has(globalAnalytics, 'google') && globalAnalytics.google.isActive) {
+        if(_analytics.debug) {
+          console.log("Registering Google Analytics");
+        }
         var g = null; //Where Google Analytics would go
         _analytics.registerObserver(g);
       }

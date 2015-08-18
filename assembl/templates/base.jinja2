@@ -53,7 +53,11 @@
     <script type="text/javascript"> var globalAnalytics = {};</script>
     {% if web_analytics_piwik_script %}
         {{ web_analytics_piwik_script|safe }}
-        <script type="text/javascript"> globalAnalytics['piwik'] = true; </script>
+        <script type="text/javascript">
+            globalAnalytics.piwik = {};
+            globalAnalytics.piwik.isActive = true;
+            //Should add goals defined in ini files here as well. 
+        </script>
     {% endif %}
 
     {% block facebook_sdk_load%}{% endblock%}

@@ -10,7 +10,7 @@ var _EVENT_DEFINITIONS = {
   REPLY_MESSAGE_COMPLETE: 'REPLY_MESSAGE_COMPLETE' 
 };
 
-var _ANALYTICS_PAGE_DEFS = {
+var _PAGE_DEFINITIONS = {
   'CONTEXT/-': 'CONTEXT/-'
 }
 /**
@@ -23,6 +23,7 @@ function Wrapper() {
 };
 
 Wrapper.prototype = {
+  debug: true,
   events: _EVENT_DEFINITIONS,
   pages: _PAGE_DEFINITIONS,
 

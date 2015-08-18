@@ -247,7 +247,8 @@ var groupContent = Marionette.CompositeView.extend({
       this.groupContainer.suspendResize();
       this.model.set('navigationState', 'about');
       this.ensureOnlyPanelsVisible(PanelSpecTypes.DISCUSSION_CONTEXT);
-      Analytics.changeCurrentPage(Analytics.pages['CONTEXT/-']);
+      var analytics = Analytics.getInstance();
+      analytics.changeCurrentPage(analytics.pages['CONTEXT/-']);
       this.groupContainer.resumeResize();
     }
   },

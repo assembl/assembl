@@ -5,7 +5,7 @@ var _ = require('../shims/underscore.js'),
     Wrapper = require('./abstract.js');
 
 var Piwik = function(){
-  Wrapper.call(this, arguements);
+  Wrapper.call(this, arguments);
 }
 
 Piwik.prototype = Object.create(Wrapper.prototype);
@@ -45,7 +45,7 @@ Piwik.prototype = {
     if (userId) {
       this._invoke('setUserId', [userId]);
     }
-  },
+  }, 
   trackEvent: function(eventName, options){
     var category = options.category,
         action = options.action,
@@ -57,6 +57,10 @@ Piwik.prototype = {
   trackGoal: function(goalId, options){
     var customRevenue = options.customRevenue || null;
     this._invoke('trackGoal', [goalId, customRevenue]);
+  },
+
+  changeCurrentPage: function(page, options){
+    this._invoke('setCustomUrl', [page]);
   }
 
 
