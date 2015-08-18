@@ -15,6 +15,7 @@ import sqltap.wsgi
 
 from .lib.sqla import configure_engine, session_maker_is_initialized
 from .lib.locale import to_posix_format, ensure_locale_has_country
+from .lib.config import set_config
 
 # Do not import models here, it will break tests.
 
@@ -29,6 +30,7 @@ def main(global_config, **settings):
 
     # here we create the engine and bind it to the (not really a) session
     # factory
+    set_config(settings)
     if not session_maker_is_initialized():
         configure_engine(settings)
     if settings.get('assembl_debug_signal', False):
