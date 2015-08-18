@@ -51,7 +51,7 @@ var navBarLeft = Marionette.LayoutView.extend({
               context: Widget.Model.prototype.DISCUSSION_MENU_CONFIGURE_CTX,
               idea: rootIdea});
             if (confWidgets.length) {
-              var configuration = WidgetLinks.WidgetLinkListView({collection: confWidgets});
+              var configuration = new WidgetLinks.WidgetLinkListView({collection: confWidgets});
               that.widgetMenuConfig.show(configuration);
             }
             var creation = new WidgetLinks.WidgetLinkListView({

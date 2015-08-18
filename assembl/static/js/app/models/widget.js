@@ -316,7 +316,7 @@ var InspirationWidgetModel = WidgetModel.extend({
         return (activityState === "active");
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         // assume root idea
-        return (linkType === "BaseIdeaWidgetLink");
+        return (linkType === "IdeaInspireMeWidgetLink");
       default:
         return false;
     }
