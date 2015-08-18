@@ -132,7 +132,7 @@ module.exports = {
         var p = new Piwik();
         _analytics.registerObserver(p);
       }
-      else if (_.has(globalAnalytics, 'google') && globalAnalytics.google.isActive) {
+      else if (_.has(window.globalAnalytics, 'google') && globalAnalytics.google.isActive) {
         if(_analytics.debug) {
           console.log("Registering Google Analytics");
         }

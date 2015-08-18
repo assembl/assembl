@@ -47,8 +47,6 @@
     {% include 'includes/javascript.jinja2' %}
 	{% include 'includes/updatebrowser.jinja2' %}
 
-    {% block extra_js %}{% endblock %}
-    {% block main_js %}{% endblock %}
 
     <script type="text/javascript"> var globalAnalytics = {};</script>
     {% if web_analytics_piwik_script %}
@@ -59,6 +57,10 @@
             //Should add goals defined in ini files here as well. 
         </script>
     {% endif %}
+    
+    
+    {% block extra_js %}{% endblock %}
+    {% block main_js %}{% endblock %}
 
     {% block facebook_sdk_load%}{% endblock%}
 

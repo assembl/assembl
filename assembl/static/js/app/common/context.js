@@ -167,16 +167,15 @@ Context.prototype = {
     return this.CURRENT_USER_ID;
   },
 
-  setCurrentUserId: function(user_id) {
-    this.CURRENT_USER_ID = user_id;
-  },
-
   getCurrentUser: function() {
     return this.currentUser;
   },
 
   setCurrentUser: function(user) {
     this.currentUser = user;
+    var Analytics = require('../analytics/dispatcher.js'),
+        analytics = Analytics.getInstance();
+    analytics.setUserId(this.currentUser.id);
   },
 
   getCsrfToken: function() {
