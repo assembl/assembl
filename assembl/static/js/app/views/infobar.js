@@ -5,6 +5,7 @@ var Marionette = require('../shims/marionette.js'),
     i18n = require("../utils/i18n.js"),
     Moment = require('moment'),
     CollectionManager = require('../common/collectionManager.js'),
+    Widget = require('../models/widget.js'),
     Ctx = require('../common/context.js'),
     $ = require('../shims/jquery.js');
 
@@ -28,23 +29,12 @@ var InfobarItem = Marionette.LayoutView.extend({
   },
 
   serializeModel: function(model) {
-    var n = model.get("activity_notification"),
-        widgetEndpoint = n.widget_endpoint;
-    if (n.base_idea) {
-      widgetEndpoint = widgetEndpoint + "&target=" + n.base_idea;
-    }
-    var end_date = model.get("end_date") || model.get("settings").endDate;
-    if (end_date) {
-      n.end_date_moment = Moment(end_date).fromNow();
-    } else {
-      n.end_date_moment = '';
-    }
-
     return {
-      message: i18n.sprintf(i18n.gettext(n.message), n),
-      call_to_action_msg: i18n.sprintf(i18n.gettext(n.call_to_action_msg), n),
-      widget_endpoint: widgetEndpoint,
-      call_to_action_class: n.call_to_action_class,
+      model: model,
+      message: model.getDescriptionText(Widget.Model.prototype.INFO_BAR),
+      call_to_action_msg: model.getLinkText(Widget.Model.prototype.INFO_BAR),
+      widget_endpoint: model.getUrlForUser(Widget.Model.prototype.INFO_BAR),
+      call_to_action_class: model.getCssClasses(Widget.Model.prototype.INFO_BAR),
       locale: Ctx.getLocale()
     };
   },

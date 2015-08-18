@@ -12,6 +12,7 @@ var Assembl = require('../app.js'),
     SegmentList = require('./segmentList.js'),
     Widget = require('../models/widget.js'),
     WidgetLinks = require('./widgetLinks.js'),
+    WidgetButtons = require('./widgetButtons.js'),
     CollectionManager = require('../common/collectionManager.js'),
     AssemblPanel = require('./assemblPanel.js'),
     Marionette = require('../shims/marionette.js'),
@@ -238,7 +239,7 @@ var IdeaPanel = AssemblPanel.extend({
         Widget.Model.prototype.IDEA_PANEL_ACCESS_CTX,
         that.model).then(function(subset) {
           that.widgetsInteraction.show(
-            new WidgetLinks.WidgetLinkListView({collection: subset}));
+            new WidgetButtons.WidgetButtonListView({collection: subset}));
         });
       if (currentUser.can(Permissions.ADMIN_DISCUSSION)) {
         collectionManager.getWidgetsForContextPromise(

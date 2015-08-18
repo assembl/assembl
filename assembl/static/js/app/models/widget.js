@@ -12,7 +12,6 @@ var WidgetModel = Base.Model.extend({
 
   defaults: {
     "base_idea": null,
-    "activity_notification": null,
     "start_date": null,
     "end_date": null,
     "activity_state": "active",
@@ -45,13 +44,26 @@ var WidgetModel = Base.Model.extend({
     return false;
   },
 
+  findLink: function(idea) {
+    var id = this.getId(),
+        links = idea.get("widget_links");
+    links = _.filter(links, function(link) {
+      return link.widget == id;
+    });
+    if (links.length > 0) {
+      return links[0]["@type"];
+    }
+  },
+
   isRelevantFor: function(context, idea) {
     if (idea === null) {
       return this.isRelevantForLink(null, context, null);
     }
-    var that = this, widgetLinks = idea.get("widget_links", []);
+    var that = this, id=this.getId(),
+        widgetLinks = idea.get("widget_links", []);
     widgetLinks = _.filter(widgetLinks, function(link) {
-      return that.isRelevantForLink(link["@type"], context, idea);
+      return link.widget == id &&
+             that.isRelevantForLink(link["@type"], context, idea);
     });
     return widgetLinks.length > 0;
   },
@@ -80,6 +92,18 @@ var WidgetModel = Base.Model.extend({
   getUrlForUser: function(targetIdeaId, page) {
     // Is it the same as widget.get("ui_endpoint")?
     console.error("Widget.getUrlForUser: wrong type");
+  },
+
+  getCssClasses: function(context, idea) {
+    return "";
+  },
+
+  getLinkText: function(context, idea) {
+    return "";
+  },
+
+  getDescriptionText: function(context, idea) {
+    return "";
   },
 
   getUrl: function(context, targetIdeaId, page) {
@@ -128,7 +152,8 @@ var VotingWidgetModel = WidgetModel.extend({
   getUrlForUser: function(targetIdeaId, page) {
     var uri = this.getId(), locale = Ctx.getLocale(),
         activityState = this.get("activity_state"),
-        base = this.baseUri + "?config=" + uri + "&locale=" + locale;
+        base = this.baseUri + "?config=" + encodeURIComponent(uri)
+          + "&locale=" + locale;
     if (activityState == "ended") {
       base += "&page=results";
     }
@@ -140,29 +165,74 @@ var VotingWidgetModel = WidgetModel.extend({
 
   getLinkText: function(context, idea) {
     var locale = Ctx.getLocale(),
-        activityState = this.get("activity_state");
+        activityState = this.get("activity_state"),
+        endDate = this.get("end_date");
     switch (context) {
       case this.IDEA_PANEL_CREATE_CTX:
-        return i18n.gettext("Create a voting widget on this idea");
+        return i18n.gettext("Create a voting session on this idea");
       case this.INFO_BAR:
-        if (activityState === "active" && !this.get("closeInfobar")) {
-          var n = this.get("activity_notification");
-          return i18n.sprintf(i18n.gettext(n.call_to_action_msg), n);
-        }
-        break;
+        return i18n.gettext("Vote");
       case this.IDEA_PANEL_ACCESS_CTX:
         switch (activityState) {
           case "active":
-            return i18n.gettext("Vote on these ideas");
+            return i18n.gettext("Vote");
           case "ended":
-            return i18n.gettext("See results from the vote of ") + Moment(this.get("end_date")).fromNow();
+            return i18n.gettext("See the vote results");
         }
       case this.IDEA_PANEL_CONFIGURE_CTX:
           return i18n.gettext("Configure this vote widget");
       case this.VOTE_REPORTS:
           if (activityState == "ended") {
-            return i18n.gettext("See results from the vote of ") + Moment(this.get("end_date")).fromNow();
+            return i18n.gettext("See results from the vote of ") + Moment(endDate).fromNow();
           }
+    }
+    return "";
+  },
+
+  getCssClasses: function(context, idea) {
+    switch (context) {
+      case this.INFO_BAR:
+        return "js_openVote";
+      case this.IDEA_PANEL_ACCESS_CTX:
+        switch (this.get("activity_state")) {
+          case "active":
+            return "btn-primary";
+          case "ended":
+            return "btn-secondary";
+        }
+    }
+    return "";
+  },
+
+  getDescriptionText: function(context, idea) {
+    var locale = Ctx.getLocale(),
+        activityState = this.get("activity_state"),
+        endDate = this.get("end_date");
+    switch (context) {
+      case this.INFO_BAR:
+        var message = i18n.gettext("A vote session is ongoing");
+        if (endDate) {
+          message += i18n.sprintf(i18n.gettext("; You have %s to vote"), Moment(endDate).fromNow(true));
+        }
+        return message;
+      case this.IDEA_PANEL_ACCESS_CTX:
+        var link = this.findLink(idea) || "";
+        switch (link + "_" + activityState) {
+          case "VotedIdeaWidgetLink_active":
+          case "VotableIdeaWidgetLink_active":
+            return i18n.sprintf(i18n.gettext("The option “%s” is being considered in a vote"), idea.get('shortTitle'));
+          case "VotedIdeaWidgetLink_ended":
+          case "VotableIdeaWidgetLink_ended":
+            return i18n.sprintf(i18n.gettext("The option “%s” was considered in a vote"), idea.get('shortTitle'));
+          case "BaseIdeaWidgetLink_active":
+            return i18n.gettext("A voting session is ongoing on this issue");
+          case "BaseIdeaWidgetLink_ended":
+            return i18n.gettext("A voting session has happened on this issue");
+          case "VotingCriterionWidgetLink_active":
+            return i18n.sprintf(i18n.gettext("“%s” is being used as a criterion in a vote"), idea.get('shortTitle'));
+          case "VotingCriterionWidgetLink_ended":
+            return i18n.sprintf(i18n.gettext("“%s” was used as a criterion in a vote"), idea.get('shortTitle'));
+        }
     }
     return "";
   },
@@ -172,11 +242,11 @@ var VotingWidgetModel = WidgetModel.extend({
     var activityState = this.get("activity_state");
     switch (context) {
       case this.INFO_BAR:
-        return (activityState === "active" && !this.get("closeInfobar") && this.get("activity_notification"));
+        return (activityState === "active" && !this.get("closeInfobar")
+          && this.get("settings", {}).show_infobar !== false);
       case this.IDEA_PANEL_ACCESS_CTX:
         // assume non-root idea, relevant widget type
-        return (linkType === "VotableIdeaWidgetLink"
-             && activityState === "active");
+        return true;
       case this.IDEA_PANEL_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type
         // Should we add config on votable?
@@ -213,7 +283,9 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
 
   getUrlForUser: function(targetIdeaId, page) {
     var base = this.baseUri, uri = this.getId(), locale = Ctx.getLocale();
-    return base + "?locale=" + locale + "#/home?config=" + uri;
+    targetIdeaId = targetIdeaId || self.get("base_idea", {})["@id"];
+    return base + "?locale=" + locale + "#/home?config=" + encodeURIComponent(uri)
+      + "&target="+encodeURIComponent(targetIdeaId);
   },
 
   getLinkText: function(context, idea) {
@@ -223,17 +295,50 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_CREATE_CTX:
         return i18n.gettext('Create a creativity session on this idea');
       case this.INFO_BAR:
-        if (activityState == "active" && !this.get("closeInfobar")) {
-          var n = this.get("activity_notification");
-          return i18n.sprintf(i18n.gettext(n.call_to_action_msg), n);
-        }
-        break;
+        return i18n.gettext("Participate");
       case this.IDEA_PANEL_CONFIGURE_CTX:
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type
         return i18n.gettext("Configure the creativity session on this idea");
       case this.IDEA_PANEL_ACCESS_CTX:
-        return i18n.gettext("Access to creativity session on this idea");
+        return i18n.gettext("Join the creativity session on this idea");
+    }
+    return "";
+  },
+
+  getCssClasses: function(context, idea) {
+    switch (context) {
+      case this.INFO_BAR:
+        return "js_openTargetInModal";
+      case this.IDEA_PANEL_ACCESS_CTX:
+        switch (this.get("activity_state")) {
+          case "active":
+            return "btn-primary";
+          case "ended":
+            return "btn-secondary";
+        }
+    }
+    return "";
+  },
+
+  getDescriptionText: function(context, idea) {
+    var locale = Ctx.getLocale(),
+        activityState = this.get("activity_state"),
+        endDate = this.get("end_date");
+    switch (context) {
+      case this.INFO_BAR:
+        var message = i18n.gettext("A creativity session is ongoing");
+        if (endDate) {
+          message += i18n.sprintf(i18n.gettext("; You have %s to participate"), Moment(endDate).fromNow(true));
+        }
+        return message;
+      case this.IDEA_PANEL_ACCESS_CTX:
+        switch (activityState) {
+          case "active":
+            return i18n.gettext("A creativity session is ongoing on this issue");
+          case "ended":
+            return i18n.gettext("A creativity session has happened on this issue");
+        }
     }
     return "";
   },
@@ -243,7 +348,8 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
     var activityState = this.get("activity_state");
     switch (context) {
       case this.INFO_BAR:
-        return (activityState == "active" && !this.get("closeInfobar") && this.get("activity_notification"));
+        return (activityState === "active" && !this.get("closeInfobar")
+          && this.get("settings", {}).show_infobar !== false);
       case this.IDEA_PANEL_CONFIGURE_CTX:
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type
@@ -283,10 +389,12 @@ var InspirationWidgetModel = WidgetModel.extend({
   },
 
   getUrlForUser: function(targetIdeaId, page) {
-    var base = this.baseUri, uri = this.getId(), locale = Ctx.getLocale();
-    return base + "?config=" + Ctx.getUrlFromUri(uri)
-      + "&target=" + encodeURIComponent(targetIdeaId)
-      + "&locale=" + locale;
+    var id = this.getId(), locale = Ctx.getLocale(),
+        url = this.baseUri + "?config=" + encodeURIComponent(Ctx.getUrlFromUri(id)) + "&locale=" + locale;
+    if (targetIdeaId !== undefined) {
+      url += "&target=" + encodeURIComponent(targetIdeaId);
+    }
+    return url;
   },
 
   getLinkText: function(context, idea) {
@@ -296,7 +404,7 @@ var InspirationWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_CREATE_CTX:
         return i18n.gettext("Create an inspiration module on this idea");
       case this.DISCUSSION_MENU_CREATE_CTX:
-        return i18n.gettext("Create an inspiration module on this idea");
+        return i18n.gettext("Create an inspiration module on this discussion");
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         return i18n.gettext("Configure the inspiration module associated to the discussion");
       case this.IDEA_PANEL_CONFIGURE_CTX:

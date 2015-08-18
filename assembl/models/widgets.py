@@ -181,9 +181,6 @@ class Widget(DiscussionBoundBase):
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
-    def activity_notification(self):
-        return None
-
     def notification_data(self, notification_setting_data):
         pass
 
@@ -694,26 +691,13 @@ class CreativitySessionWidget(IdeaCreatingWidget):
                     Widget.id == self.id)))
         return len(participant_ids)
 
+    def get_num_ideas(self):
+        return len(self.generated_idea_links)
+
     def get_add_post_endpoint(self, idea):
         return 'local:Discussion/%d/widgets/%d/base_idea/-/children/%d/widgetposts' % (
             self.discussion_id, self.id, idea.id)
 
-    def activity_notification(self):
-        settings = self.settings_json
-        if self.is_active() and settings.get('show_infobar', True):
-            return {
-                "message": settings.get("infobar_message", 
-                    "A creativity session is ongoing; You have until %(end_date_moment)s to join"),
-                "call_to_action_msg": settings.get(
-                    "infobar_action_message", "Join the session"),
-                "call_to_action_class": "js_openTargetInModal",
-                "base_idea": self.base_idea.uri() if self.base_idea else None,
-                "widget_type": self.external_typename(),
-                "widget_endpoint": self.get_ui_endpoint(),
-                "num_participants": self.num_participants(),
-                "num_ideas": len(self.generated_idea_links),
-                "end_date": self.end_date.isoformat() if self.end_date else None
-            }
 
 class MultiCriterionVotingWidget(Widget):
     default_view = 'voting_widget'
@@ -922,24 +906,6 @@ class MultiCriterionVotingWidget(Widget):
 
         return {'criteria': CriterionCollection(cls),
                 'targets': VotableCollection(cls)}
-
-    def activity_notification(self):
-        settings = self.settings_json
-        if self.is_active() and settings.get('show_infobar', True):
-            default_message = "A vote session is ongoing"
-            if self.end_date:
-                default_message += "; You have until %(end_date_moment)s to vote"
-            return {
-                "message": settings.get("infobar_message", default_message),
-                "call_to_action_msg": settings.get(
-                    "infobar_action_message", "Vote"),
-                "call_to_action_class": "js_openVote",
-                "widget_type": self.external_typename(),
-                "widget_endpoint": self.get_ui_endpoint(),
-                # "num_participants": self.num_participants(),
-                "num_votables": len(self.votable_idea_links),
-                "end_date": self.end_date.isoformat() if self.end_date else None
-            }
 
     # @property
     # def criteria(self):

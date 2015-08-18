@@ -285,7 +285,6 @@
         "user_states_url": "&get_user_states_url",
         "user_state_url": "&get_user_state_url",
         "widget_settings_url": "&get_settings_url",
-        "activity_notification": "&activity_notification",
         "widget_state_url": "&get_state_url"
     },
     "BaseIdeaWidget": {

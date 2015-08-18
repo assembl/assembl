@@ -401,7 +401,6 @@
         "end_date": true,
         "activity_state": true,
         "ui_endpoint": "&get_ui_endpoint",
-        "activity_notification": "&activity_notification",
         "user_states_url": "&get_user_states_url",
         "user_state_url": "&get_user_state_url",
         "widget_settings_url": "&get_settings_url",
