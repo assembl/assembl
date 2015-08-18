@@ -368,7 +368,8 @@
         "settings": "settings_json",
         "voting_urls": "&get_voting_urls",
         "results_url": "&get_vote_results_url",
-        "vote_class": "&get_vote_classname"
+        "vote_class": "&get_vote_classname",
+        "my_votes": "&votes_of_current_user:partial"
     },
     "LickertVoteSpecification": {
         "@extends": "AbstractVoteSpecification",

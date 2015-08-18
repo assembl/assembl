@@ -110,6 +110,14 @@ def get_current_discussion():
     return discussion_from_request(r)
 
 
+def get_current_user_id():
+    from pyramid.threadlocal import get_current_request
+    r = get_current_request()
+    # CAN ONLY BE CALLED IF THERE IS A CURRENT REQUEST.
+    assert r
+    return authenticated_userid(r)
+
+
 def authentication_callback(user_id, request):
     "This is how pyramid knows the user's permissions"
     connection = User.default_db.connection()

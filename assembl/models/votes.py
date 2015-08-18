@@ -98,6 +98,17 @@ class AbstractVoteSpecification(DiscussionBoundBase):
             for (votable_id, voting_results) in by_idea.iteritems()
         }
 
+    def votes_of_current_user(self):
+        "CAN ONLY BE CALLED FROM API V2"
+        from ..auth.util import get_current_user_id
+        user_id = get_current_user_id()
+        if user_id is not None:
+            return self.votes_of(user_id)
+
+    def votes_of(self, user_id):
+        return self.db.query(AbstractIdeaVote).filter_by(
+            vote_spec_id=self.id, tombstone_date=None, voter_id=user_id).all()
+
     @classmethod
     def extra_collections(cls):
         from .widgets import (VotedIdeaWidgetLink)
