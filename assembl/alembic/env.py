@@ -9,6 +9,7 @@ from pyramid.paster import bootstrap
 from assembl.lib.sqla import (
     get_session_maker, configure_engine, get_metadata)
 from assembl.lib.zmqlib import configure_zmq
+from assembl.lib.config import set_config
 from assembl.semantic import upgrade_semantic_mapping
 
 # this is the Alembic Config object, which provides
@@ -19,6 +20,7 @@ config = context.config
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
 
+set_config(config.file_config._sections['app:assembl'])
 pyramid_env = bootstrap(config.config_file_name)
 configure_zmq(pyramid_env['registry'].settings['changes.socket'], False)
 
