@@ -297,14 +297,14 @@
     },
     "IdeaCreatingWidget": {
         "@extends": "BaseIdeaWidget",
-        "num_participants": "&num_participants",
         "num_ideas": "&get_num_ideas",
         "ideas_hiding_url": "&get_ideas_hiding_url",
         "confirm_ideas_url": "&get_confirm_ideas_url",
         "confirm_messages_url": "&get_confirm_messages_url"
     },
     "CreativitySessionWidget": {
-        "@extends": "IdeaCreatingWidget"
+        "@extends": "IdeaCreatingWidget",
+        "num_participants": "&num_participants"
     },
     "InspirationWidget": {
         "@extends": "IdeaCreatingWidget"
