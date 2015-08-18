@@ -2,8 +2,6 @@
 
 var _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
-    // CollectionManager = require('..common/CollectionManager.js'),
-    // Ctx = require('../common/context.js'),
     Wrapper = require('./abstract.js');
 
 var Piwik = function(){
@@ -14,11 +12,16 @@ Piwik.prototype = Object.create(Wrapper.prototype);
 Piwik.prototype.constructor = Piwik;
 Piwik.prototype = {
   _invoke: function(methodName, args){
-    if (this.usePaq) {
-      this.engine.push([method].concat(args));
+    if (typeof methodName !== 'string') {
+      throw new Error('The function name was not of type string');
     }
     else {
-      this.engine[method].apply(this, args);
+      if (this.usePaq) {
+        this.engine.push([methodName].concat(args));
+      }
+      else {
+        this.engine[methodName].apply(this, args);
+      }
     }
   },
 
@@ -28,20 +31,32 @@ Piwik.prototype = {
 
   initialize: function(options){
     this.engine = options.engine;
+    this.userId = options.userId;
     if ($.isArray(this.engine)) {
       this.usePaq = true;
     }
     else {
       this.usePaq = false;
     }
-    this.setUserId();
+    this.setUserId(userId);
   },
 
   setUserId: function(userId){
     if (userId) {
       this._invoke('setUserId', [userId]);
-      this.commit();
     }
+  },
+  trackEvent: function(eventName, options){
+    var category = options.category,
+        action = options.action,
+        value = options.value || null;
+
+    this._invoke('trackEvent', [category, action, eventName, value]);
+  },
+
+  trackGoal: function(goalId, options){
+    var customRevenue = options.customRevenue || null;
+    this._invoke('trackGoal', [goalId, customRevenue]);
   }
 
 

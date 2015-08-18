@@ -71,7 +71,7 @@ Wrapper.prototype = {
     throw new Error('Cannot call abstract method!');
   },
 
-  trackGoal: function(){
+  trackGoal: function(goalId, options){
     throw new Error('Cannot call abstract method!');
   },
 

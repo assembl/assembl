@@ -23,14 +23,23 @@ AnalyticsDispatcher.prototype = {
     delete this._observers.indexOf(observer); //empty slot
   },
 
-  notify: function(methodName, args){
+  notify: function(methodName, args, check_cb){
     _.each(this._observers, function(observer){
       try {
-        console.log('Invoking method ' + methodName + 'and arguements ' + args + 'on observer' + observer);
-        observer[methodName].apply(this, args);
+        if (check_cb !== 'undefined') {
+          if (check_cb(observer)) {
+            console.log('Invoking method ' + methodName + 'and arguements ' + args + 'on observer' + observer);
+            observer[methodName].apply(this, args);    
+          }
+        }
+        else {
+          console.log('Invoking method ' + methodName + 'and arguements ' + args + 'on observer' + observer);
+          observer[methodName].apply(this, args);
+        }
       }
       catch(e) {
-        ;
+        console.error(e);
+        return;
       }
     });
   },
@@ -69,8 +78,16 @@ AnalyticsDispatcher.prototype = {
     this.notify('trackDomElement', arguements);
   },
 
-  trackGoal: function(){
-    this.notify('trackGoal', arguements);
+  trackGoal: function(goalId, options){
+    this.notify('trackGoal', arguements, function(observer){
+      // To add more checks for other Observer types, must update this check_cb
+      if (observer.constructor.name === 'Piwik') {
+        if _.has(globalAnalytics.piwik.goals, goalId){
+          return true;
+        }
+        else { return false; }
+      }
+    });
   },
 
   createNewVisit: function(){
@@ -94,11 +111,11 @@ module.exports = {
   Analytics: function(){
     if (!_analytics){
       _analytics = new AnalyticsDispatcher();
-      if (_.has(window.globalAnalytics, 'piwik') && globalAnalytics.piwik) {
+      if (_.has(window.globalAnalytics, 'piwik') && globalAnalytics.piwik.isActive) {
         var p = new Piwik();
         _analytics.registerObserver(p);
       }
-      else if (_.has(globalAnalytics, 'google') && globalAnalytics.google) {
+      else if (_.has(globalAnalytics, 'google') && globalAnalytics.google.isActive) {
         var g = null; //Where Google Analytics would go
         _analytics.registerObserver(g);
       }
