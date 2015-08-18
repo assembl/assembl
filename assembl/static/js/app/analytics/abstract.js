@@ -1,13 +1,27 @@
 'use strict';
 
 var _EVENT_DEFINITIONS = {
-  LOGIN_SUCCESS: 'LOGIN_SUCCESS',
-  LOGIN_FAILED: 'LOGIN_FAILED',
-  JOIN_GROUP:'JOIN_GROUP',
-  JOIN_GROUP_REFUSED: 'JOIN_GROUP_REFUSED',
-  NAVIGATE_IDEA: 'NAVIGATE_IDEA',
-  REPLY_MESSAGE_START: 'REPLY_MESSAGE_START',
-  REPLY_MESSAGE_COMPLETE: 'REPLY_MESSAGE_COMPLETE' 
+    LOGIN_SUCCESS: 'LOGIN_SUCCESS',
+    LOGIN_FAILED: 'LOGIN_FAILED',
+    JOIN_GROUP:'JOIN_GROUP',
+    JOIN_GROUP_REFUSED: 'JOIN_GROUP_REFUSED',
+    NAVIGATE_IDEA: 'NAVIGATE_IDEA',
+    REPLY_MESSAGE_START: 'REPLY_MESSAGE_START',
+    REPLY_MESSAGE_COMPLETE: 'REPLY_MESSAGE_COMPLETE'
+};
+
+/*
+  TODO: Update category registry with well defined Categories
+ */
+var _CATEGORY_DEFINITIONS = {};
+
+/*
+  TODO: Update actions registry with well defined Actions to track
+ */
+var _ACTION_DEFINITIONS = {
+  CLICK: 'CLICK',
+  READ: 'READ',
+  WRITE: 'WRITE'
 };
 
 var _PAGE_DEFINITIONS = {
@@ -25,6 +39,8 @@ function Wrapper() {
 Wrapper.prototype = {
   debug: true,
   events: _EVENT_DEFINITIONS,
+  actions: _ACTION_DEFINITIONS,
+  categories: _CATEGORY_DEFINITIONS,
   pages: _PAGE_DEFINITIONS,
 
   initialize: function(options){
@@ -52,7 +68,7 @@ Wrapper.prototype = {
     throw new Error('Cannot call abstract method!');
   },
 
-  trackEvent: function(eventName, options) {
+  trackEvent: function(category, action, eventName, value, options) {
     throw new Error('Cannot call abstract method!');
   },
 

@@ -6,7 +6,8 @@ var Backbone = require('../shims/backbone.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js'),
-    PanelSpecTypes = require('../utils/panelSpecTypes.js');
+    PanelSpecTypes = require('../utils/panelSpecTypes.js'),
+    Analytics = require('../analytics/dispatcher.js');
 
 var IdeaView = Backbone.View.extend({
   /**
@@ -204,6 +205,13 @@ var IdeaView = Backbone.View.extend({
    */
   onTitleClick: function(e) {
       e.stopPropagation();
+      var analytics = Analytics.getInstance();
+      console.log('Tracking event on idea ', this.model.getShortTitleDisplayText())
+      analytics.trackEvent(
+        analytics.events.NAVIGATE_IDEA,
+        analytics.actions.CLICK,
+        analytics.events.NAVIGATE_IDEA
+      );      
       this.doIdeaChange(null);
       if (Ctx.getCurrentUserId()) {
         // tell the backend that the idea was read

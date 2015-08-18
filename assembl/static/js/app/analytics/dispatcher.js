@@ -72,7 +72,7 @@ _.extend(AnalyticsDispatcher.prototype, {
     this.notify('changeCurrentPage', arguments);
   },
 
-  trackEvent: function(eventName, options) {
+  trackEvent: function(category, action, eventName, value, options) {
     if (!(eventName in this.events)) {
       throw new Exception("Unknown event type");
     }

@@ -31,10 +31,6 @@ _.extend(Piwik.prototype, {
     }
   },
 
-  commit: function(){
-    this._invoke('changeCurrentPage');
-  },
-
   initialize: function(options){
     this.engine = options.engine;
     this.userId = options.userId;
@@ -50,12 +46,11 @@ _.extend(Piwik.prototype, {
     if (userId) {
       this._invoke('setUserId', [userId]);
     }
+    else {
+      throw new Error('Cannot set user ID without an actual ID');
+    }
   }, 
-  trackEvent: function(eventName, options){
-    var category = options.category,
-        action = options.action,
-        value = options.value || null;
-
+  trackEvent: function(category, action, eventName, value, options){
     this._invoke('trackEvent', [category, action, eventName, value]);
   },
 
