@@ -9,7 +9,12 @@ _settings = None
 def set_config(settings):
     """ Set the settings object. """
     global _settings
-    _settings = settings
+    if _settings:
+        # Re-initializing settings fails. Patch.
+        print "initialized twice:", settings
+        print "keeping:", _settings
+    else:
+        _settings = settings
 
 
 def get_config():
