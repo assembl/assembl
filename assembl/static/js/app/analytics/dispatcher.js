@@ -28,26 +28,27 @@ _.extend(AnalyticsDispatcher.prototype, {
   },
 
   notify: function(methodName, args, check_cb){
+    var that = this,
+        check_cb = check_cb, 
+        args = args;
+
     if(this.debug) {
-      console.log("dispatching " + methodName + " on " + this._observers.length + " observer(s) with:", args);
+      console.log("dispatching " + methodName + " on " + this._observers.length + " observer(s) with argument(s):", args);
     }
+
     _.each(this._observers, function(observer){
-      try {
-        if (check_cb !== 'undefined') {
-          if (check_cb(observer)) {
-            console.log('Invoking method ' + methodName + 'and arguments ' + args + 'on observer' + observer);
-            observer[methodName].apply(this, args);    
-          }
-        }
-        else {
-          console.log('Invoking method ' + methodName + 'and arguments ' + args + 'on observer' + observer);
-          observer[methodName].apply(this, args);
+      if (check_cb !== undefined) {
+        if (!check_cb(observer)) {
+          return;
         }
       }
-      catch(e) {
-        console.error(e);
-        return;
+      if(observer.debug) {
+        console.log('Invoking method ' + methodName + ' with argument(s)', args, 'on observer', observer);
       }
+      if(observer[methodName]===undefined) {
+        throw new Error('Method ' + methodName + ' does not exist');
+      }
+      observer[methodName].apply(observer, args);
     });
   },
 
@@ -65,10 +66,16 @@ _.extend(AnalyticsDispatcher.prototype, {
   },
 
   changeCurrentPage: function(page, options) {
+    if (!(page in this.pages)) {
+      throw new Error("Unknown page definition");
+    }
     this.notify('changeCurrentPage', arguments);
   },
 
   trackEvent: function(eventName, options) {
+    if (!(eventName in this.events)) {
+      throw new Exception("Unknown event type");
+    }
     this.notify('trackEvent', arguments);
   },
 

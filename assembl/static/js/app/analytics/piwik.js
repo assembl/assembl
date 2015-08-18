@@ -10,7 +10,7 @@ var Piwik = function(){
 
 Piwik.prototype = Object.create(Wrapper.prototype);
 Piwik.prototype.constructor = Piwik;
-Piwik.prototype = {
+_.extend(Piwik.prototype, {
   _invoke: function(methodName, args){
     if (typeof methodName !== 'string') {
       throw new Error('The function name was not of type string');
@@ -20,6 +20,9 @@ Piwik.prototype = {
         this.engine.push([methodName].concat(args));
       }
       else {
+        if(this.engine[methodName]===undefined) {
+          throw new Error('Method ' + methodName + ' does not exist');
+        }
         this.engine[methodName].apply(this, args);
       }
     }
@@ -38,7 +41,6 @@ Piwik.prototype = {
     else {
       this.usePaq = false;
     }
-    this.setUserId(userId);
   },
 
   setUserId: function(userId){
@@ -60,11 +62,9 @@ Piwik.prototype = {
   },
 
   changeCurrentPage: function(page, options){
+    console.log(this);
     this._invoke('setCustomUrl', [page]);
   }
-
-
-
-};
+});
 
 module.exports = Piwik;
