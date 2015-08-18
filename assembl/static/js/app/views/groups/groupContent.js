@@ -6,7 +6,8 @@ var Marionette = require('../../shims/marionette.js'),
     panelSpec = require('../../models/panelSpec.js'),
     AssemblPanel = require('../assemblPanel.js'),
     PanelWrapper = require('./panelWrapper.js'),
-    PanelSpecTypes = require('../../utils/panelSpecTypes.js');
+    PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
+    Analytics = require('../../analytics/dispatcher.js');
 
 /** Represents the entire content of a single panel group */
 var groupContent = Marionette.CompositeView.extend({
@@ -246,6 +247,7 @@ var groupContent = Marionette.CompositeView.extend({
       this.groupContainer.suspendResize();
       this.model.set('navigationState', 'about');
       this.ensureOnlyPanelsVisible(PanelSpecTypes.DISCUSSION_CONTEXT);
+      Analytics.changeCurrentPage(Analytics.pages['CONTEXT/-']);
       this.groupContainer.resumeResize();
     }
   },

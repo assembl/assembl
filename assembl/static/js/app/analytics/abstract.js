@@ -1,15 +1,18 @@
 'use strict';
 
-var _e = {
-  'login_success': 'login_success',
-  'login_failed': 'login_failed',
-  'join_group': 'join_group',
-  'join_group_refused': 'join_group_refused',
-  'navigate_idea': 'navigate_idea',
-  'reply_message_start': 'reply_message_start',
-  'reply_message_complete': 'reply_message_complete' 
+var _EVENT_DEFINITIONS = {
+  LOGIN_SUCCESS: 'LOGIN_SUCCESS',
+  LOGIN_FAILED: 'LOGIN_FAILED',
+  JOIN_GROUP:'JOIN_GROUP',
+  JOIN_GROUP_REFUSED: 'JOIN_GROUP_REFUSED',
+  NAVIGATE_IDEA: 'NAVIGATE_IDEA',
+  REPLY_MESSAGE_START: 'REPLY_MESSAGE_START',
+  REPLY_MESSAGE_COMPLETE: 'REPLY_MESSAGE_COMPLETE' 
 };
 
+var _ANALYTICS_PAGE_DEFS = {
+  'CONTEXT/-': 'CONTEXT/-'
+}
 /**
  * Abstract Base Class for Analytics Wrapper 
  */
@@ -17,12 +20,13 @@ function Wrapper() {
   if (this.constructor === Wrapper){
     throw new Error("Abstract class cannot be constructed!");
   }
-  this.events = _e;
 };
 
 Wrapper.prototype = {
+  events: _EVENT_DEFINITIONS,
+  pages: _PAGE_DEFINITIONS,
 
-  this.initialize = function(options){
+  initialize: function(options){
     throw new Error('Cannot call abstract method!');
   },
 
@@ -34,40 +38,48 @@ Wrapper.prototype = {
   //   throw new Error('Cannot call abstract method!'); 
   // },
 
-  //this should call the updatePageUrl and updateTitle
-  this.trackPageView = function(options) {
+  /**
+   * Change the state of the current page for other events, and log the navigation
+   * to the new page.
+   * 
+   * Concrete implementions should call both piwik's updatePageUrl and updateTitle
+   * (or whatever equivalent in the implementation)
+   * 
+   * @param page One of this.pages
+   */
+  changeCurrentPage: function(page, options) {
     throw new Error('Cannot call abstract method!');
   },
 
-  this.trackEvent = function(eventName, options) {
+  trackEvent: function(eventName, options) {
     throw new Error('Cannot call abstract method!');
   },
 
-  this.setCustomVariable = function(name, value, options){
+  setCustomVariable: function(name, value, options){
     throw new Error('Cannot call abstract method!');
   },
  
-  this.deleteCustomVariable = function(options){
+  deleteCustomVariable: function(options){
     throw new Error('Cannot call abstract method!');
   },
 
-  this.trackLink = function(urlPath, options){
+  trackLink: function(urlPath, options){
     throw new Error('Cannot call abstract method!');
   },
 
-  this.trackDomElement = function(element) {
-    throw new Error('Cannot call abstract method!');
-  }
-
-  this.trackGoal = function(){
+  trackDomElement: function(element) {
     throw new Error('Cannot call abstract method!');
   },
 
-  this.createNewVisit = function(){
+  trackGoal: function(){
     throw new Error('Cannot call abstract method!');
   },
 
-  this.setUserId = function(id) {
+  createNewVisit: function(){
+    throw new Error('Cannot call abstract method!');
+  },
+
+  setUserId: function(id) {
     throw new Error('Cannot call abstract method!');
   }
 };

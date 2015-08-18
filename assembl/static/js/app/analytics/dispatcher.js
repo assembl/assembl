@@ -2,75 +2,82 @@
 
 var _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
-    CollectionManager = require('..common/CollectionManager.js'),
+    CollectionManager = require('../common/collectionManager.js'),
     Wrapper = require('./abstract.js'),
     Piwik = require('./piwik.js');
 
 
 var AnalyticsDispatcher = function(){
   Wrapper.call(this, arguements); 
-  var this._observers = [];
-}
+  this._observers = [];
+};
 
 AnalyticsDispatcher.prototype = Object.create(Wrapper.prototype);
 AnalyticsDispatcher.prototype.constructor = AnalyticsDispatcher;
 AnalyticsDispatcher.prototype = {
-  this.registerObserver = function(observer){
+  registerObserver: function(observer) {
     this._observers.push(observer);
-  }
-  this.removeObserver = function(observer){
+  },
+
+  removeObserver: function(observer){
     delete this._observers.indexOf(observer); //empty slot
   },
-  this.notify = function(methodName, args){
+
+  notify: function(methodName, args){
     _.each(this._observers, function(observer){
       try {
         console.log('Invoking method ' + methodName + 'and arguements ' + args + 'on observer' + observer);
         observer[methodName].apply(this, args);
       }
+      catch(e) {
+        ;
+      }
     });
   },
-  this.get = function(index) {
-    if index >= 0 && index > (this._observers.length -1 ) {
+
+  getObserver: function(index) {
+    if (index >= 0 && index > (this._observers.length -1 )) {
       return this._observers[index]
     }
   },
-  this.initialize = function(options){
+
+  initialize: function(options){
     this.notify('initialize', arguements);
   },
 
-  this.trackPageView = function(options) {
-    this.notify('trackPageView', arguements);
+  changeCurrentPage: function(page, options) {
+    this.notify('changeCurrentPage', arguements);
   },
 
-  this.trackEvent = function(eventName, options) {
+  trackEvent: function(eventName, options) {
     this.notify('trackEvent', arguements);
   },
 
-  this.setCustomVariable = function(name, value, options){
+  setCustomVariable: function(name, value, options){
     this.notify('setCustomVariable', arguements);
   },
  
-  this.deleteCustomVariable = function(options){
+  deleteCustomVariable: function(options){
     this.notify('deleteCustomVariable', arguements);
   },
 
-  this.trackLink = function(urlPath, options){
+  trackLink: function(urlPath, options){
     this.notify('trackEvent', arguements);
   },
 
-  this.trackDomElement = function(element) {
+  trackDomElement: function(element) {
     this.notify('trackDomElement', arguements);
-  }
+  },
 
-  this.trackGoal = function(){
+  trackGoal: function(){
     this.notify('trackGoal', arguements);
   },
 
-  this.createNewVisit = function(){
+  createNewVisit: function(){
     this.notify('createNewVisit', []);
   },
 
-  this.setUserId = function(id) {
+  setUserId: function(id) {
     this.notify('setUserId', [id]);
   }
 
@@ -81,14 +88,17 @@ AnalyticsDispatcher.prototype = {
 var _analytics;
 
 module.exports = {
-  Factory: function(){
+  /** A factory returning a completely setup singleton of a concrete analytics 
+   * object.
+   */
+  Analytics: function(){
     if (!_analytics){
-      _analytics = = new AnalyticsDispatcher();
-      if _.has(window.globalAnalytics, 'piwik') && globalAnalytics.piwik {
+      _analytics = new AnalyticsDispatcher();
+      if (_.has(window.globalAnalytics, 'piwik') && globalAnalytics.piwik) {
         var p = new Piwik();
         _analytics.registerObserver(p);
       }
-      else if _.has(globalAnalytics, 'google') && globalAnalytics.google {
+      else if (_.has(globalAnalytics, 'google') && globalAnalytics.google) {
         var g = null; //Where Google Analytics would go
         _analytics.registerObserver(g);
       }
