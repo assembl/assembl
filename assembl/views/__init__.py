@@ -76,6 +76,10 @@ def get_default_context(request):
     else:
         web_analytics_piwik_script = False
 
+    web_analytics_piwik_custom_variable_size = config.get('web_analytics_piwik_custom_variable_size')
+    if not web_analytics_piwik_custom_variable_size:
+        web_analytics_piwik_custom_variable_size = 5
+
     help_url = config.get('help_url') or ''
     if discussion and discussion.help_url:
         help_url = discussion.help_url
@@ -144,6 +148,7 @@ def get_default_context(request):
         theme=get_theme(discussion),
         minified_js=config.get('minified_js') or False,
         web_analytics_piwik_script=web_analytics_piwik_script,
+        web_analytics_piwik_custom_variable_size = web_analytics_piwik_custom_variable_size,
         help_url=help_url,
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
         raven_url=config.get('raven_url') or '',

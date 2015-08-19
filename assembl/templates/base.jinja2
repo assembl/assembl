@@ -52,8 +52,10 @@
     {% if web_analytics_piwik_script %}
         {{ web_analytics_piwik_script|safe }}
         <script type="text/javascript">
-            globalAnalytics.piwik = {};
-            globalAnalytics.piwik.isActive = true;
+            globalAnalytics.piwik = {
+                isActive: true,
+                customVariableSize: {{ web_analytics_piwik_custom_variable_size }} 
+            };
             //Should add goals defined in ini files here as well. 
         </script>
     {% endif %}
