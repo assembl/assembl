@@ -18,6 +18,7 @@ var WidgetModel = Base.Model.extend({
     "discussion": null,
     "settings": null,
     "ui_endpoint": null,
+    "vote_specifications": null,
     "@id": null,
     "@type": null,
     "@view": null
@@ -175,7 +176,19 @@ var VotingWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_ACCESS_CTX:
         switch (activityState) {
           case "active":
-            return i18n.gettext("Vote");
+            var voteSpecs = this.get("vote_specifications");
+            var voteCounts = _.map(voteSpecs, function(vs) {
+              return (vs.my_votes || []).length;
+            });
+            var minVoteCount = _.min(voteCounts);
+            var maxVoteCount = _.max(voteCounts);
+            if (maxVoteCount == 0) {
+              return i18n.gettext("Vote");
+            } else if (minVoteCount == this.get("votable_ideas", []).length) {
+              return i18n.gettext("Modify your vote");
+            } else {
+              return i18n.gettext("Complete your vote");
+            }
           case "ended":
             return i18n.gettext("See the vote results");
         }

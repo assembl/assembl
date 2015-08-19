@@ -21,6 +21,23 @@
         "is_first_visit": false,
         "accounts": [":default"]
     },
+    "User": {
+        "@extends": "AgentProfile",
+        "creation_date": true,
+        "last_login": true,
+        "login_failures": false,
+        "password": false,
+        "verified": true,
+        "is_first_visit": true,
+        "was_created_on_current_discussion": true,
+        "permissions": "permissions_for_current_discussion",
+        "username": "username_p"
+    },
+    "UserTemplate": {
+        "@extends": "User",
+        "discussion": true,
+        "for_role": ":"
+    },
     "Action": {
         "when": "creation_date",
         "user": "actor"
@@ -43,23 +60,6 @@
     },
     "ViewIdea": {
         "@extends": "ActionOnIdea"
-    },
-    "User": {
-        "@extends": "AgentProfile",
-        "creation_date": true,
-        "last_login": true,
-        "login_failures": false,
-        "password": false,
-        "verified": true,
-        "is_first_visit": true,
-        "was_created_on_current_discussion": true,
-        "permissions": "permissions_for_current_discussion",
-        "username": "username_p"
-    },
-    "UserTemplate": {
-        "@extends": "User",
-        "discussion": true,
-        "for_role": ":"
     },
     "AbstractAgentAccount": {
         "preferred": true,
@@ -409,7 +409,8 @@
     "BaseIdeaWidget": {
         "@extends": "Widget",
         "ideas_url": "&get_ideas_url",
-        "messages_url": "&get_messages_url"
+        "messages_url": "&get_messages_url",
+        "base_idea": true
     },
     "IdeaCreatingWidget": {
         "@extends": "BaseIdeaWidget",
@@ -425,8 +426,11 @@
     },
     "MultiCriterionVotingWidget": {
         "@extends": "Widget",
+        "criteria_url": true,
         "votespecs_url": true,
-        "criteria_url": true
+        "votables_url": true,
+        "votable_ideas": ":id_only",
+        "vote_specifications": ":"
     },
     "AbstractIdeaVote": {
         "idea": true,
@@ -434,6 +438,7 @@
         "widget": true,
         "value": true,
         "original_uri": true,
+        "vote_spec": true,
         "voter": true
     },
     "BinaryIdeaVote": {
@@ -527,7 +532,10 @@
         "criterion_idea": true,
         "question_id": true,
         "settings": "settings_json",
-        "vote_class": "&get_vote_classname"
+        "voting_urls": "&get_voting_urls",
+        "results_url": "&get_vote_results_url",
+        "vote_class": "&get_vote_classname",
+        "my_votes": "&votes_of_current_user:partial"
     },
     "LickertVoteSpecification": {
         "@extends": "AbstractVoteSpecification",

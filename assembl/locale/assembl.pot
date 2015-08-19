@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-18 20:14-0400\n"
+"POT-Creation-Date: 2015-08-19 17:24-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -179,115 +179,123 @@ msgstr ""
 msgid "Add a conclusion"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:172
+#: assembl/static/js/app/models/widget.js:173
 msgid "Create a voting session on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:174
-#: assembl/static/js/app/models/widget.js:178
+#: assembl/static/js/app/models/widget.js:175
+#: assembl/static/js/app/models/widget.js:186
 msgid "Vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:180
+#: assembl/static/js/app/models/widget.js:188
+msgid "Modify your vote"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:190
+msgid "Complete your vote"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:193
 msgid "See the vote results"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:183
+#: assembl/static/js/app/models/widget.js:196
 msgid "Configure this vote widget"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:186
+#: assembl/static/js/app/models/widget.js:199
 msgid "See results from the vote of "
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:213
+#: assembl/static/js/app/models/widget.js:226
 msgid "A vote session is ongoing."
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:215
+#: assembl/static/js/app/models/widget.js:228
 #, python-format
 msgid "You have %s to vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:223
+#: assembl/static/js/app/models/widget.js:236
 #, python-format
 msgid "The option “%s” is being considered in a vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:226
+#: assembl/static/js/app/models/widget.js:239
 #, python-format
 msgid "The option “%s” was considered in a vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:228
+#: assembl/static/js/app/models/widget.js:241
 msgid "A voting session is ongoing on this issue"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:230
+#: assembl/static/js/app/models/widget.js:243
 msgid "A voting session has happened on this issue"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:232
+#: assembl/static/js/app/models/widget.js:245
 #, python-format
 msgid "“%s” is being used as a criterion in a vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:234
+#: assembl/static/js/app/models/widget.js:247
 #, python-format
 msgid "“%s” was used as a criterion in a vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:296
+#: assembl/static/js/app/models/widget.js:309
 msgid "Create a creativity session on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:298
-#: assembl/static/js/app/models/widget.js:306
+#: assembl/static/js/app/models/widget.js:311
+#: assembl/static/js/app/models/widget.js:319
 msgid "Participate"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:302
+#: assembl/static/js/app/models/widget.js:315
 msgid "Configure the creativity session on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:308
+#: assembl/static/js/app/models/widget.js:321
 msgid "Review the session"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:335
+#: assembl/static/js/app/models/widget.js:348
 msgid "A creativity session is ongoing."
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:337
+#: assembl/static/js/app/models/widget.js:350
 #, python-format
 msgid "You have %s to participate"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:343
+#: assembl/static/js/app/models/widget.js:356
 msgid "A creativity session is ongoing on this issue"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:345
+#: assembl/static/js/app/models/widget.js:358
 msgid "A creativity session has happened on this issue"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:410
+#: assembl/static/js/app/models/widget.js:423
 msgid "Create an inspiration module on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:412
+#: assembl/static/js/app/models/widget.js:425
 msgid "Create an inspiration module on this discussion"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:414
+#: assembl/static/js/app/models/widget.js:427
 msgid "Configure the inspiration module associated to the discussion"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:416
+#: assembl/static/js/app/models/widget.js:429
 msgid "Configure the inspiration module associated to this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:418
+#: assembl/static/js/app/models/widget.js:431
 #: assembl/templates/views/messageList.tmpl:32
 #: assembl/templates/views/messageList.tmpl:42
 msgid "I need inspiration"
