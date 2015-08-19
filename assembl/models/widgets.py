@@ -471,6 +471,9 @@ class IdeaCreatingWidget(BaseIdeaWidget):
         # TODO : optimize
         return [idea.uri() for idea in self.generated_ideas if not idea.hidden]
 
+    def get_num_ideas(self):
+        return len(self.generated_idea_links)
+
     def set_confirmed_ideas(self, idea_ids):
         for idea in self.generated_ideas:
             uri = idea.uri()
@@ -690,9 +693,6 @@ class CreativitySessionWidget(IdeaCreatingWidget):
                 Idea, GeneratedIdeaWidgetLink).filter(
                     Widget.id == self.id)))
         return len(participant_ids)
-
-    def get_num_ideas(self):
-        return len(self.generated_idea_links)
 
     def get_add_post_endpoint(self, idea):
         return 'local:Discussion/%d/widgets/%d/base_idea/-/children/%d/widgetposts' % (
