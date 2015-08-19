@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-14 10:59-0400\n"
+"POT-Creation-Date: 2015-08-18 20:14-0400\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -17,21 +17,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.0\n"
 
-#: assembl/auth/util.py:374
+#: assembl/auth/util.py:382
 msgid "The CSV file must have three columns"
 msgstr ""
 
-#: assembl/auth/util.py:381
+#: assembl/auth/util.py:389
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr ""
 
-#: assembl/auth/util.py:384
+#: assembl/auth/util.py:392
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr ""
 
-#: assembl/auth/util.py:387
+#: assembl/auth/util.py:395
 #, python-format
 msgid "Password too short: <%s> at line %d"
 msgstr ""
@@ -64,35 +64,11 @@ msgstr ""
 msgid "SYNTHESIS: "
 msgstr ""
 
-#: assembl/static/js/app/dummy_translations.js:7
-msgid "A vote session is ongoing"
-msgstr ""
-
-#: assembl/static/js/app/dummy_translations.js:8
-#, python-format
-msgid "; You have until %(end_date_moment)s to vote"
-msgstr ""
-
-#: assembl/static/js/app/dummy_translations.js:9
-msgid "Vote"
-msgstr ""
-
-#: assembl/static/js/app/dummy_translations.js:10
-#, python-format
-msgid ""
-"A creativity session is ongoing; You have until %(end_date_moment)s to "
-"join"
-msgstr ""
-
-#: assembl/static/js/app/dummy_translations.js:11
-msgid "Join the session"
-msgstr ""
-
-#: assembl/static/js/app/routeManager.js:262
+#: assembl/static/js/app/routeManager.js:267
 msgid "You must be logged in to access this page."
 msgstr ""
 
-#: assembl/static/js/app/routeManager.js:284
+#: assembl/static/js/app/routeManager.js:289
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr ""
 
@@ -108,11 +84,11 @@ msgstr ""
 msgid "Complete messages"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:751
+#: assembl/static/js/app/common/context.js:605
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:1095
+#: assembl/static/js/app/common/context.js:949
 msgid "ajax error message:"
 msgstr ""
 
@@ -165,7 +141,7 @@ msgid "All posts"
 msgstr ""
 
 #: assembl/static/js/app/models/idea.js:132
-#: assembl/static/js/app/views/ideaPanel.js:292
+#: assembl/static/js/app/views/ideaPanel.js:298
 msgid "New idea"
 msgstr ""
 
@@ -203,32 +179,115 @@ msgstr ""
 msgid "Add a conclusion"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:126
-msgid "Vote on these ideas"
+#: assembl/static/js/app/models/widget.js:172
+msgid "Create a voting session on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:128
-#: assembl/static/js/app/models/widget.js:134
+#: assembl/static/js/app/models/widget.js:174
+#: assembl/static/js/app/models/widget.js:178
+msgid "Vote"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:180
+msgid "See the vote results"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:183
+msgid "Configure this vote widget"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:186
 msgid "See results from the vote of "
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:131
-msgid "Configure this voting widget"
+#: assembl/static/js/app/models/widget.js:213
+msgid "A vote session is ongoing."
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:191
-msgid "Configure the creativity session"
+#: assembl/static/js/app/models/widget.js:215
+#, python-format
+msgid "You have %s to vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:193
-msgid "Access the creativity session"
+#: assembl/static/js/app/models/widget.js:223
+#, python-format
+msgid "The option “%s” is being considered in a vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:251
-msgid "Configure the Inspiration tool"
+#: assembl/static/js/app/models/widget.js:226
+#, python-format
+msgid "The option “%s” was considered in a vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:253
+#: assembl/static/js/app/models/widget.js:228
+msgid "A voting session is ongoing on this issue"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:230
+msgid "A voting session has happened on this issue"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:232
+#, python-format
+msgid "“%s” is being used as a criterion in a vote"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:234
+#, python-format
+msgid "“%s” was used as a criterion in a vote"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:296
+msgid "Create a creativity session on this idea"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:298
+#: assembl/static/js/app/models/widget.js:306
+msgid "Participate"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:302
+msgid "Configure the creativity session on this idea"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:308
+msgid "Review the session"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:335
+msgid "A creativity session is ongoing."
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:337
+#, python-format
+msgid "You have %s to participate"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:343
+msgid "A creativity session is ongoing on this issue"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:345
+msgid "A creativity session has happened on this issue"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:410
+msgid "Create an inspiration module on this idea"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:412
+msgid "Create an inspiration module on this discussion"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:414
+msgid "Configure the inspiration module associated to the discussion"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:416
+msgid "Configure the inspiration module associated to this idea"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:418
 #: assembl/templates/views/messageList.tmpl:32
 #: assembl/templates/views/messageList.tmpl:42
 msgid "I need inspiration"
@@ -525,26 +584,23 @@ msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:124
 #, fuzzy, python-format
-#| msgid "%d more message is available in this message's full context."
-#| msgid_plural "%d more messages are available in this message's full
-#| context."
 msgid "%d message is available under this idea"
-msgid_plural "%d message are available under this idea"
+msgid_plural "%d messages are available under this idea"
 msgstr[0] ""
 msgstr[1] ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:199
-#: assembl/static/js/app/views/message.js:338
+#: assembl/static/js/app/views/message.js:355
 msgid "Type your response here..."
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:201
-#: assembl/static/js/app/views/message.js:340
+#: assembl/static/js/app/views/message.js:357
 msgid "Send your reply"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:204
-#: assembl/static/js/app/views/message.js:342
+#: assembl/static/js/app/views/message.js:359
 msgid "You did not type a response yet..."
 msgstr ""
 
@@ -560,89 +616,84 @@ msgstr ""
 msgid "Table of ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:100
+#: assembl/static/js/app/views/ideaPanel.js:102
 msgid "Idea"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:103
+#: assembl/static/js/app/views/ideaPanel.js:105
 msgid ""
 "Detailled information about the currently selected idea in the Table of "
 "ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:111
+#: assembl/static/js/app/views/ideaPanel.js:113
 msgid "This idea has no sub-ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:114
+#: assembl/static/js/app/views/ideaPanel.js:116
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:130
+#: assembl/static/js/app/views/ideaPanel.js:132
 msgid "No extract was harvested"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:133
+#: assembl/static/js/app/views/ideaPanel.js:135
 msgid "No important nugget was harvested"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:138
+#: assembl/static/js/app/views/ideaPanel.js:140
 #, python-format
 msgid "%d extract was harvested"
 msgid_plural "%d extracts were harvested"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:141
+#: assembl/static/js/app/views/ideaPanel.js:143
 #, python-format
 msgid "%d important nugget was harvested"
 msgid_plural "%d important nuggets were harvested"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:291
+#: assembl/static/js/app/views/ideaPanel.js:297
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:301
+#: assembl/static/js/app/views/ideaPanel.js:307
 msgid "Comment on this idea here..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:302
+#: assembl/static/js/app/views/ideaPanel.js:308
 msgid "Send your comment"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:306
+#: assembl/static/js/app/views/ideaPanel.js:312
 #: assembl/static/js/app/views/messageList.js:1152
 msgid "You need to type a comment first..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:487
+#: assembl/static/js/app/views/ideaPanel.js:493
 msgid "You cannot delete an idea while it has sub-ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:494
+#: assembl/static/js/app/views/ideaPanel.js:500
 msgid "You cannot delete an idea associated to extracts."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:498
+#: assembl/static/js/app/views/ideaPanel.js:504
 msgid "You cannot delete an idea associated to comments."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:502
+#: assembl/static/js/app/views/ideaPanel.js:508
 msgid "Confirm that you want to delete this idea."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:633
+#: assembl/static/js/app/views/ideaPanel.js:639
 msgid "Confirm that you want to send all extracts back to the clipboard."
-msgstr ""
-
-#: assembl/static/js/app/views/ideaWidgets.js:54
-#, python-format
-msgid "Vote on the '%s' idea"
 msgstr ""
 
 #: assembl/static/js/app/views/messageExportModal.js:112
@@ -1078,6 +1129,11 @@ msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:269
 msgid "Failed publishing synthesis!"
+msgstr ""
+
+#: assembl/static/js/app/views/widgetButtons.js:35
+#, python-format
+msgid "You have %s"
 msgstr ""
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:69
@@ -2112,72 +2168,44 @@ msgstr ""
 msgid "anonymous"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:90
+#: assembl/templates/views/ideaPanel.tmpl:94
 msgid "Expressions of this idea in messages or on the web"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:95
+#: assembl/templates/views/ideaPanel.tmpl:99
 msgid "Nuggets are important expressions of this idea in messages or on the web"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:103
+#: assembl/templates/views/ideaPanel.tmpl:107
 msgid "Add extracts by dragging them in this panel from the clipboard or messages"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:114
+#: assembl/templates/views/ideaPanel.tmpl:118
 msgid "Delete this idea completely"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:114
+#: assembl/templates/views/ideaPanel.tmpl:118
 msgid "Delete idea"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:119
+#: assembl/templates/views/ideaPanel.tmpl:123
 msgid ""
 "Remove all extracts from this idea.  Removed extracts will be available "
 "in your clipboard"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:119
+#: assembl/templates/views/ideaPanel.tmpl:123
 msgid "Remove all extracts"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:132
+#: assembl/templates/views/ideaPanel.tmpl:140
 msgid "No idea selected"
 msgstr ""
 
-#: assembl/templates/views/ideaPanel.tmpl:133
+#: assembl/templates/views/ideaPanel.tmpl:141
 msgid ""
 "Choose an idea in the Table of ideas to explore the discussion or close "
 "this panel as you will have open"
-msgstr ""
-
-#: assembl/templates/views/ideaPanelWidgets.tmpl:14
-msgid "Vote on this idea"
-msgstr ""
-
-#: assembl/templates/views/ideaPanelWidgets.tmpl:19
-msgid "Configure this vote widget"
-msgstr ""
-
-#: assembl/templates/views/ideaPanelWidgets.tmpl:44
-msgid "Configure the inspiration module associated to this idea"
-msgstr ""
-
-#: assembl/templates/views/ideaPanelWidgets.tmpl:51
-msgid "Create a vote on this idea"
-msgstr ""
-
-#: assembl/templates/views/ideaPanelWidgets.tmpl:55
-msgid "Create an inspiration module on this idea"
-msgstr ""
-
-#: assembl/templates/views/ideaPanelWidgets.tmpl:59
-msgid "Create a creativity session on this idea"
-msgstr ""
-
-#: assembl/templates/views/ideaPanelWidgets.tmpl:65
-msgid "Access to creativity session on this idea"
 msgstr ""
 
 #: assembl/templates/views/instigator.tmpl:6
@@ -2438,18 +2466,6 @@ msgstr ""
 
 #: assembl/templates/views/partnersInAdmin.tmpl:32
 msgid "What is their logo?"
-msgstr ""
-
-#: assembl/templates/views/rootIdeaWidgets.tmpl:10
-msgid "Configure the inspiration module associated to the discussion"
-msgstr ""
-
-#: assembl/templates/views/rootIdeaWidgets.tmpl:17
-msgid "Create an inspirtion module on the discussion"
-msgstr ""
-
-#: assembl/templates/views/rootIdeaWidgets.tmpl:17
-msgid "Create an inspiration module on the discussion"
 msgstr ""
 
 #: assembl/templates/views/segment.tmpl:8
@@ -3637,5 +3653,59 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "%d message are available under this idea"
+#~ msgstr ""
+
+#~ msgid "; You have until %(end_date_moment)s to vote"
+#~ msgstr ""
+
+#~ msgid "Join the session"
+#~ msgstr ""
+
+#~ msgid "Vote on these ideas"
+#~ msgstr ""
+
+#~ msgid "Configure this voting widget"
+#~ msgstr ""
+
+#~ msgid "Configure the creativity session"
+#~ msgstr ""
+
+#~ msgid "Access the creativity session"
+#~ msgstr ""
+
+#~ msgid "Configure the Inspiration tool"
+#~ msgstr ""
+
+#~ msgid "Vote on the '%s' idea"
+#~ msgstr ""
+
+#~ msgid "Vote on this idea"
+#~ msgstr ""
+
+#~ msgid "Create a vote on this idea"
+#~ msgstr ""
+
+#~ msgid "Access to creativity session on this idea"
+#~ msgstr ""
+
+#~ msgid "Create an inspirtion module on the discussion"
+#~ msgstr ""
+
+#~ msgid "Create an inspiration module on the discussion"
+#~ msgstr ""
+
+#~ msgid "A vote session is ongoing"
+#~ msgstr ""
+
+#~ msgid "; You have %s to vote"
+#~ msgstr ""
+
+#~ msgid "Join the creativity session on this idea"
+#~ msgstr ""
+
+#~ msgid "A creativity session is ongoing"
+#~ msgstr ""
+
+#~ msgid "; You have %s to participate"
 #~ msgstr ""
 

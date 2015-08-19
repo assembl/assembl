@@ -210,9 +210,9 @@ var VotingWidgetModel = WidgetModel.extend({
         endDate = this.get("end_date");
     switch (context) {
       case this.INFO_BAR:
-        var message = i18n.gettext("A vote session is ongoing");
+        var message = i18n.gettext("A vote session is ongoing.");
         if (endDate) {
-          message += i18n.sprintf(i18n.gettext("; You have %s to vote"), Moment(endDate).fromNow(true));
+          message += i18n.sprintf(i18n.gettext("You have %s to vote"), Moment(endDate).fromNow(true));
         }
         return message;
       case this.IDEA_PANEL_ACCESS_CTX:
@@ -301,7 +301,12 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
         // assume non-root idea, relevant widget type
         return i18n.gettext("Configure the creativity session on this idea");
       case this.IDEA_PANEL_ACCESS_CTX:
-        return i18n.gettext("Join the creativity session on this idea");
+        switch (activityState) {
+          case "active":
+            return i18n.gettext("Participate");
+          case "ended":
+            return i18n.gettext("Review the session");
+        }
     }
     return "";
   },
@@ -327,9 +332,9 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
         endDate = this.get("end_date");
     switch (context) {
       case this.INFO_BAR:
-        var message = i18n.gettext("A creativity session is ongoing");
+        var message = i18n.gettext("A creativity session is ongoing.");
         if (endDate) {
-          message += i18n.sprintf(i18n.gettext("; You have %s to participate"), Moment(endDate).fromNow(true));
+          message += i18n.sprintf(i18n.gettext("You have %s to participate"), Moment(endDate).fromNow(true));
         }
         return message;
       case this.IDEA_PANEL_ACCESS_CTX:
