@@ -699,7 +699,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
             self.discussion_id, self.id, idea.id)
 
 
-class MultiCriterionVotingWidget(Widget):
+class MultiCriterionVotingWidget(BaseIdeaWidget):
     default_view = 'voting_widget'
     __mapper_args__ = {
         'polymorphic_identity': 'multicriterion_voting_widget',
@@ -716,6 +716,8 @@ class MultiCriterionVotingWidget(Widget):
         return "/static/widget/vote/"
 
     def interpret_settings(self, settings):
+        if "idea" not in settings and "votable_root_id" in settings:
+            settings["idea"] = settings["votable_root_id"]
         super(MultiCriterionVotingWidget, self).interpret_settings(settings)
         if 'criteria' in settings:
             for criterion in settings['criteria']:

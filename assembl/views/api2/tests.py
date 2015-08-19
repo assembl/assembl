@@ -511,6 +511,7 @@ def test_voting_widget(
     widget_uri = new_widget_loc.location
     new_widget = Widget.get_instance(widget_uri)
     assert new_widget
+    assert new_widget.base_idea == subidea_1_1
     db.expire(new_widget, ('criteria', 'votable_ideas', 'vote_specifications'))
     # Get the widget from the api
     widget_rep = test_app.get(
