@@ -12,11 +12,11 @@
 
     {% block extra_css %}{% endblock extra_css %}
 </head>
-<body>
+<body class="sg-body">
 
 <aside class="sg-sidebar gu gu-1of5">
     <h1 class="logo tac pas h1">Assembl UI</h1>
-    <nav class="sg-sidebar-nav paxl">
+    <nav class="sg-sidebar-nav plm">
       {% for name, path in styleguide_views.items() %}
         <h2 class="h3 sg-title"><a href="#{{name}}">{{name | title}}</a></h2>
       {% endfor %}

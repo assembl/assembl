@@ -39,20 +39,17 @@
   padding: 20px;
 
   .sg-section-title {
-    color: $gray1;
-    border-bottom: 2px solid $gray4;
+    color: #484848;
+    //border-bottom: 2px solid $gray4;
   }
 }
 
 .sg-sidebar {
-  background-color: $gray4;
-  position: fixed;
+  //background-color: $gray4;
+  //position: fixed;
   top: 0;
   z-index: 1000;
   min-height: 100%;
-  .sg-sidebar-nav {
-
-  }
   .logo {
     color: $purple2;
   }
@@ -64,8 +61,17 @@
   overflow: hidden;
 }
 
-.sg-title > * {
-  color: $white;
+.sg-title > a {
+    color: #484848;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 6px;
+    display: block;
+    line-height: 1em;
+    &:hover{
+        background-color: #f2f2f2;
+        text-decoration: none;
+    }
 }
 
 //-----------
@@ -74,6 +80,10 @@ code[class*="language-"], pre[class*="language-"] {
 }
 
 // styleguide components
+
+.sg-body{
+    background-color: $white;
+}
 
 .bx-color {
   .bg {
