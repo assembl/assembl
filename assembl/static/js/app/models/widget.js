@@ -5,6 +5,7 @@ var _ = require('../shims/underscore.js'),
     Base = require("./base.js"),
     i18n = require('../utils/i18n.js'),
     Moment = require('moment'),
+    Permissions = require('../utils/permissions.js'),
     Ctx = require("../common/context.js");
 
 var WidgetModel = Base.Model.extend({
@@ -258,14 +259,17 @@ var VotingWidgetModel = WidgetModel.extend({
 
   isRelevantForLink: function(linkType, context, idea) {
     // TODO: This should depend on widget configuration.
-    var activityState = this.get("activity_state");
+    var activityState = this.get("activity_state"),
+        currentUser = Ctx.getCurrentUser();
     switch (context) {
       case this.INFO_BAR:
         return (activityState === "active" && !this.get("closeInfobar")
-          && this.get("settings", {}).show_infobar !== false);
+          && this.get("settings", {}).show_infobar !== false
+          && currentUser.can(Permissions.VOTE));
       case this.IDEA_PANEL_ACCESS_CTX:
         // assume non-root idea, relevant widget type
-        return true;
+        return (activityState == "ended"
+            || currentUser.can(Permissions.VOTE));
       case this.IDEA_PANEL_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type
         // Should we add config on votable?
@@ -274,7 +278,8 @@ var VotingWidgetModel = WidgetModel.extend({
         return (activityState === "ended");
       case this.TABLE_OF_IDEA_MARKERS:
         return (linkType === "BaseIdeaWidgetLink"
-            && activityState === "active");
+            && activityState === "active"
+            && currentUser.can(Permissions.VOTE));
       default:
         return false;
     }
@@ -373,11 +378,13 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
 
   isRelevantForLink: function(linkType, context, idea) {
     // TODO: This should depend on widget configuration.
-    var activityState = this.get("activity_state");
+    var activityState = this.get("activity_state"),
+        currentUser = Ctx.getCurrentUser();
     switch (context) {
       case this.INFO_BAR:
         return (activityState === "active" && !this.get("closeInfobar")
-          && this.get("settings", {}).show_infobar !== false);
+          && this.get("settings", {}).show_infobar !== false
+          && currentUser.can(Permissions.ADD_POST));
       case this.IDEA_PANEL_CONFIGURE_CTX:
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type
@@ -385,7 +392,8 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_ACCESS_CTX:
       case this.TABLE_OF_IDEA_MARKERS:
         return (linkType == "IdeaCreativitySessionWidgetLink"
-            && activityState === "active");
+            && activityState === "active"
+            && currentUser.can(Permissions.ADD_POST));
       default:
         return false;
     }
