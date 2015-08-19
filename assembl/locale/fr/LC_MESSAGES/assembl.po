@@ -229,7 +229,7 @@ msgstr "Une session de vote est en cours."
 #: assembl/static/js/app/models/widget.js:228
 #, python-format
 msgid "You have %s to vote"
-msgstr "vous avez %s pour voter"
+msgstr "Vous avez %s pour voter"
 
 #: assembl/static/js/app/models/widget.js:236
 #, python-format

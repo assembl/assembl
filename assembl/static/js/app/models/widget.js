@@ -40,6 +40,7 @@ var WidgetModel = Base.Model.extend({
   VOTE_REPORTS: 7,
   TABLE_OF_IDEA_MARKERS: 8,
   INFO_BAR: 9,
+  UNTIL_TEXT: 10,
 
   isRelevantForLink: function(linkType, context, idea) {
     return false;
@@ -225,7 +226,7 @@ var VotingWidgetModel = WidgetModel.extend({
       case this.INFO_BAR:
         var message = i18n.gettext("A vote session is ongoing.");
         if (endDate) {
-          message += i18n.sprintf(i18n.gettext("You have %s to vote"), Moment(endDate).fromNow(true));
+          message += " " + this.getDescriptionText(this.UNTIL_TEXT, idea);
         }
         return message;
       case this.IDEA_PANEL_ACCESS_CTX:
@@ -245,6 +246,11 @@ var VotingWidgetModel = WidgetModel.extend({
             return i18n.sprintf(i18n.gettext("“%s” is being used as a criterion in a vote"), idea.get('shortTitle'));
           case "VotingCriterionWidgetLink_ended":
             return i18n.sprintf(i18n.gettext("“%s” was used as a criterion in a vote"), idea.get('shortTitle'));
+        }
+        break;
+      case this.UNTIL_TEXT:
+        if (endDate) {
+          return i18n.sprintf(i18n.gettext("You have %s to vote"), Moment(endDate).fromNow(true));
         }
     }
     return "";
@@ -347,7 +353,7 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       case this.INFO_BAR:
         var message = i18n.gettext("A creativity session is ongoing.");
         if (endDate) {
-          message += i18n.sprintf(i18n.gettext("You have %s to participate"), Moment(endDate).fromNow(true));
+          message += " " + this.getDescriptionText(this.UNTIL_TEXT, idea);
         }
         return message;
       case this.IDEA_PANEL_ACCESS_CTX:
@@ -356,6 +362,10 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
             return i18n.gettext("A creativity session is ongoing on this issue");
           case "ended":
             return i18n.gettext("A creativity session has happened on this issue");
+        }
+      case this.UNTIL_TEXT:
+        if (endDate) {
+          return i18n.sprintf(i18n.gettext("You have %s to participate"), Moment(endDate).fromNow(true));
         }
     }
     return "";

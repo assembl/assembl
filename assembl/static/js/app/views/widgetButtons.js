@@ -4,6 +4,7 @@ var Backbone = require("../shims/backbone.js"),
     Marionette = require("../shims/marionette.js"),
     _ = require("../shims/underscore.js"),
     i18n = require('../utils/i18n.js'),
+    Moment = require('moment'),
     Widget = require("../models/widget.js");
 
 
@@ -32,8 +33,7 @@ var WidgetButtonView = Marionette.ItemView.extend({
       button_text: this.model.getLinkText(this.options.context, this.options.idea),
       description: this.model.getDescriptionText(this.options.context, this.options.idea),
       classes: this.model.getCssClasses(this.options.context, this.options.idea),
-      until_text: endDate?i18n.sprintf(i18n.gettext(
-        "You have %s"), Moment(endDate).fromNow(true)):null
+      until_text: this.model.getDescriptionText(this.model.UNTIL_TEXT, this.options.idea)
     };
   }
 });
