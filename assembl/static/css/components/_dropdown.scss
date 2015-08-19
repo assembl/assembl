@@ -83,7 +83,7 @@ $grid-float-breakpoint: 768px !default;
   }
 
   // Links within the dropdown menu
-  > li > a {
+  li > a {
     display: block;
     padding: 3px 20px;
     clear: both;
@@ -95,7 +95,7 @@ $grid-float-breakpoint: 768px !default;
 }
 
 // Hover/Focus state
-.dropdown-menu > li > a {
+.dropdown-menu li > a {
   &:hover,
   &:focus {
     text-decoration: none;
