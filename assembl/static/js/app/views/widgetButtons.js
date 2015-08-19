@@ -16,7 +16,7 @@ var WidgetButtonView = Marionette.ItemView.extend({
     button: ".btn"
   },
   events: {
-    "click @ui.btn": "onButtonClick"
+    "click @ui.button": "onButtonClick"
   },
   onButtonClick: function(evt) {
     var options = {
