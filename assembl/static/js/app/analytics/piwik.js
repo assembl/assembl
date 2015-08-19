@@ -34,6 +34,8 @@ _.extend(Piwik.prototype, {
   initialize: function(options){
     this.engine = options.engine;
     this.userId = options.userId;
+    this.customVariableSize = options.piwik_customVariableSize;
+    this.customVariables = {};
     if (_.isFunction(this.engine['push'])) {
       this.usePaq = true;
     }
@@ -61,6 +63,17 @@ _.extend(Piwik.prototype, {
 
   changeCurrentPage: function(page, options){
     this._invoke('setCustomUrl', [page]);
+    this._invoke('trackPageView');
+  },
+
+  setCustomVariable: function(name, value, options){
+    var scope = options.scope,
+        index = options.index;
+    this._invoke('setCustomVariable', [index, name, value, scope]);
+  },
+
+  //For debug use ONLY
+  commit: function(){
     this._invoke('trackPageView');
   }
 });

@@ -112,6 +112,43 @@ _.extend(AnalyticsDispatcher.prototype, {
 
   setUserId: function(id) {
     this.notify('setUserId', [id]);
+  },
+
+  //For debug use ONLY
+  commit: function(options){
+    if (options.piwik){
+      this._observers[0].commit();
+    }
+  },
+
+  /**
+   * Either manually or automatically track content.
+   * @param  {[type]} options Must include contentName,
+   * contentPiece, contentTarget for base case.
+   *
+   * To track all content impressions, options must have:
+   * { piwik_trackAll: true}
+   *
+   * To track visible content impressions, options must have:
+   * {
+   *   piwik_trackVisible: true,
+   *   piwik_trackVisible_options: {
+   *     checkOnScroll: true/false,
+   *     timeInterval: 50 // in milliseconds
+   *   }
+   * }
+ 
+   * @return {[type]}         null
+   */
+  trackContentImpression: function(options) {
+    var trackAll = options.piwik_trackAll,
+        trackVisible = options.piwik_trackVisible;
+
+    console.log('Incomplete method!');
+    
+  },
+  trackContentInteraction: function(interaction, contentName, contentPiece, contentTarget, options){
+    throw new Error('Cannot call abstract method!');
   }
 });
 
@@ -138,7 +175,10 @@ module.exports = {
         var g = null; //Where Google Analytics would go
         _analytics.registerObserver(g);
       }
-      _analytics.initialize({engine: _paq}); //_paq might not be available at page load...
+      _analytics.initialize({
+        engine: _paq,
+        piwik_customVariableSize: globalAnalytics.piwik.customVariableSize
+      });
     }
     return _analytics;
   }

@@ -13,7 +13,9 @@ var _EVENT_DEFINITIONS = {
 /*
   TODO: Update category registry with well defined Categories
  */
-var _CATEGORY_DEFINITIONS = {};
+var _CATEGORY_DEFINITIONS = {
+  BASE_CATEGORY: 'BASE_CATEGORY'
+};
 
 /*
   TODO: Update actions registry with well defined Actions to track
@@ -25,8 +27,17 @@ var _ACTION_DEFINITIONS = {
 };
 
 var _PAGE_DEFINITIONS = {
-  'CONTEXT/-': 'CONTEXT/-'
+  'CONTEXT/-': 'CONTEXT/-',
+  'LOGIN/-': 'LOGIN/-',
+  'SIGNUP/-': 'SINGUP/-',
+  'JOIN_GROUP/-': 'JOIN_GROUP/-',
+
+};
+
+var CUSTOM_VARIABLES = {
+  SAMPLE_CUSTOM_VAR: ['SAMPLE_CUSTOM_VAR', 1]
 }
+
 /**
  * Abstract Base Class for Analytics Wrapper 
  */
@@ -37,6 +48,7 @@ function Wrapper() {
 };
 
 Wrapper.prototype = {
+  customVariableSize: 5,
   debug: true,
   events: _EVENT_DEFINITIONS,
   actions: _ACTION_DEFINITIONS,
@@ -97,6 +109,16 @@ Wrapper.prototype = {
   },
 
   setUserId: function(id) {
+    throw new Error('Cannot call abstract method!');
+  },
+
+  // These tracking functions do not seem to correlate with google analytics (from what I can see).
+  // However, to call them from the dispatcher, I have added them to the abstract
+  // data structure. 
+  trackContentImpression: function(contentName, contentPiece, contentTarget, options) {
+    throw new Error('Cannot call abstract method!');
+  },
+  trackContentInteraction: function(interaction, contentName, contentPiece, contentTarget, options){
     throw new Error('Cannot call abstract method!');
   }
 };
