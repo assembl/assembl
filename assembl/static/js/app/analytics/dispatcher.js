@@ -2,7 +2,6 @@
 
 var _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
-    CollectionManager = require('../common/collectionManager.js'),
     Wrapper = require('./abstract.js'),
     Piwik = require('./piwik.js');
 

@@ -8,7 +8,8 @@ var $ = require('../shims/jquery.js'),
     Permissions =  require('../utils/permissions.js'),
     Roles =  require('../utils/roles.js'),
     i18n =  require('../utils/i18n.js'),
-    Raven = require('raven-js');
+    Raven = require('raven-js'),
+    Analytics = require('../analytics/dispatcher.js');
 
 require('linkifyjs');
 require('linkifyjs/jquery')($);
@@ -173,8 +174,7 @@ Context.prototype = {
 
   setCurrentUser: function(user) {
     this.currentUser = user;
-    var Analytics = require('../analytics/dispatcher.js'),
-        analytics = Analytics.getInstance();
+    var analytics = Analytics.getInstance();
     analytics.setUserId(this.currentUser.id);
   },
 
