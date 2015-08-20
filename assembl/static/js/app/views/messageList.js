@@ -375,12 +375,11 @@ var MessageList = AssemblPanel.extend({
           currentIdea, Widget.Model.prototype.MESSAGE_LIST_INSPIREME_CTX);
 
         if (relevantWidgets.length > 0) {
-          _.first(relevantWidgets, function(widget) {
-            // TODO : Handle multiple widgets.
-            that.inspireMeLink = widget.getUrl(
-              Widget.Model.prototype.MESSAGE_LIST_INSPIREME_CTX);
-            that.ui.inspireMeAnchor.attr("href", that.inspireMeLink);
-          });
+          var widget = relevantWidgets[0];
+          // TODO : Handle multiple widgets.
+          that.inspireMeLink = widget.getUrl(
+            Widget.Model.prototype.MESSAGE_LIST_INSPIREME_CTX, currentIdea.getId());
+          that.ui.inspireMeAnchor.attr("href", that.inspireMeLink);
           that.ui.inspireMe.removeClass("hidden");
         } else {
           that.inspireMeLink = null;
