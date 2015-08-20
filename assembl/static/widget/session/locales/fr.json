@@ -35,7 +35,7 @@
       "shuffle":"Tirez une autre carte",
       "idea_prompt":"Cette question fait référence à l'idée «{{parentIdeaTitle}}». Veuillez essayer de répondre à la question, en vous inspirant d'une des cartes ci-dessous:",
       "send": "Envoyer",
-      "propose_idea":"Que vous inspire cette carte ?",
+      "propose_idea":"Cette carte vous inspire-t-elle de nouvelles idées ?",
       "start_end_dates_info": "Veuillez exprimer les dates et heures dans le fuseau horaire UTC."
     },
     "RATE":{
