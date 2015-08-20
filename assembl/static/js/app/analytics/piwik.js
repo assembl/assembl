@@ -75,6 +75,28 @@ _.extend(Piwik.prototype, {
   //For debug use ONLY
   commit: function(){
     this._invoke('trackPageView');
+  },
+
+  //Very thin wrappers here.  
+  //http://developer.piwik.org/guides/content-tracking
+  trackImpression: function(contentName, contentPiece, contentTarget) {
+    this._invoke('trackContentImpression', [contentName, contentPiece, contentTarget]);
+  },
+
+  trackVisibleImpression: function(checkOnScroll, timeInterval){
+    this._invoke('trackVisibleContentImpressions', [checkOnScroll, timeInterval]);
+  },
+
+  trackDomNodeImpression: function(domNode){
+    this._invoke('trackContentImpressionsWithinNode', [domNode]);
+  },
+
+  trackContentInteraction: function(interaction, contentName, contentPiece, contentTarget){
+    this._invoke('trackContentInteraction', [interaction, contentName, contentPiece, contentTarget]);
+  },
+
+  trackDomNodeInteraction: function(domNode, contentInteraction){
+    this._invoke('trackContentInteractionNode', [domNode, contentInteraction]);
   }
 });
 

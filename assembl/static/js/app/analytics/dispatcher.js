@@ -121,34 +121,25 @@ _.extend(AnalyticsDispatcher.prototype, {
     }
   },
 
-  /**
-   * Either manually or automatically track content.
-   * @param  {[type]} options Must include contentName,
-   * contentPiece, contentTarget for base case.
-   *
-   * To track all content impressions, options must have:
-   * { piwik_trackAll: true}
-   *
-   * To track visible content impressions, options must have:
-   * {
-   *   piwik_trackVisible: true,
-   *   piwik_trackVisible_options: {
-   *     checkOnScroll: true/false,
-   *     timeInterval: 50 // in milliseconds
-   *   }
-   * }
- 
-   * @return {[type]}         null
-   */
-  trackContentImpression: function(options) {
-    var trackAll = options.piwik_trackAll,
-        trackVisible = options.piwik_trackVisible;
-
-    console.log('Incomplete method!');
-    
+  //Only Piwik has implemented these functions. Very thin wrapper.  
+  trackImpression: function(contentName, contentPiece, contentTarget) {
+    this.notify('trackImpression', arguments);
   },
-  trackContentInteraction: function(interaction, contentName, contentPiece, contentTarget, options){
-    throw new Error('Cannot call abstract method!');
+
+  trackVisibleImpression: function(checkOnScroll, timeInterval){
+    this.notify('trackVisibleImpression', arguments);
+  },
+
+  trackDomNodeImpression: function(domNode){
+    this.notify('trackDomNodeImpression', arguments);
+  },
+
+  trackContentInteraction: function(interaction, contentName, contentPiece, contentTarget){
+    this.notify('trackContentInteraction', arguments);
+  },
+
+  trackDomNodeInteraction: function(domNode, contentInteraction){
+    this.notify('trackDomNodeInteraction', arguments);
   }
 });
 

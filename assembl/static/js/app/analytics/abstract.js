@@ -96,10 +96,6 @@ Wrapper.prototype = {
     throw new Error('Cannot call abstract method!');
   },
 
-  trackDomElement: function(element) {
-    throw new Error('Cannot call abstract method!');
-  },
-
   trackGoal: function(goalId, options){
     throw new Error('Cannot call abstract method!');
   },
@@ -112,13 +108,24 @@ Wrapper.prototype = {
     throw new Error('Cannot call abstract method!');
   },
 
-  // These tracking functions do not seem to correlate with google analytics (from what I can see).
-  // However, to call them from the dispatcher, I have added them to the abstract
-  // data structure. 
-  trackContentImpression: function(contentName, contentPiece, contentTarget, options) {
+  //The below functions do not seem to have a correlation to GA, used by Piwik only
+  trackImpression: function(contentName, contentPiece, contentTarget) {
     throw new Error('Cannot call abstract method!');
   },
-  trackContentInteraction: function(interaction, contentName, contentPiece, contentTarget, options){
+
+  trackVisibleImpression: function(checkOnScroll, timeInterval){
+    throw new Error('Cannot call abstract method!');
+  },
+
+  trackDomNodeImpression: function(domNode){
+    throw new Error('Cannot call abstract method!');
+  },
+
+  trackContentInteraction: function(interaction, contentName, contentPiece, contentTarget){
+    throw new Error('Cannot call abstract method!');
+  },
+
+  trackDomNodeInteraction: function(domNode, contentInteraction){
     throw new Error('Cannot call abstract method!');
   }
 };
