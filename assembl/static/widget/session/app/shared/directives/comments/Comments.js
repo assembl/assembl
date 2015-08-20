@@ -11,7 +11,8 @@ SessionApp.directive('comments', [
         restrict:'E',
         scope: {
           idea:'=idea',
-          widget:'=widget'
+          widget:'=widget',
+          reply:'=reply'
         },
         templateUrl: 'app/shared/directives/comments/comments.html',
         link: function($scope, element, attrs) {

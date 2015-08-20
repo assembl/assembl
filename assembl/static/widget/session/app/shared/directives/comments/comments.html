@@ -1,8 +1,8 @@
-<div class="options-comment">
+<div class="options-comment" ng-if="reply">
     <span><a ng-init="displayBox=false" ng-click="displayBox = !displayBox" ng-hide="readOnly">{{'COMMENTS.reply'| translate }}</a></span>&nbsp;
     <span><a ng-init="showComments=true" ng-click="showComments = !showComments"><i class="fa fa-comment-o"></i>&nbsp;{{comments.length}}</a></span>
 </div>
-<div class="sub-comment" ng-show="displayBox">
+<div class="sub-comment" ng-show="displayBox" ng-if="reply">
     <form ng-submit="commentSubIdea()">
         <div class="media">
             <div class="media-left">
