@@ -1,8 +1,11 @@
-<div class="options-comment" ng-if="reply">
+<span ng-init="showComments=true"></span>
+<div ng-show="reply">
+<div class="options-comment">
     <span><a ng-init="displayBox=false" ng-click="displayBox = !displayBox" ng-hide="readOnly">{{'COMMENTS.reply'| translate }}</a></span>&nbsp;
-    <span><a ng-init="showComments=true" ng-click="showComments = !showComments"><i class="fa fa-comment-o"></i>&nbsp;{{comments.length}}</a></span>
+    <span><a ng-click="showComments = !showComments"><i class="fa fa-comment-o"></i>&nbsp;{{comments.length}}</a></span>
+    <!--  -->
 </div>
-<div class="sub-comment" ng-show="displayBox" ng-if="reply">
+<div class="sub-comment" ng-show="displayBox">
     <form ng-submit="commentSubIdea()">
         <div class="media">
             <div class="media-left">
@@ -17,6 +20,10 @@
         <button type="submit" class="btn btn-default btn-purple btn-xs pull-right">{{'Send'| translate }}</button>
     </form>
 </div>
+</div>
+<span ng-show="!reply">
+    <a ng-click="showComments = !showComments"><i class="fa fa-comment-o"></i>&nbsp;{{comments.length}}</a>
+</span>
 
 <div style="clear: right;"></div>
 
