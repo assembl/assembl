@@ -175,7 +175,9 @@ Context.prototype = {
   setCurrentUser: function(user) {
     this.currentUser = user;
     var analytics = Analytics.getInstance();
-    analytics.setUserId(this.currentUser.id);
+    if(!user.isUnknownUser()) {
+      analytics.setUserId(this.currentUser.id);
+    }
   },
 
   getCsrfToken: function() {
