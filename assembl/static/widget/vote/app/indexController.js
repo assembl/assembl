@@ -9,12 +9,6 @@ voteApp.controller('indexCtl',
     $scope.init = function() {
       console.log("indexCtl::init()");
 
-      var target = window.getUrlVariableValue("target");
-      if ( !target ){
-        $scope.initVotingForAllTargets();
-        return;
-      }
-
       console.log("configService:");
       console.log(configService);
       $scope.settings = configService.settings;
@@ -63,8 +57,22 @@ voteApp.controller('indexCtl',
 
       $scope.user = configService.user;
       
-      // TODO (when the API is implemented): check that the user has the right to participate in this vote
+      // TODO: check that the user has the "vote" permission
 
+
+      
+      $scope.overwriteItemsDefaultValuesWithPreviousUserVotes();
+
+
+
+      var target = window.getUrlVariableValue("target");
+      $scope.target = target;
+      if ( !target ){
+        $scope.initVotingForAllTargets();
+        return;
+      }
+
+      /*
       // try to get previous votes of the user
 
       if (!configService.user_votes_url)
@@ -129,22 +137,72 @@ voteApp.controller('indexCtl',
           $scope.drawUI();
         });
       }
+      */
 
     };
 
     $scope.initVotingForAllTargets = function(){
       /*
-      TODO:
+      v0:
       (this is not very nice, maybe the backend should send us directly all data in one API call)
       - get all targets, by querying http://localhost:6543/data/Widget/16/targets
       - for each target, query http://localhost:6543/data/Widget/16?target={target["@id"]}
         - save/aggregate its content
       - display each question/criterion, and for each of them display a vote item for each target
+
+      v1:
+      - for each question (= each element of settings.item, optionally ordered by question_id of its vote specifications)
+        - display question and description
+        - for each target (= in an widget.vote_specifications element, list all the keys of its voting_urls field)
+          - show target idea title (optionnaly with a link to the idea)
+          - show voting item
+            - get user previous vote on item's criteria for this target, if any (my_votes field of the vote specification, filtered by the value of idea) => if that's the case, pre-fill item with user votes
+          - (optionnaly show vote button)
+        - show vote button
       */
+
+      var widget = configService;
+
+      // create list of targets from voting_urls field (associative array) of widget.vote_specifications (we use only first element because we assume all vote specifications of this vote widget instance have the same set of targets)
+
+      $scope.targets_ids = null;
+
+      var vote_specifications = "vote_specifications" in widget ? widget.vote_specifications : null;
+      if ( vote_specifications && vote_specifications.length ){
+        var vote_spec = vote_specifications[0];
+        var voting_urls = "voting_urls" in vote_spec ? vote_spec.voting_urls : null;
+        console.log("voting_urls: ", voting_urls);
+        console.log("Object.keys(voting_urls): ", Object.keys(voting_urls));
+        if ( voting_urls && Object.keys(voting_urls).length )
+        $scope.targets_ids = Object.keys(voting_urls);
+      }
+      console.log("$scope.targets_ids: ", $scope.targets_ids);
+
+      $scope.targets_promises = {}; // {"local:Idea/228": promise, ...}
+      if ( $scope.targets_ids && $scope.targets_ids.length ){
+        $scope.targets_ids.forEach(function(target){
+          $scope.targets_promises[target] = $.ajax(AssemblToolsService.resourceToUrl(target)); // TODO: add an increasing delay
+        });
+      }
+
+      $scope.drawUI(true);
 
     };
 
-    $scope.drawUI = function() {
+    $scope.overwriteItemsDefaultValuesWithPreviousUserVotes = function(){
+      if ("items" in $scope.settings){
+        _.each($scope.settings.items, function(item, item_index){
+          if ("vote_specifications" in item){
+            _.each(item.vote_specifications, function(criterion, criterion_index){
+              // TODO
+            });
+          }
+        });
+      }
+    };
+
+    // @param multiple_targets: boolean
+    $scope.drawUI = function(multiple_targets) {
       // set a background color
 
       if ($scope.settings.background)
@@ -164,16 +222,26 @@ voteApp.controller('indexCtl',
         $("body").css("min-height", $scope.settings.minHeight + "px");
       }
 
-      // display the UI in a table of classic way depending on the settings
+      if ( multiple_targets ){
+        $scope.drawMultipleTargetsUI();
+      }
+      else {
+        // display the UI in a table of classic way depending on the settings
+        if ($scope.settings.displayStyle && $scope.settings.displayStyle == "table")
+        {
+          $scope.drawUIWithTable();
+        }
+        else
+        {
+          $scope.drawUIWithoutTable();
+        }
+      }
 
-      if ($scope.settings.displayStyle && $scope.settings.displayStyle == "table")
-      {
-        $scope.drawUIWithTable();
+      if ( !multiple_targets ){
+        $("body").append($('<button id="vote_submit" ng-click="submitVote()" class="btn btn-primary btn-sm">Submit your vote</button>')); // TODO: i18n
       }
-      else
-      {
-        $scope.drawUIWithoutTable();
-      }
+      $("body").append($('<div id="vote_submit_result_holder"></div>'));
+      
 
       $scope.resizeIframe();
     };
@@ -183,26 +251,42 @@ voteApp.controller('indexCtl',
         window.parent.resizeIframe();
     };
 
-    $scope.computeMyVotes = function() {
+    // @param container: DOM container where to find votes. For example the DOM element of one question, or of the whole page.
+    // @returns An object in the form of {"target_id": "local:Idea/228", "criterion_id": "local:AbstractVoteSpecification/20", "value": 10} . The "target_id" field is optional (when there is only one pre-identified vote target).
+    $scope.computeMyVotes = function(container) {
       // do not use .data("criterion-value") because jQuery does not seem to read the value set by d3
 
-      $scope.myVotes = {};
+      container = container || $("#d3_container");
+
+      $scope.myVotes = [];
 
       // once serialized by $.param(), this will give "rentabilite=10&risque=0&investissement=22222&difficulte_mise_en_oeuvre=50"
-      $("#d3_container g.criterion").each(function(index) {
-        //console.log("current criterion:", $(this).attr("data-criterion-id"));
+      container.find("g.criterion").each(function(index) {
         var valueMin = parseFloat($(this).attr("data-criterion-value-min"));
         var valueMax = parseFloat($(this).attr("data-criterion-value-max"));
         var value = parseFloat($(this).attr("data-criterion-value"));
+        var criterion_id = $(this).attr("data-criterion-id");
+        var target_id = $(this).attr("data-target-id");
+        if ( target_id && !(target_id in $scope.myVotes) ){
+          $scope.myVotes[target_id] = {};
+        }
 
         //var valueToPost = (value - valueMin) / (valueMax - valueMin); // the posted value has to be a float in [0;1]
         var valueToPost = value;
 
-        $scope.myVotes[$(this).attr("data-criterion-id")] = valueToPost;
+        var vote = {
+          "criterion_id": criterion_id,
+          "value": valueToPost
+        };
+        if ( target_id ){
+          vote["target_id"] = target_id;
+        }
+        $scope.myVotes.push(vote);
       });
 
-      $("#d3_container > div.criterion").each(function(index) {
+      container.find("div.criterion").each(function(index) {
         var criterion_id = $(this).attr("data-criterion-id");
+        var target_id = $(this).attr("data-target-id");
         var value = parseInt($(this).attr("data-criterion-value"));
         console.log("criterion " + criterion_id + " has value " + value);
         if (isNaN(value))
@@ -212,197 +296,259 @@ voteApp.controller('indexCtl',
         }
 
         var valueToPost = value; // or maybe !!value
-        $scope.myVotes[criterion_id] = valueToPost;
+        var vote = {
+          "criterion_id": criterion_id,
+          "value": valueToPost
+        };
+        if ( target_id ){
+          vote["target_id"] = target_id;
+        }
+        $scope.myVotes.push(vote);
       });
 
       return $scope.myVotes;
     };
 
-    $scope.submitVote = function() {
-      console.log("submitVote()");
-      $scope.computeMyVotes();
-      console.log("myVotes:");
-      console.log($scope.myVotes);
+    $scope.buildValidatedVoteFormat = function(criterion_id, vote_value){
+      // determine vote type
 
-      var vote_result_holder = $("#vote_submit_result_holder");
-      vote_result_holder.empty();
+      var widget = configService;
+      var vote_type = "LickertIdeaVote";
 
-      var voting_urls = configService.voting_urls;
-      var counter = 0;
-      for (var k in $scope.myVotes)
-      {
-        if ($scope.myVotes.hasOwnProperty(k))
-        {
-
-          // determine vote type
-
-          var vote_type = "LickertIdeaVote";
-
-          var found = false;
-          /*if ( "items" in $scope.settings )
-          {
-            for ( var i = 0; !found && i < $scope.settings.items.length; ++i )
-            {
-              if ( "vote_specifications" in $scope.settings.items[i] )
-              {
-                for ( var j = 0; !found && j < $scope.settings.items[i].vote_specifications.length; ++j )
-                {
-                  if ( "@id" in $scope.settings.items[i].vote_specifications[j] && $scope.settings.items[i].vote_specifications[j]["@id"] == k )
-                  {
-                    if ( "vote_class" in $scope.settings.items[i].vote_specifications[j] )
-                    {
-                      found = true;
-                      vote_type = $scope.settings.items[i].vote_specifications[j]["vote_class"];
-                    }
-                  }
-                }
-              }
-            }
-          }*/
-          if ("vote_specifications" in configService) {
-            var vote_spec = _.findWhere(configService.vote_specifications, { "@id": k});
-            if (vote_spec && "vote_class" in vote_spec) {
-              vote_type = vote_spec.vote_class;
-            }
-          }
-
-          // validate vote value
-
-          var value = null; // must be float, and contained in the range defined in the criterion
-          if (vote_type == "BinaryIdeaVote")
-          {
-            console.log("$scope.myVotes[k]: ", $scope.myVotes[k]);
-            console.log("typeof $scope.myVotes[k]: ", typeof $scope.myVotes[k]);
-            if (typeof $scope.myVotes[k] == 'string')
-              value = !!parseInt($scope.myVotes[k]);
-            else if (typeof $scope.myVotes[k] == 'number')
-            {
-              value = !!$scope.myVotes[k];
-            }
-            else
-              value = $scope.myVotes[k];
-            console.log("new value:", value);
-          }
-          else if (vote_type == "MultipleChoiceIdeaVote")
-          {
-            if (typeof $scope.myVotes[k] == 'string')
-              value = parseInt($scope.myVotes[k]);
-            else
-              value = $scope.myVotes[k];
-          }
-          else // if ( vote_type == "LickertIdeaVote" )
-          {
-            if (typeof $scope.myVotes[k] == 'string')
-              value = parseFloat($scope.myVotes[k]);
-            else
-              value = $scope.myVotes[k];
-          }
-
-          if (voting_urls[k])
-          {
-            var url = AssemblToolsService.resourceToUrl(voting_urls[k]);
-            var data_to_post = {
-              "type": vote_type,
-              "value": value
-            };
-
-            var successForK = function(vk) {
-              return function(data, status, headers) {
-                console.log("success");
-
-                //alert("success");
-                console.log("data:");
-                console.log(data);
-                console.log("status:");
-                console.log(status);
-                console.log("headers:");
-                console.log(headers);
-
-                //$location.path( "/voted" );
-
-                console.log("k: " + vk);
-                var criterion_tag = $("svg g[data-criterion-id=\"" + vk + "\"]");
-                if (!criterion_tag.length)
-                  criterion_tag = $("div.criterion[data-criterion-id=\"" + vk + "\"]");
-                var svg = criterion_tag.parent("svg");
-                var criterion_name = criterion_tag.attr("data-criterion-name");
-
-                /*
-                //svg.css("background","#00ff00").fadeOut();
-                svg.css("background","#00ff00");//.delay(1000).css("background","none");
-                setTimeout(function(){svg.css("background","none");}, 1000);
-                */
-
-                $translate('voteSubmitSuccessForCriterion', {'criterion': criterion_name}).then(function(translation) {
-                  vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
-
-                  // $scope.resizeIframe(); // our resize function is not good enough yet
-                });
-              };          
-            };
-
-            var errorForK = function(vk) {
-              return function(status, headers) {
-                console.log("error");
-
-                //alert("error");
-                console.log("status:");
-                console.log(status);
-                console.log("headers:");
-                console.log(headers);
-
-                //$location.path( "/voted" );
-                console.log("k: " + vk);
-                var criterion_tag = $("svg g[data-criterion-id=\"" + vk + "\"]");
-                if (!criterion_tag.length)
-                  criterion_tag = $("div.criterion[data-criterion-id=\"" + vk + "\"]");
-                var svg = criterion_tag.parent("svg");
-                var criterion_name = criterion_tag.attr("data-criterion-name");
-
-                svg.css("background", "#ff0000");
-                setTimeout(function() {svg.css("background", "none");}, 1000);
-
-                $translate('voteSubmitFailureForCriterion', {'criterion': criterion_name}).then(function(translation) {
-                  vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
-
-                  // $scope.resizeIframe(); // our resize function is not good enough yet
-                });
-              }
-            };
-
-            // we will send votes for each criterion separated with a small delay, so that we avoid server saturation
-            // TODO: instead we could chain calls (send a call once the response of the previous one has been received)
-
-            var sendVote = function(url, data_to_post, k, delay) {
-              setTimeout(function() {
-                // POST to this URL
-                $http({
-                  method: "POST",
-                  url: url,
-                  data: $.param(data_to_post),
-
-                  //data: data_to_post,
-                  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-                  //headers: {'Content-Type': 'application/json'}
-                }).success(successForK(k)).error(errorForK(k));
-              }, delay);
-            };
-              
-            sendVote(url, data_to_post, k, (counter++) * 300);
-            
-          }
-          else
-          {
-            var error = "Error: No voting_urls endpoint associated to criterion " + k;
-            console.error(error);
-            alert(error);
-
-            // what else should we do?
-          }
+      if ("vote_specifications" in widget) {
+        var vote_spec = _.findWhere(widget.vote_specifications, { "@id": criterion_id});
+        if (vote_spec && "vote_class" in vote_spec) {
+          vote_type = vote_spec.vote_class;
         }
       }
 
+      // validate vote value
+
+      var value = null; // must be float, and contained in the range defined in the criterion
+      if (vote_type == "BinaryIdeaVote")
+      {
+        if (typeof vote_value == 'string')
+          value = !!parseInt(vote_value);
+        else if (typeof vote_value == 'number')
+        {
+          value = !!vote_value;
+        }
+        else
+          value = vote_value;
+        console.log("new value:", value);
+      }
+      else if (vote_type == "MultipleChoiceIdeaVote")
+      {
+        if (typeof vote_value == 'string')
+          value = parseInt(vote_value);
+        else
+          value = vote_value;
+      }
+      else // if ( vote_type == "LickertIdeaVote" )
+      {
+        if (typeof vote_value == 'string')
+          value = parseFloat(vote_value);
+        else
+          value = vote_value;
+      }
+
+      return {
+        "type": vote_type,
+        "value": value
+      };
+    };
+
+    $scope.getVoteSpecByURI = function(uri){
+      var widget = configService;
+      if ( "vote_specifications" in widget ){
+        if ( widget.vote_specifications.length ){
+          var sz = widget.vote_specifications.length;
+          for ( var i = 0; i < sz; ++i ){
+            var vote_spec = widget.vote_specifications[i];
+            if ( "@id" in vote_spec && vote_spec["@id"] == uri ){
+              return vote_spec;
+            }
+          }
+        }
+      }
+      return null;
+    };
+
+    $scope.submitVote = function(votes_container, result_holder) {
+      console.log("submitVote(): ", votes_container, result_holder);
+      var votes_to_submit = $scope.computeMyVotes(votes_container);
+      console.log("votes_to_submit:", votes_to_submit);
+      $scope.myVotes = votes_to_submit;
+
+      var vote_result_holder = result_holder || $("#vote_submit_result_holder");
+      vote_result_holder.empty();
+
+      var widget = configService;
+      var voting_urls = "voting_urls" in widget ? widget.voting_urls : null;
+      var counter = 0;
+      if ( !(votes_to_submit && votes_to_submit.length) ){
+        var translation = "Error: There is no vote to submit!";
+        vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
+        return;
+      }
+      votes_to_submit.forEach(function(vote){
+        // checking that we have enough info from input and configuration
+        
+        var criterion_id = "criterion_id" in vote ? vote.criterion_id : null;
+        var target_id = "target_id" in vote ? vote.target_id : null;
+        if ( !criterion_id ){
+          console.log("Error: vote has no criterion_id field");
+          return;
+        }
+        var vote_spec = $scope.getVoteSpecByURI(criterion_id);
+        if ( !vote_spec ){
+          console.log("Error: vote_spec not found");
+          return;
+        }
+        var voting_url = null;
+        var target = $scope.target || target_id;
+        if ( !target ){
+          console.log("Error: no target to vote to!");
+          return;
+        }
+        var target_endpoint = null;
+        if ( "voting_urls" in vote_spec && target in vote_spec.voting_urls )
+          target_endpoint = vote_spec.voting_urls[target];
+        if ( !target_endpoint ){
+          console.log("Error: no target endpoint to vote to!");
+          return;
+        }
+
+        // from here, we do have enough info to proceed
+
+        var url = AssemblToolsService.resourceToUrl(target_endpoint);
+        var data_to_post = $scope.buildValidatedVoteFormat(vote.criterion_id, vote.value);
+        
+
+        var successForK = function(vote_spec) {
+          return function(data, status, headers) {
+            console.log("success");
+
+            //alert("success");
+            console.log("data:");
+            console.log(data);
+            console.log("status:");
+            console.log(status);
+            console.log("headers:");
+            console.log(headers);
+
+            var criterion_name = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
+            if ( !criterion_name && "@id" in vote_spec ){
+              criterion_name = vote_spec["@id"];
+            }
+
+            //$location.path( "/voted" );
+
+            /*
+            console.log("k: " + vk);
+            var criterion_tag = votes_container.find("svg g[data-criterion-id=\"" + vk + "\"]");
+            if (!criterion_tag.length)
+              criterion_tag = votes_container.find("div.criterion[data-criterion-id=\"" + vk + "\"]");
+            var svg = criterion_tag.parent("svg");
+            var criterion_name = criterion_tag.attr("data-criterion-name");
+
+            
+            //svg.css("background","#00ff00").fadeOut();
+            svg.css("background","#00ff00");//.delay(1000).css("background","none");
+            setTimeout(function(){svg.css("background","none");}, 1000);
+            */
+
+            $translate('voteSubmitSuccessForCriterion', {'criterion': criterion_name}).then(function(translation) {
+              vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
+
+              // $scope.resizeIframe(); // our resize function is not good enough yet
+            });
+          };          
+        };
+
+        var errorForK = function(vote_spec) {
+          return function(status, headers) {
+            console.log("error");
+
+            //alert("error");
+            console.log("status:");
+            console.log(status);
+            console.log("headers:");
+            console.log(headers);
+
+            var criterion_name = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
+            if ( !criterion_name && "@id" in vote_spec ){
+              criterion_name = vote_spec["@id"];
+            }
+
+            /*
+            console.log("k: " + vk);
+            var criterion_tag = $("svg g[data-criterion-id=\"" + vk + "\"]");
+            if (!criterion_tag.length)
+              criterion_tag = $("div.criterion[data-criterion-id=\"" + vk + "\"]");
+            var svg = criterion_tag.parent("svg");
+            var criterion_name = criterion_tag.attr("data-criterion-name");
+
+            svg.css("background", "#ff0000");
+            setTimeout(function() {svg.css("background", "none");}, 1000);
+            */
+
+            $translate('voteSubmitFailureForCriterion', {'criterion': criterion_name}).then(function(translation) {
+              vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
+
+              // $scope.resizeIframe(); // our resize function is not good enough yet
+            });
+          }
+        };
+
+        // we will send votes for each criterion separated with a small delay, so that we avoid server saturation
+        // TODO: instead we could chain calls (send a call once the response of the previous one has been received)
+
+        var sendVote = function(url, data_to_post, vote_spec, delay) {
+          setTimeout(function() {
+            // POST to this URL
+            $http({
+              method: "POST",
+              url: url,
+              data: $.param(data_to_post),
+
+              //data: data_to_post,
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+
+              //headers: {'Content-Type': 'application/json'}
+            }).success(successForK(vote_spec)).error(errorForK(vote_spec));
+          }, delay);
+        };
+          
+        sendVote(url, data_to_post, vote_spec, (counter++) * 300);
+            
+          
+      });
+
+    };
+
+    $scope.computeMyVotesForQuestion = function(item_id){
+      var myVotes = null;
+      var dom_id = "vote-question-item-" + item_id;
+      var question = $("#"+dom_id);
+      if ( question ){
+        myVotes = $scope.computeMyVotes(question);
+      }
+      return myVotes;
+    };
+
+    $scope.submitVotesForQuestion = function(item_id){
+      console.log("submitVotesForQuestion(): ", item_id);
+
+      var dom_id = "vote-question-item-" + item_id;
+      var question = $("#"+dom_id);
+      if ( question ){
+        var result_holder = question.children(".vote-question-submit-button-container").children(".vote-question-result"); // or .find()
+        if ( !result_holder ){
+          result_holder = question.find(".vote-question-result");
+        }
+        $scope.submitVote(question, result_holder);
+      }
     };
 
     $scope.submitSingleVote = function(endpoint, type, criterion_id) {
@@ -416,9 +562,13 @@ voteApp.controller('indexCtl',
     // The d3 container (div)
     // @param item_data
     // One of the elements of the "items" array, from the configuration JSON
+    // @param target_id
+    // Id of the target votable (for example: "local:Idea/228")
+    // @param getUserPreviousVoteFunction
+    // function(criterion_id [, target_id]) which returns the user's previous vote for this criterion and this (or current) target
     // @param xPosCenter
     // Position on the X coordinates of the center of the gauge, in the created SVG
-    $scope.drawVerticalGauge = function(destination, item_data, xPosCenter) {
+    $scope.drawVerticalGauge = function(destination, item_data, target_id, getUserPreviousVoteFunction, xPosCenter) {
       console.log("drawVerticalGauge()");
       console.log("item_data:");
       console.log(item_data);
@@ -431,8 +581,15 @@ voteApp.controller('indexCtl',
       var criterion = item_data.vote_specifications[0];
       var valueMin = ("minimum" in criterion) ? criterion.minimum : 0;
       var valueMax = ("maximum" in criterion) ? criterion.maximum : 100;
-      var valueDefault = ("valueDefault" in criterion) ? criterion.valueDefault : valueMin;
+      var valueDefault = null;
+      if ( getUserPreviousVoteFunction ){
+        valueDefault = getUserPreviousVoteFunction(criterion["@id"], target_id);
+      }
+      if ( valueDefault === null ) {
+        valueDefault = ("valueDefault" in criterion) ? criterion.valueDefault : valueMin;
+      }
       var criterionValue = valueDefault;
+      target_id = target_id || null;
       console.log("criterionValue: ", criterionValue);
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
       
@@ -449,14 +606,8 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-value", criterionValue)
         .attr("data-criterion-value-min", valueMin)
         .attr("data-criterion-value-max", valueMax)
+        .attr("data-target-id", target_id)
       ;
-
-      console.log("criterion.minimum: ", ("minimum" in criterion ? criterion.minimum : "not defined"));
-      console.log("valueMin: ", valueMin);
-      console.log("criterion.maximum: ", ("maximum" in criterion ? criterion.maximum : "not defined"));
-      console.log("valueMax: ", valueMax);
-      console.log("item_data.height: ", item_data.height);
-      console.log("config.padding: ", config.padding);
 
       // create vertical scale
       var scale = d3.scale.linear()
@@ -602,7 +753,6 @@ voteApp.controller('indexCtl',
           // So we create an HTML element
           var elParent = $("#d3_container");
           var elOrigin = $(svg[0]);
-          console.log("svg: ", svg);
           var text = document.createTextNode(criterion.description);
           var node = document.createElement("span");
           node.appendChild(text);
@@ -655,13 +805,15 @@ voteApp.controller('indexCtl',
     // The d3 container (div)
     // @param item_data
     // One of the elements of the "items" array, from the configuration JSON
+    // @param target_id
+    // Id of the target votable (for example: "local:Idea/228")
+    // @param getUserPreviousVoteFunction
+    // function(criterion_id [, target_id]) which returns the user's previous vote for this criterion and this (or current) target
     // @param xPosCenter
     // Position on the X coordinates of the center of the gauge, in the created SVG
-    $scope.draw2AxesVote = function(destination, item_data, xPosCenter) {
+    $scope.draw2AxesVote = function(destination, item_data, target_id, getUserPreviousVoteFunction, xPosCenter) {
       console.log("draw2AxesVote()");
 
-      //console.log("item_data:");
-      //console.log(item_data);
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length)) {
         console.log("error: item has no 'vote_specifications' field");
@@ -684,9 +836,20 @@ voteApp.controller('indexCtl',
       var criterionYValueMax = ("maximum" in criteria[1]) ? criteria[1].maximum : 100;
       var criterionYValueDefault = ("valueDefault" in criteria[1]) ? criteria[1].valueDefault : criterionYValueMin;
 
-      var criterionXValue = criterionXValueDefault;
-      var criterionYValue = criterionYValueDefault;
+      var criterionXValue = null;
+      var criterionYValue = null;
+      if ( getUserPreviousVoteFunction ){
+        criterionXValue = getUserPreviousVoteFunction(criteria[0]["@id"], target_id);
+        criterionYValue = getUserPreviousVoteFunction(criteria[1]["@id"], target_id);
+      }
+      if ( criterionXValue === null ){
+        criterionXValue = criterionXValueDefault;
+      }
+      if ( criterionYValue === null ){
+        criterionYValue = criterionYValueDefault;
+      }
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
+      target_id = target_id || null;
 
       // create the graph, as a SVG in the d3 container div
       var svg = destination
@@ -702,6 +865,7 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-value-min", criterionXValueMin)
         .attr("data-criterion-value-max", criterionXValueMax)
         .attr("data-criterion-type", "x")
+        .attr("data-target-id", target_id)
       ;
 
       svg.append("g")
@@ -712,6 +876,7 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-value-min", criterionYValueMin)
         .attr("data-criterion-value-max", criterionYValueMax)
         .attr("data-criterion-type", "y")
+        .attr("data-target-id", target_id)
       ;
 
       // create X and Y scales
@@ -870,7 +1035,6 @@ voteApp.controller('indexCtl',
             // So we create an HTML element
             var elParent = $("#d3_container");
             var elOrigin = $(svg[0]);
-            console.log("svg: ", svg);
             var text = document.createTextNode(criteria[i].description);
             var node = document.createElement("span");
             node.appendChild(text);
@@ -940,9 +1104,6 @@ voteApp.controller('indexCtl',
           .text(criteria[1].descriptionMax);
       }
 
-      console.log("criterionXValue: ", criterionXValue);
-      console.log("criterionYValue: ", criterionYValue);
-
       // draw the cursor (inner disc)
       svg.append("circle")
         .attr("cx", xScale(criterionXValue))
@@ -968,10 +1129,12 @@ voteApp.controller('indexCtl',
     // The DOM element which will be used as container (div)
     // @param item_data
     // One of the elements of the "items" array, from the configuration JSON
-    $scope.drawRadioVote = function(destination, item_data) {
+    // @param target_id
+    // Id of the target votable (for example: "local:Idea/228")
+    // @param getUserPreviousVoteFunction
+    // function(criterion_id [, target_id]) which returns the user's previous vote for this criterion and this (or current) target
+    $scope.drawRadioVote = function(destination, item_data, target_id, getUserPreviousVoteFunction) {
       console.log("drawRadioVote()");
-      console.log("item_data:");
-      console.log(item_data);
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length > 0)) {
         console.log("error: item has no 'vote_specifications' field");
@@ -979,16 +1142,35 @@ voteApp.controller('indexCtl',
       }
 
       var criterion = item_data.vote_specifications[0];
-      var criterionValue = (criterion.valueDefault || criterion.valueDefault === 0) ? criterion.valueDefault : null;
-      console.log("drawRadioVote criterion: ", criterion);
+      target_id = target_id || null;
+
+      var criterionValue = null;
+      if ( getUserPreviousVoteFunction ){
+        var user_previous_vote = getUserPreviousVoteFunction(criterion["@id"], target_id);
+        console.log("user_previous_vote: ", user_previous_vote);
+        console.log('criterion["@id"]: ', criterion["@id"]);
+        console.log('target_id: ', target_id);
+        
+        // special case of binary vote
+        if ( user_previous_vote === true )
+          user_previous_vote = 1;
+        else if ( user_previous_vote === false )
+          user_previous_vote = 0;
+
+        criterionValue = user_previous_vote;
+      }
+      if ( criterionValue === null && "valueDefault" in criterion ){
+        criterionValue = criterion.valueDefault;
+      }
+      
       var div = $('<div>');
       div.attr({
         'class': 'criterion',
         'data-criterion-id': criterion["@id"],
         'data-criterion-name': criterion.name,
-        'data-criterion-value': null
+        'data-criterion-value': null,
+        'data-target-id': target_id
       });
-      console.log("div: ", div);
 
       // adapt data format from BinaryIdeaVote which has labelYes and labelNo, to PluralityIdeaVote which has possibleValues
       // criterion.possibleValues is like so: [ { label: 'Choice 1', value: 0 }, { label: 'Choice 2', value: 1} ]
@@ -1033,14 +1215,14 @@ voteApp.controller('indexCtl',
 
       if ('possibleValues' in criterion)
       {
-        if ('name' in criterion)
+        if (!target_id && 'name' in criterion)
         {
           var name = $('<strong>');
           name.text(criterion.name);
           div.append(name);
         }
 
-        if ('description' in criterion)
+        if (!target_id && 'description' in criterion)
         {
           var description = $('<p>');
           description.text(criterion.description);
@@ -1053,9 +1235,16 @@ voteApp.controller('indexCtl',
             var option = $('<div>');
             var input = $('<input>');
             var radio_id = 'radio_' + criterion["@id"] + '_' + item.value;
+            if ( target_id ){
+              radio_id = 'radio_' + criterion["@id"] + '_' + target_id + "_" + item.value;
+            }
+            var input_name = criterion["@id"];
+            if ( target_id ){
+              input_name = criterion["@id"] + "_" + target_id;
+            }
             input.attr({
               type: 'radio',
-              name: criterion["@id"], // criterion.name,
+              name: input_name,
               value: item.value,
               id: radio_id
             });
@@ -1067,7 +1256,6 @@ voteApp.controller('indexCtl',
             label.text(item.label);
             option.append(input);
             option.append(label);
-            console.log("option: ", option);
             div.append(option);
           }
         });
@@ -1105,7 +1293,6 @@ voteApp.controller('indexCtl',
 
       for (var i = 0; i < config.items.length; ++i)
       {
-        console.log(i);
         var item = config.items[i];
 
         var td = $("<th/>");
@@ -1134,8 +1321,6 @@ voteApp.controller('indexCtl',
         holder_svg = d3.select("#table_vote_item_" + i);
         holder_jquery = $("#table_vote_item_" + i);
 
-        //console.log("item.type:");
-        //console.log(item.type);
         if (item.type == "vertical_gauge")
         {
           $scope.drawVerticalGauge(holder_svg, item);
@@ -1164,8 +1349,6 @@ voteApp.controller('indexCtl',
         {
           var item = config.items[i];
 
-          //console.log("item.type:");
-          //console.log(item.type);
           if (item.type == "vertical_gauge")
           {
             $scope.drawVerticalGauge(holder_svg, item);
@@ -1206,6 +1389,133 @@ voteApp.controller('indexCtl',
           {
             $scope.drawRadioVote(holder_jquery, item);
           }
+        }
+      }
+
+      console.log("drawUIWithoutTable() completed");
+    };
+
+    $scope.drawMultipleTargetsUI = function() {
+      console.log("drawMultipleTargetsUI()");
+      var settings = $scope.settings;
+      var holder_svg = d3.select("#d3_container");
+      var holder_jquery = $("#d3_container");
+
+      if ("items" in settings) {
+        for (var i = 0; i < settings.items.length; ++i)
+        {
+          var item = settings.items[i];
+          var item_type = "type" in item ? item.type : null;
+          if ( !item_type ){
+            console.log("Error: item has no type. item was: ", item );
+            continue;
+          }
+
+          var question_holder = $("<section class='vote-question-item' />");
+          question_holder.attr("id", "vote-question-item-"+i);
+          holder_jquery.append(question_holder);
+          var question_holder_d3 = d3.select(question_holder.get(0));
+          
+
+          var question_title = "question_title" in item ? item.question_title : null;
+          var question_description = "question_description" in item ? item.question_description : null;
+          if ( question_title ){
+            question_holder_d3.append("h2").text(question_title);
+            if ( question_description ){
+              question_holder_d3.append("p").text(question_description);
+            }
+          }
+          else if (item_type == "2_axes"){
+            // TODO: display both questions and descriptions? Or nothing as each question is displayed along an axis? Or associate  question and description properties to an item instead of a criterion?
+          } else {
+            var vote_specifications = "vote_specifications" in item ? item.vote_specifications : null;
+            if ( vote_specifications && vote_specifications.length ){
+              var vote_spec = vote_specifications[0];
+              var question = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
+              var description = ("settings" in vote_spec && "description" in vote_spec.settings) ? vote_spec.settings.description : null;
+              if ( question ){
+                question_holder_d3.append("h2").text(question);
+                if ( description ){
+                  question_holder_d3.append("p").text(description);
+                }
+              }
+            }
+          }
+
+          var fctGetUserPreviousVote = function(criterion_id, target_id){
+            var widget = configService;
+            var vote_specifications = "vote_specifications" in widget ? widget.vote_specifications : null;
+            if ( vote_specifications && vote_specifications.length ){
+              var vote_spec = _.findWhere(vote_specifications, {"@id": criterion_id});
+              if ( vote_spec ){
+                var my_votes = "my_votes" in vote_spec ? vote_spec.my_votes : null;
+                if ( my_votes && my_votes.length ){
+                  var vote = _.findWhere(my_votes, {"idea": target_id});
+                  if ( "value" in vote ){
+                    return vote.value;
+                  }
+                  return vote;
+                }
+              }
+            }
+            return null;
+          };
+
+          if ( $scope.targets_ids && $scope.targets_ids.length ){
+            $scope.targets_ids.forEach(function(target_id){
+              //console.log("target currently being displayed: ", target_id);
+              var inline_vote_holder = $("<div class='inline-vote-for-a-target' />");
+              question_holder.append(inline_vote_holder);
+              
+              var target_title_holder = $("<div class='inline-vote-for-a-target--title' />");
+              inline_vote_holder.append(target_title_holder);
+              target_title_holder.text(target_id);
+              if ( target_id in $scope.targets_promises ){
+                $.when($scope.targets_promises[target_id]).done(function(data){
+                  if ( "shortTitle" in data ){
+                    target_title_holder.text(data.shortTitle);
+                    if ( "definition" in data && data.definition.length ){
+                      target_title_holder.attr("title", data.definition); // TODO: but this is HTML :/
+                      //for debug: target_title_holder.attr("title", target_id);
+                    } 
+                    
+                  } else {
+                    console.log("error: idea ", target_id, "has no shortTitle property");
+                  }
+                });
+              }
+              var item_holder = $("<div class='inline-vote-for-a-target--item' />");
+              inline_vote_holder.append(item_holder);
+              var item_holder_d3 = d3.select(item_holder.get(0));
+              if (item_type == "vertical_gauge")
+              {
+                $scope.drawVerticalGauge(item_holder_d3, item, target_id, fctGetUserPreviousVote);
+              }
+              else if (item_type == "2_axes")
+              {
+                $scope.draw2AxesVote(item_holder_d3, item, target_id, fctGetUserPreviousVote);
+              }
+              else if (item_type == "radio")
+              {
+                $scope.drawRadioVote(item_holder, item, target_id, fctGetUserPreviousVote);
+              }
+              
+            });
+          }
+
+          // after each item, display a "Vote" button which sends the votes of this question
+          var vote_button_holder = $("<div class='vote-question-submit-button-container'>");
+          question_holder.append(vote_button_holder);
+          var button = $('<button class="btn btn-primary btn-sm">Submit my vote for this question</button>'); // TODO: i18n
+          vote_button_holder.append(button);
+          vote_button_holder.append($("<div class='vote-question-result'>"));
+          var f = function(question_id){
+            return function(){
+              $scope.submitVotesForQuestion(question_id);
+            };
+          };
+          button.click(f(i));
+          
         }
       }
 

@@ -78,10 +78,34 @@ body {
   margin-top: 10px;
 }
 
-#vote_submit_result_holder p.success {
+#vote_submit_result_holder p.success, .vote-question-result p.success {
   color: #00A012;
 }
 
-#vote_submit_result_holder p.failure {
+#vote_submit_result_holder p.failure, .vote-question-result p.failure {
   color: #9E0000;
+}
+
+
+section.vote-question-item {
+  margin-bottom: 20px;
+}
+
+.inline-vote-for-a-target {
+  display: inline-block;
+  padding-right: 50px;
+}
+
+.inline-vote-for-a-target--title {
+  font-style: italic;
+  font-weight: bold;
+  text-align: center;
+}
+
+.inline-vote-for-a-target--item {
+
+}
+
+.vote-question-submit-button-container {
+  margin: 20px 0 30px 0;
 }

@@ -128,6 +128,11 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       //"default": "vertical_gauge", // we do not set default, because we use the change event to populate criterion list
       //"options": item_types_options
       "options": this.item_types // format needed by "options" is: [ { "key": "bla", "label": "blabla" }, { "key": "bli", "label": "blibli" }]
+    },
+    {
+      "key": "question_title",
+      "type": "text",
+      "label": "Question title"
     }
   ];
 
@@ -149,6 +154,12 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "type": "integer",
       "label": "Order of appearance of the question",
       "default": 0
+    },
+    {
+      "key": "question_description",
+      "type": "text",
+      "label": "Question description",
+      "default": ""
     }
   ];
 
@@ -182,7 +193,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
     {
       "key": "name",
       "type": "text",
-      "label": "Name",
+      "label": "Name (title of the axis)",
       "storage": "settings"
     },
     {

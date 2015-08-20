@@ -38,11 +38,12 @@ voteApp.controller('resultsCtl',
     };
 
     $scope.getVoteSpecByURI = function(uri){
-      if ( "vote_specifications" in configService ){
-        if ( configService.vote_specifications.length ){
-          var sz = configService.vote_specifications.length;
+      var widget = configService;
+      if ( "vote_specifications" in widget ){
+        if ( widget.vote_specifications.length ){
+          var sz = widget.vote_specifications.length;
           for ( var i = 0; i < sz; ++i ){
-            var vote_spec = configService.vote_specifications[i];
+            var vote_spec = widget.vote_specifications[i];
             if ( "@id" in vote_spec && vote_spec["@id"] == uri ){
               return vote_spec;
             }
