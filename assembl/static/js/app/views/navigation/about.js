@@ -14,7 +14,8 @@ var AboutNavPanel = AssemblPanel.extend({
   },
   events: {
     'click @ui.debate': 'goToDebate',
-    'click .js_test_stuff_analytics': 'testAnalytics'
+    'click .js_test_stuff_analytics': 'testAnalytics',
+    'click .js_trackInteractionExample': 'testAnalytics2'
   },
   initialize: function(options) {
       Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
@@ -26,8 +27,13 @@ var AboutNavPanel = AssemblPanel.extend({
     e.stopPropagation();
     e.preventDefault();
     var a = Analytics.getInstance();
-    a.setCustomVariable("Type1_index2", 'value1_index2', {scope: 'visit', index: 2});
-    a.commit({piwik: true});
+    a.trackImpression("DummyContentName", "DummyContentPiece", "http://dummyurl.fc.uk");
+  },
+  testAnalytics2: function(e){
+    e.stopPropagation();
+    e.preventDefault();
+    var a = Analytics.getInstance();
+    a.trackContentInteraction("DummyInteraction", "DummyContentName", "DummyContentPiece", "http://dummyurl.fc.uk");
   }
 });
 
