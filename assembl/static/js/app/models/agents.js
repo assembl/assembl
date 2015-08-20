@@ -134,7 +134,7 @@ var AgentModel = Base.Model.extend({
   },
 
   getSingleUser: function() {
-    this.urlRoot = Ctx.getApiV2DiscussionUrl('all_users/') + Ctx.getCurrentUserId();
+    this.urlRoot = Ctx.getApiV2DiscussionUrl('all_users/');
   },
 
   validate: function(attrs, options) {
