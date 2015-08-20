@@ -160,9 +160,6 @@ var VotingWidgetModel = WidgetModel.extend({
     if (activityState == "ended") {
       base += "&page=results";
     }
-    if (targetIdeaId !== undefined) {
-      base += "&target=" + encodeURIComponent(targetIdeaId);
-    }
     return base;
   },
 
