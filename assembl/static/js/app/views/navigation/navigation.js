@@ -14,7 +14,8 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js'),
     Permissions = require('../../utils/permissions.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    CollectionManager = require('../../common/collectionManager.js');
+    CollectionManager = require('../../common/collectionManager.js'),
+    Analytics = require('../../analytics/dispatcher.js');
 
 var NavigationView = AssemblPanel.extend({
   template: "#tmpl-navigation",
@@ -46,7 +47,7 @@ var NavigationView = AssemblPanel.extend({
     synthesis_tab: '.js_synthesis_tab'
   },
   events: {
-    'click @ui.navigation': 'toggleMenuByEvent',
+    'click @ui.navigation': '_toggleMenuByEvent',
     'click @ui.ideaFromIdealist': 'addIdeaFromIdeaList',
   },
   initialize: function(options) {
@@ -57,7 +58,7 @@ var NavigationView = AssemblPanel.extend({
     this.visualizationItems = new Base.Collection();
     this.num_items = 2;
 
-    this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
+    this.listenTo(Assembl.vent, 'DEPRECATEDnavigation:selected', this.setViewByName);
     this.listenTo(Assembl.vent, 'infobar:closeItem', this.setSideBarHeight);
   },
   onAttach:function() {
@@ -141,23 +142,35 @@ var NavigationView = AssemblPanel.extend({
     $(window).off('resize', this.setSideBarHeight);
   },
 
-  toggleMenuByName: function(itemName, options) {
-    var elm = this.$('.nav[data-view=' + itemName + ']');
-    this.toggleMenuByElement(elm, options);
+  /** 
+   * @param origin Analytics context where the event was fired
+   */
+  setViewByName: function(itemName, origin) {
+    if (origin === undefined) {
+      origin = '-';
+    }
+    this._toggleMenuByName(itemName);
+    this._loadView(itemName, origin);
   },
-  toggleMenuByEvent: function(evt) {
+
+  _toggleMenuByName: function(itemName, options) {
+    var elm = this.$('.nav[data-view=' + itemName + ']');
+    this._toggleMenuByElement(elm, options);
+  },
+
+  _toggleMenuByEvent: function(evt) {
     if ($(evt.target).hasClass("panel-header-minimize"))
         return;
     var elm = $(evt.currentTarget), // use currentTarget instead of target, so that we are sure that it is a .nav element
         view = elm.attr('data-view');
-    Assembl.vent.trigger("navigation:selected", view);
+    Assembl.vent.trigger("DEPRECATEDnavigation:selected", view, 'NAVIGATION');
   },
 
   /**
    * Toggle a navigation accordion item
    * @param  {jQuery selection of a DOM element} elm
    */
-  toggleMenuByElement: function(elm, options) {
+  _toggleMenuByElement: function(elm, options) {
     this.setSideBarHeight();
     var view = elm.attr('data-view');
 
@@ -166,8 +179,6 @@ var NavigationView = AssemblPanel.extend({
       this.$('.nav').removeClass('active');
       elm.addClass('active');
       elm.next(this.ui.level).slideDown();
-
-      this.loadView(view, options);
     }
   },
 
@@ -185,7 +196,7 @@ var NavigationView = AssemblPanel.extend({
   /**
    * @param options: { show_help: boolean }
    */
-  loadView: function(view, options) {
+  _loadView: function(view, origin) {
       // clear aspects of current state
       switch (this.getContainingGroup().model.get('navigationState')) {
         case 'synthesis':
@@ -200,7 +211,7 @@ var NavigationView = AssemblPanel.extend({
           break;
       }
       this.getContainingGroup().model.set('navigationState', view);
-
+      var analytics = Analytics.getInstance();
       // set new state
       switch (view) {
         case 'about':
@@ -209,6 +220,9 @@ var NavigationView = AssemblPanel.extend({
             panelWrapper: this.getPanelWrapper()
           });
           this.about.show(aboutNavPanel);
+          if(origin !== null) {
+            analytics.changeCurrentPage(analytics.pages['NAVIGATION_CONTEXT_SECTION/'+origin]);
+          }
           this.getContainingGroup().NavigationResetContextState();
           break;
         case 'debate':
@@ -218,6 +232,9 @@ var NavigationView = AssemblPanel.extend({
             nav: true
           });
           this.debate.show(idealist);
+          if(origin !== null) {
+            analytics.changeCurrentPage(analytics.pages['NAVIGATION_DEBATE_SECTION/'+origin]);
+          }
           this.getContainingGroup().NavigationResetDebateState();
           break;
         case 'synthesis':
@@ -226,6 +243,9 @@ var NavigationView = AssemblPanel.extend({
             panelWrapper: this.getPanelWrapper()
           });
           this.synthesis.show(synthesisInNavigationPanel);
+          if(origin !== null) {
+            analytics.changeCurrentPage(analytics.pages['NAVIGATION_SYNTHESES_SECTION/'+origin]);
+          }
           this.getContainingGroup().NavigationResetSynthesisMessagesState(synthesisInNavigationPanel);
           break;
         case 'visualizations':
@@ -234,9 +254,13 @@ var NavigationView = AssemblPanel.extend({
             collection: this.visualizationItems
           });
           this.visualizationList.show(visualizationListPanel);
+          //SHOULDN'T WE CLEAR THE OTHER PANELS HERE?  benoitg- 2015-08-20
+          if(origin !== null) {
+            analytics.changeCurrentPage(analytics.pages['NAVIGATION_VISUALIZATIONS_SECTION/'+origin]);
+          }
           break;
         default:
-          break
+          break;
       }
     },
 

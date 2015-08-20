@@ -112,7 +112,7 @@ var routeManager = Marionette.Object.extend({
         var messageList = firstGroup.findViewByType(PanelSpecTypes.MESSAGE_LIST);
         if (!messageList) {
           if (firstGroup.isSimpleInterface()) {
-            Assembl.vent.trigger("navigation:selected", 'debate', { show_help: false });
+            Assembl.vent.trigger("DEPRECATEDnavigation:selected", 'debate', null);
           }
           else {
             throw new Error("WRITEME:  There was no group with a messagelist available");
@@ -132,7 +132,7 @@ var routeManager = Marionette.Object.extend({
     setTimeout(function() {
       //TODO: fix this horrible hack
       //We really need to address panels explicitely
-      Assembl.vent.trigger("navigation:selected", 'debate');
+      Assembl.vent.trigger("DEPRECATEDnavigation:selected", 'debate', null);
       Assembl.vent.trigger('DEPRECATEDideaList:selectIdea', id, "from_url", true);
     }, 0);
 
@@ -241,7 +241,7 @@ var routeManager = Marionette.Object.extend({
           if (navigableGroupSpec) {
             setTimeout(function() {
               var groupContent = groupsView.children.findByModel(navigableGroupSpec);
-              groupContent.NavigationResetContextState();
+              groupContent.NavigationResetDefaultState();
             }, 0);
           }
         }

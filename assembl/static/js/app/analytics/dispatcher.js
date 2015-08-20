@@ -66,7 +66,7 @@ _.extend(AnalyticsDispatcher.prototype, {
 
   changeCurrentPage: function(page, options) {
     if (!(page in this.pages)) {
-      throw new Error("Unknown page definition");
+      throw new Error("Unknown page definition: " + page);
     }
     this.notify('changeCurrentPage', arguments);
   },

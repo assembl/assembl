@@ -458,7 +458,7 @@ var MessageView = Marionette.ItemView.extend({
             //console.log("current_navigation_state:", current_navigation_state);
             if (current_navigation_state === 'about')
             {
-              that.listenToOnce(Assembl.vent, 'navigation:selected', applyEllipsis);
+              that.listenToOnce(Assembl.vent, 'DEPRECATEDnavigation:selected', applyEllipsis);
               return;
             }
 
@@ -480,8 +480,8 @@ var MessageView = Marionette.ItemView.extend({
         //Why do we need the following block?  benoitg-2015-03-03
         //console.log('current_navigation_state is:', current_navigation_state);
         if (current_navigation_state !== undefined) {
-          //console.log('Setting listener on navigation:selected');
-          that.listenTo(Assembl.vent, 'navigation:selected', function(navSection) {
+          //console.log('Setting listener on DEPRECATEDnavigation:selected');
+          that.listenTo(Assembl.vent, 'DEPRECATEDnavigation:selected', function(navSection) {
             //console.log('New navigation has just been selected:', navSection);
             if (navSection === 'debate') {
               //console.log('Updating dotdotdot because debate has just been selected');

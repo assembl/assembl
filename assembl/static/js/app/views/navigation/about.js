@@ -21,7 +21,7 @@ var AboutNavPanel = AssemblPanel.extend({
       Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
     },
   goToDebate: function() {
-    Assembl.vent.trigger("navigation:selected", "debate");
+    Assembl.vent.trigger("DEPRECATEDnavigation:selected", "debate");
   },
   testAnalytics: function(e){
     e.stopPropagation();

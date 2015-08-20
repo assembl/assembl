@@ -310,7 +310,7 @@ var navBar = Marionette.LayoutView.extend({
             that.scrollToRight();
 
             if (hasNavSide) {
-              Assembl.vent.trigger('navigation:selected', 'about');
+              Assembl.vent.trigger('DEPRECATEDnavigation:selected', 'about');
             }
 
             that.$el.unbind();

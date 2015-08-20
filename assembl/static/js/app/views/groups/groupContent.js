@@ -6,8 +6,7 @@ var Marionette = require('../../shims/marionette.js'),
     panelSpec = require('../../models/panelSpec.js'),
     AssemblPanel = require('../assemblPanel.js'),
     PanelWrapper = require('./panelWrapper.js'),
-    PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    Analytics = require('../../analytics/dispatcher.js');
+    PanelSpecTypes = require('../../utils/panelSpecTypes.js');
 
 /** Represents the entire content of a single panel group */
 var groupContent = Marionette.CompositeView.extend({
@@ -25,11 +24,10 @@ var groupContent = Marionette.CompositeView.extend({
       if (!that.isViewDestroyed()) {
         var navView = that.findViewByType(PanelSpecTypes.NAV_SIDEBAR);
         if (navView) {
-          //navView.loadView(that.model.get('navigationState'));
-          navView.toggleMenuByName(that.model.get('navigationState'));
+          navView.setViewByName(that.model.get('navigationState'), null);
         }
       }
-    }, 200);
+    }, 200); //FIXME:  Magic delay...
   },
   events: {
     'click .js_closeGroup': 'closeGroup'
@@ -209,13 +207,17 @@ var groupContent = Marionette.CompositeView.extend({
   },
 
   isSimpleInterface: function() {
-      if (this.findNavigationSidebarPanelSpec()) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    },
+    if (this.findNavigationSidebarPanelSpec()) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
+  NavigationResetDefaultState: function() {
+    return this.NavigationResetDebateState();
+  },
 
   /**
    * Specific to the simple interface.  Does nothing if there is no
@@ -241,14 +243,13 @@ var groupContent = Marionette.CompositeView.extend({
       }
     },
 
+  
   NavigationResetContextState: function() {
     var nav = this.findNavigationSidebarPanelSpec();
     if (nav) {
       this.groupContainer.suspendResize();
       this.model.set('navigationState', 'about');
       this.ensureOnlyPanelsVisible(PanelSpecTypes.DISCUSSION_CONTEXT);
-      var analytics = Analytics.getInstance();
-      analytics.changeCurrentPage(analytics.pages['CONTEXT/-']);
       this.groupContainer.resumeResize();
     }
   },
