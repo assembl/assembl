@@ -324,6 +324,7 @@ JOIN post AS family_posts ON (
     )
     OR family_posts.id = root_posts.id
 )
+JOIN content AS family_content ON (family_posts.id = family_content.id AND family_content.hidden = 0)
 """ % (select, Idea._get_idea_dag_statement(skip_where))
 
     @staticmethod
@@ -894,7 +895,8 @@ class RootIdea(Idea):
         """ In the root idea, this is the count of all mesages in the system """
         from .post import Post
         result = self.db.query(Post).filter(
-            Post.discussion_id == self.discussion_id
+            Post.discussion_id == self.discussion_id,
+            Post.hidden==False
         ).count()
         return int(result)
 
