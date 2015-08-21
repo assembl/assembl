@@ -1,9 +1,8 @@
 import re
 from collections import defaultdict
-from Stemmer import Stemmer
 
 from . import (
-    normalize_locale, get_stop_words, known_languages, DummyStemmer)
+    locale_to_lang, get_stop_words, known_languages, get_stemmer)
 
 
 class StemSet(set):
@@ -35,17 +34,13 @@ class WordCounter(defaultdict):
         # We will base stemmer on first known language.
         stemmer = None
         stopwords = set()
-        for lang in langs:
-            lang = normalize_locale(lang)
+        for locale in langs:
+            lang = locale_to_lang(locale)
             if lang in known_languages:
                 stopwords.update(get_stop_words(lang))
             self.langs.append(lang)
-            if lang in known_languages and not stemmer:
-                stemmer = Stemmer(lang)
-        if stemmer:
-            self.stemmer = stemmer
-        else:
-            self.stemmer = DummyStemmer()
+            stemmer = stemmer or get_stemmer(lang, False)
+        self.stemmer = stemmer or get_stemmer(None)
         self.stop_words = stopwords
 
     def add_text(self, text, weight=1.0):
