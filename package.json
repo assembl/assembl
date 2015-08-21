@@ -23,7 +23,6 @@
     "cover": "mochify --cover"
   },
   "dependencies": {
-    "underscore": "~1.7.0",
     "bluebird": "^2.9.26",
     "browserify": "^10.2.1",
     "browserify-shim": "^3.8.7",
