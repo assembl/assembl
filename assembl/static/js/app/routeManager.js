@@ -227,7 +227,7 @@ var routeManager = Marionette.Object.extend({
                                }
                              });
       } else {
-        activate_tour = false;
+        //activate_tour = false;
         if (!lastSave
             || (Date.now() - lastSave.getTime() > (7 * 24 * 60 * 60 * 1000))
             ) {

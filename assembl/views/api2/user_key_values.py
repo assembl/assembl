@@ -1,7 +1,8 @@
 from simplejson import dumps, loads
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import (HTTPCreated, HTTPNotFound)
+from pyramid.httpexceptions import (
+    HTTPCreated, HTTPNotFound, HTTPBadRequest)
 from pyramid.security import Everyone
 
 from assembl.auth import (
@@ -28,6 +29,17 @@ def view_namespaces(request):
              request_method='GET', permission=P_READ)
 def view_dict(request):
     user_ns_b_kvdict = request.context.collection
+    return dict(user_ns_b_kvdict)
+
+
+@view_config(context=UserNSBoundDictContext, renderer='json',
+             request_method='PATCH', permission=P_READ)
+def patch_dict(request):
+    user_ns_b_kvdict = request.context.collection
+    if not isinstance(request.json, dict):
+        raise HTTPBadRequest()
+    for k, v in request.json.iteritems():
+        user_ns_b_kvdict[k] = v
     return dict(user_ns_b_kvdict)
 
 

@@ -1,6 +1,7 @@
 "use strict";
 
 var i18n =  require('./i18n.js');
+var tourModel = require('../models/tour.js');
 
 // Tours
 var onStart = require('./tours/onStart.js');

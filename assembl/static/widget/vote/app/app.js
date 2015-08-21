@@ -1,7 +1,7 @@
 "use strict";
 
 var voteApp = angular.module('voteApp',
-    ['ngRoute', 'ngSanitize', 'creativityServices', 'pascalprecht.translate']);
+    ['ngRoute', 'ngSanitize', 'creativityServices', 'pascalprecht.translate', 'mgcrea.ngStrap.datepicker', 'mgcrea.ngStrap.timepicker']);
 
 voteApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
@@ -40,6 +40,10 @@ voteApp.config(['$routeProvider', function($routeProvider) {
         when('/admin/configure_instance_set_settings', {
           templateUrl:'app/partials/admin_configure_instance_set_settings.html',
           controller:'adminConfigureInstanceSetSettingsCtl'
+        }).
+        when('/admin/configure_instance_set_start_and_end_dates', {
+          templateUrl:'app/partials/admin_configure_instance_set_start_and_end_dates.html',
+          controller:'adminConfigureInstanceSetStartAndEndDatesCtl'
         }).
         otherwise({
           redirectTo: '/'
