@@ -69,6 +69,10 @@ def get_cluster_info(idea_id, num_topics=200, passes=5, algorithm="DBSCAN", **al
     idea = Idea.get(idea_id)
     lang = idea.discussion.discussion_locales[0].split('_')[0]
     dirname = join(nlp_data, lang)
+    stemmer = get_stemmer(lang)
+    if not isinstance(stemmer, DummyStemmer):
+        stemmer = ReversibleStemmer(
+            stemmer, join(dirname, 'stems.dict'))
     dictionary = corpora.Dictionary.load(join(dirname, 'dico.dict'))
     corpus = IdMmCorpus(join(dirname, 'posts.mm'))
     related = text(
@@ -102,7 +106,7 @@ def get_cluster_info(idea_id, num_topics=200, passes=5, algorithm="DBSCAN", **al
             continue
         subset = [n for (n, l) in enumerate(labels) if label == l]
         post_clusters.append([post_id_by_index[n] for n in subset])
-    clusters_features = []
+    all_cluster_features = []
     for cluster in post_clusters:
         cluster_corpus = corpus.subcorpus(cluster)
         clusterneg_corpus = corpus.subcorpus(
@@ -115,14 +119,19 @@ def get_cluster_info(idea_id, num_topics=200, passes=5, algorithm="DBSCAN", **al
 
         difference = centroid(cluster_corpus) - centroid(clusterneg_corpus)
         difference = difference.argsort()
-        cluster_features = [
-            lda_model.print_topic(id)
-            for id in difference[0:4]]
+        def as_words(index):
+            words = tokenize(index)
+            if getattr(stemmer, 'reverse', None):
+                return [stemmer.reverse[word] for word in words]
+            return list(words)
         clusterneg_features = [
-            lda_model.print_topic(id)
+            as_words(lda_model.print_topic(id))
+            for id in difference[0:4]]
+        cluster_features = [
+            as_words(lda_model.print_topic(id))
             for id in difference[-1:-5:-1]]
-        clusters_features.append((cluster_features, clusterneg_features))
-    return silhouette_score, post_clusters, clusters_features
+        all_cluster_features.append((cluster_features, clusterneg_features))
+    return silhouette_score, post_clusters, all_cluster_features
     # On root: [[1781, 2036, 2069, 2090, 2100]]
     # on 429: posts=[2093, 1787, 2040, 2047, 2086, 2079]
 

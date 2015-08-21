@@ -121,7 +121,7 @@ class ReversibleStemmer(object):
         stemmed = self.stemmer.stemWord(word)
         orig = self.reverse.get(stemmed, None)
         if orig is None or len(orig) > len(word):
-            self.reverse[stemmed] = orig
+            self.reverse[stemmed] = word
         return stemmed
 
     def stemText(self, text):
