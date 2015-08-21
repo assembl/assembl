@@ -3,6 +3,7 @@
 
     "historyBack":"Retour",
     "voteSubmit":"Validez votre vote",
+    "voteSubmitForQuestion":"Validez votre vote pour cette question",
     "voteSubmitSuccessForCriterion":"Votre vote sur le critère \"{{criterion}}\" a été correctement pris en compte !",
     "voteSubmitFailureForCriterion":"Il y a eu une erreur lors de la soumission de votre vote pour le critère \"{{criterion}}\"! Il n'a pas été comptabilisé, veuillez réessayer.",
     "voteAsUser":"Vous votez en tant que \"{{username}}\".",

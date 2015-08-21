@@ -57,12 +57,27 @@ voteApp.controller('indexCtl',
 
       $scope.user = configService.user;
       
-      // TODO: check that the user has the "vote" permission
+      // check that the user has the "vote" permission
 
-
-      
-      $scope.overwriteItemsDefaultValuesWithPreviousUserVotes();
-
+      var widget = configService;
+      var discussion_id = "discussion" in widget ? widget.discussion : null;
+      if ( discussion_id ){
+        var user = "user" in widget ? widget.user : null;
+        if ( user ){
+          var permissions = "permissions" in user ? user.permissions : null;
+          if ( permissions && (discussion_id in permissions) ){
+            var permissions_for_discussion = permissions[discussion_id];
+            if ( permissions_for_discussion.length && permissions_for_discussion.indexOf("vote") ){
+              // OK we are sure that the user has the permission to vote
+              console.log("OK we are sure that the user has the permission to vote");
+            }
+            else {
+              alert("Error: you do not have the permission to vote.");
+              return;
+            }
+          }
+        }
+      }
 
 
       var target = window.getUrlVariableValue("target");
@@ -157,7 +172,6 @@ voteApp.controller('indexCtl',
           - show target idea title (optionnaly with a link to the idea)
           - show voting item
             - get user previous vote on item's criteria for this target, if any (my_votes field of the vote specification, filtered by the value of idea) => if that's the case, pre-fill item with user votes
-          - (optionnaly show vote button)
         - show vote button
       */
 
@@ -187,18 +201,6 @@ voteApp.controller('indexCtl',
 
       $scope.drawUI(true);
 
-    };
-
-    $scope.overwriteItemsDefaultValuesWithPreviousUserVotes = function(){
-      if ("items" in $scope.settings){
-        _.each($scope.settings.items, function(item, item_index){
-          if ("vote_specifications" in item){
-            _.each(item.vote_specifications, function(criterion, criterion_index){
-              // TODO
-            });
-          }
-        });
-      }
     };
 
     // @param multiple_targets: boolean
@@ -238,9 +240,14 @@ voteApp.controller('indexCtl',
       }
 
       if ( !multiple_targets ){
-        $("body").append($('<button id="vote_submit" ng-click="submitVote()" class="btn btn-primary btn-sm">Submit your vote</button>')); // TODO: i18n
+        $translate('voteSubmit').then(function(translation) {
+          $("body").append($('<button id="vote_submit" ng-click="submitVote()" class="btn btn-primary btn-sm">' + translation + '</button>'));
+          $("body").append($('<div id="vote_submit_result_holder"></div>'));
+        });
       }
-      $("body").append($('<div id="vote_submit_result_holder"></div>'));
+      else {
+        $("body").append($('<div id="vote_submit_result_holder"></div>'));
+      }
       
 
       $scope.resizeIframe();
@@ -1504,17 +1511,23 @@ voteApp.controller('indexCtl',
           }
 
           // after each item, display a "Vote" button which sends the votes of this question
-          var vote_button_holder = $("<div class='vote-question-submit-button-container'>");
-          question_holder.append(vote_button_holder);
-          var button = $('<button class="btn btn-primary btn-sm">Submit my vote for this question</button>'); // TODO: i18n
-          vote_button_holder.append(button);
-          vote_button_holder.append($("<div class='vote-question-result'>"));
-          var f = function(question_id){
-            return function(){
-              $scope.submitVotesForQuestion(question_id);
+          var translationReceived = function(question_id){
+            return function(translation){
+              var question_holder = $("#vote-question-item-"+question_id);
+              console.log("translation received: ", translation);
+              var vote_button_holder = $("<div class='vote-question-submit-button-container'>");
+              question_holder.append(vote_button_holder);
+              var button = $('<button class="btn btn-primary btn-sm">' + translation + '</button>');
+              vote_button_holder.append(button);
+              vote_button_holder.append($("<div class='vote-question-result'>"));
+              var onButtonClick = function(){
+                $scope.submitVotesForQuestion(question_id);
+              };
+              button.click(onButtonClick);
             };
-          };
-          button.click(f(i));
+          }
+          $translate('voteSubmitForQuestion').then(translationReceived(i));
+          
           
         }
       }
