@@ -79,13 +79,7 @@ voteApp.controller('indexCtl',
         }
       }
 
-
-      var target = window.getUrlVariableValue("target");
-      $scope.target = target;
-      if ( !target ){
-        $scope.initVotingForAllTargets();
-        return;
-      }
+      $scope.initVotingForAllTargets();
 
       /*
       // try to get previous votes of the user
@@ -179,18 +173,38 @@ voteApp.controller('indexCtl',
 
       // create list of targets from voting_urls field (associative array) of widget.vote_specifications (we use only first element because we assume all vote specifications of this vote widget instance have the same set of targets)
 
-      $scope.targets_ids = null;
+      var target = window.getUrlVariableValue("target");
+      var targets = window.getUrlVariableValue("targets");
+      if ( target ){
+        $scope.targets_ids = [target];
+        $scope.target = target; // shorcut for the unique target
+      }
+      else if ( targets ){
+        $scope.targets_ids = targets.split(",");
+        $scope.target = null;
+      }
+      else {
+        $scope.targets_ids = null;
+        $scope.target = null;
+      }
 
-      var vote_specifications = "vote_specifications" in widget ? widget.vote_specifications : null;
-      if ( vote_specifications && vote_specifications.length ){
-        var vote_spec = vote_specifications[0];
-        var voting_urls = "voting_urls" in vote_spec ? vote_spec.voting_urls : null;
-        console.log("voting_urls: ", voting_urls);
-        console.log("Object.keys(voting_urls): ", Object.keys(voting_urls));
-        if ( voting_urls && Object.keys(voting_urls).length )
-        $scope.targets_ids = Object.keys(voting_urls);
+      if ( !$scope.targets_ids ){
+        var vote_specifications = "vote_specifications" in widget ? widget.vote_specifications : null;
+        if ( vote_specifications && vote_specifications.length ){
+          var vote_spec = vote_specifications[0];
+          var voting_urls = "voting_urls" in vote_spec ? vote_spec.voting_urls : null;
+          console.log("voting_urls: ", voting_urls);
+          console.log("Object.keys(voting_urls): ", Object.keys(voting_urls));
+          if ( voting_urls && Object.keys(voting_urls).length ){
+            $scope.targets_ids = Object.keys(voting_urls);
+            if ( $scope.targets_ids && $scope.targets_ids.length == 1 ){
+              $scope.target = $scope.targets_ids[0];
+            }
+          }
+        }
       }
       console.log("$scope.targets_ids: ", $scope.targets_ids);
+      console.log("$scope.target: ", $scope.target);
 
       $scope.targets_promises = {}; // {"local:Idea/228": promise, ...}
       if ( $scope.targets_ids && $scope.targets_ids.length ){
@@ -199,7 +213,7 @@ voteApp.controller('indexCtl',
         });
       }
 
-      $scope.drawUI(true);
+      $scope.drawUI(true); // should be $scope.drawUI($scope.target === null); but original single-target vote UI is now temporary disabled because does not work correctly since recent changes. So instead, we display a multiple-target UI even for single-target vote.
 
     };
 
@@ -1407,6 +1421,17 @@ voteApp.controller('indexCtl',
       var settings = $scope.settings;
       var holder_svg = d3.select("#d3_container");
       var holder_jquery = $("#d3_container");
+
+      // check that there are at least 1 item and at least 1 target
+      
+      if ( !("items" in settings && settings.items && settings.items.length > 0) ){
+        holder_jquery.append($("<p>Error: There is no voting item to display.</p>"));
+        return;
+      }
+      if ( !($scope.targets_ids && $scope.targets_ids.length > 0) ){
+        holder_jquery.append($("<p>Error: There is no target to vote on.</p>"));
+        return;
+      }
 
       if ("items" in settings) {
         for (var i = 0; i < settings.items.length; ++i)

@@ -100,6 +100,15 @@ This URL is the configuration parameter which you can now give when you access t
 So an example of widget URL is http://localhost:6543/widget/vote/?config=http://localhost:6543/data/Widget/22#/
 
 
+Displaying the form for a user to vote on all or some vote targets
+==================================================================
+
+* http://localhost:6543/static/widget/vote/?config=local:Widget/16&targets=local:Idea/228,local:Idea/166#/ displays the 2 given targets. The "targets" parameter takes a list of targets URIs, separated by the "," character. So http://localhost:6543/static/widget/vote/?config=local:Widget/16&targets=local:Idea/228#/ displays a single target
+* http://localhost:6543/static/widget/vote/?config=local:Widget/16&target=local:Idea/228#/ also displays a single target
+* http://localhost:6543/static/widget/vote/?config=local:Widget/16#/ displays all targets (when no "target" or "targets" parameter is given)
+
+
+
 Tools to make REST calls
 ========================
 
