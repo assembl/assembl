@@ -286,13 +286,14 @@ class Content(DiscussionBoundBase):
 
     def get_body_as_text(self):
         mimetype = self.get_body_mime_type()
+        body = self.body or ""
         if mimetype == 'text/plain':
-            return self.body.strip()
+            return body.strip()
         elif mimetype == 'text/html':
-            return BeautifulSoup(self.body).get_text().strip()
+            return BeautifulSoup(body).get_text().strip()
         else:
             log.error("What is this mimetype?" + mimetype)
-            return self.body
+            return body
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP,
                         discussion_id=None, view_def="changes"):
