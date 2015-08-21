@@ -556,7 +556,7 @@ def install_bower():
 
 def update_bower():
     with cd(env.projectpath):
-        run('npm update bower po2json requirejs')
+        run('npm update bower po2json')
 
 
 def bower_cmd(cmd, relative_path='.'):
