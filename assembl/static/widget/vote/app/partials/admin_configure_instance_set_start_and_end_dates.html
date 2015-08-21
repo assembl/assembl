@@ -1,0 +1,69 @@
+
+<link type="text/css" rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+
+<div id="admin" ng-controller="adminConfigureInstanceSetStartAndEndDatesCtl" ng-init="init()">
+
+    <button onclick="window.history.back()">{{'historyBack' | translate}}</button>
+
+    <h1>{{'adminConfigureInstanceTitle' | translate}}</h1>
+
+    <p>
+        {{'adminConfigureInstanceCurrent' | translate}} <a href="{{ widget_endpoint }}">{{ widget_uri }}</a>.
+
+        <span ng-if="target != null">
+            {{'adminConfigureInstanceCurrentUse' | translate}} <a href="?config={{ widget_uri }}&target={{ target }}" target="_blank">{{'adminConfigureInstanceCurrentUseHere' | translate}}</a>.
+        </span>
+    </p>
+
+    <div id="step_get_data" ng-show="current_step == 1">
+        <p>
+            {{'gettingDataFromServerWidgetInstance' | translate}} "<strong>{{ widget_uri }}</strong>"...
+        </p>
+    </div>
+
+    <div id="step_select_criteria" ng-show="current_step == 2">
+        <h2>{{'adminConfigureInstanceSetStartAndEndDates' | translate}}</h2>
+        <div>
+            <form id="widget_set_start_and_end_dates" method="POST">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <p>{{'adminConfigureInstanceSetStartAndEndDatesInfo' | translate}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="exampleInputName1">{{'startDate' | translate}}</label>
+                        <br/>
+                        <div class="form-group col-xs-6">
+                            <input type="text" class="form-control" ng-model="formData.startDate" id="exampleInputName1" data-date-format="yyyy-MM-dd" data-max-date="{{formData.endDate}}" placeholder="{{'startDate' | translate}}" data-container="body" data-autoclose="1" bs-datepicker>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <input type="text" size="8" class="form-control" ng-model="formData.startDate" data-time-format="h:mm:ss a" data-container="body" data-autoclose="1" placeholder="Time" bs-timepicker>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="exampleInputName2">{{'endDate' | translate}}</label>
+                        <br/>
+                        <div class="form-group col-xs-6">
+                            <input type="text" class="form-control" ng-model="formData.endDate" id="exampleInputName2" data-date-format="yyyy-MM-dd" data-min-date="{{formData.startDate}}" placeholder="{{'startDate' | translate}}" data-container="body" data-autoclose="1" bs-datepicker>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <input type="text" size="8" class="form-control" ng-model="formData.endDate" data-time-format="h:mm:ss a" data-container="body" data-autoclose="1" placeholder="Time" bs-timepicker>
+                        </div>
+                    </div>
+                </div>
+
+                <br/><br/>
+                <input type="submit" ng-click="saveWidgetSettings();" value="{{'adminConfigureInstanceSetAppearanceSave' | translate}}" />
+                <span id="widget_set_start_and_end_dates_result"></span>
+            </form>
+        </div>
+    </div>
+
+</div>
