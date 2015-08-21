@@ -3,6 +3,7 @@
 
     "historyBack":"Back",
     "voteSubmit":"Submit your vote",
+    "voteSubmitForQuestion":"Submit your vote for this question",
     "voteSubmitSuccessForCriterion":"Your vote on criterion \"{{criterion}}\" has been successfully submitted!",
     "voteSubmitFailureForCriterion":"There was an error during the submission of your vote on criterion \"{{criterion}}\"! It has NOT be counted, please retry.",
     "voteAsUser":"You will be voting as \"{{username}}\".",

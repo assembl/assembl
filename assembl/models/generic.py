@@ -16,6 +16,7 @@ from sqlalchemy.orm import relationship, backref
 from virtuoso.alchemy import CoerceUnicode
 from virtuoso.vmapping import PatternIriClass
 # from virtuoso.textindex import TextIndex, TableWithTextIndex
+from bs4 import BeautifulSoup
 
 from ..lib.sqla import (INSERT_OP, UPDATE_OP, get_model_watcher, Base)
 from . import DiscussionBoundBase
@@ -275,6 +276,23 @@ class Content(DiscussionBoundBase):
         text/html (Undestood as some subste of html)
         """
         return "text/plain"
+
+    def get_body_as_html(self):
+        if self.get_body_mime_type() == 'text/html':
+            return self.body
+        else:
+            return '<span style="white-space: pre-wrap">%s</div>' % (
+                self.get_body_as_text(),)
+
+    def get_body_as_text(self):
+        mimetype = self.get_body_mime_type()
+        if mimetype == 'text/plain':
+            return self.body.strip()
+        elif mimetype == 'text/html':
+            return BeautifulSoup(self.body).get_text().strip()
+        else:
+            log.error("What is this mimetype?" + mimetype)
+            return self.body
 
     def send_to_changes(self, connection=None, operation=UPDATE_OP,
                         discussion_id=None, view_def="changes"):

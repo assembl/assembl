@@ -106,12 +106,6 @@ class Post(Content):
         frontendUrls = FrontendUrls(self.discussion)
         return frontendUrls.get_post_url(self)
 
-    def get_body_as_html(self):
-        if self.get_body_mime_type == 'text/html':
-            return self.body
-        else:
-            return '<span style="white-space: pre-wrap">%s</div>' % BeautifulSoup(self.body).get_text().strip()
-
     def get_body_preview(self):
         body = self.get_body().strip()
         target_len = 120
