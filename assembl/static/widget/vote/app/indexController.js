@@ -1483,7 +1483,7 @@ voteApp.controller('indexCtl',
                 var my_votes = "my_votes" in vote_spec ? vote_spec.my_votes : null;
                 if ( my_votes && my_votes.length ){
                   var vote = _.findWhere(my_votes, {"idea": target_id});
-                  if ( "value" in vote ){
+                  if ( vote && "value" in vote ){
                     return vote.value;
                   }
                   return vote;
