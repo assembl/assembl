@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
     Wrapper = require('./abstract.js');
 
 var Piwik = function(){
@@ -20,23 +19,22 @@ _.extend(Piwik.prototype, {
     }
     else {
       if (this.usePaq) {
-        this.engine.push([methodName].concat(args));
+        _paq.push([methodName].concat(args));
       }
       else {
-        if(this.engine[methodName] === undefined) {
+        if(_paq[methodName] === undefined) {
           throw new Error('Method ' + methodName + ' does not exist');
         }
-        this.engine[methodName].apply(this, args);
+        _paq[methodName].apply(this, args);
       }
     }
   },
 
   initialize: function(options){
-    this.engine = options.engine;
     this.userId = options.userId;
     this.customVariableSize = options.piwik_customVariableSize;
     this.customVariables = {};
-    if (_.isFunction(this.engine['push'])) {
+    if (_.isFunction(_paq['push'])) {
       this.usePaq = true;
     }
     else {
@@ -52,8 +50,9 @@ _.extend(Piwik.prototype, {
       throw new Error('Cannot set user ID without an actual ID');
     }
   }, 
-  trackEvent: function(category, action, eventName, value, options){
-    this._invoke('trackEvent', [category, action, eventName, value]);
+  
+  trackEvent: function(eventDefinition, value, options){
+    this._invoke('trackEvent', [eventDefinition.category, eventDefinition.action, eventDefinition.eventName, value]);
   },
 
   trackGoal: function(goalId, options){

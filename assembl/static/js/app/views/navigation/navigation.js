@@ -221,7 +221,8 @@ var NavigationView = AssemblPanel.extend({
           });
           this.about.show(aboutNavPanel);
           if(origin !== null) {
-            analytics.changeCurrentPage(analytics.pages['NAVIGATION_CONTEXT_SECTION/'+origin]);
+            //analytics.trackEvent(analytics.events.NAVIGATION_OPEN_CONTEXT_SECTION);
+            analytics.changeCurrentPage(analytics.pages.SIMPLEUI_CONTEXT_SECTION);
           }
           this.getContainingGroup().NavigationResetContextState();
           break;
@@ -233,7 +234,8 @@ var NavigationView = AssemblPanel.extend({
           });
           this.debate.show(idealist);
           if(origin !== null) {
-            analytics.changeCurrentPage(analytics.pages['NAVIGATION_DEBATE_SECTION/'+origin]);
+            //analytics.trackEvent(analytics.events.NAVIGATION_OPEN_DEBATE_SECTION);
+            analytics.changeCurrentPage(analytics.pages.SIMPLEUI_DEBATE_SECTION);
           }
           this.getContainingGroup().NavigationResetDebateState();
           break;
@@ -244,7 +246,8 @@ var NavigationView = AssemblPanel.extend({
           });
           this.synthesis.show(synthesisInNavigationPanel);
           if(origin !== null) {
-            analytics.changeCurrentPage(analytics.pages['NAVIGATION_SYNTHESES_SECTION/'+origin]);
+            analytics.trackEvent(analytics.events.NAVIGATION_OPEN_SYNTHESES_SECTION);
+            analytics.changeCurrentPage(analytics.pages.SIMPLEUI_SYNTHESES_SECTION);
           }
           this.getContainingGroup().NavigationResetSynthesisMessagesState(synthesisInNavigationPanel);
           break;
@@ -256,7 +259,8 @@ var NavigationView = AssemblPanel.extend({
           this.visualizationList.show(visualizationListPanel);
           //SHOULDN'T WE CLEAR THE OTHER PANELS HERE?  benoitg- 2015-08-20
           if(origin !== null) {
-            analytics.changeCurrentPage(analytics.pages['NAVIGATION_VISUALIZATIONS_SECTION/'+origin]);
+            analytics.trackEvent(analytics.events.NAVIGATION_OPEN_VISUALIZATIONS_SECTION);
+            analytics.changeCurrentPage(analytics.pages.SIMPLEUI_VISUALIZATIONS_SECTION);
           }
           break;
         default:

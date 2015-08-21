@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
     Wrapper = require('./abstract.js'),
     Piwik = require('./piwik.js');
 
@@ -58,6 +57,7 @@ _.extend(AnalyticsDispatcher.prototype, {
   },
 
   initialize: function(options){
+    this.validateEventsArray();
     if(this.debug  && this._observers.length < 1) {
       console.warn("No observers registered for analytics");
     }
@@ -71,9 +71,9 @@ _.extend(AnalyticsDispatcher.prototype, {
     this.notify('changeCurrentPage', arguments);
   },
 
-  trackEvent: function(category, action, eventName, value, options) {
-    if (!(eventName in this.events)) {
-      throw new Exception("Unknown event type");
+  trackEvent: function(eventDefinition, value, options) {
+    if (_.indexOf(_.values(this.events), eventDefinition) === -1) {
+      throw new Error("Unknown event type: "+eventDefinition.eventName);
     }
     this.notify('trackEvent', arguments);
   },
@@ -167,7 +167,6 @@ module.exports = {
         _analytics.registerObserver(g);
       }
       _analytics.initialize({
-        engine: _paq,
         piwik_customVariableSize: globalAnalytics.piwik.customVariableSize
       });
     }

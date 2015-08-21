@@ -1,6 +1,39 @@
 'use strict';
 
+
+/*
+  TODO: Update category registry with well defined Categories
+ */
+var _CATEGORY_DEFINITIONS = {
+    TABLE_OF_IDEAS: 'TABLE_OF_IDEAS',
+    SYNTHESIS: 'SYNTHESIS',
+    IDEA_PANEL: 'IDEA_PANEL',
+    MESSAGE_LIST: 'MESSAGE_LIST',
+    MESSAGE: 'MESSAGE',
+    NAVIGATION_PANEL: 'NAVIGATION_PANEL',
+    SHARED_URL: 'SHARED_URL',
+    NOTIFICATION: 'NOTIFICATION'
+};
+
+/*
+  TODO: Update actions registry with well defined Actions to track
+ */
+var _ACTION_DEFINITIONS = {
+    READING: 'READING',
+    FINDING: 'FINDING',
+    INTERACTING: 'INTERACTING',
+    PRODUCING: 'PRODUCING'
+};
+
+/**
+ * eventDefinition.category, eventDefinition.action, eventDefinition.eventName
+ */
 var _EVENT_DEFINITIONS = {
+    NAVIGATION_OPEN_CONTEXT_SECTION: {action: 'FINDING', category: 'NAVIGATION_PANEL', eventName: 'OPEN_CONTEXT_SECTION'},
+    NAVIGATION_OPEN_DEBATE_SECTION: {action: 'FINDING', category: 'NAVIGATION_PANEL', eventName: 'OPEN_DEBATE_SECTION'},
+    NAVIGATION_OPEN_SYNTHESES_SECTION: {action: 'FINDING', category: 'NAVIGATION_PANEL', eventName: 'OPEN_SYNTHESES_SECTION'},
+    NAVIGATION_OPEN_VISUALIZATIONS_SECTION: {action: 'FINDING', category: 'NAVIGATION_PANEL', eventName: 'OPEN_VISUALIZATIONS_SECTION'}
+    /*
     LOGIN_SUCCESS: 'LOGIN_SUCCESS',
     LOGIN_FAILED: 'LOGIN_FAILED',
     JOIN_GROUP:'JOIN_GROUP',
@@ -8,22 +41,7 @@ var _EVENT_DEFINITIONS = {
     NAVIGATE_IDEA: 'NAVIGATE_IDEA',
     REPLY_MESSAGE_START: 'REPLY_MESSAGE_START',
     REPLY_MESSAGE_COMPLETE: 'REPLY_MESSAGE_COMPLETE'
-};
-
-/*
-  TODO: Update category registry with well defined Categories
- */
-var _CATEGORY_DEFINITIONS = {
-  BASE_CATEGORY: 'BASE_CATEGORY'
-};
-
-/*
-  TODO: Update actions registry with well defined Actions to track
- */
-var _ACTION_DEFINITIONS = {
-  CLICK: 'CLICK',
-  READ: 'READ',
-  WRITE: 'WRITE'
+    */
 };
 
 /**
@@ -34,14 +52,12 @@ var _ACTION_DEFINITIONS = {
  *  A dash (-) means that the TRIGGER_INFO in unknown, or irrelevent
  *  Ex: TODO
  */
-var _PAGE_DEFINITIONS = {
+var _PAGE_DEFINITIONS = { 
     //IMPLEMENTED
-    'NAVIGATION_CONTEXT_SECTION/NAVIGATION': 'NAVIGATION_CONTEXT_SECTION/NAVIGATION',
-    'NAVIGATION_DEBATE_SECTION/NAVIGATION': 'NAVIGATION_DEBATE_SECTION/NAVIGATION',
-    'NAVIGATION_DEBATE_SECTION/-': 'NAVIGATION_DEBATE_SECTION/-',
-    'NAVIGATION_SYNTHESES_SECTION/NAVIGATION': 'NAVIGATION_SYNTHESES_SECTION/NAVIGATION',
-    'NAVIGATION_SYNTHESES_SECTION/-': 'NAVIGATION_SYNTHESES_SECTION/-',
-    'NAVIGATION_VISUALIZATIONS_SECTION/NAVIGATION': 'NAVIGATION_VISUALIZATIONS_SECTION/NAVIGATION',
+    'SIMPLEUI_CONTEXT_SECTION': 'SIMPLEUI_CONTEXT_SECTION',
+    'SIMPLEUI_DEBATE_SECTION': 'SIMPLEUI_DEBATE_SECTION',
+    'SIMPLEUI_SYNTHESES_SECTION': 'SIMPLEUI_SYNTHESES_SECTION',
+    'SIMPLEUI_VISUALIZATIONS_SECTION': 'SIMPLEUI_VISUALIZATIONS_SECTION',
     //NOT YET IMPLEMENTED
     'LOGIN/-': 'LOGIN/-',
     'SIGNUP/-': 'SINGUP/-',
@@ -70,6 +86,20 @@ Wrapper.prototype = {
   categories: _CATEGORY_DEFINITIONS,
   pages: _PAGE_DEFINITIONS,
 
+  
+  validateEventsArray: function() {
+    var that = this;
+
+    _.each(this.events, function(event) {
+      if (!(event.action in that.actions)) {
+        throw new Error("Action "+event.action+" not in _ACTION_DEFINITIONS");
+      }
+      if (!(event.category in that.categories)) {
+        throw new Error("Action "+event.action+" not in _CATEGORY_DEFINITIONS");
+      }
+    });
+  },
+  
   initialize: function(options){
     throw new Error('Cannot call abstract method!');
   },
@@ -95,7 +125,7 @@ Wrapper.prototype = {
     throw new Error('Cannot call abstract method!');
   },
 
-  trackEvent: function(category, action, eventName, value, options) {
+  trackEvent: function(eventDefinition, value, options) {
     throw new Error('Cannot call abstract method!');
   },
 
