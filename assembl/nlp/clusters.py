@@ -126,6 +126,17 @@ def parse_topic(topic, trans=identity):
     return {trans(k.strip('"')): float(v) for (v, k) in words}
 
 
+def post_ids_of(idea):
+    related = text(
+        Idea._get_related_posts_statement(),
+        bindparams=[bindparam('root_idea_id', idea.id),
+                    bindparam('discussion_id', idea.discussion_id)]
+        ).columns(column('post_id')).alias('related')
+    post_ids = idea.db.query(Content.id).join(
+        related, Content.id == related.c.post_id)
+    return [x for (x,) in post_ids]
+
+
 def get_cluster_info(
         idea_id, num_topics=200, passes=5,
         algorithm="DBSCAN", **algo_kwargs):
@@ -146,14 +157,7 @@ def get_cluster_info(
         def trans(x):
             return stemmer.reverse[x]
     corpus = IdMmCorpus(join(dirname, 'posts.mm'))
-    related = text(
-        Idea._get_related_posts_statement(),
-        bindparams=[bindparam('root_idea_id', idea_id),
-                    bindparam('discussion_id', idea.discussion_id)]
-        ).columns(column('post_id')).alias('related')
-    post_ids = idea.db.query(Content.id).join(
-        related, Content.id == related.c.post_id)
-    post_ids = [x for (x,) in post_ids]
+    post_ids = post_ids_of(idea)
     if len(post_ids) < 10:
         return
     post_id_by_index = {n: post_id for (n, post_id) in enumerate(post_ids)}
@@ -204,7 +208,46 @@ def get_cluster_info(
         neg_terms = [t for (v, t) in extremes if v < 0][0:15]
         pos_terms.reverse()
         all_cluster_features.append((pos_terms, neg_terms))
-    return silhouette_score, post_clusters, remainder, all_cluster_features
+    # Compare to children classification
+    compare_with_ideas = None
+    if len(idea.children):
+        children_remainder = set(post_ids)
+        posts_of_children = {
+            child.id: post_ids_of(child)
+            for child in idea.children}
+        ideas_of_post = defaultdict(list)
+        for idea_id, c_post_ids in posts_of_children.iteritems():
+            for post_id in c_post_ids:
+                ideas_of_post[post_id].append(idea_id)
+            children_remainder -= set(c_post_ids)
+        for post_id in children_remainder:
+            ideas_of_post[post_id] = [idea_id]
+        # if many ideas to a post, choose one with the most ideas in same cluster.
+        # A bit arbitrary but I need a single idea.
+        for cluster in chain(post_clusters, (remainder,)):
+            idea_score = defaultdict(int)
+            for post_id in cluster:
+                for idea_id in ideas_of_post[post_id]:
+                    idea_score[idea_id] += 1
+            for post_id in cluster:
+                if len(ideas_of_post[post_id]) > 1:
+                    scores = [(idea_score[idea_id], idea_id)
+                              for idea_id in ideas_of_post[post_id]]
+                    scores.sort()
+                    ideas_of_post[post_id] = [scores[-1][1]]
+        # index_by_post_id = {v: k for (k, v) in post_id_by_index.iteritems()}
+        idea_of_index = [ideas_of_post[post_id][0] for post_id in post_ids]
+        compare_with_ideas = {
+            "Homogeneity": metrics.homogeneity_score(idea_of_index, labels),
+            "Completeness": metrics.completeness_score(idea_of_index, labels),
+            "V-measure": metrics.v_measure_score(idea_of_index, labels),
+            "Adjusted Rand Index": metrics.adjusted_rand_score(
+                idea_of_index, labels),
+            "Adjusted Mutual Information": metrics.adjusted_mutual_info_score(
+                idea_of_index, labels)}
+
+    return (silhouette_score, post_clusters, remainder, all_cluster_features,
+            compare_with_ideas)
 
 
 def show_clusters(clusters):
