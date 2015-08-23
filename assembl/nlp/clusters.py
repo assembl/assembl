@@ -4,7 +4,7 @@ from os import makedirs, unlink
 from itertools import chain
 
 from sqlalchemy import (text, column, bindparam)
-from gensim import corpora, models
+from gensim import corpora, models as gmodels
 from gensim.utils import tokenize
 import numpy
 from scipy.sparse import lil_matrix
@@ -45,13 +45,18 @@ def create_dictionaries():
         stop_words = get_stop_words(lang)
         posts = db.query(Content).join(Discussion).filter(
             Discussion.id.in_(discussion_ids))
+        phrases = gmodels.Phrases()
+        phrases.add_vocab((
+            as_word_list(post, stemmer, stop_words) for post in posts))
 
         dictionary = corpora.Dictionary((
-            as_word_list(post, stemmer, stop_words) for post in posts))
+            phrases[as_word_list(post, stemmer, stop_words)]
+            for post in posts))
         dictionary.save(join(dirname, 'dico.dict'))
         IdMmCorpus.serialize(join(dirname, 'posts.mm'), (
             (post.id, dictionary.doc2bow(
-                as_word_list(post, stemmer, stop_words))) for post in posts))
+                phrases[as_word_list(post, stemmer, stop_words)]))
+            for post in posts))
         if not isinstance(stemmer, DummyStemmer):
             stemmer.save()
 
@@ -67,7 +72,7 @@ def gensimvecs_to_csr(vecs, width):
 
 def get_discussion_semantic_analysis(
         discussion_id, num_topics=200,
-        model_cls=models.ldamodel.LdaModel, **model_kwargs):
+        model_cls=gmodels.ldamodel.LdaModel, **model_kwargs):
     discussion = Discussion.get(discussion_id)
     lang = discussion.discussion_locales[0].split('_')[0]
     dirname = join(nlp_data, lang)
@@ -77,7 +82,7 @@ def get_discussion_semantic_analysis(
     doc_count = post_ids.count()
     if doc_count < 10:
         return None, None
-    tfidf_model = models.TfidfModel(id2word=dictionary)
+    tfidf_model = gmodels.TfidfModel(id2word=dictionary)
     tfidf_fname = join(dirname, "tfidf_%d.model" % (discussion_id,))
     model_fname = join(dirname, "model_%s_%d.model" % (
         model_cls.__name__, discussion_id,))
@@ -123,7 +128,8 @@ def identity(x):
 def parse_topic(topic, trans=identity):
     words = topic.split(' + ')
     words = (word.split('*') for word in words)
-    return {trans(k.strip('"')): float(v) for (v, k) in words}
+    return dict(((' '.join((trans(w) for w in k.strip('"').split('_') if w)), float(v))
+            for (v, k) in words))
 
 
 def post_ids_of(idea):
@@ -143,7 +149,7 @@ def get_cluster_info(
     idea = Idea.get(idea_id)
     tfidf_model, gensim_model = get_discussion_semantic_analysis(
         idea.discussion_id, num_topics=num_topics, passes=passes)
-    # , model_cls=models.lsimodel.LsiModel
+    # , model_cls=gmodels.lsimodel.LsiModel
     if not tfidf_model or not gensim_model:
         return
     lang = idea.discussion.discussion_locales[0].split('_')[0]
