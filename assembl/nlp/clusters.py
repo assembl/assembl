@@ -65,7 +65,9 @@ def gensimvecs_to_csr(vecs, width):
     return model_matrix.tocsr()
 
 
-def get_discussion_semantic_analysis(discussion_id, num_topics=200, passes=5):
+def get_discussion_semantic_analysis(
+        discussion_id, num_topics=200,
+        model_cls=models.ldamodel.LdaModel, **model_kwargs):
     discussion = Discussion.get(discussion_id)
     lang = discussion.discussion_locales[0].split('_')[0]
     dirname = join(nlp_data, lang)
@@ -77,24 +79,28 @@ def get_discussion_semantic_analysis(discussion_id, num_topics=200, passes=5):
         return None, None
     tfidf_model = models.TfidfModel(id2word=dictionary)
     tfidf_fname = join(dirname, "tfidf_%d.model" % (discussion_id,))
-    lda_fname = join(dirname, "lda_%d.model" % (discussion_id,))
-    lda_model = models.ldamodel.LdaModel(
-        id2word=dictionary, num_topics=num_topics, passes=passes)
+    model_fname = join(dirname, "model_%s_%d.model" % (
+        model_cls.__name__, discussion_id,))
+    gensim_model = model_cls(
+        id2word=dictionary, num_topics=num_topics, **model_kwargs)
     if exists(tfidf_fname):
         tfidf_model = tfidf_model.load(tfidf_fname)
         # assumption: count implies identity.
         # Wrong in corner cases: hidden, etc.
         if tfidf_model.num_docs == doc_count:
-            if exists(lda_fname):
-                lda_model = lda_model.load(lda_fname)
-                if (lda_model.num_updates == doc_count
-                        and lda_model.num_topics == num_topics
-                        and lda_model.passes == passes):
-                    return tfidf_model, lda_model
+            if exists(model_fname):
+                gensim_model = gensim_model.load(model_fname)
+                same_kwargs = all((
+                    getattr(gensim_model, k) == v
+                    for (k, v) in model_kwargs.iteritems()))
+                same_kwargs = same_kwargs and getattr(
+                    gensim_model, 'num_updates', doc_count) == doc_count
+                if same_kwargs and gensim_model.num_topics == num_topics:
+                    return tfidf_model, gensim_model
         elif exists(tfidf_fname):
             unlink(tfidf_fname)
-    if exists(lda_fname):
-        unlink(lda_fname)
+    if exists(model_fname):
+        unlink(model_fname)
     post_ids = [x for (x,) in post_ids]
     corpus = IdMmCorpus(join(dirname, 'posts.mm'))
     subcorpus = corpus.subcorpus(post_ids)
@@ -102,25 +108,43 @@ def get_discussion_semantic_analysis(discussion_id, num_topics=200, passes=5):
         tfidf_model.initialize(subcorpus)
         tfidf_model.save(tfidf_fname)
     tfidf_corpus = tfidf_model[subcorpus]
-    lda_model.update(tfidf_corpus)
-    lda_model.save(lda_fname)
-    return (tfidf_model, lda_model)
+    if getattr(gensim_model, 'update', None):
+        gensim_model.update(tfidf_corpus)
+    elif getattr(gensim_model, 'add_documents', None):
+        gensim_model.add_documents(tfidf_corpus)
+    gensim_model.save(model_fname)
+    return (tfidf_model, gensim_model)
+
+
+def identity(x):
+    return x
+
+
+def parse_topic(topic, trans=identity):
+    words = topic.split(' + ')
+    words = (word.split('*') for word in words)
+    return {trans(k.strip('"')): float(v) for (v, k) in words}
 
 
 def get_cluster_info(
         idea_id, num_topics=200, passes=5,
         algorithm="DBSCAN", **algo_kwargs):
     idea = Idea.get(idea_id)
-    tfidf_model, lda_model = get_discussion_semantic_analysis(
-        idea.discussion_id, num_topics, passes)
-    if not tfidf_model or not lda_model:
+    tfidf_model, gensim_model = get_discussion_semantic_analysis(
+        idea.discussion_id, num_topics=num_topics, passes=passes)
+    # , model_cls=models.lsimodel.LsiModel
+    if not tfidf_model or not gensim_model:
         return
     lang = idea.discussion.discussion_locales[0].split('_')[0]
     dirname = join(nlp_data, lang)
     stemmer = get_stemmer(lang)
+    trans = identity
     if not isinstance(stemmer, DummyStemmer):
         stemmer = ReversibleStemmer(
             stemmer, join(dirname, 'stems.dict'))
+
+        def trans(x):
+            return stemmer.reverse[x]
     corpus = IdMmCorpus(join(dirname, 'posts.mm'))
     related = text(
         Idea._get_related_posts_statement(),
@@ -130,24 +154,31 @@ def get_cluster_info(
     post_ids = idea.db.query(Content.id).join(
         related, Content.id == related.c.post_id)
     post_ids = [x for (x,) in post_ids]
+    if len(post_ids) < 10:
+        return
     post_id_by_index = {n: post_id for (n, post_id) in enumerate(post_ids)}
     subcorpus = corpus.subcorpus(post_ids)
     tfidf_corpus = tfidf_model[subcorpus]
-    model_matrix = gensimvecs_to_csr(lda_model[tfidf_corpus], num_topics)
+    model_matrix = gensimvecs_to_csr(gensim_model[tfidf_corpus], num_topics)
     algorithm = getattr(sklearn.cluster, algorithm)
     algorithm = algorithm(**algo_kwargs)
     r = algorithm.fit(model_matrix)
     labels = r.labels_
-    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+    n_clusters_raw = len(set(labels))
+    # n_clusters_ = n_clusters_raw - (1 if -1 in labels else 0)
     silhouette_score = None
-    if n_clusters_ > 0:
+    if n_clusters_raw > 1:
         silhouette_score = metrics.silhouette_score(model_matrix, labels)
     post_clusters = []
+    remainder = set(post_ids)
     for label in set(labels):
         if label == -1:
             continue
         subset = [n for (n, l) in enumerate(labels) if label == l]
-        post_clusters.append([post_id_by_index[n] for n in subset])
+        cluster = [post_id_by_index[n] for n in subset]
+        remainder -= set(cluster)
+        post_clusters.append(cluster)
+    remainder = list(remainder)
     all_cluster_features = []
     for cluster in post_clusters:
         cluster_corpus = corpus.subcorpus(cluster)
@@ -155,27 +186,25 @@ def get_cluster_info(
             list(set(post_ids) - set(cluster)))
 
         def centroid(corpus):
-            clust_lda = [lda_model[tfidf_model[c]] for c in corpus]
+            clust_lda = [gensim_model[tfidf_model[c]] for c in corpus]
             clust_lda = gensimvecs_to_csr(clust_lda, num_topics)
             return clust_lda.sum(0).A1 / clust_lda.shape[0]
 
-        difference = centroid(cluster_corpus) - centroid(clusterneg_corpus)
-        difference = difference.argsort()
-
-        def as_words(index):
-            words = tokenize(index)
-            if getattr(stemmer, 'reverse', None):
-                return [stemmer.reverse[word] for word in words]
-            return list(words)
-
-        clusterneg_features = [
-            as_words(lda_model.print_topic(id))
-            for id in difference[0:4]]
-        cluster_features = [
-            as_words(lda_model.print_topic(id))
-            for id in difference[-1:-5:-1]]
-        all_cluster_features.append((cluster_features, clusterneg_features))
-    return silhouette_score, post_clusters, all_cluster_features
+        difference_vals = centroid(cluster_corpus) - centroid(clusterneg_corpus)
+        difference = difference_vals.argsort()
+        extremes = defaultdict(float)
+        for id in chain(difference[0:5], difference[-1:-6:-1]):
+            factor = difference_vals[id]
+            terms = parse_topic(gensim_model.print_topic(id), trans)
+            for term, val in terms.iteritems():
+                extremes[term] += val * factor
+        extremes = [(val, term) for (term, val) in extremes.iteritems()]
+        extremes.sort()
+        pos_terms = [t for (v, t) in extremes if v > 0][0:15]
+        neg_terms = [t for (v, t) in extremes if v < 0][0:15]
+        pos_terms.reverse()
+        all_cluster_features.append((pos_terms, neg_terms))
+    return silhouette_score, post_clusters, remainder, all_cluster_features
 
 
 def show_clusters(clusters):
