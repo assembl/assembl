@@ -20,7 +20,7 @@ body{
         <form class="form" method="POST" "{{ slug_prefix }}/password_change_sent/{{ profile_id }}">
             <input type="hidden" name="next_view" value="{{next_view}}" />
             <input type="hidden" name="email" value="{{email}}" />
-            <input type="submit" name="resend" value="{{ gettext('Resend the email') }}" class="btn btn-primary" />
+            <input type="submit" name="resend" value="{{ gettext('Resend the email') }}" class="btn btn-secondary" />
         </form>
     </div>
 </div>
