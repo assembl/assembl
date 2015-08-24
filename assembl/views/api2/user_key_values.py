@@ -39,7 +39,10 @@ def patch_dict(request):
     if not isinstance(request.json, dict):
         raise HTTPBadRequest()
     for k, v in request.json.iteritems():
-        user_ns_b_kvdict[k] = v
+        if v is None:
+            del user_ns_b_kvdict[k]
+        else:
+            user_ns_b_kvdict[k] = v
     return dict(user_ns_b_kvdict)
 
 
