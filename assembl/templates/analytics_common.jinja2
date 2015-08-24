@@ -1,6 +1,5 @@
- <!-- Begin adding Piwik logic 2 -->
 {% if web_analytics.get('enabled', False) %}
-    <!-- Begin adding Piwik logic -->
+    <!-- Begin adding Analytics logic -->
     <script type="text/javascript">var globalAnalytics = {};</script>
     {% if "piwik" in web_analytics %}
         {{ web_analytics['piwik']['script']|safe }}
