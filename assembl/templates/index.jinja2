@@ -89,6 +89,7 @@
         <script type="text/json" id="read-posts-json">{{ discussion.get_read_posts_ids_preload(userId) |safe }}</script>
     {% endif %}
     <script type="text/json" id="permissions-json">{{ discussion.get_user_permissions_preload(userId) |safe }}</script>
+    {% include 'analytics_common.jinja2' %}
 
 
 {% endblock %}

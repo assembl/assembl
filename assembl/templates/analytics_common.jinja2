@@ -1,0 +1,17 @@
+ <!-- Begin adding Piwik logic 2 -->
+{% if web_analytics.get('enabled', False) %}
+    <!-- Begin adding Piwik logic -->
+    <script type="text/javascript">var globalAnalytics = {};</script>
+    {% if "piwik" in web_analytics %}
+        {{ web_analytics['piwik']['script']|safe }}
+        <script type="text/javascript">
+            globalAnalytics.piwik = {
+                isActive: true,
+                customVariableSize: {{ web_analytics['piwik']['custom_variable_size'] }} 
+            };
+        </script>
+    {% endif %}
+{% endif %}
+
+{% block analytics_extra_scripts %}
+{% endblock %}

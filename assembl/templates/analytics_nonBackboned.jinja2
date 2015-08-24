@@ -1,0 +1,10 @@
+{% extends 'analytics_common.jinja2' %}
+
+{% block analytics_extra_scripts %}
+    <script src="{{ STATIC_URL }}/js/app/analytics/abstract.js"></script>
+    <script src="{{ STATIC_URL }}/js/app/analytics/piwik.js"></script>
+    <script src="{{ STATIC_URL }}/js/app/analytics/dispatcher.js"></script>
+    <script type="text/javascript"> var globalAnalytics = {};</script>
+
+{% endblock %}
+
