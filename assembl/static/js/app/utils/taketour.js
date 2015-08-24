@@ -24,7 +24,9 @@ var Taketour = {
     }
   ],
 
-  setTour: function() {
+  initTour: function() {
+      var tourModel = new TourModel.Model(),
+          that = this;
 
       hopscotch.configure({
       onShow: function() {
@@ -48,22 +50,14 @@ var Taketour = {
        this.tours_by_name[tour.name] = tour;
     }
 
-  },
+    tourModel.fetch({
+       success: function(model, response, options){
+          that.disabled_tour = response;
+       },
+       error: function(model, response, options){
 
-  initTour: function(){
-    var tourModel = new TourModel.Model(),
-             that = this;
-
-      this.setTour();
-
-      tourModel.fetch({
-          success: function(model, response, options){
-              that.disabled_tour = response;
-          },
-          error: function(model, response, options){
-
-          }
-      })
+       }
+    })
 
   },
 
