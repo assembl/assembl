@@ -39,6 +39,9 @@ def create_dictionaries():
         if not exists(dirname):
             makedirs(dirname)
         stemmer = get_stemmer(lang)
+        # Actually it might be better to go phrases (longer),
+        # then stop words filtering, then stemming
+        # on non-phrase. BUT phrases may require stemming too.
         if not isinstance(stemmer, DummyStemmer):
             stemmer = ReversibleStemmer(
                 stemmer, join(dirname, 'stems.dict'))
@@ -128,8 +131,9 @@ def identity(x):
 def parse_topic(topic, trans=identity):
     words = topic.split(' + ')
     words = (word.split('*') for word in words)
-    return dict(((' '.join((trans(w) for w in k.strip('"').split('_') if w)), float(v))
-            for (v, k) in words))
+    return dict(((' '.join((
+            trans(w) for w in k.strip('"').split('_') if w)), float(v))
+        for (v, k) in words))
 
 
 def post_ids_of(idea):
@@ -161,7 +165,7 @@ def get_cluster_info(
             stemmer, join(dirname, 'stems.dict'))
 
         def trans(x):
-            return stemmer.reverse[x]
+            return stemmer.reverse.get(x, x)
     corpus = IdMmCorpus(join(dirname, 'posts.mm'))
     post_ids = post_ids_of(idea)
     if len(post_ids) < 10:
@@ -264,3 +268,13 @@ def show_clusters(clusters):
         print "*"*100, "Cluster", n+1
         for post_id in cluster:
             print posts[post_id].get_body_as_text()
+
+
+def show_all(db, discussion_id, eps=0.2, min_samples=4):
+    idea_ids = db.query(Idea.id).filter_by(
+        discussion_id=discussion_id).all()
+    results = {id: get_cluster_info(id, eps=eps, min_samples=min_samples)
+               for (id,) in idea_ids}
+    posres = {id: r for (id, r) in results.iteritems() if r is not None}
+    for id, (silh, clusters, rem, topics, compare) in posres.iteritems():
+        print id, silh, [len(x) for x in clusters], len(rem)
