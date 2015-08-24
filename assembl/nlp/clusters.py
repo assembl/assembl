@@ -256,8 +256,8 @@ def get_cluster_info(
             "Adjusted Mutual Information": metrics.adjusted_mutual_info_score(
                 idea_of_index, labels)}
 
-    return (silhouette_score, post_clusters, remainder, all_cluster_features,
-            compare_with_ideas)
+    return (silhouette_score, compare_with_ideas, post_clusters,
+            remainder, all_cluster_features)
 
 
 def show_clusters(clusters):
@@ -276,5 +276,5 @@ def show_all(db, discussion_id, eps=0.2, min_samples=4):
     results = {id: get_cluster_info(id, eps=eps, min_samples=min_samples)
                for (id,) in idea_ids}
     posres = {id: r for (id, r) in results.iteritems() if r is not None}
-    for id, (silh, clusters, rem, topics, compare) in posres.iteritems():
+    for id, (silh, compare, clusters, rem, topics) in posres.iteritems():
         print id, silh, [len(x) for x in clusters], len(rem)
