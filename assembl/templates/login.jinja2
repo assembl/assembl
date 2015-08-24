@@ -96,11 +96,14 @@
         
     </div>
 </div>
+{% endblock %}
 
 {% block main_js %}
     <script src="{{ STATIC_URL }}/js/bower/jquery/dist/jquery.min.js"></script>
     <script src="{{ STATIC_URL }}/js/bower/underscore/underscore-min.js"></script>
 {% endblock %}
 
+{% block extra_js %}
+    <!-- Including our analytics wrapper scripts in order to make calls using our analytics engine. -->
+    {% include 'analytics.jinja2' %}
 {% endblock %}
-

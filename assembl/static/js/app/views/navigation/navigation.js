@@ -221,7 +221,7 @@ var NavigationView = AssemblPanel.extend({
           });
           this.about.show(aboutNavPanel);
           if(origin !== null) {
-            //analytics.trackEvent(analytics.events.NAVIGATION_OPEN_CONTEXT_SECTION);
+            analytics.trackEvent(analytics.events.NAVIGATION_OPEN_CONTEXT_SECTION);
             analytics.changeCurrentPage(analytics.pages.SIMPLEUI_CONTEXT_SECTION);
           }
           this.getContainingGroup().NavigationResetContextState();
@@ -234,7 +234,7 @@ var NavigationView = AssemblPanel.extend({
           });
           this.debate.show(idealist);
           if(origin !== null) {
-            //analytics.trackEvent(analytics.events.NAVIGATION_OPEN_DEBATE_SECTION);
+            analytics.trackEvent(analytics.events.NAVIGATION_OPEN_DEBATE_SECTION);
             analytics.changeCurrentPage(analytics.pages.SIMPLEUI_DEBATE_SECTION);
           }
           this.getContainingGroup().NavigationResetDebateState();

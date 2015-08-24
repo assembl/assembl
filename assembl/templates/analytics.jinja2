@@ -1,0 +1,18 @@
+{% if web_analytics.get('enabled', False) %}
+    <!-- <script src="{{ STATIC_URL }}/js/bower/underscore/underscore-min.js"></script> -->
+    <script src="{{ STATIC_URL }}/js/app/analytics/abstract.js"></script>
+    <script src="{{ STATIC_URL }}/js/app/analytics/piwik.js"></script>
+    <script src="{{ STATIC_URL }}/js/app/analytics/dispatcher.js"></script>
+    <script type="text/javascript"> var globalAnalytics = {};</script>
+    {% if "piwik" in web_analytics %}
+        {{ web_analytics['piwik']['script']|safe }}
+        <script type="text/javascript">
+            globalAnalytics.piwik = {
+                isActive: true,
+                customVariableSize: {{ web_analytics['piwik']['custom_variable_size'] }} 
+            };
+            //Should add goals defined in ini files here as well. 
+        </script>
+    {% endif %}
+{% endif %}
+

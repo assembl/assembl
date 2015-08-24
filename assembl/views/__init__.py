@@ -132,6 +132,19 @@ def get_default_context(request):
             config.get('supported_exports_list'))
     }
 
+    # A container for all analytics related settings. All future
+    # analytics based settings that will be exposed to the templates
+    # should be included in this dictionary
+    analytics_settings = {
+        'enabled': True if web_analytics_piwik_script else False,
+    }
+
+    if analytics_settings.get('enabled', False):
+        analytics_settings['piwik'] = {
+            'script': web_analytics_piwik_script,
+            'custom_variable_size': web_analytics_piwik_custom_variable_size
+        }
+
     return dict(
         default_context,
         request=request,
@@ -147,8 +160,7 @@ def get_default_context(request):
         show_locale_country=show_locale_country,
         theme=get_theme(discussion),
         minified_js=config.get('minified_js') or False,
-        web_analytics_piwik_script=web_analytics_piwik_script,
-        web_analytics_piwik_custom_variable_size = web_analytics_piwik_custom_variable_size,
+        web_analytics=analytics_settings,
         help_url=help_url,
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
         raven_url=config.get('raven_url') or '',
