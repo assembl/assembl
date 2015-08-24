@@ -158,7 +158,7 @@ var VotingWidgetModel = WidgetModel.extend({
         base = this.baseUri + "?config=" + encodeURIComponent(uri)
           + "&locale=" + locale;
     if (activityState == "ended") {
-      base += "&page=results";
+      base += "#/results"; // was "&page=results";
     }
     return base;
   },
@@ -247,9 +247,16 @@ var VotingWidgetModel = WidgetModel.extend({
         }
         break;
       case this.UNTIL_TEXT:
-        if (endDate) {
-          return i18n.sprintf(i18n.gettext("You have %s to vote"), Moment(endDate).fromNow(true));
+        switch ( activityState ){
+          case "ended":
+            return "";
+            break;
+          default:
+            if (endDate) {
+              return i18n.sprintf(i18n.gettext("You have %s to vote"), Moment(endDate).fromNow(true));
+            }
         }
+        break;
     }
     return "";
   },
