@@ -32,7 +32,13 @@ var _EVENT_DEFINITIONS = {
     NAVIGATION_OPEN_CONTEXT_SECTION: {action: 'FINDING', category: 'NAVIGATION_PANEL', eventName: 'OPEN_CONTEXT_SECTION'},
     NAVIGATION_OPEN_DEBATE_SECTION: {action: 'FINDING', category: 'NAVIGATION_PANEL', eventName: 'OPEN_DEBATE_SECTION'},
     NAVIGATION_OPEN_SYNTHESES_SECTION: {action: 'FINDING', category: 'NAVIGATION_PANEL', eventName: 'OPEN_SYNTHESES_SECTION'},
-    NAVIGATION_OPEN_VISUALIZATIONS_SECTION: {action: 'FINDING', category: 'NAVIGATION_PANEL', eventName: 'OPEN_VISUALIZATIONS_SECTION'}
+    NAVIGATION_OPEN_SPECIFIC_SYNTHESIS: {action: 'FINDING', category: 'NAVIGATION_PANEL', eventName: 'NAVIGATE_TO_SYNTHESIS'},
+    NAVIGATION_OPEN_VISUALIZATIONS_SECTION: {action: 'FINDING', category: 'NAVIGATION_PANEL', eventName: 'OPEN_VISUALIZATIONS_SECTION'},
+    SHOW_TABLE_OF_IDEAS: {action: 'FINDING', category: 'TABLE_OF_IDEAS', eventName: 'SHOW'},
+    OPEN_IDEA_IN_TABLE_OF_IDEAS: {action: 'FINDING', category: 'TABLE_OF_IDEAS', eventName: 'OPEN_IDEA'},
+    OPEN_IDEA_NEW_MESSAGES_IN_TABLE_OF_IDEAS: {action: 'FINDING', category: 'TABLE_OF_IDEAS', eventName: 'OPEN_IDEA_NEW_MESSAGES'},
+    NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS: {action: 'FINDING', category: 'TABLE_OF_IDEAS', eventName: 'NAVIGATE_TO_IDEA'},
+    NAVIGATE_TO_IDEA_IN_SYNTHESIS: {action: 'FINDING', category: 'SYNTHESIS', eventName: 'NAVIGATE_TO_IDEA'},
     /*
     LOGIN_SUCCESS: 'LOGIN_SUCCESS',
     LOGIN_FAILED: 'LOGIN_FAILED',
@@ -58,10 +64,14 @@ var _PAGE_DEFINITIONS = {
     'SIMPLEUI_DEBATE_SECTION': 'SIMPLEUI_DEBATE_SECTION',
     'SIMPLEUI_SYNTHESES_SECTION': 'SIMPLEUI_SYNTHESES_SECTION',
     'SIMPLEUI_VISUALIZATIONS_SECTION': 'SIMPLEUI_VISUALIZATIONS_SECTION',
+    'IDEA': 'IDEA', //Context of a specific idea.  Means the state of the group was just set to this idea
+    'MESSAGES': 'MESSAGES', //Context of messages.  Means the state of the group was just set to a null idea, or user is playing with the filters
     //NOT YET IMPLEMENTED
     'LOGIN/-': 'LOGIN/-',
     'SIGNUP/-': 'SINGUP/-',
     'JOIN_GROUP/-': 'JOIN_GROUP/-',
+    'MESSAGE': 'MESSAGE', //Context of a specific message.  To be implemented in showMessageById
+    'SYNTHESIS': 'SYNTHESIS' //Context of a specific synthesis.  To be implemented in showMessageById AND synthesisInNavigation.js
 
 };
 
@@ -95,7 +105,7 @@ Wrapper.prototype = {
         throw new Error("Action "+event.action+" not in _ACTION_DEFINITIONS");
       }
       if (!(event.category in that.categories)) {
-        throw new Error("Action "+event.action+" not in _CATEGORY_DEFINITIONS");
+        throw new Error("Category "+event.category+" not in _CATEGORY_DEFINITIONS");
       }
     });
   },

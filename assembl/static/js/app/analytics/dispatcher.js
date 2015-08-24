@@ -73,7 +73,7 @@ _.extend(AnalyticsDispatcher.prototype, {
 
   trackEvent: function(eventDefinition, value, options) {
     if (_.indexOf(_.values(this.events), eventDefinition) === -1) {
-      throw new Error("Unknown event type: "+eventDefinition.eventName);
+      throw new Error("Unknown event type");
     }
     this.notify('trackEvent', arguments);
   },

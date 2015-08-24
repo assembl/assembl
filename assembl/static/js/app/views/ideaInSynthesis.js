@@ -14,7 +14,8 @@ var Marionette = require('../shims/marionette.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes'),
     viewsFactory = require('../objects/viewsFactory'),
     groupSpec = require('../models/groupSpec'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    Analytics = require('../analytics/dispatcher.js');
 
 var IdeaInSynthesisView = Marionette.ItemView.extend({
   synthesis: null,
@@ -271,7 +272,8 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
     
   navigateToIdea: function(ev, forcePopup) {
       var panel = this.getPanel();
-
+      var analytics = Analytics.getInstance();
+      analytics.trackEvent(analytics.events.NAVIGATE_TO_IDEA_IN_SYNTHESIS);
       if (panel.isPrimaryNavigationPanel()) {
         panel.getContainingGroup().setCurrentIdea(this.original_idea);
       }

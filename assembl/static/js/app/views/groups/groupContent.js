@@ -6,7 +6,8 @@ var Marionette = require('../../shims/marionette.js'),
     panelSpec = require('../../models/panelSpec.js'),
     AssemblPanel = require('../assemblPanel.js'),
     PanelWrapper = require('./panelWrapper.js'),
-    PanelSpecTypes = require('../../utils/panelSpecTypes.js');
+    PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
+    Analytics = require('../../analytics/dispatcher.js');
 
 /** Represents the entire content of a single panel group */
 var groupContent = Marionette.CompositeView.extend({
@@ -47,17 +48,25 @@ var groupContent = Marionette.CompositeView.extend({
    * @param  {Idea} [idea]
    */
   setCurrentIdea: function(idea, reason, doScroll) {
-      //console.log("setCurrentIdea() fired", idea, reason, doScroll);
-      //console.log(this.model);
-      //console.log("current state was: ", this.model.get('states').at(0));
-      if (idea !== this._getCurrentIdea()) {
-        //console.log("About to set current idea on group:", this.cid);
-        //console.log("currentIdea was: ", this.model.get('states').at(0).get('currentIdea'));
-        var setReturn = this.model.get('states').at(0).set({currentIdea: idea}, {validate: true});
+    var analytics = Analytics.getInstance();
 
-        //console.log("Return was:", setReturn, "currentIdea is now: ", this.model.get('states').at(0).get('currentIdea'));
+    //console.log("setCurrentIdea() fired", idea, reason, doScroll);
+    //console.log(this.model);
+    //console.log("current state was: ", this.model.get('states').at(0));
+    if (idea !== this._getCurrentIdea()) {
+      //console.log("About to set current idea on group:", this.cid);
+      //console.log("currentIdea was: ", this.model.get('states').at(0).get('currentIdea'));
+      if (idea !== null) {
+        analytics.changeCurrentPage(analytics.pages.IDEA);
       }
-    },
+      else {
+        //If idea is null, assume we are focussed on the messages
+        analytics.changeCurrentPage(analytics.pages.MESSAGES);
+      }
+      var setReturn = this.model.get('states').at(0).set({currentIdea: idea}, {validate: true});
+      //console.log("Return was:", setReturn, "currentIdea is now: ", this.model.get('states').at(0).get('currentIdea'));
+    }
+  },
 
   /**
    * @return: undefined if no idea was set yet.

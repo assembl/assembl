@@ -187,7 +187,16 @@ var IdeaView = Backbone.View.extend({
    */
   doIdeaChange: function(is_unread) {
       var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-
+      
+      var analytics = Analytics.getInstance();
+      console.log('Tracking event on idea ', this.model.getShortTitleDisplayText())
+      if(!is_unread) {
+        analytics.trackEvent(analytics.events.OPEN_IDEA_IN_TABLE_OF_IDEAS);
+      }
+      else {
+        analytics.trackEvent(analytics.events.OPEN_IDEA_NEW_MESSAGES_IN_TABLE_OF_IDEAS);
+      }
+      analytics.trackEvent(analytics.events.NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS);
       this._groupContent.setCurrentIdea(this.model);
       if (messageListView) {
         //Syncing with current idea below isn't sufficient, as we need to set/unset the unread filter
@@ -205,13 +214,6 @@ var IdeaView = Backbone.View.extend({
    */
   onTitleClick: function(e) {
       e.stopPropagation();
-      var analytics = Analytics.getInstance();
-      console.log('Tracking event on idea ', this.model.getShortTitleDisplayText())
-      analytics.trackEvent(
-        analytics.events.NAVIGATE_IDEA,
-        analytics.actions.CLICK,
-        analytics.events.NAVIGATE_IDEA
-      );      
       this.doIdeaChange(null);
       if (Ctx.getCurrentUserId()) {
         // tell the backend that the idea was read
