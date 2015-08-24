@@ -171,6 +171,7 @@ def get_cluster_info(
     if len(post_ids) < 10:
         return
     post_id_by_index = {n: post_id for (n, post_id) in enumerate(post_ids)}
+    index_by_post_id = {post_id: n for (n, post_id) in enumerate(post_ids)}
     subcorpus = corpus.subcorpus(post_ids)
     tfidf_corpus = tfidf_model[subcorpus]
     model_matrix = gensimvecs_to_csr(gensim_model[tfidf_corpus], num_topics)
@@ -220,12 +221,13 @@ def get_cluster_info(
         all_cluster_features.append((pos_terms, neg_terms))
     # Compare to children classification
     compare_with_ideas = None
+    all_idea_scores = []
+    ideas_of_post = defaultdict(list)
+    children_remainder = set(post_ids)
     if len(idea.children):
-        children_remainder = set(post_ids)
         posts_of_children = {
             child.id: post_ids_of(child)
             for child in idea.children}
-        ideas_of_post = defaultdict(list)
         for idea_id, c_post_ids in posts_of_children.iteritems():
             for post_id in c_post_ids:
                 ideas_of_post[post_id].append(idea_id)
@@ -236,6 +238,7 @@ def get_cluster_info(
         # A bit arbitrary but I need a single idea.
         for cluster in chain(post_clusters, (remainder,)):
             idea_score = defaultdict(int)
+            all_idea_scores.append(idea_score)
             for post_id in cluster:
                 for idea_id in ideas_of_post[post_id]:
                     idea_score[idea_id] += 1
@@ -243,8 +246,8 @@ def get_cluster_info(
                 if len(ideas_of_post[post_id]) > 1:
                     scores = [(idea_score[idea_id], idea_id)
                               for idea_id in ideas_of_post[post_id]]
-                    scores.sort()
-                    ideas_of_post[post_id] = [scores[-1][1]]
+                    scores.sort(reverse=True)
+                    ideas_of_post[post_id] = [score[1] for score in scores]
         # index_by_post_id = {v: k for (k, v) in post_id_by_index.iteritems()}
         idea_of_index = [ideas_of_post[post_id][0] for post_id in post_ids]
         compare_with_ideas = {
@@ -255,9 +258,26 @@ def get_cluster_info(
                 idea_of_index, labels),
             "Adjusted Mutual Information": metrics.adjusted_mutual_info_score(
                 idea_of_index, labels)}
-
-    return (silhouette_score, compare_with_ideas, post_clusters,
-            remainder, all_cluster_features)
+    else:
+        for post_id in children_remainder:
+            ideas_of_post[post_id] = [idea_id]
+        all_idea_scores.append({idea_id:len(post_ids)})
+    post_text = dict(Content.default_db.query(Content.id, Content.body).all())
+    post_info = {
+        post_id:
+        dict(ideas= ideas_of_post[post_id],
+             cluster_id = labels[index_by_post_id[post_id]],
+             text=post_text[post_id])
+        for post_id in post_ids
+    }
+    clusters = [
+        dict(cluster= cluster,
+             features= all_cluster_features[n],
+             idea_scores=all_idea_scores[n])
+        for (n, cluster) in enumerate(post_clusters)
+    ]
+    clusters.append(dict(remainder=remainder, idea_scores=all_idea_scores[-1]))
+    return (silhouette_score, compare_with_ideas, clusters, post_info)
 
 
 def show_clusters(clusters):
@@ -276,5 +296,46 @@ def show_all(db, discussion_id, eps=0.2, min_samples=4):
     results = {id: get_cluster_info(id, eps=eps, min_samples=min_samples)
                for (id,) in idea_ids}
     posres = {id: r for (id, r) in results.iteritems() if r is not None}
-    for id, (silh, compare, clusters, rem, topics) in posres.iteritems():
-        print id, silh, [len(x) for x in clusters], len(rem)
+    for id, (silhouette_score, compare_with_ideas, clusters, post_info) in posres.iteritems():
+        print id, silhouette_score, [len(x.get('cluster', ())) or len(x.get('remainder', ())) for x in clusters]
+    return posres
+
+def as_html(db, discussion_id, f=None, eps=0.2, min_samples=4):
+    if not f:
+        f = open('output.html', 'w')
+    results = show_all(db, discussion_id, eps=eps, min_samples=min_samples)
+    with f:
+        for idea_id, (silhouette_score, compare_with_ideas, clusters, post_info) in results.iteritems():
+            idea = Idea.get(idea_id)
+            f.write("<h1>Idea %d: [%f] %s</h1>\n" % (
+                idea_id, silhouette_score or 0,
+                (idea.short_title or '').encode('utf-8')))
+            if (compare_with_ideas):
+                f.write("<dl>\n")
+                for k, v in compare_with_ideas.iteritems():
+                    f.write("<dt>%s</dt><dd>%s</dd>\n" % (k, v))
+                f.write("</dl>\n")
+            children_ids = set(chain(*(cli['idea_scores'].keys() for cli in clusters)))
+            post_counts_per_idea = {
+                child_id: len([post_id for (post_id, pinfo) in post_info.iteritems() if child_id in pinfo['ideas']])
+                for child_id in children_ids}
+            for n, cluster_info in enumerate(clusters):
+                is_remainder = 'remainder' in cluster_info
+                cluster = cluster_info['remainder'] if is_remainder else cluster_info['cluster']
+                features = cluster_info.get('features', {})
+                idea_scores = cluster_info['idea_scores']
+                f.write("<h2>Cluster %d</h2>\n<ol>" % (n,))
+                for idea_id, score in idea_scores.iteritems():
+                    idea = Idea.get(idea_id)
+                    f.write("<li>Idea %d: %d/%d %s</li>\n" % (
+                        idea_id, score, post_counts_per_idea[idea_id],
+                        (idea.short_title or '').encode('utf-8')))
+                f.write("</ol>\n")
+                if features:
+                    f.write("<p><b>Positive:</b> %s</p>\n" % (", ".join(features[0])))
+                    f.write("<p><b>Negative:</b> %s</p>\n" % (", ".join(features[1])))
+                f.write("<dl>\n")
+                for post_id in cluster:
+                    f.write("<dt>Post %d (%s):</dt>\n" % (post_id, ','.join((str(p) for p in post_info[post_id]['ideas']))))
+                    f.write("<dd>%s</dd>" % (post_info[post_id]['text'].encode('utf-8')))
+                f.write("</dl>\n")
