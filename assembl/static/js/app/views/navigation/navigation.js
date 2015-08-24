@@ -15,7 +15,7 @@ var Marionette = require('../../shims/marionette.js'),
     Permissions = require('../../utils/permissions.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
     CollectionManager = require('../../common/collectionManager.js'),
-    Analytics = require('../../analytics/dispatcher.js');
+    Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 var NavigationView = AssemblPanel.extend({
   template: "#tmpl-navigation",

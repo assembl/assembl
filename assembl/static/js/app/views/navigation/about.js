@@ -3,7 +3,7 @@
 var Assembl = require('../../app.js'),
     AssemblPanel = require('../assemblPanel.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    Analytics = require('../../analytics/dispatcher.js');
+    Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 var AboutNavPanel = AssemblPanel.extend({
   template: '#tmpl-about',

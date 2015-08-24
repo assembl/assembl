@@ -15,7 +15,7 @@ var Marionette = require('../shims/marionette.js'),
     viewsFactory = require('../objects/viewsFactory'),
     groupSpec = require('../models/groupSpec'),
     Promise = require('bluebird'),
-    Analytics = require('../analytics/dispatcher.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var IdeaInSynthesisView = Marionette.ItemView.extend({
   synthesis: null,

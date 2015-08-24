@@ -7,7 +7,7 @@ var Backbone = require('../shims/backbone.js'),
     Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
-    Analytics = require('../analytics/dispatcher.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var IdeaView = Backbone.View.extend({
   /**

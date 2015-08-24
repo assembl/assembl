@@ -7,7 +7,7 @@ var Marionette = require('../../shims/marionette.js'),
     AssemblPanel = require('../assemblPanel.js'),
     PanelWrapper = require('./panelWrapper.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    Analytics = require('../../analytics/dispatcher.js');
+    Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 /** Represents the entire content of a single panel group */
 var groupContent = Marionette.CompositeView.extend({

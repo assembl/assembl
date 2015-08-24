@@ -9,8 +9,7 @@ var $ = require('../shims/jquery.js'),
     Roles =  require('../utils/roles.js'),
     i18n =  require('../utils/i18n.js'),
     Raven = require('raven-js'),
-    Analytics = require('../analytics/dispatcher.js');
-
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 require('linkifyjs');
 require('linkifyjs/jquery')($);
 

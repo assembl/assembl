@@ -9,7 +9,7 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    Analytics = require('../../analytics/dispatcher.js');
+    Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 var SynthesisItem = Marionette.ItemView.extend({
   template: '#tmpl-synthesisItemInNavigation',

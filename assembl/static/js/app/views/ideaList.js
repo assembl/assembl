@@ -19,7 +19,7 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     OtherInIdeaListView = require('./otherInIdeaList.js'),
     $ = require('../shims/jquery.js'),
     Promise = require('bluebird'),
-    Analytics = require('../analytics/dispatcher.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var FEATURED = 'featured',
     IN_SYNTHESIS = 'inNextSynthesis';
