@@ -285,14 +285,14 @@ $previewNumLines: 4;
     }
     .avatar {
       img {
-        margin-top: -8px; //TODO:  I don't know why this is needed
+        margin-top: -8px; /*TODO:  I don't know why this is needed*/
       }
     }
     .message-author {
       @extend .header_item_template;
 
       white-space: nowrap;
-      margin: 0px 0px 0px $mesageSpacing; //No left margin because there is an element on the left
+      margin: 0px 0px 0px $mesageSpacing; /*No left margin because there is an element on the left*/
     }
 
     .message-abstract {
@@ -424,8 +424,8 @@ $previewNumLines: 4;
           & > *:first-child {
             margin-top: 0px;
           }
-          & > *:last-child {
-            display: inline;
+          & > p:last-child { /* TODO: Why was it "& > *:last-child"? Maybe it was for span.authors to be displayed right next to the last paragraph, but this breaks the margins of the ul elements. So I (Quentin) replace "*:last-child" by "p:last-child". */
+            display: inline; 
           }
         }
         .comment {
