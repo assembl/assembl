@@ -240,7 +240,6 @@ var messageSend = Marionette.ItemView.extend({
                           });
 
                           var agent = new Agents.Model({'@id': Ctx.getCurrentUserId()});
-                          agent.getSingleUser();
                           agent.fetch({
                                 success: function(model, resp) {
                                   //if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) && this.roles.get('role') === null) {

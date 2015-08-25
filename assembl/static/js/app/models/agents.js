@@ -129,14 +129,6 @@ var AgentModel = Base.Model.extend({
     return this.getId() == UNKNOWN_USER_ID;
   },
 
-  getSingleAgent: function() {
-    this.urlRoot = Ctx.getApiUrl('agents/') + Ctx.getCurrentUserId();
-  },
-
-  getSingleUser: function() {
-    this.urlRoot = Ctx.getApiV2DiscussionUrl('all_users/');
-  },
-
   validate: function(attrs, options) {
     /**
      * check typeof variable
