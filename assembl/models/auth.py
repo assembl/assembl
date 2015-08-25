@@ -272,6 +272,18 @@ class AgentProfile(Base):
             return status.last_visit == status.first_visit
 
     @property
+    def last_visit(self):
+        status = self.status_in_current_discussion
+        if status:
+            return status.last_visit
+
+    @property
+    def first_visit(self):
+        status = self.status_in_current_discussion
+        if status:
+            return status.first_visit
+
+    @property
     def was_created_on_current_discussion(self):
         # Use from api v2
         status = self.status_in_current_discussion
