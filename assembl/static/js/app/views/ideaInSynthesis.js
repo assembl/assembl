@@ -271,8 +271,9 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
     },
     
   navigateToIdea: function(ev, forcePopup) {
-      var panel = this.getPanel();
-      var analytics = Analytics.getInstance();
+      var panel = this.getPanel(),
+          analytics = Analytics.getInstance();
+
       analytics.trackEvent(analytics.events.NAVIGATE_TO_IDEA_IN_SYNTHESIS);
       if (panel.isPrimaryNavigationPanel()) {
         panel.getContainingGroup().setCurrentIdea(this.original_idea);
