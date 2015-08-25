@@ -2,7 +2,7 @@
 
 var i18n =  require('./i18n.js'),
     TourModel = require('../models/tour.js'),
-    _ = require('underscore');
+    _ = require('../shims/underscore.js');
 
 // Tours
 var onStart = require('./tours/onStart.js'),
