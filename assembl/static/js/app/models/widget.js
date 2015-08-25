@@ -275,9 +275,7 @@ var VotingWidgetModel = WidgetModel.extend({
         return (activityState == "ended"
             || currentUser.can(Permissions.VOTE));
       case this.IDEA_PANEL_CONFIGURE_CTX:
-        // assume non-root idea, relevant widget type
-        // Should we add config on votable?
-        return linkType === "BaseIdeaWidgetLink";
+        return true;
       case this.VOTE_REPORTS:
         return (activityState === "ended");
       case this.TABLE_OF_IDEA_MARKERS:

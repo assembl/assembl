@@ -182,7 +182,7 @@ def get_cluster_info(
         topic_intensities = numpy.ones((num_topics,))
     model_matrix = gensimvecs_to_csr(gensim_model[tfidf_corpus], num_topics, topic_intensities)
     algorithm = getattr(sklearn.cluster, algorithm)
-    algorithm = algorithm(**algo_kwargs)
+    algorithm = algorithm(metric='cosine', algorithm='brute', **algo_kwargs)
     r = algorithm.fit(model_matrix)
     labels = r.labels_
     n_clusters_raw = len(set(labels))
