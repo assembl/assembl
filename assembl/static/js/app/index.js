@@ -34,7 +34,7 @@ if (raven_url.length) {
 else {
   //Disables raven for development
   Raven.config(false);
-  Raven.debug = false;
+  Raven.debug = true;
 }
 
 var router = new Router();
