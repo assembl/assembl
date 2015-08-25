@@ -9,6 +9,7 @@ from sqlalchemy.orm import (
 from sqlalchemy.ext.associationproxy import association_proxy
 import simplejson as json
 import uuid
+import isodate
 
 from ..auth import (
     CrudPermissions, P_ADD_IDEA, P_READ, P_EDIT_IDEA)
@@ -25,8 +26,6 @@ from ..views.traversal import (
     CollectionDefinition, AbstractCollectionDefinition)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (ASSEMBL, QUADNAMES)
-
-ISO_8601_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
 
 class Widget(DiscussionBoundBase):
@@ -191,10 +190,9 @@ class Widget(DiscussionBoundBase):
 
         for notification in notifications:
             try:
-                start = datetime.strptime(
-                    notification['start'], ISO_8601_FORMAT)
+                start = isodate.parse_datetime(notification['start'])
                 end = notification.get('end', None)
-                end = datetime.strptime(end, ISO_8601_FORMAT) if end else datetime.max
+                end = isodate.parse_datetime(end) if end else datetime.max
                 if now < start or now > end:
                     continue
             except (ValueError, TypeError, KeyError) as e:
@@ -670,7 +668,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
 
     def notification_data(self, data):
         end = data.get('end', None)
-        time_to_end = (datetime.strptime(end, ISO_8601_FORMAT) - datetime.utcnow()
+        time_to_end = (isodate.parse_datetime(end) - datetime.utcnow()
                        ).total_seconds() if end else None
         return dict(
             data,
