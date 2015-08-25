@@ -10,7 +10,7 @@ import numpy
 from scipy.sparse import lil_matrix
 import sklearn.cluster
 from sklearn import metrics
-
+from .optics import optics
 
 from assembl.models import Content, Idea, Discussion
 from .indexedcorpus import IdMmCorpus
@@ -79,7 +79,10 @@ def get_discussion_semantic_analysis(
     discussion = Discussion.get(discussion_id)
     lang = discussion.discussion_locales[0].split('_')[0]
     dirname = join(nlp_data, lang)
-    dictionary = corpora.Dictionary.load(join(dirname, 'dico.dict'))
+    dict_fname = join(dirname, 'dico.dict')
+    if not exists(dict_fname):
+        create_dictionaries()
+    dictionary = corpora.Dictionary.load(dict_fname)
     post_ids = discussion.db.query(Content.id).filter_by(
         discussion_id=discussion_id)
     doc_count = post_ids.count()
@@ -152,6 +155,7 @@ def post_ids_of(idea):
 def get_cluster_info(
         idea_id, num_topics=100, passes=5,
         algorithm="DBSCAN", **algo_kwargs):
+    metric = algo_kwargs.get('metric', 'cosine')
     idea = Idea.get(idea_id)
     tfidf_model, gensim_model = get_discussion_semantic_analysis(
         idea.discussion_id, num_topics=num_topics,  # passes=passes)
@@ -181,15 +185,26 @@ def get_cluster_info(
     else:
         topic_intensities = numpy.ones((num_topics,))
     model_matrix = gensimvecs_to_csr(gensim_model[tfidf_corpus], num_topics, topic_intensities)
+    if 'eps' not in algo_kwargs:
+        # This is silly, but approximate eps with optics
+        r = optics(model_matrix.todense(), algo_kwargs.get('min_samples', 4), metric)
+        print "optics result:", r[0]
+        a, b = min(r[0][1:]), max(r[0])
+        eps = a + (b - a) * 0.5
+        print "epsilon", eps
+        algo_kwargs['eps'] = eps
     algorithm = getattr(sklearn.cluster, algorithm)
-    algorithm = algorithm(metric='cosine', algorithm='brute', **algo_kwargs)
+    algorithm = algorithm(
+        metric=metric,
+        algorithm=('brute' if metric == 'cosine' else 'auto'),
+        **algo_kwargs)
     r = algorithm.fit(model_matrix)
     labels = r.labels_
     n_clusters_raw = len(set(labels))
     # n_clusters_ = n_clusters_raw - (1 if -1 in labels else 0)
     silhouette_score = None
     if n_clusters_raw > 1:
-        silhouette_score = metrics.silhouette_score(model_matrix, labels)
+        silhouette_score = metrics.silhouette_score(model_matrix, labels, metric=metric)
     post_clusters = []
     remainder = set(post_ids)
     for label in set(labels):
@@ -297,20 +312,20 @@ def show_clusters(clusters):
             print posts[post_id].get_body_as_text()
 
 
-def get_all_results(db, discussion_id, eps=0.2, min_samples=4):
+def get_all_results(db, discussion_id, min_samples=4):
     idea_ids = db.query(Idea.id).filter_by(
         discussion_id=discussion_id).all()
-    results = {id: get_cluster_info(id, eps=eps, min_samples=min_samples)
+    results = {id: get_cluster_info(id, min_samples=min_samples)
                for (id,) in idea_ids}
     posres = {id: r for (id, r) in results.iteritems() if r is not None}
     # for id, (silhouette_score, compare_with_ideas, clusters, post_info) in posres.iteritems():
     #     print id, silhouette_score, [len(x['cluster']) for x in clusters]
     return posres
 
-def as_html(db, discussion_id, f=None, eps=0.2, min_samples=4):
+def as_html(db, discussion_id, f=None, min_samples=4):
     if not f:
         f = open('output.html', 'w')
-    results = get_all_results(db, discussion_id, eps=eps, min_samples=min_samples)
+    results = get_all_results(db, discussion_id, min_samples=min_samples)
     results = [(silhouette_score, idea_id, compare_with_ideas, clusters, post_info)
         for idea_id, (silhouette_score, compare_with_ideas, clusters, post_info) in results.iteritems()]
     results.sort(reverse=True)
