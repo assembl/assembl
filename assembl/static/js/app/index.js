@@ -61,7 +61,7 @@ if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
       // test with defer call to action
       setTimeout(function() {
 
-         Taketour.showTour('on_start');
+         Taketour.showTour('on_show_profile');
 
       }, 5000);
 
