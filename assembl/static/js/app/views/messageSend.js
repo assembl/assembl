@@ -222,6 +222,9 @@ var messageSend = Marionette.ItemView.extend({
 
     model.save(null, {
       success: function(model, resp) {
+        var analytics = Analytics.getInstance();
+        analytics.trackEvent(analytics.events['MESSAGE_POSTED_ON_'+that.analytics_context])
+
         btn.text(i18n.gettext('Message posted!'));
 
         that.ui.messageBody.val('');
@@ -320,6 +323,7 @@ var messageSend = Marionette.ItemView.extend({
           that.ui.cancelButton.trigger('click');
         }, 5000);
       },
+
       error: function(model, resp) {
               that.sendInProgress = false;
               console.error('ERROR: onSendMessageButtonClick', model, resp);
@@ -387,7 +391,11 @@ var messageSend = Marionette.ItemView.extend({
       MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title.val());
       return true;
     }
-    return false;
+    else {
+      //We may have just emptied the content
+      this.clearPartialMessage();
+      return false;
+    }
   },
 
   clearPartialMessage: function() {

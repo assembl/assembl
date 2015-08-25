@@ -14,7 +14,8 @@ var Marionette = require('../shims/marionette.js'),
     $ = require('../shims/jquery.js'),
     facebook = require('./facebookModal.js'),
     Promise = require('bluebird'),
-    messageExport = require('./messageExportModal.js');
+    messageExport = require('./messageExportModal.js'),
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10;
@@ -134,6 +135,7 @@ var MessageView = Marionette.ItemView.extend({
     'click .js_readLess': 'onMessageTitleClick',
     'click .message-hoistbtn': 'onMessageHoistClick',
     'click .js_likeButton': 'onClickLiked',
+    'click .js_shareButton': 'onClickShare',
     'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
     'click @ui.jumpToMessageInThreadButton': 'onMessageJumpToMessageInThreadClick',
     'click @ui.jumpToMessageInReverseChronologicalButton': 'onMessageJumpToMessageInReverseChronologicalClick',
@@ -514,32 +516,41 @@ var MessageView = Marionette.ItemView.extend({
   },
 
   onClickLiked: function(e) {
-      var that = this,
-          liked_uri = this.model.get('liked');
-      if (liked_uri) {
-        Promise.resolve($.ajax(Ctx.getUrlFromUri(this.model.get('liked')), {
-          method: "DELETE"})).then(function(data) {
+    var that = this,
+    liked_uri = this.model.get('liked'),
+    analytics = Analytics.getInstance();
+
+    if (liked_uri) {
+      analytics.trackEvent(analytics.events.MESSAGE_UNLIKED);
+      Promise.resolve($.ajax(Ctx.getUrlFromUri(this.model.get('liked')), {
+        method: "DELETE"})).then(function(data) {
           that.model.set('liked', false);
         }).catch(function(e) {
           that.model.set('liked', liked_uri);
           return false;
         });
-      } else {
-        Promise.resolve($.ajax(
+    } else {
+      analytics.trackEvent(analytics.events.MESSAGE_LIKED);
+      Promise.resolve($.ajax(
           "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/actions", {
-          method: "POST",
-          contentType: "application/json",
-          dataType: "json",
-          data: '{"@type":"LikedPost"}'
-        })).then(function(data) {
-          that.model.set('liked', data['@id']);
-        }).catch(function(e) {
-          that.model.set('liked', false);
-          return false;
-        });
-      }
+            method: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: '{"@type":"LikedPost"}'
+          })).then(function(data) {
+            that.model.set('liked', data['@id']);
+          }).catch(function(e) {
+            that.model.set('liked', liked_uri);
+            return false;
+          });
+    }
 
-      return false;
+    return false;
+    },
+
+    onClickShare: function(e) {
+      var analytics = Analytics.getInstance();
+      analytics.trackEvent(analytics.events.MESSAGE_SHARE_BTN_CLICKED);
     },
 
   /**
@@ -783,17 +794,20 @@ var MessageView = Marionette.ItemView.extend({
   },
 
   onMessageReplyBtnClick: function(e) {
-      e.preventDefault();
+    var analytics = Analytics.getInstance();
+    e.preventDefault();
 
-      //So it is saved if the view refreshes
-      this.replyBoxHasFocus = true;
-      if (!this.isMessageOpened()) {
-        this.doOpenMessage();
-      }
-      else {
-        this.focusReplyBox();
-      }
-    },
+    //So it is saved if the view refreshes
+    this.replyBoxHasFocus = true;
+    analytics.trackEvent(analytics.events.MESSAGE_REPLY_BTN_CLICKED);
+
+    if (!this.isMessageOpened()) {
+      this.doOpenMessage();
+    }
+    else {
+      this.focusReplyBox();
+    }
+  },
 
   /**
    *  Focus on the reply box, and open the message if closed
@@ -1138,8 +1152,11 @@ var MessageView = Marionette.ItemView.extend({
    * Mark the current message as unread
    */
   markAsUnread: function(ev) {
+    var target = this.$('.readUnreadIndicator'),
+        analytics = Analytics.getInstance();
+
+    analytics.trackEvent(analytics.events.MESSAGE_MANUALLY_MARKED_UNREAD);
     ev.stopPropagation();
-    var target = this.$('.readUnreadIndicator');
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
     this.model.setRead(false, target);
   },
@@ -1148,8 +1165,11 @@ var MessageView = Marionette.ItemView.extend({
    * Mark the current message as read
    */
   markAsRead: function(ev) {
+    var target = this.$('.readUnreadIndicator'),
+        analytics = Analytics.getInstance();
+
+    analytics.trackEvent(analytics.events.MESSAGE_MANUALLY_MARKED_READ);
     ev.stopPropagation();
-    var target = this.$('.readUnreadIndicator');
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
     this.model.setRead(true, target);
   },
