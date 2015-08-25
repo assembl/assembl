@@ -268,6 +268,7 @@ voteApp.controller('indexCtl',
     };
 
     $scope.resizeIframe = function() {
+      console.log("$scope.resizeIframe()");
       if (window.parent && window.parent.resizeIframe)
         window.parent.resizeIframe();
     };
@@ -605,20 +606,31 @@ voteApp.controller('indexCtl',
       var valueDefault = null;
       if ( getUserPreviousVoteFunction ){
         valueDefault = getUserPreviousVoteFunction(criterion["@id"], target_id);
+        console.log("getUserPreviousVoteFunction is true => valueDefault: ", valueDefault);
       }
-      if ( valueDefault === null ) {
+      if ( valueDefault === null || valueDefault === undefined ) {
         valueDefault = ("valueDefault" in criterion) ? criterion.valueDefault : valueMin;
+        console.log("valueDefault is null => valueDefault: ", valueDefault);
       }
       var criterionValue = valueDefault;
       target_id = target_id || null;
       console.log("criterionValue: ", criterionValue);
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
+      var width = "width" in item_data ? item_data.width : null;
+      if ( !width )
+        width = "width" in config ? config.witdth : 300;
+      var height = "height" in item_data ? item_data.height : null;
+      if ( !height )
+        height = "height" in config ? config.height : 300;
+      var padding = "padding" in item_data ? item_data.padding : null;
+      if ( !padding )
+        padding = "padding" in padding ? config.padding : 60;
       
       // create the graph, as a SVG in the d3 container div
       var svg = destination
         .append("svg")
-        .attr("width", item_data.width)    
-        .attr("height", item_data.height);
+        .attr("width", width)    
+        .attr("height", height);
 
       svg.append("g")
         .attr("class", "criterion")
@@ -633,7 +645,7 @@ voteApp.controller('indexCtl',
       // create vertical scale
       var scale = d3.scale.linear()
         .domain([valueMin, valueMax])
-        .range([item_data.height - config.padding, config.padding])
+        .range([height - padding, padding])
         .clamp(true);
 
       var ticks = 5;
@@ -719,9 +731,9 @@ voteApp.controller('indexCtl',
         var gradientWidth = 10;
         g.append("rect")
           .attr("x", xPosCenter - gradientWidth / 2)
-          .attr("y", config.padding - 1) // this is the same as .attr("y", scale(criterion.valueMax) )
+          .attr("y", padding - 1) // this is the same as .attr("y", scale(criterion.valueMax) )
           .attr("width", gradientWidth)
-          .attr("height", scale(valueMin) - config.padding + 1)
+          .attr("height", scale(valueMin) - padding + 1)
           .attr("fill", "url(#gradient_" + criterion.id + ")");
       }
 
@@ -741,7 +753,7 @@ voteApp.controller('indexCtl',
 
       // show axis label
       var axisLabel = g.append("text")
-        .attr("y", item_data.height - config.padding * 0.3)
+        .attr("y", height - padding * 0.3)
         .attr("x", xPosCenter)
         .attr("class", "axis-label")
         .text(criterion.name);
@@ -777,11 +789,11 @@ voteApp.controller('indexCtl',
           var text = document.createTextNode(criterion.description);
           var node = document.createElement("span");
           node.appendChild(text);
-          var descriptionWidth = item_data.width;
+          var descriptionWidth = width;
 
           $(node).css("position", "absolute");
           $(node).css("width", descriptionWidth + "px");
-          $(node).css("top", elOrigin.offset().top + (item_data.height - config.padding * 0.25) + "px");
+          $(node).css("top", elOrigin.offset().top + (height - padding * 0.25) + "px");
           $(node).css("left", (elOrigin.offset().left + xPosCenter - descriptionWidth / 2) + "px");
           $(node).css("text-align", "center");
 
@@ -793,7 +805,7 @@ voteApp.controller('indexCtl',
       if (criterion.descriptionMin)
       {
         g.append("text")
-          .attr("y", item_data.height - config.padding * 0.7)
+          .attr("y", height - padding * 0.7)
           .attr("x", xPosCenter)
           .style("text-anchor", "middle")
           .text(criterion.descriptionMin);
@@ -802,7 +814,7 @@ voteApp.controller('indexCtl',
       if (criterion.descriptionMax)
       {
         g.append("text")
-          .attr("y", config.padding * 0.7)
+          .attr("y", padding * 0.7)
           .attr("x", xPosCenter)
           .style("text-anchor", "middle")
           .text(criterion.descriptionMax);
@@ -1451,26 +1463,22 @@ voteApp.controller('indexCtl',
 
           var question_title = "question_title" in item ? item.question_title : null;
           var question_description = "question_description" in item ? item.question_description : null;
-          if ( question_title ){
-            question_holder_d3.append("h2").text(question_title);
-            if ( question_description ){
-              question_holder_d3.append("p").text(question_description);
+          if ( !question_title ){
+            if ( item_type == "2_axes"){
+              // TODO: display both questions and descriptions? Or nothing as each question is displayed along an axis? Or associate  question and description properties to an item instead of a criterion?
+            } else {
+              var vote_specifications = "vote_specifications" in item ? item.vote_specifications : null;
+              if ( vote_specifications && vote_specifications.length ){
+                var vote_spec = vote_specifications[0];
+                question_title = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
+                question_description = ("settings" in vote_spec && "description" in vote_spec.settings) ? vote_spec.settings.description : null;
+              }
             }
           }
-          else if (item_type == "2_axes"){
-            // TODO: display both questions and descriptions? Or nothing as each question is displayed along an axis? Or associate  question and description properties to an item instead of a criterion?
-          } else {
-            var vote_specifications = "vote_specifications" in item ? item.vote_specifications : null;
-            if ( vote_specifications && vote_specifications.length ){
-              var vote_spec = vote_specifications[0];
-              var question = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
-              var description = ("settings" in vote_spec && "description" in vote_spec.settings) ? vote_spec.settings.description : null;
-              if ( question ){
-                question_holder_d3.append("h2").text(question);
-                if ( description ){
-                  question_holder_d3.append("p").text(description);
-                }
-              }
+          if ( question_title ){
+            question_holder_d3.append("h2").classed({"question-title": true}).text(question_title);
+            if ( question_description ){
+              question_holder_d3.append("div").classed({"question-description": true}).text(question_description);
             }
           }
 
@@ -1483,10 +1491,14 @@ voteApp.controller('indexCtl',
                 var my_votes = "my_votes" in vote_spec ? vote_spec.my_votes : null;
                 if ( my_votes && my_votes.length ){
                   var vote = _.findWhere(my_votes, {"idea": target_id});
-                  if ( vote && "value" in vote ){
-                    return vote.value;
+                  if ( vote ){
+                    if ( "value" in vote ){
+                      return vote.value;
+                    }
+                    else {
+                      return vote;
+                    }
                   }
-                  return vote;
                 }
               }
             }

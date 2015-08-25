@@ -25,7 +25,7 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "type": "integer",
       "label": "Padding in item",
       "default": 60,
-      "description": "Empty space (in pixels) between the border of the votable item and its axis"
+      "description": "Default empty space (in pixels) between the border of the votable item and its axis"
     },
     {
       "key": "minWidth",
@@ -160,7 +160,14 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "type": "text",
       "label": "Question description",
       "default": ""
-    }
+    },
+    {
+      "key": "padding",
+      "type": "integer",
+      "label": "Padding in item",
+      "default": 60,
+      "description": "Empty space (in pixels) between the border of the votable item and its axis"
+    },
   ];
 
   this.criterion_types = [
