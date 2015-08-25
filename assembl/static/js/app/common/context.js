@@ -7,7 +7,8 @@ var $ = require('../shims/jquery.js'),
     Assembl =  require('../app.js'),
     Permissions =  require('../utils/permissions.js'),
     Roles =  require('../utils/roles.js'),
-    i18n =  require('../utils/i18n.js');
+    i18n =  require('../utils/i18n.js'),
+    Raven = require('raven-js');
 
 require('linkifyjs');
 require('linkifyjs/jquery')($);
@@ -942,7 +943,7 @@ Context.prototype = {
     if (settings && "url" in settings && window.location.hostname != getHostnameFromUrl(settings.url))
     {
       console.log("ignoring Ajax error from outside domain: ", getHostnameFromUrl(settings.url));
-      console.log("the URL which return an error was: ", settings.url);
+      console.log("the URL which returned an error was: ", settings.url);
       return;
     }
 
@@ -950,7 +951,8 @@ Context.prototype = {
     message = "url: " + settings.url + "\n" + message + "\n" + exception;
 
     var model = new Backbone.Model({
-      msg: message
+      msg: message,
+      url: settings.url
     });
 
     var Modal = Backbone.Modal.extend({
@@ -963,6 +965,10 @@ Context.prototype = {
       },
       events: {
         'click .js_reload': 'reload'
+      },
+
+      onRender: function() {
+        Raven.captureMessage('Reload popup presented to the user', {tags: { url: this.model.get("url") }});
       },
 
       reload: function() {
