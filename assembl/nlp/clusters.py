@@ -221,8 +221,8 @@ def get_similar_posts(discussion, post_id=None, text=None, cutoff=0.15):
     query_vec = gensim_model[tfidf_model[words]]
     results = [(v, post_ids[n]) for (n, v) in enumerate(similarity[query_vec])]
     results.sort(reverse=True)
-    assert results[0][1] == post_id
-    results = results[1:]
+    # forget self and duplicates
+    results = [x for x in results if x[0] < 0.999]
     cutoff *= results[0][0]
     results = [(post_id, score) for (score, post_id) in results
                if score > cutoff]
