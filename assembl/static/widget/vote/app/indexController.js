@@ -604,6 +604,7 @@ voteApp.controller('indexCtl',
       var valueMin = ("minimum" in criterion) ? criterion.minimum : 0;
       var valueMax = ("maximum" in criterion) ? criterion.maximum : 100;
       var valueDefault = null;
+      var hasVoted = true;
       if ( getUserPreviousVoteFunction ){
         valueDefault = getUserPreviousVoteFunction(criterion["@id"], target_id);
         console.log("getUserPreviousVoteFunction is true => valueDefault: ", valueDefault);
@@ -611,6 +612,7 @@ voteApp.controller('indexCtl',
       if ( valueDefault === null || valueDefault === undefined ) {
         valueDefault = ("valueDefault" in criterion) ? criterion.valueDefault : valueMin;
         console.log("valueDefault is null => valueDefault: ", valueDefault);
+        hasVoted = false;
       }
       var criterionValue = valueDefault;
       target_id = target_id || null;
@@ -625,6 +627,8 @@ voteApp.controller('indexCtl',
       var padding = "padding" in item_data ? item_data.padding : null;
       if ( !padding )
         padding = "padding" in padding ? config.padding : 60;
+      var colorCursor = "colorCursor" in criterion ? criterion.colorCursor : "blue";
+      var colorCursorNoVoteYet = "#ccc";
       
       // create the graph, as a SVG in the d3 container div
       var svg = destination
@@ -669,6 +673,9 @@ voteApp.controller('indexCtl',
         //var x = d3.event.x;
         var y = d3.event.y;
 
+        // make cursor color change to say that the state has changed
+        svg.select("circle").style("fill", colorCursor);
+
         setCirclePositionFromOutputRange(y);
       }
 
@@ -680,6 +687,9 @@ voteApp.controller('indexCtl',
       {
         // Ignore the click event if it was suppressed
         if (d3.event.defaultPrevented) return;
+
+        // make cursor color change to say that the state has changed
+        svg.select("circle").style("fill", colorCursor);
 
         // Extract the click location
         var point = d3.mouse(this);
@@ -824,11 +834,12 @@ voteApp.controller('indexCtl',
       console.log("scale(criterionValue): ", scale(criterionValue));
 
       // draw the cursor
+      var currentCursorColor = hasVoted ? colorCursor : colorCursorNoVoteYet;
       svg.append("circle")
         .attr("cx", xPosCenter)
         .attr("cy", scale(criterionValue))
         .attr("r", 8)
-        .style("fill", (criterion.colorCursor) ? criterion.colorCursor : "blue")
+        .style("fill", currentCursorColor)
         .style("cursor", "pointer")
       ;
 
@@ -1456,6 +1467,9 @@ voteApp.controller('indexCtl',
           }
 
           var question_holder = $("<section class='vote-question-item' />");
+          if ( item_type == "radio" || item_type == "vertical_gauge" || item_type == "2_axes" ){
+            question_holder.addClass("vote-question-item-type-"+item_type);
+          }
           question_holder.attr("id", "vote-question-item-"+i);
           holder_jquery.append(question_holder);
           var question_holder_d3 = d3.select(question_holder.get(0));

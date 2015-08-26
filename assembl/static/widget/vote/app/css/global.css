@@ -94,8 +94,9 @@ section.vote-question-item {
 
 .inline-vote-for-a-target {
   display: inline-block;
-  padding-right: 50px;
   margin-top: 15px;
+  margin-right: 40px;
+  margin-bottom: 15px;
 }
 
 .inline-vote-for-a-target--title {
@@ -120,4 +121,12 @@ section.vote-question-item {
 
 .vote-question-item .question-description {
   
+}
+
+.vote-question-item-type-radio .inline-vote-for-a-target--title {
+  text-align: left;
+}
+
+.vote-question-item-type-radio .inline-vote-for-a-target {
+  width: 300px;
 }
