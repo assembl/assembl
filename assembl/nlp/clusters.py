@@ -4,8 +4,8 @@ from os import makedirs, unlink
 from itertools import chain
 
 from sqlalchemy import (text, column, bindparam)
-from gensim import corpora, models as gmodels
-from gensim.utils import tokenize
+from gensim import corpora, models as gmodels, similarities
+from gensim.utils import tokenize as gtokenize
 import numpy
 from scipy.sparse import lil_matrix
 import sklearn.cluster
@@ -19,13 +19,87 @@ from . import (
     DummyStemmer, ReversibleStemmer)
 
 nlp_data = 'var/nlp'
+DICTIONARY_FNAME = 'dico.dict'
+STEMS_FNAME = 'stems.dict'
+PHRASES_FNAME = 'phrases.model'
+CORPUS_FNAME = 'posts.mm'
+
+
+class Tokenizer(object):
+    def __init__(self, lang):
+        self.lang = lang
+        dirname = join(nlp_data, lang)
+        stemmer = get_stemmer(lang)
+        # Actually it might be better to go phrases (longer),
+        # then stop words filtering, then stemming
+        # on non-phrase. BUT phrases may require stemming too.
+        if not isinstance(stemmer, DummyStemmer):
+            stemmer = ReversibleStemmer(
+                stemmer, join(dirname, STEMS_FNAME))
+        self.stemmer = stemmer
+        self.stop_words = get_stop_words(lang)
+
+    def tokenize(self, text):
+        return [
+            self.stemmer.stemWord(word)
+            for word in gtokenize(text, True)
+            if word not in self.stop_words]
+
+    def tokenize_post(self, post):
+        subject = post.subject or ""
+        if subject.lower().split() in ('re:', 'comment'):
+            subject = ''
+        else:
+            subject += ' '
+        text = subject + post.get_body_as_text()
+        return self.tokenize(text)
+
+    def save(self):
+        if not isinstance(self.stemmer, DummyStemmer):
+            self.stemmer.save()
 
 
 def as_word_list(post, stemmer, stop_words):
-    text = (post.subject or "") + " " + post.get_body_as_text()
+    subject = post.subject or ""
+    if subject.split().lower() in ('re:', 'comment'):
+        subject = ''
+    else:
+        subject += ' '
+    text = subject + post.get_body_as_text()
     return [stemmer.stemWord(word)
             for word in tokenize(text, True)
             if word not in stop_words]
+
+
+class BOWizer(object):
+    def __init__(self, lang, tokenizer=None, load=True):
+        self.lang = lang
+        self.tokenizer = tokenizer or Tokenizer(lang)
+        dirname = join(nlp_data, lang)
+        dict_fname = join(dirname, DICTIONARY_FNAME)
+        phrase_fname = join(dirname, PHRASES_FNAME)
+        if load and exists(phrase_fname):
+            self.phrases = gmodels.Phrases.load(phrase_fname)
+        else:
+            self.phrases = gmodels.Phrases()
+        if load and exists(dict_fname):
+            self.dictionary = corpora.Dictionary.load(dict_fname)
+        else:
+            self.dictionary = corpora.Dictionary()
+
+    def text_to_bow(self, text):
+        return self.dictionary.doc2bow(self.phrases[
+            self.tokenizer.tokenize(text)])
+
+    def post_to_bow(self, post):
+        return self.dictionary.doc2bow(self.phrases[
+            self.tokenizer.tokenize_post(post)])
+
+    def save(self):
+        dirname = dirname = join(nlp_data, self.lang)
+        self.tokenizer.save()
+        self.phrases.save(join(dirname, PHRASES_FNAME))
+        self.dictionary.save(join(dirname, DICTIONARY_FNAME))
 
 
 def create_dictionaries():
@@ -35,33 +109,19 @@ def create_dictionaries():
         main_lang = d.discussion_locales[0].split('_')[0]
         by_main_lang[main_lang].append(d.id)
     for lang, discussion_ids in by_main_lang.iteritems():
-        dirname = join(nlp_data, lang)
-        if not exists(dirname):
-            makedirs(dirname)
-        stemmer = get_stemmer(lang)
-        # Actually it might be better to go phrases (longer),
-        # then stop words filtering, then stemming
-        # on non-phrase. BUT phrases may require stemming too.
-        if not isinstance(stemmer, DummyStemmer):
-            stemmer = ReversibleStemmer(
-                stemmer, join(dirname, 'stems.dict'))
-        stop_words = get_stop_words(lang)
+        tokenizer = Tokenizer(lang)
+        bowizer = BOWizer(lang, tokenizer, False)
         posts = db.query(Content).join(Discussion).filter(
             Discussion.id.in_(discussion_ids))
-        phrases = gmodels.Phrases()
-        phrases.add_vocab((
-            as_word_list(post, stemmer, stop_words) for post in posts))
-
-        dictionary = corpora.Dictionary((
-            phrases[as_word_list(post, stemmer, stop_words)]
+        bowizer.phrases.add_vocab((
+            tokenizer.tokenize_post(post) for post in posts))
+        bowizer.dictionary.add_documents((
+            bowizer.phrases[tokenizer.tokenize_post(post)]
             for post in posts))
-        dictionary.save(join(dirname, 'dico.dict'))
-        IdMmCorpus.serialize(join(dirname, 'posts.mm'), (
-            (post.id, dictionary.doc2bow(
-                phrases[as_word_list(post, stemmer, stop_words)]))
+        IdMmCorpus.serialize(join(nlp_data, lang, CORPUS_FNAME), (
+            (post.id, bowizer.post_to_bow(post))
             for post in posts))
-        if not isinstance(stemmer, DummyStemmer):
-            stemmer.save()
+        bowizer.save()
 
 
 def gensimvecs_to_csr(vecs, width, topic_intensities):
@@ -79,7 +139,7 @@ def get_discussion_semantic_analysis(
     discussion = Discussion.get(discussion_id)
     lang = discussion.discussion_locales[0].split('_')[0]
     dirname = join(nlp_data, lang)
-    dict_fname = join(dirname, 'dico.dict')
+    dict_fname = join(dirname, DICTIONARY_FNAME)
     if not exists(dict_fname):
         create_dictionaries()
     dictionary = corpora.Dictionary.load(dict_fname)
@@ -88,6 +148,9 @@ def get_discussion_semantic_analysis(
     doc_count = post_ids.count()
     if doc_count < 10:
         return None, None
+    post_ids = [x for (x,) in post_ids]
+    corpus = IdMmCorpus(join(dirname, CORPUS_FNAME))
+    subcorpus = corpus.subcorpus(post_ids)
     tfidf_model = gmodels.TfidfModel(id2word=dictionary)
     tfidf_fname = join(dirname, "tfidf_%d.model" % (discussion_id,))
     model_fname = join(dirname, "model_%s_%d.model" % (
@@ -107,14 +170,11 @@ def get_discussion_semantic_analysis(
                 same_kwargs = same_kwargs and getattr(
                     gensim_model, 'num_updates', doc_count) == doc_count
                 if same_kwargs and gensim_model.num_topics == num_topics:
-                    return tfidf_model, gensim_model
+                    return (subcorpus, tfidf_model, gensim_model)
         elif exists(tfidf_fname):
             unlink(tfidf_fname)
     if exists(model_fname):
         unlink(model_fname)
-    post_ids = [x for (x,) in post_ids]
-    corpus = IdMmCorpus(join(dirname, 'posts.mm'))
-    subcorpus = corpus.subcorpus(post_ids)
     if tfidf_model.num_docs != doc_count:
         tfidf_model.initialize(subcorpus)
         tfidf_model.save(tfidf_fname)
@@ -124,7 +184,60 @@ def get_discussion_semantic_analysis(
     elif getattr(gensim_model, 'add_documents', None):
         gensim_model.add_documents(tfidf_corpus)
     gensim_model.save(model_fname)
-    return (tfidf_model, gensim_model)
+    return (subcorpus, tfidf_model, gensim_model)
+
+
+def get_similarity_matrix(
+        discussion, num_topics=100, model_cls=gmodels.lsimodel.LsiModel,
+        **model_kwargs):
+    (
+        subcorpus, tfidf_model, gensim_model
+    ) = get_discussion_semantic_analysis(discussion.id)
+    lang = discussion.discussion_locales[0].split('_')[0]
+    dirname = join(nlp_data, lang)
+    similarity_fname = join(dirname, 'similarity_%d.model' % (discussion.id,))
+    if exists(similarity_fname):
+        similarity = similarities.MatrixSimilarity.load(similarity_fname)
+        if similarity.index.shape[0] == tfidf_model.num_docs:
+            return subcorpus, tfidf_model, gensim_model, similarity
+    similarity = similarities.MatrixSimilarity(
+        gensim_model[tfidf_model[subcorpus]])
+    similarity.save(similarity_fname)
+    return subcorpus, tfidf_model, gensim_model, similarity
+
+
+def get_similar_posts(discussion, post_id=None, text=None):
+    post_ids = discussion.db.query(Content.id).filter_by(discussion_id=discussion.id).all()
+    post_ids = [x for (x,) in post_ids]
+    (subcorpus, tfidf_model, gensim_model, similarity
+        ) = get_similarity_matrix(discussion)
+    lang = discussion.discussion_locales[0].split('_')[0]
+    bowizer = BOWizer(lang)
+    assert post_id or text, "Please give a text or a post_id"
+    if post_id:
+        words = bowizer.post_to_bow(Content.get(post_id))
+    else:
+        words = bowizer.text_to_bow(text)
+    query_vec = gensim_model[tfidf_model[words]]
+    results = [(v, post_ids[n]) for (n, v) in enumerate(similarity[query_vec])]
+    results.sort(reverse=True)
+    return results
+
+
+def show_similar_posts(discussion, post_id=None, text=None, cutoff=0.15):
+    similar = get_similar_posts(discussion, post_id, text)
+    assert similar[0][1] == post_id
+    similar = similar[1:]
+    cutoff *= similar[0][0]
+    similar = [(post_id, score) for (score, post_id) in similar
+               if score > cutoff]
+    posts = discussion.db.query(Content).filter(Content.id.in_([x[0] for x in similar]))
+    posts = {post.id: post for post in posts}
+    results = [(posts[post_id], score) for (post_id, score) in similar]
+    return [
+        dict(id=post.uri(), score=score, subject=post.subject,
+             content=post.get_body_as_text())
+        for post, score in results]
 
 
 def identity(x):
@@ -153,11 +266,11 @@ def post_ids_of(idea):
 
 
 def get_cluster_info(
-        idea_id, num_topics=100, passes=5,
+        idea_id, num_topics=100, passes=5, silhouette_cutoff=0.05,
         algorithm="DBSCAN", **algo_kwargs):
     metric = algo_kwargs.get('metric', 'cosine')
     idea = Idea.get(idea_id)
-    tfidf_model, gensim_model = get_discussion_semantic_analysis(
+    _, tfidf_model, gensim_model = get_discussion_semantic_analysis(
         idea.discussion_id, num_topics=num_topics,  # passes=passes)
         model_cls=gmodels.lsimodel.LsiModel)
     if not tfidf_model or not gensim_model:
@@ -168,11 +281,11 @@ def get_cluster_info(
     trans = identity
     if not isinstance(stemmer, DummyStemmer):
         stemmer = ReversibleStemmer(
-            stemmer, join(dirname, 'stems.dict'))
+            stemmer, join(dirname, STEMS_FNAME))
 
         def trans(x):
             return stemmer.reverse.get(x, x)
-    corpus = IdMmCorpus(join(dirname, 'posts.mm'))
+    corpus = IdMmCorpus(join(dirname, CORPUS_FNAME))
     post_ids = post_ids_of(idea)
     if len(post_ids) < 10:
         return
@@ -205,6 +318,8 @@ def get_cluster_info(
     silhouette_score = None
     if n_clusters_raw > 1:
         silhouette_score = metrics.silhouette_score(model_matrix, labels, metric=metric)
+    if silhouette_score < silhouette_cutoff:
+        return None
     post_clusters = []
     remainder = set(post_ids)
     for label in set(labels):
@@ -215,6 +330,33 @@ def get_cluster_info(
         remainder -= set(cluster)
         post_clusters.append(cluster)
     remainder = list(remainder)
+    all_cluster_features = calc_features(
+            post_ids, post_clusters, corpus, tfidf_model,
+            gensim_model, num_topics, topic_intensities, trans)
+    # Compare to children classification
+    (
+        compare_with_ideas, all_idea_scores, ideas_of_post, children_remainder
+    ) = compare_with_children(
+        idea, post_ids, post_clusters, remainder, labels)
+    post_text = dict(Content.default_db.query(Content.id, Content.body).all())
+    post_info = {
+        post_id:
+        dict(ideas=ideas_of_post[post_id],
+             cluster_id=labels[index_by_post_id[post_id]],
+             text=post_text[post_id])
+        for post_id in post_ids
+    }
+    clusters = [
+        dict(cluster=cluster,
+             features=all_cluster_features[n],
+             idea_scores=all_idea_scores[n])
+        for (n, cluster) in enumerate(post_clusters)
+    ]
+    clusters.append(dict(cluster=remainder, idea_scores=all_idea_scores[-1]))
+    return (silhouette_score, compare_with_ideas, clusters, post_info)
+
+
+def calc_features(post_ids, post_clusters, corpus, tfidf_model, gensim_model, num_topics, topic_intensities, trans):
     all_cluster_features = []
     for cluster in post_clusters:
         cluster_corpus = corpus.subcorpus(cluster)
@@ -223,10 +365,12 @@ def get_cluster_info(
 
         def centroid(corpus):
             clust_lda = [gensim_model[tfidf_model[c]] for c in corpus]
-            clust_lda = gensimvecs_to_csr(clust_lda, num_topics, topic_intensities)
+            clust_lda = gensimvecs_to_csr(
+                clust_lda, num_topics, topic_intensities)
             return clust_lda.sum(0).A1 / clust_lda.shape[0]
 
-        difference_vals = centroid(cluster_corpus) - centroid(clusterneg_corpus)
+        difference_vals = centroid(cluster_corpus) - \
+            centroid(clusterneg_corpus)
         difference = difference_vals.argsort()
         extremes = defaultdict(float)
         for id in chain(difference[0:5], difference[-1:-6:-1]):
@@ -240,6 +384,10 @@ def get_cluster_info(
         neg_terms = [t for (v, t) in extremes if v < 0][0:15]
         pos_terms.reverse()
         all_cluster_features.append((pos_terms, neg_terms))
+    return all_cluster_features
+
+
+def compare_with_children(idea, post_ids, post_clusters, remainder, labels):
     # Compare to children classification
     compare_with_ideas = None
     all_idea_scores = []
@@ -281,25 +429,10 @@ def get_cluster_info(
                 idea_of_index, labels)}
     else:
         for post_id in children_remainder:
-            ideas_of_post[post_id] = [idea_id]
+            ideas_of_post[post_id] = [idea.id]
         for cluster in chain(post_clusters, (remainder,)):
-            all_idea_scores.append({idea_id:len(cluster)})
-    post_text = dict(Content.default_db.query(Content.id, Content.body).all())
-    post_info = {
-        post_id:
-        dict(ideas= ideas_of_post[post_id],
-             cluster_id = labels[index_by_post_id[post_id]],
-             text=post_text[post_id])
-        for post_id in post_ids
-    }
-    clusters = [
-        dict(cluster= cluster,
-             features= all_cluster_features[n],
-             idea_scores=all_idea_scores[n])
-        for (n, cluster) in enumerate(post_clusters)
-    ]
-    clusters.append(dict(cluster=remainder, idea_scores=all_idea_scores[-1]))
-    return (silhouette_score, compare_with_ideas, clusters, post_info)
+            all_idea_scores.append({idea.id: len(cluster)})
+    return (compare_with_ideas, all_idea_scores, ideas_of_post, children_remainder)
 
 
 def show_clusters(clusters):
@@ -321,6 +454,7 @@ def get_all_results(db, discussion_id, min_samples=4):
     # for id, (silhouette_score, compare_with_ideas, clusters, post_info) in posres.iteritems():
     #     print id, silhouette_score, [len(x['cluster']) for x in clusters]
     return posres
+
 
 def as_html(db, discussion_id, f=None, min_samples=4):
     if not f:
