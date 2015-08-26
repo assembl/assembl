@@ -140,10 +140,11 @@ def get_token(request):
     if not user_id:
         raise HTTPUnauthorized()
     discussion_id = request.context.get_discussion_id()
-    req_permissions = request.GET.getall('permission') or [
+    permissions = request.GET.getall('permission') or [
         P_READ, P_READ_PUBLIC_CIF]
     if P_READ in permissions:
-        permissions.add(P_READ_PUBLIC_CIF)
+        permissions.append(P_READ_PUBLIC_CIF)
+    permissions = list(set(permissions))
     random_seed = request.GET.get('seed', None)
     # TODO: Rewrite that crap so randomness is internal,
     # give a pair of tokens.
@@ -156,7 +157,7 @@ def get_token(request):
     else:
         random_str = urandom(8)
     data = permission_token(
-        user_id, discussion_id, req_permissions, random_str)
+        user_id, discussion_id, permissions, random_str)
     return Response(body=data, content_type="text/text")
 
 
