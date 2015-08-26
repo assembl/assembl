@@ -206,7 +206,7 @@ def get_similarity_matrix(
     return subcorpus, tfidf_model, gensim_model, similarity
 
 
-def get_similar_posts(discussion, post_id=None, text=None):
+def get_similar_posts(discussion, post_id=None, text=None, cutoff=0.15):
     post_ids = discussion.db.query(Content.id).filter_by(discussion_id=discussion.id).all()
     post_ids = [x for (x,) in post_ids]
     (subcorpus, tfidf_model, gensim_model, similarity
@@ -221,17 +221,18 @@ def get_similar_posts(discussion, post_id=None, text=None):
     query_vec = gensim_model[tfidf_model[words]]
     results = [(v, post_ids[n]) for (n, v) in enumerate(similarity[query_vec])]
     results.sort(reverse=True)
+    assert results[0][1] == post_id
+    results = results[1:]
+    cutoff *= results[0][0]
+    results = [(post_id, score) for (score, post_id) in results
+               if score > cutoff]
     return results
 
 
 def show_similar_posts(discussion, post_id=None, text=None, cutoff=0.15):
-    similar = get_similar_posts(discussion, post_id, text)
-    assert similar[0][1] == post_id
-    similar = similar[1:]
-    cutoff *= similar[0][0]
-    similar = [(post_id, score) for (score, post_id) in similar
-               if score > cutoff]
-    posts = discussion.db.query(Content).filter(Content.id.in_([x[0] for x in similar]))
+    similar = get_similar_posts(discussion, post_id, text, cutoff)
+    post_ids = [x[0] for x in similar]
+    posts = discussion.db.query(Content).filter(Content.id.in_(post_ids))
     posts = {post.id: post for post in posts}
     results = [(posts[post_id], score) for (post_id, score) in similar]
     return [
