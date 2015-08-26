@@ -646,11 +646,14 @@ def install_builddeps():
             # may require a sudo
             if not run('brew link libiodbc', quiet=True):
                 sudo('brew link libiodbc')
+        if not exists('/usr/local/bin/gfortran'):
+            sudo('brew install gcc')
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
         sudo('apt-get install -y automake bison flex gperf  libxml2-dev libssl-dev libreadline-dev gawk')
         sudo('apt-get install -y graphviz libgraphviz-dev pkg-config')
+        sudo('apt-get install -y liblapack-dev libatlas-dev gfortran')
 
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev')

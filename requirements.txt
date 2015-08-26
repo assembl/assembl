@@ -32,6 +32,8 @@ anykeystore==0.2
 backports.ssl-match-hostname==3.4.0.2
 beautifulsoup4==4.4.0
 billiard==3.3.0.20
+boto==2.38.0
+bz2file==0.98
 celery==3.1.18
 chroma==0.2.0
 cffi==1.2.1
@@ -116,6 +118,7 @@ selenium==2.47.1
 simplejson==3.8.0
 six==1.9.0
 snowballstemmer==1.2.0
+smart_open==1.2.1
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
 sphinx-bootstrap-theme==0.4.7
 splinter==0.7.3
