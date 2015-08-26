@@ -255,11 +255,13 @@ var messageSend = Marionette.ItemView.extend({
                           var agent = new Agents.Model({'@id': Ctx.getCurrentUserId()});
                           agent.fetch({
                                 success: function(model, resp) {
-                                  //if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) && this.roles.get('role') === null) {
+                                  var analytics = Analytics.getInstance();
+
+                                  // The <2 condition is because we are in the process of posting, but the agent may, or may not have been updated yet.
                                   if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) &&
                                       userActiveNotifications.length < defaultActiveNotificationsDicussion.length) { // we could make a real diff here but this is enough for now
-
                                     that.showPopInFirstPost();
+                                    analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, true);
                                   }
                                 }});
                         }

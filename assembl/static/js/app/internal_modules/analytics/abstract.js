@@ -98,12 +98,7 @@ var moduleName = 'Analytics_Abstract',
   };
 
   /**
-   * Pseudo URLs: (/TARGET/TRIGGER_INFO (NOT origin target ), ex: IDEA/SYNTHESIS,
-   *  meaning an idea was navigated to from the synthesis (any synthesis) but NOT 
-   *  IDEA/SYNTHESIS_SECTION (meaning an idea was navigated to from the synthesis
-   *  section of the accordeon) 
-   *  A dash (-) means that the TRIGGER_INFO in unknown, or irrelevent
-   *  Ex: TODO
+   *
    */
   var _PAGE_DEFINITIONS = { 
       //IMPLEMENTED
@@ -122,8 +117,13 @@ var moduleName = 'Analytics_Abstract',
 
   };
 
-  var CUSTOM_VARIABLES = {
-    SAMPLE_CUSTOM_VAR: ['SAMPLE_CUSTOM_VAR', 1]
+  var _CUSTOM_VARIABLES = {
+    HAS_ELEVATED_RIGHTS: {name: 'HAS_ELEVATED_RIGHTS', index: 1},
+    IS_DISCUSSION_MEMBER: {name: 'IS_DISCUSSION_MEMBER', index: 2},
+    HAS_POSTED_BEFORE: {name: 'HAS_POSTED_BEFORE', index: 3},
+    /* Is on a return visit if 24h has passed since the user's first login */
+    IS_ON_RETURN_VISIT: {name: 'IS_ON_RETURN_VISIT', index: 4},
+
   }
 
   /**
@@ -142,6 +142,7 @@ var moduleName = 'Analytics_Abstract',
     actions: _ACTION_DEFINITIONS,
     categories: _CATEGORY_DEFINITIONS,
     pages: _PAGE_DEFINITIONS,
+    customVariables: _CUSTOM_VARIABLES,
 
     
     validateEventsArray: function() {
@@ -178,7 +179,7 @@ var moduleName = 'Analytics_Abstract',
       throw new Error('Cannot call abstract method!');
     },
 
-    setCustomVariable: function(name, value, options){
+    setCustomVariable: function(variableDefinition, value) {
       throw new Error('Cannot call abstract method!');
     },
    

@@ -85,10 +85,8 @@ var moduleName = 'Analytics_Piwik',
       this._invoke('trackPageView');
     },
 
-    setCustomVariable: function(name, value, options){
-      var scope = options.scope,
-          index = options.index;
-      this._invoke('setCustomVariable', [index, name, value, scope]);
+    setCustomVariable: function(variableDefinition, value) {
+      this._invoke('setCustomVariable', [variableDefinition.index, variableDefinition.name, value, 'visit']);
     },
 
     //For debug use ONLY

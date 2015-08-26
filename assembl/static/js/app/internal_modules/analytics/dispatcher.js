@@ -96,7 +96,10 @@ var moduleName = 'Analytics_Dispatcher',
       this.notify('trackEvent', arguments);
     },
 
-    setCustomVariable: function(name, value, options){
+    setCustomVariable: function(variableDefinition, value) {
+      if (_.indexOf(_.values(this.customVariables), variableDefinition) === -1) {
+        throw new Error("Unknown custom variable");
+      }
       this.notify('setCustomVariable', arguments);
     },
    

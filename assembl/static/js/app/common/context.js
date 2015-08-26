@@ -172,10 +172,48 @@ Context.prototype = {
   },
 
   setCurrentUser: function(user) {
+    var analytics = Analytics.getInstance(),
+        days_since_first_visit;
+
     this.currentUser = user;
-    var analytics = Analytics.getInstance();
-    if(!user.isUnknownUser()) {
+
+    if(!this.currentUser.isUnknownUser()) {
+
       analytics.setUserId(this.currentUser.id);
+
+      analytics.setCustomVariable(analytics.customVariables.HAS_ELEVATED_RIGHTS, this.currentUser.can(Permissions.EDIT_EXTRACT));
+      
+      if(this.currentUser.get('post_count') >= 1) {
+        analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, true);
+      }
+      else {
+        analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, false);
+      }
+
+      if(this.currentUser.get('first_visit') !== null && this.currentUser.get('last_visit') !== null) {
+        //Note:  moment always rounds DOWN
+        days_since_first_visit = Moment(this.currentUser.get('last_visit')).diff(this.currentUser.get('first_visit'), 'days');
+        if(days_since_first_visit >= 1) {
+          analytics.setCustomVariable(analytics.customVariables.IS_ON_RETURN_VISIT, true);
+        }
+        else {
+          analytics.setCustomVariable(analytics.customVariables.IS_ON_RETURN_VISIT, false);
+        }
+      }
+
+      var CollectionManager = require('./collectionManager.js'),
+          collectionManager = new CollectionManager();
+
+      collectionManager.getLocalRoleCollectionPromise().then(function(localRoles) {
+        var logUserSubscriptionStatus = function(localRoles) {
+          analytics.setCustomVariable(analytics.customVariables.IS_DISCUSSION_MEMBER, localRoles.isUserSubscribedToDiscussion());
+        }
+        localRoles.listenTo(localRoles, 'update', logUserSubscriptionStatus);
+        logUserSubscriptionStatus(localRoles);
+      });
+      
+      
+
     }
   },
 
@@ -1272,8 +1310,6 @@ Context.prototype = {
           that.setCurrentUser(user);
           user.fetchPermissions();
 
-          //user.fetchPermissionsToScriptTag();
-          //user.toScriptTag('current-user-json');
           that.loadCsrfToken(true);
         }
       });
