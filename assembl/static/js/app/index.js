@@ -49,7 +49,7 @@ App.start();
 if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
 
   var currentUser = Ctx.getCurrentUser();
-  if (activate_tour /*&& (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))*/) {
+  if (activate_tour && (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))) {
     // start take tour due to the dom latencies
     setTimeout(function() {
       // may have been disabled by the router
