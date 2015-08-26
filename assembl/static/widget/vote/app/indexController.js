@@ -627,7 +627,7 @@ voteApp.controller('indexCtl',
       var padding = "padding" in item_data ? item_data.padding : null;
       if ( !padding )
         padding = "padding" in padding ? config.padding : 60;
-      var colorCursor = "colorCursor" in criterion ? criterion.colorCursor : "blue";
+      var colorCursor = "colorCursor" in criterion ? criterion.colorCursor : "#9013FE";
       var colorCursorNoVoteYet = "#ccc";
       
       // create the graph, as a SVG in the d3 container div
@@ -882,18 +882,23 @@ voteApp.controller('indexCtl',
 
       var criterionXValue = null;
       var criterionYValue = null;
+      var hasVoted = true;
       if ( getUserPreviousVoteFunction ){
         criterionXValue = getUserPreviousVoteFunction(criteria[0]["@id"], target_id);
         criterionYValue = getUserPreviousVoteFunction(criteria[1]["@id"], target_id);
       }
       if ( criterionXValue === null ){
+        hasVoted = false;
         criterionXValue = criterionXValueDefault;
       }
       if ( criterionYValue === null ){
+        hasVoted = false;
         criterionYValue = criterionYValueDefault;
       }
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
       target_id = target_id || null;
+      var colorCursor = "colorCursor" in criteria[0] ? criteria[0].colorCursor : "#9013FE";
+      var colorCursorNoVoteYet = "#ccc";
 
       // create the graph, as a SVG in the d3 container div
       var svg = destination
@@ -962,8 +967,9 @@ voteApp.controller('indexCtl',
           svg.select("g.criterion[data-criterion-type='y']").attr("data-criterion-value", yValue);
         }
 
-        svg.selectAll("circle").attr("cx", xScale(xValue));
-        svg.selectAll("circle").attr("cy", yScale(yValue));
+        var circle = svg.selectAll("circle");
+        circle.attr("cx", xScale(xValue));
+        circle.attr("cy", yScale(yValue));
       }
 
       function dragmove(d) {
@@ -974,8 +980,12 @@ voteApp.controller('indexCtl',
       }
 
       function dragEnd(d) {
-        var x = svg.selectAll("circle").attr("cx");
-        var y = svg.selectAll("circle").attr("cy");
+        var circle = svg.selectAll("circle");
+        var x = circle.attr("cx");
+        var y = circle.attr("cy");
+        
+        // make cursor color change to say that the state has changed
+        circle.style("fill", colorCursor);
 
         setCirclePositionFromOutputRange(x, y, true);
       }
@@ -1148,24 +1158,28 @@ voteApp.controller('indexCtl',
           .text(criteria[1].descriptionMax);
       }
 
+      var currentCursorColor = hasVoted ? colorCursor : colorCursorNoVoteYet;
+
       // draw the cursor (inner disc)
       svg.append("circle")
         .attr("cx", xScale(criterionXValue))
         .attr("cy", yScale(criterionYValue))
-        .attr("r", 7)
-        .style("fill", (item_data.colorCursor) ? item_data.colorCursor : "blue")
+        .attr("r", 8) // use 7 with an outer circle, 8 without
+        .style("fill", currentCursorColor)
         .style("cursor", "pointer")
       ;
 
       // draw the cursor (outer circle)
+      /*
       svg.append("circle")
         .attr("cx", xScale(criterionXValue))
         .attr("cy", yScale(criterionYValue))
         .attr("r", 10) 
         .style("fill", "none")
-        .style("stroke", (item_data.colorCursor) ? item_data.colorCursor : "blue")
+        .style("stroke", currentCursorColor)
         .style("cursor", "pointer")
       ;
+      */
 
     };
 
