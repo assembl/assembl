@@ -3,7 +3,7 @@
     <!-- SUBSCRIBTION  -->
     {% if help_url %}
     <li class="sub fl mrs">
-        <a href="{{ help_url }}" target="_blank" title="{{ gettext('Help') }}" class="btn btn-default btn-xs help"><i class="icon-help"></i></a>
+        <a href="{{ help_url }}" target="_blank" title="{{ gettext('Help') }}" class="btn btn-default btn-sm help"><i class="icon-help"></i></a>
     </li>
     {% endif %}
     
@@ -48,7 +48,7 @@
         </div>
         {% else %}
         {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-        <a href="{{discussion.get_url()}}/login" class="btn btn-default btn-xs">{{ gettext('Sign in') }}</a>
+        <a href="{{discussion.get_url()}}/login" class="btn btn-default btn-sm">{{ gettext('Sign in') }}</a>
         {% endif %}
         {% endif %}
     </li>

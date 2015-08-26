@@ -1,6 +1,6 @@
 <ul class="side-menu">
   <li style="display:none" class="js_synthesis_tab">
-    <a href="#" class="nav js_navigation" data-view="synthesis"><i class="icon-doc btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Synthesis') }}
+    <a href="#" class="nav js_navigation" data-view="synthesis"><i class="icon-doc btn btn-sm"></i>&nbsp;&nbsp;{{ gettext('Synthesis') }}
     <% if ( hasMinimize ){ %>
         <span class="js_minimizePanel panel-header-minimize btn btn-sm icon-arrowleft" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}"></span>
     <% } %>
@@ -8,7 +8,7 @@
     <div class="second-level synthesis"></div>
   </li>
   <li>
-    <a href="#" class="nav js_navigation" data-view="debate"><i class="icon-discuss btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Discussion') }}
+    <a href="#" class="nav js_navigation" data-view="debate"><i class="icon-discuss btn btn-sm"></i>&nbsp;&nbsp;{{ gettext('Discussion') }}
     {# check if number of synthesis > 0 to hide this
     <% if ( hasMinimize ){ %>
     <span class="js_minimizePanel panel-header-minimize btn btn-sm icon-arrowleft" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}"></span>
@@ -18,11 +18,11 @@
     <div class="second-level debate"></div>
   </li>
   <li>
-    <a href="#" class="nav js_navigation" data-view="about"><i class="icon-home btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('About') }}</a>
+    <a href="#" class="nav js_navigation" data-view="about"><i class="icon-home btn btn-sm"></i>&nbsp;&nbsp;{{ gettext('About') }}</a>
     <div class="second-level about"></div>
   </li>
   <li style="display:none" id="visualization_tab">
-    <a href="#" class="nav js_navigation" data-view="visualizations"><i class="icon-doc btn btn-xs"></i>&nbsp;&nbsp;{{ gettext('Statistics') }}</a>
+    <a href="#" class="nav js_navigation" data-view="visualizations"><i class="icon-doc btn btn-sm"></i>&nbsp;&nbsp;{{ gettext('Statistics') }}</a>
     <div class="second-level visualizations">
     <ul class="visualization-list"></ul>
     </div>
