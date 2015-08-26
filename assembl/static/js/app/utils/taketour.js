@@ -12,13 +12,27 @@ var onStart = require('./tours/onStart.js'),
 
 var TakeTour = Marionette.Object.extend({
 
-    _tours_by_name: {},
-    _disabled_tour: undefined,
+    _nextTours: [],
+    _seenTours: undefined,
 
     initialize: function(){
+
         this.tour_assembl = [
-            { name:"on_start", tour: onStart },
-            { name:"on_show_synthesis", tour: onShowSynthesis }
+            {
+              name:"on_start",
+              conditional: function(){
+
+              },
+              autostart: true,
+              tour: onStart
+            },
+            {
+              name:"on_show_synthesis",
+              conditional: '',
+              autostart: false,
+              tour: onShowSynthesis
+            }
+
         ];
 
         this.initTour();
@@ -26,7 +40,8 @@ var TakeTour = Marionette.Object.extend({
 
     initTour: function() {
         var tourModel = new TourModel.Model(),
-            that = this;
+            that = this,
+            currentTour = hopscotch.getCurrTour();
 
         hopscotch.configure({
             onShow: function() {
@@ -44,45 +59,64 @@ var TakeTour = Marionette.Object.extend({
             }
         });
 
-        for (var i=0; i<this.tour_assembl.length; i++) {
+        /*for (var i=0; i<this.tour_assembl.length; i++) {
             var tour = this.tour_assembl[i];
             tour.order = i;
-            this._tours_by_name[tour.name] = tour;
-        }
+            this._nextTours[tour.name] = tour;
+        }*/
 
         // Recovery disabled tour
         tourModel.fetch({
             success: function(model, response, options){
-                that._disabled_tour = response;
+                that._seenTours = response;
             },
             error: function(model, response, options){
 
             }
-        })
-
+        });
     },
 
     disabledTour: function(tour){
         console.debug('disabledTour', tour);
 
-
-
     },
 
-    showTour: function(tour){
+    startTour: function(name){
+        var index = -1;
 
-        // show the initial tour "on_start"
-        if(!this._disabled_tour) return;
-
-        // check if the tour is in the disabled_tour[]
-        if(_.contains(_.keys(this._disabled_tour), tour)){
-
-            console.debug("do not show this tour");
-
+        // check if the tour has been seen[]
+        if(_.contains(_.keys(this._seenTours), name)){
+            console.debug("Tour already seen");
+            return;
         } else {
+            //If there is an ongoing round
+            if(hopscotch.getCurrTour()){
+                //find index of "name" in assembl_tour[];
+                for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
+                    if (this.tour_assembl[i].name === name) {
+                        index = i;
+                        break;
+                    }
+                }
 
-            console.debug("show this tour", tour);
+                this._nextTours[index] = name;
+            } else {
 
+                for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
+                    if (this.tour_assembl[i].name === name) {
+
+                        if(this.tour_assembl[i].condition())
+
+
+
+                        break;
+                    }
+                }
+
+
+            }
+
+            console.debug("show this tour", name);
             // need to return "hopscotch" object with proper tour
             //return hopscotch.startTour(this.tour, 0);
         }
