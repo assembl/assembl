@@ -36,13 +36,17 @@ var moduleName = 'Analytics_Abstract',
       MESSAGE: 'MESSAGE',
       NAVIGATION_PANEL: 'NAVIGATION_PANEL',
       SHARED_URL: 'SHARED_URL',
-      NOTIFICATION: 'NOTIFICATION'
+      NOTIFICATION: 'NOTIFICATION',
+      LOGIN: 'LOGIN',
+      REGISTER: 'REGISTER',
+      CONFIRM_ACCOUNT: 'CONFIRM_ACCOUNT'
   };
 
   /*
     TODO: Update actions registry with well defined Actions to track
    */
   var _ACTION_DEFINITIONS = {
+      ONBOARDING: 'ONBOARDING',
       READING: 'READING',
       FINDING: 'FINDING',
       INTERACTING: 'INTERACTING',
@@ -85,15 +89,22 @@ var moduleName = 'Analytics_Abstract',
       MESSAGE_MANUALLY_MARKED_READ: {action: 'INTERACTING', category: 'MESSAGE', eventName: 'MANUALLY_MARK_READ'},
       MESSAGE_MANUALLY_MARKED_UNREAD: {action: 'INTERACTING', category: 'MESSAGE', eventName: 'MANUALLY_MARK_UNREAD'},
       THREAD_VIEW_COMPLETE_CONVERSATION: {action: 'INTERACTING', category: 'MESSAGE_THREAD', eventName: 'VIEW_COMPLETE_CONVERSATION'},
-      
+
+      EMAIL_LOGIN: {action:'ONBOARDING', category: 'LOGIN', eventName: 'ASSEMBL_USER_CLICK_LOGIN'},
+      FACEBOOK_LOGIN: {action: 'ONBOARDING', category: 'LOGIN', eventName: 'FACEBOOK_USER_CLICK_LOGIN'},
+      TWITTER_LOGIN: {action:'ONBOARDING', category: 'LOGIN', eventName: 'TWITTER_USER_CLICK_LOGIN'},
+      GOOGLE_LOGIN: {action: 'ONBOARDING', category: 'LOGIN', eventName: 'GOOGLE_USER_CLICK_LOGIN'},
+
+      USER_REGISTER: {action:'ONBOARDING', category: 'REGISTER', eventName: 'ASSEMBL_USER_CLICK_LOGIN'},
+      USER_LOGIN: {action: 'ONBOARDING', category: 'LOGIN', eventName: 'USER_LOGGED_IN'},
+      CONFIRM_ACCOUNT: {action: 'ONBOARDING', category: 'CONFIRM_ACCOUNT', eventName: 'ASSEMBL_USER_ACCOUNT_CONFIRM'},
+      ENTER_POST_VIA_NOTIFICATION: {action: 'ONBOARDING', category: 'NOTIFICATION', eventName: 'ENTER_ASSEMBL_OPEN_POST'},
+      ENTER_POST_VIA_SHARE: {action: 'ONBOARDING', category: 'SHARED_URL', eventName: 'ENTER_ASSEMBL_OPEN_POST'},
+      ENTER_IDEA_VIA_SHARE: {action: 'ONBOARDING', category: 'SHARED_URL', eventName: 'ENTER_ASSEMBL_OPEN_IDEA'}
+
       /*
-      LOGIN_SUCCESS: 'LOGIN_SUCCESS',
-      LOGIN_FAILED: 'LOGIN_FAILED',
       JOIN_GROUP:'JOIN_GROUP',
       JOIN_GROUP_REFUSED: 'JOIN_GROUP_REFUSED',
-      NAVIGATE_IDEA: 'NAVIGATE_IDEA',
-      REPLY_MESSAGE_START: 'REPLY_MESSAGE_START',
-      REPLY_MESSAGE_COMPLETE: 'REPLY_MESSAGE_COMPLETE'
       */
   };
 
@@ -108,9 +119,9 @@ var moduleName = 'Analytics_Abstract',
       'SIMPLEUI_VISUALIZATIONS_SECTION': 'SIMPLEUI_VISUALIZATIONS_SECTION',
       'IDEA': 'IDEA', //Context of a specific idea.  Means the state of the group was just set to this idea
       'MESSAGES': 'MESSAGES', //Context of messages.  Means the state of the group was just set to a null idea, or user is playing with the filters
+      'LOGIN': 'LOGIN',
+      'REGISTER': 'REGISTER',
       //NOT YET IMPLEMENTED
-      'LOGIN/-': 'LOGIN/-',
-      'SIGNUP/-': 'SINGUP/-',
       'JOIN_GROUP/-': 'JOIN_GROUP/-',
       'MESSAGE': 'MESSAGE', //Context of a specific message.  To be implemented in showMessageById
       'SYNTHESIS': 'SYNTHESIS' //Context of a specific synthesis.  To be implemented in showMessageById AND synthesisInNavigation.js
@@ -137,7 +148,7 @@ var moduleName = 'Analytics_Abstract',
 
   Wrapper.prototype = {
     customVariableSize: 5,
-    debug: true,
+    debug: false,
     events: _EVENT_DEFINITIONS,
     actions: _ACTION_DEFINITIONS,
     categories: _CATEGORY_DEFINITIONS,
