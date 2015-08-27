@@ -505,8 +505,8 @@ def as_html(discussion, f=None, min_samples=4):
                     (idea.short_title or '').encode('utf-8')))
             f.write("</ol>\n")
             if features:
-                f.write("<p><b>Positive:</b> %s</p>\n" % (", ".join(features[0])))
-                f.write("<p><b>Negative:</b> %s</p>\n" % (", ".join(features[1])))
+                f.write("<p><b>Positive:</b> %s</p>\n" % (u", ".join(features[0])).encode('utf-8'))
+                f.write("<p><b>Negative:</b> %s</p>\n" % (u", ".join(features[1])).encode('utf-8'))
             f.write("<dl>\n")
             for post_id in cluster:
                 f.write("<dt>Post %d (%s):</dt>\n" % (post_id, ','.join((str(p) for p in post_info[post_id]['ideas']))))
