@@ -75,6 +75,10 @@ class Widget(DiscussionBoundBase):
         # TODO: Make this configurable.
         return None
 
+    @property
+    def configured(self):
+        return True
+
     def get_ui_endpoint(self):
         uri = self.get_ui_endpoint_base()
         assert uri
@@ -98,7 +102,10 @@ class Widget(DiscussionBoundBase):
     @property
     def settings_json(self):
         if self.settings:
-            return json.loads(self.settings)
+            settings = json.loads(self.settings)
+            # Do not allow non-dict settings
+            if isinstance(settings, dict):
+                return settings
         return {}
 
     @settings_json.setter
@@ -635,6 +642,12 @@ class InspirationWidget(IdeaCreatingWidget):
     }
     base_idea_link_class = IdeaInspireMeWidgetLink
 
+    @property
+    def configured(self):
+        active_modules = self.settings_json.get('active_modules', {})
+        return bool(active_modules.get('card', None)
+                or active_modules.get('video', None))
+
     @classmethod
     def get_ui_endpoint_base(cls):
         # TODO: Make this configurable.
@@ -798,6 +811,12 @@ class MultiCriterionVotingWidget(BaseIdeaWidget):
             if link.idea == idea:
                 self.criteria_links.remove(link)
                 return
+
+    @property
+    def configured(self):
+        return bool(len(self.votable_idea_links)
+                and len(self.vote_specifications)
+                and len(self.settings_json.get('items', ())))
 
     def set_criteria(self, ideas):
         idea_ids = {idea.id for idea in ideas}

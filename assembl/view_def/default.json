@@ -401,6 +401,7 @@
         "state": "state_json",
         "start_date": true,
         "end_date": true,
+        "configured": true,
         "activity_state": true,
         "ui_endpoint": "&get_ui_endpoint",
         "user_states_url": "&get_user_states_url",
