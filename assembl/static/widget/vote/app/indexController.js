@@ -427,7 +427,7 @@ voteApp.controller('indexCtl',
       vote_result_holder.empty();
       $translate('voteSubmitLoading').then(function(translation) {
         vote_result_holder.append($("<p class='loading'>" + translation + "</p>"));
-        $scope.resizeIframe();
+        // $scope.resizeIframe(); // the code of the window.parent.resizeIframe function is not good enough yet
       });
 
       var widget = configService;
@@ -469,7 +469,7 @@ voteApp.controller('indexCtl',
         $translate('voteSubmitSuccessForAllCriteriaOfQuestion').then(function(translation) {
           vote_result_holder.empty();
           vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
-          $scope.resizeIframe();
+          // $scope.resizeIframe(); // the code of the window.parent.resizeIframe function is not good enough yet
         });
       };
 
@@ -490,7 +490,7 @@ voteApp.controller('indexCtl',
 
           $translate('voteSubmitFailureForCriterion', {'criterion': criterion_name}).then(function(translation) {
             vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
-            $scope.resizeIframe();
+            // $scope.resizeIframe(); // the code of the window.parent.resizeIframe function is not good enough yet
           });
         }
       };
