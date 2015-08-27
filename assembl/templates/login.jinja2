@@ -29,7 +29,7 @@
 
 {% macro form(name, title, image) %}
   {% if name in providers %}
-  <form id="{{name}}" class="mts" method="post" action="/login/{{name}}">
+  <form id="{{name}}" class="mts js_login_{{name}}" method="post" action="/login/{{name}}">
   {% for k,v in kwargs.items() %}
       <input type="hidden" name="{{ k }}" value="{{ v }}" />
   {% endfor %}
@@ -85,7 +85,7 @@
 
                 <table class="submitButtons">
                 <tr><td>
-                    <input type="submit" name="login" value="{{ gettext('Log in') }}" class="btn btn-primary" />
+                    <input type="submit" name="login" value="{{ gettext('Log in') }}" class="btn btn-primary js_login" />
                 </td><td>
                     <a href="{{ slug_prefix }}/req_password_change">{{ gettext('Forgot your password?') }}</a>
                 </td></tr></table>
@@ -106,4 +106,25 @@
 {% block extra_js %}
     {# Including our analytics wrapper scripts in order to make calls using our analytics engine. #}
     {% include 'analytics_nonBackboned.jinja2' %}
+    <script type="text/javascript">
+      var analytics = Analytics_Dispatcher.getInstance();
+      analytics.changeCurrentPage(analytics.pages.LOGIN);
+
+      document.getElementsByClassName('js_login')[0].addEventListener('click', function(){
+        analytics.trackEvent(analytics.events.EMAIL_LOGIN);
+      });
+
+      document.getElementsByClassName('js_login_facebook')[0].addEventListener('click', function(){
+        analytics.trackEvent(analytics.events.FACEBOOK_LOGIN);
+      });
+
+      document.getElementsByClassName('js_login_twitter')[0].addEventListener('click', function(){
+        analytics.trackEvent(analytics.events.TWITTER_LOGIN);
+      });
+
+      document.getElementsByClassName('js_login_google')[0].addEventListener('click', function(){
+        analytics.trackEvent(analytics.events.GOOGLE_LOGIN);
+      });
+
+    </script>
 {% endblock %}

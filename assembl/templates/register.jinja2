@@ -24,7 +24,7 @@ body{
             <input type="text" name="email" class="form-control defaultfield" placeholder="{{ gettext('Email') }}" required />
             <input type="password" name="password" class="form-control defaultfield" placeholder="{{ gettext('Password') }}" required />
             <input type="password" name="password2" class="form-control defaultfield" placeholder="{{ gettext('Repeat password') }}" required />
-            <input type="submit" name="register" value="{{ gettext('Sign up') }}" class="btn btn-primary" />
+            <input type="submit" name="register" value="{{ gettext('Sign up') }}" class="btn btn-primary js_register" />
         </form>
 
         <div class="subcontent">
@@ -34,3 +34,16 @@ body{
     </div>
 </div>
 {% endblock %}
+
+{% block extra_js %}
+    {% include 'analytics_nonBackboned.jinja2' %}
+    <script type="text/javascript">
+      var analytics = Analytics_Dispatcher.getInstance();
+      analytics.changeCurrentPage(analytics.pages.REGISTER);
+
+      document.getElementsByClassName('js_register')[0].addEventListener('click', function(){
+        analytics.trackEvent(analytics.events.USER_REGISTER);
+      });
+
+    </script>
+{% endblock%}
