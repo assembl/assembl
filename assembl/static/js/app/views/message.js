@@ -216,12 +216,12 @@ var MessageView = Marionette.ItemView.extend({
       bodyFormatClass = "body_format_" + this.model.get('bodyMimeType').replace("/", "_");
     }
 
-    var direct_link_relative_url = Ctx.getRelativeURLFromDiscussionRelativeURL("posts/" + encodeURIComponent(this.model.get('@id'))),
+    var direct_link_relative_url = Ctx.getRelativeURLFromDiscussionRelativeURL("posts/" + encodeURIComponent(this.model.get('@id'))) + '&source=share',
 
         //share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
         share_link_url = "/static/widget/share/index.html?u=" +
         encodeURIComponent(Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)) + "&t=" +
-        encodeURIComponent(this.model.get('subject'));
+        encodeURIComponent(this.model.get('subject')) + '&source=share';
 
     return {
       message: this.model,

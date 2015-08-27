@@ -24,7 +24,82 @@ var Marionette = require('./shims/marionette.js'),
     Widget = require('./models/widget.js'),
     AdminDiscussionSettings = require('./views/admin/adminDiscussionSettings.js'),
     FirstIdeaToShowVisitor = require('./views/visitors/firstIdeaToShowVisitor.js'),
-    i18n = require('./utils/i18n.js');
+    i18n = require('./utils/i18n.js'),
+    Analytics = require('./internal_modules/analytics/dispatcher.js');
+
+var QUERY_STRINGS = {
+  'source': ['notification', 'share']
+};
+
+var trackAnalyticsWithQueryString = function(qs, context){
+  
+  console.log('tracking with query string ' + qs + ' using context ' + context);
+
+  function arrayHas(array, id){
+    var result = false;
+    _.each(array, function(a){
+      if (a === id){
+        result = true;
+      }
+    });
+    return result;
+  };
+
+  function doCheck(param, success){
+    var tmp = param.split('='),
+        k = tmp[0],
+        v = tmp[1];
+
+    if ( _.has(QUERY_STRINGS, k) ){
+      if ( arrayHas(QUERY_STRINGS[k], v) ){
+        success(k,v);
+      }
+      else {
+        console.warn('[Analytics] Query string ' + k + '=' + v + ' ; ' + k + ' is valid, but ' + v + ' does nothing.');
+      }
+    }
+    else {
+      console.warn('[Analytics] Query string ' + k + '=' + v + ' does nothing');
+    }
+  };
+
+  var analytics = Analytics.getInstance();
+
+  var cb = function(key, value){
+    //Define what type of event is fired here
+    switch(value){
+      case 'notification':
+        if (context === 'post'){
+          console.log('trackEvent enter post via notification');
+          analytics.trackEvent(analytics.events.ENTER_POST_VIA_NOTIFICATION);
+        }
+        break;
+      case 'share':
+        if (context === 'post'){
+          console.log('trackEvent enter post via share');
+          analytics.trackEvent(analytics.events.ENTER_POST_VIA_SHARE);
+        }
+        else if (context === 'idea') {
+          console.log('trackEvent enter idea via share');
+          analytics.trackEvent(analytics.events.ENTER_IDEA_VIA_SHARE);
+        }
+        break;
+      default:
+        break;
+    }
+
+  };
+
+  if ( qs.indexOf('&') > -1 ){
+    _.each( qs.split('&'), function(param){
+      doCheck(param, cb);
+    });
+  }
+  else {
+    doCheck(qs, cb);
+  }
+
+};
 
 var routeManager = Marionette.Object.extend({
 
@@ -104,9 +179,12 @@ var routeManager = Marionette.Object.extend({
     }
   },
 
-  post: function(id) {
+  post: function(id, qs) {
       //TODO: add new behavior to show messageList Panel
       // We are skiping restoring the group state
+
+      trackAnalyticsWithQueryString(qs, 'post');
+
       this.restoreViews(undefined, undefined, true).then(function(groups) {
         var firstGroup = groups.children.first();
         var messageList = firstGroup.findViewByType(PanelSpecTypes.MESSAGE_LIST);
@@ -125,8 +203,10 @@ var routeManager = Marionette.Object.extend({
       });
     },
 
-  idea: function(id) {
+  idea: function(id, qs) {
     //TODO: add new behavior to show messageList Panel
+    
+    trackAnalyticsWithQueryString(qs, 'idea');
     this.restoreViews();
 
     setTimeout(function() {
