@@ -1,78 +1,3 @@
-// A fancier checkbox
-// ==================
-/*.chk {
-  cursor: pointer;
-
-  display: inline-block;
-  @include box-sizing(border-box);
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  float: left;
-
-  position: relative;
-  @include z-index("floor");
-}
-
-// Designed to fit tin the .idealist-item
-// ++++++++++++++++
-.chk.chk--idealist {
-  height: 40px;
-  line-height: 40px;
-  float: left;
-  margin-left: 5px;
-
-  // Don't ask
-  padding-top: 4.25px;
-}
-
-// Change the selected color to the muted color
-// ++++++++++++++++
-.chk.chk--muted {}
-
-// The checkbox
-// ---------------
-.chk-checkbox {
-  display: none;
-}
-
-// The label
-// --------------
-.chk-label {
-  @extend %icon;
-  @extend .icon-check-empty;
-
-  display: inline-block;
-  position: absolute;
-  top: -2px;
-  left: -5px;
-  font-size: 20px;
-  color: #cccccc;
-
-  .chk--idealist & {
-    top: 10px;
-    left: 0;
-    line-height: 20px;
-  }
-
-  .chk-checkbox:checked ~ & {
-    @extend .icon-check;
-    color: $theme_checkbox_color;
-  }
-
-  .chk--muted .chk-checkbox:checked ~ & {
-    color: $gray1;
-  }
-
-  .chk--dropdown & {
-    font-size: 16px;
-    color: white !important;
-    top: 3px;
-    left: -2px;
-  }
-} */
-
-// Custom checkboxes
 
 // rule filter to block browsers that don't support that selector from applying rules they shouldn't
 .custom-checkbox:not(#unsupported) {
@@ -121,4 +46,52 @@
       visibility: visible;
     }
   }
+}
+
+.custom-radio:not(#unsupported) {
+    cursor: pointer;
+
+    input[type=radio] {
+        opacity: 0;
+
+        &:focus + .custom-radio-element {
+            // if behavior necessary
+        }
+
+        &:checked + .custom-radio-element {
+            @extend %icon;
+            @extend .icon-dot-circled;
+            color: $theme_checkbox_color;
+        }
+
+    }
+
+    .custom-radio-element {
+        @extend %icon;
+        @extend .icon-circle-empty;
+        display: inline-block;
+        width: 17px;
+        height: 17px;
+        line-height: 16px;
+        margin: 0 0 2px 0;
+        margin-right: $spacingXs;
+        margin-left: -20px;
+        border-radius: 2px;
+        vertical-align: middle;
+        text-align: center;
+        color: #cccccc;
+        font-size: 20px;
+    }
+
+    &:hover {
+        /*.custom-checkbox-element {
+          border-color: mix(#000000, $inputBorder, 25%);
+        }*/
+    }
+
+    input:checked + .custom-radio-element {
+        &:after {
+            visibility: visible;
+        }
+    }
 }
