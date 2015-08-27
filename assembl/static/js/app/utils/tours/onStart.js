@@ -64,7 +64,10 @@ var onStart = {
             content: i18n.gettext("Notifications are set to go to your email. If you aren’t receiving them, make sure to check your spam folder! You can update your notification settings here.")
         }
     ],
-    showPrevButton: true
+    showPrevButton: true,
+    onStart: function() {
+        // set dom id
+    }
 }
 
 module.exports = onStart;

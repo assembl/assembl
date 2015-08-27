@@ -14,6 +14,7 @@ var TakeTour = Marionette.Object.extend({
 
     _nextTours: [],
     _seenTours: undefined,
+    _tourModel: new TourModel.Model(),
 
     initialize: function(){
 
@@ -21,16 +22,33 @@ var TakeTour = Marionette.Object.extend({
             {
               name:"on_start",
               conditional: function(){
-
+                  return true;
+              },
+              beforeStart: function(){
+                  //setter les ID dans le DOM pour hopscotch
               },
               autostart: true,
               tour: onStart
             },
             {
+                name:'on_ideas'
+            },
+            {
+                name:'on_synthesis'
+            },
+            {
               name:"on_show_synthesis",
-              conditional: '',
+              conditional: function(){
+                return false;
+              },
+              beforeStart: function(){
+
+              },
               autostart: false,
               tour: onShowSynthesis
+            },
+            {
+                name:'on_profile'
             }
 
         ];
@@ -40,8 +58,7 @@ var TakeTour = Marionette.Object.extend({
 
     initTour: function() {
         var tourModel = new TourModel.Model(),
-            that = this,
-            currentTour = hopscotch.getCurrTour();
+            that = this;
 
         hopscotch.configure({
             onShow: function() {
@@ -59,14 +76,8 @@ var TakeTour = Marionette.Object.extend({
             }
         });
 
-        /*for (var i=0; i<this.tour_assembl.length; i++) {
-            var tour = this.tour_assembl[i];
-            tour.order = i;
-            this._nextTours[tour.name] = tour;
-        }*/
-
         // Recovery disabled tour
-        tourModel.fetch({
+        this._tourModel.fetch({
             success: function(model, response, options){
                 that._seenTours = response;
             },
@@ -74,11 +85,42 @@ var TakeTour = Marionette.Object.extend({
 
             }
         });
+
+        hopscotch.listen('end', function(){
+            var currentTour = hopscotch.getCurrTour();
+
+            // after each end we delete the tour
+            this.deleteTour(currentTour.id);
+
+            console.debug('hopscotch', hopscotch.getCurrTour());
+
+            //console.debug('hopscotch', hopscotch, hopscotch.getState(), hopscotch.getCurrTour());
+
+            //that.runTour('on_show_synthesis');
+
+        });
+
+        //console.debug('tour_assembl', this.tour_assembl);
     },
 
-    disabledTour: function(tour){
-        console.debug('disabledTour', tour);
+    getCurrentTour: function(){
+       return hopscotch.getCurrTour();
+    },
 
+    deleteTour: function(name){
+       var index = -1;
+
+        console.debug('disabledTour', name);
+
+        for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
+            if (this.tour_assembl[i].name === name) {
+                index = i;
+                //delete in array
+                //this._nextTours[index -1];
+                //this._tourModel.save(attrs, {patch: true});
+                break;
+            }
+        }
     },
 
     startTour: function(name){
@@ -90,37 +132,51 @@ var TakeTour = Marionette.Object.extend({
             return;
         } else {
             //If there is an ongoing round
-            if(hopscotch.getCurrTour()){
+            if(this.getCurrentTour()){
                 //find index of "name" in assembl_tour[];
                 for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
                     if (this.tour_assembl[i].name === name) {
                         index = i;
+                        this._nextTours[index] = name;
                         break;
                     }
                 }
 
-                this._nextTours[index] = name;
+                //console.debug(this._nextTours[index]);
+                //runTour
+
             } else {
 
                 for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
                     if (this.tour_assembl[i].name === name) {
-
-                        if(this.tour_assembl[i].condition())
-
-
-
+                        index = i;
+                        this._nextTours[index] = name;
                         break;
                     }
                 }
 
+                this.runTour(this._nextTours[index]);
+
+                //if(this.tour_assembl[i].conditional()){}
+
+                //this.tour_assembl[index].beforeStart();
 
             }
-
-            console.debug("show this tour", name);
-            // need to return "hopscotch" object with proper tour
-            //return hopscotch.startTour(this.tour, 0);
         }
 
+    },
+
+    runTour: function(name){
+        var tour = undefined;
+
+        for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
+            if (this.tour_assembl[i].name === name) {
+                tour = this.tour_assembl[i].tour;
+                break;
+            }
+        }
+
+        return hopscotch.startTour(tour, 0);
     }
 
 });

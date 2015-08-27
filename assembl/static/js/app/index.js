@@ -49,7 +49,7 @@ App.start();
 if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
 
   var currentUser = Ctx.getCurrentUser();
-  if (activate_tour && (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))) {
+  if (activate_tour /*&& (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))*/) {
     // start take tour due to the dom latencies
     setTimeout(function() {
       // may have been disabled by the router
@@ -58,12 +58,39 @@ if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
       }
     }, 4000);
 
-      // test with defer call to action
+    // test with defer call to action
+    setTimeout(function() {
+
+       Taketour.startTour('on_start');
+
+    }, 5000);
+
+
       setTimeout(function() {
 
-         Taketour.showTour('on_show_profile');
+          Taketour.startTour('on_synthesis');
 
-      }, 5000);
+      }, 6000);
+
+
+      setTimeout(function() {
+
+          Taketour.startTour('on_ideas');
+
+      }, 6000);
+
+      setTimeout(function() {
+
+          Taketour.startTour('on_profile');
+
+      }, 6000);
+
+
+      setTimeout(function() {
+
+          Taketour.startTour('on_show_synthesis');
+
+      }, 8000);
 
 
   }
