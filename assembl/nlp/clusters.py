@@ -109,6 +109,9 @@ def create_dictionaries():
         main_lang = d.discussion_locales[0].split('_')[0]
         by_main_lang[main_lang].append(d.id)
     for lang, discussion_ids in by_main_lang.iteritems():
+        dirname = join(nlp_data, lang)
+        if not exists(dirname):
+            makedirs(dirname)
         tokenizer = Tokenizer(lang)
         bowizer = BOWizer(lang, tokenizer, False)
         posts = db.query(Content).join(Discussion).filter(
