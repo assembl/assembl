@@ -647,7 +647,7 @@ def install_builddeps():
             if not run('brew link libiodbc', quiet=True):
                 sudo('brew link libiodbc')
         if not exists('/usr/local/bin/gfortran'):
-            sudo('brew install gcc')
+            sudo('brew install gcc isl')
     else:
         sudo('apt-get install -y build-essential python-dev ruby-builder')
         sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
