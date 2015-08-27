@@ -449,9 +449,9 @@ def show_clusters(clusters):
             print posts[post_id].get_body_as_text()
 
 
-def get_all_results(db, discussion_id, min_samples=4):
-    idea_ids = db.query(Idea.id).filter_by(
-        discussion_id=discussion_id).all()
+def get_all_results(discussion, min_samples=4):
+    idea_ids = discussion.db.query(Idea.id).filter_by(
+        discussion_id=discussion.id).all()
     results = {id: get_cluster_info(id, min_samples=min_samples)
                for (id,) in idea_ids}
     posres = {id: r for (id, r) in results.iteritems() if r is not None}
@@ -460,55 +460,57 @@ def get_all_results(db, discussion_id, min_samples=4):
     return posres
 
 
-def as_html(db, discussion_id, f=None, min_samples=4):
+def as_html(discussion, f=None, min_samples=4):
     if not f:
         f = open('output.html', 'w')
-    results = get_all_results(db, discussion_id, min_samples=min_samples)
+    results = get_all_results(discussion, min_samples=min_samples)
     results = [(silhouette_score, idea_id, compare_with_ideas, clusters, post_info)
         for idea_id, (silhouette_score, compare_with_ideas, clusters, post_info) in results.iteritems()]
     results.sort(reverse=True)
-    with f:
-        for (silhouette_score, idea_id, compare_with_ideas, clusters, post_info) in results:
-            idea = Idea.get(idea_id)
-            f.write("<h1>Idea %d: [%f] %s</h1>\n" % (
-                idea_id, silhouette_score or 0,
-                (idea.short_title or '').encode('utf-8')))
-            if len(clusters) > 1:
-                f.write("<p><b>Cluster size: %s</b>, remainder %d</p>\n" % (
-                    ', '.join((str(len(ci['cluster'])) for ci in clusters[:-1])),
-                    len(clusters[-1]['cluster'])))
-            if (compare_with_ideas):
-                f.write("<dl>\n")
-                for k, v in compare_with_ideas.iteritems():
-                    f.write("<dt>%s</dt><dd>%s</dd>\n" % (k, v))
-                f.write("</dl>\n")
-            children_ids = set(chain(*(
-                cli['idea_scores'].keys() for cli in clusters)))
-            post_counts_per_idea = {
-                child_id: len([post_id for (post_id, pinfo)
-                               in post_info.iteritems()
-                               if child_id in pinfo['ideas']])
-                for child_id in children_ids}
-            for n, cluster_info in enumerate(clusters):
-                is_remainder = 'features' not in cluster_info
-                cluster = cluster_info['cluster']
-                features = cluster_info.get('features', {})
-                idea_scores = cluster_info['idea_scores']
-                if is_remainder:
-                    f.write("<h2>Remainder:</h2>\n<ol>")
-                else:
-                    f.write("<h2>Cluster %d</h2>\n<ol>" % (n,))
-                for idea_id, score in idea_scores.iteritems():
-                    idea = Idea.get(idea_id)
-                    f.write("<li>Idea %d: %d/%d %s</li>\n" % (
-                        idea_id, score, post_counts_per_idea[idea_id],
-                        (idea.short_title or '').encode('utf-8')))
-                f.write("</ol>\n")
-                if features:
-                    f.write("<p><b>Positive:</b> %s</p>\n" % (", ".join(features[0])))
-                    f.write("<p><b>Negative:</b> %s</p>\n" % (", ".join(features[1])))
-                f.write("<dl>\n")
-                for post_id in cluster:
-                    f.write("<dt>Post %d (%s):</dt>\n" % (post_id, ','.join((str(p) for p in post_info[post_id]['ideas']))))
-                    f.write("<dd>%s</dd>" % (post_info[post_id]['text'].encode('utf-8')))
-                f.write("</dl>\n")
+    f.write("<html><body>")
+    for (silhouette_score, idea_id, compare_with_ideas, clusters, post_info) in results:
+        idea = Idea.get(idea_id)
+        f.write("<h1>Idea %d: [%f] %s</h1>\n" % (
+            idea_id, silhouette_score or 0,
+            (idea.short_title or '').encode('utf-8')))
+        if len(clusters) > 1:
+            f.write("<p><b>Cluster size: %s</b>, remainder %d</p>\n" % (
+                ', '.join((str(len(ci['cluster'])) for ci in clusters[:-1])),
+                len(clusters[-1]['cluster'])))
+        if (compare_with_ideas):
+            f.write("<dl>\n")
+            for k, v in compare_with_ideas.iteritems():
+                f.write("<dt>%s</dt><dd>%s</dd>\n" % (k, v))
+            f.write("</dl>\n")
+        children_ids = set(chain(*(
+            cli['idea_scores'].keys() for cli in clusters)))
+        post_counts_per_idea = {
+            child_id: len([post_id for (post_id, pinfo)
+                           in post_info.iteritems()
+                           if child_id in pinfo['ideas']])
+            for child_id in children_ids}
+        for n, cluster_info in enumerate(clusters):
+            is_remainder = 'features' not in cluster_info
+            cluster = cluster_info['cluster']
+            features = cluster_info.get('features', {})
+            idea_scores = cluster_info['idea_scores']
+            if is_remainder:
+                f.write("<h2>Remainder:</h2>\n<ol>")
+            else:
+                f.write("<h2>Cluster %d</h2>\n<ol>" % (n,))
+            for idea_id, score in idea_scores.iteritems():
+                idea = Idea.get(idea_id)
+                f.write("<li>Idea %d: %d/%d %s</li>\n" % (
+                    idea_id, score, post_counts_per_idea[idea_id],
+                    (idea.short_title or '').encode('utf-8')))
+            f.write("</ol>\n")
+            if features:
+                f.write("<p><b>Positive:</b> %s</p>\n" % (", ".join(features[0])))
+                f.write("<p><b>Negative:</b> %s</p>\n" % (", ".join(features[1])))
+            f.write("<dl>\n")
+            for post_id in cluster:
+                f.write("<dt>Post %d (%s):</dt>\n" % (post_id, ','.join((str(p) for p in post_info[post_id]['ideas']))))
+                f.write("<dd>%s</dd>" % (post_info[post_id]['text'].encode('utf-8')))
+            f.write("</dl>\n")
+    f.write("</body></html>")
+    return f
