@@ -653,7 +653,9 @@ def install_builddeps():
         sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
         sudo('apt-get install -y automake bison flex gperf  libxml2-dev libssl-dev libreadline-dev gawk')
         sudo('apt-get install -y graphviz libgraphviz-dev pkg-config')
-        sudo('apt-get install -y liblapack-dev libatlas-dev gfortran')
+        sudo('apt-get install -y liblapack-dev libatlas-dev libblas-dev gfortran')
+        print "We are still trying to get some requirements right for linux,"\
+            "See http://www.scipy.org/scipylib/building/linux.html for details."
 
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev')
