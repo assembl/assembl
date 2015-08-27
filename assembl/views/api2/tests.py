@@ -103,8 +103,8 @@ def test_add_subidea_in_synthesis(
 def test_widget_settings(
         discussion, test_app, subidea_1, participant1_user, test_session):
     # Post arbitrary json as initial configuration
-    settings = [{"local:Idea/67": 8}, {"local:Idea/66": 2},
-             {"local:Idea/65": 9}, {"local:Idea/64": 1}]
+    settings = {"ideas":[{"local:Idea/67": 8}, {"local:Idea/66": 2},
+             {"local:Idea/65": 9}, {"local:Idea/64": 1}]}
     settings_s = json.dumps(settings)
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
