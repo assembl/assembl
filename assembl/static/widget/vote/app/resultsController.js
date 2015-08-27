@@ -301,7 +301,8 @@ voteApp.controller('resultsCtl',
       // var x = d3.time.scale().range([0, width]);
       var x = d3.scale.linear().range([0, width]);
       var y = d3.scale.linear().range([height, 0]);
-      var z = d3.scale.linear().range(["white", "steelblue"]);
+      //var z = d3.scale.linear().range(["white", "steelblue"]);
+      var z = d3.scale.linear().range(["white", "#9013FE"]);
 
       // The size of the buckets in the CSV data file.
       // This could be inferred from the data if it weren't sparse.
