@@ -31,11 +31,11 @@ AdminModule.controller('AdminController',
         else
             $scope.formData.question = "";
 
-        if (widget.settings.startDate)
-            $scope.formData.startDate = widget.settings.startDate;
+        if ("start_date" in widget)
+            $scope.formData.startDate = widget.start_date;
 
-        if (widget.settings.endDate)
-            $scope.formData.endDate = widget.settings.endDate;
+        if ("end_date" in widget)
+            $scope.formData.endDate = widget.end_date;
 
         //Need to display button if there is a minimal config
         $scope.goToDiscussion();
