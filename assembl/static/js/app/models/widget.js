@@ -121,7 +121,11 @@ var WidgetModel = Base.Model.extend({
       case this.IDEA_PANEL_ACCESS_CTX:
       case this.VOTE_REPORTS:
       case this.INFO_BAR:
-        return this.getUrlForUser(targetIdeaId);
+        if (this.get("configured")) {
+          return this.getUrlForUser(targetIdeaId);
+        } else {
+          return this.getConfigurationUrl(targetIdeaId);
+        }
       case this.TABLE_OF_IDEA_MARKERS:
       default:
         console.error("Widget.getUrlForUser: wrong context");
@@ -171,8 +175,15 @@ var VotingWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_CREATE_CTX:
         return i18n.gettext("Create a voting session on this idea");
       case this.INFO_BAR:
-        return i18n.gettext("Vote");
+        if (this.get("configured")) {
+          return i18n.gettext("Vote");
+        } else {
+          return i18n.gettext("Configure");
+        }
       case this.IDEA_PANEL_ACCESS_CTX:
+        if (!this.get("configured")) {
+          return i18n.gettext("Configure");
+        }
         switch (activityState) {
           case "active":
             var voteSpecs = this.get("vote_specifications");
@@ -220,6 +231,12 @@ var VotingWidgetModel = WidgetModel.extend({
     var locale = Ctx.getLocale(),
         activityState = this.get("activity_state"),
         endDate = this.get("end_date");
+    if (!this.get("configured")) {
+      if (context == this.UNTIL_TEXT) {
+        return "";
+      }
+      return i18n.gettext("This widget is not fully configured");
+    }
     switch (context) {
       case this.INFO_BAR:
         var message = i18n.gettext("A vote session is ongoing.");
@@ -265,6 +282,10 @@ var VotingWidgetModel = WidgetModel.extend({
     // TODO: This should depend on widget configuration.
     var activityState = this.get("activity_state"),
         currentUser = Ctx.getCurrentUser();
+    if (!this.get("configured") &&
+        !currentUser.can(Permissions.ADMIN_DISCUSSION)) {
+      return false;
+    }
     switch (context) {
       case this.INFO_BAR:
         return (activityState === "active" && !this.get("closeInfobar")
@@ -321,12 +342,19 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_CREATE_CTX:
         return i18n.gettext('Create a creativity session on this idea');
       case this.INFO_BAR:
-        return i18n.gettext("Participate");
+        if (this.get("configured")) {
+          return i18n.gettext("Participate");
+        } else {
+          return i18n.gettext("Configure");
+        }
       case this.IDEA_PANEL_CONFIGURE_CTX:
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type
         return i18n.gettext("Configure the creativity session on this idea");
       case this.IDEA_PANEL_ACCESS_CTX:
+        if (!this.get("configured")) {
+          return i18n.gettext("Configure");
+        }
         switch (activityState) {
           case "active":
             return i18n.gettext("Participate");
@@ -356,6 +384,12 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
     var locale = Ctx.getLocale(),
         activityState = this.get("activity_state"),
         endDate = this.get("end_date");
+    if (!this.get("configured")) {
+      if (context == this.UNTIL_TEXT) {
+        return "";
+      }
+      return i18n.gettext("This widget is not fully configured.");
+    }
     switch (context) {
       case this.INFO_BAR:
         var message = i18n.gettext("A creativity session is ongoing.");
@@ -382,6 +416,10 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
     // TODO: This should depend on widget configuration.
     var activityState = this.get("activity_state"),
         currentUser = Ctx.getCurrentUser();
+    if (!this.get("configured") &&
+        !currentUser.can(Permissions.ADMIN_DISCUSSION)) {
+      return false;
+    }
     switch (context) {
       case this.INFO_BAR:
         return (activityState === "active" && !this.get("closeInfobar")
@@ -448,7 +486,11 @@ var InspirationWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_CONFIGURE_CTX:
         return i18n.gettext("Configure the inspiration module associated to this idea");
       case this.IDEA_PANEL_ACCESS_CTX:
-        return i18n.gettext("I need inspiration");
+        if (this.get("configured")) {
+          return i18n.gettext("I need inspiration");
+        } else {
+          return i18n.gettext("Configure");
+        }
     }
     return "";
   },
@@ -456,7 +498,12 @@ var InspirationWidgetModel = WidgetModel.extend({
   isRelevantForLink: function(linkType, context, idea) {
     // TODO: This should depend on widget configuration.
     // Put in subclasses?
-    var activityState = this.get("activity_state");
+    var activityState = this.get("activity_state"),
+        currentUser = Ctx.getCurrentUser();
+    if (!this.get("configured") &&
+        !currentUser.can(Permissions.ADMIN_DISCUSSION)) {
+      return false;
+    }
     switch (context) {
       case this.MESSAGE_LIST_INSPIREME_CTX:
         return (activityState === "active");
