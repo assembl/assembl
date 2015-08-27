@@ -1027,7 +1027,7 @@ class NotificationOnPostCreated(NotificationOnPost):
         return subject
 
     def render_to_email_html_part(self):
-        from ..lib.frontend_urls import FrontendUrls
+        from ..lib.frontend_urls import FrontendUrls, URL_DISCRIMINANTS, SOURCE_DISCRIMINANTS
         from premailer import Premailer
         ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
         ink_css = open(ink_css_path)
@@ -1035,7 +1035,11 @@ class NotificationOnPostCreated(NotificationOnPost):
         template_data={'subscription': self.first_matching_subscription,
                        'notification': self,
                        'frontendUrls': FrontendUrls(self.first_matching_subscription.discussion),
-                       'ink_css': ink_css.read()
+                       'ink_css': ink_css.read(),
+                       'discriminants': {
+                                            'url': URL_DISCRIMINANTS,
+                                            'source': SOURCE_DISCRIMINANTS
+                                        }
                        }
         jinja_env = self.get_jinja_env()
         if isinstance(self.post, SynthesisPost):

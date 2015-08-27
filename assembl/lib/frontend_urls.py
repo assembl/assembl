@@ -2,6 +2,15 @@ from ..models import Discussion
 from urlparse import urljoin
 import urllib
 
+URL_DISCRIMINANTS = {
+    'SOURCE': 'source'
+}
+
+SOURCE_DISCRIMINANTS = {
+    'NOTIFICATION': 'notification',
+    'SHARE': 'share'
+}
+
 
 class FrontendUrls():
     def __init__(self, discussion):
@@ -73,6 +82,17 @@ class FrontendUrls():
 
     def get_discussion_edition_url(self):
         return self.get_discussion_url() + '/edition'
+
+    def append_query_string(self, url, **kwargs):
+        if not url:
+            return ''
+        if url[-1] is '/':
+            url = url[:-1]
+        url_base = url + '?'
+        f = lambda k, v: "%s=%s" % (k, v)
+        qs = [f(k, v) for k, v in kwargs.iteritems() if k]
+        return url_base + ('&'.join(qs)) if kwargs else ''
+
 
     def get_agentprofile_avatar_url(self, profile, pixelSize):
         return urljoin(
