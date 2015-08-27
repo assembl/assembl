@@ -3,6 +3,7 @@
 var Marionette = require('../shims/marionette.js'),
     i18n =  require('./i18n.js'),
     TourModel = require('../models/tour.js'),
+    Ctx = require('../common/context.js'),
     _ = require('../shims/underscore.js');
 
 // Tours
@@ -58,6 +59,7 @@ var TakeTour = Marionette.Object.extend({
 
     initTour: function() {
         var tourModel = new TourModel.Model(),
+            currentUser = Ctx.getCurrentUser(),
             that = this;
 
         hopscotch.configure({
@@ -77,14 +79,19 @@ var TakeTour = Marionette.Object.extend({
         });
 
         // Recovery disabled tour
-        this._tourModel.fetch({
-            success: function(model, response, options){
-                that._seenTours = response;
-            },
-            error: function(model, response, options){
+        if (Ctx.getCurrentUser().isUnknownUser()) {
+            // TODO: Fetch _seenTours from localStorage
+            this._seenTours = {};
+        } else {
+            this._tourModel.fetch({
+                success: function(model, response, options){
+                    that._seenTours = response;
+                },
+                error: function(model, response, options){
 
-            }
-        });
+                }
+            });
+        }
 
         hopscotch.listen('end', function(){
             var currentTour = hopscotch.getCurrTour();
