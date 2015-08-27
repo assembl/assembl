@@ -33,7 +33,7 @@ var InfobarItem = Marionette.LayoutView.extend({
       model: model,
       message: model.getDescriptionText(Widget.Model.prototype.INFO_BAR),
       call_to_action_msg: model.getLinkText(Widget.Model.prototype.INFO_BAR),
-      widget_endpoint: model.getUrlForUser(Widget.Model.prototype.INFO_BAR),
+      widget_endpoint: model.getUrl(Widget.Model.prototype.INFO_BAR),
       call_to_action_class: model.getCssClasses(Widget.Model.prototype.INFO_BAR),
       locale: Ctx.getLocale()
     };
