@@ -208,8 +208,11 @@ voteApp.controller('indexCtl',
 
       $scope.targets_promises = {}; // {"local:Idea/228": promise, ...}
       if ( $scope.targets_ids && $scope.targets_ids.length ){
-        $scope.targets_ids.forEach(function(target){
-          $scope.targets_promises[target] = $.ajax(AssemblToolsService.resourceToUrl(target)); // TODO: add an increasing delay
+        $scope.targets_ids.forEach(function(target, targetIndex){
+          var promise_generator = function(){
+            return $.ajax(AssemblToolsService.resourceToUrl(target));
+          };
+          $scope.targets_promises[target] = $scope.afterDelayPromiseGenerator(targetIndex*300, promise_generator);
         });
       }
 
@@ -396,6 +399,24 @@ voteApp.controller('indexCtl',
       return null;
     };
 
+    $scope.delayPromiseGenerator = function(time) {
+      var defer = new $.Deferred();
+      setTimeout(function () {
+        defer.resolve();
+      }, time);
+      return defer.promise();
+    };
+
+    $scope.afterDelayPromiseGenerator = function(time, promise_generator){
+      var defer = new $.Deferred();
+      var delayPromise = $scope.delayPromiseGenerator(time);
+      delayPromise.then(function(){
+        var executedPromise = promise_generator();
+        executedPromise.then(defer.resolve, defer.reject);
+      }, defer.reject);
+      return defer.promise();
+    };
+
     $scope.submitVote = function(votes_container, result_holder) {
       console.log("submitVote(): ", votes_container, result_holder);
       var votes_to_submit = $scope.computeMyVotes(votes_container);
@@ -404,16 +425,92 @@ voteApp.controller('indexCtl',
 
       var vote_result_holder = result_holder || $("#vote_submit_result_holder");
       vote_result_holder.empty();
+      $translate('voteSubmitLoading').then(function(translation) {
+        vote_result_holder.append($("<p class='loading'>" + translation + "</p>"));
+        $scope.resizeIframe();
+      });
 
       var widget = configService;
       var voting_urls = "voting_urls" in widget ? widget.voting_urls : null;
-      var counter = 0;
       if ( !(votes_to_submit && votes_to_submit.length) ){
         var translation = "Error: There is no vote to submit!";
         vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
         return;
       }
-      votes_to_submit.forEach(function(vote){
+      var submitVotePromises = [];
+
+      /*
+      var successForK = function(vote_spec) {
+        return function(data, status, headers) {
+          console.log("success");
+
+          //alert("success");
+          console.log("data:");
+          console.log(data);
+          console.log("status:");
+          console.log(status);
+          console.log("headers:");
+          console.log(headers);
+
+          var criterion_name = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
+          if ( !criterion_name && "@id" in vote_spec ){
+            criterion_name = vote_spec["@id"];
+          }
+
+          $translate('voteSubmitSuccessForCriterion', {'criterion': criterion_name}).then(function(translation) {
+            vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
+            $scope.resizeIframe();
+          });
+        };          
+      };
+      */
+
+      var successForAllCriteriaOfQuestion = function(){
+        $translate('voteSubmitSuccessForAllCriteriaOfQuestion').then(function(translation) {
+          vote_result_holder.empty();
+          vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
+          $scope.resizeIframe();
+        });
+      };
+
+      var errorOnOneCriterionVote = function(vote_spec) {
+        return function(status, headers) {
+          console.log("error");
+
+          //alert("error");
+          console.log("status:");
+          console.log(status);
+          console.log("headers:");
+          console.log(headers);
+
+          var criterion_name = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
+          if ( !criterion_name && "@id" in vote_spec ){
+            criterion_name = vote_spec["@id"];
+          }
+
+          $translate('voteSubmitFailureForCriterion', {'criterion': criterion_name}).then(function(translation) {
+            vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
+            $scope.resizeIframe();
+          });
+        }
+      };
+
+      // we will send votes for each criterion separated with a small delay, so that we avoid server saturation
+
+      var votePromiseGenerator = function(url, data_to_post, delay){
+        var promise_generator = function(){
+          return $.ajax({
+            type: "POST",
+            url: url,
+            data: $.param(data_to_post), // or maybe: data_to_post
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8' // or maybe: 'Content-Type': 'application/json'
+          });
+        };
+        var promise = $scope.afterDelayPromiseGenerator(delay, promise_generator);
+        return promise;
+      };
+
+      votes_to_submit.forEach(function(vote, voteIndex){
         // checking that we have enough info from input and configuration
         
         var criterion_id = "criterion_id" in vote ? vote.criterion_id : null;
@@ -446,106 +543,14 @@ voteApp.controller('indexCtl',
         var url = AssemblToolsService.resourceToUrl(target_endpoint);
         var data_to_post = $scope.buildValidatedVoteFormat(vote.criterion_id, vote.value);
         
-
-        var successForK = function(vote_spec) {
-          return function(data, status, headers) {
-            console.log("success");
-
-            //alert("success");
-            console.log("data:");
-            console.log(data);
-            console.log("status:");
-            console.log(status);
-            console.log("headers:");
-            console.log(headers);
-
-            var criterion_name = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
-            if ( !criterion_name && "@id" in vote_spec ){
-              criterion_name = vote_spec["@id"];
-            }
-
-            //$location.path( "/voted" );
-
-            /*
-            console.log("k: " + vk);
-            var criterion_tag = votes_container.find("svg g[data-criterion-id=\"" + vk + "\"]");
-            if (!criterion_tag.length)
-              criterion_tag = votes_container.find("div.criterion[data-criterion-id=\"" + vk + "\"]");
-            var svg = criterion_tag.parent("svg");
-            var criterion_name = criterion_tag.attr("data-criterion-name");
-
-            
-            //svg.css("background","#00ff00").fadeOut();
-            svg.css("background","#00ff00");//.delay(1000).css("background","none");
-            setTimeout(function(){svg.css("background","none");}, 1000);
-            */
-
-            $translate('voteSubmitSuccessForCriterion', {'criterion': criterion_name}).then(function(translation) {
-              vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
-
-              // $scope.resizeIframe(); // our resize function is not good enough yet
-            });
-          };          
-        };
-
-        var errorForK = function(vote_spec) {
-          return function(status, headers) {
-            console.log("error");
-
-            //alert("error");
-            console.log("status:");
-            console.log(status);
-            console.log("headers:");
-            console.log(headers);
-
-            var criterion_name = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
-            if ( !criterion_name && "@id" in vote_spec ){
-              criterion_name = vote_spec["@id"];
-            }
-
-            /*
-            console.log("k: " + vk);
-            var criterion_tag = $("svg g[data-criterion-id=\"" + vk + "\"]");
-            if (!criterion_tag.length)
-              criterion_tag = $("div.criterion[data-criterion-id=\"" + vk + "\"]");
-            var svg = criterion_tag.parent("svg");
-            var criterion_name = criterion_tag.attr("data-criterion-name");
-
-            svg.css("background", "#ff0000");
-            setTimeout(function() {svg.css("background", "none");}, 1000);
-            */
-
-            $translate('voteSubmitFailureForCriterion', {'criterion': criterion_name}).then(function(translation) {
-              vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
-
-              // $scope.resizeIframe(); // our resize function is not good enough yet
-            });
-          }
-        };
-
-        // we will send votes for each criterion separated with a small delay, so that we avoid server saturation
-        // TODO: instead we could chain calls (send a call once the response of the previous one has been received)
-
-        var sendVote = function(url, data_to_post, vote_spec, delay) {
-          setTimeout(function() {
-            // POST to this URL
-            $http({
-              method: "POST",
-              url: url,
-              data: $.param(data_to_post),
-
-              //data: data_to_post,
-              headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-              //headers: {'Content-Type': 'application/json'}
-            }).success(successForK(vote_spec)).error(errorForK(vote_spec));
-          }, delay);
-        };
-          
-        sendVote(url, data_to_post, vote_spec, (counter++) * 300);
-            
+        var votePromise = votePromiseGenerator(url, data_to_post, 300*voteIndex);
+        votePromise.fail(errorOnOneCriterionVote(vote_spec));
+        submitVotePromises.push(votePromise);
           
       });
+
+      // when all vote promises have returned a sucess, show success to the user
+      $.when.apply(null, submitVotePromises).then(successForAllCriteriaOfQuestion);
 
     };
 
