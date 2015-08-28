@@ -705,6 +705,19 @@ class CreativitySessionWidget(IdeaCreatingWidget):
                     Widget.id == self.id)))
         return len(participant_ids)
 
+    def num_posts_by(self, user_id):
+        from .post import WidgetPost
+        return self.db.query(WidgetPost
+            ).join(self.__class__
+            ).filter(WidgetPost.creator_id==user_id).count()
+
+    @property
+    def num_posts_by_current_user(self):
+        from ..auth.util import get_current_user_id
+        user_id = get_current_user_id()
+        if user_id:
+            return self.num_posts_by(user_id)
+
     def get_add_post_endpoint(self, idea):
         return 'local:Discussion/%d/widgets/%d/base_idea/-/children/%d/widgetposts' % (
             self.discussion_id, self.id, idea.id)

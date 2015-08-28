@@ -328,7 +328,8 @@ var VotingWidgetModel = WidgetModel.extend({
 var CreativitySessionWidgetModel = WidgetModel.extend({
   baseUri: "/static/widget/session/",
   defaults: {
-    '@type': 'CreativitySessionWidget'
+    "@type": "CreativitySessionWidget",
+    "num_posts_by_current_user": 0
   },
 
   getCreationUrl: function(ideaId, locale) {
@@ -440,7 +441,8 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       case this.INFO_BAR:
         return (activityState === "active" && !this.get("closeInfobar")
           && this.get("settings", {}).show_infobar !== false
-          && currentUser.can(Permissions.ADD_POST));
+          && currentUser.can(Permissions.ADD_POST)
+          && this.get("num_posts_by_current_user", 0) === 0);
       case this.IDEA_PANEL_CONFIGURE_CTX:
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
         // assume non-root idea, relevant widget type

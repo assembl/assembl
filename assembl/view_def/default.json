@@ -422,7 +422,8 @@
         "confirm_messages_url": "&get_confirm_messages_url"
     },
     "CreativitySessionWidget": {
-        "@extends": "IdeaCreatingWidget"
+        "@extends": "IdeaCreatingWidget",
+        "num_posts_by_current_user": true
     },
     "InspirationWidget": {
         "@extends": "IdeaCreatingWidget"
