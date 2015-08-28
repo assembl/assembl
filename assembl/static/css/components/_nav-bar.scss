@@ -162,30 +162,36 @@ $textProfile: #515151;
 .content-infobar {
   position: relative;
   height: $infobar_height;
-  background-color: #6C0AAB;
+  background-color: $txtPurple;
   font-size: 12px;
   text-align: center;
+  box-sizing: border-box; /* include border in height */
+  border-top: 1px solid $purple1;
   .close {
     position: absolute;
-    right: 5px;
-    top: 10px;
-    color: #FFFFFF;
+    right: calc(12px - 0.2em);
+    @include calc(top, "#{$infobar_height}/2 - 0.5em");
+    color: $white;
+    opacity: initial;
     cursor: pointer;
     font-size: 20px;
   }
   .session {
     border: none;
-    background-color: #FFFFFF;
+    background-color: $white;
     color: #AAAAAA;
     border-radius: 2px;
     padding: 6px;
     cursor: pointer;
   }
-  p {
+  .content {
     margin: 0;
     padding: 0;
-    line-height: 40px;
-    color: #FFFFFF;
+    color: $white;
+    display: inline-block;
+    height: 0; /* so that we can center it vertically without knowing its contents height */
+    vertical-align: middle;
+    font-weight: normal;
   }
 }
 
