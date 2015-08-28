@@ -25,7 +25,77 @@ voteApp.controller('resultsCtl',
 
       $scope.user = configService.user;
 
+      $scope.initForAllTargets();
+    };
+
+    $scope.initForAllTargets = function(){
+      var widget = configService;
+
+      // create list of targets from voting_urls field (associative array) of widget.vote_specifications (we use only first element because we assume all vote specifications of this vote widget instance have the same set of targets)
+
+      var target = window.getUrlVariableValue("target");
+      var targets = window.getUrlVariableValue("targets");
+      if ( target ){
+        $scope.targets_ids = [target];
+        $scope.target = target; // shorcut for the unique target
+      }
+      else if ( targets ){
+        $scope.targets_ids = targets.split(",");
+        $scope.target = null;
+      }
+      else {
+        $scope.targets_ids = null;
+        $scope.target = null;
+      }
+
+      if ( !$scope.targets_ids ){
+        var vote_specifications = "vote_specifications" in widget ? widget.vote_specifications : null;
+        if ( vote_specifications && vote_specifications.length ){
+          var vote_spec = vote_specifications[0];
+          var voting_urls = "voting_urls" in vote_spec ? vote_spec.voting_urls : null;
+          console.log("voting_urls: ", voting_urls);
+          console.log("Object.keys(voting_urls): ", Object.keys(voting_urls));
+          if ( voting_urls && Object.keys(voting_urls).length ){
+            $scope.targets_ids = Object.keys(voting_urls);
+            if ( $scope.targets_ids && $scope.targets_ids.length == 1 ){
+              $scope.target = $scope.targets_ids[0];
+            }
+          }
+        }
+      }
+      console.log("$scope.targets_ids: ", $scope.targets_ids);
+      console.log("$scope.target: ", $scope.target);
+
+      $scope.targets_promises = {}; // {"local:Idea/228": promise, ...}
+      if ( $scope.targets_ids && $scope.targets_ids.length ){
+        $scope.targets_ids.forEach(function(target, targetIndex){
+          var promise_generator = function(){
+            return $.ajax(AssemblToolsService.resourceToUrl(target));
+          };
+          $scope.targets_promises[target] = $scope.afterDelayPromiseGenerator(targetIndex*300, promise_generator);
+        });
+      }
+
       $scope.drawUI();
+
+    };
+
+    $scope.delayPromiseGenerator = function(time) {
+      var defer = new $.Deferred();
+      setTimeout(function () {
+        defer.resolve();
+      }, time);
+      return defer.promise();
+    };
+
+    $scope.afterDelayPromiseGenerator = function(time, promise_generator){
+      var defer = new $.Deferred();
+      var delayPromise = $scope.delayPromiseGenerator(time);
+      delayPromise.then(function(){
+        var executedPromise = promise_generator();
+        executedPromise.then(defer.resolve, defer.reject);
+      }, defer.reject);
+      return defer.promise();
     };
 
     $scope.getVoteSpecFieldInSettings = function(vote_spec, field_name){
@@ -84,10 +154,11 @@ voteApp.controller('resultsCtl',
       var destination = d3.select("body");
       var destination_jquery = $("body");
 
+      // @param destination_for_this_result: d3 selector
       var single_vote_spec_result_received = function(vote_spec_uri, destination_for_this_result){
         return function(vote_spec_result_data){
           console.log("promise " + vote_spec_uri + " resolved to: ", vote_spec_result_data);
-          var filter_by_targets = null;
+          var filter_by_targets = $scope.targets_ids;
           $scope.drawResultsForAllTargetsOfVoteSpecification(destination_for_this_result, vote_spec_uri, vote_spec_result_data, filter_by_targets);
         }
       };
@@ -95,7 +166,7 @@ voteApp.controller('resultsCtl',
       var grouped_vote_spec_results_received = function(vote_spec_uris, destination_for_this_result){
         return function(vote_spec_result_data){
           console.log("promise " + vote_spec_uris[0] + " resolved to: ", vote_spec_result_data);
-          var filter_by_targets = null;
+          var filter_by_targets = $scope.targets_ids;
           $scope.drawResultsForAllTargetsOfTwoCombinedVoteSpecifications(destination_for_this_result, vote_spec_uris[0], vote_spec_uris[1], vote_spec_result_data, filter_by_targets);
         }
       };
@@ -185,6 +256,18 @@ voteApp.controller('resultsCtl',
 
     $scope.drawResultsForAllTargetsOfTwoCombinedVoteSpecifications = function(destination, x_vote_spec_uri, y_vote_spec_uri, vote_specs_result_data, filter_by_targets){
       console.log("vote_specs_result_data: ", vote_specs_result_data);
+
+      var drawTargetTitleAndItem = function(destination, first_vote_spec_uri, second_vote_spec_uri, vote_spec_result_data, target_id){
+        var inline_vote_holder = destination.append("div");
+        inline_vote_holder.classed({"inline-vote-result-for-a-target": true});
+        
+        $scope.drawTargetTitleHolder(inline_vote_holder, target_id);
+        var item_holder = inline_vote_holder.append("div");
+        item_holder.classed({"inline-vote-result-for-a-target--item": true});
+        $scope.drawResultAsHeatmapForSingleTargetOfTwoVoteSpecifications(item_holder, first_vote_spec_uri, second_vote_spec_uri, vote_spec_result_data, target_id);
+      };
+
+
       if ( vote_specs_result_data ){
         if ( $.isEmptyObject(vote_specs_result_data) ){ // there is no vote yet (on this vote_spec, on any of its available targets), but we have to show it instead of showing nothing
           if ( !filter_by_targets ){
@@ -218,8 +301,7 @@ voteApp.controller('resultsCtl',
             var second_vote_spec_uri = best_key.split(",")[1];
             for ( var target in data ){
               if ( !filter_by_targets || (filter_by_targets.indexOf(target) != -1) ){
-                var destination_for_this_result = destination; //destination.append("div");
-                $scope.drawResultAsHeatmapForSingleTargetOfTwoVoteSpecifications(destination_for_this_result, first_vote_spec_uri, second_vote_spec_uri, data[target], target);
+                drawTargetTitleAndItem(destination, first_vote_spec_uri, second_vote_spec_uri, data[target], target);
               }
             }
           }
@@ -317,8 +399,8 @@ voteApp.controller('resultsCtl',
       console.log("result_heatmap_data: ", result_heatmap_data);
       data = result_heatmap_data;
 
-      var destination_for_this_result = destination.append("div");
-      destination_for_this_result.classed({"inline-vote-result-for-a-target": true});
+      var destination_for_this_result = destination; //destination.append("div");
+      //destination_for_this_result.classed({"inline-vote-result-for-a-target": true});
 
 
       var str = "Vote results for criteria \"<span title='" + x_vote_spec_uri + "'>" + x_vote_spec_label + "</span>\" and \"<span title='" + y_vote_spec_uri + "'>" + y_vote_spec_label + "</span>\"." + "<br/>number of votes: " + result_number_of_voters;
@@ -437,8 +519,45 @@ voteApp.controller('resultsCtl',
             .text(y_vote_spec_label);
     };
 
+    $scope.drawTargetTitleHolder = function(destination, target_id){
+      var getShownText = function(title){
+        var shown_text = "Results for idea \"" + title + "\"";
+        return shown_text;
+      }
+
+      var target_title_holder = destination.append("div");
+      target_title_holder.classed({"inline-vote-result-for-a-target--title": true});
+      target_title_holder.text(getShownText(target_id));
+      target_title_holder.attr("data-target-id", target_id);
+      if ( target_id in $scope.targets_promises ){
+        $.when($scope.targets_promises[target_id]).done(function(data){
+          if ( "shortTitle" in data ){
+            target_title_holder.text(getShownText(data.shortTitle));
+            if ( "definition" in data && data.definition.length ){
+              target_title_holder.attr("title", data.definition); // TODO: but this is HTML :/
+              //for debug: target_title_holder.attr("title", target_id);
+            }
+          } else {
+            console.log("error: idea ", target_id, "has no shortTitle property");
+          }
+        });
+      }
+    };
+
+    // @param destination: d3 selector
     $scope.drawResultsForAllTargetsOfVoteSpecification = function(destination, vote_spec_uri, vote_spec_result_data, filter_by_targets){
       console.log("vote_spec_result_data: ", vote_spec_result_data);
+
+      var drawTargetTitleAndItem = function(destination, vote_spec_uri, vote_spec_result_data, target_id){
+        var inline_vote_holder = destination.append("div");
+        inline_vote_holder.classed({"inline-vote-result-for-a-target": true});
+        
+        $scope.drawTargetTitleHolder(inline_vote_holder, target_id);
+        var item_holder = inline_vote_holder.append("div");
+        item_holder.classed({"inline-vote-result-for-a-target--item": true});
+        $scope.drawResultAsBarChartForSingleTargetOfVoteSpecification(item_holder, vote_spec_uri, vote_spec_result_data, target_id);
+      };
+
       if ( vote_spec_result_data ){
         if ( $.isEmptyObject(vote_spec_result_data) ){ // there is no vote yet (on this vote_spec, on any of its available targets), but we have to show it instead of showing nothing
           if ( !filter_by_targets ){
@@ -452,18 +571,14 @@ voteApp.controller('resultsCtl',
               if ( target == vote_spec_uri ){ // here we care only about current vote_spec_uri
                 for ( var target_real in vote_spec_result_data[target] ){
                   if ( !filter_by_targets || (filter_by_targets.indexOf(target_real) != -1) ){
-                    var destination_for_this_result = destination.append("div");
-                    destination_for_this_result.classed({"inline-vote-result-for-a-target": true});
-                    $scope.drawResultAsBarChartForSingleTargetOfVoteSpecification(destination_for_this_result, vote_spec_uri, vote_spec_result_data[target][target_real], target_real);
+                    drawTargetTitleAndItem(destination, vote_spec_uri, vote_spec_result_data[target][target_real], target_real);
                   }
                 }
               }
             }
             else {
               if ( !filter_by_targets || (filter_by_targets.indexOf(target) != -1) ){
-                var destination_for_this_result = destination.append("div");
-                destination_for_this_result.classed({"inline-vote-result-for-a-target": true});
-                $scope.drawResultAsBarChartForSingleTargetOfVoteSpecification(destination_for_this_result, vote_spec_uri, vote_spec_result_data[target], target);
+                drawTargetTitleAndItem(destination, vote_spec_uri, vote_spec_result_data[target], target);
               }
             }
           }
@@ -646,37 +761,44 @@ voteApp.controller('resultsCtl',
 
       var vote_spec_label = $scope.getVoteSpecLabelByURI(vote_spec_uri) || vote_spec_uri;
 
-      var target_idea_url = AssemblToolsService.resourceToUrl(target);
-      var target_idea_promise = $.ajax(target_idea_url);
       var target_idea_label = target; // using target URI as label while waiting for its real label
+      var target_idea_definition = null;
 
       var result_info = destination.append("p");
       result_info.classed("result-info");
       var populateResultInfo = function(){
         // var text = "Vote result for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "</span>\" and target idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":";
-        var text = "Result on the idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":";
+        //var text = "Result on the idea \"<span title='" + (target_idea_definition || target) + "'>" + target_idea_label + "</span>\":";
+        var text = "";
         var text_number_of_votes = "number of votes: " + result_number_of_voters;
         if ( vote_spec_type == "MultipleChoiceVoteSpecification" || vote_spec_type == "BinaryVoteSpecification" ){
           // add only the number of votes
-          text += "<br/>" + text_number_of_votes;
+          text += text_number_of_votes;
         } else {
           // add number of votes, average and standard deviation
           var text_average = "average: " + result_average;
           var text_standard_deviation = "standard deviation: " + result_standard_deviation;
-          text += "<br/>" + text_number_of_votes + "<br/>" + text_average + "<br/>" + text_standard_deviation;
+          text += text_number_of_votes + "<br/>" + text_average + "<br/>" + text_standard_deviation;
         }
         result_info.html(text);
       };    
 
       populateResultInfo();
 
-      $.when(target_idea_promise).done(function(data){
-        console.log("target_idea_promise data received: ", data);
-        if ( "shortTitle" in data ){
-          target_idea_label = data.shortTitle;
-          populateResultInfo();          
-        }
-      });
+      var target_id = target;
+      if ( target_id in $scope.targets_promises ){
+        $.when($scope.targets_promises[target_id]).done(function(data){
+          if ( "shortTitle" in data ){
+            target_idea_label = data.shortTitle;
+            if ( "definition" in data && data.definition.length ){
+              target_idea_definition = data.definition; // TODO: but this is HTML :/
+            }
+            populateResultInfo();
+          } else {
+            console.log("error: idea ", target_id, "has no shortTitle property");
+          }
+        });
+      }
 
       
 
