@@ -140,7 +140,8 @@ def votes_collection_add(request):
 
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=AbstractVoteSpecification,
-             name="vote_results", renderer="json")
+             name="vote_results", renderer="json",
+             permission=P_READ)
 def vote_results(request):
     ctx = request.context
     user_id = authenticated_userid(request)
@@ -156,7 +157,8 @@ def vote_results(request):
             raise HTTPBadRequest(
                 "Please select at most 25 bins in the histogram.")
     widget = ctx._instance.widget
-    if not widget.end_date or datetime.utcnow() < widget.end_date:
+    if widget.activity_state != "ended":
         permissions = get_permissions(user_id, ctx.get_discussion_id())
-        check_permissions(ctx, user_id, permissions, P_ADMIN_DISC)
+        if P_ADMIN_DISC not in permissions:
+            raise HTTPUnauthorized()
     return ctx._instance.voting_results(histogram)
