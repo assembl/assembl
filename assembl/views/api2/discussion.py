@@ -21,6 +21,7 @@ from pyramid.settings import asbool
 import requests
 
 from assembl.lib.config import get_config
+from assembl.lib.parsedatetime import parse_datetime
 from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_SYSADMIN, Everyone)
 from assembl.auth.password import verify_data_token, data_token
@@ -230,9 +231,9 @@ def get_contribution_count(request):
     discussion = request.context._instance
     try:
         if start:
-            start = isodate.parse_datetime(start)
+            start = parse_datetime(start)
         if end:
-            end = isodate.parse_datetime(end)
+            end = parse_datetime(end)
         if interval:
             interval = isodate.parse_duration(interval)
     except isodate.ISO8601Error as e:
@@ -311,9 +312,9 @@ def get_visit_count(request):
     discussion = request.context._instance
     try:
         if start:
-            start = isodate.parse_datetime(start)
+            start = parse_datetime(start)
         if end:
-            end = isodate.parse_datetime(end)
+            end = parse_datetime(end)
         if interval:
             interval = isodate.parse_duration(interval)
     except isodate.ISO8601Error as e:

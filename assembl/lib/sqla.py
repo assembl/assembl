@@ -12,7 +12,6 @@ import atexit
 from abc import abstractmethod
 
 from anyjson import dumps, loads
-import isodate
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
     DateTime, MetaData, engine_from_config, event, Column, Integer,
@@ -33,6 +32,7 @@ from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 from zope.component import getGlobalSiteManager
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 
+from .parsedatetime import parse_datetime
 from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
 from ..semantic.namespaces import QUADNAMES
@@ -949,9 +949,7 @@ class BaseOps(object):
                     if isinstance(value, (str, unicode)):
                         target_type = col.type.__class__
                         if target_type == DateTime:
-                            value = isodate.parse_datetime(value)
-                            assert value
-                            setattr(self, key, value)
+                            setattr(self, key, parse_datetime(value, True))
                         elif isinstance(col.type, DeclEnumType):
                             setattr(self, key, col.type.enum.from_string(value))
                         elif col.type.python_type is unicode \

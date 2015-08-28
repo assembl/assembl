@@ -61,13 +61,13 @@ voteApp.controller('adminConfigureInstanceSetStartAndEndDatesCtl',
         if (startDate instanceof Date) {
           startDate = startDate.toISOString();
         }
-        dates.start_date = startDate.substr(0, 19);
+        dates.start_date = startDate;
       }
       if ($scope.formData.endDate) {
         if (endDate instanceof Date) {
           endDate = endDate.toISOString();
         }
-        dates.end_date = endDate.substr(0, 19);
+        dates.end_date = endDate;
       }
       
       $http({

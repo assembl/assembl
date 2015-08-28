@@ -1,6 +1,6 @@
-import json
-
 from math import ceil
+
+import simplejson as json
 from cornice import Service
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest)
@@ -14,15 +14,16 @@ from sqlalchemy.orm import joinedload_all, aliased
 from sqlalchemy.sql.expression import bindparam, and_
 from sqlalchemy.sql import cast, column
 
-from assembl.views.api import API_DISCUSSION_PREFIX
 import transaction
 
+from assembl.lib.parsedatetime import parse_datetime
+from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.auth.util import get_permissions
 from assembl.models import (
     get_database_id, Post, AssemblPost, SynthesisPost,
-    Synthesis, Discussion, Content, Idea, ViewPost, User, Action,
-    IdeaRelatedPostLink, Email, AgentProfile, LikedPost)
+    Synthesis, Discussion, Content, Idea, ViewPost, User,
+    IdeaRelatedPostLink, AgentProfile, LikedPost)
 import uuid
 from assembl.lib import config
 from jwzthreading import restrip_pat
@@ -190,15 +191,7 @@ def get_posts(request):
         posts = posts.filter(Post.id.in_(ids))
 
     if posted_after_date:
-        import isodate
-        try:
-            if 'T' in posted_after_date:
-                posted_after_date = isodate.parse_datetime(posted_after_date)
-            else:
-                posted_after_date = isodate.parse_date(posted_after_date)
-        except isodate.ISO8601Error as e:
-            posted_after_date = None
-            raise e 
+        posted_after_date = parse_datetime(posted_after_date)
         if posted_after_date:
             posts = posts.filter(PostClass.creation_date >= posted_after_date)
         #Maybe we should do something if the date is invalid.  benoitg

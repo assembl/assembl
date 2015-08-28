@@ -9,8 +9,8 @@ from sqlalchemy.orm import (
 from sqlalchemy.ext.associationproxy import association_proxy
 import simplejson as json
 import uuid
-import isodate
 
+from assembl.lib.parsedatetime import parse_datetime
 from ..auth import (
     CrudPermissions, P_ADD_IDEA, P_READ, P_EDIT_IDEA)
 from . import DiscussionBoundBase
@@ -197,9 +197,9 @@ class Widget(DiscussionBoundBase):
 
         for notification in notifications:
             try:
-                start = isodate.parse_datetime(notification['start'])
+                start = parse_datetime(notification['start'])
                 end = notification.get('end', None)
-                end = isodate.parse_datetime(end) if end else datetime.max
+                end = parse_datetime(end) if end else datetime.max
                 if now < start or now > end:
                     continue
             except (ValueError, TypeError, KeyError) as e:
@@ -681,7 +681,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
 
     def notification_data(self, data):
         end = data.get('end', None)
-        time_to_end = (isodate.parse_datetime(end) - datetime.utcnow()
+        time_to_end = (parse_datetime(end) - datetime.utcnow()
                        ).total_seconds() if end else None
         return dict(
             data,
