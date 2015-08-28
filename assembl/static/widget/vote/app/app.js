@@ -1,7 +1,7 @@
 "use strict";
 
 var voteApp = angular.module('voteApp',
-    ['ngRoute', 'ngSanitize', 'creativityServices', 'pascalprecht.translate', 'mgcrea.ngStrap.datepicker', 'mgcrea.ngStrap.timepicker']);
+    ['ngRoute', 'ngSanitize', 'voteServices', 'pascalprecht.translate', 'mgcrea.ngStrap.datepicker', 'mgcrea.ngStrap.timepicker']);
 
 voteApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.

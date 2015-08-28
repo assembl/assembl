@@ -3,8 +3,8 @@
 // "Small" controllers are here. When a controller becomes too big (> X lines of code), put it in its own file
 
 voteApp.controller('adminConfigureInstanceCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService', 
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService) {
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'VoteWidgetService', 
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, AssemblToolsService, VoteWidgetService) {
 
     $scope.current_step = 1;
     $scope.current_substep = 1;
@@ -107,8 +107,8 @@ voteApp.controller('adminConfigureInstanceSetSettingsItemCriterionCtl', ['$scope
 }]);
 
 voteApp.controller('votedCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion',
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion) {
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService) {
 
     $scope.init = function() {
     console.log("votedCtl::init()");

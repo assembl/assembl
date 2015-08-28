@@ -1,8 +1,8 @@
 "use strict";
 
 voteApp.controller('indexCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService',
-  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService) {
+  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'VoteWidgetService',
+  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, AssemblToolsService, VoteWidgetService) {
 
     // intialization code (constructor)
 
@@ -1492,7 +1492,9 @@ voteApp.controller('indexCtl',
           question_holder.attr("id", "vote-question-item-"+i);
           holder_jquery.append(question_holder);
           var question_holder_d3 = d3.select(question_holder.get(0));
-          
+
+
+          // show question title and description
 
           var question_title = "question_title" in item ? item.question_title : null;
           var question_description = "question_description" in item ? item.question_description : null;

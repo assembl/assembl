@@ -1,8 +1,8 @@
 "use strict";
 
 voteApp.controller('resultsCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService',
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService) {
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'VoteWidgetService',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, AssemblToolsService, VoteWidgetService) {
 
     // intialization code (constructor)
 
@@ -82,6 +82,7 @@ voteApp.controller('resultsCtl',
       var results_promises = {};
       
       var destination = d3.select("body");
+      var destination_jquery = $("body");
 
       var single_vote_spec_result_received = function(vote_spec_uri, destination_for_this_result){
         return function(vote_spec_result_data){
@@ -104,6 +105,42 @@ voteApp.controller('resultsCtl',
         items.forEach(function(item, item_index){
           var item_vote_specifications = "vote_specifications" in item ? item.vote_specifications : null;
           var item_type = "type" in item ? item.type : null;
+
+          // add a <section> for the question
+
+          var question_holder = $("<section class='vote-question-item' />");
+          if ( item_type == "radio" || item_type == "vertical_gauge" || item_type == "2_axes" ){
+            question_holder.addClass("vote-question-item-type-"+item_type);
+          }
+          question_holder.attr("id", "vote-question-item-"+item_index);
+          destination_jquery.append(question_holder);
+          var question_holder_d3 = d3.select(question_holder.get(0));
+
+
+          // show question title and description
+
+          var question_title = "question_title" in item ? item.question_title : null;
+          var question_description = "question_description" in item ? item.question_description : null;
+          if ( !question_title ){
+            if ( item_type == "2_axes"){
+              // TODO: display both questions and descriptions? Or nothing as each question is displayed along an axis? Or associate  question and description properties to an item instead of a criterion?
+            } else {
+              var vote_specifications = "vote_specifications" in item ? item.vote_specifications : null;
+              if ( vote_specifications && vote_specifications.length ){
+                var vote_spec = vote_specifications[0];
+                question_title = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
+                question_description = ("settings" in vote_spec && "description" in vote_spec.settings) ? vote_spec.settings.description : null;
+              }
+            }
+          }
+          if ( question_title ){
+            question_holder_d3.append("h2").classed({"question-title": true}).text(question_title);
+            if ( question_description ){
+              question_holder_d3.append("div").classed({"question-description": true}).text(question_description);
+            }
+          }
+
+
           if ( item_vote_specifications && item_vote_specifications.length ){
             if ( item_type != "2_axes" && item_vote_specifications.length == 1 ){ // this is a single criterion item/question, so we show its results as a bar chart
               var vote_spec = item_vote_specifications[0];
