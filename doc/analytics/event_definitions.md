@@ -38,7 +38,7 @@ Actions:
   PRODUCING
 
 
-Event Name: 
+Event Names: 
 
   OPEN_CONTEXT_SECTION:
     - Category: NAVIGATION_PANEL
@@ -70,7 +70,7 @@ Event Name:
     - (Name if Code): NAVIGATION_OPEN_VISUALIZATIONS_SECTION 
     - Description: Statistics section?
 
-  SHOW:
+  SHOW: //This is vague, should be improved upon
     - Category: TABLE_OF_IDEAS
     - Action: FINDING
     - (Name if Code): SHOW_TABLE_OF_IDEAS
@@ -89,106 +89,40 @@ Event Name:
     - Description: ?
 
   NAVIGATE_TO_IDEA: 
-    - Category: TABLE_OF_IDEAS
+    - Category: TABLE_OF_IDEAS, SYNTHESIS
     - Action: FINDING
-    - (Name if Code): NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS 
-    - Description: ? (Difference with open idea?) 
-
-  NAVIGATE_TO_IDEA: 
-    - Category: SYNTHESIS
-    - Action: FINDING
-    - (Name if Code): NAVIGATE_TO_IDEA_IN_SYNTHESIS
-    - Description: Fired when clicked on idea in a specific synthesis
+    - (Name if Code): NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS, NAVIGATE_TO_IDEA_IN_SYNTHESIS
+    - Description: Fired when an idea is clicked, either from table of ideas, or from a specific synthesis
 
   ENTER_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE
+    - Category: MESSAGE, MESSAGE_LIST_IDEA, MESSAGE_LIST
     - Action: PRODUCING
-    - (Name if Code): ENTER_EMPTY_MESSAGE_WRITING_AREA_ON_MESSAGE_REPLY
-    - Description: Fired when the textarea for a reply to a message comes into focus
+    - (Name if Code): ENTER_EMPTY_MESSAGE_WRITING_AREA_ON_MESSAGE_REPLY, ENTER_EMPTY_MESSAGE_WRITING_AREA_ON_IDEA_REPLY, NTER_EMPTY_MESSAGE_WRITING_AREA_ON_TOP_POST
+    - Description: Fired when the textarea for a reply to a message comes into focus, either in a message reply, an idea reply or a top post reply
 
   ENTER_NON_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE
+    - Category: MESSAGE, MESSAGE_LIST_IDEA, MESSAGE_LIST
     - Action: PRODUCING
-    - (Name if Code): ENTER_NON_EMPTY_MESSAGE_WRITING_AREA_ON_MESSAGE_REPLY
-    - Description: Fired when textarea of a reply with no content goes out of focus
+    - (Name if Code): ENTER_NON_EMPTY_MESSAGE_WRITING_AREA_ON_MESSAGE_REPLY, ENTER_NON_EMPTY_MESSAGE_WRITING_AREA_ON_IDEA_REPLY, ENTER_NON_EMPTY_MESSAGE_WRITING_AREA_ON_TOP_POST
+    - Description: Fired when textarea of a reply with no content goes out of focus, either in a message reply, an idea reply, or a top post reply
 
   LEAVE_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE
-    - Action: PRODUCING,
-    - (Name if Code): LEAVE_EMPTY_MESSAGE_WRITING_AREA_ON_MESSAGE_REPLY
-    - Description: Fired when the textarea of an empty message reply goes out of focus (no content written)
+    - Category: MESSAGE, MESSAGE_LIST_IDEA, MESSAGE_LIST
+    - Action: PRODUCING
+    - (Name if Code): LEAVE_EMPTY_MESSAGE_WRITING_AREA_ON_MESSAGE_REPLY, LEAVE_EMPTY_MESSAGE_WRITING_AREA_ON_IDEA_REPLY, LEAVE_EMPTY_MESSAGE_WRITING_AREA_ON_TOP_POST
+    - Description: Fired when the textarea of an empty message reply goes out of focus (no content written), from either a message reply, an idea reply, or a top post repy
 
   LEAVE_NON_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE
+    - Category: MESSAGE, MESSAGE_LIST_IDEA, MESSAGE_LIST
     - Action: PRODUCING
-    - (Name if Code): LEAVE_NON_EMPTY_MESSAGE_WRITING_AREA_ON_MESSAGE_REPLY
-    - Description: Fired when the textare of a non-empty message reply goes out of focus (content was written, went out of focus) on an idea
-
-  ENTER_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE_LIST_IDEA
-    - Action: PRODUCING
-    - (Name if Code): ENTER_EMPTY_MESSAGE_WRITING_AREA_ON_IDEA_REPLY
-    - Description: Fired when textarea for an idea reply comes into focus in the idea message list
-
-  ENTER_NON_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE_LIST_IDEA
-    - Action: PRODUCING
-    - (Name if Code): ENTER_NON_EMPTY_MESSAGE_WRITING_AREA_ON_IDEA_REPLY
-    - Description: Fired when the textarea with content comes into focus, in the idea message list
-
-  LEAVE_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE_LIST_IDEA
-    - Action: PRODUCING
-    - (Name if Code): LEAVE_EMPTY_MESSAGE_WRITING_AREA_ON_IDEA_REPLY
-    - Description: Fired when an empty textarea in the idea message list goes out of focus
-
-  LEAVE_NON_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE_LIST_IDEA
-    - Action: PRODUCING
-    - (Name if Code): LEAVE_NON_EMPTY_MESSAGE_WRITING_AREA_ON_IDEA_REPLY
-    - Description: Fired when a content filled textarea in the idea message list goes out of focus
-
-  ENTER_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE_LIST
-    - Action: PRODUCING
-    - (Name if Code): ENTER_EMPTY_MESSAGE_WRITING_AREA_ON_TOP_POST
-    - Description: Fired when empty textarea response to the top post in the message list comes into focus
-
-  ENTER_NON_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE_LIST
-    - Action: PRODUCING
-    - (Name if Code): ENTER_NON_EMPTY_MESSAGE_WRITING_AREA_ON_TOP_POST
-    - Description: Fired when non-empty textarea reply to a top post comes into focus
-
-  LEAVE_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE_LIST
-    - Action: PRODUCING
-    - (Name if Code): LEAVE_EMPTY_MESSAGE_WRITING_AREA_ON_TOP_POST
-    - Description: Fired when empty textarea reply to a top post goes out of focus
-
-  LEAVE_NON_EMPTY_MESSAGE_WRITING_AREA: 
-    - Category: MESSAGE_LIST
-    - Action: PRODUCING
-    - (Name if Code): LEAVE_NON_EMPTY_MESSAGE_WRITING_AREA_ON_TOP_POST
-    - Description: Fired when empty textarea reply to a top post goes out of focus
+    - (Name if Code): LEAVE_NON_EMPTY_MESSAGE_WRITING_AREA_ON_MESSAGE_REPLY, LEAVE_NON_EMPTY_MESSAGE_WRITING_AREA_ON_IDEA_REPLY, LEAVE_NON_EMPTY_MESSAGE_WRITING_AREA_ON_TOP_POST
+    - Description: Fired when the textare of a non-empty message reply goes out of focus (content was written, went out of focus), whether in a message reply, an idea reply, or a top post reply
 
   MESSAGE_POSTED: 
-    - Category: MESSAGE
+    - Category: MESSAGE, MESSAGE_LIST_IDEA, MESSAGE_LIST
     - Action: PRODUCING
-    - (Name if Code): MESSAGE_POSTED_ON_MESSAGE_REPLY
-    - Description: Fired when a reply to a message is posted
-
-  MESSAGE_POSTED: 
-    - Category: MESSAGE_LIST_IDEA
-    - Action: PRODUCING
-    - (Name if Code): MESSAGE_POSTED_ON_IDEA_REPLY
-    - Description: Fired when a reply to a message is posted under ideas
-
-  MESSAGE_POSTED: 
-    - Category: MESSAGE_LIST
-    - Action: PRODUCING
-    - (Name if Code): MESSAGE_POSTED_ON_TOP_POST
-    - Description: Fired when a reply to a message is posted under message list to a top post
+    - (Name if Code): MESSAGE_POSTED_ON_MESSAGE_REPLY, MESSAGE_POSTED_ON_IDEA_REPLY, MESSAGE_POSTED_ON_TOP_POST
+    - Description: Fired when a reply to a message is posted, whether under a message, under an idea, or under a top post
 
   REPLY_BUTTON_CLICKED: 
     - Category: MESSAGE
@@ -233,10 +167,10 @@ Event Name:
     - Description: Fired when a 'view entire conversation' is clicked on a message in non-threaded views
 
   ASSEMBL_USER_CLICK_LOGIN: 
-    - Category: LOGIN
+    - Category: LOGIN, REGISTER
     - Action: ONBOARDING
-    - (Name if Code): EMAIL_LOGIN
-    - Description: Fired when a user clicks 'log in' using their Assembl email and password
+    - (Name if Code): EMAIL_LOGIN, USER_REGISTER
+    - Description: Fired when a user clicks 'log in' using their Assembl email and password, or after registering for an Assembl account using their email and desired password
 
   FACEBOOK_USER_CLICK_LOGIN: 
     - Category: LOGIN
@@ -256,12 +190,6 @@ Event Name:
     - (Name if Code): GOOGLE_LOGIN
     - Description: Fired when a user clicks on 'log in with google+' button
 
-  ASSEMBL_USER_CLICK_LOGIN: 
-    - Category: REGISTER
-    - Action: ONBOARDING
-    - (Name if Code): USER_REGISTER
-    - Description: Fired when a user clicks on 'register' after entering their email information to register to Assembl
-
   USER_LOGGED_IN: 
     - Category: LOGIN // This is a questionable source
     - Action: ONBOARDING
@@ -275,16 +203,10 @@ Event Name:
     - Description: Fired when a user clicks on the confirm email link that is sent to their inbox
 
   ENTER_ASSEMBL_OPEN_POST: 
-    - Category: NOTIFICATION
+    - Category: NOTIFICATION, SHARED_URL
     - Action: ONBOARDING
-    - (Name if Code): ENTER_POST_VIA_NOTIFICATION
-    - Description: Fired when a user lands on Assembl to a specific post which was sent via a notification email
-
-  ENTER_ASSEMBL_OPEN_POST: 
-    - Category: SHARED_URL
-    - Action: ONBOARDING
-    - (Name if Code): ENTER_POST_VIA_SHARE
-    - Description: Fired when a user lands on Assembl to a specific post which was shared externally
+    - (Name if Code): ENTER_POST_VIA_NOTIFICATION, ENTER_POST_VIA_SHARE
+    - Description: Fired when a user lands on Assembl to a specific post which was sent via a notification email, or a post that shared externally
 
   ENTER_ASSEMBL_OPEN_IDEA: 
     - Category: SHARED_URL
