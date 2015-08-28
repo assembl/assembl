@@ -849,8 +849,10 @@ class BaseOps(object):
         parse_def = get_view_def(parse_def_name)
         context = context or self.dummy_context
         user_id = user_id or Everyone
-        from assembl.models import Discussion
+        from assembl.models import DiscussionBoundBase, Discussion
         discussion = context.get_instance_of_class(Discussion)
+        if not discussion and isinstance(self, DiscussionBoundBase):
+            discussion = Discussion.get(self.get_discussion_id())
         permissions = get_permissions(
             user_id, discussion.id if discussion else None)
         if not self.user_can(
