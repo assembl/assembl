@@ -4,6 +4,7 @@ from os import makedirs, unlink
 from itertools import chain
 
 from sqlalchemy import (text, column, bindparam)
+from sqlalchemy.orm import defer
 from gensim import corpora, models as gmodels, similarities
 from gensim.utils import tokenize as gtokenize
 import numpy
@@ -12,6 +13,7 @@ import sklearn.cluster
 from sklearn import metrics
 from .optics import optics
 
+from assembl.lib.config import get_config
 from assembl.models import Content, Idea, Discussion
 from .indexedcorpus import IdMmCorpus
 from . import (
@@ -102,16 +104,34 @@ class BOWizer(object):
         self.dictionary.save(join(dirname, DICTIONARY_FNAME))
 
 
-def create_dictionaries():
+def create_dictionaries(discussion_id=None):
     db = Discussion.default_db
     by_main_lang = defaultdict(list)
-    for d in db.query(Discussion).all():
-        main_lang = d.discussion_locales[0].split('_')[0]
-        by_main_lang[main_lang].append(d.id)
+    default_locales = get_config().get('available_languages', 'fr_CA en_CA').split()
+    only_for_lang = None
+    for d_id, locales in db.query(
+            Discussion.id, Discussion.preferred_locales).all():
+        locales = locales or default_locales
+        main_lang = locales.split()[0].split('_')[0]
+        by_main_lang[main_lang].append(d_id)
+        if discussion_id == d_id:
+            only_for_lang = main_lang
     for lang, discussion_ids in by_main_lang.iteritems():
+        if only_for_lang and only_for_lang != lang:
+            continue
         dirname = join(nlp_data, lang)
         if not exists(dirname):
             makedirs(dirname)
+        corpus_fname = join(dirname, CORPUS_FNAME)
+        if exists(corpus_fname):
+            corpus = IdMmCorpus(join(dirname, CORPUS_FNAME))
+            doc_count = db.query(Content).with_polymorphic(Content
+                ).options(defer(Content.like_count)).join(Discussion
+                ).filter(Discussion.id.in_(discussion_ids)).count()
+            if corpus.num_docs == doc_count:
+                if only_for_lang:
+                    return corpus
+                continue
         tokenizer = Tokenizer(lang)
         bowizer = BOWizer(lang, tokenizer, False)
         posts = db.query(Content).join(Discussion).filter(
@@ -143,8 +163,8 @@ def get_discussion_semantic_analysis(
     lang = discussion.discussion_locales[0].split('_')[0]
     dirname = join(nlp_data, lang)
     dict_fname = join(dirname, DICTIONARY_FNAME)
-    if not exists(dict_fname):
-        create_dictionaries()
+    # rebuild dico in all cases to ensure complete corpus
+    corpus = create_dictionaries(discussion_id)
     dictionary = corpora.Dictionary.load(dict_fname)
     post_ids = discussion.db.query(Content.id).filter_by(
         discussion_id=discussion_id)
@@ -152,7 +172,6 @@ def get_discussion_semantic_analysis(
     if doc_count < 10:
         return None, None
     post_ids = [x for (x,) in post_ids]
-    corpus = IdMmCorpus(join(dirname, CORPUS_FNAME))
     subcorpus = corpus.subcorpus(post_ids)
     tfidf_model = gmodels.TfidfModel(id2word=dictionary)
     tfidf_fname = join(dirname, "tfidf_%d.model" % (discussion_id,))
