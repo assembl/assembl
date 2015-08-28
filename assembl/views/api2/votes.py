@@ -10,7 +10,7 @@ from simplejson import dumps
 
 from ..traversal import (CollectionContext, InstanceContext)
 from assembl.auth import (
-    P_READ, Everyone, CrudPermissions, P_ADMIN_DISC)
+    P_READ, Everyone, CrudPermissions, P_ADMIN_DISC, P_VOTE)
 from assembl.auth.util import get_permissions
 from assembl.models import (
     AbstractIdeaVote, User, AbstractVoteSpecification,
@@ -39,7 +39,7 @@ def votes_collection_view(request):
 
 
 @view_config(context=CollectionContext, request_method='POST',
-             header=JSON_HEADER,  # permission=P_ADD_VOTE?,
+             header=JSON_HEADER, permission=P_VOTE,
              ctx_collection_class=AbstractIdeaVote)
 def votes_collection_add_json(request):
     ctx = request.context
@@ -49,6 +49,9 @@ def votes_collection_add_json(request):
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
+    widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
+    if widget.activity_state != 'active':
+        raise HTTPUnauthorized("Not in voting period")
     spec = ctx.get_instance_of_class(AbstractVoteSpecification)
     if spec:
         required = spec.get_vote_class()
@@ -84,7 +87,8 @@ def votes_collection_add_json(request):
 
 
 @view_config(context=CollectionContext, request_method='POST',
-             header=FORM_HEADER, ctx_collection_class=AbstractIdeaVote)
+             permission=P_VOTE, header=FORM_HEADER,
+             ctx_collection_class=AbstractIdeaVote)
 def votes_collection_add(request):
     ctx = request.context
     user_id = authenticated_userid(request)
@@ -93,6 +97,9 @@ def votes_collection_add(request):
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
+    widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
+    if widget.activity_state != 'active':
+        raise HTTPUnauthorized("Not in voting period")
     args = request.params
     spec = ctx.get_instance_of_class(AbstractVoteSpecification)
     if spec:
