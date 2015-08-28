@@ -167,6 +167,26 @@ var VotingWidgetModel = WidgetModel.extend({
     return base;
   },
 
+  VOTE_STATUS_NONE: 0,
+  VOTE_STATUS_INCOMPLETE: 1,
+  VOTE_STATUS_COMPLETE: 2,
+
+  voteStatus: function() {
+    var voteSpecs = this.get("vote_specifications");
+    var voteCounts = _.map(voteSpecs, function(vs) {
+      return (vs.my_votes || []).length;
+    });
+    var maxVoteCount = _.max(voteCounts);
+    if (maxVoteCount === 0) {
+      return this.VOTE_STATUS_NONE;
+    }
+    var minVoteCount = _.min(voteCounts);
+    if (minVoteCount == this.get("votable_ideas", []).length) {
+      return this.VOTE_STATUS_COMPLETE;
+    }
+    return this.VOTE_STATUS_INCOMPLETE;
+  },
+
   getLinkText: function(context, idea) {
     var locale = Ctx.getLocale(),
         activityState = this.get("activity_state"),
@@ -186,18 +206,13 @@ var VotingWidgetModel = WidgetModel.extend({
         }
         switch (activityState) {
           case "active":
-            var voteSpecs = this.get("vote_specifications");
-            var voteCounts = _.map(voteSpecs, function(vs) {
-              return (vs.my_votes || []).length;
-            });
-            var minVoteCount = _.min(voteCounts);
-            var maxVoteCount = _.max(voteCounts);
-            if (maxVoteCount == 0) {
-              return i18n.gettext("Vote");
-            } else if (minVoteCount == this.get("votable_ideas", []).length) {
-              return i18n.gettext("Modify your vote");
-            } else {
-              return i18n.gettext("Complete your vote");
+            switch (this.voteStatus()) {
+              case this.VOTE_STATUS_NONE:
+                return i18n.gettext("Vote");
+              case this.VOTE_STATUS_INCOMPLETE:
+                return i18n.gettext("Complete your vote");
+              case this.VOTE_STATUS_COMPLETE:
+                return i18n.gettext("Modify your vote");
             }
           case "ended":
             return i18n.gettext("See the vote results");
@@ -290,7 +305,8 @@ var VotingWidgetModel = WidgetModel.extend({
       case this.INFO_BAR:
         return (activityState === "active" && !this.get("closeInfobar")
           && this.get("settings", {}).show_infobar !== false
-          && currentUser.can(Permissions.VOTE));
+          && currentUser.can(Permissions.VOTE)
+          && this.voteStatus() != this.VOTE_STATUS_COMPLETE);
       case this.IDEA_PANEL_ACCESS_CTX:
         // assume non-root idea, relevant widget type
         return (activityState == "ended"
