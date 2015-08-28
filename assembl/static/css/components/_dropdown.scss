@@ -236,3 +236,137 @@ $grid-float-breakpoint: 768px !default;
     }
   }
 }
+
+// dropdown V2
+
+// General Properties
+
+$_padding: 8px 10px;
+$_textColor: $gray4;
+$_ActiveColor: lighten($gray1, 8%);
+$_listBorder: 1px solid lighten($gray1, 8%);
+$_listBackground: $white;
+
+// Dropdown
+
+.dd  {
+
+    position:relative;
+    display:inline-block;
+    text-shadow: none;
+
+    // Button
+
+    .dd-btn {
+        padding: 6px 8px;
+        > .vicon {
+            margin:0 0 0 5px;
+            line-height: 1;
+        }
+
+        &.btn-append {
+            border-left-color:rgba(255,255,255,.4);
+        }
+
+        &.dd-btn-primary {
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 70px;
+            background-color: $purple1;
+        }
+    }
+
+    // Menu
+
+    .dd-menu {
+        overflow: hidden;
+        background: $white;
+        box-shadow: 0px 1px 1px rgba(0,0,0,0.2);
+        border-radius: 4px;
+        outline: medium none;
+        left: 0;
+        top: 100%;
+        margin-top: 5px;
+        position: absolute;
+        width: auto;
+        min-width: 100% !important;
+        z-index: 10;
+
+        max-height: 0;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        will-change: opacity;
+
+        padding: 0;
+
+        // Menu item
+
+        .dd-item {
+            border-top: $_listBorder;
+            padding: 0;
+            list-style: none;
+
+            &:first-child {
+                border: 0;
+            }
+
+            // Menu link
+            a, .label {
+                white-space: nowrap;
+                padding: $_padding;
+                color: $_textColor;
+            }
+
+            a {
+                display: block;
+                text-decoration: none;
+
+                &.dd-btn {
+                    padding-right: 24px;
+                }
+            }
+
+            &.active a, a:hover {
+                background-color: $_ActiveColor;
+            }
+
+            .label {
+                display: inline-block;
+                font-weight: bold;
+            }
+        }
+
+    }
+
+    // State
+
+    &.open {
+        .dd-menu {
+            opacity: 1;
+            max-height: 400px;
+        }
+    }
+
+    // Position
+
+    &.pull-right {
+        .dd-menu {
+            left: auto;
+            right: 0;
+        }
+    }
+
+    &.pull-top {
+        .dd-menu {
+            margin-bottom: 5px;
+            top: auto;
+            bottom: 100%;
+        }
+    }
+
+}
+
+// When the dropdown is appended to an input field
+.core-form .input-append .dd .active.btn-default {
+    border-color: $gray1;
+}

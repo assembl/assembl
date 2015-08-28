@@ -1,18 +1,23 @@
 <div class="gr bx-color">
-
-{% set color_list = { 'purple':'#CC9FEA', 'purple1':'#B36FE0', 'purple2':'#9A3FD5', 'purple3':'#513850' } %}
+    {% set color_list = {
+    'purple':'#9013FE',
+    'purple1':'#A846FE',
+    'purple2':'#C078FE',
+    'purple3':'#D8ABFF',
+    'purple4':'#EFDEFF'
+    }
+    %}
 
     {% for color in color_list|sort %}
-
-      <div class="gu gu-1of4 gu-s-1of1">
+    <div class="gu gu-1of4 gu-s-1of1">
         <div class="bg bg-{{color}}">
         </div>
         <pre><code class="language-scss"><span class="hljs-at_rule">${{color}}: <span class="hljs-hexcolor">{{color_list[color]}}</span>;</span></code></pre>
-      </div>
-
+    </div>
     {% endfor %}
 
 </div>
+
 
 <div class="gr bx-color">
 
@@ -71,3 +76,5 @@
     {% endfor %}
 
 </div>
+
+
