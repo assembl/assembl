@@ -149,7 +149,7 @@ voteApp.controller('resultsCtl',
                 results_urls[vote_spec_id] = AssemblToolsService.resourceToUrl(results_uris[vote_spec_id]) + "?histogram=10"; // TODO: this could be a customizable URL parameter
                 if ( !questions || (questions.indexOf(vote_spec_id) != -1) ){
                   results_promises[vote_spec_id] = $.ajax(results_urls[vote_spec_id]);
-                  var destination_for_this_result = destination.append("div");
+                  var destination_for_this_result = question_holder_d3.append("div");
                   $.when(results_promises[vote_spec_id]).done(single_vote_spec_result_received(vote_spec_id, destination_for_this_result));
                 }
               }
@@ -166,7 +166,7 @@ voteApp.controller('resultsCtl',
                     if ( first ){
                       first = false;
                       // each vote_spec which shares a question_id property with other vote_specs contains all single and grouped vote results
-                      var destination_for_this_result = destination.append("div");
+                      var destination_for_this_result = question_holder_d3.append("div");
                       $.when(results_promises[vote_spec_id]).done(grouped_vote_spec_results_received([vote_spec_id, second_vote_spec_id], destination_for_this_result));
                     }
                   }
@@ -218,7 +218,8 @@ voteApp.controller('resultsCtl',
             var second_vote_spec_uri = best_key.split(",")[1];
             for ( var target in data ){
               if ( !filter_by_targets || (filter_by_targets.indexOf(target) != -1) ){
-                $scope.drawResultAsHeatmapForSingleTargetOfTwoVoteSpecifications(destination, first_vote_spec_uri, second_vote_spec_uri, data[target], target);
+                var destination_for_this_result = destination; //destination.append("div");
+                $scope.drawResultAsHeatmapForSingleTargetOfTwoVoteSpecifications(destination_for_this_result, first_vote_spec_uri, second_vote_spec_uri, data[target], target);
               }
             }
           }
@@ -316,21 +317,24 @@ voteApp.controller('resultsCtl',
       console.log("result_heatmap_data: ", result_heatmap_data);
       data = result_heatmap_data;
 
+      var destination_for_this_result = destination.append("div");
+      destination_for_this_result.classed({"inline-vote-result-for-a-target": true});
+
 
       var str = "Vote results for criteria \"<span title='" + x_vote_spec_uri + "'>" + x_vote_spec_label + "</span>\" and \"<span title='" + y_vote_spec_uri + "'>" + y_vote_spec_label + "</span>\"." + "<br/>number of votes: " + result_number_of_voters;
-      destination.append("p").html(str);
+      destination_for_this_result.append("p").html(str);
 
 
-      var chart_holder = destination.append("div");
+      var chart_holder = destination_for_this_result.append("div");
       chart_holder.classed({"heatmap": true});
 
 
 
 
 
-      var margin = {top: 20, right: 90, bottom: 30, left: 50},
-          width = 960 - margin.left - margin.right,
-          height = 500 - margin.top - margin.bottom;
+      var margin = {top: 10, right: 90, bottom: 30, left: 40},
+          width = 400,
+          height = 400;
 
       var parseDate = d3.time.format("%Y-%m-%d").parse,
           formatDate = d3.time.format("%b %d");
@@ -448,14 +452,18 @@ voteApp.controller('resultsCtl',
               if ( target == vote_spec_uri ){ // here we care only about current vote_spec_uri
                 for ( var target_real in vote_spec_result_data[target] ){
                   if ( !filter_by_targets || (filter_by_targets.indexOf(target_real) != -1) ){
-                    $scope.drawResultAsBarChartForSingleTargetOfVoteSpecification(destination, vote_spec_uri, vote_spec_result_data[target][target_real], target_real);
+                    var destination_for_this_result = destination.append("div");
+                    destination_for_this_result.classed({"inline-vote-result-for-a-target": true});
+                    $scope.drawResultAsBarChartForSingleTargetOfVoteSpecification(destination_for_this_result, vote_spec_uri, vote_spec_result_data[target][target_real], target_real);
                   }
                 }
               }
             }
             else {
               if ( !filter_by_targets || (filter_by_targets.indexOf(target) != -1) ){
-                $scope.drawResultAsBarChartForSingleTargetOfVoteSpecification(destination, vote_spec_uri, vote_spec_result_data[target], target);
+                var destination_for_this_result = destination.append("div");
+                destination_for_this_result.classed({"inline-vote-result-for-a-target": true});
+                $scope.drawResultAsBarChartForSingleTargetOfVoteSpecification(destination_for_this_result, vote_spec_uri, vote_spec_result_data[target], target);
               }
             }
           }
@@ -601,7 +609,7 @@ voteApp.controller('resultsCtl',
 
 
       var margin = {
-        top: 40,
+        top: 10,
         right: 20,
         bottom: 30,
         left: 40
@@ -645,7 +653,8 @@ voteApp.controller('resultsCtl',
       var result_info = destination.append("p");
       result_info.classed("result-info");
       var populateResultInfo = function(){
-        var text = "Vote result for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "</span>\" and target idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":";
+        // var text = "Vote result for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "</span>\" and target idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":";
+        var text = "Result on the idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":";
         var text_number_of_votes = "number of votes: " + result_number_of_voters;
         if ( vote_spec_type == "MultipleChoiceVoteSpecification" || vote_spec_type == "BinaryVoteSpecification" ){
           // add only the number of votes
