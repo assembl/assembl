@@ -14,7 +14,7 @@
     "send": "Envoyer",
     "Select the deck of cards which will be displayed": "Choisissez le jeu de cartes qui sera montré",
     "CREATE":{
-      "create_from_idea_title":"Souhaitez-vous créer une session de créativité basée sur «{{idea}}» ?",
+      "create_from_idea_title":"Souhaitez-vous créer une session de créativité basée sur l'idée «{{idea}}» ?",
       "helper":"Une session de créativité aide à raviver la discussion en exposant les participants à des questions provocatrices.",
       "see_more_detail":"Voir plus de détails",
       "create": "Créer"
@@ -24,8 +24,8 @@
     },
     "HOME":{
       "question_placeholder":"Cette question sera visible en haut de la carte",
-      "question_title":"Écrivez une question à laquelle vous voulez faire réagir les participants",
-      "question_helper":"Vous mobilisez les participants sur «{{idea}}»",
+      "question_title":"Écrivez une question sur laquelle vous voulez faire réagir les participants",
+      "question_helper":"Vous mobilisez les participants sur l'idée «{{idea}}»",
       "step":"Étape {{ n }}",
       "jeton_number":"Nombre de jetons",
       "jeton_title":"Jeton",
@@ -41,6 +41,6 @@
     "RATE":{
       "rateIncludeIdea": "Voulez-vous montrer cette contribution dans la table des idées?",
       "nbSelection": "{selectedItems, plural, =0 {Vous n'avez pas sélectionné de contributions} one {Vous avez sélectionné une contribution} other {Vous avez sélectionné # contributions}}",
-      "rateIdeaTitle":"{selectedItems, plural, =0 { } one {Voulez-vous l'envoyer à «{title}»?} other {Voulez-vous les envoyer à «{title}»?}}"
+      "rateIdeaTitle":"{selectedItems, plural, =0 { } one {Voulez-vous l'envoyer dans l'idée «{title}»?} other {Voulez-vous les envoyer dans l'idée «{title}»?}}"
     }
 }
