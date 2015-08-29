@@ -124,7 +124,7 @@ def create_dictionaries(discussion_id=None):
             makedirs(dirname)
         corpus_fname = join(dirname, CORPUS_FNAME)
         if exists(corpus_fname):
-            corpus = IdMmCorpus(join(dirname, CORPUS_FNAME))
+            corpus = IdMmCorpus(corpus_fname)
             doc_count = db.query(Content).with_polymorphic(Content
                 ).options(defer(Content.like_count)).join(Discussion
                 ).filter(Discussion.id.in_(discussion_ids)).count()
@@ -141,10 +141,11 @@ def create_dictionaries(discussion_id=None):
         bowizer.dictionary.add_documents((
             bowizer.phrases[tokenizer.tokenize_post(post)]
             for post in posts))
-        IdMmCorpus.serialize(join(nlp_data, lang, CORPUS_FNAME), (
+        IdMmCorpus.serialize(corpus_fname, (
             (post.id, bowizer.post_to_bow(post))
             for post in posts))
         bowizer.save()
+        return IdMmCorpus(corpus_fname)
 
 
 def gensimvecs_to_csr(vecs, width, topic_intensities):
