@@ -42,8 +42,10 @@ SessionApp.directive('comments', [
             switch (value){
               case 'commentSubIdea:success':
                 $scope.getCommentsFromSubIdea();
+                $scope.message = null; // reset message value, in order to hear another change if the user posts another message
                 break;
               case 'commentSubIdea:error':
+                $scope.message = null; // reset message value, in order to hear another change if the user posts another message
                 break;
             }
           }, true);
@@ -142,6 +144,7 @@ SessionApp.directive('comments', [
 
                 $scope.message = "commentSubIdea:success";
                 $scope.formData.comment = null;
+                $scope.displayBox = false;
 
               }).error(function() {
 
