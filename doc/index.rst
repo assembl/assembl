@@ -14,6 +14,8 @@ Contents:
    backups
    permissions_and_roles
    localization
+   analytics/piwik_reporting_api
+   analytics/events
 
    services
    modules
