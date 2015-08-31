@@ -4,6 +4,7 @@ import re
 import base64
 from cStringIO import StringIO
 from os import urandom
+from os.path import join, dirname
 from itertools import chain
 from collections import defaultdict
 import random
@@ -49,9 +50,15 @@ def discussion_settings_put(request):
     request.context._instance.settings_json = request.json_body
     return HTTPOk()
 
+dogpile_fname = join(
+    dirname(dirname(dirname(dirname(__file__)))),
+    get_config().get('dogpile_cache.arguments.filename'))
 
-discussion_jsonld_cache = get_region('discussion_jsonld')
-userprivate_jsonld_cache = get_region('userprivate_jsonld')
+discussion_jsonld_cache = get_region(
+    'discussion_jsonld', **{"arguments.filename": dogpile_fname})
+userprivate_jsonld_cache = get_region(
+    'userprivate_jsonld', **{"arguments.filename": dogpile_fname})
+
 
 @discussion_jsonld_cache.cache_on_arguments()
 def discussion_jsonld(discussion_id):
