@@ -37,13 +37,15 @@ body{
 
 {% block extra_js %}
     {% include 'analytics_nonBackboned.jinja2' %}
-    <script type="text/javascript">
-      var analytics = Analytics_Dispatcher.getInstance();
-      analytics.changeCurrentPage(analytics.pages.REGISTER);
+    {% if web_analytics.get('enabled', False) %}
+        <script type="text/javascript">
+          var analytics = Analytics_Dispatcher.getInstance();
+          analytics.changeCurrentPage(analytics.pages.REGISTER);
 
-      document.getElementsByClassName('js_register')[0].addEventListener('click', function(){
-        analytics.trackEvent(analytics.events.USER_REGISTER);
-      });
+          document.getElementsByClassName('js_register')[0].addEventListener('click', function(){
+            analytics.trackEvent(analytics.events.USER_REGISTER);
+          });
 
-    </script>
+        </script>
+    {% endif %}
 {% endblock%}

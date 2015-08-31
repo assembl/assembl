@@ -27,9 +27,11 @@ body{
 {% block extra_js %}
     {% if not error %}
         {% include 'analytics_nonBackboned.jinja2' %}
-        <script type="text/javascript">
-        var analytics = Analytics_Dispatcher.getInstance();
-        analytics.trackEvent(analytics.events.CONFIRM_ACCOUNT);
-        </script>
+        {% if web_analytics.get('enabled', False) %}
+            <script type="text/javascript">
+            var analytics = Analytics_Dispatcher.getInstance();
+            analytics.trackEvent(analytics.events.CONFIRM_ACCOUNT);
+            </script>
+        {% endif %}
     {% endif%}
 {% endblock%}

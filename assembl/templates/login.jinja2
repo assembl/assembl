@@ -104,27 +104,29 @@
 {% endblock %}
 
 {% block extra_js %}
-    {# Including our analytics wrapper scripts in order to make calls using our analytics engine. #}
+    {# Including our analytics wrapper scripts in order to make calls using our analytics engine (if configured) #}
     {% include 'analytics_nonBackboned.jinja2' %}
-    <script type="text/javascript">
-      var analytics = Analytics_Dispatcher.getInstance();
-      analytics.changeCurrentPage(analytics.pages.LOGIN);
+    {% if web_analytics.get('enabled', False) %}
+        <script type="text/javascript">
+          var analytics = Analytics_Dispatcher.getInstance();
+          analytics.changeCurrentPage(analytics.pages.LOGIN);
 
-      document.getElementsByClassName('js_login')[0].addEventListener('click', function(){
-        analytics.trackEvent(analytics.events.EMAIL_LOGIN);
-      });
+          document.getElementsByClassName('js_login')[0].addEventListener('click', function(){
+            analytics.trackEvent(analytics.events.EMAIL_LOGIN);
+          });
 
-      document.getElementsByClassName('js_login_facebook')[0].addEventListener('click', function(){
-        analytics.trackEvent(analytics.events.FACEBOOK_LOGIN);
-      });
+          document.getElementsByClassName('js_login_facebook')[0].addEventListener('click', function(){
+            analytics.trackEvent(analytics.events.FACEBOOK_LOGIN);
+          });
 
-      document.getElementsByClassName('js_login_twitter')[0].addEventListener('click', function(){
-        analytics.trackEvent(analytics.events.TWITTER_LOGIN);
-      });
+          document.getElementsByClassName('js_login_twitter')[0].addEventListener('click', function(){
+            analytics.trackEvent(analytics.events.TWITTER_LOGIN);
+          });
 
-      document.getElementsByClassName('js_login_google')[0].addEventListener('click', function(){
-        analytics.trackEvent(analytics.events.GOOGLE_LOGIN);
-      });
+          document.getElementsByClassName('js_login_google')[0].addEventListener('click', function(){
+            analytics.trackEvent(analytics.events.GOOGLE_LOGIN);
+          });
 
-    </script>
+        </script>
+    {% endif %}
 {% endblock %}
