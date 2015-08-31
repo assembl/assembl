@@ -15,6 +15,7 @@ var TakeTour = Marionette.Object.extend({
 
     _nextTours: [],
     _seenTours: undefined,
+    _currentTour: undefined,
     _tourModel: new TourModel.Model(),
 
     initialize: function(){
@@ -57,6 +58,7 @@ var TakeTour = Marionette.Object.extend({
         this.initTour();
     },
 
+    // Question: est-ce que c'est l'initialisation globale?
     initTour: function() {
         var tourModel = new TourModel.Model(),
             currentUser = Ctx.getCurrentUser(),
@@ -98,6 +100,7 @@ var TakeTour = Marionette.Object.extend({
 
             // after each end we delete the tour
             this.deleteTour(currentTour.id);
+            // TODO: 2.i
 
             console.debug('hopscotch', hopscotch.getCurrTour());
 
@@ -114,6 +117,10 @@ var TakeTour = Marionette.Object.extend({
        return hopscotch.getCurrTour();
     },
 
+    getNextTour: function() {
+        // TODO: 2.g
+    },
+
     deleteTour: function(name){
        var index = -1;
 
@@ -122,7 +129,7 @@ var TakeTour = Marionette.Object.extend({
         for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
             if (this.tour_assembl[i].name === name) {
                 index = i;
-                //delete in array
+                //delete in array (MAP: Why delete it?)
                 //this._nextTours[index -1];
                 //this._tourModel.save(attrs, {patch: true});
                 break;
@@ -144,6 +151,9 @@ var TakeTour = Marionette.Object.extend({
                 for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
                     if (this.tour_assembl[i].name === name) {
                         index = i;
+                        // BUG: this assumes the indexes of tour_assembl and _nextTours are in sync.
+                        // The order should be the same, but the indices will normally be different.
+                        // Also: why store the names and not the objects? It entails a further lookup.
                         this._nextTours[index] = name;
                         break;
                     }
@@ -153,6 +163,7 @@ var TakeTour = Marionette.Object.extend({
                 //runTour
 
             } else {
+                // TODO: Étapes 2.f.iii, 2.f.iv, 2.f.v
 
                 for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
                     if (this.tour_assembl[i].name === name) {
@@ -163,6 +174,8 @@ var TakeTour = Marionette.Object.extend({
                 }
 
                 this.runTour(this._nextTours[index]);
+                // TODO: Étape 2.f.vii et 2.h
+                // C'est dans 2.h que je m'attends à refaire un hopscotch.configure
 
                 //if(this.tour_assembl[i].conditional()){}
 
