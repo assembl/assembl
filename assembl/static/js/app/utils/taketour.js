@@ -175,7 +175,7 @@ var TakeTour = Marionette.Object.extend({
 
                 this.runTour(this._nextTours[index]);
                 // TODO: Étape 2.f.vii et 2.h
-                // C'est dans 2.h que je m'attends à refaire un hopscotch.configure
+                // C'est dans 2.h que je m'attends à refaire un hopscotch.startTour
 
                 //if(this.tour_assembl[i].conditional()){}
 
