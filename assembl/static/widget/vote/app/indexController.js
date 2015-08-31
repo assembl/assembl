@@ -287,6 +287,10 @@ voteApp.controller('indexCtl',
 
       // once serialized by $.param(), this will give "rentabilite=10&risque=0&investissement=22222&difficulte_mise_en_oeuvre=50"
       container.find("g.criterion").each(function(index) {
+        var voted = $(this).attr("data-voted");
+        if (voted !== "true") {
+          return;
+        }
         var valueMin = parseFloat($(this).attr("data-criterion-value-min"));
         var valueMax = parseFloat($(this).attr("data-criterion-value-max"));
         var value = parseFloat($(this).attr("data-criterion-value"));
@@ -649,6 +653,7 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-value-min", valueMin)
         .attr("data-criterion-value-max", valueMax)
         .attr("data-target-id", target_id)
+        .attr("data-voted", hasVoted)
       ;
 
       // create vertical scale
@@ -669,7 +674,7 @@ voteApp.controller('indexCtl',
       {
         var v = scale.invert(y);
 
-        svg.select("g.criterion").attr("data-criterion-value", v);
+        svg.select("g.criterion").attr("data-criterion-value", v).attr("data-voted", true);
 
         svg.select("circle").attr("cy", scale(v));
       }
@@ -920,6 +925,7 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-value-max", criterionXValueMax)
         .attr("data-criterion-type", "x")
         .attr("data-target-id", target_id)
+        .attr("data-voted", hasVoted)
       ;
 
       svg.append("g")
@@ -931,6 +937,7 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-value-max", criterionYValueMax)
         .attr("data-criterion-type", "y")
         .attr("data-target-id", target_id)
+        .attr("data-voted", hasVoted)
       ;
 
       // create X and Y scales
@@ -968,8 +975,12 @@ voteApp.controller('indexCtl',
 
         if (setData === true)
         {
-          svg.select("g.criterion[data-criterion-type='x']").attr("data-criterion-value", xValue);
-          svg.select("g.criterion[data-criterion-type='y']").attr("data-criterion-value", yValue);
+          svg.select("g.criterion[data-criterion-type='x']")
+            .attr("data-criterion-value", xValue)
+            .attr("data-voted", true);
+          svg.select("g.criterion[data-criterion-type='y']")
+            .attr("data-criterion-value", yValue)
+            .attr("data-voted", true);
         }
 
         var circle = svg.selectAll("circle");
@@ -1269,7 +1280,7 @@ voteApp.controller('indexCtl',
         var el = div.find('input:checked');
         if (el)
         {
-          div.attr('data-criterion-value', el.val());
+          div.attr('data-criterion-value', el.val()).attr('data-voted', true);
         }
         else {
           div.attr('data-criterion-value', null);
