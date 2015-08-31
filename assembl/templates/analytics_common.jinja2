@@ -5,8 +5,7 @@
         {{ web_analytics['piwik']['script']|safe }}
         <script type="text/javascript">
             globalAnalytics.piwik = {
-                isActive: true,
-                customVariableSize: {{ web_analytics['piwik']['custom_variable_size'] }} 
+                isActive: true 
             };
         </script>
     {% endif %}

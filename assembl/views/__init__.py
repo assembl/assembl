@@ -141,8 +141,7 @@ def get_default_context(request):
 
     if analytics_settings.get('enabled', False):
         analytics_settings['piwik'] = {
-            'script': web_analytics_piwik_script,
-            'custom_variable_size': web_analytics_piwik_custom_variable_size
+            'script': web_analytics_piwik_script
         }
 
     return dict(

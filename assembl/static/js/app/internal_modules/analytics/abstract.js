@@ -361,7 +361,6 @@ var moduleName = 'Analytics_Abstract',
   };
 
   Wrapper.prototype = {
-    customVariableSize: 5,
     debug: false,
     events: _EVENT_DEFINITIONS,
     actions: _ACTION_DEFINITIONS,

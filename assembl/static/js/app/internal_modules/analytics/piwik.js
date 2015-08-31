@@ -52,8 +52,6 @@ var moduleName = 'Analytics_Piwik',
 
     initialize: function(options){
       this.userId = options.userId;
-      this.customVariableSize = options.piwik_customVariableSize;
-      this.customVariables = {};
       if (_.isFunction(_paq['push'])) {
         this.usePaq = true;
       }
