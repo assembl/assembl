@@ -1,4 +1,4 @@
-pip==7.1.1
+pip==7.1.2
 setuptools==18.2
 Babel==2.0
 Beaker>=1.6.5
@@ -8,7 +8,7 @@ DateTime==4.0.1
 Fabric==1.10.2
 IMAPClient==0.13
 Jinja2==2.8
-Mako==1.0.1
+Mako==1.0.2
 MarkupSafe==0.23
 PasteDeploy==1.5.2
 PyJWT==1.4.0
@@ -50,10 +50,10 @@ ecdsa==0.13
 enum34==1.0.4
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
-flaky==2.1.2
+flaky==2.2.0
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
 gensim==0.12.1
-greenlet==0.4.7
+greenlet==0.4.9
 html5lib==0.999999
 idna==2.0
 imaplib2==2.45.0
@@ -95,15 +95,15 @@ pyramid-mailer==0.14.1
 pyramid-mako==1.0.2
 pyramid-tm==0.12
 pytest==2.7.2
-pytest-cov==2.0.0
+pytest-cov==2.1.0
 pytest-localserver==0.3.4
 pytest-mock==0.7.0
-pytest-splinter==1.6.6
+pytest-splinter==1.7.0
 python-dateutil==2.4.2
 python-openid==2.2.5
 pytz==2015.4
 pyzmq==14.7.0
-raven==5.5.0
+raven==5.6.0
 rdflib==4.2.1
 rdflib-jsonld==0.3
 redis==2.10.3
