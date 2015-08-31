@@ -10,8 +10,10 @@
     <link type="text/css" rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="css/global.css" />
 
+    <script src="bower_components/angular/angular.js"></script><!-- this script is in <head> instead of the end of <body> because of ng-cloak -->
+
 </head>
-<body ng-app="appSession">
+<body ng-cloak ng-app="appSession">
 
 <div ui-view="topMenu"></div>
 <div ui-view></div>
@@ -32,7 +34,6 @@
 
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-resource/angular-resource.min.js"></script>
 <script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
