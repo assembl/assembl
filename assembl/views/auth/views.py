@@ -360,6 +360,7 @@ def assembl_register_view(request):
             print "email token:", request.route_url(
                 'user_confirm_email', ticket=email_token(email_account))
         headers = remember(request, user.id)
+        user.last_login = datetime.utcnow()
         request.response.headerlist.extend(headers)
         # TODO: Tell them to expect an email.
         request.session.pop('next_view')
@@ -444,6 +445,7 @@ def assembl_login_complete_view(request):
         session.add(user)
         return dict(get_login_context(request),
                     error=localizer.translate(_("Invalid user and password")))
+    user.last_login = datetime.utcnow()
     headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
     discussion = discussion_from_request(request)
@@ -687,6 +689,7 @@ def velruse_login_complete_view(request):
 
     session.flush()
 
+    base_profile.last_login = now
     headers = remember(request, base_profile.id)
     request.response.headerlist.extend(headers)
     if discussion:
