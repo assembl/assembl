@@ -33,7 +33,7 @@ var QUERY_STRINGS = {
 
 var trackAnalyticsWithQueryString = function(qs, context){
   
-  console.log('tracking with query string ' + qs + ' using context ' + context);
+  //console.log('tracking with query string ' + qs + ' using context ' + context);
 
   function arrayHas(array, id){
     var result = false;
@@ -73,6 +73,10 @@ var trackAnalyticsWithQueryString = function(qs, context){
           console.log('trackEvent enter post via notification');
           analytics.trackEvent(analytics.events.ENTER_POST_VIA_NOTIFICATION);
         }
+        else {
+          console.warn("Unknown context "+context);
+        }
+        
         break;
       case 'share':
         if (context === 'post'){
@@ -83,20 +87,32 @@ var trackAnalyticsWithQueryString = function(qs, context){
           console.log('trackEvent enter idea via share');
           analytics.trackEvent(analytics.events.ENTER_IDEA_VIA_SHARE);
         }
+        else {
+          console.warn("Unknown context "+context);
+        }
         break;
       default:
+        //Question, should there be an "UNKNOWN" case for ideas and messages here
+        //so we find new cases we forgot.  For example we'll soon add the synthesis
+        //to notifications, which will point to ideas.  It wouldn't be logged at 
+        //all as it is, even IF is add the 'idea' context to the share url.
+        console.warn("Unknown value "+value);
         break;
     }
 
   };
-
-  if ( qs.indexOf('&') > -1 ){
-    _.each( qs.split('&'), function(param){
-      doCheck(param, cb);
-    });
+  if (qs) {
+    if ( qs.indexOf('&') > -1 ){
+      _.each( qs.split('&'), function(param){
+        doCheck(param, cb);
+      });
+    }
+    else {
+      doCheck(qs, cb);
+    }
   }
   else {
-    doCheck(qs, cb);
+    console.warn("Ùnable to track event, there are no event tracking query parameters present.")
   }
 
 };
@@ -207,14 +223,11 @@ var routeManager = Marionette.Object.extend({
     //TODO: add new behavior to show messageList Panel
     
     trackAnalyticsWithQueryString(qs, 'idea');
-    this.restoreViews();
-
-    setTimeout(function() {
-      //TODO: fix this horrible hack
+    this.restoreViews().then(function() {
       //We really need to address panels explicitely
       Assembl.vent.trigger("DEPRECATEDnavigation:selected", 'debate', null);
       Assembl.vent.trigger('DEPRECATEDideaList:selectIdea', id, "from_url", true);
-    }, 0);
+    });
 
     //TODO: fix this horrible hack that prevents calling
     //showMessageById over and over.
@@ -329,7 +342,7 @@ var routeManager = Marionette.Object.extend({
 
       Assembl.groupContainer.show(groupsView);
 
-      return groupsView;
+      return Promise.resolve(groupsView);
     });
   },
 
