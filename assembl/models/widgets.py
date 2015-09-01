@@ -827,9 +827,13 @@ class MultiCriterionVotingWidget(BaseIdeaWidget):
 
     @property
     def configured(self):
-        return bool(len(self.votable_idea_links)
-                and len(self.vote_specifications)
-                and len(self.settings_json.get('items', ())))
+        if not bool(len(self.votable_idea_links)
+                    and len(self.vote_specifications)):
+            return False
+        items = self.settings_json.get('items', ())
+        return bool(len(
+            [item for item in items
+             if item.get('vote_specifications', None)]))
 
     def set_criteria(self, ideas):
         idea_ids = {idea.id for idea in ideas}
