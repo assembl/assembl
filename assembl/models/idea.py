@@ -60,7 +60,7 @@ class IdeaVisitor(object):
     def visit_idea(self, idea, level, prev_result):
         pass
 
-    def end_visit(self, result, child_results):
+    def end_visit(self, idea, level, result, child_results):
         return result
 
 
@@ -414,7 +414,7 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
                     idea_visitor, visited, level+1, result)
                 if r:
                     child_results.append(r)
-        return idea_visitor.end_visit(result, child_results)
+        return idea_visitor.end_visit(self, level, result, child_results)
 
     def visit_ideas_breadth_first(self, idea_visitor):
         self.prefetch_descendants()
@@ -441,7 +441,7 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
         for child in children:
             child._visit_ideas_breadth_first(
                 idea_visitor, visited, level+1, result)
-        return idea_visitor.end_visit(prev_result, child_results)
+        return idea_visitor.end_visit(self, level, prev_result, child_results)
 
     def most_common_words(self, lang=None, num=8):
         if lang:
