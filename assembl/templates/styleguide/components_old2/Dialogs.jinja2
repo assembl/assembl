@@ -1,0 +1,183 @@
+{# Tooltips  #}
+<h3 class="h3">Tooltips Coming soon</h3>
+
+<div class="tooltips-container">
+{#<div class="tooltip-container">
+  <a class="tooltip tooltip-top btn btn-secondary btn-sm">
+    Tooltip on top left (default)
+    <span class="tooltip-content">
+      Tooltip on top left
+    </span>
+  </a>
+
+  <a class="tooltip tooltip-top-right btn btn-secondary btn-sm">
+    Tooltip on top right
+    <span class="tooltip-content">
+      Tooltip on top right
+    </span>
+  </a>
+
+  <a class="tooltip tooltip-right btn btn-secondary btn-sm">
+    Tooltip on right
+    <span class="tooltip-content">
+      I'm on right
+    </span>
+  </a>
+
+  <a class="tooltip tooltip-left btn btn-secondary btn-sm">
+    Tooltip on left
+    <span class="tooltip-content">
+      I'm on top right
+    </span>
+  </a>
+
+  <a class="tooltip tooltip-bottom btn btn-secondary btn-sm">
+    Tooltip on bottom left
+    <span class="tooltip-content">
+      I'm on bottom left
+    </span>
+  </a>
+</div>#}
+
+{#<div>
+<button class="btn btn-default tooltip-example" data-toggle="tooltip" data-placement="left" title="Some tooltip text!">left hover</button>
+<button class="btn btn-default tooltip-example" data-toggle="tooltip" data-placement="top" title="Some tooltip text!">top hover</button>
+<button class="btn btn-default tooltip-example" data-toggle="tooltip" data-placement="bottom" title="Some tooltip text!">bottom hover</button>
+<button class="btn btn-default tooltip-example" data-toggle="tooltip" data-placement="right" title="Some tooltip text!">right hover</button>
+</div>#}
+
+</div>
+
+{# Popovers  #}
+<h3 class="h3">Popovers</h3>
+
+<div class="popover-container">
+<a class="btn btn-primary btn-sm popover-display">
+  Popover on top (default)
+  <span class="popover">
+    <span class="popover-header">Header</span>
+    <span class="popover-content">
+      Loremipsumdolorsitametconsecteturadipiscingelitpraesentbibendumullamcorper lectus dictum blandit.
+    </span>
+    <span class="popover-footer">Footer</span>
+  </span>
+</a>
+
+<a class="btn btn-primary btn-sm popover-display popover-bottom">
+  Popover on bottom
+  <span class="popover">
+    <span class="popover-header">Header</span>
+    <span class="popover-content">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent bibendum ullamcorper lectus dictum blandit.
+    </span>
+  </span>
+</a>
+
+<a class="btn btn-primary btn-sm popover-display popover-left">
+  Popover on top left
+  <span class="popover">
+    <span class="popover-content">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent bibendum ullamcorper lectus dictum blandit.
+    </span>
+    <span class="popover-footer">Footer</span>
+  </span>
+</a>
+
+<a class="btn btn-primary btn-sm popover-display popover-bottom popover-left">
+  Popover on bottom left
+  <span class="popover">
+    <span class="popover-content">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent bibendum ullamcorper lectus dictum blandit.
+    </span>
+  </span>
+</a>
+</div>
+
+{# Popins #}
+<h3 class="h3">Popins</h3>
+
+<div class="popin-container">
+  <div class="demo-popin" style="display: block;">
+    <div class="popin popin-open" style="opacity: 1;">
+      <div class="popin-header">
+          <a href="#" class="close"><i class="icon-delete"></i></a>
+          <h3 class="h3">Lorem ipsum dolor sit amet</h3>
+      </div>
+
+      <div class="popin-body">
+        <div>
+          <h5 class="h5">Lorem ipsum</h5>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum felis elit, gravida a libero ut, consequat placerat dui. Sed ante ipsum, sollicitudin eu venenatis laoreet, posuere ac mauris.</p>
+
+          <h4 class="mts">consectetur adipiscing elit</h4>
+          <p>Vivamus sed porttitor nisl, vel hendrerit erat. Nullam quis urna cursus, placerat tortor a, efficitur ligula. Sed ut felis non augue aliquam egestas.</p>
+        </div>
+        <div class="clr"></div>
+      </div>
+
+      <div class="popin-footer">
+        <button class="btn btn-cancel btn-sm fr">{{ gettext('Cancel') }}</button>
+        <button class="btn btn-primary btn-sm fr">{{ gettext('Validate') }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="popin-container">
+    <div class="demo-popin" style="display: block;">
+        <div class="popin popin-open" style="opacity: 1;">
+            <div class="popin-header">
+                <a href="#" class="close"><i class="icon-delete"></i></a>
+                <h3 class="h3">Lorem ipsum dolor sit amet</h3>
+            </div>
+
+            <div class="popin-body">
+                <div>
+                    <h5 class="h5">Lorem ipsum</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum felis elit, gravida a libero ut, consequat placerat dui. Sed ante ipsum, sollicitudin eu venenatis laoreet, posuere ac mauris.</p>
+
+                    <h4 class="mts">consectetur adipiscing elit</h4>
+                    <p>Vivamus sed porttitor nisl, vel hendrerit erat. Nullam quis urna cursus, placerat tortor a, efficitur ligula. Sed ut felis non augue aliquam egestas.</p>
+                </div>
+                <div class="clr"></div>
+            </div>
+
+            <div class="popin-footer">
+                <button class="btn btn-cancel btn-sm fr">{{ gettext('Cancel') }}</button>
+                <button class="btn btn-primary btn-sm fr">{{ gettext('Validate') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="popin-container">
+    <div class="demo-popin" style="display: block;">
+
+        <div class="bbm-modal bbm-modal--open" style="opacity: 1;">
+            <div class="popin-header pbxs background-grey">
+                <i class="icon-discuss"></i>
+            </div>
+
+            <div class="popin-body ptxs background-grey">
+                <div class="content">
+                    <h1 class="h1 pbs">Suivez l'évolution de la discussion</h1>
+                    <h6 class="h6 tal">Tenez-vous informé de l'évolution de la discussion en recevant des notifications lorsque :</h6>
+                    <ul class="tal">
+                        <li class="h6">Une synthèse est publiée</li>
+                    </ul>
+                    <h6 class="h6 tal">Vous pouvez modifier vos abonnements à tout moment en cliquant sur la section ‘‘Notifications’’ de votre profil.</h6>
+                </div>
+                <div class="clr"></div>
+            </div>
+
+            <div class="popin-footer background-lightgrey">
+                <a class="btn btn-cancel btn-sm fl" href="/sandbox/user/notifications">Configurer mes notifications</a>
+                <button class="btn btn-third btn-sm fr js_subscribe">Recevoir des notifications</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+

@@ -1,423 +1,409 @@
-/**
- * Styleguide things are prefixed with `sg`
- */
+@import '../partials/layout'; // responsive grid and media queries
 
-.container {
-  @include box-sizing(border-box);
-  margin: auto;
-  width: 1020px;
+// color palette - these colors will be the color swatches of the Colors section
 
-  .container {
-    max-width: 100.1%;
-  }
+$color-1: #5f8ee4; // Cornflower Blue - Action color
+$color-2: #19191a; // Dark Blue
+$color-3: #e4655f; // Red
+$color-4: #e6e6e6; // light grey
+$color-5: #ffffff; // white
+$color-6: #A846FE; // purple
 
-  @include medium-only {
-    width: 724px;
-  }
+$color-7: #484848; // grey
+
+// additional colors
+
+$success: #6fce72; // green
+$alert: $color-3;  // red
+
+// fonts
+
+$primary-font: 'Merriweather', serif;
+$secondary-font: 'Open Sans', sans-serif;
+
+/* --------------------------------
+
+xBackground
+
+-------------------------------- */
+
+body {
+    /* this is the page background */
+    background-color: $color-5;
 }
 
-.row {
-  @include clearfix();
-  margin-left: -2.762430939%;
+/* --------------------------------
+
+xPatterns
+
+-------------------------------- */
+
+.cd-box {
+    /* this is the container of various design elements - i.e. the 2 logo of the branding section */
+    border: 1px solid $color-4;
+    border-radius: 3px;
+    background: $color-5;
+    box-shadow: 0 1px 1px rgba(#000, .05);
+    padding: 6px;
 }
 
-.col {
-  @include col-span(12);
+/* --------------------------------
+
+xNavigation
+
+-------------------------------- */
+
+header {
+    background-color: $color-5;
 }
 
-@for $i from 1 through 12 {
-  // The column of the grid
-  // ----------------------
-  .col-#{$i} {
-    @include col-span($i);
-  }
+.cd-logo {
+    /* logo box style */
+    //background-color: $color-1;
+    width: 120px;
+
+    @include MQ(M) {
+        width: 130px;
+    }
 }
 
-// A section to a component
-// =====================
-.sg-section {
-  padding: 20px;
+.cd-main-nav {
+    /* main navigation background color - full screen on small devices */
+    background: $color-2;
 
-  .sg-section-title {
-    color: #484848;
-    //border-bottom: 2px solid $gray4;
-  }
-}
-
-.sg-sidebar {
-  //background-color: $gray4;
-  //position: fixed;
-  top: 0;
-  z-index: 1000;
-  min-height: 100%;
-  .logo {
-    color: $purple2;
-  }
-}
-
-.sg-main {
-  margin-left: 20%;
-  min-height: 100%;
-  overflow: hidden;
-}
-
-.sg-title > a {
-    color: #484848;
-    padding: 12px;
-    border-radius: 5px;
-    margin-bottom: 6px;
-    display: block;
-    line-height: 1em;
-    &:hover{
-        background-color: #f2f2f2;
+    li a {
+        color: $color-5;
+        border-color: lighten($color-2, 5%);
         text-decoration: none;
     }
-}
 
-//-----------
-code[class*="language-"], pre[class*="language-"] {
-  white-space: pre-wrap;
-}
+    @include MQ(M) {
+        li a {
+            color: lighten($color-2, 40%);
 
-// styleguide components
+            &.selected {
+                color: $color-7;
+                box-shadow: 0 2px 0 $color-6;
+            }
 
-.sg-body{
-    background-color: $white;
-}
-
-.bx-color {
-  .bg {
-    height: 40px;
-  }
-  .code {
-    width: 100px;
-    height: 30px;
-    color: $black;
-  }
-}
-
-.icons-content {
-  .bx {
-    padding: 20px;
-    margin-bottom: 20px;
-    background: #ffffff;
-    border-radius: 3px;
-    i.icon {
-      font-size: 1.5em;
-      color: #404040;
+            .no-touch &:hover {
+                color: $color-7;
+            }
+        }
     }
-  }
 }
 
-.bs-example-popover {
-  height: 400px;
-  .popover {
-    position: relative;
-    display: block;
-    float: left;
-    width: 260px;
-    margin: 20px;
-  }
-}
+.cd-nav-trigger span {
+    /* hamburger menu */
+    background-color: $color-5;
 
-.bs-example {
-  height: 50px;
-}
-
-table.table {
-  width: 100%;
-  padding: 0;
-  margin-bottom: 1.4em;
-  font-size: 12px;
-  border: 1px solid #ddd;
-  border-collapse: separate;
-  border-radius: 4px;
-
-  thead {
-    th {
-      padding-top: 9px;
-      font-weight: bold;
-      vertical-align: middle;
-      border-bottom: 1px solid #ddd;
+    &::before,
+    &::after {
+        /* upper and lower lines */
+        background-color: $color-5;
     }
-    th + th, th + td, td + td {
-      border-left: 1px solid #ddd;
+}
+
+.nav-is-visible .cd-nav-trigger span {
+    /* hide line in the center on mobile when nav is visible */
+    background-color: rgba($color-5, 0);
+
+    &::before, &::after {
+        /* preserve visibility of upper and lower lines - close icon */
+        background-color: rgba($color-5, 1);
+    }
+}
+
+.cd-download {
+    /* download button top-right visible on big devices */
+    //background-color: lighten($color-2, 10%);
+
+    .no-touch &:hover {
+        background-color: lighten($color-2, 15%);
     }
 
-  }
-  th, td {
-    padding: 10px 10px 9px;
-    line-height: 1.4em;
-    text-align: left;
-    vertical-align: top;
-  }
+    span {
+        /* tooltip */
+        background: $color-1;
+        color: $color-5;
 
-  h1, h2, h3, h4, h5, h6 {
+        &::before {
+            /* right arrow color */
+            border-color: $color-1;
+        }
+    }
+}
+
+/* --------------------------------
+
+xPage title
+
+-------------------------------- */
+
+main > h1 {
+    color: $color-2;
+
+    @include MQ(L) {
+        /* title goes into the header on big devices */
+        color: $color-5;
+    }
+}
+
+/* --------------------------------
+
+xTypography
+
+-------------------------------- */
+
+h1, h2 {
+    font-family: $secondary-font;
+    color: $color-2;
+}
+
+h1 {
+    font-size: 2.4rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin: 0 0 .4em;
+
+    @include MQ(S) {
+        font-size: 3.2rem;
+    }
+
+    @include MQ(M) {
+        font-size: 4rem;
+    }
+}
+
+h2 {
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 1em 0;
+
+    @include MQ(S) {
+        font-size: 1.8rem;
+        margin: 1em 0 1.4em;
+    }
+}
+
+section > h2::before {
+    /* number before each section title */
+    color: darken($color-4, 15%);
+}
+
+p {
+    font-size: 1.4rem;
+    line-height: 1.4;
+    color: lighten($color-2, 25%);
+
+    a {
+        color: $color-1;
+        text-decoration: underline;
+    }
+
+    @include MQ(S) {
+        font-size: 1.6rem;
+        line-height: 1.6;
+    }
+}
+
+/* --------------------------------
+
+xButtons
+
+-------------------------------- */
+
+.btn {
+    border: none;
+    box-shadow: none;
+    border-radius: .25em;
+    font: {
+        size: 1.4rem;
+        family: $secondary-font;
+    }
+    color: $color-5;
+    padding: .6em 2.2em;
+    cursor: pointer;
+    background: $color-1;
+
+    &:focus {
+        outline: none;
+    }
+
+    .no-touch &:hover {
+        background: lighten($color-1, 5%);
+    }
+
+    &.btn-success {
+        background: $success;
+
+        .no-touch &:hover {
+            background: lighten($success, 5%);
+        }
+    }
+
+    &.btn-alert {
+        background: $alert;
+
+        .no-touch &:hover {
+            background: lighten($alert, 5%);
+        }
+    }
+
+    &.btn-outline {
+        color: $color-1;
+        background: transparent;
+        box-shadow: inset 0 0 0 1px $color-1;
+
+        .no-touch &:hover {
+            color: $color-5;
+            background: $color-1;
+        }
+    }
+
+    @include MQ(S) {
+        font-size: 1.6rem;
+    }
+}
+
+.cd-buttons .cd-box:nth-of-type(2) span {
+    /* CSS class name color */
+    color: $color-1;
+}
+
+/* --------------------------------
+
+xIcons
+
+-------------------------------- */
+
+.cd-icons li {
+    /* icons size */
+    //width: 32px;
+    height: 32px;
+
+    span{
+      font-size: 12px;
+    }
+}
+
+
+/* --------------------------------
+
+xForm
+
+-------------------------------- */
+
+input[type=text], select {
+    border: 1px solid $color-4;
+    border-radius: .25em;
+    background: $color-5;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+input[type=text] {
+    padding: .6em 1em;
+    box-shadow: inset 1px 1px rgba(#000, .03);
+
+    &.success {
+        border-color: $success;
+        box-shadow: 0 0 6px rgba($success, .2);
+    }
+
+    &.alert {
+        border-color: $alert;
+        box-shadow: 0 0 6px rgba($alert, .2);
+    }
+
+    &:focus {
+        border-color: $color-1;
+        box-shadow: 0 0 6px rgba($color-1, .2);
+    }
+}
+
+input[type=radio],
+input[type=checkbox] {
+    position: absolute;
+    left: 0;
+    top: 0;
     margin: 0;
-  }
+    padding: 0;
+    opacity: 0;
 }
 
-//colors.  Mostly for styleguide, you should not normally use these in the DOM
-.bg-purple {
-  background-color: $purple;
-}
+.radio-label,
+.checkbox-label {
+    padding-left: 24px;
+    @include user-select(none);
 
-.bg-purple1 {
-  background-color: $purple1;
-}
-
-.bg-purple2 {
-  background-color: $purple2;
-}
-
-.bg-purple3 {
-  background-color: $purple3;
-}
-
-.bg-gray {
-  background-color: $gray;
-}
-
-.bg-gray1 {
-  background-color: $gray1;
-}
-
-.bg-gray2 {
-  background-color: $gray2;
-}
-
-.bg-gray3 {
-  background-color: $gray3;
-}
-
-.bg-gray4 {
-  background-color: $gray4;
-}
-
-.bg-white {
-  background-color: $white;
-}
-
-.bg-orange {
-  background-color: $orange;
-}
-
-.bg-orange1 {
-  background-color: $orange1;
-}
-
-.bg-orange2 {
-  background-color: $orange2;
-}
-
-.bg-black {
-  background-color: $black;
-}
-
-.bg-yellow {
-  background-color: $yellow;
-}
-
-.bg-blue {
-  background-color: $blue;
-}
-
-.demo-popin {
-  width: 500px;
-  height: 350px;
-}
-
-.txt-gray {
-  color: $txtGray;
-}
-
-.txt-gray1 {
-  color: $txtGray1;
-}
-
-.txt-gray2 {
-  color: $txtGray2;
-}
-
-.txtPurple {
-    color: $txtPurple;
-}
-
-.txtPurple1 {
-    color: $txtPurple1;
-}
-
-
-#grid-content {
-  .gr-zebra {
-    .gu {
-      &:nth-child(even) {
-        background-color: $gray1;
-      }
-      &:nth-child(odd) {
-        background-color: $gray3;
-      }
+    &::before,
+    &::after {
+        /* custom radio and check boxes */
+        content: '';
+        display: block;
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        top: 50%;
+        @include transform(translateY(-50%));
     }
-  }
+
+    &::before {
+        left: 0;
+        border: 1px solid $color-4;
+        box-shadow: inset 1px 1px rgba(#000, .03);
+    }
+
+    &::after {
+        left: 3px;
+        background: url('../assets/form/icon-check.svg') no-repeat center center;
+        display: none;
+    }
 }
 
-//doc
-
-.code-content {
-  margin: 10px 0 0 0;
+.radio-label::before {
+    border-radius: 50%;
 }
 
-.typo-content, #text {
-  pre {
-    background: $white;
-  }
+.checkbox-label::before {
+    border-radius: 3px;
 }
 
-pre {
-  padding: 15px;
-  margin: 0 0 20px 0;
-  overflow: auto;
-  background: #f5f2f0;
+input[type=radio]:checked + label::before,
+input[type=checkbox]:checked + label::before {
+    background-color: $color-2;
+    border: none;
+    box-shadow: none;
 }
 
-code[class*="language-"],
-pre[class*="language-"] {
-  white-space: pre-wrap;
+input[type=radio]:checked + label::after,
+input[type=checkbox]:checked + label::after {
+    display: block;
 }
 
-/*
-github.com style (c) Vasily Polovnyov <vast@whiteants.net>
-https://github.com/isagalaev/highlight.js/tree/master/src/styles
-*/
-
-.hljs {
-  display: block;
-  padding: 0.5em;
-  color: #333;
-  background: #f8f8f8;
+.cd-select::after {
+    /* switcher arrow for select element */
+    content: '';
+    position: absolute;
+    z-index: 1;
+    right: 14px;
+    top: 50%;
+    @include transform(translateY(-50%));
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: url('../assets/form/icon-select.svg') no-repeat center center;
+    pointer-events: none;
 }
 
-.hljs-comment,
-.hljs-template_comment,
-.diff .hljs-header,
-.hljs-javadoc {
-  font-style: italic;
-  color: #998;
+select {
+    position: relative;
+    padding: .6em 2em .6em 1em;
+    cursor: pointer;
+    @include appearance(none);
 }
 
-.hljs-keyword,
-.css .rule .hljs-keyword,
-.hljs-winutils,
-.javascript .hljs-title,
-.nginx .hljs-title,
-.hljs-subst,
-.hljs-request,
-.hljs-status {
-  font-weight: bold;
-  color: #333;
-}
-
-.hljs-number,
-.hljs-hexcolor,
-.ruby .hljs-constant {
-  color: #099;
-}
-
-.hljs-string,
-.hljs-tag .hljs-value,
-.hljs-phpdoc,
-.tex .hljs-formula {
-  color: #d14;
-}
-
-.hljs-title,
-.hljs-id,
-.coffeescript .hljs-params,
-.scss .hljs-preprocessor {
-  font-weight: bold;
-  color: #900;
-}
-
-.javascript .hljs-title,
-.lisp .hljs-title,
-.clojure .hljs-title,
-.hljs-subst {
-  font-weight: normal;
-}
-
-.hljs-class .hljs-title,
-.haskell .hljs-type,
-.vhdl .hljs-literal,
-.tex .hljs-command {
-  font-weight: bold;
-  color: #458;
-}
-
-.hljs-tag,
-.hljs-tag .hljs-title,
-.hljs-rules .hljs-property,
-.django .hljs-tag .hljs-keyword {
-  font-weight: normal;
-  color: #000080;
-}
-
-.hljs-attribute,
-.hljs-variable,
-.lisp .hljs-body {
-  color: #008080;
-}
-
-.hljs-regexp {
-  color: #009926;
-}
-
-.hljs-symbol,
-.ruby .hljs-symbol .hljs-string,
-.lisp .hljs-keyword,
-.tex .hljs-special,
-.hljs-prompt {
-  color: #990073;
-}
-
-.hljs-built_in,
-.lisp .hljs-title,
-.clojure .hljs-built_in {
-  color: #0086b3;
-}
-
-.hljs-preprocessor,
-.hljs-pragma,
-.hljs-pi,
-.hljs-doctype,
-.hljs-shebang,
-.hljs-cdata {
-  font-weight: bold;
-  color: #999;
-}
-
-.hljs-deletion {
-  background: #fdd;
-}
-
-.hljs-addition {
-  background: #dfd;
-}
-
-.diff .hljs-change {
-  background: #0086b3;
-}
-
-.hljs-chunk {
-  color: #aaa;
-}
-
-.tooltip-container {
-  //height: 50px;
-  padding: 50px 0 50px 0;
-}
-
-.popover-container {
-  height: 160px;
-  line-height: 150px;
-  @include box-sizing(border-box);
-}
+@import '../partials/basic-style';

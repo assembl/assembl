@@ -21,37 +21,15 @@ var TakeTour = Marionette.Object.extend({
 
         this.tour_assembl = [
             {
-              name:"on_start",
-              conditional: function(){
-                  return true;
-              },
-              beforeStart: function(){
-                  //setter les ID dans le DOM pour hopscotch
-              },
-              autostart: true,
-              tour: onStart
+                name:"on_start",
+                autostart: true,
+                tour: onStart
             },
             {
-                name:'on_ideas'
-            },
-            {
-                name:'on_synthesis'
-            },
-            {
-              name:"on_show_synthesis",
-              conditional: function(){
-                return false;
-              },
-              beforeStart: function(){
-
-              },
-              autostart: false,
-              tour: onShowSynthesis
-            },
-            {
-                name:'on_profile'
+                name:"on_show_synthesis",
+                autostart: false,
+                tour: onShowSynthesis
             }
-
         ];
 
         this.initTour();
@@ -66,7 +44,7 @@ var TakeTour = Marionette.Object.extend({
             onShow: function() {
                 //that.$(".panel-body").scroll(that, that.scrollLogger);
             },
-            onNext:function() {
+            onNext: function() {
                 // need to scroll messageListPanel there.
             },
             i18n: {
@@ -97,34 +75,36 @@ var TakeTour = Marionette.Object.extend({
             var currentTour = hopscotch.getCurrTour();
 
             // after each end we delete the tour
-            this.deleteTour(currentTour.id);
+            that.deleteTour(currentTour.id);
 
-            console.debug('hopscotch', hopscotch.getCurrTour());
+            console.debug('active', hopscotch.isActive, hopscotch.getCurrTour());
 
-            //console.debug('hopscotch', hopscotch, hopscotch.getState(), hopscotch.getCurrTour());
-
-            //that.runTour('on_show_synthesis');
+            if (that._nextTours.length) {
+               that.runTour(that._nextTours[0]);
+            }
 
         });
-
-        //console.debug('tour_assembl', this.tour_assembl);
     },
 
     getCurrentTour: function(){
        return hopscotch.getCurrTour();
     },
 
+    getNextTours: function(){
+        return this._nextTours;
+    },
+
+    setNextTours: function(index, name){
+        this._nextTours[index] = name;
+    },
+
     deleteTour: function(name){
-       var index = -1;
+        sessionStorage.removeItem('hopscotch.tour.state');
 
-        console.debug('disabledTour', name);
-
-        for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
-            if (this.tour_assembl[i].name === name) {
-                index = i;
-                //delete in array
-                //this._nextTours[index -1];
-                //this._tourModel.save(attrs, {patch: true});
+        for(var i = 0, len = this._nextTours.length; i < len; i++) {
+            if (this._nextTours[i] === name) {
+                this._nextTours.splice(i, 1);
+                //this._tourModel.save(name, {patch: true});
                 break;
             }
         }
@@ -139,40 +119,24 @@ var TakeTour = Marionette.Object.extend({
             return;
         } else {
             //If there is an ongoing round
-            if(this.getCurrentTour()){
-                //find index of "name" in assembl_tour[];
-                for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
-                    if (this.tour_assembl[i].name === name) {
-                        index = i;
-                        this._nextTours[index] = name;
-                        break;
-                    }
+            for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
+                if (this.tour_assembl[i].name === name) {
+                    index = i;
+                    this.setNextTours(index, name);
+                    break;
                 }
-
-                //console.debug(this._nextTours[index]);
-                //runTour
-
-            } else {
-
-                for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
-                    if (this.tour_assembl[i].name === name) {
-                        index = i;
-                        this._nextTours[index] = name;
-                        break;
-                    }
-                }
-
-                this.runTour(this._nextTours[index]);
-
-                //if(this.tour_assembl[i].conditional()){}
-
-                //this.tour_assembl[index].beforeStart();
-
             }
+        }
+
+        // check if the _nextTours[] have still tour to load
+        // avoid to reload the current tour running by hopscotch.getCurrTour()
+        if(this._nextTours.length){
+            this.runTour(this._nextTours[0]);
         }
 
     },
 
+    // private function
     runTour: function(name){
         var tour = undefined;
 
@@ -182,8 +146,8 @@ var TakeTour = Marionette.Object.extend({
                 break;
             }
         }
-
-        return hopscotch.startTour(tour, 0);
+        // not adapter to load multiple tour on single page
+        hopscotch.startTour(tour);
     }
 
 });

@@ -6,7 +6,7 @@ var onShowSynthesis = {
         {
             target: "tour_step_welcome",
             placement: "right",
-            title: i18n.gettext("Welcome!"),
+            title: i18n.gettext("Welcome! welcome"),
             content: i18n.gettext("Welcome to this discussion. We’ve created a 30 second tour to help you get started using Assembl")
         },
         {
@@ -61,7 +61,8 @@ var onShowSynthesis = {
             target: "tour_step_notifications",
             placement: "left",
             title: i18n.gettext("Stay informed"),
-            content: i18n.gettext("Notifications are set to go to your email. If you aren’t receiving them, make sure to check your spam folder! You can update your notification settings here.")
+            content: i18n.gettext("Notifications are set to go to your email. If you aren’t receiving them, make sure to check your spam folder! You can update your notification settings here."),
+            multipage: true
         }
     ],
     showPrevButton: true

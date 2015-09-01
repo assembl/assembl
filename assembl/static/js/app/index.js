@@ -59,14 +59,20 @@ if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
     }, 4000);
 
     // test with defer call to action
-    setTimeout(function() {
-
-       Taketour.startTour('on_start');
-
-    }, 5000);
-
 
       setTimeout(function() {
+
+          Taketour.startTour('on_start');
+
+      }, 6000);
+
+      setTimeout(function() {
+
+          Taketour.startTour('on_show_synthesis');
+
+      }, 6000);
+
+      /*setTimeout(function() {
 
           Taketour.startTour('on_synthesis');
 
@@ -83,14 +89,10 @@ if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
 
           Taketour.startTour('on_profile');
 
-      }, 6000);
+      }, 6000);*/
 
 
-      setTimeout(function() {
 
-          Taketour.startTour('on_show_synthesis');
-
-      }, 8000);
 
 
   }

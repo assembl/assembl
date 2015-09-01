@@ -17,22 +17,23 @@
     "tests"
   ],
   "dependencies": {
-    "jquery.dotdotdot": "https://github.com/ImaginationForPeople/jQuery.dotdotdot.git#fix-paragraph-and-read-more-not-showing",
-    "jquery-oembed-all": "https://github.com/nfl/jquery-oembed-all.git#5f1f2c5b0b0fe8a0da167ed459d2318c09852e6b",
-    "ckeditor": "^4.4.7",
-    "jit": "~2.0.2",
     "Backbone.Subset": "https://github.com/ImaginationForPeople/Backbone.Subset.git#~0.1.1",
-    "ink": "~1.0.5",
-    "bootstrap-growl": "~1.1.0",
-    "jquery": "~2.1.4",
     "backbone": "~1.1.2",
-    "marionette": "~2.4.1",
-    "underscore": "~1.7.0",
     "backbone-modal": "~1.1.5",
-    "sockjs": "~0.3.4",
+    "bootstrap-growl": "~1.1.0",
+    "chai": "~3.2.0",
+    "ckeditor": "^4.4.7",
     "hopscotch": "~0.2.4",
+    "ink": "~1.0.5",
+    "jit": "~2.0.2",
+    "jquery": "~2.1.4",
+    "jquery-oembed-all": "https://github.com/nfl/jquery-oembed-all.git#5f1f2c5b0b0fe8a0da167ed459d2318c09852e6b",
+    "jquery.dotdotdot": "https://github.com/ImaginationForPeople/jQuery.dotdotdot.git#fix-paragraph-and-read-more-not-showing",
+    "marionette": "~2.4.1",
     "mocha": "~2.2.5",
-    "chai": "~3.2.0"
+    "modernizr": "~2.8.3",
+    "sockjs": "~0.3.4",
+    "underscore": "~1.7.0"
   },
   "resolutions": {
     "underscore": "~1.7.0"

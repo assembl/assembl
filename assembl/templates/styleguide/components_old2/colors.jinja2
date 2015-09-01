@@ -1,0 +1,80 @@
+<div class="gr bx-color">
+    {% set color_list = {
+    'purple':'#9013FE',
+    'purple1':'#A846FE',
+    'purple2':'#C078FE',
+    'purple3':'#D8ABFF',
+    'purple4':'#EFDEFF'
+    }
+    %}
+
+    {% for color in color_list|sort %}
+    <div class="gu gu-1of4 gu-s-1of1">
+        <div class="bg bg-{{color}}">
+        </div>
+        <pre><code class="language-scss"><span class="hljs-at_rule">${{color}}: <span class="hljs-hexcolor">{{color_list[color]}}</span>;</span></code></pre>
+    </div>
+    {% endfor %}
+
+</div>
+
+
+<div class="gr bx-color">
+
+    {% set color_list = {
+      'black':'#000000',
+      'gray':'#7F8C8D',
+      'gray1':'#888888',
+      'gray2':'#515151',
+      'gray3':'#ECF0F1',
+      'gray4':'#484848'
+      }
+    %}
+
+    {% for color in color_list|sort %}
+       <div class="gu gu-1of6 gu-s-1of1">
+         <div class="bg bg-{{color}}">
+         </div>
+         <pre><code class="language-scss"><span class="hljs-at_rule">${{color}}: <span class="hljs-hexcolor">{{color_list[color]}}</span>;</span></code></pre>
+       </div>
+    {% endfor %}
+
+</div>
+
+<div class="gr bx-color">
+
+    {% set color_list = {
+      'yellow':'#fcf8e3',
+      'orange':'#FFD37F',
+      'orange1':'#FFBD40',
+      'orange2':'#FFA700'
+      }
+    %}
+
+    {% for color in color_list|sort %}
+    <div class="gu gu-1of4 gu-s-1of1">
+      <div class="bg bg-{{color}}">
+      </div>
+      <pre><code class="language-scss"><span class="hljs-at_rule">${{color}}: <span class="hljs-hexcolor">{{color_list[color]}}</span>;</span></code></pre>
+    </div>
+    {% endfor %}
+
+</div>
+
+<div class="gr bx-color">
+    {% set color_list = {
+      'blue':'#dbf2ff'
+      }
+    %}
+
+    {% for color in color_list|sort %}
+    <div class="gu gu-1of4 gu-s-1of1">
+      <div class="bg bg-{{color}}">
+      </div>
+      <pre><code class="language-scss"><span class="hljs-at_rule">${{color}}: <span class="hljs-hexcolor">{{color_list[color]}}</span>;</span></code></pre>
+    </div>
+    {% endfor %}
+
+</div>
+
+

@@ -1,0 +1,69 @@
+<section id="icons" class="cd-icons">
+    <h2>Icons</h2>
+
+    {# list generated using the following command: python3 assembl/scripts/list_css_icons.py #}
+    {% set icon_list = [
+        'checkbox',
+        'collapse',
+        'delete',
+        'timer',
+        'options',
+        'message',
+        'clipboard',
+        'synth',
+        'tableofideas',
+        'answer',
+        'lab',
+        'add',
+        'arrowdown',
+        'expand',
+        'bullet-point',
+        'book',
+        'home',
+        'lock',
+        'lock-open',
+        'quote',
+        'arrowright',
+        'arrowleft',
+        'infinite',
+        'discuss',
+        'search',
+        'idea',
+        'user',
+        'sheet',
+        'heart',
+        'download',
+        'close',
+        'infinite-2',
+        'comment',
+        'diamond',
+        'add-2',
+        'arrowup',
+        'logout',
+        'bell',
+        'imported',
+        'ok',
+        'help',
+        'doc',
+        'check',
+        'check-empty',
+        'facebook',
+        'github',
+        'gplus',
+        'linkedin-squared',
+        'openid',
+        'twitter',
+        'reload',
+        'mail',
+        'circle-empty',
+        'dot-circled']%}
+
+    <ul class="cd-box">
+        {% for icon in icon_list %}
+        <li class="cd-icon-1">
+            <i class="icon-{{icon}}"></i>
+            <span>icon-{{icon}}</span>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
