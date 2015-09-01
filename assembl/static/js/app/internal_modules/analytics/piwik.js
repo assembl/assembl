@@ -51,7 +51,6 @@ var moduleName = 'Analytics_Piwik',
     },
 
     initialize: function(options){
-      this.userId = options.userId;
       if (_.isFunction(_paq['push'])) {
         this.usePaq = true;
       }

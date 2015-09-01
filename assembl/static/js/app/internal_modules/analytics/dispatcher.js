@@ -187,7 +187,7 @@ var moduleName = 'Analytics_Dispatcher',
           var g = null; //Where Google Analytics would go
           _analytics.registerObserver(g);
         }
-        _analytics.initialize();
+        _analytics.initialize({});
       }
       return _analytics;
     }
