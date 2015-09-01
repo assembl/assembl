@@ -51,14 +51,73 @@ voteApp.config(['$routeProvider', function($routeProvider) {
 
 }]);
 
-voteApp.config(['$translateProvider', function($translateProvider) {
 
+// returns the value of a given parameter in the URL of the current page
+function getUrlVariableValue(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return pair[1];
+    }
+  } 
+
+  //alert('Query Variable ' + variable + ' not found');
+  return null;
+}
+window.getUrlVariableValue = getUrlVariableValue;
+
+
+voteApp.config(['$translateProvider', function($translateProvider) {
   $translateProvider.useStaticFilesLoader({
     prefix: 'app/locales/',
     suffix: '.json'
   });
 
-  $translateProvider.preferredLanguage('fr');
+  // language detection and fallbacks
+
+  $translateProvider.fallbackLanguage('en');
+  $translateProvider.registerAvailableLanguageKeys(['en', 'fr'], {
+    'en_US': 'en',
+    'en_UK': 'en',
+    'de_DE': 'en',
+    'de': 'en',
+    'de_CH': 'en',
+    'en-US': 'en',
+    'en-UK': 'en',
+    'de-DE': 'en',
+    'de-CH': 'en',
+    'fr_FR': 'fr',
+    'fr-fr': 'fr',
+  });
+
+  //$translateProvider.preferredLanguage('fr'); // no, we want to use one of the available languages
+  //$translateProvider.determinePreferredLanguage(); // not enough: any language not listed in registerAvailableLanguageKeys() won't use fallback, resulting in translation keys appearing on the page
+  var getLocale = function() {
+      var nav = window.navigator;
+      return (nav.language || nav.browserLanguage || nav.systemLanguage || nav.userLanguage || '').split('-').join('_');
+    };
+  var localeOrFallback = function(locale) {
+    if (locale && locale.length && locale.length > 2)
+        locale = locale.substring(0, 2);
+    locale = locale.toLowerCase();
+    if (locale != 'fr')
+        locale = 'en';
+    return locale;
+  };
+  $translateProvider.determinePreferredLanguage(function() {
+    var locale;
+    var localeInUrl = window.getUrlVariableValue("locale");
+    console.log("localeInUrl: ", localeInUrl);
+    if (localeInUrl)
+        locale = localeInUrl;
+    else
+        locale = getLocale();
+    locale = localeOrFallback(locale);
+    console.log("determined locale: ", locale);
+    return locale;
+  });
 
 }]);
 
@@ -86,23 +145,6 @@ voteApp.run(['configTestingService', function(configTestingService) {
 angular.element(document).ready(function() {
   console.log("angular.element(document).ready()");
 
-  // returns the value of a given parameter in the URL of the current page
-  function getUrlVariableValue(variable) {
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split("=");
-      if (pair[0] == variable) {
-        return pair[1];
-      }
-    } 
-
-    //alert('Query Variable ' + variable + ' not found');
-    return null;
-  }
-
-  window.getUrlVariableValue = getUrlVariableValue;
-
   function startAngularApplication() {
     angular.bootstrap('#voteApp', ['voteApp']);
   }
@@ -119,7 +161,7 @@ angular.element(document).ready(function() {
 
   // TODO: better way to access the admin panel
   // if the user is trying to access the admin panel, skip the loading of the configuration file and start the Angular application directly
-  var admin_variable = getUrlVariableValue("admin");
+  var admin_variable = window.getUrlVariableValue("admin");
   console.log("admin_variable:");
   console.log(admin_variable);
   if (admin_variable != null)
@@ -130,7 +172,7 @@ angular.element(document).ready(function() {
 
   // get the "target" URL parameter
   // this parameter is meant to contain the identifier of the item about which the user is voting
-  var target = getUrlVariableValue("target");
+  var target = window.getUrlVariableValue("target");
     
   var successCallback = function(configData) {
     console.log("successCallback ()");
@@ -148,7 +190,7 @@ angular.element(document).ready(function() {
   };
 
   var configFileDefault = "/data/Widget/19";
-  var configFile = decodeURIComponent(getUrlVariableValue("config"));
+  var configFile = decodeURIComponent(window.getUrlVariableValue("config"));
   configFile = resourceToUrl(configFile);
     
   if (

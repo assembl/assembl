@@ -1,8 +1,8 @@
 "use strict";
 
 voteApp.controller('resultsCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'VoteWidgetService',
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, AssemblToolsService, VoteWidgetService) {
+  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'VoteWidgetService',
+  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, AssemblToolsService, VoteWidgetService) {
 
     // intialization code (constructor)
 
@@ -18,8 +18,10 @@ voteApp.controller('resultsCtl',
       // check that the user is logged in
       if (!configService.user || !configService.user.verified)
       {
-        alert('You have to be authenticated to vote. Please log in and try again.');
-        window.location.assign("/login");
+        $translate('errorNeedLogin').then(function(translation) {
+          alert(translation);
+          window.location.assign("/login");
+        });
         return;
       }
 
@@ -157,7 +159,6 @@ voteApp.controller('resultsCtl',
       // @param destination_for_this_result: d3 selector
       var single_vote_spec_result_received = function(vote_spec_uri, destination_for_this_result){
         return function(vote_spec_result_data){
-          console.log("promise " + vote_spec_uri + " resolved to: ", vote_spec_result_data);
           var filter_by_targets = $scope.targets_ids;
           $scope.drawResultsForAllTargetsOfVoteSpecification(destination_for_this_result, vote_spec_uri, vote_spec_result_data, filter_by_targets);
         }
@@ -165,7 +166,6 @@ voteApp.controller('resultsCtl',
 
       var grouped_vote_spec_results_received = function(vote_spec_uris, destination_for_this_result){
         return function(vote_spec_result_data){
-          console.log("promise " + vote_spec_uris[0] + " resolved to: ", vote_spec_result_data);
           var filter_by_targets = $scope.targets_ids;
           $scope.drawResultsForAllTargetsOfTwoCombinedVoteSpecifications(destination_for_this_result, vote_spec_uris[0], vote_spec_uris[1], vote_spec_result_data, filter_by_targets);
         }
@@ -255,7 +255,6 @@ voteApp.controller('resultsCtl',
     };
 
     $scope.drawResultsForAllTargetsOfTwoCombinedVoteSpecifications = function(destination, x_vote_spec_uri, y_vote_spec_uri, vote_specs_result_data, filter_by_targets){
-      console.log("vote_specs_result_data: ", vote_specs_result_data);
 
       var drawTargetTitleAndItem = function(destination, first_vote_spec_uri, second_vote_spec_uri, vote_spec_result_data, target_id){
         var inline_vote_holder = destination.append("div");
@@ -273,7 +272,9 @@ voteApp.controller('resultsCtl',
           if ( !filter_by_targets ){
             //$scope.drawResultAsBarChartForSingleTargetOfVoteSpecification(destination, vote_spec_uri, {}, null);
             var vote_spec_label = $scope.getVoteSpecLabelByURI(vote_spec_uri) || vote_spec_uri;
-            destination.append("p").html("There is no vote yet for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "\", on any of its target ideas.");
+            $translate('voteResultsForQuestionNoResult', {"hover": vote_spec_uri, "label": vote_spec_label}).then(function(translation) {
+              destination.append("p").html(translation);
+            });
           }
         } else {
           var data = null;
@@ -313,12 +314,9 @@ voteApp.controller('resultsCtl',
      * Heatmap is based on http://bl.ocks.org/mbostock/3202354
      */
     $scope.drawResultAsHeatmapForSingleTargetOfTwoVoteSpecifications = function(destination, x_vote_spec_uri, y_vote_spec_uri, vote_spec_result_data_for_target, target){
-      console.log("drawing heatmap for vote specs ", x_vote_spec_uri, " and ", y_vote_spec_uri, ", and target ", target, ", which has data ", vote_spec_result_data_for_target);
 
       var x_vote_spec = $scope.getVoteSpecByURI(x_vote_spec_uri);
       var y_vote_spec = $scope.getVoteSpecByURI(y_vote_spec_uri);
-      console.log("current x_vote_spec: ", x_vote_spec);
-      console.log("current y_vote_spec: ", y_vote_spec);
       var x_vote_spec_type = (x_vote_spec && "@type" in x_vote_spec) ? x_vote_spec["@type"] : "LickertVoteSpecification";
       if ( x_vote_spec_type != "LickertVoteSpecification" ){
         console.log("ERROR: x_vote_spec_type is not of type LickertVoteSpecification. Instead: ", x_vote_spec_type);
@@ -351,7 +349,6 @@ voteApp.controller('resultsCtl',
         result_histogram = vote_spec_result_data_for_target.histogram;
         
         heatmap_y_size = result_histogram.length;
-        console.log("heatmap_y_size: ", heatmap_y_size);
       }
 
       if ( heatmap_y_size > 0 ){
@@ -374,7 +371,6 @@ voteApp.controller('resultsCtl',
         }
         result_number_of_voters = 0;
       }
-      console.log("result_histogram: ", result_histogram);
 
 
       var current_y_step = lickert_y_min_value;
@@ -396,15 +392,15 @@ voteApp.controller('resultsCtl',
         current_y_step += heatmap_y_step;
       });
 
-      console.log("result_heatmap_data: ", result_heatmap_data);
       data = result_heatmap_data;
 
       var destination_for_this_result = destination; //destination.append("div");
       //destination_for_this_result.classed({"inline-vote-result-for-a-target": true});
 
 
-      var str = "Vote results for criteria \"<span title='" + x_vote_spec_uri + "'>" + x_vote_spec_label + "</span>\" and \"<span title='" + y_vote_spec_uri + "'>" + y_vote_spec_label + "</span>\"." + "<br/>number of votes: " + result_number_of_voters;
-      destination_for_this_result.append("p").html(str);
+      $translate('voteResultsForTwoCriteria', {"first_hover": x_vote_spec_uri, "first_label": x_vote_spec_label, "second_hover": y_vote_spec_uri, "second_label": y_vote_spec_label, "number_of_votes": result_number_of_voters}).then(function(translation) {
+        destination_for_this_result.append("p").html(translation);
+      });
 
 
       var chart_holder = destination_for_this_result.append("div");
@@ -520,8 +516,12 @@ voteApp.controller('resultsCtl',
     };
 
     $scope.drawTargetTitleHolder = function(destination, target_id){
+      var strResultsForIdea = "Results for idea";
+      $translate('voteResultsForTarget').then(function(translation) {
+        strResultsForIdea = translation;
+      });
       var getShownText = function(title){
-        var shown_text = "Results for idea \"" + title + "\"";
+        var shown_text = strResultsForIdea + " \"" + title + "\"";
         return shown_text;
       }
 
@@ -546,7 +546,6 @@ voteApp.controller('resultsCtl',
 
     // @param destination: d3 selector
     $scope.drawResultsForAllTargetsOfVoteSpecification = function(destination, vote_spec_uri, vote_spec_result_data, filter_by_targets){
-      console.log("vote_spec_result_data: ", vote_spec_result_data);
 
       var drawTargetTitleAndItem = function(destination, vote_spec_uri, vote_spec_result_data, target_id){
         var inline_vote_holder = destination.append("div");
@@ -563,7 +562,9 @@ voteApp.controller('resultsCtl',
           if ( !filter_by_targets ){
             //$scope.drawResultAsBarChartForSingleTargetOfVoteSpecification(destination, vote_spec_uri, {}, null);
             var vote_spec_label = $scope.getVoteSpecLabelByURI(vote_spec_uri) || vote_spec_uri;
-            destination.append("p").html("There is no vote yet for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "\", on any of its target ideas.");
+            $translate('voteResultsForQuestionNoResult', {"hover": vote_spec_uri, "label": vote_spec_label}).then(function(translation) {
+              destination.append("p").html(translation);
+            });
           }
         } else {
           for ( var target in vote_spec_result_data ){
@@ -590,10 +591,8 @@ voteApp.controller('resultsCtl',
      * Bar chart is based on http://bl.ocks.org/Caged/6476579
      */
     $scope.drawResultAsBarChartForSingleTargetOfVoteSpecification = function(destination, vote_spec_uri, vote_spec_result_data_for_target, target){
-      console.log("drawing vote result for vote_spec_uri ", vote_spec_uri, " and target ", target, " which has data ", vote_spec_result_data_for_target);
 
       var vote_spec = $scope.getVoteSpecByURI(vote_spec_uri);
-      console.log("current vote_spec: ", vote_spec);
       var vote_spec_type = (vote_spec && "@type" in vote_spec) ? vote_spec["@type"] : "LickertVoteSpecification"; // can also be "MultipleChoiceVoteSpecification"
 
       var data = null;
@@ -626,7 +625,6 @@ voteApp.controller('resultsCtl',
         data = [];
 
         var candidates = $scope.getVoteSpecFieldInSettings(vote_spec, "candidates");
-        console.log("candidates: ", candidates);
 
         // first, create empty data (because vote results do not contain candidates which received zero vote)
         if ( candidates ){
@@ -642,9 +640,6 @@ voteApp.controller('resultsCtl',
         // then, fill data with vote results
         if ( "results" in vote_spec_result_data_for_target ){
           for ( var key in vote_spec_result_data_for_target.results ){
-            console.log("key: ", key);
-            console.log("parseInt(key): ", parseInt(key));
-            console.log("candidates[parseInt(key)]: ", candidates[parseInt(key)]);
             var label = candidates ? candidates[parseInt(key)] : key;
             var votes = vote_spec_result_data_for_target.results[key];
             var frequency = result_number_of_voters > 0 ? (votes / result_number_of_voters) : 0;
@@ -662,8 +657,6 @@ voteApp.controller('resultsCtl',
             }
           }
         }
-
-        console.log("final data: ", data);
       
       } else { // "LickertVoteSpecification"
 
@@ -687,7 +680,6 @@ voteApp.controller('resultsCtl',
           result_histogram = vote_spec_result_data_for_target.histogram;
           
           histogram_size = result_histogram.length;
-          console.log("histogram_size: ", histogram_size);
         }
 
         if ( histogram_size > 0 ){
@@ -699,7 +691,6 @@ voteApp.controller('resultsCtl',
             result_histogram.push(0);
           result_number_of_voters = 0;
         }
-        console.log("result_histogram: ", result_histogram);
 
         result_histogram.forEach( function(number_of_voters_in_slice){
           var label = "" + lickert_value_cur.toFixed(0) + "-" + (lickert_value_cur+histogram_step).toFixed(0); // temporary
@@ -716,8 +707,6 @@ voteApp.controller('resultsCtl',
 
           lickert_value_cur += histogram_step;
         } );
-
-        console.log("result_histogram_data: ", result_histogram_data);
 
         data = result_histogram_data;
       }
@@ -750,13 +739,32 @@ voteApp.controller('resultsCtl',
         .orient("left")
         .tickFormat(formatPercent);
 
+      var strTooltipContentVotes = "Votes:";
+      var strTooltipContentFrequency = "Frequency:";
+      $translate('voteResultsVotes').then(function(translation) {
+        strTooltipContentVotes = translation;
+      });
+      $translate('voteResultsFrequency').then(function(translation) {
+        strTooltipContentFrequency = translation;
+      });
+      var strItemContentVotes = strTooltipContentVotes; // could be a different i18n
+      var strItemContentAverage = "Average:";
+      var strItemContentStandardDeviation = "Standard deviation:";
+      $translate('voteResultsAverage').then(function(translation) {
+        strItemContentAverage = translation;
+      });
+      $translate('voteResultsStandardDeviation').then(function(translation) {
+        strItemContentStandardDeviation = translation;
+      });
+
+
 
       var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
-          return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>"
-            + "<br/>" + "<strong>Votes:</strong> <span style='color:red'>" + d.votes + "</span>";
+          return "<strong>"+strTooltipContentFrequency+"</strong> <span style='color:red'>" + d.frequency + "</span>"
+            + "<br/>" + "<strong>"+strTooltipContentVotes+"</strong> <span style='color:red'>" + d.votes + "</span>";
         });
 
       var vote_spec_label = $scope.getVoteSpecLabelByURI(vote_spec_uri) || vote_spec_uri;
@@ -770,14 +778,14 @@ voteApp.controller('resultsCtl',
         // var text = "Vote result for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "</span>\" and target idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":";
         //var text = "Result on the idea \"<span title='" + (target_idea_definition || target) + "'>" + target_idea_label + "</span>\":";
         var text = "";
-        var text_number_of_votes = "number of votes: " + result_number_of_voters;
+        var text_number_of_votes = strItemContentVotes + " " + result_number_of_voters;
         if ( vote_spec_type == "MultipleChoiceVoteSpecification" || vote_spec_type == "BinaryVoteSpecification" ){
           // add only the number of votes
           text += text_number_of_votes;
         } else {
           // add number of votes, average and standard deviation
-          var text_average = "average: " + result_average;
-          var text_standard_deviation = "standard deviation: " + result_standard_deviation;
+          var text_average = strItemContentAverage + " " + result_average;
+          var text_standard_deviation = strItemContentStandardDeviation + " " + result_standard_deviation;
           text += text_number_of_votes + "<br/>" + text_average + "<br/>" + text_standard_deviation;
         }
         result_info.html(text);
@@ -813,19 +821,28 @@ voteApp.controller('resultsCtl',
 
       x.domain(data.map(function(d) { return d.label; }));
       y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+
+      var strItemAxisFrequency = "Frequency";
+
       svg.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
           .call(xAxis);
-      svg.append("g")
+      var y_axis = svg.append("g")
           .attr("class", "y axis")
-          .call(yAxis)
-        .append("text")
+          .call(yAxis);
+      var y_axis_label = y_axis.append("text")
           .attr("transform", "rotate(-90)")
           .attr("y", 6)
           .attr("dy", ".71em")
           .style("text-anchor", "end")
-          .text("Frequency");
+          .text(strItemAxisFrequency);
+
+      $translate('voteResultsAxisFrequency').then(function(translation) {
+        strItemAxisFrequency = translation;
+        y_axis_label.text(strItemAxisFrequency);
+      });
 
       svg.selectAll(".bar")
         .data(data)

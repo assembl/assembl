@@ -1,6 +1,20 @@
 {
     "vote":"Votez",
 
+    "errorNeedLogin":"Vous devez être authentifié pour pouvoir voter. Veuillez vous connecter à votre compte et réessayer.",
+    "errorNeedPermission":"Erreur : Vous n'avez pas la permission de participer à ce vote.",
+    "errorNoValueForCriterion":"Erreur : pas de valeur pour le critère \"{{criterion}}\"",
+    "errorNoVoteToSubmit":"Erreur : Il n'y a pas de vote à envoyer.",
+    "ideaDescription":"Description",
+    "voteResultsForTwoCriteria":"Résultat du vote pour le critère \"<span title='{{first_hover}}'>{{first_label}}</span>\" and \"<span title='{{second_hover}}'>{{second_title}}</span>\".<br/>Nombre de votes : {{number_of_votes}}",
+    "voteResultsForQuestionNoResult":"Il n'y a pas encore de vote pour la question \"<span title='{{hover}}'>{{label}}</span>\", sur aucune de ses idées cibles.",
+    "voteResultsVotes":"Votes :",
+    "voteResultsFrequency":"Fréquence :",
+    "voteResultsAverage":"Moyenne :",
+    "voteResultsStandardDeviation":"Écart-type :",
+    "voteResultsAxisFrequency":"Fréquence",
+    "voteResultsForTarget":"Résultats pour l'idée",
+
     "historyBack":"Retour",
     "voteSubmit":"Validez votre vote",
     "voteSubmitLoading": "Votre vote est en train d'être envoyé...",

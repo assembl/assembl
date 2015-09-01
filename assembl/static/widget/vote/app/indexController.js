@@ -50,8 +50,10 @@ voteApp.controller('indexCtl',
       // check that the user is logged in
       if (!configService.user || !configService.user.verified)
       {
-        alert('You have to be authenticated to vote. Please log in and try again.');
-        window.location.assign("/login");
+        $translate('errorNeedLogin').then(function(translation) {
+          alert(translation);
+          window.location.assign("/login");
+        });
         return;
       }
 
@@ -72,7 +74,9 @@ voteApp.controller('indexCtl',
               console.log("OK we are sure that the user has the permission to vote");
             }
             else {
-              alert("Error: you do not have the permission to vote.");
+              $translate('errorNeedPermission').then(function(translation) {
+                alert(translation);
+              });
               return;
             }
           }
@@ -80,74 +84,6 @@ voteApp.controller('indexCtl',
       }
 
       $scope.initVotingForAllTargets();
-
-      /*
-      // try to get previous votes of the user
-
-      if (!configService.user_votes_url)
-      {
-        $scope.drawUI();
-      }
-      else
-      {
-        var my_votes_endpoint_url = AssemblToolsService.resourceToUrl(configService.user_votes_url);
-        $http({
-          method: 'GET',
-          url: my_votes_endpoint_url,
-        }).success(function(data, status, headers) {
-          console.log("user votes received: ", data);
-          var my_votes = data;
-
-          // override default value of given criteria
-          if ("items" in $scope.settings)
-          _.each($scope.settings.items, function(item, item_index) {
-            if ("vote_specifications" in item)
-            _.each(item.vote_specifications, function(criterion, criterion_index) {
-              var entity_id = criterion["@id"];
-              var my_vote_for_this_criterion = _.findWhere(my_votes, {"vote_spec": entity_id});
-              if (my_vote_for_this_criterion)
-              {
-                console.log("value found: " + my_vote_for_this_criterion.value);
-                var new_value = my_vote_for_this_criterion.value;
-
-                // interpret vote value differently depending on criterion type
-                if (my_vote_for_this_criterion["@type"] == "BinaryIdeaVote")
-                {
-                  console.log("criterion type is BinaryIdeaVote");
-                  if (my_vote_for_this_criterion.value === true || my_vote_for_this_criterion.value == "true" || my_vote_for_this_criterion.value === 1 || my_vote_for_this_criterion.value == "1")
-                  {
-                    new_value = 1;
-                  }
-                  else if (my_vote_for_this_criterion.value === false || my_vote_for_this_criterion.value == "false" || my_vote_for_this_criterion.value === 0 || my_vote_for_this_criterion.value == "0")
-                  {
-                    new_value = 0;
-                  }
-                } else // if ( criterion["@type"] == "LickertIdeaVote" )
-                {
-                  //var valueMin = "minimum" in criterion ? parseFloat(criterion.minimum) : 0;
-                  //var valueMax = "maximum" in criterion ? parseFloat(criterion.maximum) : 100;
-                  //new_value = valueMin + my_vote_for_this_criterion.value * (valueMax - valueMin);
-
-                  new_value = my_vote_for_this_criterion.value;
-                }
-                
-                $scope.settings.items[item_index].vote_specifications[criterion_index].valueDefault = new_value;
-                console.log("value set: " + new_value);
-              } else {
-                console.log("error: we could not find a definition of this criterion for which the user has voted: ", entity_id);
-              }
-            });
-          });
-          console.log("settings after my votes:");
-          console.log($scope.settings);
-          $scope.drawUI();
-        }).error(function(status, headers) {
-          console.log("error");
-          $scope.drawUI();
-        });
-      }
-      */
-
     };
 
     $scope.initVotingForAllTargets = function(){
@@ -320,7 +256,9 @@ voteApp.controller('indexCtl',
         console.log("criterion " + criterion_id + " has value " + value);
         if (isNaN(value))
         {
-          alert("Error: no value for criterion " + criterion_id);
+          $translate('errorNoValueForCriterion', {'criterion': criterion_id}).then(function(translation) {
+            alert(translation);
+          });
           return;
         }
 
@@ -437,37 +375,12 @@ voteApp.controller('indexCtl',
       var widget = configService;
       var voting_urls = "voting_urls" in widget ? widget.voting_urls : null;
       if ( !(votes_to_submit && votes_to_submit.length) ){
-        var translation = "Error: There is no vote to submit!";
-        vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
+        $translate('errorNoVoteToSubmit').then(function(translation) {
+          vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
+        });
         return;
       }
       var submitVotePromises = [];
-
-      /*
-      var successForK = function(vote_spec) {
-        return function(data, status, headers) {
-          console.log("success");
-
-          //alert("success");
-          console.log("data:");
-          console.log(data);
-          console.log("status:");
-          console.log(status);
-          console.log("headers:");
-          console.log(headers);
-
-          var criterion_name = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
-          if ( !criterion_name && "@id" in vote_spec ){
-            criterion_name = vote_spec["@id"];
-          }
-
-          $translate('voteSubmitSuccessForCriterion', {'criterion': criterion_name}).then(function(translation) {
-            vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
-            $scope.resizeIframe();
-          });
-        };          
-      };
-      */
 
       var successForAllCriteriaOfQuestion = function(){
         $translate('voteSubmitSuccessForAllCriteriaOfQuestion').then(function(translation) {
@@ -600,9 +513,6 @@ voteApp.controller('indexCtl',
     // @param xPosCenter
     // Position on the X coordinates of the center of the gauge, in the created SVG
     $scope.drawVerticalGauge = function(destination, item_data, target_id, getUserPreviousVoteFunction, xPosCenter) {
-      console.log("drawVerticalGauge()");
-      console.log("item_data:");
-      console.log(item_data);
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length > 0)) {
         console.log("error: this item has no 'vote_specifications' field");
@@ -616,16 +526,13 @@ voteApp.controller('indexCtl',
       var hasVoted = true;
       if ( getUserPreviousVoteFunction ){
         valueDefault = getUserPreviousVoteFunction(criterion["@id"], target_id);
-        console.log("getUserPreviousVoteFunction is true => valueDefault: ", valueDefault);
       }
       if ( valueDefault === null || valueDefault === undefined ) {
         valueDefault = ("valueDefault" in criterion) ? criterion.valueDefault : valueMin;
-        console.log("valueDefault is null => valueDefault: ", valueDefault);
         hasVoted = false;
       }
       var criterionValue = valueDefault;
       target_id = target_id || null;
-      console.log("criterionValue: ", criterionValue);
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
       var width = "width" in item_data ? item_data.width : null;
       if ( !width )
@@ -840,9 +747,6 @@ voteApp.controller('indexCtl',
           .text(criterion.descriptionMax);
       }
 
-      console.log("criterionValue: ", criterionValue);
-      console.log("scale(criterionValue): ", scale(criterionValue));
-
       // draw the cursor
       var currentCursorColor = hasVoted ? colorCursor : colorCursorNoVoteYet;
       svg.append("circle")
@@ -866,7 +770,6 @@ voteApp.controller('indexCtl',
     // @param xPosCenter
     // Position on the X coordinates of the center of the gauge, in the created SVG
     $scope.draw2AxesVote = function(destination, item_data, target_id, getUserPreviousVoteFunction, xPosCenter) {
-      console.log("draw2AxesVote()");
 
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length)) {
@@ -1208,7 +1111,6 @@ voteApp.controller('indexCtl',
     // @param getUserPreviousVoteFunction
     // function(criterion_id [, target_id]) which returns the user's previous vote for this criterion and this (or current) target
     $scope.drawRadioVote = function(destination, item_data, target_id, getUserPreviousVoteFunction) {
-      console.log("drawRadioVote()");
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length > 0)) {
         console.log("error: item has no 'vote_specifications' field");
@@ -1221,9 +1123,6 @@ voteApp.controller('indexCtl',
       var criterionValue = null;
       if ( getUserPreviousVoteFunction ){
         var user_previous_vote = getUserPreviousVoteFunction(criterion["@id"], target_id);
-        console.log("user_previous_vote: ", user_previous_vote);
-        console.log('criterion["@id"]: ', criterion["@id"]);
-        console.log('target_id: ', target_id);
         
         // special case of binary vote
         if ( user_previous_vote === true )
@@ -1276,7 +1175,6 @@ voteApp.controller('indexCtl',
       }
 
       var updateSelectedValue = function() {
-        console.log("updateSelectedValue()");
         var el = div.find('input:checked');
         if (el)
         {
@@ -1358,7 +1256,9 @@ voteApp.controller('indexCtl',
       if (config.presentationText)
       {
         var td = $("<th/>");
-        td.text("Description"); // TODO: i18n
+        $translate('ideaDescription').then(function(translation) {
+          td.text(translation);
+        });
         tr.append(td);
         var td2 = $("<td/>");
         td2.text(config.presentationText);
@@ -1409,7 +1309,6 @@ voteApp.controller('indexCtl',
         }
       }
 
-      console.log("drawUIWithTable() completed");
     };
 
     $scope.drawUIWithoutTable = function() {
@@ -1426,34 +1325,7 @@ voteApp.controller('indexCtl',
           if (item.type == "vertical_gauge")
           {
             $scope.drawVerticalGauge(holder_svg, item);
-
-            /*
-            // add specific vote button for this criterion
-            console.log("item.criteria:");
-            console.log(item.criteria);
-            if ( item.criteria && item.criteria.length && item.criteria[0] && item.criteria[0]["@id"] )
-            {
-              var criterion_id = item.criteria[0]["@id"];
-              console.log("criterion_id id:");
-              console.log(criterion_id);
-              console.log("configService.voting_urls:");
-              console.log(configService.voting_urls);
-              if ( configService.voting_urls && configService.voting_urls[criterion_id] )
-              {
-                console.log("configService.voting_urls[criterion_id]:");
-                console.log(configService.voting_urls[criterion_id]);
-                var criterion_endpoint = AssemblToolsService.resourceToUrl(configService.voting_urls[criterion_id]);
-                //holder_jquery.append("<a href='#' ng-click=\"submitSingleVote('"+criterion_endpoint+"', 'LickertIdeaVote', '"+criterion_id+"')\">Vote</a>").click(function(){
-                var link = $("<button>Vote</button>");
-                link.click(function(){ // TODO: does not work, all buttons call with the same parameter value
-                  console.log("coucou");
-                  $scope.submitSingleVote(criterion_endpoint, 'LickertIdeaVote', item.criteria[0]["id"]);
-                });
-                holder_jquery.append(link);
-              }
-            }
-            */
-            
+            // here we could add specific vote button for this criterion
           }
           else if (item.type == "2_axes")
           {
@@ -1466,7 +1338,6 @@ voteApp.controller('indexCtl',
         }
       }
 
-      console.log("drawUIWithoutTable() completed");
     };
 
     $scope.drawMultipleTargetsUI = function() {
@@ -1597,7 +1468,6 @@ voteApp.controller('indexCtl',
           var translationReceived = function(question_id){
             return function(translation){
               var question_holder = $("#vote-question-item-"+question_id);
-              console.log("translation received: ", translation);
               var vote_button_holder = $("<div class='vote-question-submit-button-container'>");
               question_holder.append(vote_button_holder);
               var button = $('<button class="btn btn-primary btn-sm">' + translation + '</button>');
@@ -1615,7 +1485,6 @@ voteApp.controller('indexCtl',
         }
       }
 
-      console.log("drawUIWithoutTable() completed");
     };
 
   }]);
