@@ -567,7 +567,7 @@ class BaseOps(object):
                 elif isinstance(v, EnumSymbol):
                     return v.name
                 elif isinstance(v, datetime):
-                    return v.isoformat()
+                    return v.isoformat() + "Z"
                 elif isinstance(v, dict):
                     v = {translate_to_json(k): translate_to_json(val)
                          for k, val in v.items()}
@@ -736,7 +736,7 @@ class BaseOps(object):
                     ob = getattr(self, name)
                     if ob:
                         if type(ob) == datetime:
-                            ob = ob.isoformat()
+                            ob = ob.isoformat() + "Z"
                         result[name] = ob
                     else:
                         result[name] = None
