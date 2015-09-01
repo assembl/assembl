@@ -60,6 +60,9 @@ class IdeaVisitor(object):
     def visit_idea(self, idea, level, prev_result):
         pass
 
+    def end_visit(self, result, child_results):
+        return result
+
 
 class IdeaLinkVisitor(object):
     CUT_VISIT = object()
@@ -67,20 +70,6 @@ class IdeaLinkVisitor(object):
 
     @abstractmethod
     def visit_link(self, link):
-        pass
-
-
-class GraphViewIdeaVisitor(IdeaVisitor):
-    def __init__(self, graph_view):
-        self.graph_view = graph_view
-
-    def visit_idea(self, idea, level, prev_result):
-        # not the most efficient, but everything was prefetched
-        if idea in self.graph_view.get_ideas():
-            return self.do_visit_idea(idea, level, prev_result)
-
-    @abstractmethod
-    def do_visit_idea(self, idea, level, prev_result):
         pass
 
 
@@ -409,7 +398,7 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
 
     def visit_ideas_depth_first(self, idea_visitor):
         self.prefetch_descendants()
-        self._visit_ideas_depth_first(idea_visitor, set(), 0, None)
+        return self._visit_ideas_depth_first(idea_visitor, set(), 0, None)
 
     def _visit_ideas_depth_first(
             self, idea_visitor, visited, level, prev_result):
@@ -418,22 +407,28 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
             return False
         result = idea_visitor.visit_idea(self, level, prev_result)
         visited.add(self)
+        child_results = []
         if result is not IdeaVisitor.CUT_VISIT:
             for child in self.children:
-                child._visit_ideas_depth_first(
+                r = child._visit_ideas_depth_first(
                     idea_visitor, visited, level+1, result)
+                if r:
+                    child_results.append(r)
+        return idea_visitor.end_visit(result, child_results)
 
     def visit_ideas_breadth_first(self, idea_visitor):
         self.prefetch_descendants()
         result = idea_visitor.visit_idea(self, 0, None)
         visited = {self}
         if result is not IdeaVisitor.CUT_VISIT:
-            self._visit_ideas_breadth_first(idea_visitor, visited, 1, result)
+            return self._visit_ideas_breadth_first(
+                idea_visitor, visited, 1, result)
 
     def _visit_ideas_breadth_first(
             self, idea_visitor, visited, level, prev_result):
         children = []
         result = True
+        child_results = []
         for child in self.children:
             if child in visited:
                 continue
@@ -441,9 +436,12 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
             visited.add(child)
             if result != IdeaVisitor.CUT_VISIT:
                 children.append(child)
+                if result:
+                    child_results.append(result)
         for child in children:
             child._visit_ideas_breadth_first(
                 idea_visitor, visited, level+1, result)
+        return idea_visitor.end_visit(prev_result, child_results)
 
     def most_common_words(self, lang=None, num=8):
         if lang:

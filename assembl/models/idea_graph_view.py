@@ -1,6 +1,7 @@
 from collections import defaultdict
 from datetime import datetime
 from abc import abstractmethod
+from itertools import chain
 
 from sqlalchemy.orm import (
     relationship, backref)
@@ -14,13 +15,14 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import join
+import lxml.html as htmlt
 
 from . import DiscussionBoundBase
 from .discussion import Discussion
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADMIN_DISC, P_EDIT_SYNTHESIS)
-from .idea import Idea, IdeaLink, RootIdea
+from .idea import Idea, IdeaLink, RootIdea, IdeaVisitor
 from ..semantic.namespaces import (
     SIOC, CATALYST, IDEA, ASSEMBL, DCTERMS, QUADNAMES)
 from assembl.views.traversal import AbstractCollectionDefinition
@@ -427,6 +429,11 @@ class Synthesis(ExplicitSubGraphView):
                 new_link.target_ts = idea_copies[link.target_id]
         return frozen_synthesis
 
+    def as_html(self):
+        v = SynthesisHtmlizationVisitor(self)
+        self.discussion.root_idea.visit_ideas_depth_first(v)
+        return v.as_html()
+
     @property
     def is_next_synthesis(self):
         return self.discussion.get_next_synthesis() == self
@@ -442,3 +449,53 @@ class Synthesis(ExplicitSubGraphView):
         return "<Synthesis %s>" % repr(self.subject)
 
     crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
+
+
+class GraphViewIdeaVisitor(IdeaVisitor):
+    def __init__(self, graph_view):
+        self.graph_view = graph_view
+        self.ideas = {idea.base_id: idea for idea in graph_view.get_ideas()}
+
+    def visit_idea(self, idea, level, prev_result):
+        idea = self.ideas.get(idea.base_id, None)
+        if idea is not None:
+            return self.do_visit_idea(idea, level, prev_result)
+
+    @abstractmethod
+    def do_visit_idea(self, idea, level, prev_result):
+        pass
+
+
+class SynthesisHtmlizationVisitor(GraphViewIdeaVisitor):
+    def do_visit_idea(self, idea, level, prev_result):
+        from lxml.html import builder as E
+        root = E.DIV()
+        if idea.long_title:
+            for f in htmlt.fragments_fromstring(idea.long_title):
+                if isinstance(f, (str, unicode)):
+                    f = E.SPAN(f)
+                root.append(f)
+        else:
+            root.append(E.P(idea.short_title))
+        return root
+
+    def end_visit(self, prev_result, child_results):
+        from lxml.html import builder as E
+        if prev_result is None:
+            if not child_results:
+                return None
+            prev_result = E.DIV(E.SPAN('...'))
+        if child_results:
+            prev_result.append(E.UL(*(E.LI(r) for r in child_results)))
+        self.result = prev_result
+        return prev_result
+
+    def as_html(self):
+        from lxml.html import builder as E
+        if not getattr(self, 'result', None):
+            self.result = E.DIV()
+        return htmlt.tostring(E.DIV(*chain(
+            (E.H1(self.graph_view.subject or ''),),
+            htmlt.fragments_fromstring(self.graph_view.introduction or ''),
+            (self.result,),
+            htmlt.fragments_fromstring(self.graph_view.conclusion or ''))))
