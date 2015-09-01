@@ -75,7 +75,7 @@ var NavigationView = AssemblPanel.extend({
       var navigationItemCollections = discussion.getVisualizations();
       if (navigationItemCollections.length > 0) {
         // just use the first one for now.
-        that.visualizationItems.reset(navigationItemCollections[0]);
+        that.visualizationItems.reset(navigationItemCollections[0].models);
         that.num_items += 1;
         that.ui.visualization_tab.show();
         setTimeout(function() {
