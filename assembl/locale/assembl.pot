@@ -106,7 +106,7 @@ msgid "you must <a href='%s'>Sign in</a>"
 msgstr ""
 
 #: assembl/static/js/app/models/discussion.js:66
-msgid "you must Join this discussion"
+msgid "you must join this discussion"
 msgstr ""
 
 #: assembl/static/js/app/models/discussion.js:70

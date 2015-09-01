@@ -114,8 +114,8 @@ msgid "you must <a href='%s'>Sign in</a>"
 msgstr "vous devez <a href='%s'>Vous connecter</a>"
 
 #: assembl/static/js/app/models/discussion.js:66
-msgid "you must Join this discussion"
-msgstr "Vous devez rejoindre cette discussion"
+msgid "you must join this discussion"
+msgstr "vous devez rejoindre cette discussion"
 
 #: assembl/static/js/app/models/discussion.js:70
 #, python-format
@@ -270,7 +270,7 @@ msgstr "«%s» a servi de critère dans le cadre d'un vote"
 #: assembl/static/js/app/models/widget.js:288
 #, python-format
 msgid "You have %s to vote"
-msgstr "vous avez %s pour voter"
+msgstr "Vous avez %s pour voter"
 
 #: assembl/static/js/app/models/widget.js:360
 msgid "Create a creativity session on this idea"

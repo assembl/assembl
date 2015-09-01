@@ -1,6 +1,7 @@
 'use strict';
 
 var Base = require('./base.js'),
+    Jed = require('jed'),
     Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js'),
     i18n = require('../utils/i18n.js'),
@@ -63,7 +64,7 @@ var discussionModel = Base.Model.extend({
         var rolesGrantingPermission = this.getRolesForPermission(permission);
         if (_.size(rolesGrantingPermission) > 0) {
           if (_.contains(rolesGrantingPermission, Roles.PARTICIPANT) && _.contains(this.getRolesForPermission(Permissions.SELF_REGISTER), Roles.AUTHENTICATED)) {
-            retval = i18n.sprintf(i18n.gettext('you must Join this discussion'));
+            retval = i18n.sprintf(i18n.gettext('you must join this discussion'));
           }
           else {
             //TODO:  Handle the case of self_register_req
@@ -81,6 +82,44 @@ var discussionModel = Base.Model.extend({
 
   setUserContributions: function() {
     this.url = Ctx.getApiUrl('posts');
+  },
+  
+  getVisualizations: function() {
+    var jed, settings = this.get('settings'),
+        visualizations = settings.visualizations,
+        navigation_sections = settings.navigation_sections || {},
+        user = Ctx.getCurrentUser(),
+        navigation_item_collections = [];
+    try {
+      jed = new Jed(translations[Ctx.getLocale()]);
+    } catch (e) {
+      // console.error(e);
+      jed = new Jed({});
+    }
+
+    for (var i in navigation_sections) {
+      var navigation_section = navigation_sections[i],
+      permission = navigation_section.requires_permission || Permissions.READ;
+      if (user.can(permission)) {
+        var visualization_items = navigation_section.navigation_content.items;
+        visualization_items = _.filter(visualization_items, function(item) {
+          return user.can(item.requires_permission || Permissions.READ) &&
+          visualizations[item.visualization] !== undefined;
+        });
+        if (visualization_items.length === 0)
+          continue;
+        navigation_item_collections.push(new Base.Collection(
+          _.map(visualization_items, function(item) {
+          var visualization = visualizations[item.visualization];
+          return new Base.Model({
+            "url": visualization.url,
+            "title": jed.gettext(visualization.title),
+            "description": jed.gettext(visualization.description)
+          });
+        })));
+      }
+    }
+    return navigation_item_collections;
   }
 
 });
