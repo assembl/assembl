@@ -187,9 +187,7 @@ var moduleName = 'Analytics_Dispatcher',
           var g = null; //Where Google Analytics would go
           _analytics.registerObserver(g);
         }
-        _analytics.initialize({
-          piwik_customVariableSize: globalAnalytics.piwik.customVariableSize
-        });
+        _analytics.initialize();
       }
       return _analytics;
     }
