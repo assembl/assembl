@@ -99,11 +99,9 @@ def get_default_context(request):
     countries_for_locales = defaultdict(set)
     for locale in locales:
         countries_for_locales[get_language(locale)].add(get_country(locale))
-    print "countries_for_locales", countries_for_locales
     show_locale_country = {
         locale: (len(countries_for_locales[get_language(locale)]) > 1)
         for locale in locales}
-    print "show_lang_country", show_locale_country
     jedfilename = os.path.join(
             os.path.dirname(__file__), '..', 'locale',
             localizer.locale_name, 'LC_MESSAGES', 'assembl.jed.json')
