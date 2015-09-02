@@ -8,8 +8,74 @@ $color-3: #e4655f; // Red
 $color-4: #e6e6e6; // light grey
 $color-5: #ffffff; // white
 $color-6: #A846FE; // purple
-
 $color-7: #484848; // grey
+
+
+//colors.  Mostly for styleguide, you should not normally use these in the DOM
+.bg-purple {
+    background-color: $purple;
+}
+
+.bg-purple1 {
+    background-color: $purple1;
+}
+
+.bg-purple2 {
+    background-color: $purple2;
+}
+
+.bg-purple3 {
+    background-color: $purple3;
+}
+
+.bg-gray {
+    background-color: $gray;
+}
+
+.bg-gray1 {
+    background-color: $gray1;
+}
+
+.bg-gray2 {
+    background-color: $gray2;
+}
+
+.bg-gray3 {
+    background-color: $gray3;
+}
+
+.bg-gray4 {
+    background-color: $gray4;
+}
+
+.bg-white {
+    background-color: $white;
+}
+
+.bg-orange {
+    background-color: $orange;
+}
+
+.bg-orange1 {
+    background-color: $orange1;
+}
+
+.bg-orange2 {
+    background-color: $orange2;
+}
+
+.bg-black {
+    background-color: $black;
+}
+
+.bg-yellow {
+    background-color: $yellow;
+}
+
+.bg-blue {
+    background-color: $blue;
+}
+
 
 // additional colors
 
@@ -45,6 +111,10 @@ xPatterns
     background: $color-5;
     box-shadow: 0 1px 1px rgba(#000, .05);
     padding: 6px;
+}
+
+.cd-box-radius {
+
 }
 
 /* --------------------------------
