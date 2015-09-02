@@ -276,6 +276,13 @@ voteApp.controller('indexCtl',
       return $scope.myVotes;
     };
 
+    $scope.onClickDoNothing = function(){
+      // prevent the other click() function to get called
+      d3.event.stopPropagation();
+      
+      // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
+    }
+
     $scope.buildValidatedVoteFormat = function(criterion_id, vote_value){
       // determine vote type
 
@@ -545,6 +552,7 @@ voteApp.controller('indexCtl',
         padding = "padding" in padding ? config.padding : 60;
       var colorCursor = "colorCursor" in criterion ? criterion.colorCursor : "#9013FE";
       var colorCursorNoVoteYet = "#ccc";
+      var showCriterionDescription = "showCriterionDescription" in config ? config.showCriterionDescription : "icon";
       
       // create the graph, as a SVG in the d3 container div
       var svg = destination
@@ -687,25 +695,18 @@ voteApp.controller('indexCtl',
 
       // make the axis label interactive (mouse hover) to show the description text of the criterion
       // possibility of improvement: maybe instead of an HTML "title" attribute, we could use tipsy, as on http://bl.ocks.org/ilyabo/1373263
-      if (!config.showCriterionDescription || config.showCriterionDescription == "tooltip")
+      if (showCriterionDescription == "tooltip")
       {
         if (criterion.description && criterion.description.length > 0)
         {
-          var f = function() {
-            // prevent the other click() function to get called
-            d3.event.stopPropagation();
-            
-            // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
-          }
-
           axisLabel
             .style("cursor", "help")
             .attr("title", criterion.description)
-            .on("click", f)
+            .on("click", $scope.onClickDoNothing)
           ;
         }
       }
-      else if (config.showCriterionDescription && config.showCriterionDescription == "text")
+      else if (showCriterionDescription == "text")
       {
         if (criterion.description && criterion.description.length > 0)
         {
@@ -727,9 +728,44 @@ voteApp.controller('indexCtl',
           elParent.append(node);
         }
       }
+      else if ( (!showCriterionDescription || showCriterionDescription == "icon") && (criterion.description || criterion.descriptionMin || criterion.descriptionMax) )
+      {
+        var icon = g.append("image");
+
+        var tip = d3.tip()
+          .attr('class', 'd3-tip')
+          .offset([-10, 0])
+          .html(function(d) {
+            var str = "<span class='text'>";
+            if ( criterion.description ){
+              str += criterion.description;
+            }
+            if ( criterion.descriptionMin ){
+              str += "<br/>Min: " + criterion.descriptionMin;
+            }
+            if ( criterion.descriptionMax ){
+              str += "<br/>Max: " + criterion.descriptionMax;
+            }
+            str += "</span>";
+            return str;
+          });
+
+        svg.call(tip);
+
+        var icon_size = 22;
+        icon.attr("class", "question-mark-icon")
+          .attr("y", padding * 0.7 - icon_size)
+          .attr("x", xPosCenter - icon_size/2)
+          .attr("xlink:href", "app/images/question_mark_icon_with_alpha.png")
+          .attr("width", icon_size+"px")
+          .attr("height", icon_size+"px")
+          .on('mouseover', tip.show)
+          .on('mouseout', tip.hide)
+          .on('click', $scope.onClickDoNothing);
+      }
 
       // show descriptions of the minimum and maximum values
-      if (criterion.descriptionMin)
+      if ( (showCriterionDescription == "tooltip" || showCriterionDescription == "text") && criterion.descriptionMin )
       {
         g.append("text")
           .attr("y", height - padding * 0.7)
@@ -738,7 +774,7 @@ voteApp.controller('indexCtl',
           .text(criterion.descriptionMin);
       }
 
-      if (criterion.descriptionMax)
+      if ( (showCriterionDescription == "tooltip" || showCriterionDescription == "text") && criterion.descriptionMax )
       {
         g.append("text")
           .attr("y", padding * 0.7)
@@ -746,6 +782,8 @@ voteApp.controller('indexCtl',
           .style("text-anchor", "middle")
           .text(criterion.descriptionMax);
       }
+
+      
 
       // draw the cursor
       var currentCursorColor = hasVoted ? colorCursor : colorCursorNoVoteYet;
@@ -812,6 +850,11 @@ voteApp.controller('indexCtl',
       target_id = target_id || null;
       var colorCursor = "colorCursor" in criteria[0] ? criteria[0].colorCursor : "#9013FE";
       var colorCursorNoVoteYet = "#ccc";
+      var showCriterionDescription = "showCriterionDescription" in config ? config.showCriterionDescription : "icon";
+
+      var padding = "padding" in item_data ? item_data.padding : null;
+      if ( !padding )
+        padding = "padding" in padding ? config.padding : 60;
 
       // create the graph, as a SVG in the d3 container div
       var svg = destination
@@ -846,12 +889,12 @@ voteApp.controller('indexCtl',
       // create X and Y scales
       var xScale = d3.scale.linear()
         .domain([criterionXValueMin, criterionXValueMax])
-        .range([config.padding, item_data.width - config.padding])
+        .range([padding, item_data.width - padding])
         .clamp(true);
 
       var yScale = d3.scale.linear()
         .domain([criterionYValueMin, criterionYValueMax])
-        .range([item_data.height - config.padding, config.padding])
+        .range([item_data.height - padding, padding])
         .clamp(true);
 
       // create X and Y axes using their scales
@@ -943,20 +986,19 @@ voteApp.controller('indexCtl',
       // show X axis
       g.append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(0," + (item_data.height - config.padding) + ")")
+        .attr("transform", "translate(0," + (item_data.height - padding) + ")")
         .call(xAxis);
 
       // show Y axis
       g.append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(" + config.padding + ",0)")
+        .attr("transform", "translate(" + padding + ",0)")
         .call(yAxis);
 
       // show X axis label
       var xAxisLabel = g.append("text")
-
         //.attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
-        .attr("y", (item_data.height - config.padding * 0.45))
+        .attr("y", (item_data.height - padding * 0.45))
         .attr("x", (item_data.width / 2))
         .attr("dy", "1em")
         .attr("class", "axis-label")
@@ -967,25 +1009,19 @@ voteApp.controller('indexCtl',
         .attr("transform", "rotate(-90)")
         .attr("y", (0))
         .attr("x", (0 - item_data.height / 2))
-        .attr("dy", config.padding / 3 + "px")
+        .attr("dy", padding / 3 + "px")
         .attr("class", "axis-label")
         .text(criteria[1].name);
 
       // make the axis labels interactive (mouse hover) to show the description text of the criterion
-      if (!config.showCriterionDescription || config.showCriterionDescription == "tooltip")
+      if (config.showCriterionDescription == "tooltip")
       {
-        var onClickDoNothing = function() {
-          // prevent the other click() function to get called
-          d3.event.stopPropagation();
-          
-          // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
-        };
         if (criteria[0].description && criteria[0].description.length > 0)
         {
           xAxisLabel
             .style("cursor", "help")
             .attr("title", criteria[0].description)
-            .on("click", onClickDoNothing)
+            .on("click", $scope.onClickDoNothing)
           ;
         }
 
@@ -994,11 +1030,11 @@ voteApp.controller('indexCtl',
           yAxisLabel
             .style("cursor", "help")
             .attr("title", criteria[1].description)
-            .on("click", onClickDoNothing)
+            .on("click", $scope.onClickDoNothing)
           ;
         }
       }
-      else if (config.showCriterionDescription && config.showCriterionDescription == "text")
+      else if (showCriterionDescription == "text")
       {
         for (var i = 0; i < 2; ++i)
         {
@@ -1017,7 +1053,7 @@ voteApp.controller('indexCtl',
 
             $(node).css("position", "absolute");
             $(node).css("width", descriptionWidth + "px");
-            $(node).css("top", (elOrigin.offset().top + (item_data.height - config.padding * 0.25)) + "px");
+            $(node).css("top", (elOrigin.offset().top + (item_data.height - padding * 0.25)) + "px");
             $(node).css("left", (elOrigin.offset().left + xPosCenter - descriptionWidth / 2) + "px");
             $(node).css("text-align", "center");
 
@@ -1032,49 +1068,103 @@ voteApp.controller('indexCtl',
           }
         }
       }
-
-      // show descriptions of the minimum and maximum values on X axis
-      if (criteria[0].descriptionMin && criteria[0].descriptionMin.length > 0)
+      else if ( showCriterionDescription == "icon" )
       {
-        g.append("text")
-          .attr("y", (item_data.height - config.padding * 0.6))
-          .attr("x", (item_data.width * 0.2))
-          .attr("dy", "1em")
-          .style("text-anchor", "middle")
-          .text(criteria[0].descriptionMin);
+        var fctTipContent = function(criterion){
+          var str = "<span class='text'>";
+          if ( criterion.description ){
+            str += criterion.description;
+          }
+          if ( criterion.descriptionMin ){
+            str += "<br/>Min: " + criterion.descriptionMin;
+          }
+          if ( criterion.descriptionMax ){
+            str += "<br/>Max: " + criterion.descriptionMax;
+          }
+          str += "</span>";
+          return str;
+        };
+
+        for ( var i = 0; i < 2; ++i)
+        {
+          if ( criteria[i].description || criteria[i].descriptionMin || criteria[i].descriptionMax )
+          {
+            var icon = g.append("image");
+
+            var tip = d3.tip()
+              .attr('class', 'd3-tip')
+              .offset([-10, 0])
+              .html(fctTipContent(criteria[i]));
+
+            svg.call(tip);
+
+            var icon_size = 22;
+            icon.attr("class", "question-mark-icon")
+              .attr("xlink:href", "app/images/question_mark_icon_with_alpha.png")
+              .attr("width", icon_size+"px")
+              .attr("height", icon_size+"px")
+              .on('mouseover', tip.show)
+              .on('mouseout', tip.hide)
+              .on('click', $scope.onClickDoNothing);
+
+            if ( i == 0 ) // criterion on x axis
+            {
+              icon.attr("y", (item_data.height - config.padding * 0.6))
+                .attr("x", (item_data.width * 0.8 - icon_size/2));
+            } else if ( i == 1 ) // criterion on y axis
+            {
+              icon.attr("y", (item_data.width * 0.2 - icon_size/2))
+                .attr("x", padding/3 - icon_size/2);
+            }
+          }
+        }
       }
 
-      if (criteria[0].descriptionMax && criteria[0].descriptionMax.length > 0)
-      {
-        g.append("text")
-          .attr("y", (item_data.height - config.padding * 0.6))
-          .attr("x", (item_data.width * 0.8))
-          .attr("dy", "1em")
-          .style("text-anchor", "middle")
-          .text(criteria[0].descriptionMax);
-      }
+      if ( showCriterionDescription == "text" || showCriterionDescription == "tooltip" ){
 
-      // show descriptions of the minimum and maximum values on Y axis
-      if (criteria[1].descriptionMin && criteria[1].descriptionMin.length > 0)
-      {
-        g.append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", (0))
-          .attr("x", (0 - item_data.height * 0.8))
-          .attr("dy", (config.padding * 0.5) + "px")
-          .style("text-anchor", "middle")
-          .text(criteria[1].descriptionMin);
-      }
+        // show descriptions of the minimum and maximum values on X axis
+        if (criteria[0].descriptionMin && criteria[0].descriptionMin.length > 0)
+        {
+          g.append("text")
+            .attr("y", (item_data.height - config.padding * 0.6))
+            .attr("x", (item_data.width * 0.2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text(criteria[0].descriptionMin);
+        }
 
-      if (criteria[1].descriptionMax && criteria[1].descriptionMax.length > 0)
-      {
-        g.append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", (0))
-          .attr("x", (0 - item_data.height * 0.2))
-          .attr("dy", (config.padding * 0.5) + "px")
-          .style("text-anchor", "middle")
-          .text(criteria[1].descriptionMax);
+        if (criteria[0].descriptionMax && criteria[0].descriptionMax.length > 0)
+        {
+          g.append("text")
+            .attr("y", (item_data.height - config.padding * 0.6))
+            .attr("x", (item_data.width * 0.8))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text(criteria[0].descriptionMax);
+        }
+
+        // show descriptions of the minimum and maximum values on Y axis
+        if (criteria[1].descriptionMin && criteria[1].descriptionMin.length > 0)
+        {
+          g.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", (0))
+            .attr("x", (0 - item_data.height * 0.8))
+            .attr("dy", (config.padding * 0.5) + "px")
+            .style("text-anchor", "middle")
+            .text(criteria[1].descriptionMin);
+        }
+
+        if (criteria[1].descriptionMax && criteria[1].descriptionMax.length > 0)
+        {
+          g.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", (0))
+            .attr("x", (0 - item_data.height * 0.2))
+            .attr("dy", (config.padding * 0.5) + "px")
+            .style("text-anchor", "middle")
+            .text(criteria[1].descriptionMax);
+        }
       }
 
       var currentCursorColor = hasVoted ? colorCursor : colorCursorNoVoteYet;

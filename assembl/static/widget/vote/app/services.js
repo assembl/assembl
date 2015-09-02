@@ -75,11 +75,12 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       "label": "Show criterion description",
       "type": "select",
       "description": "Different ways of displaying the description associated to each criterion",
-      "default":"tooltip",
+      "default":"icon",
       "options": {
         "false": "false",
         "tooltip": "tooltip",
-        "text": "text"
+        "text": "text",
+        "icon": "icon"
       }
     }
   ];

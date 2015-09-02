@@ -43,6 +43,46 @@ body {
 }
 
 
+/* d3-tip: D3 tooltip plugin */
+
+.d3-tip {
+  line-height: 1;
+  /*font-weight: bold;*/
+  padding: 12px;
+  background: #F6F6F6; /* was rgba(0, 0, 0, 0.8) */
+  color: #fff;
+  border-radius: 2px;
+  max-width: 175px; /* cannot be too wide otherwise 2_axes y tooltip does not show completely :/ */
+}
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  
+  color: #F6F6F6; /* was rgba(0, 0, 0, 0.8) */
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.d3-tip .text {
+  color: #333333;
+}
+
+.d3-tip .data {
+  color: #9013FE;
+}
+
+
 /* graphical vote representation */
 
 .axis {
@@ -99,6 +139,10 @@ section.vote-question-item {
   margin-bottom: 15px;
 }
 
+.vote-question-item-type-2_axes .inline-vote-for-a-target {
+  margin-left: 50px; /* needed for 2_axes y tooltip to show completely :/ */
+}
+
 .inline-vote-for-a-target--title {
   font-style: italic;
   font-weight: bold;
@@ -129,4 +173,11 @@ section.vote-question-item {
 
 .vote-question-item-type-radio .inline-vote-for-a-target {
   width: 300px;
+}
+
+.question-mark-icon {
+  cursor: help;
+  /*background-image: ("app/images/question_mark_icon_with_alpha.png"); => is xlink:href in SVG and cannot be set via CSS */
+  width: 22px;
+  height: 22px;
 }
