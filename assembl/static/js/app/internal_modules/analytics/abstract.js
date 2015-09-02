@@ -349,12 +349,33 @@ var moduleName = 'Analytics_Abstract',
        */
       ENTER_POST_VIA_NOTIFICATION: {action: 'ONBOARDING', category: 'NOTIFICATION', eventName: 'ENTER_ASSEMBL_OPEN_POST'},
       ENTER_POST_VIA_SHARE: {action: 'ONBOARDING', category: 'SHARED_URL', eventName: 'ENTER_ASSEMBL_OPEN_POST'},
-      ENTER_IDEA_VIA_SHARE: {action: 'ONBOARDING', category: 'SHARED_URL', eventName: 'ENTER_ASSEMBL_OPEN_IDEA'}
+      ENTER_IDEA_VIA_SHARE: {action: 'ONBOARDING', category: 'SHARED_URL', eventName: 'ENTER_ASSEMBL_OPEN_IDEA'},
 
-      /*
-      JOIN_GROUP:'JOIN_GROUP',
-      JOIN_GROUP_REFUSED: 'JOIN_GROUP_REFUSED',
-      */
+      /**
+       * Event fired when user clicks on the 'join discussion' button, signalling intent to join the group
+       * assembl/assembl/static/js/app/views/navBar.js
+       * assembl/static/js/app/views/user/userNotificationSubscriptions.js
+       */
+      JOIN_DISCUSSION_CLICK: {action: 'ONBOARDING', category: 'NOTIFICATION', eventName: 'JOIN_DISCUSSION_CLICKED'},
+
+      /**
+       * Event fired when the user cancels the notification subscription, including cancel, esc, clicking outside the nofication popin. 
+       * assembl/assembl/static/js/app/views/navBar.js
+       */
+      JOIN_DISCUSSION_REFUSED: {action: 'ONBOARDING', category: 'NOTIFICATION', eventName: 'JOIN_DISCUSSION_REFUSED'},
+      
+      /**
+       * Event fired when the user has successfully joined the group (ie added the userRole.PARTICIPANT to his/her list of roles)
+       * assembl/static/js/app/views/navBar.js
+       * assembl/static/js/app/views/user/userNotificationSubscriptions.js
+       */
+      JOIN_DISCUSSION: {action: 'ONBOARDING', category: 'NOTIFICATION', eventName: 'JOIN_DISCUSSION'},
+      
+      /**
+       * Event fired when the user has successfully left the group (ie removed the userRole.PARTICIPANT from his/her list of roles)
+       * assembl/static/js/app/models/roles.js
+       */
+      LEAVE_DISCUSSION: {action: 'ONBOARDING', category: 'NOTIFICATION', eventName: 'LEAVE_DISCUSSION'}
   };
 
   /**
@@ -427,6 +448,19 @@ var moduleName = 'Analytics_Abstract',
        * assembl/templates/login.jinja2
        */      
       'REGISTER': 'REGISTER',
+
+
+      /**
+       * The notification modal that pops up when joining the discussion
+       * assembl/static/js/app/views/navBar.js
+       */   
+      'NOTIFICATION': 'NOTIFICATION',
+
+      /**
+       * The notification settings page
+       * assembl/static/js/app/views/user/userNotificationSubscriptions.js
+       */   
+      'NOTIFICATION_SETTINGS': 'NOTIFICATION_SETTINGS',
 
       //NOT YET IMPLEMENTED
       'MESSAGE': 'MESSAGE', //Context of a specific message.  To be implemented in showMessageById

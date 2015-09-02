@@ -29,6 +29,13 @@ var moduleName = 'Analytics_Dispatcher',
     }
     Wrapper.call(this, arguments);  
     this._observers = [];
+
+    /**
+     * Update this to keep track of what the current virtual page is.
+     * Extremely useful for defining pages in modals, and knowing what the next virtual page will
+     * be when Modal is closed. 
+     */    
+    this.currentPage = null;
   };
 
   AnalyticsDispatcher.prototype = Object.create(Wrapper.prototype);
@@ -84,9 +91,18 @@ var moduleName = 'Analytics_Dispatcher',
 
     changeCurrentPage: function(page, options) {
       if (!(page in this.pages)) {
-        throw new Error("Unknown page definition: " + page);
+        if (options && _.has(options, 'bypass' && options['bypass']) ){
+          this.currentPage = null;
+          this.notify('changeCurrentPage', ['', {}]); //go back to root
+        }
+        else {
+          throw new Error("Unknown page definition: " + page);
+        }
       }
-      this.notify('changeCurrentPage', arguments);
+      else {
+        this.currentPage = page;
+        this.notify('changeCurrentPage', arguments);
+      }
     },
 
     trackEvent: function(eventDefinition, value, options) {
@@ -161,6 +177,10 @@ var moduleName = 'Analytics_Dispatcher',
 
     trackDomNodeInteraction: function(domNode, contentInteraction){
       this.notify('trackDomNodeInteraction', arguments);
+    },
+
+    getCurrentPage: function(){
+      return this.currentPage;
     }
   });
 
