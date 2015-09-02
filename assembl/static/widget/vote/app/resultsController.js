@@ -758,13 +758,24 @@ voteApp.controller('resultsCtl',
       });
 
 
+      var strItemTooltipFrequency = "";
+      $translate('voteResultsTooltipFrequency').then(function(translation) {
+        strItemTooltipFrequency = translation;
+      });
 
       var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
+          var percent = (d.frequency * 100).toFixed(2);
+          // replacing by hand, because the use of proper i18n with $translate is really too complicated in a function which needs to return now instead of a promise
+          var str = strItemTooltipFrequency.replace("[[percent]]", percent);
+          str = str.replace("[[votes]]", d.votes);
+          /*
           return "<strong>"+strTooltipContentFrequency+"</strong> <span style='color:red'>" + d.frequency + "</span>"
             + "<br/>" + "<strong>"+strTooltipContentVotes+"</strong> <span style='color:red'>" + d.votes + "</span>";
+          */
+          return str;
         });
 
       var vote_spec_label = $scope.getVoteSpecLabelByURI(vote_spec_uri) || vote_spec_uri;

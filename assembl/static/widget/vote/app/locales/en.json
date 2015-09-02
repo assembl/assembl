@@ -14,6 +14,7 @@
     "voteResultsStandardDeviation":"Standard deviation:",
     "voteResultsAxisFrequency":"Frequency",
     "voteResultsForTarget":"Results for idea",
+    "voteResultsTooltipFrequency":"<span class='data'>[[percent]]%</span><span class='text'> of participants have chosen this option, this corresponds to </span><span class='data'>[[votes]]</span><span class='text'> votes</span>",
 
     "historyBack":"Back",
     "voteSubmit":"Submit your vote",
