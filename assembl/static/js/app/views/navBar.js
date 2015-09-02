@@ -15,7 +15,8 @@ var Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js'),
     Roles = require('../utils/roles.js'),
     Widget = require('../models/widget.js'),
-    WidgetLinks = require('./widgetLinks.js');
+    WidgetLinks = require('./widgetLinks.js'),
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var navBarLeft = Marionette.LayoutView.extend({
   template: '#tmpl-navBarLeft',
@@ -134,10 +135,14 @@ var navBarRight = Marionette.ItemView.extend({
     if (!this._store.getItem('needJoinDiscussion')) {
       this._store.setItem('needJoinDiscussion', true);
     }
+    var analytics = Analytics.getInstance();
+    analytics.trackEvent(analytics.events.JOIN_DISCUSSION_CLICK);
   },
 
   joinPopin: function() {
+    var analytics = Analytics.getInstance();
     Assembl.vent.trigger('navBar:joinDiscussion');
+    analytics.trackEvent(analytics.events.JOIN_DISCUSSION_CLICK);
   }
 });
 
@@ -373,11 +378,16 @@ var navBar = Marionette.LayoutView.extend({
                 initialize: function() {
                   var that = this;
                   this.$('.bbm-modal').addClass('popin');
+                  var analytics = Analytics.getInstance(),
+                      previousPage = analytics.getCurrentPage();
+
+                  this.returningPage = previousPage;
+                  analytics.changeCurrentPage(analytics.pages.NOTIFICATION);
                 },
-                events: {
-                  'click .js_subscribe': 'subscription',
-                  'click .js_close': 'closeModal'
-                },
+                // events: {
+                //   'click .js_subscribe': 'subscription',
+                //   'click .js_close': 'closeModal'
+                // },
                 serializeData: function() {
                   return {
                     i18n: i18n,
@@ -396,6 +406,9 @@ var navBar = Marionette.LayoutView.extend({
                     });
                     LocalRolesUser.save(null, {
                       success: function(model, resp) {
+                        var analytics = Analytics.getInstance();
+                        analytics.trackEvent(analytics.events.JOIN_DISCUSSION);
+
                         // TODO: Is there a simpler way to do this? MAP
                         self.navBarRight.currentView.ui.joinDiscussion.css('visibility', 'hidden');
                         self._store.removeItem('needJoinDiscussion');
@@ -417,6 +430,9 @@ var navBar = Marionette.LayoutView.extend({
 
                 cancel: function() {
                   self._store.removeItem('needJoinDiscussion');
+                  var analytics = Analytics.getInstance();
+                  analytics.trackEvent(analytics.events.JOIN_DISCUSSION_REFUSED);
+                  analytics.changeCurrentPage(this.returningPage, {bypass: true}); //if page is null, go back to / page
                 }
               });
               Assembl.slider.show(new Modal());
