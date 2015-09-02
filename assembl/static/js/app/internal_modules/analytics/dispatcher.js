@@ -91,9 +91,9 @@ var moduleName = 'Analytics_Dispatcher',
 
     changeCurrentPage: function(page, options) {
       if (!(page in this.pages)) {
-        if (options && _.has(options, 'bypass' && options['bypass']) ){
+        if (options && _.has(options,'default') && options['default']){
           this.currentPage = null;
-          this.notify('changeCurrentPage', ['', {}]); //go back to root
+          this.notify('changeCurrentPage', [window.location.href, {}]); //go back to root
         }
         else {
           throw new Error("Unknown page definition: " + page);

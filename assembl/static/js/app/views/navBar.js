@@ -320,7 +320,7 @@ var navBar = Marionette.LayoutView.extend({
                   self._store.removeItem('needJoinDiscussion');
                   var analytics = Analytics.getInstance();
                   analytics.trackEvent(analytics.events.JOIN_DISCUSSION_REFUSED);
-                  analytics.changeCurrentPage(this.returningPage, {bypass: true}); //if page is null, go back to / page
+                  analytics.changeCurrentPage(this.returningPage, {default: true}); //if page is null, go back to / page
                 }
               });
               Assembl.slider.show(new Modal());
