@@ -9,6 +9,7 @@ var $ = require('../shims/jquery.js'),
     Roles =  require('../utils/roles.js'),
     i18n =  require('../utils/i18n.js'),
     Raven = require('raven-js'),
+    BrowserDetect = require('../utils/browser-detect.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 require('linkifyjs');
 require('linkifyjs/jquery')($);
@@ -675,7 +676,11 @@ Context.prototype = {
     if (ev.dataTransfer) {
       ev.dataTransfer.dropEffect = 'all';
       ev.dataTransfer.effectAllowed = 'copy';
-      ev.dataTransfer.setData("text/plain", text);
+      if (BrowserDetect.browser == "Explorer") {
+        ev.dataTransfer.setData("Text", text);
+      } else {
+        ev.dataTransfer.setData("text/plain", text);
+      }
       ev.dataTransfer.setDragImage(this.dragbox, 10, 10);
     }
 
