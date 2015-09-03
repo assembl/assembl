@@ -197,13 +197,21 @@ var SynthesisPanel = AssemblPanel.extend({
 
           var introductionField = new CKEditorField({
             model: that.model,
-            modelProp: 'introduction'
+            modelProp: 'introduction',
+            placeholder: i18n.gettext("You can add an introduction to your synthesis here..."),
+            showPlaceholderOnEditIfEmpty: true,
+            autosave: true,
+            hideButton: true
           });
           introductionField.renderTo(that.$('.synthesisPanel-introduction'));
 
           var conclusionField = new CKEditorField({
             model: that.model,
-            modelProp: 'conclusion'
+            modelProp: 'conclusion',
+            placeholder: i18n.gettext("You can add a conclusion to your synthesis here..."),
+            showPlaceholderOnEditIfEmpty: true,
+            autosave: true,
+            hideButton: true
           });
           conclusionField.renderTo(that.$('.synthesisPanel-conclusion'));
         }

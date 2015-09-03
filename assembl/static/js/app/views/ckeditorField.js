@@ -70,7 +70,7 @@ var cKEditorField = Marionette.ItemView.extend({
   },
 
   serializeData: function() {
-    var textToShow = (this.showPlaceholderOnEditIfEmpty) ? this.placeholder : this.model.get(this.modelProp);
+    var textToShow = (this.showPlaceholderOnEditIfEmpty && !this.model.get(this.modelProp)) ? this.placeholder : this.model.get(this.modelProp);
 
     return {
       topId: this.topId,
@@ -164,7 +164,7 @@ var cKEditorField = Marionette.ItemView.extend({
 
     var text = this.ckInstance.getData();
     text = $.trim(text);
-    if (text != this.placeholder || text == '') {
+    if (Ctx.stripHtml(text) != Ctx.stripHtml(this.placeholder) || Ctx.stripHtml(text) == '') {
       /* We never save placeholder values to the model */
       if (this.model.get(this.modelProp) != text) {
         /* Nor save to the database and fire change events
