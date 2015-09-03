@@ -11,6 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 3
 
+   INSTALL
    backups
    permissions_and_roles
    localization
