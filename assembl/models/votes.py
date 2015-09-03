@@ -41,7 +41,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     "Used by a voting widget"
 
     criterion_idea_id = Column(Integer, ForeignKey(
-        Idea.id, ondelete="SET NULL", onupdate="CASCADE"),
+        Idea.id),  # ondelete="SET NULL", onupdate="CASCADE"), WIP
         nullable=True)
     "Optional: the specification may be tied to an idea"
 
@@ -438,7 +438,7 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
 
     criterion_id = Column(
         Integer,
-        ForeignKey(Idea.id, ondelete="SET NULL", onupdate="CASCADE"),
+        ForeignKey(Idea.id),  # ondelete="SET NULL", onupdate="CASCADE"), WIP
         nullable=True,
         info={'rdf': QuadMapPatternS(None, VOTE.voting_criterion)}
     )
