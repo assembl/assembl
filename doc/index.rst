@@ -18,7 +18,7 @@ Contents:
    analytics/events
 
    services
-   modules
+   autodoc/modules
 
 
 Indices and tables
