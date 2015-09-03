@@ -90,7 +90,7 @@ class ZMQRouter(SockJSConnection):
     def do_close(self):
         self.close()
         self.socket = None
-        if self.loop:
+        if getattr(self, "loop", None):
             self.loop.stop_on_recv()
             self.loop.close()
             self.loop = None
