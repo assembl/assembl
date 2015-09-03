@@ -1222,9 +1222,8 @@ Context.prototype = {
         window.localStorage.removeItem('simpleInterfacegroupItems');
         window.localStorage.removeItem('composing_messages');
       }
-    } else {
-      window.localStorage.setItem('lastCurrentUser', this.currentUser.get('@id'));
     }
+    window.localStorage.setItem('lastCurrentUser', this.currentUser.get('@id'));
 
   },
 
