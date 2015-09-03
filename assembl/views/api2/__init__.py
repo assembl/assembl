@@ -48,6 +48,7 @@ from pyramid.response import Response
 from pyramid.settings import asbool
 from simplejson import dumps
 
+from assembl.lib.sqla import ObjectNotUniqueError
 from ..traversal import (
     InstanceContext, CollectionContext, ClassContext, Api2Context)
 from assembl.auth import (
@@ -57,6 +58,7 @@ from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
     User, Discussion, TombstonableMixin)
 from assembl.lib.decl_enums import DeclEnumType
+from .. import JSONError
 
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
@@ -353,6 +355,8 @@ def class_add(request):
         typename = cls.external_typename()
     try:
         instances = ctx.create_object(typename, None, user_id, **args)
+    except ObjectNotUniqueError as e:
+        raise JSONError(409, str(e))
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:
