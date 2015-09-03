@@ -812,50 +812,6 @@ Context.prototype = {
 
     return null;
   },
-
-  /**
-   * Shows the context menu given the options
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Object} scope The scope where the functions will be executed
-   * @param {Object<string:function>} items The items on the context menu
-   */
-   
-  //FIXME: this method never use in app
-  /*showContextMenu: function(x, y, scope, items){
-   var menu_width = 150;
-
-
-   this.hideContextMenu();
-
-   var menu = $('<div>').addClass('contextmenu');
-
-   // Adjusting position
-   if( (x + menu_width) > (window.innerWidth - 50) ){
-   x = window.innerWidth - menu_width - 10;
-   }
-
-   menu.css({'top': y, 'left': x});
-
-   _.each(items, function(func, text){
-   var item = $('<a>').addClass('contextmenu-item').text(text);
-   item.on('click', func.bind(scope) );
-   menu.append( item );
-   });
-
-   $(document.body).append( menu );
-   window.setTimeout(function(){
-   $(document).on("click", this.hideContextMenu);
-   });
-
-   // Adjusting menu position
-   var menuY = menu.height() + y,
-   maxY = window.innerHeight - 50;
-
-   if( menuY >= maxY ){
-   menu.css({'top': maxY - menu.height() });
-   }
-   },*/
    
   /**
    * Shows the segment source in the better way related to the source
