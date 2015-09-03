@@ -1521,15 +1521,17 @@ voteApp.controller('indexCtl',
               var target_title_holder = $("<div class='inline-vote-for-a-target--title' />");
               inline_vote_holder.append(target_title_holder);
               target_title_holder.text(target_id);
+              target_title_holder.attr("data-target-id", target_id);
               if ( target_id in $scope.targets_promises ){
                 $.when($scope.targets_promises[target_id]).done(function(data){
                   if ( "shortTitle" in data ){
                     target_title_holder.text(data.shortTitle);
                     if ( "definition" in data && data.definition.length ){
-                      target_title_holder.attr("title", data.definition); // TODO: but this is HTML :/
-                      //for debug: target_title_holder.attr("title", target_id);
-                    } 
-                    
+                      var icon = $("<i>");
+                      icon.addClass("question-mark-icon-small");
+                      icon.attr("title", AssemblToolsService.stripHtml(data.definition)); // idea's definition field contains HTML
+                      target_title_holder.append(icon);
+                    }
                   } else {
                     console.log("error: idea ", target_id, "has no shortTitle property");
                   }
