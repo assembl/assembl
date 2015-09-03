@@ -16,3 +16,7 @@
 #step_criteria_groups_and_appearance span.with-title {
   border-bottom: 1px dotted #666;
 }
+
+#admin li {
+	margin-bottom: 5px;
+}

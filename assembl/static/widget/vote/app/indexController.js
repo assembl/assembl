@@ -148,7 +148,7 @@ voteApp.controller('indexCtl',
           var promise_generator = function(){
             return $.ajax(AssemblToolsService.resourceToUrl(target));
           };
-          $scope.targets_promises[target] = $scope.afterDelayPromiseGenerator(targetIndex*300, promise_generator);
+          $scope.targets_promises[target] = AssemblToolsService.afterDelayPromiseGenerator(targetIndex*300, promise_generator);
         });
       }
 
@@ -348,24 +348,6 @@ voteApp.controller('indexCtl',
       return null;
     };
 
-    $scope.delayPromiseGenerator = function(time) {
-      var defer = new $.Deferred();
-      setTimeout(function () {
-        defer.resolve();
-      }, time);
-      return defer.promise();
-    };
-
-    $scope.afterDelayPromiseGenerator = function(time, promise_generator){
-      var defer = new $.Deferred();
-      var delayPromise = $scope.delayPromiseGenerator(time);
-      delayPromise.then(function(){
-        var executedPromise = promise_generator();
-        executedPromise.then(defer.resolve, defer.reject);
-      }, defer.reject);
-      return defer.promise();
-    };
-
     $scope.submitVote = function(votes_container, result_holder) {
       console.log("submitVote(): ", votes_container, result_holder);
       var votes_to_submit = $scope.computeMyVotes(votes_container);
@@ -430,7 +412,7 @@ voteApp.controller('indexCtl',
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8' // or maybe: 'Content-Type': 'application/json'
           });
         };
-        var promise = $scope.afterDelayPromiseGenerator(delay, promise_generator);
+        var promise = AssemblToolsService.afterDelayPromiseGenerator(delay, promise_generator);
         return promise;
       };
 

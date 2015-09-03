@@ -259,7 +259,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     }
   };
   
-    $scope.moveUnknownProperties = function(object, known_properties, target_property) {
+  $scope.moveUnknownProperties = function(object, known_properties, target_property) {
     for (var property in object) {
       if (object.hasOwnProperty(property)) {
         if (known_properties.indexOf(property) == -1) {
@@ -276,7 +276,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     return object;
   };
 
-    $scope.ensurePropertiesTypes = function(object, fct_get_type) {
+  $scope.ensurePropertiesTypes = function(object, fct_get_type) {
     for (var property in object) {
       if (object.hasOwnProperty(property)) {
         var object_type = "@type" in object ? object["@type"] : null;
@@ -296,12 +296,12 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     return object;
   };
 
-    /*
-    This method iterates over vote_specifications and for each element, looks for an id.
-    If no id, POST the VoteSpec, get its new id, and set it in the id json field.
-    If there is an id, PUT the already existing VoteSpec to replace it
-    */
-    $scope.updateVoteSpecifications = function() {
+  /*
+  This method iterates over vote_specifications and for each element, looks for an id.
+  If no id, POST the VoteSpec, get its new id, and set it in the id json field.
+  If there is an id, PUT the already existing VoteSpec to replace it
+  */
+  $scope.updateVoteSpecifications = function() {
     var id_field = "@id";
     var collection = $scope.widget.settings.vote_specifications;
     if (!("votespecs_url" in $scope.widget)) {
@@ -347,6 +347,8 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
 
       return null;
     };
+
+    var updateSettingsAfterPostVoteSpec = _.debounce($scope.applyWidgetSettings, 300);
     
     if ("items" in $scope.widget.settings) {
       $scope.widget.settings.items.forEach(function(item, item_index, item_ar) {
@@ -376,8 +378,12 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
               post_data["question_id"] = item_index;
 
               endpoint = collection_endpoint;
-              var promise = VoteWidgetService.postJson(endpoint, post_data, result_holder); // TODO: maybe we should delay this one also
-              promise.success(function(data, status, headers) {
+              var postNewVoteSpecPromiseGenerator = function(){
+                return VoteWidgetService.postJson(endpoint, post_data, result_holder);
+              };
+              var promise = AssemblToolsService.afterDelayPromiseGenerator(item_index * 500, postNewVoteSpecPromiseGenerator);
+
+              promise.then(function(data, status, headers) {
                 // set @id in current json
                 console.log("updateVoteSpecifications success:", data, status, headers);
                 if ("@id" in data) {
@@ -386,7 +392,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
                 }
 
                 console.log("settings after:", $scope.widget.settings);
-                $scope.applyWidgetSettings(); // ugly!
+                updateSettingsAfterPostVoteSpec();
               });
             }
           });

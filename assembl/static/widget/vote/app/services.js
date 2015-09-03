@@ -29,6 +29,24 @@ voteServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', fu
     //console.log("stripHtml called with", html, "returning ", retval);
     return retval;
   };
+
+  this.delayPromiseGenerator = function(time) {
+    var defer = new $.Deferred();
+    setTimeout(function () {
+      defer.resolve();
+    }, time);
+    return defer.promise();
+  };
+
+  this.afterDelayPromiseGenerator = function(time, promise_generator){
+    var defer = new $.Deferred();
+    var delayPromise = this.delayPromiseGenerator(time);
+    delayPromise.then(function(){
+      var executedPromise = promise_generator();
+      executedPromise.then(defer.resolve, defer.reject);
+    }, defer.reject);
+    return defer.promise();
+  };
 }]);
 
 voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$http', function($window, $rootScope, $log, $http) {

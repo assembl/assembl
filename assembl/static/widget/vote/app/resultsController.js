@@ -74,30 +74,12 @@ voteApp.controller('resultsCtl',
           var promise_generator = function(){
             return $.ajax(AssemblToolsService.resourceToUrl(target));
           };
-          $scope.targets_promises[target] = $scope.afterDelayPromiseGenerator(targetIndex*300, promise_generator);
+          $scope.targets_promises[target] = AssemblToolsService.afterDelayPromiseGenerator(targetIndex*300, promise_generator);
         });
       }
 
       $scope.drawUI();
 
-    };
-
-    $scope.delayPromiseGenerator = function(time) {
-      var defer = new $.Deferred();
-      setTimeout(function () {
-        defer.resolve();
-      }, time);
-      return defer.promise();
-    };
-
-    $scope.afterDelayPromiseGenerator = function(time, promise_generator){
-      var defer = new $.Deferred();
-      var delayPromise = $scope.delayPromiseGenerator(time);
-      delayPromise.then(function(){
-        var executedPromise = promise_generator();
-        executedPromise.then(defer.resolve, defer.reject);
-      }, defer.reject);
-      return defer.promise();
     };
 
     $scope.getVoteSpecFieldInSettings = function(vote_spec, field_name){
