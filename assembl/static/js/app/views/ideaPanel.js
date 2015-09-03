@@ -539,8 +539,8 @@ var IdeaPanel = AssemblPanel.extend({
             .then(function(allExtractsCollection) {
               ev.currentTarget.style.opacity = 0.4;
 
-              ev.originalEvent.dataTransfer.effectAllowed = 'move';
-              ev.originalEvent.dataTransfer.dropEffect = 'all';
+              ev.originalEvent.dataTransfer.effectAllowed = 'all';
+              ev.originalEvent.dataTransfer.dropEffect = 'move';
 
               var cid = ev.currentTarget.getAttribute('data-segmentid'),
                   segment = allExtractsCollection.getByCid(cid);
@@ -574,7 +574,7 @@ var IdeaPanel = AssemblPanel.extend({
       ev = ev.originalEvent;
     }
 
-    ev.dataTransfer.dropEffect = 'all';
+    ev.dataTransfer.dropEffect = 'move';
 
     if (Ctx.getDraggedSegment() !== null || Ctx.getDraggedAnnotation() !== null) {
       this.$el.addClass("is-dragover");

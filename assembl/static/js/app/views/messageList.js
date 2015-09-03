@@ -1623,7 +1623,7 @@ var MessageList = AssemblPanel.extend({
       div.html(annotation.quote);
 
       div.on('dragstart', function(ev) {
-        Ctx.showDragbox(ev, annotation.quote);
+        Ctx.showDragbox(ev, annotation.quote, true);
         Ctx.setDraggedAnnotation(annotation, annotatorEditor);
       });
 

@@ -645,7 +645,7 @@ Context.prototype = {
    * @param  {Event} ev The event object
    * @param  {String} text The text to be shown in the .dragbox
    */
-  showDragbox: function(ev, text) {
+  showDragbox: function(ev, text, newExtract) {
 
     var dragbox_max_length = 25,
         that = this;
@@ -673,8 +673,13 @@ Context.prototype = {
     this.dragbox.innerHTML = text;
 
     if (ev.dataTransfer) {
-      ev.dataTransfer.dropEffect = 'all';
-      ev.dataTransfer.effectAllowed = 'copy';
+      if (newExtract) {
+        ev.dataTransfer.dropEffect = "link";
+        ev.dataTransfer.effectAllowed = 'link';
+      } else {
+        ev.dataTransfer.dropEffect = "move";
+        ev.dataTransfer.effectAllowed = 'all';
+      }
       if (window.BrowserDetect.browser == "Explorer") {
         ev.dataTransfer.setData("Text", text);
       } else {
