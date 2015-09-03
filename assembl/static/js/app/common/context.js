@@ -679,8 +679,8 @@ Context.prototype = {
         ev.dataTransfer.setData("Text", text);
       } else {
         ev.dataTransfer.setData("text/plain", text);
+        ev.dataTransfer.setDragImage(this.dragbox, 10, 10);
       }
-      ev.dataTransfer.setDragImage(this.dragbox, 10, 10);
     }
 
     $(ev.currentTarget).one("dragend", function() {
