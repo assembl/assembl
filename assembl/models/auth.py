@@ -414,7 +414,7 @@ class EmailAccount(AbstractAgentAccount):
     def unique_query(self):
         query, _ = super(EmailAccount, self).unique_query()
         return query.filter_by(
-            type=self.type, email=self.email), True
+            type=self.type, email=self.email, verified=True), self.verified
 
     @staticmethod
     def avatar_url_for(email, size=32, default=None):
