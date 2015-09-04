@@ -1643,15 +1643,15 @@ var MessageList = AssemblPanel.extend({
     this.annotator.subscribe('annotationViewerTextField', function(field, annotation) {
           var collectionManager = new CollectionManager();
 
+          var id = annotation['@id'];
+          if (id === undefined) {
+            console.log("Missing @id, probably a new annotation", annotation);
+            return;
+          }
+
           //$(field).html("THIS IS A TEST");
           //console.log(annotation);
           collectionManager.getAllExtractsCollectionPromise().then(function(extracts) {
-            var id = annotation['@id'];
-            if (id === undefined) {
-              console.log("Missing @id", annotation);
-              return;
-            }
-
             return extracts.get(id).getAssociatedIdeaPromise().then(function(idea) {
               var txt = '';
               if (idea) {
