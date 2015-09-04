@@ -1218,14 +1218,14 @@ Context.prototype = {
 
     if(connectedUserId) {
       //We have a real user logged-in
-      window.localStorage.setItem('lastCurrentUser', this._currentUser.get('@id'));
       if (connectedUserId != lastCurrentUserId) {
         //Clear the preferences of the previous real user that used the computer
-        console.info("Clearing preferences since the user changed")
+        console.info("Clearing preferences since the logged-in user changed, or there was no previous logged-in user")
         // Take the opportunity to completely clear localStorage, since it's 
         // unreliable so far...
         window.localStorage.clear();
       }
+      window.localStorage.setItem('lastCurrentUser', this._currentUser.get('@id'));
     }
   },
 
