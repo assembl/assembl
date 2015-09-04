@@ -135,7 +135,6 @@ var routeManager = Marionette.Object.extend({
   },
 
   home: function() {
-    Ctx.isNewUser();
     this.restoreViews(true);
   },
 
@@ -259,7 +258,6 @@ var routeManager = Marionette.Object.extend({
 
   groupSpec: function(path) {
     console.log(path);
-    Ctx.isNewUser();
     try {
       var structure = UrlParser.parse("/" + path);
       console.log(structure);

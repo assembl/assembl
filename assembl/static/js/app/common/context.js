@@ -48,7 +48,7 @@ var Context = function() {
    * Current user
    * @type {User}
    */
-  this.currentUser = null;
+  this._currentUser = null;
 
   /**
    * Csrf token
@@ -168,7 +168,7 @@ Context.prototype = {
   },
 
   getCurrentUser: function() {
-    return this.currentUser;
+    return this._currentUser;
   },
 
   setCurrentUser: function(user) {
@@ -176,9 +176,9 @@ Context.prototype = {
         days_since_first_visit,
         last_login_buffer = 30; //seconds
 
-    this.currentUser = user;
-    if(!this.currentUser.isUnknownUser()) {
-      analytics.setUserId(this.currentUser.id);
+    this._currentUser = user;
+    if(!this._currentUser.isUnknownUser()) {
+      analytics.setUserId(this._currentUser.id);
 
       //Hackish way to know if the USER_LOGIN event should be triggered
       var last_login = user.get('last_login');
@@ -195,18 +195,18 @@ Context.prototype = {
         }
       }
 
-      analytics.setCustomVariable(analytics.customVariables.HAS_ELEVATED_RIGHTS, this.currentUser.can(Permissions.EDIT_EXTRACT));
+      analytics.setCustomVariable(analytics.customVariables.HAS_ELEVATED_RIGHTS, this._currentUser.can(Permissions.EDIT_EXTRACT));
       
-      if(this.currentUser.get('post_count') >= 1) {
+      if(this._currentUser.get('post_count') >= 1) {
         analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, true);
       }
       else {
         analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, false);
       }
 
-      if(this.currentUser.get('first_visit') !== null && this.currentUser.get('last_visit') !== null) {
+      if(this._currentUser.get('first_visit') !== null && this._currentUser.get('last_visit') !== null) {
         //Note:  moment always rounds DOWN
-        days_since_first_visit = Moment(this.currentUser.get('last_visit')).diff(this.currentUser.get('first_visit'), 'days');
+        days_since_first_visit = Moment(this._currentUser.get('last_visit')).diff(this._currentUser.get('first_visit'), 'days');
         if(days_since_first_visit >= 1) {
           analytics.setCustomVariable(analytics.customVariables.IS_ON_RETURN_VISIT, true);
         }
@@ -226,7 +226,7 @@ Context.prototype = {
         logUserSubscriptionStatus(localRoles);
       });
       
-      
+      this.manageLastCurrentUser();
 
     }
   },
@@ -1204,31 +1204,33 @@ Context.prototype = {
     return this.format('/{0}/{1}', this.getDiscussionSlug(), url);
   },
 
-  isNewUser: function() {
-    var currentUser = null,
-        connectedUser = null;
+  manageLastCurrentUser: function() {
+    var lastCurrentUserId = null,
+        connectedUserId = null;
 
     if (window.localStorage.getItem('lastCurrentUser')) {
-      currentUser = window.localStorage.getItem('lastCurrentUser').split('/')[1];
+      lastCurrentUserId = window.localStorage.getItem('lastCurrentUser').split('/')[1];
     }
 
-    if (this.currentUser.get('@id') !== Roles.EVERYONE) {
-      connectedUser = this.currentUser.get('@id').split('/')[1];
+    if (this._currentUser.get('@id') !== Roles.EVERYONE) {
+      connectedUserId = this._currentUser.get('@id').split('/')[1];
     }
 
-    if (currentUser) {
-      if (connectedUser != currentUser) {
-        window.localStorage.removeItem('expertInterfacegroupItems');
-        window.localStorage.removeItem('simpleInterfacegroupItems');
-        window.localStorage.removeItem('composing_messages');
+    if(connectedUserId) {
+      //We have a real user logged-in
+      window.localStorage.setItem('lastCurrentUser', this._currentUser.get('@id'));
+      if (connectedUserId != lastCurrentUserId) {
+        //Clear the preferences of the previous real user that used the computer
+        console.info("Clearing preferences since the user changed")
+        // Take the opportunity to completely clear localStorage, since it's 
+        // unreliable so far...
+        window.localStorage.clear();
       }
     }
-    window.localStorage.setItem('lastCurrentUser', this.currentUser.get('@id'));
-
   },
 
   isUserConnected: function() {
-    if (this.currentUser.get('@id') !== Roles.EVERYONE) {
+    if (this._currentUser.get('@id') !== Roles.EVERYONE) {
       return true;
     } else {
       return false;
