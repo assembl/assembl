@@ -42,6 +42,7 @@ var SynthesisPanel = AssemblPanel.extend({
     //This is used if the panel is displayed as part of a message
     // that publishes this synthesis
     this.messageListView = obj.messageListView;
+
     Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
                 collectionManager.getAllIdeasCollectionPromise(),
                 collectionManager.getAllIdeaLinksCollectionPromise(),
@@ -130,10 +131,8 @@ var SynthesisPanel = AssemblPanel.extend({
       }
 
       var that = this;
-      if (this.model === null || this.ideas === null) {
-        window.setTimeout(function() {
-          that.render();
-        }, 30);
+
+      if(that.template !== that.realTemplate) {
         return;
       }
 
