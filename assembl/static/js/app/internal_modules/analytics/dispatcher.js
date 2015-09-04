@@ -193,14 +193,15 @@ var moduleName = 'Analytics_Dispatcher',
     getInstance: function(){
       if (!_analytics){
         _analytics = new AnalyticsDispatcher();
-        if (_.has(window.globalAnalytics, 'piwik') && globalAnalytics.piwik.isActive) {
+        var globalAnalytics = window.globalAnalytics || {};
+        if (globalAnalytics.piwik && globalAnalytics.piwik.isActive) {
           if(_analytics.debug) {
             console.log("Registering piwik");
           }
           var p = new Piwik();
           _analytics.registerObserver(p);
         }
-        else if (_.has(window.globalAnalytics, 'google') && globalAnalytics.google.isActive) {
+        else if (globalAnalytics.google && globalAnalytics.google.isActive) {
           if(_analytics.debug) {
             console.log("Registering Google Analytics");
           }
