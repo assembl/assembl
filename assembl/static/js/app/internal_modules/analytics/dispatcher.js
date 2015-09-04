@@ -135,7 +135,9 @@ var moduleName = 'Analytics_Dispatcher',
       this.notify('trackGoal', arguments, function(observer){
         // To add more checks for other Observer types, must update this check_cb
         if (observer.constructor.name === 'Piwik') {
-          if (_.has(globalAnalytics.piwik.goals, goalId)){
+          if (globalAnalytics && globalAnalytics.piwik
+            && globalAnalytics.piwik.goals
+            && globalAnalytics.piwik.goals.goalId) {
             return true;
           }
           else { return false; }
@@ -193,7 +195,7 @@ var moduleName = 'Analytics_Dispatcher',
     getInstance: function(){
       if (!_analytics){
         _analytics = new AnalyticsDispatcher();
-        var globalAnalytics = window.globalAnalytics || {};
+        globalAnalytics = globalAnalytics || {};
         if (globalAnalytics.piwik && globalAnalytics.piwik.isActive) {
           if(_analytics.debug) {
             console.log("Registering piwik");
