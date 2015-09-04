@@ -383,12 +383,17 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
               };
               var promise = AssemblToolsService.afterDelayPromiseGenerator(item_index * 500, postNewVoteSpecPromiseGenerator);
 
-              promise.then(function(data, status, headers) {
+              promise.then(function(res) { // /!\ this is not function(data, status, headers), but the single parameter is an object which contains a data field
+                var data = "data" in res ? res.data : null;
                 // set @id in current json
-                console.log("updateVoteSpecifications success:", data, status, headers);
+                console.log("updateVoteSpecifications success:", res);
                 if ("@id" in data) {
+                  console.log("there is a '@id' field in data: ", data["@id"]);
                   //el["@id"] = data["@id"];
                   $scope.widget.settings.items[item_index].vote_specifications[el_index]["@id"] = data["@id"];
+                }
+                else {
+                  alert("error: There is no '@id' field in received data of the newly created vote specification");
                 }
 
                 console.log("settings after:", $scope.widget.settings);
