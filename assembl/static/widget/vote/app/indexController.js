@@ -1115,12 +1115,24 @@ voteApp.controller('indexCtl',
 
             if ( i == 0 ) // criterion on x axis
             {
-              icon.attr("y", (item_data.height - config.padding * 0.6))
+              /*
+              // these measures put the icon at the bottom of the maximum value of the horizontal axis
+              icon.attr("y", (item_data.height - padding * 0.6))
                 .attr("x", (item_data.width * 0.8 - icon_size/2));
+              */
+              // these measures put the icon to the right of the horizontal axis, vertically centered with its line
+              icon.attr("y", (item_data.height - padding - icon_size/2))
+                .attr("x", (item_data.width - padding + 15));
             } else if ( i == 1 ) // criterion on y axis
             {
+              /*
+              // these measures put the icon at the left of the maximum value of the vertical axis
               icon.attr("y", (item_data.width * 0.2 - icon_size/2))
                 .attr("x", padding/3 - icon_size/2);
+              */
+              // these measures put the icon at the top of the vertical axis
+              icon.attr("y", (padding - 10 - icon_size))
+                .attr("x", padding - icon_size/2);
             }
           }
         }
