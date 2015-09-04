@@ -9,7 +9,10 @@ Installation for developers
    Also renew (or delete) the corresponding ``.pyc``, ``.pyo`` files.
 
 -  For production on linux using nginx/uwsgi you need the following ppa
-   (for both saucy and raring): apt-add-repository ppa:chris-lea/uwsgi
+   - Necessary for both saucy 13.10, raring 13.04, trusty 14.04
+   - Not needed for vivid 15.04 and later
+   
+   apt-add-repository ppa:chris-lea/uwsgi
 
 -  Ruby does not like libreadline6, which comes on newer Ubuntus. Make
    sure you have libreadline-gplv2-dev instead of libreadline6-dev.
