@@ -12,7 +12,11 @@
 {% set segmentTextLink = '<a class="segment-link" data-segmentid="<%= segment.cid %>" data-tooltip="'+segmentLinkTooltip+'">'+gettext('Show in original context')+'&nbsp;</a>' %}
 
 
-<div class="bx bx-default postit" draggable="true" data-segmentid="<%= segment.cid %>">
+<div class="bx bx-default postit" 
+  <% if (canEditExtracts || (canEditMyExtracts && harvester == ctx.getCurrentUser())) { %>
+    draggable="true"
+  <% } %>
+data-segmentid="<%= segment.cid %>">
   <% if (canEditExtracts || (canEditMyExtracts && harvester == ctx.getCurrentUser())) { %>
   <button class="btn btn-cancel btn-sm bx-close js_closeExtract" type="button" data-segmentid="<%= segment.cid %>">
     <i class="icon-delete"></i>
