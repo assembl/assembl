@@ -999,7 +999,7 @@ var MessageView = Marionette.ItemView.extend({
         console.log("startAnnotatorTextSelection called");
       }
 
-      if (this.messageListView.isInPrintableView()) {
+      if (this.messageListView.isInPrintableView() || !user.can(Permissions.ADD_EXTRACT)) {
         return;
       }
 
