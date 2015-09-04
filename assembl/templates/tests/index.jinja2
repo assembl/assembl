@@ -21,6 +21,17 @@
 
 {% endblock %}
 
+{% block backboneTemplates %}
+    <div id="templates">
+        {% for template in templates %}
+            {% set template_path = '../views/' + template + '.tmpl' %}
+            <script id="tmpl-{{template}}" type="text/x-template">
+                {% include template_path %}
+            </script>
+        {% endfor %}
+    </div>
+{% endblock %}
+
 {% block extra_js %}
     {% if user %}   
       {% set userId = user.id %}
