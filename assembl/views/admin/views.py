@@ -4,7 +4,7 @@ from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid
-from pyramid.httpexceptions import HTTPFound, HTTPNotFound
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound, HTTPBadRequest
 
 from assembl.models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
@@ -22,6 +22,43 @@ from assembl.models.auth import (
 
 _ = TranslationStringFactory('assembl')
 
+
+@view_config(route_name='test_simultaneous_ajax_calls', permission=P_SYSADMIN)
+def test_simultaneous_ajax_calls(request):
+    g = lambda x: request.GET.get(x, None)
+
+    session = User.default_db
+
+    discussion_id = g('discussion_id')
+    widget_id = g('widget_id')
+    if not discussion_id:
+        return HTTPBadRequest(explanation="Please provide a discussion_id parameter", detail="")
+    if not widget_id:
+        return HTTPBadRequest(explanation="Please provide a widget_id parameter", detail="")
+
+    widget_id = int(widget_id)
+    discussion_id = int(discussion_id)
+    discussion = Discussion.get_instance(discussion_id)
+
+    if not discussion:
+        raise HTTPNotFound("Discussion with id '%d' not found." % (
+            discussion_id,))
+
+    user_id = authenticated_userid(request)
+    assert user_id
+
+    
+
+    context = dict(
+        get_default_context(request),
+        discussion=discussion,
+        discussion_id=discussion_id,
+        widget_id=widget_id)
+
+    return render_to_response(
+        'admin/test_simultaneous_ajax_calls.jinja2',
+        context,
+        request=request)
 
 @view_config(route_name='discussion_admin', permission=P_SYSADMIN)
 def discussion_admin(request):

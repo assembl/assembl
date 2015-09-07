@@ -6,3 +6,4 @@ def includeme(config):
                      '/admin/permissions/discussion/{discussion_id:\d+}')
     config.add_route('discussion_edit',
                      '/admin/discussion/edit/{discussion_id:\d+}')
+    config.add_route('test_simultaneous_ajax_calls', '/admin/test_simultaneous_ajax_calls/')
