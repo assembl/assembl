@@ -301,7 +301,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   If no id, POST the VoteSpec, get its new id, and set it in the id json field.
   If there is an id, PUT the already existing VoteSpec to replace it
   */
-  $scope.updateVoteSpecifications = function() {
+  $scope.saveVoteSpecificationsAndSettingsField = function() {
     var id_field = "@id";
     var collection = $scope.widget.settings.vote_specifications;
     if (!("votespecs_url" in $scope.widget)) {
@@ -348,7 +348,13 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
       return null;
     };
 
-    var updateSettingsAfterPostVoteSpec = _.debounce($scope.applyWidgetSettings, 300);
+    var debouncedSaveWidgetSettingsField = _.debounce($scope.saveWidgetSettingsField, 700);
+    var saveWidgetSettingsFieldAfterPostVoteSpec = function(){
+      result_holder.text("Saving...");
+      debouncedSaveWidgetSettingsField();
+    };
+    
+    var ajaxRequestsSent = 0;
     
     if ("items" in $scope.widget.settings) {
       $scope.widget.settings.items.forEach(function(item, item_index, item_ar) {
@@ -368,7 +374,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
               // we delay each API call a bit more than the previous one, so that the server does not get overwhelmed.
               // (by the use of the same question_id parameter for 2 criteria)
               var putJson = _.bind(VoteWidgetService.putJson, VoteWidgetService);
-              _.delay(putJson, item_index * 500, endpoint, post_data, result_holder);
+              _.delay(putJson, (ajaxRequestsSent++) * 500, endpoint, post_data, result_holder);
               
             }
             else { // if it does not exist in the backend yet, we create it using POST
@@ -381,12 +387,12 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
               var postNewVoteSpecPromiseGenerator = function(){
                 return VoteWidgetService.postJson(endpoint, post_data, result_holder);
               };
-              var promise = AssemblToolsService.afterDelayPromiseGenerator(item_index * 500, postNewVoteSpecPromiseGenerator);
+              var promise = AssemblToolsService.afterDelayPromiseGenerator((ajaxRequestsSent++) * 500, postNewVoteSpecPromiseGenerator);
 
               promise.then(function(res) { // /!\ this is not function(data, status, headers), but the single parameter is an object which contains a data field
                 var data = "data" in res ? res.data : null;
                 // set @id in current json
-                console.log("updateVoteSpecifications success:", res);
+                console.log("saveVoteSpecificationsAndSettingsField success:", res);
                 if ("@id" in data) {
                   console.log("there is a '@id' field in data: ", data["@id"]);
                   //el["@id"] = data["@id"];
@@ -397,23 +403,23 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
                 }
 
                 console.log("settings after:", $scope.widget.settings);
-                updateSettingsAfterPostVoteSpec();
+                saveWidgetSettingsFieldAfterPostVoteSpec();
               });
             }
           });
         }
       });
     }
+
+    saveWidgetSettingsFieldAfterPostVoteSpec();
   };
 
-    $scope.saveWidgetSettings = function() {
-    // ugly!
-    $scope.applyWidgetSettings();
-    $scope.updateVoteSpecifications();
+  $scope.saveWidget = function() {
+    $scope.saveVoteSpecificationsAndSettingsField();
   };
 
-    $scope.applyWidgetSettings = function() {
-    console.log("applyWidgetSettings()");
+  $scope.saveWidgetSettingsField = function() {
+    console.log("saveWidgetSettingsField()");
 
     var endpoint = $scope.widget_endpoint + "/settings";
     var post_data = $scope.widget.settings;
