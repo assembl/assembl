@@ -309,7 +309,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
           modal_title = i18n.sprintf(i18n.gettext("Exploring idea \"%s\""), idea_title);
 
         //console.log("modal_title:", modal_title);
-        var modal = new ModalGroup({"model": groupSpecModel, "title": modal_title});
+        var modal = new ModalGroup.View({"model": groupSpecModel, "title": modal_title});
         Assembl.slider.show(modal);
       }
     },

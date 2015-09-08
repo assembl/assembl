@@ -135,9 +135,6 @@ var CollectionManager = Marionette.Controller.extend({
   _currentUserModel: undefined,
   _currentUserModelPromise: undefined,
 
-  _allUserContributionsModel: undefined,
-  _allUserContributionsModelPromise: undefined,
-
   /**
    * Collection of Facebook Access Tokens that 
    * current user is permissible to view
@@ -724,24 +721,6 @@ var CollectionManager = Marionette.Controller.extend({
 
     return this._allDiscussionSourceCollection2Promise;
   },
-
-  getUserContributionsPromise: function(params) {
-
-    if (this._allUserContributionsModelPromise) {
-      return this._allUserContributionsModelPromise;
-    }
-
-    this._allUserContributionsModel = new Discussion.Model();
-    this._allUserContributionsModel.setUserContributions();
-    this._allUserContributionsModel.collectionManager = this;
-    this._allUserContributionsModelPromise = Promise.resolve(this._allUserContributionsModel.fetch({data: $.param({post_author: params}) }))
-        .thenReturn(this._allUserContributionsModel)
-            .catch(function(e) {
-              console.error(e.statusText);
-            });
-
-    return this._allUserContributionsModelPromise;
-  }, 
 
   getFacebookAccessTokensPromise: function() {
       if (this._allFacebookAccessTokensPromise) {

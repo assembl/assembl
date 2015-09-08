@@ -312,43 +312,6 @@ var groupContent = Marionette.CompositeView.extend({
     this.resetMessagePanelWidth();
   },
 
-  // not used?
-  /*
-  setPanelWidthByType: function (panelType, width) {
-      var panels = this.model.get('panels');
-      var panel = panels.findWhere({'type': panelType.id});
-      var view = this.children.findByModel(panel);
-      view.setGridSize(width);
-  },
-
-  resetNavigation: function () {
-      var that = this,
-          navigationSpec = this.findNavigationSidebarPanelSpec(),
-          ideaPanel = this.model.getPanelSpecByType(PanelSpecTypes.IDEA_PANEL),
-          messagePanelSpec = this.model.getPanelSpecByType(PanelSpecTypes.MESSAGE_LIST),
-          messagePanelView = this.children.findByModel(messagePanelSpec);
-      if (navigationSpec && messagePanelSpec) {
-          if (messagePanelView) {
-              if (ideaPanel == null || ideaPanel.get('hidden')) {
-                  messagePanelView.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE);
-              }
-              else {
-                  messagePanelView.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
-              }
-          } else {
-              window.setTimeout(function () {
-                  if (ideaPanel == null || ideaPanel.get('hidden')) {
-                      messagePanelView.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE);
-                  }
-                  else {
-                      messagePanelView.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
-                  }
-              }, 1000);
-          }
-
-      }
-  },
-  */
   
   /**
    * @params panelSpecTypes

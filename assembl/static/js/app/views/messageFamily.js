@@ -8,7 +8,8 @@ var Marionette = require('../shims/marionette.js'),
     Types = require('../utils/types.js'),
     MessageView = require('./message.js'),
     SynthesisMessageView = require('./synthesisMessage.js'),
-    Analytics = require('../internal_modules/analytics/dispatcher.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js'),
+    availableFilters = require('./postFilters.js');
 
 /**
  * @class views.MessageFamilyView
@@ -180,36 +181,22 @@ var MessageFamilyView = Marionette.ItemView.extend({
 
   /**
    * @event
-   * Collapse icon has been toggled
+   * View the entire conversation of a family (possibly composed of a single message)
    */
   onViewConversationClick: function(ev) {
     var analytics = Analytics.getInstance();
-
-    analytics.trackEvent(analytics.events.THREAD_VIEW_COMPLETE_CONVERSATION);
     ev.preventDefault();
-    var panelSpec = require('../models/panelSpec.js');
-    var PanelSpecTypes = require('../utils/panelSpecTypes.js');
-    var ModalGroup = require('./groups/modalGroup.js');
-    var viewsFactory = require('../objects/viewsFactory');
-    var groupSpec = require('../models/groupSpec');
+    analytics.trackEvent(analytics.events.THREAD_VIEW_COMPLETE_CONVERSATION);
 
-    var defaults = {
-        panels: new panelSpec.Collection([
-                                          {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
-                                          ],
-                                          {'viewsFactory': viewsFactory })
-    };
-    var groupSpecModel = new groupSpec.Model(defaults);
-    var modal_title = i18n.sprintf(i18n.gettext("Zooming on the conversation around \"%s\""), this.model.get('subject'));
-    var modal = new ModalGroup({"model": groupSpecModel, "title": modal_title});
-    var group = modal.getGroup();
-    var messagePanel = group.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-    messagePanel.setViewStyle(messagePanel.ViewStyles.THREADED, true)
-    messagePanel.currentQuery.addFilter(this.messageListView.currentQuery.availableFilters.POST_IS_DESCENDENT_OR_ANCESTOR_OF_POST, this.model.id);
-    console.log("About to manually trigger messagePanel render");
-    messagePanel.render();
+    var filters =  [{filterDef: availableFilters.POST_IS_DESCENDENT_OR_ANCESTOR_OF_POST, value: this.model.id}],
+        ModalGroup = require('./groups/modalGroup.js'),
+        modal_title = i18n.sprintf(i18n.gettext("Zooming on the conversation around \"%s\""), this.model.get('subject')),
+        modalFactory = ModalGroup.filteredMessagePanelFactory(modal_title, filters),
+        modal = modalFactory.modal,
+        messageList = modalFactory.messageList;
+
     Assembl.slider.show(modal);
-    messagePanel.showMessageById(this.model.id, undefined, true, true); 
+    messageList.showMessageById(this.model.id, undefined, true, true); 
   },
 
   /**

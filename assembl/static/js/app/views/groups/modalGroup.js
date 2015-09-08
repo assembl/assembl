@@ -12,7 +12,7 @@ var Marionette = require('../../shims/marionette.js'),
     groupSpec = require('../../models/groupSpec'),
     GroupContainer = require('../groups/groupContainer');
 
-var ModalGroup = Backbone.Modal.extend({
+var ModalGroupView = Backbone.Modal.extend({
   template: _.template($('#tmpl-groupModal').html()),
 
   className: 'panelGroups-modal popin-wrapper',
@@ -85,5 +85,40 @@ var ModalGroup = Backbone.Modal.extend({
   }
 
 });
+/**
+ * @param title:  title of the modal
+ * @param filters: an array of objects:
+ *   filterDef:  a member of availableFilters in postFilter.js
+ *   value:  the value to be filtered
+ * @return: {modal: modal, messagePanel: messagePanel}
+ *  modal is a fully configured instance of ModalGroup.
+ */
+var filteredMessagePanelFactory = function(modal_title, filters) {
+  var panelSpec = require('../../models/panelSpec.js');
+  var PanelSpecTypes = require('../../utils/panelSpecTypes.js');
+  var viewsFactory = require('../../objects/viewsFactory');
 
-module.exports = ModalGroup;
+  var defaults = {
+      panels: new panelSpec.Collection([
+                                        {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
+                                        ],
+                                        {'viewsFactory': viewsFactory })
+  };
+  var groupSpecModel = new groupSpec.Model(defaults);
+  var modal = new ModalGroupView({"model": groupSpecModel, "title": modal_title});
+  var group = modal.getGroup();
+  var messagePanel = group.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+  messagePanel.setViewStyle(messagePanel.ViewStyles.THREADED, true)
+  _.each(filters, function(filter){
+    //messagePanel.currentQuery.addFilter(this.messageListView.currentQuery.availableFilters.POST_IS_DESCENDENT_OR_ANCESTOR_OF_POST, this.model.id);
+    messagePanel.currentQuery.addFilter(filter.filterDef, filter.value);
+  });
+ 
+  //console.log("About to manually trigger messagePanel render");
+  messagePanel.render();
+  return {modal: modal, messageList: messagePanel};
+}
+module.exports = { 
+    View: ModalGroupView,
+    filteredMessagePanelFactory: filteredMessagePanelFactory
+  }

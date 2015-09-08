@@ -49,10 +49,6 @@ var discussionModel = Base.Model.extend({
       }
     },
 
-  setUserContributions: function() {
-    this.url = Ctx.getApiUrl('posts');
-  },
-  
   getVisualizations: function() {
     var jed, settings = this.get('settings'),
         visualizations = settings.visualizations,

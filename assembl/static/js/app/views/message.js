@@ -877,6 +877,24 @@ var MessageView = Marionette.ItemView.extend({
       this.messageListView.showMessageById(this.model.id);
     },
 
+  getContributions: function(e) {
+    var that = this;
+
+    e.stopPropagation();
+
+    this.model.getCreatorPromise().then(function(creator) {
+      var analytics = Analytics.getInstance(),
+      filters =  [{filterDef: that.messageListView.currentQuery.availableFilters.POST_IS_FROM, value: creator.id}],
+      ModalGroup = require('./groups/modalGroup.js'),
+      modal_title = i18n.sprintf(i18n.gettext("All message by %s"), creator.get('name')),
+      modalFactory = ModalGroup.filteredMessagePanelFactory(modal_title, filters),
+      modal = modalFactory.modal,
+      messageList = modalFactory.messageList;
+
+      Assembl.slider.show(modal);
+    });
+  },
+
   /**
    * You need to re-render after this
    */
@@ -1198,40 +1216,6 @@ var MessageView = Marionette.ItemView.extend({
   openTargetInPopOver: function(evt) {
     console.log("message openTargetInPopOver(evt: ", evt);
     return Ctx.openTargetInPopOver(evt);
-  },
-
-  getContributions: function(e) {
-    e.stopPropagation();
-
-    var user_id = $(e.target).attr('data-user-id');
-
-    var collectionManager = new CollectionManager();
-
-    collectionManager.getUserContributionsPromise(user_id).then(function(contributions) {
-
-      console.log('contributions', contributions.get('posts'));
-
-      var Modal = Backbone.Modal.extend({
-        template: _.template($('#tmpl-contributions').html()),
-        className: 'generic-modal popin-wrapper',
-        cancelEl: '.close, .btn-cancel',
-        serializeData: function() {
-          return {
-            contributions: contributions.get('posts')
-          }
-        },
-        initialize: function() {
-          this.$('.bbm-modal').addClass('popin');
-        },
-        events: {
-
-        }
-
-      });
-
-      Assembl.slider.show(new Modal());
-
-    });
   },
 
   /**
