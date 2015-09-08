@@ -252,6 +252,7 @@ var VotingWidgetModel = WidgetModel.extend({
 
   getDescriptionText: function(context, idea) {
     var locale = Ctx.getLocale(),
+        currentUser = Ctx.getCurrentUser(),
         activityState = this.get("activity_state"),
         endDate = this.get("end_date");
     if (!this.get("configured")) {
@@ -265,6 +266,9 @@ var VotingWidgetModel = WidgetModel.extend({
         var message = i18n.gettext("A vote session is ongoing.");
         if (endDate) {
           message += " " + this.getDescriptionText(this.UNTIL_TEXT, idea);
+        }
+        if(!currentUser.can(Permissions.VOTE)) {
+          message += "  " + i18n.sprintf(i18n.gettext("You cannot vote right now because %s."), currentUser.getRolesMissingMessageForPermission());
         }
         return message;
       case this.IDEA_PANEL_ACCESS_CTX:
@@ -313,7 +317,6 @@ var VotingWidgetModel = WidgetModel.extend({
       case this.INFO_BAR:
         return (activityState === "active" && !this.get("closeInfobar")
           && this.get("settings", {}).show_infobar !== false
-          && (currentUser.isUnknownUser() || currentUser.can(Permissions.VOTE))
           && this.voteStatus() != this.VOTE_STATUS_COMPLETE);
       case this.IDEA_PANEL_ACCESS_CTX:
         // assume non-root idea, relevant widget type
