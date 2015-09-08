@@ -11,7 +11,8 @@ var Marionette = require('../../shims/marionette.js'),
     RolesModel = require('../../models/roles.js'),
     i18n = require('../../utils/i18n.js'),
     Roles = require('../../utils/roles.js'),
-    Accounts = require('../../models/accounts.js');
+    Accounts = require('../../models/accounts.js'),
+    Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 /**
  * User notification
@@ -235,6 +236,9 @@ var Subscriber = Marionette.ItemView.extend({
     this.roles = options.roles;
     this.role = options.role;
 
+    var analytics = Analytics.getInstance();
+    analytics.changeCurrentPage(analytics.pages.NOTIFICATION_SETTINGS);
+
     this.listenTo(this.roles, 'remove add', function(model) {
       this.role = (_.size(this.roles)) ? model : undefined;
       this.render();
@@ -256,6 +260,8 @@ var Subscriber = Marionette.ItemView.extend({
 
   subscription: function() {
     var that = this;
+    var analytics = Analytics.getInstance();
+    analytics.trackEvent(analytics.events.JOIN_DISCUSSION_CLICK);
 
     if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
 
@@ -268,6 +274,7 @@ var Subscriber = Marionette.ItemView.extend({
       LocalRolesUser.save(null, {
                 success: function(model, resp) {
                   that.roles.add(model);
+                  analytics.trackEvent(analytics.events.JOIN_DISCUSSION);
                 },
                 error: function(model, resp) {
                   console.error('ERROR: joinDiscussion->subscription', resp);

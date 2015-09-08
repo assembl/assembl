@@ -11,6 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 3
 
+   INSTALL
    backups
    permissions_and_roles
    localization
@@ -18,7 +19,7 @@ Contents:
    analytics/events
 
    services
-   modules
+   autodoc/modules
 
 
 Indices and tables

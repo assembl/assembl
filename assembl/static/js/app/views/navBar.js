@@ -15,7 +15,9 @@ var Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js'),
     Roles = require('../utils/roles.js'),
     Widget = require('../models/widget.js'),
-    WidgetLinks = require('./widgetLinks.js');
+    DefineGroupModal = require('./groups/defineGroupModal.js'),
+    WidgetLinks = require('./widgetLinks.js'),
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var navBarLeft = Marionette.LayoutView.extend({
   template: '#tmpl-navBarLeft',
@@ -134,10 +136,14 @@ var navBarRight = Marionette.ItemView.extend({
     if (!this._store.getItem('needJoinDiscussion')) {
       this._store.setItem('needJoinDiscussion', true);
     }
+    var analytics = Analytics.getInstance();
+    analytics.trackEvent(analytics.events.JOIN_DISCUSSION_CLICK);
   },
 
   joinPopin: function() {
+    var analytics = Analytics.getInstance();
     Assembl.vent.trigger('navBar:joinDiscussion');
+    analytics.trackEvent(analytics.events.JOIN_DISCUSSION_CLICK);
   }
 });
 
@@ -215,120 +221,7 @@ var navBar = Marionette.LayoutView.extend({
     var collectionManager = new CollectionManager(),
         groupSpecsP = collectionManager.getGroupSpecsCollectionPromise(viewsFactory);
 
-    var Modal = Backbone.Modal.extend({
-      template: _.template($('#tmpl-create-group').html()),
-      className: 'generic-modal popin-wrapper',
-      cancelEl: '.close, .btn-cancel',
-      serializeData: function() {
-        return {
-          PanelSpecTypes: PanelSpecTypes
-        }
-      },
-      initialize: function() {
-        this.$('.bbm-modal').addClass('popin');
-      },
-      events: {
-        'click .js_selectItem': 'selectItem',
-        'click .js_createGroup': 'createGroup'
-      },
-      selectItem: function(e) {
-        var elm = $(e.currentTarget),
-            item = elm.parent().attr('data-view');
-
-        elm.parent().toggleClass('is-selected');
-
-        if (elm.parent().hasClass('is-selected')) {
-          switch (item) {
-            case PanelSpecTypes.NAV_SIDEBAR.id:
-              this.disableView([PanelSpecTypes.TABLE_OF_IDEAS, PanelSpecTypes.SYNTHESIS_EDITOR, PanelSpecTypes.CLIPBOARD, PanelSpecTypes.MESSAGE_LIST, PanelSpecTypes.IDEA_PANEL]);
-              break;
-            case PanelSpecTypes.SYNTHESIS_EDITOR.id:
-              this.disableView([PanelSpecTypes.TABLE_OF_IDEAS, PanelSpecTypes.NAV_SIDEBAR]);
-              this.enableView([PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST]);
-              break;
-            case PanelSpecTypes.TABLE_OF_IDEAS.id:
-              this.disableView([PanelSpecTypes.SYNTHESIS_EDITOR, PanelSpecTypes.NAV_SIDEBAR]);
-              this.enableView([PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST]);
-              break;
-          }
-
-        } else {
-          switch (item) {
-            case PanelSpecTypes.NAV_SIDEBAR.id:
-              this.enableView([PanelSpecTypes.TABLE_OF_IDEAS, PanelSpecTypes.SYNTHESIS_EDITOR, PanelSpecTypes.CLIPBOARD]);
-              break;
-            case PanelSpecTypes.SYNTHESIS_EDITOR.id:
-              this.enableView([PanelSpecTypes.TABLE_OF_IDEAS, PanelSpecTypes.NAV_SIDEBAR]);
-              this.disableView([PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST]);
-              break;
-            case PanelSpecTypes.TABLE_OF_IDEAS.id:
-              this.disableView([PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST]);
-              this.enableView([PanelSpecTypes.SYNTHESIS_EDITOR, PanelSpecTypes.NAV_SIDEBAR]);
-              break;
-          }
-        }
-
-      },
-
-      disableView: function(items) {
-        items.forEach(function(item) {
-          var panel = $(".itemGroup[data-view='" + item.id + "']");
-          panel.removeClass('is-selected');
-          panel.addClass('is-disabled');
-        });
-      },
-
-      enableView: function(items) {
-        items.forEach(function(item) {
-          var panel = $(".itemGroup[data-view='" + item.id + "']");
-          panel.removeClass('is-disabled');
-        });
-      },
-
-      createGroup: function() {
-        var items = [],
-            that = this,
-            hasNavSide = false;
-
-        if ($('.itemGroup').hasClass('is-selected')) {
-
-          $('.itemGroup.is-selected').each(function() {
-            var item = $(this).attr('data-view');
-            items.push({type: item});
-
-            if (item === 'navSidebar') {
-              hasNavSide = true;
-            }
-          });
-          groupSpecsP.done(function(groupSpecs) {
-            var groupSpec = new GroupSpec.Model(
-                {'panels': items}, {'parse': true, 'viewsFactory': viewsFactory});
-            groupSpecs.add(groupSpec);
-          });
-
-          setTimeout(function() {
-            that.scrollToRight();
-
-            if (hasNavSide) {
-              Assembl.vent.trigger('DEPRECATEDnavigation:selected', 'about');
-            }
-
-            that.$el.unbind();
-            that.$el.remove();
-          }, 100);
-        }
-
-      },
-      scrollToRight: function() {
-        var right = $('.groupsContainer').width();
-        $('.groupsContainer').animate({
-          scrollLeft: right
-        }, 1000);
-      }
-
-    });
-
-    Assembl.slider.show(new Modal());
+    Assembl.slider.show(new DefineGroupModal({groupSpecsP: groupSpecsP}));
   },
 
   // @param popinType: null, 'first_post', 'first_login_after_auto_subscribe_to_notifications'
@@ -373,11 +266,16 @@ var navBar = Marionette.LayoutView.extend({
                 initialize: function() {
                   var that = this;
                   this.$('.bbm-modal').addClass('popin');
+                  var analytics = Analytics.getInstance(),
+                      previousPage = analytics.getCurrentPage();
+
+                  this.returningPage = previousPage;
+                  analytics.changeCurrentPage(analytics.pages.NOTIFICATION);
                 },
-                events: {
-                  'click .js_subscribe': 'subscription',
-                  'click .js_close': 'closeModal'
-                },
+                // events: {
+                //   'click .js_subscribe': 'subscription',
+                //   'click .js_close': 'closeModal'
+                // },
                 serializeData: function() {
                   return {
                     i18n: i18n,
@@ -396,6 +294,9 @@ var navBar = Marionette.LayoutView.extend({
                     });
                     LocalRolesUser.save(null, {
                       success: function(model, resp) {
+                        var analytics = Analytics.getInstance();
+                        analytics.trackEvent(analytics.events.JOIN_DISCUSSION);
+
                         // TODO: Is there a simpler way to do this? MAP
                         self.navBarRight.currentView.ui.joinDiscussion.css('visibility', 'hidden');
                         self._store.removeItem('needJoinDiscussion');
@@ -417,6 +318,9 @@ var navBar = Marionette.LayoutView.extend({
 
                 cancel: function() {
                   self._store.removeItem('needJoinDiscussion');
+                  var analytics = Analytics.getInstance();
+                  analytics.trackEvent(analytics.events.JOIN_DISCUSSION_REFUSED);
+                  analytics.changeCurrentPage(this.returningPage, {default: true}); //if page is null, go back to / page
                 }
               });
               Assembl.slider.show(new Modal());

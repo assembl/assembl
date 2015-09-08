@@ -167,12 +167,12 @@ var IdeaPanel = AssemblPanel.extend({
       subIdeas = this.model.getChildren();
       contributors = this.model.get('contributors');
 
-      direct_link_relative_url = Ctx.getRelativeURLFromDiscussionRelativeURL("idea/" + encodeURIComponent(this.model.get('@id')));
+      direct_link_relative_url = Ctx.getRelativeURLFromDiscussionRelativeURL("idea/" + encodeURIComponent(this.model.get('@id'))) + "?source=share";
 
       //share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
       share_link_url = "/static/widget/share/index.html?u=" +
           encodeURIComponent(Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)) + "&t=" +
-          encodeURIComponent(this.model.get('shortTitle'));
+          encodeURIComponent(this.model.get('shortTitle')) + "?source=share";
     }
 
     return {
@@ -539,8 +539,8 @@ var IdeaPanel = AssemblPanel.extend({
             .then(function(allExtractsCollection) {
               ev.currentTarget.style.opacity = 0.4;
 
-              ev.originalEvent.dataTransfer.effectAllowed = 'move';
-              ev.originalEvent.dataTransfer.dropEffect = 'all';
+              ev.originalEvent.dataTransfer.effectAllowed = 'all';
+              ev.originalEvent.dataTransfer.dropEffect = 'move';
 
               var cid = ev.currentTarget.getAttribute('data-segmentid'),
                   segment = allExtractsCollection.getByCid(cid);
@@ -574,7 +574,7 @@ var IdeaPanel = AssemblPanel.extend({
       ev = ev.originalEvent;
     }
 
-    ev.dataTransfer.dropEffect = 'all';
+    ev.dataTransfer.dropEffect = 'move';
 
     if (Ctx.getDraggedSegment() !== null || Ctx.getDraggedAnnotation() !== null) {
       this.$el.addClass("is-dragover");

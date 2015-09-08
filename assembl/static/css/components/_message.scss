@@ -508,7 +508,7 @@ $previewNumLines: 4;
       padding: 0;
       list-style: none;
       .dropdown-menu {
-        right: 0;
+        right: -20px; //Use the size always available on the right defined above
         left: auto;
       }
       i.icon-mail {
@@ -624,6 +624,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   clear: left;
   padding-left: $messageFamilyImageWidth/2;
   margin-left: $messageFamilyImageWidth/2;
+  background-color: $white;
 
   .message-conversation-block {
     box-sizing: border-box;
@@ -707,7 +708,6 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 // --------------
 .messagelist-children {
   height: 0px;
-  overflow: hidden;
   clear: left;
 
   @include transition(height 0.4s);

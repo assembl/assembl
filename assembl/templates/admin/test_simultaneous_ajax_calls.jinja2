@@ -1,0 +1,155 @@
+{% extends 'base.jinja2' %}
+
+{% block content %}
+
+
+<script type="text/javascript" src="/static/js/bower/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/static/js/bower/underscore/underscore.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+/*
+
+POST
+http://localhost:81/data/Discussion/8/widgets/25/vote_specifications
+json
+{"@type":"LickertVoteSpecification","minimum":0,"maximum":100,"settings":{"name":"bb"},"question_id"
+:1}
+
+
+POST
+http://localhost:81/data/Discussion/8/widgets/25/vote_specifications
+json
+{"@type":"LickertVoteSpecification","minimum":0,"maximum":100,"settings":{"name":"bb"},"question_id"
+:1}
+
+
+PUT
+http://localhost:6543/data/AbstractVoteSpecification/65
+json
+{"minimum":0,"@type":"LickertVoteSpecification","maximum":100,"settings":{"@id":"local:AbstractVoteSpecification
+/65","name":"aa"},"question_id":0}
+
+
+
+PUT
+http://localhost:81/data/Widget/25/settings
+json
+{"items":[{"criteria":[],"vote_specifications":[{"name":"aa","@type":"LickertVoteSpecification","minimum"
+:0,"maximum":100,"@id":"local:AbstractVoteSpecification/63"}],"type":"vertical_gauge","question_title"
+:"Question 1 ?"},{"criteria":[],"vote_specifications":[{"name":"bb","@type":"LickertVoteSpecification"
+,"minimum":0,"maximum":100,"@id":"local:AbstractVoteSpecification/64"}],"type":"vertical_gauge","question_title"
+:"Question 2 ?"}]}
+
+*/
+
+var widget_id = {{widget_id}};
+var discussion_id = {{discussion_id}};
+
+var createVoteWidget = function(){
+    alert("createVoteWidget");
+};
+
+var createVoteSpecifications = function(){
+    var url = "/data/Discussion/" + discussion_id + "/widgets/" + widget_id + "/vote_specifications";
+    var vote_specs_names = ["aa", "bb", "cc", "dd", "ee"];
+    var number_of_vote_specs = vote_specs_names.length;
+    var data = {};
+    var settings = {};
+
+    for ( var i = 0; i < number_of_vote_specs; ++i ){
+        data = {
+            "@type": "LickertVoteSpecification",
+            "minimum": 0,
+            "maximum": 100,
+            "settings": {
+                "name": vote_specs_names[i]
+            },
+            "question_id": i
+        };
+        settings = {
+            "type": "POST",
+            "contentType": "application/json",
+            "data": JSON.stringify(data)
+        };
+        $.ajax(url, settings);
+    }
+
+    // when the backend sends us back the id of the new vote specs, we have to save the settings field of the widget
+};
+
+var updateVoteSpecifications = function(){
+    var widget_url = "/data/Widget/" + widget_id;
+    $.get(widget_url).then(function(data){
+        var vote_specifications = "vote_specifications" in data ? data.vote_specifications : null;
+        if ( vote_specifications && vote_specifications.length ){
+            vote_specifications.forEach(function(vote_spec, vote_spec_index){
+                var vote_spec_id = "@id" in vote_spec ? vote_spec["@id"] : null; // looks like "local:AbstractVoteSpecification/65"
+                if ( vote_spec_id ){
+                    var url = "/data/" + vote_spec_id.substr(vote_spec_id.indexOf(":")+1);
+                    var settings = {
+                        "type": "PUT",
+                        "contentType": "application/json",
+                        "data": JSON.stringify(vote_spec)
+                    };
+                    $.ajax(url, settings);
+                }
+            });
+        }
+    });
+
+    // we also have to save the settings field of the widget
+};
+
+var deleteVoteWidget = function(){
+    alert("deleteVoteWidget");
+};
+
+$("#btnCreateVoteWidget").on('click', createVoteWidget);
+$("#btnCreateVoteSpecifications").on('click', createVoteSpecifications);
+$("#btnUpdateVoteSpecifications").on('click', updateVoteSpecifications);
+$("#btnDeleteVoteWidget").on('click', deleteVoteWidget);
+
+}); 
+</script>
+
+
+
+
+
+
+<h1>Test simultaneous AJAX calls</h1>
+<div>(on discussion <a href="/{{discussion.slug}}">{{discussion.topic}}</a>)
+<br/>
+<br/>
+<br/>
+TODO Step 1: Create a vote widget
+<br/>
+<button id="btnCreateVoteWidget">Create widget</button>
+<div id="resultCreateVoteWidget"></div>
+<br/>
+<br/>
+Step 2: Create several vote specifications (stress test of simultaneous calls happens here)
+<br/>
+<button id="btnCreateVoteSpecifications">Create vote specifications</button>
+<div id="resultCreateVoteSpecifications"></div>
+<br/>
+<br/>
+Step 3: Update vote specifications (stress test of simultaneous calls happens here)
+<br/>
+<button id="btnUpdateVoteSpecifications">Update vote specifications</button>
+<div id="resultUpdateVoteSpecifications"></div>
+<br/>
+<br/>
+TODO Step 4: Delete vote widget (and its vote specs)
+<br/>
+<button id="btnDeleteVoteWidget">Delete widget</button>
+<div id="resultDeleteVoteWidget"></div>
+<br/>
+<br/>
+
+
+
+
+{% endblock %}

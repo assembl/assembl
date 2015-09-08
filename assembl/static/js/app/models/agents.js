@@ -116,13 +116,6 @@ var AgentModel = Base.Model.extend({
     return this.getId() == UNKNOWN_USER_ID;
   },
 
-  /**
-   * @return {Boolean} true if the user is currently a member of the discussion
-   */
-  isDiscussionMember: function() {
-    return this.getId() == UNKNOWN_USER_ID;
-  },
-
   validate: function(attrs, options) {
     /**
      * check typeof variable

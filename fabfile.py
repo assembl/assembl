@@ -1162,6 +1162,14 @@ def commonenv(projectpath, venvpath=None):
     env.ruby_build_min_version = LooseVersion('20130628')
 
 
+@task
+def build_doc():
+    with cd(env.projectpath):
+        run('rm -rf doc/autodoc')
+        run('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -f -o doc/autodoc assembl')
+        venvcmd('cd doc; make html')
+
+
 # Specific environments
 
 @task

@@ -14,7 +14,6 @@ var messagesInProgress = Marionette.Object.extend({
       return this._messages;
     }
 
-    Ctx.isNewUser();
     var messages = this._store.getItem(this._key);
     if (messages !== null) {
       messages = JSON.parse(messages);

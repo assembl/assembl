@@ -2,7 +2,8 @@
 
 var Base = require('./base.js'),
     Ctx = require('../common/context.js'),
-    Roles = require('../utils/roles.js');
+    Roles = require('../utils/roles.js'),
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var roleModel = Base.Model.extend({
   urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/current/local_roles"),
@@ -47,6 +48,8 @@ var roleCollection = Base.Collection.extend({
   role.destroy({
     success: function(model, resp) {
       that.remove(model);
+      var analytics = Analytics.getInstance();
+      analytics.trackEvent(analytics.events.LEAVE_DISCUSSION);
     },
     error: function(model, resp) {
       console.error('ERROR: unSubscription failed', resp);

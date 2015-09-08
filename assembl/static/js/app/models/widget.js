@@ -158,9 +158,13 @@ var VotingWidgetModel = WidgetModel.extend({
 
   getUrlForUser: function(targetIdeaId, page) {
     var uri = this.getId(), locale = Ctx.getLocale(),
-        activityState = this.get("activity_state"),
-        base = this.baseUri + "?config=" + encodeURIComponent(uri)
-          + "&locale=" + locale;
+      currentUser = Ctx.getCurrentUser(),
+      activityState = this.get("activity_state"),
+      base = this.baseUri + "?config=" + encodeURIComponent(uri)
+        + "&locale=" + locale;
+    if ( currentUser.isUnknownUser() ){
+      return Ctx.getLoginURL() + "?"; // "?" is added in order to handle the hacky adding of "&locale=..." in infobar.tmpl
+    }
     if (activityState == "ended") {
       base += "#/results"; // was "&page=results";
     }
@@ -228,9 +232,13 @@ var VotingWidgetModel = WidgetModel.extend({
   },
 
   getCssClasses: function(context, idea) {
+    var currentUser = Ctx.getCurrentUser();
+    if ( currentUser.isUnknownUser() ){
+        return "";
+    }
     switch (context) {
       case this.INFO_BAR:
-        return "js_openVote";
+        return "js_openTargetInModal";
       case this.IDEA_PANEL_ACCESS_CTX:
         switch (this.get("activity_state")) {
           case "active":
@@ -305,7 +313,7 @@ var VotingWidgetModel = WidgetModel.extend({
       case this.INFO_BAR:
         return (activityState === "active" && !this.get("closeInfobar")
           && this.get("settings", {}).show_infobar !== false
-          && currentUser.can(Permissions.VOTE)
+          && (currentUser.isUnknownUser() || currentUser.can(Permissions.VOTE))
           && this.voteStatus() != this.VOTE_STATUS_COMPLETE);
       case this.IDEA_PANEL_ACCESS_CTX:
         // assume non-root idea, relevant widget type

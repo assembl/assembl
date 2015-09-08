@@ -13,6 +13,40 @@ voteServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', fu
 
     return str;
   };
+
+  /** (this function is copied from Assembl's context.js) This removes (rather than escape) all html tags
+   * @param  {String} html
+   * @return {String} The new string without html tags
+   */
+  this.stripHtml = function(html) {
+    if (!html) {
+      //coerce type to string
+      html = '';
+    }
+
+    var retval = $.trim($('<div>' + html + '</div>').text());
+
+    //console.log("stripHtml called with", html, "returning ", retval);
+    return retval;
+  };
+
+  this.delayPromiseGenerator = function(time) {
+    var defer = new $.Deferred();
+    setTimeout(function () {
+      defer.resolve();
+    }, time);
+    return defer.promise();
+  };
+
+  this.afterDelayPromiseGenerator = function(time, promise_generator){
+    var defer = new $.Deferred();
+    var delayPromise = this.delayPromiseGenerator(time);
+    delayPromise.then(function(){
+      var executedPromise = promise_generator();
+      executedPromise.then(defer.resolve, defer.reject);
+    }, defer.reject);
+    return defer.promise();
+  };
 }]);
 
 voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$http', function($window, $rootScope, $log, $http) {

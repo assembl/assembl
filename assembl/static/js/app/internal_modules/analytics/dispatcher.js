@@ -29,6 +29,13 @@ var moduleName = 'Analytics_Dispatcher',
     }
     Wrapper.call(this, arguments);  
     this._observers = [];
+
+    /**
+     * Update this to keep track of what the current virtual page is.
+     * Extremely useful for defining pages in modals, and knowing what the next virtual page will
+     * be when Modal is closed. 
+     */    
+    this.currentPage = null;
   };
 
   AnalyticsDispatcher.prototype = Object.create(Wrapper.prototype);
@@ -84,9 +91,18 @@ var moduleName = 'Analytics_Dispatcher',
 
     changeCurrentPage: function(page, options) {
       if (!(page in this.pages)) {
-        throw new Error("Unknown page definition: " + page);
+        if (options && _.has(options,'default') && options['default']){
+          this.currentPage = null;
+          this.notify('changeCurrentPage', [window.location.href, {}]); //go back to root
+        }
+        else {
+          throw new Error("Unknown page definition: " + page);
+        }
       }
-      this.notify('changeCurrentPage', arguments);
+      else {
+        this.currentPage = page;
+        this.notify('changeCurrentPage', arguments);
+      }
     },
 
     trackEvent: function(eventDefinition, value, options) {
@@ -119,7 +135,9 @@ var moduleName = 'Analytics_Dispatcher',
       this.notify('trackGoal', arguments, function(observer){
         // To add more checks for other Observer types, must update this check_cb
         if (observer.constructor.name === 'Piwik') {
-          if (_.has(globalAnalytics.piwik.goals, goalId)){
+          if (globalAnalytics && globalAnalytics.piwik
+            && globalAnalytics.piwik.goals
+            && globalAnalytics.piwik.goals.goalId) {
             return true;
           }
           else { return false; }
@@ -161,6 +179,10 @@ var moduleName = 'Analytics_Dispatcher',
 
     trackDomNodeInteraction: function(domNode, contentInteraction){
       this.notify('trackDomNodeInteraction', arguments);
+    },
+
+    getCurrentPage: function(){
+      return this.currentPage;
     }
   });
 
@@ -173,14 +195,15 @@ var moduleName = 'Analytics_Dispatcher',
     getInstance: function(){
       if (!_analytics){
         _analytics = new AnalyticsDispatcher();
-        if (_.has(window.globalAnalytics, 'piwik') && globalAnalytics.piwik.isActive) {
+        globalAnalytics = globalAnalytics || {};
+        if (globalAnalytics.piwik && globalAnalytics.piwik.isActive) {
           if(_analytics.debug) {
             console.log("Registering piwik");
           }
           var p = new Piwik();
           _analytics.registerObserver(p);
         }
-        else if (_.has(window.globalAnalytics, 'google') && globalAnalytics.google.isActive) {
+        else if (globalAnalytics.google && globalAnalytics.google.isActive) {
           if(_analytics.debug) {
             console.log("Registering Google Analytics");
           }

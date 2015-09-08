@@ -10,7 +10,8 @@
     <link type="text/css" rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="css/global.css" />
 
-    <script src="bower_components/angular/angular.js"></script><!-- this script is in <head> instead of the end of <body> because of ng-cloak -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script><!-- this script is in <head> instead of the end of <body> because we need it in our use of angularjs, which we do also load in <head> -->
+    <script src="bower_components/angular/angular.min.js"></script><!-- this script is in <head> instead of the end of <body> because of ng-cloak -->
 
 </head>
 <body ng-cloak ng-app="appSession">
@@ -32,7 +33,6 @@
 </div>
 <div growl></div>
 
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/angular-resource/angular-resource.min.js"></script>
 <script src="bower_components/angular-route/angular-route.min.js"></script>

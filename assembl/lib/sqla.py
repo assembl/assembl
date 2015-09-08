@@ -1219,7 +1219,7 @@ class BaseOps(object):
                 if inspect(self).pending:
                     other.db.expunge(self)
                 if duplicate_error:
-                    raise HTTPBadRequest("Duplicate of <%s> created" % (other.uri()))
+                    raise ObjectNotUniqueError("Duplicate of <%s> created" % (other.uri()))
                 else:
                     # TODO: Check if there's a risk of infinite recursion here?
                     return other._do_update_from_json(

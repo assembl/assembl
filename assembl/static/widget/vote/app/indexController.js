@@ -148,7 +148,7 @@ voteApp.controller('indexCtl',
           var promise_generator = function(){
             return $.ajax(AssemblToolsService.resourceToUrl(target));
           };
-          $scope.targets_promises[target] = $scope.afterDelayPromiseGenerator(targetIndex*300, promise_generator);
+          $scope.targets_promises[target] = AssemblToolsService.afterDelayPromiseGenerator(targetIndex*300, promise_generator);
         });
       }
 
@@ -348,24 +348,6 @@ voteApp.controller('indexCtl',
       return null;
     };
 
-    $scope.delayPromiseGenerator = function(time) {
-      var defer = new $.Deferred();
-      setTimeout(function () {
-        defer.resolve();
-      }, time);
-      return defer.promise();
-    };
-
-    $scope.afterDelayPromiseGenerator = function(time, promise_generator){
-      var defer = new $.Deferred();
-      var delayPromise = $scope.delayPromiseGenerator(time);
-      delayPromise.then(function(){
-        var executedPromise = promise_generator();
-        executedPromise.then(defer.resolve, defer.reject);
-      }, defer.reject);
-      return defer.promise();
-    };
-
     $scope.submitVote = function(votes_container, result_holder) {
       console.log("submitVote(): ", votes_container, result_holder);
       var votes_to_submit = $scope.computeMyVotes(votes_container);
@@ -430,7 +412,7 @@ voteApp.controller('indexCtl',
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8' // or maybe: 'Content-Type': 'application/json'
           });
         };
-        var promise = $scope.afterDelayPromiseGenerator(delay, promise_generator);
+        var promise = AssemblToolsService.afterDelayPromiseGenerator(delay, promise_generator);
         return promise;
       };
 
@@ -522,17 +504,27 @@ voteApp.controller('indexCtl',
     $scope.drawVerticalGauge = function(destination, item_data, target_id, getUserPreviousVoteFunction, xPosCenter) {
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length > 0)) {
-        console.log("error: this item has no 'vote_specifications' field");
+        var str = "error: this item has no 'vote_specifications' field";
+        console.log(str);
+        destination.append("div").text(str);
         return;
       }
 
       var criterion = item_data.vote_specifications[0];
+      var criterion_id = "@id" in criterion ? criterion["@id"] : null; // contains something like "local:Idea/3"
+      if ( !criterion_id ){
+        var str = "error: item's vote_specification has no '@id' field.";
+        console.log(str);
+        destination.append("div").text(str);
+        return;
+      }
+
       var valueMin = ("minimum" in criterion) ? criterion.minimum : 0;
       var valueMax = ("maximum" in criterion) ? criterion.maximum : 100;
       var valueDefault = null;
       var hasVoted = true;
       if ( getUserPreviousVoteFunction ){
-        valueDefault = getUserPreviousVoteFunction(criterion["@id"], target_id);
+        valueDefault = getUserPreviousVoteFunction(criterion_id, target_id);
       }
       if ( valueDefault === null || valueDefault === undefined ) {
         valueDefault = ("valueDefault" in criterion) ? criterion.valueDefault : valueMin;
@@ -563,7 +555,7 @@ voteApp.controller('indexCtl',
       svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name", criterion.name)
-        .attr("data-criterion-id", criterion["@id"]) // contains something like "local:Idea/3"
+        .attr("data-criterion-id", criterion_id)
         .attr("data-criterion-value", criterionValue)
         .attr("data-criterion-value-min", valueMin)
         .attr("data-criterion-value-max", valueMax)
@@ -808,10 +800,13 @@ voteApp.controller('indexCtl',
     // @param xPosCenter
     // Position on the X coordinates of the center of the gauge, in the created SVG
     $scope.draw2AxesVote = function(destination, item_data, target_id, getUserPreviousVoteFunction, xPosCenter) {
-
+      var showError = function(str){
+        console.log(str);
+        destination.append("div").text(str);
+      };
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length)) {
-        console.log("error: item has no 'vote_specifications' field");
+        showError("error: item has no 'vote_specifications' field");
         return;
       }
 
@@ -819,7 +814,18 @@ voteApp.controller('indexCtl',
 
       if (criteria.length < 2)
       {
-        console.log("error: need at least 2 criteria");
+        showError("error: need at least 2 criteria");
+        return;
+      }
+
+      var criterionXId = "@id" in criteria[0] ? criteria[0]["@id"] : null; // contains something like "local:Idea/3"
+      if ( criterionXId === null ){
+        showError("error: first criterion has no '@id' field");
+        return;
+      }
+      var criterionYId = "@id" in criteria[1] ? criteria[1]["@id"] : null; // contains something like "local:Idea/3"
+      if ( criterionYId === null ){
+        showError("error: second criterion has no '@id' field");
         return;
       }
 
@@ -835,8 +841,8 @@ voteApp.controller('indexCtl',
       var criterionYValue = null;
       var hasVoted = true;
       if ( getUserPreviousVoteFunction ){
-        criterionXValue = getUserPreviousVoteFunction(criteria[0]["@id"], target_id);
-        criterionYValue = getUserPreviousVoteFunction(criteria[1]["@id"], target_id);
+        criterionXValue = getUserPreviousVoteFunction(criterionXId, target_id);
+        criterionYValue = getUserPreviousVoteFunction(criterionYId, target_id);
       }
       if ( criterionXValue === null ){
         hasVoted = false;
@@ -865,7 +871,7 @@ voteApp.controller('indexCtl',
       svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name", criteria[0].name)
-        .attr("data-criterion-id", criteria[0]["@id"]) // contains something like "local:Idea/3"
+        .attr("data-criterion-id", criterionXId)
         .attr("data-criterion-value", criterionXValue)
         .attr("data-criterion-value-min", criterionXValueMin)
         .attr("data-criterion-value-max", criterionXValueMax)
@@ -877,7 +883,7 @@ voteApp.controller('indexCtl',
       svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name", criteria[1].name)
-        .attr("data-criterion-id", criteria[1]["@id"]) // contains something like "local:Idea/3"
+        .attr("data-criterion-id", criterionYId)
         .attr("data-criterion-value", criterionYValue)
         .attr("data-criterion-value-min", criterionYValueMin)
         .attr("data-criterion-value-max", criterionYValueMax)
@@ -1109,12 +1115,24 @@ voteApp.controller('indexCtl',
 
             if ( i == 0 ) // criterion on x axis
             {
-              icon.attr("y", (item_data.height - config.padding * 0.6))
+              /*
+              // these measures put the icon at the bottom of the maximum value of the horizontal axis
+              icon.attr("y", (item_data.height - padding * 0.6))
                 .attr("x", (item_data.width * 0.8 - icon_size/2));
+              */
+              // these measures put the icon to the right of the horizontal axis, vertically centered with its line
+              icon.attr("y", (item_data.height - padding - icon_size/2))
+                .attr("x", (item_data.width - padding + 15));
             } else if ( i == 1 ) // criterion on y axis
             {
+              /*
+              // these measures put the icon at the left of the maximum value of the vertical axis
               icon.attr("y", (item_data.width * 0.2 - icon_size/2))
                 .attr("x", padding/3 - icon_size/2);
+              */
+              // these measures put the icon at the top of the vertical axis
+              icon.attr("y", (padding - 10 - icon_size))
+                .attr("x", padding - icon_size/2);
             }
           }
         }
@@ -1203,16 +1221,25 @@ voteApp.controller('indexCtl',
     $scope.drawRadioVote = function(destination, item_data, target_id, getUserPreviousVoteFunction) {
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length > 0)) {
-        console.log("error: item has no 'vote_specifications' field");
+        var str = "error: item has no 'vote_specifications' field";
+        console.log(str);
+        destination.append("div").text(str);
         return;
       }
 
       var criterion = item_data.vote_specifications[0];
+      var criterion_id = "@id" in criterion ? criterion["@id"] : null;
+      if ( !criterion_id ){
+        var str = "error: item's vote specification had no '@id' field";
+        console.log(str);
+        destination.append("div").text(str);
+        return;
+      }
       target_id = target_id || null;
 
       var criterionValue = null;
       if ( getUserPreviousVoteFunction ){
-        var user_previous_vote = getUserPreviousVoteFunction(criterion["@id"], target_id);
+        var user_previous_vote = getUserPreviousVoteFunction(criterion_id, target_id);
         
         // special case of binary vote
         if ( user_previous_vote === true )
@@ -1229,7 +1256,7 @@ voteApp.controller('indexCtl',
       var div = $('<div>');
       div.attr({
         'class': 'criterion',
-        'data-criterion-id': criterion["@id"],
+        'data-criterion-id': criterion_id,
         'data-criterion-name': criterion.name,
         'data-criterion-value': null,
         'data-target-id': target_id
@@ -1296,13 +1323,13 @@ voteApp.controller('indexCtl',
           {
             var option = $('<div>');
             var input = $('<input>');
-            var radio_id = 'radio_' + criterion["@id"] + '_' + item.value;
+            var radio_id = 'radio_' + criterion_id + '_' + item.value;
             if ( target_id ){
-              radio_id = 'radio_' + criterion["@id"] + '_' + target_id + "_" + item.value;
+              radio_id = 'radio_' + criterion_id + '_' + target_id + "_" + item.value;
             }
-            var input_name = criterion["@id"];
+            var input_name = criterion_id;
             if ( target_id ){
-              input_name = criterion["@id"] + "_" + target_id;
+              input_name = criterion_id + "_" + target_id;
             }
             input.attr({
               type: 'radio',
@@ -1521,15 +1548,17 @@ voteApp.controller('indexCtl',
               var target_title_holder = $("<div class='inline-vote-for-a-target--title' />");
               inline_vote_holder.append(target_title_holder);
               target_title_holder.text(target_id);
+              target_title_holder.attr("data-target-id", target_id);
               if ( target_id in $scope.targets_promises ){
                 $.when($scope.targets_promises[target_id]).done(function(data){
                   if ( "shortTitle" in data ){
                     target_title_holder.text(data.shortTitle);
                     if ( "definition" in data && data.definition.length ){
-                      target_title_holder.attr("title", data.definition); // TODO: but this is HTML :/
-                      //for debug: target_title_holder.attr("title", target_id);
-                    } 
-                    
+                      var icon = $("<i>");
+                      icon.addClass("question-mark-icon-small");
+                      icon.attr("title", AssemblToolsService.stripHtml(data.definition)); // idea's definition field contains HTML
+                      target_title_holder.append(icon);
+                    }
                   } else {
                     console.log("error: idea ", target_id, "has no shortTitle property");
                   }

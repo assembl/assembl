@@ -48,7 +48,7 @@ var Context = function() {
    * Current user
    * @type {User}
    */
-  this.currentUser = null;
+  this._currentUser = null;
 
   /**
    * Csrf token
@@ -168,7 +168,7 @@ Context.prototype = {
   },
 
   getCurrentUser: function() {
-    return this.currentUser;
+    return this._currentUser;
   },
 
   setCurrentUser: function(user) {
@@ -176,9 +176,9 @@ Context.prototype = {
         days_since_first_visit,
         last_login_buffer = 30; //seconds
 
-    this.currentUser = user;
-    if(!this.currentUser.isUnknownUser()) {
-      analytics.setUserId(this.currentUser.id);
+    this._currentUser = user;
+    if(!this._currentUser.isUnknownUser()) {
+      analytics.setUserId(this._currentUser.id);
 
       //Hackish way to know if the USER_LOGIN event should be triggered
       var last_login = user.get('last_login');
@@ -195,18 +195,18 @@ Context.prototype = {
         }
       }
 
-      analytics.setCustomVariable(analytics.customVariables.HAS_ELEVATED_RIGHTS, this.currentUser.can(Permissions.EDIT_EXTRACT));
+      analytics.setCustomVariable(analytics.customVariables.HAS_ELEVATED_RIGHTS, this._currentUser.can(Permissions.EDIT_EXTRACT));
       
-      if(this.currentUser.get('post_count') >= 1) {
+      if(this._currentUser.get('post_count') >= 1) {
         analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, true);
       }
       else {
         analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, false);
       }
 
-      if(this.currentUser.get('first_visit') !== null && this.currentUser.get('last_visit') !== null) {
+      if(this._currentUser.get('first_visit') !== null && this._currentUser.get('last_visit') !== null) {
         //Note:  moment always rounds DOWN
-        days_since_first_visit = Moment(this.currentUser.get('last_visit')).diff(this.currentUser.get('first_visit'), 'days');
+        days_since_first_visit = Moment(this._currentUser.get('last_visit')).diff(this._currentUser.get('first_visit'), 'days');
         if(days_since_first_visit >= 1) {
           analytics.setCustomVariable(analytics.customVariables.IS_ON_RETURN_VISIT, true);
         }
@@ -226,7 +226,7 @@ Context.prototype = {
         logUserSubscriptionStatus(localRoles);
       });
       
-      
+      this.manageLastCurrentUser();
 
     }
   },
@@ -645,7 +645,7 @@ Context.prototype = {
    * @param  {Event} ev The event object
    * @param  {String} text The text to be shown in the .dragbox
    */
-  showDragbox: function(ev, text) {
+  showDragbox: function(ev, text, newExtract) {
 
     var dragbox_max_length = 25,
         that = this;
@@ -673,10 +673,19 @@ Context.prototype = {
     this.dragbox.innerHTML = text;
 
     if (ev.dataTransfer) {
-      ev.dataTransfer.dropEffect = 'all';
-      ev.dataTransfer.effectAllowed = 'copy';
-      ev.dataTransfer.setData("text/plain", text);
-      ev.dataTransfer.setDragImage(this.dragbox, 10, 10);
+      if (newExtract) {
+        ev.dataTransfer.dropEffect = "link";
+        ev.dataTransfer.effectAllowed = 'link';
+      } else {
+        ev.dataTransfer.dropEffect = "move";
+        ev.dataTransfer.effectAllowed = 'all';
+      }
+      if (window.BrowserDetect.browser == "Explorer") {
+        ev.dataTransfer.setData("Text", text);
+      } else {
+        ev.dataTransfer.setData("text/plain", text);
+        ev.dataTransfer.setDragImage(this.dragbox, 10, 10);
+      }
     }
 
     $(ev.currentTarget).one("dragend", function() {
@@ -803,50 +812,6 @@ Context.prototype = {
 
     return null;
   },
-
-  /**
-   * Shows the context menu given the options
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Object} scope The scope where the functions will be executed
-   * @param {Object<string:function>} items The items on the context menu
-   */
-   
-  //FIXME: this method never use in app
-  /*showContextMenu: function(x, y, scope, items){
-   var menu_width = 150;
-
-
-   this.hideContextMenu();
-
-   var menu = $('<div>').addClass('contextmenu');
-
-   // Adjusting position
-   if( (x + menu_width) > (window.innerWidth - 50) ){
-   x = window.innerWidth - menu_width - 10;
-   }
-
-   menu.css({'top': y, 'left': x});
-
-   _.each(items, function(func, text){
-   var item = $('<a>').addClass('contextmenu-item').text(text);
-   item.on('click', func.bind(scope) );
-   menu.append( item );
-   });
-
-   $(document.body).append( menu );
-   window.setTimeout(function(){
-   $(document).on("click", this.hideContextMenu);
-   });
-
-   // Adjusting menu position
-   var menuY = menu.height() + y,
-   maxY = window.innerHeight - 50;
-
-   if( menuY >= maxY ){
-   menu.css({'top': maxY - menu.height() });
-   }
-   },*/
    
   /**
    * Shows the segment source in the better way related to the source
@@ -1239,32 +1204,33 @@ Context.prototype = {
     return this.format('/{0}/{1}', this.getDiscussionSlug(), url);
   },
 
-  isNewUser: function() {
-    var currentUser = null,
-        connectedUser = null;
+  manageLastCurrentUser: function() {
+    var lastCurrentUserId = null,
+        connectedUserId = null;
 
     if (window.localStorage.getItem('lastCurrentUser')) {
-      currentUser = window.localStorage.getItem('lastCurrentUser').split('/')[1];
+      lastCurrentUserId = window.localStorage.getItem('lastCurrentUser').split('/')[1];
     }
 
-    if (this.currentUser.get('@id') !== Roles.EVERYONE) {
-      connectedUser = this.currentUser.get('@id').split('/')[1];
+    if (this._currentUser.get('@id') !== Roles.EVERYONE) {
+      connectedUserId = this._currentUser.get('@id').split('/')[1];
     }
 
-    if (currentUser) {
-      if (connectedUser != currentUser) {
-        window.localStorage.removeItem('expertInterfacegroupItems');
-        window.localStorage.removeItem('simpleInterfacegroupItems');
-        window.localStorage.removeItem('composing_messages');
+    if(connectedUserId) {
+      //We have a real user logged-in
+      if (connectedUserId != lastCurrentUserId) {
+        //Clear the preferences of the previous real user that used the computer
+        console.info("Clearing preferences since the logged-in user changed, or there was no previous logged-in user")
+        // Take the opportunity to completely clear localStorage, since it's 
+        // unreliable so far...
+        window.localStorage.clear();
       }
-    } else {
-      window.localStorage.setItem('lastCurrentUser', this.currentUser.get('@id'));
+      window.localStorage.setItem('lastCurrentUser', this._currentUser.get('@id'));
     }
-
   },
 
   isUserConnected: function() {
-    if (this.currentUser.get('@id') !== Roles.EVERYONE) {
+    if (this._currentUser.get('@id') !== Roles.EVERYONE) {
       return true;
     } else {
       return false;

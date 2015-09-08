@@ -74,30 +74,12 @@ voteApp.controller('resultsCtl',
           var promise_generator = function(){
             return $.ajax(AssemblToolsService.resourceToUrl(target));
           };
-          $scope.targets_promises[target] = $scope.afterDelayPromiseGenerator(targetIndex*300, promise_generator);
+          $scope.targets_promises[target] = AssemblToolsService.afterDelayPromiseGenerator(targetIndex*300, promise_generator);
         });
       }
 
       $scope.drawUI();
 
-    };
-
-    $scope.delayPromiseGenerator = function(time) {
-      var defer = new $.Deferred();
-      setTimeout(function () {
-        defer.resolve();
-      }, time);
-      return defer.promise();
-    };
-
-    $scope.afterDelayPromiseGenerator = function(time, promise_generator){
-      var defer = new $.Deferred();
-      var delayPromise = $scope.delayPromiseGenerator(time);
-      delayPromise.then(function(){
-        var executedPromise = promise_generator();
-        executedPromise.then(defer.resolve, defer.reject);
-      }, defer.reject);
-      return defer.promise();
     };
 
     $scope.getVoteSpecFieldInSettings = function(vote_spec, field_name){
@@ -749,19 +731,17 @@ voteApp.controller('resultsCtl',
       });
       var strItemContentVotes = strTooltipContentVotes; // could be a different i18n
       var strItemContentAverage = "Average:";
+      var strItemContentAverageHelp = "";
       var strItemContentStandardDeviation = "Standard deviation:";
-      $translate('voteResultsAverage').then(function(translation) {
-        strItemContentAverage = translation;
-      });
-      $translate('voteResultsStandardDeviation').then(function(translation) {
-        strItemContentStandardDeviation = translation;
-      });
+      var strItemContentStandardDeviationHelp = "";
+      
 
 
       var strItemTooltipFrequency = "";
       $translate('voteResultsTooltipFrequency').then(function(translation) {
         strItemTooltipFrequency = translation;
       });
+      
 
       var tip = d3.tip()
         .attr('class', 'd3-tip')
@@ -784,8 +764,9 @@ voteApp.controller('resultsCtl',
       var target_idea_definition = null;
 
       var result_info = destination.append("p");
-      result_info.classed("result-info");
+      result_info.classed("result-info", true);
       var populateResultInfo = function(){
+        result_info.html("");
         // var text = "Vote result for question \"<span title='" + vote_spec_uri + "'>" + vote_spec_label + "</span>\" and target idea \"<span title='" + target + "'>" + target_idea_label + "</span>\":";
         //var text = "Result on the idea \"<span title='" + (target_idea_definition || target) + "'>" + target_idea_label + "</span>\":";
         var text = "";
@@ -793,16 +774,46 @@ voteApp.controller('resultsCtl',
         if ( vote_spec_type == "MultipleChoiceVoteSpecification" || vote_spec_type == "BinaryVoteSpecification" ){
           // add only the number of votes
           text += text_number_of_votes;
+          result_info.html(text);
         } else {
           // add number of votes, average and standard deviation
-          var text_average = strItemContentAverage + " " + result_average;
-          var text_standard_deviation = strItemContentStandardDeviation + " " + result_standard_deviation;
-          text += text_number_of_votes + "<br/>" + text_average + "<br/>" + text_standard_deviation;
+          var text_average = strItemContentAverage + " " + result_average.toFixed(1);
+          var el_average = result_info.append("div");
+          el_average.append("span").text(text_average);
+          if ( strItemContentAverageHelp ){
+            el_average.append("i").classed("question-mark-icon-small", true).attr("title", strItemContentAverageHelp);
+          }
+
+          var text_standard_deviation = strItemContentStandardDeviation + " " + result_standard_deviation.toFixed(1);
+          var el_standard_deviation = result_info.append("div");
+          el_standard_deviation.append("span").text(text_standard_deviation);
+          if ( strItemContentStandardDeviationHelp ){
+            el_standard_deviation.append("i").classed("question-mark-icon-small", true).attr("title", strItemContentStandardDeviationHelp);
+          }
         }
-        result_info.html(text);
       };    
 
       populateResultInfo();
+
+      // this is very boring
+      $translate('voteResultsAverage').then(function(translation) {
+        strItemContentAverage = translation;
+        populateResultInfo();
+      });
+      $translate('voteResultsAverageHelp').then(function(translation) {
+        strItemContentAverageHelp = translation;
+        populateResultInfo();
+      });
+      $translate('voteResultsStandardDeviation').then(function(translation) {
+        strItemContentStandardDeviation = translation;
+        populateResultInfo();
+      });
+      $translate('voteResultsStandardDeviationHelp').then(function(translation) {
+        strItemContentStandardDeviationHelp = translation;
+        populateResultInfo();
+      });
+
+      
 
       var target_id = target;
       if ( target_id in $scope.targets_promises ){

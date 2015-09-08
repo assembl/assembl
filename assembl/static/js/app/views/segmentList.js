@@ -415,7 +415,7 @@ var SegmentListPanel = AssemblPanel.extend({
       ev = ev.originalEvent;
     }
 
-    ev.dataTransfer.dropEffect = 'all';
+    ev.dataTransfer.dropEffect = 'move';
 
     var isText = false;
     if (ev.dataTransfer && ev.dataTransfer.types && _.indexOf(ev.dataTransfer.types, "text/plain") > -1) {

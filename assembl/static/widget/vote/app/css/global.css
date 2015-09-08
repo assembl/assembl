@@ -177,7 +177,20 @@ section.vote-question-item {
 
 .question-mark-icon {
   cursor: help;
-  /*background-image: ("app/images/question_mark_icon_with_alpha.png"); => is xlink:href in SVG and cannot be set via CSS */
+  background-image: url("../images/question_mark_icon_with_alpha.png"); /* => for <image> tags in SVG, this property is called xlink:href and cannot be set via CSS */
   width: 22px;
   height: 22px;
+  display: inline-block;
 }
+
+.question-mark-icon-small {
+  cursor: help;
+  background-image: url("../images/question_mark_icon_with_alpha.png"); /* => for <image> tags in SVG, this property is called xlink:href and cannot be set via CSS */
+  background-size: 11px 11px;
+  background-repeat: no-repeat;
+  width: 11px;
+  height: 11px;
+  display: inline-block;
+  margin-left: 5px;
+}
+

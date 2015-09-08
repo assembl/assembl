@@ -246,7 +246,7 @@ var IdeaView = Backbone.View.extend({
     if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
       ev.currentTarget.style.opacity = 0.4;
       ev.originalEvent.dataTransfer.effectAllowed = 'move';
-      ev.originalEvent.dataTransfer.dropEffect = 'all';
+      ev.originalEvent.dataTransfer.dropEffect = 'move';
 
       Ctx.showDragbox(ev, this.model.get('shortTitle'));
       Ctx.draggedIdea = this.model;
@@ -287,7 +287,7 @@ var IdeaView = Backbone.View.extend({
       this.model.set('isOpen', true);
     }
 
-    ev.dataTransfer.dropEffect = 'all';
+    ev.dataTransfer.dropEffect = 'move';
 
     if (Ctx.draggedIdea !== null) {
 
@@ -309,6 +309,13 @@ var IdeaView = Backbone.View.extend({
         this.$el.addClass('is-dragover-below');
       } else {
         this.$el.addClass('is-dragover');
+      }
+    } else {
+      // extract
+      if (ev.dataTransfer.effectAllowed == 'link') {
+        ev.dataTransfer.dropEffect = 'link';
+      } else {
+        ev.dataTransfer.dropEffect = 'move';
       }
     }
 
