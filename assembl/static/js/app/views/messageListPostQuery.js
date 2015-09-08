@@ -422,16 +422,19 @@ var PostQuery = function() {
       descriptionPromise,
       individualValuesButtonsPromises = [];
       _.each(filter.getValues(), function(value) {
-        individualValuesButtonsPromises.push(filter.getFilterIndividualValueDescriptionStringPromise(value).then(
-            function(individualValueString) {
+        individualValuesButtonsPromises.push(filter.getFilterIndividualValueDescriptionStringPromise(value)
+            .then(function(individualValueString) {
+
               var retval = '';
               retval += '<span>' + individualValueString + '</span>';
               retval += '<a href="#" class="remove js_deleteFilter" data-filterid="' + filter.getId() + '" data-value-index="' + _.indexOf(filter.getValues(), value) + '"  ><i class="icon-delete"></i></a>\n';
               return retval;
             }));
       });
-        
+
       descriptionPromise = filter.getFilterDescriptionStringPromise(individualValuesButtonsPromises);
+
+        console.debug(descriptionPromise);
 
       return descriptionPromise.then((function(description) {
         return '<li class="filter ui-tag">' + description + '</li>';

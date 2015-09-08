@@ -2,9 +2,20 @@ var i18n =  require('../i18n.js');
 
 var onStart = {
     id: "on_start",
+    onNext: function() {
+        // this should be a onBeforShow on next step...
+        var element = document.getElementById('tour_step_msg_list_options');
+        while (element && element.className.split(' ').indexOf('panel-body') < 0) {
+            element = element.parentNode;
+        }
+
+        if (element) {
+            element.scrollTop = 0;
+        }
+    },
+    onEnd:['getNextTour'],
     steps: [
         {
-            orphan: true,
             target: "tour_step_welcome",
             placement: "right",
             title: i18n.gettext("Welcome!"),
@@ -15,18 +26,8 @@ var onStart = {
             placement: "left",
             title: i18n.gettext("Join the discussion"),
             content: i18n.gettext("This is the conversation panel, where the discussion takes place. You can reply to messages directly, or create an entirely new message by clicking ‘react to the discussion’ at the bottom of the panel."),
-            xOffset: 20,
-            onNext: function() {
-                // this should be a onBeforShow on next step...
-                var element = document.getElementById('tour_step_msg_list_options');
-                while (element && element.className.split(' ').indexOf('panel-body') < 0) {
-                    element = element.parentNode;
-                }
+            xOffset: 20
 
-                if (element) {
-                    element.scrollTop = 0;
-                }
-            }
         },
         {
             target: "tour_step_msg_list_options",
@@ -62,8 +63,7 @@ var onStart = {
             target: "tour_step_notifications",
             placement: "left",
             title: i18n.gettext("Stay informed"),
-            content: i18n.gettext("Notifications are set to go to your email. If you aren’t receiving them, make sure to check your spam folder! You can update your notification settings here."),
-            multipage: true
+            content: i18n.gettext("Notifications are set to go to your email. If you aren’t receiving them, make sure to check your spam folder! You can update your notification settings here.")
         }
     ],
     showPrevButton: true

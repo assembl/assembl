@@ -113,6 +113,9 @@ AbstractFilter.prototype = {
       var that = this;
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
         return that.getLabelPromise().then(function(label) {
+
+            console.debug(label, individualValuesButtons)
+
           return i18n.sprintf(i18n.ngettext("%s (%s)", "%s (%s)", _.size(individualValuesButtons)), label, individualValuesButtons.join(', '));
         });
       });

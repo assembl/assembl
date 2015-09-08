@@ -283,59 +283,6 @@ xButtons
 
 -------------------------------- */
 
-.btn {
-    border: none;
-    box-shadow: none;
-    border-radius: .25em;
-    font: {
-        size: 1.4rem;
-        family: $secondary-font;
-    }
-    color: $color-5;
-    padding: .6em 2.2em;
-    cursor: pointer;
-    background: $color-1;
-
-    &:focus {
-        outline: none;
-    }
-
-    .no-touch &:hover {
-        background: lighten($color-1, 5%);
-    }
-
-    &.btn-success {
-        background: $success;
-
-        .no-touch &:hover {
-            background: lighten($success, 5%);
-        }
-    }
-
-    &.btn-alert {
-        background: $alert;
-
-        .no-touch &:hover {
-            background: lighten($alert, 5%);
-        }
-    }
-
-    &.btn-outline {
-        color: $color-1;
-        background: transparent;
-        box-shadow: inset 0 0 0 1px $color-1;
-
-        .no-touch &:hover {
-            color: $color-5;
-            background: $color-1;
-        }
-    }
-
-    @include MQ(S) {
-        font-size: 1.6rem;
-    }
-}
-
 .cd-buttons .cd-box:nth-of-type(2) span {
     /* CSS class name color */
     color: $color-1;

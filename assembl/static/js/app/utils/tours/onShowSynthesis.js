@@ -61,8 +61,7 @@ var onShowSynthesis = {
             target: "tour_step_notifications",
             placement: "left",
             title: i18n.gettext("Stay informed"),
-            content: i18n.gettext("Notifications are set to go to your email. If you aren’t receiving them, make sure to check your spam folder! You can update your notification settings here."),
-            multipage: true
+            content: i18n.gettext("Notifications are set to go to your email. If you aren’t receiving them, make sure to check your spam folder! You can update your notification settings here.")
         }
     ],
     showPrevButton: true

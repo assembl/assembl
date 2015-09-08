@@ -72,26 +72,6 @@ if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
 
       }, 6000);
 
-      /*setTimeout(function() {
-
-          Taketour.startTour('on_synthesis');
-
-      }, 6000);
-
-
-      setTimeout(function() {
-
-          Taketour.startTour('on_ideas');
-
-      }, 6000);
-
-      setTimeout(function() {
-
-          Taketour.startTour('on_profile');
-
-      }, 6000);*/
-
-
 
 
 
