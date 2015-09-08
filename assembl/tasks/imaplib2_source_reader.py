@@ -119,7 +119,7 @@ class IMAPReader(SourceReader):
                 self.source.last_imported_email_uid = email_id
                 self.source.db.commit()
             finally:
-                self.source = self.source.db.get(self.source.id)
+                self.source = ContentSource.get(self.source.id)
         except IMAP4.abort as e:
             raise IrrecoverableError(e)
         except IMAP4.error as e:

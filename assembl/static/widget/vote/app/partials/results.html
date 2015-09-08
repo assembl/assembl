@@ -5,9 +5,7 @@ We have to clear the cache or force refresh of the exact URL of this template pa
 
 <style>
 /* Bar chart is based on http://bl.ocks.org/Caged/6476579 */
-body {
-  font: 10px sans-serif;
-}
+
 svg.barchart .axis path,
 svg.barchart .axis line {
   fill: none;
@@ -22,34 +20,6 @@ svg.barchart .bar:hover {
 }
 svg.barchart .x.axis path {
   display: none;
-}
-
-
-.d3-tip {
-  line-height: 1;
-  font-weight: bold;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  border-radius: 2px;
-}
-/* Creates a small triangle extender for the tooltip */
-.d3-tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 10px;
-  width: 100%;
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
-}
-/* Style northward tooltips differently */
-.d3-tip.n:after {
-  margin: -1px 0 0 0;
-  top: 100%;
-  left: 0;
 }
 
 
@@ -70,6 +40,31 @@ svg.barchart .x.axis path {
   stroke: #000;
   shape-rendering: crispEdges;
 }
+
+
+/* general style */
+
+.inline-vote-result-for-a-target {
+  display: inline-block;
+  margin-top: 15px;
+  margin-right: 70px;
+  margin-bottom: 30px;
+}
+
+.inline-vote-result-for-a-target--title {
+  font-style: italic;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 5px;
+  max-width: 300px;
+}
+
+.inline-vote-result-for-a-target--item {
+
+}
+
+
+
 
 </style>
 

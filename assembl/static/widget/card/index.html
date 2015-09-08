@@ -11,8 +11,10 @@
     <link type="text/css" rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="app/css/fontello.css"/>
     <link type="text/css" rel="stylesheet" href="app/css/global.css"/>
+
+    <script src="bower_components/angular/angular.js"></script><!-- this script is in <head> instead of the end of <body> because of ng-cloak -->
 </head>
-<body ng-app="appCards">
+<body ng-cloak ng-app="appCards">
 <div class="container-fluid widget-container">
     <div class="row">
         <div class="tab-content">
@@ -36,7 +38,6 @@
 
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="bower_components/angular-resource/angular-resource.min.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>

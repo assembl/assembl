@@ -250,13 +250,7 @@ var Subscriber = Marionette.ItemView.extend({
     var that = this;
 
     if (this.role) {
-      this.role.destroy({
-                success: function(model, resp) {
-                  that.roles.remove(model);
-                },
-                error: function(model, resp) {
-                  console.error('ERROR: unSubscription failed', resp);
-                }});
+      this.roles.UnsubscribeUserFromDiscussion();
     }
   },
 
@@ -302,11 +296,8 @@ var userNotificationSubscriptions = Marionette.LayoutView.extend({
            collectionManager.getConnectedSocketPromise(),
             function(NotificationsUser, notificationTemplates, allRoles, socket) {
 
-              var role =  allRoles.find(function(local_role) {
-                return local_role.get('role') === Roles.PARTICIPANT;
-              });
               var subscriber = new Subscriber({
-                role: role,
+                role: allRoles.isUserSubscribedToDiscussion(),
                 roles: allRoles
               });
               that.getRegion('userSubscriber').show(subscriber);
@@ -314,14 +305,14 @@ var userNotificationSubscriptions = Marionette.LayoutView.extend({
               var templateSubscriptions = new TemplateSubscriptions({
                 notificationTemplates: notificationTemplates,
                 notificationsUser: NotificationsUser,
-                role: role,
+                role: allRoles.isUserSubscribedToDiscussion(),
                 roles: allRoles
               });
               that.getRegion('templateSubscription').show(templateSubscriptions);
 
               var userNotification = new Notifications({
                 notificationsUser: NotificationsUser,
-                role: role,
+                role: allRoles.isUserSubscribedToDiscussion(),
                 roles: allRoles
               });
               that.getRegion('userNotifications').show(userNotification);

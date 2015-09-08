@@ -1,8 +1,8 @@
 "use strict";
 
 voteApp.controller('adminCreateFromIdeaCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService',
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService) {
+  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService',
+  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, AssemblToolsService) {
 
     $scope.current_step = 1;
     $scope.url_parameter_idea = null; // the URL of the idea given in URL parameter, which will be associated to the widget instance

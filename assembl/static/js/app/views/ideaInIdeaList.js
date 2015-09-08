@@ -6,7 +6,8 @@ var Backbone = require('../shims/backbone.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js'),
-    PanelSpecTypes = require('../utils/panelSpecTypes.js');
+    PanelSpecTypes = require('../utils/panelSpecTypes.js'),
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var IdeaView = Backbone.View.extend({
   /**
@@ -186,7 +187,16 @@ var IdeaView = Backbone.View.extend({
    */
   doIdeaChange: function(is_unread) {
       var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-
+      
+      var analytics = Analytics.getInstance();
+      console.log('Tracking event on idea ', this.model.getShortTitleDisplayText())
+      if(!is_unread) {
+        analytics.trackEvent(analytics.events.OPEN_IDEA_IN_TABLE_OF_IDEAS);
+      }
+      else {
+        analytics.trackEvent(analytics.events.OPEN_IDEA_NEW_MESSAGES_IN_TABLE_OF_IDEAS);
+      }
+      analytics.trackEvent(analytics.events.NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS);
       this._groupContent.setCurrentIdea(this.model);
       if (messageListView) {
         //Syncing with current idea below isn't sufficient, as we need to set/unset the unread filter

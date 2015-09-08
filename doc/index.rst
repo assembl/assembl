@@ -9,7 +9,13 @@ Welcome to Assembl's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
+
+   backups
+   permissions_and_roles
+   localization
+   analytics/piwik_reporting_api
+   analytics/events
 
    services
    modules

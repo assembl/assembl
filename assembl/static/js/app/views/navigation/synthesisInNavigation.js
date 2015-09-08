@@ -8,7 +8,8 @@ var Marionette = require('../../shims/marionette.js'),
     Types = require('../../utils/types.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
-    PanelSpecTypes = require('../../utils/panelSpecTypes.js');
+    PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
+    Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 var SynthesisItem = Marionette.ItemView.extend({
   template: '#tmpl-synthesisItemInNavigation',
@@ -74,6 +75,9 @@ var SynthesisInNavigationPanel = AssemblPanel.extend({
     },
 
   displaySynthesis: function(messageId) {
+    var analytics = Analytics.getInstance();
+
+    analytics.trackEvent(analytics.events.NAVIGATION_OPEN_SPECIFIC_SYNTHESIS);
     var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
     messageListView.currentQuery.clearAllFilters();
     messageListView.toggleFilterByPostId(messageId);

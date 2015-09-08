@@ -237,5 +237,43 @@
         "@private": "user",
         "discussion": true,
         "role": "&get_role_name"
+    },
+    "Widget": {
+        "discussion": true,
+        "settings": "settings_json",
+        "state": "state_json",
+        "start_date": true,
+        "end_date": true,
+        "configured": true,
+        "activity_state": true,
+        "ui_endpoint": "&get_ui_endpoint",
+        "widget_settings_url": "&get_settings_url",
+        "widget_state_url": "&get_state_url"
+    },
+    "BaseIdeaWidget": {
+        "@extends": "Widget",
+        "ideas_url": "&get_ideas_url",
+        "messages_url": "&get_messages_url",
+        "base_idea": true
+    },
+    "IdeaCreatingWidget": {
+        "@extends": "BaseIdeaWidget",
+        "ideas_hiding_url": "&get_ideas_hiding_url",
+        "confirm_ideas_url": "&get_confirm_ideas_url",
+        "confirm_messages_url": "&get_confirm_messages_url"
+    },
+    "CreativitySessionWidget": {
+        "@extends": "IdeaCreatingWidget"
+    },
+    "InspirationWidget": {
+        "@extends": "IdeaCreatingWidget"
+    },
+    "MultiCriterionVotingWidget": {
+        "@extends": "BaseIdeaWidget",
+        "criteria_url": true,
+        "votespecs_url": true,
+        "votables_url": true,
+        "votable_ideas": ":id_only",
+        "vote_specifications": ":"
     }
 }

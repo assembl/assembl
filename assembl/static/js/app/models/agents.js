@@ -31,6 +31,9 @@ var AgentModel = Base.Model.extend({
     avatar_url_base: null,
     creation_date: null,
     is_first_visit: false,
+    first_visit: null,
+    last_visit: null,
+    last_login: null,
     real_name: null,
     permissions: [],
     '@type': null,
@@ -58,22 +61,6 @@ var AgentModel = Base.Model.extend({
     } catch (e) {
       throw new Error("Invalid json");
     }
-  },
-
-  fetchPermissionsToScriptTag: function(id) {
-    //console.log("AgentModel::fetchPermissionsToScriptTag()");
-    id = id || 'permissions-json';
-
-    var promise = this.fetchPermissions();
-    promise.then(function(permissions) {
-      try {
-        Ctx.writeJsonToScriptTag(permissions, id);
-      } catch (e) {
-        throw new Error("Invalid json");
-      }
-    });
-
-    return promise;
   },
 
   /**
@@ -126,6 +113,13 @@ var AgentModel = Base.Model.extend({
    * @return {Boolean} true if the user is an unknown user
    */
   isUnknownUser: function() {
+    return this.getId() == UNKNOWN_USER_ID;
+  },
+
+  /**
+   * @return {Boolean} true if the user is currently a member of the discussion
+   */
+  isDiscussionMember: function() {
     return this.getId() == UNKNOWN_USER_ID;
   },
 

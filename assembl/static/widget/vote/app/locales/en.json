@@ -1,6 +1,21 @@
 {
     "vote":"Vote",
 
+    "errorNeedLogin":"You have to be authenticated to vote. Please log in and try again.",
+    "errorNeedPermission":"Error: you do not have the permission to vote.",
+    "errorNoValueForCriterion":"Error: no value for criterion \"{{criterion}}\"",
+    "errorNoVoteToSubmit":"Error: There is no vote to submit!",
+    "ideaDescription":"Description",
+    "voteResultsForTwoCriteria":"Vote results for criteria \"<span title='{{first_hover}}'>{{first_label}}</span>\" and \"<span title='{{second_hover}}'>{{second_title}}</span>\".<br/>number of votes: {{number_of_votes}}",
+    "voteResultsForQuestionNoResult":"There is no vote yet for question \"<span title='{{hover}}'>{{label}}\", on any of its target ideas.",
+    "voteResultsVotes":"Votes:",
+    "voteResultsFrequency":"Frequency:",
+    "voteResultsAverage":"Average:",
+    "voteResultsStandardDeviation":"Standard deviation:",
+    "voteResultsAxisFrequency":"Frequency",
+    "voteResultsForTarget":"Results for idea",
+    "voteResultsTooltipFrequency":"<span class='data'>[[percent]]%</span><span class='text'> of participants have chosen this option, this corresponds to </span><span class='data'>[[votes]]</span><span class='text'> votes</span>",
+
     "historyBack":"Back",
     "voteSubmit":"Submit your vote",
     "voteSubmitLoading": "Your vote is being submitted...",

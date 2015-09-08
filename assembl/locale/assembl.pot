@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-19 17:24-0400\n"
+"POT-Creation-Date: 2015-08-28 14:42-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,27 +72,27 @@ msgstr ""
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:115
+#: assembl/static/js/app/common/context.js:116
 msgid "Message titles"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:119
+#: assembl/static/js/app/common/context.js:120
 msgid "Message previews"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:123
+#: assembl/static/js/app/common/context.js:124
 msgid "Complete messages"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:605
+#: assembl/static/js/app/common/context.js:615
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:949
+#: assembl/static/js/app/common/context.js:959
 msgid "ajax error message:"
 msgstr ""
 
-#: assembl/static/js/app/models/agents.js:189
+#: assembl/static/js/app/models/agents.js:181
 msgid "Unknown user"
 msgstr ""
 
@@ -106,7 +106,7 @@ msgid "you must <a href='%s'>Sign in</a>"
 msgstr ""
 
 #: assembl/static/js/app/models/discussion.js:66
-msgid "you must Join this discussion"
+msgid "you must join this discussion"
 msgstr ""
 
 #: assembl/static/js/app/models/discussion.js:70
@@ -179,221 +179,248 @@ msgstr ""
 msgid "Add a conclusion"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:173
+#: assembl/static/js/app/models/widget.js:196
 msgid "Create a voting session on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:175
-#: assembl/static/js/app/models/widget.js:186
+#: assembl/static/js/app/models/widget.js:199
+#: assembl/static/js/app/models/widget.js:211
 msgid "Vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:188
-msgid "Modify your vote"
+#: assembl/static/js/app/models/widget.js:201
+#: assembl/static/js/app/models/widget.js:205
+#: assembl/static/js/app/models/widget.js:365
+#: assembl/static/js/app/models/widget.js:373
+#: assembl/static/js/app/models/widget.js:510
+msgid "Configure"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:190
+#: assembl/static/js/app/models/widget.js:213
 msgid "Complete your vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:193
+#: assembl/static/js/app/models/widget.js:215
+msgid "Modify your vote"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:218
 msgid "See the vote results"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:196
+#: assembl/static/js/app/models/widget.js:221
 msgid "Configure this vote widget"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:199
+#: assembl/static/js/app/models/widget.js:224
 msgid "See results from the vote of "
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:226
+#: assembl/static/js/app/models/widget.js:253
+#: assembl/static/js/app/models/widget.js:408
+msgid "This widget is not fully configured"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:257
 msgid "A vote session is ongoing."
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:228
-#, python-format
-msgid "You have %s to vote"
-msgstr ""
-
-#: assembl/static/js/app/models/widget.js:236
+#: assembl/static/js/app/models/widget.js:267
 #, python-format
 msgid "The option “%s” is being considered in a vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:239
+#: assembl/static/js/app/models/widget.js:270
 #, python-format
 msgid "The option “%s” was considered in a vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:241
+#: assembl/static/js/app/models/widget.js:272
 msgid "A voting session is ongoing on this issue"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:243
+#: assembl/static/js/app/models/widget.js:274
 msgid "A voting session has happened on this issue"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:245
+#: assembl/static/js/app/models/widget.js:276
 #, python-format
 msgid "“%s” is being used as a criterion in a vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:247
+#: assembl/static/js/app/models/widget.js:278
 #, python-format
 msgid "“%s” was used as a criterion in a vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:309
+#: assembl/static/js/app/models/widget.js:288
+#, python-format
+msgid "You have %s to vote"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:360
 msgid "Create a creativity session on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:311
-#: assembl/static/js/app/models/widget.js:319
+#: assembl/static/js/app/models/widget.js:363
+#: assembl/static/js/app/models/widget.js:377
 msgid "Participate"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:315
+#: assembl/static/js/app/models/widget.js:370
 msgid "Configure the creativity session on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:321
+#: assembl/static/js/app/models/widget.js:379
 msgid "Review the session"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:348
+#: assembl/static/js/app/models/widget.js:412
 msgid "A creativity session is ongoing."
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:350
+#: assembl/static/js/app/models/widget.js:420
+msgid "A creativity session is ongoing on this issue"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:422
+msgid "A creativity session has happened on this issue"
+msgstr ""
+
+#: assembl/static/js/app/models/widget.js:426
 #, python-format
 msgid "You have %s to participate"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:356
-msgid "A creativity session is ongoing on this issue"
-msgstr ""
-
-#: assembl/static/js/app/models/widget.js:358
-msgid "A creativity session has happened on this issue"
-msgstr ""
-
-#: assembl/static/js/app/models/widget.js:423
+#: assembl/static/js/app/models/widget.js:499
 msgid "Create an inspiration module on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:425
+#: assembl/static/js/app/models/widget.js:501
 msgid "Create an inspiration module on this discussion"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:427
+#: assembl/static/js/app/models/widget.js:503
 msgid "Configure the inspiration module associated to the discussion"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:429
+#: assembl/static/js/app/models/widget.js:505
 msgid "Configure the inspiration module associated to this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:431
+#: assembl/static/js/app/models/widget.js:508
 #: assembl/templates/views/messageList.tmpl:32
 #: assembl/templates/views/messageList.tmpl:42
 msgid "I need inspiration"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:13
+#: assembl/static/js/app/utils/taketour.js:73
+msgid "Next"
+msgstr ""
+
+#: assembl/static/js/app/utils/taketour.js:74
+msgid "Back"
+msgstr ""
+
+#: assembl/static/js/app/utils/taketour.js:75
+msgid "Done"
+msgstr ""
+
+#: assembl/static/js/app/utils/taketour.js:76
+msgid "Skip"
+msgstr ""
+
+#: assembl/static/js/app/utils/taketour.js:77
+msgid "Close"
+msgstr ""
+
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:9
+#: assembl/static/js/app/utils/tours/onStart.js:9
 #: assembl/templates/views/helperDebate.tmpl:3
 msgid "Welcome!"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:14
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:10
+#: assembl/static/js/app/utils/tours/onStart.js:10
 msgid ""
 "Welcome to this discussion. We’ve created a 30 second tour to help you get "
 "started using Assembl"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:19
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:15
+#: assembl/static/js/app/utils/tours/onStart.js:15
 msgid "Join the discussion"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:20
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:16
+#: assembl/static/js/app/utils/tours/onStart.js:16
 msgid ""
 "This is the conversation panel, where the discussion takes place. You can "
 "reply to messages directly, or create an entirely new message by clicking "
 "‘react to the discussion’ at the bottom of the panel."
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:37
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:33
+#: assembl/static/js/app/utils/tours/onStart.js:33
 msgid "Customize your view"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:38
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:34
+#: assembl/static/js/app/utils/tours/onStart.js:34
 msgid ""
 "You can view the discussion in many different ways using the filters at the "
 "top, or under ‘more options’ in each message."
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:45
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:41
+#: assembl/static/js/app/utils/tours/onStart.js:41
 msgid "Find messages easily"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:46
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:42
+#: assembl/static/js/app/utils/tours/onStart.js:42
 msgid ""
 "Excerpts from these messages are harvested and are organized to help you find"
 " messages you are interested in. Click on ‘see in context’ to view the "
 "message related to the excerpt."
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:53
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:49
+#: assembl/static/js/app/utils/tours/onStart.js:49
 msgid "Navigate quickly through the conversations"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:54
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:50
+#: assembl/static/js/app/utils/tours/onStart.js:50
 msgid ""
 "You can find the topics that are currently being discussed in this table of "
 "contents. Clicking on a topic will filter the conversation to only show "
 "messages that have been harvested under that topic."
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:60
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:56
+#: assembl/static/js/app/utils/tours/onStart.js:56
 msgid "Catch up on what’s been said"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:62
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:58
+#: assembl/static/js/app/utils/tours/onStart.js:58
 msgid ""
 "Periodically an executive summary of the discussion is created to give you a "
 "quick overview of what was said since the last executive summary"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:67
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:63
+#: assembl/static/js/app/utils/tours/onStart.js:63
 msgid "Stay informed"
 msgstr ""
 
-#: assembl/static/js/app/utils/taketour.js:68
+#: assembl/static/js/app/utils/tours/onShowSynthesis.js:64
+#: assembl/static/js/app/utils/tours/onStart.js:64
 msgid ""
 "Notifications are set to go to your email. If you aren’t receiving them, make"
 " sure to check your spam folder! You can update your notification settings "
 "here."
-msgstr ""
-
-#: assembl/static/js/app/utils/taketour.js:84
-msgid "Next"
-msgstr ""
-
-#: assembl/static/js/app/utils/taketour.js:85
-msgid "Back"
-msgstr ""
-
-#: assembl/static/js/app/utils/taketour.js:86
-msgid "Done"
-msgstr ""
-
-#: assembl/static/js/app/utils/taketour.js:87
-msgid "Skip"
-msgstr ""
-
-#: assembl/static/js/app/utils/taketour.js:88
-msgid "Close"
 msgstr ""
 
 #: assembl/static/js/app/views/contextPage.js:78
@@ -678,7 +705,7 @@ msgid "Send your comment"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaPanel.js:312
-#: assembl/static/js/app/views/messageList.js:1152
+#: assembl/static/js/app/views/messageList.js:1151
 msgid "You need to type a comment first..."
 msgstr ""
 
@@ -755,36 +782,37 @@ msgstr ""
 msgid "New messages threaded"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:811
+#: assembl/static/js/app/views/messageList.js:810
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1149
+#: assembl/static/js/app/views/messageList.js:1148
 #: assembl/static/js/app/views/messageSend.js:111
 #: assembl/templates/do_password_change.jinja2:18
 #: assembl/templates/request_password_change.jinja2:26
 msgid "Send"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1150
+#: assembl/static/js/app/views/messageList.js:1149
 msgid "Subject"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1151
+#: assembl/static/js/app/views/messageList.js:1150
 msgid "Add a subject above and start a new topic here"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1153
+#: assembl/static/js/app/views/messageList.js:1152
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1618
+#: assembl/static/js/app/views/messageList.js:1617
 msgid "Send to clipboard"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1620
+#: assembl/static/js/app/views/messageList.js:1619
 #: assembl/static/js/app/views/messageSend.js:110
 #: assembl/templates/styleguide/components/Dialogs.jinja2:119
+#: assembl/templates/styleguide/components/Dialogs.jinja2:146
 #: assembl/templates/views/adminPartnerEditForm.tmpl:65
 #: assembl/templates/views/adminPartnerEditForm.tmpl:71
 #: assembl/templates/views/adminPartnerForm.tmpl:63
@@ -797,18 +825,18 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1659
+#: assembl/static/js/app/views/messageList.js:1658
 #, python-format
 msgid ""
 "This extract was organized in the idea \" %s \" by the facilitator of the "
 "debate"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1662
+#: assembl/static/js/app/views/messageList.js:1661
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:2438
+#: assembl/static/js/app/views/messageList.js:2437
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
@@ -1129,11 +1157,6 @@ msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:269
 msgid "Failed publishing synthesis!"
-msgstr ""
-
-#: assembl/static/js/app/views/widgetButtons.js:35
-#, python-format
-msgid "You have %s"
 msgstr ""
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:69
@@ -1531,6 +1554,7 @@ msgid "Please read the rest of this synthesis online"
 msgstr ""
 
 #: assembl/templates/styleguide/components/Dialogs.jinja2:120
+#: assembl/templates/styleguide/components/Dialogs.jinja2:147
 #: assembl/templates/views/adminPartnerEditForm.tmpl:72
 #: assembl/templates/views/adminPartnerForm.tmpl:70
 #: assembl/templates/views/create-group.tmpl:97
@@ -1772,7 +1796,7 @@ msgid "Add partner"
 msgstr ""
 
 #: assembl/templates/views/ajaxError.tmpl:2
-msgid "assembl need to be reload"
+msgid "Assembl needs to be reloaded"
 msgstr ""
 
 #: assembl/templates/views/ajaxError.tmpl:7
@@ -2631,24 +2655,24 @@ msgstr ""
 msgid "No file given."
 msgstr ""
 
-#: assembl/views/api/post.py:60 assembl/views/api/post.py:429
+#: assembl/views/api/post.py:61 assembl/views/api/post.py:422
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr ""
 
-#: assembl/views/api/post.py:142
+#: assembl/views/api/post.py:143
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:149
+#: assembl/views/api/post.py:150
 msgid "Getting non-orphan posts isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:242
+#: assembl/views/api/post.py:235
 msgid "You must be logged in to view which posts are read"
 msgstr ""
 
-#: assembl/views/api/post.py:412
+#: assembl/views/api/post.py:405
 msgid "Your message is empty"
 msgstr ""
 

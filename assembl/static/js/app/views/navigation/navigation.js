@@ -14,7 +14,8 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js'),
     Permissions = require('../../utils/permissions.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    CollectionManager = require('../../common/collectionManager.js');
+    CollectionManager = require('../../common/collectionManager.js'),
+    Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 var NavigationView = AssemblPanel.extend({
   template: "#tmpl-navigation",
@@ -46,7 +47,7 @@ var NavigationView = AssemblPanel.extend({
     synthesis_tab: '.js_synthesis_tab'
   },
   events: {
-    'click @ui.navigation': 'toggleMenuByEvent',
+    'click @ui.navigation': '_toggleMenuByEvent',
     'click @ui.ideaFromIdealist': 'addIdeaFromIdeaList',
   },
   initialize: function(options) {
@@ -57,7 +58,7 @@ var NavigationView = AssemblPanel.extend({
     this.visualizationItems = new Base.Collection();
     this.num_items = 2;
 
-    this.listenTo(Assembl.vent, 'navigation:selected', this.toggleMenuByName);
+    this.listenTo(Assembl.vent, 'DEPRECATEDnavigation:selected', this.setViewByName);
     this.listenTo(Assembl.vent, 'infobar:closeItem', this.setSideBarHeight);
   },
   onAttach:function() {
@@ -71,59 +72,15 @@ var NavigationView = AssemblPanel.extend({
 
     collectionManager.getDiscussionModelPromise()
     .then(function(discussion) {
-
-      var settings = discussion.get('settings') || {},
-      translations = settings.translations,
-      visualizations = settings.visualizations,
-      navigation_sections = settings.navigation_sections,
-      jed;
-
-      try {
-        // temporary hack
-        if (settings.navigation_sections === undefined) {
-          return;
-        }
-
-        try {
-          jed = new Jed(translations[Ctx.getLocale()]);
-        } catch (e) {
-          // console.error(e);
-          jed = new Jed({});
-        }
-
-        var new_navigation_items = 0;
-        for (var i in navigation_sections) {
-          var navigation_section = navigation_sections[i],
-          permission = navigation_section.requires_permission || Permissions.READ;
-          if (Ctx.getCurrentUser().can(permission)) {
-            var visualization_items = navigation_section.navigation_content.items;
-            visualization_items = _.filter(visualization_items, function(item) {
-              return Ctx.getCurrentUser().can(item.requires_permission || Permissions.READ) &&
-              visualizations[item.visualization] !== undefined;
-            });
-            if (visualization_items.length === 0)
-              continue;
-            that.visualizationItems.reset(_.map(visualization_items, function(item) {
-              var visualization = visualizations[item.visualization];
-              return new Base.Model({
-                "url": visualization.url,
-                "title": jed.gettext(visualization.title),
-                "description": jed.gettext(visualization.description)
-              });
-            }));
-            new_navigation_items += 1;
-          }
-        }
-
-        if (new_navigation_items) {
-          that.num_items += new_navigation_items;
-          that.ui.visualization_tab.show();
-          setTimeout(function() {
-            that.setSideBarHeight();
-          }, 500);
-        }
-      } catch (e) {
-        console.log(e);
+      var navigationItemCollections = discussion.getVisualizations();
+      if (navigationItemCollections.length > 0) {
+        // just use the first one for now.
+        that.visualizationItems.reset(navigationItemCollections[0].models);
+        that.num_items += 1;
+        that.ui.visualization_tab.show();
+        setTimeout(function() {
+          that.setSideBarHeight();
+        }, 500);
       }
     });
 
@@ -141,23 +98,35 @@ var NavigationView = AssemblPanel.extend({
     $(window).off('resize', this.setSideBarHeight);
   },
 
-  toggleMenuByName: function(itemName, options) {
-    var elm = this.$('.nav[data-view=' + itemName + ']');
-    this.toggleMenuByElement(elm, options);
+  /** 
+   * @param origin Analytics context where the event was fired
+   */
+  setViewByName: function(itemName, origin) {
+    if (origin === undefined) {
+      origin = '-';
+    }
+    this._toggleMenuByName(itemName);
+    this._loadView(itemName, origin);
   },
-  toggleMenuByEvent: function(evt) {
+
+  _toggleMenuByName: function(itemName, options) {
+    var elm = this.$('.nav[data-view=' + itemName + ']');
+    this._toggleMenuByElement(elm, options);
+  },
+
+  _toggleMenuByEvent: function(evt) {
     if ($(evt.target).hasClass("panel-header-minimize"))
         return;
     var elm = $(evt.currentTarget), // use currentTarget instead of target, so that we are sure that it is a .nav element
         view = elm.attr('data-view');
-    Assembl.vent.trigger("navigation:selected", view);
+    Assembl.vent.trigger("DEPRECATEDnavigation:selected", view, 'NAVIGATION');
   },
 
   /**
    * Toggle a navigation accordion item
    * @param  {jQuery selection of a DOM element} elm
    */
-  toggleMenuByElement: function(elm, options) {
+  _toggleMenuByElement: function(elm, options) {
     this.setSideBarHeight();
     var view = elm.attr('data-view');
 
@@ -166,8 +135,6 @@ var NavigationView = AssemblPanel.extend({
       this.$('.nav').removeClass('active');
       elm.addClass('active');
       elm.next(this.ui.level).slideDown();
-
-      this.loadView(view, options);
     }
   },
 
@@ -185,7 +152,7 @@ var NavigationView = AssemblPanel.extend({
   /**
    * @param options: { show_help: boolean }
    */
-  loadView: function(view, options) {
+  _loadView: function(view, origin) {
       // clear aspects of current state
       switch (this.getContainingGroup().model.get('navigationState')) {
         case 'synthesis':
@@ -200,7 +167,7 @@ var NavigationView = AssemblPanel.extend({
           break;
       }
       this.getContainingGroup().model.set('navigationState', view);
-
+      var analytics = Analytics.getInstance();
       // set new state
       switch (view) {
         case 'about':
@@ -209,6 +176,10 @@ var NavigationView = AssemblPanel.extend({
             panelWrapper: this.getPanelWrapper()
           });
           this.about.show(aboutNavPanel);
+          if(origin !== null) {
+            analytics.trackEvent(analytics.events.NAVIGATION_OPEN_CONTEXT_SECTION);
+            analytics.changeCurrentPage(analytics.pages.SIMPLEUI_CONTEXT_SECTION);
+          }
           this.getContainingGroup().NavigationResetContextState();
           break;
         case 'debate':
@@ -218,6 +189,10 @@ var NavigationView = AssemblPanel.extend({
             nav: true
           });
           this.debate.show(idealist);
+          if(origin !== null) {
+            analytics.trackEvent(analytics.events.NAVIGATION_OPEN_DEBATE_SECTION);
+            analytics.changeCurrentPage(analytics.pages.SIMPLEUI_DEBATE_SECTION);
+          }
           this.getContainingGroup().NavigationResetDebateState();
           break;
         case 'synthesis':
@@ -226,6 +201,10 @@ var NavigationView = AssemblPanel.extend({
             panelWrapper: this.getPanelWrapper()
           });
           this.synthesis.show(synthesisInNavigationPanel);
+          if(origin !== null) {
+            analytics.trackEvent(analytics.events.NAVIGATION_OPEN_SYNTHESES_SECTION);
+            analytics.changeCurrentPage(analytics.pages.SIMPLEUI_SYNTHESES_SECTION);
+          }
           this.getContainingGroup().NavigationResetSynthesisMessagesState(synthesisInNavigationPanel);
           break;
         case 'visualizations':
@@ -234,9 +213,14 @@ var NavigationView = AssemblPanel.extend({
             collection: this.visualizationItems
           });
           this.visualizationList.show(visualizationListPanel);
+          //SHOULDN'T WE CLEAR THE OTHER PANELS HERE?  benoitg- 2015-08-20
+          if(origin !== null) {
+            analytics.trackEvent(analytics.events.NAVIGATION_OPEN_VISUALIZATIONS_SECTION);
+            analytics.changeCurrentPage(analytics.pages.SIMPLEUI_VISUALIZATIONS_SECTION);
+          }
           break;
         default:
-          break
+          break;
       }
     },
 

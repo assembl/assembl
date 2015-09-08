@@ -405,7 +405,7 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       if (context == this.UNTIL_TEXT) {
         return "";
       }
-      return i18n.gettext("This widget is not fully configured.");
+      return i18n.gettext("This widget is not fully configured");
     }
     switch (context) {
       case this.INFO_BAR:

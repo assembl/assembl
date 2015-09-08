@@ -36,11 +36,13 @@ HomeModule.controller('HomeController', [
               growl.success(tr);
             });
             $scope.getSubIdeaFromIdea();
+            $scope.message = null; // reset message value, in order to hear another change if the user posts another message
             break;
           case 'sendNewIdea:error':
             $translate("Sorry, an error occured").then(function (tr) {
               growl.error(tr);
             });
+            $scope.message = null; // reset message value, in order to hear another change if the user posts another message
             break;
 
         }

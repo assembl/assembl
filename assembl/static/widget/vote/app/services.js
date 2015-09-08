@@ -1,8 +1,8 @@
 "use strict";
 
-var creativityServices = angular.module('creativityServices', ['ngResource']);
+var voteServices = angular.module('voteServices', ['ngResource']);
 
-creativityServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', function($window, $rootScope, $log) {
+voteServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', function($window, $rootScope, $log) {
   this.resourceToUrl = function(str)
   {
     var start = "local:";
@@ -15,7 +15,7 @@ creativityServices.service('AssemblToolsService', ['$window', '$rootScope', '$lo
   };
 }]);
 
-creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$http', function($window, $rootScope, $log, $http) {
+voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$http', function($window, $rootScope, $log, $http) {
 
   this.mandatory_settings_fields = [];
 
@@ -75,11 +75,12 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
       "label": "Show criterion description",
       "type": "select",
       "description": "Different ways of displaying the description associated to each criterion",
-      "default":"tooltip",
+      "default":"icon",
       "options": {
         "false": "false",
         "tooltip": "tooltip",
-        "text": "text"
+        "text": "text",
+        "icon": "icon"
       }
     }
   ];
@@ -491,7 +492,8 @@ creativityServices.service('VoteWidgetService', ['$window', '$rootScope', '$log'
 
 }]);
 
-creativityServices.factory('globalConfig', function($http) {
+// not really used => TODO: remove
+voteServices.factory('globalConfig', function($http) {
 
   var api_rest = 'test/config_test.json';
 
@@ -503,12 +505,12 @@ creativityServices.factory('globalConfig', function($http) {
 
 });
 
-//CONFIG
-creativityServices.factory('configTestingService', [function() {
+// not really used => TODO: remove
+voteServices.factory('configTestingService', [function() {
   return {
     init: function() {
       
-    },
+    }/*,
     testCall: function() {
       $.ajax({
         url:'http://localhost:6543/data/Discussion/1/widgets',
@@ -545,20 +547,10 @@ creativityServices.factory('configTestingService', [function() {
         success: fnSuccess,
         error: fnError
       });
-    }
+    }*/
   }
 
 }]);
 
-//CARD inspire me: send an idea to assembl
-creativityServices.factory('sendIdeaService', ['$resource', function($resource) {
-  return $resource('http://localhost:6543/api/v1/discussion/:discussionId/posts')
-}]);
 
-// WIP: use Angular's REST and Custom Services as our Model for Messages
-creativityServices.factory('Discussion', ['$resource', function($resource) {
-  return $resource('http://localhost:6543/data/Discussion/:discussionId', {}, {
-    query: {method:'GET', params:{discussionId:'1'}, isArray:false}
-  });
-}]);
 

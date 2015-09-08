@@ -1,8 +1,8 @@
 "use strict";
 
 voteApp.controller('indexCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'VoteWidgetService',
-  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, VoteWidgetService) {
+  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'VoteWidgetService',
+  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, AssemblToolsService, VoteWidgetService) {
 
     // intialization code (constructor)
 
@@ -50,8 +50,10 @@ voteApp.controller('indexCtl',
       // check that the user is logged in
       if (!configService.user || !configService.user.verified)
       {
-        alert('You have to be authenticated to vote. Please log in and try again.');
-        window.location.assign("/login");
+        $translate('errorNeedLogin').then(function(translation) {
+          alert(translation);
+          window.location.assign("/login");
+        });
         return;
       }
 
@@ -72,7 +74,9 @@ voteApp.controller('indexCtl',
               console.log("OK we are sure that the user has the permission to vote");
             }
             else {
-              alert("Error: you do not have the permission to vote.");
+              $translate('errorNeedPermission').then(function(translation) {
+                alert(translation);
+              });
               return;
             }
           }
@@ -80,74 +84,6 @@ voteApp.controller('indexCtl',
       }
 
       $scope.initVotingForAllTargets();
-
-      /*
-      // try to get previous votes of the user
-
-      if (!configService.user_votes_url)
-      {
-        $scope.drawUI();
-      }
-      else
-      {
-        var my_votes_endpoint_url = AssemblToolsService.resourceToUrl(configService.user_votes_url);
-        $http({
-          method: 'GET',
-          url: my_votes_endpoint_url,
-        }).success(function(data, status, headers) {
-          console.log("user votes received: ", data);
-          var my_votes = data;
-
-          // override default value of given criteria
-          if ("items" in $scope.settings)
-          _.each($scope.settings.items, function(item, item_index) {
-            if ("vote_specifications" in item)
-            _.each(item.vote_specifications, function(criterion, criterion_index) {
-              var entity_id = criterion["@id"];
-              var my_vote_for_this_criterion = _.findWhere(my_votes, {"vote_spec": entity_id});
-              if (my_vote_for_this_criterion)
-              {
-                console.log("value found: " + my_vote_for_this_criterion.value);
-                var new_value = my_vote_for_this_criterion.value;
-
-                // interpret vote value differently depending on criterion type
-                if (my_vote_for_this_criterion["@type"] == "BinaryIdeaVote")
-                {
-                  console.log("criterion type is BinaryIdeaVote");
-                  if (my_vote_for_this_criterion.value === true || my_vote_for_this_criterion.value == "true" || my_vote_for_this_criterion.value === 1 || my_vote_for_this_criterion.value == "1")
-                  {
-                    new_value = 1;
-                  }
-                  else if (my_vote_for_this_criterion.value === false || my_vote_for_this_criterion.value == "false" || my_vote_for_this_criterion.value === 0 || my_vote_for_this_criterion.value == "0")
-                  {
-                    new_value = 0;
-                  }
-                } else // if ( criterion["@type"] == "LickertIdeaVote" )
-                {
-                  //var valueMin = "minimum" in criterion ? parseFloat(criterion.minimum) : 0;
-                  //var valueMax = "maximum" in criterion ? parseFloat(criterion.maximum) : 100;
-                  //new_value = valueMin + my_vote_for_this_criterion.value * (valueMax - valueMin);
-
-                  new_value = my_vote_for_this_criterion.value;
-                }
-                
-                $scope.settings.items[item_index].vote_specifications[criterion_index].valueDefault = new_value;
-                console.log("value set: " + new_value);
-              } else {
-                console.log("error: we could not find a definition of this criterion for which the user has voted: ", entity_id);
-              }
-            });
-          });
-          console.log("settings after my votes:");
-          console.log($scope.settings);
-          $scope.drawUI();
-        }).error(function(status, headers) {
-          console.log("error");
-          $scope.drawUI();
-        });
-      }
-      */
-
     };
 
     $scope.initVotingForAllTargets = function(){
@@ -287,6 +223,10 @@ voteApp.controller('indexCtl',
 
       // once serialized by $.param(), this will give "rentabilite=10&risque=0&investissement=22222&difficulte_mise_en_oeuvre=50"
       container.find("g.criterion").each(function(index) {
+        var voted = $(this).attr("data-voted");
+        if (voted !== "true") {
+          return;
+        }
         var valueMin = parseFloat($(this).attr("data-criterion-value-min"));
         var valueMax = parseFloat($(this).attr("data-criterion-value-max"));
         var value = parseFloat($(this).attr("data-criterion-value"));
@@ -316,7 +256,9 @@ voteApp.controller('indexCtl',
         console.log("criterion " + criterion_id + " has value " + value);
         if (isNaN(value))
         {
-          alert("Error: no value for criterion " + criterion_id);
+          $translate('errorNoValueForCriterion', {'criterion': criterion_id}).then(function(translation) {
+            alert(translation);
+          });
           return;
         }
 
@@ -333,6 +275,13 @@ voteApp.controller('indexCtl',
 
       return $scope.myVotes;
     };
+
+    $scope.onClickDoNothing = function(){
+      // prevent the other click() function to get called
+      d3.event.stopPropagation();
+      
+      // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
+    }
 
     $scope.buildValidatedVoteFormat = function(criterion_id, vote_value){
       // determine vote type
@@ -433,37 +382,12 @@ voteApp.controller('indexCtl',
       var widget = configService;
       var voting_urls = "voting_urls" in widget ? widget.voting_urls : null;
       if ( !(votes_to_submit && votes_to_submit.length) ){
-        var translation = "Error: There is no vote to submit!";
-        vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
+        $translate('errorNoVoteToSubmit').then(function(translation) {
+          vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
+        });
         return;
       }
       var submitVotePromises = [];
-
-      /*
-      var successForK = function(vote_spec) {
-        return function(data, status, headers) {
-          console.log("success");
-
-          //alert("success");
-          console.log("data:");
-          console.log(data);
-          console.log("status:");
-          console.log(status);
-          console.log("headers:");
-          console.log(headers);
-
-          var criterion_name = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
-          if ( !criterion_name && "@id" in vote_spec ){
-            criterion_name = vote_spec["@id"];
-          }
-
-          $translate('voteSubmitSuccessForCriterion', {'criterion': criterion_name}).then(function(translation) {
-            vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
-            $scope.resizeIframe();
-          });
-        };          
-      };
-      */
 
       var successForAllCriteriaOfQuestion = function(){
         $translate('voteSubmitSuccessForAllCriteriaOfQuestion').then(function(translation) {
@@ -596,9 +520,6 @@ voteApp.controller('indexCtl',
     // @param xPosCenter
     // Position on the X coordinates of the center of the gauge, in the created SVG
     $scope.drawVerticalGauge = function(destination, item_data, target_id, getUserPreviousVoteFunction, xPosCenter) {
-      console.log("drawVerticalGauge()");
-      console.log("item_data:");
-      console.log(item_data);
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length > 0)) {
         console.log("error: this item has no 'vote_specifications' field");
@@ -612,16 +533,13 @@ voteApp.controller('indexCtl',
       var hasVoted = true;
       if ( getUserPreviousVoteFunction ){
         valueDefault = getUserPreviousVoteFunction(criterion["@id"], target_id);
-        console.log("getUserPreviousVoteFunction is true => valueDefault: ", valueDefault);
       }
       if ( valueDefault === null || valueDefault === undefined ) {
         valueDefault = ("valueDefault" in criterion) ? criterion.valueDefault : valueMin;
-        console.log("valueDefault is null => valueDefault: ", valueDefault);
         hasVoted = false;
       }
       var criterionValue = valueDefault;
       target_id = target_id || null;
-      console.log("criterionValue: ", criterionValue);
       xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
       var width = "width" in item_data ? item_data.width : null;
       if ( !width )
@@ -634,6 +552,7 @@ voteApp.controller('indexCtl',
         padding = "padding" in padding ? config.padding : 60;
       var colorCursor = "colorCursor" in criterion ? criterion.colorCursor : "#9013FE";
       var colorCursorNoVoteYet = "#ccc";
+      var showCriterionDescription = "showCriterionDescription" in config ? config.showCriterionDescription : "icon";
       
       // create the graph, as a SVG in the d3 container div
       var svg = destination
@@ -649,6 +568,7 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-value-min", valueMin)
         .attr("data-criterion-value-max", valueMax)
         .attr("data-target-id", target_id)
+        .attr("data-voted", hasVoted)
       ;
 
       // create vertical scale
@@ -669,7 +589,7 @@ voteApp.controller('indexCtl',
       {
         var v = scale.invert(y);
 
-        svg.select("g.criterion").attr("data-criterion-value", v);
+        svg.select("g.criterion").attr("data-criterion-value", v).attr("data-voted", true);
 
         svg.select("circle").attr("cy", scale(v));
       }
@@ -775,25 +695,18 @@ voteApp.controller('indexCtl',
 
       // make the axis label interactive (mouse hover) to show the description text of the criterion
       // possibility of improvement: maybe instead of an HTML "title" attribute, we could use tipsy, as on http://bl.ocks.org/ilyabo/1373263
-      if (!config.showCriterionDescription || config.showCriterionDescription == "tooltip")
+      if (showCriterionDescription == "tooltip")
       {
         if (criterion.description && criterion.description.length > 0)
         {
-          var f = function() {
-            // prevent the other click() function to get called
-            d3.event.stopPropagation();
-            
-            // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
-          }
-
           axisLabel
             .style("cursor", "help")
             .attr("title", criterion.description)
-            .on("click", f)
+            .on("click", $scope.onClickDoNothing)
           ;
         }
       }
-      else if (config.showCriterionDescription && config.showCriterionDescription == "text")
+      else if (showCriterionDescription == "text")
       {
         if (criterion.description && criterion.description.length > 0)
         {
@@ -815,9 +728,44 @@ voteApp.controller('indexCtl',
           elParent.append(node);
         }
       }
+      else if ( (!showCriterionDescription || showCriterionDescription == "icon") && (criterion.description || criterion.descriptionMin || criterion.descriptionMax) )
+      {
+        var icon = g.append("image");
+
+        var tip = d3.tip()
+          .attr('class', 'd3-tip')
+          .offset([-10, 0])
+          .html(function(d) {
+            var str = "<span class='text'>";
+            if ( criterion.description ){
+              str += criterion.description;
+            }
+            if ( criterion.descriptionMin ){
+              str += "<br/>Min: " + criterion.descriptionMin;
+            }
+            if ( criterion.descriptionMax ){
+              str += "<br/>Max: " + criterion.descriptionMax;
+            }
+            str += "</span>";
+            return str;
+          });
+
+        svg.call(tip);
+
+        var icon_size = 22;
+        icon.attr("class", "question-mark-icon")
+          .attr("y", padding * 0.7 - icon_size)
+          .attr("x", xPosCenter - icon_size/2)
+          .attr("xlink:href", "app/images/question_mark_icon_with_alpha.png")
+          .attr("width", icon_size+"px")
+          .attr("height", icon_size+"px")
+          .on('mouseover', tip.show)
+          .on('mouseout', tip.hide)
+          .on('click', $scope.onClickDoNothing);
+      }
 
       // show descriptions of the minimum and maximum values
-      if (criterion.descriptionMin)
+      if ( (showCriterionDescription == "tooltip" || showCriterionDescription == "text") && criterion.descriptionMin )
       {
         g.append("text")
           .attr("y", height - padding * 0.7)
@@ -826,7 +774,7 @@ voteApp.controller('indexCtl',
           .text(criterion.descriptionMin);
       }
 
-      if (criterion.descriptionMax)
+      if ( (showCriterionDescription == "tooltip" || showCriterionDescription == "text") && criterion.descriptionMax )
       {
         g.append("text")
           .attr("y", padding * 0.7)
@@ -835,8 +783,7 @@ voteApp.controller('indexCtl',
           .text(criterion.descriptionMax);
       }
 
-      console.log("criterionValue: ", criterionValue);
-      console.log("scale(criterionValue): ", scale(criterionValue));
+      
 
       // draw the cursor
       var currentCursorColor = hasVoted ? colorCursor : colorCursorNoVoteYet;
@@ -861,7 +808,6 @@ voteApp.controller('indexCtl',
     // @param xPosCenter
     // Position on the X coordinates of the center of the gauge, in the created SVG
     $scope.draw2AxesVote = function(destination, item_data, target_id, getUserPreviousVoteFunction, xPosCenter) {
-      console.log("draw2AxesVote()");
 
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length)) {
@@ -904,6 +850,11 @@ voteApp.controller('indexCtl',
       target_id = target_id || null;
       var colorCursor = "colorCursor" in criteria[0] ? criteria[0].colorCursor : "#9013FE";
       var colorCursorNoVoteYet = "#ccc";
+      var showCriterionDescription = "showCriterionDescription" in config ? config.showCriterionDescription : "icon";
+
+      var padding = "padding" in item_data ? item_data.padding : null;
+      if ( !padding )
+        padding = "padding" in padding ? config.padding : 60;
 
       // create the graph, as a SVG in the d3 container div
       var svg = destination
@@ -920,6 +871,7 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-value-max", criterionXValueMax)
         .attr("data-criterion-type", "x")
         .attr("data-target-id", target_id)
+        .attr("data-voted", hasVoted)
       ;
 
       svg.append("g")
@@ -931,17 +883,18 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-value-max", criterionYValueMax)
         .attr("data-criterion-type", "y")
         .attr("data-target-id", target_id)
+        .attr("data-voted", hasVoted)
       ;
 
       // create X and Y scales
       var xScale = d3.scale.linear()
         .domain([criterionXValueMin, criterionXValueMax])
-        .range([config.padding, item_data.width - config.padding])
+        .range([padding, item_data.width - padding])
         .clamp(true);
 
       var yScale = d3.scale.linear()
         .domain([criterionYValueMin, criterionYValueMax])
-        .range([item_data.height - config.padding, config.padding])
+        .range([item_data.height - padding, padding])
         .clamp(true);
 
       // create X and Y axes using their scales
@@ -968,8 +921,12 @@ voteApp.controller('indexCtl',
 
         if (setData === true)
         {
-          svg.select("g.criterion[data-criterion-type='x']").attr("data-criterion-value", xValue);
-          svg.select("g.criterion[data-criterion-type='y']").attr("data-criterion-value", yValue);
+          svg.select("g.criterion[data-criterion-type='x']")
+            .attr("data-criterion-value", xValue)
+            .attr("data-voted", true);
+          svg.select("g.criterion[data-criterion-type='y']")
+            .attr("data-criterion-value", yValue)
+            .attr("data-voted", true);
         }
 
         var circle = svg.selectAll("circle");
@@ -1029,20 +986,19 @@ voteApp.controller('indexCtl',
       // show X axis
       g.append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(0," + (item_data.height - config.padding) + ")")
+        .attr("transform", "translate(0," + (item_data.height - padding) + ")")
         .call(xAxis);
 
       // show Y axis
       g.append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(" + config.padding + ",0)")
+        .attr("transform", "translate(" + padding + ",0)")
         .call(yAxis);
 
       // show X axis label
       var xAxisLabel = g.append("text")
-
         //.attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
-        .attr("y", (item_data.height - config.padding * 0.45))
+        .attr("y", (item_data.height - padding * 0.45))
         .attr("x", (item_data.width / 2))
         .attr("dy", "1em")
         .attr("class", "axis-label")
@@ -1053,25 +1009,19 @@ voteApp.controller('indexCtl',
         .attr("transform", "rotate(-90)")
         .attr("y", (0))
         .attr("x", (0 - item_data.height / 2))
-        .attr("dy", config.padding / 3 + "px")
+        .attr("dy", padding / 3 + "px")
         .attr("class", "axis-label")
         .text(criteria[1].name);
 
       // make the axis labels interactive (mouse hover) to show the description text of the criterion
-      if (!config.showCriterionDescription || config.showCriterionDescription == "tooltip")
+      if (config.showCriterionDescription == "tooltip")
       {
-        var onClickDoNothing = function() {
-          // prevent the other click() function to get called
-          d3.event.stopPropagation();
-          
-          // do nothing, so that we just block the other click function in case the user clicks on the axis label because they think it would give more info (info appears on hover after a bit of time, because for now it is handled by the "title" property, so the browser decides how/when it appears)
-        };
         if (criteria[0].description && criteria[0].description.length > 0)
         {
           xAxisLabel
             .style("cursor", "help")
             .attr("title", criteria[0].description)
-            .on("click", onClickDoNothing)
+            .on("click", $scope.onClickDoNothing)
           ;
         }
 
@@ -1080,11 +1030,11 @@ voteApp.controller('indexCtl',
           yAxisLabel
             .style("cursor", "help")
             .attr("title", criteria[1].description)
-            .on("click", onClickDoNothing)
+            .on("click", $scope.onClickDoNothing)
           ;
         }
       }
-      else if (config.showCriterionDescription && config.showCriterionDescription == "text")
+      else if (showCriterionDescription == "text")
       {
         for (var i = 0; i < 2; ++i)
         {
@@ -1103,7 +1053,7 @@ voteApp.controller('indexCtl',
 
             $(node).css("position", "absolute");
             $(node).css("width", descriptionWidth + "px");
-            $(node).css("top", (elOrigin.offset().top + (item_data.height - config.padding * 0.25)) + "px");
+            $(node).css("top", (elOrigin.offset().top + (item_data.height - padding * 0.25)) + "px");
             $(node).css("left", (elOrigin.offset().left + xPosCenter - descriptionWidth / 2) + "px");
             $(node).css("text-align", "center");
 
@@ -1118,49 +1068,103 @@ voteApp.controller('indexCtl',
           }
         }
       }
-
-      // show descriptions of the minimum and maximum values on X axis
-      if (criteria[0].descriptionMin && criteria[0].descriptionMin.length > 0)
+      else if ( showCriterionDescription == "icon" )
       {
-        g.append("text")
-          .attr("y", (item_data.height - config.padding * 0.6))
-          .attr("x", (item_data.width * 0.2))
-          .attr("dy", "1em")
-          .style("text-anchor", "middle")
-          .text(criteria[0].descriptionMin);
+        var fctTipContent = function(criterion){
+          var str = "<span class='text'>";
+          if ( criterion.description ){
+            str += criterion.description;
+          }
+          if ( criterion.descriptionMin ){
+            str += "<br/>Min: " + criterion.descriptionMin;
+          }
+          if ( criterion.descriptionMax ){
+            str += "<br/>Max: " + criterion.descriptionMax;
+          }
+          str += "</span>";
+          return str;
+        };
+
+        for ( var i = 0; i < 2; ++i)
+        {
+          if ( criteria[i].description || criteria[i].descriptionMin || criteria[i].descriptionMax )
+          {
+            var icon = g.append("image");
+
+            var tip = d3.tip()
+              .attr('class', 'd3-tip')
+              .offset([-10, 0])
+              .html(fctTipContent(criteria[i]));
+
+            svg.call(tip);
+
+            var icon_size = 22;
+            icon.attr("class", "question-mark-icon")
+              .attr("xlink:href", "app/images/question_mark_icon_with_alpha.png")
+              .attr("width", icon_size+"px")
+              .attr("height", icon_size+"px")
+              .on('mouseover', tip.show)
+              .on('mouseout', tip.hide)
+              .on('click', $scope.onClickDoNothing);
+
+            if ( i == 0 ) // criterion on x axis
+            {
+              icon.attr("y", (item_data.height - config.padding * 0.6))
+                .attr("x", (item_data.width * 0.8 - icon_size/2));
+            } else if ( i == 1 ) // criterion on y axis
+            {
+              icon.attr("y", (item_data.width * 0.2 - icon_size/2))
+                .attr("x", padding/3 - icon_size/2);
+            }
+          }
+        }
       }
 
-      if (criteria[0].descriptionMax && criteria[0].descriptionMax.length > 0)
-      {
-        g.append("text")
-          .attr("y", (item_data.height - config.padding * 0.6))
-          .attr("x", (item_data.width * 0.8))
-          .attr("dy", "1em")
-          .style("text-anchor", "middle")
-          .text(criteria[0].descriptionMax);
-      }
+      if ( showCriterionDescription == "text" || showCriterionDescription == "tooltip" ){
 
-      // show descriptions of the minimum and maximum values on Y axis
-      if (criteria[1].descriptionMin && criteria[1].descriptionMin.length > 0)
-      {
-        g.append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", (0))
-          .attr("x", (0 - item_data.height * 0.8))
-          .attr("dy", (config.padding * 0.5) + "px")
-          .style("text-anchor", "middle")
-          .text(criteria[1].descriptionMin);
-      }
+        // show descriptions of the minimum and maximum values on X axis
+        if (criteria[0].descriptionMin && criteria[0].descriptionMin.length > 0)
+        {
+          g.append("text")
+            .attr("y", (item_data.height - config.padding * 0.6))
+            .attr("x", (item_data.width * 0.2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text(criteria[0].descriptionMin);
+        }
 
-      if (criteria[1].descriptionMax && criteria[1].descriptionMax.length > 0)
-      {
-        g.append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", (0))
-          .attr("x", (0 - item_data.height * 0.2))
-          .attr("dy", (config.padding * 0.5) + "px")
-          .style("text-anchor", "middle")
-          .text(criteria[1].descriptionMax);
+        if (criteria[0].descriptionMax && criteria[0].descriptionMax.length > 0)
+        {
+          g.append("text")
+            .attr("y", (item_data.height - config.padding * 0.6))
+            .attr("x", (item_data.width * 0.8))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text(criteria[0].descriptionMax);
+        }
+
+        // show descriptions of the minimum and maximum values on Y axis
+        if (criteria[1].descriptionMin && criteria[1].descriptionMin.length > 0)
+        {
+          g.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", (0))
+            .attr("x", (0 - item_data.height * 0.8))
+            .attr("dy", (config.padding * 0.5) + "px")
+            .style("text-anchor", "middle")
+            .text(criteria[1].descriptionMin);
+        }
+
+        if (criteria[1].descriptionMax && criteria[1].descriptionMax.length > 0)
+        {
+          g.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", (0))
+            .attr("x", (0 - item_data.height * 0.2))
+            .attr("dy", (config.padding * 0.5) + "px")
+            .style("text-anchor", "middle")
+            .text(criteria[1].descriptionMax);
+        }
       }
 
       var currentCursorColor = hasVoted ? colorCursor : colorCursorNoVoteYet;
@@ -1197,7 +1201,6 @@ voteApp.controller('indexCtl',
     // @param getUserPreviousVoteFunction
     // function(criterion_id [, target_id]) which returns the user's previous vote for this criterion and this (or current) target
     $scope.drawRadioVote = function(destination, item_data, target_id, getUserPreviousVoteFunction) {
-      console.log("drawRadioVote()");
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length > 0)) {
         console.log("error: item has no 'vote_specifications' field");
@@ -1210,9 +1213,6 @@ voteApp.controller('indexCtl',
       var criterionValue = null;
       if ( getUserPreviousVoteFunction ){
         var user_previous_vote = getUserPreviousVoteFunction(criterion["@id"], target_id);
-        console.log("user_previous_vote: ", user_previous_vote);
-        console.log('criterion["@id"]: ', criterion["@id"]);
-        console.log('target_id: ', target_id);
         
         // special case of binary vote
         if ( user_previous_vote === true )
@@ -1265,11 +1265,10 @@ voteApp.controller('indexCtl',
       }
 
       var updateSelectedValue = function() {
-        console.log("updateSelectedValue()");
         var el = div.find('input:checked');
         if (el)
         {
-          div.attr('data-criterion-value', el.val());
+          div.attr('data-criterion-value', el.val()).attr('data-voted', true);
         }
         else {
           div.attr('data-criterion-value', null);
@@ -1347,7 +1346,9 @@ voteApp.controller('indexCtl',
       if (config.presentationText)
       {
         var td = $("<th/>");
-        td.text("Description"); // TODO: i18n
+        $translate('ideaDescription').then(function(translation) {
+          td.text(translation);
+        });
         tr.append(td);
         var td2 = $("<td/>");
         td2.text(config.presentationText);
@@ -1398,7 +1399,6 @@ voteApp.controller('indexCtl',
         }
       }
 
-      console.log("drawUIWithTable() completed");
     };
 
     $scope.drawUIWithoutTable = function() {
@@ -1415,34 +1415,7 @@ voteApp.controller('indexCtl',
           if (item.type == "vertical_gauge")
           {
             $scope.drawVerticalGauge(holder_svg, item);
-
-            /*
-            // add specific vote button for this criterion
-            console.log("item.criteria:");
-            console.log(item.criteria);
-            if ( item.criteria && item.criteria.length && item.criteria[0] && item.criteria[0]["@id"] )
-            {
-              var criterion_id = item.criteria[0]["@id"];
-              console.log("criterion_id id:");
-              console.log(criterion_id);
-              console.log("configService.voting_urls:");
-              console.log(configService.voting_urls);
-              if ( configService.voting_urls && configService.voting_urls[criterion_id] )
-              {
-                console.log("configService.voting_urls[criterion_id]:");
-                console.log(configService.voting_urls[criterion_id]);
-                var criterion_endpoint = AssemblToolsService.resourceToUrl(configService.voting_urls[criterion_id]);
-                //holder_jquery.append("<a href='#' ng-click=\"submitSingleVote('"+criterion_endpoint+"', 'LickertIdeaVote', '"+criterion_id+"')\">Vote</a>").click(function(){
-                var link = $("<button>Vote</button>");
-                link.click(function(){ // TODO: does not work, all buttons call with the same parameter value
-                  console.log("coucou");
-                  $scope.submitSingleVote(criterion_endpoint, 'LickertIdeaVote', item.criteria[0]["id"]);
-                });
-                holder_jquery.append(link);
-              }
-            }
-            */
-            
+            // here we could add specific vote button for this criterion
           }
           else if (item.type == "2_axes")
           {
@@ -1455,7 +1428,6 @@ voteApp.controller('indexCtl',
         }
       }
 
-      console.log("drawUIWithoutTable() completed");
     };
 
     $scope.drawMultipleTargetsUI = function() {
@@ -1492,7 +1464,9 @@ voteApp.controller('indexCtl',
           question_holder.attr("id", "vote-question-item-"+i);
           holder_jquery.append(question_holder);
           var question_holder_d3 = d3.select(question_holder.get(0));
-          
+
+
+          // show question title and description
 
           var question_title = "question_title" in item ? item.question_title : null;
           var question_description = "question_description" in item ? item.question_description : null;
@@ -1584,7 +1558,6 @@ voteApp.controller('indexCtl',
           var translationReceived = function(question_id){
             return function(translation){
               var question_holder = $("#vote-question-item-"+question_id);
-              console.log("translation received: ", translation);
               var vote_button_holder = $("<div class='vote-question-submit-button-container'>");
               question_holder.append(vote_button_holder);
               var button = $('<button class="btn btn-primary btn-sm">' + translation + '</button>');
@@ -1602,7 +1575,6 @@ voteApp.controller('indexCtl',
         }
       }
 
-      console.log("drawUIWithoutTable() completed");
     };
 
   }]);

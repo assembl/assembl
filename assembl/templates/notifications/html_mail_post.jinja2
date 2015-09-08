@@ -45,7 +45,10 @@ ink_css
               <table class="tiny-button facebook">
                 <tr>
                   <td>
-                    <a href="{{ frontendUrls.get_post_url(notification.event_source_object()) }}">{{ gettext("Reply to this message") }}</a>
+                    <a href="{{ frontendUrls.append_query_string(
+                                  frontendUrls.get_post_url(notification.event_source_object()),
+                                  **{discriminants.url.SOURCE: discriminants.source.NOTIFICATION} 
+                                ) }}">{{ gettext("Reply to this message") }}</a>
                   </td>
                 </tr>
               </table>

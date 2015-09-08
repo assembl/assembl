@@ -14,7 +14,8 @@ var Backbone = require('../shims/backbone.js'),
     autosize = require('jquery-autosize'),
     Messages = require('../models/message.js'),
     Agents = require('../models/agents.js'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 /**
  * @init
@@ -71,6 +72,15 @@ var messageSend = Marionette.ItemView.extend({
     this.initialBody = (this.options.body_help_message !== undefined) ?
         this.options.body_help_message : i18n.gettext('Type your message here...');
 
+    if (this.options.reply_message_id) {
+      this.analytics_context = 'MESSAGE_REPLY';
+    }
+    else if (this.options.reply_idea) {
+      this.analytics_context = 'IDEA_REPLY';
+    }
+    else {
+      this.analytics_context = 'TOP_POST';
+    }
     this.messageList = options.messageList;
     this.msg_in_progress_ctx = options.msg_in_progress_ctx;
   },
@@ -212,6 +222,9 @@ var messageSend = Marionette.ItemView.extend({
 
     model.save(null, {
       success: function(model, resp) {
+        var analytics = Analytics.getInstance();
+        analytics.trackEvent(analytics.events['MESSAGE_POSTED_ON_'+that.analytics_context])
+
         btn.text(i18n.gettext('Message posted!'));
 
         that.ui.messageBody.val('');
@@ -242,11 +255,13 @@ var messageSend = Marionette.ItemView.extend({
                           var agent = new Agents.Model({'@id': Ctx.getCurrentUserId()});
                           agent.fetch({
                                 success: function(model, resp) {
-                                  //if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) && this.roles.get('role') === null) {
+                                  var analytics = Analytics.getInstance();
+
+                                  // The <2 condition is because we are in the process of posting, but the agent may, or may not have been updated yet.
                                   if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) &&
                                       userActiveNotifications.length < defaultActiveNotificationsDicussion.length) { // we could make a real diff here but this is enough for now
-
                                     that.showPopInFirstPost();
+                                    analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, true);
                                   }
                                 }});
                         }
@@ -310,6 +325,7 @@ var messageSend = Marionette.ItemView.extend({
           that.ui.cancelButton.trigger('click');
         }, 5000);
       },
+
       error: function(model, resp) {
               that.sendInProgress = false;
               console.error('ERROR: onSendMessageButtonClick', model, resp);
@@ -323,8 +339,10 @@ var messageSend = Marionette.ItemView.extend({
   },
 
   onBlurMessage: function() {
+    var analytics = Analytics.getInstance(),
+        messageWasSaved = this.savePartialMessage();
+
     //console.log("onBlurMessage()");
-    this.savePartialMessage();
 
     /* Quentin: turned off, because the "when I'm writing a message, I don't want the interface to reload" fix will be done using filtering on message collection add event
     var panelWrapper = this.options.messageList._panelWrapper;
@@ -333,26 +351,52 @@ var messageSend = Marionette.ItemView.extend({
       panelWrapper.autoUnlockPanel(false, "USER_WAS_WRITING_A_MESSAGE");
     }
     */
+    if(messageWasSaved) {
+      analytics.trackEvent(analytics.events['LEAVE_NON_EMPTY_MESSAGE_WRITING_AREA_ON_'+this.analytics_context]);
+    }
+    else {
+      analytics.trackEvent(analytics.events['LEAVE_EMPTY_MESSAGE_WRITING_AREA_ON_'+this.analytics_context]);
+    }
+
   },
 
   onFocusMessage: function() {
-      //console.log("onFocusMessage()");
-      //TODO: use a better mecanism than panel locking to address the problem of reloading UI when the user is writing a message (for example when other new messages arrive at the same time)
-      /* Quentin: turned off, because the "when I'm writing a message, I don't want the interface to reload" fix will be done using filtering on message collection add event
+    var analytics = Analytics.getInstance(),
+        message_body = this.ui.messageBody,
+        message_title = this.ui.messageSubject;
+
+    //console.log("onFocusMessage()");
+    //TODO: use a better mecanism than panel locking to address the problem of reloading UI when the user is writing a message (for example when other new messages arrive at the same time)
+    /* Quentin: turned off, because the "when I'm writing a message, I don't want the interface to reload" fix will be done using filtering on message collection add event
       var panelWrapper = this.options.messageList._panelWrapper;
       if ( !panelWrapper.isPanelLocked() ) {
         console.log("onFocusMessage() will autoLockPanel()");
         panelWrapper.autoLockPanel(false, "USER_IS_WRITING_A_MESSAGE");
       }
-      */
-    },
+     */
+    if ((message_body.length > 0 && message_body.val().length > 0) || (message_title.length > 0 && message_title.val().length > 0)) {
+      analytics.trackEvent(analytics.events['ENTER_NON_EMPTY_MESSAGE_WRITING_AREA_ON_'+this.analytics_context]);
+    } else {
+      analytics.trackEvent(analytics.events['ENTER_EMPTY_MESSAGE_WRITING_AREA_ON_'+this.analytics_context]);
+    }
 
+  },
+
+  /**
+   * @return true if there was a message to save
+   */
   savePartialMessage: function() {
     var message_body = this.ui.messageBody,
         message_title = this.ui.messageSubject;
 
     if ((message_body.length > 0 && message_body.val().length > 0) || (message_title.length > 0 && message_title.val().length > 0)) {
       MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title.val());
+      return true;
+    }
+    else {
+      //We may have just emptied the content
+      this.clearPartialMessage();
+      return false;
     }
   },
 

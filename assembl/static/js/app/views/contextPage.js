@@ -96,7 +96,7 @@ var Synthesis = Marionette.ItemView.extend({
   },
 
   readSynthesis: function() {
-    Assembl.vent.trigger("navigation:selected", "synthesis");
+    Assembl.vent.trigger("DEPRECATEDnavigation:selected", "synthesis");
   }
 
 });

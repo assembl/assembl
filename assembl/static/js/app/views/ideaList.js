@@ -18,7 +18,8 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     i18n = require('../utils/i18n.js'),
     OtherInIdeaListView = require('./otherInIdeaList.js'),
     $ = require('../shims/jquery.js'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var FEATURED = 'featured',
     IN_SYNTHESIS = 'inNextSynthesis';
@@ -204,6 +205,8 @@ var IdeaList = AssemblPanel.extend({
       }
 
       if (this.template != '#tmpl-loader') {
+        var analytics = Analytics.getInstance();
+        analytics.trackEvent(analytics.events.NAVIGATION_OPEN_DEBATE_SECTION);
         if (!this.allIdeasCollection || !this.allIdeaLinksCollection) {
           throw new Error("loader has been cleared, but ideas aren't available yet");
         }

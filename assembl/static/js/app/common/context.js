@@ -8,8 +8,8 @@ var $ = require('../shims/jquery.js'),
     Permissions =  require('../utils/permissions.js'),
     Roles =  require('../utils/roles.js'),
     i18n =  require('../utils/i18n.js'),
-    Raven = require('raven-js');
-
+    Raven = require('raven-js'),
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 require('linkifyjs');
 require('linkifyjs/jquery')($);
 
@@ -167,16 +167,68 @@ Context.prototype = {
     return this.CURRENT_USER_ID;
   },
 
-  setCurrentUserId: function(user_id) {
-    this.CURRENT_USER_ID = user_id;
-  },
-
   getCurrentUser: function() {
     return this.currentUser;
   },
 
   setCurrentUser: function(user) {
+    var analytics = Analytics.getInstance(),
+        days_since_first_visit,
+        last_login_buffer = 30; //seconds
+
     this.currentUser = user;
+    if(!this.currentUser.isUnknownUser()) {
+      analytics.setUserId(this.currentUser.id);
+
+      //Hackish way to know if the USER_LOGIN event should be triggered
+      var last_login = user.get('last_login');
+      if (last_login) {
+        var timezonedLogin = this.addUTCTimezoneToISO8601(last_login),
+            now = new Moment().utc(),
+            loginMoment = new Moment(timezonedLogin).utc(),
+            acceptableTime = loginMoment.add(last_login_buffer, 'seconds');
+
+        // Moment #isBefore has consequences http://momentjs.com/docs/#/query/is-before/
+        if ( now.isBefore(acceptableTime) ) {
+          //If within the acceptable timeframe, fire login event.
+          analytics.trackEvent(analytics.events.USER_LOGIN);
+        }
+      }
+
+      analytics.setCustomVariable(analytics.customVariables.HAS_ELEVATED_RIGHTS, this.currentUser.can(Permissions.EDIT_EXTRACT));
+      
+      if(this.currentUser.get('post_count') >= 1) {
+        analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, true);
+      }
+      else {
+        analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, false);
+      }
+
+      if(this.currentUser.get('first_visit') !== null && this.currentUser.get('last_visit') !== null) {
+        //Note:  moment always rounds DOWN
+        days_since_first_visit = Moment(this.currentUser.get('last_visit')).diff(this.currentUser.get('first_visit'), 'days');
+        if(days_since_first_visit >= 1) {
+          analytics.setCustomVariable(analytics.customVariables.IS_ON_RETURN_VISIT, true);
+        }
+        else {
+          analytics.setCustomVariable(analytics.customVariables.IS_ON_RETURN_VISIT, false);
+        }
+      }
+
+      var CollectionManager = require('./collectionManager.js'),
+          collectionManager = new CollectionManager();
+
+      collectionManager.getLocalRoleCollectionPromise().then(function(localRoles) {
+        var logUserSubscriptionStatus = function(localRoles) {
+          analytics.setCustomVariable(analytics.customVariables.IS_DISCUSSION_MEMBER, localRoles.isUserSubscribedToDiscussion());
+        }
+        localRoles.listenTo(localRoles, 'update', logUserSubscriptionStatus);
+        logUserSubscriptionStatus(localRoles);
+      });
+      
+      
+
+    }
   },
 
   getCsrfToken: function() {
@@ -1272,8 +1324,6 @@ Context.prototype = {
           that.setCurrentUser(user);
           user.fetchPermissions();
 
-          //user.fetchPermissionsToScriptTag();
-          //user.toScriptTag('current-user-json');
           that.loadCsrfToken(true);
         }
       });
@@ -1337,6 +1387,20 @@ Context.prototype = {
     }
     else { return undefined; }
   },
+
+  /**
+   * [A utility function to convert backend DateTime data (ISO 8601 String) into ISO 8601 String with UTC Timezone]
+   * TODO: This function was taken from app/js/models/social.js. Refactor to use this Ctx version throughout codebase.
+   * @param {[String]} e [Returns ISO 8601 String with UTC Timezone]
+   */
+  addUTCTimezoneToISO8601: function(e){
+      if (/[Z]$|([+-]\d{2}:\d{2})$/.test(e) ) {
+          return e;
+      }
+      else {
+          return e + 'Z'; //Z: ISO 8601 UTC Timezone
+      }
+  },  
   /**
    * Executor of lazy code
    * ex :

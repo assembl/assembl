@@ -1,0 +1,11 @@
+{% extends 'analytics_common.jinja2' %}
+
+{% block analytics_extra_scripts %}
+  {% if web_analytics.get('enabled', False) %}
+    <script src="{{ STATIC_URL }}/js/bower/underscore/underscore-min.js"></script>
+    <script src="{{ STATIC_URL }}/js/app/internal_modules/analytics/abstract.js"></script>
+    <script src="{{ STATIC_URL }}/js/app/internal_modules/analytics/piwik.js"></script>
+    <script src="{{ STATIC_URL }}/js/app/internal_modules/analytics/dispatcher.js"></script>
+  {% endif %}
+{% endblock %}
+
