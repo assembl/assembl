@@ -123,6 +123,8 @@ function getUrlVariableValue(variable) {
 // For example: http://localhost:6543/widget/vote/?config=http://localhost:6543/data/Widget/19#/
 angular.element(document).ready(function() {
   console.log("angular.element(document).ready()");
+  // Tell Explorer not to cache Ajax requests.
+  $.ajaxSetup({ cache: false });
 
   function startAngularApplication() {
     angular.bootstrap('#creativityApp', ['creativityApp']);

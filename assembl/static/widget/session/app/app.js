@@ -72,6 +72,9 @@ SessionApp.run(['$rootScope', '$state', '$stateParams',
       var locale = getPreferredLocale();
       $rootScope.locale = locale;
 
+      // Tell Explorer not to cache Ajax requests.
+      $.ajaxSetup({ cache: false });
+
       $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
         $rootScope.destinationState = toState;
         $rootScope.destinationParams = toStateParams;

@@ -7,6 +7,8 @@ videosApp.config(['$routeProvider', '$translateProvider', '$locationProvider', '
     function($routeProvider, $translateProvider, $locationProvider, growlProvider) {
 
       $locationProvider.html5Mode(false);
+      // Tell Explorer not to cache Ajax requests.
+      $.ajaxSetup({ cache: false });
 
       $routeProvider.
             when('/', {

@@ -7,6 +7,8 @@ appCards.config(['$routeProvider', '$translateProvider', '$locationProvider', 'g
     function($routeProvider, $translateProvider, $locationProvider, growlProvider) {
 
       $locationProvider.html5Mode(false);
+      // Tell Explorer not to cache Ajax requests.
+      $.ajaxSetup({ cache: false });
 
       var appResolver = function($route, configService, $q) {
         console.log("$route.current.params:", $route.current.params);
