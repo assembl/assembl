@@ -270,6 +270,7 @@ class AgentProfile(Base):
         status = self.status_in_current_discussion
         if status:
             return status.last_visit == status.first_visit
+        return True
 
     @property
     def last_visit(self):
