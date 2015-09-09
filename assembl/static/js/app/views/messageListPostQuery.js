@@ -434,8 +434,6 @@ var PostQuery = function() {
 
       descriptionPromise = filter.getFilterDescriptionStringPromise(individualValuesButtonsPromises);
 
-        console.debug(descriptionPromise);
-
       return descriptionPromise.then((function(description) {
         return '<li class="filter ui-tag">' + description + '</li>';
       }));

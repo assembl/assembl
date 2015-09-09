@@ -472,7 +472,9 @@ _.extend(FilterPostIsSynthesis.prototype, {
       return i18n.gettext('Only include messages that represent a synthesis of the discussion.');
     },
     getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
-      return this.getLabelPromise();
+      return Promise.all(individualValuesButtonsPromises, this.getLabelPromise()).then(function(individualValuesButtons, label) {
+        return i18n.sprintf("%s %s", label, individualValuesButtons.join(''));
+      });
     }
   });
   
