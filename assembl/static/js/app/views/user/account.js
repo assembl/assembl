@@ -187,34 +187,8 @@ var account = Marionette.LayoutView.extend({
         email = this.$('input[name="new_email"]').val(),
         emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (email && emailRegex.test(email)) {
-
-      var emailModel = new Accounts.Model({
-        email: email,
-        '@type': 'EmailAccount'
-      });
-
-      emailModel.save(null, {
-        success:function() {
-          that.render();
-          $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
-            ele: 'body',
-            type: 'success',
-            offset: {from: 'bottom', amount:20},
-            align: 'left',
-            delay: 4000,
-            allow_dismiss: true,
-            stackup_spacing: 10
-          });
-        },
-        error: function(model, resp) {
-          resp.handled = true;
-          var message = Ctx.getErrorMessageFromAjaxError(resp);
-          if (message === null) {
-            message = i18n.gettext('Your settings fail to update');
-          }
-
-          $.bootstrapGrowl(message, {
+    if (!email) {
+      $.bootstrapGrowl(i18n.gettext("Empty email"), {
             ele: 'body',
             type: 'error',
             offset: {from: 'bottom', amount:20},
@@ -223,9 +197,58 @@ var account = Marionette.LayoutView.extend({
             allow_dismiss: true,
             stackup_spacing: 10
           });
-        }
-      })
+      return;
     }
+
+    if (!emailRegex.test(email)) {
+      $.bootstrapGrowl(i18n.gettext("Invalid email"), {
+            ele: 'body',
+            type: 'error',
+            offset: {from: 'bottom', amount:20},
+            align: 'left',
+            delay: 4000,
+            allow_dismiss: true,
+            stackup_spacing: 10
+          });
+      return;
+    }
+
+    var emailModel = new Accounts.Model({
+      email: email,
+      '@type': 'EmailAccount'
+    });
+
+    emailModel.save(null, {
+      success: function() {
+        that.emailCollection.fetch();
+        $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
+          ele: 'body',
+          type: 'success',
+          offset: {from: 'bottom', amount:20},
+          align: 'left',
+          delay: 4000,
+          allow_dismiss: true,
+          stackup_spacing: 10
+        });
+      },
+      error: function(model, resp) {
+        resp.handled = true;
+        var message = Ctx.getErrorMessageFromAjaxError(resp);
+        if (message === null) {
+          message = i18n.gettext('Your settings fail to update');
+        }
+
+        $.bootstrapGrowl(message, {
+          ele: 'body',
+          type: 'error',
+          offset: {from: 'bottom', amount:20},
+          align: 'left',
+          delay: 4000,
+          allow_dismiss: true,
+          stackup_spacing: 10
+        });
+      }
+    })
 
   }
 
