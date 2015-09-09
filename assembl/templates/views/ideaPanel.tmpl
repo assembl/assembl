@@ -57,20 +57,8 @@
     {# section contributor #}
     <% if( _.size(contributors) ){ %>
     <fieldset class="ideaPanel-section-contributors panel-section pvs">
-      <span class="ideaPanel-contributors legend"><i class="icon-user"></i> {{ gettext('contributors') }}</span>
-      <div class="gr mts">
-         <% _.each(contributors, function(contributor, index, list){ %>
-         <div class="gu gu1of6 contributor mrxs">
-         <% if(contributor.real_name) { %>
-           <a href="#" class="img-left avatar img-rounded" data-toggle="tooltip" data-placement="top" title="<%= contributor.real_name %>">
-         <% } else { %>
-           <a href="#" class="img-left avatar img-rounded" data-toggle="tooltip" data-placement="top" title="{{ gettext('anonymous') }}">
-         <% } %>
-             <img src="<%= contributor.avatar_url_base %>30" width="30" height="30">
-           </a>
-         </div>
-         <% }) %>
-      </div>
+      <span class="ideaPanel-contributors legend"><i class="icon-user"></i> {{ gettext('Contributors') }}</span>
+      <div class="gr mts contributors"></div>
     </fieldset>
     <% } %>
 

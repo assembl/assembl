@@ -15,6 +15,7 @@ var Marionette = require('../shims/marionette.js'),
     facebook = require('./facebookModal.js'),
     Promise = require('bluebird'),
     messageExport = require('./messageExportModal.js'),
+    AgentAvatarView = require('./agentAvatar.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
@@ -22,7 +23,7 @@ var MIN_TEXT_TO_TOOLTIP = 5,
 /**
  * @class views.MessageView
  */
-var MessageView = Marionette.ItemView.extend({
+var MessageView = Marionette.LayoutView.extend({
   template: '#tmpl-loader',
   availableMessageViewStyles: Ctx.AVAILABLE_MESSAGE_VIEW_STYLES,
   /**
@@ -121,7 +122,12 @@ var MessageView = Marionette.ItemView.extend({
       showAllMessagesByThisAuthorButton: ".js_message-show-all-by-this-author",
       messageReplyBox: ".message-replybox",
       likedLink: ".js_likeButton",
-      likeCounter: ".js_likeCount"
+      likeCounter: ".js_likeCount",
+      avatar: ".js_avatarContainer"
+    },
+
+    regions: {
+      avatar: "@ui.avatar",
     },
 
   /**
@@ -329,6 +335,8 @@ var MessageView = Marionette.ItemView.extend({
       this.clearAnnotationsToLoadCache();
       Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
+      this.renderAvatar();
+
       this.$el.attr("id", "message-" + this.model.get('@id'));
       this.$el.addClass(this.model.get('@type'));
 
@@ -497,6 +505,13 @@ var MessageView = Marionette.ItemView.extend({
       }
     }
 
+  },
+
+  renderAvatar: function() {
+    this.agentAvatarView = new AgentAvatarView({
+      model: this.creator
+    });
+    this.avatar.show(this.agentAvatarView);
   },
 
   /**
@@ -878,21 +893,7 @@ var MessageView = Marionette.ItemView.extend({
     },
 
   getContributions: function(e) {
-    var that = this;
-
-    e.stopPropagation();
-
-    this.model.getCreatorPromise().then(function(creator) {
-      var analytics = Analytics.getInstance(),
-      filters =  [{filterDef: that.messageListView.currentQuery.availableFilters.POST_IS_FROM, value: creator.id}],
-      ModalGroup = require('./groups/modalGroup.js'),
-      modal_title = i18n.sprintf(i18n.gettext("All message by %s"), creator.get('name')),
-      modalFactory = ModalGroup.filteredMessagePanelFactory(modal_title, filters),
-      modal = modalFactory.modal,
-      messageList = modalFactory.messageList;
-
-      Assembl.slider.show(modal);
-    });
+    this.agentAvatarView.onAvatarClick(e);
   },
 
   /**

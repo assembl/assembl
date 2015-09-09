@@ -13,21 +13,29 @@ var Marionette = require('../shims/marionette.js'),
     CollectionManager = require('../common/collectionManager.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     AssemblPanel = require('./assemblPanel.js'),
+    AgentAvatarView = require('./agentAvatar.js'),
 
     //Subset = require('backbone.subset'),
     Promise = require('bluebird');
 
-var SegmentView = Marionette.ItemView.extend({
+var SegmentView = Marionette.LayoutView.extend({
   template: '#tmpl-segment',
   gridSize: AssemblPanel.prototype.CLIPBOARD_GRID_SIZE,
   ui: {
     postItFooter: '.postit-footer .text-quotation',
-    postIt: '.postit'
+    postIt: '.postit',
+    authorAvatar: '.js_authorAvatar'
   },
+
+  regions: {
+    authorAvatar: '@ui.authorAvatar'
+  },
+
   initialize: function(options) {
     this.allUsersCollection = options.allUsersCollection;
     this.allMessagesCollection = options.allMessagesCollection;
     this.closeDeletes = options.closeDeletes;
+    this.postCreator = undefined;
   },
 
   events: {
@@ -39,7 +47,6 @@ var SegmentView = Marionette.ItemView.extend({
 
   serializeData: function() {
     var post,
-        postCreator,
         idPost = this.model.get('idPost'),
         currentUser = Ctx.getCurrentUser(),
         harvester = this.model.getCreatorFromUsersCollection(this.allUsersCollection);
@@ -51,14 +58,14 @@ var SegmentView = Marionette.ItemView.extend({
     if (idPost) {
       post = this.allMessagesCollection.get(idPost);
       if (post) {
-        postCreator = this.allUsersCollection.get(post.get('idCreator'));
+        this.postCreator = this.allUsersCollection.get(post.get('idCreator'));
       }
     }
 
     return {
       segment: this.model,
       post: post,
-      postCreator: postCreator,
+      postCreator: this.postCreator,
       harvester: harvester,
       allUsersCollection: this.allUsersCollection,
       canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),
@@ -72,11 +79,23 @@ var SegmentView = Marionette.ItemView.extend({
     Ctx.initTooltips(this.$el);
     Ctx.convertUrlsToLinks(this.ui.postItFooter);
 
-    if (!_.isUndefined(this.model.get('firstInlist'))) {
+    this.renderAuthorAvatar();
 
+    if (!_.isUndefined(this.model.get('firstInlist'))) {
       this.$el.attr('id', 'tour_step_segment');
     }
 
+  },
+
+  renderAuthorAvatar: function() {
+    var agentAvatarView;
+
+    if (this.postCreator) {
+      agentAvatarView= new AgentAvatarView({
+        model: this.postCreator
+      });
+      this.authorAvatar.show(agentAvatarView);
+    }
   },
 
   onDragStart: function(ev) {

@@ -464,7 +464,7 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
         return [c for c in siblings if isinstance(c, cls)]
 
     def get_contributors(self):
-        return self._get_contributors(True, False)
+        return self._get_contributors(True, True)
 
     def _get_contributors(self, indirect=True, id_only=True):
         from .post import Post

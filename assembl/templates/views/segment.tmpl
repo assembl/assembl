@@ -47,16 +47,14 @@ data-segmentid="<%= segment.cid %>">
     <div class="extractOrigin">
       <% var type = segment.get("target")["@type"]; if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost" || type == "LoomioFeedPost" ) { %>
 
-        {% set postCreatorAvatarImg = '<img src="<%= postCreator.getAvatarUrl(30) %>" class="creatorAvatar image-rounded fl prxs" alt="" width="30" height="30" />' %}
         {% set postCreatorName = '<%= postCreator.get("name") %>' %}
         {% set nicePostDate = '<%= ctx.getNiceDateTime(post.get("date")) %>' %}
         {% set precisePostDate = '<%= ctx.getReadableDateTime(post.get("date")) %>' %}
         {% set authorTooltip = gettext('%(img)s Posted <time title="%(precise_date)s">%(nice_date)s</time> by %(name)s')|format(name=postCreatorName, img=postCreatorAvatarImg, nice_date=nicePostDate, precise_date=precisePostDate)|safe %}
 
-      <div class="avatar img-rounded">
-        {{ postCreatorAvatarImg|safe }}
+        <div class="js_authorAvatar authorAvatar"></div>
         <span class="creatorName">{{ postCreatorName|safe }}</span>
-      </div>
+
 
       <% } else if (type == "Webpage") { %>
         <img src="/static/img/icon/search_document.svg" width="35" height="35" class="image-rounded fl prxs" alt="{{ gettext('Document extracted from the web') }}" />

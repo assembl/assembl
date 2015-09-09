@@ -57,15 +57,22 @@ $harvesterAvatarSize: 24px;
       position: relative;
       .extractOrigin {
         display: inline-block;
+        .agentAvatar {
+          float:none;
+          display: inline-block;
+        }
+        .authorAvatar {
+          display: inline-block;
+        }
         a.segment-link {
           position: relative;
           //visibility: hidden;
           font-size: 12px;
         }
         .creatorName {
+          vertical-align: top;
           color: $theme_person_name_color;
           font-size: 11px;
-          vertical-align: text-bottom;
         }
       }
       .segment-harvester {

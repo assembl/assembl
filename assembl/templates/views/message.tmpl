@@ -82,11 +82,7 @@
 
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
   <div class="leftSection js_messageTitle">
-    <div class="avatar img-rounded">
-        <% if(creator){ %>
-        <img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}"  class="image-rounded" width="30" height="30" />
-        <% } %>
-    </div>
+    <div class="js_avatarContainer"></div>
     <span class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
   </div>
   <div class="rightSection">
@@ -103,7 +99,7 @@
 <% } else { %>
   <div class="js_messageHeader rc rcss pbxs mbs head">
       <% if(creator){ %>
-      <a class="img-left avatar  img-rounded mtxs" href="#"><img src="<%= creator.getAvatarUrl(30) %>" alt="{{ gettext('User') }}" width="30" height="30"></a>
+      <div class="js_avatarContainer"></div>
       <% } %>
       <div class="bd">
       <div class="message-author js_getContributions" data-user-id="<%= creator.get('@id') %>">{{ gettext('%(user)s')|format(user=userName)|safe }} {{ readUnreadIndicator() }}</div>

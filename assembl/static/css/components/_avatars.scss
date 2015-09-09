@@ -1,5 +1,10 @@
 // Avatars
 
+.agentAvatar {
+  float: left;
+  display: inline-block;
+  margin-right: 5px;
+}
 .avatar {
   display: block;
   border: 1px solid transparent;

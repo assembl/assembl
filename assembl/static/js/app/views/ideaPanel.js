@@ -11,6 +11,7 @@ var Assembl = require('../app.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     SegmentList = require('./segmentList.js'),
     Widget = require('../models/widget.js'),
+    AgentAvatar = require('./agentAvatar.js'),
     WidgetLinks = require('./widgetLinks.js'),
     WidgetButtons = require('./widgetButtons.js'),
     CollectionManager = require('../common/collectionManager.js'),
@@ -30,6 +31,7 @@ var IdeaPanel = AssemblPanel.extend({
   minWidth: 270,
   regions: {
     segmentList: ".postitlist",
+    contributors: ".contributors",
     widgetsInteraction: ".ideaPanel-section-access-widgets",
     widgetsConfigurationInteraction: ".ideaPanel-section-conf-widgets",
     widgetsCreationInteraction: ".ideaPanel-section-create-widgets"
@@ -159,13 +161,11 @@ var IdeaPanel = AssemblPanel.extend({
         currentUser = Ctx.getCurrentUser(),
         canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
         canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
-        contributors = null,
         direct_link_relative_url = null,
         share_link_url = null;
 
     if (this.model) {
       subIdeas = this.model.getChildren();
-      contributors = this.model.get('contributors');
 
       direct_link_relative_url = Ctx.getRelativeURLFromDiscussionRelativeURL("idea/" + encodeURIComponent(this.model.get('@id'))) + "?source=share";
 
@@ -177,8 +177,8 @@ var IdeaPanel = AssemblPanel.extend({
 
     return {
       idea: this.model,
-      contributors: contributors,
       subIdeas: subIdeas,
+      contributors: this.model.get('contributors'),
       canEdit: canEdit,
       i18n: i18n,
       getExtractsLabel: this.getExtractsLabel,
@@ -235,6 +235,8 @@ var IdeaPanel = AssemblPanel.extend({
         that.ellipsis('.ideaPanel-definition', that.ui.seeMoreOrLess);
       }, 0);
 
+      this.renderContributors();
+
       collectionManager.getWidgetsForContextPromise(
         Widget.Model.prototype.IDEA_PANEL_ACCESS_CTX,
         that.model).then(function(subset) {
@@ -281,6 +283,44 @@ var IdeaPanel = AssemblPanel.extend({
     } else {
       this.renderTemplateGetExtractsLabel();
     }
+  },
+
+  renderContributors: function() {
+    var that = this,
+    collectionManager = new CollectionManager();
+
+    collectionManager.getAllUsersCollectionPromise().then(function(allAgents) {
+      var contributorsRaw = that.model.get('contributors'),
+      contributorsId = [],
+      allAgents = allAgents;
+      _.each(contributorsRaw, function(contributorId) {
+        contributorsId.push(contributorId);
+      }); 
+      //console.log(contributorsId);
+      var ContributorAgentSubset = Backbone.Subset.extend({
+        name: 'ContributorAgentSubset',
+        sieve: function(agent) {
+          //console.log(agent.id, _.indexOf(contributorsId, agent.id), contributorsId);
+          return _.indexOf(contributorsId, agent.id) !== -1;
+        },
+        parent: function() {
+          return allAgents
+        }
+      });
+      
+      var contributors = new ContributorAgentSubset()
+      
+      //console.log(contributors);
+      var avatarCollectionView = Marionette.CollectionView.extend({
+        childView: AgentAvatar
+      });
+      var avatarsView = new avatarCollectionView({
+        collection: contributors
+      });
+      
+      that.contributors.show(avatarsView);
+    });
+
   },
 
   displayEditableFields: function() {
