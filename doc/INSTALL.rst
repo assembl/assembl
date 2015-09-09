@@ -246,3 +246,13 @@ files in %(here)s. Vagrant does not allow creating sockets in a shared
 folder; so if you insist on using vagrant, make sure to move sockets
 locations. There is one is supervisord.conf, and one in an unkonwn
 location.
+
+Ontology Submodule
+===================
+
+The ontology module is a git submodule. As a result, after pulling in changes,
+update with the following:
+
+.. code:: sh
+
+    git submodule update --init
