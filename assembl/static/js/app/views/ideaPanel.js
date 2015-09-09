@@ -560,11 +560,15 @@ var IdeaPanel = AssemblPanel.extend({
 
     this.$el.removeClass('is-dragover');
     ev.currentTarget.style.opacity = 1;
+    Ctx.setDraggedAnnotation(null);
     Ctx.setDraggedSegment(null);
 
   },
 
   onDragOver: function(ev) {
+    if (Ctx.debugAnnotator) {
+      console.log("ideaPanel:onDragOver() fired", Ctx.getDraggedSegment(), Ctx.getDraggedAnnotation());
+    }
     if (ev) {
       ev.preventDefault();
       ev.stopPropagation();
@@ -591,7 +595,9 @@ var IdeaPanel = AssemblPanel.extend({
   },
 
   onDrop: function(ev) {
-    //console.log("ideaPanel:onDrop() fired");
+    if (Ctx.debugAnnotator) {
+      console.log("ideaPanel:onDrop() fired");
+    }
     if (ev) {
       ev.preventDefault();
       ev.stopPropagation();
@@ -617,6 +623,9 @@ var IdeaPanel = AssemblPanel.extend({
       Ctx.saveCurrentAnnotationAsExtract();
     }
 
+    if(!segment && !annotation) {
+      console.error("Neither a segment nor an annotation was available after Drop");
+    }
     this.extractListView.render();
 
     return;

@@ -348,6 +348,9 @@ var IdeaView = Backbone.View.extend({
    * @event
    */
   onDrop: function(ev) {
+    if (Ctx.debugAnnotator) {
+      console.log("ideaInIdeaList:onDrop() fired", Ctx.getDraggedSegment(), Ctx.getDraggedAnnotation());
+    }
     if (ev) {
       ev.preventDefault();
       ev.stopPropagation();

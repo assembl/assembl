@@ -902,7 +902,7 @@ var MessageList = AssemblPanel.extend({
    * will not be shown.
    */
   doAnnotatorRefresh: function() {
-    if (Ctx.debugRender) {
+    if (Ctx.debugAnnotator) {
       console.log("messageList:doAnnotatorRefresh() called for " + _.size(this.renderedMessageViewsCurrent) + " messages");
     }
 

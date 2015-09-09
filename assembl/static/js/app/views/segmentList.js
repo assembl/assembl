@@ -224,21 +224,23 @@ var SegmentListPanel = AssemblPanel.extend({
 
     collectionManager.getAllExtractsCollectionPromise()
             .then(function(allExtractsCollection) {
-              that.clipboard = new Clipboard([], {
-                parent: allExtractsCollection,
-                currentUserId: Ctx.getCurrentUser().id
-              });
-              that.listenTo(allExtractsCollection, 'invalid', function(model, error) {
-                alert(error);
-              });
+              if(!that.isViewDestroyed()) {
+                that.clipboard = new Clipboard([], {
+                  parent: allExtractsCollection,
+                  currentUserId: Ctx.getCurrentUser().id
+                });
+                that.listenTo(allExtractsCollection, 'invalid', function(model, error) {
+                  alert(error);
+                });
 
-              that.listenTo(that.clipboard, 'add', function(segment) {
-                that.highlightSegment(segment);
-              });
-              that.listenTo(that.clipboard, 'add remove reset change', that.resetTitle);
-              window.setTimeout(function() {
-                that.render();
-              }, 1000);
+                that.listenTo(that.clipboard, 'add', function(segment) {
+                  that.highlightSegment(segment);
+                });
+                that.listenTo(that.clipboard, 'add remove reset change', that.resetTitle);
+                window.setTimeout(function() {
+                  that.render();
+                }, 0);
+              }
             });
 
     this.listenTo(Assembl.vent, 'segmentListPanel:showSegment', function(segment) {
