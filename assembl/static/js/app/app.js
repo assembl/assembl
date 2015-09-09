@@ -44,6 +44,9 @@ App.on('start', function() {
 });
 
 App.on('start', function() {
+  // Tell Explorer not to cache Ajax requests.
+  // http://stackoverflow.com/questions/4303829/how-to-prevent-a-jquery-ajax-request-from-caching-in-internet-explorer
+  $.ajaxSetup({ cache: false });
 
   // change dynamically tab title
   document.title = document.querySelector('#discussion-topic').value; // not needed anymore on the debate page
