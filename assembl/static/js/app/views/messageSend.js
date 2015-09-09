@@ -135,18 +135,21 @@ var messageSend = Marionette.ItemView.extend({
       Ctx.initTooltips(this.$el);
 
       if (!Ctx.getCurrentUser().can(Permissions.ADD_POST)) {
-        var rolesMissingMessageForPermission = Ctx.getCurrentUser().getRolesMissingMessageForPermission(Permissions.ADD_POST),
-        messageString,
-        warningMessage;
-        if ('reply_message_id' in this.options) {
-          messageString = i18n.gettext("Before you can reply to this message %s")
-        }
-        else {
-          messageString = i18n.gettext("Before you can post a message %s")
-        }
+        var that = this, collectionManager = new CollectionManager();
+        collectionManager.getDiscussionModelPromise().then(function(discussion) {
+          var rolesMissingMessageForPermission = Ctx.getCurrentUser().getRolesMissingMessageForPermission(Permissions.ADD_POST, discussion),
+          messageString,
+          warningMessage;
+          if ('reply_message_id' in that.options) {
+            messageString = i18n.gettext("Before you can reply to this message %s")
+          }
+          else {
+            messageString = i18n.gettext("Before you can post a message %s")
+          }
 
-        warningMessage = i18n.sprintf(messageString, rolesMissingMessageForPermission);
-        this.ui.permissionDeniedWarningMessage.html(warningMessage);
+          warningMessage = i18n.sprintf(messageString, rolesMissingMessageForPermission);
+          that.ui.permissionDeniedWarningMessage.html(warningMessage);
+        });
       }
     },
 

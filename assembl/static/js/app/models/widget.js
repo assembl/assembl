@@ -268,7 +268,8 @@ var VotingWidgetModel = WidgetModel.extend({
           message += " " + this.getDescriptionText(this.UNTIL_TEXT, idea);
         }
         if(!currentUser.can(Permissions.VOTE)) {
-          message += "  " + i18n.sprintf(i18n.gettext("You cannot vote right now because %s."), currentUser.getRolesMissingMessageForPermission());
+          // TODO: get the current discussion synchronously.
+          message += "  " + i18n.sprintf(i18n.gettext("You cannot vote right now because %s."), currentUser.getRolesMissingMessageForPermission(Permissions.VOTE));
         }
         return message;
       case this.IDEA_PANEL_ACCESS_CTX:

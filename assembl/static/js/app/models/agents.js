@@ -113,32 +113,30 @@ var AgentModel = Base.Model.extend({
   /**
    * @return A text message designed to replace X in the question "You cannot perform this operation because X"
    */
-  getRolesMissingMessageForPermission: function(permission) {
-      var retval;
+  getRolesMissingMessageForPermission: function(permission, discussion) {
       if (this.hasPermission(permission)) {
-        retval = i18n.gettext('need no additional permissions');
+        return i18n.gettext('need no additional permissions');
       }
       else if (this.isUnknownUser()) {
-        retval = i18n.sprintf(i18n.gettext("you must first <a href='%s'>Sign in</a>"), Ctx.getLoginURL());
+        return i18n.sprintf(i18n.gettext("you must first <a href='%s'>Sign in</a>"), Ctx.getLoginURL());
       }
-      else {
-        var rolesGrantingPermission = this.getRolesForPermission(permission);
+      else if (discussion !== undefined) {
+        var rolesGrantingPermission = discussion.getRolesForPermission(permission);
         if (_.size(rolesGrantingPermission) > 0) {
-          if (_.contains(rolesGrantingPermission, Roles.PARTICIPANT) && _.contains(this.getRolesForPermission(Permissions.SELF_REGISTER), Roles.AUTHENTICATED)) {
-            retval = i18n.sprintf(i18n.gettext('you must first join this discussion'));
+          if (_.contains(rolesGrantingPermission, Roles.PARTICIPANT) && _.contains(discussion.getRolesForPermission(Permissions.SELF_REGISTER), Roles.AUTHENTICATED)) {
+            return i18n.sprintf(i18n.gettext('you must first join this discussion'));
           }
           else {
             //TODO:  Handle the case of self_register_req
-            retval = i18n.sprintf(i18n.ngettext('you must ask a discussion administrator for the following role: %s', 'you must ask a discussion administrator for one of the following roles: %s', _.size(rolesGrantingPermission)), rolesGrantingPermission.join(', '));
+            return i18n.sprintf(i18n.ngettext('you must ask a discussion administrator for the following role: %s', 'you must ask a discussion administrator for one of the following roles: %s', _.size(rolesGrantingPermission)), rolesGrantingPermission.join(', '));
           }
         }
         else {
-          retval = i18n.sprintf(i18n.gettext('the administrator has closed this discussion to all contributions'), '');
+          return i18n.gettext('the administrator has closed this discussion to all contributions');
         }
-
+      } else {
+        return i18n.gettext("You need additional permissions")
       }
-
-      return retval;
     },
 
   /**
