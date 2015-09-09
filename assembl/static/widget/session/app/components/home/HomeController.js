@@ -24,9 +24,7 @@ HomeModule.controller('HomeController', [
       $scope.user_avatar_url = (("user" in $scope.widget) && ("avatar_url_base" in $scope.widget.user)) ? $scope.widget.user.avatar_url_base + "" + $scope.avatar_size : null;
 
       // when the session end up, switch to read only mode
-      if (config.settings.endDate) {
-        $scope.readOnly = new Date().getTime() > new Date(config.settings.endDate).getTime();
-      }
+      $scope.readOnly = config.activity_state !== "active";
 
       $scope.$watch("message", function(value) {
 
