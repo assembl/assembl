@@ -162,11 +162,12 @@ var IdeaPanel = AssemblPanel.extend({
         canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
         canEditNextSynthesis = currentUser.can(Permissions.EDIT_SYNTHESIS),
         direct_link_relative_url = null,
-        share_link_url = null;
+        share_link_url = null,
+        contributors = undefined;
 
     if (this.model) {
       subIdeas = this.model.getChildren();
-
+      contributors = this.model.get('contributors');
       direct_link_relative_url = Ctx.getRelativeURLFromDiscussionRelativeURL("idea/" + encodeURIComponent(this.model.get('@id'))) + "?source=share";
 
       //share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
@@ -178,7 +179,7 @@ var IdeaPanel = AssemblPanel.extend({
     return {
       idea: this.model,
       subIdeas: subIdeas,
-      contributors: this.model.get('contributors'),
+      contributors: contributors,
       canEdit: canEdit,
       i18n: i18n,
       getExtractsLabel: this.getExtractsLabel,
