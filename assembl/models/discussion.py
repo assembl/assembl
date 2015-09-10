@@ -5,6 +5,7 @@ from collections import defaultdict
 
 import simplejson as json
 from pyramid.security import Allow, ALL_PERMISSIONS
+from pyramid.settings import asbool
 from sqlalchemy import (
     Column,
     Integer,
@@ -20,6 +21,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, join, subqueryload_all
 
+from assembl.lib import config
 from assembl.lib.utils import slugify
 from . import DiscussionBoundBase
 from virtuoso.alchemy import CoerceUnicode
@@ -262,6 +264,39 @@ class Discussion(DiscussionBoundBase):
 
     def get_user_permissions_preload(self, user_id):
         return json.dumps(self.get_user_permissions(user_id))
+
+    def get_base_url(self):
+        """Get the base URL of this server
+
+        Tied to discussion so that we can support virtual hosts or
+        communities in the future and access the urls when we can't rely
+        on pyramid's current request (such as when celery generates
+        notifications)
+        """
+        port = config.get('public_port')
+        accept_secure_connection = asbool(
+            config.get('accept_secure_connection'))
+        require_secure_connection = asbool(
+            config.get('require_secure_connection'))
+        service = 'http'
+        if accept_secure_connection or require_secure_connection:
+            if port is None or port == "443":
+                service += 's'
+                portString = ''
+            elif port == "80":
+                if require_secure_connection:
+                    assert "Do not use secure connection on 80"
+                else:
+                    portString = ''
+            else:
+                if require_secure_connection:
+                    service += 's'
+                portString = (':'+port)
+        else:
+            if port is not None and port != "80":
+                portString = (':'+port)
+        return '%s://%s%s' % (
+            service, config.get('public_hostname'), portString)
 
     @property
     def widget_collection_url(self):

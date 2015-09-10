@@ -2,7 +2,7 @@ from urlparse import urljoin
 import urllib
 
 from ..models import Discussion
-from .utils import get_base_url
+
 
 URL_DISCRIMINANTS = {
     'SOURCE': 'source'
@@ -58,14 +58,15 @@ class FrontendUrls():
         return None
 
     def getDiscussionLogoUrl(self):
-        return urljoin(get_base_url(), '/static/img/assembl.png')
+        return urljoin(
+            self.discussion.get_base_url(), '/static/img/assembl.png')
 
     def get_discussion_url(self):
         from pyramid.request import Request
-        #req = Request.blank('/', base_url=get_base_url())
+        #req = Request.blank('/', base_url=self.discussion.get_base_url())
         #Celery didn't like this.  To revisit once we have virtual hosts
         #return req.route_url('home', discussion_slug=self.discussion.slug)
-        return urljoin(get_base_url(), self.discussion.slug)
+        return urljoin(self.discussion.get_base_url(), self.discussion.slug)
 
     def getUserNotificationSubscriptionsConfigurationUrl(self):
         return self.get_discussion_url() + '/user/notifications'
@@ -95,4 +96,4 @@ class FrontendUrls():
 
     def get_agentprofile_avatar_url(self, profile, pixelSize):
         return urljoin(
-            get_base_url(), profile.external_avatar_url()+str(pixelSize))
+            self.discussion.get_base_url(), profile.external_avatar_url()+str(pixelSize))
