@@ -93,7 +93,7 @@ var MessageList = AssemblPanel.extend({
       this.isUsingExpertView = (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT); // TODO?: have a dedicated flag
 
       this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
-      this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+      this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY;
 
       collectionManager.getAllMessageStructureCollectionPromise()
         .then(function(allMessageStructureCollection) {
@@ -1873,7 +1873,7 @@ var MessageList = AssemblPanel.extend({
         targetMessageViewStyle;
 
     if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-      defaultMessageStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+      defaultMessageStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY;
     }
     else {
       defaultMessageStyle = this.defaultMessageStyle;
@@ -1888,7 +1888,7 @@ var MessageList = AssemblPanel.extend({
           targetMessageViewStyle = defaultMessageStyle;
         }
         else {
-          targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW;
+          targetMessageViewStyle = Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY;
         }
       }
     }
