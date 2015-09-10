@@ -19,7 +19,7 @@ var assembl_tours = [
     },
     {
         name:"on_show_synthesis",
-        autostart: true,
+        autostart: false,
         tour: onShowSynthesis
     }
 ];
