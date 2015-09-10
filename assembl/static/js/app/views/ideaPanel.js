@@ -77,7 +77,8 @@ var IdeaPanel = AssemblPanel.extend({
     'seeLess': '.js_seeLess',
     'deleteIdea': '.js_ideaPanel-deleteBtn',
     'clearIdea': '.js_ideaPanel-clearBtn',
-    'closeExtract': '.js_closeExtract'
+    'closeExtract': '.js_closeExtract',
+    'contributorsSection': '.ideaPanel-section-contributors'
   },
   modelEvents: {
     //Do NOT listen to change here
@@ -296,7 +297,7 @@ var IdeaPanel = AssemblPanel.extend({
       allAgents = allAgents;
       _.each(contributorsRaw, function(contributorId) {
         contributorsId.push(contributorId);
-      }); 
+      });
       //console.log(contributorsId);
       var ContributorAgentSubset = Backbone.Subset.extend({
         name: 'ContributorAgentSubset',
@@ -320,6 +321,9 @@ var IdeaPanel = AssemblPanel.extend({
       });
       
       that.contributors.show(avatarsView);
+      if(contributorsId.length > 0) {
+        that.ui.contributorsSection.removeClass('hidden');
+      }
     });
 
   },
