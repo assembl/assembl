@@ -184,7 +184,7 @@ var account = Marionette.LayoutView.extend({
     e.preventDefault();
 
     var that = this,
-        email = this.$('input[name="new_email"]').val(),
+        email = this.$('input[name="new_email"]').val().trim(),
         emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (!email) {
