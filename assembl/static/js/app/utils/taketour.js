@@ -35,12 +35,33 @@ var TourManager = Marionette.Object.extend({
     var that = this,
         currentUser = Ctx.getCurrentUser();
     this.user = currentUser;
+    hopscotch.configure({
+        onShow: function() {
+          if (hopscotch.getCurrStepNum() + 1 == that.currentTour.tour.length) {
+            that.beforeLastStep();
+          }
+            //that.$(".panel-body").scroll(that, that.scrollLogger);
+        },
+        onNext: function() {
+            // need to scroll messageListPanel there.
+        },
+        i18n: {
+            nextBtn: i18n.gettext('Next'),
+            prevBtn: i18n.gettext('Back'),
+            doneBtn: i18n.gettext('Done'),
+            skipBtn: i18n.gettext('Skip'),
+            closeTooltip: i18n.gettext('Close')
+        }
+    });
+    hopscotch.listen('end', function() {
+      that.afterLastStep();
+    });
     if (!currentUser.isUnknownUser()) {
-        this.tourModel = new TourModel.Model();
-        this.tourModel.fetch({
-          success: function() {
-            that.initialize2();
-          }});
+      this.tourModel = new TourModel.Model();
+      this.tourModel.fetch({
+        success: function() {
+          that.initialize2();
+        }});
     } else {
       this.initialize2();
     }
@@ -156,28 +177,10 @@ var TourManager = Marionette.Object.extend({
   startCurrentTour: function() {
     var that = this, hopscotchTour = this.currentTour.tour;
     // this.lastStep = hopscotch_tour.steps[hopscotch_tour.steps.length - 1];
-    hopscotch.configure({
-        onShow: function() {
-          if (hopscotch.getCurrStepNum() + 1 == that.currentTour.tour.length) {
-            that.beforeLastStep();
-          }
-            //that.$(".panel-body").scroll(that, that.scrollLogger);
-        },
-        onNext: function() {
-            // need to scroll messageListPanel there.
-        },
-        i18n: {
-            nextBtn: i18n.gettext('Next'),
-            prevBtn: i18n.gettext('Back'),
-            doneBtn: i18n.gettext('Done'),
-            skipBtn: i18n.gettext('Skip'),
-            closeTooltip: i18n.gettext('Close')
-        }
-    });
-    hopscotch.listen('end', function() {
-      that.afterLastStep();
-    });
-    hopscotch.startTour(hopscotchTour);
+    // We may be within the end signal, so make it asynchronous.
+    setTimeout(function() {
+      hopscotch.startTour(hopscotchTour);
+    }, 0);
   }
 });
 
