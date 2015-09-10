@@ -135,7 +135,7 @@ var AgentModel = Base.Model.extend({
           return i18n.gettext('the administrator has closed this discussion to all contributions');
         }
       } else {
-        return i18n.gettext("You need additional permissions")
+        return i18n.gettext("you need additional permissions");
       }
     },
 
