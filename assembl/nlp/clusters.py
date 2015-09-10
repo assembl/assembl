@@ -111,8 +111,8 @@ def create_dictionaries(discussion_id=None):
     only_for_lang = None
     for d_id, locales in db.query(
             Discussion.id, Discussion.preferred_locales).all():
-        locales = locales or default_locales
-        main_lang = locales.split()[0].split('_')[0]
+        locales = locales.split() or default_locales
+        main_lang = locales[0].split('_')[0]
         by_main_lang[main_lang].append(d_id)
         if discussion_id == d_id:
             only_for_lang = main_lang
