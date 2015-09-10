@@ -279,15 +279,13 @@ class Discussion(DiscussionBoundBase):
         require_secure_connection = asbool(
             config.get('require_secure_connection'))
         service = 'http'
+        portString = ''
         if accept_secure_connection or require_secure_connection:
             if port is None or port == "443":
                 service += 's'
-                portString = ''
             elif port == "80":
                 if require_secure_connection:
                     assert "Do not use secure connection on 80"
-                else:
-                    portString = ''
             else:
                 if require_secure_connection:
                     service += 's'
