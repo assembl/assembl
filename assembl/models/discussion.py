@@ -470,16 +470,6 @@ class Discussion(DiscussionBoundBase):
             return (id for (id,) in query.all())
         return query.all()
 
-    def get_base_url(self):
-        """ Abstracted so that we can support virtual hosts or communities in 
-        the future and access the urls when we can't rely on pyramid's current
-        request (such as when celery generates notifications
-        """
-        from assembl.lib import config
-        port = config.get('public_port')
-        portString = (':'+port) if port != 80 else ''
-        return 'http://'+config.get('public_hostname')+portString
-
     def get_url(self):
         from assembl.lib.frontend_urls import FrontendUrls
         frontendUrls = FrontendUrls(self)
