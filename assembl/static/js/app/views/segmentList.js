@@ -13,7 +13,7 @@ var Marionette = require('../shims/marionette.js'),
     CollectionManager = require('../common/collectionManager.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     AssemblPanel = require('./assemblPanel.js'),
-    AgentAvatarView = require('./agentAvatar.js'),
+    AgentViews = require('./agent.js'),
 
     //Subset = require('backbone.subset'),
     Promise = require('bluebird');
@@ -24,11 +24,13 @@ var SegmentView = Marionette.LayoutView.extend({
   ui: {
     postItFooter: '.postit-footer .text-quotation',
     postIt: '.postit',
-    authorAvatar: '.js_authorAvatar'
+    authorAvatar: '.js_authorAvatar',
+    authorName: '.js_authorName'
   },
 
   regions: {
-    authorAvatar: '@ui.authorAvatar'
+    authorAvatar: '@ui.authorAvatar',
+    authorName: '@ui.authorName'
   },
 
   initialize: function(options) {
@@ -79,7 +81,7 @@ var SegmentView = Marionette.LayoutView.extend({
     Ctx.initTooltips(this.$el);
     Ctx.convertUrlsToLinks(this.ui.postItFooter);
 
-    this.renderAuthorAvatar();
+    this.renderAuthor();
 
     if (!_.isUndefined(this.model.get('firstInlist'))) {
       this.$el.attr('id', 'tour_step_segment');
@@ -87,14 +89,19 @@ var SegmentView = Marionette.LayoutView.extend({
 
   },
 
-  renderAuthorAvatar: function() {
-    var agentAvatarView;
+  renderAuthor: function() {
+    var agentAvatarView,
+        agentNameView;
 
     if (this.postCreator) {
-      agentAvatarView= new AgentAvatarView({
+      agentAvatarView = new AgentViews.AgentAvatarView({
         model: this.postCreator
       });
       this.authorAvatar.show(agentAvatarView);
+      agentNameView = new AgentViews.AgentNameView({
+        model: this.postCreator
+      });
+      this.authorName.show(agentNameView);
     }
   },
 

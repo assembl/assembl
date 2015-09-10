@@ -1,7 +1,7 @@
 <% if(agent.get('name')) { %>
-  <a href="#" class="avatar img-rounded" data-toggle="tooltip" data-placement="top" title="<%= agent.get('name') %>">
+  <a href="#" class="avatar js_agentAvatar img-rounded" data-toggle="tooltip" data-placement="top" title="<%= agent.get('name') %>">
 <% } else { %>
-  <a href="#" class="avatar img-rounded" data-toggle="tooltip" data-placement="top" title="{{ gettext('anonymous') }}">
+  <a href="#" class="avatar js_agentAvatar img-rounded" data-toggle="tooltip" data-placement="top" title="{{ gettext('anonymous') }}">
 <% } %>
     <img src="<%= agent.getAvatarUrl(30) %>" width="30" height="30">
   </a>

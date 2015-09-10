@@ -15,7 +15,7 @@ var Marionette = require('../shims/marionette.js'),
     facebook = require('./facebookModal.js'),
     Promise = require('bluebird'),
     messageExport = require('./messageExportModal.js'),
-    AgentAvatarView = require('./agentAvatar.js'),
+    AgentViews = require('./agent.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
@@ -123,11 +123,13 @@ var MessageView = Marionette.LayoutView.extend({
       messageReplyBox: ".message-replybox",
       likedLink: ".js_likeButton",
       likeCounter: ".js_likeCount",
-      avatar: ".js_avatarContainer"
+      avatar: ".js_avatarContainer",
+      name: ".js_nameContainer"
     },
 
     regions: {
       avatar: "@ui.avatar",
+      name: "@ui.name"
     },
 
   /**
@@ -166,7 +168,6 @@ var MessageView = Marionette.LayoutView.extend({
     'click .js_message-markasread': 'markAsRead',
 
     'click .js_message-export-facebook': 'exportToFacebook',
-    'click .js_getContributions':'getContributions',
 
     'click .js_openTargetInPopOver': 'openTargetInPopOver'
   },
@@ -335,7 +336,7 @@ var MessageView = Marionette.LayoutView.extend({
       this.clearAnnotationsToLoadCache();
       Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-      this.renderAvatar();
+      this.renderAuthor();
 
       this.$el.attr("id", "message-" + this.model.get('@id'));
       this.$el.addClass(this.model.get('@type'));
@@ -507,11 +508,15 @@ var MessageView = Marionette.LayoutView.extend({
 
   },
 
-  renderAvatar: function() {
-    this.agentAvatarView = new AgentAvatarView({
+  renderAuthor: function() {
+    var agentAvatarView = new AgentViews.AgentAvatarView({
       model: this.creator
     });
-    this.avatar.show(this.agentAvatarView);
+    this.avatar.show(agentAvatarView);
+    var agentNameView = new AgentViews.AgentNameView({
+      model: this.creator
+    });
+    this.name.show(agentNameView);
   },
 
   /**
@@ -891,10 +896,6 @@ var MessageView = Marionette.LayoutView.extend({
       this.messageListView.render();
       this.messageListView.showMessageById(this.model.id);
     },
-
-  getContributions: function(e) {
-    this.agentAvatarView.onAvatarClick(e);
-  },
 
   /**
    * You need to re-render after this

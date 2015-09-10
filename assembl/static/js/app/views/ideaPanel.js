@@ -11,7 +11,7 @@ var Assembl = require('../app.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     SegmentList = require('./segmentList.js'),
     Widget = require('../models/widget.js'),
-    AgentAvatar = require('./agentAvatar.js'),
+    AgentViews = require('./agent.js'),
     WidgetLinks = require('./widgetLinks.js'),
     WidgetButtons = require('./widgetButtons.js'),
     CollectionManager = require('../common/collectionManager.js'),
@@ -313,7 +313,7 @@ var IdeaPanel = AssemblPanel.extend({
       
       //console.log(contributors);
       var avatarCollectionView = Marionette.CollectionView.extend({
-        childView: AgentAvatar
+        childView: AgentViews.AgentAvatarView
       });
       var avatarsView = new avatarCollectionView({
         collection: contributors

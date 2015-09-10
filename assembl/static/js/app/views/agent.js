@@ -9,18 +9,15 @@ var Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js'),
     availableFilters = require('./postFilters.js');
 
-var AgentAvatarView = Marionette.ItemView.extend({
-  template: '#tmpl-agentAvatar',
-  className: 'agentAvatar',
-  initialize: function(options) {
-  },
-
+var AgentView = Marionette.ItemView.extend({
   ui: {
-    avatar: '.avatar',
+    avatar: '.js_agentAvatar',
+    name: '.js_agentName'
   },
 
   events: {
-    'click @ui.avatar': 'onAvatarClick'
+    'click @ui.avatar': 'onAvatarClick',
+    'click @ui.name': 'onAvatarClick'
   },
 
   serializeData: function() {
@@ -50,4 +47,17 @@ var AgentAvatarView = Marionette.ItemView.extend({
   
 });
 
-module.exports = AgentAvatarView;
+var AgentAvatarView = AgentView.extend({
+  template: '#tmpl-agentAvatar',
+  className: 'agentAvatar'
+});
+
+var AgentNameView = AgentView.extend({
+  template: '#tmpl-agentName',
+  className: 'agentName'
+});
+
+module.exports = {
+  AgentAvatarView: AgentAvatarView,
+  AgentNameView: AgentNameView
+};

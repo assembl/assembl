@@ -83,7 +83,7 @@
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
   <div class="leftSection js_messageTitle">
     <div class="js_avatarContainer avatarContainer"></div>
-    <span class="message-author js_messageHeader">{{ gettext('%(user)s')|format(user=userName)|safe }}</span>
+    <span class="message-author js_nameContainer"></span>
   </div>
   <div class="rightSection">
     <span class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</span>
@@ -102,7 +102,7 @@
       <div class="js_avatarContainer"></div>
       <% } %>
       <div class="bd">
-      <div class="message-author js_getContributions" data-user-id="<%= creator.get('@id') %>">{{ gettext('%(user)s')|format(user=userName)|safe }} {{ readUnreadIndicator() }}</div>
+      <div class="message-author" data-user-id="<%= creator.get('@id') %>"><span class='js_nameContainer'></span>{{ readUnreadIndicator() }}</div>
       <div class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }} {{ showInspirationSource() }}</div>
     </div>
   </div>

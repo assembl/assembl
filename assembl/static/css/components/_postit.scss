@@ -69,7 +69,8 @@ $harvesterAvatarSize: 24px;
           //visibility: hidden;
           font-size: 12px;
         }
-        .creatorName {
+        .authorName {
+          display: inline;
           vertical-align: top;
           color: $theme_person_name_color;
           font-size: 11px;

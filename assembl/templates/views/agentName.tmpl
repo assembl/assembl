@@ -1,0 +1,6 @@
+<% if(agent.get('name')) { %>
+  <a href="#" class="js_agentName"><%= agent.get('name') %>
+<% } else { %>
+  <a href="#" class="js_agentName">{{ gettext('Anonymous') }}
+<% } %>
+  </a>
