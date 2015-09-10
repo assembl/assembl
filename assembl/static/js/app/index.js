@@ -4,7 +4,7 @@ var App = require('./app.js'),
     Router = require('./router.js'),
     Ctx = require('./common/context.js'),
     Socket = require('./utils/socket.js'),
-    Taketour = require('./utils/taketour.js'),
+    TourManager = require('./utils/taketour.js'),
     CollectionManager = require('./common/collectionManager.js'),
     Raven = require('raven-js');
 
@@ -45,36 +45,7 @@ window.Ctx = Ctx;
 
 App.start();
 
-// available in simple interface
-if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-
-  var currentUser = Ctx.getCurrentUser();
-  if (activate_tour /*&& (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))*/) {
-    // start take tour due to the dom latencies
-    setTimeout(function() {
-      // may have been disabled by the router
-      if (activate_tour) {
-        Taketour.initTour();
-      }
-    }, 4000);
-
-    // test with defer call to action
-
-      setTimeout(function() {
-
-          Taketour.startTour('on_start');
-
-      }, 6000);
-
-      setTimeout(function() {
-
-          Taketour.startTour('on_show_synthesis');
-
-      }, 6000);
-
-
-
-
-  }
+var currentUser = Ctx.getCurrentUser();
+if (activate_tour /*&& (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))*/) {
+  App.tourManager = new TourManager();
 }
-

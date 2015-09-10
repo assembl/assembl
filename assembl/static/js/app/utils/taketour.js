@@ -11,146 +11,174 @@ var onStart = require('./tours/onStart.js'),
     onShowSynthesis = require('./tours/onShowSynthesis.js');
 
 
-var TakeTour = Marionette.Object.extend({
-
-    _nextTours: [],
-    _seenTours: undefined,
-    _tourModel: new TourModel.Model(),
-
-    initialize: function(){
-
-        this.tour_assembl = [
-            {
-                name:"on_start",
-                autostart: true,
-                tour: onStart
-            },
-            {
-                name:"on_show_synthesis",
-                autostart: false,
-                tour: onShowSynthesis
-            }
-        ];
-
-        this.initTour();
+var assembl_tours = [
+    {
+        name:"on_start",
+        autostart: true,
+        tour: onStart
     },
-
-    initTour: function() {
-        var tourModel = new TourModel.Model(),
-            currentUser = Ctx.getCurrentUser(),
-            that = this;
-
-        hopscotch.configure({
-            onShow: function() {
-                //that.$(".panel-body").scroll(that, that.scrollLogger);
-            },
-            onNext: function() {
-                // need to scroll messageListPanel there.
-            },
-            i18n: {
-                nextBtn: i18n.gettext('Next'),
-                prevBtn: i18n.gettext('Back'),
-                doneBtn: i18n.gettext('Done'),
-                skipBtn: i18n.gettext('Skip'),
-                closeTooltip: i18n.gettext('Close')
-            }
-        });
-
-        // Recovery disabled tour
-        if (Ctx.getCurrentUser().isUnknownUser()) {
-            // TODO: Fetch _seenTours from localStorage
-            this._seenTours = {};
-        } else {
-            this._tourModel.fetch({
-                success: function(model, response, options){
-                    that._seenTours = response;
-                },
-                error: function(model, response, options){
-
-                }
-            });
-        }
-
-        hopscotch.listen('end', function(){
-            var currentTour = hopscotch.getCurrTour();
-
-            // after each end we delete the tour
-            that.deleteTour(currentTour.id);
-
-            console.debug('active', hopscotch.isActive, hopscotch.getCurrTour());
-
-            if (that._nextTours.length) {
-               that.runTour(that._nextTours[0]);
-            }
-
-        });
-    },
-
-    getCurrentTour: function(){
-       return hopscotch.getCurrTour();
-    },
-
-    getNextTours: function(){
-        return this._nextTours;
-    },
-
-    setNextTours: function(index, name){
-        this._nextTours[index] = name;
-    },
-
-    deleteTour: function(name){
-        sessionStorage.removeItem('hopscotch.tour.state');
-
-        for(var i = 0, len = this._nextTours.length; i < len; i++) {
-            if (this._nextTours[i] === name) {
-                this._nextTours.splice(i, 1);
-                //this._tourModel.save(name, {patch: true});
-                break;
-            }
-        }
-    },
-
-    startTour: function(name){
-        var index = -1;
-
-        // check if the tour has been seen[]
-        if(_.contains(_.keys(this._seenTours), name)){
-            console.debug("Tour already seen");
-            return;
-        } else {
-            //If there is an ongoing round
-            for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
-                if (this.tour_assembl[i].name === name) {
-                    index = i;
-                    this.setNextTours(index, name);
-                    break;
-                }
-            }
-        }
-
-        // check if the _nextTours[] have still tour to load
-        // avoid to reload the current tour running by hopscotch.getCurrTour()
-        if(this._nextTours.length){
-            this.runTour(this._nextTours[0]);
-        }
-
-    },
-
-    // private function
-    runTour: function(name){
-        var tour = undefined;
-
-        for(var i = 0, len = this.tour_assembl.length; i < len; i++) {
-            if (this.tour_assembl[i].name === name) {
-                tour = this.tour_assembl[i].tour;
-                break;
-            }
-        }
-        // not adapter to load multiple tour on single page
-        hopscotch.startTour(tour);
+    {
+        name:"on_show_synthesis",
+        autostart: true,
+        tour: onShowSynthesis
     }
+];
 
+var TourManager = Marionette.Object.extend({
+
+  nextTours: [],
+  tourModel: undefined,
+  currentTour: undefined,
+  // lastStep: undefined,
+
+  initialize: function() {
+    var that = this,
+        currentUser = Ctx.getCurrentUser();
+    this.user = currentUser;
+    if (!currentUser.isUnknownUser()) {
+        this.tourModel = new TourModel.Model();
+        this.tourModel.fetch({
+          success: function() {
+            that.initialize2();
+          }});
+    } else {
+      this.initialize2();
+    }
+  },
+  initialize2: function() {
+    var that = this, toursById = {};
+    for (var i in assembl_tours) {
+        var tour = assembl_tours[i];
+        tour.position = i;
+        toursById[tour.name] = tour;
+        if (tour.autostart && !this.isTourSeen(tour.name)) {
+            this.nextTours.push(tour);
+        }
+    }
+    this.toursById = toursById;
+
+    if (this.nextTours.length > 0) {
+      setTimeout(function() {
+        that.currentTour = that.getNextTour(true);
+        if (that.currentTour !== undefined)
+          that.startCurrentTour();
+      }, 4000);
+    }
+  },
+
+  isTourSeen: function(tourName) {
+      if (this.tourModel === undefined) {
+        var seen = JSON.parse(window.localStorage.getItem('toursSeen') || "{}");
+        return seen[tourName];
+      } else {
+          return this.tourModel.get(tourName);
+      }
+  },
+
+  tourIsSeen: function(tourName) {
+      if (this.tourModel === undefined) {
+        var seen = {};
+        try {
+          JSON.parse(window.localStorage.getItem('toursSeen') || "{}");
+        } catch (err) {
+          console.error("wrong toursSeen in localStorage:" + err);
+        }
+        seen[tourName] = true;
+        window.localStorage.setItem('toursSeen', JSON.stringify(seen));
+      } else {
+          this.tourModel.isSeen(tourName);
+      }
+  },
+
+  getNextTour: function(remove) {
+    while (this.nextTours.length > 0) {
+      var tour = this.nextTours[0];
+      if (tour.condition !== undefined) {
+        if (!tour.condition()) {
+            this.nextTours.shift();
+            continue;
+        }
+      }
+      if (remove) {
+          return this.nextTours.shift();
+      } else {
+          return tour;
+      }
+    }
+    return undefined;
+  },
+
+  requestTour: function(tourName) {
+    var tour = this.toursById(tourName);
+    if (tour === undefined) {
+      console.error("Unknown tour: " + tourName);
+      return;
+    }
+    if (this.isTourSeen(tourName)) {
+      return;
+    }
+    if (this.currentTour !== undefined) {
+      this.currentTour.push(tour);
+      _.sort(this.currentTour, function(tour) {
+        return tour.position;
+      });
+      return;
+    }
+    if (tour.condition !== undefined && !tour.condition()) {
+      return;
+    }
+    if (tour.beforeStart !== undefined) {
+      tour.beforeStart();
+    }
+    // TODO: Scroll to show ID?
+    this.currentTour = tour;
+    this.startCurrentTour();
+  },
+
+  beforeLastStep: function() {
+    var nextTour = this.getNextTour(false);
+    if (nextTour !== undefined) {
+      // tell hopscotch that there is a next step
+    }
+  },
+
+  afterLastStep: function() {
+    if (this.currentTour.cleanup !== undefined) {
+      this.currentTour.cleanup();
+    }
+    this.tourIsSeen(this.currentTour.name);
+    this.currentTour = this.getNextTour(true);
+    if (this.currentTour != undefined) {
+      this.startCurrentTour();
+    }
+  },
+
+  startCurrentTour: function() {
+    var that = this, hopscotchTour = this.currentTour.tour;
+    // this.lastStep = hopscotch_tour.steps[hopscotch_tour.steps.length - 1];
+    hopscotch.configure({
+        onShow: function() {
+          if (hopscotch.getCurrStepNum() + 1 == that.currentTour.tour.length) {
+            that.beforeLastStep();
+          }
+            //that.$(".panel-body").scroll(that, that.scrollLogger);
+        },
+        onNext: function() {
+            // need to scroll messageListPanel there.
+        },
+        i18n: {
+            nextBtn: i18n.gettext('Next'),
+            prevBtn: i18n.gettext('Back'),
+            doneBtn: i18n.gettext('Done'),
+            skipBtn: i18n.gettext('Skip'),
+            closeTooltip: i18n.gettext('Close')
+        }
+    });
+    hopscotch.listen('end', function() {
+      that.afterLastStep();
+    });
+    hopscotch.startTour(hopscotchTour);
+  }
 });
 
-module.exports = new TakeTour();
-
+module.exports = TourManager;
