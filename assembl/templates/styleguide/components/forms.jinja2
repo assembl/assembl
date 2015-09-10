@@ -1,6 +1,283 @@
-<section id="forms" class="cd-forms">
-    <h2>Forms</h2>
-    <div class="cd-box">
+<blockquote class="mbl">
+  <p><strong>Vertical</strong>: .core-form<br>
+  <strong>Inline</strong>: .core-form .form-inline<br>
+  <strong>Horizontal</strong>:  .core-form .form-horizontal</p>
+</blockquote>
 
+
+<p>The default form is vertical aligned. All textual <strong>input</strong>, <strong>textarea</strong>, and <strong>select</strong> elements with <strong>.core-form</strong> are set to width: 100%; by default.<br></p>
+<p class="mbl">Add the <strong>.core-form</strong> class to the form element.</p>
+
+<form class="core-form">
+  <fieldset>
+    <div class="control-group">
+      <label for="input01" class="control-label">Text input</label>
+      <div class="controls">
+        <input type="text" id="input01" class="input-xlarge">
+        <p class="help-block">Lorem iptsum</p>
+      </div>
     </div>
-</section>
+    <div class="control-group mts">
+      <label for="optionsCheckbox" class="control-label">Checkbox</label>
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" value="option1" id="optionsCheckbox">
+          Option one
+        </label>
+      </div>
+    </div>
+    <div class="control-group mts">
+      <label for="select01" class="control-label">Select list</label>
+      <div class="controls">
+        <select id="select01">
+          <option>something</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="control-group mts">
+      <label for="textarea" class="control-label">Textarea</label>
+      <div class="controls">
+        <textarea rows="3" id="textarea" class="input-xlarge"></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions ptm">
+      <button class="btn btn-secondary" type="submit">Save changes</button>
+      <button class="btn btn-cancel">Cancel</button>
+    </div>
+
+  </fieldset>
+</form>
+
+
+<h3 class="h3 mtl">Inline form</h3>
+<form class="core-form form-inline">
+  <input type="text" placeholder="Email" class="input-small">
+  <input type="password" placeholder="Password" class="input-small">
+  <button class="btn btn-default" type="submit">Reset password</button>
+</form>
+
+<h3 class="h3 mtl">Horizontal form</h3>
+<form class="core-form form-horizontal">
+  <fieldset>
+    <div class="control-group">
+      <label for="input01" class="control-label">Text input</label>
+      <div class="controls">
+        <input type="text" id="input01" class="input-xlarge">
+        <p class="help-block">Lorem iptsum</p>
+      </div>
+    </div>
+    <div class="control-group mts">
+      <label for="optionsCheckbox" class="control-label">Checkbox</label>
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" value="option1" id="optionsCheckbox">
+          Option one
+        </label>
+      </div>
+    </div>
+    <div class="control-group mts">
+      <label for="select01" class="control-label">Select list</label>
+      <div class="controls">
+        <select id="select01">
+          <option>something</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="control-group mts">
+      <label for="textarea" class="control-label">Textarea</label>
+      <div class="controls">
+        <textarea rows="3" id="textarea" class="input-xlarge"></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions ptm">
+      <button class="btn btn-primary" type="submit">Save changes</button>
+      <button class="btn btn-cancel">Cancel</button>
+    </div>
+  </fieldset>
+</form>
+
+<h3 class="h3 mtl">Custom radio & checkbox</h3>
+
+<p class="mbs">Only works in modern browsers, falls back to standard radio buttons in legacy browsers.
+These custom radio buttons are pure CSS3, no JavaScript required.</p>
+
+<form class="core-form form-horizontal">
+<div class="control-group">
+  <label class="control-label">Horizontal checkboxes</label>
+  <div class="controls">
+    <label class="checkbox inline custom-checkbox mrl">
+      <input type="checkbox" checked="checked">
+      <span class="custom-checkbox-element"></span>
+      Option one
+    </label>
+    <label class="checkbox inline custom-checkbox mrl">
+      <input type="checkbox">
+      <span class="custom-checkbox-element"></span>
+      Option two
+    </label>
+  </div>
+</div>
+</form>
+
+<form class="core-form form-horizontal">
+    <div class="control-group">
+        <label class="control-label">Horizontal checkboxes</label>
+        <div class="controls">
+            <label class="radio inline custom-radio mrl">
+                <input type="radio" checked="checked">
+                <span class="custom-radio-element"></span>
+                Option one
+            </label>
+            <label class="radio inline custom-radio mrl">
+                <input type="radio">
+                <span class="custom-radio-element"></span>
+                Option two
+            </label>
+        </div>
+    </div>
+</form>
+
+<h3 class="h3 mtl">Message Box</h3>
+
+<div class="messageSend">
+  <div class="rc rcss">
+    <a class="img-left avatar img-rounded" href="#"><img src="/user/id/12/avatar/30" width="30" height="30"></a>
+    <div class="bd">
+      <div>
+        <div class="topic-subject mbxs">
+            <span class="topic-subject-input">
+              <input type="text" class="messageSend-subject formfield text bras" placeholder="Titre du nouveau message">
+            </span>
+        </div>
+      </div>
+      <div>
+        <textarea class="formtextarea messageSend-body text text-muted mbxs">Écrivez votre réponse ici...</textarea>
+        <div class="messageSend-buttons fr">
+            <a class="btn btn-primary btn-xs messageSend-sendbtn hidden">Envoyez votre réponse</a>
+            <a class="btn btn-cancel btn-sm messageSend-cancelbtn hidden">Annuler</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 class="h3 mtl">States forms</h3>
+
+<form class="core-form form-horizontal" id="form-partner">
+<fieldset>
+
+	<div class="control-group error">
+		<label for="name" class="control-label">Input with error</label>
+		<div class="controls">
+			<input type="text" class="input-xlarge">
+			<span class="help-inline">
+				<p class="control-error">Please correct the error</p>
+			</span>
+		</div>
+	</div>
+
+	<div class="control-group success">
+		<label for="homepage" class="control-label">Input with success</label>
+		<div class="controls">
+			<input type="text" value="Valid input..." class="input-xlarge">
+			<span class="help-inline">
+				<p class="control-success"><i class="icon-ok"></i></p>
+			</span>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label for="homepage" class="control-label">Focus input</label>
+		<div class="controls">
+			<input type="text" value="This is focused…" class="input-xlarge">
+		</div>
+	</div>
+
+</fieldset>
+</form>
+
+<h3 class="h3 mtl">Dropdown</h3>
+
+<div style="position: relative; height: 200px;">
+<form class="core-form form-horizontal" id="form-partner">
+    <fieldset>
+    <li class="dropdown mrxl mts open">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Plus d'options
+            <span class="icon-arrowdown"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="#" class="dropdown-listitem">Marquer non-lu</a></li>
+            <li><a href="#" class="dropdown-listitem">Exporter le message</a></li>
+            <li><a href="#" class="message-hoistbtn" data-id="local%3AContent/4946">Afficher seulement ce message et ses réponses</a></li>
+            <li><a href="#" class="">Voir tous les messages de Gaby Hourlier</a></li>
+            <li><a title="test1@test1.com" href="mailto:test1@test1.com">Envoyez un courriel à cet utilisateur</a></li>
+        </ul>
+    </li>
+    </fieldset>
+</form>
+</div>
+
+<h3 class="h3 mtl">Switch button</h3>
+<div class="show-expert-mode-toggle-button"><div class="flipSwitchButton">
+    <div class="js_toggleButton flipswitch flipswitch-no">
+        <label class="flipswitch-lbl-yes">
+            <input type="radio" checked="checked" name="flipswitch-sample-1">
+        </label>
+
+  <span class="flipswitch-sliders">
+    <span class="flipswitch-outer">
+      <span class="flipswitch-inner">
+        <span class="flipswitch-btn-no">
+          <span class="flipswitch-btn-no-background-text">off</span>
+        </span>
+        <span class="flipswitch-btn-yes">
+          <span class="flipswitch-btn-yes-background-text">on</span>
+        </span>
+      </span>
+    </span>
+    <span class="flipswitch-slider"></span>
+  </span>
+
+        <label class="flipswitch-lbl-no">
+            <input type="radio" name="flipswitch-sample-1">
+        </label>
+    </div>
+</div></div>
+
+
+<h3 class="h3 mtl">Dropdown</h3>
+<div style="position: relative; height: 200px;">
+
+<div class="dispib mrs" style="width: 200px;">
+    <div class="dd mrs open">
+        <a class="dd-btn btn btn-primary dd-btn-primary">open <i class="icon-arrowdown"></i></a>
+        <ul class="dd-menu">
+            <li class="dd-item"><a href="">dd item list</a></li>
+            <li class="dd-item"><a href="">dd item list</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="dispib mrs" style="width: 200px;">
+    <div class="dd mrs open">
+        <a class="dd-btn btn btn-primary dd-btn-primary">open <i class="icon-arrowdown"></i></a>
+        <ul class="dd-menu">
+            <li class="dd-item"><a href="">dd item list</a></li>
+            <li class="dd-item"><a href="">dd item list</a></li>
+        </ul>
+    </div>
+</div>
+
+</div>

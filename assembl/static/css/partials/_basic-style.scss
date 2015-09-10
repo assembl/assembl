@@ -4,38 +4,7 @@ xBasic style
 
 -------------------------------- */
 
-*, *::after, *::before {
-	@include box-sizing(border-box);
-}
-
-html * {
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
-html {
-	font-size: 62.5%;
-}
-
-body {
-	font-size: 1.6rem;
-	font-family: $primary-font;
-}
-
-a {
-	text-decoration: none;
-}
-
-img {
-	max-width: 100%;
-}
-
-input, textarea, select {
-	font-family: $primary-font;
-	font-size: 1.6rem;
-}
-
-header {
+.sg-header {
 	position: fixed;
 	height: 50px;
 	width: 100%;

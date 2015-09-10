@@ -1,0 +1,66 @@
+<section id="forms" class="cd-forms">
+    <h2>Forms</h2>
+    <div class="cd-box">
+        <blockquote class="mbl">
+            <p><strong>Vertical</strong>: .core-form<br>
+                <strong>Inline</strong>: .core-form .form-inline<br>
+                <strong>Horizontal</strong>:  .core-form .form-horizontal</p>
+        </blockquote>
+
+        <p>The default form is vertical aligned. All textual <strong>input</strong>, <strong>textarea</strong>, and <strong>select</strong> elements with <strong>.core-form</strong> are set to width: 100%; by default.<br></p>
+        <p class="mbl">Add the <strong>.core-form</strong> class to the form element.</p>
+
+        <form class="core-form">
+            <fieldset>
+                <div class="control-group">
+                    <label for="input01" class="control-label">Text input</label>
+                    <div class="controls">
+                        <input type="text" id="input01" class="input-xlarge">
+                        <p class="help-block">Lorem iptsum</p>
+                    </div>
+                </div>
+                <div class="control-group mts">
+                    <label for="optionsCheckbox" class="control-label">Checkbox</label>
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" value="option1" id="optionsCheckbox">
+                            Option one
+                        </label>
+                    </div>
+                </div>
+                <div class="control-group mts">
+                    <label for="select01" class="control-label">Select list</label>
+                    <div class="controls">
+                        <select id="select01">
+                            <option>something</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group mts">
+                    <label for="textarea" class="control-label">Textarea</label>
+                    <div class="controls">
+                        <textarea rows="3" id="textarea" class="input-xlarge"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions ptm">
+                    <button class="btn btn-secondary" type="submit">Save changes</button>
+                    <button class="btn btn-cancel">Cancel</button>
+                </div>
+
+            </fieldset>
+        </form>
+
+        <h3 class="h3 mtl">Inline form</h3>
+        <form class="core-form form-inline">
+            <input type="text" placeholder="Email" class="input-small">
+            <input type="password" placeholder="Password" class="input-small">
+            <button class="btn btn-default" type="submit">Reset password</button>
+        </form>
+    </div>
+</section>
