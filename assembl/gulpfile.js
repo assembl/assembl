@@ -91,7 +91,7 @@ gulp.task('libs',['clean:infrastructure'], function() {
       path.js+'/bower/bootstrap-growl/jquery.bootstrap-growl.js',
       //path.js+'/bower/jQuery-linkify/dist/jquery.linkify.js',
       path.js+'/lib/jquery-highlight/jquery.highlight.js',
-      //path.js+'/bower/hopscotch/dist/js/hopscotch.js',
+      path.js+'/bower/hopscotch/dist/js/hopscotch.js',
       path.js+'/lib/bootstrap.js',
       path.js+'/lib/dropdown.js',
       path.js+'/lib/annotator/annotator-full.js',
