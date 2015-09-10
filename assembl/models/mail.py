@@ -723,7 +723,8 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
             # and process the bounce
             return False
         if parsed_email.get('Precedence', None) == 'bulk':
-            return False
+            # Possibly a mailing list message: Allow for mailing lists only
+            return isinstance(self, MailingList)
         if parsed_email.get('Precedence', None) == 'list':
             # A mailing list message: Allow for mailing lists only
             return isinstance(self, MailingList)
