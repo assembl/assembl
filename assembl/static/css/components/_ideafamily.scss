@@ -125,7 +125,7 @@ $idea_in_synthesis_comment_hover: $th_purple5;
 
     .ideafamily-item.is-open > .ideafamily-body > & {
         height: auto;
-        display: initial;
+        //display: block;
     }
 
     &:empty {
