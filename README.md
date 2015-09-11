@@ -17,4 +17,4 @@ Assembl is made with the following technologies :
 
 Assembl is developed by [Imagination For People](http://imaginationforpeople.org) and [bluenove](http://bluenove.com)
 
-Installation is described in doc/INSTALL.rst
+Installation is described in [INSTALL](https://github.com/ImaginationForPeople/assembl/blob/develop/doc/INSTALL.rst)
