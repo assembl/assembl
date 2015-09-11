@@ -13,12 +13,12 @@ var onStart = require('./tours/onStart.js'),
 
 var assembl_tours = [
     {
-        name:"on_start",
+        name: "on_start",
         autostart: true,
         tour: onStart
     },
     {
-        name:"on_show_synthesis",
+        name: "on_show_synthesis",
         autostart: false,
         tour: onShowSynthesis
     }
@@ -37,7 +37,7 @@ var TourManager = Marionette.Object.extend({
     this.user = currentUser;
     hopscotch.configure({
         onShow: function() {
-          if (hopscotch.getCurrStepNum() + 1 == that.currentTour.tour.length) {
+          if (hopscotch.getCurrStepNum() + 1 == that.currentTour.tour.steps.length) {
             that.beforeLastStep();
           }
             //that.$(".panel-body").scroll(that, that.scrollLogger);
@@ -159,9 +159,10 @@ var TourManager = Marionette.Object.extend({
   },
 
   beforeLastStep: function() {
-    var nextTour = this.getNextTour(false);
+    var nextTour = this.getNextTour(false),
+        nextButton = $(".hopscotch-next");
     if (nextTour !== undefined) {
-      // tell hopscotch that there is a next step
+      nextButton.text(i18n.gettext("Next"));
     }
   },
 
