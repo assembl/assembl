@@ -139,10 +139,12 @@ var TourManager = Marionette.Object.extend({
       return;
     }
     if (this.currentTour !== undefined) {
-      this.currentTour.push(tour);
-      _.sort(this.currentTour, function(tour) {
-        return tour.position;
-      });
+      // insert in-order, unless it's already there.
+      var pos = _.sortedIndex(this.currentTour, tour, "position");
+      if (!((pos < this.currentTour.length && this.currentTour[pos] === tour)
+        || (pos > 0 && this.currentTour[pos - 1] === tour))) {
+        this.currentTour.splice(pos, 0, tour);
+      }
       return;
     }
     if (tour.condition !== undefined && !tour.condition()) {
