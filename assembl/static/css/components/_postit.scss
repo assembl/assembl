@@ -70,7 +70,7 @@ $harvesterAvatarSize: 24px;
           font-size: 12px;
         }
         .authorName {
-          display: inline;
+          display: inline-block;
           vertical-align: top;
           color: $theme_person_name_color;
           font-size: 11px;

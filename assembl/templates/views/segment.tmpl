@@ -53,8 +53,7 @@ data-segmentid="<%= segment.cid %>">
         {% set authorTooltip = gettext('%(img)s Posted <time title="%(precise_date)s">%(nice_date)s</time> by %(name)s')|format(name=postCreatorName, img=postCreatorAvatarImg, nice_date=nicePostDate, precise_date=precisePostDate)|safe %}
 
         <div class="js_authorAvatar authorAvatar"></div>
-        <span class="js_authorName authorName"></span>
-
+        <div class="js_authorName authorName"></div>
 
       <% } else if (type == "Webpage") { %>
         <img src="/static/img/icon/search_document.svg" width="35" height="35" class="image-rounded fl prxs" alt="{{ gettext('Document extracted from the web') }}" />

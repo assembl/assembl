@@ -267,6 +267,7 @@ $previewNumLines: 4;
     }
     .leftSection {
       float: left;
+      white-space: nowrap;
       margin: 0px;
       text-align: left;
       .avatar {
@@ -275,6 +276,7 @@ $previewNumLines: 4;
     }
     .rightSection {
       float: right;
+      white-space: nowrap;
       margin: 0px;
     }
     .centerSection {
@@ -282,11 +284,6 @@ $previewNumLines: 4;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-    }
-    .avatar {
-      img {
-        margin-top: -8px; /*TODO:  I don't know why this is needed*/
-      }
     }
     .message-author {
       @extend .header_item_template;
@@ -327,15 +324,15 @@ $previewNumLines: 4;
     }
 
     .readUnreadIndicatorClickZone {
-      right: -$messagePaddingLR;
-      top: 8px;
+      position: static;
     }
   }
 
   .readUnreadIndicatorClickZone {
     cursor: pointer;
     display: inline-block;
-    padding: $messagePaddingLR;
+    padding: 0 $mesageSpacing 0 $mesageSpacing;
+    margin-left: -$mesageSpacing;
     position: absolute;
     z-index: 1000;
     right: 0;
@@ -348,7 +345,6 @@ $previewNumLines: 4;
     height: $readUnreadIndicatorSize;
     vertical-align: middle;
     border: 1px solid $gray;
-    float: right;
     @include border-radius(50px);
   }
 
