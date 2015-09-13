@@ -4,7 +4,7 @@ var App = require('./app.js'),
     Router = require('./router.js'),
     Ctx = require('./common/context.js'),
     Socket = require('./utils/socket.js'),
-    TourManager = require('./utils/taketour.js'),
+    TourManager = require('./utils/tourManager.js'),
     CollectionManager = require('./common/collectionManager.js'),
     Raven = require('raven-js');
 
