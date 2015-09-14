@@ -275,7 +275,7 @@
       var root = options['root'];
       var option_defaults = {
         externals: {
-          "jQuery":  root + "/static/js/bower/jquery/jquery.min.js",
+          "jQuery":  root + "/static/js/bower/dist/jquery/jquery.min.js",
           "source":  root + "/static/js/lib/annotator/annotator-bookmarklet.min.js",
           "styles":  root + "/static/css/lib/annotator.min.css"
         },
