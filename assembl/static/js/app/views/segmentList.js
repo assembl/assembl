@@ -67,7 +67,7 @@ var SegmentView = Marionette.LayoutView.extend({
     return {
       segment: this.model,
       post: post,
-      postCreator: this.postCreator,
+      contentCreator: this.postCreator,
       harvester: harvester,
       allUsersCollection: this.allUsersCollection,
       canEditExtracts: currentUser.can(Permissions.EDIT_EXTRACT),

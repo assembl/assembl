@@ -45,21 +45,24 @@ data-segmentid="<%= segment.cid %>">
     <% } %>
 
     <div class="extractOrigin">
-      <% var type = segment.get("target")["@type"]; if ( type == "Email" || type == "Post" || type == "AssemblPost" || type == "ImportedPost" || type == "LoomioFeedPost" ) { %>
+      <% var type = segment.get("target")["@type"];
+         if (contentCreator) { %>
 
-        {% set postCreatorName = '<%= postCreator.get("name") %>' %}
+        {% set postCreatorName = '<%= contentCreator.get("name") %>' %}
         {% set nicePostDate = '<%= ctx.getNiceDateTime(post.get("date")) %>' %}
         {% set precisePostDate = '<%= ctx.getReadableDateTime(post.get("date")) %>' %}
-        {% set authorTooltip = gettext('%(img)s Posted <time title="%(precise_date)s">%(nice_date)s</time> by %(name)s')|format(name=postCreatorName, img=postCreatorAvatarImg, nice_date=nicePostDate, precise_date=precisePostDate)|safe %}
+        {% set authorTooltip = gettext('Posted %(nice_date)s by %(name)s')|format(name=postCreatorName, nice_date=nicePostDate, precise_date=precisePostDate)|safe %}
 
-        <div class="js_authorAvatar authorAvatar"></div>
+        <div class="js_authorAvatar authorAvatar" data-toggle="tooltip" title="{{ authorTooltip }}"></div>
         <div class="js_authorName authorName"></div>
 
-      <% } else if (type == "Webpage") { %>
-        <img src="/static/img/icon/search_document.svg" width="35" height="35" class="image-rounded fl prxs" alt="{{ gettext('Document extracted from the web') }}" />
-        {{ gettext('Harvested from webpage') }}
       <% } else { %>
-        {{ gettext('Unknown segment type: ') }}<%= type %>
+        <% if (type == "Webpage") { %>
+          <img src="/static/img/icon/search_document.svg" width="35" height="35" class="image-rounded fl prxs" alt="{{ gettext('Document extracted from the web') }}" />
+          {{ gettext('Harvested from webpage') }}
+        <% } else { %>
+          {{ gettext('Unknown segment type: ') }}<%= type %>
+        <% } %>
       <% } %>
       <br>
       {{ segmentTextLink|safe }}
