@@ -13,7 +13,7 @@ fab env_dev database_dump
 #Make sure we back up the database dump from the last deployment:
 cp --dereference $ASSEMBL_PATH/assembl-virtuoso-backup.bp $ASSEMBL_PATH/assembl-virtuoso-backup-real.bp
 NAME="`hostname`-`basename $ASSEMBL_PATH`-`date --iso-8601='minutes'`"
-set -x
+#set -x
 borg create                             \
     $REPOSITORY::$NAME      \
     $ASSEMBL_PATH                               \
