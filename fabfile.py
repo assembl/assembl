@@ -1257,7 +1257,7 @@ def env_inm_agora():
     INM (Institut du nouveau monde) dedicated environment
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/var/www/assembl_inm/"))
+    commonenv(normpath("/home/www/assembl_inm/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "agora.inm.qc.ca"
@@ -1279,7 +1279,7 @@ def env_bluenove_discussions():
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/var/www/assembl_discussions_bluenove_com/"))
+    commonenv(normpath("/home/www/assembl_discussions_bluenove_com/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "discussions.bluenove.com"
@@ -1300,7 +1300,7 @@ def env_paris_debat():
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/var/www/assembl_paris_fr/"))
+    commonenv(normpath("/home/www/assembl_paris_fr/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "debat.paris.bluenove.com"
