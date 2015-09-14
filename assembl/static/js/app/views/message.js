@@ -624,22 +624,25 @@ var MessageView = Marionette.LayoutView.extend({
 
     if (this.annotator && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY)) {
       this.getAnnotationsToLoadPromise().done(function(annotationsToLoad) {
-        // Loading the annotations
-        if (annotationsToLoad.length) {
-          // This call is synchronous I believe - benoitg
-          if (!that.annotator) {
-            console.error("missing annotation", that);
-            return;
+        if(!that.isViewDestroyed()) {
+          // Loading the annotations
+          if (annotationsToLoad.length) {
+            if (!that.annotator) {
+              Raven.captureMessage('Missing annotation')
+              console.error("missing annotation", {tags: { messageId: that.id,
+                annotator: that.annotator }});
+              return;
+            }
+            // This call is synchronous I believe - benoitg
+            that.annotator.loadAnnotations(_.clone(annotationsToLoad));
+            _.each(annotationsToLoad, function(annotation) {
+              that.loadedAnnotations[annotation['@id']] = annotation;
+            });
+
+            setTimeout(function() {
+              that.renderAnnotations(annotationsToLoad);
+            }, 1);
           }
-
-          that.annotator.loadAnnotations(_.clone(annotationsToLoad));
-          _.each(annotationsToLoad, function(annotation) {
-            that.loadedAnnotations[annotation['@id']] = annotation;
-          });
-
-          setTimeout(function() {
-            that.renderAnnotations(annotationsToLoad);
-          }, 1);
         }
       });
 
