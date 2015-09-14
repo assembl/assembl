@@ -837,7 +837,6 @@ var MessageList = AssemblPanel.extend({
       that.trigger("messageList:render_complete", "Render complete");
       return true;
     }).catch(function(e) {
-      console.error("An error occured during rendering: ", e);
       Raven.captureException(e);
       that.ui.messageList.html("<div class='error'>We are sorry, a technical error occured during rendering.</div>");
     });
@@ -1390,15 +1389,16 @@ var MessageList = AssemblPanel.extend({
     return collectionManager.getMessageFullModelsPromise(requestedIds)
             .then(function(fullMessageModels) {
               var list = [];
-              _.each(fullMessageModels, function(fullMessageModel) {
-                view = new MessageFamilyView({
-                  model: fullMessageModel,
-                  messageListView: that,
-                  hasChildren: []
+              if(!that.isViewDestroyed()) {
+                _.each(fullMessageModels, function(fullMessageModel) {
+                  view = new MessageFamilyView({
+                    model: fullMessageModel,
+                    messageListView: that,
+                    hasChildren: []
+                  });
+                  list.push(view.render().el);
                 });
-                list.push(view.render().el);
-              });
-
+              }
               //console.log("getRenderedMessagesFlatPromise():  Resolving promise with:",list);
               return Promise.resolve(list);
             });
