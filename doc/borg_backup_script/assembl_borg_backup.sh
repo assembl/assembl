@@ -27,7 +27,7 @@ borg create                             \
     --exclude '*.sass-cache' \
     --exclude $ASSEMBL_PATH/assembl_dumps \
     --exclude '*.pyc' \
-    --progress
+    --progress \
     --stats
 #    --verbose
 

@@ -11,8 +11,8 @@ Installing an up to date Borg Backup
 
 ::
 
-    sudo apt-get install python3-pip libacl1-dev
-    sudo pip3 install borgbackup
+    sudo apt-get install python3-pip libacl1-dev liblz4-dev
+    sudo pip3 install --upgrade borgbackup
 
 Using
 -----
@@ -37,7 +37,7 @@ You can the automate with cron. For example:
 
     sudo su - www-data
     crontab -e
-    0 3 * * * ASSEMBL_PATH=/home/benoitg/development/assembl REPOSITORY=www-data@discussions.bluenove.com:/home/backups/assembl_backups.borg bash doc/borg_backup_script/assembl_borg_backup.sh > /tmp/assembl_backup.log
+    0 3 * * * ASSEMBL_PATH=/home/www/assembl_discussions_bluenove_com REPOSITORY=www-data@coeus.ca:/media/backup/assembl_backups_bluenove.borg doc/borg_backup_script/assembl_borg_backup.sh > $ASSEMBL_PATH/var/log/assembl_backup.log
 
 All backups are encrypted. Make SURE you backup the keys (normally in
 ``~/.borg/keys/``) somewhere safe, otherwise your backups will be
