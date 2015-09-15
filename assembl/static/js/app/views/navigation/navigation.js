@@ -89,6 +89,10 @@ var NavigationView = AssemblPanel.extend({
       if (allMessageStructureCollection.getLastSynthesisPost()) {
         that.num_items += 1;
         that.ui.synthesis_tab.show();
+        if (that.getContainingGroup().model.get('navigationState') !== "synthesis") {
+          that.ui.synthesis_tab[0].id = "tour_step_synthesis";
+          Assembl.vent.trigger("requestTour", "synthesis");
+        }
       }
     }).delay(500).then(function() {that.setSideBarHeight();});
     },

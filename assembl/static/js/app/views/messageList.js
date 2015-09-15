@@ -810,9 +810,11 @@ var MessageList = AssemblPanel.extend({
         that.ui.messageList.html(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
       } else {
 
-        // dynamically add id to the first view of message to enable take tour
-        $(views[0]).attr('id', 'tour_step_message');
-        Assembl.vent.trigger("requestTour", "first_message");
+        if (that.getContainingGroup().model.get('navigationState') !== "synthesis") {
+          // dynamically add id to the first view of message to enable take tour
+          $(views[0]).attr('id', 'tour_step_message');
+          Assembl.vent.trigger("requestTour", "first_message");
+        }
 
         that.ui.messageList.html(views);
       }

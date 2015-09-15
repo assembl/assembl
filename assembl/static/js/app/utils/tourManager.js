@@ -151,11 +151,11 @@ var TourManager = Marionette.Object.extend({
         step = this.currentTour.tour.steps[stepNum];
     //console.log("onShow", this.currentTour.name, stepNum);
     this.currentTour.wasSeen = true;
-    if (step.stepOnShow !== undefined) {
-      step.stepOnShow();
-    }
     if (stepNum + 1 == this.currentTour.tour.steps.length) {
       this.beforeLastStep();
+    }
+    if (step.stepOnShow !== undefined) {
+      step.stepOnShow();
     }
       //that.$(".panel-body").scroll(that, that.scrollLogger);
   },

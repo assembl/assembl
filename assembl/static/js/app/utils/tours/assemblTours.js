@@ -12,12 +12,16 @@ var AssemblTours = [
           target: "tour_step_welcome",
           placement: "right",
           title: i18n.gettext("Welcome!"),
+          stepOnShow: function() {
+              $(".hopscotch-next").text(i18n.gettext("Thank you"));
+          },
           content: i18n.gettext("Welcome to this discussion. We’ve created a 30 second tour to help you get started using Assembl")
         }
       ]}},
   {
     name: "first_message",
     autostart: false,
+    // TODO: Pas dans le cas du panneau synthèse
     tour: {
       steps: [
         {
@@ -41,7 +45,7 @@ var AssemblTours = [
       ]}},
   {
     name: "message_list_options",
-    autostart: true,
+    autostart: false,
     condition: function() {
       return $("#tour_step_msg_list_options").is(":visible");
     },
@@ -81,7 +85,7 @@ var AssemblTours = [
         }]}},
   {
       name: "idea_list",
-      autostart: true,
+      autostart: false,
       condition: function() {
         // idea is visible
         return $("#tour_step_idealist").is(":visible");
@@ -97,11 +101,7 @@ var AssemblTours = [
           }]}},
   {
     name: "synthesis",
-    autostart: true,
-    condition: function() {
-      // synthesis is visible
-      return $("#tour_step_synthesis").is(":visible");
-    },
+    autostart: false,
     tour: {
       steps: [
         {
@@ -110,6 +110,42 @@ var AssemblTours = [
           title: i18n.gettext("Catch up on what’s been said"),
           yOffset: -15,
           content: i18n.gettext("Periodically an executive summary of the discussion is created to give you a quick overview of what was said since the last executive summary")
+        }]}},
+  {
+    name: "synthesis_item1",
+    autostart: false,
+    tour: {
+      steps: [
+        {
+          target: "tour_step_synthesis_item1",
+          placement: "bottom",
+          title: i18n.gettext("xxx"),
+          yOffset: -15,
+          content: i18n.gettext("Find the different syntheses produced since the beginning of the discussion")
+        }]}},
+  {
+    name: "synthesis_intro",
+    autostart: false,
+    tour: {
+      steps: [
+        {
+          target: "tour_step_synthesis_intro",
+          placement: "bottom",
+          title: i18n.gettext("Catch up on the evolution"),
+          yOffset: -15,
+          content: i18n.gettext("The facilitator of the discussion has written this synthesis to help you get on board of the discussion. Enjoy reading!")
+        }]}},
+  {
+    name: "synthesis_idea1",
+    autostart: false,
+    tour: {
+      steps: [
+        {
+          target: "tour_step_synthesis_idea1",
+          placement: "left",
+          title: i18n.gettext("Dig more on an interesting idea and post your contribution"),
+          yOffset: -15,
+          content: i18n.gettext("You can click on this idea to see current discussions happening on it. You would be able to start contributing on this idea from there.")
         }]}},
   {
     name: "notifications",
