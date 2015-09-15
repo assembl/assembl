@@ -110,6 +110,7 @@ var MessageListHeader = Marionette.ItemView.extend({
 
     this.renderQueryInfo();
     Ctx.initTooltips(this.$el);
+    Assembl.vent.trigger("requestTour", "message_list_options");
   },
 
   renderToggleButton: function() {

@@ -1,4 +1,5 @@
 var i18n =  require('../i18n.js'),
+    Ctx = require("../../common/context.js"),
     $ = require('../../shims/jquery.js');
 
 var AssemblTours = [
@@ -28,9 +29,11 @@ var AssemblTours = [
         }
       ]}},
   {
-    name: "message_list",
+    name: "message_list_options",
     autostart: true,
-    // condition: message list is visible
+    condition: function() {
+      return $("#tour_step_msg_list_options").is(":visible");
+    },
     tour: {
       steps: [
         {
@@ -99,6 +102,9 @@ var AssemblTours = [
   {
     name: "notifications",
     autostart: true,
+    condition: function() {
+      return !Ctx.getCurrentUser().isUnknownUser();
+    },
     tour: {
       steps: [
         {
