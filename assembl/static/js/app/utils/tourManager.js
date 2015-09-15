@@ -149,10 +149,10 @@ var TourManager = Marionette.Object.extend({
     }
     var stepNum = hopscotch.getCurrStepNum(),
         step = this.currentTour.tour.steps[stepNum];
-    console.log("onShow", this.currentTour.name, stepNum);
-    this.currentTour.tour.wasSeen = true;
+    //console.log("onShow", this.currentTour.name, stepNum);
+    this.currentTour.wasSeen = true;
     if (step.stepOnShow !== undefined) {
-      step.stopOnShow();
+      step.stepOnShow();
     }
     if (stepNum + 1 == this.currentTour.tour.steps.length) {
       this.beforeLastStep();
@@ -184,15 +184,22 @@ var TourManager = Marionette.Object.extend({
   },
 
   startCurrentTour: function() {
-    var that = this, hopscotchTour = this.currentTour.tour;
+    var that = this, tour = this.currentTour;
     // We may be within the end signal, so make it asynchronous.
     setTimeout(function() {
-      hopscotch.startTour(hopscotchTour);
+      hopscotch.startTour(tour.tour);
       // Some tour steps fail
       setTimeout(function() {
-        if (!hopscotchTour.wasSeen) {
-          console.error("Tour was not seen:", hopscotchTour);
-          that.currentTour = that.getNextTour(true);
+        if (!tour.wasSeen) {
+          if (tour.numErrors === undefined) {
+            tour.numErrors = 1;
+          } else {
+            tour.numErrors += 1;
+          }
+          if (tour.numErrors > 1) {
+            console.error("Tour was not seen:", tour);
+            that.currentTour = that.getNextTour(true);
+          }
           if (that.currentTour !== undefined) {
             that.startCurrentTour();
           }

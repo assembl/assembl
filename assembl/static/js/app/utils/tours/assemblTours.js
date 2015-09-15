@@ -25,7 +25,18 @@ var AssemblTours = [
           placement: "left",
           title: i18n.gettext("Join the discussion"),
           content: i18n.gettext("This is the conversation panel, where the discussion takes place. You can reply to messages directly, or create an entirely new message by clicking ‘react to the discussion’ at the bottom of the panel."),
-          xOffset: 20
+          xOffset: 20,
+          stepOnShow: function() {
+            var element = document.getElementById("tour_step_message");
+            while (element && element.className.split(' ').indexOf("panel-body") < 0) {
+              element = element.parentNode;
+            }
+
+            if (element) {
+              element.scrollTop = 0;
+              hopscotch.refreshBubblePosition();
+            }
+          }
         }
       ]}},
   {
@@ -43,7 +54,7 @@ var AssemblTours = [
           content: i18n.gettext("You can view the discussion in many different ways using the filters at the top, or under ‘more options’ in each message."),
           yOffset: -20,
           xOffset: 30,
-          stopOnShow: function() {
+          stepOnShow: function() {
             var element = document.getElementById("tour_step_msg_list_options");
             while (element && element.className.split(' ').indexOf("panel-body") < 0) {
               element = element.parentNode;
@@ -51,6 +62,7 @@ var AssemblTours = [
 
             if (element) {
               element.scrollTop = 0;
+              hopscotch.refreshBubblePosition();
             }
           }
         }]}},
