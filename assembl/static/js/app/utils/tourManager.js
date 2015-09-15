@@ -84,7 +84,7 @@ var TourManager = Marionette.Object.extend({
       if (this.tourModel === undefined) {
         var seen = {};
         try {
-          JSON.parse(window.localStorage.getItem('toursSeen') || "{}");
+          seen = JSON.parse(window.localStorage.getItem('toursSeen') || "{}");
         } catch (err) {
           console.error("wrong toursSeen in localStorage:" + err);
         }
