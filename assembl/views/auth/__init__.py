@@ -68,7 +68,6 @@ def includeme(config):
             #realm=settings['google.realm'],
             consumer_key=settings['google.consumer_key'],
             consumer_secret=settings['google.consumer_secret'],
-            protocol=settings.get('google.protocol', 'http'),
             callback_path=settings.get('google.callback_path', '/login/google/callback')
         )
 
