@@ -53,6 +53,9 @@ def get_theme(discussion):
 
 def get_default_context(request):
     from ..auth.util import get_user, get_current_discussion
+    if request.scheme == "http"\
+            and asbool(config.get("require_secure_connection")):
+        raise HTTPFound("https://" + request.host + request.path_qs)
     localizer = request.localizer
     _ = TranslationStringFactory('assembl')
     user = get_user(request)
@@ -116,7 +119,6 @@ def get_default_context(request):
         import string
         return map(lambda s: s.strip(), ls.split(","))
 
-    from pyramid.settings import asbool
     social_settings = {
         'fb_export_permissions': config.get('facebook.export_permissions'),
         'fb_debug': asbool(config.get('facebook.debug_mode')),
