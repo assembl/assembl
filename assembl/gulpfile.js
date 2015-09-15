@@ -100,7 +100,7 @@ gulp.task('libs',['clean:infrastructure'], function() {
   ], { base: path.js })
     .pipe(sourcemaps.init({loadMaps: true, debug: true}))
     .pipe(concat('infrastructure.concat.js'))
-    .pipe(uglify({compress: true }))
+    //.pipe(uglify({compress: true }))
     .pipe(rename('infrastructure.min.js'))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(path.js+'/build/'))

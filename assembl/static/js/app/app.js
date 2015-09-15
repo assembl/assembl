@@ -3,6 +3,7 @@
 var Marionette = require('./shims/marionette.js'),
     $ = require('./shims/jquery.js'),
     Raven = require('raven-js'),
+    TourManager = require('./utils/tourManager.js'),
     _ = require('./shims/underscore.js');
 
 var App = new Marionette.Application();
@@ -37,6 +38,17 @@ App.on('start', function() {
         if (typeof href !== 'undefined' && href.slice(protocol.length) !== protocol && /^#.+$/.test(href)) {
           evt.preventDefault();
           Backbone.history.navigate(href, true);
+        }
+      });
+    }
+    if (activate_tour /*&& (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))*/) {
+      var tourManager = new TourManager();
+      this.tourManager = tourManager;
+      tourManager.listenTo(this.vent, "requestTour", function(tourName) {
+        if (tourName === undefined) {
+          console.error("undefined tour name");
+        } else {
+          tourManager.requestTour(tourName);
         }
       });
     }

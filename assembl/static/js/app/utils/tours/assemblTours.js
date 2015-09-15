@@ -12,7 +12,13 @@ var AssemblTours = [
           placement: "right",
           title: i18n.gettext("Welcome!"),
           content: i18n.gettext("Welcome to this discussion. We’ve created a 30 second tour to help you get started using Assembl")
-        },
+        }
+      ]}},
+  {
+    name: "first_message",
+    autostart: false,
+    tour: {
+      steps: [
         {
           target: "tour_step_message",
           placement: "left",
@@ -48,23 +54,22 @@ var AssemblTours = [
   {
     name: "segment",
     autostart: false,
-    // TODO: Add a trigger
     tour: {
       steps: [
         {
           target: "tour_step_segment",
-          placement: "left",
+          placement: "top",
           title: i18n.gettext("Find messages easily"),
           content: i18n.gettext("Excerpts from these messages are harvested and are organized to help you find messages you are interested in. Click on ‘see in context’ to view the message related to the excerpt."),
-          yOffset: 40,
-          xOffset: 20
+          yOffset: 10,
+          xOffset: 0
         }]}},
   {
       name: "idea_list",
       autostart: true,
       condition: function() {
         // idea is visible
-        return $(".tour_step_idealist").is(":visible");
+        return $("#tour_step_idealist").is(":visible");
       },
       tour: {
         steps: [
@@ -80,7 +85,7 @@ var AssemblTours = [
     autostart: true,
     condition: function() {
       // synthesis is visible
-      return $(".tour_step_synthesis").is(":visible");
+      return $("#tour_step_synthesis").is(":visible");
     },
     tour: {
       steps: [

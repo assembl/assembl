@@ -6,6 +6,7 @@ var Marionette = require('../../shims/marionette.js'),
     AssemblPanel = require('../assemblPanel.js'),
     CollectionManager = require('../../common/collectionManager.js'),
     Types = require('../../utils/types.js'),
+    Assembl = require('../../app.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
@@ -122,6 +123,8 @@ var SynthesisInNavigationPanel = AssemblPanel.extend({
               //console.log("Re-displaying synthesis list from collection update...", allSynthesisCollection.length);
               that.displaySynthesisList(allMessageStructureCollection, allSynthesisCollection);
             });
+            that.synthesisContainer.$el.find(".synthesisItem:first")[0].id = "tour_step_synthesis";
+            Assembl.vent.trigger("requestTour", "synthesis");
           });
     }
 

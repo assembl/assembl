@@ -12,6 +12,7 @@ var TourManager = Marionette.Object.extend({
   nextTours: [],
   tourModel: undefined,
   currentTour: undefined,
+  firstTourStarted: false,
   hopscotch_i18n: {
           nextBtn: i18n.gettext('Next'),
           prevBtn: i18n.gettext('Back'),
@@ -59,13 +60,15 @@ var TourManager = Marionette.Object.extend({
     }
     this.toursById = toursById;
 
-    if (this.nextTours.length > 0) {
-      setTimeout(function() {
+    setTimeout(function() {
+      that.firstTourStarted = true;
+      if (that.nextTours.length > 0) {
         that.currentTour = that.getNextTour(true);
-        if (that.currentTour !== undefined)
+        if (that.currentTour !== undefined) {
           that.startCurrentTour();
-      }, 4000);
-    }
+        }
+      }
+    }, 4000);
   },
 
   isTourSeen: function(tourName) {
@@ -111,7 +114,7 @@ var TourManager = Marionette.Object.extend({
   },
 
   requestTour: function(tourName) {
-    var tour = this.toursById(tourName);
+    var tour = this.toursById[tourName];
     if (tour === undefined) {
       console.error("Unknown tour: " + tourName);
       return;
@@ -119,12 +122,12 @@ var TourManager = Marionette.Object.extend({
     if (this.isTourSeen(tourName)) {
       return;
     }
-    if (this.currentTour !== undefined) {
+    if (this.currentTour !== undefined || !this.firstTourStarted) {
       // insert in-order, unless it's already there.
-      var pos = _.sortedIndex(this.currentTour, tour, "position");
-      if (!((pos < this.currentTour.length && this.currentTour[pos] === tour)
-        || (pos > 0 && this.currentTour[pos - 1] === tour))) {
-        this.currentTour.splice(pos, 0, tour);
+      var pos = _.sortedIndex(this.nextTours, tour, "position");
+      if (!((pos < this.nextTours.length && this.nextTours[pos] === tour)
+        || (pos > 0 && this.nextTours[pos - 1] === tour))) {
+        this.nextTours.splice(pos, 0, tour);
       }
       return;
     }
@@ -140,9 +143,14 @@ var TourManager = Marionette.Object.extend({
   },
 
   onShow: function() {
+    if (this.currentTour === undefined) {
+      console.error("onShow came after tour was cleared");
+      return;
+    }
     var stepNum = hopscotch.getCurrStepNum(),
         step = this.currentTour.tour.steps[stepNum];
     console.log("onShow", this.currentTour.name, stepNum);
+    this.currentTour.tour.wasSeen = true;
     if (step.stepOnShow !== undefined) {
       step.stopOnShow();
     }
@@ -166,7 +174,7 @@ var TourManager = Marionette.Object.extend({
     }
     this.tourIsSeen(this.currentTour.name);
     this.currentTour = this.getNextTour(true);
-    if (this.currentTour != undefined) {
+    if (this.currentTour !== undefined) {
       this.startCurrentTour();
     }
   },
@@ -176,6 +184,16 @@ var TourManager = Marionette.Object.extend({
     // We may be within the end signal, so make it asynchronous.
     setTimeout(function() {
       hopscotch.startTour(hopscotchTour);
+      // Some tour steps fail
+      setTimeout(function() {
+        if (!hopscotchTour.wasSeen) {
+          console.error("Tour was not seen:", hopscotchTour);
+          that.currentTour = that.getNextTour(true);
+          if (that.currentTour !== undefined) {
+            that.startCurrentTour();
+          }
+        }
+      }, 1000);
     }, 0);
   }
 });

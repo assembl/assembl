@@ -4,7 +4,6 @@ var App = require('./app.js'),
     Router = require('./router.js'),
     Ctx = require('./common/context.js'),
     Socket = require('./utils/socket.js'),
-    TourManager = require('./utils/tourManager.js'),
     CollectionManager = require('./common/collectionManager.js'),
     Raven = require('raven-js');
 
@@ -44,8 +43,3 @@ var socket = collectionManager.getConnectedSocketPromise();
 window.Ctx = Ctx;
 
 App.start();
-
-var currentUser = Ctx.getCurrentUser();
-if (activate_tour /*&& (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))*/) {
-  App.tourManager = new TourManager();
-}

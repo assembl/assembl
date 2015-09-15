@@ -82,11 +82,10 @@ var SegmentView = Marionette.LayoutView.extend({
     Ctx.convertUrlsToLinks(this.ui.postItFooter);
 
     this.renderAuthor();
-
     if (!_.isUndefined(this.model.get('firstInlist'))) {
       this.$el.attr('id', 'tour_step_segment');
+      Assembl.vent.trigger("requestTour", "segment");
     }
-
   },
 
   renderAuthor: function() {
@@ -177,7 +176,7 @@ var SegmentListView = Marionette.CollectionView.extend({
   childView: SegmentView,
   initialize: function(options) {
 
-    if (this.collection.models.length) {
+    if (this.collection.name == "IdeaSegmentList" && this.collection.models.length) {
       var firstelm = this.collection.models[0];
       firstelm.attributes.firstInlist = true;
     }
@@ -186,7 +185,7 @@ var SegmentListView = Marionette.CollectionView.extend({
       allUsersCollection: options.allUsersCollection,
       allMessagesCollection: options.allMessagesCollection,
       closeDeletes: options.closeDeletes
-    }
+    };
   }
 });
 

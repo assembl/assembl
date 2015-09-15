@@ -289,6 +289,7 @@ var IdeaList = AssemblPanel.extend({
 
         that.body = that.$('.panel-body');
         that.body.get(0).scrollTop = y;
+        Assembl.vent.trigger("requestTour", "idea_list");
       }
     },
 
