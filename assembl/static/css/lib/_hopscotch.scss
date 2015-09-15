@@ -1,2 +1,28 @@
-.hopscotch-bubble-number { visibility: hidden; }
+div.hopscotch-bubble .hopscotch-bubble-number { display: none !important; }
 .hopscotch-bubble-content { margin: 0 !important; }
+
+div.hopscotch-bubble .hopscotch-nav-button {
+    background-color: $theme_btn_primary_bg_color !important;
+    background-image: none !important;
+    border-color: none !important;
+    border-width: 0 !important;
+    text-shadow: none !important;
+}
+div.hopscotch-bubble h3 {
+    color: $th_purple !important;
+}
+div.hopscotch-bubble {
+    border: 5px solid #ccc !important;
+}
+div.hopscotch-bubble .hopscotch-bubble-arrow-container.up .hopscotch-bubble-arrow-border {
+    border-bottom: 17px solid #ccc !important;
+}
+div.hopscotch-bubble .hopscotch-bubble-arrow-container.down .hopscotch-bubble-arrow-border {
+    border-top: 17px solid #ccc !important;
+}
+div.hopscotch-bubble .hopscotch-bubble-arrow-container.left .hopscotch-bubble-arrow-border {
+    border-right: 17px solid #ccc !important;
+}
+div.hopscotch-bubble .hopscotch-bubble-arrow-container.right .hopscotch-bubble-arrow-border {
+    border-left: 17px solid #ccc !important;
+}
