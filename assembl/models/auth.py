@@ -35,6 +35,7 @@ from virtuoso.alchemy import CoerceUnicode
 import transaction
 
 from ..lib import config
+from ..lib.utils import get_global_base_url
 from ..lib.sqla import (
     UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
@@ -77,7 +78,7 @@ class AgentProfile(Base):
     # but right now they do not know the accounts.
     agent_as_account_iri = PatternIriClass(
             QUADNAMES.agent_as_account_iri,
-            'http://%{WSHostName}U/data/AgentAccount/%d', None,
+            get_global_base_url() + '/data/AgentAccount/%d', None,
             ('id', Integer, False))
 
     id = Column(Integer, primary_key=True)

@@ -38,6 +38,7 @@ from .zmqlib import get_pub_socket, send_changes
 from ..semantic.namespaces import QUADNAMES
 from ..auth import *
 from .decl_enums import EnumSymbol, DeclEnumType
+from .utils import get_global_base_url
 
 atexit_engines = []
 
@@ -320,8 +321,8 @@ class BaseOps(object):
             iri_name = clsname + "_iri"
             cls._iri_class = PatternIriClass(
                 getattr(QUADNAMES, iri_name),
-                'http://%{WSHostName}U/data/'+clsname+'/%d', None,
-                ('id', Integer, False))
+                get_global_base_url() + '/data/'+clsname+'/%d',
+                None, ('id', Integer, False))
         return cls._iri_class
 
     @classmethod

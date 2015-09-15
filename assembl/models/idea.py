@@ -31,7 +31,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from virtuoso.vmapping import IriClass, PatternIriClass
 from virtuoso.alchemy import SparqlClause, Timestamp
 
-from ..lib import config
+from ..lib.utils import get_global_base_url
 from ..nlp.wordcounter import WordCounter
 from . import DiscussionBoundBase, HistoryMixin
 from .discussion import Discussion
@@ -174,7 +174,9 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 None, FOAF.homepage,
                 PatternIriClass(
                     QUADNAMES.idea_external_link_iri,
-                    'http://%{WSHostName}U/%s/idea/local:Idea/%d', None,
+                    # TODO: Use discussion.get_base_url.
+                    # This should be computed outside the DB.
+                    get_global_base_url() + '/%s/idea/local:Idea/%d', None,
                     ('slug', Unicode, False), ('id', Integer, False)).apply(
                     discussion_alias.slug, cls.id),
                 name=QUADNAMES.idea_external_link_map)

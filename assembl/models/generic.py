@@ -19,6 +19,7 @@ from virtuoso.vmapping import PatternIriClass
 from bs4 import BeautifulSoup
 
 from ..lib.sqla import (INSERT_OP, UPDATE_OP, get_model_watcher, Base)
+from ..lib.utils import get_global_base_url
 from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
@@ -323,7 +324,9 @@ class Content(DiscussionBoundBase):
                 None, FOAF.homepage,
                 PatternIriClass(
                     QUADNAMES.post_external_link_iri,
-                    'http://%{WSHostName}U/%s/posts/local:Content/%d', None,
+                    # TODO: Use discussion.get_base_url.
+                    # This should be computed outside the DB.
+                    get_global_base_url() + '/%s/posts/local:Content/%d', None,
                     ('slug', Unicode, False), ('id', Integer, False)).apply(
                     discussion_alias.slug, cls.id),
                 name=QUADNAMES.post_external_link_map)

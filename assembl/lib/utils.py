@@ -35,3 +35,32 @@ def get_concrete_subclasses_recursive(c):
         if not inspect.isabstract(d):
             concreteSubclasses.append(d)
     return concreteSubclasses
+
+
+def get_global_base_url():
+    """Get the base URL of this server
+    DO NOT USE directly, except for Linked data;
+    use Discussion.get_base_url()
+    """
+    port = config.get('public_port')
+    accept_secure_connection = asbool(
+        config.get('accept_secure_connection'))
+    require_secure_connection = asbool(
+        config.get('require_secure_connection'))
+    service = 'http'
+    portString = ''
+    if accept_secure_connection or require_secure_connection:
+        if port is None or port == "443":
+            service += 's'
+        elif port == "80":
+            if require_secure_connection:
+                assert "Do not use secure connection on 80"
+        else:
+            if require_secure_connection:
+                service += 's'
+            portString = (':'+port)
+    else:
+        if port is not None and port != "80":
+            portString = (':'+port)
+    return '%s://%s%s' % (
+        service, config.get('public_hostname'), portString)

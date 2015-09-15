@@ -14,6 +14,7 @@ import simplejson as json
 
 from . import (context_url, ontology_dir, local_context_loc)
 from ..lib.config import get_config
+from ..lib.utils import get_global_base_url
 from ..lib.sqla import class_registry, Base
 from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST, SIOC, FOAF)
 from virtuoso.vmapping import (
@@ -393,7 +394,7 @@ class AssemblQuadStorageManager(object):
     sections = {section.name: section for section in chain(*(
         storage.sections for storage in storages))}
     global_graph = QUADNAMES.global_graph
-    current_discussion_storage_version = 13
+    current_discussion_storage_version = 14
 
     def __init__(self, session=None, nsm=None):
         self.session = session or get_session()
@@ -405,7 +406,7 @@ class AssemblQuadStorageManager(object):
 
     @staticmethod
     def local_uri():
-        return "http://%s/data/" % (get_config().get('public_hostname'))
+        return get_global_base_url() + '/data/'
 
     def audit_metadata(self):
         # in response to error 22023, The quad storage is edited by other client
@@ -600,17 +601,33 @@ class AssemblQuadStorageManager(object):
                 continue
             self.drop_discussion_storage(storage_num)
 
+    def drop_iri_classes(self):
+        for (quadname,) in list(self.session.execute("""
+                SPARQL select * where {
+                    graph virtrdf: {
+                        ?s a virtrdf:QuadMapFormat }}""")):
+            if quadname.startswith(QUADNAMES)\
+                    and not quadname.endswith("-nullable"):
+                self.session.execute("SPARQL drop iri class quadnames:%s" % (
+                    quadname[len(QUADNAMES):],))
+
     def update_all_storages(self):
         self.audit_metadata()
         self.declare_functions()
         self.add_function_permissions()
         # drop old single-discussion storages
         self.drop_all_discussion_storages_but(None)
+        delete_storages = False
         for storage in self.storages:
             version = self.get_storage_version(storage.name)
-            if version < self.current_discussion_storage_version:
-                if version >= 0:
-                    self.drop_storage(storage.name)
+            if 0 <= version < self.current_discussion_storage_version:
+                delete_storages = True
+        if delete_storages:
+            self.drop_all()
+        for storage in self.storages:
+            version = self.get_storage_version(storage.name)
+            if version < self.current_discussion_storage_version\
+                    or delete_storages:
                 self.create_storage(storage)
                 self.set_storage_version(
                     storage.name, self.current_discussion_storage_version)
@@ -661,6 +678,7 @@ class AssemblQuadStorageManager(object):
         from ..models import Discussion
         for (id,) in self.session.query(Discussion.id).all():
             self.drop_storage(self.discussion_storage_name(id), force)
+        self.drop_iri_classes()
 
     def as_graph(self, d_storage_name, graphs=()):
         v = get_virtuoso(self.session, d_storage_name)

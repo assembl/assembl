@@ -20,6 +20,7 @@ from virtuoso.vmapping import PatternIriClass
 from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..lib.sqla import (UPDATE_OP, DELETE_OP, INSERT_OP, get_model_watcher)
+from ..lib.utils import get_global_base_url
 from .discussion import Discussion
 from .idea import Idea
 from .generic import Content
@@ -206,7 +207,7 @@ class Extract(IdeaContentPositiveLink):
     # TODO: This iri is not yet dereferencable.
     specific_resource_iri = PatternIriClass(
         QUADNAMES.oa_specific_resource_iri,
-        'http://%{WSHostName}U/data/SpecificResource/%d', None,
+        get_global_base_url() + '/data/SpecificResource/%d', None,
         ('id', Integer, False))
 
     id = Column(Integer, ForeignKey(
@@ -217,7 +218,7 @@ class Extract(IdeaContentPositiveLink):
 
     graph_iri_class = PatternIriClass(
         QUADNAMES.ExcerptGraph_iri,
-        'http://%{WSHostName}U/data/ExcerptGraph/%d',
+        get_global_base_url() + '/data/ExcerptGraph/%d',
         None,
         ('id', Integer, False))
 
