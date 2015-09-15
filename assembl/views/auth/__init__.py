@@ -68,6 +68,7 @@ def includeme(config):
             #realm=settings['google.realm'],
             consumer_key=settings['google.consumer_key'],
             consumer_secret=settings['google.consumer_secret'],
+            callback_path=settings.get('google.callback_path', '/login/google/callback')
         )
 
     if 'openid' in providers:
