@@ -145,7 +145,7 @@ var TourManager = Marionette.Object.extend({
   onShow: function() {
     if (this.currentTour === undefined) {
       console.error("onShow came after tour was cleared");
-      return;
+      this.currentTour = this.toursById(hopscotch.getCurrTour().id);
     }
     var stepNum = hopscotch.getCurrStepNum(),
         step = this.currentTour.tour.steps[stepNum];
@@ -169,6 +169,10 @@ var TourManager = Marionette.Object.extend({
   },
 
   afterLastStep: function() {
+    if (this.currentTour === undefined) {
+      console.error("afterLastStep came after tour was cleared");
+      this.currentTour = this.toursById(hopscotch.getCurrTour().id);
+    }
     if (this.currentTour.cleanup !== undefined) {
       this.currentTour.cleanup();
     }
