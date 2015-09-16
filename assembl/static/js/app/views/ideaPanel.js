@@ -169,12 +169,14 @@ var IdeaPanel = AssemblPanel.extend({
     if (this.model) {
       subIdeas = this.model.getChildren();
       contributors = this.model.get('contributors');
-      direct_link_relative_url = Ctx.getRelativeURLFromDiscussionRelativeURL("idea/" + encodeURIComponent(this.model.get('@id'))) + "?source=share";
 
-      //share_link_url = "/static/js/bower/expando/add/index.htm?u=" +
-      share_link_url = "/static/widget/share/index.html?u=" +
-          encodeURIComponent(Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)) + "&t=" +
-          encodeURIComponent(this.model.get('shortTitle')) + "?source=share";
+      direct_link_relative_url = Ctx.getIdeaURL(this.model.get('@id'), {'source': 'share'}, {'relative': true});
+      share_link_url = Ctx.appendExtraURLParams("/static/widget/share/index.html",
+        [
+          {'u': Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url) },
+          {'t': this.model.get('shortTitle')}
+        ]
+      );
     }
 
     return {
