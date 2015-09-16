@@ -119,7 +119,7 @@ var AssemblTours = [
         {
           target: "tour_step_synthesis_item1",
           placement: "bottom",
-          title: i18n.gettext("xxx"),
+          title: i18n.gettext("DISABLED"),
           yOffset: -15,
           content: i18n.gettext("Find the different syntheses produced since the beginning of the discussion")
         }]}},
