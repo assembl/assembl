@@ -276,6 +276,7 @@ class LickertVoteSpecification(AbstractVoteSpecification):
             spec: float(spec.maximum - spec.minimum) / histogram_size
             for spec in group_specs
         }
+        group_spec_ids = {x.id for x in group_specs}
         group_signature = ",".join([spec.uri() for spec in group_specs])
         joint_histograms[group_signature] = histograms_by_idea = {}
         sums = [0] * len(group_specs)
@@ -287,7 +288,8 @@ class LickertVoteSpecification(AbstractVoteSpecification):
             histograms_by_idea[Idea.uri_generic(idea_id)] = results
             n = 0
             for votes_by_spec in votes_by_user_spec.itervalues():
-                if len(votes_by_spec) == len(group_specs):  # only full
+                spec_ids = {spec.id for spec in votes_by_spec}
+                if spec_ids == group_spec_ids:  # only full
                     n += 1
                     h = histogram
                     prod = 1
