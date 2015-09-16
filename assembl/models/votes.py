@@ -289,7 +289,7 @@ class LickertVoteSpecification(AbstractVoteSpecification):
             n = 0
             for votes_by_spec in votes_by_user_spec.itervalues():
                 spec_ids = {spec.id for spec in votes_by_spec}
-                if spec_ids == group_spec_ids:  # only full
+                if group_spec_ids <= spec_ids:  # only full
                     n += 1
                     h = histogram
                     prod = 1
