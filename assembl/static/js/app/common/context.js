@@ -1204,6 +1204,107 @@ Context.prototype = {
     return this.format('/{0}/{1}', this.getDiscussionSlug(), url);
   },
 
+  /**
+   * Helper function to add query string to a URL
+   * @param  {[string]} url [The URL to append query string to]
+   * @param  {[array]} params [An array of key-value objects denoting the query string, raw (unencoded)]
+   * @return {[string]}        [The query string updated URL]
+   */
+  appendExtraURLParams: function(url, params){
+    //console.log('append extra url:', url);
+    if (!params || _.isEmpty(params)){
+      return url;
+    }
+
+    if (_.isObject(params) && !(_.isArray(params))){
+      // Sugar for single object input
+      params = [params];
+    }
+
+    var urlHasParams = false,
+        paramExists = false;
+    
+    if (url.indexOf('?') >= 0) {
+      urlHasParams = true;
+      var i = url.indexOf('?');
+      var c = url.charAt(i+1);
+      if (c) {
+        paramExists = true;
+      }
+    }
+
+    var qs = [],
+        finalUrl = url.substring(0);
+
+    _.each(params, function(p){
+      qs.push($.param(p));
+    });
+
+    if (urlHasParams && !paramExists){
+      finalUrl += qs.join('&');
+    }
+    else if (urlHasParams){
+      finalUrl += '&' + qs.join('&');
+    }
+    else {
+      // URL has no params
+      finalUrl += "?" + qs.join('&');
+    }
+
+    //console.log('final url', finalUrl);
+    return finalUrl;
+  },
+
+  /**
+   * [A central location to generate the URL of a post given an ID]
+   * @param  {[String]} id      [The ID of the post model]
+   * @param  {[Object]} options [Optional. The settings on how the URL should be composed.
+   *                            [{'relative' : true}]
+   *                            'relative' will return a relative url based on the discussion slug
+   *                            default is to return an absolute URL path with discussion slug
+   *                            ]
+   * @param  {[Array]} params  [Query string parameters described in an array of key-value objects]
+   * @return {[String]}         [The fully composed URL of the post]
+   */
+  getPostURL: function(id, params, options){
+    var post = 'posts/',
+        encodedId = encodeURIComponent(id),
+        relPath = post + encodedId;
+    if ((options) && _.has(options, 'relative') && options.relative === true){
+      return this.appendExtraURLParams(
+        this.getRelativeURLFromDiscussionRelativeURL(relPath), params);
+    }
+    else {
+      return this.appendExtraURLParams(
+        this.getAbsoluteURLFromDiscussionRelativeURL(relPath), params);
+    }
+  },
+
+  /**
+   * [A central location to generate the URL of an idea given an ID]
+   * @param  {[String]} id      [The ID of the idea model]
+   * @param  {[Object]} options [Optional. The settings on how the URL should be composed.
+   *                            [{'relative' : true}]
+   *                            'relative' will return a relative url based on the discussion slug
+   *                            default is to return an absolute URL path with discussion slug
+   *                            ]
+   * @param  {[Array]} params  [Query string parameters described in an array of key-value objects]
+   * @return {[String]}         [The fully composed URL of the post]
+   */
+  getIdeaURL: function(id, params, options){
+    var idea = 'idea/',
+        encodedId = encodeURIComponent(id),
+        relPath = idea + encodedId;
+    if ((options) && _.has(options, 'relative') && options.relative === true){
+      return this.appendExtraURLParams(
+        this.getRelativeURLFromDiscussionRelativeURL(relPath), params);
+    }
+    else {
+      return this.appendExtraURLParams(
+        this.getAbsoluteURLFromDiscussionRelativeURL(relPath), params);
+    }
+  },
+
   manageLastCurrentUser: function() {
     var lastCurrentUserId = null,
         connectedUserId = null;
