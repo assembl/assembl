@@ -123,11 +123,19 @@ var TourManager = Marionette.Object.extend({
       return;
     }
     if (this.currentTour !== undefined || !this.firstTourStarted) {
-      // insert in-order, unless it's already there.
-      var pos = _.sortedIndex(this.nextTours, tour, "position");
-      if (!((pos < this.nextTours.length && this.nextTours[pos] === tour)
-        || (pos > 0 && this.nextTours[pos - 1] === tour))) {
-        this.nextTours.splice(pos, 0, tour);
+      if (this.nextTours.length === 0) {
+        this.nextTours.push(tour);
+        if (this.currentTour !== undefined) {
+          // change the "Done" to "Next" live.
+          this.checkForLastStep();
+        }
+      } else {
+        // insert in-order, unless it's already there.
+        var pos = _.sortedIndex(this.nextTours, tour, "position");
+        if (!((pos < this.nextTours.length && this.nextTours[pos] === tour)
+          || (pos > 0 && this.nextTours[pos - 1] === tour))) {
+          this.nextTours.splice(pos, 0, tour);
+        }
       }
       return;
     }
@@ -147,24 +155,26 @@ var TourManager = Marionette.Object.extend({
       console.error("onShow came after tour was cleared");
       this.currentTour = this.toursById(hopscotch.getCurrTour().id);
     }
+    this.checkForLastStep();
     var stepNum = hopscotch.getCurrStepNum(),
         step = this.currentTour.tour.steps[stepNum];
     //console.log("onShow", this.currentTour.name, stepNum);
     this.currentTour.wasSeen = true;
-    if (stepNum + 1 == this.currentTour.tour.steps.length) {
-      this.beforeLastStep();
-    }
     if (step.stepOnShow !== undefined) {
       step.stepOnShow();
     }
       //that.$(".panel-body").scroll(that, that.scrollLogger);
   },
 
-  beforeLastStep: function() {
-    var nextTour = this.getNextTour(false),
-        nextButton = $(".hopscotch-next");
-    if (nextTour !== undefined) {
-      nextButton.text(i18n.gettext("Next"));
+  checkForLastStep: function() {
+    var stepNum = hopscotch.getCurrStepNum(),
+        step = this.currentTour.tour.steps[stepNum];
+    if (stepNum + 1 == this.currentTour.tour.steps.length) {
+      var nextTour = this.getNextTour(false),
+          nextButton = $(".hopscotch-next");
+      if (nextTour !== undefined) {
+        nextButton.text(i18n.gettext("Next"));
+      }
     }
   },
 
