@@ -96,6 +96,11 @@ class AgentProfile(Base):
         'with_polymorphic': '*'
     }
 
+    def __repr__(self):
+        r = super(AgentProfile, self).__repr__()
+        name = self.name or ""
+        return r[:-1] + name.encode("ascii", "ignore") + ">"
+
     def get_preferred_email_account(self):
         if inspect(self).attrs.accounts.loaded_value is NO_VALUE:
             account = self.db.query(AbstractAgentAccount).filter(
@@ -764,11 +769,6 @@ class User(AgentProfile):
         if self.username:
             return self.username.username
         return super(User, self).display_name()
-
-    def __repr__(self):
-        if inspect(self).detached:
-            return "Detached user"
-        return "<User id=%d '%s'>" % (self.id, self.name)
 
     @property
     def permissions_for_current_discussion(self):

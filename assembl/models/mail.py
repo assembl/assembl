@@ -732,8 +732,6 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
             return False
         return True
 
-    def __repr__(self):
-        return "<%s %s: %s>" % (type(self).__name__ , repr(self.id),repr(self.name))
 
 class IMAPMailbox(AbstractMailbox):
     """
@@ -1057,10 +1055,10 @@ class Email(ImportedPost):
         smtp_connection.quit()
 
     def __repr__(self):
-        return "<Email '%s to %s'>" % (
-            self.sender.encode('utf-8'),
-            self.recipients.encode('utf-8')
-        )
+        return "%s from %s to %s>" % (
+            super(Email, self).__repr__(),
+            self.sender.encode('ascii', 'ignore'),
+            self.recipients.encode('ascii', 'ignore'))
 
     def get_title(self):
         return self.source.mangle_mail_subject(self.subject)

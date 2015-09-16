@@ -224,12 +224,6 @@ class Post(Content):
         "filter query according to object owners"
         return query.filter(cls.creator_id == user_id)
 
-    def __repr__(self):
-        return "<Post %s '%s'>" % (
-            self.id,
-            self.type,
-        )
-
 
 def orm_insert_listener(mapper, connection, target):
     """ This is to allow the root idea to send update to "All posts",

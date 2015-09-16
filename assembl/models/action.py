@@ -67,15 +67,11 @@ class Action(TombstonableMixin, DiscussionBoundBase):
     #         name=QUADNAMES.class_Action_class)]
 
     def __repr__(self):
-
-        return "<%s '%s'>" % (
-            self.__class__.__name__,
-            " ".join([
-                self.actor.display_name() if self.actor else 'nobody',
-                self.verb,
-                self.object_type
-            ])
-        )
+        return "%s %s %s %s>" % (
+            super(Action, self).__repr__()[:-1],
+            self.actor.display_name() if self.actor else 'nobody',
+            self.verb,
+            self.object_type)
 
     def is_owner(self, user_id):
         return self.actor_id == user_id

@@ -90,9 +90,6 @@ class ContentSource(DiscussionBoundBase):
                      "FacebookPagePostsSource", "FacebookPageFeedSource",
                      "FacebookSinglePostSource", "EdgeSenseDrupalSource")
 
-    def __repr__(self):
-        return "<ContentSource %s>" % repr(self.name)
-
     def import_content(self, only_new=True):
         from assembl.tasks.source_reader import wake
         wake(self.id, reimport=not only_new)
@@ -134,9 +131,6 @@ class PostSource(ContentSource):
     __mapper_args__ = {
         'polymorphic_identity': 'post_source',
     }
-
-    def __repr__(self):
-        return "<PostSource %s>" % repr(self.name)
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
@@ -260,9 +254,6 @@ class Content(DiscussionBoundBase):
         'polymorphic_on': 'type',
         'with_polymorphic': '*'
     }
-
-    def __repr__(self):
-        return "<Content %s>" % repr(self.type)
 
     def get_body(self):
         return self.body.strip()

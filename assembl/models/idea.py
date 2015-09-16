@@ -584,10 +584,9 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
             watcher.processIdeaCreated(self.id)
 
     def __repr__(self):
-        if self.short_title:
-            return "<Idea %d %s>" % (self.id or -1, repr(self.short_title))
-
-        return "<Idea %d>" % (self.id or -1,)
+        r = super(Idea, self).__repr__()
+        title = self.short_title or ""
+        return r[:-1] + title.encode("ascii", "ignore") + ">"
 
     @classmethod
     def invalidate_ideas(cls, discussion_id, post_id):

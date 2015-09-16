@@ -324,7 +324,9 @@ class Extract(IdeaContentPositiveLink):
         return retval
 
     def __repr__(self):
-        return "<Extract %d %s>" % (self.id or -1, repr(self.body[:20]))
+        r = super(Extract, self).__repr__()
+        body = self.body or ""
+        return r[:-1] + body[:20].encode("ascii", "ignore") + ">"
 
     def get_target(self):
         return self.content

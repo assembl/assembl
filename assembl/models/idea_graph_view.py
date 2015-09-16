@@ -381,7 +381,8 @@ class TableOfContents(IdeaGraphView):
         return self.discussion.ideas
 
     def __repr__(self):
-        return "<TableOfContents %s>" % repr(self.discussion.topic)
+        r = super(TableOfContents, self).__repr__()
+        return r[:-1] + self.discussion.slug + ">"
 
 
 class Synthesis(ExplicitSubGraphView):
@@ -481,7 +482,9 @@ class Synthesis(ExplicitSubGraphView):
         return (cls.discussion_id == discussion_id,)
 
     def __repr__(self):
-        return "<Synthesis %s>" % repr(self.subject)
+        r = super(Synthesis, self).__repr__()
+        subject = self.subject or ""
+        return r[:-1] + subject.encode("ascii", "ignore") + ">"
 
     crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
 

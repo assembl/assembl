@@ -294,9 +294,8 @@ class Discussion(DiscussionBoundBase):
         return acls
 
     def __repr__(self):
-        if inspect(self).detached:
-            return "<Discussion (detached)>"
-        return "<Discussion %d (%s)>" % (self.id, self.slug)
+        r = super(Discussion, self).__repr__()
+        return r[:-1] + self.slug + ">"
 
     def get_notifications(self):
         for widget in self.widgets:

@@ -293,6 +293,12 @@ class BaseOps(object):
     def external_typename(cls):
         return cls.__name__
 
+    def __repr__(self):
+        if inspect(self).detached:
+            return "<%s (detached)>" % (self.external_typename())
+        return "<%s id=%d>" % (
+            self.external_typename(), getattr(self, 'id', None) or -1)
+
     @classmethod
     def external_typename_with_inheritance(cls):
         """ Returns the root ancestor class typename """
