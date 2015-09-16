@@ -178,9 +178,11 @@ section.vote-question-item {
 .question-mark-icon {
   cursor: help;
   background-image: url("../images/question_mark_icon_with_alpha.png"); /* => for <image> tags in SVG, this property is called xlink:href and cannot be set via CSS */
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   display: inline-block;
+  background-size: 18px 18px;
+  background-repeat: no-repeat;
 }
 
 .question-mark-icon-small {

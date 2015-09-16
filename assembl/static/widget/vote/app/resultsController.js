@@ -781,14 +781,14 @@ voteApp.controller('resultsCtl',
           var el_average = result_info.append("div");
           el_average.append("span").text(text_average);
           if ( strItemContentAverageHelp ){
-            el_average.append("i").classed("question-mark-icon-small", true).attr("title", strItemContentAverageHelp);
+            el_average.append("i").classed("question-mark-icon", true).attr("title", strItemContentAverageHelp);
           }
 
           var text_standard_deviation = strItemContentStandardDeviation + " " + result_standard_deviation.toFixed(1);
           var el_standard_deviation = result_info.append("div");
           el_standard_deviation.append("span").text(text_standard_deviation);
           if ( strItemContentStandardDeviationHelp ){
-            el_standard_deviation.append("i").classed("question-mark-icon-small", true).attr("title", strItemContentStandardDeviationHelp);
+            el_standard_deviation.append("i").classed("question-mark-icon", true).attr("title", strItemContentStandardDeviationHelp);
           }
         }
       };    

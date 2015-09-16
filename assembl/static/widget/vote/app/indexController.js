@@ -1555,7 +1555,7 @@ voteApp.controller('indexCtl',
                     target_title_holder.text(data.shortTitle);
                     if ( "definition" in data && data.definition.length ){
                       var icon = $("<i>");
-                      icon.addClass("question-mark-icon-small");
+                      icon.addClass("question-mark-icon");
                       icon.attr("title", AssemblToolsService.stripHtml(data.definition)); // idea's definition field contains HTML
                       target_title_holder.append(icon);
                     }
