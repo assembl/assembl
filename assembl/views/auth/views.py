@@ -450,6 +450,7 @@ def assembl_login_complete_view(request):
     request.response.headerlist.extend(headers)
     discussion = discussion_from_request(request)
     if discussion:
+        maybe_auto_subscribe(user, discussion)
         request.session['discussion'] = discussion.slug
     return HTTPFound(location=next_view)
 
@@ -745,10 +746,7 @@ def maybe_auto_subscribe(user, discussion):
             or not discussion.subscribe_to_notifications_on_signup):
         return False
     # really auto-subscribe user
-    role = discussion.db.query(Role).filter_by(name=R_PARTICIPANT).first()
-    discussion.db.add(LocalUserRole(
-        user_id=user.id, role=role,
-        discussion_id=discussion.id))
+    user.subscribe(discussion)
     discussion.db.flush()
     # apply new notifications
     user.get_notification_subscriptions(discussion.id)

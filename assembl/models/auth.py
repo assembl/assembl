@@ -800,24 +800,21 @@ class User(AgentProfile):
         elif operation == INSERT_OP:
             watcher.processAccountCreated(self.id)
 
-    def subscribe(self, discussion, role=R_PARTICIPANT):
-        existing = self.db.query(LocalUserRole).join(Role).filter(
+    def has_role_in(self, discussion, role):
+        return self.db.query(LocalUserRole).join(Role).filter(
             LocalUserRole.user_id == self.id,
             Role.name == role,
             LocalUserRole.discussion_id == discussion.id).first()
-        if not existing:
+
+    def subscribe(self, discussion, role=R_PARTICIPANT):
+        if not self.has_role_in(discussion, role):
             role = self.db.query(Role).filter_by(name=role).one()
             self.db.add(LocalUserRole(
                 user=self, role=role, discussion=discussion))
 
     def unsubscribe(self, discussion, role=R_PARTICIPANT):
-        existing = self.db.query(LocalUserRole).join(Role).filter(
-            LocalUserRole.user_id == self.id,
-            Role.name == role,
-            LocalUserRole.discussion_id == discussion.id).all()
-        if existing:
-            for lur in existing:
-                self.db.delete(lur)
+        for lur in self.has_role_in(discussion, role) or ():
+            self.db.delete(lur)
 
     @classmethod
     def extra_collections(cls):

@@ -18,6 +18,7 @@ from ..lib.json import json_renderer_factory
 from ..lib import config
 from ..lib.frontend_urls import FrontendUrls
 from ..lib.locale import get_language, get_country
+from ..auth import R_PARTICIPANT
 
 default_context = {
     'STATIC_URL': '/static'
@@ -91,7 +92,8 @@ def get_default_context(request):
 
     first_login_after_auto_subscribe_to_notifications = False
     if (user and discussion and discussion.id and user.is_first_visit
-            and discussion.subscribe_to_notifications_on_signup):
+            and discussion.subscribe_to_notifications_on_signup
+            and user.has_role_in(discussion, R_PARTICIPANT)):
         first_login_after_auto_subscribe_to_notifications = True
     locales = config.get('available_languages').split()
     countries_for_locales = defaultdict(set)
