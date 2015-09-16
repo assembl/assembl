@@ -296,7 +296,7 @@ class BaseOps(object):
     def __repr__(self):
         if inspect(self).detached:
             return "<%s (detached)>" % (self.external_typename())
-        return "<%s id=%d>" % (
+        return "<%s id=%d >" % (
             self.external_typename(), getattr(self, 'id', None) or -1)
 
     @classmethod
