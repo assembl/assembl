@@ -183,6 +183,7 @@ section.vote-question-item {
   display: inline-block;
   background-size: 18px 18px;
   background-repeat: no-repeat;
+  margin-left: 5px;
 }
 
 .question-mark-icon-small {
