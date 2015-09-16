@@ -15,7 +15,7 @@ var AssemblTours = [
           stepOnShow: function() {
               $(".hopscotch-next").text(i18n.gettext("Thank you"));
           },
-          content: i18n.gettext("Welcome to this discussion. We’ve created a 30 second tour to help you get started using Assembl")
+          content: i18n.gettext("Welcome to this discussion. We’ve created series of hints to help you get started using Assembl.")
         }
       ]}},
   {
@@ -28,7 +28,7 @@ var AssemblTours = [
           target: "tour_step_message",
           placement: "left",
           title: i18n.gettext("Join the discussion"),
-          content: i18n.gettext("This is the conversation panel, where the discussion takes place. You can reply to messages directly, or create an entirely new message by clicking ‘react to the discussion’ at the bottom of the panel."),
+          content: i18n.gettext("This is the conversation panel, where the discussion takes place. You can reply to messages directly, or start a new topic by clicking ‘Start a new discussion thread’ at the bottom of the panel."),
           xOffset: 20,
           stepOnShow: function() {
             var element = document.getElementById("tour_step_message");
@@ -55,7 +55,7 @@ var AssemblTours = [
           target: "tour_step_msg_list_options",
           placement: "left",
           title: i18n.gettext("Customize your view"),
-          content: i18n.gettext("You can view the discussion in many different ways using the filters at the top, or under ‘more options’ in each message."),
+          content: i18n.gettext("You can view the discussion in many different ways using the filters at the top."),
           yOffset: -20,
           xOffset: 30,
           stepOnShow: function() {
@@ -78,8 +78,8 @@ var AssemblTours = [
         {
           target: "tour_step_segment",
           placement: "top",
-          title: i18n.gettext("Find messages easily"),
-          content: i18n.gettext("Excerpts from these messages are harvested and are organized to help you find messages you are interested in. Click on ‘see in context’ to view the message related to the excerpt."),
+          title: i18n.gettext("Spot relevant quotes on each idea"),
+          content: i18n.gettext("Excerpts from messages are harvested and are organized to help you find relevant contributions on this idea."),
           yOffset: 10,
           xOffset: 0
         }]}},
@@ -95,8 +95,8 @@ var AssemblTours = [
           {
             target: "tour_step_idealist",
             placement: "right",
-            title: i18n.gettext("Navigate quickly through the conversations"),
-            content: i18n.gettext("You can find the topics that are currently being discussed in this table of contents. Clicking on a topic will filter the conversation to only show messages that have been harvested under that topic."),
+            title: i18n.gettext("Explore one of these topics"),
+            content: i18n.gettext("You can find the topics that are currently being discussed in this table of contents. Clicking on a topic will filter the conversation to only show messages that are related to this topic."),
             xOffset: -20
           }]}},
   {
