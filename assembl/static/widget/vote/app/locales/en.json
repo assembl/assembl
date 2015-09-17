@@ -16,8 +16,7 @@
     "voteResultsStandardDeviationHelp":"This is a measurement of the dispersion of votes around the average.",
     "voteResultsAxisFrequency":"Frequency",
     "voteResultsForTarget":"Results for idea",
-    "voteResultsTooltipFrequency":"<span class='data'>[[percent]]%</span><span class='text'> of participants have chosen this option, this corresponds to </span><span class='data'>[[votes]]</span><span class='text'> votes</span>",
-
+    "voteResultsTooltipFrequency":"{votes, plural, =0 { } one {<span class='data'>One</span><span class='text'> participant (<span class='data'>{percent}%</span>) has chosen this option</span>} other {<span class='data'>{percent}%</span><span class='text'> of participants have chosen this option, this corresponds to </span><span class='data'>{votes}</span><span class='text'> votes</span>}}",
     "historyBack":"Back",
     "voteSubmit":"Submit your vote",
     "voteSubmitLoading": "Your vote is being submitted...",

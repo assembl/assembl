@@ -741,22 +741,6 @@ voteApp.controller('resultsCtl',
       $translate('voteResultsTooltipFrequency').then(function(translation) {
         strItemTooltipFrequency = translation;
       });
-      
-
-      var tip = d3.tip()
-        .attr('class', 'd3-tip')
-        .offset([-10, 0])
-        .html(function(d) {
-          var percent = (d.frequency * 100).toFixed(2);
-          // replacing by hand, because the use of proper i18n with $translate is really too complicated in a function which needs to return now instead of a promise
-          var str = strItemTooltipFrequency.replace("[[percent]]", percent);
-          str = str.replace("[[votes]]", d.votes);
-          /*
-          return "<strong>"+strTooltipContentFrequency+"</strong> <span style='color:red'>" + d.frequency + "</span>"
-            + "<br/>" + "<strong>"+strTooltipContentVotes+"</strong> <span style='color:red'>" + d.votes + "</span>";
-          */
-          return str;
-        });
 
       var vote_spec_label = $scope.getVoteSpecLabelByURI(vote_spec_uri) || vote_spec_uri;
 
@@ -831,15 +815,12 @@ voteApp.controller('resultsCtl',
       }
 
       
-
       var svg = destination.append("svg")
         .classed({"barchart": true})
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      svg.call(tip);
 
       x.domain(data.map(function(d) { return d.label; }));
       y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
@@ -866,17 +847,31 @@ voteApp.controller('resultsCtl',
         y_axis_label.text(strItemAxisFrequency);
       });
 
-      svg.selectAll(".bar")
-        .data(data)
-        .enter()
-        .append("rect")
-          .attr("class", "bar")
-          .attr("x", function(d) { return x(d.label); })
-          .attr("width", x.rangeBand())
-          .attr("y", function(d) { return y(d.frequency); })
-          .attr("height", function(d) { return height - y(d.frequency); })
-          .on('mouseover', tip.show)
-          .on('mouseout', tip.hide);
+      $translate("voteResultsTooltipFrequency").then(function(translation) {
+        var mf = new MessageFormat($translate.preferredLanguage());
+        var msg = mf.compile(translation);
+        var tip = d3.tip()
+          .attr("class", "d3-tip")
+          .offset([-10, 0])
+          .html(function(d) {
+            return msg({
+              percent: (d.frequency * 100).toFixed(2),
+              votes: d.votes
+            });
+          });
+        svg.call(tip);
+        svg.selectAll(".bar")
+          .data(data)
+          .enter()
+          .append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) { return x(d.label); })
+            .attr("width", x.rangeBand())
+            .attr("y", function(d) { return y(d.frequency); })
+            .attr("height", function(d) { return height - y(d.frequency); })
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide);
+      });
     };
 
   }]);
