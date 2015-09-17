@@ -35,7 +35,7 @@
  http://www.chemometria.us.edu.pl
 
  ported to python Jan, 2009 by Brian H. Clowers, Pacific Northwest National Laboratory.
- Dependencies include scipy, numpy, and hcluster.
+ Dependencies include scipy, numpy.
  bhclowers at gmail.com
 '''
 
@@ -56,7 +56,7 @@ def optics(x, k, distMethod='euclidean'):
     RD = N.ones(m)*1E10
 
     for i in xrange(m):
-        # again you can use the euclid function if you don't want hcluster
+        # again you can use the euclid function if you don't want scipy
         # d = euclid(x[i],x)
         # d.sort()
         # CD[i] = d[k]
@@ -79,7 +79,7 @@ def optics(x, k, distMethod='euclidean'):
         order.append(ob)
         tempX = N.ones(len(seeds))*CD[ob]
         tempD = D[ob][seeds]  # [seeds]
-        # you can use this function if you don't want to use hcluster
+        # you can use this function if you don't want to use scipy
         # tempD = euclid(x[ob],x[seeds])
 
         temp = N.column_stack((tempX, tempD))
