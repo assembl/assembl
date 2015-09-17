@@ -20,6 +20,7 @@
     "angular-route": "~1.2.16",
     "angular-resource": "~1.2.16",
     "angular-sanitize": "~1.2.16",
+    "angular-translate-loader-static-files": "~2.7.0",
     "angular-translate": "~2.7.0"
   }
 }
