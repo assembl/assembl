@@ -3,7 +3,6 @@
 var Marionette = require('./shims/marionette.js'),
     $ = require('./shims/jquery.js'),
     Raven = require('raven-js'),
-    TourManager = require('./utils/tourManager.js'),
     _ = require('./shims/underscore.js');
 
 var App = new Marionette.Application();
@@ -42,7 +41,8 @@ App.on('start', function() {
       });
     }
     if (activate_tour /*&& (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))*/) {
-      var tourManager = new TourManager();
+      var TourManager = require('./utils/tourManager.js'),
+          tourManager = new TourManager();
       this.tourManager = tourManager;
       tourManager.listenTo(this.vent, "requestTour", function(tourName) {
         if (tourName === undefined) {
