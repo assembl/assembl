@@ -37,6 +37,8 @@
  ported to python Jan, 2009 by Brian H. Clowers, Pacific Northwest National Laboratory.
  Dependencies include scipy, numpy.
  bhclowers at gmail.com
+ Extraction section written by Marc-Antoine Parent
+ maparent@acm.org
 '''
 
 import numpy as N
@@ -91,6 +93,215 @@ def optics(x, k, distMethod='euclidean'):
     order.append(seeds[0])
     RD[0] = 0  # we set this point to 0 as it does not get overwritten
     return RD, CD, order
+
+
+eps=0.05
+
+
+def up_point(RD, i, eps=eps):
+    if not (0 < i < len(RD)-1):
+        return False
+    return RD[i] <= RD[i+1] * (1-eps)
+
+
+def down_point(RD, i, eps=eps):
+    if not (0 < i < len(RD)-1):
+        return False
+    return RD[i] * (1-eps) >= RD[i+1]
+
+
+def steep_up_area(RD, start, end, min_points, eps=eps):
+    if not (up_point(RD, start, eps) and up_point(RD, end, eps)):
+        return False
+    consecutive = 0
+    for i in range(start, end):
+        if not RD[i+1] >= RD[i]:
+            return False
+        if up_point(RD, i, eps):
+            consecutive = 0
+        else:
+            consecutive += 1
+            if consecutive >= min_points:
+                return False
+    return True
+
+
+def max_steep_up_area(RD, start, end, min_points, eps=eps):
+    if not steep_up_area(RD, start, end, min_points, eps):
+        return None
+    start_val = RD[start]
+    for i in range(start - 1, 0, -1):
+        if RD[i] > start_val:
+            break
+        start_val = RD[i]
+        if up_point(RD, i, eps) and steep_up_area(RD, i, end, min_points, eps):
+            start = i
+    end_val = RD[end]
+    for i in range(end, len(RD)):
+        if RD[i] < end_val:
+            break
+        end_val = RD[i]
+        if up_point(RD, i, eps) and steep_up_area(RD, start, i, min_points, eps):
+            end = i
+    return (start, end)
+
+
+def steep_down_area(RD, start, end, min_points, eps=eps):
+    if not (down_point(RD, start, eps) and down_point(RD, end, eps)):
+        return False
+    consecutive = 0
+    for i in range(start, end):
+        if not RD[i+1] <= RD[i]:
+            return False
+        if down_point(RD, i, eps):
+            consecutive = 0
+        else:
+            consecutive += 1
+            if consecutive >= min_points:
+                return False
+    return True
+
+
+def max_steep_down_area(RD, start, end, min_points, eps=eps):
+    if not steep_down_area(RD, start, end, min_points, eps):
+        return None
+    start_val = RD[start]
+    for i in range(start - 1, 0, -1):
+        if RD[i] < start_val:
+            break
+        start_val = RD[i]
+        if down_point(RD, i, eps) and steep_down_area(RD, i, end, min_points, eps):
+            start = i
+    end_val = RD[end]
+    for i in range(end, len(RD)):
+        if RD[i] > end_val:
+            break
+        end_val = RD[i]
+        if down_point(RD, i, eps) and steep_down_area(RD, start, i, min_points, eps):
+            end = i
+    return (start, end)
+
+
+def is_start_of_steep_down(RD, i, min_points, eps=eps):
+    if not down_point(RD, i, eps):
+        return False
+    if i > 0 and down_point(RD, i-1, eps) and RD[i-1] >= RD[i]:
+        return False
+    r = max_steep_down_area(RD, i, i, min_points, eps)
+    if not r:
+        return False
+    if r[0] != i:
+        return False
+    return r[1]
+
+
+def is_start_of_steep_up(RD, i, min_points, eps=eps):
+    if not up_point(RD, i, eps):
+        return False
+    if i > 0 and up_point(RD, i-1, eps) and RD[i-1] <= RD[i]:
+        return False
+    r = max_steep_up_area(RD, i, i, min_points, eps)
+    if not r:
+        return False
+    if r[0] != i:
+        return False
+    return r[1]
+
+
+def cluster_boundary(RD, down_area, up_area, eps=eps):
+    start = down_area[0]
+    end1 = up_area[1]+1
+    endv = RD[end1]
+    if RD[down_area[0]] * (1-eps) >= endv:
+        for i in range(down_area[1], down_area[0]-1, -1):
+            if RD[i] > endv:
+                break
+        return (i, end1-1)
+    startv = RD[start]
+    if endv*(1-eps) >= startv:
+        for i in range(up_area[0], up_area[1]+1):
+            if RD[i] < startv:
+                break
+        return (start, i)
+    return (start, end1-1)
+
+
+def is_valid_cluster(RD, cluster, min_points, down_area=None, up_area=None, eps=eps):
+    start, end = cluster
+    if end - start < min_points:
+        return False
+    cluster_edge = min(RD[start], RD[end+1]) * (1-eps)
+    max_val = N.amax(RD[start+1:end])
+    if max_val > cluster_edge:
+        return False
+    if down_area:
+        if not (down_area[0] <= start <= down_area[1]):
+            return False
+    if up_area:
+        if not (up_area[0] <= end <= up_area[1]):
+            return False
+    return True
+
+
+def as_cluster(RD, down_area, up_area, min_points, eps=eps):
+    cluster = cluster_boundary(RD, down_area, up_area, eps)
+    if is_valid_cluster(RD, cluster, min_points, down_area, up_area, eps):
+        return cluster
+
+
+class SDArea(object):
+    __slots__ = ('start', 'end', 'mib')
+
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+        self.mib = 0
+
+    def update_mib(self, val):
+        self.mib = max(self.mib, val)
+
+
+def extract_clusters(RD, min_points, eps=eps):
+    steep_down_areas = set()
+    clusters = set()
+    index = 0
+    mib = 0
+    index = 0
+    while index < len(RD):
+        mib = max(mib, RD[index])
+        end = is_start_of_steep_down(RD, index, min_points, eps)
+        if end is not False:
+            for a in steep_down_areas.copy():
+                if RD[a.start] * (1-eps) < mib:
+                    # print "removing A", a.start, a.end
+                    steep_down_areas.remove(a)
+                    continue
+                a.update_mib(RD[index])
+            a = SDArea(index, end)
+            # print "adding ", index, end
+            steep_down_areas.add(a)
+            index = end + 1
+            mib = RD[index]
+            continue
+        end = is_start_of_steep_up(RD, index, min_points, eps)
+        if end is not False:
+            for a in steep_down_areas.copy():
+                if RD[a.start] * (1-eps) < mib:
+                    # print "removing A", a.start, a.end
+                    steep_down_areas.remove(a)
+                    continue
+                a.update_mib(RD[index])
+            for a in steep_down_areas:
+                if RD[end+1] * (1-eps) >= a.mib:
+                    # print "trying", (a.start, a.end), (index, end)
+                    cluster = as_cluster(RD, (a.start, a.end), (index, end), min_points, eps)
+                    if cluster:
+                        clusters.add(cluster)
+            index = end + 1
+            mib = RD[index]
+            continue
+        index += 1
+    return clusters
 
 
 def euclid(i, x):
