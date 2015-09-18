@@ -222,11 +222,13 @@ var SynthesisPanel = AssemblPanel.extend({
         
         Ctx.initTooltips(that.$el);
 
-        that.$('.synthesisPanel-introduction')[0].id = "tour_step_synthesis_intro";
-        Assembl.vent.trigger("requestTour", "synthesis_intro");
-        if (roots.length > 0) {
-          that.$('.synthesisPanel-ideas')[0].id = "tour_step_synthesis_idea1";
-          Assembl.vent.trigger("requestTour", "synthesis_idea1");
+        if (that.getContainingGroup().model.get('navigationState') == "synthesis") {
+          that.$('.synthesisPanel-introduction')[0].id = "tour_step_synthesis_intro";
+          Assembl.vent.trigger("requestTour", "synthesis_intro");
+          if (roots.length > 0) {
+            that.$('.synthesisPanel-ideas')[0].id = "tour_step_synthesis_idea1";
+            Assembl.vent.trigger("requestTour", "synthesis_idea1");
+          }
         }
 
       }
