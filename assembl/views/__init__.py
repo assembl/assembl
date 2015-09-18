@@ -63,7 +63,7 @@ def get_default_context(request):
         else config.get('changes.websocket.port')
     secure_socket = socket_proxied and (
         asbool(config.get("require_secure_connection"))
-        or (asbool(config.get("allow_secure_connection"))
+        or (asbool(config.get("accept_secure_connection"))
             and request.url.startswith('https:')))
     socket_url = get_global_base_url(
         secure_socket, websocket_port) + config.get('changes.prefix')
