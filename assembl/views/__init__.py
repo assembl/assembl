@@ -18,6 +18,7 @@ from ..lib.json import json_renderer_factory
 from ..lib import config
 from ..lib.frontend_urls import FrontendUrls
 from ..lib.locale import get_language, get_country
+from ..lib.utils import get_global_base_url
 from ..auth import R_PARTICIPANT
 
 default_context = {
@@ -57,6 +58,16 @@ def get_default_context(request):
     if request.scheme == "http"\
             and asbool(config.get("require_secure_connection")):
         raise HTTPFound("https://" + request.host + request.path_qs)
+    socket_proxied = asbool(config.get('changes.websocket.proxied'))
+    websocket_port = None if socket_proxied \
+        else config.get('changes.websocket.port')
+    secure_socket = socket_proxied and (
+        asbool(config.get("require_secure_connection"))
+        or (asbool(config.get("allow_secure_connection"))
+            and request.url.startswith('https:')))
+    socket_url = get_global_base_url(
+        secure_socket, websocket_port) + config.get('changes.prefix')
+
     localizer = request.localizer
     _ = TranslationStringFactory('assembl')
     user = get_user(request)
@@ -158,6 +169,7 @@ def get_default_context(request):
         minified_js=config.get('minified_js') or False,
         web_analytics=analytics_settings,
         help_url=help_url,
+        socket_url=socket_url,
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
         raven_url=config.get('raven_url') or '',
         activate_tour=str(config.get('activate_tour') or False).lower(),
@@ -279,7 +291,5 @@ def includeme(config):
     def redirector(request):
         return HTTPMovedPermanently(request.route_url('home', discussion_slug=request.matchdict.get('discussion_slug')))
     config.add_view(redirector, route_name='home-auto')
-    default_context['socket_url'] = \
-        config.registry.settings['changes.websocket.url']
     default_context['cache_bust'] = \
         config.registry.settings['requirejs.cache_bust']

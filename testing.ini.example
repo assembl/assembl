@@ -166,10 +166,9 @@ changes.multiplex = true
 # 8088 thru 8089: reserved for automated testing
 # 8090-: production
 changes.websocket.port = 8085
+# Whether the websocket is proxied by nginx, and exposed through the public_port
+changes.websocket.proxied = false
 changes.prefix = /socket
-# Use the second version if proxying through nginx
-changes.websocket.url = http://localhost:%(changes.websocket.port)s%(changes.prefix)s/
-#changes.websocket.url = http://%(public_hostname)s:%(public_port)s%(changes.prefix)s/
 
 # Notification broker. possible configurations:
 

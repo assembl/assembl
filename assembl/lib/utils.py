@@ -37,15 +37,15 @@ def get_concrete_subclasses_recursive(c):
     return concreteSubclasses
 
 
-def get_global_base_url():
+def get_global_base_url(require_secure=None, override_port=None):
     """Get the base URL of this server
     DO NOT USE directly, except for Linked data;
     use Discussion.get_base_url()
     """
-    port = config.get('public_port')
+    port = str(override_port or config.get('public_port'))
     accept_secure_connection = asbool(
         config.get('accept_secure_connection'))
-    require_secure_connection = asbool(
+    require_secure_connection = require_secure or asbool(
         config.get('require_secure_connection'))
     service = 'http'
     portString = ''
@@ -54,7 +54,7 @@ def get_global_base_url():
             service += 's'
         elif port == "80":
             if require_secure_connection:
-                assert "Do not use secure connection on 80"
+                service += 's'  # assume standard port upgrade
         else:
             if require_secure_connection:
                 service += 's'
