@@ -142,6 +142,9 @@ def logout(request):
     renderer='assembl:templates/login.jinja2',
 )
 def login_view(request):
+    if request.scheme == "http"\
+            and asbool(config.get("accept_secure_connection")):
+        raise HTTPFound("https://" + request.host + request.path_qs)
     return get_login_context(
         request, request.matched_route.name == 'login_forceproviders')
 
@@ -297,6 +300,9 @@ def assembl_register_view(request):
     p_slug = "/" + slug if slug else ""
     next_view = handle_next_view(request)
     if not request.params.get('email'):
+        if request.scheme == "http"\
+                and asbool(config.get("accept_secure_connection")):
+            raise HTTPFound("https://" + request.host + request.path_qs)
         response = dict(get_default_context(request),
                     slug_prefix=p_slug)
         if request.GET.get('error', None):
