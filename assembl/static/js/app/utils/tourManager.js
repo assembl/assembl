@@ -122,6 +122,9 @@ var TourManager = Marionette.Object.extend({
     if (this.isTourSeen(tourName)) {
       return;
     }
+    if (tour == this.currentTour) {
+      return;
+    }
     if (this.currentTour !== undefined || !this.firstTourStarted) {
       if (this.nextTours.length === 0) {
         this.nextTours.push(tour);
