@@ -290,16 +290,21 @@ def post_ids_of(idea):
 
 
 def get_cluster_info(
-        idea_id, num_topics=100, passes=5, silhouette_cutoff=0.05,
-        algorithm="DBSCAN", **algo_kwargs):
+        discussion_id, idea_id=None, num_topics=100, passes=5,
+        silhouette_cutoff=0.05, algorithm="DBSCAN", **algo_kwargs):
     metric = algo_kwargs.get('metric', 'cosine')
-    idea = Idea.get(idea_id)
+    if idea_id:
+        idea = Idea.get(idea_id)
+        discussion = idea.discussion
+    else:
+        idea = None
+        discussion = Discussion.get(discussion_id)
     _, tfidf_model, gensim_model = get_discussion_semantic_analysis(
-        idea.discussion_id, num_topics=num_topics,  # passes=passes)
+        discussion_id, num_topics=num_topics,  # passes=passes)
         model_cls=gmodels.lsimodel.LsiModel)
     if not tfidf_model or not gensim_model:
         return
-    lang = idea.discussion.discussion_locales[0].split('_')[0]
+    lang = discussion.discussion_locales[0].split('_')[0]
     dirname = join(nlp_data, lang)
     stemmer = get_stemmer(lang)
     trans = identity
@@ -310,7 +315,12 @@ def get_cluster_info(
         def trans(x):
             return stemmer.reverse.get(x, x)
     corpus = IdMmCorpus(join(dirname, CORPUS_FNAME))
-    post_ids = post_ids_of(idea)
+    # TODO: Orphans
+    if idea:
+        post_ids = post_ids_of(idea)
+    else:
+        post_ids = [x for (x,) in discussion.db.query(
+            Content.id).filter_by(discussion_id=discussion_id).all()]
     if len(post_ids) < 10:
         return
     post_id_by_index = {n: post_id for (n, post_id) in enumerate(post_ids)}
@@ -357,11 +367,17 @@ def get_cluster_info(
     all_cluster_features = calc_features(
             post_ids, post_clusters, corpus, tfidf_model,
             gensim_model, num_topics, topic_intensities, trans)
-    # Compare to children classification
-    (
-        compare_with_ideas, all_idea_scores, ideas_of_post, children_remainder
-    ) = compare_with_children(
-        idea, post_ids, post_clusters, remainder, labels)
+    if idea:
+        # Compare to children classification
+        (
+            compare_with_ideas, all_idea_scores, ideas_of_post, children_remainder
+        ) = compare_with_children(
+            idea, post_ids, post_clusters, remainder, labels)
+    else:
+        compare_with_ideas = ()
+        ideas_of_post = defaultdict(tuple)
+        all_idea_scores = defaultdict(dict)
+        children_remainder = set()
     post_text = dict(Content.default_db.query(Content.id, Content.body).all())
     post_info = {
         post_id:
@@ -472,8 +488,9 @@ def show_clusters(clusters):
 def get_all_results(discussion, min_samples=4):
     idea_ids = discussion.db.query(Idea.id).filter_by(
         discussion_id=discussion.id).all()
-    results = {id: get_cluster_info(id, min_samples=min_samples)
+    results = {id: get_cluster_info(discussion.id, id, min_samples=min_samples)
                for (id,) in idea_ids}
+    results[None] = get_cluster_info(discussion.id, min_samples=min_samples)
     posres = {id: r for (id, r) in results.iteritems() if r is not None}
     # for id, (silhouette_score, compare_with_ideas, clusters, post_info) in posres.iteritems():
     #     print id, silhouette_score, [len(x['cluster']) for x in clusters]
@@ -489,10 +506,13 @@ def as_html(discussion, f=None, min_samples=4):
     results.sort(reverse=True)
     f.write("<html><body>")
     for (silhouette_score, idea_id, compare_with_ideas, clusters, post_info) in results:
-        idea = Idea.get(idea_id)
-        f.write("<h1>Idea %d: [%f] %s</h1>\n" % (
-            idea_id, silhouette_score or 0,
-            (idea.short_title or '').encode('utf-8')))
+        if idea_id:
+            idea = Idea.get(idea_id)
+            f.write("<h1>Idea %d: [%f] %s</h1>\n" % (
+                idea_id, silhouette_score or 0,
+                (idea.short_title or '').encode('utf-8')))
+        else:
+            f.write("<h1>Discussion %s</h1>" % discussion.topic)
         if len(clusters) > 1:
             f.write("<p><b>Cluster size: %s</b>, remainder %d</p>\n" % (
                 ', '.join((str(len(ci['cluster'])) for ci in clusters[:-1])),
