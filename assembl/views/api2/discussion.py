@@ -461,3 +461,15 @@ def show_cluster(request):
     as_html(discussion, output)
     output.seek(0)
     return Response(body_file=output, content_type='text/html')
+
+
+@view_config(context=InstanceContext, name="optics",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_ADMIN_DISC)
+def show_cluster(request):
+    discussion = request.context._instance
+    output = StringIO()
+    from assembl.nlp.clusters import as_html_optics
+    as_html_optics(discussion, output)
+    output.seek(0)
+    return Response(body_file=output, content_type='text/html')

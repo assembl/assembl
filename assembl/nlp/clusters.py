@@ -11,7 +11,7 @@ import numpy
 from scipy.sparse import lil_matrix
 import sklearn.cluster
 from sklearn import metrics
-from .optics import optics
+from .optics import Optics
 
 from assembl.lib.config import get_config
 from assembl.models import Content, Idea, Discussion
@@ -334,9 +334,11 @@ def get_cluster_info(
     model_matrix = gensimvecs_to_csr(gensim_model[tfidf_corpus], num_topics, topic_intensities)
     if 'eps' not in algo_kwargs:
         # This is silly, but approximate eps with optics
-        r = optics(model_matrix.todense(), algo_kwargs.get('min_samples', 4), metric)
-        print "optics result:", r[0]
-        a, b = min(r[0][1:]), max(r[0])
+        o = Optics(algo_kwargs.get('min_samples', 4), metric)
+        o.calculate_distances(model_matrix.todense())
+        RD = o.RD
+        print "optics result:", RD
+        a, b = min(RD[1:]), max(RD)
         eps = a + (b - a) * 0.5
         print "epsilon", eps
         algo_kwargs['eps'] = eps
@@ -351,7 +353,8 @@ def get_cluster_info(
     # n_clusters_ = n_clusters_raw - (1 if -1 in labels else 0)
     silhouette_score = None
     if n_clusters_raw > 1:
-        silhouette_score = metrics.silhouette_score(model_matrix, labels, metric=metric)
+        silhouette_score = metrics.silhouette_score(
+            model_matrix, labels, metric=metric)
     if silhouette_score < silhouette_cutoff:
         return None
     post_clusters = []
@@ -394,6 +397,81 @@ def get_cluster_info(
     ]
     clusters.append(dict(cluster=remainder, idea_scores=all_idea_scores[-1]))
     return (silhouette_score, compare_with_ideas, clusters, post_info)
+
+
+def get_cluster_info_optics(
+        discussion, num_topics=100,
+        silhouette_cutoff=0.05, min_points=4, eps=0.2, metric='cosine'):
+    _, tfidf_model, gensim_model = get_discussion_semantic_analysis(
+        discussion.id, num_topics=num_topics,
+        model_cls=gmodels.lsimodel.LsiModel)
+    if not tfidf_model or not gensim_model:
+        return
+    lang = discussion.discussion_locales[0].split('_')[0]
+    dirname = join(nlp_data, lang)
+    stemmer = get_stemmer(lang)
+    trans = identity
+    if not isinstance(stemmer, DummyStemmer):
+        stemmer = ReversibleStemmer(
+            stemmer, join(dirname, STEMS_FNAME))
+
+        def trans(x):
+            return stemmer.reverse.get(x, x)
+    corpus = IdMmCorpus(join(dirname, CORPUS_FNAME))
+    post_ids = [x for (x,) in discussion.db.query(
+        Content.id).filter_by(discussion_id=discussion.id).all()]
+    if len(post_ids) < 3 * min_points:
+        return
+    post_id_by_index = {n: post_id for (n, post_id) in enumerate(post_ids)}
+    index_by_post_id = {post_id: n for (n, post_id) in enumerate(post_ids)}
+    subcorpus = corpus.subcorpus(post_ids)
+    tfidf_corpus = tfidf_model[subcorpus]
+    if isinstance(gensim_model, gmodels.lsimodel.LsiModel):
+        topic_intensities = gensim_model.projection.s / gensim_model.projection.s[0]
+    else:
+        topic_intensities = numpy.ones((num_topics,))
+    model_matrix = gensimvecs_to_csr(
+        gensim_model[tfidf_corpus], num_topics, topic_intensities)
+    optics = Optics(min_points, metric)
+    clusters = optics.extract_clusters(model_matrix.todense(), eps)
+    clusters.sort(key=optics.cluster_depth)
+    dendrogram = optics.as_dendrogram(clusters)
+    post_clusters_by_cluster = {
+        cluster:
+        [post_id_by_index[x] for x in optics.cluster_as_ids(cluster)]
+        for cluster in clusters}
+    silhouette_score = metrics.silhouette_score(
+        model_matrix, optics.as_labels(clusters), metric="cosine")
+    remainder = set(post_ids)
+    for cluster in dendrogram.subclusters:
+        remainder -= set(post_clusters_by_cluster[cluster.cluster])
+    remainder = list(remainder)
+    post_clusters = [post_clusters_by_cluster[cl] for cl in clusters]
+    all_cluster_features = calc_features(
+            post_ids, post_clusters, corpus, tfidf_model,
+            gensim_model, num_topics, topic_intensities, trans)
+    compare_with_ideas = ()
+    ideas_of_post = defaultdict(tuple)
+    all_idea_scores = defaultdict(dict)
+    post_text = dict(Content.default_db.query(Content.id, Content.body).all())
+    post_info = {}
+    for post_id in post_ids:
+        in_d = dendrogram.containing(index_by_post_id[post_id])
+        cluster_id = clusters.index(in_d.cluster) if in_d.parent else -1
+        post_info[post_id] = dict(
+            ideas=ideas_of_post[post_id],
+            cluster_id=cluster_id,
+            text=post_text[post_id])
+    clusters = [
+        dict(cluster=cluster,
+             pcluster=post_clusters_by_cluster[cluster],
+             features=all_cluster_features[n],
+             idea_scores=all_idea_scores[n])
+        for (n, cluster) in enumerate(clusters)
+    ]
+    clusters.append(dict(pcluster=remainder, cluster=None, idea_scores=all_idea_scores[-1]))
+    return (
+        silhouette_score, compare_with_ideas, clusters, post_info, dendrogram)
 
 
 def calc_features(post_ids, post_clusters, corpus, tfidf_model, gensim_model, num_topics, topic_intensities, trans):
@@ -512,7 +590,7 @@ def as_html(discussion, f=None, min_samples=4):
                 idea_id, silhouette_score or 0,
                 (idea.short_title or '').encode('utf-8')))
         else:
-            f.write("<h1>Discussion %s</h1>" % discussion.topic)
+            f.write("<h1>Discussion %s</h1>" % discussion.topic.encode('utf-8'))
         if len(clusters) > 1:
             f.write("<p><b>Cluster size: %s</b>, remainder %d</p>\n" % (
                 ', '.join((str(len(ci['cluster'])) for ci in clusters[:-1])),
@@ -552,5 +630,46 @@ def as_html(discussion, f=None, min_samples=4):
                 f.write("<dt>Post %d (%s):</dt>\n" % (post_id, ','.join((str(p) for p in post_info[post_id]['ideas']))))
                 f.write("<dd>%s</dd>" % (post_info[post_id]['text'].encode('utf-8')))
             f.write("</dl>\n")
+    f.write("</body></html>")
+    return f
+
+
+def as_html_optics(discussion, f=None, min_samples=4):
+    if not f:
+        f = open('output.html', 'w')
+    (silhouette_score, compare_with_ideas, cluster_infos, post_info, dendrogram
+     ) = get_cluster_info_optics(
+        discussion, min_points=min_samples, eps=0.2)
+    clusters = [ci['cluster'] for ci in cluster_infos]
+    f.write("<html><body>")
+    f.write("<h1>Discussion %s</h1>" % discussion.topic.encode('utf-8'))
+    if len(cluster_infos) > 1:
+        f.write("<p><b>Cluster size: %s</b>, remainder %d</p>\n" % (
+            ', '.join((str(len(ci['cluster'])) for ci in cluster_infos[:-1])),
+            len(cluster_infos[-1]['pcluster'])))
+    for n, cluster_info in enumerate(cluster_infos):
+        cluster = cluster_info['cluster']
+        is_remainder = cluster is None
+        pcluster = cluster_info['pcluster']
+        features = cluster_info.get('features', {})
+        if is_remainder:
+            f.write("<h2>Remainder:</h2>\n<ol>")
+        else:
+            f.write("<h2>Cluster %d</h2>\n<ol>" % (n,))
+        if not is_remainder:
+            cl_dendrogram = dendrogram.find_cluster(cluster)
+            assert cl_dendrogram
+            if cl_dendrogram.parent != dendrogram:
+                f.write("<p>included in %d</p>" % (
+                    clusters.index(cl_dendrogram.parent.cluster),))
+        f.write("</ol>\n")
+        if features:
+            f.write("<p><b>Positive:</b> %s</p>\n" % (u", ".join(features[0])).encode('utf-8'))
+            f.write("<p><b>Negative:</b> %s</p>\n" % (u", ".join(features[1])).encode('utf-8'))
+        f.write("<dl>\n")
+        for post_id in pcluster:
+            f.write("<dt>Post %d (%s):</dt>\n" % (post_id, ','.join((str(p) for p in post_info[post_id]['ideas']))))
+            f.write("<dd>%s</dd>" % (post_info[post_id]['text'].encode('utf-8')))
+        f.write("</dl>\n")
     f.write("</body></html>")
     return f
