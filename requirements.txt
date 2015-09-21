@@ -52,7 +52,7 @@ enum34==1.0.4
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
 flaky==2.2.0
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
-gensim==0.12.2
+gensim==0.12.1
 greenlet==0.4.9
 html5lib==0.9999999
 idna==2.0
