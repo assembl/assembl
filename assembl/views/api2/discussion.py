@@ -466,7 +466,7 @@ def show_cluster(request):
 @view_config(context=InstanceContext, name="optics",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_ADMIN_DISC)
-def show_cluster(request):
+def show_optics_cluster(request):
     discussion = request.context._instance
     output = StringIO()
     from assembl.nlp.clusters import as_html_optics
