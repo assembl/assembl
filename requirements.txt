@@ -1,5 +1,5 @@
 pip==7.1.2
-setuptools==18.3.1
+setuptools==18.3.2
 Babel==2.0
 Beaker>=1.6.5
 Chameleon==2.22
@@ -40,7 +40,7 @@ cffi==1.2.1
 colander==1.0
 -e git+https://github.com/mozilla-services/cornice.git@master#egg=cornice
 cov-core==1.15.0
-coverage==3.7.1
+coverage==4.0
 cryptography==1.0.1
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 docutils==0.12
@@ -52,7 +52,7 @@ enum34==1.0.4
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
 flaky==2.2.0
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
-gensim==0.12.1
+gensim==0.12.2
 greenlet==0.4.9
 html5lib==0.9999999
 idna==2.0
@@ -94,7 +94,7 @@ pyramid-jinja2==2.5
 pyramid-mailer==0.14.1
 pyramid-mako==1.0.2
 pyramid-tm==0.12
-pytest==2.7.3
+pytest==2.8.0
 pytest-cov==2.1.0
 pytest-localserver==0.3.4
 pytest-mock==0.7.0
@@ -103,7 +103,7 @@ python-dateutil==2.4.2
 python-openid==2.2.5
 pytz==2015.4
 pyzmq==14.7.0
-raven==5.7.1
+raven==5.7.2
 rdflib==4.2.1
 rdflib-jsonld==0.3
 redis==2.10.3
@@ -118,7 +118,7 @@ selenium==2.47.3
 simplejson==3.8.0
 six==1.9.0
 snowballstemmer==1.2.0
-smart_open==1.2.1
+smart_open==1.3.0
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
 sphinx-bootstrap-theme==0.4.7
 splinter==0.7.3
