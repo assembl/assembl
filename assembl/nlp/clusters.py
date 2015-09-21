@@ -436,6 +436,8 @@ def get_cluster_info_optics(
     clusters = optics.extract_clusters(model_matrix.todense(), eps)
     clusters.sort(key=optics.cluster_depth)
     dendrogram = optics.as_dendrogram(clusters)
+    if not clusters:
+        return (-1, (), [], {}, dendrogram)
     post_clusters_by_cluster = {
         cluster:
         [post_id_by_index[x] for x in optics.cluster_as_ids(cluster)]
@@ -634,12 +636,12 @@ def as_html(discussion, f=None, min_samples=4):
     return f
 
 
-def as_html_optics(discussion, f=None, min_samples=4):
+def as_html_optics(discussion, f=None, min_samples=4, eps=0.2):
     if not f:
         f = open('output.html', 'w')
     (silhouette_score, compare_with_ideas, cluster_infos, post_info, dendrogram
      ) = get_cluster_info_optics(
-        discussion, min_points=min_samples, eps=0.2)
+        discussion, min_points=min_samples, eps=eps)
     clusters = [ci['cluster'] for ci in cluster_infos]
     f.write("<html><body>")
     f.write("<h1>Discussion %s</h1>" % discussion.topic.encode('utf-8'))

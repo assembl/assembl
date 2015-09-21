@@ -287,7 +287,7 @@ class Optics(object):
         if i > 0 and self.down_point(i-1) and RD[i-1] >= RD[i]:
             return None
         ivl = self.max_steep_down_area(i)
-        if not ivl:
+        if ivl is None:
             return None
         if ivl.start != i:
             return None
@@ -300,7 +300,7 @@ class Optics(object):
         if i > 0 and self.up_point(i-1) and RD[i-1] <= RD[i]:
             return None
         ivl = self.max_steep_up_area(i)
-        if not ivl:
+        if ivl is None:
             return None
         if ivl.start != i:
             return None
@@ -365,7 +365,7 @@ class Optics(object):
             if ivl is not None:
                 for a in steep_down_areas.keys():
                     if RD[a.start] * (1-eps) < mib:
-                        # print "removing A", a.start, a.end
+                        # print "removing ", a
                         del steep_down_areas[a]
                         continue
                     steep_down_areas[a] = max(steep_down_areas[a], RD[index])
@@ -378,14 +378,14 @@ class Optics(object):
             if ivl is not None:
                 for a in steep_down_areas.keys():
                     if RD[a.start] * (1-eps) < mib:
-                        # print "removing A", a.start, a.end
+                        # print "removing ", a
                         del steep_down_areas[a]
                         continue
                     steep_down_areas[a] = max(steep_down_areas[a], RD[index])
                 cutoff = RD[ivl.end+1] * (1-eps)
                 for a in steep_down_areas:
                     if steep_down_areas[a] <= cutoff:
-                        # print "trying", (a.start, a.end), (index, end)
+                        # print 'trying', a, ivl
                         cluster = self.as_cluster(a, ivl)
                         if cluster:
                             clusters.append(cluster)
