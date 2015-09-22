@@ -947,16 +947,22 @@ var MessageView = Marionette.LayoutView.extend({
    * etc.
    */
   doOpenMessage: function() {
+      var shouldReRender = false;
       if (!this.isMessageOpened()) {
         this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
         this.replyBoxShown = true;
-        this.render();
+        shouldReRender = true;
       }
 
       var read = this.model.get('read');
       if (read === false && Ctx.getCurrentUser().isUnknownUser() === false) {
         var target = this.$('.readUnreadIndicator');
-        this.model.setRead(true, target);
+        this.model.setRead(true, target); // causes a re-render
+        shouldReRender = false; // because previous this.model.setRead() will already cause a re-render
+      }
+
+      if ( shouldReRender ){
+        this.render();
       }
     },
 
