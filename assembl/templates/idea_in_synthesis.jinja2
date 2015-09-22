@@ -1,0 +1,20 @@
+<div>
+{% if idea %}
+{% if idea.long_title %}
+{{idea.long_title|safe}}
+{% else %}
+<p>{{idea.short_title}}</p>
+{% endif %}
+{% elif children %}
+<span>...</span>
+{% endif %}
+{% if children %}
+<ul>
+{% for child in children %}
+<li>
+{{child|safe}}
+</li>
+{% endfor %}
+</ul>
+{% endif %}
+</div>

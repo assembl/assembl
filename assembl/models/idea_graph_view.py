@@ -491,39 +491,28 @@ class Synthesis(ExplicitSubGraphView):
 
 class SynthesisHtmlizationVisitor(IdeaVisitor):
     def __init__(self, graph_view):
+        from os.path import dirname, join
+        from jinja2 import Template
+        templates_dir = join(dirname(dirname(__file__)), 'templates')
+        with open(join(
+                templates_dir, "idea_in_synthesis.jinja2")) as f:
+            self.idea_template = Template(f.read())
+        with open(join(
+                templates_dir, "synthesis.jinja2")) as f:
+            self.synthesis_template = Template(f.read())
         self.graph_view = graph_view
 
     def visit_idea(self, idea, level, prev_result):
-        from lxml.html import builder as E
-        root = E.DIV()
-        if idea.long_title:
-            for f in htmlt.fragments_fromstring(idea.long_title):
-                if isinstance(f, (str, unicode)):
-                    f = E.SPAN(f)
-                root.append(f)
-        else:
-            root.append(E.P(idea.short_title))
-        return root
+        return True
 
     def end_visit(self, idea, level, prev_result, child_results):
-        from lxml.html import builder as E
-        if prev_result is None:
-            if not child_results:
-                return None
-            prev_result = E.DIV()
-            if level:
-                prev_result.append(E.SPAN('...'))
-        if child_results:
-            prev_result.append(E.UL(*(E.LI(r) for r in child_results)))
-        self.result = prev_result
-        return prev_result
+        if prev_result is not True:
+            idea = None
+        if idea or child_results:
+            self.result = self.idea_template.render(
+                idea=idea, children=child_results)
+            return self.result
 
     def as_html(self):
-        from lxml.html import builder as E
-        if not getattr(self, 'result', None):
-            self.result = E.DIV()
-        return htmlt.tostring(E.DIV(*chain(
-            (E.H1(self.graph_view.subject or ''),),
-            htmlt.fragments_fromstring(self.graph_view.introduction or ''),
-            (self.result,),
-            htmlt.fragments_fromstring(self.graph_view.conclusion or ''))))
+        return self.synthesis_template.render(
+            synthesis=self.graph_view, content=self.result)
