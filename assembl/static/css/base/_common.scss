@@ -72,4 +72,8 @@ body{
 
 #popover-oembed {
   background-color: white;
+  min-width: 100px;
+  min-height: 100px;
+  max-width: 90%;
+  max-height: 90%;
 }

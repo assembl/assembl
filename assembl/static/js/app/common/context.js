@@ -404,7 +404,7 @@ Context.prototype = {
     popover[0].innerHTML = iframe;
 
     var triggerHover = function(evt) {
-      console.log("triggerHover(evt: ", evt);
+      console.log("triggerHover() evt: ", evt);
       popover.css('position', 'fixed');
       popover.css('top', (evt.pageY - parseInt(popover_height) - 14) + 'px');
       popover.css('left', evt.pageX + 'px');
@@ -1105,10 +1105,15 @@ Context.prototype = {
   },
 
   makeLinksShowOembedOnHover: function(el) {
-    var popover = $("#popover-oembed");
-    var that = this;
+    var that = this,
+        popover = $("#popover-oembed");
 
     var triggerHover = function(evt) {
+      var LoaderView = require('../views/loader.js'),
+      loader = new LoaderView(),
+      loaderHtml = loader.render().el;
+      
+      popover.html(loaderHtml);
       popover.css('position', 'fixed');
       popover.css('top', (evt.pageY + 2) + 'px');
       popover.css('left', evt.pageX + 'px');
@@ -1123,8 +1128,10 @@ Context.prototype = {
         //apikeys: {
         //etsy : 'd0jq4lmfi5bjbrxq2etulmjr',
         //},
-        //maxHeight: 200, maxWidth:300
-        onError: function() {
+        maxHeight: "90%", maxWidth: "90%",
+        debug: false,
+        onEmbedFailed: function() {
+          console.log("onEmbedFailed (assembl)");
           popover.hide();
         },
         afterEmbed: function() {
