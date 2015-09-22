@@ -52,7 +52,7 @@
     "moment": "^2.10.3",
     "phantomjs": "^1.9.17",
     "po2json": "~0.4.1",
-    "raven-js": "git+https://github.com/getsentry/raven-js.git#d51d7b13aa035558c2952ef2ef91b0a12728e6e5",
+    "raven-js": " ~1.1.22",
     "uglify-js": "^2.4.23",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
