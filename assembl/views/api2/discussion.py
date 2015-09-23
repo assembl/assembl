@@ -465,7 +465,7 @@ def show_cluster(request):
 
 @view_config(context=InstanceContext, name="optics",
              ctx_instance_class=Discussion, request_method='GET',
-             permission=P_ADMIN_DISC)
+             permission=P_READ)
 def show_optics_cluster(request):
     discussion = request.context._instance
     eps = float(request.GET.get("eps", "0.02"))
