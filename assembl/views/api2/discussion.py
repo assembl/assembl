@@ -467,8 +467,8 @@ def show_cluster(request):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_ADMIN_DISC)
 def show_optics_cluster(request):
-    eps = float(request.GET.get("eps", "0.1"))
-    min_points = int(request.GET.get("min_points", "4"))
+    eps = float(request.GET.get("eps", "0.02"))
+    min_points = int(request.GET.get("min_points", "3"))
     discussion = request.context._instance
     output = StringIO()
     from assembl.nlp.clusters import as_html_optics

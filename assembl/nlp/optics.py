@@ -423,7 +423,7 @@ class Optics(object):
         RD = self.RDO
         down_area = self.max_steep_down_area(cluster.start)
         up_area = self.max_steep_up_area(cluster.end)
-        return N.amax(RD[down_area.end:up_area.start]) / max(
+        return N.amax(RD[down_area.end+1:up_area.start+1]) / max(
             RD[cluster.start], RD[cluster.end+1])
 
     def as_labels(self, clusters):
