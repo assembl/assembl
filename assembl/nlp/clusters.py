@@ -422,8 +422,8 @@ def get_cluster_info_optics(
         Content.id).filter_by(discussion_id=discussion.id).all()]
     if len(post_ids) < 3 * min_points:
         return
-    post_id_by_index = {n: post_id for (n, post_id) in enumerate(post_ids)}
-    index_by_post_id = {post_id: n for (n, post_id) in enumerate(post_ids)}
+    post_ids = numpy.array(post_ids)
+    post_ids.sort()
     subcorpus = corpus.subcorpus(post_ids)
     tfidf_corpus = tfidf_model[subcorpus]
     if isinstance(gensim_model, gmodels.lsimodel.LsiModel):
@@ -439,8 +439,7 @@ def get_cluster_info_optics(
     if not clusters:
         return (-1, (), [], {}, dendrogram)
     post_clusters_by_cluster = {
-        cluster:
-        [post_id_by_index[x] for x in optics.cluster_as_ids(cluster)]
+        cluster: post_ids[optics.cluster_as_ids(cluster)]
         for cluster in clusters}
     silhouette_score = metrics.silhouette_score(
         model_matrix, optics.as_labels(clusters), metric="cosine")
@@ -458,7 +457,7 @@ def get_cluster_info_optics(
     post_text = dict(Content.default_db.query(Content.id, Content.body).all())
     post_info = {}
     for post_id in post_ids:
-        in_d = dendrogram.containing(index_by_post_id[post_id])
+        in_d = dendrogram.containing(numpy.searchsorted(post_ids, post_id))
         cluster_id = clusters.index(in_d.cluster) if in_d.parent else -1
         post_info[post_id] = dict(
             ideas=ideas_of_post[post_id],

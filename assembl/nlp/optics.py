@@ -193,21 +193,24 @@ class Optics(object):
 
         order.append(seeds[0])
         RD[0] = 0  # we set this point to 0 as it does not get overwritten
+        # negative distance is a disaster
+        RD = N.maximum(RD, 0)
+        self.RDO = RD[order]
 
     def up_point(self, i):
-        RD = self.RD
+        RD = self.RDO
         if not (0 < i < len(RD)-1):
             return False
-        return RD[i] <= RD[i+1] * (1-self.eps)
+        return RD[i] < RD[i+1] * (1-self.eps)
 
     def down_point(self, i):
-        RD = self.RD
+        RD = self.RDO
         if not (0 < i < len(RD)-1):
             return False
-        return RD[i] * (1-self.eps) >= RD[i+1]
+        return RD[i] * (1-self.eps) > RD[i+1]
 
     def steep_up_area(self, ivl):
-        RD = self.RD
+        RD = self.RDO
         if not (self.up_point(ivl.start) and self.up_point(ivl.end)):
             return False
         consecutive = 0
@@ -223,7 +226,7 @@ class Optics(object):
         return True
 
     def max_steep_up_area(self, i):
-        RD = self.RD
+        RD = self.RDO
         if not self.up_point(i):
             return None
         start, end = i, i
@@ -244,7 +247,7 @@ class Optics(object):
         return Interval(start, end)
 
     def steep_down_area(self, ivl):
-        RD = self.RD
+        RD = self.RDO
         if not (self.down_point(ivl.start) and self.down_point(ivl.end)):
             return False
         consecutive = 0
@@ -260,7 +263,7 @@ class Optics(object):
         return True
 
     def max_steep_down_area(self, i):
-        RD = self.RD
+        RD = self.RDO
         if not self.down_point(i):
             return None
         start, end = i, i
@@ -281,7 +284,7 @@ class Optics(object):
         return Interval(start, end)
 
     def is_start_of_steep_down(self, i):
-        RD = self.RD
+        RD = self.RDO
         if not self.down_point(i):
             return None
         if i > 0 and self.down_point(i-1) and RD[i-1] >= RD[i]:
@@ -294,7 +297,7 @@ class Optics(object):
         return ivl
 
     def is_start_of_steep_up(self, i):
-        RD = self.RD
+        RD = self.RDO
         if not self.up_point(i):
             return None
         if i > 0 and self.up_point(i-1) and RD[i-1] <= RD[i]:
@@ -307,7 +310,7 @@ class Optics(object):
         return ivl
 
     def cluster_boundary(self, down_area, up_area):
-        RD = self.RD
+        RD = self.RDO
         eps = self.eps
         start = down_area.start
         end1 = up_area.end+1
@@ -326,7 +329,7 @@ class Optics(object):
         return Interval(start, end1-1)
 
     def is_valid_cluster(self, cluster, down_area=None, up_area=None):
-        RD = self.RD
+        RD = self.RDO
         start, end = cluster.start, cluster.end
         if end - start < self.min_points:
             return False
@@ -353,7 +356,7 @@ class Optics(object):
             self.calculate_distances(x)
         else:
             assert self.RD is not None, "You must provide a vector first"
-        RD = self.RD
+        RD = self.RDO
         steep_down_areas = {}
         clusters = []
         index = 0
@@ -417,7 +420,7 @@ class Optics(object):
         return self.order[cluster.as_slice()]
 
     def cluster_depth(self, cluster):
-        RD = self.RD
+        RD = self.RDO
         down_area = self.max_steep_down_area(cluster.start)
         up_area = self.max_steep_up_area(cluster.end)
         return N.amax(RD[down_area.end:up_area.start]) / max(
