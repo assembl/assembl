@@ -469,9 +469,10 @@ def show_cluster(request):
 def show_optics_cluster(request):
     eps = float(request.GET.get("eps", "0.02"))
     min_points = int(request.GET.get("min_points", "3"))
+    scramble = asbool(request.GET.get("scramble", "false"))
     discussion = request.context._instance
     output = StringIO()
     from assembl.nlp.clusters import as_html_optics
-    as_html_optics(discussion, output, min_points, eps)
+    as_html_optics(discussion, output, min_points, eps, scramble)
     output.seek(0)
     return Response(body_file=output, content_type='text/html')

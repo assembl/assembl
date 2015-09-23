@@ -17,8 +17,7 @@ from assembl.lib.config import get_config
 from assembl.models import Content, Idea, Discussion
 from .indexedcorpus import IdMmCorpus
 from . import (
-    locale_to_lang, get_stop_words, known_languages, get_stemmer,
-    DummyStemmer, ReversibleStemmer)
+    get_stop_words, get_stemmer, DummyStemmer, ReversibleStemmer)
 
 nlp_data = 'var/nlp'
 DICTIONARY_FNAME = 'dico.dict'
@@ -61,18 +60,6 @@ class Tokenizer(object):
             self.stemmer.save()
 
 
-def as_word_list(post, stemmer, stop_words):
-    subject = post.subject or ""
-    if subject.split().lower() in ('re:', 'comment'):
-        subject = ''
-    else:
-        subject += ' '
-    text = subject + post.get_body_as_text()
-    return [stemmer.stemWord(word)
-            for word in tokenize(text, True)
-            if word not in stop_words]
-
-
 class BOWizer(object):
     def __init__(self, lang, tokenizer=None, load=True):
         self.lang = lang
@@ -107,7 +94,8 @@ class BOWizer(object):
 def create_dictionaries(discussion_id=None):
     db = Discussion.default_db
     by_main_lang = defaultdict(list)
-    default_locales = get_config().get('available_languages', 'fr_CA en_CA').split()
+    default_locales = get_config().get(
+        'available_languages', 'fr_CA en_CA').split()
     only_for_lang = None
     for d_id, locales in db.query(
             Discussion.id, Discussion.preferred_locales).all():
@@ -125,9 +113,10 @@ def create_dictionaries(discussion_id=None):
         corpus_fname = join(dirname, CORPUS_FNAME)
         if exists(corpus_fname):
             corpus = IdMmCorpus(corpus_fname)
-            doc_count = db.query(Content).with_polymorphic(Content
-                ).options(defer(Content.like_count)).join(Discussion
-                ).filter(Discussion.id.in_(discussion_ids)).count()
+            doc_count = db.query(Content).with_polymorphic(
+                Content).options(defer(Content.like_count)).join(
+                Discussion).filter(Discussion.id.in_(discussion_ids)
+                                   ).count()
             if corpus.num_docs == doc_count:
                 if only_for_lang:
                     return corpus
@@ -230,10 +219,11 @@ def get_similarity_matrix(
 
 
 def get_similar_posts(discussion, post_id=None, text=None, cutoff=0.15):
-    post_ids = discussion.db.query(Content.id).filter_by(discussion_id=discussion.id).all()
+    post_ids = discussion.db.query(Content.id).filter_by(
+        discussion_id=discussion.id).all()
     post_ids = [x for (x,) in post_ids]
     (subcorpus, tfidf_model, gensim_model, similarity
-        ) = get_similarity_matrix(discussion)
+     ) = get_similarity_matrix(discussion)
     lang = discussion.discussion_locales[0].split('_')[0]
     bowizer = BOWizer(lang)
     assert post_id or text, "Please give a text or a post_id"
@@ -328,10 +318,12 @@ def get_cluster_info(
     subcorpus = corpus[post_ids]
     tfidf_corpus = tfidf_model[subcorpus]
     if isinstance(gensim_model, gmodels.lsimodel.LsiModel):
-        topic_intensities = gensim_model.projection.s / gensim_model.projection.s[0]
+        topic_intensities = (gensim_model.projection.s
+                             / gensim_model.projection.s[0])
     else:
         topic_intensities = numpy.ones((num_topics,))
-    model_matrix = gensimvecs_to_csr(gensim_model[tfidf_corpus], num_topics, topic_intensities)
+    model_matrix = gensimvecs_to_csr(
+        gensim_model[tfidf_corpus], num_topics, topic_intensities)
     if 'eps' not in algo_kwargs:
         # This is silly, but approximate eps with optics
         o = Optics(algo_kwargs.get('min_samples', 4), metric)
@@ -380,7 +372,6 @@ def get_cluster_info(
         compare_with_ideas = ()
         ideas_of_post = defaultdict(tuple)
         all_idea_scores = defaultdict(dict)
-        children_remainder = set()
     post_text = dict(Content.default_db.query(Content.id, Content.body).all())
     post_info = {
         post_id:
@@ -400,8 +391,8 @@ def get_cluster_info(
 
 
 def get_cluster_info_optics(
-        discussion, num_topics=100,
-        silhouette_cutoff=0.05, min_points=4, eps=0.2, metric='cosine'):
+        discussion, num_topics=100, min_points=4, eps=0.2, metric='cosine',
+        scramble=False):
     _, tfidf_model, gensim_model = get_discussion_semantic_analysis(
         discussion.id, num_topics=num_topics,
         model_cls=gmodels.lsimodel.LsiModel)
@@ -427,7 +418,8 @@ def get_cluster_info_optics(
     subcorpus = corpus[post_ids]
     tfidf_corpus = tfidf_model[subcorpus]
     if isinstance(gensim_model, gmodels.lsimodel.LsiModel):
-        topic_intensities = gensim_model.projection.s / gensim_model.projection.s[0]
+        topic_intensities = (gensim_model.projection.s
+                             / gensim_model.projection.s[0])
     else:
         topic_intensities = numpy.ones((num_topics,))
     model_matrix = gensimvecs_to_csr(
@@ -438,9 +430,15 @@ def get_cluster_info_optics(
     dendrogram = optics.as_dendrogram(clusters)
     if not clusters:
         return (-1, (), [], {}, dendrogram)
-    post_clusters_by_cluster = {
-        cluster: post_ids[optics.cluster_as_ids(cluster)]
-        for cluster in clusters}
+    if scramble:
+        # quasi-random data: do not use ordering.
+        post_clusters_by_cluster = {
+            cluster: post_ids[cluster.as_slice()]
+            for cluster in clusters}
+    else:
+        post_clusters_by_cluster = {
+            cluster: post_ids[optics.cluster_as_ids(cluster)]
+            for cluster in clusters}
     silhouette_score = metrics.silhouette_score(
         model_matrix, optics.as_labels(clusters), metric="cosine")
     remainder = set(post_ids)
@@ -470,12 +468,15 @@ def get_cluster_info_optics(
              idea_scores=all_idea_scores[n])
         for (n, cluster) in enumerate(clusters)
     ]
-    clusters.append(dict(pcluster=remainder, cluster=None, idea_scores=all_idea_scores[-1]))
+    clusters.append(dict(
+        pcluster=remainder, cluster=None, idea_scores=all_idea_scores[-1]))
     return (
         silhouette_score, compare_with_ideas, clusters, post_info, dendrogram)
 
 
-def calc_features(post_ids, post_clusters, corpus, tfidf_model, gensim_model, num_topics, topic_intensities, trans):
+def calc_features(
+        post_ids, post_clusters, corpus, tfidf_model, gensim_model,
+        num_topics, topic_intensities, trans):
     all_cluster_features = []
     for cluster in post_clusters:
         cluster_corpus = corpus[cluster]
@@ -551,7 +552,8 @@ def compare_with_children(idea, post_ids, post_clusters, remainder, labels):
             ideas_of_post[post_id] = [idea.id]
         for cluster in chain(post_clusters, (remainder,)):
             all_idea_scores.append({idea.id: len(cluster)})
-    return (compare_with_ideas, all_idea_scores, ideas_of_post, children_remainder)
+    return (compare_with_ideas, all_idea_scores, ideas_of_post,
+            children_remainder)
 
 
 def show_clusters(clusters):
@@ -581,10 +583,12 @@ def as_html(discussion, f=None, min_samples=4):
         f = open('output.html', 'w')
     results = get_all_results(discussion, min_samples=min_samples)
     results = [(silhouette_score, idea_id, compare_with_ideas, clusters, post_info)
-        for idea_id, (silhouette_score, compare_with_ideas, clusters, post_info) in results.iteritems()]
+        for idea_id, (silhouette_score, compare_with_ideas, clusters, post_info)
+        in results.iteritems()]
     results.sort(reverse=True)
     f.write("<html><body>")
-    for (silhouette_score, idea_id, compare_with_ideas, clusters, post_info) in results:
+    for (silhouette_score, idea_id, compare_with_ideas, clusters, post_info
+         ) in results:
         if idea_id:
             idea = Idea.get(idea_id)
             f.write("<h1>Idea %d: [%f] %s</h1>\n" % (
@@ -635,12 +639,12 @@ def as_html(discussion, f=None, min_samples=4):
     return f
 
 
-def as_html_optics(discussion, f=None, min_samples=4, eps=0.2):
+def as_html_optics(discussion, f=None, min_samples=4, eps=0.2, scramble=False):
     if not f:
         f = open('output.html', 'w')
     (silhouette_score, compare_with_ideas, cluster_infos, post_info, dendrogram
      ) = get_cluster_info_optics(
-        discussion, min_points=min_samples, eps=eps)
+        discussion, min_points=min_samples, eps=eps, scramble=scramble)
     clusters = [ci['cluster'] for ci in cluster_infos]
     f.write("<html><body>")
     f.write("<h1>Discussion %s</h1>" % discussion.topic.encode('utf-8'))
@@ -648,6 +652,7 @@ def as_html_optics(discussion, f=None, min_samples=4, eps=0.2):
         f.write("<p><b>Cluster size: %s</b>, remainder %d</p>\n" % (
             ', '.join((str(len(ci['cluster'])) for ci in cluster_infos[:-1])),
             len(cluster_infos[-1]['pcluster'])))
+        f.write("<p>score: %f</p>" % (silhouette_score,))
     for n, cluster_info in enumerate(cluster_infos):
         cluster = cluster_info['cluster']
         is_remainder = cluster is None
