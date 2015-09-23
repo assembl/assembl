@@ -14,7 +14,10 @@ synthesis
 {% extends "notifications/html_mail_post.jinja2" %}
 
 {%- block post_body %}
+  {{ synthesis.as_html() }}
+  {#
   {{ synthesis.introduction }}
+  #}
   {#
   {{ synthesis.conclusion }}
   #}
@@ -27,7 +30,7 @@ synthesis
       <a href="{{ frontendUrls.append_query_string(
                     frontendUrls.get_post_url(notification.event_source_object()),
                     **{discriminants.url.SOURCE: discriminants.source.NOTIFICATION}
-                  ) }}">{{ gettext("Please read the rest of this synthesis online") }}</a>
+                  ) }}">{{ gettext("Click here to read the online version of this synthesis") }}</a>
     </td>
   </tr>
 </table>

@@ -28,9 +28,32 @@ ink_css
       /* Your custom styles go here */
 
       /* fix for display bug in firefox: a table following another table shows on its right instead of below */
+      
       table {
         clear: both;
       }
+
+
+      /* Synthesis-specific CSS */
+
+      #introduction, #conclusion {
+        background-color: #4ac780; /* this is $theme_synthesis_header_bg in _synthesis.scss */
+        padding: 10px;
+      }
+
+      #introduction p, #conclusion p {
+        color: white; /* this is $white in _synthesis.scss */
+      }
+    
+      #synthesis ul {
+        padding-left: 20px;
+      }
+
+      #synthesis ul li {
+        padding-left: 3px;
+        padding-top: 5px;
+      }
+
 
     </style>
   </head>
