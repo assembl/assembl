@@ -173,7 +173,7 @@ def get_discussion_semantic_analysis(
     if doc_count < 10:
         return None, None
     post_ids = [x for (x,) in post_ids]
-    subcorpus = corpus.subcorpus(post_ids)
+    subcorpus = corpus[post_ids]
     tfidf_model = gmodels.TfidfModel(id2word=dictionary)
     tfidf_fname = join(dirname, "tfidf_%d.model" % (discussion_id,))
     model_fname = join(dirname, "model_%s_%d.model" % (
@@ -325,7 +325,7 @@ def get_cluster_info(
         return
     post_id_by_index = {n: post_id for (n, post_id) in enumerate(post_ids)}
     index_by_post_id = {post_id: n for (n, post_id) in enumerate(post_ids)}
-    subcorpus = corpus.subcorpus(post_ids)
+    subcorpus = corpus[post_ids]
     tfidf_corpus = tfidf_model[subcorpus]
     if isinstance(gensim_model, gmodels.lsimodel.LsiModel):
         topic_intensities = gensim_model.projection.s / gensim_model.projection.s[0]
@@ -424,7 +424,7 @@ def get_cluster_info_optics(
         return
     post_ids = numpy.array(post_ids)
     post_ids.sort()
-    subcorpus = corpus.subcorpus(post_ids)
+    subcorpus = corpus[post_ids]
     tfidf_corpus = tfidf_model[subcorpus]
     if isinstance(gensim_model, gmodels.lsimodel.LsiModel):
         topic_intensities = gensim_model.projection.s / gensim_model.projection.s[0]
@@ -478,9 +478,9 @@ def get_cluster_info_optics(
 def calc_features(post_ids, post_clusters, corpus, tfidf_model, gensim_model, num_topics, topic_intensities, trans):
     all_cluster_features = []
     for cluster in post_clusters:
-        cluster_corpus = corpus.subcorpus(cluster)
-        clusterneg_corpus = corpus.subcorpus(
-            list(set(post_ids) - set(cluster)))
+        cluster_corpus = corpus[cluster]
+        clusterneg_corpus = corpus[
+            list(set(post_ids) - set(cluster))]
 
         def centroid(corpus):
             clust_lda = [gensim_model[tfidf_model[c]] for c in corpus]
