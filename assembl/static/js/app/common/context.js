@@ -410,14 +410,14 @@ Context.prototype = {
       popover.css('left', evt.pageX + 'px');
 
       //popover.css('padding', '25px 50px');
-      popover.show();
+      popover.removeClass('hidden');
 
       that.popoverAfterEmbed.apply(popover[0]);
 
       window.clearTimeout(that.timeoutIdHidePopover);
 
       var hidePopover = function() {
-        popover.hide();
+        popover.addClass('hidden');
       };
 
       popover.unbind("mouseleave"); // this avoids handler accumulation (each call to the following popover.mouseleave() adds a handler)
@@ -1119,7 +1119,7 @@ Context.prototype = {
       popover.css('left', evt.pageX + 'px');
 
       //popover.css('padding', '25px 50px');
-      popover.show();
+      popover.removeClass('hidden');
 
       popover.oembed($(this).attr("href"), {
         //initiallyVisible: false,
@@ -1132,7 +1132,7 @@ Context.prototype = {
         debug: false,
         onEmbedFailed: function() {
           console.log("onEmbedFailed (assembl)");
-          popover.hide();
+          popover.addClass('hidden');
         },
         afterEmbed: function() {
           that.popoverAfterEmbed.apply(this);
@@ -1145,7 +1145,7 @@ Context.prototype = {
       popover.mouseleave(function(evt) {
         var that = this;
         timeoutIdHidePopover = setTimeout(function() {
-          $(that).hide();
+          $(that).addClass('hidden');
         }, 10);
       });
 
