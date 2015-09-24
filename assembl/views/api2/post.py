@@ -1,7 +1,8 @@
 from pyramid.view import view_config
+from pyramid.response import Response
 
 from assembl.auth import P_READ
-from assembl.models import Content
+from assembl.models import Content, SynthesisPost
 from ..traversal import InstanceContext
 
 
@@ -26,3 +27,10 @@ def show_similar_posts(request):
     for n, (post_id, score) in enumerate(similar):
         results[n]['score'] = float(score)
     return results
+
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=SynthesisPost, permission=P_READ,
+             accept="text/html", name="html_export")
+def html_export(request):
+    return Response(request.context._instance.as_html(),
+        content_type='text/html')

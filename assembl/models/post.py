@@ -298,6 +298,9 @@ class SynthesisPost(AssemblPost):
     def get_title(self):
         return self.publishes_synthesis.subject
 
+    def as_html(self):
+        return self.publishes_synthesis.as_html()
+
 
 class WidgetPost(AssemblPost):
     """

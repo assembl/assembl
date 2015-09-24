@@ -16,6 +16,7 @@ var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird'),
     messageExport = require('./messageExportModal.js'),
     AgentViews = require('./agent.js'),
+    Types = require('../utils/types.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
@@ -231,6 +232,11 @@ var MessageView = Marionette.LayoutView.extend({
           ]
         );
 
+    var html_export_url = null;
+    if (this.model.getBEType() == Types.SYNTHESIS_POST) {
+      html_export_url = Ctx.getApiV2DiscussionUrl("posts/" + this.model.getNumericId() + "/html_export");
+    }
+
     return {
       message: this.model,
       messageListView: this.messageListView,
@@ -249,7 +255,8 @@ var MessageView = Marionette.LayoutView.extend({
       read: this.model.get('read'),
       nuggets: _.size(this.model.get('extracts')),
       direct_link_relative_url: direct_link_relative_url,
-      share_link_url: share_link_url
+      share_link_url: share_link_url,
+      html_export_url: html_export_url
     };
   },
 

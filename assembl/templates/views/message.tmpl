@@ -50,6 +50,10 @@
               <li><a href="#" class="dropdown-listitem js_message-export-facebook">{{gettext("Export Post")}}</a></li>
             <% }%>
 
+            <% if (html_export_url) { %>
+              <li><a href="<%= html_export_url %>" target="_blank" class="dropdown-listitem">{{gettext("Export Post in HTML")}}</a></li>
+            <% }%>
+
             <% if( parentId ){ %>
             <li><a href="#" class="js_message-jumptoparentbtn">{{gettext("Jump to this message's parent in current view (if possible, will not clear filters)")}}</a></li>
             <% } %>
