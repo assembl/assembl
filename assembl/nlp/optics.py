@@ -79,7 +79,7 @@ class Interval(object):
         return self.start <= other.start and self.end >= other.end
 
     def __len__(self):
-        return self.end - self.start
+        return self.end - self.start + 1
 
     def as_slice(self):
         return slice(self.start, self.end + 1)

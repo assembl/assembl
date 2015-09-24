@@ -14,7 +14,7 @@ from sklearn import metrics
 from .optics import Optics
 
 from assembl.lib.config import get_config
-from assembl.models import Content, Idea, Discussion
+from assembl.models import Content, Idea, Discussion, RootIdea
 from .indexedcorpus import IdMmCorpus
 from . import (
     get_stop_words, get_stemmer, DummyStemmer, ReversibleStemmer)
@@ -147,7 +147,7 @@ def gensimvecs_to_csr(vecs, width, topic_intensities):
 
 
 def get_discussion_semantic_analysis(
-        discussion_id, num_topics=100,
+        discussion_id, num_topics=200,
         model_cls=gmodels.lsimodel.LsiModel, **model_kwargs):
     discussion = Discussion.get(discussion_id)
     lang = discussion.discussion_locales[0].split('_')[0]
@@ -200,7 +200,7 @@ def get_discussion_semantic_analysis(
 
 
 def get_similarity_matrix(
-        discussion, num_topics=100, model_cls=gmodels.lsimodel.LsiModel,
+        discussion, num_topics=200, model_cls=gmodels.lsimodel.LsiModel,
         **model_kwargs):
     (
         subcorpus, tfidf_model, gensim_model
@@ -280,7 +280,7 @@ def post_ids_of(idea):
 
 
 def get_cluster_info(
-        discussion_id, idea_id=None, num_topics=100, passes=5,
+        discussion_id, idea_id=None, num_topics=200, passes=5,
         silhouette_cutoff=0.05, algorithm="DBSCAN", **algo_kwargs):
     metric = algo_kwargs.get('metric', 'cosine')
     if idea_id:
@@ -391,11 +391,11 @@ def get_cluster_info(
 
 
 def get_cluster_info_optics(
-        discussion, num_topics=100, min_points=4, eps=0.2, metric='cosine',
+        discussion, num_topics=200, min_points=4, eps=0.02, metric='cosine',
         scramble=False):
     _, tfidf_model, gensim_model = get_discussion_semantic_analysis(
         discussion.id, num_topics=num_topics,
-        model_cls=gmodels.lsimodel.LsiModel)
+        model_cls=gmodels.lsimodel.LsiModel)  # , power_iters=5, onepass=False
     if not tfidf_model or not gensim_model:
         return
     lang = discussion.discussion_locales[0].split('_')[0]
@@ -449,8 +449,46 @@ def get_cluster_info_optics(
     all_cluster_features = calc_features(
             post_ids, post_clusters, corpus, tfidf_model,
             gensim_model, num_topics, topic_intensities, trans)
-    compare_with_ideas = ()
-    ideas_of_post = defaultdict(tuple)
+    ideas_of_posts = {}
+
+    def get_ideas_of_post(post_id):
+        if post_id not in ideas_of_posts:
+            ideas_of_posts[post_id] = Idea.get_idea_ids_showing_post(post_id)
+        return ideas_of_posts[post_id]
+
+    def count_for_idea(idea, post_ids):
+        if isinstance(idea, RootIdea):
+            title = idea.discussion.topic
+            cluster_count = len(post_ids)
+        else:
+            title = idea.short_title
+            cluster_count = len([
+                pid for pid in post_ids
+                if idea.id in get_ideas_of_post(pid)])
+        if not cluster_count:
+            return None
+        children_data = filter(None, [
+            count_for_idea(child, post_ids) for child in idea.children])
+        if isinstance(idea, RootIdea):
+            orphan_cluster_count = len([
+                pid for pid in post_ids
+                if not get_ideas_of_post(pid)])
+            if orphan_cluster_count:
+                children_data.append(dict(
+                    id=-1,
+                    title='orphans',
+                    count=idea.num_orphan_posts,
+                    cluster_count=orphan_cluster_count))
+        return dict(
+            id=idea.id,
+            title=title,
+            count=idea.num_posts,
+            cluster_count=cluster_count,
+            children=children_data)
+
+    cluster_idea_data = [count_for_idea(discussion.root_idea,
+                                        post_clusters_by_cluster[cl])
+                         for cl in clusters]
     all_idea_scores = defaultdict(dict)
     post_text = dict(Content.default_db.query(Content.id, Content.body).all())
     post_info = {}
@@ -458,7 +496,7 @@ def get_cluster_info_optics(
         in_d = dendrogram.containing(numpy.searchsorted(post_ids, post_id))
         cluster_id = clusters.index(in_d.cluster) if in_d.parent else -1
         post_info[post_id] = dict(
-            ideas=ideas_of_post[post_id],
+            ideas=get_ideas_of_post(post_id),
             cluster_id=cluster_id,
             text=post_text[post_id])
     clusters = [
@@ -471,7 +509,7 @@ def get_cluster_info_optics(
     clusters.append(dict(
         pcluster=remainder, cluster=None, idea_scores=all_idea_scores[-1]))
     return (
-        silhouette_score, compare_with_ideas, clusters, post_info, dendrogram)
+        silhouette_score, cluster_idea_data, clusters, post_info, dendrogram)
 
 
 def calc_features(
@@ -639,10 +677,11 @@ def as_html(discussion, f=None, min_samples=4):
     return f
 
 
+
 def as_html_optics(discussion, f=None, min_samples=4, eps=0.2, scramble=False):
     if not f:
         f = open('output.html', 'w')
-    (silhouette_score, compare_with_ideas, cluster_infos, post_info, dendrogram
+    (silhouette_score, idea_info, cluster_infos, post_info, dendrogram
      ) = get_cluster_info_optics(
         discussion, min_points=min_samples, eps=eps, scramble=scramble)
     clusters = [ci['cluster'] for ci in cluster_infos]
@@ -659,16 +698,25 @@ def as_html_optics(discussion, f=None, min_samples=4, eps=0.2, scramble=False):
         pcluster = cluster_info['pcluster']
         features = cluster_info.get('features', {})
         if is_remainder:
-            f.write("<h2>Remainder:</h2>\n<ol>")
+            f.write("<h2>Remainder:</h2>\n")
         else:
-            f.write("<h2>Cluster %d</h2>\n<ol>" % (n,))
-        if not is_remainder:
+            f.write("<h2>Cluster %d</h2>\n" % (n,))
             cl_dendrogram = dendrogram.find_cluster(cluster)
             assert cl_dendrogram
             if cl_dendrogram.parent != dendrogram:
                 f.write("<p>included in %d</p>" % (
                     clusters.index(cl_dendrogram.parent.cluster),))
-        f.write("</ol>\n")
+            f.write("<ul>")
+            def write_idea_info(idea_info):
+                f.write("<li>{id}: <b>{cluster_count}</b>/{count} {title} ".format(**idea_info))
+                if idea_info.get('children', None):
+                    f.write("<ul>")
+                    for child in idea_info['children']:
+                        write_idea_info(child)
+                    f.write("</ul>")
+                f.write("</li>")
+            write_idea_info(idea_info[n])
+            f.write("</ul>")
         if features:
             f.write("<p><b>Positive:</b> %s</p>\n" % (u", ".join(features[0])).encode('utf-8'))
             f.write("<p><b>Negative:</b> %s</p>\n" % (u", ".join(features[1])).encode('utf-8'))
