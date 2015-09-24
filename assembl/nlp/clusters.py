@@ -538,9 +538,8 @@ def calc_features(
                 extremes[term] += val * factor
         extremes = [(val, term) for (term, val) in extremes.iteritems()]
         extremes.sort()
-        pos_terms = [t for (v, t) in extremes if v > 0][0:15]
+        pos_terms = [t for (v, t) in extremes if v > 0][-1:-16:-1]
         neg_terms = [t for (v, t) in extremes if v < 0][0:15]
-        pos_terms.reverse()
         all_cluster_features.append((pos_terms, neg_terms))
     return all_cluster_features
 
