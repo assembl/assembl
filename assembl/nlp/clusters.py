@@ -14,7 +14,7 @@ from sklearn import metrics
 from .optics import Optics
 
 from assembl.lib.config import get_config
-from assembl.models import Content, Idea, Discussion, RootIdea
+from assembl.models import Content, Idea, Discussion, RootIdea, Post
 from .indexedcorpus import IdMmCorpus
 from . import (
     get_stop_words, get_stemmer, DummyStemmer, ReversibleStemmer)
@@ -390,6 +390,72 @@ def get_cluster_info(
     return (silhouette_score, compare_with_ideas, clusters, post_info)
 
 
+def get_cluster_idea_data(
+        root_idea, post_clusters, get_ideas_of_post):
+
+    def data_for_idea(idea, post_ids):
+        if isinstance(idea, RootIdea):
+            title = idea.discussion.topic
+            cluster_count = len(post_ids)
+            local_post_ids = post_ids
+        else:
+            title = idea.short_title
+            local_post_ids = [
+                pid for pid in post_ids
+                if idea.id in get_ideas_of_post(pid)]
+            cluster_count = len(local_post_ids)
+        if not cluster_count:
+            return None
+        children_ids = {child.id for child in idea.children}
+        if children_ids:
+            only_here = len([
+                pid for pid in local_post_ids
+                if not set(get_ideas_of_post(pid)).intersection(children_ids)])
+        else:
+            only_here = cluster_count
+        children_data = filter(None, [
+            data_for_idea(child, post_ids) for child in idea.children])
+        if isinstance(idea, RootIdea):
+            orphan_cluster_count = len([
+                pid for pid in post_ids
+                if not get_ideas_of_post(pid)])
+            if orphan_cluster_count:
+                children_data.append(dict(
+                    id=-1,
+                    title='orphans',
+                    count=idea.num_orphan_posts,
+                    only_here=orphan_cluster_count,
+                    cluster_count=orphan_cluster_count))
+        return dict(
+            id=idea.id,
+            title=title,
+            count=idea.num_posts,
+            cluster_count=cluster_count,
+            only_here=only_here,
+            children=children_data)
+
+    return [data_for_idea(root_idea, cl)
+            for cl in post_clusters]
+
+
+def alerts_in_idea_data(idea_data, tolerance=1):
+    # TODO: Reimplement the homogeneity score for posts
+    # which can be in many ideas at once.
+    cluster_count = idea_data["cluster_count"]
+    found_full = False
+    results = []
+    for child in idea_data.get("children", ()):
+        results.extend(alerts_in_idea_data(child, tolerance))
+        if cluster_count - child["cluster_count"] <= tolerance:
+            found_full = True
+    if found_full:
+        return results
+    if (cluster_count > tolerance and
+            (idea_data["count"] - cluster_count > tolerance)):
+        return (idea_data["id"],)
+    return results
+
+
 def get_cluster_info_optics(
         discussion, num_topics=200, min_points=4, eps=0.02, metric='cosine',
         scramble=False):
@@ -437,7 +503,7 @@ def get_cluster_info_optics(
             for cluster in clusters}
     else:
         post_clusters_by_cluster = {
-            cluster: post_ids[optics.cluster_as_ids(cluster)]
+            cluster: list(post_ids[optics.cluster_as_ids(cluster)])
             for cluster in clusters}
     silhouette_score = metrics.silhouette_score(
         model_matrix, optics.as_labels(clusters), metric="cosine")
@@ -445,6 +511,7 @@ def get_cluster_info_optics(
     for cluster in dendrogram.subclusters:
         remainder -= set(post_clusters_by_cluster[cluster.cluster])
     remainder = list(remainder)
+    remainder.sort()
     post_clusters = [post_clusters_by_cluster[cl] for cl in clusters]
     all_cluster_features = calc_features(
             post_ids, post_clusters, corpus, tfidf_model,
@@ -456,41 +523,23 @@ def get_cluster_info_optics(
             ideas_of_posts[post_id] = Idea.get_idea_ids_showing_post(post_id)
         return ideas_of_posts[post_id]
 
-    def count_for_idea(idea, post_ids):
-        if isinstance(idea, RootIdea):
-            title = idea.discussion.topic
-            cluster_count = len(post_ids)
-        else:
-            title = idea.short_title
-            cluster_count = len([
-                pid for pid in post_ids
-                if idea.id in get_ideas_of_post(pid)])
-        if not cluster_count:
-            return None
-        children_data = filter(None, [
-            count_for_idea(child, post_ids) for child in idea.children])
-        if isinstance(idea, RootIdea):
-            orphan_cluster_count = len([
-                pid for pid in post_ids
-                if not get_ideas_of_post(pid)])
-            if orphan_cluster_count:
-                children_data.append(dict(
-                    id=-1,
-                    title='orphans',
-                    count=idea.num_orphan_posts,
-                    cluster_count=orphan_cluster_count))
-        return dict(
-            id=idea.id,
-            title=title,
-            count=idea.num_posts,
-            cluster_count=cluster_count,
-            children=children_data)
+    cluster_idea_data = get_cluster_idea_data(
+        discussion.root_idea, post_clusters, get_ideas_of_post)
 
-    cluster_idea_data = [count_for_idea(discussion.root_idea,
-                                        post_clusters_by_cluster[cl])
-                         for cl in clusters]
-    all_idea_scores = defaultdict(dict)
+    def as_chain(post_id, ancestry):
+        ancestry = [int(i) for i in ancestry.split(',') if i]
+        ancestry.append(post_id)
+        return ancestry
+
+    for cl_post_ids in post_clusters_by_cluster.values():
+        cl_post_ids.sort()
+
     post_text = dict(Content.default_db.query(Content.id, Content.body).all())
+    post_ancestry = dict(Post.default_db.query(Post.id, Post.ancestry).all())
+    post_ancestry = {id: as_chain(id, a) for (id, a) in post_ancestry.iteritems()}
+    for cl_post_ids in post_clusters_by_cluster.values():
+        cl_post_ids.sort(key = lambda pid: post_ancestry[pid])
+    remainder.sort(key = lambda pid: post_ancestry[pid])
     post_info = {}
     for post_id in post_ids:
         in_d = dendrogram.containing(numpy.searchsorted(post_ids, post_id))
@@ -498,16 +547,15 @@ def get_cluster_info_optics(
         post_info[post_id] = dict(
             ideas=get_ideas_of_post(post_id),
             cluster_id=cluster_id,
-            text=post_text[post_id])
+            text=post_text[post_id],
+            ancestry=post_ancestry[post_id])
     clusters = [
         dict(cluster=cluster,
              pcluster=post_clusters_by_cluster[cluster],
-             features=all_cluster_features[n],
-             idea_scores=all_idea_scores[n])
+             features=all_cluster_features[n])
         for (n, cluster) in enumerate(clusters)
     ]
-    clusters.append(dict(
-        pcluster=remainder, cluster=None, idea_scores=all_idea_scores[-1]))
+    clusters.append(dict(pcluster=remainder, cluster=None))
     return (
         silhouette_score, cluster_idea_data, clusters, post_info, dendrogram)
 
@@ -619,7 +667,8 @@ def as_html(discussion, f=None, min_samples=4):
     if not f:
         f = open('output.html', 'w')
     results = get_all_results(discussion, min_samples=min_samples)
-    results = [(silhouette_score, idea_id, compare_with_ideas, clusters, post_info)
+    results = [(
+        silhouette_score, idea_id, compare_with_ideas, clusters, post_info)
         for idea_id, (silhouette_score, compare_with_ideas, clusters, post_info)
         in results.iteritems()]
     results.sort(reverse=True)
@@ -632,7 +681,8 @@ def as_html(discussion, f=None, min_samples=4):
                 idea_id, silhouette_score or 0,
                 (idea.short_title or '').encode('utf-8')))
         else:
-            f.write("<h1>Discussion %s</h1>" % discussion.topic.encode('utf-8'))
+            f.write("<h1>Discussion %s</h1>" %
+                    discussion.topic.encode('utf-8'))
         if len(clusters) > 1:
             f.write("<p><b>Cluster size: %s</b>, remainder %d</p>\n" % (
                 ', '.join((str(len(ci['cluster'])) for ci in clusters[:-1])),
@@ -665,12 +715,17 @@ def as_html(discussion, f=None, min_samples=4):
                     (idea.short_title or '').encode('utf-8')))
             f.write("</ol>\n")
             if features:
-                f.write("<p><b>Positive:</b> %s</p>\n" % (u", ".join(features[0])).encode('utf-8'))
-                f.write("<p><b>Negative:</b> %s</p>\n" % (u", ".join(features[1])).encode('utf-8'))
+                f.write("<p><b>Positive:</b> %s</p>\n" % (
+                    u", ".join(features[0])).encode('utf-8'))
+                f.write("<p><b>Negative:</b> %s</p>\n" % (
+                    u", ".join(features[1])).encode('utf-8'))
             f.write("<dl>\n")
             for post_id in cluster:
-                f.write("<dt>Post %d (%s):</dt>\n" % (post_id, ','.join((str(p) for p in post_info[post_id]['ideas']))))
-                f.write("<dd>%s</dd>" % (post_info[post_id]['text'].encode('utf-8')))
+                f.write("<dt>Post %d (%s):</dt>\n" % (
+                    post_id, ','.join((
+                        str(p) for p in post_info[post_id]['ideas']))))
+                f.write("<dd>%s</dd>" % (
+                    post_info[post_id]['text'].encode('utf-8')))
             f.write("</dl>\n")
     f.write("</body></html>")
     return f
@@ -706,8 +761,19 @@ def as_html_optics(discussion, f=None, min_samples=4, eps=0.2, scramble=False):
                 f.write("<p>included in %d</p>" % (
                     clusters.index(cl_dendrogram.parent.cluster),))
             f.write("<ul>")
+            alerts = set(alerts_in_idea_data(idea_info[n]))
+
             def write_idea_info(idea_info):
-                f.write("<li>{id}: <b>{cluster_count}</b>/{count} {title} ".format(**idea_info))
+                f.write("<li>")
+                if idea_info['id'] in alerts:
+                    f.write("<b>***</b>")
+                if idea_info['cluster_count'] > idea_info['only_here']:
+                    f.write("{id}: <i>{only_here}</i>/<b>{cluster_count}</b>/{count} "
+                            .format(**idea_info))
+                else:
+                    f.write("{id}: <b>{cluster_count}</b>/{count} "
+                            .format(**idea_info))
+                f.write(idea_info['title'].encode('utf-8'))
                 if idea_info.get('children', None):
                     f.write("<ul>")
                     for child in idea_info['children']:
@@ -717,12 +783,40 @@ def as_html_optics(discussion, f=None, min_samples=4, eps=0.2, scramble=False):
             write_idea_info(idea_info[n])
             f.write("</ul>")
         if features:
-            f.write("<p><b>Positive:</b> %s</p>\n" % (u", ".join(features[0])).encode('utf-8'))
-            f.write("<p><b>Negative:</b> %s</p>\n" % (u", ".join(features[1])).encode('utf-8'))
+            f.write("<p><b>Positive:</b> %s</p>\n" % (
+                u", ".join(features[0])).encode('utf-8'))
+            f.write("<p><b>Negative:</b> %s</p>\n" % (
+                u", ".join(features[1])).encode('utf-8'))
         f.write("<dl>\n")
+        stack = []
         for post_id in pcluster:
-            f.write("<dt>Post %d (%s):</dt>\n" % (post_id, ','.join((str(p) for p in post_info[post_id]['ideas']))))
-            f.write("<dd>%s</dd>" % (post_info[post_id]['text'].encode('utf-8')))
-        f.write("</dl>\n")
+            ancestry = post_info[post_id].get('ancestry', ())
+            common = min(len(ancestry), len(stack))
+            while common > 0 and ancestry[common-1] != stack[common-1]:
+                common -= 1
+            while len(stack) > common + 1:
+                f.write('</li></ul>')
+                stack.pop()
+            if len(ancestry) == len(stack) and len(ancestry) == common + 1:
+                f.write("</li><li>")
+                stack[-1] = ancestry[-1]
+            else:
+                if len(stack) == common+1:
+                    f.write('</li></ul>')
+                    stack.pop()
+                while len(stack) < len(ancestry):
+                    f.write('<ul><li>')
+                    stack.append(ancestry[len(stack)])
+            f.write("<dl>\n")
+            f.write("<dt>Post %d (in ideas %s):</dt>\n" % (
+                post_id, ','.join((
+                    str(p) for p in post_info[post_id]['ideas']))))
+            # ','.join((str(p) for p in ancestry))
+            f.write("<dd>%s</dd>" % (
+                post_info[post_id]['text'].encode('utf-8')))
+            f.write("</dl>\n")
+        while len(stack):
+            f.write('</li></ul>')
+            stack.pop()
     f.write("</body></html>")
     return f
