@@ -6,7 +6,7 @@
     "errorNoValueForCriterion":"Error: no value for criterion \"{{criterion}}\"",
     "errorNoVoteToSubmit":"Error: There is no vote to submit!",
     "ideaDescription":"Description",
-    "voteResultsForTwoCriteria":"Vote results for criteria \"<span title='{{first_hover}}'>{{first_label}}</span>\" and \"<span title='{{second_hover}}'>{{second_title}}</span>\".<br/>number of votes: {{number_of_votes}}",
+    "voteResultsForTwoCriteria":"Vote results for criteria \"<span title='{{first_hover}}'>{{first_label}}</span>\" and \"<span title='{{second_hover}}'>{{second_label}}</span>\".<br/>number of votes: {{number_of_votes}}",
     "voteResultsForQuestionNoResult":"There is no vote yet for question \"<span title='{{hover}}'>{{label}}\", on any of its target ideas.",
     "voteResultsVotes":"Votes:",
     "voteResultsFrequency":"Frequency:",

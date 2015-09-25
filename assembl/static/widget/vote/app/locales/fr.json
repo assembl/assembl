@@ -6,7 +6,7 @@
     "errorNoValueForCriterion":"Erreur : pas de valeur pour le critère \"{{criterion}}\"",
     "errorNoVoteToSubmit":"Erreur : Il n'y a pas de vote à envoyer.",
     "ideaDescription":"Description",
-    "voteResultsForTwoCriteria":"Résultat du vote pour le critère \"<span title='{{first_hover}}'>{{first_label}}</span>\" and \"<span title='{{second_hover}}'>{{second_title}}</span>\".<br/>Nombre de votes : {{number_of_votes}}",
+    "voteResultsForTwoCriteria":"Résultat du vote pour les critères \"<span title='{{first_hover}}'>{{first_label}}</span>\" et \"<span title='{{second_hover}}'>{{second_label}}</span>\".<br/>Nombre de votes : {{number_of_votes}}",
     "voteResultsForQuestionNoResult":"Il n'y a pas encore de vote pour la question \"<span title='{{hover}}'>{{label}}</span>\", sur aucune de ses idées cibles.",
     "voteResultsVotes":"Votes :",
     "voteResultsFrequency":"Fréquence :",
