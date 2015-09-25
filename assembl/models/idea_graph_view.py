@@ -510,7 +510,7 @@ class SynthesisHtmlizationVisitor(IdeaVisitor):
             idea = None
         if idea or child_results:
             self.result = self.idea_template.render(
-                idea=idea, children=child_results)
+                idea=idea, children=child_results, level=level)
             return self.result
 
     def as_html(self):

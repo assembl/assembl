@@ -5,8 +5,8 @@
 {% else %}
 <p>{{idea.short_title}}</p>
 {% endif %}
-{% elif children %}
-{#<span>...</span>#}
+{% elif children and level > 0 %}
+<span>...</span>{# this means that this idea has not been checked (for visibility in the synthesis), but one of its children is visible, so the structure link needs to appear #}
 {% endif %}
 {% if children %}
 <ul>
