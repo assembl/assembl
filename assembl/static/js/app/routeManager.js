@@ -18,6 +18,7 @@ var Marionette = require('./shims/marionette.js'),
     AdminPartners = require('./views/admin/adminPartners.js'),
     UserNotificationSubscriptions = require('./views/user/userNotificationSubscriptions.js'),
     Profile = require('./views/user/profile.js'),
+    AgentViews = require('./views/agent.js'),
     Authorization = require('./views/authorization.js'),
     Permissions = require('./utils/permissions.js'),
     Account = require('./views/user/account.js'),
@@ -233,7 +234,23 @@ var routeManager = Marionette.Object.extend({
     //window.history.pushState('object or string', 'Title', '../');
     Backbone.history.navigate('/', {replace: true});
   },
-    
+
+  user: function(id, qs) {
+    this.restoreViews().then(function() {    
+      var collectionManager = CollectionManager(); 
+      collectionManager.getAllUsersCollectionPromise().then(
+          function(agentsCollection) {
+            var agent = agentsCollection.get(id);
+            if(!agent) {
+              console.log(agentsCollection, id)
+              throw new error("User not found");
+            }
+            AgentViews.showUserMessages(agent);
+          });
+    });
+    Backbone.history.navigate('/', {replace: true});
+  },
+
   sentryTest: function() {
     var Raven = require('raven-js');
     Raven.captureMessage("This is a test, an uncaught non existent function call will follow.");

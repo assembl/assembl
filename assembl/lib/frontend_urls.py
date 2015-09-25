@@ -20,6 +20,7 @@ class FrontendUrls():
         self.discussion = discussion
 
     # Note:  This should match with assembl/static/js/app/router.js
+    # Used by home_view, these routes will all give backbone's interface
     frontend_routes = {
         'edition': '/edition',
         'partners': '/partners',
@@ -31,7 +32,8 @@ class FrontendUrls():
         'sentrytest': '/sentrytest',
         'groupSpec': '/G*remainder',
         'purl_posts': '/posts*remainder',
-        'purl_idea': '/idea*remainder'
+        'purl_idea': '/idea*remainder',
+        'purl_user': '/user*remainder',
     }
 
     @classmethod

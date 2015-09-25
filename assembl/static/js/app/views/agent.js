@@ -34,15 +34,7 @@ var AgentView = Marionette.ItemView.extend({
 
   onAvatarClick: function(e) {
     e.stopPropagation();
-
-    var filters =  [{filterDef: availableFilters.POST_IS_FROM, value: this.model.id}],
-        ModalGroup = require('./groups/modalGroup.js'),
-        modal_title = i18n.sprintf(i18n.gettext("All message by %s"), this.model.get('name')),
-        modalFactory = ModalGroup.filteredMessagePanelFactory(modal_title, filters),
-        modal = modalFactory.modal,
-        messageList = modalFactory.messageList;
-
-    Assembl.slider.show(modal);
+    showUserMessages(this.model);
   }
   
 });
@@ -57,7 +49,19 @@ var AgentNameView = AgentView.extend({
   className: 'agentName'
 });
 
+function showUserMessages(userModel) {
+  var filters =  [{filterDef: availableFilters.POST_IS_FROM, value: userModel.id}],
+  ModalGroup = require('./groups/modalGroup.js'),
+  modal_title = i18n.sprintf(i18n.gettext("All message by %s"), userModel.get('name')),
+  modalFactory = ModalGroup.filteredMessagePanelFactory(modal_title, filters),
+  modal = modalFactory.modal,
+  messageList = modalFactory.messageList;
+
+  Assembl.slider.show(modal);
+} 
+
 module.exports = {
   AgentAvatarView: AgentAvatarView,
-  AgentNameView: AgentNameView
+  AgentNameView: AgentNameView,
+  showUserMessages: showUserMessages
 };
