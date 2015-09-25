@@ -68,7 +68,7 @@ var fb_token = function() {
       time = new Moment().utc().add(e, 'seconds');
     }
     else {
-      var tzoneTime = new Social.Facebook.Time().processTimeToUTC(e);
+      var tzoneTime = new Social.Facebook.Token.Time().processTimeToUTC(e);
       time = new Moment(tzoneTime).utc();
     }
 
