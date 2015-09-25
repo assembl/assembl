@@ -46,7 +46,7 @@
              <% } %>
             <% } %>
 
-            <% if (user_is_connected) { %>
+            <% if (user_is_connected && user_can_export_post) { %>
               <li><a href="#" class="dropdown-listitem js_message-export-facebook">{{gettext("Export Post")}}</a></li>
             <% }%>
 

@@ -251,6 +251,7 @@ var MessageView = Marionette.LayoutView.extend({
       ctx: Ctx,
       i18n: i18n,
       user_can_see_email: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
+      user_can_export_post: Ctx.getCurrentUser().can(Permissions.EXPORT_POST),
       user_is_connected: !Ctx.getCurrentUser().isUnknownUser(),
       read: this.model.get('read'),
       nuggets: _.size(this.model.get('extracts')),
