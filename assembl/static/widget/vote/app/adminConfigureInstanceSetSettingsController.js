@@ -130,6 +130,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
 
     //var criterion = $scope.widget.settings.items[item_index].criteria[criterion_index];
     var criterion = $scope.widget.settings.items[item_index].vote_specifications[criterion_index];
+    console.log("criterion before reset: ", criterion);
     VoteWidgetService.resetCriterionFromType(criterion);
   };
 
@@ -281,7 +282,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
       if (object.hasOwnProperty(property)) {
         var object_type = "@type" in object ? object["@type"] : null;
         var property_type = fct_get_type(object_type, property);
-        console.log("fct_get_type() => ", object_type, property, property_type);
+        // console.log("fct_get_type() => ", object_type, property, property_type);
         if (property_type != null) {
           if (property_type == "integer") {
             var to_integer = parseInt(object[property], 10);
@@ -374,7 +375,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
               // we delay each API call a bit more than the previous one, so that the server does not get overwhelmed.
               // (by the use of the same question_id parameter for 2 criteria)
               var putJson = _.bind(VoteWidgetService.putJson, VoteWidgetService);
-              _.delay(putJson, (ajaxRequestsSent++) * 500, endpoint, post_data, result_holder);
+              _.delay(putJson, (ajaxRequestsSent++) * 500, endpoint, post_data, result_holder, "show_only_error");
               
             }
             else { // if it does not exist in the backend yet, we create it using POST
@@ -384,10 +385,12 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
               post_data["question_id"] = item_index;
 
               endpoint = collection_endpoint;
-              var postNewVoteSpecPromiseGenerator = function(){
-                return VoteWidgetService.postJson(endpoint, post_data, result_holder);
+              var postNewVoteSpecPromiseGenerator = function(endpoint, post_data, result_holder, display_filter){
+                return function(){
+                    return VoteWidgetService.postJson(endpoint, post_data, result_holder, display_filter);
+                }
               };
-              var promise = AssemblToolsService.afterDelayPromiseGenerator((ajaxRequestsSent++) * 500, postNewVoteSpecPromiseGenerator);
+              var promise = AssemblToolsService.afterDelayPromiseGenerator((ajaxRequestsSent++) * 500, postNewVoteSpecPromiseGenerator(endpoint, post_data, result_holder, "show_only_error"));
 
               promise.then(function(res) { // /!\ this is not function(data, status, headers), but the single parameter is an object which contains a data field
                 var data = "data" in res ? res.data : null;
@@ -415,6 +418,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
   };
 
   $scope.saveWidget = function() {
+    $scope.removeDanglingVoteSpecifications();
     $scope.saveVoteSpecificationsAndSettingsField();
   };
 
@@ -425,6 +429,40 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     var post_data = $scope.widget.settings;
     var result_holder = $("#step_criteria_groups_and_appearance_result");
     VoteWidgetService.putJson(endpoint, post_data, result_holder);
+  };
+
+  $scope.removeDanglingVoteSpecifications = function(){
+    var settings = $scope.widget.settings;
+    var vote_specifications = $scope.widget.vote_specifications;
+
+    var vote_specifications_really_used = null;
+    if ( "items" in settings ){
+        vote_specifications_really_used = _.pluck(settings.items, "vote_specifications");
+        // now vote_specifications_really_used is an array of arrays of vote specifications
+        vote_specifications_really_used = _.flatten(vote_specifications_really_used);
+        // now vote_specifications_really_used is an array of vote specifications
+        vote_specifications_really_used = _.pluck(vote_specifications_really_used, "@id");
+        // now vote_specifications_really_used is an array of vote specification ids
+    }
+
+    if ( vote_specifications && vote_specifications.length ){
+        vote_specifications.forEach(function(vote_spec, vote_spec_index){
+            var vote_spec_id = "@id" in vote_spec ? vote_spec["@id"] : null;
+            if ( vote_spec_id && !_.contains(vote_specifications_really_used, vote_spec_id) ){
+                // this vote spec has an @id but is not used by any item, so we have to DELETE it
+                console.log("because it is associated to the widget but not used by any item, we are going to DELETE vote spec " + vote_spec_id + " : ", vote_spec);
+                $http({
+                  method: 'DELETE',
+                  url: AssemblToolsService.resourceToUrl(vote_spec["@id"]),
+                  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).success(function(data, status, headers) {
+                  console.log("DELETE success");
+                }).error(function(status, headers) {
+                  console.log("DELETE error");
+                });
+            }
+        });
+    }
   };
 
   }]);

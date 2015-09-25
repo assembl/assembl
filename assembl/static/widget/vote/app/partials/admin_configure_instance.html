@@ -28,7 +28,10 @@
             <a href="#/admin/configure_instance_set_settings?widget_uri={{ widget_uri }}&target={{ target }}">{{'adminConfigureInstanceConfigureAppearance' | translate}}</a>
         </li>
         <li>
-            <a href="?config={{ widget_uri }}&target={{ target }}#/results">{{'adminConfigureInstanceSeeVoteResults' | translate}}</a>
+            <a href="?config={{ widget_uri }}&target={{ target }}#/results">{{'adminConfigureInstanceSeeVoteResultsForThisTarget' | translate}}</a>
+        </li>
+        <li>
+            <a href="?config={{ widget_uri }}#/results">{{'adminConfigureInstanceSeeVoteResultsForAllTargets' | translate}}</a>
         </li>
         <li>
             <button ng-click="deleteThisWidget()">{{'adminConfigureInstanceDelete' | translate}}</button>

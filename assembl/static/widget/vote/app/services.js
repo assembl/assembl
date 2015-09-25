@@ -437,10 +437,13 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
     if (criterion_type in this.mandatory_typed_criterion_fields) {
       for (var field in criterion) {
         if (criterion.hasOwnProperty(field)) {
-          if (!(
-            _.findWhere(this.mandatory_criterion_fields, { "key": field })
-            || _.findWhere(this.mandatory_typed_criterion_fields[criterion_type], { "key": field })
-          )) {
+          if (
+            field != "@id" // we should not remove its @id field if it has one (and that we want to talk about the same object)
+            && !(
+              _.findWhere(this.mandatory_criterion_fields, { "key": field })
+              || _.findWhere(this.mandatory_typed_criterion_fields[criterion_type], { "key": field })
+            )
+          ) {
             delete criterion[field];
           }
         }
@@ -481,7 +484,7 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
     }
   };
 
-  this.sendJson = function(method, endpoint, post_data, result_holder) {
+  this.sendJson = function(method, endpoint, post_data, result_holder, display_filter) {
     console.log("sendJson()");
 
     return $http({
@@ -495,7 +498,7 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).success(function(data, status, headers) {
       console.log("success");
-      if (result_holder)
+      if (result_holder && display_filter != "show_only_error")
         result_holder.text("Success!");
       /*console.log("data:");
       console.log(data);
@@ -505,7 +508,7 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       console.log(headers);*/
     }).error(function(data, status, headers, config) {
       console.log("error");
-      if (result_holder)
+      if (result_holder && display_filter != "show_only_success")
         result_holder.text("Error");
       console.log("data:");
       console.log(data);
@@ -516,12 +519,12 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
     });
   };
 
-  this.putJson = function(endpoint, post_data, result_holder) {
-    return this.sendJson('PUT', endpoint, post_data, result_holder);
+  this.putJson = function(endpoint, post_data, result_holder, display_filter) {
+    return this.sendJson('PUT', endpoint, post_data, result_holder, display_filter);
   };
 
-  this.postJson = function(endpoint, post_data, result_holder) {
-    return this.sendJson('POST', endpoint, post_data, result_holder);
+  this.postJson = function(endpoint, post_data, result_holder, display_filter) {
+    return this.sendJson('POST', endpoint, post_data, result_holder, display_filter);
   };
 
 }]);

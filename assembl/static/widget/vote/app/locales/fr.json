@@ -39,6 +39,8 @@
     "startDate": "Date de début",
     "endDate": "Date de fin",
     "adminConfigureInstanceSeeVoteResults": "Voir les résultats du vote",
+    "adminConfigureInstanceSeeVoteResultsForThisTarget": "Voir les résultats du vote pour cette idée",
+    "adminConfigureInstanceSeeVoteResultsForAllTargets": "Voir les résultats du vote pour toutes les idées",
     "gettingDataFromServerWidgetInstance": "Récupération des données depuis le serveur à propos de l'instance de widget",
     "adminConfigureInstanceSelectCriteria": "Sélectionnez les critères de vote",
     "adminConfigureInstanceLoadingCriteria": "Chargement des critères...",
