@@ -438,19 +438,19 @@ def get_cluster_idea_data(
             for cl in post_clusters]
 
 
-def alerts_in_idea_data(idea_data, tolerance=1):
+def alerts_in_idea_data(idea_data, tolerance=1, root=True):
     # TODO: Reimplement the homogeneity score for posts
     # which can be in many ideas at once.
     cluster_count = idea_data["cluster_count"]
     found_full = False
     results = []
     for child in idea_data.get("children", ()):
-        results.extend(alerts_in_idea_data(child, tolerance))
+        results.extend(alerts_in_idea_data(child, tolerance, False))
         if cluster_count - child["cluster_count"] <= tolerance:
             found_full = True
     if found_full:
         return results
-    if (cluster_count > tolerance and
+    if (cluster_count > tolerance and not root and
             (idea_data["count"] - cluster_count > tolerance)):
         return (idea_data["id"],)
     return results
@@ -458,7 +458,7 @@ def alerts_in_idea_data(idea_data, tolerance=1):
 
 def get_cluster_info_optics(
         discussion, num_topics=200, min_points=4, eps=0.02, metric='cosine',
-        scramble=False):
+        scrambler=None):
     _, tfidf_model, gensim_model = get_discussion_semantic_analysis(
         discussion.id, num_topics=num_topics,
         model_cls=gmodels.lsimodel.LsiModel)  # , power_iters=5, onepass=False
@@ -492,21 +492,27 @@ def get_cluster_info_optics(
         gensim_model[tfidf_corpus], num_topics, topic_intensities)
     optics = Optics(min_points, metric)
     clusters = optics.extract_clusters(model_matrix.todense(), eps)
-    clusters.sort(key=optics.cluster_depth)
-    dendrogram = optics.as_dendrogram(clusters)
     if not clusters:
         return (-1, (), [], {}, dendrogram)
-    if scramble:
-        # quasi-random data: do not use ordering.
-        post_clusters_by_cluster = {
-            cluster: post_ids[cluster.as_slice()]
-            for cluster in clusters}
-    else:
-        post_clusters_by_cluster = {
-            cluster: list(post_ids[optics.cluster_as_ids(cluster)])
-            for cluster in clusters}
+    clusters.sort(key=optics.cluster_depth)
     silhouette_score = metrics.silhouette_score(
         model_matrix, optics.as_labels(clusters), metric="cosine")
+    if scrambler:
+        # Revert the RD, so we get anti-clusters
+        optics.RDO = 1 - optics.RDO
+        real_clusters = clusters
+        anti_clusters = optics.extract_clusters(eps=eps*5)
+        anti_clusters.sort(key=optics.cluster_depth)
+        real_clusters = clusters
+        clusters = []
+        while real_clusters and anti_clusters:
+            l = real_clusters if scrambler.randint(0, 1) else anti_clusters
+            clusters.append(l.pop(0))
+    # TODO: dendrogram may fail due to anticluster mix
+    dendrogram = optics.as_dendrogram(clusters)
+    post_clusters_by_cluster = {
+        cluster: list(post_ids[optics.cluster_as_ids(cluster)])
+        for cluster in clusters}
     remainder = set(post_ids)
     for cluster in dendrogram.subclusters:
         remainder -= set(post_clusters_by_cluster[cluster.cluster])
@@ -732,12 +738,12 @@ def as_html(discussion, f=None, min_samples=4):
 
 
 
-def as_html_optics(discussion, f=None, min_samples=4, eps=0.2, scramble=False):
+def as_html_optics(discussion, f=None, min_samples=4, eps=0.2, scrambler=None):
     if not f:
         f = open('output.html', 'w')
     (silhouette_score, idea_info, cluster_infos, post_info, dendrogram
      ) = get_cluster_info_optics(
-        discussion, min_points=min_samples, eps=eps, scramble=scramble)
+        discussion, min_points=min_samples, eps=eps, scrambler=scrambler)
     clusters = [ci['cluster'] for ci in cluster_infos]
     f.write("<html><body>")
     f.write("<h1>Discussion %s</h1>" % discussion.topic.encode('utf-8'))
@@ -766,7 +772,7 @@ def as_html_optics(discussion, f=None, min_samples=4, eps=0.2, scramble=False):
             def write_idea_info(idea_info):
                 f.write("<li>")
                 if idea_info['id'] in alerts:
-                    f.write("<b>***</b>")
+                    f.write("<b>")
                 if idea_info['cluster_count'] > idea_info['only_here']:
                     f.write("{id}: <i>{only_here}</i>/<b>{cluster_count}</b>/{count} "
                             .format(**idea_info))
@@ -774,6 +780,8 @@ def as_html_optics(discussion, f=None, min_samples=4, eps=0.2, scramble=False):
                     f.write("{id}: <b>{cluster_count}</b>/{count} "
                             .format(**idea_info))
                 f.write(idea_info['title'].encode('utf-8'))
+                if idea_info['id'] in alerts:
+                    f.write("</b>")
                 if idea_info.get('children', None):
                     f.write("<ul>")
                     for child in idea_info['children']:

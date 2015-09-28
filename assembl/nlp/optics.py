@@ -410,7 +410,7 @@ class Optics(object):
                     check.subclusters.append(Dendrogram(cluster, check))
                     last = check.subclusters[-1]
                     break
-                assert cluster.start >= check.cluster.end
+                # assert cluster.start >= check.cluster.end
                 check = check.parent
             else:
                 assert False

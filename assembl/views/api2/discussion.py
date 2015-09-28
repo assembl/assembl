@@ -471,14 +471,15 @@ def show_optics_cluster(request):
     eps = float(request.GET.get("eps", "0.02"))
     min_points = int(request.GET.get("min_points", "3"))
     test_code = request.GET.get("test_code", None)
-    scramble = False
+    scrambler = None
     if test_code:
-        salt = get_config().get('session.key') + test_code + discussion.slug
-        from hashlib import md5
-        scramble = bool(ord(md5(salt).digest()[-1]) % 2)
+        from random import Random
+        scrambler = Random()
+        scrambler.seed(
+            get_config().get('session.key') + test_code + discussion.slug)
     discussion = request.context._instance
     output = StringIO()
     from assembl.nlp.clusters import as_html_optics
-    as_html_optics(discussion, output, min_points, eps, scramble)
+    as_html_optics(discussion, output, min_points, eps, scrambler)
     output.seek(0)
     return Response(body_file=output, content_type='text/html')
