@@ -193,7 +193,7 @@ videosApp.controller('videosCtl',
             if (!lang)
                 lang = 'en';
             var deferred = $.Deferred();
-            $.ajax("http://" + lang + ".wikipedia.org/w/api.php" +
+            $.ajax("https://" + lang + ".wikipedia.org/w/api.php" +
                 "?action=query&continue=&prop=revisions" +
                 "&rvprop=content&format=json&titles=" + page,
                     {
@@ -446,7 +446,7 @@ videosApp.controller('videosCtl',
                 return;
               }
 
-              var videoUrl = "http://www.youtube.com/watch?v=" + $scope.currentVideoId;
+              var videoUrl = "https://www.youtube.com/watch?v=" + $scope.currentVideoId;
               var videoTitle = $scope.currentVideoTitle; // TODO: use these last 2 pieces of info
               console.log("messageSubject: ", messageSubject);
               console.log("messageContent: ", messageContent);

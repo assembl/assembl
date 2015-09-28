@@ -126,7 +126,7 @@ widgetServices.service('JukeTubeVideosService', ['$window', '$rootScope', '$log'
     };
 
     var tag = $window.document.createElement('script');
-    tag.src = "http://www.youtube.com/iframe_api";
+    tag.src = "https://www.youtube.com/iframe_api";
     var scriptTags = $window.document.getElementsByTagName('script');
     if (scriptTags && scriptTags[0])
     {
