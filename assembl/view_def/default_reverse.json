@@ -341,5 +341,31 @@
     },
     "BinaryVoteSpecification": {
         "@extends": "AbstractVoteSpecification"
+    },
+    "Document": {
+        "uri": "uri_id",
+        "oembed_type": true,
+        "mime_type": true,
+        "title": true,
+        "description": true,
+        "author_name": true,
+        "author_url": true,
+        "thumbnail_url": true,
+        "site_name": true
+    },
+    "Attachment": {
+        "idAttachedDocument": "document",
+        "idCreator": "creator",
+        "attachmentPurpose": true,
+        "title": true,
+        "description": true
+    },
+    "PostAttachment": {
+        "@extends": "Attachment",
+         "idObjectAttachedTo": "post"
+    },
+    "IdeaAttachment": {
+        "@extends": "Attachment",
+        "idObjectAttachedTo": "idea"
     }
 }

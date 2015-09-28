@@ -6,7 +6,8 @@ var _ = require('../shims/underscore.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Base = require('./base.js'),
-    Types = require('../utils/types.js');
+    Types = require('../utils/types.js'),
+    Attachment = require('./attachments.js');
 
 /**
  * @class MessageModel
@@ -17,6 +18,10 @@ var MessageModel = Base.Model.extend({
    * @type {String}
    */
   urlRoot: Ctx.getApiUrl('posts'),
+
+  getApiV2Url: function() {
+    return Ctx.getApiV2DiscussionUrl('/posts/'+this.getNumericId());
+  },
 
   /**
    * Default values
@@ -36,8 +41,18 @@ var MessageModel = Base.Model.extend({
     avatarUrl: null,
     date: null,
     bodyMimeType: null,
+    attachments: undefined,
     publishes_synthesis_id: null,
     metadata_json: null // this property needs to exist to display the inspiration source of a message (creativity widget)
+  },
+
+  parse: function(rawModel) {
+    //console.log("Message Model parse() called");
+    rawModel.attachments = new Attachment.Collection(rawModel.attachments,
+      {parse: true,
+      objectAttachedToModel: this}
+      );
+    return rawModel;
   },
 
   /**

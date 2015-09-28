@@ -78,6 +78,7 @@ var sourceCollection = Base.Collection.extend({
 
   // model: Source,
   supportedSources: {
+    //Note:  All these constants should be in utils/types.js, not here as strings
     Base: ['ContentSource', 'PostSource'],
     Email: ['AbstractMailbox', 'IMAPMailbox', 'MailingList', 'AbstractFilesystemMailbox', 'MaildirMailbox'],
     Loomio: ['FeedPostSource', 'LoomioPostSource'], 

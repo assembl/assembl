@@ -465,6 +465,12 @@ $previewNumLines: 4;
     &.hidden {
       display: none;
     }
+    .attachments {
+      text-align: left;
+      .embeddedFile {
+        margin-top: 1em;
+      }
+    }
   }
 
   //

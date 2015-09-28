@@ -314,12 +314,7 @@ Context.prototype = {
    *
    * ex: 'local:Extract/1' -> '/api/v1/discussion/1/generic/Extract/1'
    */
-   
-  //FIXME: this method never use in app
-  /*getGenericApiUrl: function(id){
-   var url = '/api/v1/discussion/' + this.getDiscussionId() + '/generic/';
-   return id.replace('local:', url);
-   },*/
+
    
   /**
    * @return {Object} The Object with mesagelistconfig in the localStorage

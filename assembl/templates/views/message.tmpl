@@ -130,6 +130,7 @@
     <h4 class="message-subject js_messageTitle h4"><%= message.get('subject') %></h4>
     {# This is the part that annotator processes.  Do NOT introduce ANY HTML within this div #}
     <div class="message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></div>
+    <div class="messageAnnotations js_messageAnnotations"></div>
     <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>
   <% } %>
   <div class="js_messageBottomMenu message-menu message-menu-actions">

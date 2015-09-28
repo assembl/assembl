@@ -14,8 +14,13 @@ var Backbone = require('../shims/backbone.js'),
     autosize = require('jquery-autosize'),
     Messages = require('../models/message.js'),
     Agents = require('../models/agents.js'),
+    Documents = require('../models/documents.js'),
+    Attachments = require('../models/attachments.js'),
+    DocumentView = require('./documents.js'),
+    AttachmentViews = require('./attachments.js'),
     Promise = require('bluebird'),
-    Analytics = require('../internal_modules/analytics/dispatcher.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js'),
+    linkify = require('linkifyjs');
 
 /**
  * @init
@@ -62,7 +67,7 @@ var Backbone = require('../shims/backbone.js'),
  *  }
  */
 
-var messageSend = Marionette.ItemView.extend({
+var messageSend = Marionette.LayoutView.extend({
   template: '#tmpl-messageSend',
   className: 'messageSend',
   initialize: function(options) {
@@ -83,6 +88,20 @@ var messageSend = Marionette.ItemView.extend({
     }
     this.messageList = options.messageList;
     this.msg_in_progress_ctx = options.msg_in_progress_ctx;
+    
+    if(!options.model) {
+      this.model = new Messages.Model();
+    }
+
+    this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model});
+
+    var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
+      childView: AttachmentViews.AttachmentEditableView
+    });
+
+    this.documentsView = new AttachmentEditableCollectionView({
+      collection: this.attachmentsCollection
+    });
   },
 
   ui: {
@@ -91,7 +110,12 @@ var messageSend = Marionette.ItemView.extend({
     messageBody: '.js_messageSend-body',
     messageSubject: '.messageSend-subject',
     topicSubject: '.topic-subject .formfield',
-    permissionDeniedWarningMessage: '.js_warning-message-for-message-post'
+    permissionDeniedWarningMessage: '.js_warning-message-for-message-post',
+    attachments: '.js_attachments'
+  },
+
+  regions: {
+    attachments: '@ui.attachments'
   },
 
   events: {
@@ -151,7 +175,17 @@ var messageSend = Marionette.ItemView.extend({
           that.ui.permissionDeniedWarningMessage.html(warningMessage);
         });
       }
+      //In case there was a message in progess just restored
+      this.processHyperlinks();
     },
+
+  onShow: function() {
+    this.attachments.show(this.documentsView);
+  },
+
+  onAttach: function() {
+    this.ui.messageBody.autosize();
+  },
 
   onSendMessageButtonClick: function(ev) {
     var btn = $(ev.currentTarget),
@@ -211,18 +245,18 @@ var messageSend = Marionette.ItemView.extend({
     // This is not too good, but it allows the next render to come.
     message_subject_field.value = "";
 
-    var model = new Messages.Model({
+    this.model.set({
       subject: message_subject,
       message: message_body,
       reply_id: reply_message_id,
       idea_id: reply_idea_id
     });
 
-    model.save(null, {
+    this.model.save(null, {
       success: function(model, resp) {
         var analytics = Analytics.getInstance();
         analytics.trackEvent(analytics.events['MESSAGE_POSTED_ON_'+that.analytics_context])
-
+        that.attachmentsCollection.invoke('save');
         btn.text(i18n.gettext('Message posted!'));
 
         that.ui.messageBody.val('');
@@ -414,8 +448,74 @@ var messageSend = Marionette.ItemView.extend({
     */
   },
 
+  _processHyperlinks: _.throttle(function() {
+    var that = this,
+        messageText = this.ui.messageBody.val()||'',
+        links = linkify.find(messageText),
+        missingLinks = [],
+        goneModels = [];
+    //console.log("_processHyperlinks called");
+    //console.log(links);
+    //console.log(this.attachmentsCollection);
+    this.attachmentsCollection.comparator = function (attachmentModel) {
+      var index = _.findIndex(links, function(link) {
+        //console.log(attachmentModel.getDocument().get('uri'), link.href);
+        return attachmentModel.getDocument().get('uri') === link.href;
+      })
+      //console.log("attachmentsCollection comparator returning: ", index);
+      return index;
+    };
+    goneModels = that.attachmentsCollection.filter(function(attachment) {
+      var document = attachment.getDocument();
+      //console.log("filtering for goneModels checking document:", document);
+      var found = _.find(links, function(link) {
+        //console.log("filtering for goneModels comparing:", document.get('uri'), link.href);
+        return document.get('uri') === link.href?true:false; 
+      });
+      return found === undefined?true:false;
+    });
+    //console.log("goneModels: ", goneModels);
+    that.attachmentsCollection.remove(goneModels);
+
+    missingLinks = _.filter(links, function(link) {
+      var retval;
+      //console.log("Checking link", link.href)
+      retval = that.attachmentsCollection.filter(function(attachment) {
+        var document = attachment.getDocument();
+        //console.log("filtering for missingLinks comparing:", document.get('uri'), link.href, document.get('uri') === link.href);
+        return (document.get('uri') === link.href)?true:false;
+      }).length === 0;
+      //console.log("Checking link", link.href, "returned", retval)
+      return retval;
+    });
+    //console.log("missingLinks: ", missingLinks);
+
+    _.each(missingLinks, function(link) {
+      if(link.type !== 'url') {
+        console.warn("unknown link type: ", link.type);
+        return;
+      }
+      var document = new Documents.Model({
+                                  uri: link.href}),
+          attachment = new Attachments.Model({
+            document: document,
+            objectAttachedToModel: that.model,
+            idCreator: Ctx.getCurrentUser().id
+          })
+      //console.log("Adding missing url", document);
+      that.attachmentsCollection.add(attachment);
+    });
+    //console.log("Attachments after _processHyperlinks:", this.attachmentsCollection);
+  }, 500),
+
+  processHyperlinks: function() {
+    var that = this;
+    this._processHyperlinks();
+  },
+  
   onChangeBody: function() {
     this.ui.messageBody.autosize();
+    this.processHyperlinks();
   },
 
   showPopInFirstPost: function() {

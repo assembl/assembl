@@ -33,9 +33,9 @@
     "mocha": "~2.2.5",
     "modernizr": "~2.8.3",
     "sockjs": "~0.3.4",
-    "underscore": "~1.7.0"
+    "underscore": "~1.8.3"
   },
   "resolutions": {
-    "underscore": "~1.7.0"
+    "underscore": "~1.8.3"
   }
 }

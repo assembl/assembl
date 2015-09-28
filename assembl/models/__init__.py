@@ -225,3 +225,8 @@ from .facebook_integration import (
     FacebookSinglePostSource,
     FacebookPost
 )
+
+from .attachment import (
+    Document,
+    Attachment
+)

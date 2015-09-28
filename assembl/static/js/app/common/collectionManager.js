@@ -343,7 +343,7 @@ var CollectionManager = Marionette.Controller.extend({
                   console.log("executeRequest resolving for id", id, deferredList['count'], " requests queued for that id");
                 }
 
-                structureModel.set(jsonData);
+                structureModel.set(structureModel.parse(jsonData));
                 structureModel.viewDef = viewDef;
                 if (deferredList !== undefined) {
                   deferredList['promiseResolver'].resolve(structureModel);

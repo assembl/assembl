@@ -14,6 +14,10 @@ var Types = {
   USER: 'User',
   PARTNER_ORGANIZATION: 'PartnerOrganization',
   WEBPAGE: 'Webpage',
+  DOCUMENT: 'Document',
+  POST_ATTACHMENT: 'PostAttachment',
+  IDEA_ATTACHMENT: 'IdeaAttachment',
+
   initInheritance: function(inheritance) {
     // This is small, I think it can be synchronous.
     var script = document.getElementById("inheritance-json");

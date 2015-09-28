@@ -17,6 +17,7 @@ var Marionette = require('../shims/marionette.js'),
     messageExport = require('./messageExportModal.js'),
     AgentViews = require('./agent.js'),
     Types = require('../utils/types.js'),
+    AttachmentViews = require('./attachments.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
@@ -125,12 +126,15 @@ var MessageView = Marionette.LayoutView.extend({
       likedLink: ".js_likeButton",
       likeCounter: ".js_likeCount",
       avatar: ".js_avatarContainer",
-      name: ".js_nameContainer"
+      name: ".js_nameContainer",
+      annotations: ".js_messageAnnotations"
     },
 
     regions: {
       avatar: "@ui.avatar",
-      name: "@ui.name"
+      name: "@ui.name",
+      annotations: "@ui.annotations",
+      messageReplyBox: "@ui.messageReplyBox"
     },
 
   /**
@@ -369,7 +373,7 @@ var MessageView = Marionette.LayoutView.extend({
         Ctx.makeLinksShowOembedOnHover(this.$el.find(".inspirationSource"));
       }
 
-      that.replyView = new MessageSendView({
+      this.replyView = new MessageSendView({
         allow_setting_subject: false,
         reply_message_id: modelId,
         body_help_message: i18n.gettext('Type your response here...'),
@@ -382,12 +386,12 @@ var MessageView = Marionette.LayoutView.extend({
         msg_in_progress_ctx: modelId,
         mandatory_subject_missing_msg: null
       });
-      that.ui.messageReplyBox.append(this.replyView.render().el);
 
       this.postRender();
 
       if (this.replyBoxShown || partialMessage.body) {
         this.ui.messageReplyBox.removeClass('hidden');
+        this.messageReplyBox.show(this.replyView);
         if (this.replyBoxHasFocus) {
           this.focusReplyBox();
         }
@@ -405,6 +409,18 @@ var MessageView = Marionette.LayoutView.extend({
       if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
         //Only the full body view uses annotator
         this.messageListView.requestAnnotatorRefresh();
+
+        var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
+          childView: AttachmentViews.AttachmentEditableView
+        });
+
+        this.annotationsCollectionView = new AttachmentEditableCollectionView({
+          collection: this.model.get('attachments')
+        });
+        
+
+        this.annotations.show(this.annotationsCollectionView);
+
       }
 
       if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle !== this.availableMessageViewStyles.FULL_BODY) {
