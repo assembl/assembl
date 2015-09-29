@@ -26,9 +26,21 @@
       <h3 class="h3">{{ gettext("Discussion settings") }}</h3>
     </div>
     <div id="content-container" class="content-container">
-      <div class="gr mtl">
+<!--       <div class="gr mtl">
         <div class="gu gu-1of1">
-						<div id="source-container"></div>
+						<div id="source-container"></div> -->
+            <div class="bx bx-alert-success hidden">
+              <button class="btn btn-cancel btn-sm bx-close" type="button">
+                <i class="icon-delete"></i>
+              </button>
+              {{ gettext("Source successfully added") }}
+            </div>
+
+            <div class="mal tar">
+              <a href="#" class="js_addSource"><i class="icon-add"></i>&nbsp; {{ gettext("Add Source") }}</a>
+            </div>
+
+            <div id="source-content" class="phl"></div>
         </div>
       </div>
     </div>
