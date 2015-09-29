@@ -890,7 +890,48 @@ var fbLayout = Marionette.LayoutView.extend({
     }
 });
 
+var fbInitView = Marionette.LayoutView.extend({
+  template: _.template("<div class='js_content_source'></div>"), //Cheating, don't want to create another file for just a 1 liner
+  ui: {
+    root: '.js_content_source'
+  }, 
+  regions: {
+    parent: '@ui.root'
+  },
+
+  initialize: function(options){
+    this.vent = _.extend({}, Backbone.Events);
+  },
+
+  onShow: function(){
+    var that = this;
+    checkState(function(fbState) {
+      console.log('The state of the checkState function', fbState);
+      if (fbState.ready) {
+        var fbView = new fbLayout({
+          creator: that.messageCreator,
+          model: that.model,
+          vent: that.vent
+        });
+
+        that.parent.show(fbView);
+      }
+      else {
+        var errView = new errorView({
+          ready: fbState.ready,
+          errorState: fbState.errorState,
+          vent: that.vent
+        });
+
+        that.parent.show(errView);
+      }
+    });
+
+  }
+});
+
 module.exports = {
+  init: fbInitView,
   root: fbLayout,
   error: errorView,
   resolveState: checkState

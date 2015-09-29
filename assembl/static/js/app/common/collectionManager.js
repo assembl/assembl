@@ -129,9 +129,10 @@ var CollectionManager = Marionette.Controller.extend({
   _allDiscussionModel: undefined,
   _allDiscussionModelPromise: undefined,
 
+  //Deprecated -> This is the old way. Will be deleted soon
   _allDiscussionSourceCollection: undefined,
   _allDiscussionSourceCollectionPromise: undefined,
-
+  //
   _currentUserModel: undefined,
   _currentUserModelPromise: undefined,
 
@@ -711,7 +712,7 @@ var CollectionManager = Marionette.Controller.extend({
       return this._allDiscussionSourceCollection2Promise;
     }
 
-    this._allDiscussionSourceCollection2 = new DiscussionSource.Collection();
+    this._allDiscussionSourceCollection2 = new DiscussionSources.Collection();
     this._allDiscussionSourceCollection2.collectionManager = this;
     this._allDiscussionSourceCollection2Promise = Promise.resolve(this._allDiscussionSourceCollection2.fetch())
         .thenReturn(this._allDiscussionSourceCollection2)

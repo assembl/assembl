@@ -6,7 +6,7 @@ var Base = require('./base.js'),
 
 //ContentSource + PostSource
 var Source = Base.Model.extend({
-  urlRoot: Ctx.getApiV2DiscussionUrl('sources'),
+  // urlRoot: Ctx.getApiV2DiscussionUrl('sources'),
   defaults: {
     'name': 'ContentSource_' + this.cid,
     'creation_date': null,
@@ -42,8 +42,6 @@ var Source = Base.Model.extend({
 //Lump different email types into one email type??
 var Email = Source.extend({
   defaults: function() {
-    console.log('this', this);
-    console.log('The proto', Source.prototype);
     return _.extend(Source.prototype.defaults, {
       'admin_sender': '',
       'post_email_address': '',
@@ -57,8 +55,6 @@ var Email = Source.extend({
 
 var Facebook = Source.extend({
   defaults: function() {
-    console.log('this', this);
-    console.log('The proto', Source.prototype);
     return _.extend(Source.prototype.defaults, {
       'fb_source_id': null,
       'url_path': null,
@@ -78,37 +74,85 @@ var ContentSourceId = Base.Model.extend({
 
 var sourceCollection = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl() + 'sources',
-  model: Source,
+  url2: Ctx.getApiV2DiscussionUrl() + 'sources',
+
+  // model: Source,
+  supportedSources: {
+    Base: ['ContentSource', 'PostSource'],
+    Email: ['AbstractMailbox', 'IMAPMailbox', 'MailingList', 'AbstractFilesystemMailbox', 'MaildirMailbox'],
+    Loomio: ['FeedPostSource', 'LoomioPostSource'], 
+    EdgeRyder: ['EdgeSenseDrupalSource'],
+    Facebook: ['FacebookGenericSource', 'FacebookGroupSource', 'FacebookGroupSourceFromUser', 'FacebookPagePostsSource', 'FacebookPageFeedSource', 'FacebookSinglePostSource']
+  },
+
+  isBase: function(t){
+    return _.contains(this.supportedSources.Base, t);
+  },
+
+  isEmail: function(t){
+    return _.contains(this.supportedSources.Email, t);
+  },
+
+  isLoomio: function(t){
+    return _.contains(this.supportedSources.Loomio, t);
+  },
+
+  isEdgeRyder: function(t){
+    return _.contains(this.supportedSources.EdgeRyder, t);
+  },
+
+  isFacebook: function(t){
+    return _.contains(this.supportedSources.Facebook, t);
+  },
+
+  getModelClass: function(t){
+    if (this.isBase(t)) {
+      return Source;
+    }
+    else if (this.isEmail(t)){
+      return Email;
+    }
+    else if (this.isFacebook(t)){
+      return Facebook;
+    }
+    else if (this.isLoomio(t)){
+      console.error('Loomio model is not yet implemented');
+      return Source
+    }
+    else if (this.isEdgeRyder(t)){
+      console.error('EdgeRyder model is not yet implemented');
+      return Source;
+    }
+    else {
+      throw new Error('Type ' + t + ' is not a supported type!');
+    }
+  },
+
+  getViewClass: function(t){
+    if (this.isEmail(t)){
+      var c = require('../views/admin/emailSettings.js');
+      return c
+    }
+    else if (this.isFacebook(t)){
+      var c = require('../views/facebookModal.js');
+      return c.init;
+    }
+    else {
+      throw new Error('Type ' + t + ' does not have a view!');
+    }
+  },
+
   parse: function(res) {
-    var that = this;
+    var that = this, 
+        models = [];
     _.each(res, function(s, i, arr) {
-      var t = s["@type"];
-      switch (t) {
-        case 'ContentSource':
-        case 'PostSource':
-          that.add(new Source(s));
-          break;
-        case 'AbstractMailbox':
-        case 'IMAPMailbox':
-        case 'MailingList':
-        case 'AbstractFilesystemMailbox':
-        case 'MaildirMailbox':
-          that.add(new Email(s));
-          break;
-        case 'FacebookGenericSource':
-        case 'FacebookGroupSource':
-        case 'FacebookGroupSourceFromUser':
-        case 'FacebookPagePostsSource':
-        case 'FacebookPageFeedSource':
-        case 'FacebookPageFeedSource':
-        case 'FacebookSinglePostSource':
-          that.add(new Facebook(s));
-          break;
-        default:
-          console.error('Could not add object to source collection', s);
-          break;
-      }
+      var t = s["@type"],
+          cls = that.getModelClass(t);
+
+      models.push(new cls(s));
     });
+
+    return models;
   }
 });
 
