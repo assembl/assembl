@@ -631,6 +631,14 @@ def velruse_login_complete_view(request):
     for conflicting_profile in conflicting_profiles:
         base_profile.merge(conflicting_profile)
         session.delete(conflicting_profile)
+
+    # If base_profile is still an AgentProfile at this point
+    # then it needs to be upgraded to a User
+    if not isinstance(base_profile, User):
+        base_profile = base_profile.change_class(
+            User, None,
+            verified=True,
+            last_login=now)
     # Set username
     if not base_profile.username:
         username = None

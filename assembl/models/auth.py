@@ -174,11 +174,16 @@ class AgentProfile(Base):
         for status in other_profile.agent_status_in_discussion[:]:
             if status.discussion_id in my_status_by_discussion:
                 my_status = my_status_by_discussion[status.discussion_id]
-                my_status.user_created_on_this_discussion |= status.user_created_on_this_discussion
-                my_status.first_visit = minN(my_status.first_visit, status.first_visit)
-                my_status.last_visit = maxN(my_status.last_visit, status.last_visit)
-                my_status.first_subscribed = minN(my_status.first_subscribed, status.first_subscribed)
-                my_status.last_unsubscribed = minN(my_status.last_unsubscribed, status.last_unsubscribed)
+                my_status.user_created_on_this_discussion |= status.\
+                    user_created_on_this_discussion
+                my_status.first_visit = minN(my_status.first_visit,
+                                             status.first_visit)
+                my_status.last_visit = maxN(my_status.last_visit,
+                                            status.last_visit)
+                my_status.first_subscribed = minN(my_status.first_subscribed,
+                                                  status.first_subscribed)
+                my_status.last_unsubscribed = minN(my_status.last_unsubscribed,
+                                                   status.last_unsubscribed)
                 status.delete()
             else:
                 status.agent_profile = self
