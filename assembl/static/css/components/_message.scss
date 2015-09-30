@@ -5,7 +5,9 @@ $readUnreadIndicatorSize: 7px;
 $mesageSpacing: 6px;
 $messagePaddingLR: 7px;
 $messageBodyFontSize: 13px;
-$mesageBodyLineHeight: $baseLineHeight;
+$mesageBodyLineHeight: 19px;
+//To keep text readable
+$messageBodyMaxWidth: 500px;
 $ten: 10px;
 $separatorBulletMargin: 0.6em;
 $previewNumLines: 4;
@@ -156,6 +158,7 @@ $previewNumLines: 4;
     }
     .message-body {
       line-height: $mesageBodyLineHeight;
+      max-width: $messageBodyMaxWidth;
       margin-top: $mesageSpacing;
       font-size: $messageBodyFontSize;
     }
@@ -325,6 +328,14 @@ $previewNumLines: 4;
 
     .readUnreadIndicatorClickZone {
       position: static;
+    }
+  }
+  
+  .messageAttachments {
+    max-width: $messageBodyMaxWidth;
+    position: relative;    //So attachements scale
+    .attachment {
+      margin: $mesageSpacing 0px $mesageSpacing 0px;
     }
   }
 

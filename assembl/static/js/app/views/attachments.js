@@ -15,7 +15,7 @@ var Marionette = require('../shims/marionette.js'),
 var AttachmentEditableView = Marionette.LayoutView.extend({
   template: '#tmpl-attachmentEditable',
 
-  className: 'attachmentEditable',
+  className: 'attachment attachmentEditable',
 
   initialize: function(options) {
 

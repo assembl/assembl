@@ -127,13 +127,13 @@ var MessageView = Marionette.LayoutView.extend({
       likeCounter: ".js_likeCount",
       avatar: ".js_avatarContainer",
       name: ".js_nameContainer",
-      annotations: ".js_messageAnnotations"
+      attachments: ".js_regionMessageAttachments"
     },
 
     regions: {
       avatar: "@ui.avatar",
       name: "@ui.name",
-      annotations: "@ui.annotations",
+      attachmentsRegion: "@ui.attachments",
       messageReplyBox: "@ui.messageReplyBox"
     },
 
@@ -414,12 +414,12 @@ var MessageView = Marionette.LayoutView.extend({
           childView: AttachmentViews.AttachmentEditableView
         });
 
-        this.annotationsCollectionView = new AttachmentEditableCollectionView({
+        this.attachmentsCollectionView = new AttachmentEditableCollectionView({
           collection: this.model.get('attachments')
         });
         
 
-        this.annotations.show(this.annotationsCollectionView);
+        this.attachmentsRegion.show(this.attachmentsCollectionView);
 
       }
 
