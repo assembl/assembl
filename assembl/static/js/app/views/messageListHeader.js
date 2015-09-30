@@ -263,17 +263,33 @@ var MessageListHeader = Marionette.ItemView.extend({
    */
   onAddFilter: function(ev) {
       var that = this,
-          filterValue = ev.currentTarget.getAttribute('data-filtervalue'),
           filterId = ev.currentTarget.getAttribute('data-filterid'),
           filterDef = this.messageList.currentQuery.getFilterDefById(filterId),
           filter = new filterDef(),
           queryChanged = false;
-      filter.getImplicitValuePromise().then(function(implicitValue) {
-        queryChanged = that.messageList.currentQuery.addFilter(filterDef, implicitValue);
+
+      var execute = function(value){
+        queryChanged = that.messageList.currentQuery.addFilter(filterDef, value);
         if (queryChanged) {
           that.messageList.render();
         }
-      })
+      };
+
+      var should_ask_value_from_user = "should_ask_value_from_user" in filterDef ? filterDef.should_ask_value_from_user : false;
+      if ( should_ask_value_from_user && "askForValue" in filter && _.isFunction(filter.askForValue) ){
+        filter.askForValue();
+        filter.getImplicitValuePromise().then(function(implicitValue) {
+          if ( implicitValue ){
+            that.messageList.currentQuery.clearFilter(filterDef);
+            execute(implicitValue);
+          }
+        });
+      }
+      else {
+        filter.getImplicitValuePromise().then(function(implicitValue) {
+          execute(implicitValue);
+        });
+      }
 
     },
 

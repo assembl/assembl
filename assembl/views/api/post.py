@@ -122,6 +122,7 @@ def get_posts(request):
         assert AgentProfile.get(post_replies_to), "Unable to find agent profile with id " + post_replies_to
 
     posted_after_date = request.GET.get('posted_after_date')
+    posted_before_date = request.GET.get('posted_before_date')
 
     PostClass = SynthesisPost if only_synthesis == "true" else Post
     if order == 'score':
@@ -194,6 +195,12 @@ def get_posts(request):
         posted_after_date = parse_datetime(posted_after_date)
         if posted_after_date:
             posts = posts.filter(PostClass.creation_date >= posted_after_date)
+        #Maybe we should do something if the date is invalid.  benoitg
+
+    if posted_before_date:
+        posted_before_date = parse_datetime(posted_before_date)
+        if posted_before_date:
+            posts = posts.filter(PostClass.creation_date <= posted_before_date)
         #Maybe we should do something if the date is invalid.  benoitg
     
     if post_author_id:

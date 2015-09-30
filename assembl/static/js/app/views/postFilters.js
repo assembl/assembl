@@ -553,6 +553,112 @@ _.extend(FilterPostIsRead.prototype, {
       return i18n.gettext('Only include messages that have previously been marked read.');
     }
   });
+
+
+function FilterPostIsPostedAfterDate() {
+    AbstractFilterSingleValue.call(this);
+}
+
+FilterPostIsPostedAfterDate.date_value = null;
+FilterPostIsPostedAfterDate.should_ask_value_from_user = true;
+
+FilterPostIsPostedAfterDate.setDate = function(date){
+    // we want to set something like "2015-04-11T01%3A59%3A23Z"
+    var processInputDate = function(d){
+        var d2 = new Date(d);
+        return d2.toISOString();
+    };
+    date = processInputDate(date);
+    FilterPostIsPostedAfterDate.date_value = date;
+};
+
+FilterPostIsPostedAfterDate.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostIsPostedAfterDate.prototype, {
+    getId: function() {
+      return 'is_posted_after_date';
+    },
+    getImplicitValuePromise: function() {
+        return Promise.resolve(FilterPostIsPostedAfterDate.date_value);
+    },
+    getServerParam: function() {
+      return 'posted_after_date';
+    },
+    getLabelPromise: function() {
+      return this.getImplicitValuePromise().then(function(value) {
+        // commented because the label of the filter in filter menu is the same as the label of the tag when the filter is active
+        //if ( value === null ){
+            return i18n.gettext('Messages posted after...');
+        //}
+        //return i18n.sprintf(i18n.gettext('Messages posted after %s'), Ctx.getNiceDateTime(value));
+      });
+    },
+    getHelpText: function() {
+      return i18n.gettext('Only include posts created after a given date.');
+    },
+    askForValue: function(){
+        var defaultValue = FilterPostIsPostedAfterDate.date_value ? FilterPostIsPostedAfterDate.date_value : "2015-01-01";
+        var val = window.prompt(i18n.gettext('Please type a date. The filter will then show only posts which have been created after this date. Example: 2015-01-01'), defaultValue);
+        if ( val ){
+            FilterPostIsPostedAfterDate.setDate(val);
+        }
+        return val;
+    }
+});
+
+
+function FilterPostIsPostedBeforeDate() {
+    AbstractFilterSingleValue.call(this);
+}
+
+FilterPostIsPostedBeforeDate.date_value = null;
+FilterPostIsPostedBeforeDate.should_ask_value_from_user = true;
+
+
+FilterPostIsPostedBeforeDate.setDate = function(date){
+    // we want to set something like "2015-04-11T01%3A59%3A23Z"
+    var processInputDate = function(d){
+        var d2 = new Date(d);
+        return d2.toISOString();
+    };
+    date = processInputDate(date);
+    FilterPostIsPostedBeforeDate.date_value = date;
+};
+
+FilterPostIsPostedBeforeDate.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostIsPostedBeforeDate.prototype, {
+    getId: function() {
+      return 'is_posted_before_date';
+    },
+    getImplicitValuePromise: function() {
+      return Promise.resolve(FilterPostIsPostedBeforeDate.date_value);
+    },
+    getServerParam: function() {
+      return 'posted_before_date';
+    },
+    getLabelPromise: function() {
+      return this.getImplicitValuePromise().then(function(value) {
+        // commented because the label of the filter in filter menu is the same as the label of the tag when the filter is active
+        //if ( value === null ){
+            return i18n.gettext('Messages posted before...');
+        //}
+        //return i18n.sprintf(i18n.gettext('Messages posted before %s'), Ctx.getNiceDateTime(value));
+      });
+    },
+    getHelpText: function() {
+      return i18n.gettext('Only include posts created before a given date.');
+    },
+    askForValue: function(){
+        var defaultValue = FilterPostIsPostedBeforeDate.date_value ? FilterPostIsPostedBeforeDate.date_value : "2015-01-01";
+        var val = window.prompt(i18n.gettext('Please type a date. The filter will then show only posts which have been created before this date. Example: 2015-01-01'), defaultValue);
+        if ( val ){
+            FilterPostIsPostedBeforeDate.setDate(val);
+        }
+        return val;
+    }
+});
+
+
+
   
 function FilterPostIsPostedSinceLastSynthesis() {
     AbstractFilterSingleValue.call(this);
@@ -601,6 +707,8 @@ var availableFilters = {
     POST_IS_UNREAD: FilterPostIsUnread,
     POST_IS_READ: FilterPostIsRead,
     POST_IS_POSTED_SINCE_LAST_SYNTHESIS: FilterPostIsPostedSinceLastSynthesis,
+    POST_IS_POSTED_AFTER_DATE: FilterPostIsPostedAfterDate,
+    POST_IS_POSTED_BEFORE_DATE: FilterPostIsPostedBeforeDate,
     POST_IS_FROM: FilterPostIsFromUser,
     POST_IS_FROM_SELF: FilterPostIsOwnPost,
     POST_REPONDS_TO: FilterPostReplyToUser,
