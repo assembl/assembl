@@ -338,6 +338,8 @@ class LickertVoteSpecification(AbstractVoteSpecification):
             bin_size = float(self.maximum - self.minimum) / histogram_size
             for vote in voting_results:
                 bin_num = int((vote.vote_value - self.minimum) / bin_size)
+                bin_num = min(bin_num, histogram_size-1)
+                bin_num = max(bin_num, 0)
                 histogram[bin_num] += 1
             base['histogram'] = histogram
         return base
