@@ -300,6 +300,8 @@ class LickertVoteSpecification(AbstractVoteSpecification):
                         prod *= vote_val
                         bin_num = int((vote_val - spec.minimum)
                                       / bin_sizes[spec])
+                        bin_num = min(bin_num, histogram_size-1)
+                        bin_num = max(bin_num, 0)
                         if gn == len(group_specs) - 1:
                             h[bin_num] += 1
                         else:
