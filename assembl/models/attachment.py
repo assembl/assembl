@@ -38,7 +38,7 @@ class Document(DiscussionBoundBase):
     The cannonical identifier of this document.  If a URL, it's to be 
     interpreted as a purl
     """
-    uri_id = Column(CoerceUnicode(1024), unique=False) ## MAP:  Change to true once https://app.asana.com/0/51461630427071/52921943509398 is done
+    uri_id = Column(CoerceUnicode(514), unique=False, index=True) ## MAP:  Change to true once https://app.asana.com/0/51461630427071/52921943509398 is done
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
         info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
     discussion_id = Column(Integer, ForeignKey(
@@ -128,14 +128,14 @@ class Attachment(DiscussionBoundBase):
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'), nullable=False)
     creator = relationship(AgentProfile)
-    title = Column(CoerceUnicode(), server_default="",
+    title = Column(CoerceUnicode(1024), server_default="",
        info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
     description = Column(
         UnicodeText,
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
 
     attachmentPurpose = Column(
-        UnicodeText, nullable=False, index=True)
+        CoerceUnicode(256), nullable=False, index=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'attachment',

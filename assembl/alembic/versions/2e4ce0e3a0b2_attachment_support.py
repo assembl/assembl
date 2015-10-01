@@ -24,7 +24,7 @@ def upgrade(pyramid_env):
         op.create_table(
             'document',
             sa.Column('id', sa.Integer, primary_key=True),
-            sa.Column('uri_id', CoerceUnicode(1024), server_default="", unique=False),
+            sa.Column('uri_id', CoerceUnicode(1024), server_default="", unique=False, index=True),
             sa.Column('creation_date',
                       sa.DateTime,
                       nullable=False,
@@ -80,7 +80,7 @@ def upgrade(pyramid_env):
             sa.Column('title', CoerceUnicode(1024), server_default=""),
             sa.Column('description', sa.UnicodeText),
             sa.Column('attachmentPurpose', 
-                      CoerceUnicode(1024), 
+                      CoerceUnicode(256), 
                       server_default="",
                       index=True,),
             )
