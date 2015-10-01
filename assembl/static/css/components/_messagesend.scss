@@ -3,7 +3,7 @@
 
 .messageSend {
   margin: 0.5em 0 0 0;
-  display: table;
+  display: block;
   background-color: lighten($gray5, 5%);
   padding: 10px 15px 5px;
   .hidden {
@@ -15,8 +15,9 @@
     width: 1px;
     vertical-align: top;
   }
-  .interface-container {
-    display: table-cell;
+  .messageSend-form {
+    display: block;
+    margin-left: 50px;
     .messageSend-subject,
     .messageSend-body {
       margin: 0;

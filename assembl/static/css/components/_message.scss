@@ -16,10 +16,13 @@ $previewNumLines: 4;
 // ================
 .message {
   position: relative;
+  display: table;
+  width: 100%;
   box-sizing: border-box;
-  padding: 7px $messagePaddingLR;
+  padding: 7px$messagePaddingLR+3*$mesageSpacing 7px $messagePaddingLR; //To balance the spacing of the message family on the left
   //margin: 0px $mesageSpacing 0px $mesageSpacing; //TODO: fix scroolbar margin
   min-height: $avatarSize;
+  //max-width: $messageBodyMaxWidth;
   height: auto;
   color: $gray2;
   //border-top: solid 1px $gray3;
@@ -58,6 +61,11 @@ $previewNumLines: 4;
     font-size: 12px; //This should be rem or something - benoitg
     overflow: hidden;
     text-overflow: ellipsis;
+    display: table;
+  }
+
+  .message-headerAndDate {
+    display: table;
   }
   .message-author {
     color: $theme_person_name_color;
@@ -115,6 +123,7 @@ $previewNumLines: 4;
   }
 
   .nb-nuggets {
+    display: none;
     color: $gray4;
     i {
       font-size: 140%;
@@ -346,6 +355,7 @@ $previewNumLines: 4;
     margin-left: -$mesageSpacing;
     position: absolute;
     z-index: 1000;
+    top: 0;
     right: 0;
   }
 
@@ -562,8 +572,11 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 /* ------------------- Start of message family section ---------------------- */
 // The arrow
 // ------------
-.message-family-arrow.noarrow {
+.message-family-arrow {
   display: block;
+}
+.message-family-arrow.noarrow {
+
   padding-left: $messageFamilyImageWidth/2;
   margin-left: $messageFamilyImageWidth/2;
 }
@@ -577,7 +590,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 .message-family-arrow.arrow {
   padding-left: $messageFamilyImageWidth/2;
   margin-left: $messageFamilyImageWidth/2;
-  display: block;
+
   .link-img {
     cursor: pointer;
   }
@@ -641,6 +654,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 
   .message-conversation-block {
     box-sizing: border-box;
+    display: table;
     @include calc(width, "100% + #{$messageFamilyImageWidth/2}");
     background-color: $gray6;
     padding: $mesageSpacing;
@@ -720,11 +734,13 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 // The child list
 // --------------
 .messagelist-children {
-  height: 0px;
+  //height: 0px;
   clear: left;
-
-  @include transition(height 0.4s);
-  @include transform(translateZ(0));
+  display: table;
+  position: relative;
+  width: 100%;
+  //@include transition(height 0.4s);
+  //@include transform(translateZ(0));
 
   height: auto;
 
