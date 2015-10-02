@@ -60,7 +60,9 @@
         "import_date": false,
         "subject": true,
         "like_count": true,
-        "body": true
+        "body": true,
+        "attachments": [":default"],
+        "extracts": [":id_only"]
     },
     "Post": {
         "@extends": "Content",

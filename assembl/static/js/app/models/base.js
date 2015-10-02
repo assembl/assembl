@@ -243,47 +243,42 @@ var BaseCollection = Backbone.Collection.extend({
    */
   updateFromSocket: function(item) {
     var model = this.get(item['@id']);
-    var debug = false;
+    var debug = Ctx.debugSocket;
     if (item['@tombstone']) {
-      if (debug) {
-        console.log("Ignoring tombstone not in collection for id: " + item['@id']);
-      }
-
       if (model) {
         if (debug) {
-          console.log("Removing from socket (tombstoned):", model)
+          console.log("updateFromSocket(): Removing from socket (tombstoned):", model.get('@type'), model.id);
         }
-
         this.remove(model);
       }
-
-      return;
+      else {
+        if (debug) {
+          console.log("updateFromSocket(): Ignoring tombstone not in collection: ", item['@type'], item['@id'], item);
+        }
+      }
     }
     else if (model === null || model === undefined) {
       // oops, doesn't exist
-      this.add(item);
       if (debug) {
-        console.log("Adding from socket:")
-        console.log(item);
+        console.log("Adding from socket:", item['@type'], item['@id'], item)
       }
-
+      var addResult = this.add(item, {parse: true});
+      console.log(addResult);
     }
     else {
       // yeah, it exists
       if (debug) {
-        console.log("Merging from socket:")
-        console.log(item);
+        console.log("updateFromSocket(): Merging from socket:", item['@type'], item['@id'], item)
       }
 
-      this.add(item, {merge: true});
+      this.add(item, {merge: true, parse: true});
       if (debug) {
-        console.log("Model is now:");
-        console.log(model);
+        console.log("updateFromSocket(): Model ", model.id, "is now:", model);
       }
     }
 
     if (debug) {
-      console.log("collection is now:", this);
+      console.log("updateFromSocket(): collection is now:", this);
     }
   }
 

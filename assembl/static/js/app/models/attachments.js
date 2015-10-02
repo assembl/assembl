@@ -18,7 +18,7 @@ var AttachmentModel = Base.Model.extend({
    * @type {String}
    */
   urlRoot: function() {
-    console.log("urlRoot called on ", this, this.get('objectAttachedToModel'));
+    //console.log("urlRoot called on ", this, this.get('objectAttachedToModel'));
     return this.get('objectAttachedToModel').getApiV2Url() + '/attachments';
   },
 
@@ -63,7 +63,7 @@ var AttachmentModel = Base.Model.extend({
     var that = this;
 
     Promise.resolve(this.get('document').save()).then(function(){
-      console.log(attrs, options);
+      //console.log("Saving attachments", attrs, options);
       Backbone.Model.prototype.save.call(that, attrs, options);
     })
   },

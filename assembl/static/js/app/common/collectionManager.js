@@ -418,7 +418,7 @@ var CollectionManager = Marionette.Controller.extend({
       }
       else {
         var msg = "Structure model not in allMessageStructureCollection for id!" + id;
-        console.log(msg);
+        console.error(msg);
         return Promise.reject(msg);
       }
     });

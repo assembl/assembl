@@ -47,11 +47,11 @@ var MessageModel = Base.Model.extend({
   },
 
   parse: function(rawModel) {
-    //console.log("Message Model parse() called");
     rawModel.attachments = new Attachment.Collection(rawModel.attachments,
       {parse: true,
       objectAttachedToModel: this}
       );
+    //console.log("Message Model parse() called, returning:", rawModel);
     return rawModel;
   },
 
@@ -188,9 +188,12 @@ var MessageModel = Base.Model.extend({
   /**
    * Set the `read` property
    * @param {Boolean} value
+   * @param jquery element
    */
   setRead: function(value, target) {
-    target.removeClass('readUnreadIndicator').addClass('is-loading');
+    if(target) {
+      target.removeClass('readUnreadIndicator').addClass('is-loading');
+    }
 
     var user = Ctx.getCurrentUser(),
         that = this;
@@ -210,7 +213,9 @@ var MessageModel = Base.Model.extend({
     this.url = Ctx.getApiUrl('post_read/') + this.getId();
     this.save({'read': value}, {
       success: function(model, resp) {
-        target.addClass('readUnreadIndicator').removeClass('is-loading');
+        if(target) {
+          target.addClass('readUnreadIndicator').removeClass('is-loading');
+        }
         that.trigger('change:read', [value]);
         that.trigger('change', that);
         Assembl.reqres.request('ideas:update', resp.ideas); // this seems to cost a lot of performance. maybe we should update only the ideas related to this message
@@ -243,7 +248,14 @@ var MessageCollection = Base.Collection.extend({
 
   /** Our data is inside the posts array */
   parse: function(response) {
-    return response.posts;
+    if(response.posts !== undefined) {
+      //APIV1
+      return response.posts;
+    }
+    else {
+      //APIV2 and socket
+      return response;
+    }
   },
 
   /** Get the last synthesis

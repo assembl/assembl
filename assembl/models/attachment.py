@@ -172,6 +172,15 @@ class PostAttachment(Attachment):
             cascade="all, delete-orphan"),
     )
 
+@event.listens_for(PostAttachment.post, 'set', propagate=True, active_history=True)
+def attachment_object_attached_to_set_listener(target, value, oldvalue, initiator):
+    print "attachment_object_attached_to_set_listener for target: %s set to %s, was %s" % (target, value, oldvalue)
+    if oldvalue is not None:
+        with oldvalue.db.no_autoflush:
+            oldvalue.send_to_changes()
+    if value is not None:
+        with value.db.no_autoflush:
+            value.send_to_changes()
 
 class IdeaAttachment(Attachment):
     __tablename__ = "idea_attachment"

@@ -90,21 +90,20 @@ Socket.prototype.processData = function(item) {
       collPromise = collectionManager.getCollectionPromiseByType(item);
 
   if (Ctx.debugSocket) {
-    console.log(item['@id'], item['@type'], item);
+    console.log("On socket:", item['@type'], item['@id'], item);
   }
 
   if (collPromise === null) {
     if (item['@type'] == "Connection") {
       //Ignore Connections
       return;
-    } else {
+    } 
+    else {
       if (Ctx.debugSocket) {
-        console.log("Socket.prototype.processData(): TODO: Handle singletons like discussion etc. for item:", item);
+        console.log("Socket.prototype.processData(): TODO: Handle socket events for items of type:", item['@type'], item);
       }
-
       return;
     }
-
   }
 
   // Each collection must know what to do
