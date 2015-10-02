@@ -14,7 +14,6 @@ from sqlalchemy import (
     DateTime
 )
 import simplejson as json
-import pytz
 from dateutil.parser import parse as parse_datetime
 from sqlalchemy.orm import relationship, backref
 from virtuoso.alchemy import CoerceUnicode
@@ -26,7 +25,6 @@ from .auth import (
 )
 
 from ..auth import (CrudPermissions, P_EXPORT, P_SYSADMIN)
-from ..views.traversal import CollectionDefinition
 from ..lib.config import get_config
 from ..lib.sqla import Base
 from ..tasks.source_reader import PullSourceReader, ReaderStatus
@@ -429,7 +427,14 @@ class FacebookGenericSource(PostSource):
     }
 
     @abstractmethod
-    def fetch_content(self, limit=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None):
+        """ The entry point of creating posts
+            :param lower_bound DateTime Read posts up to this
+                                        back in time
+
+            :param uppder_bound DateTime Read future posts up to
+                                         this time
+        """
         self._setup_reading()
 
     def make_reader(self):
@@ -492,25 +497,52 @@ class FacebookGenericSource(PostSource):
         db[post.get('id')] = new_post
         return True
 
-    def _manage_post(self, post, obj_id, posts_db, users_db):
-        post_id = post.get('id')
-        creator = self.parser.get_user_post_creator(post)
-        self._create_fb_user(creator, users_db)
+    def _manage_post(self, post, obj_id, posts_db, users_db, upper, lower):
+        """ Method that parses the json parsed facebook post and delegates
+        the creation of an Assembl post
 
-        # Get all of the tagged users instead?
-        for user in self.parser.get_users_post_to_sans_self(post, obj_id):
-            self._create_fb_user(user, users_db)
+        :param post - The json parsed post data
+        :param obj_id - The facebook ID of the creator of the content
+        :param posts_db - The cache of all posts currently imported from
+                            this source
+        :param users_db - The cache of all FacebookAccounts in the database
+        :param upper - DateTime object describing up to which datetime
+                        new messages are accepted.
+        :param lower = DateTime object describing up to which datetime
+                        old messages are accepted.
 
-        creator_id = creator.get('id', None)
-        creator_agent = users_db.get(creator_id)
-        result = self._create_post(post, creator_agent, posts_db)
+        """
+        cont = True
+        post_created_time = parse_datetime(post.get('created_time'))
+        if upper:
+            if post_created_time > upper:
+                cont = False
+        if lower:
+            if post_created_time < lower:
+                cont = False
 
-        if not result:
-            return
+        if cont:
+            post_id = post.get('id')
+            creator = self.parser.get_user_post_creator(post)
+            self._create_fb_user(creator, users_db)
 
-        assembl_post = posts_db.get(post_id)
-        self.db.commit()
-        return assembl_post
+            # Get all of the tagged users instead?
+            for user in self.parser.get_users_post_to_sans_self(post, obj_id):
+                self._create_fb_user(user, users_db)
+
+            creator_id = creator.get('id', None)
+            creator_agent = users_db.get(creator_id)
+            result = self._create_post(post, creator_agent, posts_db)
+
+            if not result:
+                return
+
+            assembl_post = posts_db.get(post_id)
+            self.db.commit()
+            return assembl_post, cont
+
+        else:
+            return None, cont
 
     def _manage_comment(self, comment, parent_post, posts_db, users_db):
         user = self.parser.get_user_from_comment(comment)
@@ -544,9 +576,7 @@ class FacebookGenericSource(PostSource):
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     break
 
-    def feed(self, post_limit=None, cmt_limit=None):
-        counter = 0
-        comment_counter = 0
+    def feed(self, upper_bound=None, lower_bound=None):
         users_db = self._get_current_users()
         posts_db = self._get_current_posts()
 
@@ -557,66 +587,73 @@ class FacebookGenericSource(PostSource):
         )
 
         for post in self.parser.get_feed_paginated(self.fb_source_id):
-            if post_limit:
-                if counter >= post_limit:
-                    break
-            assembl_post = self._manage_post(post, self.fb_source_id,
-                                             posts_db, users_db)
+            assembl_post, cont = self._manage_post(post, self.fb_source_id,
+                                                   posts_db, users_db,
+                                                   upper_bound,
+                                                   lower_bound)
+
             if not assembl_post:
+                # If a bound is reached, there is no post created, so do
+                # not continue any further
+                if not cont:
+                    break
                 continue
 
-            counter += 1
-            if self.read_status == ReaderStatus.SHUTDOWN:
-                break
-            for comment in self.parser.get_comments_paginated(post):
-                if cmt_limit:
-                    if comment_counter >= cmt_limit:
-                        break
-                self._manage_comment_subcomments(comment, assembl_post,
-                                                 posts_db, users_db)
-                if self.read_status == ReaderStatus.SHUTDOWN:
-                    return
-
-    def posts(self, post_limit=None):
-        counter = 0
-        users_db = self._get_current_users()
-        posts_db = self._get_current_posts()
-
-        for post in self.parser.get_posts_paginated(self.fb_source_id):
-            if post_limit:
-                if counter >= post_limit:
-                    break
-            assembl_post = self._manage_post(post, self.fb_source_id,
-                                             posts_db, users_db)
-            if not assembl_post:
-                continue
-
-            counter += 1
             if self.read_status == ReaderStatus.SHUTDOWN:
                 break
             for comment in self.parser.get_comments_paginated(post):
                 self._manage_comment_subcomments(comment, assembl_post,
                                                  posts_db, users_db,
-                                                 True)
+                                                 sub_comments=True)
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     return
 
-    def single_post(self, limit=None):
+    def posts(self, upper=None, lower=None):
+        users_db = self._get_current_users()
+        posts_db = self._get_current_posts()
+
+        for post in self.parser.get_posts_paginated(self.fb_source_id):
+            assembl_post, cont = self._manage_post(post, self.fb_source_id,
+                                                   posts_db, users_db,
+                                                   upper, lower)
+            if not assembl_post:
+                # If a bound is reached, there is no post created, so do
+                # not continue any further
+                if not cont:
+                    break
+                continue
+
+            if self.read_status == ReaderStatus.SHUTDOWN:
+                break
+            for comment in self.parser.get_comments_paginated(post):
+                self._manage_comment_subcomments(comment, assembl_post,
+                                                 posts_db, users_db,
+                                                 sub_comments=True)
+                if self.read_status == ReaderStatus.SHUTDOWN:
+                    return
+
+    def single_post(self, upper_bound=None, lower_bound=None):
         # Only use if the content source is a single post
-        # raise NotImplementedError("To be developed after source/sink")
         users_db = self._get_current_users()
         posts_db = self._get_current_posts()
 
         # Get the post, then iterate through the comments of the post
         post = self.parser.get_single_post(self.fb_source_id)
         entity_id = post.get('from', {}).get('id', None)
-        assembl_post = self._manage_post(post, entity_id, posts_db, users_db)
+        assembl_post, cont = self._manage_post(post, entity_id,
+                                               posts_db, users_db,
+                                               upper_bound, lower_bound)
+
+        if not cont:
+            # If a bound has been reached, do not continue parsing the
+            # comments
+            return
 
         if assembl_post:
             for comment in self.parser.get_comments_paginated(post):
                 self._manage_comment_subcomments(comment, assembl_post,
                                                  posts_db, users_db,
-                                                 True)
+                                                 sub_comments=True)
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     return
 
@@ -677,9 +714,9 @@ class FacebookGroupSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_open_group_source'
     }
 
-    def fetch_content(self, limit=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None):
         self._setup_reading()
-        self.feed(limit)
+        self.feed(lower_bound=lower_bound, upper_bound=upper_bound)
 
 
 class FacebookGroupSourceFromUser(FacebookGenericSource):
@@ -687,9 +724,9 @@ class FacebookGroupSourceFromUser(FacebookGenericSource):
         'polymorphic_identity': 'facebook_private_group_source'
     }
 
-    def fetch_content(self, limit=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None):
         self._setup_reading()
-        self.feed(limit)
+        self.feed(lower_bound=lower_bound, upper_bound=upper_bound)
 
 
 class FacebookPagePostsSource(FacebookGenericSource):
@@ -697,9 +734,9 @@ class FacebookPagePostsSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_page_posts_source'
     }
 
-    def fetch_content(self, limit=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None):
         self._setup_reading()
-        self.posts(limit)
+        self.posts(lower_bound=lower_bound, upper_bound=upper_bound)
 
 
 class FacebookPageFeedSource(FacebookGenericSource):
@@ -707,9 +744,9 @@ class FacebookPageFeedSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_page_feed_source'
     }
 
-    def fetch_content(self, limit=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None):
         self._setup_reading()
-        self.feed(limit)
+        self.feed(lower_bound=lower_bound, upper_bound=upper_bound)
 
 
 class FacebookSinglePostSource(FacebookGenericSource):
@@ -717,7 +754,7 @@ class FacebookSinglePostSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_singlepost_source'
     }
 
-    def fetch_content(self, limit=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None):
         # Limit should not apply here, unless the limit is in reference to
         # number of comments brought in
         is_sink, cs = self.content_sink()
@@ -743,17 +780,19 @@ class FacebookAccount(IdentityProviderAccount):
         ondelete='CASCADE',
         onupdate='CASCADE'), primary_key=True)
     app_id = Column(String(512))
+    user = relationship(AgentProfile, backref='facebook_accounts')
 
     def populate_picture(self, profile):
         self.picture_url = 'http://graph.facebook.com/%s/picture' % self.userid
 
     @classmethod
-    def create(cls, user, provider, app_id, avatar_url=None):
+    def create(cls, user, provider, app_id=None, avatar_url=None):
         userid = user.get('id')
         full_name = user.get('name')
         agent_profile = AgentProfile(name=full_name)
         avatar = avatar_url or \
             'http://graph.facebook.com/%s/picture' % userid
+        app_id = app_id or get_config().get('facebook.consumer_key')
 
         return cls(
             provider=provider,
@@ -764,7 +803,6 @@ class FacebookAccount(IdentityProviderAccount):
             app_id=app_id,
             picture_url=avatar
         )
-    user = relationship(AgentProfile, backref='facebook_accounts')
 
 
 class FacebookAccessToken(Base):
@@ -970,5 +1008,20 @@ class FacebookReader(PullSourceReader):
 
     def do_read(self):
         # TODO reimporting
-        limit = self.extra_args.get('limit', None)
-        self.source.fetch_content(limit)
+        # limit = self.extra_args.get('limit', None)
+        upper = self.extra_args.get('upper_bound', None)
+        lower = self.extra_args.get('lower_bound', None)
+        # Does not account for local time if Facebook ever sends non-UTC time
+        import pytz
+        if upper:
+            upper = parse_datetime(upper)
+            # cieling the datetime to maximum time of the day
+            upper = datetime(year=upper.year, month=upper.month, day=upper.day,
+                             hour=23, minute=59, second=59, tzinfo=pytz.UTC)
+        if lower:
+            lower = parse_datetime(lower)
+            # floor the datetime to minimum time of the day
+            lower = datetime(year=lower.year, month=lower.month, day=lower.day,
+                             hour=23, minute=59, second=59, tzinfo=pytz.UTC)
+
+        self.source.fetch_content(upper_bound=upper, lower_bound=lower)
