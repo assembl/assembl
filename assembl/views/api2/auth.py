@@ -251,8 +251,8 @@ def post_email_account(request):
 @view_config(
     context=InstanceContext, request_method='GET',
     ctx_instance_class=AgentProfile,
-    renderer='json', name='interesting_posts')
-def interesting_posts(request):
+    renderer='json', name='interesting_ideas')
+def interesting_ideas(request):
     from .discussion import get_analytics_alerts
     ctx = request.context
     target = request.context._instance
