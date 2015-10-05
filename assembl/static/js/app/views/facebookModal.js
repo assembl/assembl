@@ -524,6 +524,8 @@ var errorView = Marionette.ItemView.extend({
     }
     else {
       console.log('I will make an account');
+      //this.vent.trigger('closeModal');
+      Backbone.history.navigate('user/account', {trigger: true});
     }
   }
 });
@@ -890,10 +892,10 @@ var fbLayout = Marionette.LayoutView.extend({
     }
 });
 
-var fbInitView = Marionette.LayoutView.extend({
-  template: _.template("<div class='js_content_source'></div>"), //Cheating, don't want to create another file for just a 1 liner
+var basefbView = Marionette.LayoutView.extend({
+  template: _.template("<div class='js_facebook_view'></div>"), //Cheating, don't want to create another file for just a 1 liner
   ui: {
-    root: '.js_content_source'
+    root: '.js_facebook_view'
   }, 
   regions: {
     parent: '@ui.root'
@@ -931,7 +933,7 @@ var fbInitView = Marionette.LayoutView.extend({
 });
 
 module.exports = {
-  init: fbInitView,
+  init: basefbView,
   root: fbLayout,
   error: errorView,
   resolveState: checkState

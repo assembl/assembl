@@ -23,7 +23,6 @@ var Modal = Backbone.Modal.extend({
       this.vent = options.vent; //Event Aggregator
       //_.bindAll(this, "loadFbView"); //Useful for bind function
       this.vent.on("loadFbView", this.loadFbView, this);
-      this.vent.on('submitted', this.submitted, this);
       this.vent.on('clearError', this.clearError, this);
 
       var that = this;
