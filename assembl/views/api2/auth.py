@@ -1,4 +1,4 @@
-from simplejson import dumps
+from simplejson import dumps, loads
 from string import Template
 
 from pyramid.response import Response
@@ -246,3 +246,30 @@ def post_email_account(request):
     instance = request.context.collection_class.get_instance(response.location)
     send_confirmation_email(request, instance)
     return response
+
+
+@view_config(
+    context=InstanceContext, request_method='GET',
+    ctx_instance_class=AgentProfile,
+    renderer='json', name='interesting_posts')
+def interesting_posts(request):
+    from .discussion import get_analytics_alerts
+    ctx = request.context
+    target = request.context._instance
+    user_id = authenticated_userid(request) or Everyone
+    discussion_id = ctx.get_discussion_id()
+    permissions = get_permissions(
+        user_id, discussion_id)
+    if P_READ not in permissions:
+        raise HTTPUnauthorized()
+    if user_id != target.id and P_ADMIN_DISC not in permissions:
+        raise HTTPUnauthorized()
+    discussion = Discussion.get(discussion_id)
+    if not discussion:
+        raise HTTPNotFound()
+    result = get_analytics_alerts(
+        discussion, target.id,
+        ["interesting_to_me"], False)
+    result = loads(result)['responses'][0]['data'][0]['suggestions']
+    result = {x['targetID']: x['arguments']['score'] for x in result}
+    return result

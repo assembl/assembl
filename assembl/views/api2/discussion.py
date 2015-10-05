@@ -27,7 +27,7 @@ from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_SYSADMIN, Everyone)
 from assembl.auth.password import verify_data_token, data_token
 from assembl.auth.util import get_permissions
-from assembl.models import (Discussion, Permission)
+from assembl.models import (Discussion, Permission, AgentProfile)
 from ..traversal import InstanceContext
 from . import JSON_HEADER
 
@@ -133,6 +133,7 @@ def permission_token(
     elif P_SYSADMIN not in permissions:
         req_permissions = req_permissions.intersection(set(permissions))
     req_permissions = list(req_permissions)
+    user_id = 0 if user_id == Everyone else user_id
     data = [str(user_id), str(discussion_id)]
     data.extend([str(x) for (x,) in Permission.default_db.query(
             Permission.id).filter(Permission.name.in_(req_permissions)).all()])
@@ -408,21 +409,15 @@ def as_mind_map(request):
     return Response(body_file=io, content_type=mimetype)
 
 
-@view_config(context=InstanceContext, name="alerts",
-             ctx_instance_class=Discussion, request_method='GET',
-             permission=P_READ)
-def get_alerts(request):
+def get_analytics_alerts(discussion, user_id, types, all_users=False):
     from assembl.semantic.virtuoso_mapping import (
         AssemblQuadStorageManager, AESObfuscator)
-    discussion = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
-    settings = request.registry.settings
+    settings = get_config()
     metrics_server_endpoint = settings.get(
         'metrics_server_endpoint',
         'https://discussions.bluenove.com/analytics/accept')
     verify_metrics = False  # weird SNI bug on some platforms
-    discussion = request.context._instance
-    protocol = 'https' if asbool(request.registry.settings.get(
+    protocol = 'https' if asbool(settings.get(
         'accept_secure_connection', False)) else 'http'
     host = settings.get('public_hostname')
     if settings.get('public_port', 80) != 80:
@@ -433,8 +428,11 @@ def get_alerts(request):
     token = permission_token(user_id, discussion.id, [P_READ_PUBLIC_CIF], seed)
     metrics_requests = [{
         "metric": "alerts",
-        "types": [
-            "lurking_user", "inactive_user", "user_gone_inactive"]}]
+        "types": types}]
+    if user_id != Everyone and not all_users:
+        obfuscated_userid = "local:AgentProfile/" + obfuscator.encrypt(
+            str(user_id))
+        metrics_requests[0]['users'] = [obfuscated_userid]
     mapurl = '%s://%s/data/Discussion/%d/jsonld?token=%s' % (
         protocol,
         host,
@@ -448,6 +446,32 @@ def get_alerts(request):
         alerts.text, obfuscator.decrypt)
     # AgentAccount is a pseudo for AgentProfile
     result = re.sub(r'local:AgentAccount\\/', r'local:AgentProfile\\/', result)
+    return result
+
+
+@view_config(context=InstanceContext, name="activity_alerts",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_ADMIN_DISC)
+def get_activity_alerts(request):
+    discussion = request.context._instance
+    user_id = authenticated_userid(request) or Everyone
+    result = get_analytics_alerts(
+        discussion, user_id,
+        ["lurking_user", "inactive_user", "user_gone_inactive"],
+        True)
+    return Response(body=result, content_type='application/json')
+
+
+@view_config(context=InstanceContext, name="interest_alerts",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_ADMIN_DISC)
+def get_interest_alerts(request):
+    discussion = request.context._instance
+    user_id = authenticated_userid(request) or Everyone
+    result = get_analytics_alerts(
+        discussion, user_id,
+        ["interesting_to_me"],
+        True)
     return Response(body=result, content_type='application/json')
 
 
