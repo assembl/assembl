@@ -519,7 +519,9 @@ var errorView = Marionette.ItemView.extend({
     if (this.state === 'permissions') {
       var that = this;
       loginUser(function() {
-        that.vent.trigger("loadFbView", window.FB_TOKEN);
+        //that.vent.trigger("loadFbView", window.FB_TOKEN);
+        that.model.trigger('change', that.model);
+        console.error("FIXME:  Need to re-render baseFbView");
       });
     }
     else {
@@ -691,126 +693,191 @@ var fbLayout = Marionette.LayoutView.extend({
 
   //template: "#tmpl-exportPostModal-fb",
   regions: {
-      subform: '.fb-targeted-form'
-    },
+    subform: '.fb-targeted-form'
+  },
   events: {
-      'change .js_fb-supportedList': 'defineView',
-      'click .fb-js_test_area': 'test',
-    },
+    'change .js_fb-supportedList': 'defineView',
+    'click .fb-js_test_area': 'test'
+  },
   initialize: function(options) {
-      this.token = options.token;
-      this.model = options.model;
-      this.creator = options.creator;
-      this.vent = options.vent; //Event Aggregator
-      this.bundle = {
+    this.token = options.token;
+    this.exportedMessage = options.exportedMessage;
+    this.vent = options.vent; //Event Aggregator
+    this.bundle = {
         endpoint: null,
-        message: _composeMessageBody(options.model, this.creator),
         credentials: window.FB_TOKEN.getUserToken(),
         attachPic: null,
         attachSubject: null,
         attachCaption: null,
         attachDesc: null
-      };
+    };
 
-      var that = this;
-      var cm = new CollectionManager();
-      cm.getDiscussionModelPromise().then(function(d) {
-        that.topic = d.get('topic');
-        that.desc = i18n.gettext('Assembl is a collective intelligence tool designed to enable open, democratic discussions that lead to idea generation and innovation.');
-        that.template = '#tmpl-exportPostModal-fb';
-        that.render();
-        that.vent.on("submitFacebook", that.submitForm, that);
-        that.vent.trigger('clearError');
-      });
+    var that = this;
+    var cm = new CollectionManager();
+    cm.getDiscussionModelPromise().then(function(d) {
+      that.topic = d.get('topic');
+      that.desc = i18n.gettext('Assembl is a collective intelligence tool designed to enable open, democratic discussions that lead to idea generation and innovation.');
+      that.template = '#tmpl-exportPostModal-fb';
+      that.render();
+      that.vent.trigger('clearError');
+    });
 
-    },
+  },
   serializeData: function() {
-      return {
-        messageBody: this.model.get('body'),
-        suggestedName: this.topic,
-        suggestedCaption: window.location.href,
-        suggestedDescription: this.desc
-      }
-    },
+    return {
+      exportedMessage: this.exportedMessage,
+      suggestedName: this.topic,
+      suggestedCaption: window.location.href,
+      suggestedDescription: this.desc
+    }
+  },
   test: function(e) {
-      console.log('User will never see this. Only for developers only!');
-    },
+    console.log('User will never see this. Only for developers only!');
+  },
   defineView: function(event) {
-      var value = this.$(event.currentTarget)
-                      .find('option:selected')
-                      .val();
+    var value = this.$(event.currentTarget)
+    .find('option:selected')
+    .val();
 
-      switch (value) {
-        case 'page':
-          this.getRegion('subform').show(new pageView({
-            token: this.token,
-            bundle: this.bundle,
-            vent: this.vent
-          }));
-          break;
-        case 'group':
-          this.getRegion('subform').show(new groupView({
-            token: this.token,
-            bundle: this.bundle,
-            vent: this.vent
-          }));
-          break;
-        case 'me':
-          _updateBundledData(this.bundle, {
-            endpoint: "me/feed"
-          });
-          this.vent.trigger('clearError');
-          break;
-        default:
+    switch (value) {
+      case 'page':
+        this.getRegion('subform').show(new pageView({
+          token: this.token,
+          bundle: this.bundle,
+          vent: this.vent
+        }));
+        break;
+      case 'group':
+        this.getRegion('subform').show(new groupView({
+          token: this.token,
+          bundle: this.bundle,
+          vent: this.vent
+        }));
+        break;
+      case 'me':
+        _updateBundledData(this.bundle, {
+          endpoint: "me/feed"
+        });
+        this.vent.trigger('clearError');
+        break;
+      default:
 
-          //This might be the wrong approach to emptying the region
-          this.getRegion('subform').reset();
-          _updateBundledData(this.bundle, {
-            endpoint: null
-          });
-          break;
+        //This might be the wrong approach to emptying the region
+        this.getRegion('subform').reset();
+      _updateBundledData(this.bundle, {
+        endpoint: null
+      });
+      break;
+    }
+
+  }
+});
+
+var basefbView = Marionette.LayoutView.extend({
+  template: '#tmpl-sourceFacebook',
+  ui: {
+    root: '.js_facebook_view'
+  }, 
+  regions: {
+    parent: '@ui.root'
+  },
+  events: {
+    'click .js_ok_submit': 'submitForm'
+  },
+  modelEvents: {
+    "change": "render"
+  },
+  initialize: function(options){
+    this.vent = _.extend({}, Backbone.Events);
+    this.exportedMessage = options.exportedMessage;
+  },
+
+  onShow: function(){
+    var that = this;
+    checkState(function(fbState) {
+      console.log('The state of the checkState function', fbState);
+      if (fbState.ready) {
+        var fbView = new fbLayout({
+          model: that.model,
+          exportedMessage: that.exportedMessage,
+          vent: that.vent
+        });
+
+        that.parent.show(fbView);
+      }
+      else {
+        var errView = new errorView({
+          ready: fbState.ready,
+          errorState: fbState.errorState,
+          vent: that.vent,
+          model: that.model
+        });
+
+        that.parent.show(errView);
+      }
+    });
+
+  },
+  submitForm: function(e) {
+    console.log('submitting form');
+    e.preventDefault();
+    if (!this.formType) {
+      console.log('Cannot continue. Form is incomplete.');
+      var er = i18n.gettext("Please select a destination to export to before continuing");
+      $('.js_export_error_message').text(er);
+    }
+    else {
+      var that = this;
+      console.log('currentView', this.currentView);
+      this._submitForm(function() {
+        //that.destroy();
+      }, function() {
+        var text = i18n.gettext("Facebook was unable to create the post. Close the box and try again.")
+        that.$('.js_export_error_message').text(text);
+      });
+    }
+  },
+
+  _submitForm: function(success, error) {
+    var that = this;
+    var getName = function() {
+      var tmp = $('.js_fb-suggested-name').val();
+      if (!tmp) {
+        return that.topic;
       }
 
-    },
-  submitForm: function(success, error) {
-      var that = this;
-      var getName = function() {
-        var tmp = $('.js_fb-suggested-name').val();
-        if (!tmp) {
-          return that.topic;
-        }
+      return tmp;
+    };
+    var getCaption = function() {
+      var tmp = $('.js_fb-suggested-caption').val();
+      if (!tmp) {
+        return window.location.href;
+      }
 
-        return tmp;
-      };
-      var getCaption = function() {
-        var tmp = $('.js_fb-suggested-caption').val();
-        if (!tmp) {
-          return window.location.href;
-        }
+      return tmp;
+    };
+    var getDescription = function() {
+      var tmp = $('.js_fb-suggested-description').val();
+      if (!tmp) {
+        return that.desc;
+      }
 
-        return tmp;
-      };
-      var getDescription = function() {
-        var tmp = $('.js_fb-suggested-description').val();
-        if (!tmp) {
-          return that.desc;
-        }
+      return tmp;
+    };
 
-        return tmp;
-      };
-
-      var endpoint = this.bundle.endpoint;
-      var hasAttach = this.bundle.attachPic !== null;
+    var endpoint = this.bundle.endpoint;
+    var hasAttach = this.bundle.attachPic !== null;
+    this.exportedMessage.getCreatorPromise().then(function(messageCreator) {
       var args = {
-        access_token: this.bundle.credentials,
-        message: this.bundle.message,
-        link: window.location.href,
+          access_token: that.bundle.credentials,
+          message: _composeMessageBody(options.exportedMessage, messageCreator),
+          link: window.location.href,
 
-        //picture : 'http://' + window.location.host +"/" + Ctx.getApiV2DiscussionUrl() + "/mindmap",
-        picture: 'http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg', //Such a shit hack
-        name: getName(),
-        caption: getCaption(),
-        description: getDescription()
+          //picture : 'http://' + window.location.host +"/" + Ctx.getApiV2DiscussionUrl() + "/mindmap",
+          picture: 'http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg', //Such a shit hack
+          name: getName(),
+          caption: getCaption(),
+          description: getDescription()
       };
 
       if (!endpoint) {
@@ -835,10 +902,10 @@ var fbLayout = Marionette.LayoutView.extend({
             // 2) Create the ContentsourceId
             // 3) POST for a newly created pull source reader
             // 4) Then call success
-            
+
             var cm = new CollectionManager(),
-                errorDesc = i18n.gettext('Something went wrong on Assembl whilst creating your post. Please contact the Discussion administrator for more information.'),
-                errorNode = $('.js_export_error_message');
+            errorDesc = i18n.gettext('Something went wrong on Assembl whilst creating your post. Please contact the Discussion administrator for more information.'),
+            errorNode = $('.js_export_error_message');
             cm.getAllUserAccountsPromise().then(function(accounts){
               var fbAccount = accounts.getFacebookAccount();
               if (!fbAccount) {
@@ -847,16 +914,16 @@ var fbLayout = Marionette.LayoutView.extend({
               }
               else {
                 sender = fbAccount;
-                var s = new Source.Model.Facebook({
+                that.model = new Source.Model.Facebook({
                   'fb_source_id': fbPostId,
                   'creator_id': sender.get("@id"),
                   'url_path': null, //This is not vital, it's only extra information
                   '@type': 'FacebookSinglePostSource',
                   'is_content_sink': true,
-                  'sink_data': {'post_id': that.model.id, 'facebook_post_id': fbPostId}
+                  'sink_data': {'post_id': that.exportedMessage.id, 'facebook_post_id': fbPostId}
                 });
 
-                s.save(null, {
+                that.model.save(null, {
                   success: function(model, resp, op){
                     Promise.resolve($.ajax({
                       type: 'POST',
@@ -873,9 +940,9 @@ var fbLayout = Marionette.LayoutView.extend({
                         error()
                       }
                     }).error(function(error){
-                        console.error("There was an error creating the source");
-                        errorNode.text(errorDesc);
-                        error()
+                      console.error("There was an error creating the source");
+                      errorNode.text(errorDesc);
+                      error()
                     });
                   },
 
@@ -889,52 +956,10 @@ var fbLayout = Marionette.LayoutView.extend({
           }
         });  
       }
-    }
-});
-
-var basefbView = Marionette.LayoutView.extend({
-  template: _.template("<div class='js_facebook_view'></div>"), //Cheating, don't want to create another file for just a 1 liner
-  ui: {
-    root: '.js_facebook_view'
-  }, 
-  regions: {
-    parent: '@ui.root'
-  },
-
-  initialize: function(options){
-    this.vent = _.extend({}, Backbone.Events);
-  },
-
-  onShow: function(){
-    var that = this;
-    checkState(function(fbState) {
-      console.log('The state of the checkState function', fbState);
-      if (fbState.ready) {
-        var fbView = new fbLayout({
-          creator: that.messageCreator,
-          model: that.model,
-          vent: that.vent
-        });
-
-        that.parent.show(fbView);
-      }
-      else {
-        var errView = new errorView({
-          ready: fbState.ready,
-          errorState: fbState.errorState,
-          vent: that.vent
-        });
-
-        that.parent.show(errView);
-      }
     });
-
   }
 });
 
 module.exports = {
-  init: basefbView,
-  root: fbLayout,
-  error: errorView,
-  resolveState: checkState
+  init: basefbView
 };

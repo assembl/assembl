@@ -58,7 +58,7 @@ var Facebook = Source.extend({
     return _.extend(Source.prototype.defaults, {
       'fb_source_id': null,
       'url_path': null,
-      'creator_id': null
+      'creator_id': Ctx.getCurrentUserId()
     });
   }
 });
@@ -135,7 +135,7 @@ var sourceCollection = Base.Collection.extend({
       return c
     }
     else if (this.isFacebook(t)){
-      var c = require('../views/facebookModal.js');
+      var c = require('../views/facebookViews.js');
       return c.init;
     }
     else {

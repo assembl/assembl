@@ -12,7 +12,7 @@ var Marionette = require('../shims/marionette.js'),
     CollectionManager = require('../common/collectionManager.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     $ = require('../shims/jquery.js'),
-    facebook = require('./facebookModal.js'),
+    //FacebookViews = require('./facebookViews.js'),
     Promise = require('bluebird'),
     messageExport = require('./messageExportModal.js'),
     AgentViews = require('./agent.js'),
@@ -1262,12 +1262,9 @@ var MessageView = Marionette.LayoutView.extend({
    * @return {null}
    */
   exportToFacebook: function(event) {
-      //Create an Event Aggregator for the export module
-      var vent = _.extend({}, Backbone.Events);
       var modal = new messageExport({
-        model: this.model,
-        messageView: this,
-        vent: vent
+        exportedMessage: this.model,
+        messageView: this
       });
       $('#slider').html(modal.render().el);
     }

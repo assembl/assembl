@@ -40,6 +40,7 @@ var AdminDiscussionSettings = Marionette.LayoutView.extend({
     //Mock facebook view
     this.collection.add(new Sources.Model.Facebook({
       '@type': 'FacebookSinglePostSource',
+      
       name: 'Benoit!'
     }));
   }

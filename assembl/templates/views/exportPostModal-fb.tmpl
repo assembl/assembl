@@ -16,44 +16,47 @@
 <div class="fb-targeted-form"></div>
 
 <a class="fb-js_test_area mts hidden" href='#'>Click me for test</a>
-
-<!-- This is where the message preview would go -->
-<div class="form-break mts">{{ gettext("Suggested preview") }}:</div>
-
-<div class='mts'>
-  <p><%= messageBody %></p>
-</div>
-
-<div class="facebook-preview" style="border: 1px solid #ddd; margin: 5px; padding: 5px">
-
-  <div class="imagePlaceHolder mts" style='width: 170px; height: 170px; overflow: hidden; float: left; margin-right: 10px'>
-    <img src='http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg' style="
-      margin-left: -700px;
-      margin-top: -70px;
-      ">
+<% if(exportedMessage) { console.log(exportedMessage); %>
+  <!-- This is where the message preview would go -->
+  <div class="form-break mts">{{ gettext("Suggested preview") }}:</div>
+  
+  <div class='mts'>
+    <p><%= exportedMessage.get('body') %></p>
   </div>
-
-  <div style="">
-    <div class="control-group" style="">
-      <label for="attachmentName" class="control-label">{{ gettext("Title:") }}</label>
-      <div class="controls">
-        <input type="text" id="attachmentName" class="input-xlarge js_fb-suggested-name" placeholder="<%= suggestedName %>">
+  
+  <div class="facebook-preview" style="border: 1px solid #ddd; margin: 5px; padding: 5px">
+  
+    <div class="imagePlaceHolder mts" style='width: 170px; height: 170px; overflow: hidden; float: left; margin-right: 10px'>
+      <img src='http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg' style="
+        margin-left: -700px;
+        margin-top: -70px;
+        ">
+    </div>
+  
+    <div style="">
+      <div class="control-group" style="">
+        <label for="attachmentName" class="control-label">{{ gettext("Title:") }}</label>
+        <div class="controls">
+          <input type="text" id="attachmentName" class="input-xlarge js_fb-suggested-name" placeholder="<%= suggestedName %>">
+        </div>
+      </div>
+  
+      <div class="control-group" style="">
+        <label for="attachmentName" class="control-label">{{ gettext("Caption (URL):") }}</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge js_fb-suggested-caption" placeholder="<%= suggestedCaption %>">
+        </div>
+      </div>
+  
+      <div class="control-group" style="">
+        <label for="attachmentName" class="control-label">{{ gettext("Description:") }}</label>
+        <div class="controls">
+          <textarea rows=3 class="input-xlarge js_fb-suggested-description" placeholder="<%= suggestedDescription %>"></textarea>
+        </div>
       </div>
     </div>
-
-    <div class="control-group" style="">
-      <label for="attachmentName" class="control-label">{{ gettext("Caption (URL):") }}</label>
-      <div class="controls">
-        <input type="text" class="input-xlarge js_fb-suggested-caption" placeholder="<%= suggestedCaption %>">
-      </div>
-    </div>
-
-    <div class="control-group" style="">
-      <label for="attachmentName" class="control-label">{{ gettext("Description:") }}</label>
-      <div class="controls">
-        <textarea rows=3 class="input-xlarge js_fb-suggested-description" placeholder="<%= suggestedDescription %>"></textarea>
-      </div>
-    </div>
+  
   </div>
-
-</div>
+<% } else { %>
+  <div class="error">{{ gettext("Quentin, tu commence ici...") }}:</div>
+<% } %>
