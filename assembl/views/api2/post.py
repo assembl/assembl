@@ -32,5 +32,7 @@ def show_similar_posts(request):
              ctx_instance_class=SynthesisPost, permission=P_READ,
              accept="text/html", name="html_export")
 def html_export(request):
-    return Response(request.context._instance.as_html(),
+    from pyramid_jinja2 import IJinja2Environment
+    jinja_env = request.registry.queryUtility(IJinja2Environment, name='.jinja2')
+    return Response(request.context._instance.as_html(jinja_env),
         content_type='text/html')

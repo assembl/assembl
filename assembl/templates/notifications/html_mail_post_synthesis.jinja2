@@ -14,7 +14,7 @@ synthesis
 {% extends "notifications/html_mail_post.jinja2" %}
 
 {%- block post_body %}
-  {{ synthesis.as_html() }}
+  {{ synthesis.as_html(jinja_env) }}
   {#
   {{ synthesis.introduction }}
   #}

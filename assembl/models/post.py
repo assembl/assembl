@@ -298,8 +298,8 @@ class SynthesisPost(AssemblPost):
     def get_title(self):
         return self.publishes_synthesis.subject
 
-    def as_html(self):
-        return self.publishes_synthesis.as_html()
+    def as_html(self, jinja_env):
+        return self.publishes_synthesis.as_html(jinja_env)
 
 
 class WidgetPost(AssemblPost):

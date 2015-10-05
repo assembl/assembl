@@ -1032,6 +1032,7 @@ class NotificationOnPostCreated(NotificationOnPost):
         ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
         ink_css = open(ink_css_path)
         assert ink_css
+        jinja_env = self.get_jinja_env()
         template_data={'subscription': self.first_matching_subscription,
                        'notification': self,
                        'frontendUrls': FrontendUrls(self.first_matching_subscription.discussion),
@@ -1039,9 +1040,9 @@ class NotificationOnPostCreated(NotificationOnPost):
                        'discriminants': {
                                             'url': URL_DISCRIMINANTS,
                                             'source': SOURCE_DISCRIMINANTS
-                                        }
+                                        },
+                       'jinja_env': jinja_env
                        }
-        jinja_env = self.get_jinja_env()
         if isinstance(self.post, SynthesisPost):
             template = jinja_env.get_template('notifications/html_mail_post_synthesis.jinja2')
             template_data['synthesis'] = self.post.publishes_synthesis

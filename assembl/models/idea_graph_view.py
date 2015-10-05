@@ -465,8 +465,8 @@ class Synthesis(ExplicitSubGraphView):
                 new_link.target_ts = idea_copies[link.target_id]
         return frozen_synthesis
 
-    def as_html(self):
-        v = SynthesisHtmlizationVisitor(self)
+    def as_html(self, jinja_env):
+        v = SynthesisHtmlizationVisitor(self, jinja_env)
         self.visit_ideas_depth_first(v)
         return v.as_html()
 
@@ -490,16 +490,10 @@ class Synthesis(ExplicitSubGraphView):
 
 
 class SynthesisHtmlizationVisitor(IdeaVisitor):
-    def __init__(self, graph_view):
-        from os.path import dirname, join
-        from jinja2 import Template
-        templates_dir = join(dirname(dirname(__file__)), 'templates')
-        with open(join(
-                templates_dir, "idea_in_synthesis.jinja2")) as f:
-            self.idea_template = Template(f.read())
-        with open(join(
-                templates_dir, "synthesis.jinja2")) as f:
-            self.synthesis_template = Template(f.read())
+    def __init__(self, graph_view, jinja_env):
+        self.jinja_env = jinja_env
+        self.idea_template = jinja_env.get_template('idea_in_synthesis.jinja2')
+        self.synthesis_template = jinja_env.get_template('synthesis.jinja2')
         self.graph_view = graph_view
 
     def visit_idea(self, idea, level, prev_result):
