@@ -158,6 +158,21 @@ def maintenance_mode_stop():
     supervisor_process_start('prod:uwsgi')
 
 
+def as_bool(b):
+    return str(b).lower() in {"1", "true", "yes", "t", "on"}
+
+
+def filter_autostart_processes(processes):
+    config = get_config()
+
+    def is_autostart(p):
+        try:
+            return as_bool(config.get('supervisor', 'autostart_'+p))
+        except NoOptionError:
+            return False
+    return [p for p in processes if is_autostart(p)]
+
+
 @task
 def app_majorupdate():
     "This update is so major that assembl needs to be put in maintenance mode. Only for production."
@@ -174,7 +189,10 @@ def app_majorupdate():
         #supervisor config file may have changed
         venvcmd("supervisorctl reread")
         venvcmd("supervisorctl update")
-        venvcmd("supervisorctl restart celery_imap changes_router celery_notification_dispatch celery_notify")
+        processes = filter_autostart_processes([
+            "celery_imap", "changes_router", "celery_notification_dispatch",
+            "celery_notify"])
+        venvcmd("supervisorctl restart "+" ".join(processes))
         maintenance_mode_stop()
     execute(webservers_reload)
 
@@ -192,7 +210,10 @@ def app_reload():
         #supervisor config file may have changed
         venvcmd("supervisorctl reread")
         venvcmd("supervisorctl update")
-        venvcmd("supervisorctl restart celery_imap changes_router celery_notification_dispatch celery_notify celery_notify_beat source_reader")
+        processes = filter_autostart_processes([
+            "celery_imap", "changes_router", "celery_notification_dispatch",
+            "celery_notify", "celery_notify_beat", "source_reader"])
+        venvcmd("supervisorctl restart "+" ".join(processes))
         if env.uses_uwsgi:
             venvcmd("supervisorctl restart prod:uwsgi")
     """ This will log everyone out, hopefully the code is now resilient enough
