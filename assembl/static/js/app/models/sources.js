@@ -129,20 +129,6 @@ var sourceCollection = Base.Collection.extend({
     }
   },
 
-  getViewClass: function(t){
-    if (this.isEmail(t)){
-      var c = require('../views/admin/emailSettings.js');
-      return c
-    }
-    else if (this.isFacebook(t)){
-      var c = require('../views/facebookViews.js');
-      return c.init;
-    }
-    else {
-      throw new Error('Type ' + t + ' does not have a view!');
-    }
-  },
-
   parse: function(res) {
     var that = this, 
         models = [];

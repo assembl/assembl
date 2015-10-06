@@ -17,6 +17,24 @@ var Types = {
   DOCUMENT: 'Document',
   POST_ATTACHMENT: 'PostAttachment',
   IDEA_ATTACHMENT: 'IdeaAttachment',
+  CONTENT_SOURCE: 'ContentSource',
+  POST_SOURCE: 'PostSource',
+  ABSTRACT_MAILBOX: 'AbstractMailbox',
+  IMAPMAILBOX: 'IMAPMailbox',
+  MAILING_LIST: 'MailingList',
+  ABSTRACT_FILESYSTEM_MAILBOX: 'AbstractFilesystemMailbox',
+  MAILDIR_MAILBOX: 'MaildirMailbox',
+  FEED_POST_SOURCE: 'FeedPostSource',
+  LOOMIO_POST_SOURCE: 'LoomioPostSource',
+  EDGE_SENSE_DRUPAL_SOURCE: 'EdgeSenseDrupalSource',
+  FACEBOOK_GENERIC_SOURCE: 'FacebookGenericSource',
+  FACEBOOK_GROUP_SOURCE: 'FacebookGroupSource',
+  FACEBOOK_GROUP_SOURCE_FROM_USER: 'FacebookGroupSourceFromUser',
+  FACEBOOK_PAGE_POSTS_SOURCE: 'FacebookPagePostsSource',
+  FACEBOOK_PAGE_FEED_SOURCE: 'FacebookPageFeedSource',
+  FACEBOOK_SINGLE_POST_SOURCE: 'FacebookSinglePostSource',
+
+
 
   initInheritance: function(inheritance) {
     // This is small, I think it can be synchronous.
