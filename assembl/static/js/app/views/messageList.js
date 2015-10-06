@@ -62,7 +62,7 @@ var MessageList = AssemblPanel.extend({
     loadAllButton: '.js_messageList-loadallbutton',
     messageList: '.messageList-list',
     stickyBar: '.sticky-box',
-    replyBox: '.messagelist-replybox',
+    topPost: '.messagelist-replybox',
     inspireMe: '.js_inspireMe',
     inspireMeAnchor: '.js_inspireMeAnchor',
     pendingMessage: '.pendingMessage',
@@ -71,7 +71,8 @@ var MessageList = AssemblPanel.extend({
   },
 
   regions: {
-      messageListHeader: '.messageListHeader'
+      messageListHeader: '.messageListHeader',
+      topPostRegion: '@ui.topPost'
     },
 
   initialize: function(options) {
@@ -1166,8 +1167,10 @@ var MessageList = AssemblPanel.extend({
       }
 
       this.newTopicView = new MessageSendView(options);
+      //FIXME once marionettization is complete
       this.$('.messagelist-replybox').html(this.newTopicView.render().el);
-
+      this.newTopicView.onShow();
+      
       var collectionManager = new CollectionManager();
       Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
                    this.currentQuery.getResultMessageIdCollectionPromise(),
@@ -1220,6 +1223,11 @@ var MessageList = AssemblPanel.extend({
       return this;
     },
 
+  onShow: function() {
+    //FIXME once marionettization is complete
+    //console.log("messageList onShow() this.newTopicView:", this.newTopicView);
+
+  },
   onBeforeDestroy: function() {
     this.saveMessagesInProgress();
   },

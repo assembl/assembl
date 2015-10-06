@@ -180,6 +180,7 @@ var messageSend = Marionette.LayoutView.extend({
     },
 
   onShow: function() {
+    //console.log("messageSend onShow() this.documentsView:", this.documentsView);
     this.attachments.show(this.documentsView);
   },
 
