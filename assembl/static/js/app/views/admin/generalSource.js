@@ -14,21 +14,18 @@ function getSourceEditView(model) {
     case Types.MAILING_LIST:
     case Types.ABSTRACT_FILESYSTEM_MAILBOX:
     case Types.MAILDIR_MAILBOX:
-      form = EmailSourceEditView;
-      break;
+      return EmailSourceEditView;
     case Types.FACEBOOK_GENERIC_SOURCE:
     case Types.FACEBOOK_GROUP_SOURCE:
     case Types.FACEBOOK_GROUP_SOURCE_FROM_USER:
     case Types.FACEBOOK_PAGE_POSTS_SOURCE:
     case Types.FACEBOOK_PAGE_FEED_SOURCE:
     case Types.FACEBOOK_SINGLE_POST_SOURCE:
-      form = FacebookSourceEditView.init;
-      break;
+      return FacebookSourceEditView.init;
     default:
       console.error("Not edit view for source of type "+model.get("@type"));
       return;
   }
-  return new form({model: model});
 };
 
 
@@ -64,7 +61,7 @@ var ReadSource = Marionette.ItemView.extend({
 
 function getSourceDisplayView(model) {
   // TODO
-  return new ReadSource({model: model});
+  return ReadSource;
 };
 
 
@@ -77,14 +74,15 @@ var Source = Marionette.LayoutView.extend({
 
   onShow: function(){
     var display_view = getSourceDisplayView(this.model);
-    this.getRegion('readOnly').show(display_view);
+    this.getRegion('readOnly').show(new display_view({model: this.model}));
     var edit_view = getSourceEditView(this.model);
-    this.getRegion('form').show(edit_view);
+    this.getRegion('form').show(new edit_view({model: this.model}));
   }
 });
 
 
 var DiscussionSourceList = Marionette.CollectionView.extend({
+    // getChildView: getSourceDisplayView
     childView: Source
 });
 
