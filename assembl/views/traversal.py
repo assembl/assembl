@@ -692,18 +692,18 @@ class UserBoundNamespacedDictContext(TraversalContext):
         # Do not call super, because it will set the acl.
         self.collection = collection
         self.__parent__ = parent
-        self.parent_instance = parent._instance
+        self._instance = parent._instance
 
     @property
     def __acl__(self):
         return self.__parent__.__acl__
 
     def as_collection(self):
-        return self.collection.as_collection(self.parent_instance)
+        return self.collection.as_collection(self._instance)
 
     def __getitem__(self, namespace):
         user_ns_b_kvdict = self.collection.get_instance(
-            namespace, self.parent_instance)
+            namespace, self._instance)
         return UserNSBoundDictContext(user_ns_b_kvdict, self)
 
     def get_target_class(self):
@@ -717,7 +717,7 @@ class UserNSBoundDictContext(TraversalContext):
         # Do not call super, because it will set the acl.
         self.collection = user_ns_b_kvdict
         self.__parent__ = parent
-        self.parent_instance = parent.parent_instance
+        self.parent_instance = parent._instance
 
     @property
     def __acl__(self):

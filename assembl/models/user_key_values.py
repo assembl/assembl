@@ -24,7 +24,7 @@ from . import DiscussionBoundBase
 from assembl.lib import config
 from auth import User
 from discussion import Discussion
-
+from .preferences import Preferences
 
 class AbstractNamespacedKeyValue(object):
     # No table name, these are simply common columns
@@ -226,6 +226,59 @@ class NamespacedUserKVCollection(MutableMapping):
                 key=key,
                 **{ukv_cls.target_name: self.target}).first()
         return value is not None
+
+
+class UserPreferenceCollection(NamespacedUserKVCollection):
+    PREFERENCE_NAMESPACE = "preferences"
+    FORBID_USER_EDIT = "forbid_user_edit"
+
+    def __init__(self, user_id, discussion=None):
+        if discussion is None:
+            self.dprefs = Preferences.get_by_name()
+        else:
+            self.dprefs = discussion.preferences
+        super(UserPreferenceCollection, self).__init__(
+            discussion, user_id, self.PREFERENCE_NAMESPACE)
+
+    def __len__(self):
+        return len(self.dprefs.property_defaults)
+
+    def __setitem__(self, key, value):
+        if key not in self.dprefs.property_defaults:
+            raise KeyError("Unknown property")
+        if key in self.dprefs[self.FORBID_USER_EDIT]:
+            raise KeyError("Cannot edit")
+        super(UserPreferenceCollection, self).__setitem__(key, value)
+
+    def __iter__(self):
+        return self.dprefs.property_defaults.__iter__()
+
+    iterkeys = __iter__
+
+    def iteritems(self):
+        keys = set()
+        for k, v in super(UserPreferenceCollection, self).iteritems():
+            keys.add(k)
+            yield k, v
+        for k, v in self.dprefs.iteritems():
+            if k not in keys:
+                yield k, v
+
+    def __getitem__(self, key):
+        try:
+            return super(UserPreferenceCollection, self).__getitem__(key)
+        except IndexError:
+            return self.dprefs[key]
+
+    def __delitem__(self, key):
+        try:
+            return super(UserPreferenceCollection, self).__delitem__(key)
+        except IndexError, e:
+            if key not in self.dprefs:
+                raise e
+
+    def __contains__(self, key):
+        return key in self.dprefs
 
 
 class UserNsDict(MutableMapping):

@@ -22,6 +22,7 @@ class Preferences(Base, MutableMapping):
     """
     __metaclass__ = DeclarativeAbstractMeta
     __tablename__ = "preferences"
+    BASE_PREFS_NAME = "default"
     id = Column(Integer, primary_key=True)
     name = Column(CoerceUnicode, nullable=False, unique=True)
     cascade_id = Column(Integer, ForeignKey(id), nullable=True)
@@ -30,7 +31,8 @@ class Preferences(Base, MutableMapping):
     cascade_preferences = relationship("Preferences", remote_side=[id])
 
     @classmethod
-    def get_by_name(cls, name):
+    def get_by_name(cls, name=None):
+        name = name or cls.BASE_PREFS_NAME
         return cls.default_db.query(cls).filter_by(name=name).first()
 
     @classmethod
@@ -160,6 +162,8 @@ class Preferences(Base, MutableMapping):
         "navigation_sections": {},
         # Translations for the navigation sections
         "translations": {},
+        # Properties which a user cannot override
+        "forbid_user_edit": [],
     }
 
     # filter some incoming values through a conversion/validation function

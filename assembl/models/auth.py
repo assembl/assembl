@@ -823,9 +823,12 @@ class User(AgentProfile):
 
     @classmethod
     def extra_collections(cls):
-        from assembl.views.traversal import CollectionDefinition
+        from assembl.views.traversal import (
+            CollectionDefinition, AbstractCollectionDefinition,
+            UserNSBoundDictContext)
         from .notification import NotificationSubscription
         from .discussion import Discussion
+        from .user_key_values import UserPreferenceCollection
         class NotificationSubscriptionCollection(CollectionDefinition):
             def __init__(self, cls):
                 super(NotificationSubscriptionCollection, self).__init__(
@@ -896,9 +899,37 @@ class User(AgentProfile):
             def get_default_view(self):
                 return "default"
 
+        class PreferencePseudoCollection(AbstractCollectionDefinition):
+            def __init__(self):
+                super(PreferencePseudoCollection, self).__init__(
+                    cls, UserPreferenceCollection)
+
+            def decorate_query(
+                    self, query, owner_alias, coll_alias, parent_instance,
+                    ctx):
+                log.error("This should not happen")
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id, ctx,
+                    kwargs):
+                log.error("This should not happen")
+
+            def contains(self, parent_instance, instance):
+                log.error("This should not happen")
+
+            def make_context(self, parent_ctx):
+                user_id = parent_ctx._instance.id
+                discussion = None
+                discussion_id = parent_ctx.get_discussion_id()
+                if discussion_id:
+                    discussion = Discussion.get(discussion_id)
+                coll = UserPreferenceCollection(user_id, discussion)
+                return UserNSBoundDictContext(coll, parent_ctx)
+
         return {
             'notification_subscriptions': NotificationSubscriptionCollection(cls),
-            'local_roles': LocalRoleCollection(cls)}
+            'local_roles': LocalRoleCollection(cls),
+            'preferences': PreferencePseudoCollection()}
 
     def get_notification_subscriptions_for_current_discussion(self):
         "CAN ONLY BE CALLED FROM API V2"
