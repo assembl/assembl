@@ -36,6 +36,14 @@ ink_css
 
       /* Synthesis-specific CSS */
 
+
+      #title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        margin-top: 10px;
+      }
+
       #introduction, #conclusion {
         background-color: #4ac780; /* this is $theme_synthesis_header_bg in _synthesis.scss */
         padding: 10px;
@@ -46,13 +54,39 @@ ink_css
       }
     
       #synthesis ul {
-        padding-left: 20px;
+        padding-left: 14px;
+        margin-top: 5px;
       }
 
       #synthesis ul li {
-        padding-left: 3px;
-        padding-top: 5px;
+        padding-left: 5px;
+        padding-top: 10px;
       }
+
+      #synthesis ul li {
+        list-style-type: disc;
+      }
+
+      #synthesis ul li > div > p { /* in order to limit the vertical distance between an idea and its link */
+        margin-bottom: 3px;
+      }
+
+      #synthesis ul li ul {
+        padding-left: 25px;
+      }
+
+      #synthesis ul li ul li {
+        list-style-type: circle;
+      }
+
+      #synthesis ul li ul li ul li {
+        list-style-type: square;
+      }
+
+      #synthesis ul li ul li ul li ul li {
+        list-style-type: circle;
+      }
+
 
       #synthesis .link-to-idea {
         color: #999;
