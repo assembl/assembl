@@ -61,7 +61,8 @@
   },
   "devDependencies": {
     "jscs": "~1.13",
-    "node-sass": "3.2.0"
+    "node-gyp": "~3",
+    "node-sass": "3.3.3"
   },
   "browser": {
     "jit": "./assembl/static/js/bower/jit/jit/jit.js"
