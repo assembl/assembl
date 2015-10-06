@@ -23,7 +23,7 @@ from sqlalchemy import (
     Index,
     UniqueConstraint
 )
-from pyramid.httpexceptions import HTTPBadRequest
+from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
 from sqlalchemy.orm import (
     relationship, backref, deferred)
 from sqlalchemy.types import Text
@@ -918,9 +918,15 @@ class User(AgentProfile):
                 log.error("This should not happen")
 
             def make_context(self, parent_ctx):
+                from ..auth.util import (
+                    get_current_user_id, user_has_permission)
                 user_id = parent_ctx._instance.id
                 discussion = None
                 discussion_id = parent_ctx.get_discussion_id()
+                current_user_id = get_current_user_id()
+                if user_id != current_user_id and not user_has_permission(
+                        discussion_id, current_user_id, P_SYSADMIN):
+                    raise HTTPUnauthorized()
                 if discussion_id:
                     discussion = Discussion.get(discussion_id)
                 coll = UserPreferenceCollection(user_id, discussion)
