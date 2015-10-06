@@ -8,6 +8,7 @@ $messageBodyFontSize: 13px;
 $mesageBodyLineHeight: 19px;
 //To keep text readable
 $messageBodyMaxWidth: 500px;
+$messageBodyMinWidth: 300px; //If you bump it to the same value as messageBodyMaxWidth, the messagelist will no longer adapt to the available width
 $ten: 10px;
 $separatorBulletMargin: 0.6em;
 $previewNumLines: 4;
@@ -22,7 +23,6 @@ $previewNumLines: 4;
   padding: 7px$messagePaddingLR+3*$mesageSpacing 7px $messagePaddingLR; //To balance the spacing of the message family on the left
   //margin: 0px $mesageSpacing 0px $mesageSpacing; //TODO: fix scroolbar margin
   min-height: $avatarSize;
-  //max-width: $messageBodyMaxWidth;
   height: auto;
   color: $gray2;
   //border-top: solid 1px $gray3;
@@ -167,6 +167,7 @@ $previewNumLines: 4;
     .message-body {
       line-height: $mesageBodyLineHeight;
       max-width: $messageBodyMaxWidth;
+      min-width: $messageBodyMinWidth;
       margin-top: $mesageSpacing;
       font-size: $messageBodyFontSize;
     }
@@ -292,7 +293,7 @@ $previewNumLines: 4;
     }
     .centerSection {
       display: block; //So sub elements do not wrap
-      max-width: $messageBodyMaxWidth - 100px; //100px is arbitrary to leave space for avatars and name
+      max-width: $messageBodyMaxWidth - 100px; //100px is arbitrary to leave space for avatars and name.  Normally what we whould constraint is the sum of (name + body) - avatar - date 
       margin: 0px;
       text-overflow: ellipsis;
       white-space: nowrap;
