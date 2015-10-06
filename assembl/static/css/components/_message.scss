@@ -61,7 +61,6 @@ $previewNumLines: 4;
     font-size: 12px; //This should be rem or something - benoitg
     overflow: hidden;
     text-overflow: ellipsis;
-    display: table;
   }
 
   .message-headerAndDate {
@@ -292,10 +291,15 @@ $previewNumLines: 4;
       margin: 0px;
     }
     .centerSection {
+      display: block; //So sub elements do not wrap
+      max-width: $messageBodyMaxWidth - 100px; //100px is arbitrary to leave space for avatars and name
       margin: 0px;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      .message-abstract {
+        display: block; //So sub elements do not wrap
+      }
     }
     .message-author {
       @extend .header_item_template;
