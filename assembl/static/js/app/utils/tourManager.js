@@ -32,6 +32,9 @@ var TourManager = Marionette.Object.extend({
       onNext: function() {
           // need to scroll messageListPanel there.
       },
+      onClose: function() {
+        that.stopTours();
+      },
       i18n: this.hopscotch_i18n
     });
     hopscotch.listen('end', function() {
@@ -194,6 +197,10 @@ var TourManager = Marionette.Object.extend({
     if (this.currentTour !== undefined) {
       this.startCurrentTour();
     }
+  },
+
+  stopTours: function() {
+    this.nextTours = [];
   },
 
   startCurrentTour: function() {
