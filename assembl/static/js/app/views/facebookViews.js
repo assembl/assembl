@@ -5,6 +5,7 @@ var Marionette = require('../shims/marionette.js'),
     _ = require('../shims/underscore.js'),
     i18n = require('../utils/i18n.js'),
     $ = require('../shims/jquery.js'),
+    Types = require('../utils/types.js'),
     Promise = require('bluebird'),
     Moment = require('moment'),
     CollectionManager = require('../common/collectionManager.js'),
@@ -688,7 +689,7 @@ var pageView = Marionette.ItemView.extend({
 
 });
 
-var fbLayout = Marionette.LayoutView.extend({
+var exportPostForm = Marionette.LayoutView.extend({
   template: '#tmpl-loader',
 
   //template: "#tmpl-exportPostModal-fb",
@@ -770,82 +771,8 @@ var fbLayout = Marionette.LayoutView.extend({
       break;
     }
 
-  }
-});
-
-var basefbView = Marionette.LayoutView.extend({
-  template: '#tmpl-sourceFacebook',
-  ui: {
-    root: '.js_facebook_view'
-  }, 
-  regions: {
-    parent: '@ui.root'
   },
-  events: {
-    'click .js_ok_submit': 'submitForm'
-  },
-  modelEvents: {
-    "change": "render"
-  },
-  initialize: function(options){
-    this.vent = _.extend({}, Backbone.Events);
-    this.model = options.model;
-    this.exportedMessage = options.exportedMessage;
-  },
-
-  onShow: function(){
-    var that = this;
-    checkState(function(fbState) {
-      console.log('The state of the checkState function', fbState);
-      if (fbState.ready) {
-        var fbView = new fbLayout({
-          model: that.model,
-          exportedMessage: that.exportedMessage,
-          vent: that.vent
-        });
-
-        that.parent.show(fbView);
-      }
-      else {
-        var errView = new errorView({
-          ready: fbState.ready,
-          errorState: fbState.errorState,
-          vent: that.vent,
-          model: that.model
-        });
-
-        that.parent.show(errView);
-      }
-    });
-
-  },
-  submitForm: function(e) {
-    console.log('submitting form');
-    e.preventDefault();
-    // FIXME: @benoitg Where is formType supposed to come from?
-    // Nowhere in the code
-    if (false && !this.formType) {
-      console.log('Cannot continue. Form is incomplete.');
-      var er = i18n.gettext("Please select a destination to export to before continuing");
-      $('.js_export_error_message').text(er);
-    }
-    else {
-      var that = this;
-      console.log('currentView', this.currentView);
-      this._submitForm(function() {
-        //that.destroy();
-      }, function() {
-        var text = i18n.gettext("Facebook was unable to create the post. Close the box and try again.")
-        that.$('.js_export_error_message').text(text);
-      });
-    }
-  },
-
-  // FIXME @benoitg: this fails because this.bundle is only 
-  // defined in the fbLayout class. (used for endpoint etc.)
-  // I suspect _submitForm should move back to fbLayout, 
-  // but I want to understand why you moved it here first.
-  _submitForm: function(success, error) {
+  submitForm: function(success, error) {
     var that = this;
     var getName = function() {
       var tmp = $('.js_fb-suggested-name').val();
@@ -962,6 +889,148 @@ var basefbView = Marionette.LayoutView.extend({
       }
     });
   }
+
+
+});
+
+var FacebookSourceForm = Marionette.LayoutView.extend({
+  template: '#tmpl-facebookSourceForm',
+  regions: {
+    'sourcePicker': ".source_picker"
+  },
+  initialize: function(options) {
+    this.token = options.token;
+    this.vent = options.vent; //Event Aggregator
+    this.bundle = {
+        endpoint: null,
+        credentials: window.FB_TOKEN.getUserToken()
+    };
+  },
+  submitForm: function(success, error) {
+    // TODO
+  }
+});
+
+var publicGroupSourceForm = FacebookSourceForm.extend({
+  // TODO (with URL interpretation)
+});
+
+var privateGroupSourceForm = FacebookSourceForm.extend({
+  onBeforeShow: function() {
+    this.getRegion('sourcePicker').show(new groupView({
+          token: this.token,
+          bundle: this.bundle,
+          vent: this.vent
+        }));
+  }
+});
+
+var pageSourceForm = FacebookSourceForm.extend({
+  onBeforeShow: function() {
+    this.getRegion('sourcePicker').show(new pageView({
+          token: this.token,
+          bundle: this.bundle,
+          vent: this.vent
+        }));
+  }
+});
+
+var basefbView = Marionette.LayoutView.extend({
+  template: '#tmpl-sourceFacebook',
+  ui: {
+    root: '.js_facebook_view'
+  }, 
+  regions: {
+    subForm: '@ui.root'
+  },
+  events: {
+    'click .js_ok_submit': 'submitForm'
+  },
+  modelEvents: {
+    "change": "render"
+  },
+  initialize: function(options){
+    this.vent = _.extend({}, Backbone.Events);
+    this.model = options.model;
+    this.exportedMessage = options.exportedMessage;
+  },
+
+  onShow: function(){
+    var that = this;
+    checkState(function(fbState) {
+      console.log('The state of the checkState function', fbState);
+      if (fbState.ready) {
+        var fbView;
+        if (that.exportedMessage) {
+          fbView = new exportPostForm({
+            model: that.model,
+            exportedMessage: that.exportedMessage,
+            vent: that.vent
+          });
+        } else {
+          var viewClass;
+          switch (that.model.get('@type')) {
+            case Types.FACEBOOK_GROUP_SOURCE_FROM_USER:
+              viewClass = privateGroupSourceForm;
+              break;
+            case Types.FACEBOOK_PAGE_POSTS_SOURCE:
+              viewClass = pageSourceForm;
+              break;
+            case Types.FACEBOOK_PAGE_FEED_SOURCE:
+              viewClass = publicGroupSourceForm;
+              break;
+            case Types.FACEBOOK_SINGLE_POST_SOURCE:
+              viewClass = exportPostForm;
+              break;
+            default:
+              console.error("unknown type" + that.model.get('@type'));
+          }
+          fbView = new viewClass({
+            model: that.model,
+            vent: that.vent
+          });
+        }
+        that.fbView = fbView;
+        that.subForm.show(fbView);
+      }
+      else {
+        var errView = new errorView({
+          ready: fbState.ready,
+          errorState: fbState.errorState,
+          vent: that.vent,
+          model: that.model
+        });
+
+        that.subForm.show(errView);
+      }
+    });
+
+  },
+  submitForm: function(e) {
+    console.log('submitting form');
+    e.preventDefault();
+    // FIXME: @benoitg Where is formType supposed to come from?
+    // Nowhere in the code
+    if (false && !this.formType) {
+      console.log('Cannot continue. Form is incomplete.');
+      var er = i18n.gettext("Please select a destination to export to before continuing");
+      $('.js_export_error_message').text(er);
+    }
+    else if (!this.fbView) {
+     var er = i18n.gettext("Please complete facebook login");
+      $('.js_export_error_message').text(er); 
+    } else {
+      var that = this;
+      console.log('currentView', this.currentView);
+      this.fbView.submitForm(function() {
+        //that.destroy();
+      }, function() {
+        var text = i18n.gettext("Facebook was unable to create the post. Close the box and try again.")
+        that.$('.js_export_error_message').text(text);
+      });
+    }
+  },
+
 });
 
 module.exports = {

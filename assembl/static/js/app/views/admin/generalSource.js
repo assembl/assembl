@@ -74,9 +74,9 @@ var SourceView = Marionette.LayoutView.extend({
   onShow: function(){
     var display_view = getSourceDisplayView(this.model);
     this.getRegion('readOnly').show(new display_view({model: this.model}));
-    var edit_view = getSourceEditView(this.model.get("@type"));
-    if (edit_view !== undefined) {
-      this.getRegion('form').show(new edit_view({model: this.model}));
+    var editViewClass = getSourceEditView(this.model.get("@type"));
+    if (editViewClass !== undefined) {
+      this.getRegion('form').show(new editViewClass({model: this.model}));
     } else {
       this.getRegion('form').show("");
     }
@@ -97,6 +97,7 @@ var CreateSource = Marionette.LayoutView.extend({
     'click @ui.create_button': 'createButton',
     'change @ui.selector': 'changeSubForm',
   },
+  editView: undefined,
   serializeData: function() {
     var types = [
         Types.IMAPMAILBOX,
@@ -127,14 +128,20 @@ var CreateSource = Marionette.LayoutView.extend({
   },
   changeSubForm: function(ev) {
     var sourceType = ev.currentTarget.value;
-    var editView = getSourceEditView(sourceType);
+    var editViewClass = getSourceEditView(sourceType);
     var modelClass = Source.getSourceClassByType(sourceType);
-    if (editView !== undefined && modelClass !== undefined) {
-      this.getRegion('edit_form').show(new editView({model: new modelClass()}));
+    if (editViewClass !== undefined && modelClass !== undefined) {
+      this.editView = new editViewClass({model: new modelClass()});
+      this.getRegion('edit_form').show(this.editView);
+    } else {
+      this.editView = undefined;
+      this.getRegion('edit_form').show("");
     }
   },
   createButton: function(ev) {
-    
+    if (this.editView !== undefined) {
+      this.editView.submitForm();
+    }
   }
 });
 

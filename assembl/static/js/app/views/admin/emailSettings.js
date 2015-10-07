@@ -82,7 +82,9 @@ module.exports = Marionette.ItemView.extend({
   },
   saveSource: function(e) {
     e.preventDefault();
-
+    this.submitForm();
+  },
+  submitForm: function() {
     var name = this.$('#name').val(),
         admin_sender = this.$('#admin_sender').val(),
         post_email_address = this.$('#post_email_address').val(),
