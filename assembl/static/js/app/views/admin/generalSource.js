@@ -109,13 +109,13 @@ var CreateSource = Marionette.LayoutView.extend({
         Types.FACEBOOK_SINGLE_POST_SOURCE
       ],
       type_names = [
-        i18n.gettext("IMAPMailbox"),
-        i18n.gettext("MailingList"),
-        i18n.gettext("FacebookGroupSource"),
-        i18n.gettext("FacebookGroupSourceFromUser"),
-        i18n.gettext("FacebookPagePostsSource"),
-        i18n.gettext("FacebookPageFeedSource"),
-        i18n.gettext("FacebookSinglePostSource")
+        i18n.gettext("IMAP mailbox"),
+        i18n.gettext("Mailing List"),
+        i18n.gettext("Posts from a Facebook group (by URL)"),
+        i18n.gettext("Posts from a Facebook group to which you're subscribed"),
+        i18n.gettext("Posts from a Facebook page to which you're subscribed"),
+        i18n.gettext("Events from a Facebook page to which you're subscribed"),
+        i18n.gettext("Comments to a given facebook post (by URL)")
       ],
       type_name_assoc = {};
       for (var i in types) {
