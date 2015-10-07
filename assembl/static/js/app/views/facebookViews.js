@@ -1009,6 +1009,9 @@ var basefbView = Marionette.LayoutView.extend({
   submitForm: function(e) {
     console.log('submitting form');
     e.preventDefault();
+    this.saveModel();
+  },
+  saveModel: function() {
     // FIXME: @benoitg Where is formType supposed to come from?
     // Nowhere in the code
     if (false && !this.formType) {

@@ -140,7 +140,7 @@ var CreateSource = Marionette.LayoutView.extend({
   },
   createButton: function(ev) {
     if (this.editView !== undefined) {
-      this.editView.submitForm();
+      this.editView.saveModel();
     }
   }
 });

@@ -11,7 +11,7 @@ module.exports = Marionette.ItemView.extend({
     reprocess: '.js_reprocess'
   },
   events: {
-    'click @ui.source':'saveSource',
+    'click @ui.source':'submitForm',
     'click @ui.reimport':'reimportSource',
     'click @ui.reprocess':'reprocessSource'
   },
@@ -80,11 +80,11 @@ module.exports = Marionette.ItemView.extend({
 
     return false;
   },
-  saveSource: function(e) {
+  submitForm: function(e) {
     e.preventDefault();
-    this.submitForm();
+    this.saveModel();
   },
-  submitForm: function() {
+  saveModel: function() {
     var name = this.$('#name').val(),
         admin_sender = this.$('#admin_sender').val(),
         post_email_address = this.$('#post_email_address').val(),
