@@ -1,10 +1,11 @@
 var Backbone = require('../shims/backbone.js'),
     Marionette = require('../shims/marionette.js'),
-    i18n = require('../utils/i18n.js')
-$ = require('../shims/jquery.js'),
-_ = require('../shims/underscore.js'),
-Promise = require('bluebird'),
-FacebookViews = require('./facebookViews.js');
+    i18n = require('../utils/i18n.js'),
+    $ = require('../shims/jquery.js'),
+    _ = require('../shims/underscore.js'),
+    Promise = require('bluebird'),
+    Source = require('../models/sources.js'),
+    FacebookViews = require('./facebookViews.js');
 
 var Modal = Backbone.Modal.extend({
   template: '#tmpl-loader',
@@ -40,7 +41,8 @@ var Modal = Backbone.Modal.extend({
   loadFbView: function(token) {
       var fbView = new FacebookViews.init({
         exportedMessage: this.exportedMessage,
-        token: token
+        token: token,
+        model: new Source.Model.FacebookSinglePostSource()
       });
 
       this.$('.js_source-specific-form').html(fbView.render().el);

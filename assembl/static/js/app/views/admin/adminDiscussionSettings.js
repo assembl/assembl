@@ -17,32 +17,34 @@ var AdminDiscussionSettings = Marionette.LayoutView.extend({
     'click @ui.addSource': 'addFakeFacebookSource'
   },
   regions: {
-    source: "#source-content"
+    sources: "#sources-content",
+    createSource: "#create-source"
   },
   onBeforeShow: function() {
     var that = this,
         collectionManager = new CollectionManager();
 
     collectionManager.getDiscussionSourceCollectionPromise2()
-            .then(function(discussionSource) {
-              that.collection = discussionSource;
-              var discussionSourceList = new SourceView.DiscussionSourceList({
-                collection: discussionSource
-              });
-              that.getRegion('source').show(discussionSourceList);
-            })
-
+      .then(function(discussionSource) {
+        that.collection = discussionSource;
+        var discussionSourceList = new SourceView.DiscussionSourceList({
+          collection: discussionSource
+        });
+        that.getRegion('sources').show(discussionSourceList);
+      });
+    
+    this.getRegion('createSource').show(new SourceView.CreateSource());
   },
 
   addFakeFacebookSource: function(evt){
     evt.preventDefault();
 
     //Mock facebook view
-    this.collection.add(new Sources.Model.Facebook({
-      '@type': 'FacebookSinglePostSource',
+    // this.collection.add(new Sources.Model.Facebook({
+    //   '@type': 'FacebookSinglePostSource',
       
-      name: 'Benoit!'
-    }));
+    //   name: 'Benoit!'
+    // }));
   }
 });
 

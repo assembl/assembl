@@ -1,0 +1,15 @@
+<div>
+<p>{{ gettext('Create a source:') }}
+<form>
+<select class="js_contentSourceType">
+<option value="" selected>{{ gettext('Select a source type')}}</option>
+<% for (var i in types) {
+    var type = types[i]; %>
+    <option value="<%= type %>"><%= type_names[type] %></option>
+<% } %>
+</select>
+</p>
+</form>
+<div class="js_editform"></div>
+<button class="js_contentSourceCreate">{{gettext('Create')}}</button>
+</div>

@@ -789,6 +789,7 @@ var basefbView = Marionette.LayoutView.extend({
   },
   initialize: function(options){
     this.vent = _.extend({}, Backbone.Events);
+    this.model = options.model;
     this.exportedMessage = options.exportedMessage;
   },
 
@@ -821,7 +822,9 @@ var basefbView = Marionette.LayoutView.extend({
   submitForm: function(e) {
     console.log('submitting form');
     e.preventDefault();
-    if (!this.formType) {
+    // FIXME: @benoitg Where is formType supposed to come from?
+    // Nowhere in the code
+    if (false && !this.formType) {
       console.log('Cannot continue. Form is incomplete.');
       var er = i18n.gettext("Please select a destination to export to before continuing");
       $('.js_export_error_message').text(er);
@@ -838,6 +841,10 @@ var basefbView = Marionette.LayoutView.extend({
     }
   },
 
+  // FIXME @benoitg: this fails because this.bundle is only 
+  // defined in the fbLayout class. (used for endpoint etc.)
+  // I suspect _submitForm should move back to fbLayout, 
+  // but I want to understand why you moved it here first.
   _submitForm: function(success, error) {
     var that = this;
     var getName = function() {
@@ -914,12 +921,9 @@ var basefbView = Marionette.LayoutView.extend({
               }
               else {
                 sender = fbAccount;
-                that.model = new Source.Model.Facebook({
+                that.model.set({
                   'fb_source_id': fbPostId,
                   'creator_id': sender.get("@id"),
-                  'url_path': null, //This is not vital, it's only extra information
-                  '@type': 'FacebookSinglePostSource',
-                  'is_content_sink': true,
                   'sink_data': {'post_id': that.exportedMessage.id, 'facebook_post_id': fbPostId}
                 });
 
