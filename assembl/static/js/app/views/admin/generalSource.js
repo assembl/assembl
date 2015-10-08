@@ -1,6 +1,8 @@
 var Marionette = require('../../shims/marionette.js'),
+    $ = require('../../shims/jquery.js'),
     i18n = require('../../utils/i18n.js'),
     Types = require('../../utils/types.js'),
+    Ctx = require('../../common/context.js'),
     Source = require('../../models/sources.js'),
     CollectionManager = require('../../common/collectionManager.js'),
     EmailSourceEditView = require("./emailSettings.js"),
@@ -43,7 +45,11 @@ var ReadSource = Marionette.ItemView.extend({
     },
 
     manualStart: function(evt){
-        console.log('A manual start event was clicked');
+        var url = this.model.url() + "/fetch_posts";
+        $.ajax(url, {
+          method: "POST",
+          contentType: "application/x-www-form-urlencoded",
+          data: {}});
     },
 
     serializeData: function(){
