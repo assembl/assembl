@@ -47,8 +47,10 @@ var ReadSource = Marionette.ItemView.extend({
     },
 
     serializeData: function(){
+      // TODO: Name for the types
         return {
-            name: this.model.get('name')
+            name: this.model.get('name'),
+            type: this.model.localizedName
         }
     },
 
@@ -107,18 +109,9 @@ var CreateSource = Marionette.LayoutView.extend({
         Types.FACEBOOK_PAGE_FEED_SOURCE,
         Types.FACEBOOK_SINGLE_POST_SOURCE
       ],
-      type_names = [
-        i18n.gettext("IMAP mailbox"),
-        i18n.gettext("Mailing List"),
-        i18n.gettext("Posts from a Facebook group (by URL)"),
-        i18n.gettext("Posts from a Facebook group to which you're subscribed"),
-        i18n.gettext("Posts from a Facebook page to which you're subscribed"),
-        i18n.gettext("Events from a Facebook page to which you're subscribed"),
-        i18n.gettext("Comments to a given facebook post (by URL)")
-      ],
       type_name_assoc = {};
       for (var i in types) {
-        type_name_assoc[types[i]] = type_names[i];
+        type_name_assoc[types[i]] = Source.getSourceClassByType(types[i]).localizedName;
       }
     return {
       types: types,

@@ -1,6 +1,7 @@
 'use strict';
 
 var Base = require('./base.js'),
+    i18n = require('../utils/i18n.js'),
     Ctx = require('../common/context.js'),
     Types = require('../utils/types.js'),
     $ = require('../shims/jquery.js');
@@ -8,6 +9,7 @@ var Base = require('./base.js'),
 //ContentSource + PostSource
 var Source = Base.Model.extend({
   urlRoot: Ctx.getApiV2DiscussionUrl('sources'),
+  localizedName: i18n.gettext("Generic content source"),
   defaults: {
     'name': 'ContentSource_' + this.cid,
     'creation_date': null,
@@ -40,10 +42,11 @@ var Source = Base.Model.extend({
   }
 });
 
-//Lump different email types into one email type??
-var Email = Source.extend({
+var IMAPMailboxSource = Source.extend({
+  localizedName: i18n.gettext("IMAP mailbox"),
   defaults: function() {
     return _.extend(Source.prototype.defaults, {
+      '@type': Types.IMAPMAILBOX,
       'admin_sender': '',
       'post_email_address': '',
       'host': '',
@@ -54,18 +57,38 @@ var Email = Source.extend({
   }
 });
 
+var MailingListSource = IMAPMailboxSource.extend({
+  localizedName: i18n.gettext("Mailing list"),
+  defaults: function() {
+    return _.extend(IMAPMailboxSource.prototype.defaults(), {
+      '@type': Types.MAILING_LIST
+    });
+  }
+});
+
+var FacebookSource = Source.extend({
+  localizedName: i18n.gettext("IMAP mailbox"),
+  defaults: function() {
+    return _.extend(Source.prototype.defaults, {
+      'fb_source_id': null,
+      'url_path': null,
+      'creator_id': Ctx.getCurrentUserId()
+    });
+  }
+});
+
 var FacebookSource = Source.extend({
   defaults: function() {
     return _.extend(Source.prototype.defaults, {
       'fb_source_id': null,
       'url_path': null,
-      'is_content_sink': false,
       'creator_id': Ctx.getCurrentUserId()
     });
   }
 });
 
 var FacebookSinglePostSource = FacebookSource.extend({
+  localizedName: i18n.gettext("Comments to a given facebook post (by URL)"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
       '@type': Types.FACEBOOK_SINGLE_POST_SOURCE
@@ -74,6 +97,7 @@ var FacebookSinglePostSource = FacebookSource.extend({
 });
 
 var FacebookGroupSource = FacebookSource.extend({
+  localizedName: i18n.gettext("Posts from a Facebook group (by URL)"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
       '@type': Types.FACEBOOK_GROUP_SOURCE
@@ -82,6 +106,7 @@ var FacebookGroupSource = FacebookSource.extend({
 });
 
 var FacebookGroupSourceFromUser = FacebookSource.extend({
+  localizedName: i18n.gettext("Posts from a Facebook group to which you're subscribed"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
       '@type': Types.FACEBOOK_GROUP_SOURCE_FROM_USER
@@ -90,6 +115,7 @@ var FacebookGroupSourceFromUser = FacebookSource.extend({
 });
 
 var FacebookPagePostsSource = FacebookSource.extend({
+  localizedName: i18n.gettext("Posts from a Facebook page to which you're subscribed"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
       '@type': Types.FACEBOOK_PAGE_POSTS_SOURCE
@@ -98,6 +124,7 @@ var FacebookPagePostsSource = FacebookSource.extend({
 });
 
 var FacebookPageFeedSource = FacebookSource.extend({
+  localizedName: i18n.gettext("Events from a Facebook page to which you're subscribed"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
       '@type': Types.FACEBOOK_PAGE_FEED_SOURCE
@@ -129,8 +156,9 @@ function getSourceClassByType(type) {
       case Types.FACEBOOK_SINGLE_POST_SOURCE:
         return FacebookSinglePostSource;
       case Types.IMAPMAILBOX:
+        return IMAPMailboxSource;
       case Types.MAILING_LIST:
-        return Email;
+        return MailingListSource;
       default:
         console.error("Unknown source type:" + type);
         return Source;
@@ -161,7 +189,8 @@ var sourceCollection = Base.Collection.extend({
 module.exports = {
   Model: {
     Source: Source,
-    Email: Email,
+    IMAPMailboxSource: IMAPMailboxSource,
+    MailingListSource: MailingListSource,
     FacebookSinglePostSource: FacebookSinglePostSource,
     FacebookGroupSource: FacebookGroupSource,
     FacebookGroupSourceFromUser: FacebookGroupSourceFromUser,
