@@ -11,11 +11,13 @@ from sqlalchemy import (
     Integer,
     String,
     Boolean,
-    DateTime
+    DateTime,
+    Binary
 )
 import simplejson as json
-from dateutil.parser import parse as parse_datetime
-from sqlalchemy.orm import relationship, backref
+# from dateutil.parser import parse as parse_datetime
+from dateutil.tz import tzutc
+from sqlalchemy.orm import relationship, backref, deferred
 from virtuoso.alchemy import CoerceUnicode
 
 from .auth import (
@@ -27,9 +29,11 @@ from .auth import (
 from ..auth import (CrudPermissions, P_EXPORT, P_SYSADMIN)
 from ..lib.config import get_config
 from ..lib.sqla import Base
+from ..lib.parsedatetime import parse_datetime
 from ..tasks.source_reader import PullSourceReader, ReaderStatus
 from .generic import PostSource, ContentSourceIDs
 from .post import ImportedPost
+from .attachment import Document, PostAttachment
 
 
 API_VERSION_USED = 2.2
@@ -38,6 +42,13 @@ DOMAIN = 'facebook.com'
 
 
 facebook_sdk_locales = defaultdict(set)
+
+FacebookPostTypes = {
+    'photo': 'photo',
+    'album': 'album',
+    'video': 'video',
+    'status': 'status'
+}
 
 
 def fetch_facebook_sdk_locales():
@@ -378,6 +389,17 @@ class FacebookParser(object):
             return profile_info.get('url')
         return None
 
+    # ----------------------------- attachments  ------------------------------
+
+    def get_post_attachments(self, post_id):
+        resp = self.api.get_connections(post_id, "attachments")
+        return resp.get('data', None)
+
+    def get_comment_attachments(self, comment_id):
+        kwarg = {'fields': 'attachment'}
+        resp = self.api.get_object(comment_id, **kwarg)
+        return resp.get('attachment', None)
+
     # ============================SETTERS=================================== #
 
     def _populate_attachment(self, content):
@@ -422,6 +444,9 @@ class FacebookGenericSource(PostSource):
                            backref=backref('sources',
                                            cascade="all, delete-orphan"))
 
+    upper_bound = Column(DateTime)
+    lower_bound = Column(DateTime)
+
     __mapper_args__ = {
         'polymorphic_identity': 'facebook_source'
     }
@@ -442,13 +467,31 @@ class FacebookGenericSource(PostSource):
         return FacebookReader(self.id, api)
 
     @classmethod
-    def create_from(cls, discussion, fb_id, creator, url, some_name):
+    def create_from(cls, discussion, fb_id, creator, url, some_name,
+                    lower=None, upper=None):
         created_date = datetime.utcnow()
         last_import = created_date
         return cls(name=some_name, creation_date=created_date,
                    discussion=discussion, fb_source_id=fb_id,
                    url_path=url, last_import=last_import,
-                   creator=creator)
+                   creator=creator, lower_bound=lower,
+                   upper_bound=upper)
+
+    @property
+    def upper_bound_timezone_checked(self):
+        return self.upper_bound
+
+    @upper_bound_timezone_checked.setter
+    def upper_bound_timezone_checked(self, value):
+        self.upper_bound = parse_datetime(value)
+
+    @property
+    def lower_bound_timezone_checked(self):
+        return self.lower_bound
+
+    @lower_bound_timezone_checked.setter
+    def lower_bound_timezone_checked(self, value):
+        self.lower_bound = parse_datetime(value)
 
     def get_creator_uri(self):
         if self.creator:
@@ -497,6 +540,116 @@ class FacebookGenericSource(PostSource):
         db[post.get('id')] = new_post
         return True
 
+    def _create_attachments(self, post, assembl_post, get_attachment):
+        # get_attachment callback. This function will be used by the
+        # post_maker, comment_maker, and also the re_import, re_process,
+        # therefore it will be variable.
+        attach_list = []
+        post_id = post.get('id', None)
+        description = post.get('description', None)
+        title = post.get('name', None)
+        fb_type = post.get('type')
+        # fb_status_type = post.get('status_type', None)
+        # TODO map the facebook type to an OEMBED Mime-type
+        mime_type = None
+        _now = datetime.utcnow()
+
+        # try:
+        # attach = self.parser.get_post_attachments(post_id)
+        # attach = self.parser.get_comment_attachments(post_id)
+        # import pdb; pdb.set_trace()
+        attachs = get_attachment(post_id)
+        for attach in attachs:
+            if fb_type == 'photo':
+                attach_type = attach.get('type', None)
+                if attach_type == 'album':
+                    urls = [a.get('media', {}).get('image', {}).
+                            get('src', None) for a in
+                            attach.get('subattachments',
+                                       {}).get('data', [])]
+                    title = attach.get('title')
+                    description = attach.get('description')
+
+                    for url in urls:
+                        attach_list.append({
+                            'url': url,
+                            'title': title,
+                            'description': description
+                        })
+
+                else:
+                    attach_list.append({
+                        'url': attach.get('media', {}).get('image', {}).get('src', None),
+                        'title': attach.get('title'),
+                        'description': attach.get('description')
+                    })
+
+            elif fb_type == 'link':
+                # Includes image links attached
+                # using post['link'] because attach['url'] is a
+                # facebook redirect url to the source. If
+                # frontend oembed supports redirects, then this can
+                # be changed.
+                attach_list.append({
+                    'url': post.get('link'),
+                    'title': attach.get('title'),
+                    'description': attach.get('description'),
+                    'thumbnail': post.get('picture', None)
+                })
+
+            else:
+                # all other types
+                # includes 'video'
+                # includes youtube, vimeo, etc attachments as well
+                # includes 'status' types as well.
+                # 2015/10/7 cannot support embedded video, so posting
+                # url of the facebook post
+                # TODO: Update field to match support of video
+                # This can also be a comment type
+                attach_list.append({
+                    'url': attach.get('url'),  # This will be facebook redirect url
+                    'title': attach.get('title'),
+                    'description': attach.get('description'),
+                    'thumbnail': attach.get('media', {}).get('image', {}).get('src', None)
+                })
+
+        attach_list = filter(lambda a:
+                             True if a.get('url') else False, attach_list)
+
+        # TODO Check for duplication
+        docs = map(lambda a: Document(
+            uri_id=a.get('url'),
+            creation_date=_now,
+            discussion=self.discussion,
+            title=a.get('title'),
+            description=a.get('description'),
+            thumbnail_url=a.get('thumbnail', None)
+        ), attach_list)
+
+        post_attachments = map(lambda d: PostAttachment(
+            post=assembl_post,
+            discussion=self.discussion,
+            document=d,
+            creator=self.creator.user,  # must be AgentProfile
+            attachmentPurpose='EMBED_ATTACHMENT'
+        ), docs)
+
+        if attachs:
+            # this is an array. Wrap it in a data field, like how
+            # facebook returned to you.
+            data = {u'data': attachs}
+            assembl_post.attachment_blob = json.dumps(data)
+            self.db.flush()
+        # self.db.add(assembl_post)
+        self.db.add_all(docs)
+        self.db.flush()
+        self.db.add_all(post_attachments)
+        self.db.flush()
+
+        # except:
+        #     # TODO log that getting attachment failed
+        #     print "Failed to get /attachment of object"
+
     def _manage_post(self, post, obj_id, posts_db, users_db, upper, lower):
         """ Method that parses the json parsed facebook post and delegates
         the creation of an Assembl post
@@ -514,6 +667,10 @@ class FacebookGenericSource(PostSource):
         """
         cont = True
         post_created_time = parse_datetime(post.get('created_time'))
+        if not upper:
+            upper = self.upper_bound
+        if not lower:
+            lower = self.lower_bound
         if upper:
             if post_created_time > upper:
                 cont = False
@@ -538,6 +695,8 @@ class FacebookGenericSource(PostSource):
                 return
 
             assembl_post = posts_db.get(post_id)
+            self._create_attachments(post, assembl_post,
+                                     self.parser.get_post_attachments)
             self.db.commit()
             return assembl_post, cont
 
@@ -561,6 +720,8 @@ class FacebookGenericSource(PostSource):
         self.db.flush()
         comment_post = posts_db.get(comment_id)
         comment_post.set_parent(parent_post)
+        self._create_attachments(comment, comment_post,
+                                 self.parser.get_comment_attachments)
         self.db.commit()
         return comment_post
 
@@ -576,14 +737,16 @@ class FacebookGenericSource(PostSource):
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     break
 
-    def feed(self, upper_bound=None, lower_bound=None):
+    def feed(self, upper_bound=None, lower_bound=None, reimport=False,
+             reprocess=False):
         users_db = self._get_current_users()
         posts_db = self._get_current_posts()
 
         object_info = self.parser.get_object_info(self.fb_source_id)
 
         self._create_fb_user(
-            self.parser.get_user_object_creator(object_info), users_db
+            self.parser.get_user_object_creator(object_info),
+            users_db
         )
 
         for post in self.parser.get_feed_paginated(self.fb_source_id):
@@ -608,7 +771,7 @@ class FacebookGenericSource(PostSource):
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     return
 
-    def posts(self, upper=None, lower=None):
+    def posts(self, upper=None, lower=None, reimport=False, reprocess=False):
         users_db = self._get_current_users()
         posts_db = self._get_current_posts()
 
@@ -632,7 +795,8 @@ class FacebookGenericSource(PostSource):
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     return
 
-    def single_post(self, upper_bound=None, lower_bound=None):
+    def single_post(self, upper_bound=None, lower_bound=None,
+                    reimport=False, reprocess=False):
         # Only use if the content source is a single post
         users_db = self._get_current_users()
         posts_db = self._get_current_posts()
@@ -930,9 +1094,10 @@ class FacebookPost(ImportedPost):
                 onupdate='CASCADE',
                 ondelete='CASCADE'), primary_key=True)
 
-    attachment = Column(String(1024))
-    link_name = Column(CoerceUnicode(1024))
-    post_type = Column(String(20))
+    attachment_blob = deferred(Column(Binary), group='raw attachment')
+    # attachment = Column(String(1024))
+    # link_name = Column(CoerceUnicode(1024))
+    # post_type = Column(String(20))
 
     __mapper_args__ = {
         'polymorphic_identity': 'facebook_post'
@@ -942,50 +1107,16 @@ class FacebookPost(ImportedPost):
     def create(cls, source, post, user):
         import_date = datetime.utcnow()
         source_post_id = post.get('id')
-        source = source
         creation_date = parse_datetime(post.get('created_time'))
         discussion = source.discussion
         creator_agent = user.profile
         blob = json.dumps(post)
-
-        post_type = post.get('type', None)
-        subject, body, attachment, link_name = (None, None, None, None)
-        if not post_type:
-            has_attach = post.get('link', None)
-            if has_attach:
-                attachment = has_attach
-                body = post.get('message', "") + "\n" + post.get('link', "") \
-                    if 'message' in post else post.get('link', "")
-            else:
-                post_type = 'comment'
-                body = post.get('message')
-
-        elif post_type is 'video' or 'photo':
-            subject = post.get('story', None)
-            body = post.get('message', "") + "\n" + post.get('link', "") \
-                if 'message' in post else post.get('link', "")
-            attachment = post.get('link', None)
-            link_name = post.get('caption', None)
-
-        elif post_type is 'link':
-            subject = post.get('story', None)
-            body = post.get('message', "")
-            attachment = post.get('link')
-            link_name = post.get('caption', None)
-            match_str = re.split(r"^\w+://", attachment)[1]
-            if match_str not in body:
-                body += "\n" + attachment
-
-        elif post_type is 'status':
-            if not post.get('message', None):
-                # A type of post that does not have any links nor body content
-                # It is useless, therefore it should never generate a post
-                return None
-            body = post.get('message')
+        body = post.get('message')
+        subject = post.get('story', None)
 
         return cls(
-            attachment=attachment,
-            link_name=link_name,
+            # attachment=attachment,
+            # link_name=link_name,
             body_mime_type='text/plain',
             import_date=import_date,
             source_post_id=source_post_id,
@@ -994,7 +1125,7 @@ class FacebookPost(ImportedPost):
             creation_date=creation_date,
             discussion=discussion,
             creator=creator_agent,
-            post_type=post_type,
+            # post_type=post_type,
             imported_blob=blob,
             subject=subject,
             body=body

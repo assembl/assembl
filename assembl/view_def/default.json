@@ -127,7 +127,9 @@
         "@extends": "PostSource",
         "fb_source_id": true,
         "url_path": true,
-        "creator_id": "&get_creator_uri"
+        "creator_id": "&get_creator_uri",
+        "upper_bound": true,
+        "lower_bound": true
     },
     "FacebookGroupSource": {
         "@extends": "FacebookGenericSource"
@@ -226,9 +228,7 @@
     },
     "FacebookPost": {
         "@extends": "ImportedPost",
-        "attachment": true,
-        "link_name": true,
-        "post_type": true
+        "attachment_blob": false
     },
     "Webpage": {
         "@extends": "Content",

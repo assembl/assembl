@@ -41,11 +41,14 @@ var AttachmentModel = Base.Model.extend({
     /** 
      * One of:
      * Currently supported:
-     * 'EMBEEDED_ATTACHMENT',
+     * 'EMBED_ATTACHMENT',
      * Future:
      * 'EMBEEDED_INLINE'
      * 'BACKGROUND_IMAGE'
      * 'FORCE_DONWLOAD_DOCUMENT'
+     *
+     * Ensure that the front_end and back_end
+     * share the same values!
      */
     attachmentPurpose: 'EMBED_ATTACHMENT',
     

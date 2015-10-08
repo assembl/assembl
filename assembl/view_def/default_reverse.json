@@ -82,7 +82,9 @@
         "@extends": "PostSource",
         "fb_source_id": true,
         "url_path": true,
-        "creator_id": true
+        "creator_id": true,
+        "upper_bound": "upper_bound_timezone_checked",
+        "lower_bound": "lower_bound_timezone_checked"
     },
     "FacebookGroupSource": {
         "@extends": "FacebookGenericSource"
@@ -145,9 +147,7 @@
     },
     "FacebookPost": {
         "@extends": "ImportedPost",
-        "attachment": true,
-        "link_name": true,
-        "post_type": true
+        "attachment": true
     },
     "Email": {
         "@extends": "ImportedPost",

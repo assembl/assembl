@@ -12,19 +12,17 @@ from sqlalchemy import (
     event,
     func
 )
-
-from .generic import Content
 from virtuoso.alchemy import CoerceUnicode
-from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy.orm import relationship, backref
 
 from datetime import datetime
 from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..semantic.namespaces import (
-    SIOC, IDEA, ASSEMBL, DCTERMS, QUADNAMES, FOAF, RDF, VirtRDF)
+from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
 from .post import Post
 from .idea import Idea
 from .auth import AgentProfile
+
 
 class Document(DiscussionBoundBase):
     """
@@ -35,12 +33,16 @@ class Document(DiscussionBoundBase):
     id = Column(
         Integer, primary_key=True)
     """
-    The cannonical identifier of this document.  If a URL, it's to be 
+    The cannonical identifier of this document.  If a URL, it's to be
     interpreted as a purl
     """
-    uri_id = Column(CoerceUnicode(514), unique=False, index=True) ## MAP:  Change to true once https://app.asana.com/0/51461630427071/52921943509398 is done
+
+    # MAP: Change to true once
+    # https://app.asana.com/0/51461630427071/52921943509398 is done
+    uri_id = Column(CoerceUnicode(514), unique=False, index=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+                           info={'rdf': QuadMapPatternS(None,
+                                                        DCTERMS.created)})
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
         ondelete='CASCADE',
@@ -57,36 +59,42 @@ class Document(DiscussionBoundBase):
 
     oembed_type = Column(CoerceUnicode(1024), server_default="")
     mime_type = Column(CoerceUnicode(1024), server_default="")
-    #From metadata, not the user
+    # From metadata, not the user
     title = Column(CoerceUnicode(), server_default="",
-       info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
-    #From metadata, not the user
+                   info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+
+    # From metadata, not the user
     description = Column(
         UnicodeText,
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
-    #From metadata, not the user
+
+    # From metadata, not the user
     author_name = Column(
         UnicodeText)
-    #From metadata, not the user
+
+    # From metadata, not the user
     author_url = Column(
         UnicodeText)
-    #From metadata, not the user
+
+    # From metadata, not the user
     thumbnail_url = Column(
         UnicodeText)
-    #From metadata, not the user
+
+    # From metadata, not the user
     site_name = Column(
         UnicodeText)
 
     __mapper_args__ = {
         'polymorphic_identity': 'document',
     }
-    
+
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.id == discussion_id,)
+
 
 class Attachment(DiscussionBoundBase):
     """
@@ -97,8 +105,10 @@ class Attachment(DiscussionBoundBase):
     id = Column(
         Integer, primary_key=True)
 
+    type = Column(String(60), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+                           info={'rdf': QuadMapPatternS(None,
+                                                        DCTERMS.created)})
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
         ondelete='CASCADE',
@@ -126,10 +136,11 @@ class Attachment(DiscussionBoundBase):
             'attachments'),
     )
 
-    creator_id = Column(Integer, ForeignKey('agent_profile.id'), nullable=False)
+    creator_id = Column(Integer, ForeignKey('agent_profile.id'),
+                        nullable=False)
     creator = relationship(AgentProfile)
     title = Column(CoerceUnicode(1024), server_default="",
-       info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+                   info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
     description = Column(
         UnicodeText,
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
@@ -139,7 +150,8 @@ class Attachment(DiscussionBoundBase):
 
     __mapper_args__ = {
         'polymorphic_identity': 'attachment',
-        'with_polymorphic': '*'
+        'with_polymorphic': '*',
+        'polymorphic_on': 'type'
     }
 
     def get_discussion_id(self):
@@ -148,6 +160,7 @@ class Attachment(DiscussionBoundBase):
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.id == discussion_id,)
+
 
 class PostAttachment(Attachment):
     __tablename__ = "post_attachment"
@@ -176,15 +189,22 @@ class PostAttachment(Attachment):
         'with_polymorphic': '*'
     }
 
-@event.listens_for(PostAttachment.post, 'set', propagate=True, active_history=True)
-def attachment_object_attached_to_set_listener(target, value, oldvalue, initiator):
-    print "attachment_object_attached_to_set_listener for target: %s set to %s, was %s" % (target, value, oldvalue)
+
+@event.listens_for(PostAttachment.post, 'set',
+                   propagate=True, active_history=True)
+def attachment_object_attached_to_set_listener(target, value,
+                                               oldvalue, initiator):
+
+    # print "attachment_object_attached_to_set_listener for target:\
+    #      %s set to %s, was %s" % (target, value, oldvalue)
+
     if oldvalue is not None:
         with oldvalue.db.no_autoflush:
             oldvalue.send_to_changes()
     if value is not None:
         with value.db.no_autoflush:
             value.send_to_changes()
+
 
 class IdeaAttachment(Attachment):
     __tablename__ = "idea_attachment"

@@ -256,7 +256,9 @@ class Content(DiscussionBoundBase):
     }
 
     def get_body(self):
-        return self.body.strip()
+        if self.body:
+            return self.body.strip()
+        return self.body
 
     def get_title(self):
         return self.subject
