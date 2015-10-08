@@ -10,7 +10,6 @@ var Base = require('./base.js'),
 var discussionModel = Base.Model.extend({
   url: Ctx.getApiV2DiscussionUrl(),
   defaults: {
-    'settings': {},
     'introduction': '',
     'objectives': '',
     'creation_date': '',
@@ -50,7 +49,7 @@ var discussionModel = Base.Model.extend({
     },
 
   getVisualizations: function() {
-    var jed, settings = this.get('settings'),
+    var jed, settings = Ctx.getPreferences(),
         visualizations = settings.visualizations,
         navigation_sections = settings.navigation_sections || {},
         user = Ctx.getCurrentUser(),

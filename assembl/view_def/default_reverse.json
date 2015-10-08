@@ -177,7 +177,6 @@
         "@extends": "ActionOnIdea"
     },
     "Discussion": {
-        "settings": false,
         "permissions": false,
         "widget_collection_url": false,
         "creation_date": false,

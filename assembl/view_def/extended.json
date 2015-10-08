@@ -130,7 +130,6 @@
         "creation_date": true,
         "slug": true,
         "topic": true,
-        "settings": "settings_json",
         "permissions": "&get_roles_by_permission",
         "widget_collection_url": true,
         "objectives": true,
