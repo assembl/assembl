@@ -8,6 +8,9 @@
   <li <% if (selectedSection == 'notifications'){ %>class="active"<% } %>>
     <a href="#user/notifications" class="menu">{{ gettext('Notifications') }}</a>
   </li>
+  <li <% if (selectedSection == 'discussion_preferences'){ %>class="active"<% } %>>
+    <a href="#user/discussion_preferences" class="menu">{{ gettext('Discussion preferences') }}</a>
+  </li>
   <li class="mtxl">
     <a href="{{ discussion.get_url() }}">{{ gettext('Back to discussion') }}</a>
   </li>

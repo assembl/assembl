@@ -19,6 +19,7 @@ var Marionette = require('./shims/marionette.js'),
     AdminPartners = require('./views/admin/adminPartners.js'),
     UserNotificationSubscriptions = require('./views/user/userNotificationSubscriptions.js'),
     Profile = require('./views/user/profile.js'),
+    DiscussionPreferences = require('./views/user/discussionPreferences.js'),
     AgentViews = require('./views/agent.js'),
     Authorization = require('./views/authorization.js'),
     Permissions = require('./utils/permissions.js'),
@@ -185,6 +186,14 @@ var routeManager = Marionette.Object.extend({
     if (this.userHaveAccess()) {
       var profile = new Profile();
       Assembl.groupContainer.show(profile);
+    }
+  },
+
+  discussionPreferences: function() {
+    Assembl.headerRegions.show(new NavBar());
+    if (this.userHaveAccess()) {
+      var discussionPreferences = new DiscussionPreferences();
+      Assembl.groupContainer.show(discussionPreferences);
     }
   },
 
