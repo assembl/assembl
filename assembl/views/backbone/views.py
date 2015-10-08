@@ -163,9 +163,11 @@ def home_view(request):
     canAddExtract = user_has_permission(discussion.id, user_id, P_ADD_EXTRACT)
     context['canAddExtract'] = canAddExtract
     context['canDisplayTabs'] = True
+    preferences = discussion.preferences
     if user_id != Everyone:
-        from assembl.models import AgentProfile
+        from assembl.models import AgentProfile, UserPreferenceCollection
         user = AgentProfile.get(user_id)
+        preferences = UserPreferenceCollection(user_id, discussion)
         # TODO: user may not exist. Case of session with BD change.
         user.is_visiting_discussion(discussion.id)
         session = Discussion.default_db
@@ -196,6 +198,7 @@ def home_view(request):
                            current_prefs, session,
                            LanguagePreferenceOrder.OS_Default)
 
+    context['preferences'] = json.dumps(dict(preferences))
 
     response = render_to_response('../../templates/index.jinja2', context, request=request)
     # Prevent caching the home, especially for proper login/logout

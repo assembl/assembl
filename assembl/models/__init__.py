@@ -89,6 +89,7 @@ from .user_key_values import (
     DiscussionPerUserNamespacedKeyValue,
     # NamespacedUserKVCollection,
     # UserNsDict,
+    UserPreferenceCollection,
 )
 from .preferences import Preferences
 from .generic import (
