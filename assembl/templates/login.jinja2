@@ -115,17 +115,17 @@
             analytics.trackEvent(analytics.events.EMAIL_LOGIN);
           });
 
-          document.getElementsByClassName('js_login_facebook')[0].addEventListener('click', function(){
-            analytics.trackEvent(analytics.events.FACEBOOK_LOGIN);
-          });
-
-          document.getElementsByClassName('js_login_twitter')[0].addEventListener('click', function(){
-            analytics.trackEvent(analytics.events.TWITTER_LOGIN);
-          });
-
-          document.getElementsByClassName('js_login_google')[0].addEventListener('click', function(){
-            analytics.trackEvent(analytics.events.GOOGLE_LOGIN);
-          });
+          function instrument_social_login(element_cls, tracking_name) {
+            var social_login = document.getElementsByClassName(element_cls);
+            if (social_login) {
+              social_login[0].addEventListener('click', function(){
+                analytics.trackEvent(tracking_name);
+              });
+            }
+          }
+          instrument_social_login('js_login_facebook', analytics.events.FACEBOOK_LOGIN);
+          instrument_social_login('js_login_twitter', analytics.events.TWITTER_LOGIN);
+          instrument_social_login('js_login_google', analytics.events.GOOGLE_LOGIN);
 
         </script>
     {% endif %}
