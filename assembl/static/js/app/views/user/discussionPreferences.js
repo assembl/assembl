@@ -96,12 +96,12 @@ var discussionPreferences = Marionette.LayoutView.extend({
 
   getSaveUserPreferencePromise: function(preferenceName, value){
     var url = this.getUserPreferenceURL(preferenceName);
-    var data = $.param(value); // '"' + value + '"'; // value;
+    var data = '"' + value + '"';
     var promise = Promise.resolve($.ajax(
       url,
       {
         method: "PUT",
-        contentType: "application/json",
+        //contentType: "application/json",
         dataType: "json",
         data: data
       }
