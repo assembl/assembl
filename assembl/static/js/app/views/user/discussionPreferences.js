@@ -62,7 +62,6 @@ var discussionPreferences = Marionette.LayoutView.extend({
         var promise = that.getSaveUserPreferencePromise(preferenceKey, preferenceValue);
         promise.then(function(res){
             console.log("settings successfully saved! => ", res);
-            /*
             $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
               ele: 'body',
               type: 'success',
@@ -72,7 +71,6 @@ var discussionPreferences = Marionette.LayoutView.extend({
               allow_dismiss: true,
               stackup_spacing: 10
             });
-            */
         }).catch(function(e) {
             console.error(e);
         });
