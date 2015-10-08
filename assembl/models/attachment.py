@@ -171,6 +171,10 @@ class PostAttachment(Attachment):
             'attachments',
             cascade="all, delete-orphan"),
     )
+    __mapper_args__ = {
+        'polymorphic_identity': 'post_attachment',
+        'with_polymorphic': '*'
+    }
 
 @event.listens_for(PostAttachment.post, 'set', propagate=True, active_history=True)
 def attachment_object_attached_to_set_listener(target, value, oldvalue, initiator):
@@ -204,3 +208,7 @@ class IdeaAttachment(Attachment):
             'attachments',
             cascade="all, delete-orphan"),
     )
+    __mapper_args__ = {
+        'polymorphic_identity': 'idea_attachment',
+        'with_polymorphic': '*'
+    }
