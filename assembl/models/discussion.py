@@ -408,25 +408,26 @@ class Discussion(DiscussionBoundBase):
                         if 'is_content_sink' in kwargs:
                             is_sink = kwargs.get('is_content_sink', None)
                             data = kwargs.get('sink_data', None)
-                            if is_sink and not data:
-                                raise ValueError("User must pass sink data")
-                            source = instance
-                            post_id = data.get('post_id', None)
-                            fb_post_id = data.get('facebook_post_id', None)
-
-                            if not post_id:
-                                raise ValueError("Could not create \
-                                    content because of improper data input")
-                            else:
-                                try:
-                                    post_object = Content.\
-                                        get_instance(post_id)
-                                    cs = ContentSourceIDs(source=source,
-                                        post=post_object,
-                                        message_id_in_source=fb_post_id)
-                                    assocs.append(cs)
-                                except:
-                                    raise ValueError("Failed on content sink transaction")
+                            if is_sink:
+                                if not data:
+                                    raise ValueError("User must pass sink data")
+                                post_id = data.get('post_id', None)
+                                fb_post_id = data.get('facebook_post_id', None)
+                                source = instance
+                                if not post_id:
+                                    raise ValueError(
+                                        "Could not create content because of "
+                                        "improper data input")
+                                else:
+                                    try:
+                                        post_object = Content.\
+                                            get_instance(post_id)
+                                        cs = ContentSourceIDs(source=source,
+                                            post=post_object,
+                                            message_id_in_source=fb_post_id)
+                                        assocs.append(cs)
+                                    except:
+                                        raise ValueError("Failed on content sink transaction")
 
         return {'all_users': AllUsersCollection(cls),
                 'active_widgets': ActiveWidgetsCollection(cls),

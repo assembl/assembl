@@ -50,6 +50,34 @@
     "AbstractMailbox": {
         "@extends": "PostSource"
     },
+    "FeedPostSource": {
+        "@extends": "PostSource",
+        "url": true
+    },
+    "LoomioPostSource": {
+        "@extends": "FeedPostSource"
+    },
+    "FacebookGenericSource": {
+        "@extends": "PostSource",
+        "fb_source_id": true,
+        "url_path": true,
+        "creator_id": "&get_creator_uri"
+    },
+    "FacebookGroupSource": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookGroupSourceFromUser": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookPagePostsSource": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookPageFeedSource": {
+        "@extends": "FacebookGenericSource"
+    },
+    "FacebookSinglePostSource": {
+        "@extends": "FacebookGenericSource"
+    },
     "AnnotatorSource": {
         "@extends": "ContentSource"
     },

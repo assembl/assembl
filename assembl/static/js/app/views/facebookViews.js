@@ -12,7 +12,7 @@ var Marionette = require('../shims/marionette.js'),
     Social = require('../models/social.js'),
     Source = require('../models/sources.js');
 
-var _allFacebookPermissions = undefined; 
+var _allFacebookPermissions = undefined;
 var getAllFacebookPermissions = function() {
   if (_allFacebookPermissions) { return _allFacebookPermissions;}
   else {
@@ -772,8 +772,9 @@ var exportPostForm = Marionette.LayoutView.extend({
     }
 
   },
-  submitForm: function(success, error) {
-    var that = this;
+  saveModel: function(success, error) {
+    var that = this,
+        errorMsg = i18n.gettext("Facebook was unable to create the post. Close the box and try again.");
     var getName = function() {
       var tmp = $('.js_fb-suggested-name').val();
       if (!tmp) {
@@ -822,35 +823,35 @@ var exportPostForm = Marionette.LayoutView.extend({
         fbApi({endpoint: endpoint, http:'post', fields: args}, function(resp) {
           if (_.has(resp, 'error')) {
             console.error('There was an error with creating the post', resp.error);
-            error();
+            error(errorMsg);
           }
           else if (!(_.has(resp, 'id'))) {
             console.error('Facebook did not return the ID of the newly created post');
-            error();
+            error(errorMsg);
           } 
           else {
-            var fbPostId = resp.id;
-            var sender = null;
+            var fbPostId = resp.id,
+                sender = null,
+                cm = new CollectionManager();
 
             // 1) Create the source
             // 2) Create the ContentsourceId
             // 3) POST for a newly created pull source reader
             // 4) Then call success
 
-            var cm = new CollectionManager(),
-            errorDesc = i18n.gettext('Something went wrong on Assembl whilst creating your post. Please contact the Discussion administrator for more information.'),
-            errorNode = $('.js_export_error_message');
-            cm.getAllUserAccountsPromise().then(function(accounts){
+            errorMsg = i18n.gettext("Something went wrong on Assembl whilst creating your post. Please contact the Discussion administrator for more information.");
+            cm.getAllUserAccountsPromise().then(function(accounts) {
               var fbAccount = accounts.getFacebookAccount();
               if (!fbAccount) {
                 console.error('This account does NOT have a facebook account');
-                errorNode.text(errorDesc);
+                error(errorDesc);
               }
               else {
                 sender = fbAccount;
                 that.model.set({
                   'fb_source_id': fbPostId,
                   'creator_id': sender.get("@id"),
+                  'is_content_sink': true,
                   'sink_data': {'post_id': that.exportedMessage.id, 'facebook_post_id': fbPostId}
                 });
 
@@ -867,19 +868,17 @@ var exportPostForm = Marionette.LayoutView.extend({
                       }
                       else {
                         console.error("There was a server-side error");
-                        errorNode.text(errorDesc);
-                        error()
+                        error(errorDesc);
                       }
                     }).error(function(error){
                       console.error("There was an error creating the source");
-                      errorNode.text(errorDesc);
-                      error()
+                      error(errorDesc);
                     });
                   },
 
                   error: function(model, resp, op){
                     console.error('Could not create a Facebook source');
-                    errorNode.text(errorDesc);
+                    error(errorDesc);
                   }
                 });
               }
@@ -906,8 +905,51 @@ var FacebookSourceForm = Marionette.LayoutView.extend({
         credentials: window.FB_TOKEN.getUserToken()
     };
   },
-  submitForm: function(success, error) {
-    // TODO
+  getModelData: function(sender) {
+    return {
+      creator_id: sender.get("@id"),
+      endpoint: this.bundle.endpoint,
+      sink_data: {}
+    };
+  },
+  saveModel: function(success, error) {
+    var that = this, cm = new CollectionManager();
+    cm.getAllUserAccountsPromise().then(function(accounts) {
+      var fbAccount = accounts.getFacebookAccount();
+      if (!fbAccount) {
+        console.error("This account does NOT have a facebook account");
+        error(i18n.gettext("This account does NOT have a facebook account"));
+      }
+      else {
+        that.model.set(that.getModelData(fbAccount));
+
+        that.model.save(null, {
+          success: function(model, resp, op){
+            Promise.resolve($.ajax({
+              type: 'POST',
+              dataType: 'json',
+              url: model.url() + "/fetch_posts",
+              contentType: "application/x-www-form-urlencoded"
+            })).then(function(resp){
+              if ( _.has(resp, "message") ) {
+                success();
+              }
+              else {
+                console.error("There was a server-side error");
+                error(i18n.gettext("Could not create the source"));
+              }
+            }).error(function(error){
+              console.error("There was an error creating the source");
+              error(i18n.gettext("There was an error creating the source"));
+            });
+          },
+          error: function(model, resp, op) {
+            console.error("Could not create a Facebook source");
+            error(i18n.gettext("There was an error creating the source"));
+          }
+        });
+      }
+    });
   }
 });
 
@@ -917,21 +959,39 @@ var publicGroupSourceForm = FacebookSourceForm.extend({
 
 var privateGroupSourceForm = FacebookSourceForm.extend({
   onBeforeShow: function() {
-    this.getRegion('sourcePicker').show(new groupView({
+    this.groupView = new groupView({
           token: this.token,
           bundle: this.bundle,
           vent: this.vent
-        }));
+        });
+    this.getRegion("sourcePicker").show(this.groupView);
+  },
+  getModelData: function(sender) {
+    if (this.bundle.endpoint) {
+      var groupId = this.bundle.endpoint.substr(0, -5),
+          modelData = Object.getPrototypeOf(Object.getPrototypeOf(this)).getModelData.apply(this, arguments);
+      modelData.fb_source_id = groupId;
+      return modelData;
+    }
   }
 });
 
 var pageSourceForm = FacebookSourceForm.extend({
   onBeforeShow: function() {
-    this.getRegion('sourcePicker').show(new pageView({
+    this.pageView = new pageView({
           token: this.token,
           bundle: this.bundle,
           vent: this.vent
-        }));
+        });
+    this.getRegion("sourcePicker").show(this.pageView);
+  },
+  getModelData: function(sender) {
+    if (this.bundle.endpoint) {
+      var pageId = this.bundle.endpoint.substr(0, -5),
+          modelData = Object.getPrototypeOf(Object.getPrototypeOf(this)).getModelData.apply(this, arguments);
+      modelData.fb_source_id = pageId;
+      return modelData;
+    }
   }
 });
 
@@ -973,25 +1033,32 @@ var basefbView = Marionette.LayoutView.extend({
             case Types.FACEBOOK_GROUP_SOURCE_FROM_USER:
               viewClass = privateGroupSourceForm;
               break;
+            case Types.FACEBOOK_PAGE_FEED_SOURCE:
             case Types.FACEBOOK_PAGE_POSTS_SOURCE:
               viewClass = pageSourceForm;
               break;
-            case Types.FACEBOOK_PAGE_FEED_SOURCE:
+            case Types.FACEBOOK_GROUP_SOURCE:
               viewClass = publicGroupSourceForm;
               break;
             case Types.FACEBOOK_SINGLE_POST_SOURCE:
               viewClass = exportPostForm;
               break;
             default:
-              console.error("unknown type" + that.model.get('@type'));
+              console.error("unknown type " + that.model.get('@type'));
           }
-          fbView = new viewClass({
-            model: that.model,
-            vent: that.vent
-          });
+          if (viewClass) {
+            fbView = new viewClass({
+              model: that.model,
+              vent: that.vent
+            });
+          }
         }
         that.fbView = fbView;
-        that.subForm.show(fbView);
+        if (fbView) {
+          that.subForm.show(fbView);
+        } else {
+          that.subForm.show("");
+        }
       }
       else {
         var errView = new errorView({
@@ -1025,11 +1092,10 @@ var basefbView = Marionette.LayoutView.extend({
     } else {
       var that = this;
       console.log('currentView', this.currentView);
-      this.fbView.submitForm(function() {
+      this.fbView.saveModel(function() {
         //that.destroy();
-      }, function() {
-        var text = i18n.gettext("Facebook was unable to create the post. Close the box and try again.")
-        that.$('.js_export_error_message').text(text);
+      }, function(msg) {
+        that.$('.js_export_error_message').text(msg);
       });
     }
   },

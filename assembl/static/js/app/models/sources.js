@@ -7,7 +7,7 @@ var Base = require('./base.js'),
 
 //ContentSource + PostSource
 var Source = Base.Model.extend({
-  // urlRoot: Ctx.getApiV2DiscussionUrl('sources'),
+  urlRoot: Ctx.getApiV2DiscussionUrl('sources'),
   defaults: {
     'name': 'ContentSource_' + this.cid,
     'creation_date': null,
@@ -59,7 +59,7 @@ var FacebookSource = Source.extend({
     return _.extend(Source.prototype.defaults, {
       'fb_source_id': null,
       'url_path': null,
-      'is_content_sink': true,
+      'is_content_sink': false,
       'creator_id': Ctx.getCurrentUserId()
     });
   }
@@ -139,7 +139,6 @@ function getSourceClassByType(type) {
 
 var sourceCollection = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl() + 'sources',
-  url2: Ctx.getApiV2DiscussionUrl() + 'sources',
 
   // model: Source,
   // supportedSources: {
