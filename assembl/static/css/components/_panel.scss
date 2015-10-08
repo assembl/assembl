@@ -132,7 +132,7 @@
   position: relative;
   background-color: $theme_header_panel;
   color: $white;
-  border-right: 1px solid $purple;
+  border-right: 1px solid $theme_header_separator;
 
   .panel-header-title,
   .panel-header-close {

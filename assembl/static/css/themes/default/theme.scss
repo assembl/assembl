@@ -9,6 +9,7 @@ $th_white: #FFFFFF;
 //Purples
 $th_purple2: #f2ecf8; // almost white
 $th_purple: #B36FE0;
+$th_purple6: #9986AA;
 $th_purple3: #88698e;
 $th_purple5: #9013FE; // saturated purple
 $th_purple1: #513850; 
@@ -49,6 +50,7 @@ $theme_popin_header_bg: $th_purple;
 $theme_popin_header_text_color: $th_white;
 
 $theme_header_panel: $th_purple4;
+$theme_header_separator: $th_purple2;
 $theme_header_panel_text_color: $th_white;
 $theme_header_panel_icon_color: $th_green;
 
@@ -68,6 +70,7 @@ $theme_context_title_color: $th_white;
 $theme_navigation_bg: $th_purple2;
 $theme_navigation_menu_bg: $th_purple4;
 $theme_navigation_menu_bg_active: $th_purple3;
+$theme_navigation_menu_separator: $theme_header_separator;
 $theme_navigation_icon_color: $th_green;
 $theme_navigation_icon_color_active: $th_green;
 $theme_navigation_text_color: $th_white;
@@ -85,7 +88,7 @@ $theme_panel_group_header_close_color: $theme_header_text_color;
 $theme_extract_bg: $theme_navigation_bg;
 
 //idea panel
-$theme_idea_header_bg: $th_green;
+$theme_idea_header_bg: $th_purple6;
 $theme_synthesis_header_bg: $th_green;
 
 
