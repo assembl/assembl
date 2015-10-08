@@ -3,7 +3,6 @@ var Backbone = require('../shims/backbone.js'),
     i18n = require('../utils/i18n.js'),
     $ = require('../shims/jquery.js'),
     _ = require('../shims/underscore.js'),
-    Promise = require('bluebird'),
     Source = require('../models/sources.js'),
     FacebookViews = require('./facebookViews.js');
 

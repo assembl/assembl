@@ -3,7 +3,6 @@ var Marionette = require('../../shims/marionette.js'),
     Types = require('../../utils/types.js'),
     Source = require('../../models/sources.js'),
     CollectionManager = require('../../common/collectionManager.js'),
-    Promise = require('bluebird'),
     EmailSourceEditView = require("./emailSettings.js"),
     FacebookSourceEditView = require("../facebookViews.js");
 

@@ -4,6 +4,7 @@ var $ = require('../shims/jquery.js'),
     Base = require('./base.js'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
+    Promise = require('bluebird'),
     Roles = require('../utils/roles.js');
 
 var AVATAR_PLACEHOLDER = '//placehold.it/{0}';

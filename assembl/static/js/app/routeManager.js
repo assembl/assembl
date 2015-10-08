@@ -2,6 +2,7 @@
 
 var Marionette = require('./shims/marionette.js'),
     Assembl = require('./app.js'),
+    Promise = require('bluebird'),
     Ctx = require('./common/context.js'),
     Agents = require('./models/agents.js'),
     Storage = require('./objects/storage.js'),

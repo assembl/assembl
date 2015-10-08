@@ -2,6 +2,7 @@
 
 var _ = require('../shims/underscore.js'),
     Base = require('./base.js'),
+    Promise = require('bluebird'),
     Ctx = require('../common/context.js'),
     Agents = require('./agents.js'),
     Message = require('./message.js'),
