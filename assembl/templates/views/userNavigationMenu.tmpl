@@ -1,0 +1,14 @@
+<ul class="man pan adminMenu">
+  <li <% if (selectedSection == 'profile'){ %>class="active"<% } %>>
+    <a href="#user/profile" class="menu">{{ gettext('Modify your profile') }}</a>
+  </li>
+  <li <% if (selectedSection == 'account'){ %>class="active"<% } %>>
+    <a href="#user/account" class="menu">{{ gettext('Account settings') }}</a>
+  </li>
+  <li <% if (selectedSection == 'notifications'){ %>class="active"<% } %>>
+    <a href="#user/notifications" class="menu">{{ gettext('Notifications') }}</a>
+  </li>
+  <li class="mtxl">
+    <a href="{{ discussion.get_url() }}">{{ gettext('Back to discussion') }}</a>
+  </li>
+</ul>

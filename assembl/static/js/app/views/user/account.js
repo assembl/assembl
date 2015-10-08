@@ -5,6 +5,7 @@ var Marionette = require('../../shims/marionette.js'),
     Accounts = require('../../models/accounts.js'),
     Ctx = require('../../common/context.js'),
     Agents = require('../../models/agents.js'),
+    UserNavigationMenu = require('./userNavigationMenu.js'),
     i18n = require('../../utils/i18n.js');
 
 var email = Marionette.ItemView.extend({
@@ -143,13 +144,14 @@ var account = Marionette.LayoutView.extend({
   template: '#tmpl-userAccount',
   className: 'admin-account',
   regions: {
-      'accounts':'#associate_accounts',
-      'social_accounts':'#associate_social_accounts',
-      'accountForm': '#userAccountForm'
-    },
+    'navigationMenuHolder': '.navigation-menu-holder',
+    'accounts':'#associate_accounts',
+    'social_accounts':'#associate_social_accounts',
+    'accountForm': '#userAccountForm'
+  },
   ui: {
-      'addEmail': '.js_addEmail'
-    },
+    'addEmail': '.js_addEmail'
+  },
   initialize: function() {
     this.emailCollection = new Accounts.Collection();
     this.userAcount = new Agents.Model({'@id': Ctx.getCurrentUserId()});
@@ -160,6 +162,9 @@ var account = Marionette.LayoutView.extend({
     'click @ui.addEmail': 'addEmail'
   },
   onBeforeShow: function() {
+    var menu = new UserNavigationMenu({selectedSection: "account"});
+    this.getRegion('navigationMenuHolder').show(menu);
+
     var accounts = new emailList({
       collection: this.emailCollection
     });

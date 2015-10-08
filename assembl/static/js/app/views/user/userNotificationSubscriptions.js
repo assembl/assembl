@@ -12,6 +12,7 @@ var Marionette = require('../../shims/marionette.js'),
     i18n = require('../../utils/i18n.js'),
     Roles = require('../../utils/roles.js'),
     Accounts = require('../../models/accounts.js'),
+    UserNavigationMenu = require('./userNavigationMenu.js'),
     Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 /**
@@ -288,12 +289,16 @@ var userNotificationSubscriptions = Marionette.LayoutView.extend({
   template: '#tmpl-userNotificationSubscriptions',
   className: 'admin-notifications',
   regions: {
-      userNotifications:'#userNotifications',
-      templateSubscription: '#templateSubscriptions',
-      userSubscriber: '#subscriber',
-      notifByEmail: '#notifByEmail'
-    },
+    navigationMenuHolder: '.navigation-menu-holder',
+    userNotifications:'#userNotifications',
+    templateSubscription: '#templateSubscriptions',
+    userSubscriber: '#subscriber',
+    notifByEmail: '#notifByEmail'
+  },
   onBeforeShow: function() {
+    var menu = new UserNavigationMenu({selectedSection: "notifications"});
+    this.getRegion('navigationMenuHolder').show(menu);
+
     var that = this,
         collectionManager = new CollectionManager();
 

@@ -4,15 +4,19 @@ var Marionette = require('../../shims/marionette.js'),
     $ = require('../../shims/jquery.js'),
     Agents = require('../../models/agents.js'),
     i18n = require('../../utils/i18n.js'),
+    UserNavigationMenu = require('./userNavigationMenu.js'),
     Ctx = require('../../common/context.js');
 
-var profile = Marionette.ItemView.extend({
+var profile = Marionette.LayoutView.extend({
   template: '#tmpl-userProfile',
   className: 'admin-profile',
   ui: {
     close: '.bx-alert-success .bx-close',
     profile: '.js_saveProfile',
     form: '.core-form .form-horizontal'
+  },
+  regions: {
+    navigationMenuHolder: '.navigation-menu-holder'
   },
 
   initialize: function() {
@@ -33,6 +37,12 @@ var profile = Marionette.ItemView.extend({
     return {
       profile: this.model
     }
+  },
+
+  onRender: function() {
+    // this is in onRender instead of onBeforeShow because of the modelEvents
+    var menu = new UserNavigationMenu({selectedSection: "profile"});
+    this.getRegion('navigationMenuHolder').show(menu);
   },
 
   saveProfile: function(e) {
