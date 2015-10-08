@@ -7,7 +7,7 @@ var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js'),
     Document = require('../models/documents.js');
 
-var FileView = Marionette.ItemView.extend({
+var DocumentView = Marionette.ItemView.extend({
   template: '#tmpl-fileEmbed',
 
   className: 'embeddedFile',
@@ -37,15 +37,8 @@ var FileView = Marionette.ItemView.extend({
     }
   },
 
-  onRender: function() {
-    var that = this;
-
-    var LoaderView = require('../views/loader.js'),
-    loader = new LoaderView(),
-    loaderHtml = loader.render().el;
-    
-    this.$el.html(loaderHtml);
-
+  doOembed: function() {
+    //console.log (this.model.get('uri'));
     this.$el.oembed(this.model.get('uri'), {
       //initiallyVisible: false,
       embedMethod: "fill",
@@ -63,8 +56,25 @@ var FileView = Marionette.ItemView.extend({
         //console.log("Embeeding done");
       }
     });
+  },
 
+  onRender: function() {
+    var that = this;
+
+    var LoaderView = require('../views/loader.js'),
+        loader = new LoaderView(),
+        loaderHtml = loader.render().el;
+    
+    //this.$el.html(loaderHtml);
+
+    this.doOembed();
+
+  },
+
+  onAttach: function() {
+    //console.log("DocumentView.onAttach()");
+    //this.doOembed();
   }
 });
 
-module.exports = FileView;
+module.exports = DocumentView;

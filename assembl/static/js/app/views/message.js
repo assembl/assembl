@@ -116,7 +116,11 @@ var MessageView = Marionette.LayoutView.extend({
       'change':'render',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
     },
-
+  instrumentedRender: function(){
+    console.log("MessageView modelEvents change fired from", this.model);
+    this.render();
+  },
+    
   ui: {
       jumpToParentButton: ".js_message-jumptoparentbtn",
       jumpToMessageInThreadButton: ".js_message-jump-to-message-in-thread",

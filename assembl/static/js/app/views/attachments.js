@@ -43,10 +43,11 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
   },
 
   onRender: function() {
+    //console.log("AbstractAttachmentView: onRender with this.model:",this.model);
     //console.log(this.model.get('attachmentPurpose'), Attachments.attachmentPurposeTypes.DO_NOT_USE.id);
     if(this.model.get('attachmentPurpose') !== Attachments.attachmentPurposeTypes.DO_NOT_USE.id) {
-      this.documentView = new DocumentView({model: this.model.getDocument()});
-      this.documentEmbeedRegion.show(this.documentView);
+      var documentView = new DocumentView({model: this.model.getDocument()});
+      this.documentEmbeedRegion.show(documentView);
     }
   },
 

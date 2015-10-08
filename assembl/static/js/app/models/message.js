@@ -47,11 +47,13 @@ var MessageModel = Base.Model.extend({
   },
 
   parse: function(rawModel) {
-    rawModel.attachments = new Attachment.Collection(rawModel.attachments,
-      {parse: true,
-      objectAttachedToModel: this}
-      );
-    //console.log("Message Model parse() called, returning:", rawModel);
+    if(rawModel.attachments !== undefined) {
+      rawModel.attachments = new Attachment.Collection(rawModel.attachments,
+          {parse: true,
+          objectAttachedToModel: this}
+          );
+    }
+    //console.log("Message Model parse() called, returning:", rawModel.attachments);
     return rawModel;
   },
 

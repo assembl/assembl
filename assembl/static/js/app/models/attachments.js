@@ -70,6 +70,7 @@ var AttachmentModel = Base.Model.extend({
 
   parse: function(rawModel) {
     rawModel.document = new Document.Model(rawModel.document, {parse: true});
+    //console.log("AttachmentModel.parse() returning", rawModel);
     return rawModel;
   },
 
@@ -129,7 +130,7 @@ var AttachmentCollection = Base.Collection.extend({
    * @type {String}
    */
   url: function() {
-    console("AttachmentCollection::url() about to return:", this.objectAttachedToModel.urlRoot() + '/' + this.objectAttachedToModel.getNumericId() + '/attachments');
+    //console("AttachmentCollection::url() about to return:", this.objectAttachedToModel.urlRoot() + '/' + this.objectAttachedToModel.getNumericId() + '/attachments');
     return this.objectAttachedToModel.urlRoot() + '/' + this.objectAttachedToModel.getNumericId() + '/attachments';
   },
 
@@ -147,7 +148,7 @@ var AttachmentCollection = Base.Collection.extend({
     else {
       this.objectAttachedToModel = options.objectAttachedToModel;
     }
-  },
+  }
 });
 
 module.exports = {
