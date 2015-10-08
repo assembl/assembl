@@ -101,8 +101,7 @@ var discussionPreferences = Marionette.LayoutView.extend({
       url,
       {
         method: "PUT",
-        //contentType: "application/json",
-        dataType: "json",
+        contentType: "application/json",
         data: data
       }
     ));
