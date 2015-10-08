@@ -1426,6 +1426,10 @@ Context.prototype = {
     return json;
   },
 
+  getPreferences: function() {
+    return this.getJsonFromScriptTag('preferences');
+  },
+
   writeJsonToScriptTag: function(json, id) {
     var script = document.getElementById(id);
 
