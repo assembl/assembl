@@ -389,7 +389,7 @@ var MessageView = Marionette.LayoutView.extend({
 
       this.postRender();
 
-      if (this.replyBoxShown || partialMessage.body) {
+      if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && (this.replyBoxShown || partialMessage.body)) {
         this.ui.messageReplyBox.removeClass('hidden');
         this.messageReplyBox.show(this.replyView);
         if (this.replyBoxHasFocus) {
@@ -411,7 +411,7 @@ var MessageView = Marionette.LayoutView.extend({
         this.messageListView.requestAnnotatorRefresh();
 
         var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
-          childView: AttachmentViews.AttachmentEditableView
+          childView: AttachmentViews.AttachmentView
         });
 
         this.attachmentsCollectionView = new AttachmentEditableCollectionView({

@@ -47,7 +47,7 @@ var AttachmentModel = Base.Model.extend({
      * 'BACKGROUND_IMAGE'
      * 'FORCE_DONWLOAD_DOCUMENT'
      */
-    attachmentPurpose: 'EMBEEDED_ATTACHMENT',
+    attachmentPurpose: 'EMBED_ATTACHMENT',
     
   },
 

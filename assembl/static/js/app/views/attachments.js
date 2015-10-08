@@ -12,10 +12,7 @@ var Marionette = require('../shims/marionette.js'),
  * Represents the link between an object (ex: Message, Idea) and a remote (url)
  * or eventually local document attached to it.
  */
-var AttachmentEditableView = Marionette.LayoutView.extend({
-  template: '#tmpl-attachmentEditable',
-
-  className: 'attachment attachmentEditable',
+var AbstractAttachmentView = Marionette.LayoutView.extend({
 
   initialize: function(options) {
 
@@ -46,6 +43,20 @@ var AttachmentEditableView = Marionette.LayoutView.extend({
   }
 });
 
+
+var AttachmentView = AbstractAttachmentView.extend({
+  template: '#tmpl-attachment',
+
+  className: 'attachment'
+});
+
+var AttachmentEditableView = AbstractAttachmentView.extend({
+  template: '#tmpl-attachmentEditable',
+
+  className: 'attachmentEditable'
+});
+
 module.exports = module.exports = {
-    AttachmentEditableView: AttachmentEditableView
-  };;
+    AttachmentEditableView: AttachmentEditableView,
+    AttachmentView: AttachmentView
+  };

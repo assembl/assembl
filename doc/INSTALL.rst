@@ -73,6 +73,13 @@ or
     fab devenv install_builddeps
     fab devenv bootstrap_from_checkout
 
+Note:  If you get error:
+
+fabric.exceptions.NetworkError: Incompatible ssh server (no acceptable macs)
+
+You'll need to reconfigure your ssh server
+
+
 **Running**
 
 Note: memcached and redis must be running already.
@@ -248,7 +255,7 @@ locations. There is one is supervisord.conf, and one in an unkonwn
 location.
 
 Ontology Submodule
-===================
+==================
 
 The ontology module is a git submodule. As a result, after pulling in changes,
 update with the following:
