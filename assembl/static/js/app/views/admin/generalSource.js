@@ -111,7 +111,7 @@ var CreateSource = Marionette.LayoutView.extend({
       ],
       type_name_assoc = {};
       for (var i in types) {
-        type_name_assoc[types[i]] = Source.getSourceClassByType(types[i]).localizedName;
+        type_name_assoc[types[i]] = Source.getSourceClassByType(types[i]).prototype.localizedName;
       }
     return {
       types: types,
