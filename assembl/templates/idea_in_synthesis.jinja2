@@ -5,6 +5,12 @@
 {% else %}
 <p>{{idea.short_title}}</p>
 {% endif %}
+<p><i>
+{% for contributor in idea._get_contributors(False, False) %}{% if loop.first %}
+{{ gettext("By") }}
+{% else %}, {% endif %}
+{{ contributor.display_name() }}{% endfor %}
+</i></p>
 <a href="{{ idea.get_url() }}" class="link-to-idea">{{ gettext("See the conversation around this idea") }}</a>
 {% elif children and level > 0 %}
 <span>...</span>{# this means that this idea has not been checked (for visibility in the synthesis), but one of its children is visible, so the structure link needs to appear #}

@@ -475,7 +475,7 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
         # Get extracts related to the idea
         extracts = self.db.query(Extract).join(
             Extract.extract_source.of_type(Post)).filter(
-            Extract.idea_id == self.id).options(
+            Extract.idea_id == self.base_id).options(
             joinedload(Extract.extract_source)).all()
         extracts_by_author = defaultdict(list)
         for e in extracts:
