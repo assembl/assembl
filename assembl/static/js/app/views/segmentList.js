@@ -274,7 +274,6 @@ var SegmentListPanel = AssemblPanel.extend({
   },
 
   events: {
-    'dragstart @ui.postIt': 'onDragStart',
     'dragend @ui.postIt': "onDragEnd",
 
     'dragover @ui.panelBody': 'onDragOver',
