@@ -163,7 +163,7 @@ class Preferences(Base, MutableMapping):
         # Translations for the navigation sections
         "translations": {},
         # Simple view panel order, eg NIM or NMI
-        "simple_view_panel_order": "NIM",
+        "simple_view_panel_order": "NMI",
         # Properties which a user cannot override
         "forbid_user_edit": [],
     }

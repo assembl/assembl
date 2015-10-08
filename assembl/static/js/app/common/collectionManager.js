@@ -634,12 +634,24 @@ var CollectionManager = Marionette.Controller.extend({
             var panelSpec = require('../models/panelSpec.js');
             var PanelSpecTypes = require('../utils/panelSpecTypes.js');
             var groupState = require('../models/groupState.js');
+            var preferences = Ctx.getPreferences();
+            console.log(preferences);
+            var defaultPanels;
+            if(preferences.simple_view_panel_order === "NIM") {
+              defaultPanels = [{type: PanelSpecTypes.NAV_SIDEBAR.id },
+              {type: PanelSpecTypes.IDEA_PANEL.id, minimized: true},
+              {type: PanelSpecTypes.MESSAGE_LIST.id}];
+            }
+            else if (preferences.simple_view_panel_order === "NMI"){
+              defaultPanels = [{type: PanelSpecTypes.NAV_SIDEBAR.id },
+               {type: PanelSpecTypes.MESSAGE_LIST.id},
+               {type: PanelSpecTypes.IDEA_PANEL.id, minimized: true}];
+            }
+            else {
+              throw new Error("Invalid simple_view_panel_order preference: ", preferences.simple_view_panel_order);
+            }
             var defaults = {
-              panels: new panelSpec.Collection([
-                                                {type: PanelSpecTypes.NAV_SIDEBAR.id },
-                                                {type: PanelSpecTypes.IDEA_PANEL.id, minimized: true},
-                                                {type: PanelSpecTypes.MESSAGE_LIST.id}
-                                                ],
+              panels: new panelSpec.Collection(defaultPanels,
                                                 {'viewsFactory': viewsFactory }),
               navigationState: 'debate',
               states: new groupState.Collection([new groupState.Model()])

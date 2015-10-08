@@ -51,32 +51,53 @@
     <span class="item-section">{{ gettext('Others:')}}</span>
 
     <div class="gr">
-      <div class="gu gu-1of3">
-
-        <div class="itemGroup is-disabled" data-view="<%= PanelSpecTypes.IDEA_PANEL.id %>">
-         <i class="icon-checkbox"></i>
-         <br>
-         <i class="icon-idea"></i>
-         <br>
-         <span class="item-title">{{ gettext('Idea Panel') }}</span>
-         <a href="#" class="item js_selectItem"></a>
+      <% if(panelOrder === "NIM") {  %>{# Yes, silly this is in the template, but click ordering isn't respected currently #}
+        <div class="gu gu-1of3">
+          <div class="itemGroup is-disabled" data-view="<%= PanelSpecTypes.IDEA_PANEL.id %>">
+           <i class="icon-checkbox"></i>
+           <br>
+           <i class="icon-idea"></i>
+           <br>
+           <span class="item-title">{{ gettext('Idea Panel') }}</span>
+           <a href="#" class="item js_selectItem"></a>
+          </div>
+        </div>
+        <div class="gu gu-1of3">
+          <div class="itemGroup is-disabled" data-view="<%= PanelSpecTypes.MESSAGE_LIST.id %>">
+           <i class="icon-checkbox"></i>
+           <br>
+           <i class="icon-message"></i>
+           <br>
+           <span class="item-title">{{ gettext('Discussion') }}</span>
+           <a href="#" class="item js_selectItem"></a>
+          </div>
         </div>
 
-      </div>
-      <div class="gu gu-1of3">
-
-        <div class="itemGroup is-disabled" data-view="<%= PanelSpecTypes.MESSAGE_LIST.id %>">
-         <i class="icon-checkbox"></i>
-         <br>
-         <i class="icon-message"></i>
-         <br>
-         <span class="item-title">{{ gettext('Discussion') }}</span>
-         <a href="#" class="item js_selectItem"></a>
+      <% } else if(panelOrder === "NMI") {  %>
+        <div class="gu gu-1of3">
+          <div class="itemGroup is-disabled" data-view="<%= PanelSpecTypes.MESSAGE_LIST.id %>">
+           <i class="icon-checkbox"></i>
+           <br>
+           <i class="icon-message"></i>
+           <br>
+           <span class="item-title">{{ gettext('Discussion') }}</span>
+           <a href="#" class="item js_selectItem"></a>
+          </div>
         </div>
-
-      </div>
+        <div class="gu gu-1of3">
+          <div class="itemGroup is-disabled" data-view="<%= PanelSpecTypes.IDEA_PANEL.id %>">
+           <i class="icon-checkbox"></i>
+           <br>
+           <i class="icon-idea"></i>
+           <br>
+           <span class="item-title">{{ gettext('Idea Panel') }}</span>
+           <a href="#" class="item js_selectItem"></a>
+          </div>
+        </div>
+      <% } else {
+        throw new Error("Invalid panelOrder: ", panelOrder);
+      } %>
       <div class="gu gu-last">
-
         <div class="itemGroup" data-view="<%= PanelSpecTypes.CLIPBOARD.id %>">
          <i class="icon-checkbox"></i>
          <br>
@@ -84,8 +105,7 @@
          <br>
          <span class="item-title">{{ gettext('Clipboard') }}</span>
          <a href="#" class="item js_selectItem"></a>
-        </div>
-
+       </div>
       </div>
     </div>
   </div>

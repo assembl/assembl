@@ -22,7 +22,8 @@ var DefineGroupModal = Backbone.Modal.extend({
     cancelEl: '.close, .btn-cancel',
     serializeData: function() {
       return {
-        PanelSpecTypes: PanelSpecTypes
+        PanelSpecTypes: PanelSpecTypes,
+        panelOrder: Ctx.getPreferences().simple_view_panel_order
       }
     },
     initialize: function(options) {
