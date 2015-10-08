@@ -122,7 +122,7 @@ var MessageView = Marionette.LayoutView.extend({
       jumpToMessageInThreadButton: ".js_message-jump-to-message-in-thread",
       jumpToMessageInReverseChronologicalButton: ".js_message-jump-to-message-in-reverse-chronological",
       showAllMessagesByThisAuthorButton: ".js_message-show-all-by-this-author",
-      messageReplyBox: ".message-replybox",
+      messageReplyBox: ".js_messageReplyBoxRegion",
       likedLink: ".js_likeButton",
       likeCounter: ".js_likeCount",
       avatar: ".js_avatarContainer",
@@ -134,7 +134,7 @@ var MessageView = Marionette.LayoutView.extend({
       avatar: "@ui.avatar",
       name: "@ui.name",
       attachmentsRegion: "@ui.attachments",
-      messageReplyBox: "@ui.messageReplyBox"
+      messageReplyBoxRegion: "@ui.messageReplyBox"
     },
 
   /**
@@ -391,7 +391,7 @@ var MessageView = Marionette.LayoutView.extend({
 
       if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && (this.replyBoxShown || partialMessage.body)) {
         this.ui.messageReplyBox.removeClass('hidden');
-        this.messageReplyBox.show(this.replyView);
+        this.messageReplyBoxRegion.show(this.replyView);
         if (this.replyBoxHasFocus) {
           this.focusReplyBox();
         }

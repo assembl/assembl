@@ -38,6 +38,9 @@ $grid-float-breakpoint: 768px !default;
 .dropdown {
   position: relative;
   display: inline-block;
+  a {
+    color: inherit;
+  }
 }
 
 // Prevent the focus on the dropdown toggle when closing dropdowns

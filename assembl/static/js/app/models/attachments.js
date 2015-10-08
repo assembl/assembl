@@ -8,6 +8,29 @@ var $ = require('../shims/jquery.js'),
     Types = require('../utils/types.js'),
     Document = require('../models/documents.js');
 
+
+var attachmentPurposeTypes = {
+  /** 
+   * Ensure that the front_end and back_end
+   * share the same values!
+   */
+//Currently supported:
+  DO_NOT_USE: {
+    id: 'DO_NOT_USE', 
+    label: i18n.gettext('Do not show anything special')
+  },
+  EMBED_ATTACHMENT: {
+    id: 'EMBED_ATTACHMENT',
+    label: i18n.gettext('Show the following preview at the end of your message')
+  }
+  /** 
+   * Future:
+   * 'EMBED_INLINE'
+   * 'BACKGROUND_IMAGE'
+   * 'FORCE_DONWLOAD_DOCUMENT'
+   */
+};
+
 /** 
  * Represents the link between an object (ex: Message, Idea) and a remote (url)
  * or eventually local document attached to it.
@@ -38,19 +61,7 @@ var AttachmentModel = Base.Model.extend({
     idCreator: undefined,
     title: undefined,
     description: undefined,
-    /** 
-     * One of:
-     * Currently supported:
-     * 'EMBED_ATTACHMENT',
-     * Future:
-     * 'EMBEEDED_INLINE'
-     * 'BACKGROUND_IMAGE'
-     * 'FORCE_DONWLOAD_DOCUMENT'
-     *
-     * Ensure that the front_end and back_end
-     * share the same values!
-     */
-    attachmentPurpose: 'EMBED_ATTACHMENT',
+    attachmentPurpose: attachmentPurposeTypes.EMBED_ATTACHMENT.id
     
   },
 
@@ -65,10 +76,12 @@ var AttachmentModel = Base.Model.extend({
   save: function(attrs, options) {
     var that = this;
 
-    Promise.resolve(this.get('document').save()).then(function(){
-      //console.log("Saving attachments", attrs, options);
-      Backbone.Model.prototype.save.call(that, attrs, options);
-    })
+    if(this.get('attachmentPurpose') !== attachmentPurposeTypes.DO_NOT_USE.id) {
+      Promise.resolve(this.get('document').save()).then(function(){
+        //console.log("Saving attachments", attrs, options);
+        Backbone.Model.prototype.save.call(that, attrs, options);
+      })
+    }
   },
   
   sync: function(method, model, options) {
@@ -138,6 +151,7 @@ var AttachmentCollection = Base.Collection.extend({
 });
 
 module.exports = {
+  attachmentPurposeTypes: attachmentPurposeTypes,
   Model: AttachmentModel,
   Collection: AttachmentCollection
 };
