@@ -968,7 +968,8 @@ var privateGroupSourceForm = FacebookSourceForm.extend({
   },
   getModelData: function(sender) {
     if (this.bundle.endpoint) {
-      var groupId = this.bundle.endpoint.substr(0, -5),
+      var endpoint = this.bundle.endpoint,
+          groupId = endpoint.substr(0, endpoint.length - 5),
           modelData = Object.getPrototypeOf(Object.getPrototypeOf(this)).getModelData.apply(this, arguments);
       modelData.fb_source_id = groupId;
       return modelData;
@@ -987,7 +988,8 @@ var pageSourceForm = FacebookSourceForm.extend({
   },
   getModelData: function(sender) {
     if (this.bundle.endpoint) {
-      var pageId = this.bundle.endpoint.substr(0, -5),
+      var endpoint = this.bundle.endpoint,
+          pageId = endpoint.substr(0, endpoint.length - 5),
           modelData = Object.getPrototypeOf(Object.getPrototypeOf(this)).getModelData.apply(this, arguments);
       modelData.fb_source_id = pageId;
       return modelData;
