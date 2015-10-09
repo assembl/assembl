@@ -1296,7 +1296,7 @@ def env_inm_agora():
 @task
 def env_bluenove_discussions():
     """
-    [ENVIRONMENT] Production on http://agora.inm.qc.ca/
+    [ENVIRONMENT] Production on http://discussions.bluenove.com/
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
@@ -1314,6 +1314,27 @@ def env_bluenove_discussions():
     env.uses_uwsgi = True
     env.gitbranch = "master"
 
+@task
+def env_bluenove_agora():
+    """
+    [ENVIRONMENT] Production on http://agora.bluenove.com/
+    Common environment for Bluenove clients
+    """
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/home/www/assembl_agora_bluenove_com/"))
+    env.is_production_env = True
+    env.wsginame = "prod.wsgi"
+    env.urlhost = "agora.bluenove.com"
+    env.user = "www-data"
+    env.home = "www-data"
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['agora.bluenove.com']
+
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.gitbranch = "master"
+    
 @task
 def env_paris_debat():
     """

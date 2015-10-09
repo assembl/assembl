@@ -13,6 +13,8 @@ Installation for developers
    - Not needed for vivid 15.04 and later
    
    apt-add-repository ppa:chris-lea/uwsgi
+   
+   apt-get install nginx uwsgi
 
 -  Ruby does not like libreadline6, which comes on newer Ubuntus. Make
    sure you have libreadline-gplv2-dev instead of libreadline6-dev.
