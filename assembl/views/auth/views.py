@@ -673,7 +673,8 @@ def velruse_login_complete_view(request):
                     elif isinstance(account, IdentityProviderAccount):
                         if account.provider_id == base_account.provider_id:
                             log.error("This should have been caught earlier")
-                            account.delete()
+                            # TODO Suspicious, prevents Aryan's facebook login
+                            # account.delete()
                         else:
                             log.warning("Two accounts with same email," +
                                         "different provider: %d, %d" % (

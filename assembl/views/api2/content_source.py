@@ -1,6 +1,7 @@
 from pyramid.view import view_config
 from pyramid.security import authenticated_userid
-from pyramid.httpexceptions import HTTPUnauthorized, HTTPError
+from pyramid.httpexceptions import (
+    HTTPUnauthorized, HTTPError, HTTPBadRequest)
 from dateutil.parser import parse
 
 from assembl.auth import (P_READ, P_ADMIN_DISC, P_EXPORT, Everyone)
@@ -22,10 +23,12 @@ def fetch_posts(request):
     upper_bound = request.params.get('upper_limit', None)
     lower_bound = request.params.get('lower_limit', None)
     try:
-        p1 = parse(upper_bound)
-        p2 = parse(lower_bound)
+        if upper_bound:
+            p1 = parse(upper_bound)
+        if lower_bound:
+            p2 = parse(lower_bound)
     except:
-        raise HTTPError(code=500)
+        raise HTTPBadRequest("Bad date format")
 
     if force_restart or reimport or upper_bound or lower_bound:
         # Only discussion admins

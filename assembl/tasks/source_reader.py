@@ -220,6 +220,7 @@ class SourceReader(Thread):
         self.extra_args = kwargs
 
     def wake(self):
+        print "SourceReader.wake"
         if self.status in (ReaderStatus.PAUSED, ReaderStatus.CLOSED) and (
                 datetime.utcnow() - max(self.last_prod, self.last_read)
                 > self.min_time_between_reads):
