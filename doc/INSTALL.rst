@@ -14,7 +14,7 @@ Installation for developers
    
    apt-add-repository ppa:chris-lea/uwsgi
    
-   apt-get install nginx uwsgi
+   apt-get install nginx uwsgi uwsgi-plugin-python
 
 -  Ruby does not like libreadline6, which comes on newer Ubuntus. Make
    sure you have libreadline-gplv2-dev instead of libreadline6-dev.
