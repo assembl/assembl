@@ -20,7 +20,7 @@ var Router = Marionette.AppRouter.extend({
     "user/discussion_preferences": "discussionPreferences",
     "posts/*id": "post",
     "idea/*id": "idea",
-    "user/*id": "user",
+    "profile/*id": "user",
     "G/*path": "groupSpec",
     "*actions": "defaults"
   }

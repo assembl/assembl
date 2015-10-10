@@ -33,7 +33,7 @@ class FrontendUrls():
         'groupSpec': '/G*remainder',
         'purl_posts': '/posts*remainder',
         'purl_idea': '/idea*remainder',
-        'purl_user': '/user*remainder',
+        'purl_user': '/profile*remainder',
     }
 
     @classmethod
