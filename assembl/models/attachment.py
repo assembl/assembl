@@ -21,7 +21,9 @@ from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
 from .post import Post
 from .idea import Idea
-from .auth import AgentProfile
+from .auth import (
+    AgentProfile, CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
+    P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA)
 
 
 class Document(DiscussionBoundBase):
@@ -100,6 +102,12 @@ class Document(DiscussionBoundBase):
     def unique_query(self):
         query, _ = super(Document, self).unique_query()
         return query.filter_by(uri_id=self.uri_id), True
+
+    # Same crud permissions as a post. Issue with idea edition,
+    # but that is usually more restricted than post permission.
+    crud_permissions = CrudPermissions(
+            P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
+            P_EDIT_POST, P_ADMIN_DISC)
 
 
 class Attachment(DiscussionBoundBase):
@@ -195,6 +203,11 @@ class PostAttachment(Attachment):
         'with_polymorphic': '*'
     }
 
+    # Same crud permissions as a post
+    crud_permissions = CrudPermissions(
+            P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
+            P_EDIT_POST, P_ADMIN_DISC)
+
 
 @event.listens_for(PostAttachment.post, 'set',
                    propagate=True, active_history=True)
@@ -238,3 +251,8 @@ class IdeaAttachment(Attachment):
         'polymorphic_identity': 'idea_attachment',
         'with_polymorphic': '*'
     }
+
+    # Same crud permissions as a idea
+    crud_permissions = CrudPermissions(
+        P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,
+        P_ADMIN_DISC)
