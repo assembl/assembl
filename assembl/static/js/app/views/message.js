@@ -874,7 +874,7 @@ var MessageView = Marionette.LayoutView.extend({
       }
 
       var el = this.replyView.ui.messageBody;
-      if (Array.isArray(el) && el.length) {
+      if (el instanceof jQuery && el.length) {
         if (!el.is(':visible')) {
           console.error("Element not yet visible...");
         }
