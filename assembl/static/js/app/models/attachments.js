@@ -27,7 +27,7 @@ var attachmentPurposeTypes = {
    * Future:
    * 'EMBED_INLINE'
    * 'BACKGROUND_IMAGE'
-   * 'FORCE_DONWLOAD_DOCUMENT'
+   * 'FORCE_DOWNLOAD_DOCUMENT'
    */
 };
 

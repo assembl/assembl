@@ -9,7 +9,7 @@ var Base = require('./base.js'),
 //ContentSource + PostSource
 var Source = Base.Model.extend({
   urlRoot: Ctx.getApiV2DiscussionUrl('sources'),
-  localizedName: i18n.gettext("Generic content source"),
+  localizedName: i18n.gettext("Abstract content source"),
   defaults: {
     'name': 'ContentSource_' + this.cid,
     'creation_date': null,

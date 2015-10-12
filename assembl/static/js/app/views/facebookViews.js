@@ -936,16 +936,16 @@ var FacebookSourceForm = Marionette.LayoutView.extend({
               }
               else {
                 console.error("There was a server-side error");
-                error(i18n.gettext("Could not create the source"));
+                error(i18n.gettext("Could not create the message source"));
               }
             }).error(function(error){
               console.error("There was an error creating the source");
-              error(i18n.gettext("There was an error creating the source"));
+              error(i18n.gettext("There was an error creating the message source"));
             });
           },
           error: function(model, resp, op) {
             console.error("Could not create a Facebook source");
-            error(i18n.gettext("There was an error creating the source"));
+            error(i18n.gettext("There was an error creating the message source"));
           }
         });
       }

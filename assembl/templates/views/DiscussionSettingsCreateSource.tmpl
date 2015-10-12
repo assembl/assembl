@@ -1,8 +1,8 @@
 <div>
-<p>{{ gettext('Create a source:') }}
+<p>{{ gettext('Create a message source:') }}
 <form>
 <select class="js_contentSourceType">
-<option value="" selected>{{ gettext('Select a source type')}}</option>
+<option value="" selected>{{ gettext('Select a message source type')}}</option>
 <% for (var i in types) {
     var type = types[i]; %>
     <option value="<%= type %>"><%= type_names[type] %></option>
