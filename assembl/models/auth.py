@@ -557,20 +557,25 @@ class IdentityProviderAccount(AbstractAgentAccount):
     twitter_sizes = (('_mini', 25), ('_normal', 48), ('_bigger', 73), ('', 1000))
 
     def avatar_url(self, size=32):
-        if not self.picture_url:
+        picture_url = self.picture_url
+        if not picture_url:
             return
+        if config.get("accept_secure_connection"):
+            # Make the connection https, known services can handle both.
+            # Ideally we should check which ones work.
+            picture_url = "https://" + picture_url.split("://", 1)[-1]
         if self.provider.provider_type == 'google_oauth2':
-            return '%s?size=%d' % (self.picture_url, size)
+            return '%s?size=%d' % (picture_url, size)
         elif self.provider.provider_type == 'facebook':
             for (size_name, name_size) in self.facebook_sizes:
                 if size <= name_size:
                     break
-            return '%s?type=%s' % (self.picture_url, size_name)
+            return '%s?type=%s' % (picture_url, size_name)
         elif self.provider.provider_type == 'twitter':
             for (size_name, name_size) in self.twitter_sizes:
                 if size <= name_size:
                     break
-            return size_name.join(self.picture_url.split('_normal'))
+            return size_name.join(picture_url.split('_normal'))
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
