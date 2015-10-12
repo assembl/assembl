@@ -296,7 +296,7 @@ class NotificationSubscription(DiscussionBoundBase):
                 self.last_status_change_date = datetime.utcnow()
         return self.handle_duplication(
                 json, parse_def, aliases, ctx, permissions, user_id,
-                duplicate_error)
+                duplicate_error, jsonld)
 
     def unique_query(self):
         # documented in lib/sqla

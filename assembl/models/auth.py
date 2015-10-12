@@ -1186,7 +1186,7 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
                 raise HTTPBadRequest()
         return self.handle_duplication(
             json, parse_def, aliases, ctx, permissions, user_id,
-            duplicate_error)
+            duplicate_error, jsonld)
 
     def is_owner(self, user_id):
         return self.user_id == user_id

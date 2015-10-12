@@ -95,6 +95,12 @@ class Document(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.id == discussion_id,)
 
+    use_original_on_duplication = True
+
+    def unique_query(self):
+        query, _ = super(Document, self).unique_query()
+        return query.filter_by(uri_id=self.uri_id), True
+
 
 class Attachment(DiscussionBoundBase):
     """

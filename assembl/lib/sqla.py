@@ -790,6 +790,9 @@ class BaseOps(object):
             aliases[target_id] = instance
         return instance
 
+    # If a duplicate is created, do we use the original? (Error otherwise)
+    use_original_on_duplication = False
+
     # Cases: Create -> no duplicate. Sub-elements are created or found.
     # Update-> no duplicate. Sub-elements are created or found.
     # do we store aliases? (not yet.)
@@ -808,11 +811,12 @@ class BaseOps(object):
         discussion = context.get_instance_of_class(Discussion)
         permissions = permissions or get_permissions(
             user_id, discussion.id if discussion else None)
+        duplicate_error = not cls.use_original_on_duplication
         with cls.default_db.no_autoflush:
             # We need this to allow db.is_modified to work well
             return cls._do_create_from_json(
                 json, parse_def, aliases, context, permissions,
-                user_id, True, jsonld)
+                user_id, duplicate_error, jsonld)
 
     @classmethod
     def _do_create_from_json(
@@ -1208,11 +1212,11 @@ class BaseOps(object):
                     setattr(self, reln.key, instance)
         return self.handle_duplication(
             json, parse_def, aliases, context, permissions, user_id,
-            duplicate_error)
+            duplicate_error, jsonld)
 
     def handle_duplication(
                 self, json, parse_def, aliases, context, permissions, user_id,
-                duplicate_error):
+                duplicate_error, jsonld=None):
         # Issue: unique_query MAY trigger a flush, which will
         # trigger an error if columns are missing, including in a call above.
         # But without the flush, some relations will not be interpreted
