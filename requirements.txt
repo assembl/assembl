@@ -1,5 +1,5 @@
 pip==7.1.2
-setuptools==18.3.2
+setuptools==18.4
 Babel==2.1.1
 Beaker>=1.6.5
 Chameleon==2.22
@@ -19,7 +19,7 @@ SPARQLWrapper==1.6.4
 SQLAlchemy==1.0.8
 Sphinx==1.3.1
 Unidecode==0.04.18
-WebOb==1.4.1
+WebOb==1.5.0
 WebTest==2.0.18
 Werkzeug==0.10.4
 alabaster==0.7.6
@@ -62,13 +62,13 @@ isodate==0.5.4
 iso639==0.1.1
 -e git+https://github.com/imaginationforpeople/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
-kombu==3.0.26
-lingua==3.11
+kombu==3.0.27
+lingua==3.12
 lxml==3.4.4
 meld3==1.0.2
 mock==1.3.0
 ndg_httpsclient==0.4.0
-numpy==1.9.3
+numpy==1.10.0
 oauthlib==1.0.3
 paramiko==1.15.3
 pinocchio==0.4.2
@@ -94,7 +94,7 @@ pyramid-jinja2==2.5
 pyramid-mailer==0.14.1
 pyramid-mako==1.0.2
 pyramid-tm==0.12
-pytest==2.8.1
+pytest==2.8.2
 pytest-cov==2.2.0
 pytest-localserver==0.3.4
 pytest-mock==0.8.1
@@ -110,13 +110,13 @@ redis==2.10.3
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1  # rq.filter: <4.2
-requests==2.7.0
+requests==2.8.0
 requests-oauthlib==0.5.0
 scikit-learn==0.16.1
 scipy==0.16.0
-selenium==2.47.3
+selenium==2.48.0
 simplejson==3.8.0
-six==1.9.0
+six==1.10.0
 snowballstemmer==1.2.0
 smart_open==1.3.0
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
@@ -129,7 +129,7 @@ tornado==4.2.1
 transaction==1.4.4
 translationstring==1.3
 uricore==0.1.2
-uwsgitop==0.8
+uwsgitop==0.9
 -e git+https://github.com/imaginationforpeople/velruse.git#egg=velruse
 venusian==1.0
 -e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
