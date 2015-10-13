@@ -27,7 +27,7 @@
     "ink": "~1.0.5",
     "jit": "~2.0.2",
     "jquery": "~2.1.4",
-    "jquery-oembed-all": "https://github.com/benoitg/jquery-oembed-all.git#2cd4e5488e2f6f717c79636cc6b11b6c5cd1eb4a",
+    "jquery-oembed-all": "https://github.com/ImaginationForPeople/jquery-oembed-all.git#334c51707ed67d4a26f71b82c12ca4f4929a9057",
     "jquery.dotdotdot": "https://github.com/ImaginationForPeople/jQuery.dotdotdot.git#fix-paragraph-and-read-more-not-showing",
     "marionette": "~2.4.1",
     "mocha": "~2.2.5",
