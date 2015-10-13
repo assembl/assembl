@@ -40,7 +40,7 @@ cffi==1.2.1
 colander==1.0
 cornice==1.1.0
 cov-core==1.15.0
-coverage==4.0
+coverage==4.0.1 
 cryptography==1.0.2
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 docutils==0.12
@@ -62,13 +62,13 @@ isodate==0.5.4
 iso639==0.1.1
 -e git+https://github.com/imaginationforpeople/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
-kombu==3.0.27
+kombu==3.0.28
 lingua==3.12
 lxml==3.4.4
 meld3==1.0.2
 mock==1.3.0
 ndg_httpsclient==0.4.0
-numpy==1.9.3
+numpy==1.10.1
 oauthlib==1.0.3
 paramiko==1.15.3
 pinocchio==0.4.2
@@ -110,7 +110,7 @@ redis==2.10.3
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1  # rq.filter: <4.2
-requests==2.8.0
+requests==2.8.1
 requests-oauthlib==0.5.0
 scikit-learn==0.16.1
 scipy==0.16.0
