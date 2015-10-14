@@ -16,7 +16,7 @@ import transaction
 
 
 from assembl.lib import config
-
+from assembl.lib.sqla import mark_changed
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
@@ -37,8 +37,10 @@ def upgrade(pyramid_env):
             else:
                 last_id = id
                 last_uri = uri
-        db.execute('delete from document where id in (' +
-            ','.join(to_delete) + ')')
+        if to_delete:
+            db.execute('delete from document where id in (' +
+                ','.join(to_delete) + ')')
+            mark_changed()
 
 
 def downgrade(pyramid_env):
