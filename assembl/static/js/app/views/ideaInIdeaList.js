@@ -68,7 +68,7 @@ var IdeaView = Backbone.View.extend({
     'click .idealist-dropzone': 'onTitleClick',
     'click .js_idealist-title-unread-count': 'onUnreadCountClick',
     'click .idealist-arrow': 'toggle',
-    'dragstart .idealist-body': 'onDragStart',
+    'dragstart .idealist-body': 'onDragStart', // when the user starts dragging this idea
     'dragend .idealist-body': 'onDragEnd',
     'dragover .idealist-body': 'onDragOver',
     'dragleave .idealist-body': 'onDragLeave',
@@ -236,8 +236,10 @@ var IdeaView = Backbone.View.extend({
 
   /**
    * @event
+   * when the user starts dragging this idea
    */
   onDragStart: function(ev) {
+    //console.log("ideaInIdeaList::onDragStart() ev: ", ev);
     if (ev) {
       ev.stopPropagation();
       Assembl.vent.trigger('idea:dragStart', this.model);
@@ -257,6 +259,7 @@ var IdeaView = Backbone.View.extend({
    * @event
    */
   onDragEnd: function(ev) {
+    //console.log("ideaInIdeaList::onDragEnd() ev: ", ev);
     if (ev) {
       ev.preventDefault();
       ev.stopPropagation();
@@ -273,6 +276,7 @@ var IdeaView = Backbone.View.extend({
    * @event
    */
   onDragOver: function(ev) {
+    //console.log("ideaInIdeaList::onDragOver() ev: ", ev);
     if (ev) {
       ev.preventDefault();
       ev.stopPropagation();
@@ -333,27 +337,28 @@ var IdeaView = Backbone.View.extend({
 
   /**
    * @event
+   * "Finally, the dragleave event will fire at an element when the drag leaves the element. This is the time when you should remove any insertion markers or highlighting. You do not need to cancel this event. [...] The dragleave event will always fire, even if the drag is cancelled, so you can always ensure that any insertion point cleanup can be done during this event." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations
    */
   onDragLeave: function(ev) {
-    if (ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-    }
+    //console.log("ideaInIdeaList::onDragLeave() ev: ", ev);
 
     this.dragOverCounter = 0;
     this.$el.removeClass('is-dragover is-dragover-above is-dragover-below');
   },
 
-  /**
-   * @event
-   */
+  // /!\ The browser will not fire the drop event if, at the end of the last call of the dragenter or dragover event listener (right before the user releases the mouse button), one of these conditions is met:
+  // * one of ev.dataTransfer.dropEffect or ev.dataTransfer.effectAllowed is "none"
+  // * ev.dataTransfer.dropEffect is not one of the values allowed in ev.dataTransfer.dropEffect
+  // "If you don't change the effectAllowed property, then any operation is allowed, just like with the 'all' value. So you don't need to adjust this property unless you want to exclude specific types." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations
+  // "During a drag operation, a listener for the dragenter or dragover events can check the effectAllowed property to see which operations are permitted. A related property, dropEffect, should be set within one of these events to specify which single operation should be performed. Valid values for the dropEffect are none, copy, move, or link." quote https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer
+  // ev.preventDefault() is also needed here in order to prevent default action (open as link for some elements)
   onDrop: function(ev) {
+    //console.log("ideaInIdeaList::onDrop() ev: ", ev);
     if (Ctx.debugAnnotator) {
       console.log("ideaInIdeaList:onDrop() fired", Ctx.getDraggedSegment(), Ctx.getDraggedAnnotation());
     }
     if (ev) {
       ev.preventDefault();
-      ev.stopPropagation();
     }
 
     var isDraggedBelow = this.$el.hasClass('is-dragover-below'),

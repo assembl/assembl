@@ -86,11 +86,12 @@ var IdeaPanel = AssemblPanel.extend({
     'change': 'render'
   },
   events: {
-    'dragstart .bx.postit': 'onDragStart',
-    'dragend .bx.postit': "onDragEnd",
-    'dragover': 'onDragOver',
-    'dragleave': 'onDragLeave',
-    'drop': 'onDrop',
+    'dragstart @ui.postIt': 'onDragStart', // when the user starts dragging one of the extracts listed in the idea
+    'dragenter @ui.postIt': 'onDragEnter', // when the user is dragging something from anywhere and moving the mouse towards this panel
+    'dragend @ui.postIt': 'onDragEnd',
+    'dragover @ui.postIt': 'onDragOver',
+    'dragleave @ui.postIt': 'onDragLeave',
+    'drop @ui.postIt': 'onDrop',
     'click @ui.closeExtract': 'onSegmentCloseButtonClick',
     'click @ui.clearIdea': 'onClearAllClick',
     'click @ui.deleteIdea': 'onDeleteButtonClick',
@@ -572,10 +573,54 @@ var IdeaPanel = AssemblPanel.extend({
             });
   },
 
-  onDragStart: function(ev) {
+  // The dragenter event is fired when the mouse enters a drop target while dragging something
+  // We have to define dragenter and dragover event listeners which both call ev.preventDefault() in order to be sure that subsequent drop event will fire => http://stackoverflow.com/questions/21339924/drop-event-not-firing-in-chrome
+  // "Calling the preventDefault method during both a dragenter and dragover event will indicate that a drop is allowed at that location." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations#droptargets
+  onDragEnter: function(ev) {
+    //console.log("ideaPanel::onDragEnter() ev: ", ev);
     if (ev) {
-      ev.stopPropagation();
+      ev.preventDefault();
     }
+  },
+
+  // The dragover event is fired when an element or text selection is being dragged over a valid drop target (every few hundred milliseconds).
+  // We have to define dragenter and dragover event listeners which both call ev.preventDefault() in order to be sure that subsequent drop event will fire => http://stackoverflow.com/questions/21339924/drop-event-not-firing-in-chrome
+  // "Calling the preventDefault method during both a dragenter and dragover event will indicate that a drop is allowed at that location." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations#droptargets
+  onDragOver: function(ev) {
+    //console.log("ideaPanel::onDragOver() ev: ", ev);
+    if (Ctx.debugAnnotator) {
+      console.log("ideaPanel:onDragOver() fired", Ctx.getDraggedSegment(), Ctx.getDraggedAnnotation());
+    }
+    if (ev) {
+      ev.preventDefault();
+    }
+
+    if (ev.originalEvent) {
+      ev = ev.originalEvent;
+    }
+
+    // /!\ See comment at the top of the onDrop() method
+    if ( ev && "dataTransfer" in ev ) {
+      if ( "effectAllowed" in ev.dataTransfer
+        && (ev.dataTransfer.effectAllowed == "move" || ev.dataTransfer.effectAllowed == "link")
+      ){ 
+        ev.dataTransfer.dropEffect = ev.dataTransfer.effectAllowed;
+      }
+      else {
+        ev.dataTransfer.dropEffect = 'link';
+        ev.dataTransfer.effectAllowed = 'link';
+      }
+    }
+
+    if (Ctx.getDraggedSegment() !== null || Ctx.getDraggedAnnotation() !== null) {
+      this.$el.addClass("is-dragover");
+    }
+  },
+
+  // when the user starts dragging one of the extracts listed in the idea
+  // no need for any ev.preventDefault() here
+  onDragStart: function(ev) {
+    //console.log("ideaPanel::onDragStart() ev: ", ev);
 
     var that = this,
         collectionManager = new CollectionManager();
@@ -595,65 +640,46 @@ var IdeaPanel = AssemblPanel.extend({
               Ctx.showDragbox(ev, segment.getQuote());
               Ctx.setDraggedSegment(segment);
 
+            })
+            .catch(function(error){
+              console.log("promise error: ", error);
             });
     }
   },
 
+  // "The dragend event is fired when a drag operation is being ended (by releasing a mouse button or hitting the escape key)." quote https://developer.mozilla.org/en-US/docs/Web/Events/dragend
   onDragEnd: function(ev) {
-    if (ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-    }
+    //console.log("ideaPanel::onDragEnd() ev: ", ev);
 
     this.$el.removeClass('is-dragover');
-    ev.currentTarget.style.opacity = 1;
+    if ( ev && "currentTarget" in ev ) {
+        ev.currentTarget.style.opacity = 1;
+    }
     Ctx.setDraggedAnnotation(null);
     Ctx.setDraggedSegment(null);
-
   },
 
-  onDragOver: function(ev) {
-    if (Ctx.debugAnnotator) {
-      console.log("ideaPanel:onDragOver() fired", Ctx.getDraggedSegment(), Ctx.getDraggedAnnotation());
-    }
-    if (ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-    }
-
-    if (ev.originalEvent) {
-      ev = ev.originalEvent;
-    }
-
-    // dirty fix for drag&drop, cleaner fix is on the way...
-    if ( ev.dataTransfer.effectAllowed == "move"){
-      ev.dataTransfer.dropEffect = 'move';
-    }
-    else /*if ( ev.dataTransfer.effectAllowed == "link")*/{
-      ev.dataTransfer.dropEffect = 'link';
-    }
-
-    if (Ctx.getDraggedSegment() !== null || Ctx.getDraggedAnnotation() !== null) {
-      this.$el.addClass("is-dragover");
-    }
-  },
-
+  // "Finally, the dragleave event will fire at an element when the drag leaves the element. This is the time when you should remove any insertion markers or highlighting. You do not need to cancel this event. [...] The dragleave event will always fire, even if the drag is cancelled, so you can always ensure that any insertion point cleanup can be done during this event." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations
   onDragLeave: function(ev) {
-    if (ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-    }
+    console.log("ideaPanel::onDragLeave() ev: ", ev);
 
     this.$el.removeClass('is-dragover');
   },
 
+  // /!\ The browser will not fire the drop event if, at the end of the last call of the dragenter or dragover event listener (right before the user releases the mouse button), one of these conditions is met:
+  // * one of ev.dataTransfer.dropEffect or ev.dataTransfer.effectAllowed is "none"
+  // * ev.dataTransfer.dropEffect is not one of the values allowed in ev.dataTransfer.dropEffect
+  // "If you don't change the effectAllowed property, then any operation is allowed, just like with the 'all' value. So you don't need to adjust this property unless you want to exclude specific types." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations
+  // "During a drag operation, a listener for the dragenter or dragover events can check the effectAllowed property to see which operations are permitted. A related property, dropEffect, should be set within one of these events to specify which single operation should be performed. Valid values for the dropEffect are none, copy, move, or link." quote https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer
+  // ev.preventDefault() is also needed here in order to prevent default action (open as link for some elements)
   onDrop: function(ev) {
+    //console.log("ideaPanel::onDrop() ev: ", ev);
     if (Ctx.debugAnnotator) {
       console.log("ideaPanel:onDrop() fired");
     }
+
     if (ev) {
       ev.preventDefault();
-      ev.stopPropagation();
     }
 
     this.$el.removeClass('is-dragover');
@@ -680,7 +706,6 @@ var IdeaPanel = AssemblPanel.extend({
       console.error("Neither a segment nor an annotation was available after Drop");
     }
     this.extractListView.render();
-
     return;
   },
 

@@ -637,15 +637,15 @@ Context.prototype = {
 
   /**
    * Shows the dragbox when user starts dragging an element
+   * This method is designed to be called in a dragstart event listener.
    * @param  {Event} ev The event object
    * @param  {String} text The text to be shown in the .dragbox
    */
   showDragbox: function(ev, text, newExtract) {
-
     var dragbox_max_length = 25,
         that = this;
 
-    if (ev.originalEvent) {
+    if (ev && "originalEvent" in ev) {
       ev = ev.originalEvent;
     }
 
@@ -667,7 +667,7 @@ Context.prototype = {
 
     this.dragbox.innerHTML = text;
 
-    if (ev.dataTransfer) {
+    if (ev && "dataTransfer" in ev) {
       if (newExtract) {
         ev.dataTransfer.dropEffect = "link";
         ev.dataTransfer.effectAllowed = 'link';
@@ -683,9 +683,11 @@ Context.prototype = {
       }
     }
 
-    $(ev.currentTarget).one("dragend", function() {
-      that.dragbox.setAttribute('hidden', 'hidden');
-    });
+    if ( ev && "currentTarget" in ev ){
+      $(ev.currentTarget).one("dragend", function() {
+        that.dragbox.setAttribute('hidden', 'hidden');
+      });
+    }
   },
 
   /**

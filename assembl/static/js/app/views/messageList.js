@@ -217,8 +217,8 @@ var MessageList = AssemblPanel.extend({
 
         'click .js_messageList-allmessages': 'showAllMessages',
 
-        'click .js_messageList-prevbutton': 'showPreviousMessages',
-        'click .js_messageList-morebutton': 'showNextMessages',
+        'click @ui.loadPreviousMessagesButton': 'showPreviousMessages',
+        'click @ui.loadNextMessagesButton': 'showNextMessages',
         'click @ui.loadAllButton': 'showAllMessagesAtOnce',
 
         'click .js_openTargetInModal': 'openTargetInModal',
