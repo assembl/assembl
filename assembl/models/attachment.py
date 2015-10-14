@@ -39,9 +39,7 @@ class Document(DiscussionBoundBase):
     interpreted as a purl
     """
 
-    # MAP: Change to true once
-    # https://app.asana.com/0/51461630427071/52921943509398 is done
-    uri_id = Column(CoerceUnicode(514), unique=False, index=True)
+    uri_id = Column(String(514), unique=True, index=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
                            info={'rdf': QuadMapPatternS(None,
                                                         DCTERMS.created)})
@@ -59,8 +57,8 @@ class Document(DiscussionBoundBase):
             cascade="all, delete-orphan"),
     )
 
-    oembed_type = Column(CoerceUnicode(1024), server_default="")
-    mime_type = Column(CoerceUnicode(1024), server_default="")
+    oembed_type = Column(String(1024), server_default="")
+    mime_type = Column(String(1024), server_default="")
     # From metadata, not the user
     title = Column(CoerceUnicode(), server_default="",
                    info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
@@ -72,19 +70,19 @@ class Document(DiscussionBoundBase):
 
     # From metadata, not the user
     author_name = Column(
-        UnicodeText)
+        CoerceUnicode())
 
     # From metadata, not the user
     author_url = Column(
-        UnicodeText)
+        String)
 
     # From metadata, not the user
     thumbnail_url = Column(
-        UnicodeText)
+        String)
 
     # From metadata, not the user
     site_name = Column(
-        UnicodeText)
+        CoerceUnicode())
 
     __mapper_args__ = {
         'polymorphic_identity': 'document',
