@@ -30,12 +30,8 @@ field_names = ', '.join(fields)
 cast_fields = ', '.join([
     'cast(%s as varchar)' % (f) if f in ascii_fields else f for f in fields])
 
-ctx = {
-    'schema': config.get('db_schema'),
-    'user': config.get('db_user')
-}
-
 def upgrade(pyramid_env):
+    import pdb; pdb.set_trace()
     with context.begin_transaction():
         op.create_table(
             'document_temp',
@@ -93,12 +89,14 @@ def upgrade(pyramid_env):
             )
         op.execute("insert into document (%s) select %s from document_temp" % (
             field_names, field_names))
+        mark_changed()
+    with context.begin_transaction():
         op.execute("""
             ALTER TABLE {schema}.{user}.attachment
             ADD CONSTRAINT attachment_document_document_id_id FOREIGN KEY (document_id)
-            REFERENCES {schema}.{user}.document (id) ON UPDATE CASCADE ON DELETE CASCADE""".format(**ctx))
+            REFERENCES {schema}.{user}.document (id) ON UPDATE CASCADE ON DELETE CASCADE""".format(
+                schema=config.get('db_schema'), user=config.get('db_user')))
         op.drop_table("document_temp")
-        mark_changed()
 
 
 def downgrade(pyramid_env):
@@ -154,12 +152,14 @@ def downgrade(pyramid_env):
             sa.Column('author_url', sa.UnicodeText),
             sa.Column('thumbnail_url', sa.UnicodeText),
             sa.Column('site_name', sa.UnicodeText))
-        
+
         op.execute("insert into document ({fnames}) select {fnames} from document_temp".format(fnames=field_names))
+        mark_changed()
+    with context.begin_transaction():
         op.execute("""
             ALTER TABLE {schema}.{user}.attachment
             ADD CONSTRAINT attachment_document_document_id_id FOREIGN KEY (document_id)
-            REFERENCES {schema}.{user}.document (id) ON UPDATE CASCADE ON DELETE CASCADE""".format(**ctx))
+            REFERENCES {schema}.{user}.document (id) ON UPDATE CASCADE ON DELETE CASCADE""".format(
+              schema=config.get('db_schema'), user=config.get('db_user')))
 
         op.drop_table("document_temp")
-        mark_changed()
