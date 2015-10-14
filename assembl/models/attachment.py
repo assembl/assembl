@@ -93,7 +93,7 @@ class Document(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        return (cls.id == discussion_id,)
+        return (cls.discussion_id == discussion_id,)
 
     use_original_on_duplication = True
 
