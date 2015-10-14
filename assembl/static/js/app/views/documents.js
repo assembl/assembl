@@ -52,8 +52,18 @@ var DocumentView = Marionette.ItemView.extend({
         console.log("onEmbedFailed (assembl)");
         this.addClass("hidden");
       },
+      onError: function(externalUrl, embedProvider, textStatus, jqXHR) {
+        if (jqXHR) {
+          // Do not reload assembl for an embed failure
+          jqXHR.handled = true;
+        }
+        console.log('err:', externalUrl, embedProvider, textStatus);
+      },
       afterEmbed: function() {
         //console.log("Embeeding done");
+      },
+      proxyHeadCall: function(url) {
+        return "/api/v1/mime_type?url=" + encodeURIComponent(url);
       }
     });
   },

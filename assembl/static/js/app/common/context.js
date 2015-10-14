@@ -1133,8 +1133,18 @@ Context.prototype = {
           console.log("onEmbedFailed (assembl)");
           popover.addClass('hidden');
         },
+        onError: function(externalUrl, embedProvider, textStatus, jqXHR) {
+          if (jqXHR) {
+            // Do not reload assembl for an embed failure
+            jqXHR.handled = true;
+          }
+          console.log('err:', externalUrl, embedProvider, textStatus);
+        },
         afterEmbed: function() {
           that.popoverAfterEmbed.apply(this);
+        },
+        proxyHeadCall: function(url) {
+          return "/api/v1/mime_type?url=" + encodeURIComponent(url);
         }
       });
 
