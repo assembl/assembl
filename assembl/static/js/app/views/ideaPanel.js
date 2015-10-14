@@ -625,7 +625,13 @@ var IdeaPanel = AssemblPanel.extend({
       ev = ev.originalEvent;
     }
 
-    ev.dataTransfer.dropEffect = 'move';
+    // dirty fix for drag&drop, cleaner fix is on the way...
+    if ( ev.dataTransfer.effectAllowed == "move"){
+      ev.dataTransfer.dropEffect = 'move';
+    }
+    else /*if ( ev.dataTransfer.effectAllowed == "link")*/{
+      ev.dataTransfer.dropEffect = 'link';
+    }
 
     if (Ctx.getDraggedSegment() !== null || Ctx.getDraggedAnnotation() !== null) {
       this.$el.addClass("is-dragover");
