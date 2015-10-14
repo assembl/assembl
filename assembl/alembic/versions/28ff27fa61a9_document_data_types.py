@@ -31,7 +31,6 @@ cast_fields = ', '.join([
     'cast(%s as varchar)' % (f) if f in ascii_fields else f for f in fields])
 
 def upgrade(pyramid_env):
-    import pdb; pdb.set_trace()
     with context.begin_transaction():
         op.create_table(
             'document_temp',
