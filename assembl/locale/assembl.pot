@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-12 13:00-0400\n"
+"POT-Creation-Date: 2015-10-14 10:03-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -824,7 +824,7 @@ msgstr ""
 msgid "Confirm that you want to delete this idea."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:695
+#: assembl/static/js/app/views/ideaPanel.js:701
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 
@@ -2604,6 +2604,10 @@ msgstr ""
 
 #: assembl/templates/views/navigation.tmpl:21
 msgid "About"
+msgstr ""
+
+#: assembl/templates/views/notificationByEmails.tmpl:4
+msgid "Receive notifications on"
 msgstr ""
 
 #: assembl/templates/views/otherInIdeaList.tmpl:2
