@@ -668,7 +668,7 @@ var IdeaPanel = AssemblPanel.extend({
 
   // /!\ The browser will not fire the drop event if, at the end of the last call of the dragenter or dragover event listener (right before the user releases the mouse button), one of these conditions is met:
   // * one of ev.dataTransfer.dropEffect or ev.dataTransfer.effectAllowed is "none"
-  // * ev.dataTransfer.dropEffect is not one of the values allowed in ev.dataTransfer.dropEffect
+  // * ev.dataTransfer.dropEffect is not one of the values allowed in ev.dataTransfer.effectAllowed
   // "If you don't change the effectAllowed property, then any operation is allowed, just like with the 'all' value. So you don't need to adjust this property unless you want to exclude specific types." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations
   // "During a drag operation, a listener for the dragenter or dragover events can check the effectAllowed property to see which operations are permitted. A related property, dropEffect, should be set within one of these events to specify which single operation should be performed. Valid values for the dropEffect are none, copy, move, or link." quote https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer
   // ev.preventDefault() is also needed here in order to prevent default action (open as link for some elements)
