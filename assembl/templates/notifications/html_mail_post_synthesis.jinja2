@@ -24,13 +24,13 @@ synthesis
 {% endblock post_body %}
 
 {%- block action_button %}
-<table class="medium-button">
+<table class="small-button assembl-primary-button radius">
   <tr>
     <td>
       <a href="{{ frontendUrls.append_query_string(
                     frontendUrls.get_post_url(notification.event_source_object()),
                     **{discriminants.url.SOURCE: discriminants.source.NOTIFICATION}
-                  ) }}">{{ gettext("Online version of this synthesis") }}</a>
+                  ) }}">{{ gettext("Comment this synthesis") }}</a>
     </td>
   </tr>
 </table>
