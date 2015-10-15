@@ -29,6 +29,10 @@
 
 .popin-body > .groupsContainer {
   height: 70vh;
+  .groupContent {
+    /* this is a fix for the size of the popin content in IE (content was cut at the bottom even with a scrollbar). This solution for the fix has the advantage of not creating 2 scrollbars */
+    overflow-y: auto;
+  }
 }
 
 .groupContent {
