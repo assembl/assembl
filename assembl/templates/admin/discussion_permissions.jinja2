@@ -65,7 +65,7 @@
     <tbody>
         {% for user in users %}
         <tr>
-            <th>{{user.name}}</th>
+            <th>{{user.name}} (<em>{{user.get_preferred_email()}} </em>)</th>
             {% for role in roles %}
             {% if role.startswith('r:') %}
             <td>
