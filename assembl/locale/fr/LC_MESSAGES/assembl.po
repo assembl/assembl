@@ -1330,6 +1330,7 @@ msgstr "N'inclure que les messages créés avant une date donnée."
 msgid ""
 "Please type a date. The filter will then show only posts which have been "
 "created before this date. Example: 2015-01-01"
+msgstr ""
 "Veuillez écrire une date. Le filtre ne montrera ensuite que les messages "
 "qui ont été créés avant cette date. Par exemple: 2015-01-01"
 
