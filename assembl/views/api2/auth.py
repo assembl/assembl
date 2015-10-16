@@ -14,11 +14,25 @@ from assembl.auth import (
 from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile)
 from assembl.auth.util import get_permissions
-from ..traversal import (CollectionContext, InstanceContext)
+from ..traversal import (CollectionContext, InstanceContext, ClassContext)
 from .. import JSONError
 from . import (
     FORM_HEADER, JSON_HEADER, collection_view, instance_put_json,
     collection_add_json)
+
+
+@view_config(
+    context=ClassContext, request_method="PATCH",
+    ctx_class=LocalUserRole)
+@view_config(
+    context=ClassContext, request_method="PUT",
+    ctx_class=LocalUserRole)
+@view_config(
+    context=ClassContext, request_method="POST",
+    ctx_class=LocalUserRole)
+def add_local_role_on_class(request):
+    # Did not securize this route, so forbid it.
+    raise HTTPNotFound()
 
 
 @view_config(
@@ -52,6 +66,10 @@ def add_local_role(request):
         if P_SELF_REGISTER in permissions:
             json['requested'] = False
             json['role'] = R_PARTICIPANT
+            req_user = User.get_instance(requested_user)
+            discussion = Discussion.get(discussion_id)
+            if not discussion.check_authorized_email(req_user):
+                raise HTTPForbidden()
         elif P_SELF_REGISTER_REQUEST in permissions:
             json['requested'] = True
         else:

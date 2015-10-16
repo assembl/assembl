@@ -276,6 +276,22 @@ class Discussion(DiscussionBoundBase):
         """
         return get_global_base_url()
 
+    def check_authorized_email(self, user):
+        # Check if the user has a verified email from a required domain
+        require_email_domain = self.preferences['require_email_domain']
+        if not require_email_domain:
+            return True
+        for account in user.accounts:
+            if not account.verified:
+                continue
+            email = account.email
+            if not email or '@' not in email:
+                continue
+            email = email.split('@', 1)[-1]
+            if email in require_email_domain:
+                return True
+        return False
+
     @property
     def widget_collection_url(self):
         return "/data/Discussion/%d/widgets" % (self.id,)

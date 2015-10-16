@@ -164,8 +164,10 @@ class Preferences(Base, MutableMapping):
         "translations": {},
         # Simple view panel order, eg NIM or NMI
         "simple_view_panel_order": "NMI",
+        # Registration requires being a member of this email domain.
+        "require_email_domain": [],
         # Properties which a user cannot override
-        "forbid_user_edit": [],
+        "forbid_user_edit": ["require_email_domain"],
     }
 
     # filter some incoming values through a conversion/validation function
