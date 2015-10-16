@@ -792,6 +792,85 @@ class UserNsDictCollection(AbstractCollectionDefinition):
         return c[namespace]
 
 
+class PreferenceContext(TraversalContext):
+    # Represents the set of preference values (eg for a discussion)
+    def __init__(self, parent_context, collection):
+        # Do not call super, because it will set the acl.
+        self.collection = collection
+        self.__parent__ = parent_context
+        self.parent_instance = parent_context._instance
+        self.preferences = collection.as_collection(self.parent_instance)
+
+    @property
+    def __acl__(self):
+        # collection acl?
+        return self.__parent__.__acl__
+
+    def __getitem__(self, key):
+        print "PreferenceContext.getitem"
+        return PreferenceValueContext(self.preferences, self, key)
+
+    def get_target_class(self):
+        from assembl.models.preferences import Preferences
+        return Preferences
+
+
+class PreferenceValueContext(TraversalContext):
+    # Represents a specific preference
+    def __init__(self, preferences, parent, key):
+        # Do not call super, because it will set the acl.
+        self.collection = preferences
+        self.__parent__ = parent
+        self.parent_instance = parent.parent_instance
+        self.key = key
+
+    @property
+    def __acl__(self):
+        return self.__parent__.__acl__
+
+    def __getitem__(self, key):
+        return None
+
+    def get_target_class(self):
+        return None
+
+
+class PreferenceCollection(AbstractCollectionDefinition):
+    def __init__(self, cls):
+        from assembl.models.preferences import Preferences
+        super(PreferenceCollection, self).__init__(
+            cls, Preferences)
+
+    def make_context(self, parent_context):
+        print "PreferenceCollection.make_context"
+        return PreferenceContext(parent_context, self)
+
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
+        self.__parent__.decorate_instance(
+            self, instance, assocs, user_id, ctx, kwargs)
+
+    def decorate_query(
+            self, query, owner_alias, last_alias, parent_instance, ctx):
+        # No clue what to do here; UserKVCollection is not a sqla object
+        return query.outerjoin(
+            owner_alias, owner_alias.id != None)
+
+    def contains(self, parent_instance, key):
+        print "PreferenceCollection.contains"
+        from assembl.models.preferences import Preferences
+        return key in Preferences.property_defaults
+
+    def as_collection(self, parent_instance):
+        print "PreferenceCollection.as_collection"
+        return parent_instance.preferences
+
+    def get_instance(self, key, parent_instance):
+        print "PreferenceCollection.get_instance"
+        c = self.as_collection(parent_instance)
+        return c[key]
+
+
+
 def root_factory(request):
     # OK, this is the old code... I need to do better, but fix first.
     from ..models import Discussion
