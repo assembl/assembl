@@ -63,6 +63,8 @@ def upgrade(pyramid_env):
             op.drop_index('ix_%s_%s_document_uri_id' % (
                 config.get('db_schema'), config.get('db_user')),
                 'document')
+        except:
+            pass
 
     with context.begin_transaction():
         for f in new_types:
@@ -101,6 +103,8 @@ def downgrade(pyramid_env):
             op.drop_index('ix_%s_%s_document_uri_id' % (
                 config.get('db_schema'), config.get('db_user')),
                 'document')
+        except:
+            pass
     with context.begin_transaction():
         for f in old_types:
             op.drop_column('document', f)
