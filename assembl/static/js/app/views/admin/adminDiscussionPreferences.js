@@ -8,7 +8,7 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js');
 
 var adminDiscussionPreferences = Marionette.LayoutView.extend({
-  template: '#tmpl-userDiscussionPreferences',
+  template: '#tmpl-adminDiscussionPreferences',
   className: 'admin-profile',
   ui: {
     close: '.bx-alert-success .bx-close',
@@ -18,7 +18,7 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
   regions: {
     navigationMenuHolder: '.navigation-menu-holder'
   },
-  preferencesKeys: ["simple_view_panel_order"],
+  preferencesKeys: ["simple_view_panel_order", "require_email_domain"],
 
   initialize: function() {
   },
@@ -47,7 +47,7 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
     preferences.forEach(function(preferenceKey){
         var promise = that.getReadUserPreferencePromise(preferenceKey);
         promise.then(function(res){
-            that.$("#user_discussion_preferences_" + preferenceKey).val(res);
+          that.setUserInputPreferenceValue(preferenceKey, res);
         }).catch(function(e) {
             console.error(e);
         });
@@ -58,10 +58,9 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
     var that = this;
     var preferences = this.preferencesKeys;
     preferences.forEach(function(preferenceKey){
-        var preferenceValue = that.$("#user_discussion_preferences_" + preferenceKey).val();
+        var preferenceValue = that.getUserInputPreferenceValue(preferenceKey);
         var promise = that.getSaveUserPreferencePromise(preferenceKey, preferenceValue);
         promise.then(function(res){
-            console.log("settings successfully saved! => ", res);
             $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
               ele: 'body',
               type: 'success',
@@ -77,10 +76,42 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
     });
   },
 
+  getUserInputPreferenceSelector: function(preferenceName){
+    return "#admin_discussion_preferences_" + preferenceName;
+  },
+
+  getUserInputPreferenceValue: function(preferenceName){
+    var selector = this.getUserInputPreferenceSelector(preferenceName);
+    if ( preferenceName == "require_email_domain" ){
+      var inputVal = this.$(selector).val();
+      var res = inputVal.split(",");
+      res.forEach(function(el,index){
+        res[index] = el.trim();
+      });
+      return res;
+    }
+    else {
+      return this.$(selector).val();
+    }
+  },
+
+  setUserInputPreferenceValue: function(preferenceName, preferenceValue){
+    var selector = this.getUserInputPreferenceSelector(preferenceName);
+    if ( preferenceName == "require_email_domain" ){
+      var val = "";
+      if ( preferenceValue instanceof Array ){
+        val = preferenceValue.join(", ");
+      }
+      this.$(selector).val(val);
+    }
+    else {
+      this.$(selector).val(preferenceValue);
+    }
+  },
+
   getUserPreferenceURL: function(preferenceName){
     var user_id = Ctx.getCurrentUserId();
-    // TODO: this API point does not seem to work yet: var url = Ctx.getApiV2DiscussionUrl("preferences/" + preferenceName); // example: "http://localhost:6543/data/Discussion/6/preferences/simple_view_panel_order"
-    var url = Ctx.getApiV2DiscussionUrl("all_users/" + user_id + "/preferences/" + preferenceName);
+    var url = Ctx.getApiV2DiscussionUrl("settings/" + preferenceName); // example: "http://localhost:6543/data/Discussion/6/settings/simple_view_panel_order"
     return url;
   },
 
@@ -94,8 +125,14 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
   },
 
   getSaveUserPreferencePromise: function(preferenceName, value){
+    console.log("adminDiscussionPreferences::getSaveUserPreferencePromise(): ", preferenceName, value);
     var url = this.getUserPreferenceURL(preferenceName);
-    var data = '"' + value + '"';
+    var data = null;
+    if ( typeof value != "string" && value instanceof Array ){
+      console.log("warning, preference value should be a string or an array. value received: ", value);
+    }
+    data = JSON.stringify(value);
+    console.log("data we are going to send: ", data);
     var promise = Promise.resolve($.ajax(
       url,
       {

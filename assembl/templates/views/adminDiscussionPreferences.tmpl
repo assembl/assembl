@@ -12,12 +12,19 @@
           <form class="core-form form-horizontal" id="profile-form">
             <fieldset class="phl">
               <div class="control-group">
-                <label for="name" class="control-label fl">{{ gettext('Order of panels') }}</label>
+                <label for="admin_discussion_preferences_simple_view_panel_order" class="control-label fl">{{ gettext('Order of panels') }}</label>
                 <div class="controls fl">
-                    <select id="user_discussion_preferences_simple_view_panel_order">
+                    <select id="admin_discussion_preferences_simple_view_panel_order">
                       <option value="NIM">{{ gettext('Navigation, Idea, Messages') }}</option>
                       <option value="NMI">{{ gettext('Navigation, Messages, Idea') }}</option>
                     </select>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label for="admin_discussion_preferences_require_email_domain" class="control-label fl"><abbr title="{{ gettext('Please use a comma to separate domain names. Example: mycompany.com,test.com') }}">{{ gettext('List of allowed domain names for user email address') }}</abbr></label>
+                <div class="controls fl">
+                    <input id="admin_discussion_preferences_require_email_domain" />
                 </div>
               </div>
             </fieldset>
