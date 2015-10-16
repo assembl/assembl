@@ -6,7 +6,8 @@ var Marionette = require('../../shims/marionette.js'),
     CollectionManager = require('../../common/collectionManager.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
-    partnerModel = require('../../models/partners.js');
+    partnerModel = require('../../models/partners.js'),
+    AdminNavigationMenu = require('./adminNavigationMenu.js');
 
 var Partners = Marionette.ItemView.extend({
   template: '#tmpl-partnersInAdmin',
@@ -103,8 +104,9 @@ var adminPartners = Marionette.LayoutView.extend({
     },
 
   regions: {
-      partner: '#partner-content'
-    },
+    partner: '#partner-content',
+    navigationMenuHolder: '.navigation-menu-holder'
+  },
 
   events: {
       'click @ui.partners': 'addNewPartner',
@@ -135,6 +137,8 @@ var adminPartners = Marionette.LayoutView.extend({
               that.getRegion('partner').show(partnerList);
             });
 
+    var menu = new AdminNavigationMenu({selectedSection: "partners"});
+    this.getRegion('navigationMenuHolder').show(menu);
   },
 
   close: function() {

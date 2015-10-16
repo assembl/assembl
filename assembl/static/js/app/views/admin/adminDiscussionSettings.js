@@ -4,7 +4,8 @@ var Marionette = require('../../shims/marionette.js'),
     i18n = require('../../utils/i18n.js'),
     CollectionManager = require('../../common/collectionManager.js'),
     Sources = require('../../models/sources.js'),
-    SourceView = require('./generalSource.js');
+    SourceView = require('./generalSource.js'),
+    AdminNavigationMenu = require('./adminNavigationMenu.js');
 
 var AdminDiscussionSettings = Marionette.LayoutView.extend({
   template: '#tmpl-adminDiscussionSettings',
@@ -17,7 +18,8 @@ var AdminDiscussionSettings = Marionette.LayoutView.extend({
   },
   regions: {
     sources: "#sources-content",
-    createSource: "#create-source"
+    createSource: "#create-source",
+    navigationMenuHolder: '.navigation-menu-holder'
   },
   onBeforeShow: function() {
     var that = this,
@@ -33,6 +35,9 @@ var AdminDiscussionSettings = Marionette.LayoutView.extend({
       });
     
     this.getRegion('createSource').show(new SourceView.CreateSource());
+
+    var menu = new AdminNavigationMenu({selectedSection: "settings"});
+    this.getRegion('navigationMenuHolder').show(menu);
   },
 
   addFakeFacebookSource: function(evt){

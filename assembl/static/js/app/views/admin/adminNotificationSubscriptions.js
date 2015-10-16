@@ -6,9 +6,10 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
     $ = require('../../shims/jquery.js'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    AdminNavigationMenu = require('./adminNavigationMenu.js');
 
-var notifications = Marionette.ItemView.extend({
+var notifications = Marionette.LayoutView.extend({
   template: '#tmpl-adminNotification',
   className: 'controls',
   ui: {
@@ -75,9 +76,10 @@ var adminNotificationSubscriptions = Marionette.LayoutView.extend({
   template: '#tmpl-adminNotificationSubscriptions',
   className: 'admin-notifications',
   regions: {
-      notification:'#notification-content',
-      autoSubscribe:'#notification-auto-subscribe'
-    },
+    notification:'#notification-content',
+    autoSubscribe:'#notification-auto-subscribe',
+    navigationMenuHolder: '.navigation-menu-holder'
+  },
   ui: {
     close: '.bx-alert-success .bx-close'
   },
@@ -112,7 +114,9 @@ var adminNotificationSubscriptions = Marionette.LayoutView.extend({
               that.getRegion('notification').show(notif);
 
             });
-
+    
+    var menu = new AdminNavigationMenu({selectedSection: "notifications"});
+    this.getRegion('navigationMenuHolder').show(menu);
   },
 
   close: function() {

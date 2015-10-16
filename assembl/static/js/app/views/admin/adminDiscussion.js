@@ -8,14 +8,18 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js'),
     Discussion = require('../../models/discussion.js'),
     DiscussionSource = require('../../models/discussionSource.js'),
-    i18n = require('../../utils/i18n.js');
+    i18n = require('../../utils/i18n.js'),
+    AdminNavigationMenu = require('./adminNavigationMenu.js');
 
-var adminDiscussion = Marionette.ItemView.extend({
+var adminDiscussion = Marionette.LayoutView.extend({
   template: '#tmpl-adminDiscussion',
   className: 'admin-notifications',
   ui: {
       discussion: '.js_saveDiscussion'
     },
+  regions: {
+    'navigationMenuHolder': '.navigation-menu-holder'
+  },
   initialize: function() {
     var that = this,
         collectionManager = new CollectionManager();
@@ -29,7 +33,12 @@ var adminDiscussion = Marionette.ItemView.extend({
             });
 
   },
+
   onRender: function() {
+    // this is in onRender instead of onBeforeShow because of the re-render in initialize()
+    var menu = new AdminNavigationMenu({selectedSection: "edition"});
+    this.getRegion('navigationMenuHolder').show(menu);
+
     this.$('#introduction').autosize();
   },
   events: {
