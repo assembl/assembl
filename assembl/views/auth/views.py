@@ -758,7 +758,8 @@ def confirm_emailid_sent(request):
 
 def maybe_auto_subscribe(user, discussion):
     if (not discussion
-            or not discussion.subscribe_to_notifications_on_signup):
+            or not discussion.subscribe_to_notifications_on_signup
+            or not discussion.check_authorized_email(user)):
         return False
     # really auto-subscribe user
     user.subscribe(discussion)
