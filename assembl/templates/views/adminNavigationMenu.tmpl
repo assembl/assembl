@@ -2,6 +2,9 @@
   <li <% if (selectedSection == 'edition'){ %>class="active"<% } %>>
     <a href="#edition" class="menu">{{ gettext('Edit discussion') }}</a>
   </li>
+  <li <% if (selectedSection == 'discussion_preferences'){ %>class="active"<% } %>>
+    <a href="#discussion_preferences" class="menu">{{ gettext('Discussion preferences') }}</a>
+  </li>
   <li <% if (selectedSection == 'settings'){ %>class="active"<% } %>>
     <a href="#settings" class="menu">{{ gettext('Server settings') }}</a>
   </li>
