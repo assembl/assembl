@@ -55,8 +55,16 @@ def upgrade(pyramid_env):
                 "{f}_temp = {f}").format(f=f)
             for (f, stype) in new_types.iteritems())))
         mark_changed()
-    with context.begin_transaction():
+    # Why do two variants exist???
+    try:
         op.drop_index('ix_document_uri_id', 'document')
+    except:
+        try:
+            op.drop_index('ix_%s_%s_document_uri_id' % (
+                config.get('db_schema'), config.get('db_user')),
+                'document')
+
+    with context.begin_transaction():
         for f in new_types:
             op.drop_column('document', f)
         for f, stype in new_types.iteritems():
@@ -85,6 +93,14 @@ def downgrade(pyramid_env):
             "{f}_temp = {f}".format(f=f)
             for (f, stype) in old_types.iteritems())))
         mark_changed()
+    # Why do two variants exist???
+    try:
+        op.drop_index('ix_document_uri_id', 'document')
+    except:
+        try:
+            op.drop_index('ix_%s_%s_document_uri_id' % (
+                config.get('db_schema'), config.get('db_user')),
+                'document')
     with context.begin_transaction():
         for f in old_types:
             op.drop_column('document', f)
