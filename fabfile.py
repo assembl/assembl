@@ -1030,20 +1030,20 @@ def ensure_virtuoso_not_running():
     execute(supervisor_process_stop, 'virtuoso')
 
 
-@task
-def virtuoso_reconstruct_save_db():
+def virtuoso_reconstruct_save_db(try_backup=True):
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
-        backup = run('%s +backup-dump +foreground' % (
-            get_virtuoso_exec(),), quiet=True)
-        if backup.failed:
+        if try_backup:
+            backup = run('%s +backup-dump +foreground' % (
+                get_virtuoso_exec(),), quiet=True)
+            if not backup.failed:
+                return
             print "ERROR: Normal backup failed."
-            # these were created by previous attempt
-            run('rm -f virtuoso-temp.db virtuoso.pxa virtuoso.trx virtuoso.lck')
-            run('%s +crash-dump +foreground' % (get_virtuoso_exec(),))
+        # these were created by previous attempt
+        run('rm -f virtuoso-temp.db virtuoso.pxa virtuoso.trx virtuoso.lck')
+        run('%s +crash-dump +foreground' % (get_virtuoso_exec(),))
 
 
-@task
 def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
@@ -1059,8 +1059,19 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
 
 @task
 def virtuoso_reconstruct_db():
-    execute(virtuoso_reconstruct_save_db)
-    execute(virtuoso_reconstruct_restore_db)
+    execute(database_dump)
+    virtuoso_reconstruct_save_db(True)
+    virtuoso_reconstruct_restore_db()
+    execute(app_reload)
+
+
+@task
+def virtuoso_major_reconstruct_db():
+    execute(database_dump)
+    virtuoso_reconstruct_save_db(False)
+    virtuoso_reconstruct_restore_db()
+    execute(app_reload)
+
 
 def virtuoso_install_or_upgrade():
     with settings(warn_only=True), hide('warnings', 'stdout', 'stderr'):
