@@ -77,7 +77,7 @@ var AssemblTours = [
       steps: [
         {
           target: "tour_step_segment",
-          placement: "top",
+          placement: "left",
           title: i18n.gettext("Spot relevant quotes on each idea"),
           content: i18n.gettext("Excerpts from messages are harvested and are organized to help you find relevant contributions on this idea."),
           yOffset: 10,
