@@ -96,6 +96,9 @@ var MessageList = AssemblPanel.extend({
       this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
       this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY;
 
+      // each fully-displayed message asks the messageList for an anotator refresh, so to avoid doing it too often, we use a throttled version of the requestAnnotatorRefresh() method
+      this.requestAnnotatorRefresh = _.throttle(this.requestAnnotatorRefresh, 500);
+
       collectionManager.getAllMessageStructureCollectionPromise()
         .then(function(allMessageStructureCollection) {
           if(!that.isViewDestroyed()) {
@@ -921,6 +924,7 @@ var MessageList = AssemblPanel.extend({
   /**
    * Should be called by a messageview anytime it has annotations and has
    * rendered a view that shows annotations.
+   * This method is redefined in initialize() as a throttled version of itself.
    */
   requestAnnotatorRefresh: function() {
     if (this.annotatorRefreshSuspended === true) {
