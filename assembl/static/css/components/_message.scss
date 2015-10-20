@@ -89,12 +89,6 @@ $previewNumLines: 4;
     cursor: pointer;
   }
 
-  /* This is a hack for easier harvesting. The annotator will show even when the user starts text selection by clicking far at the left of the text (which harvesters do very often). Here we make the .js_messageBodyAnnotatorSelectionAllowed div bigger to the left in a transparent way, so that it gets mouse events. */
-  .message-body.js_messageBodyAnnotatorSelectionAllowed {
-    margin-left: -50px;
-    padding-left: 50px;
-  }
-
   .message-body.ellipsis {
     cursor: pointer;
     //Must match height: in message.js, so that there is an elipsis before 
