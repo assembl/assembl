@@ -1184,6 +1184,7 @@ Context.prototype = {
 
   /**
    * @init
+   * TODO: This is very slow when the DOM contained in elm is big. Maybe we should improve this CSS selector (for example using a class selector instead of an attribute selector), but then we would have to edit the HTML of every element which declares a tooltip.
    */
   initTooltips: function(elm) {
     elm.find('[data-toggle="tooltip"]').tooltip({
