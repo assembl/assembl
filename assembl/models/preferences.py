@@ -166,6 +166,11 @@ class Preferences(Base, MutableMapping):
         "simple_view_panel_order": "NMI",
         # Registration requires being a member of this email domain.
         "require_email_domain": [],
+        # Are moderated posts simply hidden or made inaccessible by default? (bool)
+        "default_allow_access_to_moderated_text": True,
+        # Default moderation text template
+        "moderation_template": None,
+        # TODO: preference to allow moderation a priori.
         # Properties which a user cannot override
         "forbid_user_edit": ["require_email_domain"],
     }

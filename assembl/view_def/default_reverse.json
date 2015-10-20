@@ -135,6 +135,11 @@
     },
     "Post": {
         "@extends": "Content",
+        "publication_state": false,
+        "moderator": false,
+        "moderated_on": false,
+        "moderation_text": false,
+        "moderator_comment": false,
         "message_id": false,
         "ancestry": false,
         "parentId": "parent",

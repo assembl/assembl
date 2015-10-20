@@ -30,6 +30,7 @@ P_SELF_REGISTER_REQUEST = 'self_register_req'
 P_ADMIN_DISC = 'admin_discussion'
 P_SYSADMIN = 'sysadmin'
 P_EXPORT = 'export_post'
+P_MODERATE = 'moderate_post'
 
 IF_OWNED = "IF_OWNED"
 

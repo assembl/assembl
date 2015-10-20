@@ -9,6 +9,7 @@ from sqlalchemy import (
     Integer,
     DateTime,
     String,
+    UnicodeText,
     ForeignKey,
     Binary,
     Text,
@@ -19,6 +20,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref, deferred
 
 from ..lib.sqla import UPDATE_OP
+from ..lib.decl_enums import DeclEnum
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from virtuoso.alchemy import CoerceUnicode
 from .generic import Content
@@ -33,6 +35,17 @@ class PostVisitor(object):
     @abstractmethod
     def visit_post(self, post):
         pass
+
+
+class PublicationStates(DeclEnum):
+    DRAFT = "DRAFT", ""
+    SUBMITTED_IN_EDIT_GRACE_PERIOD = "SUBMITTED_IN_EDIT_GRACE_PERIOD", ""
+    SUBMITTED_AWAITING_MODERATION = "SUBMITTED_AWAITING_MODERATION", ""
+    PUBLISHED = "PUBLISHED", ""
+    MODERATED_TEXT_ON_DEMAND = "MODERATED_TEXT_ON_DEMAND", ""
+    MODERATED_TEXT_NEVER_AVAILABLE = "MODERATED_TEXT_NEVER_AVAILABLE", ""
+    DELETED_BY_USER = "DELETED_BY_USER", ""
+    DELETED_BY_ADMIN = "DELETED_BY_ADMIN", ""
 
 
 class Post(Content):
@@ -66,6 +79,31 @@ class Post(Content):
         foreign_keys=[parent_id],
         backref=backref('parent', remote_side=[id]),
     )
+
+    publication_state = Column(
+        PublicationStates.db_type(),
+        nullable=False,
+        server_default=PublicationStates.PUBLISHED.name)
+
+    moderator_id = Column(Integer, ForeignKey(
+        'user.id',
+        ondelete='SET NULL',
+        onupdate='CASCADE'),
+        nullable=True,)
+
+    moderated_on = Column(DateTime)
+
+    moderation_text = Column(UnicodeText)
+
+    moderator_comment = Column(UnicodeText)  # For other moderators
+
+    moderator = relationship(
+        "User",
+        foreign_keys=[moderator_id],
+        backref=backref('posts_moderated'),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
+    )
+
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):

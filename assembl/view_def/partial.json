@@ -68,6 +68,7 @@
     },
     "Post": {
         "@extends": "Content",
+        "publication_state": true,
         "message_id": false,
         "ancestry": false,
         "parentId": "parent",

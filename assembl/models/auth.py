@@ -160,6 +160,9 @@ class AgentProfile(Base):
         for post in other_profile.posts_created[:]:
             post.creator = self
             post.creator_id = self.id
+        for post in other_profile.posts_moderated[:]:
+            post.moderator = self
+            post.moderator_id = self.id
         from .action import Action
         for action in session.query(Action).filter_by(
             actor_id=other_profile.id).all():
@@ -1319,6 +1322,7 @@ def create_default_permissions(session, discussion):
     add_perm(P_SEND_SYNTHESIS, [R_MODERATOR, R_ADMINISTRATOR])
     add_perm(P_ADMIN_DISC, [R_ADMINISTRATOR])
     add_perm(P_SYSADMIN, [R_ADMINISTRATOR])
+    add_perm(P_MODERATE, [R_MODERATOR, R_ADMINISTRATOR])
 
 
 class AnonymousUser(DiscussionBoundBase, User):
