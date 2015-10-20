@@ -69,6 +69,7 @@ def main(global_config, **settings):
         request._LOCALE_ = locale
         return locale
 
+    global locale_negotiator
     locale_negotiator = my_locale_negotiator
     config.set_locale_negotiator(my_locale_negotiator)
     config.add_tween(
