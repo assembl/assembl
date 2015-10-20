@@ -2455,9 +2455,9 @@ msgid ""
 "are interested in so you don’t get overwhelmed. Topics include messages "
 "from all related sub-topics as well."
 msgstr ""
-"Cette table des contenus vous permet d'explorer les thèmes qui vous "
-"intéressent sans être submergé. Chaque thème contient aussi les messages "
-"de ces sous-thèmes."
+"Cette table des contenus vous permet d'explorer sans être submergé les thèmes qui vous "
+"intéressent. Chaque thème contient aussi les messages "
+"de tous ses sous-thèmes."
 
 #: assembl/templates/views/helperDebate.tmpl:6
 msgid "This is a safe and respectful space. All ideas are welcome!"
