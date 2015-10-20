@@ -259,6 +259,7 @@ def build_virtualenv():
     print(cyan('Creating a fresh virtualenv'))
     require('venvpath', provided_by=('commonenv'))
     import sys
+    #This is incorrect, it will check locally instead fo on the remote server
     if hasattr(sys, 'real_prefix'):
         print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
         print(cyan('(otherwise the virtualenv command would produce an error)'))
@@ -486,8 +487,8 @@ def app_compile_noupdate():
 @task
 def app_compile_nodbupdate():
     "Separated mostly for tests, which need to run alembic manually"
-    execute(virtuoso_install_or_upgrade)
     execute(app_setup)
+    execute(virtuoso_install_or_upgrade)
     execute(compile_stylesheets)
     execute(compile_messages)
     execute(compile_javascript)
@@ -1326,20 +1327,20 @@ def env_bluenove_discussions():
     env.gitbranch = "master"
 
 @task
-def env_bluenove_agora():
+def env_bluenove_assembl2():
     """
     [ENVIRONMENT] Production on http://agora.bluenove.com/
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/home/www/assembl_agora_bluenove_com/"))
+    commonenv(normpath("/home/www/assembl2_bluenove_com/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
-    env.urlhost = "agora.bluenove.com"
+    env.urlhost = "assembl2.bluenove.com"
     env.user = "www-data"
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
-    env.hosts = ['agora.bluenove.com']
+    env.hosts = ['assembl2.bluenove.com']
 
     env.uses_apache = False
     env.uses_ngnix = True
