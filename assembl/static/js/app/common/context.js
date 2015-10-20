@@ -1177,13 +1177,18 @@ Context.prototype = {
 
   },
 
+
+  getTooltipsContainerSelector: function(){
+    return "#tooltips";
+  },
+
   /**
    * @init
    */
   initTooltips: function(elm) {
     elm.find('[data-toggle="tooltip"]').tooltip({
       animation: true,
-      container: 'body',
+      container: this.getTooltipsContainerSelector(),
       delay: {"show": 500, "hide": 100}
     });
   },
@@ -1196,10 +1201,8 @@ Context.prototype = {
   removeCurrentlyDisplayedTooltips: function() {
     //console.log("removeCurrentlyDisplayedTooltips() called");
     //This really does need to be global.
-    //Should be fast, they are at the top level and there is only
-    //a few of them.  Maybe it can be more specific to be faster
-    // ex: html > .tipsy I don't know jquery enough to know
-    $('.tooltip').remove();
+    //Should be fast, so we have put all tooltips into #tooltips
+    $('#tooltips').empty();
   },
 
   getAbsoluteURLFromRelativeURL: function(url) {

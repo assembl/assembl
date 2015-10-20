@@ -111,7 +111,7 @@ var IdeaView = Backbone.View.extend({
     data.shortTitle = this.model.getShortTitleDisplayText();
 
     this.$el.html(this.template(data));
-    Ctx.initTooltips(this.$el);
+    // Ctx.initTooltips(this.$el); // this is already done by ideaList.js and is very CPU intensive
     var rendered_children = [];
     _.each(data['children'], function(idea, i) {
       var ideaView = new IdeaView({model: idea, parentPanel: that.parentPanel, groupContent: that._groupContent}, view_data);

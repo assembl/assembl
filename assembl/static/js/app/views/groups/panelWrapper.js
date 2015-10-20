@@ -173,12 +173,12 @@ var PanelWrapper = Marionette.LayoutView.extend({
           }
 
           el.tooltip('destroy');
-          el.tooltip({container: 'body', placement: 'left'});
+          el.tooltip({container: Ctx.getTooltipsContainerSelector(), placement: 'left'});
           el.tooltip('show');
           setTimeout(function() {
             el.attr("data-original-title", initialTitle);
             el.tooltip('destroy');
-            el.tooltip({container: 'body'});
+            el.tooltip({container: Ctx.getTooltipsContainerSelector()});
           }, 7000);
         }, 5000); // FIXME: if we set this timer lower than this, the tooltip shows and immediately disappears. Why?
       }
