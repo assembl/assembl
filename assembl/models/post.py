@@ -53,6 +53,16 @@ blocking_publication_states = {
     PublicationStates.DELETED_BY_ADMIN
 }
 
+moderated_publication_states = {
+    PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE,
+    PublicationStates.MODERATED_TEXT_ON_DEMAND
+}
+
+deleted_publication_states = {
+    PublicationStates.DELETED_BY_USER,
+    PublicationStates.DELETED_BY_ADMIN
+}
+
 
 class Post(Content):
     """
@@ -151,6 +161,10 @@ class Post(Content):
         return frontendUrls.get_post_url(self)
 
     def get_body_preview(self):
+        if self.publication_state in moderated_publication_states:
+            return self.moderation_text
+        elif self.publication_state in deleted_publication_states:
+            return None
         body = self.get_body().strip()
         target_len = 120
         shortened = False
