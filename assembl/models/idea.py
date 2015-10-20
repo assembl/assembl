@@ -504,7 +504,8 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
                     column('id')).bindparams(post_id0=root_posts[0])
             # get those messages' authors. Sort by most recent
             indirect_authors = self.db.query(AgentProfile.id).join(
-                Post).filter(Post.id.in_(union)).order_by(
+                Post, Post.creator_id == AgentProfile.id).filter(
+                Post.id.in_(union)).order_by(
                 Post.creation_date.desc()).all()
             indirect_authors = [x for (x,) in indirect_authors
                                 if x not in author_ids]

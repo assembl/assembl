@@ -126,7 +126,7 @@ class Post(Content):
     creator_id = Column(Integer, ForeignKey('agent_profile.id'), nullable=False,
         info={'rdf': QuadMapPatternS(
             None, SIOC.has_creator, AgentProfile.agent_as_account_iri.apply(None))})
-    creator = relationship(AgentProfile, backref="posts_created")
+    creator = relationship(AgentProfile, foreign_keys=[creator_id], backref="posts_created")
 
     __mapper_args__ = {
         'polymorphic_identity': 'post',
