@@ -7,6 +7,7 @@ var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js'),
     CollectionManager = require('../common/collectionManager.js'),
     i18n = require('../utils/i18n.js'),
+    Permissions = require('../utils/permissions.js'),
     availableFilters = require('./postFilters.js');
 
 var AgentView = Marionette.ItemView.extend({
@@ -23,6 +24,7 @@ var AgentView = Marionette.ItemView.extend({
   serializeData: function() {
     return {
       i18n: i18n,
+      show_email: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
       agent: this.model
     }
   },

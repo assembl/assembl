@@ -1,6 +1,4 @@
-<% if(agent.get('name')) { %>
-  <a href="#" class="js_agentName"><%= agent.get('name') %>
-<% } else { %>
-  <a href="#" class="js_agentName">{{ gettext('Anonymous') }}
-<% } %>
-  </a>
+<a href="#" class="js_agentName"
+<% if (show_email) { %>
+title="<%= agent.get('preferred_email') %>"
+<% } %> ><% if(agent.get('name')) { %><%= agent.get('name') %><% } else { %>{{ gettext('Anonymous') }}<% } %></a>
