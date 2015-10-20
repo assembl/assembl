@@ -22,6 +22,8 @@ from .lib.config import set_config
 #Use a local odbc.ini
 putenv('ODBCINI', join(dirname(dirname(__file__)), 'odbc.ini'))
 
+locale_negotiator = None
+
 
 # Do not import models here, it will break tests.
 def main(global_config, **settings):
@@ -43,8 +45,20 @@ def main(global_config, **settings):
     config.add_translation_dirs('assembl:locale/')
 
     def my_locale_negotiator(request):
-        locale = to_posix_format(default_locale_negotiator(request))
         available = settings['available_languages'].split()
+        locale = None
+        from assembl.auth.util import discussion_from_request
+        discussion = discussion_from_request(request)
+        if discussion:
+            for locale in discussion.discussion_locales:
+                if locale in available:
+                    break
+                if '_' not in locale:
+                    locale = ensure_locale_has_country(locale)
+                if locale and locale in available:
+                    break
+        else:
+            locale = to_posix_format(default_locale_negotiator(request))
         if locale and locale not in available:
             locale_with_country = ensure_locale_has_country(locale)
             if locale_with_country:
@@ -55,6 +69,7 @@ def main(global_config, **settings):
         request._LOCALE_ = locale
         return locale
 
+    locale_negotiator = my_locale_negotiator
     config.set_locale_negotiator(my_locale_negotiator)
     config.add_tween(
         'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',

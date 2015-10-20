@@ -6,7 +6,7 @@ from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import HTTPNotFound, HTTPSeeOther, HTTPUnauthorized
-from pyramid.i18n import TranslationStringFactory, default_locale_negotiator
+from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 from assembl.models import Discussion
 from assembl.models.post import Post
@@ -21,7 +21,7 @@ from ...models.auth import (
 from assembl.auth.util import user_has_permission
 from .. import get_default_context as base_default_context
 from assembl.lib.frontend_urls import FrontendUrls
-
+from assembl import locale_negotiator
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')
@@ -192,7 +192,7 @@ def home_view(request):
                            current_prefs, session,
                            LanguagePreferenceOrder.Parameter)
         else:
-            locale = default_locale_negotiator(request)
+            locale = locale_negotiator(request)
             posix_locale = validate_locale(locale)
             process_locale(posix_locale, user_id,
                            current_prefs, session,

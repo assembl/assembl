@@ -1523,6 +1523,7 @@ class LanguagePreferenceOrder(IntEnum):
     Cookie = 1
     Parameter = 2
     OS_Default = 3
+    Discussion = 4
 
 
 class UserLanguagePreference(Base):
