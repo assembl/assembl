@@ -22,7 +22,7 @@ from .lib.config import set_config
 #Use a local odbc.ini
 putenv('ODBCINI', join(dirname(dirname(__file__)), 'odbc.ini'))
 
-locale_negotiator = None
+locale_negotiator = default_locale_negotiator
 
 
 # Do not import models here, it will break tests.
