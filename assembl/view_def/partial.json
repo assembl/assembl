@@ -69,6 +69,7 @@
     "Post": {
         "@extends": "Content",
         "publication_state": true,
+        "moderation_text": true,
         "message_id": false,
         "ancestry": false,
         "parentId": "parent",

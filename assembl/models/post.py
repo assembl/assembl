@@ -47,6 +47,12 @@ class PublicationStates(DeclEnum):
     DELETED_BY_USER = "DELETED_BY_USER", ""
     DELETED_BY_ADMIN = "DELETED_BY_ADMIN", ""
 
+blocking_publication_states = {
+    PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE,
+    PublicationStates.DELETED_BY_USER,
+    PublicationStates.DELETED_BY_ADMIN
+}
+
 
 class Post(Content):
     """
@@ -196,7 +202,7 @@ class Post(Content):
         )
 
         return query.scalar()
-    
+
     def ancestor_ids(self):
         ancestor_ids = [
             int(ancestor_id) \
@@ -205,7 +211,7 @@ class Post(Content):
             if ancestor_id
         ]
         return ancestor_ids
-        
+
     def ancestors(self):
 
         ancestors = [
@@ -257,6 +263,22 @@ class Post(Content):
             return self != self.parent.children[-1]
         return False
 
+    def get_body(self):
+        if self.publication_state in blocking_publication_states:
+            return None
+        if self.body:
+            return super(Post, self).get_body()
+
+    def get_body_as_html(self):
+        if self.publication_state in blocking_publication_states:
+            return None
+        return super(Post, self).get_body_as_html()
+
+    def get_body_as_text(self):
+        if self.publication_state in blocking_publication_states:
+            return None
+        return super(Post, self).get_body_as_text()
+
     @classmethod
     def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
@@ -281,7 +303,6 @@ def orm_insert_listener(mapper, connection, target):
 event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
 
 
-
 class AssemblPost(Post):
     """
     A Post that originated directly on the Assembl system (wasn't imported from elsewhere).
@@ -300,6 +321,7 @@ class AssemblPost(Post):
 
     def get_body_mime_type(self):
         return "text/plain"
+
 
 class SynthesisPost(AssemblPost):
     """

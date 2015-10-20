@@ -267,7 +267,7 @@ class Content(DiscussionBoundBase):
         """ Return the format of the body, so the frontend will know how to
         display it.  Currently, only:
         text/plain (Understood as preformatted text)
-        text/html (Undestood as some subste of html)
+        text/html (Undestood as some subset of html)
         """
         return "text/plain"
 

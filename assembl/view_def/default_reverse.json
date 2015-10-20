@@ -136,6 +136,7 @@
     "Post": {
         "@extends": "Content",
         "publication_state": false,
+        "moderation_text": false,
         "moderator": false,
         "moderated_on": false,
         "moderation_text": false,
