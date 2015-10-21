@@ -14,7 +14,7 @@ from assembl.auth.util import get_permissions
 from assembl.auth import CrudPermissions
 from ..traversal import InstanceContext, CollectionContext
 from . import (
-    FORM_HEADER, JSON_HEADER, instance_put, collection_add,
+    FORM_HEADER, JSON_HEADER, instance_put_form, collection_add,
     collection_add_json, check_permissions)
 
 
@@ -65,7 +65,7 @@ def widget_instance_put(request):
     user_state = request.POST.get('user_state')
     if user_state:
         del request.POST['user_state']
-    response = instance_put(request)
+    response = instance_put_form(request)
     if user_state:
         request.context._instance.set_user_state(
             user_state, user_id)

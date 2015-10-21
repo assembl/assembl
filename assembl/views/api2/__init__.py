@@ -221,11 +221,13 @@ def instance_post(request):
     raise HTTPBadRequest()
 
 
-@view_config(context=InstanceContext, request_method='PATCH', header=JSON_HEADER,
-             renderer='json')
+@view_config(
+    context=InstanceContext, request_method='PATCH', header=JSON_HEADER,
+    renderer='json')
 @view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER,
              renderer='json')
-def instance_put_json(request):
+def instance_put_json(request, json_data=None):
+    json_data = json_data or request.json_body
     ctx = request.context
     user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(
@@ -234,7 +236,7 @@ def instance_put_json(request):
     if not instance.user_can(user_id, CrudPermissions.UPDATE, permissions):
         return HTTPUnauthorized()
     try:
-        updated = instance.update_from_json(request.json_body, user_id, ctx)
+        updated = instance.update_from_json(json_data, user_id, ctx)
         view = request.GET.get('view', None) or 'default'
         if view == 'id_only':
             return [updated.uri()]
@@ -247,7 +249,8 @@ def instance_put_json(request):
 
 @view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER,
              renderer='json')
-def instance_put(request):
+def instance_put_form(request, form_data=None):
+    form_data = form_data or request.params
     ctx = request.context
     user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, ctx.get_discussion_id())
@@ -263,11 +266,11 @@ def instance_put(request):
              len(r._calculated_foreign_keys) == 1 and iter(
                  r._calculated_foreign_keys).next().table == mapper.local_table
              }
-    unknown = set(request.params.keys()) - (
+    unknown = set(form_data.keys()) - (
         set(cols.keys()).union(set(setables.keys())).union(set(relns.keys())))
     if unknown:
         raise HTTPBadRequest("Unknown keys: "+",".join(unknown))
-    params = dict(request.params)
+    params = dict(form_data)
     # type checking
     columns = {c.key: c for c in mapper.columns}
     for key, value in params.items():

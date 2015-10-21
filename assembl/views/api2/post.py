@@ -1,15 +1,17 @@
+from datetime import datetime
+
 from pyramid.view import view_config
 from pyramid.response import Response
-from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
+from pyramid.security import authenticated_userid
 
 from assembl.auth import P_READ, P_MODERATE
 from assembl.auth.util import get_permissions
-from assembl.models import Content, Post, SynthesisPost
+from assembl.models import Content, Post, SynthesisPost, User
 from assembl.models.post import PublicationStates
 from ..traversal import InstanceContext, CollectionContext
 from . import (
-    FORM_HEADER, JSON_HEADER, instance_put_json, instance_put,
+    FORM_HEADER, JSON_HEADER, instance_put_json, instance_put_form,
     collection_add_json, collection_add_with_params)
 
 
@@ -63,7 +65,9 @@ def has_moderation(fields):
 
 def raise_if_cannot_moderate(request):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = authenticated_userid(request)
+    if not user_id:
+        raise HTTPUnauthorized()
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     if P_MODERATE not in permissions:
@@ -77,9 +81,13 @@ def raise_if_cannot_moderate(request):
     context=InstanceContext, request_method='PUT', ctx_instance_class=Post,
     header=JSON_HEADER, renderer='json')
 def post_put_json(request):
-    if has_moderation(request.json):
+    json_data = request.json_body
+    if has_moderation(json_data):
         raise_if_cannot_moderate(request)
-    return instance_put_json(request)
+        json_data['moderated_on'] = datetime.utcnow().isoformat()+"Z"
+        json_data['moderator'] = User.uri_generic(
+            authenticated_userid(request))
+    return instance_put_json(request, json_data)
 
 
 @view_config(
@@ -89,9 +97,14 @@ def post_put_json(request):
     context=InstanceContext, request_method='PUT', ctx_instance_class=Post,
     header=FORM_HEADER, renderer='json')
 def post_put(request):
-    if has_moderation(request.params):
+    form_data = request.params
+    if has_moderation(form_data):
         raise_if_cannot_moderate(request)
-    return instance_put(request)
+        form_data = dict(form_data)
+        form_data['moderated_on'] = datetime.utcnow().isoformat()+"Z"
+        form_data['moderator'] = User.uri_generic(
+            authenticated_userid(request))
+    return instance_put_form(request, form_data)
 
 
 @view_config(
@@ -99,7 +112,7 @@ def post_put(request):
     ctx_collection_class=Post, header=FORM_HEADER, renderer='json')
 def add_post_form(request):
     if has_moderation(request.params):
-        raise_if_cannot_moderate(request)
+        raise HTTPBadRequest("Cannot moderate at post creation")
     return collection_add_with_params(request)
 
 
@@ -108,5 +121,5 @@ def add_post_form(request):
     ctx_collection_class=Post, header=JSON_HEADER, renderer='json')
 def add_post_json(request):
     if has_moderation(request.json):
-        raise_if_cannot_moderate(request)
+        raise HTTPBadRequest("Cannot moderate at post creation")
     return collection_add_json(request)
