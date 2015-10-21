@@ -232,6 +232,7 @@ var MessageView = Marionette.LayoutView.extend({
     body = (body) ? body : this.generateSafeBody();
 
     if (this.model.get("moderation_text")) {
+      bodyFormat = "text/html";
       body = this.moderationTemplate({
         body: body,
         moderation_text: this.model.get("moderation_text"),
@@ -241,7 +242,7 @@ var MessageView = Marionette.LayoutView.extend({
     }
 
     if (bodyFormat !== null) {
-      bodyFormatClass = "body_format_" + this.model.get('bodyMimeType').replace("/", "_");
+      bodyFormatClass = "body_format_" + bodyFormat.replace("/", "_");
     }
 
     var direct_link_relative_url = Ctx.getPostURL(this.model.get('@id'), {'source': 'share'}, {'relative': true}),
