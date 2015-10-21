@@ -17,7 +17,11 @@ from sqlalchemy import (
 import simplejson as json
 # from dateutil.parser import parse as parse_datetime
 from dateutil.tz import tzutc
-from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy.orm import (
+    relationship,
+    backref,
+    deferred,
+    undefer)
 from virtuoso.alchemy import CoerceUnicode
 
 from .auth import (
@@ -392,10 +396,18 @@ class FacebookParser(object):
     # ----------------------------- attachments  ------------------------------
 
     def get_post_attachments(self, post_id):
+        """
+        Currently (10/15/2015) there is only 1 attachment allowed
+        per facebook post. Therefore, pass the first available one
+        """
         resp = self.api.get_connections(post_id, "attachments")
-        return resp.get('data', None)
+        data = resp.get('data', None)
+        if data:
+            return data[0]
+        return None
 
     def get_comment_attachments(self, comment_id):
+        "Will return an object dict"
         kwarg = {'fields': 'attachment'}
         resp = self.api.get_object(comment_id, **kwarg)
         return resp.get('attachment', None)
@@ -509,10 +521,26 @@ class FacebookGenericSource(PostSource):
             filter_by(domain=DOMAIN).all()
         return {x.userid: x for x in result}
 
-    def _get_current_posts(self):
+    def _get_current_posts(self, load_json=False):
+        if load_json:
+            results = self.db.query(FacebookPost).\
+                options(undefer('imported_blob')).\
+                filter_by(source=self).all()
+            return {x.source_post_id: x for x in results}
+
         results = self.db.query(FacebookPost).filter_by(
             source=self).all()
         return {x.source_post_id: x for x in results}
+
+    def _get_current_documents(self):
+        results = self.db.query(Document).\
+            filter_by(discussion=self.discussion).all()
+        return {x.uri_id: x for x in results}
+
+    def _get_current_attachments(self):
+        results = self.db.query(PostAttachment).\
+            filter_by(discussion=self.discussion).all()
+        return results
 
     def _create_fb_user(self, user, db):
         if user['id'] not in db:
@@ -526,131 +554,265 @@ class FacebookGenericSource(PostSource):
             self.db.flush()
             db[user['id']] = new_user
 
+    def _create_or_update_fb_user(self, user, db):
+        user_id = user['id']
+        if user_id in db:
+            account = db.get(user_id)
+            account.update_fields(user)
+        else:
+            self._create_fb_user(user, db)
+
     def _create_post(self, post, user, db):
         # Utility method that creates the post and populates the local
         # cache.
         # Returns True if succesfull. False if post is not created.
-        if post.get('id') in db:
+        post_id = post.get('id')
+        if post_id in db:
             return True
         new_post = FacebookPost.create(self, post, user)
         if not new_post:
             return False
         self.db.add(new_post)
         self.db.flush()
-        db[post.get('id')] = new_post
+        db[post_id] = new_post
         return True
+
+    def _parse_attachment(self, post, attach):
+        """Returns attachment in the format:
+
+        {
+            'url': x,
+            'title': y,
+            'description': z
+        }
+        """
+
+        def parse_facebook_redirect_url(url):
+            try:
+                qs = parse_qs(urlparse(url).query)
+                return qs['u'][0]  # Will raise error if not present
+            except:
+                # In the case of url == None or
+                # url coming from an emoticon, simply return
+                # the url
+                return url
+
+        # description = post.get('description', None)
+        # title = post.get('name', None)
+        # fb_type = post.get('type')
+        # # fb_status_type = post.get('status_type', None)
+        # # TODO map the facebook type to an OEMBED Mime-type
+        # mime_type = None
+
+        # attach_list = []
+
+        # if fb_type == 'photo':
+        #     attach_type = attach.get('type', None)
+        #     if attach_type == 'album':
+        #         urls = [a.get('media', {}).get('image', {}).
+        #                 get('src', None) for a in
+        #                 attach.get('subattachments',
+        #                            {}).get('data', [])]
+        #         title = attach.get('title')
+        #         description = attach.get('description')
+
+        #         for url in urls:
+        #             attach_list.append({
+        #                 'url': url,
+        #                 'title': title,
+        #                 'description': description
+        #             })
+
+        #     else:
+        #         # Regular photo
+        #         attach_list.append({
+        #             'url': attach.get('media', {}).get('image', {}).get('src', None),
+        #             'title': attach.get('title'),
+        #             'description': attach.get('description')
+        #         })
+
+        # elif fb_type == 'link':
+        #     # Includes image links attached
+        #     # using post['link'] because attach['url'] is a
+        #     # facebook redirect url to the source. If
+        #     # frontend oembed supports redirects, then this can
+        #     # be changed.
+        #     attach_list.append({
+        #         'url': post.get('link'),
+        #         'title': attach.get('title'),
+        #         'description': attach.get('description'),
+        #         'thumbnail': post.get('picture', None)
+        #     })
+
+        # else:
+        #     # all other types
+        #     # includes 'video'
+        #     # includes youtube, vimeo, etc attachments as well
+        #     # includes 'status' types as well.
+        #     # 2015/10/7 cannot support embedded video, so posting
+        #     # url of the facebook post
+        #     # TODO: Update field to match support of video
+        #     # This can also be a comment type
+        #     attach_list.append({
+        #         'url': attach.get('url'),  # This will be facebook redirect url
+        #         'title': attach.get('title'),
+        #         'description': attach.get('description'),
+        #         'thumbnail': attach.get('media', {}).get('image', {}).get('src', None)
+        #     })
+
+        if not attach:
+            # Post has no attachment
+            return None
+
+        attach_type = attach.get('type')
+        if attach_type == 'photo' or attach_type == 'video':
+            # Just return the full post address
+            return {
+                    'url': attach.get('url', None),
+                    'title': attach.get('title', None),
+                    'description': attach.get('description', None)
+                }
+        else:
+            return {
+                    'url': parse_facebook_redirect_url(attach.get('url', None)),
+                    'title': attach.get('title', None),
+                    'description': attach.get('description', None)
+                }
+
+    def _url_exists(self, url, ls):
+        "Internal function for attachment management"
+        for l in ls:
+            if l.document.uri_id == url:
+                return True
+        return False
+
+    def _manage_attachment(self, post, getter):
+        post_id = post.get('id', None)
+
+        try:
+            raw_attach = getter(post_id)
+            attachment = self._parse_attachment(post, raw_attach)
+            return raw_attach, attachment
+
+        except:
+            return None, None
 
     def _create_attachments(self, post, assembl_post, get_attachment):
         # get_attachment callback. This function will be used by the
         # post_maker, comment_maker, and also the re_import, re_process,
         # therefore it will be variable.
-        attach_list = []
-        post_id = post.get('id', None)
-        description = post.get('description', None)
-        title = post.get('name', None)
-        fb_type = post.get('type')
-        # fb_status_type = post.get('status_type', None)
-        # TODO map the facebook type to an OEMBED Mime-type
-        mime_type = None
-        _now = datetime.utcnow()
 
-        # try:
-        # attach = self.parser.get_post_attachments(post_id)
-        # attach = self.parser.get_comment_attachments(post_id)
-        # import pdb; pdb.set_trace()
-        attachs = get_attachment(post_id)
-        for attach in attachs:
-            if fb_type == 'photo':
-                attach_type = attach.get('type', None)
-                if attach_type == 'album':
-                    urls = [a.get('media', {}).get('image', {}).
-                            get('src', None) for a in
-                            attach.get('subattachments',
-                                       {}).get('data', [])]
+        _now = datetime.utcnow()
+        raw_attach, attachment = self._manage_attachment(post, get_attachment)
+
+        try:
+            if not raw_attach or attachment.get('url') == None:
+                return
+
+            # attach_list = [a for a in attach_list if a.get('url')]
+            old_attachments_on_post = self.db.query(PostAttachment).\
+                filter_by(post=assembl_post).all()
+
+            with self.db.no_autoflush:
+                doc = Document(
+                        uri_id=attachment.get('url'),
+                        creation_date=_now,
+                        discussion=self.discussion,
+                        title=attachment.get('title'),
+                        description=attachment.get('description'),
+                        thumbnail_url=attachment.get('thumbnail', None)
+                    ).get_unique_from_db()
+
+                # docs_by_url = {
+                #     attachment.get('url'): Document(
+                #         uri_id=str(attachment.get('url')),
+                #         creation_date=_now,
+                #         discussion=self.discussion,
+                #         title=attachment.get('title'),
+                #         description=attachment.get('description'),
+                #         thumbnail_url=attachment.get('thumbnail', None)
+                #         ).get_unique_from_db()
+                #     for attachment in attach_list}
+
+            if not self._url_exists(attachment.get('url'),
+                                    old_attachments_on_post):
+                post_attachment = PostAttachment(
+                    post=assembl_post,
+                    discussion=self.discussion,
+                    title=attachment.get('title'),
+                    description=attachment.get('description'),
+                    document=doc,
+                    creator=self.creator.user,
+                    attachmentPurpose='EMBED_ATTACHMENT'
+                )
+
+            # post_attachments = [PostAttachment(
+            #         post=assembl_post,
+            #         discussion=self.discussion,
+            #         title=fb_attachment.get('title'),
+            #         description=fb_attachment.get('description'),
+            #         document=docs_by_url[fb_attachment.get('url')],
+            #         creator=self.creator.user,  # must be AgentProfile
+            #         attachmentPurpose='EMBED_ATTACHMENT')
+            #     for fb_attachment in attach_list
+            #     if not check_url_exists(fb_attachment.get('url'),
+            #                             old_attachments_on_post)
+            #     ]
+
+            if raw_attach:
+                # this is an array. Wrap it in a data field, like how
+                # facebook returned to you.
+                data = {u'data': raw_attach}
+                assembl_post.attachment_blob = json.dumps(data)
+            self.db.add_all(post_attachment)
+            self.db.flush()
+
+        except:
+            # TODO log that getting attachment failed
+            print "Failed to get /attachment of object"
+
+    def _create_or_update_attachment(self, post, assembl_post, reimport,
+                                     getter):
+        if reimport:
+            # This makes the underlying assumption that a facebook
+            # post only has ONE attachment
+            post_attachment = self.db.query(PostAttachment).\
+                filter_by(post=assembl_post).first()
+            if not post_attachment:
+                self._create_attachments(post, assembl_post, getter)
+            else:
+                raw, attach = self._manage_attachment(post, getter)
+                if attach:
                     title = attach.get('title')
                     description = attach.get('description')
 
-                    for url in urls:
-                        attach_list.append({
-                            'url': url,
-                            'title': title,
-                            'description': description
-                        })
+                    doc = post_attachment.document
+                    doc.update_fields(attach)
+                    post_attachment.title = title
+                    post_attachment.description = description
 
-                else:
-                    attach_list.append({
-                        'url': attach.get('media', {}).get('image', {}).get('src', None),
-                        'title': attach.get('title'),
-                        'description': attach.get('description')
-                    })
+        else:
+            self._create_attachments(post, assembl_post, getter)
 
-            elif fb_type == 'link':
-                # Includes image links attached
-                # using post['link'] because attach['url'] is a
-                # facebook redirect url to the source. If
-                # frontend oembed supports redirects, then this can
-                # be changed.
-                attach_list.append({
-                    'url': post.get('link'),
-                    'title': attach.get('title'),
-                    'description': attach.get('description'),
-                    'thumbnail': post.get('picture', None)
-                })
+    def _manage_user(self, creator, users_db, reimport):
+        if reimport:
+            self._create_or_update_fb_user(creator, users_db)
+        else:
+            self._create_fb_user(creator, users_db)
 
-            else:
-                # all other types
-                # includes 'video'
-                # includes youtube, vimeo, etc attachments as well
-                # includes 'status' types as well.
-                # 2015/10/7 cannot support embedded video, so posting
-                # url of the facebook post
-                # TODO: Update field to match support of video
-                # This can also be a comment type
-                attach_list.append({
-                    'url': attach.get('url'),  # This will be facebook redirect url
-                    'title': attach.get('title'),
-                    'description': attach.get('description'),
-                    'thumbnail': attach.get('media', {}).get('image', {}).get('src', None)
-                })
+    def _create_or_update_post(self, post, creator, posts_db, reimport):
+        post_id = post.get('id')
+        assembl_post = posts_db.get(post_id, None)
+        if assembl_post and reimport:
+            assembl_post.update_fields(post, creator)
+            # An update was made
+            return True
+        else:
+            result = self._create_post(post, creator, posts_db)
+            return result
 
-        attach_list = filter(lambda a:
-                             True if a.get('url') else False, attach_list)
-
-        # TODO Check for duplication
-        docs = map(lambda a: Document(
-            uri_id=a.get('url'),
-            creation_date=_now,
-            discussion=self.discussion,
-            title=a.get('title'),
-            description=a.get('description'),
-            thumbnail_url=a.get('thumbnail', None)
-        ), attach_list)
-
-        post_attachments = map(lambda d: PostAttachment(
-            post=assembl_post,
-            discussion=self.discussion,
-            document=d,
-            creator=self.creator.user,  # must be AgentProfile
-            attachmentPurpose='EMBED_ATTACHMENT'
-        ), docs)
-
-        if attachs:
-            # this is an array. Wrap it in a data field, like how
-            # facebook returned to you.
-            data = {u'data': attachs}
-            assembl_post.attachment_blob = json.dumps(data)
-            self.db.flush()
-        # self.db.add(assembl_post)
-        self.db.add_all(docs)
-        self.db.flush()
-        self.db.add_all(post_attachments)
-        self.db.flush()
-
-        # except:
-        #     # TODO log that getting attachment failed
-        #     print "Failed to get /attachment of object"
-
-    def _manage_post(self, post, obj_id, posts_db, users_db, upper, lower):
+    def _manage_post(self, post, obj_id, posts_db, users_db,
+                     upper, lower, reimport=False):
         """ Method that parses the json parsed facebook post and delegates
         the creation of an Assembl post
 
@@ -661,8 +823,9 @@ class FacebookGenericSource(PostSource):
         :param users_db - The cache of all FacebookAccounts in the database
         :param upper - DateTime object describing up to which datetime
                         new messages are accepted.
-        :param lower = DateTime object describing up to which datetime
+        :param lower - DateTime object describing up to which datetime
                         old messages are accepted.
+        :param reimport - Boolean to describe if current action is to reimport
 
         """
         cont = True
@@ -681,79 +844,94 @@ class FacebookGenericSource(PostSource):
         if cont:
             post_id = post.get('id')
             creator = self.parser.get_user_post_creator(post)
-            self._create_fb_user(creator, users_db)
+            self._manage_user(creator, users_db, reimport)
 
             # Get all of the tagged users instead?
             for user in self.parser.get_users_post_to_sans_self(post, obj_id):
-                self._create_fb_user(user, users_db)
+                self._manage_user(user, users_db, reimport)
 
             creator_id = creator.get('id', None)
             creator_agent = users_db.get(creator_id)
-            result = self._create_post(post, creator_agent, posts_db)
+            result = self._create_or_update_post(post, creator_agent,
+                                                 posts_db, reimport)
 
             if not result:
                 return
 
             assembl_post = posts_db.get(post_id)
-            self._create_attachments(post, assembl_post,
-                                     self.parser.get_post_attachments)
+            self._create_or_update_attachment(post, assembl_post, reimport,
+                                              self.parser.get_post_attachments)
+            # self._create_attachments(post, assembl_post, reimport,
+            #                          self.parser.get_post_attachments)
             self.db.commit()
             return assembl_post, cont
 
         else:
             return None, cont
 
-    def _manage_comment(self, comment, parent_post, posts_db, users_db):
+    def _manage_comment(self, comment, parent_post, posts_db, users_db,
+                        reimport=False):
         user = self.parser.get_user_from_comment(comment)
         user_id = user.get('id')
         comment_id = comment.get('id')
-        self._create_fb_user(user, users_db)
+        self._manage_user(user, users_db, reimport)
+        # self._create_fb_user(user, users_db)
         for usr in self.parser.get_users_from_mention(comment):
-            self._create_fb_user(usr, users_db)
+            # self._create_fb_user(usr, users_db)
+            self._manage_user(user, users_db, reimport)
         self.db.commit()
 
         cmt_creator_agent = users_db.get(user_id)
-        cmt_result = self._create_post(comment, cmt_creator_agent, posts_db)
+        # cmt_result = self._create_post(comment, cmt_creator_agent, posts_db)
+        cmt_result = self._create_or_update_post(comment, cmt_creator_agent,
+                                                 posts_db, reimport)
+
         if not cmt_result:
             return
 
         self.db.flush()
         comment_post = posts_db.get(comment_id)
         comment_post.set_parent(parent_post)
-        self._create_attachments(comment, comment_post,
-                                 self.parser.get_comment_attachments)
+        # self._create_attachments(comment, comment_post,
+        #                          self.parser.get_comment_attachments)
+        self._create_or_update_attachment(comment, comment_post, reimport,
+                                          self.parser.get_comment_attachments)
         self.db.commit()
         return comment_post
 
     def _manage_comment_subcomments(self, comment, parent_post,
                                     posts_db, users_db,
-                                    sub_comments=False):
+                                    sub_comments=False,
+                                    reimport=False):
         comment_post = self._manage_comment(comment, parent_post,
-                                            posts_db, users_db)
+                                            posts_db, users_db, reimport)
         if comment_post and sub_comments:
             for cmt in self.parser.get_comments_on_comment_paginated(comment):
-                self._manage_comment(cmt, comment_post, posts_db,
-                                     users_db)
+                self._manage_comment(cmt, comment_post, posts_db, users_db,
+                                     reimport=reimport)
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     break
 
-    def feed(self, upper_bound=None, lower_bound=None, reimport=False,
-             reprocess=False):
+    def feed(self, upper_bound=None, lower_bound=None, reimport=False):
         users_db = self._get_current_users()
         posts_db = self._get_current_posts()
 
         object_info = self.parser.get_object_info(self.fb_source_id)
 
-        self._create_fb_user(
+        self._manage_user(
             self.parser.get_user_object_creator(object_info),
-            users_db
+            users_db,
+            reimport
         )
 
         for post in self.parser.get_feed_paginated(self.fb_source_id):
+            import pdb; pdb.set_trace()
             assembl_post, cont = self._manage_post(post, self.fb_source_id,
                                                    posts_db, users_db,
                                                    upper_bound,
-                                                   lower_bound)
+                                                   lower_bound,
+                                                   reimport=reimport
+                                                   )
 
             if not assembl_post:
                 # If a bound is reached, there is no post created, so do
@@ -767,18 +945,20 @@ class FacebookGenericSource(PostSource):
             for comment in self.parser.get_comments_paginated(post):
                 self._manage_comment_subcomments(comment, assembl_post,
                                                  posts_db, users_db,
+                                                 reimport=reimport,
                                                  sub_comments=True)
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     return
 
-    def posts(self, upper=None, lower=None, reimport=False, reprocess=False):
+    def posts(self, upper=None, lower=None, reimport=False):
         users_db = self._get_current_users()
         posts_db = self._get_current_posts()
 
         for post in self.parser.get_posts_paginated(self.fb_source_id):
             assembl_post, cont = self._manage_post(post, self.fb_source_id,
                                                    posts_db, users_db,
-                                                   upper, lower)
+                                                   upper, lower,
+                                                   reimport=reimport)
             if not assembl_post:
                 # If a bound is reached, there is no post created, so do
                 # not continue any further
@@ -791,12 +971,13 @@ class FacebookGenericSource(PostSource):
             for comment in self.parser.get_comments_paginated(post):
                 self._manage_comment_subcomments(comment, assembl_post,
                                                  posts_db, users_db,
+                                                 reimport=reimport,
                                                  sub_comments=True)
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     return
 
     def single_post(self, upper_bound=None, lower_bound=None,
-                    reimport=False, reprocess=False):
+                    reimport=False):
         # Only use if the content source is a single post
         users_db = self._get_current_users()
         posts_db = self._get_current_posts()
@@ -806,7 +987,8 @@ class FacebookGenericSource(PostSource):
         entity_id = post.get('from', {}).get('id', None)
         assembl_post, cont = self._manage_post(post, entity_id,
                                                posts_db, users_db,
-                                               upper_bound, lower_bound)
+                                               upper_bound, lower_bound,
+                                               reimport=reimport)
 
         if not cont:
             # If a bound has been reached, do not continue parsing the
@@ -817,11 +999,12 @@ class FacebookGenericSource(PostSource):
             for comment in self.parser.get_comments_paginated(post):
                 self._manage_comment_subcomments(comment, assembl_post,
                                                  posts_db, users_db,
+                                                 reimport=reimport,
                                                  sub_comments=True)
                 if self.read_status == ReaderStatus.SHUTDOWN:
                     return
 
-    def single_post_comments_only(self, parent_post):
+    def single_post_comments_only(self, parent_post, reimport=False):
         users_db = self._get_current_users()
         posts_db = self._get_current_posts()
 
@@ -833,9 +1016,26 @@ class FacebookGenericSource(PostSource):
         for comment in self.parser.get_comments_paginated(post):
             self._manage_comment_subcomments(comment, parent_post,
                                              posts_db, users_db,
-                                             True)
+                                             reimport=reimport,
+                                             sub_comments=True)
             if self.read_status == ReaderStatus.SHUTDOWN:
                 return
+
+    def reprocess(self):
+        "Update all posts/users from this source without hitting the network"
+        users_db = self._get_current_users()
+        posts_db = self._get_current_posts(load_json=True)
+
+        for post in posts_db.itervalues():
+            data = json.loads(post.imported_blob)
+            user_data = data.get('from')
+            user = users_db[user_data.get('id')]
+
+            post.update_from_imported_json()
+            # post.update_attachments()
+            user.update_fields(user_data)
+
+        self.db.commit()  # Would this flush the changes?
 
     def content_sink(self):
         # Could use the backref? @TODO: Ask MAP about this
@@ -878,9 +1078,11 @@ class FacebookGroupSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_open_group_source'
     }
 
-    def fetch_content(self, lower_bound=None, upper_bound=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None,
+                      reimport=False):
         self._setup_reading()
-        self.feed(lower_bound=lower_bound, upper_bound=upper_bound)
+        self.feed(lower_bound=lower_bound, upper_bound=upper_bound,
+                  reimport=reimport)
 
 
 class FacebookGroupSourceFromUser(FacebookGenericSource):
@@ -888,9 +1090,11 @@ class FacebookGroupSourceFromUser(FacebookGenericSource):
         'polymorphic_identity': 'facebook_private_group_source'
     }
 
-    def fetch_content(self, lower_bound=None, upper_bound=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None,
+                      reimport=False):
         self._setup_reading()
-        self.feed(lower_bound=lower_bound, upper_bound=upper_bound)
+        self.feed(lower_bound=lower_bound, upper_bound=upper_bound,
+                  reimport=reimport)
 
 
 class FacebookPagePostsSource(FacebookGenericSource):
@@ -898,9 +1102,11 @@ class FacebookPagePostsSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_page_posts_source'
     }
 
-    def fetch_content(self, lower_bound=None, upper_bound=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None,
+                      reimport=False):
         self._setup_reading()
-        self.posts(lower_bound=lower_bound, upper_bound=upper_bound)
+        self.posts(lower_bound=lower_bound, upper_bound=upper_bound,
+                   reimport=reimport)
 
 
 class FacebookPageFeedSource(FacebookGenericSource):
@@ -908,9 +1114,11 @@ class FacebookPageFeedSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_page_feed_source'
     }
 
-    def fetch_content(self, lower_bound=None, upper_bound=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None,
+                      reimport=False):
         self._setup_reading()
-        self.feed(lower_bound=lower_bound, upper_bound=upper_bound)
+        self.feed(lower_bound=lower_bound, upper_bound=upper_bound,
+                  reimport=reimport)
 
 
 class FacebookSinglePostSource(FacebookGenericSource):
@@ -918,17 +1126,18 @@ class FacebookSinglePostSource(FacebookGenericSource):
         'polymorphic_identity': 'facebook_singlepost_source'
     }
 
-    def fetch_content(self, lower_bound=None, upper_bound=None):
+    def fetch_content(self, lower_bound=None, upper_bound=None,
+                      reimport=False):
         # Limit should not apply here, unless the limit is in reference to
         # number of comments brought in
         is_sink, cs = self.content_sink()
         if is_sink:
             parent_post = cs.post
             self._setup_reading()
-            self.single_post_comments_only(parent_post)
+            self.single_post_comments_only(parent_post, reimport=reimport)
         else:
             self._setup_reading()
-            self.single_post()
+            self.single_post(reimport=reimport)
 
 
 class FacebookAccount(IdentityProviderAccount):
@@ -954,8 +1163,7 @@ class FacebookAccount(IdentityProviderAccount):
         userid = user.get('id')
         full_name = user.get('name')
         agent_profile = AgentProfile(name=full_name)
-        avatar = avatar_url or \
-            'http://graph.facebook.com/%s/picture' % userid
+        avatar = avatar_url or cls.get_avatar_url(userid)
         app_id = app_id or get_config().get('facebook.consumer_key')
 
         return cls(
@@ -967,6 +1175,18 @@ class FacebookAccount(IdentityProviderAccount):
             app_id=app_id,
             picture_url=avatar
         )
+
+    def get_avatar_url(self, user_id):
+        return 'http://graph.facebook.com/%s/picture' % user_id
+
+    def update_fields(self, user):
+        name = user.get('name')
+        user_id = user.get('id')
+        agent_profile = self.profile
+        agent_profile.name = name
+        self.full_name = name
+        self.userid = user_id
+        self.picture_url = self.get_avatar_url(user_id)
 
 
 class FacebookAccessToken(Base):
@@ -1131,6 +1351,25 @@ class FacebookPost(ImportedPost):
             body=body
         )
 
+    def update_from_imported_json(self):
+        data = json.loads(self.imported_blob)
+        self.update_fields(data, None, reprocess=True)
+
+    def update_fields(self, post, user, reprocess=False):
+        _now = datetime.utcnow()
+        fb_id = post.get('id')
+        self.import_date = _now
+        self.body = post.get('message')
+        self.subject = post.get('story', None)
+        self.source_post_id = fb_id
+        self.creation_date = parse_datetime(post.get('created_time'))
+        self.message_id = fb_id
+        if not reprocess:
+            self.creator = user.profile
+
+    def update_attachments(self):
+        pass
+
 
 class FacebookReader(PullSourceReader):
     def __init__(self, source_id, api):
@@ -1138,10 +1377,9 @@ class FacebookReader(PullSourceReader):
         self.api = api
 
     def do_read(self):
-        # TODO reimporting
-        # limit = self.extra_args.get('limit', None)
         upper = self.extra_args.get('upper_bound', None)
         lower = self.extra_args.get('lower_bound', None)
+        reimport = self.reimporting
         # Does not account for local time if Facebook ever sends non-UTC time
         import pytz
         if upper:
@@ -1155,4 +1393,5 @@ class FacebookReader(PullSourceReader):
             lower = datetime(year=lower.year, month=lower.month, day=lower.day,
                              hour=23, minute=59, second=59, tzinfo=pytz.UTC)
 
-        self.source.fetch_content(upper_bound=upper, lower_bound=lower)
+        self.source.fetch_content(upper_bound=upper, lower_bound=lower,
+                                  reimport=reimport)

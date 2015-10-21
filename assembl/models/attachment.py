@@ -39,7 +39,7 @@ class Document(DiscussionBoundBase):
     interpreted as a purl
     """
 
-    uri_id = Column(String(514), unique=True, index=True)
+    uri_id = Column(String(1024), unique=True, index=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
                            info={'rdf': QuadMapPatternS(None,
                                                         DCTERMS.created)})
@@ -60,7 +60,7 @@ class Document(DiscussionBoundBase):
     oembed_type = Column(String(1024), server_default="")
     mime_type = Column(String(1024), server_default="")
     # From metadata, not the user
-    title = Column(CoerceUnicode(), server_default="",
+    title = Column(String(1024), server_default="",
                    info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
 
     # From metadata, not the user
@@ -100,6 +100,23 @@ class Document(DiscussionBoundBase):
     def unique_query(self):
         query, _ = super(Document, self).unique_query()
         return query.filter_by(uri_id=self.uri_id), True
+
+    def update_fields(self, new_doc):
+        """
+            :param new_doc - dict object of all of the document types
+            with keys:
+                set(['url', 'title', 'description', 'oembed', 'mime_type',
+                    'author_name', 'author_url', 'thumbnail', 'site_name'])
+        """
+        self.uri_id = new_doc.get('url')
+        self.title = new_doc.get('title')
+        self.description = new_doc.get('description')
+        self.oembed_type = new_doc.get('oembed')
+        self.mime_type = new_doc.get('mime_type')
+        self.author_name = new_doc.get('author_name')
+        self.author_url = new_doc.get('author_url')
+        self.thumbnail_url = new_doc.get('thumbnail')
+        self.site_name = new_doc.get('site_name')
 
     # Same crud permissions as a post. Issue with idea edition,
     # but that is usually more restricted than post permission.
