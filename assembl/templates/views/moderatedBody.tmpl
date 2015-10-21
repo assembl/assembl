@@ -1,8 +1,7 @@
-<p class="moderation-message"><%= moderation_text %><% if (body) { %>
-<span id="show_moderated_<%= message_id %>" class="js_showModeratedMessage" data="<%= message_id %>">{{ gettext('Click here to see original message') }}</span></p>
-<div id="js_moderated_message_<%= message_id %>" style="display: none;">
-<p><%= body %></p>
-</div>
+<p class="txt-gray2" style="white-space: normal"><%= moderation_text %>
+<% if (body) { %>
+<span id="show_moderated_<%= message_id %>" class="btn btn-cancel btn-sm js_showModeratedMessage" style="padding:0; padding-left:1ex; white-space: normal; display: inline; line-height: 1;" data="<%= message_id %>">{{ gettext('Click here to see original message') }}</span></p>
+<div class="txt-gray1" id="js_moderated_message_<%= message_id %>" style="display: none;"><%= body %></div>
 <% } else {
-print("</p>");
+    print("</p>");
 } %>
