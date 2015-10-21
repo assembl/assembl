@@ -338,7 +338,7 @@ def root_post_1(request, participant1_user, discussion, test_session):
     from assembl.models import Post
     p = Post(
         discussion=discussion, creator=participant1_user,
-        subject=u"a root post", body=u"post body",
+        subject=u"a root post", body=u"post body", moderator=None,
         creation_date=datetime(year=2000, month=1, day=1),
         type="post", message_id="msg1")
     test_session.add(p)
