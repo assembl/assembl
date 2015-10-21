@@ -683,6 +683,22 @@ class User(AgentProfile):
         super(User, self).__init__(**kwargs)
 
     @property
+    def real_name_p(self):
+        return self.real_name()
+
+    @real_name_p.setter
+    def real_name_p(self, name):
+        if name:
+            name = name.strip()
+        if not name:
+            return
+        elif len(name) < 3:
+            if not self.name or len(self.name) < len(name):
+                self.name = name
+        else:
+            self.name = name
+
+    @property
     def username_p(self):
         if self.username:
             return self.username.username

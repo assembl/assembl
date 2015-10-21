@@ -24,7 +24,8 @@
         "login_failures": false,
         "password": "password_p",
         "permissions": false,
-        "username": "username_p"
+        "username": "username_p",
+        "real_name": "real_name_p"
     },
     "AbstractAgentAccount": {
         "preferred": true,

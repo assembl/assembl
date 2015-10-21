@@ -312,6 +312,11 @@ def assembl_register_view(request):
     session = AgentProfile.default_db
     localizer = request.localizer
     name = request.params.get('name', '').strip()
+    if not name or len(name) < 3:
+        return dict(get_default_context(request),
+            slug_prefix=p_slug,
+            error=localizer.translate(_(
+                "Please use a name of at least 3 characters")))
     password = request.params.get('password', '').strip()
     password2 = request.params.get('password2', '').strip()
     email = request.params.get('email', '').strip()
