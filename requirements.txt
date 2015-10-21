@@ -16,7 +16,7 @@ PyLD==0.6.8
 PyStemmer==1.3.0
 Pygments==2.0.2
 SPARQLWrapper==1.6.4
-SQLAlchemy==1.0.8
+SQLAlchemy==1.0.9
 Sphinx==1.3.1
 Unidecode==0.04.18
 WebOb==1.5.0
@@ -36,7 +36,7 @@ boto==2.38.0
 bz2file==0.98
 celery==3.1.18
 chroma==0.2.0
-cffi==1.2.1
+cffi==1.3.0
 colander==1.0
 cornice==1.1.0
 cov-core==1.15.0
@@ -44,7 +44,7 @@ coverage==4.0.1
 cryptography==1.0.2
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 docutils==0.12
-dogpile.cache==0.5.6
+dogpile.cache==0.5.7
 dogpile.core==0.4.1
 ecdsa==0.13
 enum34==1.0.4
@@ -103,7 +103,7 @@ python-dateutil==2.4.2
 python-openid==2.2.5
 pytz==2015.6
 pyzmq==14.7.0
-raven==5.7.2
+raven==5.8.1
 rdflib==4.2.1
 rdflib-jsonld==0.3
 redis==2.10.3
@@ -135,7 +135,7 @@ venusian==1.0
 -e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
 waitress==0.8.10
 zope.component==4.2.2
-zope.event==4.0.3
+zope.event==4.1.0
 zope.deprecation==4.1.2
 zope.interface==4.1.3
 zope.sqlalchemy==0.7.6
