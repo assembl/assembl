@@ -1202,9 +1202,17 @@ class BaseOps(object):
                 continue
             if getattr(self, reln.key, None) is None:
                 target_class = reln.mapper.class_
+                # Hack: if it's a user relationship, assume owner.
+                # TODO: Make ownership reln explicit, we had an issue
+                # with moderator.
                 # TODO: Subclasses of user.
                 if target_class.__name__ == 'User' and user_id != Everyone:
                     from assembl.models.auth import User
+                    if any([
+                            issubclass(User, r.mapper.class_)
+                            for r in treated_relns]):
+                            # User is already treated
+                        continue
                     instance = User.get(user_id)
                 else:
                     instance = context.get_instance_of_class(target_class)

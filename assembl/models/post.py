@@ -117,9 +117,7 @@ class Post(Content):
         "User",
         foreign_keys=[moderator_id],
         backref=backref('posts_moderated'),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
     )
-
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):

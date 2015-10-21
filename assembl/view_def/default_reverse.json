@@ -140,7 +140,6 @@
         "moderation_text": true,
         "moderator": true,
         "moderated_on": true,
-        "moderation_text": true,
         "moderator_comment": true,
         "message_id": false,
         "ancestry": false,
