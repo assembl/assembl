@@ -63,6 +63,8 @@ var MessageView = Marionette.LayoutView.extend({
    */
   reRendered: 0,
 
+  moderationTemplate: Ctx.loadTemplate('moderatedBody'),
+
   /**
    * @init
    * @param {MessageModel} obj the model
@@ -157,6 +159,7 @@ var MessageView = Marionette.LayoutView.extend({
     'click @ui.jumpToMessageInThreadButton': 'onMessageJumpToMessageInThreadClick',
     'click @ui.jumpToMessageInReverseChronologicalButton': 'onMessageJumpToMessageInReverseChronologicalClick',
     'click @ui.showAllMessagesByThisAuthorButton': 'onShowAllMessagesByThisAuthorClick',
+    'click .js_showModeratedMessage': 'onShowModeratedMessageClick',
 
     //
     'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
@@ -227,6 +230,15 @@ var MessageView = Marionette.LayoutView.extend({
     }
 
     body = (body) ? body : this.generateSafeBody();
+
+    if (this.model.get("moderation_text")) {
+      body = this.moderationTemplate({
+        body: body,
+        moderation_text: this.model.get("moderation_text"),
+        moderator: this.model.get("moderator"),
+        message_id: this.model.id.split('/')[1]
+      });
+    }
 
     if (bodyFormat !== null) {
       bodyFormatClass = "body_format_" + this.model.get('bodyMimeType').replace("/", "_");
@@ -928,6 +940,11 @@ var MessageView = Marionette.LayoutView.extend({
       this.messageListView.render();
       this.messageListView.showMessageById(this.model.id);
     },
+
+  onShowModeratedMessageClick: function(ev) {
+    var message_number = ev.target.attributes["data"].value;
+    $("#js_moderated_message_" + message_number).toggle();
+  },
 
   /**
    * You need to re-render after this

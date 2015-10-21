@@ -1,0 +1,8 @@
+<p class="moderation-message"><%= moderation_text %><% if (body) { %>
+<span id="show_moderated_<%= message_id %>" class="js_showModeratedMessage" data="<%= message_id %>">{{ gettext('Click here to see original message') }}</span></p>
+<div id="js_moderated_message_<%= message_id %>" style="display: none;">
+<p><%= body %></p>
+</div>
+<% } else {
+print("</p>");
+} %>
