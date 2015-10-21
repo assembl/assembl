@@ -1660,7 +1660,10 @@ var MessageList = AssemblPanel.extend({
 
           var id = annotation['@id'];
           if (id === undefined) {
-            console.log("Missing @id, probably a new annotation", annotation);
+            // this happens when the user has just released the mouse button after having selected text (the extract has not been created yet: the user has not clicked on the "Add to clipboard" button, nor has he dragged the selection to an idea).
+            // console.log("Missing @id, probably a new annotation", annotation);
+            // Instead of showing a bubble with "No comment" text in it, we remove the bubble
+            $(field).parents(".annotator-outer").remove();
             return;
           }
 
