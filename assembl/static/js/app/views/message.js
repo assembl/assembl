@@ -943,7 +943,7 @@ var MessageView = Marionette.LayoutView.extend({
 
   onShowModeratedMessageClick: function(ev) {
     var message_number = ev.target.attributes["data"].value;
-    $("#js_moderated_message_" + message_number).toggle();
+    this.$("#js_moderated_message_" + message_number).toggleClass('hidden');
   },
 
   /**
