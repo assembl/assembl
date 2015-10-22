@@ -83,7 +83,7 @@ var IdeaPanel = AssemblPanel.extend({
   modelEvents: {
     //Do NOT listen to change here
     //'replacedBy': 'onReplaced',
-    'change': 'render'
+    'change': 'requestRender'
   },
   events: {
     'dragstart @ui.postIt': 'onDragStart', // when the user starts dragging one of the extracts listed in the idea
@@ -100,6 +100,17 @@ var IdeaPanel = AssemblPanel.extend({
     'click @ui.definition': 'editDefinition',
     'click @ui.longTitle': 'editTitle',
     'click .js_openTargetInPopOver': 'openTargetInPopOver'
+  },
+
+  requestRender: function() {
+    var that = this;
+
+    setTimeout(function(){
+      if(!that.isViewDestroyed()) {
+        //console.log("Render from ideaList requestRender");
+        that.render();
+      }
+    }, 1);
   },
 
   getTitle: function() {

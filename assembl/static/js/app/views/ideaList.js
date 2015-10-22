@@ -71,16 +71,23 @@ var IdeaList = AssemblPanel.extend({
     var that = this,
         collectionManager = new CollectionManager();
 
+    var requestRender = setTimeout(function(){
+      if(!that.isViewDestroyed()) {
+        //console.log("Render from ideaList requestRender");
+        that.render();
+      }
+    }, 1);
+
     Promise.join(collectionManager.getAllIdeasCollectionPromise(),
         collectionManager.getAllIdeaLinksCollectionPromise(),
             function(allIdeasCollection, allIdeaLinksCollection) {
               if(!that.isViewDestroyed()) {
                 var events = ['reset', 'change:parentId', 'change:@id', 'change:hidden', 'remove', 'add', 'destroy'];
-                that.listenTo(allIdeasCollection, events.join(' '), that.render);
+                that.listenTo(allIdeasCollection, events.join(' '), requestRender);
                 that.allIdeasCollection = allIdeasCollection;
 
                 var events = ['reset', 'change:source', 'change:target', 'change:order', 'remove', 'add', 'destroy'];
-                that.listenTo(allIdeaLinksCollection, events.join(' '), that.render);
+                that.listenTo(allIdeaLinksCollection, events.join(' '), requestRender);
                 that.allIdeaLinksCollection = allIdeaLinksCollection;
 
                 that.template = '#tmpl-ideaList';
