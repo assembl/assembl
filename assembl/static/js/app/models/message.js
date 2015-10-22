@@ -220,7 +220,11 @@ var MessageModel = Base.Model.extend({
         }
         that.trigger('change:read', [value]);
         that.trigger('change', that);
-        Assembl.reqres.request('ideas:update', resp.ideas); // this seems to cost a lot of performance. maybe we should update only the ideas related to this message
+
+        // As refreshing the table of ideas can cost a lot of CPU time, we reduce time of unresponsiveness when marking a message as read or opening it, by delaying the moment when the table of ideas refreshes
+        setTimeout(function(){
+          Assembl.reqres.request('ideas:update', resp.ideas); // this seems to cost a lot of performance. maybe we should update only the ideas related to this message
+        }, 2000);
       },
       error: function(model, resp) {}
     });
