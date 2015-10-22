@@ -96,9 +96,6 @@ var MessageList = AssemblPanel.extend({
       this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
       this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY;
 
-      // each fully-displayed message asks the messageList for an anotator refresh, so to avoid doing it too often, we use a throttled version of the requestAnnotatorRefresh() method
-      this.requestAnnotatorRefresh = _.throttle(this.requestAnnotatorRefresh, 500);
-
       collectionManager.getAllMessageStructureCollectionPromise()
         .then(function(allMessageStructureCollection) {
           if(!that.isViewDestroyed()) {
@@ -907,18 +904,32 @@ var MessageList = AssemblPanel.extend({
    * single message has been re-rendered.  Otherwise, the annotations
    * will not be shown.
    */
-  doAnnotatorRefresh: function() {
+  _doAnnotatorRefresh: function() {
     if (Ctx.debugAnnotator) {
-      console.log("messageList:doAnnotatorRefresh() called for " + _.size(this.renderedMessageViewsCurrent) + " messages");
+      console.log("messageList:_doAnnotatorRefresh() called for " + _.size(this.renderedMessageViewsCurrent) + " messages on render id ", _.clone(this._renderId));
+    }
+    if(!this.isViewDestroyed()) {
+      this.annotatorRefreshRequested = false;
+
+      //console.log("_doAnnotatorRefresh(): About to call initAnnotator");
+      this.initAnnotator();
+      _.each(this.renderedMessageViewsCurrent, function(messageView) {
+        messageView.loadAnnotations();
+      });
+    }
+  },
+
+  // each fully-displayed message asks the messageList for an anotator refresh, so to avoid doing it too often, we use a throttled version of the requestAnnotatorRefresh() method
+  doAnnotatorRefreshDebounced: function() {
+    var that = this;
+    if (this._debouncedRefresh === undefined) {
+      this._debouncedRefresh = _.debounce(_.bind(this._doAnnotatorRefresh, this), 100);
     }
 
-    this.annotatorRefreshRequested = false;
-
-    //console.log("doAnnotatorRefresh(): About to call initAnnotator");
-    this.initAnnotator();
-    _.each(this.renderedMessageViewsCurrent, function(messageView) {
-      messageView.loadAnnotations();
-    });
+    if (Ctx.debugAnnotator) {
+      console.log("messageList:doAnnotatorRefreshDebounced called for render id ", _.clone(this._renderId));
+    }
+    this._debouncedRefresh();
   },
 
   /**
@@ -931,7 +942,7 @@ var MessageList = AssemblPanel.extend({
       this.annotatorRefreshRequested = true;
     }
     else {
-      this.doAnnotatorRefresh();
+      this.doAnnotatorRefreshDebounced();
     }
 
   },
@@ -949,7 +960,10 @@ var MessageList = AssemblPanel.extend({
   resumeAnnotatorRefresh: function() {
     this.annotatorRefreshSuspended = false;
     if (this.annotatorRefreshRequested === true) {
-      this.doAnnotatorRefresh();
+      if (Ctx.debugAnnotator) {
+        console.log("About to call _doAnnotatorRefresh synchronously");
+      }
+      this._doAnnotatorRefresh();
     }
   },
 

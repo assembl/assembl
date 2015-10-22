@@ -1,6 +1,7 @@
 'use strict';
 
 var Marionette = require('../shims/marionette.js'),
+    Raven = require('raven-js'),
     Backbone = require('../shims/backbone.js'),
     _ = require('../shims/underscore.js'),
     Assembl = require('../app.js'),
@@ -765,16 +766,18 @@ var MessageView = Marionette.LayoutView.extend({
    */
   renderAnnotations: function(annotations) {
     var that = this;
-    _.each(annotations, function(annotation) {
-      var highlights = annotation.highlights,
-          func = that.showSegmentByAnnotation.bind(that, annotation);
 
-      _.each(highlights, function(highlight) {
-        highlight.setAttribute('data-annotation-id', annotation['@id']);
-        $(highlight).on('click', func);
+    if(!this.isViewDestroyed()) {
+      _.each(annotations, function(annotation) {
+        var highlights = annotation.highlights,
+        func = that.showSegmentByAnnotation.bind(that, annotation);
+
+        _.each(highlights, function(highlight) {
+          highlight.setAttribute('data-annotation-id', annotation['@id']);
+          $(highlight).on('click', func);
+        });
       });
-    });
-
+    }
   },
 
   /**
