@@ -32,7 +32,9 @@ var PanelWrapper = Marionette.LayoutView.extend({
     lockPanel: '.js_lockPanel', // clickable zone, which is bigger than just the following icon
     lockPanelIcon: '.js_lockPanel i',
     minimizePanel: '.js_minimizePanel',
-    closePanel: '.js_panel-closeButton'
+    closePanel: '.js_panel-closeButton',
+    panelHeader: '.panel-header',
+    panelContentsWhenMinimized: '.panelContentsWhenMinimized'
   },
   events: {
     'click @ui.closePanel': 'closePanel',
@@ -88,7 +90,9 @@ var PanelWrapper = Marionette.LayoutView.extend({
     this.setGridSize(this.gridSize);
     this.contents.show(this.contentsView);
     this.setHidden();
-    Ctx.initTooltips(this.$el);
+    // Ctx.initTooltips(this.$el); // this takes way too much time when the DOM of the panelContents is big, so instead we init tooltips on selected subparts of the template
+    Ctx.initTooltips(this.ui.panelHeader);
+    Ctx.initTooltips(this.ui.panelContentsWhenMinimized);
     this._minimizedStateButton = this.$('.panel-header-minimize');
     this._minimizedStateIcon = this.$('.panel-header-minimize i');
 

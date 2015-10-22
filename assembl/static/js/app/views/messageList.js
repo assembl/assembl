@@ -1146,7 +1146,7 @@ var MessageList = AssemblPanel.extend({
         $("body").addClass("js_annotatorUserCannotAddExtract");
       }
 
-      Ctx.initTooltips(this.$el);
+      // Ctx.initTooltips(this.$el); // this takes way too much time when the DOM of the messagelist is big, so instead we init tooltips on selected subparts of the template. But here each subpart takes care of their own tooltips init so we don't need to call it.
 
       //this.renderCollapseButton(); // FIXME: this seems to be not used anymore, so I (Quentin) commented it out
 
