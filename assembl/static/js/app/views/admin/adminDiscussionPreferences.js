@@ -18,7 +18,8 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
   regions: {
     navigationMenuHolder: '.navigation-menu-holder'
   },
-  preferencesKeys: ["simple_view_panel_order", "require_email_domain"],
+  preferencesKeys: ["simple_view_panel_order", "require_email_domain", "default_allow_access_to_moderated_text"],
+  preferencesValues: {},
 
   initialize: function() {
   },
@@ -47,6 +48,7 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
     preferences.forEach(function(preferenceKey){
         var promise = that.getReadUserPreferencePromise(preferenceKey);
         promise.then(function(res){
+          that.preferencesValues[preferenceKey] = res;
           that.setUserInputPreferenceValue(preferenceKey, res);
         }).catch(function(e) {
             console.error(e);
@@ -57,22 +59,29 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
   savePreferences: function(){
     var that = this;
     var preferences = this.preferencesKeys;
+    var promises = [];
     preferences.forEach(function(preferenceKey){
-        var preferenceValue = that.getUserInputPreferenceValue(preferenceKey);
+      var preferenceValue = that.getUserInputPreferenceValue(preferenceKey);
+      if ( !(preferenceKey in that.preferencesValues) || preferenceValue != that.preferencesValues[preferenceKey] ){
         var promise = that.getSaveUserPreferencePromise(preferenceKey, preferenceValue);
-        promise.then(function(res){
-            $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
-              ele: 'body',
-              type: 'success',
-              offset: {from: 'bottom', amount:20},
-              align: 'left',
-              delay: 4000,
-              allow_dismiss: true,
-              stackup_spacing: 10
-            });
-        }).catch(function(e) {
-            console.error(e);
+        promise.catch(function(e) {
+          console.error(e);
         });
+        promises.push(promise);
+      }
+    });
+    Promise.all(promises).then(function(res){
+      $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
+        ele: 'body',
+        type: 'success',
+        offset: {from: 'bottom', amount:20},
+        align: 'left',
+        delay: 4000,
+        allow_dismiss: true,
+        stackup_spacing: 10
+      });
+    }).catch(function(e) {
+        console.error(e);
     });
   },
 
@@ -82,13 +91,18 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
 
   getUserInputPreferenceValue: function(preferenceName){
     var selector = this.getUserInputPreferenceSelector(preferenceName);
-    if ( preferenceName == "require_email_domain" ){
+    if ( preferenceName == "require_email_domain" ){ // preferences of type Array
       var inputVal = this.$(selector).val();
       var res = inputVal.split(",");
       res.forEach(function(el,index){
         res[index] = el.trim();
       });
       return res;
+    }
+    else if ( preferenceName == "default_allow_access_to_moderated_text" ){ // preferences of type Boolean, which show as checkboxes
+      var val = this.$(selector).prop("checked");
+      val = val ? true : false;
+      return val;
     }
     else {
       return this.$(selector).val();
@@ -97,12 +111,17 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
 
   setUserInputPreferenceValue: function(preferenceName, preferenceValue){
     var selector = this.getUserInputPreferenceSelector(preferenceName);
-    if ( preferenceName == "require_email_domain" ){
+    if ( preferenceName == "require_email_domain" ){ // preferences of type Array
       var val = "";
       if ( preferenceValue instanceof Array ){
         val = preferenceValue.join(", ");
       }
       this.$(selector).val(val);
+    }
+    else if ( preferenceName == "default_allow_access_to_moderated_text") { // preferences of type Boolean, which show as checkboxes
+      console.log("preferenceValue: ", preferenceValue);
+      var val = preferenceValue ? true : false;
+      this.$(selector).prop("checked", preferenceValue);
     }
     else {
       this.$(selector).val(preferenceValue);
@@ -128,8 +147,8 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
     console.log("adminDiscussionPreferences::getSaveUserPreferencePromise(): ", preferenceName, value);
     var url = this.getUserPreferenceURL(preferenceName);
     var data = null;
-    if ( typeof value != "string" && value instanceof Array ){
-      console.log("warning, preference value should be a string or an array. value received: ", value);
+    if ( (typeof value != "string") && !(value instanceof Array) && (typeof value != "boolean") ){
+      console.log("warning, preference value should be a string or an array or a boolean. value received: ", value);
     }
     data = JSON.stringify(value);
     console.log("data we are going to send: ", data);
