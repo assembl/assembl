@@ -16,6 +16,7 @@ var Permissions = {
   SEND_SYNTHESIS: "send_synthesis",
   ADMIN_DISCUSSION: "admin_discussion",
   SYSADMIN: "sysadmin",
+  MODERATE_POST: "moderate_post",
   EXPORT_POST: "export_post"
 };
 
