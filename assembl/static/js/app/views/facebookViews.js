@@ -897,6 +897,10 @@ var FacebookSourceForm = Marionette.LayoutView.extend({
   regions: {
     'sourcePicker': ".source_picker"
   },
+  ui: {
+    lower_bound: ".js_lower_bound",
+    upper_bound: ".js_upper_bound"
+  },
   initialize: function(options) {
     this.token = options.token;
     this.vent = options.vent; //Event Aggregator
@@ -906,11 +910,20 @@ var FacebookSourceForm = Marionette.LayoutView.extend({
     };
   },
   getModelData: function(sender) {
-    return {
+    var result = {
       creator_id: sender.get("@id"),
       endpoint: this.bundle.endpoint,
       sink_data: {}
     };
+    var limit = this.ui.lower_bound.val();
+    if (limit) {
+      result.lower_bound = limit;
+    }
+    limit = this.ui.upper_bound.val();
+    if (limit) {
+      result.upper_bound = limit;
+    }
+    return result;
   },
   saveModel: function(success, error) {
     var that = this, cm = new CollectionManager();

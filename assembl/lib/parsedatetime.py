@@ -4,7 +4,7 @@ import isodate
 def parse_datetime(value, raise_error=None):
     try:
         if 'T' not in value:
-            return isodate.parsedate(value)
+            value += "T00:00:00"
         value = isodate.parse_datetime(value)
         # we store naive UTC in the database.
         if value.tzinfo is not None:

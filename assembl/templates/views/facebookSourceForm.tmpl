@@ -1,4 +1,27 @@
 <div>
-<div class="source_picker"></div>
-<!-- max Top post, min date, max date -->
+  <div class="source_picker"></div>
+
+  <!-- max Top post, min date, max date -->
+
+  <!-- div class="control-group mts">
+    <label for="max_top_posts" class="control-label"><abbr title="{{ gettext('How many top posts and their comments would you like to import? Leave blank to import all posts') }}">{{ gettext("Maximum number of threads") }}</abbr></label>
+    <div class="controls">
+      <input id="max_top_posts" type="text" class="input-large" />
+    </div>
+  </div -->
+
+  <div class="control-group mts">
+    <label for="lower_bound" class="control-label"><abbr title="{{ gettext('When has been posted the oldest post you would like to import? Use ISO 8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit') }}">{{ gettext("Minimum date") }}</abbr></label>
+    <div class="controls">
+      <input id="lower_bound" class="js_lower_bound" type="text" class="input-large" />
+    </div>
+  </div>
+
+  <div class="control-group mts">
+    <label for="upper_bound" class="control-label"><abbr title="{{ gettext('When has been posted the newest post you would like to import? Use ISO 8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit') }}">{{ gettext("Maximum date") }}</abbr></label>
+    <div class="controls">
+      <input id="upper_bound" class="js_upper_bound" type="text" class="input-large" />
+    </div>
+  </div>
+
 </div>

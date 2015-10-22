@@ -72,6 +72,8 @@ var FacebookSource = Source.extend({
     return _.extend(Source.prototype.defaults, {
       'fb_source_id': null,
       'url_path': null,
+      'lower_bound': null,
+      'upper_bound': null,
       'creator_id': Ctx.getCurrentUserId()
     });
   }
