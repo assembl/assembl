@@ -28,8 +28,9 @@ iframe {
 <script>
 var i,
 h = location.href,
-u = (h.match(/[&?]u=(.*)&t=/) || h.match(/[&?]u=(.*)(&|$)/) || [0,document.referrer])[1] || "",
-t = (h.match(/[&?]t=(.*)&u=/) || h.match(/[&?]t=(.*)(&|$)/) || [])[1] || "",
+u = (h.match(/[&?]u=([^&]+)/) || [0,document.referrer])[1] || "",
+t = (h.match(/[&?]t=([^&]+)/) || [])[1] || "",
+s = (h.match(/[&?]s=([^&]+)/) || [])[1] || true,
 dec = function(s) {return decodeURIComponent(s)},
 enc = function(s) {return encodeURIComponent(s)},
 iframe_url = "bower_components/expando/add/index.htm?";
@@ -48,8 +49,9 @@ if(t) {
 	document.title = "Share: "+dec(t);
 	iframe_url += "&t=" + t;
 }
-
-document.getElementById("iframe").src = iframe_url;
+if (s && s != "false") {
+    document.getElementById("iframe").src = iframe_url;
+}
 </script>
 
 

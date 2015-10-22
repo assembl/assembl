@@ -249,7 +249,8 @@ var MessageView = Marionette.LayoutView.extend({
         share_link_url = Ctx.appendExtraURLParams("/static/widget/share/index.html",
           [
             {'u': Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)},
-            {'t': this.model.get('subject')}
+            {'t': this.model.get('subject')},
+            {'s': Ctx.getPreferences().social_sharing }
           ]
         );
 
