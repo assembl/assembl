@@ -925,7 +925,6 @@ class FacebookGenericSource(PostSource):
         )
 
         for post in self.parser.get_feed_paginated(self.fb_source_id):
-            import pdb; pdb.set_trace()
             assembl_post, cont = self._manage_post(post, self.fb_source_id,
                                                    posts_db, users_db,
                                                    upper_bound,
@@ -1081,6 +1080,8 @@ class FacebookGroupSource(FacebookGenericSource):
     def fetch_content(self, lower_bound=None, upper_bound=None,
                       reimport=False):
         self._setup_reading()
+        lower_bound = lower_bound or self.lower_bound
+        upper_bound = upper_bound or self.upper_bound
         self.feed(lower_bound=lower_bound, upper_bound=upper_bound,
                   reimport=reimport)
 
@@ -1093,6 +1094,8 @@ class FacebookGroupSourceFromUser(FacebookGenericSource):
     def fetch_content(self, lower_bound=None, upper_bound=None,
                       reimport=False):
         self._setup_reading()
+        lower_bound = lower_bound or self.lower_bound
+        upper_bound = upper_bound or self.upper_bound
         self.feed(lower_bound=lower_bound, upper_bound=upper_bound,
                   reimport=reimport)
 
@@ -1105,6 +1108,8 @@ class FacebookPagePostsSource(FacebookGenericSource):
     def fetch_content(self, lower_bound=None, upper_bound=None,
                       reimport=False):
         self._setup_reading()
+        lower_bound = lower_bound or self.lower_bound
+        upper_bound = upper_bound or self.upper_bound
         self.posts(lower_bound=lower_bound, upper_bound=upper_bound,
                    reimport=reimport)
 
@@ -1117,6 +1122,8 @@ class FacebookPageFeedSource(FacebookGenericSource):
     def fetch_content(self, lower_bound=None, upper_bound=None,
                       reimport=False):
         self._setup_reading()
+        lower_bound = lower_bound or self.lower_bound
+        upper_bound = upper_bound or self.upper_bound
         self.feed(lower_bound=lower_bound, upper_bound=upper_bound,
                   reimport=reimport)
 
@@ -1176,7 +1183,8 @@ class FacebookAccount(IdentityProviderAccount):
             picture_url=avatar
         )
 
-    def get_avatar_url(self, user_id):
+    @classmethod
+    def get_avatar_url(cls, user_id):
         return 'http://graph.facebook.com/%s/picture' % user_id
 
     def update_fields(self, user):
