@@ -14,7 +14,7 @@ from zope.component import getGlobalSiteManager
 import sqltap.wsgi
 
 from .lib.sqla import configure_engine, session_maker_is_initialized
-from .lib.locale import to_posix_format, ensure_locale_has_country
+from .lib.locale import locale_negotiator as my_locale_negotiator
 from .lib.config import set_config
 
 # Do not import models here, it will break tests.
@@ -43,31 +43,6 @@ def main(global_config, **settings):
     config = Configurator(registry=getGlobalSiteManager())
     config.setup_registry(settings=settings, root_factory=root_factory)
     config.add_translation_dirs('assembl:locale/')
-
-    def my_locale_negotiator(request):
-        available = settings['available_languages'].split()
-        locale = None
-        from assembl.auth.util import discussion_from_request
-        discussion = discussion_from_request(request)
-        if discussion:
-            for locale in discussion.discussion_locales:
-                if locale in available:
-                    break
-                if '_' not in locale:
-                    locale = ensure_locale_has_country(locale)
-                if locale and locale in available:
-                    break
-        else:
-            locale = to_posix_format(default_locale_negotiator(request))
-        if locale and locale not in available:
-            locale_with_country = ensure_locale_has_country(locale)
-            if locale_with_country:
-                locale = locale_with_country
-        if not locale:
-            locale = to_posix_format(request.accept_language.best_match(
-                available, settings.get('pyramid.default_locale_name', 'en')))
-        request._LOCALE_ = locale
-        return locale
 
     global locale_negotiator
     locale_negotiator = my_locale_negotiator

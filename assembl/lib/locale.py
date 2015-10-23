@@ -1,6 +1,8 @@
 from pyramid.i18n import TranslationStringFactory, Localizer
+from pyramid.i18n import default_locale_negotiator
+from iso639 import (is_valid639_2, is_valid639_1, to_iso639_1)
+
 from .config import get_config
-from iso639 import (is_valid639_2, is_valid639_1, to_iso639_2, to_iso639_1)
 
 
 _ = TranslationStringFactory('assembl')
@@ -62,14 +64,15 @@ def get_country(locale):
         return string.upper(locale.split('_')[1])
     # otherwise None
 
+
 def ensure_locale_has_country(locale):
     # assuming a posix locale
     if '_' not in locale:
         # first look in config
-        from .config import get_config
         settings = get_config()
         available = settings.get('available_languages', 'en_CA fr_CA').split()
-        avail_langs = {get_language(loc): loc for loc in reversed(available) if '_' in loc}
+        avail_langs = {get_language(loc): loc
+                       for loc in reversed(available) if '_' in loc}
         locale_with_country = avail_langs.get(locale, None)
         if not locale_with_country:
             if is_valid639_1(locale):
@@ -77,4 +80,58 @@ def ensure_locale_has_country(locale):
             return None
         return locale_with_country
         # TODO: Default countries for languages. Look in pycountry?
+    return locale
+
+
+def get_preferred_languages(session, user_id):
+    from ..models import UserLanguagePreference
+    prefs = (session.query(UserLanguagePreference)
+             .filter_by(user_id=user_id)
+             .order_by(UserLanguagePreference.preferred_order))
+    return [p.lang_code for p in prefs]
+
+
+def locale_negotiator(request):
+    settings = get_config()
+    available = settings.get('available_languages').split()
+    locale = request.cookies['_LOCALE_'] or request.params['_LOCALE_']
+    # TODO: Set User preference in this function.
+    if not locale:
+        from pyramid.security import authenticated_userid
+        from assembl.auth.util import discussion_from_request
+        from assembl.models import get_session_maker
+        user_id = authenticated_userid(request)
+        if user_id:
+            prefs = get_preferred_languages(get_session_maker()(), user_id)
+            for locale in prefs:
+                if locale in available:
+                    break
+                if '_' not in locale:
+                    locale = ensure_locale_has_country(locale)
+                    if locale and locale in available:
+                        break
+            else:
+                locale = None
+        if locale is None:
+            discussion = discussion_from_request(request)
+            if discussion:
+                for locale in discussion.discussion_locales:
+                    if locale in available:
+                        break
+                    if '_' not in locale:
+                        locale = ensure_locale_has_country(locale)
+                        if locale and locale in available:
+                            break
+                else:
+                    locale = None
+    if not locale:
+        locale = to_posix_format(default_locale_negotiator(request))
+    if locale and locale not in available:
+        locale_with_country = ensure_locale_has_country(locale)
+        if locale_with_country:
+            locale = locale_with_country
+    if not locale:
+        locale = to_posix_format(request.accept_language.best_match(
+            available, settings.get('pyramid.default_locale_name', 'en')))
+    request._LOCALE_ = locale
     return locale
