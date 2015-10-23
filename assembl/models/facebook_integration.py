@@ -495,7 +495,8 @@ class FacebookGenericSource(PostSource):
 
     @upper_bound_timezone_checked.setter
     def upper_bound_timezone_checked(self, value):
-        self.upper_bound = parse_datetime(value)
+        if value:
+            self.upper_bound = parse_datetime(value)
 
     @property
     def lower_bound_timezone_checked(self):
@@ -503,7 +504,8 @@ class FacebookGenericSource(PostSource):
 
     @lower_bound_timezone_checked.setter
     def lower_bound_timezone_checked(self, value):
-        self.lower_bound = parse_datetime(value)
+        if value:
+            self.lower_bound = parse_datetime(value)
 
     def get_creator_uri(self):
         if self.creator:
