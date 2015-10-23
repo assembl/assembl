@@ -43,7 +43,22 @@ var AgentView = Marionette.ItemView.extend({
 
 var AgentAvatarView = AgentView.extend({
   template: '#tmpl-agentAvatar',
-  className: 'agentAvatar'
+  className: 'agentAvatar',
+  avatarSize: null,
+  initialize: function(options){
+    if ( "avatarSize" in options ){
+      this.avatarSize = options.avatarSize;
+    }
+    else {
+      this.avatarSize = 30;
+    }
+  },
+  serializeData: function() {
+    return {
+      agent: this.model,
+      avatarSize: this.avatarSize
+    };
+  }
 });
 
 var AgentNameView = AgentView.extend({

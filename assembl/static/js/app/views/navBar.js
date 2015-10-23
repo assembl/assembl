@@ -17,7 +17,8 @@ var Marionette = require('../shims/marionette.js'),
     Widget = require('../models/widget.js'),
     DefineGroupModal = require('./groups/defineGroupModal.js'),
     WidgetLinks = require('./widgetLinks.js'),
-    Analytics = require('../internal_modules/analytics/dispatcher.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js'),
+    AgentViews = require('./agent.js');
 
 var navBarLeft = Marionette.LayoutView.extend({
   template: '#tmpl-navBarLeft',
@@ -94,12 +95,22 @@ var navBarRight = Marionette.ItemView.extend({
   ui: {
     currentLocal: '.js_setLocale',
     joinDiscussion: '.js_joinDiscussion',
-    needJoinDiscussion: '.js_needJoinDiscussion'
+    needJoinDiscussion: '.js_needJoinDiscussion',
+    userAvatarContainer: '.user-avatar-container'
   },
   events: {
     'click @ui.currentLocal': 'setLocale',
     'click @ui.joinDiscussion': 'joinPopin',
     'click @ui.needJoinDiscussion': 'needJoinDiscussion'
+  },
+  onBeforeShow: function() {
+    if ( this.ui.userAvatarContainer ){
+      var userAvatarView = new AgentViews.AgentAvatarView({
+        model: Ctx.getCurrentUser(),
+        avatarSize: 25
+      });
+      this.ui.userAvatarContainer.html(userAvatarView.render().el);
+    }
   },
   serializeData: function() {
     return {

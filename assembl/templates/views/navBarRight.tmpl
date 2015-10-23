@@ -23,10 +23,7 @@
 
     <!-- USER PROFILE  -->
     {% if user %}
-    <li class="sub fl">
-        <a href="#" class="avatar img-rounded mrxs">
-            <img class="user-picture" height="25" width="25" src="/user/id/{{user.id}}/avatar/25" alt="{{ user.display_name() }}"/>
-        </a>
+    <li class="sub fl user-avatar-container">
     </li>
     {% endif %}
     <li class="sub fl mrs">

@@ -1,5 +1,5 @@
 <% if(agent.get('name')) { %>
-  <a href="#" class="avatar js_agentAvatar img-rounded" data-toggle="tooltip" data-placement="top" title="<%= agent.get('name') %>"><img src="<%= agent.getAvatarUrl(30) %>" width="30" height="30" alt="<%= agent.get('name') %>" onerror='this.onerror = null; this.src="/static/img/icon/user.png";'></a>
+  <a href="#" class="avatar js_agentAvatar img-rounded" data-toggle="tooltip" data-placement="top" title="<%= agent.get('name') %>"><img src="<%= agent.getAvatarUrl(avatarSize) %>" width="<%= avatarSize %>" height="<%= avatarSize %>" alt="<%= agent.get('name') %>" onerror='this.onerror = null; this.src="/static/img/icon/user.png";'></a>
 <% } else { %>
-  <a href="#" class="avatar js_agentAvatar img-rounded" data-toggle="tooltip" data-placement="top" title="{{ gettext('anonymous') }}"><img src="<%= agent.getAvatarUrl(30) %>" width="30" height="30" alt="{{ gettext('anonymous') }}" onerror='this.onerror = null; this.src="/static/img/icon/user.png";'></a>
+  <a href="#" class="avatar js_agentAvatar img-rounded" data-toggle="tooltip" data-placement="top" title="{{ gettext('anonymous') }}"><img src="<%= agent.getAvatarUrl(avatarSize) %>" width="<%= avatarSize %>" height="<%= avatarSize %>" alt="{{ gettext('anonymous') }}" onerror='this.onerror = null; this.src="/static/img/icon/user.png";'></a>
 <% } %>

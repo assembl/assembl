@@ -7,15 +7,16 @@
 }
 .avatar {
   display: block;
-  border: 1px solid transparent;
   padding: 1px;
 
   img {
-    display: block;
+    display: inline-block;
     border-radius: $borderRadiusMS;
     opacity: 1;
     @include transition(opacity 0.2s);
+    overflow: hidden;
   }
+  
 
   &:hover,
   &:focus {
