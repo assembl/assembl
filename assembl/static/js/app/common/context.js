@@ -142,6 +142,15 @@ var Context = function() {
    */
   this.timeoutIdHidePopover = null;
 
+  /**
+   * The view object of a current Modal
+   * Every created modal must be manually added to this
+   * property in order to maintain state.
+   *
+   * Used by Ctx.clearModal()
+   */
+  this.currentModalView = null;
+
   this.init();
 }
 
@@ -1491,7 +1500,18 @@ Context.prototype = {
       else {
           return e + 'Z'; //Z: ISO 8601 UTC Timezone
       }
-  },  
+  },
+  setCurrentModalView: function(view){
+    this.currentModalView = view;
+  },
+  clearModal: function(){
+    if (this.currentModalView){
+      //Using a backbone modal
+      this.currentModalView.destroy();
+      //hard rendered into an element
+      this.currentModalView = null; 
+    }
+  },
   /**
    * Executor of lazy code
    * ex :

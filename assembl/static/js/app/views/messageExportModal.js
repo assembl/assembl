@@ -20,6 +20,8 @@ var Modal = Backbone.Modal.extend({
       this.formType = undefined; 
       this.currentView = undefined;
 
+      Ctx.setCurrentModalView(this);
+
       var that = this;
       this.exportedMessage.getCreatorPromise().then(function(user) {
         that.messageCreator = user;
@@ -37,10 +39,9 @@ var Modal = Backbone.Modal.extend({
         }
       }
     },
-  loadFbView: function(token) {
+  loadFbView: function() {
       var fbView = new FacebookViews.init({
         exportedMessage: this.exportedMessage,
-        token: token,
         model: new Source.Model.FacebookSinglePostSource()
       });
 
@@ -68,7 +69,6 @@ var Modal = Backbone.Modal.extend({
         default:
           this.$('.js_source-specific-form').empty();
           this.$('.js_export_error_message').empty();
-          this.currentView = null;
           break;
       }
     }

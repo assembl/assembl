@@ -67,23 +67,13 @@ var MailingListSource = IMAPMailboxSource.extend({
 });
 
 var FacebookSource = Source.extend({
-  localizedName: i18n.gettext("IMAP mailbox"),
+  //An Abstract Class. Use children only!
   defaults: function() {
     return _.extend(Source.prototype.defaults, {
       'fb_source_id': null,
       'url_path': null,
       'lower_bound': null,
       'upper_bound': null,
-      'creator_id': Ctx.getCurrentUserId()
-    });
-  }
-});
-
-var FacebookSource = Source.extend({
-  defaults: function() {
-    return _.extend(Source.prototype.defaults, {
-      'fb_source_id': null,
-      'url_path': null,
       'creator_id': Ctx.getCurrentUserId()
     });
   }
@@ -126,7 +116,7 @@ var FacebookPagePostsSource = FacebookSource.extend({
 });
 
 var FacebookPageFeedSource = FacebookSource.extend({
-  localizedName: i18n.gettext("Events from a Facebook page to which you're subscribed"),
+  localizedName: i18n.gettext("Posts from users on a Facebook page to which you're subscribed"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
       '@type': Types.FACEBOOK_PAGE_FEED_SOURCE
@@ -169,16 +159,6 @@ function getSourceClassByType(type) {
 
 var sourceCollection = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl() + 'sources',
-
-  // model: Source,
-  // supportedSources: {
-  //   //Note:  All these constants should be in utils/types.js, not here as strings
-  //   Base: ['ContentSource', 'PostSource'],
-  //   Email: ['AbstractMailbox', 'IMAPMailbox', 'MailingList', 'AbstractFilesystemMailbox', 'MaildirMailbox'],
-  //   Loomio: ['FeedPostSource', 'LoomioPostSource'], 
-  //   EdgeRyder: ['EdgeSenseDrupalSource'],
-  //   Facebook: ['FacebookGenericSource', 'FacebookGroupSource', 'FacebookGroupSourceFromUser', 'FacebookPagePostsSource', 'FacebookPageFeedSource', 'FacebookSinglePostSource']
-  // },
 
   model: function(attrs, options) {
     var sourceClass = getSourceClassByType(attrs["@type"]);

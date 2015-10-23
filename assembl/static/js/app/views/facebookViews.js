@@ -3,6 +3,7 @@
 var Marionette = require('../shims/marionette.js'),
     Backbone = require('../shims/backbone.js'),
     _ = require('../shims/underscore.js'),
+    Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     $ = require('../shims/jquery.js'),
     Types = require('../utils/types.js'),
@@ -311,7 +312,7 @@ var _processLogin = function(resp, success, error) {
         //global token singleton
 
         var token = tokens.getUserToken();
-        //console.log('Currently existing user token', token);
+        console.log('Currently existing user token', token);
         token.save({
           token: resp.authResponse.accessToken,
           expiration: _convertTimeToISO8601(resp.authResponse.expiresIn)
@@ -526,9 +527,8 @@ var errorView = Marionette.ItemView.extend({
       });
     }
     else {
-      console.log('I will make an account');
-      //this.vent.trigger('closeModal');
       Backbone.history.navigate('user/account', {trigger: true});
+      Ctx.clearModal();
     }
   }
 });
@@ -701,7 +701,7 @@ var exportPostForm = Marionette.LayoutView.extend({
     'click .fb-js_test_area': 'test'
   },
   initialize: function(options) {
-    this.token = options.token;
+    // this.token = options.token;
     this.exportedMessage = options.exportedMessage;
     this.vent = options.vent; //Event Aggregator
     this.bundle = {
@@ -733,7 +733,7 @@ var exportPostForm = Marionette.LayoutView.extend({
     }
   },
   test: function(e) {
-    console.log('User will never see this. Only for developers only!');
+    console.log('User will never see this. For developers only!');
   },
   defineView: function(event) {
     var value = this.$(event.currentTarget)
@@ -805,11 +805,12 @@ var exportPostForm = Marionette.LayoutView.extend({
     this.exportedMessage.getCreatorPromise().then(function(messageCreator) {
       var args = {
           access_token: that.bundle.credentials,
-          message: _composeMessageBody(options.exportedMessage, messageCreator),
+          message: _composeMessageBody(that.exportedMessage, messageCreator),
           link: window.location.href,
 
           //picture : 'http://' + window.location.host +"/" + Ctx.getApiV2DiscussionUrl() + "/mindmap",
-          picture: 'http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg', //Such a shit hack
+          // picture: 'http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg', //Such a shit hack
+          picture: 'http://' + window.location.host + '/static/css/themes/default/img/crowd2.jpg',
           name: getName(),
           caption: getCaption(),
           description: getDescription()
@@ -1060,6 +1061,8 @@ var basefbView = Marionette.LayoutView.extend({
               break;
             default:
               console.error("unknown type " + that.model.get('@type'));
+              var err = i18n.gettext("There was an error with loading the type" + that.model.get('@type'))
+              $('.js_export_error_message').text(er);
           }
           if (viewClass) {
             fbView = new viewClass({
@@ -1108,7 +1111,7 @@ var basefbView = Marionette.LayoutView.extend({
       var that = this;
       console.log('currentView', this.currentView);
       this.fbView.saveModel(function() {
-        //that.destroy();
+        Ctx.clearModal();
       }, function(msg) {
         that.$('.js_export_error_message').text(msg);
       });
