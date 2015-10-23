@@ -30,7 +30,7 @@ from .auth import (
     IdentityProviderAccount,
 )
 
-from ..auth import (CrudPermissions, P_EXPORT, P_SYSADMIN)
+from ..auth import (CrudPermissions, P_EXPORT_EXTERNAL_SOURCE, P_SYSADMIN)
 from ..lib.config import get_config
 from ..lib.sqla import Base
 from ..lib.parsedatetime import parse_datetime
@@ -1307,8 +1307,8 @@ class FacebookAccessToken(Base):
         return query.join(cls.user).\
             filter(FacebookAccount.profile_id == user_id)
 
-    crud_permissions = CrudPermissions(P_EXPORT, P_SYSADMIN,
-                                       read_owned=P_EXPORT)
+    crud_permissions = CrudPermissions(P_EXPORT_EXTERNAL_SOURCE, P_SYSADMIN,
+                                       read_owned=P_EXPORT_EXTERNAL_SOURCE)
 
 
 class FacebookPost(ImportedPost):

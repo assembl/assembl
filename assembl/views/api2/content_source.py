@@ -4,7 +4,11 @@ from pyramid.httpexceptions import (
     HTTPUnauthorized, HTTPError, HTTPBadRequest)
 from dateutil.parser import parse
 
-from assembl.auth import (P_READ, P_ADMIN_DISC, P_EXPORT, Everyone)
+from assembl.auth import (
+    P_READ,
+    P_ADMIN_DISC,
+    P_EXPORT_EXTERNAL_SOURCE,
+    Everyone)
 from assembl.models import ContentSource
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext
@@ -56,7 +60,8 @@ def fetch_posts(request):
 
 @view_config(context=InstanceContext, request_method='POST',
              ctx_instance_class=ContentSource, name='export_post',
-             permission=P_EXPORT, header=JSON_HEADER, renderer='json')
+             permission=P_EXPORT_EXTERNAL_SOURCE, header=JSON_HEADER,
+             renderer='json')
 def export_post(request):
     # Populate the assocation table
     # MUST pass in a JSON in the form of:

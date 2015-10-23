@@ -17,7 +17,7 @@ var Permissions = {
   ADMIN_DISCUSSION: "admin_discussion",
   SYSADMIN: "sysadmin",
   MODERATE_POST: "moderate_post",
-  EXPORT_POST: "export_post"
+  EXPORT_EXTERNAL_SOURCE: "export_post"
 };
 
 module.exports = Permissions;
