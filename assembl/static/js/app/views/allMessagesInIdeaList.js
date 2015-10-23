@@ -19,7 +19,7 @@ var AllMessagesInIdeaListView = IdeaView.extend({
     var data = this.model.toJSON();
 
     this.$el.addClass('idealist-item');
-    if (this.model.get('num_posts') == 0) {
+    if (false && this.model.get('num_posts') == 0) { // why hiding it? it becomes impossible to post outside of an idea, at the beginning of a debate
       this.$el.addClass('hidden');
     }
     else {
