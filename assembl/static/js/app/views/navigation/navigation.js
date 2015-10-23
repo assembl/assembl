@@ -94,8 +94,21 @@ var NavigationView = AssemblPanel.extend({
           Assembl.vent.trigger("requestTour", "synthesis");
         }
       }
+
+      // Every time a new message arrives, check whether we now have a synthesis among all messages and show "Synthesis" navigation tab
+
+      var messageArrivedCallback = _.bind(function() {
+        console.log("navigation::onAttach::messageArrivedCallback()")
+        if ( this.getLastSynthesisPost() ){
+          console.log("we now have a synthesis, show synthesis tab");
+          that.ui.synthesis_tab.show();
+        }
+      }, allMessageStructureCollection);
+
+      that.listenTo(allMessageStructureCollection, 'add', messageArrivedCallback);
+
     }).delay(500).then(function() {that.setSideBarHeight();});
-    },
+  },
 
   onDestroy:function() {
     $(window).off('resize', this.setSideBarHeight);

@@ -84,8 +84,15 @@ var SynthesisInNavigationPanel = AssemblPanel.extend({
     messageListView.toggleFilterByPostId(messageId);
     messageListView.showMessageById(messageId, undefined, false);
 
-    messageListView.ui.stickyBar.addClass('hidden');
-    messageListView.ui.replyBox.addClass('hidden');
+    setTimeout(function(){
+      if ( messageListView.ui.stickyBar ){
+        messageListView.ui.stickyBar.addClass('hidden');
+      }
+      if ( messageListView.ui.replyBox ){
+        messageListView.ui.replyBox.addClass('hidden');
+      }
+    }, 1);
+    
 
     // Show that entry is selected
     this.selectSynthesisInMenu(messageId);
