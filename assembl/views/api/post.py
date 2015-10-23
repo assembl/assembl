@@ -471,10 +471,8 @@ def create_post(request):
         )
         discussion.db.add(idea_post_link)
     for source in discussion.sources:
-        try:
+        if 'send_post' in dir(source):
             source.send_post(new_post)
-        except AttributeError:
-            pass
     permissions = get_permissions(user_id, discussion_id)
 
     return new_post.generic_json('default', user_id, permissions)
