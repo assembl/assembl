@@ -265,7 +265,7 @@ class Discussion(DiscussionBoundBase):
     def get_user_permissions_preload(self, user_id):
         return json.dumps(self.get_user_permissions(user_id))
 
-    def get_base_url(self):
+    def get_base_url(self, require_secure=None):
         """Get the base URL of this server
 
         Tied to discussion so that we can support virtual hosts or
@@ -274,7 +274,7 @@ class Discussion(DiscussionBoundBase):
         notifications)
         Temporarily equivalent to get_global_base_url
         """
-        return get_global_base_url()
+        return get_global_base_url(require_secure)
 
     def check_authorized_email(self, user):
         # Check if the user has a verified email from a required domain
