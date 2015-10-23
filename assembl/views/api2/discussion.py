@@ -500,7 +500,7 @@ def show_optics_cluster(request):
         from random import Random
         scrambler = Random()
         scrambler.seed(
-            get_config().get('session.key') + test_code + discussion.slug)
+            get_config().get('session.secret') + test_code + discussion.slug)
     discussion = request.context._instance
     output = StringIO()
     from assembl.nlp.clusters import as_html_optics
