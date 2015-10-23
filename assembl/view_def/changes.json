@@ -90,11 +90,11 @@
         "subject": true,
         "like_count": true,
         "body": true,
-        "attachments": [":default"],
         "extracts": [":id_only"]
     },
     "Post": {
         "@extends": "Content",
+        "attachments": [":default"],
         "publication_state": true,
         "moderation_text": true,
         "message_id": false,
