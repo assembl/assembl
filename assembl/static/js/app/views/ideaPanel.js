@@ -28,7 +28,7 @@ var IdeaPanel = AssemblPanel.extend({
   minimizeable: true,
   closeable: false,
   gridSize: AssemblPanel.prototype.IDEA_PANEL_GRID_SIZE,
-  minWidth: 270,
+  minWidth: 295,
   regions: {
     segmentList: ".postitlist",
     contributors: ".contributors",

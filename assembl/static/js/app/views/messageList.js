@@ -46,7 +46,7 @@ var MessageList = AssemblPanel.extend({
   className: 'panel messageList',
   lockable: true,
   gridSize: AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE,
-  minWidth: 400, // basic, may receive idea offset.
+  minWidth: 450, // basic, may receive idea offset.
   debugPaging: false,
   debugScrollLogging: false,
   _renderId: 0,
