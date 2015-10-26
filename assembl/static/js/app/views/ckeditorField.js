@@ -164,7 +164,7 @@ var cKEditorField = Marionette.ItemView.extend({
 
     var text = this.ckInstance.getData();
     text = $.trim(text);
-    if (Ctx.stripHtml(text) != Ctx.stripHtml(this.placeholder) || Ctx.stripHtml(text) == '') {
+    if (text != $.trim(this.placeholder) || Ctx.stripHtml(text) == '') {
       /* We never save placeholder values to the model */
       if (this.model.get(this.modelProp) != text) {
         /* Nor save to the database and fire change events
