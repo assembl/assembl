@@ -1117,7 +1117,8 @@ The ${assembl} Team""")
 
 
 def send_change_password_email(
-        request, profile, email=None):
+        request, profile, email=None, subject=None,
+        text_body=None, html_body=None):
     mailer = get_mailer(request)
     localizer = request.localizer
     data = dict(
@@ -1125,13 +1126,17 @@ def send_change_password_email(
         confirm_url=maybe_contextual_route(
             request, 'do_password_change',
             ticket=password_token(profile)))
-    message = Message(
-        subject=localizer.translate(
-            _("Request for password change"), mapping=data),
-        sender=config.get('assembl.admin_email'),
-        recipients=["%s <%s>" % (
-            profile.name, email or profile.get_preferred_email())],
-        body=localizer.translate(_(u"""Hello, ${name}!
+    subject = subject or localizer.translate(
+        _("Request for password change"), mapping=data)
+    if text_body is None or html_body is not None:
+        # if text_body and no html_body, html_body remains None.
+        html_body = html_body or localizer.translate(_(u"""<p>Hello, ${name}!</p>
+<p>We have received a request to change the password on your ${assembl} account.
+Please <a href="${confirm_url}">click here to confirm your password change</a>.</p>
+<p>If you did not ask to reset your password please disregard this email.</p>
+<p>Best regards,<br />The ${assembl} Team</p>
+"""), mapping=data)
+    text_body = text_body or localizer.translate(_(u"""Hello, ${name}!
 We have received a request to change the password on your ${assembl} account.
 To confirm your password change please click on the link below.
 <${confirm_url}>
@@ -1140,13 +1145,13 @@ If you did not ask to reset your password please disregard this email.
 
 Best regards,
 The ${assembl} Team
-"""), mapping=data),
-        html=localizer.translate(_(u"""<p>Hello, ${name}!</p>
-<p>We have received a request to change the password on your ${assembl} account.
-Please <a href="${confirm_url}">click here to confirm your password change</a>.</p>
-<p>If you did not ask to reset your password please disregard this email.</p>
-<p>Best regards,<br />The ${assembl} Team</p>
-"""), mapping=data))
+"""), mapping=data)
+    message = Message(
+        subject=subject,
+        sender=config.get('assembl.admin_email'),
+        recipients=["%s <%s>" % (
+            profile.name, email or profile.get_preferred_email())],
+        body=text_body, html=html_body)
     # if deferred:
     #    mailer.send_to_queue(message)
     # else:
