@@ -203,6 +203,8 @@ class SourceReader(Thread):
 
         self.last_error_status = status
         self.source.db.rollback()
+        from assembl.models import ContentSource
+        self.source = ContentSource.get(self.source_id)
         self.source.connection_error = status.value
         self.source.error_description = str(reader_error)
         if status > ReaderStatus.TRANSIENT_ERROR:
@@ -269,6 +271,7 @@ class SourceReader(Thread):
                 # Read in all cases
                 try:
                     self.read()
+                    self.source.db.commit()
                 except ReaderError as e:
                     self.new_error(e)
                     if self.status > ReaderStatus.TRANSIENT_ERROR:
