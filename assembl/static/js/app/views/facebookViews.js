@@ -1101,7 +1101,7 @@ var basefbView = Marionette.LayoutView.extend({
               break;
             default:
               console.error("unknown type " + that.model.get('@type'));
-              var err = i18n.gettext("There was an error with loading the type" + that.model.get('@type'))
+              var err = i18n.gettext("There was an error with creating a source of type" + that.model.get('@type'))
               $('.js_export_error_message').text(er);
           }
           if (viewClass) {
