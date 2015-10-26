@@ -5,6 +5,7 @@ from sqlalchemy import (
     String,
  )
 
+from ..lib.sqla_types import URLString
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
@@ -224,7 +225,7 @@ class FeedPostSource(PostSource):
                 ondelete='CASCADE',
                 onupdate='CASCADE'), primary_key=True)
 
-    url = Column(String(1024), nullable=False)
+    url = Column(URLString, nullable=False)
 
     # For parameter free calling to parse posts from this source.
     parser_full_class_name = Column(String(512), nullable=False)

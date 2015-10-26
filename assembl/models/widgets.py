@@ -13,6 +13,7 @@ import uuid
 from assembl.lib.parsedatetime import parse_datetime
 from ..auth import (
     CrudPermissions, P_ADD_IDEA, P_READ, P_EDIT_IDEA)
+from ..lib.sqla_types import URLString
 from . import DiscussionBoundBase
 from .discussion import Discussion
 from .idea import (Idea, IdeaLink)
@@ -228,7 +229,7 @@ class IdeaWidgetLink(DiscussionBoundBase):
     widget = relationship(Widget, backref=backref(
         'idea_links', cascade="all, delete-orphan"))
 
-    context_url = Column(String())
+    context_url = Column(URLString())
 
     __mapper_args__ = {
         'polymorphic_identity': 'abstract_idea_widget_link',

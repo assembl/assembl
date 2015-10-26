@@ -33,6 +33,7 @@ from .auth import (
 from ..auth import (CrudPermissions, P_EXPORT_EXTERNAL_SOURCE, P_SYSADMIN)
 from ..lib.config import get_config
 from ..lib.sqla import Base
+from ..lib.sqla_types import URLString
 from ..lib.parsedatetime import parse_datetime
 from ..tasks.source_reader import PullSourceReader, ReaderStatus
 from .generic import PostSource, ContentSourceIDs
@@ -449,7 +450,7 @@ class FacebookGenericSource(PostSource):
                 onupdate='CASCADE'), primary_key=True)
 
     fb_source_id = Column(String(512), nullable=False)
-    url_path = Column(String(1024))
+    url_path = Column(URLString)
     creator_id = Column(Integer, ForeignKey('facebook_account.id',
                         onupdate='CASCADE', ondelete='CASCADE'))
     creator = relationship('FacebookAccount',

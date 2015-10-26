@@ -16,6 +16,7 @@ from virtuoso.alchemy import CoerceUnicode
 from sqlalchemy.orm import relationship, backref
 
 from datetime import datetime
+from ..lib.sqla_types import URLString
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
@@ -39,7 +40,7 @@ class Document(DiscussionBoundBase):
     interpreted as a purl
     """
 
-    uri_id = Column(String(1024), unique=True, index=True)
+    uri_id = Column(URLString, unique=True, index=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
                            info={'rdf': QuadMapPatternS(None,
                                                         DCTERMS.created)})
@@ -73,12 +74,10 @@ class Document(DiscussionBoundBase):
         CoerceUnicode())
 
     # From metadata, not the user
-    author_url = Column(
-        String)
+    author_url = Column(URLString)
 
     # From metadata, not the user
-    thumbnail_url = Column(
-        String)
+    thumbnail_url = Column(URLString)
 
     # From metadata, not the user
     site_name = Column(

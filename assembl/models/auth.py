@@ -38,6 +38,7 @@ from ..lib import config
 from ..lib.utils import get_global_base_url
 from ..lib.sqla import (
     UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
+from ..lib.sqla_types import URLString
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
 from ..auth import *
 from ..semantic.namespaces import (
@@ -499,7 +500,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
     userid = Column(String(200), nullable = False)
     #    info={'rdf': QuadMapPatternS(None, SIOC.id)})
     profile_info = deferred(Column(Text()))
-    picture_url = Column(String(300))
+    picture_url = Column(URLString)
     profile_i = relationship(AgentProfile, backref='identity_accounts')
 
     def __init__(self, profile_info_json=None, **kwargs):
