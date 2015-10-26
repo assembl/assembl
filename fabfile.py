@@ -710,8 +710,13 @@ def configure_rbenv():
     with settings(warn_only=True):
         bundle_version = run('bundle --version')
     if(bundle_version.failed):
-        #install bundler
-        run('gem install bundler')
+        # install bundler
+        if env.mac:
+            # New bug in El Capitan:
+            # https://github.com/wpscanteam/wpscan/issues/875
+            sudo('gem install -n /usr/local/bin bundler')
+        else:
+            run('gem install bundler')
         run('rbenv rehash')
 
 
