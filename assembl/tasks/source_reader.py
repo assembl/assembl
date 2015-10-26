@@ -157,18 +157,21 @@ class SourceReader(Thread):
         self.last_read = datetime.utcnow()
         self.reset_errors()
         self.reimporting = False
+        self.source.db.commit()
+        self.source = ContentSource.get(self.source_id)
 
     def reset_errors(self):
+        from assembl.models import ContentSource
         self.error_count = 0
         self.last_error_status = None
         self.error_backoff_until = None
         self.source.connection_error = None
         self.source.error_description = None
         self.source.error_backoff_until = None
-        self.source.db.commit()
 
     def new_error(self, reader_error, status=None, expected=True):
         import traceback
+        from assembl.models import ContentSource
         log.error(traceback.format_exc())
         if raven_client and not expected:
             raven_client.captureException()
@@ -203,7 +206,6 @@ class SourceReader(Thread):
 
         self.last_error_status = status
         self.source.db.rollback()
-        from assembl.models import ContentSource
         self.source = ContentSource.get(self.source_id)
         self.source.connection_error = status.value
         self.source.error_description = str(reader_error)
@@ -213,6 +215,7 @@ class SourceReader(Thread):
         self.error_backoff_until = datetime.utcnow() + error_backoff
         self.source.error_backoff_until = self.error_backoff_until
         self.source.db.commit()
+        self.source = ContentSource.get(self.source_id)
 
     def is_in_error(self):
         return self.last_error_status is not None
@@ -247,6 +250,7 @@ class SourceReader(Thread):
         self.last_prod = datetime.utcnow()
 
     def run(self):
+        from assembl.models import ContentSource
         self.setup()
         while self.status not in (
                 ReaderStatus.SHUTDOWN, ReaderStatus.IRRECOVERABLE_ERROR):
@@ -271,7 +275,6 @@ class SourceReader(Thread):
                 # Read in all cases
                 try:
                     self.read()
-                    self.source.db.commit()
                 except ReaderError as e:
                     self.new_error(e)
                     if self.status > ReaderStatus.TRANSIENT_ERROR:
