@@ -45,8 +45,8 @@ def get_global_base_url(require_secure=None, override_port=None):
     port = str(override_port or config.get('public_port'))
     accept_secure_connection = asbool(
         config.get('accept_secure_connection'))
-    require_secure_connection = require_secure or asbool(
-        config.get('require_secure_connection'))
+    require_secure_connection = accept_secure_connection and (require_secure or asbool(
+        config.get('require_secure_connection')))
     service = 'http'
     portString = ''
     if accept_secure_connection or require_secure_connection:
