@@ -194,7 +194,8 @@
     },
 
     storeOptions: function () {
-      var uri = location.href.split(/#|\?/).shift();
+      // var uri = location.href.split(/#|\?/).shift();
+      var uri = location.href;
       return {
         prefix: this.config('store.prefix', 'http://annotateit.org/api'),
         annotationData: { 'uri': uri },
