@@ -71,12 +71,14 @@ var IdeaList = AssemblPanel.extend({
     var that = this,
         collectionManager = new CollectionManager();
 
-    var requestRender = setTimeout(function(){
-      if(!that.isViewDestroyed()) {
-        //console.log("Render from ideaList requestRender");
-        that.render();
-      }
-    }, 1);
+    var requestRender = function() {
+      setTimeout(function(){
+        if(!that.isViewDestroyed()) {
+          //console.log("Render from ideaList requestRender");
+          that.render();
+        }
+      }, 1);
+    };
 
     Promise.join(collectionManager.getAllIdeasCollectionPromise(),
         collectionManager.getAllIdeaLinksCollectionPromise(),
@@ -422,11 +424,14 @@ var IdeaList = AssemblPanel.extend({
 
     collectionManager.getAllIdeasCollectionPromise()
             .then(function(allIdeasCollection) {
+              var order;
               if (allIdeasCollection.get(currentIdea)) {
-                newIdea.set('order', currentIdea.getOrderForNewChild());
+                order = currentIdea.getOrderForNewChild();
+                newIdea.set('order', order);
                 currentIdea.addChild(newIdea);
               } else {
-                newIdea.set('order', allIdeasCollection.getOrderForNewRootIdea());
+                order = allIdeasCollection.getOrderForNewRootIdea();
+                newIdea.set('order', order);
                 allIdeasCollection.add(newIdea);
 
                 newIdea.save(null, {
