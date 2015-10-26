@@ -34,7 +34,8 @@ var _composeMessageBody = function(model, creator) {
   msg += model.get('body');
   msg += "\n\n\n"
 
-  msg += i18n.gettext("** Please be aware that comments below will be imported into an Assembl discussion **");
+  var link = Ctx.getPostURL(model.get('@id'), {'source': 'share'}); //This SHOULD be shortened using bit.ly
+  msg += i18n.gettext("** Please be aware that comments below will be imported into an Assembl discussion found at " + link + " **");
   return msg;
 };
 
@@ -733,7 +734,24 @@ var exportPostForm = Marionette.LayoutView.extend({
     }
   },
   test: function(e) {
-    console.log('User will never see this. For developers only!');
+
+    var _removeNullArgs = function(args){
+      return _.chain(args)
+                .invert()
+                .omit('null')
+                .invert()
+                .value()
+    };
+    
+    var a = _removeNullArgs({'a': 'b', 'c': null}),
+        b = _removeNullArgs({
+          'a': 'b',
+          'b': null,
+          'c': null
+        });
+
+    console.log('object a', a);
+    console.log('object b', b);
   },
   defineView: function(event) {
     var value = this.$(event.currentTarget)
@@ -775,10 +793,20 @@ var exportPostForm = Marionette.LayoutView.extend({
   saveModel: function(success, error) {
     var that = this,
         errorMsg = i18n.gettext("Facebook was unable to create the post. Close the box and try again.");
+    var getLink = function() {
+      var tmp = $('.js_fb-attachment-link').val();
+      if (!tmp){
+        return null;
+      }
+
+      return tmp;
+    }
+
     var getName = function() {
       var tmp = $('.js_fb-suggested-name').val();
       if (!tmp) {
-        return that.topic;
+        // return that.topic;
+        return null;
       }
 
       return tmp;
@@ -786,7 +814,8 @@ var exportPostForm = Marionette.LayoutView.extend({
     var getCaption = function() {
       var tmp = $('.js_fb-suggested-caption').val();
       if (!tmp) {
-        return window.location.href;
+        // return window.location.href;
+        return null;
       }
 
       return tmp;
@@ -794,10 +823,19 @@ var exportPostForm = Marionette.LayoutView.extend({
     var getDescription = function() {
       var tmp = $('.js_fb-suggested-description').val();
       if (!tmp) {
-        return that.desc;
+        // return that.desc;
+        return null;
       }
 
       return tmp;
+    };
+
+    var _removeNullArgs = function(args){
+      return _.chain(args)
+                .invert()
+                .omit('null')
+                .invert()
+                .value()
     };
 
     var endpoint = this.bundle.endpoint;
@@ -806,15 +844,17 @@ var exportPostForm = Marionette.LayoutView.extend({
       var args = {
           access_token: that.bundle.credentials,
           message: _composeMessageBody(that.exportedMessage, messageCreator),
-          link: window.location.href,
 
           //picture : 'http://' + window.location.host +"/" + Ctx.getApiV2DiscussionUrl() + "/mindmap",
           // picture: 'http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg', //Such a shit hack
-          picture: 'http://' + window.location.host + '/static/css/themes/default/img/crowd2.jpg',
+          // picture: 'http://' + window.location.host + '/static/css/themes/default/img/crowd2.jpg',
+          link: getLink(),
           name: getName(),
           caption: getCaption(),
           description: getDescription()
       };
+
+      args = _removeNullArgs(args);
 
       if (!endpoint) {
         var er = i18n.gettext('Please select between pages, groups or your wall as the final destination to complete the form.');
