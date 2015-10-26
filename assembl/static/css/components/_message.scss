@@ -538,6 +538,10 @@ $previewNumLines: 4;
       .dropdown-menu {
         right: -20px; //Use the size always available on the right defined above
         left: auto;
+        min-width: 400px;  //About the min size of the message panel - margin
+        li > a {
+          white-space: normal;  //Override default style so long text will wrap
+        }
       }
       i.icon-mail {
         font-size: 12px; /* icon-mail needs to have a smaller font size (than original 16px) because the icon is big in the font */
@@ -545,6 +549,7 @@ $previewNumLines: 4;
       a:link, a:visited {
         color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
         text-decoration: inherit;
+        overflow: scroll;
       }
       > a:link, > a:visited {
         color: $txtGray1;
