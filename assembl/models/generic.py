@@ -100,6 +100,12 @@ class ContentSource(DiscussionBoundBase):
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
 
+    @property
+    def connection_error_as_text(self):
+        from ..tasks.source_reader import ReaderStatus
+        return (ReaderStatus(self.connection_error).name
+                if self.connection_error else None)
+
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
