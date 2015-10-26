@@ -147,7 +147,7 @@ class SourceReader(Thread):
             self.__class__.__name__, self.source_id, self.status.name,
             status.name))
         self.status = status
-        self.source.read_status = status
+        self.source.read_status = status.value
 
     def successful_login(self):
         self.last_successful_login = datetime.utcnow()
@@ -165,6 +165,7 @@ class SourceReader(Thread):
         self.source.connection_error = None
         self.source.error_description = None
         self.source.error_backoff_until = None
+        self.source.db.commit()
 
     def new_error(self, reader_error, status=None, expected=True):
         import traceback
@@ -201,13 +202,15 @@ class SourceReader(Thread):
         error_backoff *= 2 ** (self.error_count - 1)
 
         self.last_error_status = status
-        self.source.connection_error = status
+        self.source.db.rollback()
+        self.source.connection_error = status.value
         self.source.error_description = str(reader_error)
         if status > ReaderStatus.TRANSIENT_ERROR:
             self.set_status(status)
             self.reimporting = False
         self.error_backoff_until = datetime.utcnow() + error_backoff
         self.source.error_backoff_until = self.error_backoff_until
+        self.source.db.commit()
 
     def is_in_error(self):
         return self.last_error_status is not None
@@ -362,7 +365,9 @@ class SourceReader(Thread):
     def setup(self):
         from assembl.models import ContentSource
         self.source = ContentSource.get(self.source_id)
-        connection_error = self.source.connection_error
+        connection_error = (
+            ReaderStatus(self.source.connection_error)
+            if self.source.connection_error else None)
         self.error_backoff_until = self.source.error_backoff_until
         if connection_error:
             self.status = connection_error
