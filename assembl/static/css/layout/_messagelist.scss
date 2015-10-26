@@ -166,7 +166,7 @@
     @include box-sizing(border-box);
     background-color: rgba($white, 0.65);
     position: absolute;
-    bottom: 0px;
+    bottom: 10px; //Leave some space for the horizontal scrollbar
     width: 100%;
     left: 0;
     line-height: 37px;
