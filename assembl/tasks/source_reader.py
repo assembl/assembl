@@ -155,6 +155,7 @@ class SourceReader(Thread):
         self.status = ReaderStatus.READING
 
     def successful_read(self):
+        from assembl.models import ContentSource
         self.last_read = datetime.utcnow()
         self.reset_errors()
         self.reimporting = False
@@ -162,7 +163,6 @@ class SourceReader(Thread):
         self.source = ContentSource.get(self.source_id)
 
     def reset_errors(self):
-        from assembl.models import ContentSource
         self.error_count = 0
         self.last_error_status = None
         self.error_backoff_until = None
@@ -251,7 +251,6 @@ class SourceReader(Thread):
         self.last_prod = datetime.utcnow()
 
     def run(self):
-        from assembl.models import ContentSource
         self.setup()
         while self.status not in (
                 ReaderStatus.SHUTDOWN, ReaderStatus.IRRECOVERABLE_ERROR):
@@ -470,9 +469,9 @@ class SourceDispatcher(ConsumerMixin):
         message.ack()
 
     def read(self, source_id, reimport=False, force_restart=False, **kwargs):
+        from assembl.models import ContentSource
         if not (self.readers.get(source_id, None)
                 and self.readers[source_id].is_connected()):
-            from assembl.models import ContentSource
             source = ContentSource.get(source_id)
             if not source:
                 return False
