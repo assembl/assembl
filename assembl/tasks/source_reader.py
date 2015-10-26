@@ -243,7 +243,8 @@ class SourceReader(Thread):
 
     def run(self):
         self.setup()
-        while self.status != ReaderStatus.SHUTDOWN:
+        while self.status not in (
+                ReaderStatus.SHUTDOWN, ReaderStatus.IRRECOVERABLE_ERROR):
             if self.error_backoff_until:
                 interval = (self.error_backoff_until - datetime.utcnow()).total_seconds()
                 if interval > 0:
