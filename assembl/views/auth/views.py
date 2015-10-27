@@ -540,8 +540,8 @@ def velruse_login_complete_view(request):
             idp_account.profile_info_json = velruse_profile
         if len(idp_accounts) > 1:
             log.warn("multiple idp_accounts:" +
-                     ','.join((a.id for a in idp_accounts)) +
-                     " for " + velruse_accounts)
+                     ','.join((str(a.id) for a in idp_accounts)) +
+                     " for " + str(velruse_accounts))
             # We will just the last one from the loop for now.
         trusted_emails.update([
             a.email for a in idp_accounts
