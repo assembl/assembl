@@ -217,7 +217,7 @@ var TourManager = Marionette.Object.extend({
             tour.numErrors += 1;
           }
           if (tour.numErrors > 1) {
-            console.error("Tour was not seen:", tour);
+            console.error("Tour was not seen:", tour.name);
             that.currentTour = that.getNextTour(true);
           }
           if (that.currentTour !== undefined) {
