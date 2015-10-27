@@ -867,6 +867,8 @@ class FacebookGenericSource(PostSource):
             # self._create_attachments(post, assembl_post, reimport,
             #                          self.parser.get_post_attachments)
             self.db.commit()
+            # Refresh the instance
+            self.db.query(self.__class__).populate_existing().get(self.id)
             return assembl_post, cont
 
         else:
@@ -883,6 +885,9 @@ class FacebookGenericSource(PostSource):
             # self._create_fb_user(usr, users_db)
             self._manage_user(user, users_db, reimport)
         self.db.commit()
+        # Refresh the instance
+        self.db.query(self.__class__).populate_existing().get(self.id)
+
 
         cmt_creator_agent = users_db.get(user_id)
         # cmt_result = self._create_post(comment, cmt_creator_agent, posts_db)
@@ -900,6 +905,8 @@ class FacebookGenericSource(PostSource):
         self._create_or_update_attachment(comment, comment_post, reimport,
                                           self.parser.get_comment_attachments)
         self.db.commit()
+        # Refresh the instance
+        self.db.query(self.__class__).populate_existing().get(self.id)
         return comment_post
 
     def _manage_comment_subcomments(self, comment, parent_post,
@@ -1038,6 +1045,8 @@ class FacebookGenericSource(PostSource):
             user.update_fields(user_data)
 
         self.db.commit()  # Would this flush the changes?
+        # Refresh the instance
+        self.db.query(self.__class__).populate_existing().get(self.id)
 
     def content_sink(self):
         # Could use the backref? @TODO: Ask MAP about this
