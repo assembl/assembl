@@ -505,6 +505,13 @@ def velruse_login_complete_view(request):
         logged_in = User.get(logged_in)
     base_profile = logged_in
     provider = get_identity_provider(request)
+    idp_class = IdentityProviderAccount
+    for cls in idp_class.get_subclasses():
+        if cls == idp_class:
+            continue
+        if cls.account_provider_name == provider.name:
+            idp_class = cls
+            break
     # find or create IDP_Accounts
     idp_accounts = []
     new_idp_account = None
@@ -514,21 +521,19 @@ def velruse_login_complete_view(request):
     session.autoflush = False
     # Search for this social account
     for velruse_account in velruse_accounts:
-        if 'userid' in velruse_account:
-            idp_accounts.extend(session.query(
-                IdentityProviderAccount).filter_by(
-                    provider=provider,
-                    domain=velruse_account['domain'],
-                    userid=velruse_account['userid']).all())
-        elif 'username' in velruse_account:
-            idp_accounts.extend(session.query(
-                IdentityProviderAccount).filter_by(
-                    provider=provider,
-                    domain=velruse_account['domain'],
-                    username=velruse_account['username']).all())
-        else:
-            log.error("account needs username or email" + velruse_account)
-            raise HTTPServerError("account needs username or userid")
+        velruse_account = {
+            "userid": velruse_account.get("userid", None),
+            "username": velruse_account.get("username", None),
+            "domain": velruse_account.get("domain", None),
+            "verifiedEmail": velruse_profile.get("verifiedEmail", None),
+            "emails": velruse_profile.get("emails", ())
+        }
+        try:
+            idp_accounts.extend(idp_class.find_accounts(
+                provider, velruse_account))
+        except RuntimeError as e:
+            log.error("incomplete account " + str(velruse_account))
+            raise HTTPServerError(str(e))
     trusted_emails = set()
     if idp_accounts:
         for idp_account in idp_accounts:
@@ -543,13 +548,6 @@ def velruse_login_complete_view(request):
             if a.provider.trust_emails and a.email])
     else:
         # Create it if not found
-        idp_class = IdentityProviderAccount
-        for cls in idp_class.get_subclasses():
-            if cls == idp_class:
-                continue
-            if cls.account_provider_name == provider.name:
-                idp_class = cls
-                break
         idp_account = idp_class(
             provider=provider,
             profile_info_json=velruse_profile,

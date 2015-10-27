@@ -50,6 +50,7 @@ known_transitions = {
         ReaderStatus.TRANSIENT_ERROR,
         ReaderStatus.WAIT_FOR_PUSH,
         ReaderStatus.CLOSED,
+        ReaderStatus.SHUTDOWN,  # Should this not go to closed first?
     },
     ReaderStatus.PAUSED: {
         ReaderStatus.CLOSED,

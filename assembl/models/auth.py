@@ -152,8 +152,16 @@ class AgentProfile(Base):
         for other_account in other_profile.accounts[:]:
             my_account = my_accounts.get(other_account.signature())
             if my_account:
-                my_account.merge(other_account)
-                session.delete(other_account)
+                # if chrono order of accounts corresponds to merge priority
+                if my_account.prefer_newest_info_on_merge == (
+                        my_account.id > other_account.id):
+                    # prefer info from my_account
+                    my_account.merge(other_account)
+                    session.delete(other_account)
+                else:
+                    other_account.merge(my_account)
+                    other_account.profile = self
+                    session.delete(my_account)
             else:
                 other_account.profile = self
         if other_profile.name and not self.name:
@@ -173,25 +181,23 @@ class AgentProfile(Base):
             s.discussion_id: s for s in self.agent_status_in_discussion
         }
 
-        old_autoflush = session.autoflush
-        session.autoflush = False
-        for status in other_profile.agent_status_in_discussion[:]:
-            if status.discussion_id in my_status_by_discussion:
-                my_status = my_status_by_discussion[status.discussion_id]
-                my_status.user_created_on_this_discussion |= status.\
-                    user_created_on_this_discussion
-                my_status.first_visit = minN(my_status.first_visit,
-                                             status.first_visit)
-                my_status.last_visit = maxN(my_status.last_visit,
-                                            status.last_visit)
-                my_status.first_subscribed = minN(my_status.first_subscribed,
-                                                  status.first_subscribed)
-                my_status.last_unsubscribed = minN(my_status.last_unsubscribed,
-                                                   status.last_unsubscribed)
-                status.delete()
-            else:
-                status.agent_profile = self
-        session.autoflush = old_autoflush
+        with self.db.no_autoflush:
+            for status in other_profile.agent_status_in_discussion[:]:
+                if status.discussion_id in my_status_by_discussion:
+                    my_status = my_status_by_discussion[status.discussion_id]
+                    my_status.user_created_on_this_discussion |= status.\
+                        user_created_on_this_discussion
+                    my_status.first_visit = minN(my_status.first_visit,
+                                                 status.first_visit)
+                    my_status.last_visit = maxN(my_status.last_visit,
+                                                status.last_visit)
+                    my_status.first_subscribed = minN(
+                        my_status.first_subscribed, status.first_subscribed)
+                    my_status.last_unsubscribed = minN(
+                        my_status.last_unsubscribed, status.last_unsubscribed)
+                    status.delete()
+                else:
+                    status.agent_profile = self
 
 
     def has_permission(self, verb, subject):
@@ -326,6 +332,7 @@ class AbstractAgentAccount(Base):
     __tablename__ = "abstract_agent_account"
     rdf_class = SIOC.UserAccount
     rdf_sections = (PRIVATE_USER_SECTION,)
+    prefer_newest_info_on_merge = True
 
     id = Column(Integer, primary_key=True)
 
@@ -522,6 +529,12 @@ class IdentityProviderAccount(AbstractAgentAccount):
         if email and email != self.email:
             self.email = email
             self.verified = self.provider.trust_emails
+        if not self.email:
+            for email in profile.get('emails', ()):
+                self.verified = False
+                self.email = email.get('value', None)
+                if email.get('primary', False):
+                    break
 
     def display_name(self):
         # TODO: format according to provider, ie @ for twitter.
@@ -595,6 +608,22 @@ class IdentityProviderAccount(AbstractAgentAccount):
         return query.filter_by(
             type=self.type, provider_id=self.provider_id,
             username=self.username), True
+
+    @classmethod
+    def find_accounts(cls, provider, velruse_account):
+        if 'userid' in velruse_account:
+            return provider.db.query(cls).filter_by(
+                provider=provider,
+                domain=velruse_account['domain'],
+                userid=velruse_account['userid']).all()
+        elif 'username' in velruse_account:
+            return provider.db.query(cls).filter_by(
+                provider=provider,
+                domain=velruse_account['domain'],
+                username=velruse_account['username']).all()
+        else:
+            log.error("account needs username or email" + velruse_account)
+            raise RuntimeError("account needs username or userid")
 
     @property
     def profile_info_json(self):
