@@ -887,6 +887,8 @@ class FacebookGenericSource(PostSource):
         self.db.commit()
         # Refresh the instance
         self.db.query(self.__class__).populate_existing().get(self.id)
+        self.db.query(parent_post.__class__).populate_existing(
+            ).get(parent_post.id)
 
 
         cmt_creator_agent = users_db.get(user_id)
