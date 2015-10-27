@@ -67,6 +67,12 @@ var MessageView = Marionette.LayoutView.extend({
   moderationTemplate: Ctx.loadTemplate('moderatedBody'),
 
   /**
+   * Show annotations (extracts and gems) in the message
+   * @type {Boolean}
+   */
+  showAnnotations: null,
+
+  /**
    * @init
    * @param {MessageModel} obj the model
    */
@@ -84,6 +90,7 @@ var MessageView = Marionette.LayoutView.extend({
     this.messageListView = options.messageListView;
     this.messageFamilyView = options.messageFamilyView;
     this.viewStyle = this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this);
+    this.showAnnotations = Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT); // TODO: this could be set from a user account preference, or from a toggle in the Messages panel
 
     if(!this.isViewDestroyed()) {
       //Yes, it IS possible the view is already destroyed in initialize, so we check
@@ -129,6 +136,7 @@ var MessageView = Marionette.LayoutView.extend({
       jumpToMessageInThreadButton: ".js_message-jump-to-message-in-thread",
       jumpToMessageInReverseChronologicalButton: ".js_message-jump-to-message-in-reverse-chronological",
       showAllMessagesByThisAuthorButton: ".js_message-show-all-by-this-author",
+      toggleExtracts: ".js_message-toggle-extracts",
       messageReplyBox: ".js_messageReplyBoxRegion",
       likedLink: ".js_likeButton",
       likeCounter: ".js_likeCount",
@@ -161,6 +169,7 @@ var MessageView = Marionette.LayoutView.extend({
     'click @ui.jumpToMessageInReverseChronologicalButton': 'onMessageJumpToMessageInReverseChronologicalClick',
     'click @ui.showAllMessagesByThisAuthorButton': 'onShowAllMessagesByThisAuthorClick',
     'click .js_showModeratedMessage': 'onShowModeratedMessageClick',
+    'click @ui.toggleExtracts' : 'onToggleExtractsClick',
 
     //
     'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
@@ -666,7 +675,7 @@ var MessageView = Marionette.LayoutView.extend({
   loadAnnotations: function() {
     var that = this;
 
-    if (this.annotator && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY)) {
+    if (this.annotator && this.showAnnotations && (this.viewStyle == this.availableMessageViewStyles.FULL_BODY)) {
       this.getAnnotationsToLoadPromise().done(function(annotationsToLoad) {
         if(!that.isViewDestroyed()) {
           // Loading the annotations
@@ -682,7 +691,6 @@ var MessageView = Marionette.LayoutView.extend({
             _.each(annotationsToLoad, function(annotation) {
               that.loadedAnnotations[annotation['@id']] = annotation;
             });
-
             setTimeout(function() {
               that.renderAnnotations(annotationsToLoad);
             }, 1);
@@ -931,6 +939,20 @@ var MessageView = Marionette.LayoutView.extend({
       this.messageListView.render();
       this.messageListView.showMessageById(this.model.id);
     },
+
+  onToggleExtractsClick: function(ev) {
+    if ( this.showAnnotations === true ){
+      this.showAnnotations = false;
+      if ( this.annotator && this.loadedAnnotations ){
+        for ( var annotation_id in this.loadedAnnotations ){
+          this.annotator.deleteAnnotation(this.loadedAnnotations[annotation_id]);
+        }
+      }
+    } else {
+      this.showAnnotations = true;
+      this.loadAnnotations();
+    }
+  },
 
   onMessageJumpToMessageInReverseChronologicalClick: function(ev) {
       this.messageListView.currentQuery.clearAllFilters();
