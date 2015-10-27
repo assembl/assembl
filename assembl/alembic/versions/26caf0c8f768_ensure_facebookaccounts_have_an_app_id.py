@@ -18,7 +18,7 @@ from assembl.lib import config
 def upgrade(pyramid_env):
     with context.begin_transaction():
         op.execute(
-            "update facebook_account set app_id='%d' where app_id is null" %
+            "update facebook_account set app_id='%s' where app_id is null" %
             (config.get("facebook.consumer_key"),))
 
 
