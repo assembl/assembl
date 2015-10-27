@@ -4,7 +4,7 @@
     FB.init({
       appId      : "{{ social_settings.fb_app_id }}",
       xfbml      : false,
-      version    : 'v2.2',
+      version    : 'v{{ social_settings.fb_api_version }}',
       status     : false
     });
   };

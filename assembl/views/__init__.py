@@ -136,6 +136,7 @@ def get_default_context(request):
         'fb_export_permissions': config.get('facebook.export_permissions'),
         'fb_debug': asbool(config.get('facebook.debug_mode')),
         'fb_app_id': config.get('facebook.consumer_key'),
+        'fb_api_version': config.get('facebook.api_version') or '2.2',
         'supported_exports': process_export_list(
             config.get('supported_exports_list'))
     }
