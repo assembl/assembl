@@ -83,6 +83,8 @@ known_transitions = {
         ReaderStatus.IRRECOVERABLE_ERROR,
         ReaderStatus.WAIT_FOR_PUSH,
     },
+    ReaderStatus.SHUTDOWN: {
+    },
 }
 
 disconnected_states = set((
