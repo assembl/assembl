@@ -49,6 +49,7 @@ known_transitions = {
         ReaderStatus.PAUSED,
         ReaderStatus.TRANSIENT_ERROR,
         ReaderStatus.WAIT_FOR_PUSH,
+        ReaderStatus.CLOSED,
     },
     ReaderStatus.PAUSED: {
         ReaderStatus.CLOSED,
@@ -79,6 +80,7 @@ known_transitions = {
         ReaderStatus.PAUSED,
         ReaderStatus.READING,
         ReaderStatus.TRANSIENT_ERROR,
+        ReaderStatus.IRRECOVERABLE_ERROR,
         ReaderStatus.WAIT_FOR_PUSH,
     },
 }
