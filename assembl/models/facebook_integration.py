@@ -1186,6 +1186,55 @@ class FacebookAccount(IdentityProviderAccount):
     def populate_picture(self, profile):
         self.picture_url = 'http://graph.facebook.com/%s/picture' % self.userid
 
+    def signature(self):
+        if self.email:
+            return ('facebook_account', self.app_id, self.email)
+        else:
+            return ('facebook_account', self.app_id, self.userid)
+
+    def unique_query(self):
+        query, _ = super(FacebookAccessToken, self).unique_query()
+        return query.filter_by(app_id=self.app_id), True
+
+    @classmethod
+    def find_accounts(cls, provider, velruse_account):
+        assert 'userid' in velruse_account
+        query = provider.db.query(cls).filter_by(
+                provider=provider,
+                domain=velruse_account['domain'],
+                userid=velruse_account['userid'])
+        email = velruse_account.get("verifiedEmail", None)
+        if email:
+            query = query.union(provider.db.query(cls).filter_by(
+                provider=provider,
+                domain=velruse_account['domain'],
+                email=email))
+        results = list(set(query.all()))
+        app_id = get_config().get('facebook.consumer_key', None)
+        for result in results[:]:
+            if result.app_id and result.app_id != app_id:
+                if email and result.email != email:
+                    # identical ID, different email.
+                    # Collision or change of email?
+                    client = get_raven_client()
+                    if client:
+                        client.captureMessage(
+                            "Facebook login with same user_id but diff app_id, email",
+                            data={"velruse_account": velruse_account,
+                                  "result_id": result.id})
+                    results.remove(result)
+            elif result.app_id == app_id:
+                if result.userid != velruse_account['userid']:
+                    # same email, different ID???
+                    client = get_raven_client()
+                    if client:
+                        client.captureMessage(
+                            "Facebook login with same app_id, email but diff user_id",
+                            data={"velruse_account": velruse_account,
+                                  "result_id": result.id})
+                    results.remove(result)
+        return results
+
     @classmethod
     def create(cls, user, provider, app_id=None, avatar_url=None):
         userid = user.get('id')
@@ -1321,55 +1370,6 @@ class FacebookAccessToken(Base):
     def convert_expiration_to_iso(self):
         # return the expiration date in ISO 8601 form
         return self.expiration.isoformat()
-
-    def signature(self):
-        if self.email:
-            return ('facebook_account', self.app_id, self.email)
-        else:
-            return ('facebook_account', self.app_id, self.userid)
-
-    def unique_query(self):
-        query, _ = super(FacebookAccessToken, self).unique_query()
-        return query.filter_by(app_id=self.app_id), True
-
-    @classmethod
-    def find_accounts(cls, provider, velruse_account):
-        assert 'userid' in velruse_account
-        query = provider.db.query(cls).filter_by(
-                provider=provider,
-                domain=velruse_account['domain'],
-                userid=velruse_account['userid'])
-        email = velruse_account.get("verifiedEmail", None)
-        if email:
-            query = query.union(provider.db.query(cls).filter_by(
-                provider=provider,
-                domain=velruse_account['domain'],
-                email=email))
-        results = list(set(query.all()))
-        app_id = get_config().get('facebook.consumer_key', None)
-        for result in results[:]:
-            if result.app_id and result.app_id != app_id:
-                if email and result.email != email:
-                    # identical ID, different email.
-                    # Collision or change of email?
-                    client = get_raven_client()
-                    if client:
-                        client.captureMessage(
-                            "Facebook login with same user_id but diff app_id, email",
-                            data={"velruse_account": velruse_account,
-                                  "result_id": result.id})
-                    results.remove(result)
-            elif result.app_id == app_id:
-                if result.userid != velruse_account['userid']:
-                    # same email, different ID???
-                    client = get_raven_client()
-                    if client:
-                        client.captureMessage(
-                            "Facebook login with same app_id, email but diff user_id",
-                            data={"velruse_account": velruse_account,
-                                  "result_id": result.id})
-                    results.remove(result)
-        return results
 
     @classmethod
     def restrict_to_owners(cls, query, user_id):
