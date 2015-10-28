@@ -550,7 +550,7 @@ $previewNumLines: 4;
       a:link, a:visited {
         color: inherit; /* so that the icon is not purple when the "a" tag has an href attribute (link) */
         text-decoration: inherit;
-        overflow: scroll;
+        overflow: auto;
       }
       > a:link, > a:visited {
         color: $txtGray1;
