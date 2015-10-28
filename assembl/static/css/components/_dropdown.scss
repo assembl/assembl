@@ -3,7 +3,8 @@
 // --------------------------------------------------
 
 $caret-width-base: 4px !default;
-$zindex-dropdown: 1000 !default;
+$zindex-dropdown: 1000 !default; /* should be more than $zindex-read-unread-indicator */
+$zindex-read-unread-indicator: 999 !default; /* should be less than the dropdown of the "More options" menu of the message ($zindex-read-unread-indicator) */
 $font-size-base: 12px !default;
 $dropdown-bg: $white !default;
 $dropdown-fallback-border: #ccc !default;
