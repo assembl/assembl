@@ -367,6 +367,7 @@ class SourceReader(Thread):
         except ReaderError as e:
             self.new_error(e, min(e.status, ReaderStatus.CLIENT_ERROR))
         finally:
+            self.set_status(ReaderStatus.SHUTDOWN)
             self.source.db.close()
 
     @abstractmethod
