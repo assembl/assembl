@@ -516,26 +516,42 @@ var MessageList = AssemblPanel.extend({
     return retval;
   },
 
-  scrollToPreviousScrollTarget: function() {
+  scrollToPreviousScrollTarget: function(retrying) {
       var previousScrollTarget = this._previousScrollTarget,
-      debug = false;
+        debug = false,
+        that = this;
 
       if (previousScrollTarget) {
         if (debug) {
-          console.log("scrollToPreviousScrollTarget(): Trying to scroll to:", previousScrollTarget);
+          console.log("scrollToPreviousScrollTarget(): Trying to scroll to:", previousScrollTarget); // example: "message-local:Content/5232"
         }
 
         //We may have been called on the first render, so we have to check
         if (this.ui.panelBody.offset() !== undefined) {
-          var selector = Ctx.format('[id="{0}"]', previousScrollTarget.messageHtmlId);
-          var message = this.$(selector);
+          // console.log("previousScrollTarget.messageHtmlId: ~" + previousScrollTarget.messageHtmlId + "~" );
+          // We have to escape some characters for the JQuery CSS selector to work. Function taken from http://learn.jquery.com/using-jquery-core/faq/how-do-i-select-an-element-by-an-id-that-has-characters-used-in-css-notation/
+          var buildIdSelector = function ( myid ) {
+            return myid.replace( /(:|\.|\[|\]|,)/g, "\\$1" );
+          };
+          var selector = Ctx.format('[id="{0}"]', buildIdSelector(previousScrollTarget.messageHtmlId)); // we could use '#{0}' or document.getElementById() but there could be problems if there are several messageLists. TODO: refactor by using a dedicated class for example
+          var message = this.$el.find(selector);
           if (!_.size(message)) {
-            //console.log("scrollToPreviousScrollTarget() can't find element with id:",previousScrollTarget.messageHtmlId);
+            console.log("scrollToPreviousScrollTarget() can't find element with id:",previousScrollTarget.messageHtmlId);
+            if ( !retrying ){
+              retrying = 0;
+            }
+            if ( retrying < 2){
+              ++retrying;
+              setTimeout(function(){
+                console.log("retrying x ", retrying);
+                that.scrollToPreviousScrollTarget(retrying);
+              });
+            }
             return;
           }
 
           // Scrolling to the element
-          this.scrollToElement(message, undefined, previousScrollTarget.innerOffset, false)
+          this.scrollToElement(message, undefined, previousScrollTarget.innerOffset, false);
         }
       }
     },
@@ -2073,7 +2089,7 @@ var MessageList = AssemblPanel.extend({
    * @param animate:  Should the scroll be smooth
    */
   scrollToElement: function(el, callback, margin, animate) {
-      //console.log("scrollToElement called with: ", el, callback, margin, animate);
+      //console.log("messageList::scrollToElement() called with: ", el, callback, margin, animate);
       //console.log("this.ui.panelBody: ", this.ui.panelBody);
       if (el && _.isFunction(this.ui.panelBody.size) && this.ui.panelBody.offset() !== undefined) {
         var panelOffset = this.ui.panelBody.offset().top,
