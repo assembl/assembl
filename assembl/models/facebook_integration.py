@@ -1420,6 +1420,9 @@ class FacebookPost(ImportedPost):
 
 
 class FacebookReader(PullSourceReader):
+    min_time_between_reads = timedelta(minutes=15)
+    time_between_reads = timedelta(minutes=45)
+
     def __init__(self, source_id, api):
         super(FacebookReader, self).__init__(source_id)
         self.api = api
