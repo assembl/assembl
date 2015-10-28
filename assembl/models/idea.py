@@ -594,22 +594,42 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
         raise NotImplemented()
 
     @classmethod
-    def get_idea_ids_showing_post(cls, post_id):
+    def get_idea_ids_showing_post(cls, post_id, direct=False, indirect=True):
         "Given a post, give the ID of the ideas that show this message"
         # This works because of a virtuoso bug...
         # where DISTINCT gives IDs instead of URIs.
         from .generic import Content
+        assert direct or indirect
         discussion_storage = \
             AssemblQuadStorageManager.discussion_storage_name()
 
         post_uri = URIRef(Content.uri_generic(
             post_id, AssemblQuadStorageManager.local_uri()))
-        return [int(id) for (id,) in cls.default_db.execute(SparqlClause(
-            '''select distinct ?idea where {
+        if indirect and not direct:
+            clause = '''select distinct ?idea where {
                 %s sioc:reply_of* ?post .
                 ?post assembl:postLinkedToIdea ?ideaP .
-                ?idea idea:includes* ?ideaP  }''' % (post_uri.n3(),),
-            quad_storage=discussion_storage.n3()))]
+                ?idea idea:includes* ?ideaP }'''
+        elif direct and not indirect:
+            clause = '''select distinct ?idea where {
+                %s sioc:reply_of* ?post .
+                ?post assembl:postLinkedToIdea ?idea }'''
+        if direct and indirect:
+            clause = '''select distinct ?idea, ?ideaP where {
+                %s sioc:reply_of* ?post .
+                ?post assembl:postLinkedToIdea ?ideaP  .
+                ?idea idea:includes* ?ideaP  }'''
+            pairs = list(cls.default_db.execute(
+                SparqlClause(clause % (
+                    post_uri.n3(),),
+                    quad_storage=discussion_storage.n3())))
+            return (list({int(p[0]) for p in pairs}) or None,
+                    list({int(p[1]) for p in pairs}) or None)
+        else:
+            return [int(id) for (id,) in cls.default_db.execute(
+                SparqlClause(clause % (
+                    post_uri.n3(),),
+                    quad_storage=discussion_storage.n3()))]
 
     @classmethod
     def idea_read_counts_sparql(cls, discussion_id, post_id, user_id):
