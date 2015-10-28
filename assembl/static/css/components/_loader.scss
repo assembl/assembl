@@ -1,8 +1,8 @@
 // blocked and with a loading message
 // ****************
 .loader-wrapper {
-  //position: relative;
-  min-height: em(20);
+  position: relative;
+  min-height: 16px; /* the size of the loader image */
   height: 100%;
   width: 100%;
 }
@@ -19,6 +19,6 @@
 
     display: block;
     content: "";
-    background: transparent url(#{$img-dir}/panel/loading.gif) no-repeat center center;
+    background: transparent url(#{$img-dir}/panel/loading.gif) no-repeat 50% 50%;
   }
 }
