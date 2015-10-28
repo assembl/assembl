@@ -520,7 +520,7 @@ var MessageList = AssemblPanel.extend({
         debug = false,
         that = this;
 
-      if (previousScrollTarget) {
+      if (previousScrollTarget && !this.isViewDestroyed()) {
         if (debug) {
           console.log("scrollToPreviousScrollTarget(): Trying to scroll to:", previousScrollTarget); // example: "message-local:Content/5232"
         }
