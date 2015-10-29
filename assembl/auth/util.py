@@ -363,7 +363,7 @@ def add_user(name, email, password, role, force=False, username=None,
         lur = None
         if old_user:
             lur = db.query(LocalUserRole).filter_by(
-                user=user, discussion=discussion, role=role).first()
+                user=user, discussion=discussion, role=localrole).first()
         if not lur:
             db.add(LocalUserRole(
                 user=user, role=localrole, discussion=discussion))
