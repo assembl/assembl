@@ -25,8 +25,7 @@ var Backbone = require('../shims/backbone.js'),
 /**
  * Constants
  */
-var DIV_ANNOTATOR_HELP = Ctx.format("<div class='annotator-draganddrop-help'>{0}</div>", i18n.gettext('You can drag the segment above directly to the table of ideas')),
-    MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX = "js_messageList-view-",
+var MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX = "js_messageList-view-",
 /* The maximum number of messages that can be loaded at the same time
  * before being removed from memory
  */
@@ -241,11 +240,6 @@ var MessageList = AssemblPanel.extend({
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "threaded",
       label: i18n.gettext('Threaded')
     },
-    CHRONOLOGICAL: {
-      id: "chronological",
-      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "chronological",
-      label: i18n.gettext('Oldest first')
-    },
     REVERSE_CHRONOLOGICAL: {
       id: "reverse_chronological",
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "activityfeed",
@@ -255,6 +249,11 @@ var MessageList = AssemblPanel.extend({
       id: "new_messages",
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "newmessages",
       label: i18n.gettext('New messages threaded')
+    },
+    CHRONOLOGICAL: {
+      id: "chronological",
+      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "chronological",
+      label: i18n.gettext('Oldest first')
     }
   },
 
@@ -1663,23 +1662,27 @@ var MessageList = AssemblPanel.extend({
       var cancel = $(annotatorEditor.element).find(".annotator-cancel");
       cancel.text(i18n.gettext('Cancel'));
       var textarea = annotatorEditor.fields[0].element.firstChild,
-          div = $('<div>', { 'draggable': true, 'class': 'annotator-textarea' });
+          div = $('<div/>'),
+          div_draggable = $('<div/>', { 'draggable': true, 'class': 'annotator-textarea' }),
+          div_annotator_help = i18n.sprintf("<div class='annotator-draganddrop-help'>%s</div>", i18n.gettext('You can drag the segment below directly to the table of ideas')),
+          div_copy_paste = i18n.sprintf("<div class='annotator-draganddrop-help'>%s</div><div class='annotator-copy-paste-zone'>%s</div>", i18n.gettext('You can also copy-paste from the text in the zone below'), annotation.quote);
 
-      div.html(annotation.quote);
+      div_draggable.html(annotation.quote);
 
-      div.on('dragstart', function(ev) {
+      div_draggable.on('dragstart', function(ev) {
         Ctx.showDragbox(ev, annotation.quote, true);
         Ctx.setDraggedAnnotation(annotation, annotatorEditor);
       });
 
-      div.on('dragend', function(ev) {
+      div_draggable.on('dragend', function(ev) {
         Ctx.setDraggedAnnotation(null, annotatorEditor);
       });
+      div.append(div_annotator_help);
+      div.append(div_draggable);
+      div.append(div_copy_paste); 
 
       $(textarea).replaceWith(div);
-      if ($(annotatorEditor.element).find(".annotator-draganddrop-help").length === 0) {
-        $(annotatorEditor.element).find(".annotator-textarea").after(DIV_ANNOTATOR_HELP);
-      }
+
 
       //Because the MessageView will need it
       that.annotatorEditor = annotatorEditor;
