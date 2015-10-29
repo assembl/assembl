@@ -54,9 +54,12 @@
               <li><a href="<%= html_export_url %>" target="_blank" class="dropdown-listitem">{{gettext("Export Post in HTML")}}</a></li>
             <% }%>
 
-            <% if( parentId ){ %>
-            <li><a href="#" class="js_message-jumptoparentbtn">{{gettext("Jump to this message's parent in current view (if possible, will not clear filters)")}}</a></li>
-            <% } %>
+            {# Disabled according to https://app.asana.com/0/15264711598672/36219414271776
+              We consider the view entire thread sufficiend
+              <% if( parentId ){ %>
+              <li><a href="#" class="js_message-jumptoparentbtn">{{gettext("Jump to this message's parent in current view (if possible, will not clear filters)")}}</a></li>
+              <% } %>
+            #}
             <% if( messageListView.isViewStyleThreadedType() === false && (parentId || message.getChildren().length > 0)){ %>
             <li><a href="#" class="js_message-jump-to-message-in-thread">{{gettext("Show this message in its entire thread (clears all filters)")}}</a></li>
             <% } %>
