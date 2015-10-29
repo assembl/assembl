@@ -282,9 +282,7 @@ var SynthesisPanel = AssemblPanel.extend({
         that.unblockPanel();
       },
       error: function(model, resp) {
-        if (raven_url) {
-          Raven.captureMessage('Failed publishing synthesis!');
-        }
+        Raven.captureMessage('Failed publishing synthesis!');
         alert(i18n.gettext("Failed publishing synthesis!"));
         that.model = new Synthesis.Model({'@id': 'next_synthesis'});
         that.model.fetch();

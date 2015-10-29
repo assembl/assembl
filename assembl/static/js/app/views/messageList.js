@@ -2148,10 +2148,7 @@ var MessageList = AssemblPanel.extend({
       }
 
       if (recursionDepth === 0 && this._scrollToMessageInProgressId) {
-        console.log("scrollToMessage():  a scrollToMessage was already in progress, aborting for ", messageModel.id);
-        if (raven_url) {
-          Raven.captureMessage("scrollToMessage():  a scrollToMessage was already in progress, aborting", {message_id: messageModel.id})
-        }
+        Raven.captureMessage("scrollToMessage():  a scrollToMessage was already in progress, aborting", {message_id: messageModel.id})
         if (_.isFunction(failedCallback)) {
           failedCallback();
         }
@@ -2217,15 +2214,13 @@ var MessageList = AssemblPanel.extend({
           // re-render. We may have to give it time
           if (recursionDepth <= MAX_RETRIES) {
             if (debug || recursionDepth >= 2) {
-              if (raven_url) {
-                Raven.captureMessage(
+              Raven.captureMessage(
                   "scrollToMessage():  Message still not found in the DOM, calling recursively",
                   { message_id: message.id,
                     selector: el,
                     next_call_recursion_depth: recursionDepth + 1
                   }
-                );
-              }
+              );
               console.log("scrollToMessage():  Message " + message.id + " not found in the DOM with selector: ", el, ", calling recursively with ", recursionDepth + 1);
             }
 
@@ -2234,19 +2229,15 @@ var MessageList = AssemblPanel.extend({
             }, RETRY_INTERVAL);
           }
           else {
-            console.log("scrollToMessage(): MAX_RETRIES has been reached: ", recursionDepth);
             that._scrollToMessageInProgressId = false;
-            if (raven_url) {
-              Raven.captureMessage(
+            Raven.captureMessage(
                 "scrollToMessage():  scrollToMessage(): MAX_RETRIES has been reached",
                 { message_id: messageModel.id,
                   recursionDepth: recursionDepth}
-                );
-            }
+            );
             if (_.isFunction(failedCallback)) {
               failedCallback();
             }
-
             return;
           }
         }
@@ -2348,10 +2339,7 @@ var MessageList = AssemblPanel.extend({
                 requestedOffsets;
 
             if (originalRenderId !== that._renderId) {
-              console.log("showMessageById():  Unable to complete because a new render is in progress, restarting from scratch for ", id);
-              if (raven_url) {
-                Raven.captureMessage("showMessageById():  Unable to complete because a new render is in progress, restarting from scratch", {requested_message_id: id})
-              }
+              Raven.captureMessage("showMessageById():  Unable to complete because a new render is in progress, restarting from scratch", {requested_message_id: id})
               that.showMessageByIdInProgress = false;
               that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, undefined, undefined);
             }

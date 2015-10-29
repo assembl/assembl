@@ -1000,9 +1000,7 @@ Context.prototype = {
       },
 
       onRender: function() {
-        if (raven_url) {
-          Raven.captureMessage('Reload popup presented to the user', {tags: { url: this.model.get("url") }});
-        }
+        Raven.captureMessage('Reload popup presented to the user', {tags: { url: this.model.get("url") }});
       },
 
       reload: function() {

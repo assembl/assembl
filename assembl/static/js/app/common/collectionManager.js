@@ -417,8 +417,7 @@ var CollectionManager = Marionette.Controller.extend({
         }
       }
       else {
-        var msg = "Structure model not in allMessageStructureCollection for id!" + id;
-        console.error(msg);
+        Raven.captureMessage("Structure model not in allMessageStructureCollection", {requested_message_id: id})
         return Promise.reject(msg);
       }
     });
