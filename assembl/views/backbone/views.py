@@ -3,6 +3,7 @@ import os.path
 import transaction
 
 from pyramid.view import view_config
+from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import HTTPNotFound, HTTPSeeOther, HTTPUnauthorized
@@ -135,7 +136,13 @@ def home_view(request):
         return HTTPSeeOther(login_url)
     elif not canRead:
         # User is logged-in but doesn't have access to the discussion
-        return HTTPUnauthorized()
+        # Would use render_to_response, except for the 401
+        from pyramid_jinja2 import IJinja2Environment
+        jinja_env = request.registry.queryUtility(
+            IJinja2Environment, name='.jinja2')
+        template = jinja_env.get_template('cannot_read_discussion.jinja2')
+        body = template.render(get_default_context(request))
+        return Response(body, 401)
 
     # if the route asks for a post, get post content (because this is needed for meta tags)
     route_name = request.matched_route.name
