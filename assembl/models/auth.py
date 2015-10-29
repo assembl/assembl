@@ -38,7 +38,7 @@ from ..lib import config
 from ..lib.utils import get_global_base_url
 from ..lib.sqla import (
     UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
-from ..lib.sqla_types import URLString
+from ..lib.sqla_types import URLString, EmailString, EmailUnicode
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
 from ..auth import *
 from ..semantic.namespaces import (
@@ -351,7 +351,7 @@ class AbstractAgentAccount(Base):
     verified = Column(Boolean(), default=False, server_default='0')
     # Note some social accounts don't disclose email (eg twitter), so nullable
     # Virtuoso + nullable -> no unique index (sigh)
-    email = Column(String(100), index=True)
+    email = Column(EmailString(100), index=True)
     # info={'rdf': QuadMapPatternS(None, SIOC.email)}
     # Note: we could also have a FOAF.mbox, but we'd have to make
     # them into URLs with mailto:
@@ -694,7 +694,7 @@ class User(AgentProfile):
         primary_key=True
     )
 
-    preferred_email = Column(CoerceUnicode(50))
+    preferred_email = Column(EmailUnicode(50))
     #    info={'rdf': QuadMapPatternS(None, FOAF.mbox)})
     verified = Column(Boolean(), default=False)
     password = deferred(Column(Binary(115)))

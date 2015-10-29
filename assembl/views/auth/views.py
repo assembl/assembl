@@ -38,6 +38,7 @@ from assembl.auth.password import (
 from assembl.auth.util import (
     get_identity_provider, discussion_from_request)
 from ...lib import config
+from assembl.lib.sqla_types import EmailString
 from .. import get_default_context, JSONError
 
 _ = TranslationStringFactory('assembl')
@@ -168,6 +169,7 @@ def get_profile(request):
         if not profile:
             raise HTTPNotFound()
     elif id_type == 'email':
+        identifier = EmailString.normalize_email_case(identifier)
         account = session.query(AbstractAgentAccount).filter_by(
             email=identifier).order_by(desc(
                 AbstractAgentAccount.verified)).first()
@@ -320,6 +322,7 @@ def assembl_register_view(request):
     password = request.params.get('password', '').strip()
     password2 = request.params.get('password2', '').strip()
     email = request.params.get('email', '').strip()
+    email = EmailString.normalize_email_case(email)
     if not is_email(email):
         return dict(get_default_context(request),
                     slug_prefix=p_slug,
@@ -398,6 +401,7 @@ def smtp_error_view(exc, request):
 def from_identifier(identifier):
     session = AgentProfile.default_db
     if '@' in identifier:
+        identifier = EmailString.normalize_email_case(identifier)
         account = session.query(AbstractAgentAccount).filter_by(
             email=identifier).order_by(AbstractAgentAccount.verified.desc()).first()
         if account:
@@ -886,6 +890,7 @@ def confirm_email_sent(request):
     email = request.matchdict.get('email')
     if not email:
         raise HTTPNotFound()
+    email = EmailString.normalize_email_case(email)
     email_objects = AbstractAgentAccount.default_db.query(
         AbstractAgentAccount).filter_by(email=email)
     verified_emails = [e for e in email_objects if e.verified]
