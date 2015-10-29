@@ -47,8 +47,6 @@ def test_simultaneous_ajax_calls(request):
     user_id = authenticated_userid(request)
     assert user_id
 
-    
-
     context = dict(
         get_default_context(request),
         discussion=discussion,
@@ -59,6 +57,7 @@ def test_simultaneous_ajax_calls(request):
         'admin/test_simultaneous_ajax_calls.jinja2',
         context,
         request=request)
+
 
 @view_config(route_name='discussion_admin', permission=P_SYSADMIN)
 def discussion_admin(request):
@@ -162,6 +161,12 @@ def discussion_edit(request):
         request=request)
 
 
+def order_by_domain_and_name(user):
+    email = user.get_preferred_email()
+    domain = email.split('@')[1] if email else None
+    return (domain, user.name)
+
+
 @view_config(route_name='discussion_permissions', permission=P_ADMIN_DISC)
 def discussion_permissions(request):
     user_id = authenticated_userid(request)
@@ -178,9 +183,11 @@ def discussion_permissions(request):
     roles = db.query(Role).all()
     roles_by_name = {r.name: r for r in roles}
     role_names = [r.name for r in roles]
+    role_names.sort()
     permissions = db.query(Permission).all()
     perms_by_name = {p.name: p for p in permissions}
     permission_names = [p.name for p in permissions]
+    permission_names.sort()
 
     disc_perms = db.query(DiscussionPermission).filter_by(
         discussion_id=discussion_id).join(Role, Permission).all()
@@ -291,6 +298,9 @@ def discussion_permissions(request):
     def has_local_role(user_id, role):
         return (user_id, role) in local_roles_as_set
 
+    users = list(users)
+    users.sort(key=order_by_domain_and_name)
+
     context = dict(
         get_default_context(request),
         discussion=discussion,
@@ -319,8 +329,10 @@ def general_permissions(request):
     roles = db.query(Role).all()
     roles_by_name = {r.name: r for r in roles}
     role_names = [r.name for r in roles]
+    role_names.sort()
     permissions = db.query(Permission).all()
     permission_names = [p.name for p in permissions]
+    permission_names.sort()
 
     user_roles = db.query(UserRole).join(Role, User).all()
     user_roles_as_set = set(
@@ -371,6 +383,9 @@ def general_permissions(request):
 
     def has_role(user_id, role):
         return (user_id, role) in user_roles_as_set
+
+    users = list(users)
+    users.sort(key=order_by_domain_and_name)
 
     context = dict(
         get_default_context(request),
