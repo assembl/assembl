@@ -899,10 +899,10 @@ def confirm_email_sent(request):
             # offer to merge accounts?
             # Send an email to other emails of the duplicate? Sigh!
             pass
-        else:
-            # TODO!: Your email is fine, why do you want to confirm it?
-            # Unlog and redirect to login.
-            pass
+        return HTTPFound(location=maybe_contextual_route(
+            request, 'login', email=email, _query=dict(
+                error=localizer.translate(_(
+                    "This email is already confirmed.")))))
     else:
         if len(unverified_emails):
             # Normal case: Send an email. May be spamming
