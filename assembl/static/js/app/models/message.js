@@ -98,15 +98,17 @@ var MessageModel = Base.Model.extend({
   },
 
   /**
-   * Return the parent message (if any)
+   * Return a promise to the parent message (if any)
+   * Else a promise to null
    * @return {Promise}
    */
   getParentPromise: function() {
       if (this.get('parentId')) {
         return this.collection.collectionManager.getMessageFullModelPromise(this.get('parentId'));
       }
-
-      return this.get('parentId');
+      else {
+        return Promise.resolve(null);
+      }
     },
 
   getAncestorCount: function() {
@@ -159,7 +161,6 @@ var MessageModel = Base.Model.extend({
   },
 
   /** Return a promise for the post's creator
-   * @return {$.Defered.Promise}
    */
   getCreatorPromise: function() {
     var that = this;

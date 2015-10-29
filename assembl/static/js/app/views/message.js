@@ -459,7 +459,7 @@ var MessageView = Marionette.LayoutView.extend({
           that.messageFamilyView.currentLevel !== 1) {
         this.model.getParentPromise().then(function(parentMessageModel) {
           //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
-          if (parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe()) {
+          if (parentMessageModel && parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe()) {
             //console.log("Hiding redundant title")
             that.$(".message-subject").addClass('hidden');
           }
