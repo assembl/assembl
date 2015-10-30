@@ -26,24 +26,24 @@ var Marionette = require('../shims/marionette.js'),
     Socket = require('../utils/socket.js'),
     DiscussionSources = require('../models/sources.js');
 
-
 /**
- * @class CollectionManager
- *
- * A singleton to manage lazy loading of server collections
+ * @class CollectionManager A singleton to manage lazy loading of server
+ *        collections
  */
-var CollectionManager = Marionette.Controller.extend({
+var CollectionManager = Marionette.Object.extend({
   FETCH_WORKERS_LIFETIME: 30,
 
   /**
    * Send debugging output to console.log to observe the activity of lazy
    * loading
+   * 
    * @type {boolean}
    */
   DEBUG_LAZY_LOADING: false,
 
   /**
    * Collection with all users in the discussion.
+   * 
    * @type {UserCollection}
    */
   _allUsersCollection: undefined,
@@ -52,6 +52,7 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Collection with all messsages in the discussion.
+   * 
    * @type {MessageCollection}
    */
   _allMessageStructureCollection: undefined,
@@ -60,6 +61,7 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Collection with all synthesis in the discussion.
+   * 
    * @type {SynthesisCollection}
    */
   _allSynthesisCollection: undefined,
@@ -68,6 +70,7 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Collection with all ideas in the discussion.
+   * 
    * @type {SegmentCollection}
    */
   _allIdeasCollection: undefined,
@@ -76,6 +79,7 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Collection with all idea links in the discussion.
+   * 
    * @type {MessageCollection}
    */
   _allIdeaLinksCollection: undefined,
@@ -84,6 +88,7 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Collection with all extracts in the discussion.
+   * 
    * @type {SegmentCollection}
    */
   _allExtractsCollection: undefined,
@@ -92,6 +97,7 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Collectin with a definition of the user's view
+   * 
    * @type {GroupSpec}
    */
   _allGroupSpecsCollection: undefined,
@@ -100,32 +106,33 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Collection with all partner organization in the discussion.
+   * 
    * @type {PartnerOrganizationCollection}
    */
   _allPartnerOrganizationCollection: undefined,
   _allPartnerOrganizationCollectionPromise: undefined,
 
   /**
-   *  Collection from discussion notifications.
-   * */
+   * Collection from discussion notifications.
+   */
   _allNotificationsDiscussionCollection: undefined,
   _allNotificationsDiscussionCollectionPromise: undefined,
 
   /**
-   *  Collection from user notifications
-   * */
+   * Collection from user notifications
+   */
   _allNotificationsUserCollection: undefined,
   _allNotificationsUserCollectionPromise: undefined,
 
   /**
-   *  Collection of user roles
-   * */
+   * Collection of user roles
+   */
   _allLocalRoleCollection: undefined,
   _allLocalRoleCollectionPromise: undefined,
 
   /**
-   *  Collection from discussion
-   * */
+   * Collection from discussion
+   */
   _allDiscussionModel: undefined,
   _allDiscussionModelPromise: undefined,
 
@@ -137,22 +144,21 @@ var CollectionManager = Marionette.Controller.extend({
   _currentUserModelPromise: undefined,
 
   /**
-   * Collection of Facebook Access Tokens that 
-   * current user is permissible to view
+   * Collection of Facebook Access Tokens that current user is permissible to
+   * view
    */
   _allFacebookAccessTokens: undefined,
   _allFacebookAccessTokensPromise: undefined,
 
   /**
-   * The super collection of all types of sources that the
-   * front end supports
+   * The super collection of all types of sources that the front end supports
    */
   _allDiscussionSourceCollection2: undefined,
   _allDiscussionSourceCollection2Promise: undefined,
 
   /**
-   * Collection of all the Accounts associated with the
-   * current User
+   * Collection of all the Accounts associated with the current User
+   * 
    * @type {[Account]}
    */
   _allUserAccounts: undefined,
@@ -160,6 +166,7 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Collection of all the Widgets in the discussion
+   * 
    * @type {[Widget]}
    */
   _allWidgets: undefined,
@@ -167,15 +174,19 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Connected socket promise
+   * 
    * @type socket
    */
   _connectedSocketPromise: undefined,
 
   /**
-   * Returns the collection from the giving object's @type .
-   * Used by the socket to sync the collection.
-   * @param {BaseModel} item
-   * @param {String} [type=item['@type']] The model type
+   * Returns the collection from the giving object's
+   * 
+   * @type . Used by the socket to sync the collection.
+   * @param {BaseModel}
+   *          item
+   * @param {String}
+   *          [type=item['@type']] The model type
    * @return {BaseCollection}
    */
   getCollectionPromiseByType: function(item, type) {
@@ -206,6 +217,9 @@ var CollectionManager = Marionette.Controller.extend({
 
     return null;
   },
+  
+  initialize: function(options){
+  },
 
   getAllUsersCollectionPromise: function() {
     if (this._allUsersCollectionPromise) {
@@ -224,6 +238,8 @@ var CollectionManager = Marionette.Controller.extend({
   },
 
   getAllMessageStructureCollectionPromise: function() {
+    var that = this;
+
     if (this._allMessageStructureCollectionPromise) {
       return this._allMessageStructureCollectionPromise;
     }
@@ -231,10 +247,21 @@ var CollectionManager = Marionette.Controller.extend({
     this._allMessageStructureCollection = new Message.Collection();
     this._allMessageStructureCollection.collectionManager = this;
     this._allMessageStructureCollectionPromise = Promise.resolve(this._allMessageStructureCollection.fetch())
-        .thenReturn(this._allMessageStructureCollection)
-            .catch(function(e) {
-              Raven.captureException(e);
-            });
+      .then(function() {
+        that.listenTo(Assembl.vent, 'socket:open', function() {
+          //Yes, I want that in sentry for now
+          console.debug("collectionManager: getAllMessageStructureCollectionPromise re-fetching because of socket re-open.");
+          console.log(that._allMessageStructureCollection);
+          //WARNING:  This is wastefull.  But even if we had a mecanism to request only if there is new data, some specific models might have changed.
+          //So the only way we could fix that is to add a generic mecanism that returns objects modified after a specific date, 
+          // recursively taking into account any relationship in the viewdef.  Not likely to happen...
+          that._allMessageStructureCollection.fetch();
+        });
+        return that._allMessageStructureCollection;
+      })
+      .catch(function(e) {
+        Raven.captureException(e);
+      });
 
     return this._allMessageStructureCollectionPromise;
   },
@@ -248,7 +275,10 @@ var CollectionManager = Marionette.Controller.extend({
       this.requests = this.collectionManager._messageFullModelRequests,
 
       this.addRequest = function(id) {
-        /* Emulates the defered pattern in bluebird, in this case we really do need it */
+        /*
+         * Emulates the defered pattern in bluebird, in this case we really do
+         * need it
+         */
         function Defer() {
           var resolve, reject;
           var promise = new Promise(function() {
@@ -344,7 +374,6 @@ var CollectionManager = Marionette.Controller.extend({
                 }
 
                 structureModel.set(structureModel.parse(jsonData));
-                structureModel.viewDef = viewDef;
                 if (deferredList !== undefined) {
                   deferredList['promiseResolver'].resolve(structureModel);
                   delete that.requests[id];
@@ -382,7 +411,7 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Need to be refactor with bluebird
-   * */
+   */
   getMessageFullModelPromise: function(id) {
     var that = this,
         allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
@@ -397,7 +426,7 @@ var CollectionManager = Marionette.Controller.extend({
       var structureModel = allMessageStructureCollection.get(id);
 
       if (structureModel) {
-        if (structureModel.viewDef !== undefined && structureModel.viewDef == "default") {
+        if (structureModel.get("@view") === "default") {
           if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
             console.log("getMessageFullModelPromise CACHE HIT!");
           }
@@ -426,7 +455,9 @@ var CollectionManager = Marionette.Controller.extend({
 
   /**
    * Retrieve fully populated models for the list of id's given
-   * @param ids[] array of message id's
+   * 
+   * @param ids[]
+   *          array of message id's
    * @return Message.Model{}
    */
   getMessageFullModelsPromise: function(ids) {
@@ -592,7 +623,8 @@ var CollectionManager = Marionette.Controller.extend({
       return models;
     },
 
-  /* Gets the stored configuration of groups and panels
+  /*
+   * Gets the stored configuration of groups and panels
    */
   getGroupSpecsCollectionPromise: function(viewsFactory, url_structure_promise, skip_group_state) {
       var that = this;

@@ -28,6 +28,7 @@ var MessageModel = Base.Model.extend({
    * @type {Object}
    */
   defaults: {
+    '@view': undefined,
     collapsed: true,
     checked: false,
     read: false,

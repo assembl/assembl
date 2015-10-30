@@ -46,13 +46,13 @@ Socket.prototype.onOpen = function() {
 };
 
 /**
- * Triggered when the client receives a message form server
+ * Triggered when the client receives a message from the server
  * @event
  */
 Socket.prototype.onMessage = function(ev) {
-  if (this.state == Socket.STATE_CONNECTING) {
+  if (this.state === Socket.STATE_CONNECTING) {
     this.connectCallback(this);
-    App.commands.execute('socket:open');
+    App.vent.trigger('socket:open');
     this.state = Socket.STATE_OPEN;
   }
 
@@ -72,7 +72,7 @@ Socket.prototype.onMessage = function(ev) {
  * @event
  */
 Socket.prototype.onClose = function() {
-  App.commands.execute('socket:close');
+  App.vent.trigger('socket:close');
 
   var that = this;
   window.setTimeout(function() {

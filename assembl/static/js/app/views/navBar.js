@@ -32,10 +32,10 @@ var navBarLeft = Marionette.LayoutView.extend({
   },
   onRender: function() {
     var that = this;
-    Assembl.commands.setHandler('socket:open', function() {
+    this.listenTo(Assembl.vent, 'socket:open', function() {
       that.$('#onlinedot').addClass('is-online');
     });
-    Assembl.commands.setHandler('socket:close', function() {
+    this.listenTo(Assembl.vent, 'socket:close', function() {
       that.$('#onlinedot').removeClass('is-online');
     });
 
