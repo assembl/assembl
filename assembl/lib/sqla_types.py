@@ -9,6 +9,10 @@ class URLString(TypeDecorator):
 
     impl = String
 
+    @property
+    def python_type(self):
+        return self.impl.python_type
+
     def process_bind_param(self, value, dialect):
         if not value:
             return value
@@ -21,6 +25,10 @@ class URLString(TypeDecorator):
 
 class EmailString(TypeDecorator):
     impl = String
+
+    @property
+    def python_type(self):
+        return self.impl.python_type
 
     @staticmethod
     def normalize_email_case(email):
