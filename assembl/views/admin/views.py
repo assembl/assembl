@@ -284,7 +284,12 @@ def discussion_permissions(request):
             if 'user_csvfile' in request.POST:
                 try:
                     num_users = add_multiple_users_csv(
-                        request.POST['user_csvfile'].file, discussion_id, role)
+                        request, request.POST['user_csvfile'].file,
+                        discussion_id, role,
+                        request.POST['send_invite'],
+                        request.POST['email_subject'],
+                        request.POST['text_email_message'],
+                        request.POST['html_email_message'])
                 except Exception as e:
                     error = repr(e)
             else:

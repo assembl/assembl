@@ -107,7 +107,14 @@ def handle_next_view(request, consume=False, default_suffix=''):
 def maybe_contextual_route(request, route_name, **args):
     discussion_slug = request.matchdict.get('discussion_slug', None)
     if discussion_slug is None:
-        return request.route_url(route_name, **args)
+        discussion_id = request.matchdict.get('discussion_id', None)
+        if discussion_id is None:
+            return request.route_url(route_name, **args)
+        else:
+            discussion = Discussion.get(int(discussion_id))
+            return request.route_url(
+                'contextual_'+route_name,
+                discussion_slug=discussion.slug, **args)
     else:
         return request.route_url(
             'contextual_'+route_name, discussion_slug=discussion_slug, **args)
@@ -1121,25 +1128,30 @@ The ${assembl} Team""")
 
 def send_change_password_email(
         request, profile, email=None, subject=None,
-        text_body=None, html_body=None):
+        text_body=None, html_body=None, discussion=None):
     mailer = get_mailer(request)
     localizer = request.localizer
     data = dict(
-        name=profile.name, assembl="Assembl",
+        assembl="Assembl", name=profile.name,
         confirm_url=maybe_contextual_route(
             request, 'do_password_change',
             ticket=password_token(profile)))
+    if discussion:
+        data.update(dict(
+            discussion_topic=discussion.topic,
+            discussion_url=discussion.get_url()))
     subject = subject or localizer.translate(
         _("Request for password change"), mapping=data)
     if text_body is None or html_body is not None:
         # if text_body and no html_body, html_body remains None.
-        html_body = html_body or localizer.translate(_(u"""<p>Hello, ${name}!</p>
+        html_body = html_body or _(u"""<p>Hello, ${name}!</p>
 <p>We have received a request to change the password on your ${assembl} account.
 Please <a href="${confirm_url}">click here to confirm your password change</a>.</p>
 <p>If you did not ask to reset your password please disregard this email.</p>
 <p>Best regards,<br />The ${assembl} Team</p>
-"""), mapping=data)
-    text_body = text_body or localizer.translate(_(u"""Hello, ${name}!
+""")
+        html_body = localizer.translate(html_body, mapping=data)
+    text_body = text_body or _(u"""Hello, ${name}!
 We have received a request to change the password on your ${assembl} account.
 To confirm your password change please click on the link below.
 <${confirm_url}>
@@ -1148,7 +1160,8 @@ If you did not ask to reset your password please disregard this email.
 
 Best regards,
 The ${assembl} Team
-"""), mapping=data)
+""")
+    text_body = localizer.translate(text_body, mapping=data)
     message = Message(
         subject=subject,
         sender=config.get('assembl.admin_email'),

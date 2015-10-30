@@ -1,5 +1,7 @@
 from csv import reader
 from datetime import datetime
+from os import urandom
+import base64
 
 from sqlalchemy.sql.expression import and_
 from pyramid.security import (
@@ -7,7 +9,7 @@ from pyramid.security import (
 from pyramid.httpexceptions import HTTPNotFound
 from pyisemail import is_email
 
-from assembl.lib.locale import _, get_localizer
+from assembl.lib.locale import _
 from ..lib.sqla import get_session_maker
 from . import R_SYSADMIN, P_READ, SYSTEM_ROLES
 from ..models.auth import (
@@ -281,6 +283,7 @@ def add_user(name, email, password, role, force=False, username=None,
     # refetch within transaction
     all_roles = {r.name: r for r in Role.default_db.query(Role).all()}
     user = None
+    created_user = True
     if discussion and localrole:
         if isinstance(discussion, (str, unicode)):
             discussion_ob = db.query(Discussion).filter_by(
@@ -313,6 +316,7 @@ def add_user(name, email, password, role, force=False, username=None,
         user.preferred_email = email
         user.name = name
         user.verified = True
+        created_user = False
         if password and change_old_password:
             user.password_p = password
         if username:
@@ -323,12 +327,12 @@ def add_user(name, email, password, role, force=False, username=None,
     else:
         if user:
             # Profile may have come from userless existing AgentProfile
-            user = User(
-                id=user.id,
+            user = user.change_class(
+                User, None,
                 preferred_email=email,
                 verified=True,
-                password=password,
                 creation_date=datetime.utcnow())
+            user.password_p = password
         else:
             user = User(
                 name=name,
@@ -336,7 +340,7 @@ def add_user(name, email, password, role, force=False, username=None,
                 verified=True,
                 password=password,
                 creation_date=datetime.utcnow())
-        db.add(user)
+            db.add(user)
         if username:
             db.add(Username(username=username, user=user))
     for account in user.accounts:
@@ -369,19 +373,31 @@ def add_user(name, email, password, role, force=False, username=None,
                 user=user, role=localrole, discussion=discussion))
     if discussion:
         user.get_notification_subscriptions(discussion.id)
+    return (user, created_user)
 
 
-def add_multiple_users_csv(csv_file, discussion_id, with_role):
+def add_multiple_users_csv(
+        request, csv_file, discussion_id, with_role,
+        send_password_change=False, message_subject=None,
+        text_message=None, html_message=None):
     r = reader(csv_file)
-    localizer = get_localizer()
+    localizer = request.localizer
     for i, l in enumerate(r):
         if not len(l):
             # tolerate empty lines
             continue
-        if len(l) != 3:
-            raise RuntimeError(localizer.translate(_(
-                "The CSV file must have three columns")))
-        (name, email, password) = [x.decode('utf-8').strip() for x in l]
+        l = [x.decode('utf-8').strip() for x in l]
+        if send_password_change:
+            if len(l) != 2:
+                raise RuntimeError(localizer.translate(_(
+                    "The CSV file must have two columns")))
+            (name, email) = l
+            password = base64.urlsafe_b64encode(urandom(8))
+        else:
+            if len(l) != 3:
+                raise RuntimeError(localizer.translate(_(
+                    "The CSV file must have three columns")))
+            (name, email, password) = l
         if not is_email(email):
             if i == 0:
                 # Header
@@ -394,7 +410,15 @@ def add_multiple_users_csv(csv_file, discussion_id, with_role):
         if len(password) < 4:
             raise RuntimeError(localizer.translate(_(
                 "Password too short: <%s> at line %d")) % (password, i))
-        add_user(
+        (user, is_new) = add_user(
             name, email, password, None, True, localrole=with_role,
             discussion=discussion_id, change_old_password=False)
+        if is_new and send_password_change:
+            from assembl.views.auth.views import send_change_password_email
+            from assembl.models import Discussion
+            discussion = Discussion.get(discussion_id)
+            send_change_password_email(
+                request, user, email, subject=message_subject,
+                text_body=text_message, html_body=html_message,
+                discussion=discussion)
     return i
