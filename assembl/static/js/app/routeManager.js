@@ -298,8 +298,8 @@ var routeManager = Marionette.Object.extend({
       var structure = UrlParser.parse("/" + path);
       console.log(structure);
       this.restoreViews(false, structure);
-    } catch (err) {
-      console.error(err);
+    } catch (e) {
+      Raven.captureException(e);
       this.restoreViews(true);
     }
   },

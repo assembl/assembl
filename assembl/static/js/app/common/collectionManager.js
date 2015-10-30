@@ -217,7 +217,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allUsersCollectionPromise = Promise.resolve(this._allUsersCollection.fetchFromScriptTag('users-json'))
         .thenReturn(this._allUsersCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allUsersCollectionPromise;
@@ -233,7 +233,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allMessageStructureCollectionPromise = Promise.resolve(this._allMessageStructureCollection.fetch())
         .thenReturn(this._allMessageStructureCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allMessageStructureCollectionPromise;
@@ -459,7 +459,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allSynthesisCollectionPromise = Promise.resolve(this._allSynthesisCollection.fetch())
         .thenReturn(this._allSynthesisCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allSynthesisCollectionPromise;
@@ -476,7 +476,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allIdeasCollectionPromise = Promise.resolve(this._allIdeasCollection.fetch())
         .thenReturn(this._allIdeasCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     //Start listener setup
@@ -506,7 +506,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allIdeaLinksCollectionPromise = Promise.resolve(this._allIdeaLinksCollection.fetch())
         .thenReturn(this._allIdeaLinksCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allIdeaLinksCollectionPromise;
@@ -522,7 +522,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allExtractsCollectionPromise = Promise.resolve(this._allExtractsCollection.fetchFromScriptTag('extracts-json'))
         .thenReturn(this._allExtractsCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allExtractsCollectionPromise;
@@ -538,7 +538,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allPartnerOrganizationCollectionPromise = Promise.resolve(this._allPartnerOrganizationCollection.fetch())
         .thenReturn(this._allPartnerOrganizationCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allPartnerOrganizationCollectionPromise;
@@ -555,7 +555,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allNotificationsDiscussionCollectionPromise = Promise.resolve(this._allNotificationsDiscussionCollection.fetch())
         .thenReturn(this._allNotificationsDiscussionCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             })
 
     return this._allNotificationsDiscussionCollectionPromise;
@@ -572,7 +572,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allNotificationsUserCollectionPromise = Promise.resolve(this._allNotificationsUserCollection.fetch())
         .thenReturn(this._allNotificationsUserCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allNotificationsUserCollectionPromise;
@@ -680,7 +680,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allLocalRoleCollectionPromise = Promise.resolve(this._allLocalRoleCollection.fetch())
         .thenReturn(this._allLocalRoleCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allLocalRoleCollectionPromise;
@@ -696,7 +696,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allDiscussionModelPromise = Promise.resolve(this._allDiscussionModel.fetch())
         .thenReturn(this._allDiscussionModel)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allDiscussionModelPromise;
@@ -712,7 +712,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allDiscussionSourceCollectionPromise = Promise.resolve(this._allDiscussionSourceCollection.fetch())
         .thenReturn(this._allDiscussionSourceCollection)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allDiscussionSourceCollectionPromise;
@@ -728,7 +728,7 @@ var CollectionManager = Marionette.Controller.extend({
     this._allDiscussionSourceCollection2Promise = Promise.resolve(this._allDiscussionSourceCollection2.fetch())
         .thenReturn(this._allDiscussionSourceCollection2)
             .catch(function(e) {
-              console.error(e.statusText);
+              Raven.captureException(e);
             });
 
     return this._allDiscussionSourceCollection2Promise;
@@ -744,7 +744,7 @@ var CollectionManager = Marionette.Controller.extend({
       this._allFacebookAccessTokensPromise = Promise.resolve(this._allFacebookAccessTokens.fetch())
           .thenReturn(this._allFacebookAccessTokens)
           .catch(function(e) {
-            console.error(e.statusText);
+            Raven.captureException(e);
           });
       return this._allFacebookAccessTokensPromise;
     },
@@ -759,7 +759,7 @@ var CollectionManager = Marionette.Controller.extend({
       this._allUserAccountsPromise = Promise.resolve(this._allUserAccounts.fetch())
           .thenReturn(this._allUserAccounts)
           .catch(function(e) {
-            console.error(e.statusText);
+            Raven.captureException(e);
           });
       return this._allUserAccountsPromise;
     },
@@ -774,7 +774,7 @@ var CollectionManager = Marionette.Controller.extend({
       this._allWidgetsPromise = Promise.resolve(this._allWidgets.fetch())
           .thenReturn(this._allWidgets)
           .catch(function(e) {
-            console.error(e.statusText);
+            Raven.captureException(e);
           });
       return this._allWidgetsPromise;
     },
