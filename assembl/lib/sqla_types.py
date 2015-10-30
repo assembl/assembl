@@ -45,6 +45,9 @@ class EmailString(TypeDecorator):
         if not value:
             return value
         value = self.normalize_to_type(value, dialect)
+        if '%' in value:
+            # LIKE search string
+            return value
         if not is_email(value):
             raise ValueError(value+" is not a valid email")
         value = self.normalize_email_case(value)
