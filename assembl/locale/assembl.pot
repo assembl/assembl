@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-29 16:38-0400\n"
+"POT-Creation-Date: 2015-10-30 16:09-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,21 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
 
-#: assembl/auth/util.py:382
+#: assembl/auth/util.py:392
+msgid "The CSV file must have two columns"
+msgstr ""
+
+#: assembl/auth/util.py:398
 msgid "The CSV file must have three columns"
 msgstr ""
 
-#: assembl/auth/util.py:389
+#: assembl/auth/util.py:405
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr ""
 
-#: assembl/auth/util.py:392
+#: assembl/auth/util.py:408
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr ""
 
-#: assembl/auth/util.py:395
+#: assembl/auth/util.py:411
 #, python-format
 msgid "Password too short: <%s> at line %d"
 msgstr ""
@@ -807,7 +811,7 @@ msgid "Send your comment"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaPanel.js:372
-#: assembl/static/js/app/views/messageList.js:1188
+#: assembl/static/js/app/views/messageList.js:1187
 msgid "You need to type a comment first..."
 msgstr ""
 
@@ -850,60 +854,56 @@ msgstr[1] ""
 msgid "Zooming on the conversation around \"%s\""
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:28
-msgid "You can drag the segment above directly to the table of ideas"
-msgstr ""
-
-#: assembl/static/js/app/views/messageList.js:235
+#: assembl/static/js/app/views/messageList.js:234
 msgid "Messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:242
+#: assembl/static/js/app/views/messageList.js:241
 msgid "Threaded"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:247
-#: assembl/static/js/app/views/messageListPostQuery.js:42
-msgid "Oldest first"
-msgstr ""
-
-#: assembl/static/js/app/views/messageList.js:252
+#: assembl/static/js/app/views/messageList.js:246
 #: assembl/static/js/app/views/messageListPostQuery.js:49
 msgid "Newest first"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:257
+#: assembl/static/js/app/views/messageList.js:251
 msgid "New messages threaded"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:827
+#: assembl/static/js/app/views/messageList.js:256
+#: assembl/static/js/app/views/messageListPostQuery.js:42
+msgid "Oldest first"
+msgstr ""
+
+#: assembl/static/js/app/views/messageList.js:826
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1185
+#: assembl/static/js/app/views/messageList.js:1184
 #: assembl/static/js/app/views/messageSend.js:145
 #: assembl/templates/do_password_change.jinja2:18
 #: assembl/templates/request_password_change.jinja2:26
 msgid "Send"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1186
+#: assembl/static/js/app/views/messageList.js:1185
 msgid "Subject"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1187
+#: assembl/static/js/app/views/messageList.js:1186
 msgid "Add a subject above and start a new topic here"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1189
+#: assembl/static/js/app/views/messageList.js:1188
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1662
+#: assembl/static/js/app/views/messageList.js:1661
 msgid "Send to clipboard"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1664
+#: assembl/static/js/app/views/messageList.js:1663
 #: assembl/static/js/app/views/messageSend.js:144
 #: assembl/templates/styleguide/components/Dialogs.jinja2:119
 #: assembl/templates/styleguide/components/Dialogs.jinja2:146
@@ -919,18 +919,26 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1706
+#: assembl/static/js/app/views/messageList.js:1667
+msgid "You can drag the segment below directly to the table of ideas"
+msgstr ""
+
+#: assembl/static/js/app/views/messageList.js:1668
+msgid "You can also copy-paste from the text in the zone below"
+msgstr ""
+
+#: assembl/static/js/app/views/messageList.js:1709
 #, python-format
 msgid ""
 "This extract was organized in the idea \" %s \" by the facilitator of the "
 "debate"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1709
+#: assembl/static/js/app/views/messageList.js:1712
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:2481
+#: assembl/static/js/app/views/messageList.js:2484
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
@@ -995,6 +1003,7 @@ msgid "Type your message here..."
 msgstr ""
 
 #: assembl/static/js/app/views/messageSend.js:146
+#: assembl/templates/admin/discussion_permissions.jinja2:117
 msgid "Subject:"
 msgstr ""
 
@@ -1393,7 +1402,7 @@ msgid "Admin"
 msgstr ""
 
 #: assembl/templates/discussion_list.jinja2:13
-#: assembl/templates/admin/discussion_permissions.jinja2:11
+#: assembl/templates/admin/discussion_permissions.jinja2:15
 msgid "Permissions"
 msgstr ""
 
@@ -1499,7 +1508,7 @@ msgstr ""
 msgid "Email or username"
 msgstr ""
 
-#: assembl/templates/login.jinja2:88 assembl/views/auth/views.py:857
+#: assembl/templates/login.jinja2:88 assembl/views/auth/views.py:864
 msgid "Log in"
 msgstr ""
 
@@ -1571,9 +1580,9 @@ msgid "Email"
 msgstr ""
 
 #: assembl/templates/profile.jinja2:107
-#: assembl/templates/admin/discussion_permissions.jinja2:48
-#: assembl/templates/admin/discussion_permissions.jinja2:85
-#: assembl/templates/admin/discussion_permissions.jinja2:107
+#: assembl/templates/admin/discussion_permissions.jinja2:52
+#: assembl/templates/admin/discussion_permissions.jinja2:89
+#: assembl/templates/admin/discussion_permissions.jinja2:139
 #: assembl/templates/admin/global_permissions.jinja2:37
 #: assembl/templates/views/ckeditorField.tmpl:9
 #: assembl/templates/views/sourceFacebook.tmpl:3
@@ -1615,59 +1624,107 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:6
+#: assembl/templates/admin/discussion_permissions.jinja2:10
 msgid "Discussion "
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:7
+#: assembl/templates/admin/discussion_permissions.jinja2:11
 msgid "Role permissions:"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:11
-#: assembl/templates/admin/discussion_permissions.jinja2:56
+#: assembl/templates/admin/discussion_permissions.jinja2:15
+#: assembl/templates/admin/discussion_permissions.jinja2:60
 #: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Roles"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:33
+#: assembl/templates/admin/discussion_permissions.jinja2:37
 msgid "delete role"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:43
+#: assembl/templates/admin/discussion_permissions.jinja2:47
 msgid "Add a role"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:52
+#: assembl/templates/admin/discussion_permissions.jinja2:56
 msgid "User roles specific to this discussion:"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:56
+#: assembl/templates/admin/discussion_permissions.jinja2:60
 #: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Users"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:80
+#: assembl/templates/admin/discussion_permissions.jinja2:84
 #: assembl/templates/admin/global_permissions.jinja2:32
 msgid "Search for users"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:90
+#: assembl/templates/admin/discussion_permissions.jinja2:94
 msgid "Add users with a CSV file"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:91
+#: assembl/templates/admin/discussion_permissions.jinja2:95
 msgid ""
-"The CSV file should have three fields, in this order: full name, email, and "
-"password.  If it has a header, it MUST be on the first line.  Imported user's"
-" email will be considered validated."
+"The CSV file must have two or three fields, in this order: full name, email, "
+"and password.  If it has a header, it MUST be on the first line. Imported "
+"user's email will be considered validated. If no password is given, please "
+"use the \"Send an invite message\" option below."
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:92
+#: assembl/templates/admin/discussion_permissions.jinja2:96
 msgid "Role"
 msgstr ""
 
-#: assembl/templates/admin/discussion_permissions.jinja2:104
+#: assembl/templates/admin/discussion_permissions.jinja2:108
 msgid "CSV File"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:112
+msgid "Send an invite message"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:115
+msgid ""
+"Note that this email will only be sent to new users. In the message, you can "
+"use the following placeholders: ${name}, ${confirm_url}, ${discussion_topic},"
+" ${discussion_url}"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:118
+msgid "Welcome to ${discussion_topic}."
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:119
+msgid "Text email message:"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:120
+msgid ""
+"Hello, ${name}!\n"
+"You have been invited to the Assembl discussion ${discussion_topic}.\n"
+"This link will allow you to set you password, after which you can log in.\n"
+"<${confirm_url}>\n"
+"\n"
+"If you did not ask to join please disregard this email.\n"
+"\n"
+"Best regards,\n"
+"The Assembl Team\n"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:130
+msgid "HTML email message:"
+msgstr ""
+
+#: assembl/templates/admin/discussion_permissions.jinja2:131
+msgid ""
+"<p>Hello, ${name}!</p>\n"
+"<p>You have been invited to the Assembl discussion <a "
+"href=\"${discussion_url}\">${discussion_topic}</a>.\n"
+"Please <a href=\"${confirm_url}\">click here</a> to set you password, after "
+"which you can log in.</p>\n"
+"<p>If you did not ask to join please disregard this email.</p>\n"
+"<p>Best regards,<br />The Assembl Team</p>\n"
 msgstr ""
 
 #: assembl/templates/admin/global_permissions.jinja2:4
@@ -2898,7 +2955,7 @@ msgstr ""
 msgid "unsubscribed"
 msgstr ""
 
-#: assembl/views/admin/views.py:284
+#: assembl/views/admin/views.py:296
 msgid "No file given."
 msgstr ""
 
@@ -2923,140 +2980,140 @@ msgstr ""
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/auth/views.py:224
+#: assembl/views/auth/views.py:231
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:243 assembl/views/auth/views.py:1054
+#: assembl/views/auth/views.py:250 assembl/views/auth/views.py:1061
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:251 assembl/views/auth/views.py:329
+#: assembl/views/auth/views.py:258 assembl/views/auth/views.py:336
 msgid "This is not a valid email"
 msgstr ""
 
-#: assembl/views/auth/views.py:320
+#: assembl/views/auth/views.py:327
 msgid "Please use a name of at least 3 characters"
 msgstr ""
 
-#: assembl/views/auth/views.py:336
+#: assembl/views/auth/views.py:343
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:341
+#: assembl/views/auth/views.py:348
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:390
+#: assembl/views/auth/views.py:397
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email "
 "that does not exist."
 msgstr ""
 
-#: assembl/views/auth/views.py:445 assembl/views/auth/views.py:956
+#: assembl/views/auth/views.py:452 assembl/views/auth/views.py:963
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:462
+#: assembl/views/auth/views.py:469
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:751
+#: assembl/views/auth/views.py:758
 msgid "This email address is already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:752
+#: assembl/views/auth/views.py:759
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:760 assembl/views/auth/views.py:919
+#: assembl/views/auth/views.py:767 assembl/views/auth/views.py:926
 msgid "Confirmation requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:761 assembl/views/auth/views.py:920
+#: assembl/views/auth/views.py:768 assembl/views/auth/views.py:927
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your "
 "inbox in a few minutes. Please follow the confirmation link in order to "
 "confirm your email"
 msgstr ""
 
-#: assembl/views/auth/views.py:796
+#: assembl/views/auth/views.py:803
 msgid "Wrong email token."
 msgstr ""
 
-#: assembl/views/auth/views.py:813
+#: assembl/views/auth/views.py:820
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:846
+#: assembl/views/auth/views.py:853
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr ""
 
-#: assembl/views/auth/views.py:851
+#: assembl/views/auth/views.py:858
 #, python-format
 msgid "Your email address %s has been confirmed, you can now log in."
 msgstr ""
 
-#: assembl/views/auth/views.py:858
+#: assembl/views/auth/views.py:865
 msgid "Your account is now active!"
 msgstr ""
 
-#: assembl/views/auth/views.py:872
+#: assembl/views/auth/views.py:879
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/auth/views.py:909
+#: assembl/views/auth/views.py:916
 msgid "This email is already confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:927
+#: assembl/views/auth/views.py:934
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:946 assembl/views/auth/views.py:957
+#: assembl/views/auth/views.py:953 assembl/views/auth/views.py:964
 msgid "I forgot my password"
 msgstr ""
 
-#: assembl/views/auth/views.py:990
+#: assembl/views/auth/views.py:997
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:991
+#: assembl/views/auth/views.py:998
 msgid ""
 "We have sent you an email with a temporary connection link. Please use that "
 "link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:1013
+#: assembl/views/auth/views.py:1020
 msgid "Wrong password token."
 msgstr ""
 
-#: assembl/views/auth/views.py:1018
+#: assembl/views/auth/views.py:1025
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/auth/views.py:1030
+#: assembl/views/auth/views.py:1037
 msgid "Change your password"
 msgstr ""
 
-#: assembl/views/auth/views.py:1061
+#: assembl/views/auth/views.py:1068
 msgid "Password changed"
 msgstr ""
 
-#: assembl/views/auth/views.py:1073
+#: assembl/views/auth/views.py:1080
 msgid "email"
 msgstr ""
 
-#: assembl/views/auth/views.py:1075
+#: assembl/views/auth/views.py:1082
 msgid "account"
 msgstr ""
 
-#: assembl/views/auth/views.py:1076
+#: assembl/views/auth/views.py:1083
 msgid ""
 "Hello, ${name}, and welcome to ${assembl}!\n"
 "\n"
@@ -3068,7 +3125,7 @@ msgid ""
 "The ${assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:1083
+#: assembl/views/auth/views.py:1090
 msgid ""
 "<p>Hello, ${name}, and welcome to ${assembl}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">click here to confirm your email "
@@ -3077,7 +3134,7 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:1088
+#: assembl/views/auth/views.py:1095
 msgid ""
 "Hello, ${name}!\n"
 "\n"
@@ -3089,7 +3146,7 @@ msgid ""
 "The ${assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:1095
+#: assembl/views/auth/views.py:1102
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">click here to confirm your new email "
@@ -3098,15 +3155,15 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:1111
+#: assembl/views/auth/views.py:1118
 msgid "Please confirm your ${confirm_what} with ${assembl}"
 msgstr ""
 
-#: assembl/views/auth/views.py:1133
+#: assembl/views/auth/views.py:1144
 msgid "Request for password change"
 msgstr ""
 
-#: assembl/views/auth/views.py:1136
+#: assembl/views/auth/views.py:1147
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>We have received a request to change the password on your ${assembl} "
@@ -3118,7 +3175,7 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:1142
+#: assembl/views/auth/views.py:1154
 msgid ""
 "Hello, ${name}!\n"
 "We have received a request to change the password on your ${assembl} account."
