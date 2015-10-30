@@ -1262,7 +1262,12 @@ class BaseOps(object):
             assert usable, "Class %s needs a valid unique_query" % (
                 self.__class__.__name__)
         if not usable:
-            return True
+            # This used to be True, meaning uniqueness test "succeeded".
+            # But most invocations have a usable query, or force
+            # must_define_uniqueness, so this case never actually arises,
+            # and many downstream usage tests for None in a way that would.
+            # fail with True. TODO: Cleanup must_define_uniqueness
+            return None
         other = query.first()
         if other is not None and other is not self:
             if expunge and inspect(self).pending:
