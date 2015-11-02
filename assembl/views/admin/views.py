@@ -286,7 +286,7 @@ def discussion_permissions(request):
                     num_users = add_multiple_users_csv(
                         request, request.POST['user_csvfile'].file,
                         discussion_id, role,
-                        request.POST['send_invite'],
+                        request.POST.get('send_invite', False),
                         request.POST['email_subject'],
                         request.POST['text_email_message'],
                         request.POST['html_email_message'])
