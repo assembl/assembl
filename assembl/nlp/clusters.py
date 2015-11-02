@@ -456,9 +456,7 @@ def alerts_in_idea_data(idea_data, tolerance=1, root=True):
     return results
 
 
-def get_cluster_info_optics(
-        discussion, num_topics=200, min_points=4, eps=0.02, metric='cosine',
-        scrambler=None):
+def get_model_data(discussion, num_topics=200, min_points=4):
     _, tfidf_model, gensim_model = get_discussion_semantic_analysis(
         discussion.id, num_topics=num_topics,
         model_cls=gmodels.lsimodel.LsiModel)  # , power_iters=5, onepass=False
@@ -490,6 +488,16 @@ def get_cluster_info_optics(
         topic_intensities = numpy.ones((num_topics,))
     model_matrix = gensimvecs_to_csr(
         gensim_model[tfidf_corpus], num_topics, topic_intensities)
+    return (post_ids, corpus, tfidf_model, model_matrix,
+            gensim_model, topic_intensities, trans)
+
+
+def get_cluster_info_optics(
+        discussion, num_topics=200, min_points=4, eps=0.02, metric='cosine',
+        scrambler=None):
+    (
+        post_ids, corpus, tfidf_model, model_matrix, gensim_model, topic_intensities, trans
+    ) = get_model_data(discussion, num_topics, min_points)
     optics = Optics(min_points, metric)
     clusters = optics.extract_clusters(model_matrix.todense(), eps)
     if not clusters:
