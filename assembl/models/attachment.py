@@ -40,7 +40,9 @@ class Document(DiscussionBoundBase):
     interpreted as a purl
     """
 
-    uri_id = Column(URLString, unique=True, index=True)
+    __table_args__ = (UniqueConstraint('discussion_id', 'uri_id'), )
+
+    uri_id = Column(URLString)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
                            info={'rdf': QuadMapPatternS(None,
                                                         DCTERMS.created)})
