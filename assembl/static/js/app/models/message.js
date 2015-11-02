@@ -44,7 +44,11 @@ var MessageModel = Base.Model.extend({
     bodyMimeType: null,
     attachments: undefined,
     publishes_synthesis_id: null,
-    metadata_json: null // this property needs to exist to display the inspiration source of a message (creativity widget)
+    metadata_json: null, // this property needs to exist to display the inspiration source of a message (creativity widget)
+    publication_state: "PUBLISHED",
+    moderator: null,
+    moderation_text: null,
+    moderated_on: null,
   },
 
   parse: function(rawModel) {
@@ -234,6 +238,18 @@ var MessageModel = Base.Model.extend({
      * check typeof variable
      * */
      
+  },
+
+  sync: function(method, model, options) {
+    console.log("message::sync() ", method, model, options);
+    if ( method == "patch" ){ // for REST calls of type PATCH, we use APIv2 instead of APIv1
+      console.log("we are in patch case");
+      var options2 = options ? _.clone(options) : {};
+      options2.url = this.getApiV2Url();
+      return Backbone.sync(method, model, options2);
+    }
+    console.log("we are in default case");
+    return Backbone.sync(method, model, options);
   }
 });
 

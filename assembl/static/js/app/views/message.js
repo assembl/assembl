@@ -19,6 +19,7 @@ var Marionette = require('../shims/marionette.js'),
     AgentViews = require('./agent.js'),
     Types = require('../utils/types.js'),
     AttachmentViews = require('./attachments.js'),
+    MessageModerationOptionsView = require('./messageModerationOptions.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
@@ -71,6 +72,12 @@ var MessageView = Marionette.LayoutView.extend({
    * @type {Boolean}
    */
   showAnnotations: null,
+
+  /**
+   * The Marionette view for moderation
+   * @type {Marionette view}
+   */
+  messageModerationOptionsView: null,
 
   /**
    * @init
@@ -137,18 +144,21 @@ var MessageView = Marionette.LayoutView.extend({
       jumpToMessageInReverseChronologicalButton: ".js_message-jump-to-message-in-reverse-chronological",
       showAllMessagesByThisAuthorButton: ".js_message-show-all-by-this-author",
       toggleExtracts: ".js_message-toggle-extracts",
+      moderationOptionsButton: ".js_message-moderation-options",
       messageReplyBox: ".js_messageReplyBoxRegion",
       likedLink: ".js_likeButton",
       likeCounter: ".js_likeCount",
       avatar: ".js_avatarContainer",
       name: ".js_nameContainer",
-      attachments: ".js_regionMessageAttachments"
+      attachments: ".js_regionMessageAttachments",
+      moderationOptions: ".js_regionMessageModerationOptions"
     },
 
     regions: {
       avatar: "@ui.avatar",
       name: "@ui.name",
       attachmentsRegion: "@ui.attachments",
+      moderationOptionsRegion: "@ui.moderationOptions",
       messageReplyBoxRegion: "@ui.messageReplyBox"
     },
 
@@ -170,6 +180,7 @@ var MessageView = Marionette.LayoutView.extend({
     'click @ui.showAllMessagesByThisAuthorButton': 'onShowAllMessagesByThisAuthorClick',
     'click .js_showModeratedMessage': 'onShowModeratedMessageClick',
     'click @ui.toggleExtracts' : 'onToggleExtractsClick',
+    'click @ui.moderationOptionsButton' : 'onModerationOptionsClick',
 
     //
     'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
@@ -241,7 +252,8 @@ var MessageView = Marionette.LayoutView.extend({
 
     body = (body) ? body : this.generateSafeBody();
 
-    if (this.model.get("moderation_text")) {
+    if (this.model.get("publication_state") != "PUBLISHED") {
+    //if (this.model.get("moderation_text")) {
       bodyFormat = "text/html";
       body = this.moderationTemplate({
         body: body,
@@ -289,7 +301,8 @@ var MessageView = Marionette.LayoutView.extend({
       nuggets: _.size(this.model.get('extracts')),
       direct_link_relative_url: direct_link_relative_url,
       share_link_url: share_link_url,
-      html_export_url: html_export_url
+      html_export_url: html_export_url,
+      user_can_moderate: Ctx.getCurrentUser().can(Permissions.MODERATE_POST)
     };
   },
 
@@ -448,7 +461,6 @@ var MessageView = Marionette.LayoutView.extend({
         
 
         this.attachmentsRegion.show(this.attachmentsCollectionView);
-
       }
 
       if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle !== this.availableMessageViewStyles.FULL_BODY) {
@@ -952,6 +964,43 @@ var MessageView = Marionette.LayoutView.extend({
       this.showAnnotations = true;
       this.loadAnnotations();
     }
+  },
+
+  onModerationOptionsClick: function(ev) {
+    console.log("message::onModerationOptionsClick()");
+    if ( this.messageModerationOptionsView ){
+      // this.destroyMessageModerationOptionsView(); // uncomment to toggle
+      return;
+    }
+    this.messageModerationOptionsView = new MessageModerationOptionsView({
+      model: this.model,
+      message_publication_status: this.model.get("publication_state"),
+      message_moderated_version: this.model.get("moderation_text"),
+      message_moderation_remarks: "" // TODO
+    });
+    this.getRegion("moderationOptionsRegion").show(this.messageModerationOptionsView);
+    this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsSaveAndClose', this.onModerationOptionsSaveAndClose);
+    this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsClose', this.onModerationOptionsClose);
+  },
+
+  destroyMessageModerationOptionsView: function(){
+    console.log("message::destroyMessageModerationOptionsView()");
+    if ( this.messageModerationOptionsView ){
+      console.log("destroying");
+      this.messageModerationOptionsView.destroy();
+      this.messageModerationOptionsView = null;
+    }
+  },
+
+  onModerationOptionsSaveAndClose: function(){
+    console.log("message:onModerationOptionsSaveAndClose()");
+    this.destroyMessageModerationOptionsView();
+    this.render();
+  },
+
+  onModerationOptionsClose: function(){
+    console.log("message:onModerationOptionsClose()");
+    this.destroyMessageModerationOptionsView();
   },
 
   onMessageJumpToMessageInReverseChronologicalClick: function(ev) {
