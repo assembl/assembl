@@ -1216,7 +1216,10 @@ class BaseOps(object):
                     instance = User.get(user_id)
                 else:
                     instance = context.get_instance_of_class(target_class)
+                    if instance is self:
+                        continue
                 if instance is not None:
+                    print "extra relation assignment", reln.key, instance
                     setattr(self, reln.key, instance)
         return self.handle_duplication(
             json, parse_def, aliases, context, permissions, user_id,
