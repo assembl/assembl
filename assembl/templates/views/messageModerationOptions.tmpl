@@ -11,6 +11,13 @@
 <br/>
 
 <div class="js_moderationDetails hidden">
+    <div class="js_messageModerator hidden">
+        {{gettext('Moderated by')}}
+        <div class="js_avatarContainer avatarContainer"></div>
+        <span class="message-author js_nameContainer"></span>
+    </div>
+
+
     {{gettext('Moderated version of the message')}}
     <textarea class="formtextarea message-moderated-version js_messageModeratedVersion text mbxs" placeholder="{{gettext('Type something...')}}"><%= message_moderated_version %></textarea>
 

@@ -6,6 +6,7 @@ var Backbone = require('../shims/backbone.js'),
     _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
     Ctx = require('../common/context.js'),
+    AgentViews = require('./agent.js'),
     i18n = require('../utils/i18n.js');
 
 
@@ -13,7 +14,7 @@ var messageModerationOptions = Marionette.LayoutView.extend({
   template: '#tmpl-messageModerationOptions',
   className: 'messageModerationOptions',
   initialize: function(options) {
-    console.log("messageModerationOptions::initialize() options: ", options);
+    //console.log("messageModerationOptions::initialize() options: ", options);
     this.options = options;
 
     if ( !("message_publication_status" in options) ){
@@ -36,6 +37,9 @@ var messageModerationOptions = Marionette.LayoutView.extend({
   ui: {
     publicationStatusSelect: '.js_messagePublicationStatusSelect',
     moderationDetails: '.js_moderationDetails',
+    messageModerator: '.js_messageModerator',
+    messageModeratorAvatar: '.js_messageModerator .js_avatarContainer',
+    messageModeratorName: '.js_messageModerator .js_nameContainer',
     messageModeratedVersion: '.js_messageModeratedVersion',
     messageModerationRemarks: '.js_messageModerationRemarks',
     saveButton: '.js_messageModerationSaveButton',
@@ -49,12 +53,26 @@ var messageModerationOptions = Marionette.LayoutView.extend({
   },
 
   onShow: function(){
-    console.log("messageModerationOptions::onShow()");
+    var that = this;
+
     this.updateContent();
+
+    if ( this.model.get("moderator") ){
+      this.model.getModeratorPromise().then(function(messageModerator){
+        var agentAvatarView = new AgentViews.AgentAvatarView({
+          model: messageModerator
+        });
+        that.ui.messageModeratorAvatar.html(agentAvatarView.render().el);
+
+        var agentNameView = new AgentViews.AgentNameView({
+          model: messageModerator
+        });
+        that.ui.messageModeratorName.html(agentNameView.render().el);
+      });
+    }    
   },
 
   onPublicationStatusSelectChange: function(ev){
-    console.log("messageModerationOptions::onPublicationStatusSelectChange() ev: ", ev);
     this.updateContent();
   },
 
@@ -65,11 +83,16 @@ var messageModerationOptions = Marionette.LayoutView.extend({
     else {
       this.ui.moderationDetails.removeClass("hidden");
     }
+
+    if ( this.model.get("moderator") ){
+      this.ui.messageModerator.removeClass('hidden');
+    }
+    else {
+      this.ui.messageModerator.addClass("hidden");
+    }
   },
 
   onSaveButtonClick: function(){
-    console.log("messageModerationOptions::onSaveButtonClick()");
-    console.log("this.model: ", this.model);
     var publication_state = this.ui.publicationStatusSelect.val();
     if ( publication_state == "PUBLISHED" ){
       this.model.save({

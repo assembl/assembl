@@ -166,19 +166,34 @@ var MessageModel = Base.Model.extend({
         );
   },
 
-  /** Return a promise for the post's creator
+  /** 
+   * Return a promise for the post's creator
    */
   getCreatorPromise: function() {
     var that = this;
 
     return this.collection.collectionManager.getAllUsersCollectionPromise()
-            .then(function(allUsersCollection) {
-              return Promise.resolve(allUsersCollection.getById(that.get('idCreator')))
-                    .catch(function(e) {
-                      console.error(e.statusText);
-                    });
-            });
+      .then(function(allUsersCollection) {
+        return Promise.resolve(allUsersCollection.getById(that.get('idCreator')))
+          .catch(function(e) {
+            console.error(e.statusText);
+          });
+      });
+  },
 
+  /**
+   * Return a promise for the post's moderator
+   */
+  getModeratorPromise: function() {
+    var that = this;
+
+    return this.collection.collectionManager.getAllUsersCollectionPromise()
+      .then(function(allUsersCollection) {
+        return Promise.resolve(allUsersCollection.getById(that.get('moderator')))
+          .catch(function(e) {
+            console.error(e.statusText);
+          });
+      });
   },
 
   /**
