@@ -976,7 +976,8 @@ var MessageView = Marionette.LayoutView.extend({
       model: this.model,
       message_publication_status: this.model.get("publication_state"),
       message_moderated_version: this.model.get("moderation_text"),
-      message_moderation_remarks: "" // TODO
+      message_moderation_remarks: this.model.get("moderator_comment"),
+      message_original_body_safe: this.generateSafeBody()
     });
     this.getRegion("moderationOptionsRegion").show(this.messageModerationOptionsView);
     this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsSaveAndClose', this.onModerationOptionsSaveAndClose);

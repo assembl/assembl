@@ -1,3 +1,6 @@
+{{gettext('Initial message content')}}
+<textarea class="formtextarea text mbxs" disabled><%= message_original_body_safe %></textarea>
+
 {{gettext('Message publication status')}}
 <select class="message-publication-status js_messagePublicationStatusSelect">
     <option value="PUBLISHED" <% if (message_publication_status == "PUBLISHED"){ %>selected<% } %>>{{gettext('Published without moderation')}}</option>
@@ -13,13 +16,10 @@
 
     <br/>
     
-    {# TODO
     {{gettext('Moderation remarks')}}
     <textarea class="formtextarea message-moderation-remarks js_messageModerationRemarks text mbxs" placeholder="{{gettext('Type something...')}}"><%= message_moderation_remarks %></textarea>
-    
 
     <br/>
-    #}
 </div>
 
 <a class="btn btn-primary btn-sm js_messageModerationSaveButton">{{gettext('Save')}}</a> <a class="btn btn-cancel btn-sm js_messageModerationCancelButton">{{gettext('Cancel')}}</a>

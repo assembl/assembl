@@ -49,6 +49,7 @@ var MessageModel = Base.Model.extend({
     moderator: null,
     moderation_text: null,
     moderated_on: null,
+    moderator_comment: null
   },
 
   parse: function(rawModel) {

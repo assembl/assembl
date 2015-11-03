@@ -27,12 +27,17 @@ var messageModerationOptions = Marionette.LayoutView.extend({
     if ( !("message_moderation_remarks" in options) ){
       this.options.message_moderation_remarks = "";
     }
+
+    if ( !("message_original_body_safe" in options) ){
+      this.options.message_original_body_safe = "";
+    }
   },
 
   ui: {
     publicationStatusSelect: '.js_messagePublicationStatusSelect',
     moderationDetails: '.js_moderationDetails',
     messageModeratedVersion: '.js_messageModeratedVersion',
+    messageModerationRemarks: '.js_messageModerationRemarks',
     saveButton: '.js_messageModerationSaveButton',
     cancelButton: '.js_messageModerationCancelButton'
   },
@@ -43,15 +48,22 @@ var messageModerationOptions = Marionette.LayoutView.extend({
     'click @ui.cancelButton': 'onCancelButtonClick'
   },
 
+  onShow: function(){
+    console.log("messageModerationOptions::onShow()");
+    this.updateContent();
+  },
+
   onPublicationStatusSelectChange: function(ev){
     console.log("messageModerationOptions::onPublicationStatusSelectChange() ev: ", ev);
-    if ( ev && "currentTarget" in ev ){
-      var val = $(ev.currentTarget).val();
-      if ( val == "PUBLISHED" ){
-        this.ui.moderationDetails.addClass("hidden");
-      } else {
-        this.ui.moderationDetails.removeClass("hidden");
-      }
+    this.updateContent();
+  },
+
+  updateContent: function(){
+    if ( this.ui.publicationStatusSelect.val() == "PUBLISHED" ){
+      this.ui.moderationDetails.addClass("hidden");
+    }
+    else {
+      this.ui.moderationDetails.removeClass("hidden");
     }
   },
 
@@ -67,8 +79,8 @@ var messageModerationOptions = Marionette.LayoutView.extend({
     else {
       this.model.save({
         publication_state: publication_state,
-        moderation_text: this.ui.messageModeratedVersion.val()
-        // TODO: js_messageModerationRemarks
+        moderation_text: this.ui.messageModeratedVersion.val(),
+        moderator_comment: this.ui.messageModerationRemarks.val()
       }, {patch: true}); // send a PATCH request, not a PUT
     }
     this.trigger("moderationOptionsSave");
@@ -84,7 +96,8 @@ var messageModerationOptions = Marionette.LayoutView.extend({
       i18n: i18n,
       message_publication_status: this.options.message_publication_status,
       message_moderated_version: this.options.message_moderated_version,
-      message_moderation_remarks: this.options.message_moderation_remarks
+      message_moderation_remarks: this.options.message_moderation_remarks,
+      message_original_body_safe: this.options.message_original_body_safe
     }
   },
 
