@@ -1,3 +1,9 @@
-<span class="txt-gray2" style="white-space: normal"><%= moderation_text %></span><% if (body) { %><span id="show_moderated_<%= message_id %>" class="btn btn-cancel btn-sm js_showModeratedMessage txt-gray" style="padding:0; padding-left:1ex; white-space: normal; display: inline; line-height: 1;" data="<%= message_id %>">{{ gettext('Click here to see original message') }}</span>
-<div class="moderated_message_content hidden txt-gray1 message-body body_format_text_plain" id="js_moderated_message_<%= message_id %>"><%= body %></div>
+<% if ((publication_state == "MODERATED_TEXT_ON_DEMAND" || publication_state == "MODERATED_TEXT_NEVER_AVAILABLE") && moderation_text) { %><%= moderation_text %><% } %><% if( viewStyle != ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
+    <% if (publication_state == "MODERATED_TEXT_NEVER_AVAILABLE"){ %>
+        <span class="txt-gray mls">{{ gettext('This message has been moderated and the original message is not available.') }}</span>
+    <% } %>
+    <% if (publication_state == "MODERATED_TEXT_ON_DEMAND" && body) { %>
+        <span id="show_moderated_<%= message_id %>" class="btn btn-cancel btn-sm js_showModeratedMessage txt-gray" style="padding:0; padding-left:1ex; display: inline; line-height: 1;" data="<%= message_id %>">{{ gettext('Click here to see original message') }}</span>
+        <div class="moderated_message_content hidden txt-gray1 message-body body_format_text_plain" id="js_moderated_message_<%= message_id %>"><%= body %></div>
+    <% } %>
 <% } %>

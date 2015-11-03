@@ -256,7 +256,10 @@ var MessageView = Marionette.LayoutView.extend({
     //if (this.model.get("moderation_text")) {
       bodyFormat = "text/html";
       body = this.moderationTemplate({
+        ctx: Ctx,
+        viewStyle: this.viewStyle,
         body: body,
+        publication_state: this.model.get("publication_state"),
         moderation_text: this.model.get("moderation_text"),
         moderator: this.model.get("moderator"),
         message_id: this.model.id.split('/')[1]
