@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-30 16:09-0400\n"
+"POT-Creation-Date: 2015-11-03 13:56-0500\n"
 "PO-Revision-Date: 2015-10-21 03:05+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language: fr\n"
@@ -801,17 +801,17 @@ msgstr[0] "%d message est disponible sous cette idée"
 msgstr[1] "%d messages sont disponibles sous cette idée"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:200
-#: assembl/static/js/app/views/message.js:407
+#: assembl/static/js/app/views/message.js:423
 msgid "Type your response here..."
 msgstr "Écrivez votre réponse ici..."
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:202
-#: assembl/static/js/app/views/message.js:409
+#: assembl/static/js/app/views/message.js:425
 msgid "Send your reply"
 msgstr "Envoyez votre réponse"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:205
-#: assembl/static/js/app/views/message.js:411
+#: assembl/static/js/app/views/message.js:427
 msgid "You did not type a response yet..."
 msgstr "Vous n'avez pas encore écrit de réponse"
 
@@ -994,6 +994,7 @@ msgstr "Ajouter au presse-papier"
 #: assembl/templates/views/base-modal.tmpl:12
 #: assembl/templates/views/ckeditorField.tmpl:10
 #: assembl/templates/views/create-group.tmpl:116
+#: assembl/templates/views/messageModerationOptions.tmpl:32
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:9
 #: assembl/templates/views/synthesisIdea.tmpl:34
 msgid "Cancel"
@@ -1123,36 +1124,36 @@ msgstr "Envoi en cours..."
 msgid "Message posted!"
 msgstr "Commentaire envoyé!"
 
-#: assembl/static/js/app/views/postFilters.js:119
+#: assembl/static/js/app/views/postFilters.js:116
 #, python-format
 msgid "%s (%s)"
 msgid_plural "%s (%s)"
 msgstr[0] "%s (%s)"
 msgstr[1] "%s (%s)"
 
-#: assembl/static/js/app/views/postFilters.js:178
+#: assembl/static/js/app/views/postFilters.js:175
 #, python-format
 msgid "%s"
 msgstr "%s"
 
-#: assembl/static/js/app/views/postFilters.js:178
+#: assembl/static/js/app/views/postFilters.js:175
 #, python-format
 msgid "NOT %s"
 msgstr "PAS %s"
 
-#: assembl/static/js/app/views/postFilters.js:198
+#: assembl/static/js/app/views/postFilters.js:195
 msgid "Posts with specific ids"
 msgstr "Messages avec des identifiants spécifiques"
 
-#: assembl/static/js/app/views/postFilters.js:202
+#: assembl/static/js/app/views/postFilters.js:199
 msgid "Only include posts that are in a range of specific ids"
 msgstr "N'inclure que les messages qui sont dans la liste d'identifiants fournie"
 
-#: assembl/static/js/app/views/postFilters.js:219
+#: assembl/static/js/app/views/postFilters.js:216
 msgid "Related to idea"
 msgstr "Relatif à l'idée"
 
-#: assembl/static/js/app/views/postFilters.js:222
+#: assembl/static/js/app/views/postFilters.js:219
 msgid ""
 "Only include messages related to the specified idea.  The filter is "
 "recursive:  Messages related to ideas that are descendents of the idea "
@@ -1162,53 +1163,53 @@ msgstr ""
 "récursif: Les messages liés à des idées en-dessous de l'idée courante "
 "seront inclus."
 
-#: assembl/static/js/app/views/postFilters.js:237
+#: assembl/static/js/app/views/postFilters.js:234
 #, python-format
 msgid "Discuss idea %s"
 msgid_plural "Discuss ideas: %s"
 msgstr[0] "En lien avec l'idée %s"
 msgstr[1] "En lien avec les idées : %s"
 
-#: assembl/static/js/app/views/postFilters.js:237
-#: assembl/static/js/app/views/postFilters.js:276
-#: assembl/static/js/app/views/postFilters.js:315
-#: assembl/static/js/app/views/postFilters.js:350
-#: assembl/static/js/app/views/postFilters.js:405
+#: assembl/static/js/app/views/postFilters.js:234
+#: assembl/static/js/app/views/postFilters.js:273
+#: assembl/static/js/app/views/postFilters.js:312
+#: assembl/static/js/app/views/postFilters.js:347
+#: assembl/static/js/app/views/postFilters.js:402
 msgid " AND "
 msgstr " ET "
 
-#: assembl/static/js/app/views/postFilters.js:255
+#: assembl/static/js/app/views/postFilters.js:252
 msgid "Part of thread of"
 msgstr "Partie de l'enfilade de"
 
-#: assembl/static/js/app/views/postFilters.js:258
+#: assembl/static/js/app/views/postFilters.js:255
 msgid "Only include messages that are in the specified post reply thread."
 msgstr ""
 "N'inclure que les messages qui sont dans l'enfilade de réponses au "
 "message courant."
 
-#: assembl/static/js/app/views/postFilters.js:267
-#: assembl/static/js/app/views/postFilters.js:306
+#: assembl/static/js/app/views/postFilters.js:264
+#: assembl/static/js/app/views/postFilters.js:303
 #, python-format
 msgid "synthesis \"%s\""
 msgstr "synthèse \"%s\""
 
-#: assembl/static/js/app/views/postFilters.js:270
-#: assembl/static/js/app/views/postFilters.js:309
+#: assembl/static/js/app/views/postFilters.js:267
+#: assembl/static/js/app/views/postFilters.js:306
 #, python-format
 msgid "message \"%s\""
 msgstr "message \"%s\""
 
-#: assembl/static/js/app/views/postFilters.js:276
+#: assembl/static/js/app/views/postFilters.js:273
 #, python-format
 msgid "Are in the conversation that follows: %s"
 msgstr "Sont dans la conversation qui suit : %s"
 
-#: assembl/static/js/app/views/postFilters.js:294
+#: assembl/static/js/app/views/postFilters.js:291
 msgid "Part of the context of"
 msgstr "Partie du contexte de"
 
-#: assembl/static/js/app/views/postFilters.js:297
+#: assembl/static/js/app/views/postFilters.js:294
 msgid ""
 "Only include messages that are in the specified post reply thread or "
 "ancestry."
@@ -1216,119 +1217,119 @@ msgstr ""
 "N'inclure que les messages qui sont directement en amont ou en aval du "
 "message courant."
 
-#: assembl/static/js/app/views/postFilters.js:315
+#: assembl/static/js/app/views/postFilters.js:312
 #, python-format
 msgid "Are in the context of: %s"
 msgstr "Sont dans le contexte de : %s"
 
-#: assembl/static/js/app/views/postFilters.js:333
+#: assembl/static/js/app/views/postFilters.js:330
 msgid "Posted by"
 msgstr "Postés par"
 
-#: assembl/static/js/app/views/postFilters.js:336
+#: assembl/static/js/app/views/postFilters.js:333
 msgid "Only include messages that are posted by a specific user."
 msgstr ""
 "N'inclure que des messages qui ont été envoyés par un utilisateur en "
 "particulier."
 
-#: assembl/static/js/app/views/postFilters.js:345
-#: assembl/static/js/app/views/postFilters.js:400
+#: assembl/static/js/app/views/postFilters.js:342
+#: assembl/static/js/app/views/postFilters.js:397
 #, python-format
 msgid "\"%s\""
 msgstr "\"%s\""
 
-#: assembl/static/js/app/views/postFilters.js:350
+#: assembl/static/js/app/views/postFilters.js:347
 #, python-format
 msgid "Are posted by: %s"
 msgstr "Sont écrits par: %s"
 
-#: assembl/static/js/app/views/postFilters.js:368
+#: assembl/static/js/app/views/postFilters.js:365
 msgid "Messages I posted"
 msgstr "Mes messages"
 
-#: assembl/static/js/app/views/postFilters.js:371
+#: assembl/static/js/app/views/postFilters.js:368
 msgid "Only include messages that I posted."
 msgstr "Inclure seulement les messages que j'ai envoyé"
 
-#: assembl/static/js/app/views/postFilters.js:388
+#: assembl/static/js/app/views/postFilters.js:385
 msgid "Replies to"
 msgstr "Réponses à"
 
-#: assembl/static/js/app/views/postFilters.js:391
+#: assembl/static/js/app/views/postFilters.js:388
 msgid "Only include messages that reply to a specific user."
 msgstr "Inclure seulement les messages répondant à un utilisateur spécifiquement"
 
-#: assembl/static/js/app/views/postFilters.js:405
+#: assembl/static/js/app/views/postFilters.js:402
 #, python-format
 msgid "Replies to: %s"
 msgstr "Réponses à : %s"
 
-#: assembl/static/js/app/views/postFilters.js:423
+#: assembl/static/js/app/views/postFilters.js:420
 msgid "Messages that reply to me"
 msgstr "Messages en réponse à mes contributions"
 
-#: assembl/static/js/app/views/postFilters.js:426
+#: assembl/static/js/app/views/postFilters.js:423
 msgid "Only include messages that reply one of the messages I posted."
 msgstr "Inclure seulement les messages qui répondent à une de mes contributions"
 
-#: assembl/static/js/app/views/postFilters.js:446
+#: assembl/static/js/app/views/postFilters.js:443
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
 msgid "Messages not yet associated with an idea"
 msgstr "Messages pas encore associés à une idée"
 
-#: assembl/static/js/app/views/postFilters.js:449
+#: assembl/static/js/app/views/postFilters.js:446
 msgid "Only include messages that are not found in any idea."
 msgstr "N'inclure que des messages qui ne se trouvent liés à aucune idée"
 
-#: assembl/static/js/app/views/postFilters.js:469
+#: assembl/static/js/app/views/postFilters.js:466
 msgid "Synthesis messages"
 msgstr "Synthèses"
 
-#: assembl/static/js/app/views/postFilters.js:472
+#: assembl/static/js/app/views/postFilters.js:469
 msgid "Only include messages that represent a synthesis of the discussion."
 msgstr "N'inclure que des messages qui représentent une synthèse de la discussion"
 
-#: assembl/static/js/app/views/postFilters.js:494
+#: assembl/static/js/app/views/postFilters.js:491
 msgid "Have unread value"
 msgstr "A la valeur non-lu"
 
-#: assembl/static/js/app/views/postFilters.js:500
+#: assembl/static/js/app/views/postFilters.js:497
 msgid "You haven't read yet"
 msgstr "N'ont pas été lus"
 
-#: assembl/static/js/app/views/postFilters.js:502
+#: assembl/static/js/app/views/postFilters.js:499
 msgid "You've already read"
 msgstr "Vous avez déjà lu"
 
-#: assembl/static/js/app/views/postFilters.js:530
+#: assembl/static/js/app/views/postFilters.js:527
 msgid "Unread messages"
 msgstr "Messages non-lus"
 
-#: assembl/static/js/app/views/postFilters.js:533
+#: assembl/static/js/app/views/postFilters.js:530
 msgid "Only include messages you haven't read yet, or you manually marked unread."
 msgstr ""
 "Inclure seulement les messages que je n'ai pas lu et ceux que j'ai marqué"
 " \"Non-lus\""
 
-#: assembl/static/js/app/views/postFilters.js:550
+#: assembl/static/js/app/views/postFilters.js:547
 msgid "Read messages"
 msgstr "Messages lus"
 
-#: assembl/static/js/app/views/postFilters.js:553
+#: assembl/static/js/app/views/postFilters.js:550
 msgid "Only include messages that have previously been marked read."
 msgstr "Inclure seulement les messages que j'ai marqué \"Lu\""
 
-#: assembl/static/js/app/views/postFilters.js:590
+#: assembl/static/js/app/views/postFilters.js:587
 msgid "Messages posted after..."
 msgstr "Messages envoyés après..."
 
-#: assembl/static/js/app/views/postFilters.js:596
+#: assembl/static/js/app/views/postFilters.js:593
 msgid "Only include posts created after a given date."
 msgstr "Inclure seulement les messages créés depuis une date donnée."
 
-#: assembl/static/js/app/views/postFilters.js:600
+#: assembl/static/js/app/views/postFilters.js:597
 msgid ""
 "Please type a date. The filter will then show only posts which have been "
 "created after this date. Example: 2015-01-01"
@@ -1336,15 +1337,15 @@ msgstr ""
 "Veuillez écrire une date. Le filtre ne montrera ensuite que les messages "
 "qui ont été créés après cette date. Par exemple: 2015-01-01"
 
-#: assembl/static/js/app/views/postFilters.js:642
+#: assembl/static/js/app/views/postFilters.js:639
 msgid "Messages posted before..."
 msgstr "Messages envoyés avant..."
 
-#: assembl/static/js/app/views/postFilters.js:648
+#: assembl/static/js/app/views/postFilters.js:645
 msgid "Only include posts created before a given date."
 msgstr "N'inclure que les messages créés avant une date donnée."
 
-#: assembl/static/js/app/views/postFilters.js:652
+#: assembl/static/js/app/views/postFilters.js:649
 msgid ""
 "Please type a date. The filter will then show only posts which have been "
 "created before this date. Example: 2015-01-01"
@@ -1352,12 +1353,12 @@ msgstr ""
 "Veuillez écrire une date. Le filtre ne montrera ensuite que les messages "
 "qui ont été créés avant cette date. Par exemple: 2015-01-01"
 
-#: assembl/static/js/app/views/postFilters.js:692
+#: assembl/static/js/app/views/postFilters.js:689
 #, python-format
 msgid "Messages posted since the last synthesis (%s)"
 msgstr "Messages envoyés depuis la dernière synthèse (%s)"
 
-#: assembl/static/js/app/views/postFilters.js:696
+#: assembl/static/js/app/views/postFilters.js:693
 msgid "Only include posts created after the last synthesis."
 msgstr "Inclure seulement les messages créés depuis la dernière synthèse."
 
@@ -1713,6 +1714,7 @@ msgstr "Courriel"
 #: assembl/templates/admin/discussion_permissions.jinja2:139
 #: assembl/templates/admin/global_permissions.jinja2:37
 #: assembl/templates/views/ckeditorField.tmpl:9
+#: assembl/templates/views/messageModerationOptions.tmpl:32
 #: assembl/templates/views/sourceFacebook.tmpl:3
 #: assembl/templates/views/synthesisIdea.tmpl:33
 #: assembl/templates/views/userAccount.tmpl:48
@@ -2878,21 +2880,25 @@ msgstr "Envoyez un courriel à cet utilisateur"
 msgid "Show/hide extracts"
 msgstr "Montrer/cacher les extraits"
 
-#: assembl/templates/views/message.tmpl:100
-#: assembl/templates/views/message.tmpl:118
+#: assembl/templates/views/message.tmpl:89
+msgid "Moderation options"
+msgstr "Options de modération"
+
+#: assembl/templates/views/message.tmpl:104
+#: assembl/templates/views/message.tmpl:123
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 msgstr "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 
-#: assembl/templates/views/message.tmpl:137
+#: assembl/templates/views/message.tmpl:143
 msgid "Read more"
 msgstr "Lire plus"
 
-#: assembl/templates/views/message.tmpl:144
+#: assembl/templates/views/message.tmpl:151
 msgid "Read less"
 msgstr "Lire moins"
 
-#: assembl/templates/views/message.tmpl:156
+#: assembl/templates/views/message.tmpl:163
 msgid "Reply"
 msgstr "Répondre"
 
@@ -2924,6 +2930,43 @@ msgstr "Désélectionner"
 msgid "Select"
 msgstr "Sélectionner"
 
+#: assembl/templates/views/messageModerationOptions.tmpl:1
+msgid "Initial message content"
+msgstr "Contenu original du message"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:4
+msgid "Message publication status"
+msgstr "Statut de publication du message"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:6
+msgid "Published without moderation"
+msgstr "Publié sans modération"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:7
+msgid "Moderated, initial content available"
+msgstr "Modéré, contenu original disponible"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:8
+msgid "Moderated, initial content not available"
+msgstr "Modéré, contenu original indisponible"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:15
+msgid "Moderated by"
+msgstr "Modéré par"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:21
+msgid "Moderated version of the message"
+msgstr "Version modérée du message"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:22
+#: assembl/templates/views/messageModerationOptions.tmpl:27
+msgid "Type something..."
+msgstr "Écrivez quelque chose..."
+
+#: assembl/templates/views/messageModerationOptions.tmpl:26
+msgid "Moderation remarks"
+msgstr "Remarques de modération"
+
 #: assembl/templates/views/messageSend.tmpl:4
 msgid "Start a new discussion thread"
 msgstr "Lancez un nouveau sujet de discussion"
@@ -2953,7 +2996,11 @@ msgstr "Votre message sera posté en tant qu'enfant du message précédent."
 msgid "Your message will be posted in the general conversation."
 msgstr "Votre message sera posté dans la conversation générale."
 
-#: assembl/templates/views/moderatedBody.tmpl:1
+#: assembl/templates/views/moderatedBody.tmpl:3
+msgid "This message has been moderated and the original message is not available."
+msgstr "Ce message a été modéré et le message original n'est pas disponible."
+
+#: assembl/templates/views/moderatedBody.tmpl:6
 msgid "Click here to see original message"
 msgstr "Cliquez ici pour voir le message original"
 
