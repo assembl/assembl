@@ -152,12 +152,15 @@ class SourceReader(Thread):
         log.log(lvl, "%s %d: %s -> %s" % (
             self.__class__.__name__, self.source_id, self.status.name,
             status.name))
+        if status == ReaderStatus.READING and self.status != ReaderStatus.READING:
+            self.source.connection_error = self.status
+            self.source.db.commit()
+            self.refresh_source()
         self.status = status
-        self.source.read_status = status.value
 
     def successful_login(self):
         self.last_successful_login = datetime.utcnow()
-        self.status = ReaderStatus.READING
+        self.source.db.commit()
 
     def successful_read(self):
         from assembl.models import ContentSource
@@ -165,7 +168,7 @@ class SourceReader(Thread):
         self.reset_errors()
         self.reimporting = False
         self.source.db.commit()
-        self.source = ContentSource.get(self.source_id)
+        self.refresh_source()
 
     def reset_errors(self):
         self.error_count = 0
@@ -212,7 +215,7 @@ class SourceReader(Thread):
 
         self.last_error_status = status
         self.source.db.rollback()
-        self.source = ContentSource.get(self.source_id)
+        self.refresh_source()
         self.source.connection_error = status.value
         self.source.error_description = str(reader_error)
         if status > ReaderStatus.TRANSIENT_ERROR:
@@ -221,7 +224,13 @@ class SourceReader(Thread):
         self.error_backoff_until = datetime.utcnow() + error_backoff
         self.source.error_backoff_until = self.error_backoff_until
         self.source.db.commit()
-        self.source = ContentSource.get(self.source_id)
+        self.refresh_source()
+
+    def refresh_source(self):
+        # after a commit, refresh the source so it's still usable
+        self.source.db.query(
+            self.source.__class__
+            ).populate_existing().get(self.source.id)
 
     def is_in_error(self):
         return self.last_error_status is not None
