@@ -56,9 +56,6 @@ class ContentSource(DiscussionBoundBase):
     error_description = Column(String)
     error_backoff_until = Column(DateTime)
 
-    # Non-persistant, default reading status
-    read_status = 0
-
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
         return [
