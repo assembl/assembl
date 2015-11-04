@@ -43,7 +43,7 @@
 '''
 
 import numpy as N
-from scipy.spatial.distance import pdist, squareform
+from sklearn.metrics.pairwise import pairwise_distances
 
 
 class Interval(object):
@@ -146,14 +146,14 @@ class Optics(object):
         self.distMethod = distMethod
         self.RD = None
 
-    def calculate_distances(self, x):
+    def calculate_distances(self, x, D=None):
         if len(x.shape) > 1:
             m, n = x.shape
         else:
             m = x.shape[0]
             n == 1
 
-        D = squareform(pdist(x, self.distMethod))
+        D = D if D is not None else pairwise_distances(x, metric=self.distMethod)
 
         self.CD = CD = N.zeros(m)
         self.RD = RD = N.ones(m)*1E10
@@ -350,10 +350,10 @@ class Optics(object):
         if self.is_valid_cluster(cluster, down_area, up_area):
             return cluster
 
-    def extract_clusters(self, x=None, eps=0.05):
+    def extract_clusters(self, x=None, eps=0.05, D=None):
         self.eps = eps
         if x is not None:
-            self.calculate_distances(x)
+            self.calculate_distances(x, D=D)
         else:
             assert self.RD is not None, "You must provide a vector first"
         RD = self.RDO

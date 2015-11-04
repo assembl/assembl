@@ -497,8 +497,9 @@ def get_interest_alerts(request):
 def show_cluster(request):
     discussion = request.context._instance
     output = StringIO()
-    from assembl.nlp.clusters import as_html
-    as_html(discussion, output)
+    from assembl.nlp.clusters import SKLearnClusteringSemanticAnalysis
+    analysis = SKLearnClusteringSemanticAnalysis(discussion)
+    analysis.as_html(output)
     output.seek(0)
     return Response(body_file=output, content_type='text/html')
 
@@ -509,7 +510,7 @@ def show_cluster(request):
 def show_optics_cluster(request):
     discussion = request.context._instance
     eps = float(request.GET.get("eps", "0.02"))
-    min_points = int(request.GET.get("min_points", "3"))
+    min_samples = int(request.GET.get("min_samples", "3"))
     test_code = request.GET.get("test_code", None)
     scrambler = None
     if test_code:
@@ -519,7 +520,9 @@ def show_optics_cluster(request):
             get_config().get('session.secret') + test_code + discussion.slug)
     discussion = request.context._instance
     output = StringIO()
-    from assembl.nlp.clusters import as_html_optics
-    as_html_optics(discussion, output, min_points, eps, scrambler)
+    from assembl.nlp.clusters import OpticsSemanticsAnalysisWithSuggestions
+    analysis = OpticsSemanticsAnalysisWithSuggestions(
+        discussion, min_samples=min_samples, eps=eps, scrambler=scrambler)
+    analysis.as_html(output)
     output.seek(0)
     return Response(body_file=output, content_type='text/html')

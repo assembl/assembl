@@ -22,8 +22,9 @@ from . import (
 def show_similar_posts(request):
     ctx = request.context
     post = ctx._instance
-    from assembl.nlp.clusters import get_similar_posts
-    similar = get_similar_posts(post.discussion, post.id)
+    from assembl.nlp.clusters import SemanticAnalysisData
+    analysis = SemanticAnalysisData(post.discussion)
+    similar = analysis.get_similar_posts(post.id)
     view = (request.matchdict or {}).get('view', None)\
         or ctx.get_default_view() or 'default'
     if view == 'id_only':
