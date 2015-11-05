@@ -260,9 +260,13 @@ class UserPreferenceCollection(NamespacedUserKVCollection):
         for k, v in super(UserPreferenceCollection, self).iteritems():
             keys.add(k)
             yield k, v
-        for k, v in self.dprefs.iteritems():
+        for k, v in self.dprefs.items():
             if k not in keys:
                 yield k, v
+
+    def items(self):
+        # the inherited items makes multiple requests
+        return list(self.iteritems())
 
     def __getitem__(self, key):
         try:
