@@ -18,7 +18,7 @@ from ..traversal import (CollectionContext, InstanceContext, ClassContext)
 from .. import JSONError
 from . import (
     FORM_HEADER, JSON_HEADER, collection_view, instance_put_json,
-    collection_add_json)
+    collection_add_json, instance_view)
 
 
 @view_config(
@@ -179,6 +179,42 @@ def use_json_header_for_LocalUserRole_PUT(request):
              accept="application/json")
 def view_localuserrole_collection(request):
     return collection_view(request, 'default')
+
+
+@view_config(context=CollectionContext, renderer='json', request_method='GET',
+             ctx_collection_class=AgentProfile,
+             accept="application/json")
+def view_profile_collection(request):
+    ctx = request.context
+    view = request.GET.get('view', None) or ctx.get_default_view() or 'default'
+    content = collection_view(request)
+    if view != "id_only":
+        discussion = ctx.get_instance_of_class(Discussion)
+        if discussion:
+            from assembl.models import Post, AgentProfile
+            num_posts_per_user = \
+                AgentProfile.count_posts_in_discussion_all_profiles(discussion)
+            for x in content:
+                id = AgentProfile.get_database_id(x['@id'])
+                if id in num_posts_per_user:
+                    x['post_count'] = num_posts_per_user[id]
+    return content
+
+
+@view_config(context=InstanceContext, renderer='json', request_method='GET',
+             ctx_instance_class=AgentProfile,
+             accept="application/json")
+def view_agent_profile(request):
+    profile = instance_view(request)
+    ctx = request.context
+    view = ctx.get_default_view() or 'default'
+    view = request.GET.get('view', view)
+    if view not in ("id_only", "extended"):
+        discussion = ctx.get_instance_of_class(Discussion)
+        if discussion:
+            profile['post_count'] = ctx._instance.count_posts_in_discussion(
+                discussion.id)
+    return profile
 
 
 @view_config(

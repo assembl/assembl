@@ -28,6 +28,7 @@ from sqlalchemy.orm import (
     relationship, backref, deferred)
 from sqlalchemy.types import Text
 from sqlalchemy.orm.attributes import NO_VALUE
+from sqlalchemy.sql.functions import count
 from pyramid.security import Everyone, Authenticated
 from rdflib import URIRef
 from virtuoso.vmapping import PatternIriClass
@@ -236,6 +237,14 @@ class AgentProfile(Base):
     def get_agent_preload(self, view_def='default'):
         result = self.generic_json(view_def, user_id=self.id)
         return json.dumps(result)
+
+    @classmethod
+    def count_posts_in_discussion_all_profiles(cls, discussion):
+        from .post import Post
+        return dict(discussion.db.query(
+            Post.creator_id, count(Post.id)).filter_by(
+            discussion_id=discussion.id, hidden=False).group_by(
+            Post.creator_id))
 
     def count_posts_in_discussion(self, discussion_id):
         from .post import Post
