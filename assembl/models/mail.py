@@ -392,8 +392,6 @@ class AbstractMailbox(PostSource):
 
         def email_header_to_unicode(header_string, join_crlf=True):
             decoded_header = decode_email_header(header_string)
-            if join_crlf:
-                decoded_header = ''.join(decoded_header.split('\r\n'))
             default_charset = 'ASCII'
 
             text = ''.join(
@@ -402,6 +400,8 @@ class AbstractMailbox(PostSource):
                     decoded_header
                 ]
             )
+            if join_crlf:
+                text = u''.join(text.split('\r\n'))
 
             return text
 
