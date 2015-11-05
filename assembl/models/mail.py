@@ -390,8 +390,10 @@ class AbstractMailbox(PostSource):
 
         (mimeType, body) = get_payload(parsed_email)
 
-        def email_header_to_unicode(header_string):
+        def email_header_to_unicode(header_string, join_crlf=True):
             decoded_header = decode_email_header(header_string)
+            if join_crlf:
+                decoded_header = ''.join(decoded_header.split('\r\n'))
             default_charset = 'ASCII'
 
             text = ''.join(
@@ -424,7 +426,7 @@ class AbstractMailbox(PostSource):
         sender_email_account = EmailAccount.get_or_make_profile(self.db, sender_email, sender_name)
         creation_date = datetime.utcfromtimestamp(
             mktime(email.utils.parsedate(parsed_email['Date'])))
-        subject = email_header_to_unicode(parsed_email['Subject'])
+        subject = email_header_to_unicode(parsed_email['Subject'], False)
         recipients = email_header_to_unicode(parsed_email['To'])
         body = body.strip()
         # Try/except for a normal situation is an anti-pattern,
