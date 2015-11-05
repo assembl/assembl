@@ -234,16 +234,22 @@ class ExplicitSubGraphView(IdeaGraphView):
         return retval
 
     def get_idea_links(self):
-        return self.idea_links
+        # more efficient than the association_proxy
+        return self.db.query(IdeaLink).join(
+            SubGraphIdeaLinkAssociation
+            ).filter_by(sub_graph_id=self.id).all()
 
     def get_ideas(self):
-        return self.ideas
+        # more efficient than the association_proxy
+        return self.db.query(Idea).join(
+            SubGraphIdeaAssociation
+            ).filter_by(sub_graph_id=self.id).all()
 
     def visit_ideas_depth_first(self, idea_visitor):
         # prefetch
-        ideas_by_id = {idea.id: idea for idea in self.ideas}
+        ideas_by_id = {idea.id: idea for idea in self.get_ideas()}
         children_links = defaultdict(list)
-        for link in self.idea_links:
+        for link in self.get_idea_links():
             children_links[link.source_id].append(link)
         for links in children_links.itervalues():
             links.sort(key=lambda l: l.order)
