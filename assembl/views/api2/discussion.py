@@ -372,6 +372,22 @@ def get_visit_count(request):
     return Response(body_file=output, content_type='text/csv')
 
 
+@view_config(context=InstanceContext, name="visitors",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_ADMIN_DISC)
+def get_visitors(request):
+    discussion = request.context._instance
+    visitors = [
+        (st.last_visit, st.agent_profile.name,
+            st.agent_profile.get_preferred_email())
+        for st in discussion.agent_status_in_discussion if st.last_visit]
+    visitors.sort()
+    visitors.reverse()
+    body = "\n".join(("%s: %s <%s>" % (x[0].isoformat(), x[1], x[2])
+                      for x in visitors))
+    return Response(body=body, content_type='text/text')
+
+
 pygraphviz_formats = {
     'text/vnd.graphviz': 'dot',
     'image/gif': 'gif',
