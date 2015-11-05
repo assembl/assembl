@@ -629,16 +629,41 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
                 %s sioc:reply_of* ?post .
                 ?post assembl:postLinkedToIdea ?idea }'''
         if direct and indirect:
-            clause = '''select distinct ?idea, ?ideaP where {
-                %s sioc:reply_of* ?post .
-                ?post assembl:postLinkedToIdea ?ideaP  .
+            clause = '''select distinct ?postP, ?ideaP, ?idea where {
+                %s sioc:reply_of* ?postP .
+                ?postP assembl:postLinkedToIdea ?ideaP  .
                 ?idea idea:includes* ?ideaP  }'''
-            pairs = list(cls.default_db.execute(
+            r = list(cls.default_db.execute(
                 SparqlClause(clause % (
                     post_uri.n3(),),
                     quad_storage=discussion_storage.n3())))
-            return (list({int(p[0]) for p in pairs}) or None,
-                    list({int(p[1]) for p in pairs}) or None)
+            r = [(int(x), int(y), int(z)) for (x, y, z) in r]
+
+            def comp((pp1, ip1, i1), (pp2, ip2, i2)):
+                direct_idea1 = ip1 == i1
+                direct_idea2 = ip2 == i2
+                direct_post1 = pp1 == post_id
+                direct_post2 = pp2 == post_id
+                if direct_idea1 != direct_idea2:
+                    return -1 if direct_idea1 else 1
+                if direct_post1 != direct_post2:
+                    return -1 if direct_post1 else 1
+                if pp1 != pp2:
+                    # assume hry is congruent with post order.
+                    return pp2 - pp1
+                if ip1 != ip2:
+                    # TODO: Real hry order. Should be rare.
+                    return ip2 - ip1
+                if i1 != i2:
+                    # TODO: Real hry order.
+                    return i2 - i1
+                return 0
+            r.sort(cmp=comp)
+            return [(
+                Content.uri_generic(pp),
+                Idea.uri_generic(ip),
+                Idea.uri_generic(i)
+            ) for (pp, ip, i) in r]
         else:
             return [int(id) for (id,) in cls.default_db.execute(
                 SparqlClause(clause % (
