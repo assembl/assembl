@@ -194,6 +194,20 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         'target_links', 'target',
         creator=lambda idea: IdeaLink(target=idea))
 
+    def get_children(self):
+        return self.db.query(Idea).join(
+            IdeaLink, (IdeaLink.target_id == Idea.id)
+            & (IdeaLink.tombstone_date == None)).filter(
+            (IdeaLink.source_id == self.id)
+            & (Idea.tombstone_date == None)).all()
+
+    def get_parents(self):
+        return self.db.query(Idea).join(
+            IdeaLink, (IdeaLink.source_id == Idea.id)
+            & (IdeaLink.tombstone_date == None)).filter(
+            (IdeaLink.target_id == self.id)
+            & (Idea.tombstone_date == None)).all()
+
     @property
     def parent_uris(self):
         return [Idea.uri_generic(l.source_id) for l in self.source_links]
@@ -218,7 +232,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         # HACK. Review consequences after test.
         target_idea = target_idea or self
         inherited = dict()
-        for p in self.parents:
+        for p in self.get_parents():
             inherited.update(p.widget_ancestor_endpoints(target_idea))
         inherited.update({
             widget.uri(): widget.get_add_post_endpoint(target_idea)
@@ -411,7 +425,7 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
         visited.add(self)
         child_results = []
         if result is not IdeaVisitor.CUT_VISIT:
-            for child in self.children:
+            for child in self.get_children():
                 r = child._visit_ideas_depth_first(
                     idea_visitor, visited, level+1, result)
                 if r:
@@ -431,7 +445,7 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
         children = []
         result = True
         child_results = []
-        for child in self.children:
+        for child in self.get_children():
             if child in visited:
                 continue
             result = idea_visitor.visit_idea(child, level, prev_result)
@@ -460,7 +474,7 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
 
     def get_siblings_of_type(self, cls):
         # TODO: optimize
-        siblings = set(chain(*(p.children for p in self.parents)))
+        siblings = set(chain(*(p.children for p in self.get_parents())))
         if siblings:
             siblings.remove(self)
         return [c for c in siblings if isinstance(c, cls)]
