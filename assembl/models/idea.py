@@ -480,57 +480,24 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
         return [c for c in siblings if isinstance(c, cls)]
 
     def get_contributors(self):
-        return self._get_contributors(True, True)
+        local_uri = AssemblQuadStorageManager.local_uri()
+        discussion_storage = \
+            AssemblQuadStorageManager.discussion_storage_name()
 
-    def _get_contributors(self, indirect=True, id_only=True):
-        from .post import Post
-        from .auth import AgentProfile
-        from .idea_content_link import Extract
-        # Get extracts related to the idea
-        extracts = self.db.query(Extract).join(
-            Extract.extract_source.of_type(Post)).filter(
-            Extract.idea_id == self.base_id).options(
-            joinedload(Extract.extract_source)).all()
-        extracts_by_author = defaultdict(list)
-        for e in extracts:
-            extracts_by_author[e.extract_source.creator_id].append(e)
-        author_ids = extracts_by_author.keys()
-
-        def priority(author_id):
-            extracts = extracts_by_author[author_id]
-            return (-len([e for e in extracts if e.important]), -len(extracts))
-        # Sort authors by number of important extracts, then extracts
-        author_ids.sort(key=priority)
-        if indirect and extracts:
-            # Get ids of all messages replying one of those extracts's messages
-            root_posts = list({e.content_id for e in extracts})
-            pattern = """SELECT id FROM (
-                    SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
-                        id, parent_id FROM post ) pa%d
-                WHERE parent_id = :post_id%d"""
-            if len(root_posts) > 1:
-                union = union_all(
-                    *[text(pattern % (n, n)).columns(
-                        column('id')).bindparams(**{'post_id'+str(n): id})
-                      for n, id in enumerate(root_posts)])
-            else:
-                union = text(pattern % (0, 0)).columns(
-                    column('id')).bindparams(post_id0=root_posts[0])
-            # get those messages' authors. Sort by most recent
-            indirect_authors = self.db.query(AgentProfile.id).join(
-                Post, Post.creator_id == AgentProfile.id).filter(
-                Post.id.in_(union)).order_by(
-                Post.creation_date.desc()).all()
-            indirect_authors = [x for (x,) in indirect_authors
-                                if x not in author_ids]
-            author_ids.extend(indirect_authors)
-        if not author_ids:
-          return []
-        if id_only:
-            return [AgentProfile.uri_generic(id) for id in author_ids]
-        else:
-            return self.db.query(AgentProfile).filter(
-                AgentProfile.id.in_(author_ids)).all()
+        idea_uri = URIRef(self.uri(local_uri))
+        clause = '''select count(distinct ?postP), count(distinct ?post), ?author where {
+            %s idea:includes* ?ideaP .
+            ?postP assembl:postLinkedToIdea ?ideaP  .
+            ?post sioc:reply_of* ?postP .
+            ?post sioc:has_creator ?author }'''
+        r = self.db.execute(
+            SparqlClause(clause % (
+                idea_uri.n3(),),
+                quad_storage=discussion_storage.n3()))
+        r = [(int(cpp), int(cp), 'local:AgentProfile/' + a.rsplit('/',1)[1]
+              ) for (cpp, cp, a) in r]
+        r.sort(reverse=True)
+        return [a for (cpp, cp, a) in r]
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
