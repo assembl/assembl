@@ -33,6 +33,8 @@ def _get_agents_real(discussion, user_id=None, view_def='default'):
     include_emails = P_ADMIN_DISC in permissions or P_SYSADMIN in permissions
     if include_emails:
         agents = agents.options(joinedload(AgentProfile.accounts))
+    num_posts_per_user = \
+        AgentProfile.count_posts_in_discussion_all_profiles(discussion)
 
     def view(agent):
         result = agent.generic_json(view_def, user_id, permissions)
@@ -40,6 +42,9 @@ def _get_agents_real(discussion, user_id=None, view_def='default'):
             return
         if include_emails or agent.id == user_id:
             result['preferred_email'] = agent.get_preferred_email()
+        post_count = num_posts_per_user.get(agent.id, 0)
+        if post_count:
+            result['post_count'] = post_count
         return result
     return [view(agent) for agent in agents if agent is not None]
 
