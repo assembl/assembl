@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-11-03 13:56-0500\n"
+"POT-Creation-Date: 2015-11-06 11:01-0500\n"
 "PO-Revision-Date: 2015-10-21 03:05+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language: fr\n"
@@ -149,27 +149,27 @@ msgstr "Ne rien montrer de particulier"
 msgid "Show the following preview at the end of your message"
 msgstr "Montrer l'aperçu suivant à la fin de votre message"
 
-#: assembl/static/js/app/models/idea.js:71
+#: assembl/static/js/app/models/idea.js:74
 msgid "The root idea will not be in the synthesis"
 msgstr "L'idée-racine ne fera pas partie de la synthèse"
 
-#: assembl/static/js/app/models/idea.js:82
+#: assembl/static/js/app/models/idea.js:85
 msgid "Add a description of this idea"
 msgstr "Ajouter une description de cette idée"
 
-#: assembl/static/js/app/models/idea.js:97
+#: assembl/static/js/app/models/idea.js:100
 msgid "The root idea will never be in the synthesis"
 msgstr "L'idée-racine ne fera jamais partie de la synthèse"
 
-#: assembl/static/js/app/models/idea.js:110
+#: assembl/static/js/app/models/idea.js:113
 msgid "You can add an expression for the next synthesis"
 msgstr "Vous pouvez spécifier l'expression dans la prochaine synthèse"
 
-#: assembl/static/js/app/models/idea.js:120
+#: assembl/static/js/app/models/idea.js:123
 msgid "All posts"
 msgstr "Tous les messages"
 
-#: assembl/static/js/app/models/idea.js:132
+#: assembl/static/js/app/models/idea.js:135
 #: assembl/static/js/app/views/ideaPanel.js:358
 msgid "New idea"
 msgstr "Ajouter une idée"
@@ -544,116 +544,22 @@ msgstr ""
 msgid "All message by %s"
 msgstr "Tous les messages de %s"
 
-#: assembl/static/js/app/views/contextPage.js:78
+#: assembl/static/js/app/views/contextPage.js:79
 #: assembl/static/js/app/views/navigation/synthesisInNavigation.js:115
 msgid "No synthesis of the discussion has been published yet"
 msgstr "Aucune synthèse de cette discussion n'a été publiée"
 
-#: assembl/static/js/app/views/contextPage.js:148
-msgid "Evolution of the total number of messages"
-msgstr "Évolution du nombre total de messages"
-
-#: assembl/static/js/app/views/contextPage.js:148
-msgid "Evolution of the number of messages posted"
-msgstr "Évolution du nombre de messages postés"
-
-#: assembl/static/js/app/views/contextPage.js:149
-#: assembl/templates/views/navigation.tmpl:25
-#: assembl/templates/views/statistics.tmpl:5
-msgid "Statistics"
-msgstr "Statistiques"
-
-#: assembl/static/js/app/views/contextPage.js:454
-msgid "messages"
-msgstr "messages"
-
-#: assembl/static/js/app/views/contextPage.js:689
-#: assembl/static/js/app/views/contextPage.js:702
-msgid "messages, posted by"
-msgstr "messages, postés par"
-
-#: assembl/static/js/app/views/contextPage.js:866
-msgid "Not enough data yet."
-msgstr "Pas encore de données disponibles."
-
-#: assembl/static/js/app/views/contextPage.js:934
-msgid "last week"
-msgstr "la semaine dernière"
-
-#: assembl/static/js/app/views/contextPage.js:937
-msgid "last 2 weeks"
-msgstr "les 2 dernières semaines"
-
-#: assembl/static/js/app/views/contextPage.js:940
-msgid "last month"
-msgstr "le mois dernier"
-
-#: assembl/static/js/app/views/contextPage.js:943
-msgid "last 3 months"
-msgstr "les 3 derniers mois"
-
-#: assembl/static/js/app/views/contextPage.js:946
-msgid "last 6 months"
-msgstr "les 6 derniers mois"
-
-#: assembl/static/js/app/views/contextPage.js:949
-msgid "last year"
-msgstr "l'année dernière"
-
-#: assembl/static/js/app/views/contextPage.js:1104
-#, python-format
-msgid "%d participant has contributed in the %s"
-msgid_plural "%d participants have contributed in the %s"
-msgstr[0] "%d participant a contribué pendant %s"
-msgstr[1] "%d participants ont contribué pendant %s"
-
-#: assembl/static/js/app/views/contextPage.js:1113
-#, python-format
-msgid "%d new participant started contributing in the %s"
-msgid_plural "%d new participants started contributing in the %s"
-msgstr[0] "%d nouveau participant a commencé à contribuer pendant %s"
-msgstr[1] "%d nouveaux participants ont commencé à contribuer pendant %s"
-
-#: assembl/static/js/app/views/contextPage.js:1123
-#, python-format
-msgid "%d active participant had contributed before %s"
-msgid_plural "%d active participants had contributed before %s"
-msgstr[0] "%d contributeur avait contribué lors %s et demeure toujours actif."
-msgstr[1] "%d contributeurs avaient contribué avant %s et demeurent toujours actifs."
-
-#: assembl/static/js/app/views/contextPage.js:1136
-#, python-format
-msgid "%d participant's last contribution was prior to %s"
-msgid_plural "%d participants' last contribution was prior to %s"
-msgstr[0] "La dernière contribution de %d participant date d'avant %s"
-msgstr[1] "La dernière contribution de %d participants date d'avant %s"
-
-#: assembl/static/js/app/views/contextPage.js:1151
-#, python-format
-msgid "%d participant has contributed since the beginning of the discussion"
-msgid_plural "%d participants have contributed since the beginning of the discussion"
-msgstr[0] "%d participant a contribué depuis le début de la discussion"
-msgstr[1] "%d participants ont contribué depuis le début de la discussion"
-
-#: assembl/static/js/app/views/contextPage.js:1163
-msgid "Contributors active recently"
-msgstr "Participants actifs récemment"
-
-#: assembl/static/js/app/views/contextPage.js:1167
-msgid "Contributors inactive recently"
-msgstr "Participants non actifs récemment"
-
-#: assembl/static/js/app/views/contextPage.js:1403
+#: assembl/static/js/app/views/contextPage.js:235
 #: assembl/templates/views/introductions.tmpl:22
 msgid "Context"
 msgstr "Contexte"
 
-#: assembl/static/js/app/views/contextPage.js:1409
+#: assembl/static/js/app/views/contextPage.js:241
 #: assembl/templates/views/introductions.tmpl:37
 msgid "Discussion objectives"
 msgstr "Objectifs de la discussion"
 
-#: assembl/static/js/app/views/contextPage.js:1506
+#: assembl/static/js/app/views/contextPage.js:338
 msgid "Home"
 msgstr "Accueil"
 
@@ -661,7 +567,17 @@ msgstr "Accueil"
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-#: assembl/static/js/app/views/facebookViews.js:32
+#: assembl/static/js/app/views/facebookViews.js:36
+msgid ""
+"The following message was posted on Assembl:\n"
+"\n"
+"\n"
+msgstr ""
+"Le message suivant a été publié d'Assembl:\n"
+"\n"
+"\n"
+
+#: assembl/static/js/app/views/facebookViews.js:38
 #, python-format
 msgid ""
 "The following message was posted by %s on Assembl:\n"
@@ -672,15 +588,14 @@ msgstr ""
 "\n"
 "\n"
 
-#: assembl/static/js/app/views/facebookViews.js:38
-msgid ""
-"** Please be aware that comments below will be imported into an Assembl "
-"discussion found at  **"
+#: assembl/static/js/app/views/facebookViews.js:43
+"Please be aware that comments below will be imported into a discussion "
+"found at "
 msgstr ""
-"** Prière de noter que les commentaires ci-dessous seront importés dans "
-"une discussion Assembl située à **"
+"Prière de noter que les commentaires ci-dessous seront importés dans une "
+"discussion située à "
 
-#: assembl/static/js/app/views/facebookViews.js:241
+#: assembl/static/js/app/views/facebookViews.js:289
 msgid ""
 "An error occured whilst communicating with Facebook. Close the box and "
 "try again."
@@ -688,13 +603,13 @@ msgstr ""
 "** Sachez que les commentaires ci-dessous seront importés dans une "
 "discussion Assembl qui se trouve sur **"
 
-#: assembl/static/js/app/views/facebookViews.js:373
+#: assembl/static/js/app/views/facebookViews.js:423
 msgid "You did not log into facebook. Please log-in to continue."
 msgstr ""
 "Vous n'êtes pas connecté à Facebook. Veuillez vous connecter pour "
 "continuer."
 
-#: assembl/static/js/app/views/facebookViews.js:392
+#: assembl/static/js/app/views/facebookViews.js:442
 msgid ""
 "There was an issue with getting your Facebook login status. Please close "
 "this box and contact your discussion administrator."
@@ -702,7 +617,7 @@ msgstr ""
 "Nous n'avons pu obtenir l'état de votre connexion à Facebook. Veuillez "
 "fermer ce dialogue et contacter l'administrateur de la discussion."
 
-#: assembl/static/js/app/views/facebookViews.js:493
+#: assembl/static/js/app/views/facebookViews.js:533
 msgid ""
 "Great! You already have a facebook account. Below are the list of "
 "permissions we need for the exportation process."
@@ -710,11 +625,11 @@ msgstr ""
 "Bravo! Vous avez déjà un compte facebook. Nous aurons besoin des "
 "permissions énumérées ci-dessous pour le processus d'exportation."
 
-#: assembl/static/js/app/views/facebookViews.js:494
+#: assembl/static/js/app/views/facebookViews.js:534
 msgid "Click here if you agree with these permissions."
 msgstr "Cliquez ici si vous nous accordez ces permissions."
 
-#: assembl/static/js/app/views/facebookViews.js:498
+#: assembl/static/js/app/views/facebookViews.js:538
 msgid ""
 "It appears that your session was expired. Click below to refresh your "
 "session. As always, below are the permissions that Assembl would need to "
@@ -724,19 +639,19 @@ msgstr ""
 "ci-dessous pour la renouveler. Nous vous rappelons ci-dessous les "
 "permissions dont Assembl a besoin pour poursuivre l'opération."
 
-#: assembl/static/js/app/views/facebookViews.js:499
+#: assembl/static/js/app/views/facebookViews.js:539
 msgid "Click here to continue."
 msgstr "Cliquez ici pour continuer."
 
-#: assembl/static/js/app/views/facebookViews.js:503
+#: assembl/static/js/app/views/facebookViews.js:543
 msgid "You must create an account. Warning: This will refresh the page"
 msgstr "Vous devez créer un compte. (La page sera rafraîchie)"
 
-#: assembl/static/js/app/views/facebookViews.js:504
+#: assembl/static/js/app/views/facebookViews.js:544
 msgid "Sign in using your Facebook account"
 msgstr "Connectez-vous avec votre compte Facebook"
 
-#: assembl/static/js/app/views/facebookViews.js:721
+#: assembl/static/js/app/views/facebookViews.js:770
 msgid ""
 "Assembl is a collective intelligence tool designed to enable open, "
 "democratic discussions that lead to idea generation and innovation."
@@ -745,13 +660,13 @@ msgstr ""
 "discussions ouvertes et démocratiques menant à la génération d'idées et "
 "l'innovation."
 
-#: assembl/static/js/app/views/facebookViews.js:795
+#: assembl/static/js/app/views/facebookViews.js:833
 msgid "Facebook was unable to create the post. Close the box and try again."
 msgstr ""
 "Facebook n'a pas pu créer le message exporté. Veuillez fermer ce dialogue"
 " et ré-essayer."
 
-#: assembl/static/js/app/views/facebookViews.js:860
+#: assembl/static/js/app/views/facebookViews.js:914
 msgid ""
 "Please select between pages, groups or your wall as the final destination"
 " to complete the form."
@@ -759,7 +674,7 @@ msgstr ""
 "Veuillez compléter le formulaire en choisissant une destination parmi vos"
 " pages, vos groupes ou votre mur"
 
-#: assembl/static/js/app/views/facebookViews.js:883
+#: assembl/static/js/app/views/facebookViews.js:937
 msgid ""
 "Something went wrong on Assembl whilst creating your post. Please contact"
 " the Discussion administrator for more information."
@@ -768,28 +683,28 @@ msgstr ""
 "Veuillez contacter un administrateur de discussion pour plus "
 "d'information."
 
-#: assembl/static/js/app/views/facebookViews.js:975
+#: assembl/static/js/app/views/facebookViews.js:1029
 msgid "This account does NOT have a facebook account"
 msgstr "Ce compte n'est pas associé à un compte Facebook"
 
-#: assembl/static/js/app/views/facebookViews.js:993
+#: assembl/static/js/app/views/facebookViews.js:1047
 msgid "Could not create the message source"
 msgstr "Impossible de créer la source de messages"
 
-#: assembl/static/js/app/views/facebookViews.js:997
-#: assembl/static/js/app/views/facebookViews.js:1002
+#: assembl/static/js/app/views/facebookViews.js:1051
+#: assembl/static/js/app/views/facebookViews.js:1056
 msgid "There was an error creating the message source"
 msgstr "Il y a eu une erreur à la création de la source de messages"
 
-#: assembl/static/js/app/views/facebookViews.js:1104
+#: assembl/static/js/app/views/facebookViews.js:1160
 msgid "There was an error with creating a source of type"
 msgstr "Il y a eu une erreur à la création d'une source de type "
 
-#: assembl/static/js/app/views/facebookViews.js:1144
+#: assembl/static/js/app/views/facebookViews.js:1200
 msgid "Please select a destination to export to before continuing"
 msgstr "Veuillez choisir où exporter avant de poursuivre"
 
-#: assembl/static/js/app/views/facebookViews.js:1148
+#: assembl/static/js/app/views/facebookViews.js:1204
 msgid "Please complete facebook login"
 msgstr "Veuillez compléter la connexion à Facebook"
 
@@ -1377,6 +1292,100 @@ msgstr "vide"
 msgid "Are you sure you want to empty your entire clipboard?"
 msgstr "Êtes-vous certain de vouloir vider tout votre presse-papier?"
 
+#: assembl/static/js/app/views/statistics.js:58
+msgid "Evolution of the total number of messages"
+msgstr "Évolution du nombre total de messages"
+
+#: assembl/static/js/app/views/statistics.js:58
+msgid "Evolution of the number of messages posted"
+msgstr "Évolution du nombre de messages postés"
+
+#: assembl/static/js/app/views/statistics.js:59
+#: assembl/templates/views/navigation.tmpl:25
+#: assembl/templates/views/statistics.tmpl:5
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: assembl/static/js/app/views/statistics.js:364
+msgid "messages"
+msgstr "messages"
+
+#: assembl/static/js/app/views/statistics.js:599
+#: assembl/static/js/app/views/statistics.js:612
+msgid "messages, posted by"
+msgstr "messages, postés par"
+
+#: assembl/static/js/app/views/statistics.js:776
+msgid "Not enough data yet."
+msgstr "Pas encore de données disponibles."
+
+#: assembl/static/js/app/views/statistics.js:844
+msgid "last week"
+msgstr "la semaine dernière"
+
+#: assembl/static/js/app/views/statistics.js:847
+msgid "last 2 weeks"
+msgstr "les 2 dernières semaines"
+
+#: assembl/static/js/app/views/statistics.js:850
+msgid "last month"
+msgstr "le mois dernier"
+
+#: assembl/static/js/app/views/statistics.js:853
+msgid "last 3 months"
+msgstr "les 3 derniers mois"
+
+#: assembl/static/js/app/views/statistics.js:856
+msgid "last 6 months"
+msgstr "les 6 derniers mois"
+
+#: assembl/static/js/app/views/statistics.js:859
+msgid "last year"
+msgstr "l'année dernière"
+
+#: assembl/static/js/app/views/statistics.js:1014
+#, python-format
+msgid "%d participant has contributed in the %s"
+msgid_plural "%d participants have contributed in the %s"
+msgstr[0] "%d participant a contribué pendant %s"
+msgstr[1] "%d participants ont contribué pendant %s"
+
+#: assembl/static/js/app/views/statistics.js:1023
+#, python-format
+msgid "%d new participant started contributing in the %s"
+msgid_plural "%d new participants started contributing in the %s"
+msgstr[0] "%d nouveau participant a commencé à contribuer pendant %s"
+msgstr[1] "%d nouveaux participants ont commencé à contribuer pendant %s"
+
+#: assembl/static/js/app/views/statistics.js:1033
+#, python-format
+msgid "%d active participant had contributed before %s"
+msgid_plural "%d active participants had contributed before %s"
+msgstr[0] "%d contributeur avait contribué lors %s et demeure toujours actif."
+msgstr[1] "%d contributeurs avaient contribué avant %s et demeurent toujours actifs."
+
+#: assembl/static/js/app/views/statistics.js:1046
+#, python-format
+msgid "%d participant's last contribution was prior to %s"
+msgid_plural "%d participants' last contribution was prior to %s"
+msgstr[0] "La dernière contribution de %d participant date d'avant %s"
+msgstr[1] "La dernière contribution de %d participants date d'avant %s"
+
+#: assembl/static/js/app/views/statistics.js:1061
+#, python-format
+msgid "%d participant has contributed since the beginning of the discussion"
+msgid_plural "%d participants have contributed since the beginning of the discussion"
+msgstr[0] "%d participant a contribué depuis le début de la discussion"
+msgstr[1] "%d participants ont contribué depuis le début de la discussion"
+
+#: assembl/static/js/app/views/statistics.js:1073
+msgid "Contributors active recently"
+msgstr "Participants actifs récemment"
+
+#: assembl/static/js/app/views/statistics.js:1077
+msgid "Contributors inactive recently"
+msgstr "Participants non actifs récemment"
+
 #: assembl/static/js/app/views/synthesisPanel.js:87
 #: assembl/templates/views/navigation.tmpl:3
 #: assembl/templates/views/synthesisContext.tmpl:6
@@ -1568,7 +1577,7 @@ msgid "Sign out"
 msgstr "Déconnexion"
 
 #: assembl/templates/do_password_change.jinja2:16
-#: assembl/templates/login.jinja2:84 assembl/templates/register.jinja2:25
+#: assembl/templates/login.jinja2:83 assembl/templates/register.jinja2:25
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -1628,28 +1637,28 @@ msgstr "Se connecter avec Github"
 msgid "Login with Bitbucket"
 msgstr "Se connecter avec Bitbucket"
 
-#: assembl/templates/login.jinja2:79
+#: assembl/templates/login.jinja2:78
 msgid "Already have an account?"
 msgstr "Vous avez déjà un compte ?"
 
-#: assembl/templates/login.jinja2:83
+#: assembl/templates/login.jinja2:82
 #: assembl/templates/request_password_change.jinja2:25
 msgid "Email or username"
 msgstr "Courriel ou identifiant"
 
-#: assembl/templates/login.jinja2:88 assembl/views/auth/views.py:864
+#: assembl/templates/login.jinja2:87 assembl/views/auth/views.py:864
 msgid "Log in"
 msgstr "Se connecter"
 
-#: assembl/templates/login.jinja2:90
+#: assembl/templates/login.jinja2:89
 msgid "Forgot your password?"
 msgstr "Mot de passe oublié ?"
 
-#: assembl/templates/login.jinja2:93
+#: assembl/templates/login.jinja2:92
 msgid "No account yet?"
 msgstr "Vous n'avez pas encore de compte ?"
 
-#: assembl/templates/login.jinja2:94 assembl/templates/register.jinja2:27
+#: assembl/templates/login.jinja2:93 assembl/templates/register.jinja2:27
 msgid "Sign up"
 msgstr "Créer un compte"
 
@@ -2503,39 +2512,47 @@ msgstr ""
 "pouvoir y publier en votre nom, ou au nom d'une page dont vous êtes "
 "administrateur."
 
-#: assembl/templates/views/exportPostModal-fb.tmpl:3
+#: assembl/templates/views/exportPostModal-fb.tmpl:23
 msgid "Pick where to post to"
 msgstr "Choisissez où publier"
 
-#: assembl/templates/views/exportPostModal-fb.tmpl:8
+#: assembl/templates/views/exportPostModal-fb.tmpl:28
 msgid "Your Wall"
 msgstr "Votre mur"
 
-#: assembl/templates/views/exportPostModal-fb.tmpl:9
+#: assembl/templates/views/exportPostModal-fb.tmpl:29
 msgid "Your Pages"
 msgstr "Vos pages"
 
-#: assembl/templates/views/exportPostModal-fb.tmpl:10
+#: assembl/templates/views/exportPostModal-fb.tmpl:30
 msgid "Your Groups"
 msgstr "Vos groupes"
 
-#: assembl/templates/views/exportPostModal-fb.tmpl:21
+#: assembl/templates/views/exportPostModal-fb.tmpl:41
 msgid "Suggested preview"
 msgstr "Aperçu suggéré"
 
-#: assembl/templates/views/exportPostModal-fb.tmpl:31
+#: assembl/templates/views/exportPostModal-fb.tmpl:44
+msgid "Message Header:"
+msgstr "En-tête du message:"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:49
+msgid "Extra Message:"
+msgstr "Ajouts au message:"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:57
 msgid "Link URL:"
 msgstr "Lien URL:"
 
-#: assembl/templates/views/exportPostModal-fb.tmpl:38
+#: assembl/templates/views/exportPostModal-fb.tmpl:58
 msgid "Title Override:"
 msgstr "Remplacer par ce titre:"
 
-#: assembl/templates/views/exportPostModal-fb.tmpl:45
+#: assembl/templates/views/exportPostModal-fb.tmpl:59
 msgid "Caption Override:"
 msgstr "Remplacer par cette légende:"
 
-#: assembl/templates/views/exportPostModal-fb.tmpl:52
+#: assembl/templates/views/exportPostModal-fb.tmpl:60
 msgid "Description Override:"
 msgstr "Remplacer par cette description:"
 
@@ -2919,8 +2936,9 @@ msgid "Load all remaining messages at once"
 msgstr "Tout afficher"
 
 #: assembl/templates/views/messageList.tmpl:40
-msgid "React to the ongoing discussion"
-msgstr "Réagir à la discussion en cours"
+#: assembl/templates/views/messageSend.tmpl:4
+msgid "Start a new discussion thread"
+msgstr "Lancez un nouveau sujet de discussion"
 
 #: assembl/templates/views/messageListItem.tmpl:4
 msgid "Unselect"
@@ -2966,10 +2984,6 @@ msgstr "Écrivez quelque chose..."
 #: assembl/templates/views/messageModerationOptions.tmpl:26
 msgid "Moderation remarks"
 msgstr "Remarques de modération"
-
-#: assembl/templates/views/messageSend.tmpl:4
-msgid "Start a new discussion thread"
-msgstr "Lancez un nouveau sujet de discussion"
 
 #: assembl/templates/views/messageSend.tmpl:16
 msgid "New topic subject:"
@@ -3563,4 +3577,7 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n'avons pas de discussion sous le code=%s"
+
+#~ msgid "React to the ongoing discussion"
+#~ msgstr "Réagir à la discussion en cours"
 
