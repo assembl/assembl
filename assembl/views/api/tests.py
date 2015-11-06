@@ -248,7 +248,7 @@ def test_api_get_posts_from_idea(
     res = test_app.get(base_idea_url + "/" + str(root_idea.id))
     assert res.status_code == 200
     res_data = json.loads(res.body)
-    assert res_data['num_posts'] == 3
+    assert res_data['num_total_and_read_posts'][0] == 3
     assert res_data['num_orphan_posts'] == 3
     
     def check_number_of_posts(idea, expected_num, fail_msg):
@@ -257,7 +257,7 @@ def test_api_get_posts_from_idea(
         res = test_app.get(base_idea_url + "/" + str(idea.id))
         assert res.status_code == 200
         res_data = json.loads(res.body)
-        assert res_data['num_posts'] == expected_num, "idea API returned %d but %s" % (res_data['num_posts'],fail_msg)
+        assert res_data['num_total_and_read_posts'][0] == expected_num, "idea API returned %d but %s" % (res_data['num_total_and_read_posts'][0],fail_msg)
 
         url = base_post_url + "?" + urlencode({"root_idea_id": idea.uri()})
         res = test_app.get(url)
@@ -272,7 +272,7 @@ def test_api_get_posts_from_idea(
         res = test_app.get(base_idea_url + "/" + str(root_idea.id))
         assert res.status_code == 200
         res_data = json.loads(res.body)
-        assert res_data['num_posts'] == expected_total
+        assert res_data['num_total_and_read_posts'][0] == expected_total
         # Known to fail. I get 0 on v6, ? on v7.
         assert res_data['num_orphan_posts'] == expected_orphans
     
