@@ -40,7 +40,7 @@ var messageDefaults = {
   footer: function(post_model) {
     //This SHOULD be shortened using bit.ly
     var link = Ctx.getPostURL(post_model.get('@id'), {'source': 'share'});  
-    return i18n.gettext("Please be aware that comments below will be imported into an Assembl discussion found at " + link);
+    return i18n.gettext("Please be aware that comments below will be imported into a discussion found at " + link);
   }
 }; 
 
@@ -63,12 +63,11 @@ var _composeMessageBody = function(model, creator, header, extra) {
   if (extra){
     msg += "\n\n";
     msg += '-----------------------------------------------------------';
-    msg += '\n';
+    msg += '\n\n';
     msg += extra;
   }
 
-  msg += "\n";
-  msg += "\n";
+  msg += "\n\n\n\n";
   msg += footer;
 
   return {
@@ -389,6 +388,7 @@ var _processLogin = function(resp, success, error) {
         token.save(null, {
           success: function(model, resp, opt) {
             window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
+            tokens.add(model);
             success()
           },
           error: function(model, resp, opt) {
@@ -562,7 +562,7 @@ var errorView = Marionette.ItemView.extend({
     if (this.state === 'permissions') {
       var that = this;
       loginUser(function() {
-        that.model.trigger('reloadBase', that.model);
+        that.vent.trigger('reloadBase');
         //console.error("FIXME:  Need to re-render baseFbView");
       });
     }
@@ -1117,13 +1117,14 @@ var basefbView = Marionette.LayoutView.extend({
     'click .js_ok_submit': 'submitForm'
   },
   modelEvents: {
-    "change": "render",
-    "reloadBase": "onShow"
+    "change": "render"
   },
   initialize: function(options){
     this.vent = _.extend({}, Backbone.Events);
     this.model = options.model;
     this.exportedMessage = options.exportedMessage;
+
+    this.vent.on("reloadBase", this.onShow, this);
   },
 
   onShow: function(){
@@ -1213,6 +1214,10 @@ var basefbView = Marionette.LayoutView.extend({
       });
     }
   },
+
+  onDestroy: function(){
+    this.vent.off("reloadBase");
+  }
 
 });
 
