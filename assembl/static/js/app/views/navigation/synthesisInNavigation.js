@@ -117,23 +117,25 @@ var SynthesisInNavigationPanel = AssemblPanel.extend({
     },
   
   onBeforeShow: function() {
-      var that = this,
-      collectionManager = new CollectionManager();
+    var that = this,
+    collectionManager = new CollectionManager();
 
-      Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
-          collectionManager.getAllSynthesisCollectionPromise(),
-          function(allMessageStructureCollection, allSynthesisCollection) {
-            that.template = '#tmpl-synthesisInNavigationPanel';
-            that.render();
-            that.displaySynthesisList(allMessageStructureCollection, allSynthesisCollection);
-            that.listenTo(allSynthesisCollection, 'add reset', function() {
-              //console.log("Re-displaying synthesis list from collection update...", allSynthesisCollection.length);
-              that.displaySynthesisList(allMessageStructureCollection, allSynthesisCollection);
-            });
-            // that.synthesisContainer.$el.find(".synthesisItem:first")[0].id = "tour_step_synthesis_item1";
-            // Assembl.vent.trigger("requestTour", "synthesis_item1");
-          });
-    }
+    Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+      collectionManager.getAllSynthesisCollectionPromise(),
+      function(allMessageStructureCollection, allSynthesisCollection) {
+      if(!that.isViewDestroyed()) {
+        that.template = '#tmpl-synthesisInNavigationPanel';
+        that.render();
+        that.displaySynthesisList(allMessageStructureCollection, allSynthesisCollection);
+        that.listenTo(allSynthesisCollection, 'add reset', function() {
+          //console.log("Re-displaying synthesis list from collection update...", allSynthesisCollection.length);
+          that.displaySynthesisList(allMessageStructureCollection, allSynthesisCollection);
+        });
+        // that.synthesisContainer.$el.find(".synthesisItem:first")[0].id = "tour_step_synthesis_item1";
+        // Assembl.vent.trigger("requestTour", "synthesis_item1");
+      }
+    });
+  }
 
 });
 
