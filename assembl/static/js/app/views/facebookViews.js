@@ -40,7 +40,7 @@ var messageDefaults = {
   footer: function(post_model) {
     //This SHOULD be shortened using bit.ly
     var link = Ctx.getPostURL(post_model.get('@id'), {'source': 'share'});  
-    return i18n.gettext("Please be aware that comments below will be imported into a discussion found at " + link);
+    return i18n.gettext("Please be aware that comments below will be imported into a discussion found at ") + link;
   }
 }; 
 
