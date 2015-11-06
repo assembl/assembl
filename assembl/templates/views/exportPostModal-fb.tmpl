@@ -1,3 +1,23 @@
+{% macro input_text(label_id, title, class, data='') %}
+  <div class="control-group" style="">
+    <label for="{{label_id}}" class="control-label">{{ title }}</label>
+    <div class="controls">
+      <input type="text" id="{{label_id}}" class="input-xlarge {{class}}" 
+        {% if data != '' %} placeholder="<%= {{data}} %>" {% endif %}>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro textarea_text(label_id, title, class, data='') %}
+  <div class="control-group" style="">
+    <label for="{{label_id}}" class="control-label">{{ title }}</label>
+    <div class="controls">
+      <textarea rows=3 id="{{label_id}}" class="input-xlarge {{class}}" 
+      {% if data != ''%} placeholder="<%= {{data}} %>" {% endif %}></textarea>
+    </div>
+  </div>
+{% endmacro %}
+
 <div class="control-group">
   <label for="targetLocation" class="control-label">
     {{ gettext("Pick where to post to") }}:
@@ -15,45 +35,30 @@
 
 <div class="fb-targeted-form"></div>
 
-<a class="fb-js_test_area mts hidden" href='#'>Click me for test</a>
-<% if(exportedMessage) { console.log(exportedMessage); %>
+  <a class="fb-js_test_area mts" href='#'>Click me for test</a>
+  <% if(exportedMessage) { %>
   <!-- This is where the message preview would go -->
   <div class="form-break mts">{{ gettext("Suggested preview") }}:</div>
   
-  <div class='mts'>
-    <p><%= exportedMessage.get('body') %></p>
+  <div class='mts' style="border: 1px solid #ddd; margin: 5px; padding: 5px;">
+    {{ textarea_text("fb-export-modal-message-header", gettext("Message Header:"), 'js_fb_message_header',
+      data="suggestedHeader" ) }}
+    <div style="width: 50%; display: inline-block;">
+      <p><%= exportedMessage.get('body') %></p>
+      <hr>
+      {{ textarea_text("fb-export-modal-message-extra", gettext("Extra Message:"), 'js_fb_message_extra') }}
+      <p> <%= messageFooter %></p>
+    </div>
+
   </div>
   
-  <div class="facebook-preview" style="border: 1px solid #ddd; margin: 5px; padding: 5px">
+  <div class="mts facebook-preview" style="border: 1px solid #ddd; margin: 5px; padding: 5px">
   
-    <div style="">
-      <div class="control-group" style="">
-        <label for="fb-link-attachment" class="control-label">{{ gettext("Link URL:") }}</label>
-        <div class="controls">
-          <input type="text" id="fb-link-attachment" class="input-xlarge js_fb-attachment-link">
-        </div>
-      </div>
+    {{ input_text("fb-link-attachment", gettext("Link URL:"), 'js_fb-attachment-link') }}
+    {{ input_text("fb-attachmentName", gettext("Title Override:"), 'js_fb-suggested-name') }}
+    {{ input_text("fb-attachmentCaption", gettext("Caption Override:"), 'js_fb-suggested-caption') }}
+    {{ textarea_text("fb-attachmentDescription", gettext("Description Override:"), 'js_fb-suggested-description') }}
 
-      <div class="control-group" style="">
-        <label for="attachmentName" class="control-label">{{ gettext("Title Override:") }}</label>
-        <div class="controls">
-          <input type="text" id="attachmentName" class="input-xlarge js_fb-suggested-name">
-        </div>
-      </div>
-  
-      <div class="control-group" style="">
-        <label for="attachmentName" class="control-label">{{ gettext("Caption Override:") }}</label>
-        <div class="controls">
-          <input type="text" class="input-xlarge js_fb-suggested-caption">
-        </div>
-      </div>
-  
-      <div class="control-group" style="">
-        <label for="attachmentName" class="control-label">{{ gettext("Description Override:") }}</label>
-        <div class="controls">
-          <textarea rows=3 class="input-xlarge js_fb-suggested-description"></textarea>
-        </div>
-      </div>
     </div>
   
   </div>

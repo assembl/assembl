@@ -28,15 +28,56 @@ var _convertTimeToISO8601 = function(time) {
   return m.toISOString();
 };
 
-var _composeMessageBody = function(model, creator) {
-  var msg = i18n.sprintf(i18n.gettext("The following message was posted by %s on Assembl:\n\n\n"), creator.get('name'));
+var messageDefaults = {
+  //Creator comes from a resolved Promise and may NOT not be an existing
+  //value at first render.
+  header: function(creator){
+    if (!creator){
+      return i18n.gettext("The following message was posted on Assembl:\n\n\n");
+    }
+    return i18n.sprintf(i18n.gettext("The following message was posted by %s on Assembl:\n\n\n"), creator.get('name')); 
+  },
+  footer: function(post_model) {
+    //This SHOULD be shortened using bit.ly
+    var link = Ctx.getPostURL(post_model.get('@id'), {'source': 'share'});  
+    return i18n.gettext("Please be aware that comments below will be imported into an Assembl discussion found at " + link);
+  }
+}; 
 
-  msg += model.get('body');
-  msg += "\n\n\n"
+var _composeMessageBody = function(model, creator, header, extra) {
+  var header_default = messageDefaults.header(creator);
+  var body = model.get('body');
+  var footer = messageDefaults.footer(model);
+  
+  var msg = "";
+  if (header) {
+    msg += header;
+  }
+  else {
+    msg += header_default;
+  }
 
-  var link = Ctx.getPostURL(model.get('@id'), {'source': 'share'}); //This SHOULD be shortened using bit.ly
-  msg += i18n.gettext("** Please be aware that comments below will be imported into an Assembl discussion found at " + link + " **");
-  return msg;
+  msg += "\n\n";
+  msg += body;
+
+  if (extra){
+    msg += "\n\n";
+    msg += '-----------------------------------------------------------';
+    msg += '\n';
+    msg += extra;
+  }
+
+  msg += "\n";
+  msg += "\n";
+  msg += footer;
+
+  return {
+    header: header,
+    body: body,
+    extra: extra,
+    footer: footer,
+    full: msg
+  }
 };
 
 var _updateBundledData = function(bundle, updates) {
@@ -65,7 +106,14 @@ var fb_token = function() {
   
   this.setExpiration = function(e, success) {
     var time = null;
-    if (typeof e === 'number') {
+    if (!e){
+      // Hacky solution for front-end only, expiration of null can mean
+      // inifinite token, therefore add time of 10 years. Nobody in their
+      // right mind would keep a browser tab open for 10 years.
+      
+      time = new Moment().utc().add(10, 'years');
+    }
+    else if (typeof e === 'number') {
       //Ensure that the incoming datetime has no timezone information
       //before adding the UTC timezone to it
       time = new Moment().utc().add(e, 'seconds');
@@ -237,10 +285,10 @@ var fbApi = function(options, success, error) {
 
   window.FB.api(source, httpType, qs, function(resp) {
     if (_.has(resp, 'error')) {
+      console.error(resp.error);
       if (error !== 'function') {
         var eMessage = i18n.gettext('An error occured whilst communicating with Facebook. Close the box and try again.');
         $('.js_export_error_message').text(eMessage);
-        console.error(resp.error);
       }
       else {
         error(resp); 
@@ -324,6 +372,7 @@ var _processLogin = function(resp, success, error) {
             success();
           },
           error: function(model, resp, opt) {
+            console.error("Failed to update a user access token from backend!", resp);
             window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
             error();
           }
@@ -343,6 +392,7 @@ var _processLogin = function(resp, success, error) {
             success()
           },
           error: function(model, resp, opt) {
+            console.error("Failed to create a user access token from backend!", resp);
             window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
             error();
           }
@@ -351,7 +401,7 @@ var _processLogin = function(resp, success, error) {
     })
     .error(function(e){
       // Cannot get the access tokens from db
-      console.error("Could not get the access tokens from the server");
+      console.error("Failed to create or update access token from backend", e);
       error();
     });
 };
@@ -391,6 +441,7 @@ var checkLoginState = function(options) {
     if (_.has(resp, 'error')) {
       var errorMessage = i18n.gettext("There was an issue with getting your Facebook login status. Please close this box and contact your discussion administrator.");
       $('.js_export_error_message').text(errorMessage);
+      console.error("Facebook SDK failed to get the loginStatus of Facebook user", resp);
     }
     else {
       if (resp.status !== 'connected') {
@@ -439,11 +490,8 @@ var checkState = function(renderView) {
               window.FB_TOKEN.setGroupToken(fb_id, t, e);
             }
             else {
-              //This might be unnecessary here
-              if (e === 'infinite'){
-                var oneYearInSeconds = 60*60*24*365;
-                window.FB_TOKEN.setUserToken(t,oneYearInSeconds);
-              }
+              //FB_TOKEN will deal with infinite condition
+              window.FB_TOKEN.setUserToken(t,e);
             }
           });
           var userToken = tokens.getUserToken();
@@ -452,16 +500,8 @@ var checkState = function(renderView) {
             renderView(state);
           }
           else {
-            // First check if it the user token is an infinite token
-            if ( userToken.isInfiniteToken() ) {
-              var oneYearInSeconds = 60*60*24*365; //Lazy hack
-              window.FB_TOKEN.setUserToken(userToken.get('token'), oneYearInSeconds);
-              var state = new fbState(true, null, window.FB_TOKEN);
-              renderView(state);
-            }
-
             //Check token expiry
-            else if ( userToken.isExpired() ) {
+            if ( userToken.isExpired() ) {
               checkLoginState({
                 success: function() {
                   var state = new fbState(true, null, window.FB_TOKEN);
@@ -522,9 +562,8 @@ var errorView = Marionette.ItemView.extend({
     if (this.state === 'permissions') {
       var that = this;
       loginUser(function() {
-        //that.vent.trigger("loadFbView", window.FB_TOKEN);
-        that.model.trigger('change', that.model);
-        console.error("FIXME:  Need to re-render baseFbView");
+        that.model.trigger('reloadBase', that.model);
+        //console.error("FIXME:  Need to re-render baseFbView");
       });
     }
     else {
@@ -650,7 +689,6 @@ var pageView = Marionette.ItemView.extend({
                       .val();
 
       if (value === 'self' || value === 'null') {
-        var t = window.FB_TOKEN.getUserToken();
         _updateBundledData(this.bundle, {
           credentials: window.FB_TOKEN.getUserToken()
         });
@@ -697,9 +735,17 @@ var exportPostForm = Marionette.LayoutView.extend({
   regions: {
     subform: '.fb-targeted-form'
   },
+  
+  ui: {
+    test: '.fb-js_test_area',
+    supportedList: '.js_fb-supportedList',
+    messageHeader: '.js_fb_message_header',
+    messageExtra: '.js_fb_message_extra'
+  },
+
   events: {
-    'change .js_fb-supportedList': 'defineView',
-    'click .fb-js_test_area': 'test'
+    'change @ui.supportedList': 'defineView',
+    'click @ui.test': 'test'
   },
   initialize: function(options) {
     // this.token = options.token;
@@ -716,42 +762,34 @@ var exportPostForm = Marionette.LayoutView.extend({
 
     var that = this;
     var cm = new CollectionManager();
-    cm.getDiscussionModelPromise().then(function(d) {
+    this.exportedMessage.getCreatorPromise().then(function(creator){
+      that.messageCreator = creator;
+      return cm.getDiscussionModelPromise();
+    }).then(function(d){
       that.topic = d.get('topic');
       that.desc = i18n.gettext('Assembl is a collective intelligence tool designed to enable open, democratic discussions that lead to idea generation and innovation.');
       that.template = '#tmpl-exportPostModal-fb';
       that.render();
       that.vent.trigger('clearError');
     });
-
   },
+
   serializeData: function() {
     return {
       exportedMessage: this.exportedMessage,
       suggestedName: this.topic,
       suggestedCaption: window.location.href,
-      suggestedDescription: this.desc
+      suggestedDescription: this.desc,
+      suggestedHeader: messageDefaults.header(this.messageCreator),
+      messageFooter: messageDefaults.footer(this.exportedMessage)
     }
   },
   test: function(e) {
+    var v1 = _composeMessageBody(this.exportedMessage, this.messageCreator, null, null);
+    var v2 = _composeMessageBody(this.exportedMessage, this.messageCreator, "A random header", "Extra information here...");
 
-    var _removeNullArgs = function(args){
-      return _.chain(args)
-                .invert()
-                .omit('null')
-                .invert()
-                .value()
-    };
-    
-    var a = _removeNullArgs({'a': 'b', 'c': null}),
-        b = _removeNullArgs({
-          'a': 'b',
-          'b': null,
-          'c': null
-        });
-
-    console.log('object a', a);
-    console.log('object b', b);
+    console.log('Null header, null extra', v1);
+    console.log('Header, Extra', v2);
   },
   defineView: function(event) {
     var value = this.$(event.currentTarget)
@@ -830,6 +868,22 @@ var exportPostForm = Marionette.LayoutView.extend({
       return tmp;
     };
 
+    var getHeader = function(){
+      var tmp = $('.js_fb_message_header').val();
+      if (!tmp){
+        return null;
+      }
+      return tmp;
+    };
+
+    var getMessageExtra = function(){
+      var tmp = $('.js_fb_message_extra').val();
+      if (!tmp){
+        return null;
+      }
+      return tmp;
+    }
+
     var _removeNullArgs = function(args){
       return _.chain(args)
                 .invert()
@@ -843,7 +897,7 @@ var exportPostForm = Marionette.LayoutView.extend({
     this.exportedMessage.getCreatorPromise().then(function(messageCreator) {
       var args = {
           access_token: that.bundle.credentials,
-          message: _composeMessageBody(that.exportedMessage, messageCreator),
+          message: _composeMessageBody(that.exportedMessage, messageCreator, getHeader(), getMessageExtra()).full,
 
           //picture : 'http://' + window.location.host +"/" + Ctx.getApiV2DiscussionUrl() + "/mindmap",
           // picture: 'http://assembl.coeus.ca/static/css/themes/default/img/crowd2.jpg', //Such a shit hack
@@ -884,7 +938,7 @@ var exportPostForm = Marionette.LayoutView.extend({
             cm.getAllUserAccountsPromise().then(function(accounts) {
               var fbAccount = accounts.getFacebookAccount();
               if (!fbAccount) {
-                console.error('This account does NOT have a facebook account');
+                console.error('This account does NOT have a facebook account', accounts);
                 error(errorDesc);
               }
               else {
@@ -908,7 +962,7 @@ var exportPostForm = Marionette.LayoutView.extend({
                         success();
                       }
                       else {
-                        console.error("There was a server-side error");
+                        console.error("There was a server-side error", resp);
                         error(errorDesc);
                       }
                     }).error(function(error){
@@ -1063,7 +1117,8 @@ var basefbView = Marionette.LayoutView.extend({
     'click .js_ok_submit': 'submitForm'
   },
   modelEvents: {
-    "change": "render"
+    "change": "render",
+    "reloadBase": "onShow"
   },
   initialize: function(options){
     this.vent = _.extend({}, Backbone.Events);
@@ -1149,11 +1204,12 @@ var basefbView = Marionette.LayoutView.extend({
       $('.js_export_error_message').text(er); 
     } else {
       var that = this;
-      console.log('currentView', this.currentView);
+      //console.log('currentView', this.currentView);
       this.fbView.saveModel(function() {
         Ctx.clearModal();
       }, function(msg) {
         that.$('.js_export_error_message').text(msg);
+        console.error('Could not save model in basefbView');
       });
     }
   },
