@@ -158,7 +158,8 @@ def get_default_context(request):
         request=request,
         user=user,
         templates=get_template_views(),
-        discussion={},  # Templates won't load without a discussion object
+        discussion=discussion or {},  # Templates won't load without a discussion object
+        preferences=discussion.preferences if discussion else {},
         user_profile_edit_url=user_profile_edit_url,
         locale=localizer.locale_name,
         locales=locales,

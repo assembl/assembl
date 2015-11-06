@@ -50,7 +50,7 @@
     </header>
 
     <div class="content">
-
+      {% if not preferences['require_email_domain'] %}
         <div class="socialPart">
             <p class="login-box-title">{{ gettext("Log in using one of these social networks") }}</p>
             {% if providers %}
@@ -66,14 +66,13 @@
             {# Need to be refactored #}
             {# {form('openid', gettext('Login with OpenID'), true)} #}
         </div>
-
         
         <div class="signinSeparator left">
         {#
             <div class="mask"></div>
         #}
         </div>
-        
+      {% endif %}
 
         <div class="signinWrapper">
             <p class="login-box-title mbl">{{ gettext("Already have an account?") }}</p>
