@@ -22,7 +22,10 @@ var IdeaModel = Base.Model.extend({
     obj.creationDate = obj.creationDate || Ctx.getCurrentTime();
     this.set('creationDate', obj.creationDate);
     this.set('hasCheckbox', Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS));
-
+    if (obj.num_total_and_read_posts !== undefined) {
+      this.set('num_posts', obj.num_total_and_read_posts[0]);
+      this.set('num_read_posts', obj.num_total_and_read_posts[1]);
+    }
   },
 
   /**

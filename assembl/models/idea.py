@@ -388,6 +388,16 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
         user_id = connection.info.get('userid', None)
         return self.num_read_posts_for(user_id)
 
+    @property
+    def num_total_and_read_posts(self):
+        """ Worse than above... but temporary """
+        connection = self.db.connection()
+        user_id = connection.info.get('userid', None)
+        if user_id:
+            return self.num_total_and_read_posts_for(user_id)
+        else:
+            return (self.num_posts, 0)
+
     def num_read_posts_for(self, user_id):
         if not user_id:
             return 0
@@ -402,6 +412,22 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
             {"root_idea_id": self.id, "user_id": user_id,
              "discussion_id": self.discussion_id})
         return int(result.first()['total_count'])
+
+    def num_total_and_read_posts_for(self, user_id):
+        if not user_id:
+            return 0
+        select = """SELECT COUNT(DISTINCT family_posts.id) as total_count,
+                    COUNT(DISTINCT action.id) as read_count """
+        join = """LEFT JOIN action_on_post ON (action_on_post.post_id = family_posts.id)
+                  LEFT JOIN action ON (action.id = action_on_post.id
+                  AND action.actor_id = :user_id
+                  AND action.tombstone_date IS NULL
+                  AND action.type = 'version:ReadStatusChange_P')"""
+        result = self.db.execute(text(
+            Idea._get_related_posts_statement_no_select(select, False) + join),
+            {"root_idea_id": self.id, "user_id": user_id,
+             "discussion_id": self.discussion_id}).first()
+        return (int(result['total_count']), int(result['read_count']))
 
     def prefetch_descendants(self):
         # TODO: descendants only. Let's just prefetch all ideas.

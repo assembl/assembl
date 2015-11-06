@@ -210,6 +210,7 @@
         "numChildIdea": false,
         "num_posts": false,
         "num_read_posts": false,
+        "num_total_and_read_posts": false,
         "widget_add_post_endpoint": false,
         "notifications": false,
         "subtype": "rdf_type",

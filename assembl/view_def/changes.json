@@ -174,8 +174,7 @@
         "parentId": "&get_first_parent_uri",
         "inNextSynthesis": "is_in_next_synthesis",
         "numChildIdea": "num_children",
-        "num_posts": true,
-        "num_read_posts": true
+        "num_total_and_read_posts": true
     },
     "RootIdea": {
         "@extends": "Idea",

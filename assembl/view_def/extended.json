@@ -159,8 +159,7 @@
         "inNextSynthesis": "is_in_next_synthesis",
         "numChildIdea": "num_children",
         "subtype": "rdf_type",
-        "num_posts": true,
-        "num_read_posts": true,
+        "num_total_and_read_posts": true,
         "contributors": "&get_contributors:default",
         "widget_links": "&widget_link_signatures",
         "widget_add_post_endpoint": true

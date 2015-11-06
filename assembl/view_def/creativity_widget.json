@@ -147,9 +147,8 @@
         "inNextSynthesis": "is_in_next_synthesis",
         "numChildIdea": "num_children",
         "creation_ctx_url": "&get_widget_creation_urls",
-        "num_posts": true,
         "subtype": "rdf_type",
-        "num_read_posts": true,
+        "num_total_and_read_posts": true,
         "widget_links": "&widget_link_signatures",
         "proposed_in_post": ":",
         "widget_add_post_endpoint": true
