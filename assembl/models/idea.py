@@ -390,7 +390,6 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
 
     @property
     def num_total_and_read_posts(self):
-        """ Worse than above... but temporary """
         connection = self.db.connection()
         user_id = connection.info.get('userid', None)
         if user_id:
@@ -951,6 +950,10 @@ class RootIdea(Idea):
             Post.hidden==False
         ).count()
         return int(result)
+
+    @property
+    def num_total_and_read_posts(self):
+        return (self.num_posts, self.num_read_posts)
 
     @property
     def num_orphan_posts(self):
