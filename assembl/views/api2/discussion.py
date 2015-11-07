@@ -512,6 +512,7 @@ def show_optics_cluster(request):
     eps = float(request.GET.get("eps", "0.02"))
     min_samples = int(request.GET.get("min_samples", "3"))
     test_code = request.GET.get("test_code", None)
+    suggestions = request.GET.get("suggestions", True)
     scrambler = None
     if test_code:
         from random import Random
@@ -520,9 +521,14 @@ def show_optics_cluster(request):
             get_config().get('session.secret') + test_code + discussion.slug)
     discussion = request.context._instance
     output = StringIO()
-    from assembl.nlp.clusters import OpticsSemanticsAnalysisWithSuggestions
-    analysis = OpticsSemanticsAnalysisWithSuggestions(
-        discussion, min_samples=min_samples, eps=eps, scrambler=scrambler)
+    from assembl.nlp.clusters import (
+        OpticsSemanticsAnalysis, OpticsSemanticsAnalysisWithSuggestions)
+    if asbool(suggestions):
+        analysis = OpticsSemanticsAnalysisWithSuggestions(
+            discussion, min_samples=min_samples, eps=eps, scrambler=scrambler)
+    else:
+        analysis = OpticsSemanticsAnalysis(
+            discussion, min_samples=min_samples, eps=eps, scrambler=scrambler)
     analysis.as_html(output)
     output.seek(0)
     return Response(body_file=output, content_type='text/html')

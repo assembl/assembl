@@ -838,6 +838,9 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
     _distance_matrix = None
     _post_clusters_by_cluster = None
     _cluster_features = None
+    _clusters = None
+    _silhouette_score = None
+    _remainder = None
 
     def __init__(self, discussion, num_topics=200, min_samples=4, eps=None,
                  model_cls=None, metric=None, scrambler=None):
@@ -932,17 +935,50 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
         return self._optics_clusters
 
     @property
+    def clusters(self):
+        if self._clusters is None:
+            if self.scrambler is None:
+                self._clusters = self.optics_clusters
+            else:
+                # Revert the RD, so we get anti-clusters
+                optics = self.optics
+                real_clusters = self.optics_clusters[:]
+                temp = optics.RDO
+                optics.RDO = 1 - optics.RDO
+                anti_clusters = optics.extract_clusters(eps=self.eps*5)
+                anti_clusters.sort(key=optics.cluster_depth)
+                clusters = []
+                while real_clusters and anti_clusters:
+                    l = real_clusters if self.scrambler.randint(0, 1) else anti_clusters
+                    clusters.append(l.pop(0))
+                # all real clusters must be present
+                clusters.extend(real_clusters)
+                optics.RDO = temp
+                self._clusters = clusters
+        return self._clusters
+
+    @property
+    def silhouette_score(self):
+        if self._silhouette_score is None:
+            self._silhouette_score = metrics.silhouette_score(
+                self.model_matrix,
+                self.optics.as_labels(self.optics_clusters),
+                metric=self.metric)
+        return self._silhouette_score
+
+    @property
     def optics_dendrogram(self):
         if self._optics_dendrogram is None:
             optics = self.optics
-            clusters = self.optics_clusters
+            # TODO: dendrogram may fail due to anticluster mix
+            clusters = self.clusters
             self._optics_dendrogram = optics.as_dendrogram(clusters)
         return self._optics_dendrogram
 
     @property
     def post_clusters_by_cluster(self):
         if self._post_clusters_by_cluster is None:
-            clusters = self.optics_clusters
+            clusters = self.clusters
             post_ids = self.post_ids
             post_ancestry = self.post_ancestry
             post_clusters_by_cluster = {
@@ -954,57 +990,42 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
         return self._post_clusters_by_cluster
 
     @property
+    def remainder(self):
+        if self._remainder is None:
+            post_clusters_by_cluster = self.post_clusters_by_cluster
+            remainder = set(self.post_ids)
+            for cluster in self.optics_dendrogram.subclusters:
+                if cluster in post_clusters_by_cluster:
+                    # pseudo-clusters do not work so well
+                    remainder -= set(post_clusters_by_cluster[cluster.cluster])
+            remainder = list(remainder)
+            post_ancestry = self.post_ancestry
+            remainder.sort(key=lambda pid: post_ancestry[pid])
+            remainder = np.array(remainder)
+            self._remainder = remainder
+        return self._remainder
+
+    @property
     def cluster_features(self):
         if self._cluster_features is None:
             post_clusters_by_cluster = self.post_clusters_by_cluster
-            clusters = self.optics_clusters
+            clusters = self.clusters
             post_clusters = [post_clusters_by_cluster[cl] for cl in clusters]
             cluster_features = self.calc_features(post_clusters)
             self._cluster_features = dict(zip(clusters, cluster_features))
         return self._cluster_features
 
     def get_cluster_info(self):
-        discussion = self.discussion
-        eps = self.eps
         model_matrix = self.model_matrix
         if model_matrix is None:
             return None
         post_ids = self.post_ids
-        optics = self.optics
-        clusters = self.optics_clusters
+        clusters = self.clusters
         if not clusters:
             return (-1, (), [], {})
-        silhouette_score = metrics.silhouette_score(
-            model_matrix, optics.as_labels(clusters), metric=self.metric)
-        if self.scrambler is not None:
-            # Revert the RD, so we get anti-clusters
-            temp = optics.RDO
-            optics.RDO = 1 - optics.RDO
-            real_clusters = clusters
-            anti_clusters = optics.extract_clusters(eps=eps*5)
-            anti_clusters.sort(key=optics.cluster_depth)
-            real_clusters = clusters
-            clusters = []
-            while real_clusters and anti_clusters:
-                l = real_clusters if self.scrambler.randint(0, 1) else anti_clusters
-                clusters.append(l.pop(0))
-            optics.RDO = temp
-        # TODO: dendrogram may fail due to anticluster mix
         dendrogram = self.optics_dendrogram
         post_clusters_by_cluster = self.post_clusters_by_cluster
-        remainder = set(post_ids)
-        for cluster in dendrogram.subclusters:
-            remainder -= set(post_clusters_by_cluster[cluster.cluster])
-        remainder = list(remainder)
-        remainder.sort()
-        post_clusters = [post_clusters_by_cluster[cl] for cl in clusters]
-
-        cluster_idea_data = self.get_cluster_idea_data(
-            discussion.root_idea, post_clusters)
-
-        post_ancestry = self.post_ancestry
-        remainder.sort(key=lambda pid: post_ancestry[pid])
-        # not used?
+        remainder = self.remainder
         cluster_of_post = {}
         for post_id in post_ids:
             in_d = dendrogram.containing(np.searchsorted(post_ids, post_id))
@@ -1016,8 +1037,7 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
             for (n, cluster) in enumerate(clusters)
         ]
         clusters.append(dict(pcluster=remainder, cluster=None))
-        return (
-            silhouette_score, cluster_idea_data, clusters, cluster_of_post)
+        return (clusters, cluster_of_post)
 
     def write_title(self, f):
         discussion = self.discussion
@@ -1033,12 +1053,16 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
         return f
 
     def write_cluster_info(self, f):
-        (silhouette_score, idea_info, cluster_infos, cluster_of_post
-         ) = self.get_cluster_info()
+        clusters = self.clusters
+        post_clusters_by_cluster = self.post_clusters_by_cluster
+        post_clusters = [post_clusters_by_cluster[cl] for cl in clusters]
+        idea_info = self.get_cluster_idea_data(
+            self.discussion.root_idea, post_clusters)
+        (cluster_infos, cluster_of_post) = self.get_cluster_info()
         dendrogram = self.optics_dendrogram
         if not len(cluster_infos) > 1:
             return
-        f.write("<h2>Clusters (score = %f)</h2>" % (silhouette_score,))
+        f.write("<h2>Clusters (score = %f)</h2>" % (self.silhouette_score,))
         clusters = [ci['cluster'] for ci in cluster_infos]
         f.write("<p><b>Cluster size: %s</b>, remainder %d</p>\n" % (
             ', '.join((str(len(ci['cluster']))
@@ -1370,19 +1394,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         clusters = self.optics_clusters
         if clusters:
             cl_labels = optics.as_labels(clusters)
-            optics_silhouette_score = metrics.silhouette_score(
-                model_matrix, cl_labels, metric=self.metric)
-            dendrogram = self.optics_dendrogram
-
-            post_clusters_by_cluster = {
-                cluster: list(post_ids[optics.cluster_as_ids(cluster)])
-                for cluster in clusters}
-            remainder = set(post_ids)
-            for cluster in dendrogram.subclusters:
-                remainder -= set(post_clusters_by_cluster[cluster.cluster])
-            remainder = list(remainder)
-            remainder.sort()
-            post_clusters = [post_clusters_by_cluster[cl] for cl in clusters]
+            post_clusters_by_cluster = self.post_clusters_by_cluster
             suggestions_add = []
             suggestions_partition = []
             for num_cluster, cluster in enumerate(clusters):
@@ -1562,7 +1574,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 idea = self.ideas[idea_id]
                 suggestion['title'] = idea.short_title
                 # children_ids = self.idea_children[idea_id]
-                cluster = self.optics_clusters[cluster_id]
+                cluster = self.clusters[cluster_id]
                 cluster_posts = self.post_clusters_by_cluster[cluster]
                 suggestion['num_new_posts'] = len(new_posts)
                 union = set(self.get_posts_of_idea(idea_id))
@@ -1592,7 +1604,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 idea = self.ideas[idea_id]
                 suggestion['title'] = idea.short_title
                 children_ids = self.idea_children[idea_id]
-                cluster = self.optics_clusters[cluster_id]
+                cluster = self.clusters[cluster_id]
                 cluster_posts = self.post_clusters_by_cluster[cluster]
                 if new_posts:
                     target = set(self.get_posts_of_idea(idea_id))
