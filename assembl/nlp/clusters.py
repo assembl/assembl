@@ -114,6 +114,7 @@ class SemanticAnalysisData(object):
     _ideas_by_post = None
     _idea_hry = None
     _narrowest_ideas_by_post = None
+    _broadest_ideas_by_post = None
     _idea_children = None
     _ideas = None
     _posts = None
@@ -122,18 +123,29 @@ class SemanticAnalysisData(object):
 
     # data used by semantic analysis
     def __init__(self, discussion, num_topics=200, min_samples=4, eps=None,
-                 model_cls=None, metric=None, scrambler=None):
+                 model_cls=None, metric=None, test_code=None):
         self.discussion = discussion
         self.num_topics = num_topics
         self.min_samples = min_samples
         self.eps = eps
         self.metric = metric or 'cosine'
         self.model_cls = model_cls or gmodels.lsimodel.LsiModel
-        self.scrambler = scrambler
+        self.test_code = test_code
         self._ideas_by_post = {}
         self._posts_by_idea = {}
         # self._direct_ideas_by_post = {}
         self._posts = {}
+        self.scrambler = None
+        if test_code:
+            self.setup_scrambler()
+
+    def setup_scrambler(self):
+        from random import Random
+        scrambler = Random()
+        scrambler.seed(
+            get_config().get('session.secret')
+            + self.test_code + self.discussion.slug)
+        self.scrambler = scrambler
 
     def get_ideas_of_post(self, post_id):
         if post_id not in self._ideas_by_post:
@@ -270,6 +282,31 @@ class SemanticAnalysisData(object):
 
             self._narrowest_ideas_by_post = narrowest_ideas_by_post
         return self._narrowest_ideas_by_post
+
+    @property
+    def broadest_ideas_by_post(self):
+        # Use narrowest categories
+        # not the same as direct ideas, which may include broad direct links.
+        if self._broadest_ideas_by_post is None:
+            idea_hry = self.idea_hry
+            broadest_ideas_by_post = {}
+            for post_id, idea_ids in self.ideas_by_post.items():
+                if not idea_ids:
+                    continue
+                idea_ids = set(idea_ids)
+                clean = set()
+                for idea_id in idea_ids:
+                    current = idea_id
+                    while current in idea_hry:
+                        current = idea_hry[current]
+                        if current in idea_ids:
+                            break
+                    else:
+                        clean.add(idea_id)
+                broadest_ideas_by_post[post_id] = list(clean)
+            # print post_id, len(idea_ids), len(clean)
+            self._broadest_ideas_by_post = broadest_ideas_by_post
+        return self._broadest_ideas_by_post
 
     def create_dictionaries(self, all_languages=False):
         db = self.discussion.db
@@ -607,10 +644,10 @@ class SKLearnClusteringSemanticAnalysis(SemanticAnalysisData):
 
     def __init__(self, discussion, num_topics=200, min_samples=4, eps=None,
                  model_cls=None, metric=None, silhouette_cutoff=0.05,
-                 algorithm="DBSCAN", scrambler=None, **algo_kwargs):
+                 algorithm="DBSCAN", test_code=None, **algo_kwargs):
         super(SKLearnClusteringSemanticAnalysis, self).__init__(
             discussion, num_topics, min_samples, eps, model_cls, metric,
-            scrambler)
+            test_code)
         self.silhouette_cutoff = silhouette_cutoff
         self.algorithm = algorithm
         self.eps = eps
@@ -843,11 +880,11 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
     _remainder = None
 
     def __init__(self, discussion, num_topics=200, min_samples=4, eps=None,
-                 model_cls=None, metric=None, scrambler=None):
+                 model_cls=None, metric=None, test_code=None):
         super(OpticsSemanticsAnalysis, self).__init__(
             discussion, num_topics, min_samples, eps=eps or 0.02,
             model_cls=model_cls, metric=metric or 'cosine',
-            scrambler=scrambler)
+            test_code=test_code)
 
     def get_cluster_idea_data(self, root_idea, post_clusters):
 
@@ -934,6 +971,15 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
             self._optics_clusters.sort(key=optics.cluster_depth)
         return self._optics_clusters
 
+    def scramble_lists(self, good_list, bad_list, include_all_good=False):
+        scrambled = []
+        while good_list and bad_list:
+            l = good_list if self.scrambler.randint(0, 1) else bad_list
+            scrambled.append(l.pop(0))
+        if include_all_good:
+            scrambled.extend(good_list)
+        return scrambled
+
     @property
     def clusters(self):
         if self._clusters is None:
@@ -947,14 +993,10 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
                 optics.RDO = 1 - optics.RDO
                 anti_clusters = optics.extract_clusters(eps=self.eps*5)
                 anti_clusters.sort(key=optics.cluster_depth)
-                clusters = []
-                while real_clusters and anti_clusters:
-                    l = real_clusters if self.scrambler.randint(0, 1) else anti_clusters
-                    clusters.append(l.pop(0))
                 # all real clusters must be present
-                clusters.extend(real_clusters)
+                self._clusters = self.scramble_lists(
+                    real_clusters, anti_clusters, True)
                 optics.RDO = temp
-                self._clusters = clusters
         return self._clusters
 
     @property
@@ -1359,154 +1401,155 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         return silhouette_scores_for_idea, sizes
 
     def get_suggestions(self):
+        # Suggestion from Mark: Do it in layers.
         model_matrix = self.model_matrix
         post_ids = self.post_ids
-
-        # Use broadest category
-        # if False:
-        #     for post_id, idea_ids in ideas_by_post.items():
-        #         if not idea_ids:
-        #             continue
-        #         idea_ids = set(idea_ids)
-        #         clean = set()
-        #         for idea_id in idea_ids:
-        #             current = idea_id
-        #             while current in idea_hry:
-        #                 current = idea_hry[current]
-        #                 if current in idea_ids:
-        #                     break
-        #             else:
-        #                 clean.add(idea_id)
-        #         ideas_by_post[post_id] = list(clean)
-        #         print post_id, idea_ids, clean
-
         narrowest_ideas_by_post = self.narrowest_ideas_by_post
-
-        # Suggestion from Mark: Do it in layers.
-
         silhouette_scores_per_idea = self.silhouette_scores_per_idea
 
         # TODO: Add the orphans.
-        # Factor out in a function that allows an arbitrary post set 
+        # Factor out in a function that allows an arbitrary post set
         # to be compared as a child of idea X. (And without idea Y?)
 
         optics = self.optics
         clusters = self.optics_clusters
-        if clusters:
-            cl_labels = optics.as_labels(clusters)
-            post_clusters_by_cluster = self.post_clusters_by_cluster
-            suggestions_add = []
-            suggestions_partition = []
-            for num_cluster, cluster in enumerate(clusters):
-                cl_post_ids = post_clusters_by_cluster[cluster]
-                in_ideas = defaultdict(int)
-                cl_score = self.partial_silhouette_score(
-                     cl_labels, post_ids.searchsorted(cl_post_ids))
-                # print "cluster:", cl_post_ids, cl_score
+        if not clusters:
+            return ((), ())
+        cl_labels = optics.as_labels(clusters)
+        post_clusters_by_cluster = self.post_clusters_by_cluster
+        suggestions_add = []
+        suggestions_partition = []
+        for num_cluster, cluster in enumerate(clusters):
+            cl_post_ids = post_clusters_by_cluster[cluster]
+            in_ideas = defaultdict(int)
+            cl_score = self.partial_silhouette_score(
+                 cl_labels, post_ids.searchsorted(cl_post_ids))
+            # print "cluster:", cl_post_ids, cl_score
 
-                # Looking at direct connections. Of course ancestors often
-                # have more, but we lose precision. There are a few cases where
-                # going up a single level would be useful, TODO.
-                for post_id in cl_post_ids:
-                    for idea_id in narrowest_ideas_by_post[post_id]:
-                        in_ideas[idea_id] += 1
-                in_ideas = list(in_ideas.iteritems())
-                in_ideas.sort(key=lambda x: -x[1])
-                if not in_ideas:
-                    # TODO: Orphan cluster
+            # Looking at direct connections. Of course ancestors often
+            # have more, but we lose precision. There are a few cases where
+            # going up a single level would be useful, TODO.
+            for post_id in cl_post_ids:
+                for idea_id in narrowest_ideas_by_post[post_id]:
+                    in_ideas[idea_id] += 1
+            in_ideas = list(in_ideas.iteritems())
+            in_ideas.sort(key=lambda x: -x[1])
+            if not in_ideas:
+                # TODO: Orphan cluster
+                continue
+            max_count = in_ideas[0][1]
+            for idea_id, count in in_ideas:
+                if count < 2 or count * 2 < max_count:
+                    break
+                idea_posts = set(self.get_posts_of_idea(idea_id))
+                if len(idea_posts)-count < 2:
                     continue
-                max_count = in_ideas[0][1]
-                for idea_id, count in in_ideas:
-                    if count < 2 or count * 2 < max_count:
-                        break
-                    idea_posts = set(self.get_posts_of_idea(idea_id))
-                    if len(idea_posts)-count < 2:
-                        continue
-                    data = {post_id: idea_id for post_id in cl_post_ids}
-                    labels = self.labels_for_idea(idea_id, base_labels=data)
+                data = {post_id: idea_id for post_id in cl_post_ids}
+                labels = self.labels_for_idea(idea_id, base_labels=data)
 
-                    cl_post_ids_s = set(cl_post_ids)
-                    intersection_posts = cl_post_ids_s.intersection(idea_posts)
-                    new_posts = cl_post_ids_s - idea_posts
-                    basic_info = dict(
-                            cluster_posts=', '.join(
-                                (str(id) for id in cl_post_ids)),
-                            cl_post_ids=cl_post_ids,
-                            cl_score=cl_score,
-                            count=count,
-                            idea_id=idea_id,
-                            num_cluster=num_cluster,
-                            num_posts_cluster=len(cl_post_ids),
-                            num_posts_idea=len(self.get_posts_of_idea(idea_id)),
-                        )
-                    if cl_post_ids_s - idea_posts:
-                        # If we add this whole cluster to the idea, does it
-                        # yield a better partial score?
-                        union_posts = cl_post_ids_s
-                        union_posts.update(self.get_posts_of_idea(idea_id))
-                        score = self.partial_silhouette_score(
-                            labels, post_ids.searchsorted(list(union_posts)))
-                        # print "idea: %d incluster:%d / %d, cluster %d, union %d, score " % (
-                        #    idea_id, count, len(self.get_posts_of_idea(idea_id)), len(cl_post_ids),
-                        #    len(union_posts)), score, silhouette_scores_per_idea[idea_id]
-                        original_score = silhouette_scores_per_idea[idea_id][0]
-                        suggestions_add.append(dict(
-                            basic_info,
-                            new_posts=new_posts,
-                            num_union_posts=len(union_posts),
-                            original_score=original_score,
-                            score=score,
-                            score_delta=original_score-score))
-                    # if we set the cluster as a child of this idea,
-                    # does it help the score?
-                    data = {post_id: -1 for post_id in intersection_posts}
-                    score = self.internal_silhouette(idea_id, data)
-                    original_score = silhouette_scores_per_idea[idea_id][2] or 0
-                    suggestions_partition.append(dict(
-                            basic_info,
-                            num_intersection_posts=len(intersection_posts),
-                            original_score=original_score,
-                            score=score,
-                            score_delta=original_score-score,
-                            whole=''))
-                    # if we set the whole cluster as a child of this idea,
-                    # does it help the score?
-                    data = {post_id: -1 for post_id in cl_post_ids}
-                    score = self.internal_silhouette(idea_id, data)
-                    suggestions_partition.append(dict(
-                            basic_info,
-                            new_posts=new_posts,
-                            num_intersection_posts=len(intersection_posts),
-                            original_score=original_score,
-                            score=score,
-                            score_delta=original_score-score,
-                            whole='whole'))
+                cl_post_ids_s = set(cl_post_ids)
+                intersection_posts = cl_post_ids_s.intersection(idea_posts)
+                new_posts = cl_post_ids_s - idea_posts
+                basic_info = dict(
+                        cluster_posts=', '.join(
+                            (str(id) for id in cl_post_ids)),
+                        cl_post_ids=cl_post_ids,
+                        cl_score=cl_score,
+                        count=count,
+                        idea_id=idea_id,
+                        num_cluster=num_cluster,
+                        num_posts_cluster=len(cl_post_ids),
+                        num_posts_idea=len(self.get_posts_of_idea(idea_id)),
+                    )
+                if cl_post_ids_s - idea_posts:
+                    # If we add this whole cluster to the idea, does it
+                    # yield a better partial score?
+                    union_posts = cl_post_ids_s
+                    union_posts.update(self.get_posts_of_idea(idea_id))
+                    score = self.partial_silhouette_score(
+                        labels, post_ids.searchsorted(list(union_posts)))
+                    original_score = silhouette_scores_per_idea[idea_id][0]
+                    suggestions_add.append(dict(
+                        basic_info,
+                        new_posts=new_posts,
+                        num_union_posts=len(union_posts),
+                        original_score=original_score,
+                        score=score,
+                        score_delta=original_score-score))
+                # if we set the cluster as a child of this idea,
+                # does it help the score?
+                data = {post_id: -1 for post_id in intersection_posts}
+                score = self.internal_silhouette(idea_id, data)
+                original_score = silhouette_scores_per_idea[idea_id][2] or 0
+                suggestions_partition.append(dict(
+                        basic_info,
+                        num_intersection_posts=len(intersection_posts),
+                        original_score=original_score,
+                        score=score,
+                        score_delta=original_score-score,
+                        whole=''))
+                # if we set the whole cluster as a child of this idea,
+                # does it help the score?
+                data = {post_id: -1 for post_id in cl_post_ids}
+                score = self.internal_silhouette(idea_id, data)
+                suggestions_partition.append(dict(
+                        basic_info,
+                        new_posts=new_posts,
+                        num_intersection_posts=len(intersection_posts),
+                        original_score=original_score,
+                        score=score,
+                        score_delta=original_score-score,
+                        whole='whole'))
 
-            def pos_score(sugg):
-                return sugg['score_delta'] < 0
-            suggestions_add = filter(pos_score, suggestions_add)
-            suggestions_partition = filter(pos_score, suggestions_partition)
-            # Choose best per cluster for additions
-            suggestions_add.sort(key=lambda x: (x['num_cluster'], x['score_delta']))
-            suggestions = []
-            for sugg_type, suggestions_of_cl in groupby(
-                    suggestions_add, key=lambda x: x['num_cluster']):
-                for suggestion in suggestions_of_cl:
-                    suggestions.append(suggestion)
-                    break
-            suggestions.sort(key=lambda x: x['score_delta'])
-            suggestions_add = suggestions
-            # Choose best per idea for partitions
-            suggestions = []
-            suggestions_partition.sort(key=lambda x: (x['idea_id'], x['score_delta']))
-            for sugg_type, suggestions_of_idea in groupby(
-                    suggestions_partition, key=lambda x: x['idea_id']):
-                for suggestion in suggestions_of_idea:
-                    suggestions.append(suggestion)
-                    break
-            suggestions.sort(key=lambda x: x['score_delta'])
-            suggestions_partition = suggestions
-            return (suggestions_add, suggestions_partition)
+        return (suggestions_add, suggestions_partition)
+
+    @property
+    def clusters(self):
+        if self._clusters is None:
+            # Do not scramble at the cluster level
+            temp = self.scrambler
+            self.scrambler = None
+            self._clusters = super(
+                OpticsSemanticsAnalysisWithSuggestions, self).clusters
+            self.scrambler = temp
+        return self._clusters
+
+    def pick_best_suggestions(self, suggestion_list, group_key, reverse=False):
+        polarity = -1 if reverse else 1
+        suggestion_list.sort(
+            key=lambda x: (x[group_key], polarity * x['score_delta']))
+        suggestions = []
+        for sugg_type, suggestions_of_cl in groupby(
+                suggestion_list, key=lambda x: x[group_key]):
+            for suggestion in suggestions_of_cl:
+                suggestions.append(suggestion)
+                break
+        suggestions.sort(key=lambda x: polarity * x['score_delta'])
+        suggestions = filter(
+            lambda x: polarity * x['score_delta'] < 0, suggestions)
+        return suggestions
+
+    def select_suggestions(self, add_suggestions, partition_suggestions):
+        def pos_score(sugg):
+            return sugg['score_delta'] < 0
+        # suggestions_add = filter(pos_score, suggestions_add)
+        # suggestions_partition = filter(pos_score, suggestions_partition)
+        # Choose best per cluster for additions
+        best_add_suggestions = self.pick_best_suggestions(
+            add_suggestions, 'num_cluster')
+        # Choose best per idea for partitions
+        best_partition_suggestions = self.pick_best_suggestions(
+            partition_suggestions, 'idea_id')
+        if self.scrambler:
+            worst_add_suggestions = self.pick_best_suggestions(
+                add_suggestions, 'num_cluster', True)
+            best_add_suggestions = self.scramble_lists(
+                best_add_suggestions, worst_add_suggestions, True)
+            worst_partition_suggestions = self.pick_best_suggestions(
+                partition_suggestions, 'idea_id', True)
+            best_partition_suggestions = self.scramble_lists(
+                best_partition_suggestions, worst_partition_suggestions, True)
+        return (best_add_suggestions, best_partition_suggestions)
 
     def print_idea_scores(self):
         discussion = self.discussion
@@ -1549,9 +1592,17 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         f.write("</li>")
 
     def as_html(self, f=None):
+        # TODO: Rewrite as jinja.
         if not f:
             f = open('output.html', 'w')
         f.write("<html><body>")
+        if self.test_code:
+            f.write('''<form action="test_results" method="POST">')
+            <input type="hidden" name="test_code" value="%(test_code)s">
+            <input type="hidden" name="server" value="%(server)s">
+            <input type="hidden" name="discussion" value="%(disc_id)d">''' %
+            dict(test_code=self.test_code, disc_id=self.discussion.id,
+                 server=get_config()['public_hostname']))
         self.write_title(f)
         discussion = self.discussion
         root = discussion.root_idea.id
@@ -1560,14 +1611,19 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         f.write('</ul>')
         self.suggestions_as_html(f)
         # self.write_cluster_info(f)
+        if self.test_code:
+            f.write('<input type="submit"></input>')
+            f.write('</form>')
         f.write("</body></html>")
         return f
 
     def suggestions_as_html(self, f):
         (suggestions_add, suggestions_partition) = self.get_suggestions()
+        (suggestions_add, suggestions_partition) = self.select_suggestions(
+            suggestions_add, suggestions_partition)
         if suggestions_add:
             f.write("<h2>Suggested additions</h2>")
-            for suggestion in suggestions_add:
+            for n, suggestion in enumerate(suggestions_add):
                 idea_id = suggestion['idea_id']
                 new_posts = suggestion['new_posts']
                 cluster_id = suggestion['num_cluster']
@@ -1584,6 +1640,12 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                     Already in cluster: %(count)d / %(num_posts_idea)d. outer score: %(original_score)f -> %(score)f</p>
                     """ % suggestion)
                 self.write_features(f, cluster)
+                if self.test_code:
+                    f.write('''<p>Is this suggestion useful?
+                        <input type="radio" name="add_%(num)d_valid" value="true">yes</input>
+                        <input type="radio" name="add_%(num)d_valid" value="false">no</input></p>'''
+                        % dict(num=n))
+
                 def title_function(post_id):
                     if post_id in new_posts:
                         return "<b>Add new post %d</b>:" % (post_id,)
@@ -1596,7 +1658,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 self.write_post_cluster(f, union, title_function)
         if suggestions_partition:
             f.write("<h2>Suggested segmentations</h2>")
-            for suggestion in suggestions_partition:
+            for n, suggestion in enumerate(suggestions_partition):
                 idea_id = suggestion['idea_id']
                 new_posts = suggestion.get('new_posts', ())
                 cluster_id = suggestion['num_cluster']
@@ -1619,6 +1681,11 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                     <p>outer score: %(original_score)f -> %(score)f. Idea: <b>%(title)s</b></p>
                     """ % suggestion)
                 self.write_features(f, cluster)
+                if self.test_code:
+                    f.write('''<p>Is this suggestion useful?
+                        <input type="radio" name="part_%(num)d_valid" value="true">yes</input>
+                        <input type="radio" name="part_%(num)d_valid" value="false">no</input></p>'''
+                        % dict(num=n))
 
                 def title_function(post_id):
                     present_in = set(ideas_by_post[post_id])

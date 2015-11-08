@@ -1,11 +1,8 @@
-import os
-from functools import partial
 import re
 import base64
 from cStringIO import StringIO
 from os import urandom
 from os.path import join, dirname
-from itertools import chain
 from collections import defaultdict
 import random
 
@@ -19,17 +16,19 @@ from pyramid_dogpile_cache import get_region
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.renderers import JSONP_VALID_CALLBACK
 from pyramid.settings import asbool
+from pyramid_mailer import get_mailer
+from pyramid_mailer.message import Message
 import requests
 
 from assembl.lib.config import get_config
 from assembl.lib.parsedatetime import parse_datetime
 from assembl.auth import (
-    P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_SYSADMIN, Everyone)
+    P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_SYSADMIN)
 from assembl.auth.password import verify_data_token, data_token
 from assembl.auth.util import get_permissions
-from assembl.models import (Discussion, Permission, AgentProfile)
+from assembl.models import (Discussion, Permission)
 from ..traversal import InstanceContext
-from . import JSON_HEADER
+from . import (JSON_HEADER, FORM_HEADER)
 
 
 @view_config(context=InstanceContext, request_method='GET',
@@ -264,8 +263,9 @@ def get_contribution_count(request):
         if not start:
             from assembl.models import Post
             from sqlalchemy import func
-            (start,) = discussion.db.query(func.min(Post.creation_date)
-                ).filter_by(discussion_id=discussion.id).first()
+            (start,) = discussion.db.query(
+                func.min(Post.creation_date)).filter_by(
+                discussion_id=discussion.id).first()
         r["start"] = start.isoformat()
         if not end:
             end = datetime.now()
@@ -349,8 +349,9 @@ def get_visit_count(request):
         if not start:
             from assembl.models import Post
             from sqlalchemy import func
-            (start,) = discussion.db.query(func.min(Post.creation_date)
-                ).filter_by(discussion_id=discussion.id).first()
+            (start,) = discussion.db.query(
+                func.min(Post.creation_date)).filter_by(
+                discussion_id=discussion.id).first()
         r["start"] = start.isoformat()
         if not end:
             end = datetime.now()
@@ -419,7 +420,7 @@ def as_mind_map(request):
     discussion = request.context._instance
     G = discussion.as_mind_map()
     G.layout(prog='twopi')
-    io=StringIO()
+    io = StringIO()
     G.draw(io, format=pygraphviz_formats[mimetype])
     io.seek(0)
     return Response(body_file=io, content_type=mimetype)
@@ -513,22 +514,31 @@ def show_optics_cluster(request):
     min_samples = int(request.GET.get("min_samples", "3"))
     test_code = request.GET.get("test_code", None)
     suggestions = request.GET.get("suggestions", True)
-    scrambler = None
-    if test_code:
-        from random import Random
-        scrambler = Random()
-        scrambler.seed(
-            get_config().get('session.secret') + test_code + discussion.slug)
     discussion = request.context._instance
     output = StringIO()
     from assembl.nlp.clusters import (
         OpticsSemanticsAnalysis, OpticsSemanticsAnalysisWithSuggestions)
     if asbool(suggestions):
         analysis = OpticsSemanticsAnalysisWithSuggestions(
-            discussion, min_samples=min_samples, eps=eps, scrambler=scrambler)
+            discussion, min_samples=min_samples, eps=eps, test_code=test_code)
     else:
         analysis = OpticsSemanticsAnalysis(
-            discussion, min_samples=min_samples, eps=eps, scrambler=scrambler)
+            discussion, min_samples=min_samples, eps=eps, test_code=test_code)
     analysis.as_html(output)
     output.seek(0)
     return Response(body_file=output, content_type='text/html')
+
+
+@view_config(context=InstanceContext, name="test_results",
+             ctx_instance_class=Discussion, request_method='POST',
+             header=FORM_HEADER, permission=P_READ)
+def test_results(request):
+    mailer = get_mailer(request)
+    config = get_config()
+    message = Message(
+        subject="test_results",
+        sender=config.get('assembl.admin_email'),
+        recipients=["maparent@acm.org"],
+        body=json.dumps(request.POST.dict_of_lists()))
+    mailer.send(message)
+    return Response(body="Thank you!", content_type="text/text")
