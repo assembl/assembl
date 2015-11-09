@@ -129,7 +129,6 @@ from .action import (
 )
 from .idea_content_link import (
     Extract,
-    Idea,
     IdeaContentLink,
     IdeaContentNegativeLink,
     IdeaContentPositiveLink,

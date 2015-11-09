@@ -3,7 +3,6 @@ from simplejson import dumps, loads
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPCreated, HTTPNotFound, HTTPBadRequest)
-from pyramid.security import Everyone
 
 from assembl.auth import (
     P_READ, IF_OWNED, Everyone, CrudPermissions)

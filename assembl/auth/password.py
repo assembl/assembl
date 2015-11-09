@@ -7,7 +7,6 @@ from base64 import urlsafe_b64encode, urlsafe_b64decode
 from enum import Enum
 from assembl.lib import config
 from ..models import EmailAccount, User
-from ..lib import config
 
 SALT_SIZE = 8
 

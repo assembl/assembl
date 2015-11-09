@@ -52,7 +52,7 @@ from assembl.lib.sqla import ObjectNotUniqueError
 from ..traversal import (
     InstanceContext, CollectionContext, ClassContext, Api2Context)
 from assembl.auth import (
-    P_READ, IF_OWNED, Everyone, CrudPermissions)
+    P_READ, IF_OWNED, CrudPermissions)
 from assembl.auth.util import get_permissions
 from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
