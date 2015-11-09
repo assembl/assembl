@@ -516,14 +516,17 @@ def show_optics_cluster(request):
     suggestions = request.GET.get("suggestions", True)
     discussion = request.context._instance
     output = StringIO()
+    user_id = authenticated_userid(request) or Everyone
     from assembl.nlp.clusters import (
         OpticsSemanticsAnalysis, OpticsSemanticsAnalysisWithSuggestions)
     if asbool(suggestions):
         analysis = OpticsSemanticsAnalysisWithSuggestions(
-            discussion, min_samples=min_samples, eps=eps, test_code=test_code)
+            discussion, min_samples=min_samples, eps=eps,
+            user_id=user_id, test_code=test_code)
     else:
         analysis = OpticsSemanticsAnalysis(
-            discussion, min_samples=min_samples, eps=eps, test_code=test_code)
+            discussion, min_samples=min_samples, eps=eps,
+            user_id=user_id, test_code=test_code)
     analysis.as_html(output)
     output.seek(0)
     return Response(body_file=output, content_type='text/html')

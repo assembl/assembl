@@ -149,7 +149,7 @@ class SemanticAnalysisData(object):
 
     # data used by semantic analysis
     def __init__(self, discussion, num_topics=200, min_samples=4, eps=None,
-                 model_cls=None, metric=None, test_code=None):
+                 model_cls=None, metric=None, user_id=None, test_code=None):
         self.discussion = discussion
         self.num_topics = num_topics
         self.min_samples = min_samples
@@ -157,6 +157,7 @@ class SemanticAnalysisData(object):
         self.metric = metric or 'cosine'
         self.model_cls = model_cls or gmodels.lsimodel.LsiModel
         self.test_code = test_code
+        self.user_id = user_id
         self._ideas_by_post = {}
         self._posts_by_idea = {}
         # self._direct_ideas_by_post = {}
@@ -194,6 +195,11 @@ class SemanticAnalysisData(object):
     @property
     def db(self):
         return self.discussion.db
+
+    @property
+    def discussion_url(self):
+        discussion = self.discussion
+        return "%s/%s/" % (discussion.get_base_url(), discussion.slug)
 
     @property
     def idea_hry(self):
@@ -664,10 +670,11 @@ class SKLearnClusteringSemanticAnalysis(SemanticAnalysisData):
 
     def __init__(self, discussion, num_topics=200, min_samples=4, eps=None,
                  model_cls=None, metric=None, silhouette_cutoff=0.05,
-                 algorithm="DBSCAN", test_code=None, **algo_kwargs):
+                 algorithm="DBSCAN", user_id=None, test_code=None,
+                 **algo_kwargs):
         super(SKLearnClusteringSemanticAnalysis, self).__init__(
             discussion, num_topics, min_samples, eps, model_cls, metric,
-            test_code)
+            user_id, test_code)
         self.silhouette_cutoff = silhouette_cutoff
         self.algorithm = algorithm
         self.eps = eps
@@ -878,8 +885,10 @@ class SKLearnClusteringSemanticAnalysis(SemanticAnalysisData):
                         u", ".join(features[1])).encode('utf-8'))
                 f.write("<dl>\n")
                 for post_id in cluster:
-                    f.write("<dt>Post %d (%s):</dt>\n" % (
-                        post_id, ','.join((
+                    f.write("<dt><a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (%(ideas)s):</dt>\n" % dict(
+                        url=self.discussion_url,
+                        post_id=post_id, 
+                        ideas=','.join((
                             str(p) for p in post_info[post_id]['ideas']))))
                     f.write("<dd>%s</dd>" % (
                         self.post_texts[post_id].encode('utf-8')))
@@ -900,11 +909,11 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
     _remainder = None
 
     def __init__(self, discussion, num_topics=200, min_samples=4, eps=None,
-                 model_cls=None, metric=None, test_code=None):
+                 model_cls=None, metric=None, user_id=None, test_code=None):
         super(OpticsSemanticsAnalysis, self).__init__(
             discussion, num_topics, min_samples, eps=eps or 0.02,
             model_cls=model_cls, metric=metric or 'cosine',
-            test_code=test_code)
+            user_id=user_id, test_code=test_code)
 
     def get_cluster_idea_data(self, root_idea, post_clusters):
 
@@ -1127,7 +1136,10 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
         dendrogram = self.optics_dendrogram
         if not len(cluster_infos) > 1:
             return
-        f.write("<h2>Clusters (score = %f)</h2>" % (self.silhouette_score,))
+        score_string = ''
+        if not self.test_code:
+            score_string = " (score = %f)" % (self.silhouette_score,)
+        f.write("<h2>Clusters%s</h2>" % (score_string,))
         clusters = [ci['cluster'] for ci in cluster_infos]
         f.write("<p><b>Cluster size: %s</b>, remainder %d</p>\n" % (
             ', '.join((str(len(ci['cluster']))
@@ -1173,8 +1185,10 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
             self.write_features(f, cluster)
 
             def title_function(post_id):
-                return "Post %d (in ideas %s):" % (
-                    post_id, ','.join((
+                return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (in ideas %(ideas)s):" % dict(
+                    post_id=post_id,
+                    url=self.discussion_url,
+                    ideas=','.join((
                         str(p) for p in self.get_ideas_of_post(post_id))))
                 # ','.join((str(p) for p in ancestry))
             self.write_post_cluster(f, pcluster, title_function)
@@ -1617,12 +1631,13 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
             f = open('output.html', 'w')
         f.write("<html><body>")
         if self.test_code:
-            f.write('''<form action="test_results" method="POST">')
+            f.write('''<form action="test_results" method="POST">
             <input type="hidden" name="test_code" value="%(test_code)s">
+            <input type="hidden" name="user_id" value="%(user_id)s">
             <input type="hidden" name="server" value="%(server)s">
             <input type="hidden" name="discussion" value="%(disc_id)d">''' %
             dict(test_code=self.test_code, disc_id=self.discussion.id,
-                 server=get_config()['public_hostname']))
+                 user_id=self.user_id, server=get_config()['public_hostname']))
         self.write_title(f)
         discussion = self.discussion
         root = discussion.root_idea.id
@@ -1658,12 +1673,15 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 cluster = self.clusters[cluster_id]
                 cluster_posts = self.post_clusters_by_cluster[cluster]
                 suggestion['num_new_posts'] = len(new_posts)
+                suggestion['url'] = self.discussion_url
                 union = set(self.get_posts_of_idea(idea_id))
                 union.update(new_posts)
                 f.write("""<h3>From cluster %(num_cluster)d (size: %(num_posts_cluster)d)</h3>
-                    <p>Add %(num_new_posts)d posts to idea %(idea_id)d <b>%(title)s</b><br />
-                    Already in cluster: %(count)d / %(num_posts_idea)d. outer score: %(original_score)f -> %(score)f</p>
-                    """ % suggestion)
+                    <p>Add %(num_new_posts)d posts to <a target='out' href='%(url)sidea/local:Idea/%(idea_id)d'>idea %(idea_id)d</a> <b>%(title)s</b><br />
+                    Already in cluster: %(count)d / %(num_posts_idea)d.""" % suggestion)
+                if not self.test_code:
+                    f.write(" Outer score: %(original_score)f -> %(score)f" % suggestion)
+                f.write("</p>")
                 self.write_features(f, cluster)
                 if self.test_code:
                     f.write('''<p>Is this suggestion useful?
@@ -1673,13 +1691,14 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
 
                 def title_function(post_id):
                     if post_id in new_posts:
-                        return "<b>Add new post %d</b>:" % (post_id,)
+                        return "<b>Add new <a target='out' href='%(url)sposts/local:Content/%(post_id)d'>post %(post_id)d</a></b>:" % dict(
+                            url=self.discussion_url, post_id=post_id)
                     elif post_id in cluster_posts:
-                        return "Post %d (<em>already in cluster</em>):" % (
-                            post_id,)
+                        return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<em>already in cluster</em>):" % dict(
+                            url=self.discussion_url, post_id=post_id)
                     else:
-                        return "Post %d (<em><b>not</b> in cluster</em>):" % (
-                            post_id,)
+                        return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<em><b>not</b> in cluster</em>):" % dict(
+                            url=self.discussion_url, post_id=post_id)
                 self.write_post_cluster(f, union, title_function)
         if suggestions_partition:
             f.write("<h2>Suggested segmentations</h2>")
@@ -1690,6 +1709,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 ideas_by_post = self.ideas_by_post
                 idea = self.ideas[idea_id]
                 suggestion['title'] = idea.short_title
+                suggestion['url'] = self.discussion_url
                 children_ids = self.idea_children[idea_id]
                 cluster = self.clusters[cluster_id]
                 cluster_posts = self.post_clusters_by_cluster[cluster]
@@ -1697,14 +1717,15 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                     target = set(self.get_posts_of_idea(idea_id))
                     target.update(new_posts)
                     suggestion['num_new_posts'] = len(new_posts)
-                    f.write("""<h3>Segment and complete idea %(idea_id)d with cluster %(num_cluster)d (size: %(num_posts_cluster)d), adding %(num_new_posts)d posts)</h3>
-                    <p>outer score: %(original_score)f -> %(score)f. Idea: <b>%(title)s</b></p>
-                    """ % suggestion)
+                    f.write("""<h3>Segment and complete <a target='out' href='%(url)sidea/local:Idea/%(idea_id)d'>idea %(idea_id)d</a> with cluster %(num_cluster)d (size: %(num_posts_cluster)d), adding %(num_new_posts)d posts)</h3>
+                    <p>""" % suggestion)
                 else:
                     target = self.get_posts_of_idea(idea_id)
-                    f.write("""<h3>Segment idea %(idea_id)d using cluster %(num_cluster)d (in idea: <b>%(count)d</b> / %(num_posts_cluster)d)</h3>
-                    <p>outer score: %(original_score)f -> %(score)f. Idea: <b>%(title)s</b></p>
-                    """ % suggestion)
+                    f.write("""<h3>Segment <a target='out' href='%(url)sidea/local:Idea/%(idea_id)d'>idea %(idea_id)d</a> using cluster %(num_cluster)d (in idea: <b>%(count)d</b> / %(num_posts_cluster)d)</h3>
+                    <p>""" % suggestion)
+                if not self.test_code:
+                    f.write("inner score: %(original_score)f -> %(score)f. " % suggestion)
+                f.write(" Idea: <b>%(title)s</b></p>" % suggestion)
                 self.write_features(f, cluster)
                 if self.test_code:
                     f.write('''<p>Is this suggestion useful?
@@ -1715,21 +1736,20 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 def title_function(post_id):
                     present_in = set(ideas_by_post[post_id])
                     present_in = present_in.intersection(set(children_ids))
-                    present_in_st = ', '.join(present_in)
+                    args = dict(url=self.discussion_url, post_id=post_id,
+                                present_in=', '.join(present_in))
                     if post_id in new_posts:
-                        return "<b>Add new post %d</b>:" % (post_id,)
+                        return "<b>Add new <a target='out' href='%(url)sposts/local:Content/%(post_id)d'>post %(post_id)d</a></b>:" % args
                     elif post_id in cluster_posts:
                         if present_in:
-                            return "Post %d (<b>put in new idea</b>, <em>formerly in %s</em>):" % (
-                                post_id, present_in_st)
+                            return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<b>put in new idea</b>, <em>formerly in %(present_in)s</em>):" % args
                         else:
-                            return "Post %d (<b>put in new idea</b></em>):" % (post_id,)
+                            return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<b>put in new idea</b></em>):" % args
                     else:
                         if present_in:
-                            return "Post %d (<em><b>not</b> in cluster</em>, keep in %s):" % (
-                                post_id, present_in_st)
+                            return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<em><b>not</b> in cluster</em>, keep in %(present_in)s):" % args
                         else:
-                            return "Post %d (<em><b>not</b> in cluster</em>):" % (post_id,)
+                            return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<em><b>not</b> in cluster</em>):" % args
                 self.write_post_cluster(f, target, title_function)
 
     def print_suggestions(self):
