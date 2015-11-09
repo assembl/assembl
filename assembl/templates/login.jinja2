@@ -89,8 +89,10 @@
                     <a href="{{ slug_prefix }}/req_password_change">{{ gettext('Forgot your password?') }}</a>
                 </td></tr></table>
             </form>
+            {% if not hide_registration %}
             <p class="login-box-title mtxl mbs">{{ gettext("No account yet?") }}</p>
             <form class="form inline" method="GET" action="{{ slug_prefix }}/register"><input type="submit" value="{{ gettext('Sign up') }}" class="btn btn-secondary" /></form>
+            {% endif %}
         </div>
         
     </div>

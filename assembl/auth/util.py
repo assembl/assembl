@@ -177,6 +177,20 @@ def discussions_with_access(userid, permission=P_READ):
         return db.query(Discussion).join(perms.subquery('perms'))
 
 
+def roles_with_permission(discussion, permission=P_READ):
+    return [x for (x,) in discussion.db.query(Role.name).join(
+        DiscussionPermission).join(Permission).filter(and_(
+            Permission.name == permission,
+            DiscussionPermission.discussion == discussion))]
+
+
+def roles_with_permissions(discussion, *permissions):
+    return [x for (x,) in discussion.db.query(Role.name).join(
+        DiscussionPermission).join(Permission).filter(and_(
+            Permission.name.in_(permissions),
+            DiscussionPermission.discussion == discussion))]
+
+
 def user_has_permission(discussion_id, user_id, permission):
     from ..models import Discussion
     # assume all ids valid

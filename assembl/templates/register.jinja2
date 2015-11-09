@@ -18,6 +18,9 @@ body{
         <div class="error">{{error}}</div>
         {% endif %}
 
+        {% if hide_registration %}
+        <p class="content">{{ gettext("This is a closed discussion.") }}</p>
+        {% else %}
         <form class="form" method="POST">
             <input type="hidden" name="next_view" value="{{next_view}}" />
             <input type="text" name="name" class="form-control defaultfield" placeholder="{{ gettext('Full name') }}" autofocus required />
@@ -26,7 +29,7 @@ body{
             <input type="password" name="password2" class="form-control defaultfield" placeholder="{{ gettext('Repeat password') }}" required />
             <input type="submit" name="register" value="{{ gettext('Sign up') }}" class="btn btn-primary js_register" />
         </form>
-
+        {% endif %}
         <div class="subcontent">
             {{gettext("Do you already have an account?")}} <a href="{{ slug_prefix }}/login?next_view={{next_view}}" class="btn btn-default btn-sm">{{gettext("Log in!")}}</a>
         </div>

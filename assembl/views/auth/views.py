@@ -13,6 +13,7 @@ from pyramid.security import (
     remember,
     forget,
     Everyone,
+    Authenticated,
     authenticated_userid,
     NO_PERMISSION_REQUIRED)
 from pyramid.httpexceptions import (
@@ -31,12 +32,13 @@ from assembl.models import (
     AgentProfile, User, Username, Role, LocalUserRole,
     AbstractAgentAccount, Discussion, AgentStatusInDiscussion)
 from assembl.auth import (
-    P_READ, R_PARTICIPANT)
+    P_READ, R_PARTICIPANT, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST)
 from assembl.auth.password import (
     verify_email_token, verify_password_change_token,
     password_token)
 from assembl.auth.util import (
-    get_identity_provider, discussion_from_request)
+    get_identity_provider, discussion_from_request,
+    roles_with_permissions)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
 from .. import get_default_context, JSONError
@@ -44,6 +46,8 @@ from .. import get_default_context, JSONError
 _ = TranslationStringFactory('assembl')
 log = logging.getLogger('assembl')
 
+
+public_roles = {Everyone, Authenticated}
 
 def get_login_context(request, force_show_providers=False):
     slug = request.matchdict.get('discussion_slug', None)
@@ -54,6 +58,12 @@ def get_login_context(request, force_show_providers=False):
         p_slug = ""
         request.session.pop('discussion')
     providers = request.registry.settings['login_providers'][:]
+    discussion = discussion_from_request(request)
+    hide_registration = (discussion
+        and not public_roles.intersection(set(roles_with_permissions(
+            discussion, P_READ)))
+        and not roles_with_permissions(
+            discussion, P_SELF_REGISTER_REQUEST, P_SELF_REGISTER))
     if not force_show_providers:
         hide_providers = request.registry.settings.get(
             'hide_login_providers', ())
@@ -62,15 +72,15 @@ def get_login_context(request, force_show_providers=False):
             hide_providers = (hide_providers, )
         for provider in hide_providers:
             providers.remove(provider)
-    return dict(get_default_context(request), **{
-        'login_url': login_url,
-        'slug_prefix': p_slug,
-        'providers': providers,
-        'google_consumer_key': request.registry.settings.get(
+    return dict(get_default_context(request),
+        login_url=login_url,
+        slug_prefix=p_slug,
+        providers=providers,
+        hide_registration=hide_registration,
+        google_consumer_key=request.registry.settings.get(
             'google.consumer_key', ''),
-        'next_view': handle_next_view(request)
-    })
-
+        next_view=handle_next_view(request)
+    )
 
 def _get_route_from_path(request, path):
     from pyramid.urldispatch import IRoutesMapper
@@ -312,7 +322,7 @@ def assembl_register_view(request):
         if request.scheme == "http"\
                 and asbool(config.get("accept_secure_connection")):
             raise HTTPFound("https://" + request.host + request.path_qs)
-        response = dict(get_default_context(request),
+        response = dict(get_login_context(request),
                     slug_prefix=p_slug)
         if request.GET.get('error', None):
             response['error'] = request.GET['error']
