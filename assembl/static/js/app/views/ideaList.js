@@ -310,22 +310,40 @@ var IdeaList = AssemblPanel.extend({
     },
 
   /**
+   * Add a "new" label to most recent ideas
    * @param ideas: collection of ideas. For example: this.allIdeasCollection
    * @param view_data: object which will be modified during the traversal
    */
   addLabelToMostRecentIdeas: function(ideas, view_data){
-    // add a "new" label to most recent ideas
-
-    // create a list of idea creation dates
     var maximum_ratio_of_highlighted_ideas = 0.2; // float [0;1]
-    var should_be_newer_than = new Date();
-    should_be_newer_than.setMonth(should_be_newer_than.getMonth() - 3);
-    // console.log("should_be_newer_than: ", should_be_newer_than);
+    var should_be_newer_than = null;
+    if ( Ctx.isUserConnected() ){
+      var last_visit = Ctx.getCurrentUser().get('last_visit');
+      if ( last_visit ){
+        last_visit = new Date(last_visit);
+        if ( last_visit ){
+          var yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1); // sets to x days before
+          if ( last_visit < yesterday ){
+            should_be_newer_than = last_visit;
+            should_be_newer_than.setDate(should_be_newer_than.getDate() - 3); // sets to x days before
+          } else { // TODO: look for the antepenultimate visit, but we don't store it yet
+            should_be_newer_than = yesterday;
+            should_be_newer_than.setDate(should_be_newer_than.getDate() - 3); // sets to x days before
+          }
+        }
+      }
+    }
+    if ( !should_be_newer_than ){
+      should_be_newer_than = new Date();
+      should_be_newer_than.setMonth(should_be_newer_than.getMonth() - 1); // sets to x months before
+    }
+    console.log("should_be_newer_than: ", should_be_newer_than);
 
     var idea_criterion_value = function(idea){
       return new Date(idea.get('creationDate'));
     };
-    var creation_dates = ideas.map(idea_criterion_value);
+    var creation_dates = ideas.map(idea_criterion_value); // create a list of idea creation dates
     var date_sort_asc = function (date1, date2) {
       if (date1 > date2) return 1;
       if (date1 < date2) return -1;
@@ -360,7 +378,7 @@ var IdeaList = AssemblPanel.extend({
       var crierion_value = idea_criterion_value(idea);
       if ( highlight_if_newer_than && crierion_value && crierion_value >= highlight_if_newer_than ){
         var idea_id = idea.getId();
-        console.log("we are going to highlight idea: ", idea_id, idea.get("shortTitle"));
+        //console.log("we are going to highlight idea: ", idea_id, idea.get("shortTitle"));
         if ( !(idea_id in view_data) ){
           view_data[idea_id] = {};
         }
