@@ -2,6 +2,7 @@ from collections import defaultdict
 from os.path import join, exists
 from os import makedirs, unlink
 from itertools import chain, groupby
+from random import Random
 
 from sqlalchemy import (text, column, bindparam)
 from sqlalchemy.orm import defer
@@ -98,6 +99,31 @@ def identity(x):
     return x
 
 
+class Scrambler(object):
+    def __init__(self, seed):
+        self.seed = seed
+        self.reset()
+
+    def reset(self):
+        self.scrambler = Random()
+        self.scrambler.seed(self.seed)
+        self.results = []
+
+    def next_bool(self):
+        val = self.scrambler.randint(0, 1)
+        self.results.append(str(val))
+        return bool(val)
+
+    def add_true_values(self, nvalues):
+        self.results.extend(["1"]*nvalues)
+
+    def __len__(self):
+        return len(self.results)
+
+    def __str__(self):
+        return ''.join(self.results)
+
+
 class SemanticAnalysisData(object):
     _corpora = None
     _corpus = None
@@ -137,15 +163,9 @@ class SemanticAnalysisData(object):
         self._posts = {}
         self.scrambler = None
         if test_code:
-            self.setup_scrambler()
-
-    def setup_scrambler(self):
-        from random import Random
-        scrambler = Random()
-        scrambler.seed(
-            get_config().get('session.secret')
-            + self.test_code + self.discussion.slug)
-        self.scrambler = scrambler
+            self.scrambler = Scrambler(
+                get_config().get('session.secret')
+                + self.test_code + self.discussion.slug)
 
     def get_ideas_of_post(self, post_id):
         if post_id not in self._ideas_by_post:
@@ -973,12 +993,15 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
 
     def scramble_lists(self, good_list, bad_list, include_all_good=False):
         scrambled = []
+        n = - len(self.scrambler)
         while good_list and bad_list:
-            l = good_list if self.scrambler.randint(0, 1) else bad_list
+            l = good_list if self.scrambler.next_bool() else bad_list
             scrambled.append(l.pop(0))
+        n += len(self.scrambler)
         if include_all_good:
             scrambled.extend(good_list)
-        return scrambled
+            self.scrambler.add_true_values(len(good_list))
+        return scrambled, n
 
     @property
     def clusters(self):
@@ -994,7 +1017,7 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
                 anti_clusters = optics.extract_clusters(eps=self.eps*5)
                 anti_clusters.sort(key=optics.cluster_depth)
                 # all real clusters must be present
-                self._clusters = self.scramble_lists(
+                self._clusters, _ = self.scramble_lists(
                     real_clusters, anti_clusters, True)
                 optics.RDO = temp
         return self._clusters
@@ -1530,25 +1553,22 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         return suggestions
 
     def select_suggestions(self, add_suggestions, partition_suggestions):
-        def pos_score(sugg):
-            return sugg['score_delta'] < 0
-        # suggestions_add = filter(pos_score, suggestions_add)
-        # suggestions_partition = filter(pos_score, suggestions_partition)
         # Choose best per cluster for additions
         best_add_suggestions = self.pick_best_suggestions(
             add_suggestions, 'num_cluster')
         # Choose best per idea for partitions
         best_partition_suggestions = self.pick_best_suggestions(
             partition_suggestions, 'idea_id')
-        if self.scrambler:
+        if self.scrambler is not None:
             worst_add_suggestions = self.pick_best_suggestions(
                 add_suggestions, 'num_cluster', True)
-            best_add_suggestions = self.scramble_lists(
+            best_add_suggestions, c1 = self.scramble_lists(
                 best_add_suggestions, worst_add_suggestions, True)
             worst_partition_suggestions = self.pick_best_suggestions(
                 partition_suggestions, 'idea_id', True)
-            best_partition_suggestions = self.scramble_lists(
+            best_partition_suggestions, c2 = self.scramble_lists(
                 best_partition_suggestions, worst_partition_suggestions, True)
+            self.scramble_count = (c1, c2)
         return (best_add_suggestions, best_partition_suggestions)
 
     def print_idea_scores(self):
@@ -1611,7 +1631,12 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         f.write('</ul>')
         self.suggestions_as_html(f)
         # self.write_cluster_info(f)
+
         if self.test_code:
+            f.write('''<input type="hidden" name="scramble_count"
+                value="%d,%d">''' % self.scramble_count)
+            # f.write('''<input type="scrambled" name="scrambled"
+            #     value="%s">''' % self.scrambler)
             f.write('<input type="submit"></input>')
             f.write('</form>')
         f.write("</body></html>")
