@@ -6,7 +6,7 @@
 <p>{{idea.short_title}}</p>
 {% endif %}
 <p><i>
-{% for contributor in idea.get_contributors() %}{% if loop.first %}
+{% for contributor in idea.get_synthesis_contributors() %}{% if loop.first %}
 {{ gettext("By") }}
 {% else %}, {% endif %}
 {{ contributor.display_name() }}{% endfor %}

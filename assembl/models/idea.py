@@ -504,7 +504,32 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
             siblings.remove(self)
         return [c for c in siblings if isinstance(c, cls)]
 
+    def get_synthesis_contributors(self):
+        # author of important extracts
+        from .idea_content_link import Extract
+        from .auth import AgentProfile
+        from .post import Post
+        from sqlalchemy.sql.functions import count
+        local_uri = AssemblQuadStorageManager.local_uri()
+        discussion_storage = \
+            AssemblQuadStorageManager.discussion_storage_name()
+
+        idea_uri = URIRef(self.uri(local_uri))
+        clause = '''select distinct ?annotation where {
+            %s idea:includes* ?ideaP .
+            ?annotation assembl:resourceExpressesIdea ?ideaP }'''
+        extract_ids = [x for (x,) in self.db.execute(
+            SparqlClause(clause % (
+                idea_uri.n3(),),
+                quad_storage=discussion_storage.n3()))]
+        r = list(self.db.query(AgentProfile.id, count(Extract.id)).join(
+            Post, Post.creator_id==AgentProfile.id).join(Extract).filter(
+            Extract.important == True, Extract.id.in_(extract_ids)))
+        r.sort(key=lambda x: x[1], reverse=True)
+        return ['local:AgentProfile/'+str(a) for (a, ce) in r]
+
     def get_contributors(self):
+        # anyone who contributed to any of the idea's posts
         local_uri = AssemblQuadStorageManager.local_uri()
         discussion_storage = \
             AssemblQuadStorageManager.discussion_storage_name()
