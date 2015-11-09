@@ -351,7 +351,8 @@ class DiscussionPerUserNamespacedKeyValue(
         return (cls.discussion_id == discussion_id, )
 
     def unique_query(self):
-        query, _ = super(DiscussionNamespacedKeyValue, self).unique_query()
+        query, _ = super(DiscussionPerUserNamespacedKeyValue, self
+            ).unique_query()
         query = query.filter(
             AbstractNamespacedKeyValue.user_id == self.user_id,
             AbstractNamespacedKeyValue.namespace == self.namespace,
