@@ -247,8 +247,15 @@ var IdeaList = AssemblPanel.extend({
           return idea.get('order');
         });
 
+
+
         this.allIdeasCollection.visitDepthFirst(this.allIdeaLinksCollection, new ObjectTreeRenderVisitor(view_data, order_lookup_table, roots, excludeRoot), rootIdea.getId());
         this.allIdeasCollection.visitDepthFirst(this.allIdeaLinksCollection, new IdeaSiblingChainVisitor(view_data), rootIdea.getId());
+
+        this.addLabelToMostRecentIdeas(this.allIdeasCollection, view_data);
+
+
+
 
         //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
         _.each(roots, function(idea) {
@@ -301,6 +308,67 @@ var IdeaList = AssemblPanel.extend({
         Assembl.vent.trigger("requestTour", "idea_list");
       }
     },
+
+  /**
+   * @param ideas: collection of ideas. For example: this.allIdeasCollection
+   * @param view_data: object which will be modified during the traversal
+   */
+  addLabelToMostRecentIdeas: function(ideas, view_data){
+    // add a "new" label to most recent ideas
+
+    // create a list of idea creation dates
+    var maximum_ratio_of_highlighted_ideas = 0.2; // float [0;1]
+    var should_be_newer_than = new Date();
+    should_be_newer_than.setMonth(should_be_newer_than.getMonth() - 3);
+    // console.log("should_be_newer_than: ", should_be_newer_than);
+
+    var idea_criterion_value = function(idea){
+      return new Date(idea.get('creationDate'));
+    };
+    var creation_dates = ideas.map(idea_criterion_value);
+    var date_sort_asc = function (date1, date2) {
+      if (date1 > date2) return 1;
+      if (date1 < date2) return -1;
+      return 0;
+    };
+    creation_dates.sort(date_sort_asc);
+
+    // console.log("creation_dates: ", creation_dates);
+    var sz = creation_dates.length;
+    // console.log("sz: ", sz);
+    var index = null;
+    var highlight_if_newer_than = null;
+    if ( sz > 2 ){
+      index = Math.floor((sz-1)*(1-maximum_ratio_of_highlighted_ideas));
+      // console.log("index1: ", index);
+      do {
+        if ( creation_dates[index] >= should_be_newer_than ){
+          break;
+        }
+        ++index;
+      } while(index < sz);
+      // console.log("index2: ", index);
+      if ( index < sz ){
+        // TODO: go backwards to find ideas which have been created during the same short period of time (day?) as this one, but then check we are still validating maximum_ratio_of_highlighted_ideas, otherwise just keep this one (or go forward until an idea is not in this same short period of time anymore)
+
+        //view_data["highlight_if_newer_than"] = creation_dates[index];
+        highlight_if_newer_than = creation_dates[index];
+        console.log("we are going to highlight ideas which have been created after: ", highlight_if_newer_than);
+      }
+    }
+    ideas.each(function(idea){
+      var crierion_value = idea_criterion_value(idea);
+      if ( highlight_if_newer_than && crierion_value && crierion_value >= highlight_if_newer_than ){
+        var idea_id = idea.getId();
+        console.log("we are going to highlight idea: ", idea_id, idea.get("shortTitle"));
+        if ( !(idea_id in view_data) ){
+          view_data[idea_id] = {};
+        }
+        view_data[idea_id]["showLabel"] = "new";
+      }
+    });
+    // console.log("view_data: ", view_data);
+  },
 
   onScrollToIdea: function(ideaModel, retry) {
     //console.log("ideaList::onScrollToIdea()");

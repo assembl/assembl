@@ -55,7 +55,8 @@ var IdeaModel = Base.Model.extend({
     inNextSynthesis: false,
     parentId: null,
     widget_links: [],
-    order: 1
+    order: 1,
+    creationDate: null
   },
   /* The following should be mostly in view code, but currently the
    * longTitle editor code isn't common in ideaPanel and synthesisView
