@@ -436,7 +436,7 @@ class EmailAccount(AbstractAgentAccount):
             return self.email
 
     def signature(self):
-        return ('agent_email_account', self.email,)
+        return ('agent_email_account', self.email.lower(),)
 
     def merge(self, other):
         log.warn("Merging EmailAccounts: %d, %d" % (self.id, other.id))
@@ -446,7 +446,7 @@ class EmailAccount(AbstractAgentAccount):
     def other_account(self):
         if not self.verified:
             return self.db.query(self.__class__).filter_by(
-                email=self.email, verified=True).first()
+                email_ci=self.email, verified=True).first()
 
     def avatar_url(self, size=32, default=None):
         return self.avatar_url_for(self.email, size, default)
@@ -454,7 +454,7 @@ class EmailAccount(AbstractAgentAccount):
     def unique_query(self):
         query, _ = super(EmailAccount, self).unique_query()
         return query.filter_by(
-            type=self.type, email=self.email, verified=True), self.verified
+            type=self.type, email_ci=self.email, verified=True), self.verified
 
     @staticmethod
     def avatar_url_for(email, size=32, default=None):
@@ -467,7 +467,7 @@ class EmailAccount(AbstractAgentAccount):
     @staticmethod
     def get_or_make_profile(session, email, name=None):
         emails = list(session.query(EmailAccount).filter_by(
-            email=email).all())
+            email_ci=email).all())
         # We do not want unverified user emails
         # This is costly. I should have proper boolean markers
         emails = [e for e in emails if e.verified or not isinstance(e.profile, User)]
@@ -543,7 +543,7 @@ class IdentityProviderAccount(AbstractAgentAccount):
             return
         self.populate_picture(profile)
         email = profile.get('verifiedEmail', self.email)
-        if email and email != self.email:
+        if email and email != self.email_ci:
             self.email = email
             self.verified = self.provider.trust_emails
         if not self.email:

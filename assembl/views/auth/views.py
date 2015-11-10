@@ -188,7 +188,7 @@ def get_profile(request):
     elif id_type == 'email':
         identifier = EmailString.normalize_email_case(identifier)
         account = session.query(AbstractAgentAccount).filter_by(
-            email=identifier).order_by(desc(
+            email_ci=identifier).order_by(desc(
                 AbstractAgentAccount.verified)).first()
         if not account:
             raise HTTPNotFound()
@@ -277,7 +277,7 @@ def assembl_profile(request):
         profile = session.query(User).get(user_id)
     unverified_emails = [
         (ea, session.query(AbstractAgentAccount).filter_by(
-            email=ea.email, verified=True).first())
+            email_ci=ea.email, verified=True).first())
         for ea in profile.email_accounts if not ea.verified]
     return render_to_response(
         'assembl:templates/profile.jinja2',
@@ -347,7 +347,7 @@ def assembl_register_view(request):
                         "This is not a valid email")))
     # Find agent account to avoid duplicates!
     if session.query(AbstractAgentAccount).filter_by(
-            email=email, verified=True).count():
+            email_ci=email, verified=True).count():
         return dict(get_default_context(request),
                     slug_prefix=p_slug,
                     error=localizer.translate(_(
@@ -420,7 +420,7 @@ def from_identifier(identifier):
     if '@' in identifier:
         identifier = EmailString.normalize_email_case(identifier)
         account = session.query(AbstractAgentAccount).filter_by(
-            email=identifier).order_by(AbstractAgentAccount.verified.desc()).first()
+            email_ci=identifier).order_by(AbstractAgentAccount.verified.desc()).first()
         if account:
             user = account.profile
             return (user, account)
@@ -601,7 +601,7 @@ def velruse_login_complete_view(request):
     conflicting_accounts = set()
     for email in trusted_emails:
         other_accounts = session.query(AbstractAgentAccount).filter_by(
-            email=email)
+            email_ci=email)
         for account in other_accounts:
             conflicting_accounts.add(account)
             if account.verified or len(account.profile.accounts) == 1:
@@ -689,7 +689,7 @@ def velruse_login_complete_view(request):
             session.expire(account)
             account = AbstractAgentAccount.get(account.id)
             if account.profile == base_profile:
-                if account.email == base_account.email:
+                if account.email_ci == base_account.email_ci:
                     if isinstance(account, EmailAccount):
                         account.delete()
                         if account.verified and account.preferred:
@@ -717,9 +717,9 @@ def velruse_login_complete_view(request):
                         other_profile.delete()
     session.expire(base_profile, ['accounts', 'email_accounts'])
     # create an email account for other emails.
-    known_emails = {a.email for a in base_profile.accounts}
+    known_emails = {a.email.lower() for a in base_profile.accounts}
     for email in trusted_emails:
-        if email not in known_emails:
+        if email.lower() not in known_emails:
                 email = EmailAccount(
                     email=email,
                     profile=base_profile,
@@ -831,7 +831,7 @@ def user_confirm_email(request):
     else:
         # maybe another profile already verified that email
         other_email_account = session.query(AbstractAgentAccount).filter_by(
-            email=email.email, verified=True).first()
+            email_ci=email.email, verified=True).first()
         if other_email_account:
             profile = email.profile
             # We have two versions of the email, delete the unverified one
@@ -909,7 +909,7 @@ def confirm_email_sent(request):
         raise HTTPNotFound()
     email = EmailString.normalize_email_case(email)
     email_objects = AbstractAgentAccount.default_db.query(
-        AbstractAgentAccount).filter_by(email=email)
+        AbstractAgentAccount).filter_by(email_ci=email)
     verified_emails = [e for e in email_objects if e.verified]
     unverified_emails = [e for e in email_objects if not e.verified]
     if len(verified_emails) > 1:

@@ -309,7 +309,7 @@ def add_user(name, email, password, role, force=False, username=None,
         discussion = discussion_ob
         assert discussion
     existing_email = db.query(EmailAccount).filter(
-        EmailAccount.email == email).first()
+        EmailAccount.email_ci == email).first()
     assert force or not existing_email,\
         "User with email %s already exists" % (email,)
     if username:
@@ -358,7 +358,7 @@ def add_user(name, email, password, role, force=False, username=None,
         if username:
             db.add(Username(username=username, user=user))
     for account in user.accounts:
-        if isinstance(account, EmailAccount) and account.email == email:
+        if isinstance(account, EmailAccount) and account.email_ci == email:
             account.verified = True
             account.preferred = True
             break
