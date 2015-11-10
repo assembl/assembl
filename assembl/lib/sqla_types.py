@@ -1,4 +1,6 @@
 from sqlalchemy.types import TypeDecorator, String
+from sqlalchemy.ext.hybrid import Comparator
+from sqlalchemy.sql import func
 from werkzeug.urls import iri_to_uri
 from pyisemail import is_email
 from virtuoso.alchemy import CoerceUnicode
@@ -62,3 +64,29 @@ class EmailUnicode(CoerceUnicode, EmailString):
     def process_bind_param(self, value, dialect):
         # TODO: Handle RFC 6530
         return EmailString.process_bind_param(self, value, dialect)
+
+
+class CaseInsensitiveWord(Comparator):
+    "Hybrid value representing an upper case representation of a word."
+
+    def __init__(self, word):
+        if isinstance(word, basestring):
+            self.word = word.upper()
+        elif isinstance(word, CaseInsensitiveWord):
+            self.word = word.word
+        else:
+            self.word = func.upper(word)
+
+    def operate(self, op, other):
+        if not isinstance(other, CaseInsensitiveWord):
+            other = CaseInsensitiveWord(other)
+        return op(self.word, other.word)
+
+    def __clause_element__(self):
+        return self.word
+
+    def __str__(self):
+        return self.word
+
+    key = 'word'
+    "Label to apply to Query tuple results"

@@ -6,6 +6,7 @@ import simplejson as json
 from collections import defaultdict
 from enum import IntEnum
 import logging
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from sqlalchemy import (
     Boolean,
@@ -39,7 +40,8 @@ from ..lib import config
 from ..lib.utils import get_global_base_url
 from ..lib.sqla import (
     UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
-from ..lib.sqla_types import URLString, EmailString, EmailUnicode
+from ..lib.sqla_types import (
+    URLString, EmailString, EmailUnicode, CaseInsensitiveWord)
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
 from ..auth import *
 from ..semantic.namespaces import (
@@ -361,6 +363,12 @@ class AbstractAgentAccount(Base):
     # Note some social accounts don't disclose email (eg twitter), so nullable
     # Virtuoso + nullable -> no unique index (sigh)
     email = Column(EmailString(100), index=True)
+
+    # So much for indexing
+    @hybrid_property
+    def email_ci(self):
+        return CaseInsensitiveWord(self.email)
+
     # info={'rdf': QuadMapPatternS(None, SIOC.email)}
     # Note: we could also have a FOAF.mbox, but we'd have to make
     # them into URLs with mailto:
