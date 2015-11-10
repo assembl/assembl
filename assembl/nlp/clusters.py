@@ -56,7 +56,7 @@ class Tokenizer(object):
             subject = ''
         else:
             subject += ' '
-        text = subject + post.get_body_as_text()
+        text = subject + (post.get_body_as_text() or '')
         return self.tokenize(text)
 
     def save(self):
@@ -409,6 +409,8 @@ class SemanticAnalysisData(object):
     def dictionary(self):
         if self._dictionary is None:
             dict_fname = join(self.dirname, DICTIONARY_FNAME)
+            if not exists(dict_fname):
+                self.create_dictionaries()
             self._dictionary = corpora.Dictionary.load(dict_fname)
         return self._dictionary
 
@@ -441,8 +443,8 @@ class SemanticAnalysisData(object):
             tfidf_model = gmodels.TfidfModel(id2word=dictionary)
             tfidf_fname = join(self.dirname, "tfidf_%d.model" % (
                 self.discussion.id,))
+            subcorpus = self.subcorpus
             if exists(tfidf_fname):
-                subcorpus = self.subcorpus
                 tfidf_model = tfidf_model.load(tfidf_fname)
                 # assumption: count implies identity.
                 # Wrong in corner cases: hidden, etc.
@@ -662,7 +664,7 @@ class SemanticAnalysisData(object):
         results = [(posts[post_id], score) for (post_id, score) in similar]
         return [
             dict(id=post.uri(), score=score, subject=post.subject,
-                 content=post.get_body_as_text())
+                 content=(post.get_body_as_text() or ''))
             for post, score in results]
 
 
@@ -1242,7 +1244,7 @@ def show_clusters(clusters):
     for n, cluster in enumerate(clusters):
         print "*"*100, "Cluster", n+1
         for post_id in cluster:
-            print posts[post_id].get_body_as_text()
+            print (posts[post_id].get_body_as_text() or '')
 
 
 class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
@@ -1453,7 +1455,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         optics = self.optics
         clusters = self.optics_clusters
         if not clusters:
-            return ((), ())
+            return ([], [])
         cl_labels = optics.as_labels(clusters)
         post_clusters_by_cluster = self.post_clusters_by_cluster
         suggestions_add = []
