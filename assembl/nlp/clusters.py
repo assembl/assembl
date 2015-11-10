@@ -199,7 +199,7 @@ class SemanticAnalysisData(object):
     @property
     def discussion_url(self):
         discussion = self.discussion
-        return "%s/%s/" % (discussion.get_base_url(), discussion.slug)
+        return str("%s/%s/" % (discussion.get_base_url(), discussion.slug))
 
     @property
     def idea_hry(self):
@@ -1738,7 +1738,8 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                     present_in = set(ideas_by_post[post_id])
                     present_in = present_in.intersection(set(children_ids))
                     args = dict(url=self.discussion_url, post_id=post_id,
-                                present_in=', '.join(present_in))
+                                present_in=', '.join((
+                                    str(x) for x in present_in)))
                     if post_id in new_posts:
                         return "<b>Add new <a target='out' href='%(url)sposts/local:Content/%(post_id)d'>post %(post_id)d</a></b>:" % args
                     elif post_id in cluster_posts:
