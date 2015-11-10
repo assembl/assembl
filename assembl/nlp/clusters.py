@@ -869,9 +869,9 @@ class SKLearnClusteringSemanticAnalysis(SemanticAnalysisData):
                 features = cluster_info.get('features', {})
                 idea_scores = cluster_info['idea_scores']
                 if is_remainder:
-                    f.write("<h3>Remainder:</h3>\n<ol>")
+                    f.write("<h3 id='remainder'>Remainder:</h3>\n<ol>")
                 else:
-                    f.write("<h3>Cluster %d</h3>\n<ol>" % (n,))
+                    f.write("<h3 id='cluster_%d'>Cluster %d</h3>\n" % (n,n))
                 for idea_id, score in idea_scores.iteritems():
                     idea = self.ideas[idea_id]
                     f.write("<li>Idea %d: %d/%d %s</li>\n" % (
@@ -1156,8 +1156,8 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
                 cl_dendrogram = dendrogram.find_cluster(cluster)
                 assert cl_dendrogram
                 if cl_dendrogram.parent != dendrogram:
-                    f.write("<p>included in %d</p>" % (
-                        clusters.index(cl_dendrogram.parent.cluster),))
+                    f.write("<p>included in <a href='#cluster_%(parent)d'>cluster %(parent)d</a></p>" % dict(
+                        parent=clusters.index(cl_dendrogram.parent.cluster),))
                 f.write("<ul>")
                 alerts = set(self.alerts_in_idea_data(idea_info[n]))
 
@@ -1366,6 +1366,8 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         distances = self.distance_matrix
         sub_distance = distances[idea_post_nums][:, idea_post_nums]
         sub_labels = labels[idea_post_nums]
+        if len(set(sub_labels)) < 2:
+            return 0
         return metrics.silhouette_score(sub_distance, sub_labels, 'precomputed')
 
     def remove_singletons(self, labels, idea_id):
@@ -1486,6 +1488,11 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
 
                 cl_post_ids_s = set(cl_post_ids)
                 intersection_posts = cl_post_ids_s.intersection(idea_posts)
+                size_of_difference = len(cl_post_ids) - len(intersection_posts)
+                if size_of_difference > len(idea_posts):
+                    continue
+                if size_of_difference > 2*len(intersection_posts):
+                    continue
                 new_posts = cl_post_ids_s - idea_posts
                 basic_info = dict(
                         cluster_posts=', '.join(
