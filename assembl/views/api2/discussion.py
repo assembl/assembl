@@ -527,7 +527,10 @@ def show_optics_cluster(request):
         analysis = OpticsSemanticsAnalysis(
             discussion, min_samples=min_samples, eps=eps,
             user_id=user_id, test_code=test_code)
-    analysis.as_html(output)
+    from pyramid_jinja2 import IJinja2Environment
+    jinja_env = request.registry.queryUtility(
+        IJinja2Environment, name='.jinja2')
+    analysis.as_html(output, jinja_env)
     output.seek(0)
     return Response(body_file=output, content_type='text/html')
 

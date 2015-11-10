@@ -161,7 +161,6 @@ class SemanticAnalysisData(object):
         self._ideas_by_post = {}
         self._posts_by_idea = {}
         # self._direct_ideas_by_post = {}
-        self._posts = {}
         self.scrambler = None
         if test_code:
             self.scrambler = Scrambler(
@@ -828,7 +827,7 @@ class SKLearnClusteringSemanticAnalysis(SemanticAnalysisData):
         #     print id, silhouette_score, [len(x['cluster']) for x in clusters]
         return posres
 
-    def as_html(self, f=None):
+    def as_html(self, f=None, jinja_env=None):
         discussion = self.discussion
         if not f:
             f = open('output.html', 'w')
@@ -1119,7 +1118,7 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
         discussion = self.discussion
         f.write("<h1>Discussion %s</h1>" % discussion.topic.encode('utf-8'))
 
-    def as_html(self, f=None):
+    def as_html(self, f=None, jinja_env=None):
         if not f:
             f = open('output.html', 'w')
         f.write("<html><body>")
@@ -1235,6 +1234,18 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
         while len(stack):
             f.write('</li></ul>')
             stack.pop()
+
+    def get_posts_in_cluster(self, post_ids, parent):
+        post_idss = set(post_ids)
+        if parent:
+            return [p for p in parent.children if p.id in post_idss]
+        else:
+            ancestry = self.post_ancestry
+            post_ids = [pid for pid in post_ids if not set(
+                ancestry[pid][:-1]).intersection(post_idss)]
+            post_ids.sort()
+            posts = self.posts
+            return [posts[id] for id in post_ids]
 
 
 def show_clusters(clusters):
@@ -1635,133 +1646,57 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
             f.write("</ul>")
         f.write("</li>")
 
-    def as_html(self, f=None):
-        # TODO: Rewrite as jinja.
-        if not f:
-            f = open('output.html', 'w')
-        f.write("<html><body>")
-        if self.test_code:
-            f.write('''<form action="test_results" method="POST">
-            <input type="hidden" name="test_code" value="%(test_code)s">
-            <input type="hidden" name="user_id" value="%(user_id)s">
-            <input type="hidden" name="server" value="%(server)s">
-            <input type="hidden" name="discussion" value="%(disc_id)d">''' %
-            dict(test_code=self.test_code, disc_id=self.discussion.id,
-                 user_id=self.user_id, server=get_config()['public_hostname']))
-        self.write_title(f)
-        discussion = self.discussion
-        root = discussion.root_idea.id
-        f.write('<ul>')
-        self.idea_scores_as_html(root, f)
-        f.write('</ul>')
-        self.suggestions_as_html(f)
-        # self.write_cluster_info(f)
-
-        if self.test_code:
-            f.write('''<input type="hidden" name="scramble_count"
-                value="%d,%d">''' % self.scramble_count)
-            # f.write('''<input type="scrambled" name="scrambled"
-            #     value="%s">''' % self.scrambler)
-            f.write('<input type="submit"></input>')
-            f.write('</form>')
-        f.write("</body></html>")
-        return f
-
-    def suggestions_as_html(self, f):
+    def as_html(self, f=None, jinja_env=None):
+        template = jinja_env.get_template('suggestions.jinja2')
         (suggestions_add, suggestions_partition) = self.get_suggestions()
         (suggestions_add, suggestions_partition) = self.select_suggestions(
             suggestions_add, suggestions_partition)
-        if suggestions_add:
-            f.write("<h2>Suggested additions</h2>")
-            for n, suggestion in enumerate(suggestions_add):
-                idea_id = suggestion['idea_id']
-                new_posts = suggestion['new_posts']
-                cluster_id = suggestion['num_cluster']
-                idea = self.ideas[idea_id]
-                suggestion['title'] = (idea.short_title or '').encode('utf-8')
-                # children_ids = self.idea_children[idea_id]
-                cluster = self.clusters[cluster_id]
-                cluster_posts = self.post_clusters_by_cluster[cluster]
+        suggestions_add = [self.reformulate_suggestion(s, True)
+                           for s in suggestions_add]
+        suggestions_partition = [self.reformulate_suggestion(s, False)
+                                 for s in suggestions_partition]
+        f.write(template.render(
+            analyzer=self,
+            discussion=self.discussion,
+            test_code=self.test_code,
+            user_id=self.user_id,
+            server=get_config()['public_hostname'],
+            suggestions_add=suggestions_add,
+            suggestions_partition=suggestions_partition,
+            ).encode('utf-8'))
+        return
+
+    def reformulate_suggestion(self, suggestion, is_add=True):
+        idea_id = suggestion['idea_id']
+        cluster = self.clusters[suggestion['num_cluster']]
+        suggestion['cluster_features'] = self.cluster_features.get(cluster, {})
+        new_posts = suggestion.get('new_posts', ())
+        cluster_id = suggestion['num_cluster']
+        suggestion['idea'] = self.ideas[idea_id]
+        children_ids = self.idea_children[idea_id]
+        cluster = self.clusters[cluster_id]
+        cluster_posts = self.post_clusters_by_cluster[cluster]
+        suggestion['num_new_posts'] = len(new_posts)
+        suggestion['url'] = self.discussion_url
+        ideas_by_post = self.ideas_by_post
+        if is_add:
+            target = set(self.get_posts_of_idea(idea_id))
+            target.update(new_posts)
+        else:
+            if new_posts:
+                target = set(self.get_posts_of_idea(idea_id))
+                target.update(new_posts)
                 suggestion['num_new_posts'] = len(new_posts)
-                suggestion['url'] = self.discussion_url
-                union = set(self.get_posts_of_idea(idea_id))
-                union.update(new_posts)
-                f.write("""<h3>From cluster %(num_cluster)d (size: %(num_posts_cluster)d)</h3>
-                    <p>Add %(num_new_posts)d posts to <a target='out' href='%(url)sidea/local:Idea/%(idea_id)d'>idea %(idea_id)d</a> <b>%(title)s</b><br />
-                    Already in cluster: %(count)d / %(num_posts_idea)d.""" % suggestion)
-                if not self.test_code:
-                    f.write(" Outer score: %(original_score)f -> %(score)f" % suggestion)
-                f.write("</p>")
-                self.write_features(f, cluster)
-                if self.test_code:
-                    f.write('''<p>Is this suggestion useful?
-                        <input type="radio" name="add_%(num)d_valid" value="true">yes</input>
-                        <input type="radio" name="add_%(num)d_valid" value="false">no</input></p>'''
-                        % dict(num=n))
+            else:
+                target = self.get_posts_of_idea(idea_id)
+        suggestion['posts'] = target
+        return suggestion
 
-                def title_function(post_id):
-                    if post_id in new_posts:
-                        return "<b>Add new <a target='out' href='%(url)sposts/local:Content/%(post_id)d'>post %(post_id)d</a></b>:" % dict(
-                            url=self.discussion_url, post_id=post_id)
-                    elif post_id in cluster_posts:
-                        return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<em>already in cluster</em>):" % dict(
-                            url=self.discussion_url, post_id=post_id)
-                    else:
-                        return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<em><b>not</b> in cluster</em>):" % dict(
-                            url=self.discussion_url, post_id=post_id)
-                self.write_post_cluster(f, union, title_function)
-        if suggestions_partition:
-            f.write("<h2>Suggested segmentations</h2>")
-            for n, suggestion in enumerate(suggestions_partition):
-                idea_id = suggestion['idea_id']
-                new_posts = suggestion.get('new_posts', ())
-                cluster_id = suggestion['num_cluster']
-                ideas_by_post = self.ideas_by_post
-                idea = self.ideas[idea_id]
-                suggestion['title'] = (idea.short_title or '').encode('utf-8')
-                suggestion['url'] = self.discussion_url
-                children_ids = self.idea_children[idea_id]
-                cluster = self.clusters[cluster_id]
-                cluster_posts = self.post_clusters_by_cluster[cluster]
-                if new_posts:
-                    target = set(self.get_posts_of_idea(idea_id))
-                    target.update(new_posts)
-                    suggestion['num_new_posts'] = len(new_posts)
-                    f.write("""<h3>Segment and complete <a target='out' href='%(url)sidea/local:Idea/%(idea_id)d'>idea %(idea_id)d</a> with cluster %(num_cluster)d (size: %(num_posts_cluster)d), adding %(num_new_posts)d posts)</h3>
-                    <p>""" % suggestion)
-                else:
-                    target = self.get_posts_of_idea(idea_id)
-                    f.write("""<h3>Segment <a target='out' href='%(url)sidea/local:Idea/%(idea_id)d'>idea %(idea_id)d</a> using cluster %(num_cluster)d (in idea: <b>%(count)d</b> / %(num_posts_cluster)d)</h3>
-                    <p>""" % suggestion)
-                if not self.test_code:
-                    f.write("inner score: %(original_score)f -> %(score)f. " % suggestion)
-                f.write(" Idea: <b>%(title)s</b></p>" % suggestion)
-                self.write_features(f, cluster)
-                if self.test_code:
-                    f.write('''<p>Is this suggestion useful?
-                        <input type="radio" name="part_%(num)d_valid" value="true">yes</input>
-                        <input type="radio" name="part_%(num)d_valid" value="false">no</input></p>'''
-                        % dict(num=n))
-
-                def title_function(post_id):
-                    present_in = set(ideas_by_post[post_id])
-                    present_in = present_in.intersection(set(children_ids))
-                    args = dict(url=self.discussion_url, post_id=post_id,
-                                present_in=', '.join((
-                                    str(x) for x in present_in)))
-                    if post_id in new_posts:
-                        return "<b>Add new <a target='out' href='%(url)sposts/local:Content/%(post_id)d'>post %(post_id)d</a></b>:" % args
-                    elif post_id in cluster_posts:
-                        if present_in:
-                            return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<b>put in new idea</b>, <em>formerly in %(present_in)s</em>):" % args
-                        else:
-                            return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<b>put in new idea</b></em>):" % args
-                    else:
-                        if present_in:
-                            return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<em><b>not</b> in cluster</em>, keep in %(present_in)s):" % args
-                        else:
-                            return "<a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (<em><b>not</b> in cluster</em>):" % args
-                self.write_post_cluster(f, target, title_function)
+    def post_in_which_children_of_idea(self, post_id, idea_id):
+        children_ids = self.idea_children[idea_id]
+        present_in = set(self.ideas_by_post[post_id])
+        present_in = present_in.intersection(set(children_ids))
+        return ', '.join((str(x) for x in present_in))
 
     def print_suggestions(self):
         (suggestions_add, suggestions_partition) = self.get_suggestions()
