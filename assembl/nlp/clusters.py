@@ -923,7 +923,7 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
                 cluster_count = len(post_ids)
                 local_post_ids = post_ids
             else:
-                title = idea.short_title
+                title = (idea.short_title or '').encode('utf-8')
                 local_post_ids = [
                     pid for pid in post_ids
                     if idea.id in self.get_ideas_of_post(pid)]
@@ -1594,7 +1594,8 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
 
         def print_idea(id, depth=0):
             print "  " * depth, id, sizes.get(id, 0),\
-                silhouette_scores_per_idea.get(id, None), ideas[id].short_title
+                silhouette_scores_per_idea.get(id, None), (
+                    ideas[id].short_title or '').encode('utf-8')
             for child in idea_children.get(id, ()):
                 print_idea(child, depth+1)
 
@@ -1613,11 +1614,11 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
             if outer_score is None:
                 f.write("<li>%d (%f) (%d posts) %s" % (
                     idea_id, inner_score or 0,
-                    size, idea.short_title))
+                    size, (idea.short_title or '').encode('utf-8')))
             else:
                 f.write("<li>%d (%f ; %f) (%d posts) %s" % (
                     idea_id, inner_score or 0, outer_score,
-                    size, idea.short_title))
+                    size, (idea.short_title or '').encode('utf-8')))
         if children:
             f.write("<ul>")
             for child_id in children:
@@ -1668,7 +1669,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 new_posts = suggestion['new_posts']
                 cluster_id = suggestion['num_cluster']
                 idea = self.ideas[idea_id]
-                suggestion['title'] = idea.short_title
+                suggestion['title'] = (idea.short_title or '').encode('utf-8')
                 # children_ids = self.idea_children[idea_id]
                 cluster = self.clusters[cluster_id]
                 cluster_posts = self.post_clusters_by_cluster[cluster]
@@ -1708,7 +1709,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 cluster_id = suggestion['num_cluster']
                 ideas_by_post = self.ideas_by_post
                 idea = self.ideas[idea_id]
-                suggestion['title'] = idea.short_title
+                suggestion['title'] = (idea.short_title or '').encode('utf-8')
                 suggestion['url'] = self.discussion_url
                 children_ids = self.idea_children[idea_id]
                 cluster = self.clusters[cluster_id]
