@@ -199,7 +199,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             IdeaLink, (IdeaLink.target_id == Idea.id)
             & (IdeaLink.tombstone_date == None)).filter(
             (IdeaLink.source_id == self.id)
-            & (Idea.tombstone_date == None)).all()
+            & (Idea.tombstone_date == None)
+            ).order_by(IdeaLink.order).all()
 
     def get_parents(self):
         return self.db.query(Idea).join(
