@@ -14,17 +14,15 @@
 {% endmacro %}
 
 {% macro idea_scores_as_html(ideas) %}
-<h2>Table of ideas</h2>
-<p>first score indicates how well the idea can be distinguished from ideas around it;
-second score, if any, indicates how well this idea's children can be distinguished from one another.</p>
+<h2>Partial table of ideas</h2>
 {% for idea in ideas recursive %}
 {% set size = analyzer.corrected_idea_sizes.get(idea.id, 0) %}
 {% if size > 2 or idea.children %}
     {% if idea.sqla_type != "root_idea" %}
         {% set inner_score, _, outer_score = analyzer.silhouette_scores_per_idea.get(idea.id, (None, None, None)) %}
-        <li>({{"%f"|format(inner_score or 0)}}
-        {%- if outer_score %} ; {{"%f"|format(outer_score)}}{% endif -%}
-        ) (<a target='out' href='{{ url }}idea/local:Idea/{{ idea.id }}'>#{{idea.id}}</a>, {{size}} posts) {{idea.short_title}}
+        <li><a target='out' href='{{ url }}idea/local:Idea/{{ idea.id }}'>{{idea.short_title}}</a>
+            (#{{idea.id}}, {{size}} posts.  Score: {{"%f"|format(inner_score or 0)}}
+        {%- if outer_score %} ; {{"%f"|format(outer_score)}}{% endif -%}) 
     {% endif %}
     <ul>
         {{ loop(idea.get_children()) }}
@@ -34,6 +32,8 @@ second score, if any, indicates how well this idea's children can be distinguish
     {% endif %}
 {% endif %}
 {% endfor %}
+<p>Legend: The first score indicates how well the idea can be distinguished from ideas around it;
+second score, if any, indicates how well this idea's children can be distinguished from one another.</p>
 {% endmacro %}
 
 {% macro post_list(post_ids, parent=None) %}
@@ -61,7 +61,7 @@ second score, if any, indicates how well this idea's children can be distinguish
 </style>
 </head>
 <body>
-<h1>Discussion {{discussion.topic}}</h1>
+<h1>Discussion: {{discussion.topic}}</h1>
 {% if test_code %}
 <form action="test_results" method="POST">
     <input type="hidden" name="user_id" value="{{ analyzer.user_id }}">
@@ -75,7 +75,7 @@ second score, if any, indicates how well this idea's children can be distinguish
 {% set add_length = suggestions_add.__len__() %}
 {% set partition_length = suggestions_partition.__len__() %}
 {% if suggestions_add %}
-<h2 id="add_suggestions">Suggested additions</h2>
+<h2 id="add_suggestions">Suggestions to add posts to an idea</h2>
 {% for suggestion in suggestions_add %}
     <h3 id="add_{{ loop.index }}_suggestion">
     {% if not loop.first %}
@@ -119,7 +119,7 @@ second score, if any, indicates how well this idea's children can be distinguish
 {% endfor %}
 {% endif %}
 {% if suggestions_partition %}
-<h2 id="partition_suggestions">Suggested segmentations</h2>
+<h2 id="partition_suggestions">Suggestions to add sub-ideas</h2>
 {% for suggestion in suggestions_partition %}
     <h3 id="partition_{{ loop.index }}_suggestion">
     {% if loop.first %}
@@ -134,17 +134,20 @@ second score, if any, indicates how well this idea's children can be distinguish
     {% endif %}
     {{loop.index + add_length }}:
 
+
+        Add a sub-idea to idea <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea_id }}'><b>{{ suggestion.idea.short_title }}</b></a> (#{{ suggestion.idea_id }}, {{ suggestion.num_posts_idea }} posts)
+         to represent the {{ suggestion.num_posts_cluster }} posts of cluster #{{ suggestion.num_cluster }}.
     {% if suggestion.new_posts %}
-        Segment and complete idea <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea.id }}'>#{{ suggestion.idea.id }}</a> ({{ suggestion.num_posts_idea }} posts) with cluster {{ suggestion.num_cluster }} ({{ suggestion.num_posts_cluster }} posts, {{ suggestion.num_intersection_posts }} already in idea, adding {{ suggestion.num_new_posts }} posts)
+        This requires moving {{ suggestion.num_intersection_posts }} existing posts to the new sub-idea, and adding {{ suggestion.num_new_posts }} new posts to it.
     {% else %}
-        Segment idea <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea.id }}'>#{{ suggestion.idea.id }}</a> ({{ suggestion.num_posts_idea }} posts) setting aside {{suggestion.num_intersection_posts}} posts from cluster {{ suggestion.num_cluster }} ({{ suggestion.num_posts_cluster }} posts)
+        This requires moving {{ suggestion.num_intersection_posts }} existing posts to the new sub-idea.
     {% endif %}
     </h3>
     <p>
     {% if not test_code %}
          Inner score: {{ suggestion.original_score }} -> {{ suggestion.score }}
     {% endif %}
-    <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea_id }}'>Idea {{ suggestion.idea_id }}</a>: <b>{{ suggestion.idea.short_title }}</b>
+    
     </p>
     {{cluster_features(suggestion.cluster_features)}}
     {% if test_code %}
