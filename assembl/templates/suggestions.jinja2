@@ -54,10 +54,10 @@ second score, if any, indicates how well this idea's children can be distinguish
 
 <html>
 <head>
-<style>
+<style type="text/css">
 .add_post {background-color: #6f6;}
-.add_many_posts {background-color: #afa;}
-.isolate_posts {background-color: #fdb;}
+.add_many_posts {background-color: #cfc;}
+.isolate_posts {background-color: #ddf;}
 </style>
 </head>
 <body>
@@ -96,7 +96,7 @@ second score, if any, indicates how well this idea's children can be distinguish
     {% endif %}
     </p>
     {{cluster_features(suggestion.cluster_features)}}
-    <p>Here are the posts to add:</p>
+    <p>These posts from the cluster would be <b>added</b> to the idea:</p>
     <div class="add_many_posts">
         {% call(post) post_list(suggestion.new_posts) %}
             Post <a target='out' href='{{ url }}posts/local:Content/{{ post_id }}'>#{{ post.id }}</a></b></span> by <em>{{post.creator.name}}</em>:
@@ -107,7 +107,7 @@ second score, if any, indicates how well this idea's children can be distinguish
             <input type="radio" name="add_{{ loop.index }}_valid" value="true">yes</input>
             <input type="radio" name="add_{{ loop.index }}_valid" value="false">no</input></p>
     {% endif %}
-    <p>Here are the other posts of the idea, so you can compare</p>
+    <p>Here are the other posts already in the idea, so you can compare:</p>
     {% call(post) post_list(suggestion.idea_posts_ids) %}
         Post <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>#{{ post.id }}</a> (by <em>{{post.creator.name}}</em>)
         {% if post.id in suggestion.cl_post_ids %}
@@ -154,14 +154,14 @@ second score, if any, indicates how well this idea's children can be distinguish
         </p>
     {% endif %}
     {% if suggestion.new_posts %}
-    <p>These posts from the cluster would be added to the new sub-idea:</p>
+    <p>These posts from the cluster would be <b>added</b> to the new sub-idea:</p>
     <div class="add_many_posts">
     {% call(post) post_list(suggestion.new_posts) %}
         Post <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>#{{ post.id }}</a></b> (by <em>{{post.creator.name}}</em>):
     {% endcall %}
     </div>
     {% endif %}
-    <p>These posts are in the cluster and would also be isolated in the new sub-idea:</p>
+    <p>These posts are in the cluster and would also be <b>isolated</b> in the new sub-idea:</p>
     <div class="isolate_posts">
     {% call(post) post_list(suggestion.intersection_posts_ids) %}
         {% set present_in = analyzer.post_in_which_children_of_idea(post.id, suggestion.idea_id) %}
@@ -171,7 +171,7 @@ second score, if any, indicates how well this idea's children can be distinguish
         {% endif %}
     {% endcall %}
     </div>
-    <p>These posts are not in the cluster and would remain where they are:</p>
+    <p>These posts are not in the cluster and would remain where they are in the idea or sub-ideas:</p>
     <div>
     {% call(post) post_list(suggestion.posts) %}
         {% set present_in = analyzer.post_in_which_children_of_idea(post.id, suggestion.idea_id) %}

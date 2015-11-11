@@ -545,7 +545,7 @@ def show_suggestions_test(request):
     output = StringIO()
     from assembl.nlp.clusters import OpticsSemanticsAnalysisWithSuggestions
     analysis = OpticsSemanticsAnalysisWithSuggestions(
-        discussion, user_id=user_id, test_code=str(user_id))
+        discussion, user_id=user_id, min_samples=3, test_code=str(user_id))
     from pyramid_jinja2 import IJinja2Environment
     jinja_env = request.registry.queryUtility(
         IJinja2Environment, name='.jinja2')

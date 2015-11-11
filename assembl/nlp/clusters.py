@@ -1276,6 +1276,15 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
     # Also, w/o clusters, look at closest idea to the existing cluster
     # and see if adding it improves the silhouette. (Recurse)
 
+    def __init__(self, discussion, num_topics=200, min_samples=4, eps=None,
+                 model_cls=None, metric=None, user_id=None, test_code=None,
+                 max_additions=15):
+        super(OpticsSemanticsAnalysisWithSuggestions, self).__init__(
+            discussion, num_topics, min_samples, eps=eps or 0.02,
+            model_cls=model_cls, metric=metric or 'cosine',
+            user_id=user_id, test_code=test_code)
+        self.max_additions = max_additions
+
     def is_under_idea_id(self, post_id, idea_id):
         return idea_id if idea_id in self.ideas_by_post[post_id] else None
 
@@ -1502,9 +1511,9 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 cl_post_ids_s = set(cl_post_ids)
                 intersection_posts = cl_post_ids_s.intersection(idea_posts)
                 size_of_difference = len(cl_post_ids) - len(intersection_posts)
-                if size_of_difference > len(idea_posts):
-                    continue
-                if size_of_difference > 2*len(intersection_posts):
+                if size_of_difference > min(self.max_additions,
+                                            len(idea_posts),
+                                            2*len(intersection_posts)):
                     continue
                 new_posts = cl_post_ids_s - idea_posts
                 basic_info = dict(
@@ -1586,12 +1595,35 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         return suggestions
 
     def select_suggestions(self, add_suggestions, partition_suggestions):
-        # Choose best per cluster for additions
-        best_add_suggestions = self.pick_best_suggestions(
-            add_suggestions, 'num_cluster')
+        # if we have a partition+addition coinciding with an addition,
+        # choose only the one with the best delta.
+        part_add_deltas = {
+            (s['idea_id'], s['num_cluster']): s['score_delta']
+            for s in partition_suggestions
+            if 'new_posts' in s}
+        add_deltas = {
+            (s['idea_id'], s['num_cluster']): s['score_delta']
+            for s in add_suggestions}
+        eliminate_add = {
+            x for (x, v) in add_deltas.iteritems()
+            if x in part_add_deltas
+            and part_add_deltas[x] < v}
+        eliminate_partitions = {
+            x for (x, v) in part_add_deltas.iteritems()
+            if x in add_deltas
+            and add_deltas[x] < v}
+        partition_suggestions = [
+            s for s in partition_suggestions
+            if (s['idea_id'], s['num_cluster']) not in eliminate_partitions]
+        add_suggestions = [
+            s for s in add_suggestions
+            if (s['idea_id'], s['num_cluster']) not in eliminate_add]
         # Choose best per idea for partitions
         best_partition_suggestions = self.pick_best_suggestions(
             partition_suggestions, 'idea_id')
+        # Choose best per cluster for additions
+        best_add_suggestions = self.pick_best_suggestions(
+            add_suggestions, 'num_cluster')
         if self.scrambler is not None:
             worst_add_suggestions = self.pick_best_suggestions(
                 add_suggestions, 'num_cluster', True)
