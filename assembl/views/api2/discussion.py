@@ -535,6 +535,25 @@ def show_optics_cluster(request):
     return Response(body_file=output, content_type='text/html')
 
 
+@view_config(context=InstanceContext, name="suggestions_test",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_READ)
+def show_suggestions_test(request):
+    discussion = request.context._instance
+    user_id = authenticated_userid(request) or Everyone
+    discussion = request.context._instance
+    output = StringIO()
+    from assembl.nlp.clusters import OpticsSemanticsAnalysisWithSuggestions
+    analysis = OpticsSemanticsAnalysisWithSuggestions(
+        discussion, user_id=user_id, test_code=str(user_id))
+    from pyramid_jinja2 import IJinja2Environment
+    jinja_env = request.registry.queryUtility(
+        IJinja2Environment, name='.jinja2')
+    analysis.as_html(output, jinja_env)
+    output.seek(0)
+    return Response(body_file=output, content_type='text/html')
+
+
 @view_config(context=InstanceContext, name="test_results",
              ctx_instance_class=Discussion, request_method='POST',
              header=FORM_HEADER, permission=P_READ)
