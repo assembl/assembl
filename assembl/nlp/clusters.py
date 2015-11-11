@@ -1514,6 +1514,9 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                         cl_score=cl_score,
                         count=count,
                         idea_id=idea_id,
+                        idea_posts_ids=idea_posts,
+                        intersection_posts_ids=intersection_posts,
+                        num_intersection_posts=len(intersection_posts),
                         num_cluster=num_cluster,
                         num_posts_cluster=len(cl_post_ids),
                         num_posts_idea=len(self.get_posts_of_idea(idea_id)),
@@ -1540,11 +1543,9 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 original_score = silhouette_scores_per_idea[idea_id][2] or 0
                 suggestions_partition.append(dict(
                         basic_info,
-                        num_intersection_posts=len(intersection_posts),
                         original_score=original_score,
                         score=score,
-                        score_delta=original_score-score,
-                        whole=''))
+                        score_delta=original_score-score))
                 # if we set the whole cluster as a child of this idea,
                 # does it help the score?
                 data = {post_id: -1 for post_id in cl_post_ids}
@@ -1552,11 +1553,9 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                 suggestions_partition.append(dict(
                         basic_info,
                         new_posts=new_posts,
-                        num_intersection_posts=len(intersection_posts),
                         original_score=original_score,
                         score=score,
-                        score_delta=original_score-score,
-                        whole='whole'))
+                        score_delta=original_score-score))
 
         return (suggestions_add, suggestions_partition)
 

@@ -1,11 +1,11 @@
 {% macro cluster_features(features) %}
 {% if features %}
-<p><b>Positive:</b>
+<p>Terms that <b>are</b> found in the cluster:
 {% for feature in features[0] -%}
 {%- if not loop.first %}, {% endif %}{{feature}}
 {%- endfor %}
 </p>
-<p><b>Negative:</b>
+<p>Terms that <b>are not</b> found in the cluster:
 {% for feature in features[1] -%}
 {%- if not loop.first %}, {% endif %}{{feature}}
 {%- endfor %}
@@ -14,14 +14,17 @@
 {% endmacro %}
 
 {% macro idea_scores_as_html(ideas) %}
+<h2>Table of ideas</h2>
+<p>first score indicates how well the idea can be distinguished from ideas around it;
+second score, if any, indicates how well this idea's children can be distinguished from one another.</p>
 {% for idea in ideas recursive %}
 {% set size = analyzer.corrected_idea_sizes.get(idea.id, 0) %}
 {% if size > 2 or idea.children %}
     {% if idea.sqla_type != "root_idea" %}
         {% set inner_score, _, outer_score = analyzer.silhouette_scores_per_idea.get(idea.id, (None, None, None)) %}
-        <li>{{idea.id}} ({{"%f"|format(inner_score or 0)}}
+        <li>({{"%f"|format(inner_score or 0)}}
         {%- if outer_score %} ; {{"%f"|format(outer_score)}}{% endif -%}
-        ) ({{size}} posts) {{idea.short_title}}
+        ) (<a target='out' href='{{ url }}idea/local:Idea/{{ idea.id }}'>#{{idea.id}}</a>, {{size}} posts) {{idea.short_title}}
     {% endif %}
     <ul>
         {{ loop(idea.get_children()) }}
@@ -50,6 +53,13 @@
 
 
 <html>
+<head>
+<style>
+.add_post {background-color: #6f6;}
+.add_many_posts {background-color: #afa;}
+.isolate_posts {background-color: #fdb;}
+</style>
+</head>
 <body>
 <h1>Discussion {{discussion.topic}}</h1>
 {% if test_code %}
@@ -60,82 +70,126 @@
     <input type="hidden" name="test_code" value="{{ test_code }}">
 {% endif %}
 <ul>
-{{idea_scores_as_html([discussion.root_idea])}}
+    {{idea_scores_as_html([discussion.root_idea])}}
 </ul>
-
+{% set add_length = suggestions_add.__len__() %}
+{% set partition_length = suggestions_partition.__len__() %}
 {% if suggestions_add %}
-<h2>Suggested additions</h2>
+<h2 id="add_suggestions">Suggested additions</h2>
 {% for suggestion in suggestions_add %}
-
-    <h3>From cluster {{ loop.index }} (size: {{ suggestion.num_posts_cluster }})</h3>
-        <p>Add {{ suggestion.num_new_posts }} posts to <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea_id }}'>idea {{ suggestion.idea_id }}</a> <b>{{ suggestion.idea.short_title }}</b><br />
-        Already in cluster: {{ suggestion.count }} / {{ suggestion.num_posts_idea }}.
-    {% if test_code %}
+    <h3 id="add_{{ loop.index }}_suggestion">
+    {% if not loop.first %}
+        <a href="#add_{{ loop.index -1 }}_suggestion">⬆︎</a>
+    {% endif %}
+    {% if loop.last %}
+        {% if partition_length %}
+            <a href="#partition_suggestions">⬇︎</a>
+        {% endif %}
+    {% else %}
+        <a href="#add_{{ loop.index + 1 }}_suggestion">⬇︎</a>
+    {% endif %}
+    {{loop.index}}: Adding {{ suggestion.num_new_posts }} posts from cluster {{ suggestion.num_cluster }} ({{ suggestion.num_posts_cluster }} posts) to <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea_id }}'>idea #{{ suggestion.idea_id }}</a> ({{ suggestion.num_posts_idea }} posts, {{ suggestion.num_intersection_posts }} in common)
+    <em>{{ suggestion.idea.short_title }}</em>
+    </h3>
+    {% if not test_code %}
          Outer score: {{ suggestion.original_score }} -> {{ suggestion.score }}
     {% endif %}
     </p>
     {{cluster_features(suggestion.cluster_features)}}
+    <p>Here are the posts to add:</p>
+    <div class="add_many_posts">
+        {% call(post) post_list(suggestion.new_posts) %}
+            Post <a target='out' href='{{ url }}posts/local:Content/{{ post_id }}'>#{{ post.id }}</a></b></span> by <em>{{post.creator.name}}</em>:
+        {% endcall %}
+    </div>
     {% if test_code %}
         <p>Is this suggestion useful?
             <input type="radio" name="add_{{ loop.index }}_valid" value="true">yes</input>
             <input type="radio" name="add_{{ loop.index }}_valid" value="false">no</input></p>
     {% endif %}
-    {% call(post) post_list(suggestion.posts) %}
-        {% if post.id in suggestion.new_posts %}
-            <b>Add new <a target='out' href='{{ url }}posts/local:Content/{{ post_id }}'>post {{ post.id }}</a></b>:
-        {% elif post.id in suggestion.cl_post_ids %}
-            <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>Post {{ post.id }}</a> (<em>already in cluster</em>):
+    <p>Here are the other posts of the idea, so you can compare</p>
+    {% call(post) post_list(suggestion.idea_posts_ids) %}
+        Post <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>#{{ post.id }}</a> (by <em>{{post.creator.name}}</em>)
+        {% if post.id in suggestion.cl_post_ids %}
+            (<em>already in cluster</em>):
         {% else %}
-            <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>Post {{ post.id }}</a> (<em><b>not</b> in cluster</em>):
+            (<em><b>not</b> in cluster</em>):
         {% endif %}
     {% endcall %}
-
 {% endfor %}
 {% endif %}
 {% if suggestions_partition %}
-<h2>Suggested segmentations</h2>
+<h2 id="partition_suggestions">Suggested segmentations</h2>
 {% for suggestion in suggestions_partition %}
-
-    {% if  new_posts %}
-    <h3>Segment and complete <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea.id }}'>idea {{ suggestion.idea.id }}</a> with cluster {{ suggestion.num_cluster }} (size: {{ suggestion.num_posts_cluster }}), adding {{ num_new_posts }} posts)</h3>
+    <h3 id="partition_{{ loop.index }}_suggestion">
+    {% if loop.first %}
+        {% if add_length %}
+            <a href="#add_{{ add_length }}_suggestion">⬆︎</a>
+        {% endif %}
     {% else %}
-    <h3>Segment <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea.id }}'>idea {{ suggestion.idea.id }}</a> using cluster {{ suggestion.num_cluster }} (in idea: <b>{{ suggestion.count }}</b> / {{ suggestion.num_posts_cluster }})</h3>
+        <a href="#partition_{{ loop.index - 1 }}_suggestion">⬆︎</a>
     {% endif %}
-    <p>
+    {% if not loop.last %}
+        <a href="#partition_{{ loop.index + 1 }}_suggestion">⬇︎</a>
+    {% endif %}
+    {{loop.index + add_length }}:
 
-    {% if test_code %}
+    {% if suggestion.new_posts %}
+        Segment and complete idea <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea.id }}'>#{{ suggestion.idea.id }}</a> ({{ suggestion.num_posts_idea }} posts) with cluster {{ suggestion.num_cluster }} ({{ suggestion.num_posts_cluster }} posts, {{ suggestion.num_intersection_posts }} already in idea, adding {{ suggestion.num_new_posts }} posts)
+    {% else %}
+        Segment idea <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea.id }}'>#{{ suggestion.idea.id }}</a> ({{ suggestion.num_posts_idea }} posts) setting aside {{suggestion.num_intersection_posts}} posts from cluster {{ suggestion.num_cluster }} ({{ suggestion.num_posts_cluster }} posts)
+    {% endif %}
+    </h3>
+    <p>
+    {% if not test_code %}
          Inner score: {{ suggestion.original_score }} -> {{ suggestion.score }}
     {% endif %}
-    <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea_id }}'>Idea {{ suggestion.idea_id }}</a>: <b>{{ suggestion.idea.short_title }}</b></p>
+    <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea_id }}'>Idea {{ suggestion.idea_id }}</a>: <b>{{ suggestion.idea.short_title }}</b>
     </p>
     {{cluster_features(suggestion.cluster_features)}}
     {% if test_code %}
-        <p>Is this suggestion useful?
+        <p>Is this suggestion useful? (details below)
             <input type="radio" name="add_{{ loop.index }}_valid" value="true">yes</input>
-            <input type="radio" name="add_{{ loop.index }}_valid" value="false">no</input></p>
+            <input type="radio" name="add_{{ loop.index }}_valid" value="false">no</input>
+        </p>
     {% endif %}
-    {% call(post) post_list(suggestion.posts) %}
+    {% if suggestion.new_posts %}
+    <p>These posts from the cluster would be added to the new sub-idea:</p>
+    <div class="add_many_posts">
+    {% call(post) post_list(suggestion.new_posts) %}
+        Post <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>#{{ post.id }}</a></b> (by <em>{{post.creator.name}}</em>):
+    {% endcall %}
+    </div>
+    {% endif %}
+    <p>These posts are in the cluster and would also be isolated in the new sub-idea:</p>
+    <div class="isolate_posts">
+    {% call(post) post_list(suggestion.intersection_posts_ids) %}
         {% set present_in = analyzer.post_in_which_children_of_idea(post.id, suggestion.idea_id) %}
-        {% if post.id in suggestion.new_posts %}
-            <b>Add new <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>post {{ post.id }}</a></b>:
-        {% elif post.id in suggestion.cl_post_ids %}
-            {% if present_in %}
-                <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>Post {{ post.id }}</a> (<em>already in cluster</em>):
-            {% else %}
-                <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>Post {{ post.id }}</a> (<b>put in new idea</b></em>):
-            {% endif %}            
-        {% else %}
-            {% if present_in %}
-                <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>Post {{ post.id }}</a> (<em><b>not</b> in cluster</em>, keep in {{ present_in }}):
-            {% else %}
-                <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>Post {{ post.id }}</a> (<em><b>not</b> in cluster</em>):
-            {% endif %}            
+        Post <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>#{{ post.id }}</a> (by <em>{{post.creator.name}}</em>)
+        {% if present_in %}
+            (<em>already classified in {{ present_in }}</em>):
         {% endif %}
     {% endcall %}
-
+    </div>
+    <p>These posts are not in the cluster and would remain where they are:</p>
+    <div>
+    {% call(post) post_list(suggestion.posts) %}
+        {% set present_in = analyzer.post_in_which_children_of_idea(post.id, suggestion.idea_id) %}
+        Post <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>#{{ post.id }}</a> (by <em>{{post.creator.name}}</em>)
+        {% if present_in %}
+            (<em>already classified in {{ present_in }}</em>):
+        {% endif %}
+    {% endcall %}
+    </div>
 {% endfor %}
 {% endif %}
-
+<p>
+{% if partition_length %}
+    <a href="#partition_{{ partition_length }}_suggestion">⬆︎</a>
+{% elif add_length %}
+    <a href="#partition_{{ add_length }}_suggestion">⬆︎</a>
+{% endif %}
+</p>
 {% if test_code %}
     <input type="hidden" name="test_code" value="{{ test_code }}">
     <input type="hidden" name="scramble_count"
