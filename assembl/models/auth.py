@@ -1565,10 +1565,10 @@ class PartnerOrganization(DiscussionBoundBase):
     description = Column(UnicodeText,
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
 
-    logo = Column(String(256),
+    logo = Column(URLString(),
         info={'rdf': QuadMapPatternS(None, FOAF.logo)})
 
-    homepage = Column(String(256),
+    homepage = Column(URLString(),
         info={'rdf': QuadMapPatternS(None, FOAF.homepage)})
 
     is_initiator = Column(Boolean)
