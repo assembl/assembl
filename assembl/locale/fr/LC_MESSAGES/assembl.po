@@ -933,7 +933,7 @@ msgstr ""
 msgid ""
 "This extract was organized in the idea \" %s \" by the facilitator of the"
 " debate"
-msgstr "Cet extrait extract a été classé dans l'idée \" %s \" par un modérateur"
+msgstr "Cet extrait a été classé dans l'idée \" %s \" par un modérateur"
 
 #: assembl/static/js/app/views/messageList.js:1712
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
