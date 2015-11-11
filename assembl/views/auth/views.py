@@ -717,7 +717,7 @@ def velruse_login_complete_view(request):
                         other_profile.delete()
     session.expire(base_profile, ['accounts', 'email_accounts'])
     # create an email account for other emails.
-    known_emails = {a.email.lower() for a in base_profile.accounts}
+    known_emails = {a.email.lower() for a in base_profile.accounts if a.email}
     for email in trusted_emails:
         if email.lower() not in known_emails:
                 email = EmailAccount(

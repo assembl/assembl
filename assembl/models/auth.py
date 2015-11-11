@@ -436,7 +436,8 @@ class EmailAccount(AbstractAgentAccount):
             return self.email
 
     def signature(self):
-        return ('agent_email_account', self.email.lower(),)
+        return ('agent_email_account',
+                self.email.lower() if self.email else None)
 
     def merge(self, other):
         log.warn("Merging EmailAccounts: %d, %d" % (self.id, other.id))
