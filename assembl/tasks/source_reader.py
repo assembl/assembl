@@ -161,6 +161,7 @@ class SourceReader(Thread):
     def successful_login(self):
         self.last_successful_login = datetime.utcnow()
         self.source.db.commit()
+        self.after_login = True
 
     def successful_read(self):
         from assembl.models import ContentSource
@@ -285,7 +286,8 @@ class SourceReader(Thread):
                 self.new_error(e, ReaderStatus.CLIENT_ERROR, expected=False)
                 self.do_close()
                 break
-            while self.is_connected():
+            while self.after_login or self.is_connected():
+                self.after_login = False
                 # Read in all cases
                 try:
                     self.read()
