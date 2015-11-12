@@ -16,7 +16,7 @@
 				</div>
 				</section>
 			</div>
-
+      {% if not preferences['require_email_domain'] %}
     	<div class="gu gu-1of1">
     		<section class="section">
 			 <div class="admin-title">
@@ -56,6 +56,7 @@
 			 </div>
 			 </section>
     	</div>
+      {% endif %}
     </div>
   </div>
 </div>

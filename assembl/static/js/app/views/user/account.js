@@ -164,25 +164,26 @@ var account = Marionette.LayoutView.extend({
   onBeforeShow: function() {
     var menu = new UserNavigationMenu({selectedSection: "account"});
     this.getRegion('navigationMenuHolder').show(menu);
+    var email_domain_constraints = Ctx.getPreferences().require_email_domain;
+    if (email_domain_constraints.length == 0) {
+      var accounts = new emailList({
+        collection: this.emailCollection
+      });
+      this.emailCollection.fetch();
+      this.getRegion('accounts').show(accounts);
 
-    var accounts = new emailList({
-      collection: this.emailCollection
-    });
-    this.emailCollection.fetch();
-    this.getRegion('accounts').show(accounts);
+      var providers = new socialProvidersList({
+        providers: this.providers
+      });
 
-    var providers = new socialProvidersList({
-      providers: this.providers
-    });
-
-    // disable until I complete the work
-    this.getRegion('social_accounts').show(providers);
+      // disable until I complete the work
+      this.getRegion('social_accounts').show(providers);
+    }
 
     var userAccountForm = new userAccount({
       model: this.userAcount
     });
     this.getRegion('accountForm').show(userAccountForm);
-
   },
 
   addEmail: function(e) {

@@ -205,7 +205,7 @@ def home_view(request):
                            current_prefs, session,
                            LanguagePreferenceOrder.OS_Default)
 
-    context['preferences'] = json.dumps(dict(preferences))
+    context['preferences_json'] = json.dumps(dict(preferences))
 
     response = render_to_response('../../templates/index.jinja2', context, request=request)
     # Prevent caching the home, especially for proper login/logout
