@@ -110,6 +110,7 @@ second score, if any, indicates how well this idea's children can be distinguish
         <p>Is this suggestion useful?
             <input type="radio" name="add_{{ loop.index }}_valid" value="true">yes</input>
             <input type="radio" name="add_{{ loop.index }}_valid" value="false">no</input></p>
+            <input type="hidden" name="add_{{ loop.index }}_score" value="{{ suggestion.score_delta }}">
     {% endif %}
     <p>Here are the other posts already in the idea, so you can compare:</p>
     {% call(post) post_list(suggestion.idea_posts_ids) %}
@@ -156,9 +157,10 @@ second score, if any, indicates how well this idea's children can be distinguish
     {{cluster_features(suggestion.cluster_features)}}
     {% if test_code %}
         <p>Is this suggestion useful? (details below)
-            <input type="radio" name="add_{{ loop.index }}_valid" value="true">yes</input>
-            <input type="radio" name="add_{{ loop.index }}_valid" value="false">no</input>
+            <input type="radio" name="part_{{ loop.index }}_valid" value="true">yes</input>
+            <input type="radio" name="part_{{ loop.index }}_valid" value="false">no</input>
         </p>
+        <input type="hidden" name="part_{{ loop.index }}_score" value="{{ suggestion.score_delta }}">
     {% endif %}
     {% if suggestion.new_posts %}
     <p>These posts from the cluster would be <b>added</b> to the new sub-idea:</p>
