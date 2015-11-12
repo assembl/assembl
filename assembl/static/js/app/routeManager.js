@@ -270,6 +270,18 @@ var routeManager = Marionette.Object.extend({
     Backbone.history.navigate('/', {replace: true});
   },
 
+  about: function() {
+      this.restoreViews(undefined, undefined, true).then(function(groups) {
+        var firstGroup = groups.children.first();
+        if (firstGroup.isSimpleInterface()) {
+          Assembl.vent.trigger("DEPRECATEDnavigation:selected", 'about');
+        } else {
+            // should we then switch to simple interface?
+        }
+        Backbone.history.navigate('/', {replace: true});
+      });
+    },
+
   sentryTest: function() {
     var Raven = require('raven-js');
     Raven.captureMessage("This is a test, an uncaught non existent function call will follow.");

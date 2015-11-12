@@ -25,6 +25,7 @@ class FrontendUrls():
         'edition': '/edition',
         'partners': '/partners',
         'settings': '/settings',
+        'about': '/about',
         'admin_discussion_preferences': '/discussion_preferences',
         'notifications': '/notifications',
         'user_notifications': '/user/notifications',
