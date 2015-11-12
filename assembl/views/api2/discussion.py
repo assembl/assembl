@@ -6,6 +6,20 @@ from os.path import join, dirname
 from collections import defaultdict
 import random
 
+from sqlalchemy import (
+    Column,
+    Integer,
+    UnicodeText,
+    DateTime,
+    Text,
+    String,
+    Boolean,
+    event,
+    ForeignKey,
+    func,
+    distinct
+)
+
 
 import simplejson as json
 from pyramid.response import Response
@@ -29,6 +43,7 @@ from assembl.auth.util import get_permissions
 from assembl.models import (Discussion, Permission)
 from ..traversal import InstanceContext
 from . import (JSON_HEADER, FORM_HEADER)
+from sqlalchemy.orm.util import aliased
 
 
 @view_config(context=InstanceContext, request_method='GET',
@@ -224,6 +239,178 @@ def user_private_view_jsonld(request):
     else:
         content_type = "application/ld+json"
     return Response(body=jdata, content_type=content_type)
+
+@view_config(context=InstanceContext, name="time_series_analytics",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_ADMIN_DISC)
+def get_time_series_analytics(request):
+    import isodate
+    from datetime import datetime
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    interval = request.GET.get("interval", None)
+    discussion = request.context._instance
+    user_id = authenticated_userid(request) or Everyone
+    try:
+        if start:
+            start = parse_datetime(start)
+        if end:
+            end = parse_datetime(end)
+        if interval:
+            interval = isodate.parse_duration(interval)
+    except isodate.ISO8601Error as e:
+        raise HTTPBadRequest(e)
+    if interval and not start:
+        raise HTTPBadRequest("You cannot define an interval and no start")
+    if interval and not end:
+        end = datetime.now()
+    results = []
+
+    from sqlalchemy import Table, MetaData, and_, case, cast, Float
+    from sqlalchemy.exc import ProgrammingError
+    import pprint
+    import transaction
+    with transaction.manager:
+        metadata = MetaData(discussion.db.get_bind())
+
+        intervals_table = Table('temp_table_intervals_' + str(user_id), metadata,
+            Column('interval_id', Integer, primary_key=True),
+            Column('interval_start', DateTime, nullable=False),
+            Column('interval_end', DateTime, nullable=False)
+        )
+        try:
+            intervals_table.drop()  # In case there is a leftover from a previous crash
+        except ProgrammingError:
+            pass
+        intervals_table.create()
+        interval_start = start
+        intervals = []
+        if interval:
+            while interval_start < end:
+                interval_end = min(interval_start + interval, end)
+                intervals.append({'interval_start': interval_start, 'interval_end': interval_end})
+                interval_start = interval_start + interval
+            #pprint.pprint(intervals)
+            discussion.db.execute(intervals_table.insert(), intervals)
+        else:
+            raise Exception("WRITEME")
+
+        from assembl.models import Post, AgentProfile, AgentStatusInDiscussion, ViewPost
+
+        # The posters
+        post_subquery = discussion.db.query(intervals_table.c.interval_id,
+            func.count(distinct(Post.id)).label('count_posts'),
+            func.count(distinct(Post.creator_id)).label('count_post_authors'),
+            # func.DB.DBA.BAG_AGG(Post.creator_id).label('post_authors'),
+            # func.DB.DBA.BAG_AGG(Post.id).label('post_ids'),
+            )
+        post_subquery = post_subquery.outerjoin(Post, and_(Post.creation_date >= intervals_table.c.interval_start, Post.creation_date < intervals_table.c.interval_end, Post.discussion_id == discussion.id))
+        post_subquery = post_subquery.group_by(intervals_table.c.interval_id)
+        post_subquery = post_subquery.subquery()
+
+        # The cumulative posters
+        cumulative_posts_aliased = aliased(Post)
+        cumulative_posts_subquery = discussion.db.query(intervals_table.c.interval_id,
+            func.count(distinct(cumulative_posts_aliased.id)).label('count_cumulative_posts'),
+            func.count(distinct(cumulative_posts_aliased.creator_id)).label('count_cumulative_post_authors')
+            # func.DB.DBA.BAG_AGG(cumulative_posts_aliased.id).label('cumulative_post_ids')
+            )
+        cumulative_posts_subquery = cumulative_posts_subquery.outerjoin(cumulative_posts_aliased, and_(cumulative_posts_aliased.creation_date < intervals_table.c.interval_end, cumulative_posts_aliased.discussion_id == discussion.id))
+        cumulative_posts_subquery = cumulative_posts_subquery.group_by(intervals_table.c.interval_id)
+        cumulative_posts_subquery = cumulative_posts_subquery.subquery()
+
+        # The post viewers
+        postViewers = aliased(ViewPost)
+        viewedPosts = aliased(Post)
+        post_viewers_subquery = discussion.db.query(intervals_table.c.interval_id,
+            func.count(distinct(postViewers.actor_id)).label('UNRELIABLE_count_post_viewers')
+            )
+        post_viewers_subquery = post_viewers_subquery.outerjoin(postViewers, and_(postViewers.creation_date >= intervals_table.c.interval_start, postViewers.creation_date < intervals_table.c.interval_end)).\
+                        join(viewedPosts, and_(postViewers.post_id == viewedPosts.id, viewedPosts.discussion_id == discussion.id))
+        post_viewers_subquery = post_viewers_subquery.group_by(intervals_table.c.interval_id)
+        post_viewers_subquery = post_viewers_subquery.subquery()
+
+        # The visitors
+        firstTimeVisitorAgent = aliased(AgentStatusInDiscussion)
+        visitors_subquery = discussion.db.query(intervals_table.c.interval_id,
+            func.count(firstTimeVisitorAgent.id).label('count_first_time_logged_in_visitors'),
+            # func.DB.DBA.BAG_AGG(firstTimeVisitorAgent.id).label('first_time_visitors')
+            )
+        visitors_subquery = visitors_subquery.outerjoin(firstTimeVisitorAgent, and_(firstTimeVisitorAgent.first_visit >= intervals_table.c.interval_start, firstTimeVisitorAgent.first_visit < intervals_table.c.interval_end, firstTimeVisitorAgent.discussion_id == discussion.id))
+        visitors_subquery = visitors_subquery.group_by(intervals_table.c.interval_id)
+        visitors_subquery = visitors_subquery.subquery()
+
+        # The cumulative visitors
+        cumulativeVisitorAgent = aliased(AgentStatusInDiscussion)
+        cumulative_visitors_query = discussion.db.query(intervals_table.c.interval_id,
+            func.count(distinct(cumulativeVisitorAgent.id)).label('count_cumulative_logged_in_visitors'),
+            # func.DB.DBA.BAG_AGG(cumulativeVisitorAgent.id).label('first_time_visitors')
+            )
+        cumulative_visitors_query = cumulative_visitors_query.outerjoin(cumulativeVisitorAgent, and_(cumulativeVisitorAgent.first_visit < intervals_table.c.interval_end, cumulativeVisitorAgent.discussion_id == discussion.id))
+        cumulative_visitors_query = cumulative_visitors_query.group_by(intervals_table.c.interval_id)
+        cumulative_visitors_subquery = cumulative_visitors_query.subquery()
+        # query = cumulative_visitors_query
+
+        # The members (can go up and down...)  Assumes that first_subscribed is available
+        commented_out = """ first_subscribed isn't yet filled in by assembl
+        memberAgentStatus = aliased(AgentStatusInDiscussion)
+        members_subquery = discussion.db.query(intervals_table.c.interval_id,
+            func.count(memberAgentStatus.id).label('count_approximate_members')
+            )
+        members_subquery = members_subquery.outerjoin(memberAgentStatus, ((memberAgentStatus.last_unsubscribed >= intervals_table.c.interval_end) | (memberAgentStatus.last_unsubscribed.is_(None))) & ((memberAgentStatus.first_subscribed < intervals_table.c.interval_end) | (memberAgentStatus.first_subscribed.is_(None))) & (memberAgentStatus.discussion_id==discussion.id))
+        members_subquery = members_subquery.group_by(intervals_table.c.interval_id)
+        query = members_subquery
+        members_subquery = members_subquery.subquery()
+        """
+
+        combined_query = discussion.db.query(intervals_table,
+                                             post_subquery,
+                                             cumulative_posts_subquery,
+                                             post_viewers_subquery,
+                                             visitors_subquery,
+                                             cumulative_visitors_subquery,
+                                             case([
+                                                   (cumulative_posts_subquery.c.count_cumulative_post_authors == 0, None),
+                                                   (cumulative_posts_subquery.c.count_cumulative_post_authors != 0, (cast(post_subquery.c.count_post_authors, Float) / cast(cumulative_posts_subquery.c.count_cumulative_post_authors, Float)))
+                                                   ]).label('fraction_cumulative_authors_who_posted_in_period'),
+                                             case([
+                                                   (cumulative_posts_subquery.c.count_cumulative_post_authors == 0, None),
+                                                   (cumulative_posts_subquery.c.count_cumulative_post_authors != 0, (cast(post_subquery.c.count_post_authors, Float) / cast(cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors, Float)))
+                                                   ]).label('fraction_cumulative_logged_in_visitors_who_posted_in_period'),
+                                             )
+        combined_query = combined_query.join(post_subquery, post_subquery.c.interval_id == intervals_table.c.interval_id)
+        combined_query = combined_query.join(post_viewers_subquery, post_viewers_subquery.c.interval_id == intervals_table.c.interval_id)
+        combined_query = combined_query.join(visitors_subquery, visitors_subquery.c.interval_id == intervals_table.c.interval_id)
+        combined_query = combined_query.join(cumulative_visitors_subquery, cumulative_visitors_subquery.c.interval_id == intervals_table.c.interval_id)
+        # combined_query = combined_query.join(members_subquery, members_subquery.c.interval_id==intervals_table.c.interval_id)
+        combined_query = combined_query.join(cumulative_posts_subquery, cumulative_posts_subquery.c.interval_id == intervals_table.c.interval_id)
+
+        query = combined_query
+        query = query.order_by(intervals_table.c.interval_id)
+        results = query.all()
+
+        #pprint.pprint(results)
+
+        if not (request.GET.get('format', None) == 'csv'
+                or request.accept == 'text/csv'):
+            # json default
+            for v in results:
+                # pprint.pprint(v)
+                # v['count'] = {agent.display_name(): count
+                #              for (agent, count) in v['count']}
+                # v['unique_contributors_count'] = len(v['count'])
+                pass
+        transaction.commit()
+        intervals_table.drop()
+        import datetime
+        class MyEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, datetime.datetime):
+                    return obj.isoformat()
+                return json.JSONEncoder.default(self, obj)
+
+        return Response(json.dumps(results, cls=MyEncoder), content_type='application/json')
+
 
 
 @view_config(context=InstanceContext, name="contribution_count",
