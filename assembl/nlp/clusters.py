@@ -931,7 +931,7 @@ class OpticsSemanticsAnalysis(SemanticAnalysisData):
                 cluster_count = len(local_post_ids)
             if not cluster_count:
                 return None
-            children_ids = {child.id for child in idea.children}
+            children_ids = {child.id for child in idea.get_children()}
             if children_ids:
                 only_here = len([
                     pid for pid in local_post_ids
@@ -1689,6 +1689,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         f.write(template.render(
             analyzer=self,
             discussion=self.discussion,
+            url=self.discussion_url,
             test_code=self.test_code,
             user_id=self.user_id,
             server=get_config()['public_hostname'],
@@ -1708,7 +1709,6 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
         cluster = self.clusters[cluster_id]
         cluster_posts = self.post_clusters_by_cluster[cluster]
         suggestion['num_new_posts'] = len(new_posts)
-        suggestion['url'] = self.discussion_url
         ideas_by_post = self.ideas_by_post
         if is_add:
             target = set(self.get_posts_of_idea(idea_id))
