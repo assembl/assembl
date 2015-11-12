@@ -35,7 +35,7 @@ def upgrade(pyramid_env):
     # 4082 is the virtuoso maximum for VARCHAR. It refuses to modify to VARCHAR
     schema, user = config.get('db_schema'), config.get('db_user')
     with context.begin_transaction():
-        for table, column, nullable, size in url_columns:
+        for table, column, nullable in url_columns:
             op.execute(
                 "alter table %s.%s.%s modify column %s varchar(4082) %s" % (
                     schema, user, table, column,
