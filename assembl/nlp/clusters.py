@@ -1510,12 +1510,6 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
 
                 cl_post_ids_s = set(cl_post_ids)
                 intersection_posts = cl_post_ids_s.intersection(idea_posts)
-                size_of_difference = len(cl_post_ids) - len(intersection_posts)
-                if size_of_difference > min(self.max_additions,
-                                            len(idea_posts),
-                                            2*len(intersection_posts)):
-                    continue
-                new_posts = cl_post_ids_s - idea_posts
                 basic_info = dict(
                         cluster_posts=', '.join(
                             (str(id) for id in cl_post_ids)),
@@ -1530,6 +1524,33 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                         num_posts_cluster=len(cl_post_ids),
                         num_posts_idea=len(self.get_posts_of_idea(idea_id)),
                     )
+                # if we set the cluster as a child of this idea,
+                # does it help the score?
+                data = {post_id: -1 for post_id in intersection_posts}
+                score = self.internal_silhouette(idea_id, data)
+                original_score = silhouette_scores_per_idea[idea_id][2] or 0
+                suggestions_partition.append(dict(
+                        basic_info,
+                        original_score=original_score,
+                        score=score,
+                        score_delta=original_score-score))
+                size_of_difference = len(cl_post_ids) - len(intersection_posts)
+                new_posts = cl_post_ids_s - idea_posts
+                # Don't add tons of new posts
+                if size_of_difference > min(self.max_additions,
+                                            len(idea_posts),
+                                            2*len(intersection_posts)):
+                    continue
+                # if we set the whole cluster as a child of this idea,
+                # does it help the score?
+                data = {post_id: -1 for post_id in cl_post_ids}
+                score = self.internal_silhouette(idea_id, data)
+                suggestions_partition.append(dict(
+                        basic_info,
+                        new_posts=new_posts,
+                        original_score=original_score,
+                        score=score,
+                        score_delta=original_score-score))
                 if cl_post_ids_s - idea_posts:
                     # If we add this whole cluster to the idea, does it
                     # yield a better partial score?
@@ -1542,26 +1563,6 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                         basic_info,
                         new_posts=new_posts,
                         num_union_posts=len(union_posts),
-                        original_score=original_score,
-                        score=score,
-                        score_delta=original_score-score))
-                # if we set the cluster as a child of this idea,
-                # does it help the score?
-                data = {post_id: -1 for post_id in intersection_posts}
-                score = self.internal_silhouette(idea_id, data)
-                original_score = silhouette_scores_per_idea[idea_id][2] or 0
-                suggestions_partition.append(dict(
-                        basic_info,
-                        original_score=original_score,
-                        score=score,
-                        score_delta=original_score-score))
-                # if we set the whole cluster as a child of this idea,
-                # does it help the score?
-                data = {post_id: -1 for post_id in cl_post_ids}
-                score = self.internal_silhouette(idea_id, data)
-                suggestions_partition.append(dict(
-                        basic_info,
-                        new_posts=new_posts,
                         original_score=original_score,
                         score=score,
                         score_delta=original_score-score))

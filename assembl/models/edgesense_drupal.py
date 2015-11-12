@@ -20,6 +20,7 @@ from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
 from ..tasks.source_reader import PullSourceReader
 from ..lib import config
+from ..lib.sqla_types import URLString
 from ..lib.locale import get_localizer, _
 
 
@@ -48,10 +49,10 @@ class EdgeSenseDrupalSource(PostSource):
                 onupdate='CASCADE',
                 ondelete='CASCADE'), primary_key=True)
 
-    node_source = Column(String(1024), nullable=False)
+    node_source = Column(URLString(), nullable=False)
     node_root = Column(String(200))
-    user_source = Column(String(1024), nullable=False)
-    comment_source = Column(String(1024), nullable=False)
+    user_source = Column(URLString(), nullable=False)
+    comment_source = Column(URLString(), nullable=False)
     post_id_prepend = Column(String(100), nullable=False)
 
     def generate_prepend_id(self):
@@ -113,7 +114,7 @@ class SourceSpecificAccount(AbstractAgentAccount):
                 onupdate='CASCADE',
                 ondelete='CASCADE'), primary_key=True)
 
-    user_link = Column(String(1024))
+    user_link = Column(URLString)
     # user_id: Edgeryder returns "6464" or "6460"
     user_id = Column(String(15), nullable=False)
     user_info = Column(Text)  # The JSON blob for future-keeping

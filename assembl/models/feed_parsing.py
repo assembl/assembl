@@ -188,7 +188,7 @@ class WebLinkAccount(AbstractAgentAccount):
                 onupdate='CASCADE',
                 ondelete='CASCADE'), primary_key=True)
 
-    user_link = Column(String(1024), unique=True)
+    user_link = Column(URLString, unique=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'weblink_user'
