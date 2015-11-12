@@ -39,6 +39,13 @@
         "discussion": true,
         "for_role": ":"
     },
+    "AgentStatusInDiscussion": {
+        "discussion": true,
+        "agent_profile": true,
+        "first_visit": true,
+        "last_visit": true,
+        "user_created_on_this_discussion": true
+    },
     "Action": {
         "when": "creation_date",
         "user": "actor"

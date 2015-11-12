@@ -324,6 +324,9 @@ class AgentProfile(Base):
             return status.user_created_on_this_discussion
         return False
 
+    def is_owner(self, user_id):
+        return user_id == self.id
+
     def get_preferred_locale(self):
         # TODO: per-user preferred locale
         # Want a 2-letter locale string
@@ -685,6 +688,13 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.id == discussion_id,)
+
+    def is_owner(self, user_id):
+        return user_id == self.profile_id
+
+    crud_permissions = CrudPermissions(
+        P_READ, P_ADMIN_DISC, P_ADMIN_DISC, P_ADMIN_DISC,
+        P_READ, P_READ, P_READ)
 
 
 @event.listens_for(AgentStatusInDiscussion, 'after_insert', propagate=True)
