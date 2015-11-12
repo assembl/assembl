@@ -153,7 +153,7 @@ class SourceReader(Thread):
             self.__class__.__name__, self.source_id, self.status.name,
             status.name))
         if status == ReaderStatus.READING and self.status != ReaderStatus.READING:
-            self.source.connection_error = self.status
+            self.source.connection_error = self.status.value
             self.source.db.commit()
             self.refresh_source()
         self.status = status
