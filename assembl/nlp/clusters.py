@@ -1510,6 +1510,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
 
                 cl_post_ids_s = set(cl_post_ids)
                 intersection_posts = cl_post_ids_s.intersection(idea_posts)
+                idea_remainder_post_ids = idea_posts - cl_post_ids_s
                 basic_info = dict(
                         cluster_posts=', '.join(
                             (str(id) for id in cl_post_ids)),
@@ -1520,6 +1521,7 @@ class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):
                         idea_posts_ids=idea_posts,
                         intersection_posts_ids=intersection_posts,
                         num_intersection_posts=len(intersection_posts),
+                        idea_remainder_post_ids=idea_remainder_post_ids,
                         num_cluster=num_cluster,
                         num_posts_cluster=len(cl_post_ids),
                         num_posts_idea=len(self.get_posts_of_idea(idea_id)),

@@ -113,7 +113,7 @@ second score, if any, indicates how well this idea's children can be distinguish
             <input type="hidden" name="add_{{ loop.index }}_score" value="{{ suggestion.score_delta }}">
     {% endif %}
     <p>Here are the other posts already in the idea, so you can compare:</p>
-    {% call(post) post_list(suggestion.idea_posts_ids) %}
+    {% call(post) post_list(suggestion.idea_remainder_post_ids) %}
         Post <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>#{{ post.id }}</a> (by <em>{{post.creator.name}}</em>)
         {% if post.id in suggestion.cl_post_ids %}
             (<em>already in cluster</em>):
@@ -138,14 +138,13 @@ second score, if any, indicates how well this idea's children can be distinguish
         <a href="#partition_{{ loop.index + 1 }}_suggestion">⬇︎</a>
     {% endif %}
     {{loop.index + add_length }}:
-
-
         Add a sub-idea to idea <a target='out' href='{{ url }}idea/local:Idea/{{ suggestion.idea_id }}'><b>{{ suggestion.idea.short_title }}</b></a> (#{{ suggestion.idea_id }}, {{ suggestion.num_posts_idea }} posts)
-         to represent the {{ suggestion.num_posts_cluster }} posts of cluster #{{ suggestion.num_cluster }}.
     {% if suggestion.new_posts %}
+        to represent the {{ suggestion.num_posts_cluster }} posts of cluster #{{ suggestion.num_cluster }}.
         This requires moving {{ suggestion.num_intersection_posts }} existing posts to the new sub-idea, and adding {{ suggestion.num_new_posts }} new posts to it.
     {% else %}
-        This requires moving {{ suggestion.num_intersection_posts }} existing posts to the new sub-idea.
+        to represent {{ suggestion.num_intersection_posts }} of the {{ suggestion.num_posts_cluster }} posts of cluster #{{ suggestion.num_cluster }}.
+        This requires moving those {{ suggestion.num_intersection_posts }} existing posts to the new sub-idea.
     {% endif %}
     </h3>
     <p>
@@ -182,7 +181,7 @@ second score, if any, indicates how well this idea's children can be distinguish
     </div>
     <p>These posts are not in the cluster and would remain where they are in the idea or sub-ideas:</p>
     <div>
-    {% call(post) post_list(suggestion.posts) %}
+    {% call(post) post_list(suggestion.idea_remainder_post_ids) %}
         {% set present_in = analyzer.post_in_which_children_of_idea(post.id, suggestion.idea_id) %}
         Post <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>#{{ post.id }}</a> (by <em>{{post.creator.name}}</em>)
         {% if present_in %}
