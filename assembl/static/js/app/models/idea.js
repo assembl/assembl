@@ -22,10 +22,19 @@ var IdeaModel = Base.Model.extend({
     obj.creationDate = obj.creationDate || Ctx.getCurrentTime();
     this.set('creationDate', obj.creationDate);
     this.set('hasCheckbox', Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS));
-    if (obj.num_total_and_read_posts !== undefined) {
-      this.set('num_posts', obj.num_total_and_read_posts[0]);
-      this.set('num_read_posts', obj.num_total_and_read_posts[1]);
+    this.adjust_num_read_posts(obj);
+  },
+
+  adjust_num_read_posts: function(resp) {
+    if (resp.num_total_and_read_posts !== undefined) {
+      this.set('num_posts', resp.num_total_and_read_posts[0]);
+      this.set('num_read_posts', resp.num_total_and_read_posts[1]);
     }
+  },
+
+  parse: function(resp, options) {
+    this.adjust_num_read_posts(resp);
+    return Object.getPrototypeOf(Object.getPrototypeOf(this)).parse.apply(this, arguments);
   },
 
   /**

@@ -470,6 +470,9 @@ def create_post(request):
             idea=in_reply_to_idea
         )
         discussion.db.add(idea_post_link)
+        in_reply_to_idea.send_to_changes()
+    else:
+        discussion.root_idea.send_to_changes()
     for source in discussion.sources:
         if 'send_post' in dir(source):
             source.send_post(new_post)
