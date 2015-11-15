@@ -470,7 +470,7 @@ var MessageView = Marionette.LayoutView.extend({
         this.showReadLess();
       }
 
-      if (this.messageListView.isViewStyleThreadedType() && 
+      if (this.messageListView.isCurrentViewStyleThreadedType() && 
           that.messageFamilyView.currentLevel !== 1) {
         this.model.getParentPromise().then(function(parentMessageModel) {
           //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());

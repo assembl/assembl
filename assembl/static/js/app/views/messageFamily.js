@@ -68,7 +68,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
           numAuthorsOutOfContext = 0;
 
       //console.log(this.model.id, visitorData);
-      if (this.messageListView.isViewStyleThreadedType()) {
+      if (this.messageListView.isCurrentViewStyleThreadedType()) {
         if ((visitorData.filtered_descendant_count !== visitorData.real_descendant_count) || visitorData.real_ancestor_count !== visitorData.level && firstMessage.get("parentId") && this.level === 1) {
           hasParentsOrChildrenOutOfScope = true;
           numAncestorsOutOfContext = visitorData.real_ancestor_count - visitorData.level;

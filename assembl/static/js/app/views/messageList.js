@@ -238,7 +238,17 @@ var MessageList = AssemblPanel.extend({
     THREADED: {
       id: "threaded",
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "threaded",
-      label: i18n.gettext('Threaded')
+      label: i18n.gettext('Standard threads')
+    },
+    RECENTLY_ACTIVE_THREADS: {
+      id: "recent_active_threads",
+      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "recent_active_threads",
+      label: i18n.gettext('Most recently active threads')
+    },
+    RECENT_THREAD_STARTERS: {
+      id: "recent_thread_starters",
+      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "recent_active_threads",
+      label: i18n.gettext('Most recent thread starters (Facebook style)')
     },
     REVERSE_CHRONOLOGICAL: {
       id: "reverse_chronological",
@@ -248,7 +258,7 @@ var MessageList = AssemblPanel.extend({
     NEW_MESSAGES: {
       id: "new_messages",
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "newmessages",
-      label: i18n.gettext('New messages threaded')
+      label: i18n.gettext('Standard threads, jump to oldest unread message')
     },
     CHRONOLOGICAL: {
       id: "chronological",
@@ -260,11 +270,17 @@ var MessageList = AssemblPanel.extend({
   currentViewStyle: null,
 
   /**
-   * Is the current view style a non-flat view
+   * Is the view style a non-flat view
    */
-  isViewStyleThreadedType: function() {
-      return this.currentViewStyle === this.ViewStyles.THREADED ||
-             this.currentViewStyle === this.ViewStyles.NEW_MESSAGES;
+  isViewStyleThreadedType: function(viewStyle) {
+      return viewStyle === this.ViewStyles.THREADED ||
+             viewStyle === this.ViewStyles.NEW_MESSAGES ||
+             viewStyle === this.ViewStyles.RECENTLY_ACTIVE_THREADS ||
+             viewStyle === this.ViewStyles.RECENT_THREAD_STARTERS;
+    },
+
+  isCurrentViewStyleThreadedType: function() {
+      return this.isViewStyleThreadedType(this.currentViewStyle);
     },
 
   /**
@@ -588,8 +604,7 @@ var MessageList = AssemblPanel.extend({
       var returnedDataOffsets = {},
           len = _.size(this.resultMessageIdCollection);
 
-      if ((this.currentViewStyle === this.ViewStyles.THREADED) ||
-          (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES)) {
+      if (this.isCurrentViewStyleThreadedType()) {
         returnedDataOffsets = this._calculateThreadedMessagesOffsets(this.visitorViewData, this.visitorOrderLookupTable, requestedOffsets);
       } else {
         returnedDataOffsets.offsetStart = _.isUndefined(requestedOffsets.offsetStart) ? 0 : requestedOffsets.offsetStart;
@@ -724,8 +739,7 @@ var MessageList = AssemblPanel.extend({
   getMessageIdsToShow: function(requestedOffsets) {
       var messageIdsToShow = [],
           returnedOffsets = this.calculateMessagesOffsets(requestedOffsets);
-      if ((this.currentViewStyle === this.ViewStyles.THREADED) ||
-          (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES)) {
+      if (this.isCurrentViewStyleThreadedType()) {
         messageIdsToShow = this.visitorOrderLookupTable.slice(returnedOffsets.offsetStart, returnedOffsets.offsetEnd + 1);
       } else {
         if (this.debugPaging) {
@@ -806,8 +820,7 @@ var MessageList = AssemblPanel.extend({
     returnedOffsets = this.calculateMessagesOffsets(requestedOffsets);
     messageIdsToShow = this.getMessageIdsToShow(requestedOffsets);
     numMessages = _.size(this.resultMessageIdCollection);
-    if ((this.currentViewStyle === this.ViewStyles.THREADED) ||
-        (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES)) {
+    if (this.isCurrentViewStyleThreadedType()) {
       views_promise = this.getRenderedMessagesThreadedPromise(_.clone(this.visitorRootMessagesToDisplay), 1, this.visitorViewData, messageIdsToShow);
     } else {
       views_promise = this.getRenderedMessagesFlatPromise(messageIdsToShow);
@@ -1356,13 +1369,40 @@ var MessageList = AssemblPanel.extend({
 
                   that.visitorOrderLookupTable = [];
                   that.visitorRootMessagesToDisplay = [];
+                  var sortFunction = undefined;
+                  if (that.currentViewStyle === that.ViewStyles.RECENTLY_ACTIVE_THREADS) {
+                    sortFunction = function(data) {
+                      if(data.level === 0) {
+                        return Date.now() - Date.parse(data.newest_descendant_date);
+                      }
+                      else {
+                        return Date.parse(data.object.get('date'));
+                      }
+                    }
+                  }
+                  else if (that.currentViewStyle === that.ViewStyles.RECENT_THREAD_STARTERS) {
+                    sortFunction = function(data) {
+                      if(data.level === 0) {
+                        return Date.now() - Date.parse(data.object.get('date'));
+                      }
+                      else {
+                        return Date.parse(data.object.get('date'));
+                      }
+                    }
+                  }
+                  else {
+                    sortFunction = function(data) {
+                      return data.object.get('date');
+                    }
+                  }
+                    
+                  //SORT THE TREE
                   objectTreeRenderVisitorReSort(
                       that.visitorViewData,
                       that.visitorOrderLookupTable,
                       that.visitorRootMessagesToDisplay,
-                      function(message) {
-                        return message.get('date');
-                      });
+                      sortFunction
+                      );
                   that.render_real();
                   that.showInspireMeIfAvailable();
                   that.renderMessageListHeader();
@@ -1880,7 +1920,7 @@ var MessageList = AssemblPanel.extend({
         viewStyle = this.ViewStyles.NEW_MESSAGES;
       }
 
-      if (viewStyle === this.ViewStyles.THREADED) {
+      if (this.isViewStyleThreadedType(viewStyle)) {
         this.currentViewStyle = viewStyle;
         this.currentQuery.setView(this.currentQuery.availableViews.THREADED);
       }
@@ -1891,10 +1931,6 @@ var MessageList = AssemblPanel.extend({
       else if (viewStyle === this.ViewStyles.CHRONOLOGICAL) {
         this.currentViewStyle = viewStyle;
         this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL);
-      }
-      else if (viewStyle === this.ViewStyles.NEW_MESSAGES) {
-        this.currentViewStyle = viewStyle;
-        this.currentQuery.setView(this.currentQuery.availableViews.THREADED);
       }
       else {
         throw new Error("Unsupported view style");
@@ -2005,8 +2041,7 @@ var MessageList = AssemblPanel.extend({
    */
   getMessageOffset: function(messageId, visitorOrderLookupTable, resultMessageIdCollection) {
       var messageOffset;
-      if ((this.currentViewStyle === this.ViewStyles.THREADED) ||
-          (this.currentViewStyle === this.ViewStyles.NEW_MESSAGES)) {
+      if (this.isCurrentViewStyleThreadedType()) {
         try {
           if (!this.visitorViewData[messageId]) {
             throw new Error("visitor data for message is missing");

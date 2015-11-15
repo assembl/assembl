@@ -9,8 +9,11 @@ var Visitor = require("./visitor.js");
 */
 function objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function, data, ancestry) {
   var data_sort_comparator_function = function(data) {
-      return sort_comparator_function(data.object);
+      return sort_comparator_function(data);
     };
+  var object_sort_comparator_function = function(object) {
+    return sort_comparator_function(data_by_object[object.id]);
+  };
   if (ancestry === undefined) {
     ancestry = [];
   }
@@ -31,7 +34,8 @@ function objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_compara
     //Copy ancestry
     ancestry = ancestry.slice(0);
     ancestry.push(data);
-    var children = _.sortBy(data.children, sort_comparator_function);
+    //console.log(data.children);
+    var children = _.sortBy(data.children, object_sort_comparator_function);
     for (var i in children) {
       objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function, data_by_object[children[i].id], ancestry);
     }
@@ -71,7 +75,7 @@ ObjectTreeRenderVisitorReSortVisitor.prototype.visit = function(data, ancestry) 
 * indexed by traversal order
 * @param roots: input/output param. The objects that have no parents in the
 * set.  This list will be re-sorted
-* @param sort_comparator_function:  The object is passed to this callback.
+* @param sort_comparator_function:  The parse data (data_by_object[object.id] is passed to this callback.  ex:  sort_comparator_function(data)
 */
 function objectTreeRenderVisitorReSort(data_by_object, order_lookup_table, roots, sort_comparator_function) {
   //console.log(data_by_object);

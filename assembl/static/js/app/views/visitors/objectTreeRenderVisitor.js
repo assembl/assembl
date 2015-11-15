@@ -107,6 +107,7 @@ ObjectTreeRenderVisitor.prototype.post_visit = function(object, children_data) {
       real_descendant_count = 0,
       filtered_descendant_authors_list = [],
       real_descendant_authors_list = [],
+      newest_descendant_date = undefined,
       filter_result = false,
       authors = [],
       retval = {};
@@ -116,6 +117,9 @@ ObjectTreeRenderVisitor.prototype.post_visit = function(object, children_data) {
       real_descendant_count += child_data.real_descendant_count;
       filtered_descendant_authors_list = _.union(filtered_descendant_authors_list, child_data.filtered_descendant_authors_list);
       real_descendant_authors_list = _.union(real_descendant_authors_list, child_data.real_descendant_authors_list);
+      if (newest_descendant_date === undefined || newest_descendant_date < child_data.newest_descendant_date) {
+        newest_descendant_date = child_data.newest_descendant_date;
+      }
     }
   });
 
@@ -129,6 +133,12 @@ ObjectTreeRenderVisitor.prototype.post_visit = function(object, children_data) {
       this.data_by_object[object.id].real_descendant_count = real_descendant_count;
       this.data_by_object[object.id].filtered_descendant_authors_list = filtered_descendant_authors_list;
       this.data_by_object[object.id].real_descendant_authors_list = real_descendant_authors_list;
+      if (newest_descendant_date === undefined || newest_descendant_date < object.get('date')) {
+        this.data_by_object[object.id].newest_descendant_date = object.get('date');
+      }
+      else {
+        this.data_by_object[object.id].newest_descendant_date = newest_descendant_date;
+      }
     }
 
     if (object.get('idCreator')) {
@@ -139,10 +149,17 @@ ObjectTreeRenderVisitor.prototype.post_visit = function(object, children_data) {
   if (filter_result) {
     retval.filtered_descendant_count = filtered_descendant_count + 1;
     retval.filtered_descendant_authors_list = _.union(filtered_descendant_authors_list, authors);
+    if (newest_descendant_date === undefined || newest_descendant_date < object.get('date')) {
+      retval.newest_descendant_date = object.get('date');
+    }
+    else {
+      retval.newest_descendant_date = newest_descendant_date;
+    }
   }
   else {
     retval.filtered_descendant_count = filtered_descendant_count;
     retval.filtered_descendant_authors_list = filtered_descendant_authors_list;
+    retval.newest_descendant_date = newest_descendant_date;
   }
 
   retval.real_descendant_count = real_descendant_count + 1;
