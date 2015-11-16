@@ -14,7 +14,6 @@ var Marionette = require('../shims/marionette.js'),
 var Statistics = Marionette.ItemView.extend({
   template: '#tmpl-statistics',
   initialize: function() {
-    this.listenTo(Assembl.vent, 'contextPage:render', this.render);
     this.computeStatistics();
   },
   ui: {
@@ -25,6 +24,7 @@ var Statistics = Marionette.ItemView.extend({
   lineChartIsCumulative: true,
   lineChartShowPoints: false,
   pieChartShowMessages: false,
+  pie_chart_data: undefined,
 
   onRender: function() {
     this.draw();
@@ -51,6 +51,7 @@ var Statistics = Marionette.ItemView.extend({
     // show results
     // -----
     if (this.pie_chart_data === undefined) {
+      // pie_chart_data is undefined => abort for the moment
       return;
     }
 
@@ -1082,7 +1083,7 @@ var Statistics = Marionette.ItemView.extend({
               that.pie_chart_default_legend_data = pie_chart_default_legend_data;
               that.legend_squares_data = legend_squares_data;
 
-              Assembl.vent.trigger('contextPage:render');
+              that.render();
 
             });
   },
