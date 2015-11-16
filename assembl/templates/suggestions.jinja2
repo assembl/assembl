@@ -103,7 +103,7 @@ second score, if any, indicates how well this idea's children can be distinguish
     <p>These posts from the cluster would be <b>added</b> to the idea:</p>
     <div class="add_many_posts">
         {% call(post) post_list(suggestion.new_posts) %}
-            Post <a target='out' href='{{ url }}posts/local:Content/{{ post_id }}'>#{{ post.id }}</a></b></span> by <em>{{post.creator.name}}</em>:
+            Post <a target='out' href='{{ url }}posts/local:Content/{{ post.id }}'>#{{ post.id }}</a></b></span> by <em>{{post.creator.name}}</em>:
         {% endcall %}
     </div>
     {% if test_code %}
