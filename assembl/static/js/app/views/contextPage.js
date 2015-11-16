@@ -356,7 +356,7 @@ var ContextPage = Marionette.LayoutView.extend({
         collectionManager.getAllSynthesisCollectionPromise(),
 
             function(DiscussionModel, AllPartner, allMessageStructureCollection, allSynthesisCollection) {
-              try {
+              try { if (!that.isViewDestroyed() ){
                 var partnerInstigator =  AllPartner.find(function(partner) {
                   return partner.get('is_initiator');
                 });
@@ -403,11 +403,11 @@ var ContextPage = Marionette.LayoutView.extend({
                 });
                 that.getRegion('organizations').show(partners);
 
-              } catch (e) {
+              } } catch (e) {
                 console.log("Aborting rendering of ContextPanel's regions, probably because the view was replaced since.");
 
-                //console.log("Here is the error:");
-                //console.log(e);
+                console.log("Here is the error:");
+                console.log(e);
               }
             }
 

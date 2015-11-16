@@ -14,7 +14,7 @@ var Marionette = require('../shims/marionette.js'),
 var Statistics = Marionette.ItemView.extend({
   template: '#tmpl-statistics',
   initialize: function() {
-    this.computeStatistics();
+    // this.computeStatistics(); // moved to onBeforeShow() because it can finish before the DOM is present and attached ( which can make the D3 lib crash while doing work involving transitions)
   },
   ui: {
     statistics: '.statistics',
@@ -25,6 +25,10 @@ var Statistics = Marionette.ItemView.extend({
   lineChartShowPoints: false,
   pieChartShowMessages: false,
   pie_chart_data: undefined,
+
+  onBeforeShow: function() {
+    this.computeStatistics();
+  },
 
   onRender: function() {
     this.draw();
