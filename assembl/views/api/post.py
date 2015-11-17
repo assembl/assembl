@@ -470,7 +470,11 @@ def create_post(request):
             idea=in_reply_to_idea
         )
         discussion.db.add(idea_post_link)
-        in_reply_to_idea.send_to_changes()
+        idea = in_reply_to_idea
+        while idea:
+            idea.send_to_changes()
+            parents = idea.get_parents()
+            idea = next(iter(parents)) if parents else None
     else:
         discussion.root_idea.send_to_changes()
     for source in discussion.sources:
