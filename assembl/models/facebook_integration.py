@@ -14,7 +14,7 @@ from sqlalchemy import (
     DateTime,
     Binary
 )
-import simplejson as json
+import yajl as json
 # from dateutil.parser import parse as parse_datetime
 from dateutil.tz import tzutc
 from sqlalchemy.orm import (

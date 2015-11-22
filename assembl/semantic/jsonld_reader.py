@@ -1,4 +1,4 @@
-import simplejson as json
+import yajl as json
 from rdflib_jsonld.context import Context
 from . import (context_url, local_context_loc)
 from assembl.models.import_records import ImportRecordHandler

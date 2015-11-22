@@ -4,7 +4,7 @@ import os.path
 import codecs
 from collections import defaultdict
 
-import simplejson as json
+import yajl as json
 from pyramid.view import view_config
 from pyramid.response import Response
 from velruse.exceptions import CSRFError

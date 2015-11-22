@@ -2,7 +2,7 @@ from datetime import datetime
 from abc import ABCMeta, abstractmethod
 
 from bs4 import BeautifulSoup
-import simplejson as json
+import yajl as json
 from sqlalchemy import (
     Column,
     UniqueConstraint,

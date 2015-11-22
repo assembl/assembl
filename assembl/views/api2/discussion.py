@@ -21,7 +21,7 @@ from sqlalchemy import (
 )
 
 
-import simplejson as json
+import yajl as json
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import (

@@ -13,7 +13,7 @@ from sqlalchemy import (
     Text
  )
 import requests
-import simplejson as json
+import yajl as json
 
 from .generic import PostSource
 from .post import ImportedPost

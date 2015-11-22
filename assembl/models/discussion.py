@@ -3,7 +3,7 @@ import traceback
 from datetime import datetime
 from collections import defaultdict
 
-import simplejson as json
+import yajl as json
 from pyramid.security import Allow, ALL_PERMISSIONS
 from pyramid.settings import asbool
 from sqlalchemy import (

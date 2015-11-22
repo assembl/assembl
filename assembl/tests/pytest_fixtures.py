@@ -10,7 +10,7 @@ from pyramid.paster import get_appsettings
 import transaction
 from webtest import TestApp
 from pkg_resources import get_distribution
-import simplejson as json
+import yajl as json
 from splinter import Browser
 from sqlalchemy import inspect
 

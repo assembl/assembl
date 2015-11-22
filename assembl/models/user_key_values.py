@@ -1,6 +1,6 @@
 from collections import Mapping, MutableMapping
 
-import simplejson as json
+import yajl as json
 from sqlalchemy import (
     Boolean,
     Column,

@@ -7,7 +7,7 @@ from sqlalchemy.sql import text, column
 from sqlalchemy.orm import (
     relationship, backref, aliased, join)
 from sqlalchemy.ext.associationproxy import association_proxy
-import simplejson as json
+import yajl as json
 import uuid
 
 from assembl.lib.parsedatetime import parse_datetime

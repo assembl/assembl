@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta
 
 import pytest
-import simplejson as json
+import yajl as json
 
 from ...models import (
     AbstractIdeaVote,

@@ -1,6 +1,6 @@
 from math import ceil
 
-import simplejson as json
+import yajl as json
 from cornice import Service
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest)
