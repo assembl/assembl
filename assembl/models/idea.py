@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from itertools import chain
+from itertools import chain, groupby
 from collections import defaultdict
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
@@ -631,6 +631,7 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
         # This works because of a virtuoso bug...
         # where DISTINCT gives IDs instead of URIs.
         from .generic import Content
+        from .idea_content_link import Extract
         assert direct or indirect
         discussion_storage = \
             AssemblQuadStorageManager.discussion_storage_name()
@@ -647,17 +648,20 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
                 %s sioc:reply_of* ?post .
                 ?post assembl:postLinkedToIdea ?idea }'''
         if direct and indirect:
-            clause = '''select distinct ?postP, ?ideaP, ?idea where {
+            clause = '''select distinct ?postP, ?ideaP, ?idea, ?ex where {
                 %s sioc:reply_of* ?postP .
                 ?postP assembl:postLinkedToIdea ?ideaP  .
-                ?idea idea:includes* ?ideaP  }'''
+                ?idea idea:includes* ?ideaP .
+                optional { ?ex oa:hasSource ?postP ;
+                    assembl:resourceExpressesIdea ?ideaP . } }'''
             r = list(cls.default_db.execute(
                 SparqlClause(clause % (
                     post_uri.n3(),),
                     quad_storage=discussion_storage.n3())))
-            r = [(int(x), int(y), int(z)) for (x, y, z) in r]
+            r = [(int(x), int(y), int(z), int(e) if e else None)
+                 for (x, y, z, e) in r]
 
-            def comp((pp1, ip1, i1), (pp2, ip2, i2)):
+            def comp((pp1, ip1, i1, e1), (pp2, ip2, i2, e2)):
                 direct_idea1 = ip1 == i1
                 direct_idea2 = ip2 == i2
                 direct_post1 = pp1 == post_id
@@ -675,13 +679,18 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
                 if i1 != i2:
                     # TODO: Real hry order.
                     return i2 - i1
+                if e1 != e2:
+                    return e2 - e1
                 return 0
             r.sort(cmp=comp)
+            # can't trust virtuoso's uniqueness.
+            r = [e for e, _ in groupby(r)]
             return [(
-                Content.uri_generic(pp),
+                Idea.uri_generic(i),
                 Idea.uri_generic(ip),
-                Idea.uri_generic(i)
-            ) for (pp, ip, i) in r]
+                Content.uri_generic(pp),
+                Extract.uri_generic(ex) if ex else None
+            ) for (pp, ip, i, ex) in r]
         else:
             return [int(id) for (id,) in cls.default_db.execute(
                 SparqlClause(clause % (

@@ -124,3 +124,19 @@ def add_post_json(request):
     if has_moderation(request.json):
         raise HTTPBadRequest("Cannot moderate at post creation")
     return collection_add_json(request)
+
+
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=Content, permission=P_READ,
+             accept="application/json", name="idea_connexions",
+             renderer='json')
+def idea_connexions(request):
+    # Returns the ideas this post is connected to.
+    # This is a list of tuples of the form:
+    # [idea, connexion_idea, connexion_post, extract?]
+    # the idea is an ancestor or equal to connexion_idea
+    # the connexion_post is an ancestor or equal to current post
+    from assembl.models import Idea
+    ctx = request.context
+    post = ctx._instance
+    return Idea.get_idea_ids_showing_post(post.id, True, True)
