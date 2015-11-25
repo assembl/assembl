@@ -44,7 +44,8 @@ var NavigationView = AssemblPanel.extend({
     ideaFromIdealist: '.js_addIdeaFromIdeaList',
     level: 'div.second-level',
     visualization_tab: '#visualization_tab',
-    synthesis_tab: '.js_synthesis_tab'
+    synthesis_tab: '.js_synthesis_tab',
+    discussion_tab_minimize_icon: '.js_discussion_tab .js_minimizePanel'
   },
   events: {
     'click @ui.navigation': '_toggleMenuByEvent',
@@ -89,6 +90,7 @@ var NavigationView = AssemblPanel.extend({
       if (allMessageStructureCollection.getLastSynthesisPost()) {
         that.num_items += 1;
         that.ui.synthesis_tab.show();
+        that.ui.discussion_tab_minimize_icon.hide();
         if (that.getContainingGroup().model.get('navigationState') !== "synthesis") {
           that.ui.synthesis_tab[0].id = "tour_step_synthesis";
           Assembl.vent.trigger("requestTour", "synthesis");

@@ -7,13 +7,12 @@
     </a>
     <div class="second-level synthesis"></div>
   </li>
-  <li>
+  <li class="js_discussion_tab">
     <a href="#" class="nav js_navigation" data-view="debate"><i class="icon-discuss btn btn-sm"></i>&nbsp;&nbsp;{{ gettext('Discussion') }}
-    {# check if number of synthesis > 0 to hide this
+    {# once the navigation view receives the messages structure and knows whether a synthesis exists, this second minimize button will be hidden and the synthesis menu item (which contains the first minimize button) will be shown #}
     <% if ( hasMinimize ){ %>
-    <span class="js_minimizePanel panel-header-minimize btn btn-sm icon-arrowleft" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}"></span>
+        <span class="js_minimizePanel panel-header-minimize btn btn-sm icon-arrowleft" data-toggle="tooltip" data-placement="top" title="{{gettext('Minimize panel')}}"></span>
     <% } %>
-    #}
     </a>
     <div class="second-level debate"></div>
   </li>
