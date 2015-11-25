@@ -182,7 +182,12 @@ var IdeaPanel = AssemblPanel.extend({
       subIdeas = this.model.getChildren();
       contributors = this.model.get('contributors');
 
-      direct_link_relative_url = Ctx.getIdeaURL(this.model.get('@id'), {'source': 'share'}, {'relative': true});
+      direct_link_relative_url = this.model.getRouterUrl({
+        parameters: {
+          'source': 'share'
+        },
+        relative: true
+      });
       share_link_url = Ctx.appendExtraURLParams("/static/widget/share/index.html",
         [
           {'u': Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url) },
