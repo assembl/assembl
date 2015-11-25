@@ -359,7 +359,15 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
 
   getUrlForUser: function(targetIdeaId, page) {
     var base = this.baseUri, uri = this.getId(), locale = Ctx.getLocale();
-    targetIdeaId = targetIdeaId || this.get("base_idea", {})["@id"];
+    if (!targetIdeaId) {
+      if (this.get('base_idea')){
+        targetIdeaId = this.get('base_idea')['@id'];
+      }
+    }
+    if (!targetIdeaId) {
+      targetIdeaId = null;
+    }
+
     return base + "?locale=" + locale + "#/home?config=" + encodeURIComponent(uri)
       + "&target="+encodeURIComponent(targetIdeaId);
   },
