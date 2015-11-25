@@ -3,6 +3,7 @@
 var Backbone = require('../shims/backbone.js'),
     Promise = require('bluebird'),
     Ctx = require('../common/context.js'),
+    _ = require('../shims/underscore.js'),
     Types = require('../utils/types.js');
 
 /**
@@ -156,8 +157,15 @@ var BaseModel = Backbone.Model.extend({
   },
 
   /**
+   * Get the base of the Router URL for this class
+   * 2015/11/25 Currently only defined on POST or IDEA
+   */
+  getRouterBaseUrl: function() {
+    return null;
+  },
+
+  /**
    * Get the Router URL of an object
-   * 2015/11/25 Currently only supports POST or IDEA
    *
    * @param {Object} options - optionally pass in options 
    * @param {boolean} options.relative - Optional. Default URL is absolute. Can force to be relative by setting passing {'relative' : true}
@@ -165,14 +173,15 @@ var BaseModel = Backbone.Model.extend({
    * @return {String|null} The fully composed URL of the post/idea
   */
   getRouterUrl: function(options){
-    var base = this.getBaseType();
-    if (base === Types.POST || base === Types.IDEA) {
       if (!this.id){
         return null;
       }
-      var post = base == Types.POST ? 'posts/' : 'ideas/',
-          encodedId = encodeURIComponent(this.id),
-          relPath = post + encodedId,
+      var baseUrl = this.getRouterBaseUrl();
+      if (baseUrl === null) {
+        return null;
+      }
+      var encodedId = encodeURIComponent(this.id),
+          relPath = baseUrl + encodedId,
           params = _.has(options, 'parameters') ? options.parameters : {};
 
       if (options){
@@ -188,12 +197,6 @@ var BaseModel = Backbone.Model.extend({
         Ctx.getAbsoluteURLFromDiscussionRelativeURL(relPath),
         params
       );
-
-    } 
-
-    else {
-      return null; 
-    }
   }
 
 });

@@ -19,6 +19,13 @@ var MessageModel = Base.Model.extend({
    */
   urlRoot: Ctx.getApiUrl('posts'),
 
+  /**
+   * Get the base of the Router URL for ideas
+   */
+  getRouterBaseUrl: function() {
+    return 'posts/';
+  },
+
   getApiV2Url: function() {
     return Ctx.getApiV2DiscussionUrl('/posts/'+this.getNumericId());
   },

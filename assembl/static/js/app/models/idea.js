@@ -44,6 +44,13 @@ var IdeaModel = Base.Model.extend({
   urlRoot: Ctx.getApiUrl("ideas"),
 
   /**
+   * Get the base of the Router URL for ideas
+   */
+  getRouterBaseUrl: function() {
+    return 'ideas/';
+  },
+
+  /**
    * Defaults
    */
   defaults: {
