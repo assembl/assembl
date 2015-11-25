@@ -315,8 +315,10 @@ var IdeaList = AssemblPanel.extend({
    * @param view_data: object which will be modified during the traversal
    */
   addLabelToMostRecentIdeas: function(ideas, view_data){
-    var maximum_ratio_of_highlighted_ideas = 0.2; // float [0;1]
+    var maximum_ratio_of_highlighted_ideas = 1.0; // this is a float and should be in [0;1]. was 0.2
     var should_be_newer_than = null;
+
+    // Rule: Show new labels on ideas created after 3 days before user's last visit, or created after 4 days ago if user's last visit was after yesterday
     if ( Ctx.isUserConnected() ){
       var last_visit = Ctx.getCurrentUser().get('last_visit');
       if ( last_visit ){
@@ -334,10 +336,26 @@ var IdeaList = AssemblPanel.extend({
         }
       }
     }
+
+    // Rule: Never consider as new an idea which has been created before user's first visit (so this also applies to not logged-in visitors)
+    var first_visit = Ctx.getCurrentUser().get('first_visit');
+    if ( first_visit ){
+        first_visit = new Date(first_visit);
+        if ( first_visit ){
+            if ( !should_be_newer_than || should_be_newer_than < first_visit ){
+                should_be_newer_than = first_visit;
+            }
+        }
+    }
     if ( !should_be_newer_than ){
+      return;
+      /* We used to show new labels on ideas less than 1 month old to not logged-in users and to logged-in users who are on their first visit. Now we don't show any new label to not logged-in users, and first visit logged-in users are now handled by previous code block.
       should_be_newer_than = new Date();
       should_be_newer_than.setMonth(should_be_newer_than.getMonth() - 1); // sets to x months before
+      */
     }
+    
+
     console.log("should_be_newer_than: ", should_be_newer_than);
 
     var idea_criterion_value = function(idea){
