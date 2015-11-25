@@ -29,7 +29,9 @@ synthesis
     <td>
       <a href="{{ frontendUrls.append_query_string(
                     frontendUrls.get_post_url(notification.event_source_object()),
-                    **{discriminants.url.SOURCE: discriminants.source.NOTIFICATION}
+                    **{
+                        discriminants.url.SOURCE: discriminants.source.NOTIFICATION
+                      }
                   ) }}">{{ gettext("Comment this synthesis") }}</a>
     </td>
   </tr>
