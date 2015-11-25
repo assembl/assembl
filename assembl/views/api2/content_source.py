@@ -12,29 +12,30 @@ from assembl.auth import (
 from assembl.models import ContentSource
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext
-from . import FORM_HEADER, JSON_HEADER
+from . import JSON_HEADER
 from assembl.tasks.source_reader import wake
 
 
 @view_config(context=InstanceContext, request_method='POST',
              ctx_instance_class=ContentSource, permission=P_READ,
-             header=FORM_HEADER, renderer='json', name="fetch_posts")
+             header=JSON_HEADER, renderer='json', name="fetch_posts")
 def fetch_posts(request):
     ctx = request.context
     csource = ctx._instance
     force_restart = request.params.get('force_restart', False)
     reimport = request.params.get('reimport', False)
+    reprocess = request.params.get('reprocess', False)
     upper_bound = request.params.get('upper_limit', None)
     lower_bound = request.params.get('lower_limit', None)
     try:
         if upper_bound:
-            p1 = parse(upper_bound)
+            _ = parse(upper_bound)
         if lower_bound:
-            p2 = parse(lower_bound)
+            _ = parse(lower_bound)
     except:
         raise HTTPBadRequest("Bad date format")
 
-    if force_restart or reimport or upper_bound or lower_bound:
+    if force_restart or reimport or upper_bound or lower_bound or reprocess:
         # Only discussion admins
         user_id = authenticated_userid(request) or Everyone
         permissions = get_permissions(
@@ -49,11 +50,13 @@ def fetch_posts(request):
                 requested.append('upper_limit')
             if lower_bound:
                 requested.append('lower_limit')
+            if reprocess:
+                requested.append('reprocess')
             raise HTTPUnauthorized("Only discussion administrator\
                                    can "+'and'.join(requested))
 
     wake(csource.id, reimport, force_restart, upper_bound=upper_bound,
-         lower_bound=lower_bound)  # passing the string instead of datetime
+         lower_bound=lower_bound, reprocess=reprocess)
     return {"message": "Source notified",
             "name": csource.name}
 

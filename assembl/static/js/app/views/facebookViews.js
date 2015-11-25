@@ -39,7 +39,11 @@ var messageDefaults = {
   },
   footer: function(post_model) {
     //This SHOULD be shortened using bit.ly
-    var link = Ctx.getPostURL(post_model.get('@id'), {'source': 'share'});  
+    var link = post_model.getRouterUrl({
+      parameters: {
+        'source': 'share'
+      }
+    });  
     return i18n.gettext("Please be aware that comments below will be imported into a discussion found at ") + link;
   }
 }; 
@@ -368,6 +372,7 @@ var _processLogin = function(resp, success, error) {
           patch: true,
           success: function(model, resp, opt) {
             window.FB_TOKEN.setUserToken(model.get('token'), model.get('expiration'));
+            tokens.add(model, {merge:true});  //Find existing model in collection & update fields
             success();
           },
           error: function(model, resp, opt) {
@@ -401,7 +406,7 @@ var _processLogin = function(resp, success, error) {
     })
     .error(function(e){
       // Cannot get the access tokens from db
-      console.error("Failed to create or update access token from backend", e);
+      console.error("Failed to create or update facebook access token from backend", e);
       error();
     });
 };
@@ -956,7 +961,7 @@ var exportPostForm = Marionette.LayoutView.extend({
                       type: 'POST',
                       dataType: 'json',
                       url: model.url() + "/fetch_posts",
-                      contentType: 'application/x-www-form-urlencoded'
+                      contentType: 'application/json'
                     })).then(function(resp){
                       if ( _.has(resp, "message") ) {
                         success();
