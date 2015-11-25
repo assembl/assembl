@@ -20,6 +20,7 @@ var AgentModel = Base.Model.extend({
    */
   //urlRoot: Ctx.getApiUrl('agents/'),
   urlRoot:  Ctx.getApiV2DiscussionUrl() + 'all_users/',
+
   /**
    * Defaults
    * @type {Object}

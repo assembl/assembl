@@ -1,7 +1,10 @@
 'use strict';
 
 var Marionette = require('./shims/marionette.js'),
-    routeManager = require('./routeManager.js');
+    routeManager = require('./routeManager.js'),
+    message = require('./models/message.js'),
+    idea = require('./models/idea.js'),
+    agent = require('./models/agents.js');
 
 var Router = Marionette.AppRouter.extend({
   controller: routeManager,
@@ -29,5 +32,10 @@ var Router = Marionette.AppRouter.extend({
 
 });
 
-module.exports = Router;
+// Monkey patch ensures that shared knowledge is in a single file
+// TODO: improve.
+message.Model.prototype.routerBaseUrl = "posts/";
+idea.Model.prototype.routerBaseUrl = "idea/";
+agent.Model.prototype.routerBaseUrl = "profile/";
 
+module.exports = Router;

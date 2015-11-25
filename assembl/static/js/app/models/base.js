@@ -157,12 +157,10 @@ var BaseModel = Backbone.Model.extend({
   },
 
   /**
-   * Get the base of the Router URL for this class
-   * 2015/11/25 Currently only defined on POST or IDEA
+   * The base of the Router URL for this class. Set in app/router.js.
+   * 2015/11/25 Currently only defined on post, idea and users
    */
-  getRouterBaseUrl: function() {
-    return null;
-  },
+  routerBaseUrl: null,
 
   /**
    * Get the Router URL of an object
@@ -173,15 +171,11 @@ var BaseModel = Backbone.Model.extend({
    * @return {String|null} The fully composed URL of the post/idea
   */
   getRouterUrl: function(options){
-      if (!this.id){
-        return null;
-      }
-      var baseUrl = this.getRouterBaseUrl();
-      if (baseUrl === null) {
+      if (!this.id || this.routerBaseUrl === null) {
         return null;
       }
       var encodedId = encodeURIComponent(this.id),
-          relPath = baseUrl + encodedId,
+          relPath = this.routerBaseUrl + encodedId,
           params = _.has(options, 'parameters') ? options.parameters : {};
 
       if (options){
