@@ -4,6 +4,7 @@ import inspect
 from StringIO import StringIO
 
 from pyramid.settings import asbool
+from urlparse import urlparse
 
 from . import config
 
@@ -64,3 +65,28 @@ def get_global_base_url(require_secure=None, override_port=None):
             portString = (':'+port)
     return '%s://%s%s' % (
         service, config.get('public_hostname'), portString)
+
+
+def is_url_from_same_server(url, discussion=None):
+    if not url:
+        return False
+    if discussion:
+        base = urlparse(discussion.get_base_url())
+    else:
+        # TODO: If future virtual hosting allowed, using this
+        # is very, very bad. Need to get the virtual host
+        # address instead
+        base = urlparse(get_global_base_url())
+    purl = urlparse(url)
+    return base.hostname == purl.hostname and base.port == purl.port
+
+
+def path_qs(url):
+    """Returns all components of url, including qs after hostname:port
+    excluding the dangling "/"
+
+    eg. url := "https://abcd.com:6543/a/b/c?foo=bar&baz=whocares"
+    returns '/a/b/c?foo=bar&baz=whocares'
+    """
+    p = urlparse(url)
+    return p.path + "?" + p.params

@@ -1,16 +1,21 @@
-from urlparse import urljoin
+from urlparse import urljoin, urlparse
 import urllib
 
 from ..models import Discussion
 
 
 URL_DISCRIMINANTS = {
-    'SOURCE': 'source'
+    'SOURCE': 'source',
+    'NEXT': 'next_view'
 }
 
 SOURCE_DISCRIMINANTS = {
     'NOTIFICATION': 'notification',
     'SHARE': 'share'
+}
+
+ATTACHMENT_PURPOSES = {
+    'EMBED_ATTACHMENT': 'EMBED_ATTACHMENT'
 }
 
 
@@ -80,11 +85,17 @@ class FrontendUrls():
         """ TODO:  Give an actual subscription URL """
         return self.getUserNotificationSubscriptionsConfigurationUrl()
 
+    def get_relative_post_url(self, post):
+        return '/posts/' + urllib.quote(post.uri(), '')
+
     def get_post_url(self, post):
-        return self.get_discussion_url() + '/posts/' + urllib.quote(post.uri(), '')
+        return self.get_discussion_url() + self.get_relative_post_url(post)
+
+    def get_relative_idea_url(self, idea):
+        return '/idea/' + urllib.quote(idea.uri(), '')
 
     def get_idea_url(self, idea):
-        return self.get_discussion_url() + '/idea/' + urllib.quote(idea.uri(), '')
+        return self.get_discussion_url() + self.get_relative_idea_url(idea)
 
     def get_discussion_edition_url(self):
         return self.get_discussion_url() + '/edition'
