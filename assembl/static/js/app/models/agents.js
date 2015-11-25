@@ -115,12 +115,25 @@ var AgentModel = Base.Model.extend({
   /**
    * @return A text message designed to replace X in the question "You cannot perform this operation because X"
    */
-  getRolesMissingMessageForPermission: function(permission, discussion) {
+  getRolesMissingMessageForPermission: function(permission, discussion, reroute_relative_url) {
       if (this.hasPermission(permission)) {
         return i18n.gettext('need no additional permissions');
       }
       else if (this.isUnknownUser()) {
-        return i18n.sprintf(i18n.gettext("you must first <a href='%s'>Sign in</a>"), Ctx.getLoginURL());
+        var url;
+        if (reroute_relative_url) {
+          url = Ctx.appendExtraURLParams(
+            Ctx.getLoginURL(),
+            {
+              'next_view': reroute_relative_url
+            }
+          )
+        }
+        else {
+          url = Ctx.getLoginURL();
+        }
+
+        return i18n.sprintf(i18n.gettext("you must first <a href='%s'>Sign in</a>"), url);
       }
       else if (discussion !== undefined) {
         var rolesGrantingPermission = discussion.getRolesForPermission(permission);

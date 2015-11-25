@@ -30,6 +30,8 @@ var Backbone = require('../shims/backbone.js'),
  * reply_message_id:  The id of the message model this replies to
  *  (if any)
  *
+ * reply_message_model: The model of the message; sometimes not given (ex IdeaInSynthesis)
+ * 
  * reply_idea:  The idea object this message comments or
  *  replies to (if any)
  *
@@ -89,6 +91,13 @@ var messageSend = Marionette.LayoutView.extend({
     this.messageList = options.messageList;
     this.msg_in_progress_ctx = options.msg_in_progress_ctx;
     
+    if (options.reply_message_model) {
+      this.reply_message_model = options.reply_message_model;
+    }
+    else {
+      this.reply_message_model = null;
+    }
+
     if(!options.model) {
       this.model = new Messages.Model();
     }
@@ -156,12 +165,16 @@ var messageSend = Marionette.LayoutView.extend({
 
   onRender: function() {
       Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-      Ctx.initTooltips(this.$el);
-
+      Ctx.initTooltips(this.$el)
+;
       if (!Ctx.getCurrentUser().can(Permissions.ADD_POST)) {
         var that = this, collectionManager = new CollectionManager();
         collectionManager.getDiscussionModelPromise().then(function(discussion) {
-          var rolesMissingMessageForPermission = Ctx.getCurrentUser().getRolesMissingMessageForPermission(Permissions.ADD_POST, discussion),
+          var routeUrl = null;
+          if (that.reply_message_model) {
+            routeUrl = that.reply_message_model.getRouterUrl({relative: true});
+          }
+          var rolesMissingMessageForPermission = Ctx.getCurrentUser().getRolesMissingMessageForPermission(Permissions.ADD_POST, discussion, routeUrl),
           messageString,
           warningMessage;
           if ('reply_message_id' in that.options) {

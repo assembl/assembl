@@ -13,7 +13,6 @@ var Marionette = require('../shims/marionette.js'),
     CollectionManager = require('../common/collectionManager.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     $ = require('../shims/jquery.js'),
-    //FacebookViews = require('./facebookViews.js'),
     Promise = require('bluebird'),
     messageExport = require('./messageExportModal.js'),
     AgentViews = require('./agent.js'),
@@ -270,7 +269,12 @@ var MessageView = Marionette.LayoutView.extend({
       bodyFormatClass = "body_format_" + bodyFormat.replace("/", "_");
     }
 
-    var direct_link_relative_url = Ctx.getPostURL(this.model.get('@id'), {'source': 'share'}, {'relative': true}),
+    var direct_link_relative_url = this.model.getRouterUrl({
+      parameters: {
+        'source': 'share'
+      },
+      relative: true
+    }),
         share_link_url = Ctx.appendExtraURLParams("/static/widget/share/index.html",
           [
             {'u': Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)},
@@ -420,6 +424,7 @@ var MessageView = Marionette.LayoutView.extend({
       this.replyView = new MessageSendView({
         allow_setting_subject: false,
         reply_message_id: modelId,
+        reply_message_model: this.model,
         body_help_message: i18n.gettext('Type your response here...'),
         cancel_button_label: null,
         send_button_label: i18n.gettext('Send your reply'),
