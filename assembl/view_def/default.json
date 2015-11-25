@@ -538,7 +538,8 @@
         "expiration": true,
         "token_type": true,
         "object_name": true,
-        "object_fb_id": true
+        "object_fb_id": true,
+        "is_infinite_token": "infinite_token"
     },
     "AbstractVoteSpecification": {
         "widget": true,
