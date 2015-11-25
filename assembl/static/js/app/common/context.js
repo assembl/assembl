@@ -1282,56 +1282,6 @@ Context.prototype = {
     return finalUrl;
   },
 
-  /**
-   * [A central location to generate the URL of a post given an ID]
-   * @param  {[String]} id      [The ID of the post model]
-   * @param  {[Object]} options [Optional. The settings on how the URL should be composed.
-   *                            [{'relative' : true}]
-   *                            'relative' will return a relative url based on the discussion slug
-   *                            default is to return an absolute URL path with discussion slug
-   *                            ]
-   * @param  {[Array]} params  [Query string parameters described in an array of key-value objects]
-   * @return {[String]}         [The fully composed URL of the post]
-   */
-  getPostURL: function(id, params, options){
-    var post = 'posts/',
-        encodedId = encodeURIComponent(id),
-        relPath = post + encodedId;
-    if ((options) && _.has(options, 'relative') && options.relative === true){
-      return this.appendExtraURLParams(
-        this.getRelativeURLFromDiscussionRelativeURL(relPath), params);
-    }
-    else {
-      return this.appendExtraURLParams(
-        this.getAbsoluteURLFromDiscussionRelativeURL(relPath), params);
-    }
-  },
-
-  /**
-   * [A central location to generate the URL of an idea given an ID]
-   * @param  {[String]} id      [The ID of the idea model]
-   * @param  {[Object]} options [Optional. The settings on how the URL should be composed.
-   *                            [{'relative' : true}]
-   *                            'relative' will return a relative url based on the discussion slug
-   *                            default is to return an absolute URL path with discussion slug
-   *                            ]
-   * @param  {[Array]} params  [Query string parameters described in an array of key-value objects]
-   * @return {[String]}         [The fully composed URL of the post]
-   */
-  getIdeaURL: function(id, params, options){
-    var idea = 'idea/',
-        encodedId = encodeURIComponent(id),
-        relPath = idea + encodedId;
-    if ((options) && _.has(options, 'relative') && options.relative === true){
-      return this.appendExtraURLParams(
-        this.getRelativeURLFromDiscussionRelativeURL(relPath), params);
-    }
-    else {
-      return this.appendExtraURLParams(
-        this.getAbsoluteURLFromDiscussionRelativeURL(relPath), params);
-    }
-  },
-
   manageLastCurrentUser: function() {
     var lastCurrentUserId = null,
         connectedUserId = null;

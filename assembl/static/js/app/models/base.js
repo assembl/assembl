@@ -153,7 +153,49 @@ var BaseModel = Backbone.Model.extend({
     }
 
     return resp;
+  },
+
+  /**
+   * Get the Router URL of an object
+   * 2015/11/25 Currently only supports POST or IDEA
+   *
+   * @param {Object} options - optionally pass in options 
+   * @param {boolean} options.relative - Optional. Default URL is absolute. Can force to be relative by setting passing {'relative' : true}
+   * @param {Object} options.parameters - Optional. Can pass in query string as an object. Eg. {'foo': 'bar', 'baz': 'cookie'}
+   * @return {String|null} The fully composed URL of the post/idea
+  */
+  getRouterUrl: function(options){
+    var base = this.getBaseType();
+    if (base === Types.POST || base === Types.IDEA) {
+      if (!this.id){
+        return null;
+      }
+      var post = base == Types.POST ? 'posts/' : 'ideas/',
+          encodedId = encodeURIComponent(this.id),
+          relPath = post + encodedId,
+          params = _.has(options, 'parameters') ? options.parameters : {};
+
+      if (options){
+        if (_.has(options, 'relative') && options.relative === true){
+          return Ctx.appendExtraURLParams(
+            Ctx.getRelativeURLFromDiscussionRelativeURL(relPath),
+            params
+          );
+        }
+      }
+
+      return Ctx.appendExtraURLParams(
+        Ctx.getAbsoluteURLFromDiscussionRelativeURL(relPath),
+        params
+      );
+
+    } 
+
+    else {
+      return null; 
+    }
   }
+
 });
 
 /**
