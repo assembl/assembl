@@ -14,6 +14,7 @@ from assembl.models.post import Post
 from assembl.models.idea import Idea
 from assembl.auth import P_READ, P_ADD_EXTRACT
 from assembl.lib.locale import to_posix_format, ensure_locale_has_country
+from assembl.lib.utils import is_url_from_same_server, path_qs
 from ...models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
@@ -131,8 +132,27 @@ def home_view(request):
     if not canRead and user_id == Everyone:
         # User isn't logged-in and discussion isn't public:
         # redirect to login page
-        login_url = request.route_url(
-            'contextual_login', discussion_slug=discussion.slug)
+        # need to pass the route to go to *after* login as well
+
+        # With regards to a next_view, if explicitly stated, then
+        # that is the next view. If not stated, the referer takes
+        # precedence. In case of failure, login redirects to the
+        # discussion which is its context.
+        next_view = request.params.get('next_view', None)
+        if not next_view and discussion:
+            # If referred here from a post url, want to be able to
+            # send the user back. Usually, Assembl will send the user
+            # here to login on private discussions.
+            referrer = request.url
+            next_view = path_qs(referrer)
+
+        if next_view:
+            login_url = request.route_url("contextual_login",
+                                          discussion_slug=discussion.slug,
+                                          _query={"next_view": next_view})
+        else:
+            login_url = request.route_url(
+                'contextual_login', discussion_slug=discussion.slug)
         return HTTPSeeOther(login_url)
     elif not canRead:
         # User is logged-in but doesn't have access to the discussion

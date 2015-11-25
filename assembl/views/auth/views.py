@@ -73,14 +73,13 @@ def get_login_context(request, force_show_providers=False):
         for provider in hide_providers:
             providers.remove(provider)
     return dict(get_default_context(request),
-        login_url=login_url,
-        slug_prefix=p_slug,
-        providers=providers,
-        hide_registration=hide_registration,
-        google_consumer_key=request.registry.settings.get(
-            'google.consumer_key', ''),
-        next_view=handle_next_view(request)
-    )
+                login_url=login_url,
+                slug_prefix=p_slug,
+                providers=providers,
+                hide_registration=hide_registration,
+                google_consumer_key=request.registry.settings.get(
+                    'google.consumer_key', ''),
+                next_view=handle_next_view(request))
 
 def _get_route_from_path(request, path):
     from pyramid.urldispatch import IRoutesMapper
