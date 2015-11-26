@@ -202,11 +202,31 @@
   }
 }
 
+/* CSS hack: targets Firefox >= 25 (source: browserhacks.com) */
+@supports (-moz-appearance:meterbar) and (background-attachment:local) {
+  .groupBody .groupPanel .panelContents {
+    position: absolute;
+  }
+}
+
+/* CSS hack: targets Chrome *, Safari *, Opera >= 14, Android * (source: browserhacks.com) */
+.groupBody .groupPanel .panelContents:not(*:root) {
+  position: absolute;
+}
+
+/* CSS hack: targets Internet Explorer >= 10 (source: browserhacks.com) */
+_:-ms-input-placeholder, :root .groupBody .groupPanel .panelContents {
+  position: absolute;
+}
 
 .groupBody .groupPanel .panelContents {
-  position: absolute;
+  position: relative; /* was "position: absolute;" for all browsers but there was a display bug with Firefox 24.8 */
   width: 100%;
   @include calc(height, "100vh - #{$theme_header_height} - #{$group_header_height}"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
+}
+
+.groupBody .groupPanel.minimizing .panelContents, .groupBody .groupPanel.unminimizing .panelContents {
+  position: absolute; /* we temporary set position to absolute during animation, so the size animation does not get blocked */
 }
 
 .groupBody.editable .groupPanel .panelContents {
@@ -214,7 +234,7 @@
 }
 
 .groupBody .groupPanel header ~ .panelContents {
-  //@include calc(height, "100vh - $theme_header_height - #{$group_header_height}");  need hack safari
+  //@include calc(height, "100vh - #{$theme_header_height} - #{$group_header_height}"); /* need hack safari */
   @include calc(height, "100% - #{$theme_header_height} - #{$group_header_height}"); /* retain the height of the header */
 }
 

@@ -80,7 +80,7 @@
   table-layout: auto;
 
   .groupPanel {
-    display: table-cell;
+    display: table-cell; /* Why is it "display: table-cell;" since https://github.com/ImaginationForPeople/assembl/commit/8527306e966e5730a0d2fc462cad5fd7f401edee and why is his parent not "display: table;" ? */
     height: 100%;
     vertical-align: top;
     .panelContentsWhenMinimized {

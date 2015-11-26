@@ -109,7 +109,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
     if (this.model.get('hidden')) {
       this.$el.hide();
     } else {
-      this.$el.css('display', 'table-cell');
+      this.$el.css('display', 'table-cell'); /* Set it back to its original value, which is "display: table-cell" in _groupContainer.scss . But why is it so? */
     }
   },
   setGridSize: function(gridSize) {
@@ -349,6 +349,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
     var that = this;
     var animationDuration = 1000;
     var panelContents = this.$el.children(".panelContents");
+    var initialWidth = "100%";
 
     if (this.model.get('minimized')) { // execute minimization animation
 
@@ -360,7 +361,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
 
       var target = AssemblPanel.prototype.minimized_size;
       if (skip_animation) {
-        panelContents.css("width", "100%");
+        panelContents.css("width", initialWidth);
         panelContents.hide();
         this.$el.find("header span.panel-header-title").hide();
         this.$el.children(".panelContentsWhenMinimized").show();
@@ -377,7 +378,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
 
         panelContents.fadeOut(animationDuration * 0.9, function() {
           // once the animation is over, set its width back to 100%, so that it remains adaptative
-          panelContents.css("width", "100%");
+          panelContents.css("width", initialWidth);
         });
 
         this.$el.find("header span.panel-header-title").fadeOut(animationDuration * 0.4); // hide header title rapidly, so we avoid unwanted line feeds for header icons during resize
@@ -423,7 +424,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
         this._minimizedStateButton
             .attr('data-original-title', i18n.gettext('Minimize panel'));
 
-        panelContents.css("width", "100%");
+        panelContents.css("width", initialWidth);
 
         this.$el.find("header span.panel-header-title").show();
         this.$el.children(".panelContentsWhenMinimized").hide();
@@ -450,7 +451,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
           //panelContents.delay(animationDuration*0.3).fadeIn(animationDuration*0.7, function(){
           panelContents.delay(animationDuration * 0.2).fadeIn(animationDuration * 0.8, function() {
             // once the animation is over, set its width back to 100%, so that it remains adaptative
-            panelContents.css("width", "100%");
+            panelContents.css("width", initialWidth);
           });
 
           this.$el.find("header span.panel-header-title").delay(animationDuration * 0.5).fadeIn(animationDuration * 0.5);
