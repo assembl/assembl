@@ -1,6 +1,6 @@
 from abc import abstractproperty, abstractmethod
 from datetime import datetime
-import yajl as json
+import simplejson as json
 import math
 from collections import defaultdict
 

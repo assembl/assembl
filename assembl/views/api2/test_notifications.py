@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import yajl as json
+import simplejson as json
 
 from assembl.models import (
     NotificationSubscription,

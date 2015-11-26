@@ -1,4 +1,4 @@
-from yajl import loads
+from simplejson import loads
 
 from pyramid.view import view_config
 from pyramid.security import authenticated_userid, Everyone

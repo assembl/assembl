@@ -13,7 +13,7 @@ from sqlalchemy import (
     DateTime,
     Binary
 )
-import yajl as json
+import simplejson as json
 # from dateutil.parser import parse as parse_datetime
 from dateutil.tz import tzutc
 from sqlalchemy.orm import (

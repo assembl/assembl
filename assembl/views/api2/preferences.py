@@ -1,4 +1,4 @@
-from yajl import dumps, loads
+from simplejson import dumps, loads
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import (

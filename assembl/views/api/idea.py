@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-import yajl as json
+import simplejson as json
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from pyramid.security import authenticated_userid, Everyone

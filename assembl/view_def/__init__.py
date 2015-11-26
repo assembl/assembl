@@ -1,7 +1,7 @@
 import traceback
 from os.path import exists, join, dirname
 
-import yajl
+import simplejson
 from pyramid.settings import asbool
 
 _def_cache = {}
@@ -40,7 +40,7 @@ def get_view_def(name):
     fname = join(dirname(__file__), name+".json")
     if exists(fname):
         try:
-            json = yajl.load(open(fname))
+            json = simplejson.load(open(fname))
             if _use_cache:
                 _def_cache[name] = json
             return json

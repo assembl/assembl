@@ -1,4 +1,4 @@
-import yajl as json
+import simplejson as json
 
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config

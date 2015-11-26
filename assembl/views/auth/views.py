@@ -1,5 +1,5 @@
 from datetime import datetime
-import yajl as json
+import simplejson as json
 from urllib import quote
 from smtplib import SMTPRecipientsRefused
 import logging

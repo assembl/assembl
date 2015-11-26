@@ -6,7 +6,7 @@ from pyramid.httpexceptions import (
 from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyramid.settings import asbool
-from yajl import dumps
+from simplejson import dumps
 
 from ..traversal import (CollectionContext, InstanceContext)
 from assembl.auth import (

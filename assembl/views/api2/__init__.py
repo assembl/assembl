@@ -46,7 +46,7 @@ from pyramid.httpexceptions import (
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.response import Response
 from pyramid.settings import asbool
-from yajl import dumps
+from simplejson import dumps
 
 from assembl.lib.sqla import ObjectNotUniqueError
 from ..traversal import (

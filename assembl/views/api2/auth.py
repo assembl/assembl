@@ -1,4 +1,4 @@
-from yajl import dumps, loads
+from simplejson import dumps, loads
 from string import Template
 
 from pyramid.response import Response

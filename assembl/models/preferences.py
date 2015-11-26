@@ -1,7 +1,7 @@
 from itertools import chain
 from collections import MutableMapping
 
-import yajl as json
+import simplejson as json
 from sqlalchemy import (
     Column,
     Integer,

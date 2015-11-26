@@ -5,7 +5,7 @@ from os import makedirs
 from os.path import exists, dirname
 import ConfigParser
 
-import yajl as json
+import simplejson as json
 import zmq
 from zmq.eventloop import ioloop
 from zmq.eventloop import zmqstream

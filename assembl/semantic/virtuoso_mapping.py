@@ -10,7 +10,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.properties import RelationshipProperty
 from rdflib import Graph, ConjunctiveGraph, URIRef
-import yajl as json
+import simplejson as json
 
 from . import (context_url, ontology_dir, local_context_loc)
 from ..lib.config import get_config
