@@ -3,13 +3,16 @@
 from __future__ import absolute_import
 
 from datetime import date, datetime
-from json import dumps, JSONEncoder
+from simplejson import dumps, JSONEncoder
 
 
 class DateJSONEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (date, datetime)):
-            return obj.isoformat()
+            if isinstance(obj, datetime) and obj.tzinfo:
+                from pytz import UTC
+                obj = obj.astimezone(UTC).replace(tzinfo=None)
+            return obj.isoformat() + "Z"
         else:
             return super(DateJSONEncoder, self).default(obj)
 

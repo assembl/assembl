@@ -402,15 +402,8 @@ def get_time_series_analytics(request):
                 pass
         transaction.commit()
         intervals_table.drop()
-        import datetime
-        class MyEncoder(json.JSONEncoder):
-            def default(self, obj):
-                if isinstance(obj, datetime.datetime):
-                    return obj.isoformat()
-                return json.JSONEncoder.default(self, obj)
-
-        return Response(json.dumps(results, cls=MyEncoder), content_type='application/json')
-
+        from assembl.lib.json import DateJSONEncoder
+        return Response(json.dumps(results, cls=DateJSONEncoder), content_type='application/json')
 
 
 @view_config(context=InstanceContext, name="contribution_count",
