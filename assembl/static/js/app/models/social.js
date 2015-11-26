@@ -66,20 +66,6 @@ var FacebookAccessToken = Base.Model.extend({
         '@type': null
     },
 
-    /**
-     * Parse the incoming json data from the server and check if the
-     * expiration time of the token is null. If so, set it. This way,
-     * an empty token object with expiration: null will not be considered
-     * an infinite token
-     */
-    parse: function(response, options){
-        var e = response["expiration"];
-        if ( !e || e === 'null'){
-            response["expiration"] = "infinite";
-        }
-        return response
-    },
-
     isExpired: function(){
         var t = new tokenTimeManager().processTimeToUTC(this.get('expiration'));
         var d = new Moment(t).utc();
@@ -92,7 +78,8 @@ var FacebookAccessToken = Base.Model.extend({
     },
 
     isInfiniteToken: function(){
-        return this.get('expiration') === 'infinite';
+        //Backend will return a property, is_infinite_token
+        return this.get('is_infinite_token') === false;
     },
 
     isUserToken: function(){
