@@ -32,13 +32,26 @@ var Source = Base.Model.extend({
     'is_content_sink': false // Used by API V2 as flag for side-effectful POST creation only.
     // DO NOT use for any other scenario than creating facebook content_sinks
   },
+  fetchUrl: function(){
+    return this.url() + '/fetch_posts';
+  },
   doReimport: function() {
-    var url = this.url() + '/fetch_posts';
-    return $.post(url, {reimport: true});
+    return $.ajax(
+      this.fetchUrl(), {
+        method: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: {reimport: true}
+    });
   },
   doReprocess: function() {
-    var url = this.url() + '/fetch_posts';
-    return $.post(url, {reprocess: true});
+    return $.ajax(
+      this.fetchUrl(), {
+        method: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: {reprocess: true}
+    });
   }
 });
 

@@ -1,11 +1,13 @@
 var Marionette = require('../../shims/marionette.js'),
     $ = require('../../shims/jquery.js'),
+    _ = require('../../shims/underscore.js'),
     i18n = require('../../utils/i18n.js'),
     Types = require('../../utils/types.js'),
     Ctx = require('../../common/context.js'),
+    Growl = require('../../utils/growl.js'),
     Source = require('../../models/sources.js'),
     CollectionManager = require('../../common/collectionManager.js'),
-    EmailSourceEditView = require("./emailSettings.js"),
+    SourceViews = require("./sourceEditViews.js"),
     FacebookSourceEditView = require("../facebookViews.js");
 
 function getSourceEditView(model_type) {
@@ -14,7 +16,7 @@ function getSourceEditView(model_type) {
     case Types.IMAPMAILBOX:
     case Types.MAILING_LIST:
     case Types.ABSTRACT_FILESYSTEM_MAILBOX:
-      return EmailSourceEditView;
+      return SourceViews.EmailSource;
     case Types.FACEBOOK_GENERIC_SOURCE:
     case Types.FACEBOOK_GROUP_SOURCE:
     case Types.FACEBOOK_GROUP_SOURCE_FROM_USER:
@@ -33,7 +35,9 @@ function getSourceEditView(model_type) {
 var ReadSource = Marionette.ItemView.extend({
     template: '#tmpl-adminDiscussionSettingsGeneralSourceRead',
     ui: {
-        manualStart: '.js_manualStart'
+        manualStart: '.js_manualStart',
+        reimport: '.js_reimport',
+        reprocess: '.js_reprocess',
     },
 
     modelEvents: {
@@ -41,7 +45,37 @@ var ReadSource = Marionette.ItemView.extend({
     },
 
     events: {
-        'click @ui.manualStart': 'manualStart'
+        'click @ui.manualStart': 'manualStart',
+        'click @ui.reimport': 'reimportSource',
+        'click @ui.reprocess': 'reprocessSource'
+    },
+
+    reimportSource: function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        return Promise.resolve(this.model.doReimport()).then(function(resp) {
+            if (_.has(resp, 'error')){
+                Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext("There was a reimport error!"));
+                console.error("Source " + this.model.name + " failed to reimport due to an internal server problem with response ", resp);
+            }
+            Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext('Reimport has begun! It can take up to 15 minutes to complete.'));
+        }).catch(function(e) {
+            Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext('Reimport failed.'));
+        });
+    },
+
+    reprocessSource: function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        return Promise.resolve(this.model.doReprocess()).then(function(resp) {
+            if (_.has(resp, 'error')){
+                Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext("There was a reprocess error!"));
+                console.error("Source " + this.model.name + " failed to reprocess due to an internal server problem with response", resp);
+            }
+            Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext('Reprocess has begun! It can take up to 15 minutes to complete.'));
+        }).catch(function(e) {
+            Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext('Reimport failed'));
+        });
     },
 
     manualStart: function(evt){
