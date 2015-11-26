@@ -1114,6 +1114,17 @@ Context.prototype = {
     var that = this,
         popover = $("#popover-oembed");
 
+    var timeoutIdHidePopover = null;
+
+    var hidePopoverGenerator = function(timer){
+      console.log("hidePopoverGenerator()");
+      return function(evt){
+        timeoutIdHidePopover = setTimeout(function() {
+          popover.addClass('hidden');
+        }, timer);
+      };
+    };
+
     var triggerHover = function(evt) {
       var LoaderView = require('../views/loader.js'),
       loader = new LoaderView(),
@@ -1155,15 +1166,10 @@ Context.prototype = {
         }
       });
 
-      var timeoutIdHidePopover = null;
 
       popover.unbind("mouseleave"); // this avoids handler accumulation (each call to the following popover.mouseleave() adds a handler)
-      popover.mouseleave(function(evt) {
-        var that = this;
-        timeoutIdHidePopover = setTimeout(function() {
-          $(that).addClass('hidden');
-        }, 10);
-      });
+
+      popover.mouseleave(hidePopoverGenerator(10));
 
       popover.unbind("mouseenter"); // this avoids handler accumulation (each call to the following popover.mouseenter() adds a handler)
       popover.mouseenter(function(evt) {
@@ -1171,15 +1177,21 @@ Context.prototype = {
       });
     };
 
-    el.find("a").mouseenter(function(evt) {
-      var timeoutIdShowPopover = null;
-      var that = this;
-      timeoutIdShowPopover = window.setTimeout(function() {
-        triggerHover.call(that, evt);
-      }, 800); // => this is how much time the mouse has to stay on the link in order to trigger the popover
-      $(this).mouseout(function() {
-        window.clearTimeout(timeoutIdShowPopover);
+    el.find("a").each(function(index){
+      $(this).mouseenter(function(evt) {
+        if ( timeoutIdHidePopover ){
+          window.clearTimeout(timeoutIdHidePopover);
+        }
+        var timeoutIdShowPopover = null;
+        var that = this;
+        timeoutIdShowPopover = window.setTimeout(function() {
+          triggerHover.call(that, evt);
+        }, 800); // => this is how much time the mouse has to stay on the link in order to trigger the popover
+        $(this).mouseout(function() {
+          window.clearTimeout(timeoutIdShowPopover);
+        });
       });
+      $(this).mouseleave(hidePopoverGenerator(500));
     });
 
   },
