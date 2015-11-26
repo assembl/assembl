@@ -5,7 +5,8 @@ var Marionette = require('../../shims/marionette.js'),
     Agents = require('../../models/agents.js'),
     i18n = require('../../utils/i18n.js'),
     UserNavigationMenu = require('./userNavigationMenu.js'),
-    Ctx = require('../../common/context.js');
+    Ctx = require('../../common/context.js'),
+    Growl = require('../../utils/growl.js');
 
 var profile = Marionette.LayoutView.extend({
   template: '#tmpl-userProfile',
@@ -54,26 +55,10 @@ var profile = Marionette.LayoutView.extend({
 
     this.model.save(null, {
       success: function(model, resp) {
-        $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
-          ele: 'body',
-          type: 'success',
-          offset: {from: 'bottom', amount:20},
-          align: 'left',
-          delay: 4000,
-          allow_dismiss: true,
-          stackup_spacing: 10
-        });
+        Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext('Your settings were saved!'));
       },
       error: function(model, resp) {
-        $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
-          ele: 'body',
-          type: 'error',
-          offset: {from: 'bottom', amount:20},
-          align: 'left',
-          delay: 4000,
-          allow_dismiss: true,
-          stackup_spacing: 10
-        });
+        Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext('Your settings fail to update.'));
       }
     })
   },

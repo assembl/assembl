@@ -5,7 +5,8 @@ var Marionette = require('../../shims/marionette.js'),
     i18n = require('../../utils/i18n.js'),
     AdminNavigationMenu = require('./adminNavigationMenu.js'),
     Promise = require('bluebird'),
-    Ctx = require('../../common/context.js');
+    Ctx = require('../../common/context.js'),
+    Growl = require('../../utils/growl.js');
 
 var adminDiscussionPreferences = Marionette.LayoutView.extend({
   template: '#tmpl-adminDiscussionPreferences',
@@ -71,15 +72,7 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
       }
     });
     Promise.all(promises).then(function(res){
-      $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
-        ele: 'body',
-        type: 'success',
-        offset: {from: 'bottom', amount:20},
-        align: 'left',
-        delay: 4000,
-        allow_dismiss: true,
-        stackup_spacing: 10
-      });
+      Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext("Your settings were saved!"));
     }).catch(function(e) {
         console.error(e);
     });

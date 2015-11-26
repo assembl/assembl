@@ -5,7 +5,8 @@ var Marionette = require('../../shims/marionette.js'),
     i18n = require('../../utils/i18n.js'),
     UserNavigationMenu = require('./userNavigationMenu.js'),
     Promise = require('bluebird'),
-    Ctx = require('../../common/context.js');
+    Ctx = require('../../common/context.js'),
+    Growl = require('../../utils/growl.js');
 
 var discussionPreferences = Marionette.LayoutView.extend({
   template: '#tmpl-userDiscussionPreferences',
@@ -62,17 +63,10 @@ var discussionPreferences = Marionette.LayoutView.extend({
         var promise = that.getSaveUserPreferencePromise(preferenceKey, preferenceValue);
         promise.then(function(res){
             console.log("settings successfully saved! => ", res);
-            $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
-              ele: 'body',
-              type: 'success',
-              offset: {from: 'bottom', amount:20},
-              align: 'left',
-              delay: 4000,
-              allow_dismiss: true,
-              stackup_spacing: 10
-            });
+            Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext('Your settings were saved!'));
         }).catch(function(e) {
             console.error(e);
+            Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext('Failed to save your settings.'));
         });
     });
   },

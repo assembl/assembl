@@ -6,7 +6,8 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js'),
     Agents = require('../../models/agents.js'),
     UserNavigationMenu = require('./userNavigationMenu.js'),
-    i18n = require('../../utils/i18n.js');
+    i18n = require('../../utils/i18n.js'),
+    Growl = require('../../utils/growl.js');
 
 var email = Marionette.ItemView.extend({
   template:'#tmpl-associateAccount',
@@ -112,31 +113,12 @@ var userAccount =  Marionette.ItemView.extend({
 
     this.model.save(null, {
       success: function(model, resp) {
-
-        $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
-          ele: 'body',
-          type: 'success',
-          offset: {from: 'bottom', amount:20},
-          align: 'left',
-          delay: 4000,
-          allow_dismiss: true,
-          stackup_spacing: 10
-        });
+        Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext("Your settings were saved!"));
       },
       error: function(model, resp) {
-
-        $.bootstrapGrowl(i18n.gettext('Your settings fail to update'), {
-          ele: 'body',
-          type: 'error',
-          offset: {from: 'bottom', amount:20},
-          align: 'left',
-          delay: 4000,
-          allow_dismiss: true,
-          stackup_spacing: 10
-        });
+        Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext("Your settings fail to update."));
       }
     });
-
   }
 });
 
@@ -194,28 +176,12 @@ var account = Marionette.LayoutView.extend({
         emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (!email) {
-      $.bootstrapGrowl(i18n.gettext("Empty email"), {
-            ele: 'body',
-            type: 'error',
-            offset: {from: 'bottom', amount:20},
-            align: 'left',
-            delay: 4000,
-            allow_dismiss: true,
-            stackup_spacing: 10
-          });
+      Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext("Empty email"));
       return;
     }
 
     if (!emailRegex.test(email)) {
-      $.bootstrapGrowl(i18n.gettext("Invalid email"), {
-            ele: 'body',
-            type: 'error',
-            offset: {from: 'bottom', amount:20},
-            align: 'left',
-            delay: 4000,
-            allow_dismiss: true,
-            stackup_spacing: 10
-          });
+      Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext("Invalid email"));
       return;
     }
 
@@ -227,15 +193,7 @@ var account = Marionette.LayoutView.extend({
     emailModel.save(null, {
       success: function() {
         that.emailCollection.fetch();
-        $.bootstrapGrowl(i18n.gettext('Your settings were saved'), {
-          ele: 'body',
-          type: 'success',
-          offset: {from: 'bottom', amount:20},
-          align: 'left',
-          delay: 4000,
-          allow_dismiss: true,
-          stackup_spacing: 10
-        });
+        Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext("Your settings were saved"));
       },
       error: function(model, resp) {
         resp.handled = true;
@@ -243,16 +201,7 @@ var account = Marionette.LayoutView.extend({
         if (message === null) {
           message = i18n.gettext('Your settings fail to update');
         }
-
-        $.bootstrapGrowl(message, {
-          ele: 'body',
-          type: 'error',
-          offset: {from: 'bottom', amount:20},
-          align: 'left',
-          delay: 4000,
-          allow_dismiss: true,
-          stackup_spacing: 10
-        });
+        Growl.showBottomGrowl(Growl.GrowlReason.ERROR, message);
       }
     })
 
