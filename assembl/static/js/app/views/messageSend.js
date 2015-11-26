@@ -165,8 +165,7 @@ var messageSend = Marionette.LayoutView.extend({
 
   onRender: function() {
       Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-      Ctx.initTooltips(this.$el)
-;
+      Ctx.initTooltips(this.$el);
       if (!Ctx.getCurrentUser().can(Permissions.ADD_POST)) {
         var that = this, collectionManager = new CollectionManager();
         collectionManager.getDiscussionModelPromise().then(function(discussion) {
