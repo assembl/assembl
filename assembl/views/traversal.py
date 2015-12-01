@@ -274,11 +274,10 @@ class InstanceContext(TraversalContext):
             return self._instance.__acl__
         if getattr(self._instance, 'discussion', None):
             return self._instance.discussion.__acl__
-        if getattr(self._instance, 'get_discussion_id', None):
-            discussion_id = self._instance.get_discussion_id()
-            if discussion_id:
-                from assembl.models import Discussion
-                return Discussion.get(discussion_id).__acl__
+        discussion_id = self.get_discussion_id()
+        if discussion_id:
+            from assembl.models import Discussion
+            return Discussion.get(discussion_id).__acl__
         return self.__parent__.__acl__
 
     def __getitem__(self, key):

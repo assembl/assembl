@@ -100,8 +100,9 @@ def discussion_from_request(request):
             return discussion
     if getattr(request, "context", None) and isinstance(
             request.context, TraversalContext):
-        if getattr(request.context, 'get_instance_of_class', None) is not None:
-            return request.context.get_instance_of_class(Discussion)
+        discussion_id = request.context.get_discussion_id()
+        if discussion_id:
+            return Discussion.get(discussion_id)
 
 
 def get_current_discussion():
