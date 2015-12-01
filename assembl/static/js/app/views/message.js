@@ -145,7 +145,8 @@ var MessageView = Marionette.LayoutView.extend({
       toggleExtracts: ".js_message-toggle-extracts",
       moderationOptionsButton: ".js_message-moderation-options",
       messageReplyBox: ".js_messageReplyBoxRegion",
-      likedLink: ".js_likeButton",
+      likeLink: ".js_likeButton",
+      shareLink: ".js_shareButton",
       likeCounter: ".js_likeCount",
       avatar: ".js_avatarContainer",
       name: ".js_nameContainer",
@@ -171,8 +172,8 @@ var MessageView = Marionette.LayoutView.extend({
     'click .js_readMore': 'onMessageTitleClick',
     'click .js_readLess': 'onMessageTitleClick',
     'click .message-hoistbtn': 'onMessageHoistClick',
-    'click .js_likeButton': 'onClickLiked',
-    'click .js_shareButton': 'onClickShare',
+    'click @ui.likeLink': 'onClickLike',
+    'click @ui.shareLink': 'onClickShare',
     'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
     'click @ui.jumpToMessageInThreadButton': 'onMessageJumpToMessageInThreadClick',
     'click @ui.jumpToMessageInReverseChronologicalButton': 'onMessageJumpToMessageInReverseChronologicalClick',
@@ -608,7 +609,7 @@ var MessageView = Marionette.LayoutView.extend({
     return;
   },
 
-  onClickLiked: function(e) {
+  onClickLike: function(e) {
     var that = this,
     liked_uri = this.model.get('liked'),
     analytics = Analytics.getInstance();
