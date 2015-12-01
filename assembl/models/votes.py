@@ -16,7 +16,7 @@ from .idea import Idea
 from .auth import User
 from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
 from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS)
+from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS, QUADNAMES)
 from ..views.traversal import AbstractCollectionDefinition
 
 
@@ -445,9 +445,19 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
     criterion_id = Column(
         Integer,
         ForeignKey(Idea.id),  # ondelete="SET NULL", onupdate="CASCADE"), WIP
-        nullable=True,
-        info={'rdf': QuadMapPatternS(None, VOTE.voting_criterion)}
+        nullable=True
     )
+
+    @classmethod
+    def special_quad_patterns(cls, alias_maker, discussion_id):
+        return [
+            QuadMapPatternS(
+                cls.iri_class().apply(cls.id),
+                VOTE.voting_criterion,
+                Idea.iri_class().apply(cls.idea_id),
+                name=QUADNAMES.voting_criterion,
+                conditions=(cls.idea_id != None,)),
+        ]
 
     # This dies and becomes indirect through vote_spec
     criterion_ts = relationship(
