@@ -44,6 +44,8 @@
         "agent_profile": true,
         "first_visit": true,
         "last_visit": true,
+        "first_subscribed": true,
+        "last_unsubscribed": true,
         "user_created_on_this_discussion": true
     },
     "Action": {
