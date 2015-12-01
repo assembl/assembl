@@ -9,8 +9,18 @@ var Marionette = require('../../shims/marionette.js'),
 var EmailSourceEditView = SourceViewBase.extend({
   template: '#tmpl-emailSource',
 
-  fetchValue: function(){
-    return 
+  fetchValues: function(){
+    return {
+      name: this.$('#name').val(),
+      admin_sender: this.$('#admin_sender').val(),
+      post_email_address: this.$('#post_email_address').val(),
+      host: this.$('#host').val(),
+      use_ssl: this.$('#use_ssl:checked').val(),
+      folder: this.$('#folder').val(),
+      port: parseInt(this.$('#port').val()),
+      username: this.$('#username').val(),
+      password: this.$('#password').val()
+    }
   }
 
 });

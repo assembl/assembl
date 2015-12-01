@@ -22,9 +22,9 @@ var defaultGrowlSettings = {
     stackup_spacing: 10
 };
 
-var showBottomGrowl = function(grow_reason, msg){
-    $.bootstrapGrowl(msg, _.extend(defaultGrowlSettings, {
-        type: growl_reason
+var showBottomGrowl = function(growl_reason, msg){
+  $.bootstrapGrowl(msg, _.extend(defaultGrowlSettings, {
+    type: growl_reason
     }));
 };
 
