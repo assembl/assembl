@@ -91,6 +91,7 @@ var MessageList = AssemblPanel.extend({
 
       this.expertViewIsAvailable = !Ctx.getCurrentUser().isUnknownUser(); // TODO: enable it also for logged out visitors (but for this we need to disable user-related filters, like read)
       this.isUsingExpertView = (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT); // TODO?: have a dedicated flag
+      this.annotatorIsEnabled = Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT);
 
       this.setViewStyle(this.getViewStyleDefById(this.storedMessageListConfig.viewStyleId));
       this.defaultMessageStyle = Ctx.getMessageViewStyleDefById(this.storedMessageListConfig.messageStyleId) || Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY;
@@ -112,17 +113,18 @@ var MessageList = AssemblPanel.extend({
 
       );
 
-      collectionManager.getAllExtractsCollectionPromise()
-          .then(function(allExtractsCollection) {
-            if(!that.isViewDestroyed()) {
-              that.listenToOnce(allExtractsCollection, 'add remove reset', function(eventName) {
-                // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
-                that.initAnnotator();
-              });
+      if ( this.annotatorIsEnabled ){
+        collectionManager.getAllExtractsCollectionPromise()
+            .then(function(allExtractsCollection) {
+              if(!that.isViewDestroyed()) {
+                that.listenToOnce(allExtractsCollection, 'add remove reset', function(eventName) {
+                  // console.log("about to call initAnnotator because allExtractsCollection was updated with:", eventName);
+                  that.initAnnotator();
+                });
+              }
             }
-          }
-
-      );
+        );
+      }
 
       if(!this.isViewDestroyed()) {
         //Yes, it IS possible the view is already destroyed in initialize, so we check
@@ -964,8 +966,12 @@ var MessageList = AssemblPanel.extend({
    * Should be called by a messageview anytime it has annotations and has
    * rendered a view that shows annotations.
    * This method is redefined in initialize() as a throttled version of itself.
+   * Each fully-displayed message calls explicitly this method (in message::onRender()). (TODO?: Use events instead)
    */
   requestAnnotatorRefresh: function() {
+    if ( !this.annotatorIsEnabled ){
+      return;
+    }
     if (this.annotatorRefreshSuspended === true) {
       this.annotatorRefreshRequested = true;
     }
