@@ -55,6 +55,7 @@ var MessageListHeader = Marionette.ItemView.extend({
     viewStyleDropdown: ".js_messageListViewStyle-dropdown",
     defaultMessageViewDropdown: ".js_defaultMessageView-dropdown",
     userThreadedViewButton: '.messageListViewStyleUserThreaded', // FIXME: this seems to be not used => remove?
+    userRecentlyActiveThreadsViewButton: '.js_messageListViewStyleUserRecentlyActiveThreads', 
     userActivityFeedViewButton: '.js_messageListViewStyleUserActivityFeed',
     userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew',
     filtersDropdown: '.js_filters-dropdown'
@@ -322,16 +323,25 @@ var MessageListHeader = Marionette.ItemView.extend({
       this.ui.userHighlightNewViewButton.removeClass('selected');
       this.ui.userActivityFeedViewButton.removeClass('selected');
       this.ui.userThreadedViewButton.addClass('selected');
+      this.ui.userRecentlyActiveThreadsViewButton.removeClass('selected');
     }
     else if (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES) {
       this.ui.userHighlightNewViewButton.addClass('selected');
       this.ui.userActivityFeedViewButton.removeClass('selected');
       this.ui.userThreadedViewButton.removeClass('selected');
+      this.ui.userRecentlyActiveThreadsViewButton.removeClass('selected');
     }
     else if (this.currentViewStyle == this.ViewStyles.REVERSE_CHRONOLOGICAL) {
       this.ui.userHighlightNewViewButton.removeClass('selected');
       this.ui.userActivityFeedViewButton.addClass('selected');
       this.ui.userThreadedViewButton.removeClass('selected');
+      this.ui.userRecentlyActiveThreadsViewButton.removeClass('selected');
+    }
+    else if (this.currentViewStyle == this.ViewStyles.RECENTLY_ACTIVE_THREADS) {
+      this.ui.userHighlightNewViewButton.removeClass('selected');
+      this.ui.userActivityFeedViewButton.removeClass('selected');
+      this.ui.userThreadedViewButton.removeClass('selected');
+      this.ui.userRecentlyActiveThreadsViewButton.addClass('selected');
     }
     else {
       console.log("This viewstyle is unknown in user mode:", this.currentViewStyle);
@@ -340,6 +350,7 @@ var MessageListHeader = Marionette.ItemView.extend({
     //this.currentQuery.getResultNumTotal() === undefined ? resultNumTotal = '' : resultNumTotal = i18n.sprintf("%d", this.currentQuery.getResultNumTotal());
     this.ui.userThreadedViewButton.html(this.ViewStyles.THREADED.label);
 
+    this.ui.userRecentlyActiveThreadsViewButton.html(this.ViewStyles.RECENTLY_ACTIVE_THREADS.label);
     //this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread = '' : resultNumUnread = i18n.sprintf("%d", this.currentQuery.getResultNumUnread());
 
     this.ui.userHighlightNewViewButton.html(this.ViewStyles.NEW_MESSAGES.label);

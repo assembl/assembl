@@ -1923,7 +1923,7 @@ var MessageList = AssemblPanel.extend({
       //console.log("setViewStyle called with: ", viewStyle, "interface type: ", Ctx.getCurrentInterfaceType(), "current user is unknown?:", Ctx.getCurrentUser().isUnknownUser());
       if (!viewStyle) {
         //If invalid, set global default
-        viewStyle = this.ViewStyles.NEW_MESSAGES;
+        viewStyle = this.ViewStyles.RECENTLY_ACTIVE_THREADS;
       }
 
       if (this.isViewStyleThreadedType(viewStyle)) {
@@ -1945,11 +1945,11 @@ var MessageList = AssemblPanel.extend({
       // Do we need still need this code ?
       if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
         if (Ctx.getCurrentUser().isUnknownUser()) {
-          viewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
+          viewStyle = this.ViewStyles.RECENTLY_ACTIVE_THREADS;
         }
-        else if ((viewStyle !== this.ViewStyles.NEW_MESSAGES) && (viewStyle !== this.ViewStyles.REVERSE_CHRONOLOGICAL)) {//THREADED used to be allowed
-          //New messages is default view
-          viewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
+        else if ((viewStyle !== this.ViewStyles.RECENTLY_ACTIVE_THREADS) && (viewStyle !== this.ViewStyles.REVERSE_CHRONOLOGICAL)) {
+          //Recently active threads is default view
+          viewStyle = this.ViewStyles.RECENTLY_ACTIVE_THREADS;
         }
       }
 
