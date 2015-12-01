@@ -404,7 +404,7 @@ Context.prototype = {
 
     var popover = $("#popover-oembed");
 
-    var iframe = '<iframe width="' + popover_width + '" height="' + popover_height + '" frameborder="0" scrolling="' + popover_scrolling + '" frametransparency="1" src="' + target_url + '"></iframe>';
+    var iframe = '<iframe width="' + popover_width + '" height="' + popover_height + '" frameborder="0" scrolling="' + popover_scrolling + '" frametransparency="1" src="' + target_url + '" style="display: block;"></iframe>'; // "display: block;" is added in order to avoid an empty space at the bottom of the iframe
     popover[0].innerHTML = iframe;
 
     var triggerHover = function(evt) {

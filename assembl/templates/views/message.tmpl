@@ -22,11 +22,11 @@
 {%- endmacro %}
 
 {% macro showShareButton() -%}
-<a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_shareButton js_openTargetInPopOver" data-popover-width="300" data-popover-height="71" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
+<a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_shareButton js_openTargetInPopOver" data-popover-width="200" data-popover-height="56" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
 {%- endmacro %}
 
 {% macro showLikeButton() -%}
-<a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_likeButton" data-popover-width="300" data-popover-height="71" data-popover-scrolling=""><% if (message.get('liked')) { %>{{ gettext("Unlike") }}<% } else { %>{{ gettext("Like") }}<% } %></a>
+<a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_likeButton"><% if (message.get('liked')) { %>{{ gettext("Unlike") }}<% } else { %>{{ gettext("Like") }}<% } %></a>
 {%- endmacro %}
 
 {% macro menuAction() -%}

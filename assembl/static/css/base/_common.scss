@@ -71,9 +71,11 @@ body{
 */
 
 #popover-oembed {
+  z-index: 101; /* has to be superior to the z-index of .popin-wrapper (defined in assembl/static/css/components/_modal.scss) */
   background-color: white;
-  min-width: 100px;
-  min-height: 100px;
+  border: 1px solid $borderColor;
+  min-width: 50px;
+  min-height: 50px;
   max-width: 90%;
   max-height: 90%;
 }

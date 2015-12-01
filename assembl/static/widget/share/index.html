@@ -11,19 +11,23 @@
 <body>
 
 <style>
-iframe {
+body {
+	margin: 4px;
+}
+#iframe, #url {
 	display: block;
+	margin: 0 auto;
 }
 #url {
-	width: 95%;
+	box-sizing: border-box;
+	width: 100%;
 	max-width: 1000px;
-	display: block;
 }
 </style>
 
 <input type="text" id="url" />
 
-<iframe id="iframe" src="" frameborder=0 frametransparency=1 scrolling=no height=30 width=73></iframe>
+<iframe id="iframe" src="" frameborder=0 frametransparency=1 scrolling=no height=28 width=73></iframe>
 
 <script>
 var i,
