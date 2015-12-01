@@ -237,36 +237,36 @@ var MessageList = AssemblPanel.extend({
   },
 
   ViewStyles: {
-    THREADED: {
-      id: "threaded",
-      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "threaded",
-      label: i18n.gettext('Standard threads')
-    },
     RECENTLY_ACTIVE_THREADS: {
       id: "recent_active_threads",
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "recent_active_threads",
-      label: i18n.gettext('Most recently active threads')
+      label: i18n.gettext('Recently active threads')
     },
     RECENT_THREAD_STARTERS: {
       id: "recent_thread_starters",
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "recent_active_threads",
-      label: i18n.gettext('Most recent thread starters (Facebook style)')
+      label: i18n.gettext('Recently started threads')
     },
-    REVERSE_CHRONOLOGICAL: {
-      id: "reverse_chronological",
-      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "activityfeed",
-      label: i18n.gettext('Newest first')
+    THREADED: {
+      id: "threaded",
+      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "threaded",
+      label: i18n.gettext('Chronological threads')
     },
     NEW_MESSAGES: {
       id: "new_messages",
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "newmessages",
-      label: i18n.gettext('Standard threads, jump to oldest unread message')
+      label: i18n.gettext('Chronological threads + jump to oldest unread message')
     },
+    REVERSE_CHRONOLOGICAL: {
+      id: "reverse_chronological",
+      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "activityfeed",
+      label: i18n.gettext('Newest messages first')
+    }/*,
     CHRONOLOGICAL: {
       id: "chronological",
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "chronological",
       label: i18n.gettext('Oldest first')
-    }
+    }*/
   },
 
   currentViewStyle: null,
@@ -1934,10 +1934,10 @@ var MessageList = AssemblPanel.extend({
         this.currentViewStyle = viewStyle;
         this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
       }
-      else if (viewStyle === this.ViewStyles.CHRONOLOGICAL) {
+      /*else if (viewStyle === this.ViewStyles.CHRONOLOGICAL) {
         this.currentViewStyle = viewStyle;
         this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL);
-      }
+      }*/
       else {
         throw new Error("Unsupported view style");
       }
