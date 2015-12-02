@@ -1429,6 +1429,31 @@ Context.prototype = {
       throw new Error("Invalid json. " + e.message);
     }
   },
+  getPermissionTokenPromise: function(permissions, seed) {
+      permissions = _.map(permissions, function(p) {return "permission=" + p;}).join("&");
+      var url = this.getApiV2DiscussionUrl('perm_token') + "?" + permissions;
+      if (seed !== undefined)
+        url += '&seed=' + seed;
+      return Promise.resolve($.get(url));
+    },
+  deanonymizationCifInUrl: function(url, callback) {
+    var urlTemplate = _.template(url),
+        randomSeed = String(Math.random()),
+        serverUrl = document.URL,
+        serverUrlComp1 = serverUrl.split('://', 2),
+        serverUrlComp2 = serverUrlComp1[1].split('/', 1),
+        url_base = serverUrlComp1[0] + '://' + serverUrlComp2[0] + '/data/Discussion/' + Ctx.getDiscussionId();
+    Promise.join(
+        this.getPermissionTokenPromise([Permissions.READ_PUBLIC_CIF], randomSeed),
+        this.getPermissionTokenPromise([Permissions.READ], randomSeed),
+            function(cif_token, user_token) {
+              callback(urlTemplate({
+                "url": encodeURIComponent(url_base + '/jsonld?token=' + cif_token),
+                "user_url": encodeURIComponent(url_base + '/private_jsonld?token=' + user_token),
+                "lang": assembl_locale
+              }));
+            });
+  },
   /**
    * This assumes that the there is a 1:1 relationship
    * between the AgentProfile (the user) and FacebookAccount

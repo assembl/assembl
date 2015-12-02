@@ -177,6 +177,10 @@ class Preferences(Base, MutableMapping):
         # TODO: Invert that list.
         "forbid_user_edit": [
             "require_email_domain", "social_sharing", "require_email_domain"],
+        # Show the CI Dashboard in the panel group window
+        "show_ci_dashboard": False,
+        # Configuration of the visualizations shown in the CI Dashboard
+        "ci_dashboard_url": "//cidashboard.net/ui/visualisations/index.php?width=1000&height=1000&vis=11,23,p22,13,p7,7,12,p2,p15,p9,p8,p1,p10,p14,5,6,16,p17,18,p20,p4&lang=<%= lang %>&title=&url=<%= url %>&userurl=<%= user_url %>&langurl=&timeout=60",
     }
 
     # filter some incoming values through a conversion/validation function

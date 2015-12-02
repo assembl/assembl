@@ -28,6 +28,8 @@ var PanelSpecTypes = {
   },//implemented in views/navigation/synthesisInNavigation.js
   EXTERNAL_VISUALIZATION_CONTEXT: {id: 'externalVisualizationPanel', code: 'V'
   },//implemented in views/externalVisualization.js
+  CI_DASHBOARD_CONTEXT: {id: 'dashboardVisualizationPanel', code: 'U'
+  },//implemented in views/externalVisualization.js
 
   getByRawId: function(id) {
     var panelSpec = _.findWhere(this, {id: id});

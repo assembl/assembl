@@ -2,6 +2,7 @@
 
 var Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js'),
+    Ctx = require('../common/context.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     AssemblPanel = require('./assemblPanel.js');
 
@@ -12,7 +13,7 @@ var externalVisualizationPanel = Marionette.ItemView.extend({
   gridSize: AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE,
   hideHeader: true,
   getTitle: function() {
-    return i18n.gettext('Dashboard'); // unused
+    return i18n.gettext('CI Dashboard'); // unused
   },
   ui: {
     external_visualization: 'iframe#external_visualization'
@@ -25,4 +26,19 @@ var externalVisualizationPanel = Marionette.ItemView.extend({
   }
 });
 
-module.exports = externalVisualizationPanel;
+var dashboardVisualizationPanel = externalVisualizationPanel.extend({
+  onRender: function(options) {
+    if (!this.urlSetStarted) {
+        this.urlSetStarted = true;
+        var that = this;
+        Ctx.deanonymizationCifInUrl(Ctx.getPreferences().ci_dashboard_url, function(url) {
+            that.setUrl(url);
+        });
+    }
+  }
+});
+
+module.exports = {
+    externalVisualizationPanel: externalVisualizationPanel,
+    dashboardVisualizationPanel: dashboardVisualizationPanel
+};

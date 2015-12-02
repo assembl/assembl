@@ -52,7 +52,7 @@
 
     <div class="gr">
       <% if(panelOrder === "NIM") {  %>{# Yes, silly this is in the template, but click ordering isn't respected currently #}
-        <div class="gu gu-1of3">
+        <div class="gu gu-1of<%= numLowerPanels %>">
           <div class="itemGroup is-disabled" data-view="<%= PanelSpecTypes.IDEA_PANEL.id %>">
            <i class="icon-checkbox"></i>
            <br>
@@ -62,7 +62,7 @@
            <a href="#" class="item js_selectItem"></a>
           </div>
         </div>
-        <div class="gu gu-1of3">
+        <div class="gu gu-1of<%= numLowerPanels %>">
           <div class="itemGroup is-disabled" data-view="<%= PanelSpecTypes.MESSAGE_LIST.id %>">
            <i class="icon-checkbox"></i>
            <br>
@@ -74,7 +74,7 @@
         </div>
 
       <% } else if(panelOrder === "NMI") {  %>
-        <div class="gu gu-1of3">
+        <div class="gu gu-1of<%= numLowerPanels %>">
           <div class="itemGroup is-disabled" data-view="<%= PanelSpecTypes.MESSAGE_LIST.id %>">
            <i class="icon-checkbox"></i>
            <br>
@@ -84,7 +84,7 @@
            <a href="#" class="item js_selectItem"></a>
           </div>
         </div>
-        <div class="gu gu-1of3">
+        <div class="gu gu-1of<%= numLowerPanels %>">
           <div class="itemGroup is-disabled" data-view="<%= PanelSpecTypes.IDEA_PANEL.id %>">
            <i class="icon-checkbox"></i>
            <br>
@@ -97,6 +97,18 @@
       <% } else {
         throw new Error("Invalid panelOrder: ", panelOrder);
       } %>
+      <% if (displayCIDashboard) { %>
+      <div class="gu gu-1of<%= numLowerPanels %>">
+        <div class="itemGroup" data-view="<%= PanelSpecTypes.CI_DASHBOARD_CONTEXT.id %>">
+         <i class="icon-checkbox"></i>
+         <br>
+         <i class="icon-graph"></i>
+         <br>
+         <span class="item-title">{{ gettext('CI Dashboard') }}</span>
+         <a href="#" class="item js_selectItem"></a>
+       </div>
+      </div>
+      <% } %>
       <div class="gu gu-last">
         <div class="itemGroup" data-view="<%= PanelSpecTypes.CLIPBOARD.id %>">
          <i class="icon-checkbox"></i>

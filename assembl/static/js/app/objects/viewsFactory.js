@@ -12,7 +12,7 @@ var _ = require('../shims/underscore.js'),
     SynthesisNavPanel = require('../views/navigation/synthesisInNavigation.js'),
     SynthesisPanel = require('../views/synthesisPanel.js'),
     CollectionManager = require('../common/collectionManager.js'),
-    ExternalVisualizationPanel = require('../views/externalVisualization.js');
+    ExternalVisualizationPanels = require('../views/externalVisualization.js');
 
 /*
  * A registry of AssemblView subclasses implementing a panelSpec,
@@ -21,7 +21,7 @@ var _ = require('../shims/underscore.js'),
 var panelTypeRegistry = {},
     typeByCode = {};
 _.each([
-    AboutNavPanel, ContextPanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList.SegmentListPanel, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanel
+    AboutNavPanel, ContextPanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList.SegmentListPanel, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanels.externalVisualizationPanel, ExternalVisualizationPanels.dashboardVisualizationPanel
 ], function(panelClass) {
 
   var panelType = panelClass.prototype.panelType;
