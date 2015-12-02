@@ -27,6 +27,7 @@ var externalVisualizationPanel = Marionette.ItemView.extend({
 });
 
 var dashboardVisualizationPanel = externalVisualizationPanel.extend({
+  panelType: PanelSpecTypes.DASHBOARD_CONTEXT,
   onRender: function(options) {
     if (!this.urlSetStarted) {
         this.urlSetStarted = true;
