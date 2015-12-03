@@ -138,11 +138,27 @@ var IdeaList = AssemblPanel.extend({
         collectionManager.getAllIdeasCollectionPromise()
         .done(function(allIdeasCollection) {
           var idea = allIdeasCollection.get(ideaId);
-          if (idea) {
+          function success(idea) {
             that.getContainingGroup().setCurrentIdea(idea);
             that.getContainingGroup().NavigationResetDebateState();
             if (doScroll)
               that.onScrollToIdea(idea);
+          }
+          if (idea) {
+            success(idea);
+          } else {
+            // maybe a tombstone
+            idea = new Idea.Model({"@id": ideaId});
+            idea.collection = allIdeasCollection;
+            idea.fetch({
+                success: function(model, response, options) {
+                    ideaId = model.get('original_uri');
+                    idea = allIdeasCollection.get(ideaId);
+                    if (idea) {
+                        success(idea);
+                    }
+                }
+            });
           }
         });
       });
