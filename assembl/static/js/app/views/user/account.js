@@ -116,7 +116,7 @@ var userAccount =  Marionette.ItemView.extend({
         Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext("Your settings were saved!"));
       },
       error: function(model, resp) {
-        Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext("Your settings fail to update."));
+        Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext("Your settings failed to update."));
       }
     });
   }
@@ -199,7 +199,7 @@ var account = Marionette.LayoutView.extend({
         resp.handled = true;
         var message = Ctx.getErrorMessageFromAjaxError(resp);
         if (message === null) {
-          message = i18n.gettext('Your settings fail to update');
+          message = i18n.gettext('Your settings failed to update');
         }
         Growl.showBottomGrowl(Growl.GrowlReason.ERROR, message);
       }

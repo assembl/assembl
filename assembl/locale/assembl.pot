@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-11-16 09:12-0500\n"
+"POT-Creation-Date: 2015-12-03 15:30-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,25 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
 
-#: assembl/auth/util.py:406
+#: assembl/auth/util.py:407
 msgid "The CSV file must have two columns"
 msgstr ""
 
-#: assembl/auth/util.py:412
+#: assembl/auth/util.py:413
 msgid "The CSV file must have three columns"
 msgstr ""
 
-#: assembl/auth/util.py:419
+#: assembl/auth/util.py:420
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr ""
 
-#: assembl/auth/util.py:422
+#: assembl/auth/util.py:423
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr ""
 
-#: assembl/auth/util.py:425
+#: assembl/auth/util.py:426
 #, python-format
 msgid "Password too short: <%s> at line %d"
 msgstr ""
@@ -96,35 +96,35 @@ msgstr ""
 msgid "ajax error message:"
 msgstr ""
 
-#: assembl/static/js/app/models/agents.js:120
+#: assembl/static/js/app/models/agents.js:121
 msgid "need no additional permissions"
 msgstr ""
 
-#: assembl/static/js/app/models/agents.js:123
+#: assembl/static/js/app/models/agents.js:137
 #, python-format
 msgid "you must first <a href='%s'>Sign in</a>"
 msgstr ""
 
-#: assembl/static/js/app/models/agents.js:129
+#: assembl/static/js/app/models/agents.js:143
 msgid "you must first join this discussion"
 msgstr ""
 
-#: assembl/static/js/app/models/agents.js:133
+#: assembl/static/js/app/models/agents.js:147
 #, python-format
 msgid "you must ask a discussion administrator for the following role: %s"
 msgid_plural "you must ask a discussion administrator for one of the following roles: %s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/models/agents.js:137
+#: assembl/static/js/app/models/agents.js:151
 msgid "the administrator has closed this discussion to all contributions"
 msgstr ""
 
-#: assembl/static/js/app/models/agents.js:140
+#: assembl/static/js/app/models/agents.js:154
 msgid "you need additional permissions"
 msgstr ""
 
-#: assembl/static/js/app/models/agents.js:200
+#: assembl/static/js/app/models/agents.js:214
 msgid "Unknown user"
 msgstr ""
 
@@ -157,7 +157,7 @@ msgid "All posts"
 msgstr ""
 
 #: assembl/static/js/app/models/idea.js:145
-#: assembl/static/js/app/views/ideaPanel.js:358
+#: assembl/static/js/app/views/ideaPanel.js:363
 msgid "New idea"
 msgstr ""
 
@@ -187,31 +187,31 @@ msgstr ""
 msgid "Abstract content source"
 msgstr ""
 
-#: assembl/static/js/app/models/sources.js:46
+#: assembl/static/js/app/models/sources.js:59
 msgid "IMAP mailbox"
 msgstr ""
 
-#: assembl/static/js/app/models/sources.js:61
+#: assembl/static/js/app/models/sources.js:74
 msgid "Mailing list"
 msgstr ""
 
-#: assembl/static/js/app/models/sources.js:83
+#: assembl/static/js/app/models/sources.js:96
 msgid "Comments to a given facebook post (by URL)"
 msgstr ""
 
-#: assembl/static/js/app/models/sources.js:92
+#: assembl/static/js/app/models/sources.js:105
 msgid "Posts from a Facebook group (by URL)"
 msgstr ""
 
-#: assembl/static/js/app/models/sources.js:101
+#: assembl/static/js/app/models/sources.js:114
 msgid "Posts from a Facebook group to which you're subscribed"
 msgstr ""
 
-#: assembl/static/js/app/models/sources.js:110
+#: assembl/static/js/app/models/sources.js:123
 msgid "Posts from a Facebook page to which you're subscribed"
 msgstr ""
 
-#: assembl/static/js/app/models/sources.js:119
+#: assembl/static/js/app/models/sources.js:132
 msgid "Posts from users on a Facebook page to which you're subscribed"
 msgstr ""
 
@@ -238,9 +238,9 @@ msgstr ""
 
 #: assembl/static/js/app/models/widget.js:205
 #: assembl/static/js/app/models/widget.js:209
-#: assembl/static/js/app/models/widget.js:377
 #: assembl/static/js/app/models/widget.js:385
-#: assembl/static/js/app/models/widget.js:522
+#: assembl/static/js/app/models/widget.js:393
+#: assembl/static/js/app/models/widget.js:530
 msgid "Configure"
 msgstr ""
 
@@ -265,7 +265,7 @@ msgid "See results from the vote of "
 msgstr ""
 
 #: assembl/static/js/app/models/widget.js:262
-#: assembl/static/js/app/models/widget.js:420
+#: assembl/static/js/app/models/widget.js:428
 msgid "This widget is not fully configured"
 msgstr ""
 
@@ -311,57 +311,57 @@ msgstr ""
 msgid "You have %s to vote"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:372
+#: assembl/static/js/app/models/widget.js:380
 msgid "Create a creativity session on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:375
-#: assembl/static/js/app/models/widget.js:389
+#: assembl/static/js/app/models/widget.js:383
+#: assembl/static/js/app/models/widget.js:397
 msgid "Participate"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:382
+#: assembl/static/js/app/models/widget.js:390
 msgid "Configure the creativity session on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:391
+#: assembl/static/js/app/models/widget.js:399
 msgid "Review the session"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:424
+#: assembl/static/js/app/models/widget.js:432
 msgid "A creativity session is ongoing."
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:432
+#: assembl/static/js/app/models/widget.js:440
 msgid "A creativity session is ongoing on this issue"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:434
+#: assembl/static/js/app/models/widget.js:442
 msgid "A creativity session has happened on this issue"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:438
+#: assembl/static/js/app/models/widget.js:446
 #, python-format
 msgid "You have %s to participate"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:511
+#: assembl/static/js/app/models/widget.js:519
 msgid "Create an inspiration module on this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:513
+#: assembl/static/js/app/models/widget.js:521
 msgid "Create an inspiration module on this discussion"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:515
+#: assembl/static/js/app/models/widget.js:523
 msgid "Configure the inspiration module associated to the discussion"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:517
+#: assembl/static/js/app/models/widget.js:525
 msgid "Configure the inspiration module associated to this idea"
 msgstr ""
 
-#: assembl/static/js/app/models/widget.js:520
+#: assembl/static/js/app/models/widget.js:528
 #: assembl/templates/views/messageList.tmpl:32
 #: assembl/templates/views/messageList.tmpl:42
 msgid "I need inspiration"
@@ -519,8 +519,9 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: assembl/static/js/app/views/externalVisualization.js:15
-msgid "Dashboard"
+#: assembl/static/js/app/views/externalVisualization.js:16
+#: assembl/templates/views/create-group.tmpl:107
+msgid "CI Dashboard"
 msgstr ""
 
 #: assembl/static/js/app/views/facebookViews.js:36
@@ -538,101 +539,101 @@ msgid ""
 "\n"
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:43
+#: assembl/static/js/app/views/facebookViews.js:47
 msgid ""
 "Please be aware that comments below will be imported into a discussion found "
 "at "
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:289
+#: assembl/static/js/app/views/facebookViews.js:293
 msgid ""
 "An error occured whilst communicating with Facebook. Close the box and try "
 "again."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:423
+#: assembl/static/js/app/views/facebookViews.js:428
 msgid "You did not log into facebook. Please log-in to continue."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:442
+#: assembl/static/js/app/views/facebookViews.js:447
 msgid ""
 "There was an issue with getting your Facebook login status. Please close this"
 " box and contact your discussion administrator."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:533
+#: assembl/static/js/app/views/facebookViews.js:538
 msgid ""
 "Great! You already have a facebook account. Below are the list of permissions"
 " we need for the exportation process."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:534
+#: assembl/static/js/app/views/facebookViews.js:539
 msgid "Click here if you agree with these permissions."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:538
+#: assembl/static/js/app/views/facebookViews.js:543
 msgid ""
 "It appears that your session was expired. Click below to refresh your "
 "session. As always, below are the permissions that Assembl would need to "
 "continue."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:539
+#: assembl/static/js/app/views/facebookViews.js:544
 msgid "Click here to continue."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:543
+#: assembl/static/js/app/views/facebookViews.js:548
 msgid "You must create an account. Warning: This will refresh the page"
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:544
+#: assembl/static/js/app/views/facebookViews.js:549
 msgid "Sign in using your Facebook account"
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:770
+#: assembl/static/js/app/views/facebookViews.js:775
 msgid ""
 "Assembl is a collective intelligence tool designed to enable open, democratic"
 " discussions that lead to idea generation and innovation."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:833
+#: assembl/static/js/app/views/facebookViews.js:838
 msgid "Facebook was unable to create the post. Close the box and try again."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:914
+#: assembl/static/js/app/views/facebookViews.js:919
 msgid ""
 "Please select between pages, groups or your wall as the final destination to "
 "complete the form."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:937
+#: assembl/static/js/app/views/facebookViews.js:942
 msgid ""
 "Something went wrong on Assembl whilst creating your post. Please contact the"
 " Discussion administrator for more information."
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:1029
+#: assembl/static/js/app/views/facebookViews.js:1034
 msgid "This account does NOT have a facebook account"
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:1047
+#: assembl/static/js/app/views/facebookViews.js:1052
 msgid "Could not create the message source"
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:1051
 #: assembl/static/js/app/views/facebookViews.js:1056
+#: assembl/static/js/app/views/facebookViews.js:1061
 msgid "There was an error creating the message source"
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:1160
+#: assembl/static/js/app/views/facebookViews.js:1165
 msgid "There was an error with creating a source of type"
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:1200
+#: assembl/static/js/app/views/facebookViews.js:1205
 msgid "Please select a destination to export to before continuing"
 msgstr ""
 
-#: assembl/static/js/app/views/facebookViews.js:1204
+#: assembl/static/js/app/views/facebookViews.js:1209
 msgid "Please complete facebook login"
 msgstr ""
 
@@ -644,17 +645,17 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:200
-#: assembl/static/js/app/views/message.js:423
+#: assembl/static/js/app/views/message.js:429
 msgid "Type your response here..."
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:202
-#: assembl/static/js/app/views/message.js:425
+#: assembl/static/js/app/views/message.js:431
 msgid "Send your reply"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:205
-#: assembl/static/js/app/views/message.js:427
+#: assembl/static/js/app/views/message.js:433
 msgid "You did not type a response yet..."
 msgstr ""
 
@@ -664,7 +665,7 @@ msgstr ""
 msgid "Exploring idea \"%s\""
 msgstr ""
 
-#: assembl/static/js/app/views/ideaList.js:188
+#: assembl/static/js/app/views/ideaList.js:204
 #: assembl/templates/views/create-group.tmpl:42
 #: assembl/templates/views/ideaList.tmpl:8
 msgid "Table of ideas"
@@ -711,40 +712,40 @@ msgid_plural "%d important nuggets were harvested"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:357
+#: assembl/static/js/app/views/ideaPanel.js:362
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:367
+#: assembl/static/js/app/views/ideaPanel.js:372
 msgid "Comment on this idea here..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:368
+#: assembl/static/js/app/views/ideaPanel.js:373
 msgid "Send your comment"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:372
-#: assembl/static/js/app/views/messageList.js:1200
+#: assembl/static/js/app/views/ideaPanel.js:377
+#: assembl/static/js/app/views/messageList.js:1206
 msgid "You need to type a comment first..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:553
+#: assembl/static/js/app/views/ideaPanel.js:558
 msgid "You cannot delete an idea while it has sub-ideas."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:560
+#: assembl/static/js/app/views/ideaPanel.js:565
 msgid "You cannot delete an idea associated to extracts."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:564
+#: assembl/static/js/app/views/ideaPanel.js:569
 msgid "You cannot delete an idea associated to comments."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:568
+#: assembl/static/js/app/views/ideaPanel.js:573
 msgid "Confirm that you want to delete this idea."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:738
+#: assembl/static/js/app/views/ideaPanel.js:743
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 
@@ -767,112 +768,113 @@ msgstr[1] ""
 msgid "Zooming on the conversation around \"%s\""
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:234
+#: assembl/static/js/app/views/messageList.js:236
 msgid "Messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:241
-msgid "Standard threads"
+#: assembl/static/js/app/views/messageList.js:243
+msgid "Recently active threads"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:246
-msgid "Most recently active threads"
+#: assembl/static/js/app/views/messageList.js:248
+msgid "Recently started threads"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:251
-msgid "Most recent thread starters (Facebook style)"
+#: assembl/static/js/app/views/messageList.js:253
+msgid "Chronological threads"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:256
-#: assembl/static/js/app/views/messageListPostQuery.js:49
-msgid "Newest first"
+#: assembl/static/js/app/views/messageList.js:258
+msgid "Chronological threads + jump to oldest unread message"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:261
-msgid "Standard threads, jump to oldest unread message"
+#: assembl/static/js/app/views/messageList.js:263
+msgid "Newest messages first"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:266
-#: assembl/static/js/app/views/messageListPostQuery.js:42
-msgid "Oldest first"
-msgstr ""
-
-#: assembl/static/js/app/views/messageList.js:839
+#: assembl/static/js/app/views/messageList.js:841
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1197
-#: assembl/static/js/app/views/messageSend.js:145
+#: assembl/static/js/app/views/messageList.js:1203
+#: assembl/static/js/app/views/messageSend.js:154
 #: assembl/templates/do_password_change.jinja2:18
 #: assembl/templates/request_password_change.jinja2:26
 msgid "Send"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1198
+#: assembl/static/js/app/views/messageList.js:1204
 msgid "Subject"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1199
+#: assembl/static/js/app/views/messageList.js:1205
 msgid "Add a subject above and start a new topic here"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1201
+#: assembl/static/js/app/views/messageList.js:1207
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1701
+#: assembl/static/js/app/views/messageList.js:1707
 msgid "Send to clipboard"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1703
-#: assembl/static/js/app/views/messageSend.js:144
+#: assembl/static/js/app/views/messageList.js:1709
+#: assembl/static/js/app/views/messageSend.js:153
 #: assembl/templates/styleguide/components/Dialogs.jinja2:119
 #: assembl/templates/styleguide/components/Dialogs.jinja2:146
 #: assembl/templates/views/adminPartnerEditForm.tmpl:65
 #: assembl/templates/views/adminPartnerEditForm.tmpl:71
 #: assembl/templates/views/adminPartnerForm.tmpl:63
 #: assembl/templates/views/adminPartnerForm.tmpl:69
-#: assembl/templates/views/base-modal.tmpl:12
 #: assembl/templates/views/ckeditorField.tmpl:10
-#: assembl/templates/views/create-group.tmpl:116
+#: assembl/templates/views/create-group.tmpl:128
 #: assembl/templates/views/messageModerationOptions.tmpl:32
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:9
 #: assembl/templates/views/synthesisIdea.tmpl:34
 msgid "Cancel"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1707
+#: assembl/static/js/app/views/messageList.js:1713
 msgid "You can drag the segment below directly to the table of ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1708
+#: assembl/static/js/app/views/messageList.js:1714
 msgid "You can also copy-paste from the text in the zone below"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1749
+#: assembl/static/js/app/views/messageList.js:1755
 #, python-format
 msgid ""
 "This extract was organized in the idea \" %s \" by the facilitator of the "
 "debate"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1752
+#: assembl/static/js/app/views/messageList.js:1758
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:2519
+#: assembl/static/js/app/views/messageList.js:2525
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/messageListHeader.js:184
+#: assembl/static/js/app/views/messageListHeader.js:185
 msgid "Add filter"
 msgstr ""
 
 #: assembl/static/js/app/views/messageListPostQuery.js:34
 msgid "Threaded view"
+msgstr ""
+
+#: assembl/static/js/app/views/messageListPostQuery.js:42
+msgid "Oldest first"
+msgstr ""
+
+#: assembl/static/js/app/views/messageListPostQuery.js:49
+msgid "Newest first"
 msgstr ""
 
 #: assembl/static/js/app/views/messageListPostQuery.js:460
@@ -920,38 +922,38 @@ msgid_plural "Found %d messages%s out of %d messages:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/messageSend.js:78
+#: assembl/static/js/app/views/messageSend.js:80
 msgid "Type your message here..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:146
+#: assembl/static/js/app/views/messageSend.js:155
 #: assembl/templates/admin/discussion_permissions.jinja2:117
 msgid "Subject:"
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:168
+#: assembl/static/js/app/views/messageSend.js:180
 #, python-format
 msgid "Before you can reply to this message %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:171
+#: assembl/static/js/app/views/messageSend.js:183
 #, python-format
 msgid "Before you can post a message %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:226
+#: assembl/static/js/app/views/messageSend.js:238
 msgid "You need to set a subject before you can send your message..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:236
+#: assembl/static/js/app/views/messageSend.js:248
 msgid "You need to type a message before you can send your message..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:244
+#: assembl/static/js/app/views/messageSend.js:256
 msgid "Sending..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:261
+#: assembl/static/js/app/views/messageSend.js:273
 msgid "Message posted!"
 msgstr ""
 
@@ -1179,7 +1181,7 @@ msgstr ""
 #: assembl/static/js/app/views/segmentList.js:290
 #: assembl/static/js/app/views/segmentList.js:336
 #: assembl/static/js/app/views/segmentList.js:339
-#: assembl/templates/views/create-group.tmpl:106
+#: assembl/templates/views/create-group.tmpl:118
 msgid "Clipboard"
 msgstr ""
 
@@ -1191,97 +1193,113 @@ msgstr ""
 msgid "Are you sure you want to empty your entire clipboard?"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:58
+#: assembl/static/js/app/views/sourceEditView.js:41
+#: assembl/static/js/app/views/admin/adminDiscussion.js:79
+#: assembl/static/js/app/views/admin/adminDiscussionPreferences.js:75
+#: assembl/static/js/app/views/user/account.js:116
+#: assembl/static/js/app/views/user/discussionPreferences.js:66
+#: assembl/static/js/app/views/user/profile.js:58
+msgid "Your settings were saved!"
+msgstr ""
+
+#: assembl/static/js/app/views/sourceEditView.js:45
+#: assembl/static/js/app/views/admin/adminDiscussion.js:82
+#: assembl/static/js/app/views/user/account.js:119
+#: assembl/static/js/app/views/user/profile.js:61
+msgid "Your settings failed to update."
+msgstr ""
+
+#: assembl/static/js/app/views/statistics.js:63
 msgid "Evolution of the total number of messages"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:58
+#: assembl/static/js/app/views/statistics.js:63
 msgid "Evolution of the number of messages posted"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:59
-#: assembl/templates/views/navigation.tmpl:25
+#: assembl/static/js/app/views/statistics.js:64
+#: assembl/templates/views/navigation.tmpl:24
 #: assembl/templates/views/statistics.tmpl:5
 msgid "Statistics"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:364
+#: assembl/static/js/app/views/statistics.js:369
 msgid "messages"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:599
-#: assembl/static/js/app/views/statistics.js:612
+#: assembl/static/js/app/views/statistics.js:604
+#: assembl/static/js/app/views/statistics.js:617
 msgid "messages, posted by"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:776
+#: assembl/static/js/app/views/statistics.js:781
 msgid "Not enough data yet."
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:844
+#: assembl/static/js/app/views/statistics.js:849
 msgid "last week"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:847
+#: assembl/static/js/app/views/statistics.js:852
 msgid "last 2 weeks"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:850
+#: assembl/static/js/app/views/statistics.js:855
 msgid "last month"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:853
+#: assembl/static/js/app/views/statistics.js:858
 msgid "last 3 months"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:856
+#: assembl/static/js/app/views/statistics.js:861
 msgid "last 6 months"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:859
+#: assembl/static/js/app/views/statistics.js:864
 msgid "last year"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:1014
+#: assembl/static/js/app/views/statistics.js:1019
 #, python-format
 msgid "%d participant has contributed in the %s"
 msgid_plural "%d participants have contributed in the %s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/statistics.js:1023
+#: assembl/static/js/app/views/statistics.js:1028
 #, python-format
 msgid "%d new participant started contributing in the %s"
 msgid_plural "%d new participants started contributing in the %s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/statistics.js:1033
+#: assembl/static/js/app/views/statistics.js:1038
 #, python-format
 msgid "%d active participant had contributed before %s"
 msgid_plural "%d active participants had contributed before %s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/statistics.js:1046
+#: assembl/static/js/app/views/statistics.js:1051
 #, python-format
 msgid "%d participant's last contribution was prior to %s"
 msgid_plural "%d participants' last contribution was prior to %s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/statistics.js:1061
+#: assembl/static/js/app/views/statistics.js:1066
 #, python-format
 msgid "%d participant has contributed since the beginning of the discussion"
 msgid_plural "%d participants have contributed since the beginning of the discussion"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/statistics.js:1073
+#: assembl/static/js/app/views/statistics.js:1078
 msgid "Contributors active recently"
 msgstr ""
 
-#: assembl/static/js/app/views/statistics.js:1077
+#: assembl/static/js/app/views/statistics.js:1082
 msgid "Contributors inactive recently"
 msgstr ""
 
@@ -1314,35 +1332,28 @@ msgstr ""
 msgid "Failed publishing synthesis!"
 msgstr ""
 
-#: assembl/static/js/app/views/admin/adminDiscussion.js:78
-#: assembl/static/js/app/views/admin/adminDiscussionPreferences.js:74
-#: assembl/static/js/app/views/admin/emailSettings.js:113
-#: assembl/static/js/app/views/user/account.js:116
-#: assembl/static/js/app/views/user/account.js:230
-#: assembl/static/js/app/views/user/discussionPreferences.js:65
-#: assembl/static/js/app/views/user/profile.js:57
-msgid "Your settings were saved"
+#: assembl/static/js/app/views/admin/generalSource.js:58
+msgid "There was a reimport error!"
 msgstr ""
 
-#: assembl/static/js/app/views/admin/adminDiscussion.js:89
-#: assembl/static/js/app/views/admin/emailSettings.js:126
-#: assembl/static/js/app/views/user/account.js:128
-#: assembl/static/js/app/views/user/account.js:244
-#: assembl/static/js/app/views/user/profile.js:68
-msgid "Your settings fail to update"
-msgstr ""
-
-#: assembl/static/js/app/views/admin/emailSettings.js:24
+#: assembl/static/js/app/views/admin/generalSource.js:61
 msgid "Reimport has begun! It can take up to 15 minutes to complete."
 msgstr ""
 
-#: assembl/static/js/app/views/admin/emailSettings.js:34
-#: assembl/static/js/app/views/admin/emailSettings.js:66
-msgid "Reimport failed"
+#: assembl/static/js/app/views/admin/generalSource.js:63
+msgid "Reimport failed."
 msgstr ""
 
-#: assembl/static/js/app/views/admin/emailSettings.js:56
+#: assembl/static/js/app/views/admin/generalSource.js:72
+msgid "There was a reprocess error!"
+msgstr ""
+
+#: assembl/static/js/app/views/admin/generalSource.js:75
 msgid "Reprocess has begun! It can take up to 15 minutes to complete."
+msgstr ""
+
+#: assembl/static/js/app/views/admin/generalSource.js:77
+msgid "Reimport failed"
 msgstr ""
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:130
@@ -1378,24 +1389,37 @@ msgstr ""
 msgid "Need more room for messages? Click here to minimize the Idea panel."
 msgstr ""
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:359
+#: assembl/static/js/app/views/groups/panelWrapper.js:360
 #: assembl/templates/views/panelWrapper.tmpl:35
 msgid "Maximize panel"
 msgstr ""
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:424
-#: assembl/static/js/app/views/groups/panelWrapper.js:445
+#: assembl/static/js/app/views/groups/panelWrapper.js:425
+#: assembl/static/js/app/views/groups/panelWrapper.js:446
 #: assembl/templates/views/navigation.tmpl:5
+#: assembl/templates/views/navigation.tmpl:14
 #: assembl/templates/views/panelWrapper.tmpl:20
 msgid "Minimize panel"
 msgstr ""
 
-#: assembl/static/js/app/views/user/account.js:197
+#: assembl/static/js/app/views/user/account.js:179
 msgid "Empty email"
 msgstr ""
 
-#: assembl/static/js/app/views/user/account.js:210
+#: assembl/static/js/app/views/user/account.js:184
 msgid "Invalid email"
+msgstr ""
+
+#: assembl/static/js/app/views/user/account.js:196
+msgid "Your settings were saved"
+msgstr ""
+
+#: assembl/static/js/app/views/user/account.js:202
+msgid "Your settings failed to update"
+msgstr ""
+
+#: assembl/static/js/app/views/user/discussionPreferences.js:69
+msgid "Failed to save your settings."
 msgstr ""
 
 #: assembl/templates/cannot_read_discussion.jinja2:4
@@ -1524,7 +1548,7 @@ msgstr ""
 msgid "Email or username"
 msgstr ""
 
-#: assembl/templates/login.jinja2:87 assembl/views/auth/views.py:874
+#: assembl/templates/login.jinja2:87 assembl/views/auth/views.py:873
 msgid "Log in"
 msgstr ""
 
@@ -1784,11 +1808,11 @@ msgstr ""
 msgid "Unsubscribe"
 msgstr ""
 
-#: assembl/templates/notifications/html_mail_post.jinja2:51
+#: assembl/templates/notifications/html_mail_post.jinja2:53
 msgid "Reply to this message"
 msgstr ""
 
-#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:33
+#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:35
 msgid "Comment this synthesis"
 msgstr ""
 
@@ -1796,7 +1820,7 @@ msgstr ""
 #: assembl/templates/styleguide/components/Dialogs.jinja2:147
 #: assembl/templates/views/adminPartnerEditForm.tmpl:72
 #: assembl/templates/views/adminPartnerForm.tmpl:70
-#: assembl/templates/views/create-group.tmpl:117
+#: assembl/templates/views/create-group.tmpl:129
 msgid "Validate"
 msgstr ""
 
@@ -2454,8 +2478,12 @@ msgstr ""
 msgid "Number of messages related to this idea, or any of its sub-ideas"
 msgstr ""
 
-#: assembl/templates/views/idea.tmpl:49
+#: assembl/templates/views/idea.tmpl:50
 msgid "This idea has been created recently"
+msgstr ""
+
+#: assembl/templates/views/idea.tmpl:50
+msgid "new!"
 msgstr ""
 
 #: assembl/templates/views/idea.tmpl:55
@@ -2816,7 +2844,7 @@ msgstr ""
 msgid "Discussion permissions"
 msgstr ""
 
-#: assembl/templates/views/navigation.tmpl:21
+#: assembl/templates/views/navigation.tmpl:20
 msgid "About"
 msgstr ""
 
@@ -3055,140 +3083,140 @@ msgstr ""
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/auth/views.py:241
+#: assembl/views/auth/views.py:240
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:260 assembl/views/auth/views.py:1071
+#: assembl/views/auth/views.py:259 assembl/views/auth/views.py:1070
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:268 assembl/views/auth/views.py:346
+#: assembl/views/auth/views.py:267 assembl/views/auth/views.py:345
 msgid "This is not a valid email"
 msgstr ""
 
-#: assembl/views/auth/views.py:337
+#: assembl/views/auth/views.py:336
 msgid "Please use a name of at least 3 characters"
 msgstr ""
 
-#: assembl/views/auth/views.py:353
+#: assembl/views/auth/views.py:352
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:358
+#: assembl/views/auth/views.py:357
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:407
+#: assembl/views/auth/views.py:406
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email "
 "that does not exist."
 msgstr ""
 
-#: assembl/views/auth/views.py:462 assembl/views/auth/views.py:973
+#: assembl/views/auth/views.py:461 assembl/views/auth/views.py:972
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:479
+#: assembl/views/auth/views.py:478
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:768
+#: assembl/views/auth/views.py:767
 msgid "This email address is already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:769
+#: assembl/views/auth/views.py:768
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:777 assembl/views/auth/views.py:936
+#: assembl/views/auth/views.py:776 assembl/views/auth/views.py:935
 msgid "Confirmation requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:778 assembl/views/auth/views.py:937
+#: assembl/views/auth/views.py:777 assembl/views/auth/views.py:936
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your "
 "inbox in a few minutes. Please follow the confirmation link in order to "
 "confirm your email"
 msgstr ""
 
-#: assembl/views/auth/views.py:813
+#: assembl/views/auth/views.py:812
 msgid "Wrong email token."
 msgstr ""
 
-#: assembl/views/auth/views.py:830
+#: assembl/views/auth/views.py:829
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:863
+#: assembl/views/auth/views.py:862
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr ""
 
-#: assembl/views/auth/views.py:868
+#: assembl/views/auth/views.py:867
 #, python-format
 msgid "Your email address %s has been confirmed, you can now log in."
 msgstr ""
 
-#: assembl/views/auth/views.py:875
+#: assembl/views/auth/views.py:874
 msgid "Your account is now active!"
 msgstr ""
 
-#: assembl/views/auth/views.py:889
+#: assembl/views/auth/views.py:888
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/auth/views.py:926
+#: assembl/views/auth/views.py:925
 msgid "This email is already confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:944
+#: assembl/views/auth/views.py:943
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:963 assembl/views/auth/views.py:974
+#: assembl/views/auth/views.py:962 assembl/views/auth/views.py:973
 msgid "I forgot my password"
 msgstr ""
 
-#: assembl/views/auth/views.py:1007
+#: assembl/views/auth/views.py:1006
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:1008
+#: assembl/views/auth/views.py:1007
 msgid ""
 "We have sent you an email with a temporary connection link. Please use that "
 "link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:1030
+#: assembl/views/auth/views.py:1029
 msgid "Wrong password token."
 msgstr ""
 
-#: assembl/views/auth/views.py:1035
+#: assembl/views/auth/views.py:1034
 msgid "This token is expired. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/auth/views.py:1047
+#: assembl/views/auth/views.py:1046
 msgid "Change your password"
 msgstr ""
 
-#: assembl/views/auth/views.py:1078
+#: assembl/views/auth/views.py:1077
 msgid "Password changed"
 msgstr ""
 
-#: assembl/views/auth/views.py:1090
+#: assembl/views/auth/views.py:1089
 msgid "email"
 msgstr ""
 
-#: assembl/views/auth/views.py:1092
+#: assembl/views/auth/views.py:1091
 msgid "account"
 msgstr ""
 
-#: assembl/views/auth/views.py:1093
+#: assembl/views/auth/views.py:1092
 msgid ""
 "Hello, ${name}, and welcome to ${assembl}!\n"
 "\n"
@@ -3200,7 +3228,7 @@ msgid ""
 "The ${assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:1100
+#: assembl/views/auth/views.py:1099
 msgid ""
 "<p>Hello, ${name}, and welcome to ${assembl}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">click here to confirm your email "
@@ -3209,7 +3237,7 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:1105
+#: assembl/views/auth/views.py:1104
 msgid ""
 "Hello, ${name}!\n"
 "\n"
@@ -3221,7 +3249,7 @@ msgid ""
 "The ${assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:1112
+#: assembl/views/auth/views.py:1111
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">click here to confirm your new email "
@@ -3230,15 +3258,15 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:1128
+#: assembl/views/auth/views.py:1127
 msgid "Please confirm your ${confirm_what} with ${assembl}"
 msgstr ""
 
-#: assembl/views/auth/views.py:1154
+#: assembl/views/auth/views.py:1153
 msgid "Request for password change"
 msgstr ""
 
-#: assembl/views/auth/views.py:1157
+#: assembl/views/auth/views.py:1156
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>We have received a request to change the password on your ${assembl} "
@@ -3250,7 +3278,7 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:1164
+#: assembl/views/auth/views.py:1163
 msgid ""
 "Hello, ${name}!\n"
 "We have received a request to change the password on your ${assembl} account."
@@ -3264,7 +3292,7 @@ msgid ""
 "The ${assembl} Team\n"
 msgstr ""
 
-#: assembl/views/backbone/views.py:41
+#: assembl/views/backbone/views.py:42
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
