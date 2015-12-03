@@ -92,7 +92,7 @@ class FrontendUrls():
         return self.get_discussion_url() + self.get_relative_post_url(post)
 
     def get_relative_idea_url(self, idea):
-        return '/idea/' + urllib.quote(idea.uri(), '')
+        return '/idea/' + urllib.quote(idea.original_uri(), '')
 
     def get_idea_url(self, idea):
         return self.get_discussion_url() + self.get_relative_idea_url(idea)
