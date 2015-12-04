@@ -42,9 +42,12 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
 
       var that = this,
       collectionManager = new CollectionManager();
+      // Calculate the contributors of the idea: authors of important segments (nuggets)
+      // Should match Idea.get_synthesis_contributors in the backend
       function render_with_info(allMessageStructureCollection, allUsersCollection, ideaExtracts) {
-
-        ideaExtracts.forEach(function(segment) {
+        ideaExtracts.filter(function(segment){
+            return segment.get("important");
+        }).forEach(function(segment) {
           var post = allMessageStructureCollection.get(segment.get('idPost'));
           if (post) {
             var creator = allUsersCollection.get(post.get('idCreator'));
