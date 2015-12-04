@@ -105,9 +105,13 @@ class HistoryMixin(TombstonableMixin):
 
     @declared_attr
     def live(cls):
+        # The base_id and tombstone_date are not initialized yet.
+        def delay():
+            return ((cls.identity_table.c.id == cls.base_id)
+                    & (cls.tombstone_date==None))
         return relationship(
             cls, secondary=cls.identity_table, uselist=False, viewonly=True,
-            secondaryjoin=(cls.identity_table.c.id == cls.base_id) & (cls.tombstone_date==None))
+            secondaryjoin=delay)
 
     def copy(self, tombstone=None, **kwargs):
         """Clone object, optionally as tombstone

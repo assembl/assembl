@@ -505,7 +505,7 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
             siblings.remove(self)
         return [c for c in siblings if isinstance(c, cls)]
 
-    def get_synthesis_contributors(self):
+    def get_synthesis_contributors(self, id_only=True):
         # author of important extracts
         from .idea_content_link import Extract
         from .auth import AgentProfile
@@ -527,7 +527,14 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
             Post, Post.creator_id==AgentProfile.id).join(Extract).filter(
             Extract.important == True, Extract.id.in_(extract_ids)))
         r.sort(key=lambda x: x[1], reverse=True)
-        return ['local:AgentProfile/'+str(a) for (a, ce) in r]
+        if id_only:
+            return [AgentProfile.uri_generic(a) for (a, ce) in r]
+        else:
+            ids = [a for (a, ce) in r]
+            order = {id: order for (order, id) in enumerate(ids)}
+            agents = self.db.query(AgentProfile).filter(AgentProfile.id.in_(ids)).all()
+            agents.sort(key=lambda a: order[a.id])
+            return agents
 
     def get_contributors(self):
         # anyone who contributed to any of the idea's posts
