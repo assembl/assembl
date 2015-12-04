@@ -157,31 +157,35 @@ def permission_token(
 
 @view_config(context=InstanceContext, name="perm_token",
              ctx_instance_class=Discussion, request_method='GET',
-             accept="application/ld+json")
+             accept="application/ld+json", renderer="json")
 def get_token(request):
     user_id = authenticated_userid(request)
     if not user_id:
         raise HTTPUnauthorized()
     discussion_id = request.context.get_discussion_id()
-    permissions = request.GET.getall('permission') or [
-        P_READ, P_READ_PUBLIC_CIF]
-    if P_READ in permissions:
-        permissions.append(P_READ_PUBLIC_CIF)
-    permissions = list(set(permissions))
-    random_seed = request.GET.get('seed', None)
-    # TODO: Rewrite that crap so randomness is internal,
-    # give a pair of tokens.
-    if random_seed:
-        # We need some determinism
-        random.seed(random_seed)
-        random_str = ''.join([chr(random.randint(0, 256)) for i in range(8)])
-        # Restore normal randomness
-        random.seed(urandom(8))
+    permission_sets = request.GET.getall('permissions')
+    if permission_sets:
+        permission_sets = [s.split(',') for s in permission_sets]
+        for permissions in permission_sets:
+            if P_READ in permissions:
+                permissions.append(P_READ_PUBLIC_CIF)
+        permission_sets = [sorted(set(permissions))
+                           for permissions in permission_sets]
     else:
-        random_str = urandom(8)
-    data = permission_token(
+        permission_sets = [[P_READ, P_READ_PUBLIC_CIF]]
+    random_str = urandom(8)
+    data = {','.join(permissions): permission_token(
         user_id, discussion_id, permissions, random_str)
-    return Response(body=data, content_type="text/text")
+        for permissions in permission_sets}
+    user_ids = request.GET.getall("user_id")
+    if user_ids:
+        from assembl.semantic.virtuoso_mapping import (
+            AssemblQuadStorageManager, AESObfuscator)
+        obfuscator = AESObfuscator(random_str)
+        user_ids = "\n".join(user_ids)
+        data["user_ids"] = AssemblQuadStorageManager.obfuscate(
+            user_ids, obfuscator.encrypt).split("\n")
+    return data
 
 
 @view_config(context=InstanceContext, name="jsonld",
