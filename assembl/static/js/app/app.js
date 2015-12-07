@@ -40,6 +40,30 @@ App.on('start', function() {
         }
       });
     }
+  }
+  // Temporary code for Catalyst demo
+  var that = this;
+  function messageListener(event) {
+    try {
+      var data = event.data,
+          dlen = data.length;
+      if (dlen > 2 && data[dlen-2] == ",") {
+        // bad json
+        data = data.substring(0, dlen-2) + data[dlen-1];
+      }
+      data = JSON.parse(data);
+      if (data.event == "click" && data.target.substring(0, 11) == "local:Idea/") {
+        // TODO: look for right group. Also handle Content.
+        that.vent.trigger('DEPRECATEDideaList:selectIdea', data.target);
+      }
+    } catch (e) {}
+  }
+  if (window.addEventListener){
+    addEventListener("message", messageListener, false);
+  } else {
+    attachEvent("onmessage", messageListener);
+  }
+    
     if (activate_tour /*&& (currentUser.isUnknownUser() || currentUser.get('is_first_visit'))*/) {
       var TourManager = require('./utils/tourManager.js'),
           tourManager = new TourManager();
@@ -52,7 +76,6 @@ App.on('start', function() {
         }
       });
     }
-  }
 });
 
 App.on('start', function() {
