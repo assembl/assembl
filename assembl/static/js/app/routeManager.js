@@ -270,6 +270,27 @@ var routeManager = Marionette.Object.extend({
     Backbone.history.navigate('/', {replace: true});
   },
 
+  // example: http://localhost:6543/jacklayton/widget/local%3AWidget%2F64
+  widgetInModal: function(id) {
+    this.restoreViews().then(function(groups) {
+      var collectionManager = CollectionManager();
+      var widgetPromise = collectionManager.getAllWidgetsPromise()
+        .then(function(allWidgetsCollection) {
+          return Promise.resolve(allWidgetsCollection.get(id))
+            .catch(function(e) {
+              console.error(e.statusText);
+            });
+        });
+      widgetPromise.then(function(widget){
+        var options = {
+          "target_url": widget.getUrlForUser()
+        };
+        Ctx.openTargetInModal(null, null, options);
+      });
+      Backbone.history.navigate('/', {replace: true});
+    });
+  },
+
   about: function() {
       this.restoreViews(undefined, undefined, true).then(function(groups) {
         var firstGroup = groups.children.first();

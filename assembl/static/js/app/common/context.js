@@ -443,7 +443,8 @@ Context.prototype = {
     return false;
   },
 
-  // Modal can be dynamically resized once the iframe is loaded, or on demand
+  // Display options are retrieved from evt.currentTarget attributes or from the "options" parameter (Object used as an associative array).
+  // Modal can be dynamically resized once the iframe is loaded, or on demand. 
   // TODO: options to set modal size
   openTargetInModal: function(evt, onDestroyCallback, options) {
     var target_url = null;
@@ -452,6 +453,8 @@ Context.prototype = {
           target_url = $(evt.currentTarget).attr("data-href");
       else if ($(evt.currentTarget).attr("href") && $(evt.currentTarget).attr("href") != "#")
           target_url = $(evt.currentTarget).attr("href");
+    } else if ("target_url" in options){
+        target_url = options.target_url;
     }
 
     if (!target_url)
@@ -460,14 +463,23 @@ Context.prototype = {
     var modal_title = "";
     if (evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-title"))
         modal_title = $(evt.currentTarget).attr("data-modal-title");
+    else if ( "modal_title" in options ){
+        modal_title = options.modal_title;
+    }
 
     var resizeIframeOnLoad = false;
     if (evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-resize-on-load"))
         resizeIframeOnLoad = $(evt.currentTarget).attr("data-modal-resize-on-load") != false && $(evt.currentTarget).attr("data-modal-resize-on-load") != "false";
+    else if ( "modal_resize_on_load" in options ){
+        resizeIframeOnLoad = options.modal_resize_on_load;
+    }
 
     var resizable = false;
     if (evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-resizable"))
         resizable = $(evt.currentTarget).attr("data-modal-resizable") != false && $(evt.currentTarget).attr("data-modal-resizable") != "false";
+    else if ( "modal_resizable" in options ){
+        resizable = options.modal_resizable;
+    }
 
     var model = new Backbone.Model();
     model.set("iframe_url", target_url);

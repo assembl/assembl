@@ -25,6 +25,7 @@ var Router = Marionette.AppRouter.extend({
     "user/discussion_preferences": "userDiscussionPreferences",
     "posts/*id": "post",
     "idea/*id": "idea",
+    "widget/*id": "widgetInModal",
     "profile/*id": "user",
     "G/*path": "groupSpec",
     "*actions": "defaults"

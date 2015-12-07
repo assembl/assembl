@@ -42,6 +42,7 @@ class FrontendUrls():
         'purl_posts': '/posts*remainder',
         'purl_idea': '/idea*remainder',
         'purl_user': '/profile*remainder',
+        'purl_widget': '/widget*remainder'
     }
 
     @classmethod
