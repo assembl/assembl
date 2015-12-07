@@ -86,6 +86,7 @@ pylibmc==1.5.0
 pyparsing==2.0.6
 pygraphviz==1.3.1
 pyramid==1.5.7
+pyramid-autodoc==0.0.7
 pyramid-beaker==0.8
 pyramid-debugtoolbar==2.4.2
 pyramid_debugtoolbar_ajax==0.0.4
@@ -121,6 +122,7 @@ snowballstemmer==1.2.0
 smart_open==1.3.0
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
 sphinx-bootstrap-theme==0.4.8
+sphinxcontrib-httpdomain==1.4.0
 splinter==0.7.3
 sqlparse==0.1.18
 -e git+https://github.com/imaginationforpeople/sqltap.git#egg=sqltap

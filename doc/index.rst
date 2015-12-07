@@ -20,7 +20,7 @@ Contents:
 
    services
    autodoc/modules
-
+   routes
 
 Indices and tables
 ==================
