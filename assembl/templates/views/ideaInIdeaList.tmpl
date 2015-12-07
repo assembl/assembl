@@ -41,13 +41,13 @@
 
     <% var num_unread_posts = (num_posts - num_read_posts); %>
 
-    <div class="idealist-counter" data-toggle="tooltip" title="{{ gettext('Number of messages related to this idea, or any of its sub-ideas') }}">
+    <div class="idealist-title<% if (num_unread_posts > 0 && !Ctx.getCurrentUser().isUnknownUser()) { %> idealist-title-unread<% } %> <% if (idea_css_class ){ %><%= idea_css_class %><% } %>" title="<%= shortTitle %>">
+            <div class="idealist-counter" data-toggle="tooltip" title="{{ gettext('Number of messages related to this idea, or any of its sub-ideas') }}">
         <span><%= num_posts %></span>
     </div>
-    <div class="idealist-title<% if (num_unread_posts > 0 && !Ctx.getCurrentUser().isUnknownUser()) { %> idealist-title-unread<% } %> <% if (idea_css_class ){ %><%= idea_css_class %><% } %>" title="<%= shortTitle %>">
         <%= Ctx.stripHtml(shortTitle) %>
         <% if (typeof showLabel !== "undefined" && showLabel == "new") { %>
-            <img width="26px" height="13px" title="{{ gettext('This idea has been created recently') }}" src="/static/img/icon/tag_new_horizontal_right.png" alt="{{ gettext('new!') }}">
+            <img width="26px" height="13px" title="{{ gettext('This idea has been created recently') }}" src="/static/img/icon/tag_new_horizontal_right.png" alt="{{ gettext('new!') }}" />
         <% } %>
         <% if (!Ctx.getCurrentUser().isUnknownUser()) { %>
           <% if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) { %>
@@ -61,10 +61,11 @@
           <% } %>
         <% } %>
         {# <small class="idealist-longtitle"><%= app.stripHtml(longTitle) %></small> #}
+        <div class="idealist-abovedropzone"></div>
+        <div class="idealist-dropzone"></div>
     </div>
 
-    <div class="idealist-abovedropzone"></div>
-    <div class="idealist-dropzone"></div>
+
 </div>
 
 <div class="idealist-children"></div>

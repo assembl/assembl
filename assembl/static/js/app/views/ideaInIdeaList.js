@@ -20,7 +20,7 @@ var IdeaView = Backbone.View.extend({
    * The template
    * @type {[type]}
    */
-  template: Ctx.loadTemplate('idea'),
+  template: Ctx.loadTemplate('ideaInIdeaList'),
 
   /**
    * Counter used to open the idea when it is dragover
@@ -72,7 +72,9 @@ var IdeaView = Backbone.View.extend({
     'dragend .idealist-body': 'onDragEnd',
     'dragover .idealist-body': 'onDragOver',
     'dragleave .idealist-body': 'onDragLeave',
-    'drop .idealist-body': 'onDrop'
+    'drop .idealist-body': 'onDrop',
+    'mouseleave > .idealist-body > .idealist-title': 'onMouseLeave',
+    'mouseenter > .idealist-body > .idealist-title': 'onMouseEnter',
   },
 
   /**
@@ -148,6 +150,20 @@ var IdeaView = Backbone.View.extend({
     } else {
       this.$el.removeClass('is-selected');
     }
+  },
+
+  /**
+   * @event
+   */
+  onMouseEnter: function(idea) {
+      this.$('> .idealist-body').addClass('is-hovered');
+  },
+
+  /**
+   * @event
+   */
+  onMouseLeave: function(idea) {
+      this.$('> .idealist-body').removeClass('is-hovered');
   },
 
   /**

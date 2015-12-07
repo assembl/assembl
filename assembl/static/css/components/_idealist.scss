@@ -72,7 +72,7 @@
   //border-bottom: $idealist-border;
   clear: both;
 
-  &:hover {
+  &.is-hovered {
     background-color: $theme_navigation_or_idea_bg_active;
     //border-right: 4px solid $green;
     .idealist-counter {
@@ -202,6 +202,7 @@
 // ----------
 .idealist-title {
   display: block;
+  position: relative;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -248,9 +249,14 @@
 // The arrow
 // ------------
 .idealist-arrow {
-  background: url(#{$img-dir}/idealist/idealist-arrow-closed.png) center center no-repeat;
+  background-image: url(#{$img-dir}/idealist/idealist-arrow-closed.png);
+  background-position: center center;
+  background-repeat: no-repeat;
   &.level1 {
-    background: url(#{$img-dir}/idealist/idealist-arrow-closed-l1.png) center center no-repeat;
+    background-image: url(#{$img-dir}/idealist/idealist-arrow-closed-l1.png);
+  }
+  &:hover, &.level1:hover {
+    background-color: $theme_navigation_or_idea_bg_active;
   }
 
   width: 30px;
@@ -268,9 +274,11 @@
   // }
 
   .idealist-item.is-open > .idealist-body & {
-    background: url(#{$img-dir}/idealist/idealist-arrow-open.png) center center no-repeat;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-image: url(#{$img-dir}/idealist/idealist-arrow-open.png);
     &.level1 {
-      background: url(#{$img-dir}/idealist/idealist-arrow-open-l1.png) center center no-repeat;
+      background-image: url(#{$img-dir}/idealist/idealist-arrow-open-l1.png);
     }
     // @include transform( rotate(0deg) );
   }
@@ -362,10 +370,11 @@
 #idealist-list {
   .custom-checkbox {
     height: $tableOfIdeasRowHeight;
+    width: $tableOfIdeasRowHeight;
     line-height: $tableOfIdeasRowHeight - 2;
     float: left;
-    margin-left: 2px;
-    // Don't ask
-    //padding-top: 4.25px;
+    &:hover {
+      background-color: $theme_navigation_or_idea_bg_active;
+    }
   }
 }
