@@ -109,6 +109,11 @@ var WidgetModel = Base.Model.extend({
     return "";
   },
 
+  // TODO?: Use context and targetIdeaId. But we don't need it yet.
+  getShareUrl: function(context, targetIdeaId) {
+    return Ctx.getAbsoluteURLFromDiscussionRelativeURL("widget/"+encodeURIComponent(this.getId()));
+  },
+
   getUrl: function(context, targetIdeaId, page) {
     switch (context) {
       case this.DISCUSSION_MENU_CREATE_CTX:
