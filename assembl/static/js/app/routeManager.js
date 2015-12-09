@@ -283,7 +283,8 @@ var routeManager = Marionette.Object.extend({
         });
       widgetPromise.then(function(widget){
         var options = {
-          "target_url": widget.getUrlForUser()
+          "target_url": widget.getUrlForUser(),
+          "modal_title": widget.getLinkText(Widget.Model.prototype.INFO_BAR)
         };
         Ctx.openTargetInModal(null, null, options);
       });
