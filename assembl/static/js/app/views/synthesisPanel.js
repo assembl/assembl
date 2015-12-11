@@ -73,6 +73,8 @@ var SynthesisPanel = AssemblPanel.extend({
             });
 
     Assembl.commands.setHandler('synthesisPanel:render', this.render);
+
+    this.propagateVisibility(true);
   },
 
   events: {
@@ -248,6 +250,23 @@ var SynthesisPanel = AssemblPanel.extend({
 
       return this;
     },
+
+  /* This will show/hide the checkboxes next to each idea of the tables of ideas when a synthesis creation panel is present/absent. */
+  propagateVisibility: function(isVisible) {
+    var el = Assembl.groupContainer.$el;
+    if ( el ){
+      if (isVisible){
+        el.addClass("hasSynthesisPanel");
+      }
+      else {
+        el.removeClass("hasSynthesisPanel");
+      }
+    }
+  },
+
+  onBeforeDestroy: function(){
+    this.propagateVisibility(false);
+  },
 
   /**
    * Publish the synthesis

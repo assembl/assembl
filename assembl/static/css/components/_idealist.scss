@@ -124,6 +124,17 @@
 
 }
 
+/* This will show/hide the checkboxes next to each idea of the tables of ideas when a synthesis creation panel is present/absent. */
+#groupContainer .idealist-body .custom-checkbox {
+  display: none;
+}
+
+#groupContainer.hasSynthesisPanel .idealist-body .custom-checkbox {
+  display: block;
+}
+
+
+
 // For an root idea
 .idealist-bottom.idealist-body--rootidea,
 .idealist-bottom.idealist-body--synthesis,
