@@ -3353,7 +3353,7 @@ msgid ""
 "We have sent you an email with a temporary connection link. Please use that link to "
 "log in and change your password."
 msgstr ""
-"Nous vous avons envoyé un courriel avec un lien de connection temporaire. Veuillez "
+"Nous vous avons envoyé un courriel avec un lien de connexion temporaire. Veuillez "
 "utiliser ce lien pour vous connecter et changer votre mot de passe."
 
 #: assembl/views/auth/views.py:1029
