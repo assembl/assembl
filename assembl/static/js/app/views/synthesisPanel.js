@@ -259,7 +259,12 @@ var SynthesisPanel = AssemblPanel.extend({
         el.addClass("hasSynthesisPanel");
       }
       else {
-        el.removeClass("hasSynthesisPanel");
+        var groupContainerView = this.getPanelWrapper().groupContent.groupContainer;
+        var groups = groupContainerView.findGroupsWithPanelInstance(this.panelType);
+        if ( !groups || ( groups &&  groups.length < 2) ){
+          console.log("this is the last group which was containing a Synthesis creation panel, so we can remove the CSS class");
+          el.removeClass("hasSynthesisPanel");
+        }
       }
     }
   },
