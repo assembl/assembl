@@ -23,8 +23,8 @@ def test_load_participant1_user(
     _test_load_fixture(request, discussion, admin_user, participant1_user)
 
 
-def test_load_post_source(request, discussion, admin_user, post_source):
-    _test_load_fixture(request, discussion, admin_user, post_source)
+def test_load_abstract_mailbox(request, discussion, admin_user, abstract_mailbox):
+    _test_load_fixture(request, discussion, admin_user, abstract_mailbox)
 
 
 def test_load_jack_layton_mailbox(

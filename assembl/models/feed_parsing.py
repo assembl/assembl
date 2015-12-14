@@ -1,21 +1,24 @@
+from cStringIO import StringIO
+from importlib import import_module
+from datetime import datetime
+from calendar import timegm
+
 from sqlalchemy import (
     Column,
     ForeignKey,
     Integer,
     String,
  )
+from pyisemail import is_email
+import feedparser
+import requests
+from urlparse import urlparse
 
 from ..lib.sqla_types import URLString
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
 from ..tasks.source_reader import PullSourceReader, ReaderError, ReaderStatus
-from cStringIO import StringIO
-import feedparser
-import requests
-from importlib import import_module
-from datetime import datetime
-from calendar import timegm
 
 
 class FeedFetcher(object):
@@ -255,6 +258,16 @@ class FeedPostSource(PostSource):
         #TODO?
         print "TODO?: FeedPostSource::send_post():  Actually send the post"
 
+    def generate_message_id(self, source_post_id):
+        # Feed post ids are supposed to be globally unique.
+        # They may or may not be emails.
+        if is_email(source_post_id):
+            return source_post_id
+        # Invalid source_post_id.
+        return "%s_feed@%s" % (
+            self.flatten_source_post_id(source_post_id, 5),
+            urlparse(self.url).hostname)
+
 
 class LoomioPostSource(FeedPostSource):
     """
@@ -416,7 +429,6 @@ class FeedSourceReader(PullSourceReader):
             creation_date=self._get_creation_date(entry),
             import_date=imported_date,
             source_post_id=source_post_id,
-            message_id = source.get_default_prepended_id() + source_post_id,
             source=source,
             discussion=source.discussion,
             body_mime_type=body_mime_type,

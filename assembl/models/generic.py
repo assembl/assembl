@@ -1,5 +1,7 @@
 from datetime import datetime
 import logging
+from abc import abstractmethod
+import re
 
 from sqlalchemy import (
     Column,
@@ -87,6 +89,36 @@ class ContentSource(DiscussionBoundBase):
                      "FacebookPagePostsSource", "FacebookPageFeedSource",
                      "FacebookSinglePostSource", "EdgeSenseDrupalSource")
 
+    @abstractmethod
+    def generate_message_id(self, source_post_id):
+        # Generate a globally unique message_id for the post using
+        # its source_post_id (locally unique within that source.)
+        # In many cases, the source_post_id is already globally unique.
+        return source_post_id
+
+    _non_email_chars = re.compile(r'[^-A-Za-z0-9\.]', re.U)
+
+    @classmethod
+    def flatten_source_post_id(cls, source_post_id, extra_length=0):
+        # Ensure that a source_post_id can be used as part 1 of message_id
+        sanitized = cls._non_email_chars.subn(
+            lambda c: '_' + hex(ord(c.group()))[2:], source_post_id)[0]
+        if len(sanitized) + extra_length > 64:
+            # 64 is max according to RFC 5322
+            # cut it short and add a digest of original
+            import hashlib
+            import base64
+            d = hashlib.md5()
+            d.update(source_post_id)
+            d = base64.urlsafe_b64encode(d.digest())
+            sanitized = sanitized[
+                :max(0, 64-len(d)-extra_length-1)]
+            if sanitized:
+                sanitized += "_" + d
+            else:
+                sanitized = d
+        return sanitized
+
     def import_content(self, only_new=True):
         from assembl.tasks.source_reader import wake
         wake(self.id, reimport=not only_new)
@@ -140,7 +172,7 @@ class PostSource(ContentSource):
 
     def get_default_prepended_id(self):
         # Used for PostSource's whose incoming posts cannot guarantee
-        # Post.post_source_id is unique; in which case, the Post.message_id
+        # ImportedPost.source_post_id is unique; in which case, the Post.message_id
         # which is a globally unique value maintain uniqueness integrity
         # by calling this function
         # Must be implemented by subclasses that will not have unique

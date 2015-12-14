@@ -315,15 +315,15 @@ def jack_layton_mailbox(request, discussion, test_session):
 
 
 @pytest.fixture(scope="function")
-def post_source(request, discussion, test_session):
-    from assembl.models import PostSource
-    ps = PostSource(
-        discussion=discussion, name='a source', type='post_source')
+def abstract_mailbox(request, discussion, test_session):
+    from assembl.models import AbstractMailbox
+    ps = AbstractMailbox(
+        discussion=discussion, name='a source', type='abstract_mailbox')
     test_session.add(ps)
     test_session.flush()
 
     def fin():
-        print "finalizer post_source"
+        print "finalizer abstract_mailbox"
         test_session.delete(ps)
         test_session.flush()
     request.addfinalizer(fin)
@@ -340,7 +340,7 @@ def root_post_1(request, participant1_user, discussion, test_session):
         discussion=discussion, creator=participant1_user,
         subject=u"a root post", body=u"post body", moderator=None,
         creation_date=datetime(year=2000, month=1, day=1),
-        type="post", message_id="msg1")
+        type="post", message_id="msg1@example.com")
     test_session.add(p)
     test_session.flush()
 
@@ -362,7 +362,7 @@ def discussion2_root_post_1(request, participant1_user, discussion2, test_sessio
         discussion=discussion2, creator=participant1_user,
         subject=u"a root post", body=u"post body",
         creation_date=datetime(year=2000, month=1, day=2),
-        type="post", message_id="msg1")
+        type="post", message_id="msg1@example2.com")
     test_session.add(p)
     test_session.flush()
 
@@ -380,7 +380,7 @@ def synthesis_post_1(request, participant1_user, discussion, test_session, synth
     p = SynthesisPost(
         discussion=discussion, creator=participant1_user,
         subject=u"a synthesis post", body=u"post body (unused, it's a synthesis...)",
-        message_id="msg1",
+        message_id="msg1s@example.com",
         creation_date=datetime(year=2000, month=1, day=3),
         publishes_synthesis = synthesis_1)
     test_session.add(p)
@@ -405,7 +405,7 @@ def reply_post_1(request, participant2_user, discussion,
         discussion=discussion, creator=participant2_user,
         subject=u"re1: root post", body=u"post body",
         creation_date=datetime(year=2000, month=1, day=4),
-        type="post", message_id="msg2")
+        type="post", message_id="msg2@example.com")
     test_session.add(p)
     test_session.flush()
     p.set_parent(root_post_1)
@@ -430,7 +430,7 @@ def reply_post_2(request, participant1_user, discussion,
         discussion=discussion, creator=participant1_user,
         subject=u"re2: root post", body=u"post body",
         creation_date=datetime(year=2000, month=1, day=5),
-        type="post", message_id="msg3")
+        type="post", message_id="msg3@example.com")
     test_session.add(p)
     test_session.flush()
     p.set_parent(reply_post_1)
@@ -454,7 +454,7 @@ def reply_post_3(request, participant2_user, discussion,
     p = Post(
         discussion=discussion, creator=participant2_user,
         subject=u"re2: root post", body=u"post body",
-        type="post", message_id="msg4")
+        type="post", message_id="msg4@example.com")
     test_session.add(p)
     test_session.flush()
     p.set_parent(root_post_1)
@@ -691,7 +691,7 @@ def creativity_session_widget_new_idea(
         idea=i)
     ipp = IdeaProposalPost(
         proposes_idea=i, creator=participant1_user, discussion=discussion,
-        message_id='proposal', subject=u"propose idea", body="")
+        message_id='proposal@example.com', subject=u"propose idea", body="")
     test_session.add(ipp)
     def fin():
         print "finalizer creativity_session_widget_new_idea"
@@ -713,7 +713,7 @@ def creativity_session_widget_post(
     p = Post(
         discussion=discussion, creator=participant1_user,
         subject=u"re: generated idea", body=u"post body",
-        type="post", message_id="comment_generated")
+        type="post", message_id="comment_generated@example.com")
     test_session.add(p)
     test_session.flush()
     icwl = IdeaContentWidgetLink(

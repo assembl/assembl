@@ -1,4 +1,5 @@
 from math import ceil
+import uuid
 
 import simplejson as json
 from cornice import Service
@@ -14,6 +15,8 @@ from sqlalchemy.orm import joinedload_all, aliased
 from sqlalchemy.sql.expression import bindparam, and_
 from sqlalchemy.sql import cast, column
 
+from jwzthreading import restrip_pat
+
 import transaction
 
 from assembl.lib.parsedatetime import parse_datetime
@@ -24,9 +27,7 @@ from assembl.models import (
     get_database_id, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, Content, Idea, ViewPost, User,
     IdeaRelatedPostLink, AgentProfile, LikedPost)
-import uuid
 from assembl.lib import config
-from jwzthreading import restrip_pat
 
 
 posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
@@ -445,7 +446,6 @@ def create_post(request):
 
     post_constructor_args = {
         'discussion': discussion,
-        'message_id': uuid.uuid1().hex+"@"+config.get('public_hostname'),
         'creator_id': user_id,
         'subject': subject,
         'body': html if html else message

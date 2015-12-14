@@ -18,6 +18,7 @@ from pyramid.threadlocal import get_current_registry
 from datetime import datetime
 from imaplib2 import IMAP4_SSL, IMAP4
 import transaction
+from pyisemail import is_email
 from sqlalchemy.orm import deferred
 from sqlalchemy.orm import joinedload_all
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
@@ -136,6 +137,12 @@ class AbstractMailbox(PostSource):
                         del tag[attr]
 
         return soup.decode_contents()
+
+    @staticmethod
+    def clean_angle_brackets(message_id):
+        if message_id and message_id.startswith("<") and message_id.endswith(">"):
+            return message_id[1:-1]
+        return message_id
 
     @staticmethod
     def strip_full_message_quoting_plaintext(message_body):
@@ -407,19 +414,18 @@ class AbstractMailbox(PostSource):
 
         new_message_id = parsed_email.get('Message-ID', None)
         if new_message_id:
-            new_message_id = email_header_to_unicode(
-                new_message_id)
+            new_message_id = self.clean_angle_brackets(
+                email_header_to_unicode(new_message_id))
         else:
             error_description = "Unable to parse the Message-ID for message string: \n%s" % message_string
             return (None, None, error_description)
 
-        assert new_message_id;
-        assert new_message_id != ''
+        assert new_message_id
 
         new_in_reply_to = parsed_email.get('In-Reply-To', None)
         if new_in_reply_to:
-            new_in_reply_to = email_header_to_unicode(
-                new_in_reply_to)
+            new_in_reply_to = self.clean_angle_brackets(
+                email_header_to_unicode(new_in_reply_to))
 
         sender = email_header_to_unicode(parsed_email.get('From'))
         sender_name, sender_email = parseaddr(sender)
@@ -445,8 +451,6 @@ class AbstractMailbox(PostSource):
             email_object.subject = subject
             email_object.creation_date = creation_date
             email_object.source_post_id = new_message_id
-            email_object.message_id = self.get_default_prepended_id() + \
-                new_message_id
             email_object.in_reply_to = new_in_reply_to
             email_object.body = body
             email_object.body_mime_type = mimeType
@@ -454,13 +458,12 @@ class AbstractMailbox(PostSource):
         except NoResultFound:
             email_object = Email(
                 discussion=self.discussion,
+                source=self,
                 recipients=recipients,
                 sender=sender,
                 subject=subject,
                 creation_date=creation_date,
                 source_post_id=new_message_id,
-                message_id = self.get_default_prepended_id() + \
-                    new_message_id,
                 in_reply_to=new_in_reply_to,
                 body=body,
                 body_mime_type = mimeType,
@@ -498,7 +501,6 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
 """
             raise MultipleResultsFound("ID %s has duplicates in source %d"%(new_message_id,self.id))
         email_object.creator = sender_email_account.profile
-        email_object.source = self
         # email_object = self.db.merge(email_object)
         return (email_object, parsed_email, error_description)
 
@@ -733,6 +735,15 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
         if parsed_email.get('Auto-Submitted', None) == 'auto-generated':
             return False
         return True
+
+    def generate_message_id(self, source_post_id):
+        if source_post_id.startswith('<') and source_post_id.endswith('>'):
+            source_post_id = source_post_id[1:-1]
+        # Some emails have invalid source_post_ids.
+        if is_email(source_post_id):
+            return source_post_id
+        # Invalid source_post_id.
+        return self.flatten_source_post_id(source_post_id)[:59]+"_mail@assembl.net"
 
 
 class IMAPMailbox(AbstractMailbox):

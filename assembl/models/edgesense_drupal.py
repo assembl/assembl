@@ -74,6 +74,13 @@ class EdgeSenseDrupalSource(PostSource):
         # Duck-Typed method to create a source_reader from this source
         return EdgeSenseReader(self.id)
 
+    def generate_message_id(self, source_post_id):
+        return "%s%s@%s" % (
+            self.post_id_prepend,
+            self.flatten_source_post_id(
+                source_post_id, len(self.post_id_prepend)),
+            urlparse(self.nodesource).hostname)
+
     @classmethod
     def create(cls, nodes, users, comments, title, discussion, root_url=''):
         now = datetime.utcnow()
@@ -206,11 +213,10 @@ class EdgeSenseNode(EdgeSenseSpecificPost):
         body = cls.process_body(body, source.node_root)
         body_mime_type = 'text/plain'
         discussion = source.discussion
-        message_id = source.get_default_prepended_id() + node_id
         blob = json.dumps(post)
 
         return cls(import_date=import_date, source=source,
-                   message_id=message_id, body_mime_type=body_mime_type,
+                   body_mime_type=body_mime_type,
                    source_post_id=node_id, creator=agent,
                    creation_date=created, imported_blob=blob,
                    discussion=discussion, body=body)
@@ -235,11 +241,10 @@ class EdgeSenseComment(EdgeSenseSpecificPost):
         body = cls.process_body(body, source.node_root)
         body_mime_type = 'text/plain'
         discussion = source.discussion
-        message_id = source.get_default_prepended_id() + comment_id
         blob = json.dumps(post)
 
         return cls(import_date=import_date, source_post_id=comment_id,
-                   message_id=message_id, source=source, creator=agent,
+                   source=source, creator=agent,
                    creation_date=created, discussion=discussion,
                    body_mime_type=body_mime_type, imported_blob=blob,
                    body=body)
@@ -506,8 +511,7 @@ class EdgeSenseParser(object):
                     old_node.source = self.source
                     old_node.discussion = self.source.discussion
                     old_node.source_post_id = nid
-                    old_node.message_id = \
-                        self.source.get_default_prepended_id() + nid
+                    old_node.message_id = self.source.generate_message_id(nid)
                     body = nde['Body']
                     body = old_node.process_body(body, self.source.node_root)
                     old_node.body = body
@@ -545,7 +549,7 @@ class EdgeSenseParser(object):
                     old_comm.discussion = self.source.discussion
                     old_comm.source_post_id = comment_id
                     old_comm.message_id = \
-                        self.source.get_default_prepended_id() + comment_id
+                        self.source.generate_message_id(comment_id)
 
                     body = comm['Comment']
                     body = old_comm.process_body(body, self.source.node_root)

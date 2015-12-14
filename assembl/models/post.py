@@ -1,5 +1,7 @@
 from datetime import datetime
 from abc import ABCMeta, abstractmethod
+import uuid
+import logging
 
 from bs4 import BeautifulSoup
 import simplejson as json
@@ -20,12 +22,17 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref, deferred
 
 from ..lib.sqla import UPDATE_OP
+from ..lib.sqla_types import EmailUnicode
 from ..lib.decl_enums import DeclEnum
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from virtuoso.alchemy import CoerceUnicode
-from .generic import Content
+from .generic import Content, ContentSource
 from .auth import AgentProfile
 from ..semantic.namespaces import SIOC, ASSEMBL, QUADNAMES
+from ..lib import config
+
+
+log = logging.getLogger('assembl')
 
 
 class PostVisitor(object):
@@ -78,7 +85,7 @@ class Post(Content):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    message_id = Column(CoerceUnicode(),
+    message_id = Column(EmailUnicode,
                         nullable=False,
                         index=True,
                         doc="The email-compatible message-id for the post.",
@@ -321,6 +328,16 @@ class AssemblPost(Post):
     """
     __tablename__ = "assembl_post"
 
+    def __init__(self, *args, **kwargs):
+        if 'message_id' not in kwargs:
+            kwargs['message_id'] = self.generate_message_id()
+        super(Post, self).__init__(*args, **kwargs)
+
+    @classmethod
+    def generate_message_id(cls):
+        # Create a local message_id with uuid1 and hostname
+        return uuid.uuid1().hex+"_assembl@"+config.get('public_hostname')
+
     id = Column(Integer, ForeignKey(
         'post.id',
         ondelete='CASCADE',
@@ -447,6 +464,20 @@ class ImportedPost(Post):
     __table_args__ = (
                 UniqueConstraint('source_post_id', 'source_id'),
             )
+
+    def __init__(self, *args, **kwargs):
+        if 'message_id' not in kwargs:
+            assert 'source_post_id' in kwargs
+            source = kwargs.get('source', None)
+            if not source:
+                source_id = kwargs.get('source_id', None)
+                assert source_id
+                source = ContentSource.get(int(source_id))
+                assert source
+            kwargs['message_id'] = source.generate_message_id(
+                kwargs['source_post_id'])
+        super(Post, self).__init__(*args, **kwargs)
+
     id = Column(Integer, ForeignKey(
         'post.id',
         ondelete='CASCADE',
@@ -490,8 +521,8 @@ class ImportedPost(Post):
 
 
 
-# @event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)
-# def receive_set(target, value, oldvalue, initiator):
-#     "listen for the 'set' event, keeps the message_id in Post class in sync with the source_post_id"
+@event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)
+def receive_set(target, value, oldvalue, initiator):
+    "listen for the 'set' event, keeps the message_id in Post class in sync with the source_post_id"
 
-#     target.message_id = target.source.get_default_prepend_id() + value
+    target.message_id = target.source.generate_message_id(value)

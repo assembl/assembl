@@ -529,6 +529,10 @@ class FacebookGenericSource(PostSource):
         """
         self._setup_reading()
 
+    def generate_message_id(self, source_post_id):
+        return "%s_fbpost@facebook.com" % (
+            self.flatten_source_post_id(source_post_id, 7),)
+
     def make_reader(self):
         api = FacebookAPI()
         return FacebookReader(self.id, api)
@@ -1346,7 +1350,6 @@ class FacebookPost(ImportedPost):
             body_mime_type='text/plain',
             import_date=import_date,
             source_post_id=source_post_id,
-            message_id=source_post_id,
             source=source,
             creation_date=creation_date,
             discussion=discussion,
@@ -1369,7 +1372,7 @@ class FacebookPost(ImportedPost):
         self.subject = post.get('story', None)
         self.source_post_id = fb_id
         self.creation_date = parse_datetime(post.get('created_time'))
-        self.message_id = fb_id
+        self.message_id = self.source.generate_message_id(fb_id)
         if not reprocess:
             self.creator = user.profile
 

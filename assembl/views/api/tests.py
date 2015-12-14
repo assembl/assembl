@@ -368,64 +368,64 @@ def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
         # Verify they are all imported.  one() will throw an exception if any of them didn't import
     db = discussion.db
     post1 = db.query(Post).filter(
-            Post.message_id == "<1606949.IA7dUeR8YG@benoitg-t510>"
+            Post.message_id == "1606949.IA7dUeR8YG@benoitg-t510"
         ).one()
     post2 = db.query(Post).filter(
-            Post.message_id == "<1649857.fOz6x3G98J@benoitg-t510>"
+            Post.message_id == "1649857.fOz6x3G98J@benoitg-t510"
         ).one()
     post3 = db.query(Post).filter(
-            Post.message_id == "<3844624.NgDPPPZZnZ@benoitg-t510>"
+            Post.message_id == "3844624.NgDPPPZZnZ@benoitg-t510"
         ).one()
     post4 = db.query(Post).filter(
-            Post.message_id == "<1930166.Wt7Goto29c@benoitg-t510>"
+            Post.message_id == "1930166.Wt7Goto29c@benoitg-t510"
         ).one()
     post5 = db.query(Post).filter(
-            Post.message_id == "<2249242.d9RG67mvG7@benoitg-t510>"
+            Post.message_id == "2249242.d9RG67mvG7@benoitg-t510"
         ).one()
     post6 = db.query(Post).filter(
-            Post.message_id == "<5376192.Toza0VnpdF@benoitg-t510>"
+            Post.message_id == "5376192.Toza0VnpdF@benoitg-t510"
         ).one()
     post7 = db.query(Post).filter(
-            Post.message_id == "<2046194.jVzdDay1Sb@benoitg-t510>"
+            Post.message_id == "2046194.jVzdDay1Sb@benoitg-t510"
         ).one()
     post8 = db.query(Post).filter(
-            Post.message_id == "<2338275.cGRvA7U2KY@benoitg-t510>"
+            Post.message_id == "2338275.cGRvA7U2KY@benoitg-t510"
         ).one()
     post9 = db.query(Post).filter(
-            Post.message_id == "<1963559.rNfOy2bq8q@benoitg-t510>"
+            Post.message_id == "1963559.rNfOy2bq8q@benoitg-t510"
         ).one()
     post10 = db.query(Post).filter(
-            Post.message_id == "<1908535.hooWnbd4Oz@benoitg-t510>"
+            Post.message_id == "1908535.hooWnbd4Oz@benoitg-t510"
         ).one()
     post11 = db.query(Post).filter(
-            Post.message_id == "<2252973.BLQDMMaPU7@benoitg-t510>"
+            Post.message_id == "2252973.BLQDMMaPU7@benoitg-t510"
         ).one()
     post12 = db.query(Post).filter(
-            Post.message_id == "<2198317.hep6mv1tM8@benoitg-t510>"
+            Post.message_id == "2198317.hep6mv1tM8@benoitg-t510"
         ).one()
     post13 = db.query(Post).filter(
-            Post.message_id == "<1802537.GgBR6HT3SE@benoitg-t510>"
+            Post.message_id == "1802537.GgBR6HT3SE@benoitg-t510"
         ).one()
     post14 = db.query(Post).filter(
-            Post.message_id == "<CAKqvEwBXC5+hHJ7Vqe2uOxhvq0tjiPBFGTgrKgBJWg-8OJvK4g@mail.gmail.com>"
+            Post.message_id == "CAKqvEwBXC5+hHJ7Vqe2uOxhvq0tjiPBFGTgrKgBJWg-8OJvK4g@mail.gmail.com"
         ).one()
     post15 = db.query(Post).filter(
-            Post.message_id == "<2408793.IU72A2SQDE@benoitg-t510>"
+            Post.message_id == "2408793.IU72A2SQDE@benoitg-t510"
         ).one()
     post16 = db.query(Post).filter(
-            Post.message_id == "<7106333.QhO54ZOExH@benoitg-t510>"
+            Post.message_id == "7106333.QhO54ZOExH@benoitg-t510"
         ).one()
     post17 = db.query(Post).filter(
-            Post.message_id == "<2879230.SgxIZcuISG@benoitg-t510>"
+            Post.message_id == "2879230.SgxIZcuISG@benoitg-t510"
         ).one()
     post18 = db.query(Post).filter(
-            Post.message_id == "<1790712.Gl4igCGcWl@benoitg-t510>"
+            Post.message_id == "1790712.Gl4igCGcWl@benoitg-t510"
         ).one()
     post19 = db.query(Post).filter(
-            Post.message_id == "<1720706.VGpvc9NSuf@benoitg-t510>"
+            Post.message_id == "1720706.VGpvc9NSuf@benoitg-t510"
         ).one()
     post20 = db.query(Post).filter(
-            Post.message_id == "<2400278.6mpFWar2xg@benoitg-t510>"
+            Post.message_id == "2400278.6mpFWar2xg@benoitg-t510"
         ).one()
 
     #Verify threading is correct

@@ -8,7 +8,6 @@ from sqlalchemy.orm import (
     relationship, backref, aliased, join)
 from sqlalchemy.ext.associationproxy import association_proxy
 import simplejson as json
-import uuid
 
 from assembl.lib.parsedatetime import parse_datetime
 from ..auth import (
@@ -553,7 +552,6 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                         post = IdeaProposalPost(
                             proposes_idea=inst, creator_id=user_id,
                             discussion_id=inst.discussion_id,
-                            message_id=uuid.uuid1().urn,
                             hidden=self.hide_proposed_ideas,
                             subject=inst.short_title,
                             body=instance.definition or '',  # repeated
@@ -607,7 +605,6 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                         post = IdeaProposalPost(
                             proposes_idea=inst, creator_id=user_id,
                             discussion_id=inst.discussion_id,
-                            message_id=uuid.uuid1().urn,
                             hidden=self.hide_proposed_ideas,
                             body="", subject=inst.short_title,
                             **self.filter_kwargs(
