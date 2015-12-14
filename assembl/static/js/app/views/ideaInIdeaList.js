@@ -6,6 +6,7 @@ var Backbone = require('../shims/backbone.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js'),
+    UserCustomData = require('../models/userCustomData.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
@@ -97,6 +98,14 @@ var IdeaView = Backbone.View.extend({
 
     this.onIsSelectedChange(this.parentPanel.getGroupState().get('currentIdea'));
 
+    var collapsedState = that.parentPanel ? that.parentPanel.getTableOfIdeasCollapsedState() : null;
+    if ( collapsedState && that.model ){
+      var id = that.model.getNumericId();
+      if ( id && collapsedState.get(id) ){
+        data.isOpen = (collapsedState.get(id) == "true" || collapsedState.get(id) === true) ? false : true;
+      }
+    }
+
     if (data.isOpen === true) {
       this.$el.addClass('is-open');
     } else {
@@ -138,6 +147,20 @@ var IdeaView = Backbone.View.extend({
   close: function() {
     this.model.set('isOpen', false);
     this.$el.removeClass('is-open');
+  },
+
+  saveCollapsedState: function() {
+    if ( !Ctx.isUserConnected() ){
+      return;
+    }
+    var idea_numeric_id = this.model.getNumericId();
+    var tableOfIdeasCollapsedState = new UserCustomData.Model({
+      id: "table_of_ideas_collapsed_state"
+    });
+    var value = this.model.get('isOpen') ? "false" : "true";
+    var o = {};
+    o[idea_numeric_id] = value;
+    tableOfIdeasCollapsedState.save(o, {patch: true});
   },
 
   /**
@@ -452,6 +475,7 @@ var IdeaView = Backbone.View.extend({
     } else {
       this.open();
     }
+    this.saveCollapsedState();
   }
 
 });

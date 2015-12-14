@@ -10,6 +10,7 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Idea = require('../models/idea.js'),
+    UserCustomData = require('../models/userCustomData.js'),
     IdeaView = require('./ideaInIdeaList.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     AssemblPanel = require('./assemblPanel.js'),
@@ -48,6 +49,7 @@ var IdeaList = AssemblPanel.extend({
   scrollLastSpeed: null,
   tableOfIdeasRowHeight: 36, // must match $tableOfIdeasRowHeight in _variables.scss
   tableOfIdeasFontSizeDecreasingWithDepth: true, // must match the presence of .idealist-children { font-size: 98.5%; } in _variables.scss
+  tableOfIdeasCollapsedState: null,
 
   /**
    * Are we showing the graph or the list?
@@ -80,22 +82,33 @@ var IdeaList = AssemblPanel.extend({
       }, 1);
     };
 
-    Promise.join(collectionManager.getAllIdeasCollectionPromise(),
-        collectionManager.getAllIdeaLinksCollectionPromise(),
-            function(allIdeasCollection, allIdeaLinksCollection) {
-              if(!that.isViewDestroyed()) {
-                var events = ['reset', 'change:parentId', 'change:@id', 'change:hidden', 'remove', 'add', 'destroy'];
-                that.listenTo(allIdeasCollection, events.join(' '), requestRender);
-                that.allIdeasCollection = allIdeasCollection;
 
-                var events = ['reset', 'change:source', 'change:target', 'change:order', 'remove', 'add', 'destroy'];
-                that.listenTo(allIdeaLinksCollection, events.join(' '), requestRender);
-                that.allIdeaLinksCollection = allIdeaLinksCollection;
+    this.tableOfIdeasCollapsedState = new UserCustomData.Model({
+      id: "table_of_ideas_collapsed_state"
+    });
+    var tableOfIdeasCollapsedStateFetchPromise = Ctx.isUserConnected() ? this.tableOfIdeasCollapsedState.fetch() : Promise.resolve(true);
 
-                that.template = '#tmpl-ideaList';
-                that.render();
-              }
-            });
+    Promise.join(
+      collectionManager.getAllIdeasCollectionPromise(),
+      collectionManager.getAllIdeaLinksCollectionPromise(),
+      tableOfIdeasCollapsedStateFetchPromise,
+      function(allIdeasCollection, allIdeaLinksCollection) {
+        if(!that.isViewDestroyed()) {
+          var events = ['reset', 'change:parentId', 'change:@id', 'change:hidden', 'remove', 'add', 'destroy'];
+          that.listenTo(allIdeasCollection, events.join(' '), requestRender);
+          that.allIdeasCollection = allIdeasCollection;
+
+          var events = ['reset', 'change:source', 'change:target', 'change:order', 'remove', 'add', 'destroy'];
+          that.listenTo(allIdeaLinksCollection, events.join(' '), requestRender);
+          that.allIdeaLinksCollection = allIdeaLinksCollection;
+
+          that.template = '#tmpl-ideaList';
+          that.render();
+        }
+      }
+    );
+    
+    
 
     collectionManager.getAllExtractsCollectionPromise()
             .then(function(allExtractsCollection) {
@@ -202,6 +215,10 @@ var IdeaList = AssemblPanel.extend({
 
   getTitle: function() {
     return i18n.gettext('Table of ideas');
+  },
+
+  getTableOfIdeasCollapsedState: function(){
+    return this.tableOfIdeasCollapsedState;
   },
 
   onRender: function() {
