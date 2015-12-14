@@ -39,6 +39,10 @@ var SynthesisPanel = AssemblPanel.extend({
       this.realTemplate = obj.template;
     }
 
+    if ( "showAsMessage" in obj ){
+      this.showAsMessage = obj.showAsMessage;
+    }
+
     //This is used if the panel is displayed as part of a message
     // that publishes this synthesis
     this.messageListView = obj.messageListView;
@@ -106,6 +110,8 @@ var SynthesisPanel = AssemblPanel.extend({
    * @type {Boolean}
    */
   collapsed: false,
+
+  showAsMessage: false,
 
   serializeData: function() {
     var currentUser = Ctx.getCurrentUser(),
@@ -253,6 +259,9 @@ var SynthesisPanel = AssemblPanel.extend({
 
   /* This will show/hide the checkboxes next to each idea of the tables of ideas when a synthesis creation panel is present/absent. */
   propagateVisibility: function(isVisible) {
+    if ( this.showAsMessage ){
+      return;
+    }
     var el = Assembl.groupContainer.$el;
     if ( el ){
       if (isVisible){

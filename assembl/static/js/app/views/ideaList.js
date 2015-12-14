@@ -291,7 +291,7 @@ var IdeaList = AssemblPanel.extend({
           parentPanel: that,
           groupContent: that.getContainingGroup()
         });
-        that.otherView.show(OtherView);
+        that.getRegion('otherView').show(OtherView);
 
         // Synthesis posts pseudo-idea
         var synthesisView = new SynthesisInIdeaListView({
@@ -299,7 +299,7 @@ var IdeaList = AssemblPanel.extend({
           parentPanel: that,
           groupContent: that.getContainingGroup()
         });
-        that.synthesisView.show(synthesisView);
+        that.getRegion('synthesisView').show(synthesisView);
 
         // Orphan messages pseudo-idea
         var orphanView = new OrphanMessagesInIdeaListView({
@@ -307,7 +307,7 @@ var IdeaList = AssemblPanel.extend({
           parentPanel: that,
           groupContent: that.getContainingGroup()
         });
-        that.orphanView.show(orphanView);
+        that.getRegion('orphanView').show(orphanView);
 
         // All posts pseudo-idea
         var allMessagesInIdeaListView = new AllMessagesInIdeaListView({
@@ -315,7 +315,7 @@ var IdeaList = AssemblPanel.extend({
           parentPanel: that,
           groupContent: that.getContainingGroup()
         });
-        that.allMessagesView.show(allMessagesInIdeaListView);
+        that.getRegion('allMessagesView').show(allMessagesInIdeaListView);
 
         Ctx.initTooltips(that.$el);
 
