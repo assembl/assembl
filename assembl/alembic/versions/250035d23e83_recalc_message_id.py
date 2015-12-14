@@ -51,8 +51,10 @@ def upgrade(pyramid_env):
             c = m.Content.get(id)
             if isinstance(c, m.ImportedPost):
                 c.message_id = c.source.generate_message_id(c.source_post_id)
-            else:
+            elif isinstance(c, m.AssemblPost):
                 c.message_id = c.generate_message_id()
+            else:
+                print "ERROR: Pure post", id
 
 
 def downgrade(pyramid_env):

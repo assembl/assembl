@@ -79,7 +79,7 @@ class EdgeSenseDrupalSource(PostSource):
             self.post_id_prepend,
             self.flatten_source_post_id(
                 source_post_id, len(self.post_id_prepend)),
-            urlparse(self.nodesource).hostname)
+            urlparse(self.node_source).hostname)
 
     @classmethod
     def create(cls, nodes, users, comments, title, discussion, root_url=''):
