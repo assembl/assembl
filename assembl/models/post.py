@@ -85,7 +85,9 @@ class Post(Content):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    message_id = Column(EmailUnicode,
+    # This is usually an email, but we won't enforce it because we get some
+    # weird stuff from outside.
+    message_id = Column(CoerceUnicode,
                         nullable=False,
                         index=True,
                         doc="The email-compatible message-id for the post.",

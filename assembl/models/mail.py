@@ -739,11 +739,8 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
     def generate_message_id(self, source_post_id):
         if source_post_id.startswith('<') and source_post_id.endswith('>'):
             source_post_id = source_post_id[1:-1]
-        # Some emails have invalid source_post_ids.
-        if is_email(source_post_id):
-            return source_post_id
-        # Invalid source_post_id.
-        return self.flatten_source_post_id(source_post_id)[:59]+"_mail@assembl.net"
+        # Use even invalid ids if they come from mail.
+        return source_post_id
 
 
 class IMAPMailbox(AbstractMailbox):

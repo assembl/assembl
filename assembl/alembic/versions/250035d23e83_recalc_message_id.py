@@ -13,7 +13,7 @@ down_revision = '53875f39d2ff'
 from alembic import context, op
 import sqlalchemy as sa
 import transaction
-from pyisemail import is_email
+import pyisemail
 
 
 from assembl.lib import config
@@ -25,6 +25,9 @@ def upgrade(pyramid_env):
         op.execute("""UPDATE post
             SET message_id = substring(message_id, 2, length(message_id)-2)
             WHERE message_id LIKE '<%>'""")
+        op.execute("""UPDATE imported_post
+            SET source_post_id = substring(source_post_id, 2, length(source_post_id)-2)
+            WHERE source_post_id LIKE '<%>'""")
         op.execute("""UPDATE email
             SET in_reply_to = substring(in_reply_to, 2, length(in_reply_to)-2)
             WHERE in_reply_to LIKE '<%>'""")
@@ -37,10 +40,13 @@ def upgrade(pyramid_env):
     # Do stuff with the app's models here.
     from assembl import models as m
     db = m.get_session_maker()()
+    accepted = (
+        pyisemail.diagnosis.valid_diagnosis.ValidDiagnosis(),
+        pyisemail.diagnosis.rfc5322_diagnosis.RFC5322Diagnosis('LOCAL_TOOLONG'))
 
     with transaction.manager:
         for id, email in db.execute("SELECT id, message_id FROM post"):
-            if is_email(email):
+            if pyisemail.is_email(email, diagnose=True) in accepted:
                 continue
             c = m.Content.get(id)
             if isinstance(c, m.ImportedPost):

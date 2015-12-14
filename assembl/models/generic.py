@@ -96,7 +96,7 @@ class ContentSource(DiscussionBoundBase):
         # In many cases, the source_post_id is already globally unique.
         return source_post_id
 
-    _non_email_chars = re.compile(r'[^-A-Za-z0-9\.]', re.U)
+    _non_email_chars = re.compile(r'[^!#-\'\*\+\-\./-9=\?A-Z\^_`a-z\|\~]', re.U)
 
     @classmethod
     def flatten_source_post_id(cls, source_post_id, extra_length=0):
