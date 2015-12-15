@@ -46,6 +46,23 @@ def patch_dict(request):
 
 
 @view_config(context=UserNSBoundDictContext, renderer='json',
+             request_method='PUT', permission=P_READ)
+def put_dict(request):
+    user_ns_b_kvdict = request.context.collection
+    if not isinstance(request.json, dict):
+        raise HTTPBadRequest()
+    for k, v in request.json.iteritems():
+        if v is None:
+            del user_ns_b_kvdict[k]
+        else:
+            user_ns_b_kvdict[k] = v
+    for k in user_ns_b_kvdict:
+        if k not in request.json:
+            del user_ns_b_kvdict[k]
+    return dict(user_ns_b_kvdict)
+
+
+@view_config(context=UserNSBoundDictContext, renderer='json',
              request_method='DELETE', permission=P_READ)
 def clear_namespace(request):
     ctx = request.context
