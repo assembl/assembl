@@ -20,7 +20,8 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     OtherInIdeaListView = require('./otherInIdeaList.js'),
     $ = require('../shims/jquery.js'),
     Promise = require('bluebird'),
-    Analytics = require('../internal_modules/analytics/dispatcher.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js'),
+    Storage = require('../objects/storage.js');
 
 var FEATURED = 'featured',
     IN_SYNTHESIS = 'inNextSynthesis';
@@ -83,8 +84,11 @@ var IdeaList = AssemblPanel.extend({
     };
 
 
+    var groupContent = this.getContainingGroup();
+    var groupContentIndexInGroupContainer = groupContent.groupContainer.collection.indexOf(groupContent.model);
+    var tableOfIdeasCollapsedStateKey = Storage.getStoragePrefix() + "_group_" + groupContentIndexInGroupContainer + "_table_of_ideas_collapsed_state";
     this.tableOfIdeasCollapsedState = new UserCustomData.Model({
-      id: "table_of_ideas_collapsed_state"
+      id: tableOfIdeasCollapsedStateKey
     });
     var tableOfIdeasCollapsedStateFetchPromise = Ctx.isUserConnected() ? this.tableOfIdeasCollapsedState.fetch() : Promise.resolve(true);
 
@@ -708,6 +712,18 @@ var IdeaList = AssemblPanel.extend({
 
     sheet.innerHTML = str;
     document.body.appendChild(sheet);
+  },
+
+  // called by ideaInIdeaList::saveCollapsedState()
+  saveIdeaCollapsedState: function(ideaModel){
+    if ( !Ctx.isUserConnected() || !this.tableOfIdeasCollapsedState ){
+      return;
+    }
+    var idea_numeric_id = ideaModel.getNumericId();
+    var value = ideaModel.get('isOpen') ? "false" : "true";
+    var o = {};
+    o[idea_numeric_id] = value;
+    this.tableOfIdeasCollapsedState.save(o, {patch: true});
   }
 
 });

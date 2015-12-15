@@ -150,17 +150,7 @@ var IdeaView = Backbone.View.extend({
   },
 
   saveCollapsedState: function() {
-    if ( !Ctx.isUserConnected() ){
-      return;
-    }
-    var idea_numeric_id = this.model.getNumericId();
-    var tableOfIdeasCollapsedState = new UserCustomData.Model({
-      id: "table_of_ideas_collapsed_state"
-    });
-    var value = this.model.get('isOpen') ? "false" : "true";
-    var o = {};
-    o[idea_numeric_id] = value;
-    tableOfIdeasCollapsedState.save(o, {patch: true});
+    this.parentPanel.saveIdeaCollapsedState(this.model);
   },
 
   /**
