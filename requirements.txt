@@ -1,5 +1,5 @@
 pip==7.1.2
-setuptools==18.7.1
+setuptools==18.8.1
 Babel==2.1.1
 Beaker>=1.6.5
 Chameleon==2.24
@@ -16,7 +16,7 @@ PyLD==0.6.8
 PyStemmer==1.3.0
 Pygments==2.0.2
 SPARQLWrapper==1.7.5
-SQLAlchemy==1.0.9
+SQLAlchemy==1.0.10
 Sphinx==1.3.3
 Unidecode==0.04.18
 WebOb==1.5.1
@@ -24,14 +24,14 @@ WebTest==2.0.20
 Werkzeug==0.11.2
 alabaster==0.7.6
 -e git+https://github.com/imaginationforpeople/alembic.git@virtuoso#egg=alembic
-amqp==1.4.7
+amqp==1.4.8
 anyjson==0.3.3
 anykeystore==0.2
 # Do not specify argparse, jenkins chokes on system version.
 # argparse==1.2.2
 backports.ssl-match-hostname==3.4.0.2
 beautifulsoup4==4.4.1
-billiard==3.3.0.21
+billiard==3.3.0.22
 boto==2.38.0
 bz2file==0.98
 celery==3.1.19
@@ -41,7 +41,7 @@ colander==1.0
 cornice==1.1.0
 cov-core==1.15.0
 coverage==4.0.3
-cryptography==1.1.1
+cryptography==1.1.2
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 docutils==0.12
 dogpile.cache==0.5.7
@@ -62,13 +62,13 @@ isodate==0.5.4
 iso639==0.1.1
 -e git+https://github.com/imaginationforpeople/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
-kombu==3.0.29
+kombu==3.0.30
 lingua==4.5.1
 lxml==3.5.0
 meld3==1.0.2
 mock==1.3.0
 ndg_httpsclient==0.4.0
-numpy==1.10.1
+numpy==1.10.2
 oauthlib==1.0.3
 paramiko==1.16.0
 pinocchio==0.4.2
@@ -95,7 +95,7 @@ pyramid-jinja2==2.5
 pyramid-mailer==0.14.1
 pyramid-mako==1.0.2
 pyramid-tm==0.12.1
-pytest==2.8.3
+pytest==2.8.5
 pytest-cov==2.2.0
 pytest-localserver==0.3.4
 pytest-mock==0.9.0
@@ -104,7 +104,7 @@ python-dateutil==2.4.2
 python-openid==2.2.5
 pytz==2015.7
 pyzmq==15.1.0
-raven==5.8.1
+raven==5.9.0
 rdflib==4.2.1
 rdflib-jsonld==0.3
 redis==2.10.5
@@ -112,7 +112,7 @@ repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1  # rq.filter: <4.2
 requests==2.8.1
-requests-oauthlib==0.5.0
+requests-oauthlib==0.6.0
 scikit-learn==0.17
 scipy==0.16.1
 selenium==2.48.0
