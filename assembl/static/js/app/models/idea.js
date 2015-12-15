@@ -236,25 +236,6 @@ var IdeaModel = Base.Model.extend({
   },
 
   /**
-   * Return all children which belongs to the synthesis
-   * @return {Idea[]}
-   */
-  getSynthesisChildren: function() {
-    var children = this.collection.where({ parentId: this.getId() }),
-        result = [];
-
-    _.each(children, function(child) {
-      if (child.get('inNextSynthesis') === true) {
-        result.push(child);
-      } else {
-        result = _.union(result, child.getSynthesisChildren());
-      }
-    });
-
-    return result;
-  },
-
-  /**
    * Return if the idea is descendant of the given idea
    * @param {Idea} idea
    * @return {Boolean}

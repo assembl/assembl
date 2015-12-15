@@ -160,22 +160,8 @@ var SynthesisPanel = AssemblPanel.extend({
             rootIdea = that.ideas.getRootIdea();
 
         function inSynthesis(idea) {
-          if (idea.hidden) {
-            return false;
-          }
-
-          var retval;
-          if (that.model.get('is_next_synthesis')) {
-            //This special case is so we get instant feedback before
-            //the socket sends changes
-            retval = idea != rootIdea && idea.get('inNextSynthesis');
-          }
-          else {
-            retval = idea != rootIdea && ideasCollection.contains(idea);
-          }
-
           //console.log("Checking",idea,"returning:", retval, "synthesis is next synthesis:", that.model.get('is_next_synthesis'));
-          return retval;
+          return (!idea.hidden) && idea != rootIdea && ideasCollection.contains(idea);
         }
 
         if (rootIdea) {
@@ -241,14 +227,13 @@ var SynthesisPanel = AssemblPanel.extend({
 
       }
 
+      var synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
+      synthesisIdeasCollection.collectionManager = collectionManager;
       if (this.model.get('is_next_synthesis')) {
-        Promise.join(
-            collectionManager.getAllIdeasCollectionPromise(),
-            collectionManager.getAllIdeaLinksCollectionPromise(),
-            renderSynthesis);
+        collectionManager.getAllIdeaLinksCollectionPromise().then(function (ideaLinks) {
+            renderSynthesis(synthesisIdeasCollection, ideaLinks);
+        });
       } else {
-        var synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
-        synthesisIdeasCollection.collectionManager = collectionManager;
         var synthesisIdeaLinksCollection = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
         synthesisIdeaLinksCollection.collectionManager = collectionManager;
         renderSynthesis(synthesisIdeasCollection, synthesisIdeaLinksCollection);

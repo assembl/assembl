@@ -11,7 +11,6 @@ function(jasmine, _, app, IdeaView, Idea) {
       numChildIdea: 1,
       level: 1,
       featured: false,
-      inNextSynthesis: false,
       hasCheckbox: true,
       hasOptions: false
     });

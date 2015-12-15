@@ -87,6 +87,19 @@ var Context = function() {
   this.draggedIdea = null;
 
   /**
+   * ID of Current synthesis draft
+   * @type {String}
+   */
+  this.currentSynthesisDraftId = null;
+
+  /**
+   * Current synthesis draft promise
+   * @type {Promise}
+   */
+  this.currentSynthesisDraftPromise = null;
+
+
+  /**
    * Current dragged annotation
    * @type {Annotation}
    */
@@ -605,6 +618,39 @@ Context.prototype = {
     this.draggedIdea = null;
 
     return idea;
+  },
+
+  getCurrentSynthesisDraftPromise: function() {
+    // Preliminary code, may not be final architecture.
+    if (this.currentSynthesisDraftPromise === null) {
+      var that = this,
+          CollectionManager = require('./collectionManager.js'),
+          collectionManager = new CollectionManager();
+
+      this.currentSynthesisDraftPromise = collectionManager.getAllSynthesisCollectionPromise().then(
+        function(syntheses) {
+          if (that.currentSynthesisDraftId !== null) {
+            return synthesis.get(that.currentSynthesisDraftId);
+          }
+          var drafts = syntheses.where({is_next_synthesis: true});
+          if (drafts.length == 1) {
+            var current = drafts[0];
+            that.currentSynthesisDraftId = current.id;
+            return current;
+          }
+          return null;
+        });
+    }
+    return this.currentSynthesisDraftPromise;
+  },
+
+  setCurrentSynthesisDraftId: function(id) {
+    if (id !== this.currentSynthesisDraftId) {
+      // TODO: Couple this with a system that will redraw panels dependent 
+      // on current Synthesis.
+      self.currentSynthesisDraftId = id;
+      self.currentSynthesisDraftPromise = null;
+    }
   },
 
   /**
