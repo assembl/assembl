@@ -69,7 +69,7 @@ var AgentNameView = AgentView.extend({
 function showUserMessages(userModel) {
   var filters =  [{filterDef: availableFilters.POST_IS_FROM, value: userModel.id}],
   ModalGroup = require('./groups/modalGroup.js'),
-  modal_title = i18n.sprintf(i18n.gettext("All message by %s"), userModel.get('name')),
+  modal_title = i18n.sprintf(i18n.gettext("All messages by %s"), userModel.get('name')),
   modalFactory = ModalGroup.filteredMessagePanelFactory(modal_title, filters),
   modal = modalFactory.modal,
   messageList = modalFactory.messageList;
