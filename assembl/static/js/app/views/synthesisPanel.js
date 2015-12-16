@@ -227,7 +227,7 @@ var SynthesisPanel = AssemblPanel.extend({
 
       }
 
-      var synthesisIdeasCollection = new Idea.Collection(this.model.get('ideas'), {parse: true});
+      var synthesisIdeasCollection = this.model.getIdeasCollection();
       synthesisIdeasCollection.collectionManager = collectionManager;
       if (this.model.get('is_next_synthesis')) {
         collectionManager.getAllIdeaLinksCollectionPromise().then(function (ideaLinks) {

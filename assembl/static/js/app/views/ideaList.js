@@ -96,7 +96,7 @@ var IdeaList = AssemblPanel.extend({
       collectionManager.getAllIdeasCollectionPromise(),
       collectionManager.getAllIdeaLinksCollectionPromise(),
       tableOfIdeasCollapsedStateFetchPromise,
-      function(allIdeasCollection, allIdeaLinksCollection) {
+      function(allIdeasCollection, allIdeaLinksCollection, collapsedState) {
         if(!that.isViewDestroyed()) {
           var events = ['reset', 'change:parentId', 'change:@id', 'change:hidden', 'remove', 'add', 'destroy'];
           that.listenTo(allIdeasCollection, events.join(' '), requestRender);

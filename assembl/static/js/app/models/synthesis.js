@@ -2,7 +2,19 @@
 
 var Base = require('./base.js'),
     Ctx = require('../common/context.js'),
+    Idea = require("./idea.js"),
     i18n = require('../utils/i18n.js');
+
+
+var SynthesisIdeaCollection = Idea.Collection.extend({
+  setSynthesis: function(synthesis) {
+    var id = synthesis.getNumericId();
+    this.url = Ctx.getApiV2DiscussionUrl("/syntheses/" + id + "/ideas");
+  },
+  // Here I actually need double inheritance; cheating with function references.
+  add: Base.RelationsCollection.prototype.add,
+  remove: Base.RelationsCollection.prototype.remove
+});
 
 /**
  * @class SynthesisModel
@@ -40,9 +52,15 @@ var SynthesisModel = Base.Model.extend({
      * check typeof variable
      * */
      
+  },
+  getIdeasCollection: function() {
+    var collection = new SynthesisIdeaCollection(this.get("ideas"), {parse: true});
+    collection.setSynthesis(this);
+    //collection.collectionManage = collectionManager;
+    return collection;
   }
-
 });
+
 /**
  * @class IdeaColleciton
  */
@@ -77,7 +95,7 @@ var SynthesisCollection = Base.Collection.extend({
       }
 
       return lastSynthesis;
-    },
+    }
 });
 
 module.exports = {

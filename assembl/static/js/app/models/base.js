@@ -7,7 +7,7 @@ var Backbone = require('../shims/backbone.js'),
     Types = require('../utils/types.js');
 
 /**
- * @class Model
+ * @class BaseModel
  *
  * BaseModel which should be used by ALL models
  */
@@ -196,7 +196,7 @@ var BaseModel = Backbone.Model.extend({
 });
 
 /**
- * @class Collection
+ * @class BaseCollection
  *
  * BaseCollection which should be used by ALL collections
  */
@@ -323,8 +323,48 @@ var BaseCollection = Backbone.Collection.extend({
 
 });
 
+
+/**
+ * @class RelationsCollection
+ *
+ * Collection of relationships to objects which "exist" in another
+ * BaseCollection, but the relationships are not materialized.
+ * So add/remove should not create/delete object, but relation.
+ */
+var RelationsCollection = BaseCollection.extend({
+  // Add a model, or list of models to the set.
+  add: function(models, options) {
+    models = Backbone.Collection.prototype.add.apply(this, arguments);
+    // use previousModels to detect whether called from reset
+    if (options === undefined || options.previousModels === undefined) {
+      var that = this, singular = !_.isArray(models),
+          modelsArray = singular ? [models] : models;
+      _.forEach(modelsArray, function(model) {
+        Backbone.sync("create", model, {url: that.url});
+      });
+    }
+    return models;
+  },
+
+  // Remove a model, or a list of models from the set.
+  remove: function(models, options) {
+    models = Backbone.Collection.prototype.remove.apply(this, arguments);
+    // use previousModels to detect whether called from reset
+    if (options === undefined || options.previousModels === undefined) {
+      var that = this, singular = !_.isArray(models),
+          modelsArray = singular ? [models] : models;
+      _.forEach(modelsArray, function(model) {
+        var id = model.getNumericId();
+        Backbone.sync("delete", models, {url: that.url + "/" + id});
+      });
+    }
+    return models;
+  }
+});
+
 module.exports = {
   Model: BaseModel,
-  Collection: BaseCollection
+  Collection: BaseCollection,
+  RelationsCollection: RelationsCollection
 };
 
