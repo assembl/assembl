@@ -64,17 +64,16 @@ def test_get_ideas(discussion, test_app, synthesis_1,
 
 
 def test_add_idea_in_synthesis(
-        discussion, test_app, synthesis_1, test_session):
+        discussion, test_app, test_session, subidea_1_1):
+    synthesis = discussion.next_synthesis
     new_idea_r = test_app.post(
         '/data/Discussion/%d/views/%d/ideas' % (
-            discussion.id, synthesis_1.id),
-        {"short_title": "New idea"})
+            discussion.id, synthesis.id),
+        json.dumps({"@id": subidea_1_1.uri()}),
+        headers=JSON_HEADER)
     assert new_idea_r.status_code == 201
-    link = new_idea_r.location
-    new_idea = Idea.get_instance(link)
-    assert new_idea
     idea_assoc = discussion.db.query(SubGraphIdeaAssociation).filter_by(
-        idea=new_idea, sub_graph=synthesis_1).first()
+        idea=subidea_1_1, sub_graph=synthesis).first()
     assert idea_assoc
 
 

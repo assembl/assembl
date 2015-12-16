@@ -37,7 +37,8 @@ def add_idea_to_synthesis(request):
         return duplicate.idea.generic_json()
     graph_view.db.add(link)
     return Response(
-        json.dumps(idea.generic_json()), 201, content_type='application/json')
+        json.dumps(idea.generic_json()), 201, content_type='application/json',
+        location=request.url + "/" + str(idea.id))
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='DELETE',
