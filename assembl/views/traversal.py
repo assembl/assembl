@@ -70,6 +70,7 @@ class TraversalContext(object):
     def __init__(self, parent, acl=None):
         self.__parent__ = parent
         self.__acl__ = acl or parent.__acl__
+        self.depth = getattr(parent, "depth", 0) + 1
 
     def find_collection(self, collection_class_name):
         return None
@@ -165,7 +166,7 @@ class ClassContext(TraversalContext):
         # permission on class context are quite restrictive. review.
         super(ClassContext, self).__init__(parent)
         self._class = cls
-        self.class_alias = aliased(cls)
+        self.class_alias = aliased(cls, name="alias_%s" % (cls.__name__))
 
     def __getitem__(self, key):
         try:
@@ -368,6 +369,8 @@ class CollectionContext(TraversalContext):
         self.parent_instance = instance
         self.collection_class = self.collection.collection_class
         self.class_alias = aliased(self.collection_class)
+        # TODO: This makes some tests fail, and I need to understand why.
+        # name="alias_%s_%d" % (self.collection_class.__name__, self.depth))
 
     def get_default_view(self):
         my_default = self.collection.get_default_view()
@@ -605,8 +608,8 @@ class CollectionDefinition(AbstractCollectionDefinition):
             query = query.join(owner_alias,
                 getattr(coll_alias, inv.key))
         else:
-            query = query.join(coll_alias,
-                getattr(owner_alias, self.property.key))
+            # hope for the best
+            query = query.join(owner_alias)
         if inv and not uses_list(inv):
             query = query.filter(getattr(coll_alias, inv.key) == parent_instance)
         else:
