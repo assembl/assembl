@@ -133,6 +133,13 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
         Discussion, viewonly=True, uselist=False, secondary=Idea.__table__,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
+    def unique_query(self):
+        # documented in lib/sqla
+        idea_id = self.idea_id or self.idea.id
+        subgraph_id = self.sub_graph_id or self.sub_graph.id
+        return self.db.query(self.__class__).filter_by(
+            idea_id=idea_id, sub_graph_id=subgraph_id), True
+
     # @classmethod
     # def special_quad_patterns(cls, alias_maker, discussion_id):
     #     return [QuadMapPatternS(
@@ -185,6 +192,13 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
     def get_discussion_id(self):
         sub_graph = self.sub_graph or IdeaGraphView.get(self.sub_graph_id)
         return sub_graph.get_discussion_id()
+
+    def unique_query(self):
+        # documented in lib/sqla
+        idea_link_id = self.idea_link_id or self.idea_link.id
+        subgraph_id = self.sub_graph_id or self.sub_graph.id
+        return self.db.query(self.__class__).filter_by(
+            idea_link_id=idea_link_id, sub_graph_id=subgraph_id), True
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -282,9 +296,9 @@ class ExplicitSubGraphView(IdeaGraphView):
 
     @classmethod
     def extra_collections(cls):
-        class IdeaCollectionDefinition(AbstractCollectionDefinition):
+        class GViewIdeaCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
-                super(IdeaCollectionDefinition, self).__init__(cls, Idea)
+                super(GViewIdeaCollectionDefinition, self).__init__(cls, Idea)
 
             def decorate_query(self, query, owner_alias, last_alias,
                                parent_instance, ctx):
@@ -312,9 +326,10 @@ class ExplicitSubGraphView(IdeaGraphView):
                         sub_graph=parent_instance
                     ).count() > 0
 
-        class IdeaLinkCollectionDefinition(AbstractCollectionDefinition):
+        class GViewIdeaLinkCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
-                super(IdeaLinkCollectionDefinition, self).__init__(cls, IdeaLink)
+                super(GViewIdeaLinkCollectionDefinition, self
+                      ).__init__(cls, IdeaLink)
 
             def decorate_query(self, query, owner_alias, last_alias,
                                parent_instance, ctx):
@@ -337,8 +352,8 @@ class ExplicitSubGraphView(IdeaGraphView):
                         sub_graph=parent_instance
                     ).count() > 0
 
-        return {'ideas': IdeaCollectionDefinition(cls),
-                'idea_links': IdeaLinkCollectionDefinition(cls)}
+        return {'ideas': GViewIdeaCollectionDefinition(cls),
+                'idea_links': GViewIdeaLinkCollectionDefinition(cls)}
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
