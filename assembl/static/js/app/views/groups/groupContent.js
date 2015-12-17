@@ -7,7 +7,9 @@ var Marionette = require('../../shims/marionette.js'),
     AssemblPanel = require('../assemblPanel.js'),
     PanelWrapper = require('./panelWrapper.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    Analytics = require('../../internal_modules/analytics/dispatcher.js');
+    Analytics = require('../../internal_modules/analytics/dispatcher.js'),
+    Storage = require('../../objects/storage.js'),
+    UserCustomData = require('../../models/userCustomData.js');
 
 /** Represents the entire content of a single panel group */
 var groupContent = Marionette.CompositeView.extend({
@@ -79,6 +81,7 @@ var groupContent = Marionette.CompositeView.extend({
     },
 
   closeGroup: function() {
+    this.applyUserCustomDataChangesOnGroupClose();
     this.model.collection.remove(this.model);
     this.groupContainer.resizeAllPanels();
   },
@@ -467,6 +470,51 @@ var groupContent = Marionette.CompositeView.extend({
         //console.log("leaving alone: ", panelSpecType)
       }
     });
+  },
+
+  getGroupStoragePrefix: function() {
+    var groupContent = this;
+    var groupContentIndexInGroupContainer = groupContent.groupContainer.collection.indexOf(groupContent.model);
+    var storagePrefix = Storage.getStoragePrefix() + "_group_" + groupContentIndexInGroupContainer;
+    return storagePrefix;
+  },
+
+  /**
+   * When the user closes a panel group, all UserCustomData entries which keys contain the index of the group have to be renamed with their new index.
+   */
+  applyUserCustomDataChangesOnGroupClose: function() {
+    if ( !Ctx.isUserConnected() ){
+      return;
+    }
+    var groupContent = this;
+    var groupContentIndexInGroupContainer = groupContent.groupContainer.collection.indexOf(groupContent.model);
+    var sz = groupContent.groupContainer.collection.length;
+    var storagePrefix = Storage.getStoragePrefix() + "_group_";
+    var storageSuffix = "_table_of_ideas_collapsed_state";
+    var i;
+    if ( groupContentIndexInGroupContainer < sz-1 ){
+      var tableOfIdeasCollapsedStateModels = [];
+      var tableOfIdeasCollapsedStatePromises = [];
+
+      for ( i = 0; i < groupContentIndexInGroupContainer; ++i ){
+        tableOfIdeasCollapsedStatePromises[i] = Promise.resolve(true);
+      }
+      for ( i = groupContentIndexInGroupContainer; i < sz ; ++i ){
+        tableOfIdeasCollapsedStateModels[i] = new UserCustomData.Model({
+          id: storagePrefix + i + storageSuffix
+        });
+        tableOfIdeasCollapsedStatePromises[i] = tableOfIdeasCollapsedStateModels[i].fetch();
+      }
+
+      Promise.all(tableOfIdeasCollapsedStatePromises).then(function(models){
+        for ( i = groupContentIndexInGroupContainer; i < sz; ++i ){
+          console.log("tableOfIdeasCollapsedStateModels[i]: ", tableOfIdeasCollapsedStateModels[i]);
+          // Move table of ideas collapsed state of group number i to one of group number i-1
+          tableOfIdeasCollapsedStateModels[i].set("id", storagePrefix + (i-1) + storageSuffix);
+          tableOfIdeasCollapsedStateModels[i].save();
+        }
+      });
+    }
   }
 });
 

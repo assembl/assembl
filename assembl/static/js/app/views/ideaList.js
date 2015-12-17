@@ -20,8 +20,7 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     OtherInIdeaListView = require('./otherInIdeaList.js'),
     $ = require('../shims/jquery.js'),
     Promise = require('bluebird'),
-    Analytics = require('../internal_modules/analytics/dispatcher.js'),
-    Storage = require('../objects/storage.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var FEATURED = 'featured',
     IN_SYNTHESIS = 'inNextSynthesis';
@@ -85,8 +84,7 @@ var IdeaList = AssemblPanel.extend({
 
 
     var groupContent = this.getContainingGroup();
-    var groupContentIndexInGroupContainer = groupContent.groupContainer.collection.indexOf(groupContent.model);
-    var tableOfIdeasCollapsedStateKey = Storage.getStoragePrefix() + "_group_" + groupContentIndexInGroupContainer + "_table_of_ideas_collapsed_state";
+    var tableOfIdeasCollapsedStateKey = groupContent.getGroupStoragePrefix() + "_table_of_ideas_collapsed_state";
     this.tableOfIdeasCollapsedState = new UserCustomData.Model({
       id: tableOfIdeasCollapsedStateKey
     });
