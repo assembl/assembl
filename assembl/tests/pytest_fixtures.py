@@ -147,6 +147,7 @@ def default_preferences(request, test_session):
 def discussion(request, test_session, default_preferences):
     from assembl.models import Discussion
     d = Discussion(topic=u"Jack Layton", slug="jacklayton2",
+                   subscribe_to_notifications_on_signup=False,
                    session=test_session)
     test_session.add(d)
     test_session.add(d.next_synthesis)
