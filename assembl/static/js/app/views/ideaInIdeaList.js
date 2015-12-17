@@ -50,7 +50,6 @@ var IdeaView = Backbone.View.extend({
       throw new Error("groupContent must be passed in constructor options");
     }
 
-    this.listenTo(this.model, 'change change:inNextSynthesis', this.render);
     this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
     this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function(state, currentIdea) {
@@ -120,15 +119,17 @@ var IdeaView = Backbone.View.extend({
     data.idea_css_class = this.model.getCssClassFromId();
 
     data.shortTitle = this.model.getShortTitleDisplayText();
-
-    this.$el.html(this.template(data));
-    // Ctx.initTooltips(this.$el); // this is already done by ideaList.js and is very CPU intensive
-    var rendered_children = [];
-    _.each(data['children'], function(idea, i) {
-      var ideaView = new IdeaView({model: idea, parentPanel: that.parentPanel, groupContent: that._groupContent}, view_data);
-      rendered_children.push(ideaView.render().el);
+    Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
+        data.inNextSynthesis = synthesis.getIdeasCollection().get(that.model.id) !== undefined;
+        that.$el.html(that.template(data));
+        // Ctx.initTooltips(this.$el); // this is already done by ideaList.js and is very CPU intensive
+        var rendered_children = [];
+        _.each(data['children'], function(idea, i) {
+          var ideaView = new IdeaView({model: idea, parentPanel: that.parentPanel, groupContent: that._groupContent}, view_data);
+          rendered_children.push(ideaView.render().el);
+        });
+        that.$('.idealist-children').append(rendered_children);
     });
-    this.$('.idealist-children').append(rendered_children);
 
     return this;
   },

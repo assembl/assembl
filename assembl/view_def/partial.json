@@ -125,7 +125,6 @@
         "hidden": true,
         "parents": "parent_uris",
         "parentId": "&get_first_parent_uri",
-        "inNextSynthesis": "is_in_next_synthesis",
         "numChildIdea": "num_children"
     },
     "RootIdea": {

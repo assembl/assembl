@@ -203,7 +203,6 @@
         "shortTitle": "short_title",
         "creationDate": "creation_date",
         "discussion": false,
-        "inNextSynthesis": "is_in_next_synthesis",
         "definition": true,
         "original_uri": false,
         "is_tombstone": false,

@@ -204,7 +204,6 @@ def save_idea(request):
             parent_link.source.send_to_changes()
             parent_link.db.flush()
 
-    idea.is_in_next_synthesis = idea_data.get('inNextSynthesis', False)
     idea.send_to_changes()
 
     return {'ok': True, 'id': idea.uri() }

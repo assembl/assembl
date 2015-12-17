@@ -587,25 +587,6 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
 
-    @property
-    def is_in_next_synthesis(self):
-        next_synthesis = self.discussion.get_next_synthesis()
-        if not next_synthesis:
-            return False
-        return True if self in next_synthesis.ideas else False
-
-    @is_in_next_synthesis.setter
-    def is_in_next_synthesis(self, val):
-        next_synthesis = self.discussion.get_next_synthesis()
-        assert next_synthesis
-        is_there = self in next_synthesis.ideas
-        if val and not is_there:
-            next_synthesis.ideas.append(self)
-            next_synthesis.send_to_changes()
-        elif is_there and not val:
-            next_synthesis.ideas.remove(self)
-            next_synthesis.send_to_changes()
-
     def send_to_changes(self, connection=None, operation=UPDATE_OP,
                         discussion_id=None, view_def="changes"):
         connection = connection or self.db.connection()

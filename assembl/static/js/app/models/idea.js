@@ -61,7 +61,6 @@ var IdeaModel = Base.Model.extend({
     subtype: "idea:GenericIdeaNode",
     featured: false,
     active: false,
-    inNextSynthesis: false,
     parentId: null,
     widget_links: [],
     order: 1,
