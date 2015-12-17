@@ -30,8 +30,8 @@ var IdeaFamilyView = Backbone.View.extend({
   /**
    * @init
    */
-  initialize: function(obj, view_data) {
-    this.view_data = view_data
+  initialize: function(obj) {
+    this.view_data = obj.view_data
     this.isOpen = true;
     this.innerViewClass = obj.innerViewClass;
     this.innerViewClassInitializeParams = obj.innerViewClassInitializeParams;
@@ -89,9 +89,9 @@ var IdeaFamilyView = Backbone.View.extend({
     _.each(render_data['children'], function(idea) {
       var ideaFamilyView = new IdeaFamilyView({
               model: idea,
+              view_data: that.view_data,
               innerViewClass: that.innerViewClass,
-              innerViewClassInitializeParams: that.innerViewClassInitializeParams},
-          view_data);
+              innerViewClassInitializeParams: that.innerViewClassInitializeParams});
       rendered_children.push(ideaFamilyView.render().el);
     });
     this.$el.find('>.ideafamily-body>.ideafamily-children').append(rendered_children);

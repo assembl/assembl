@@ -4,6 +4,7 @@ var ObjectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     Raven = require('raven-js'),
     _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
+    Marionette = require("../shims/marionette.js"),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     MessageModel = require('../models/message.js'),
@@ -46,6 +47,7 @@ var SynthesisPanel = AssemblPanel.extend({
     //This is used if the panel is displayed as part of a message
     // that publishes this synthesis
     this.messageListView = obj.messageListView;
+    this.synthesisIdeaRoots = new Idea.Collection();
 
     Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
                 collectionManager.getAllIdeasCollectionPromise(),
@@ -63,8 +65,10 @@ var SynthesisPanel = AssemblPanel.extend({
                   });
                   that.bindEntityEvents(that.model, that.getOption('modelEvents'));
                 }
+                that.synthesisIdeas = that.model.getIdeasCollection();
+                that.synthesisIdeas.collectionManager = collectionManager;
 
-                that.listenTo(that.ideas, 'add remove reset', that.render);
+                that.listenTo(that.synthesisIdeas, 'add remove reset', that.render);
                 that.listenTo(allIdeaLinksCollection, 'reset change:source change:target change:order remove add destroy', that.render);
                 that.template = that.realTemplate;
 
@@ -79,6 +83,13 @@ var SynthesisPanel = AssemblPanel.extend({
     Assembl.commands.setHandler('synthesisPanel:render', this.render);
 
     this.propagateVisibility(true);
+  },
+
+  regions: {
+    ideas: ".synthesisPanel-ideas",
+    title: ".synthesisPanel-title",
+    introduction: ".synthesisPanel-introduction",
+    conclusion: ".synthesisPanel-conclusion"
   },
 
   events: {
@@ -104,6 +115,18 @@ var SynthesisPanel = AssemblPanel.extend({
    * @type {Ideas.Collection}
    */
   ideas: null,
+
+  /**
+   * The synthesis ideas collection (owned by the synthesis)
+   * @type {Ideas.Collection}
+   */
+  synthesisIdeas: null,
+
+  /**
+   * The synthesis root ideas collection (local)
+   * @type {Ideas.Collection}
+   */
+  synthesisIdeaRoots: null,
 
   /**
    * Flag
@@ -155,6 +178,7 @@ var SynthesisPanel = AssemblPanel.extend({
       function renderSynthesis(ideasCollection, ideaLinksCollection) {
         // Getting the scroll position
         var body = that.$('.body-synthesis'),
+            ideasRegion = that.getRegion("ideas"),
         y = body.get(0) ? body.get(0).scrollTop : 0,
             synthesis_is_published = that.model.get("published_in_post"),
             rootIdea = that.ideas.getRootIdea();
@@ -168,25 +192,29 @@ var SynthesisPanel = AssemblPanel.extend({
           ideasCollection.visitDepthFirst(ideaLinksCollection, new ObjectTreeRenderVisitor(view_data, order_lookup_table, roots, inSynthesis), rootIdea.getId(), true);
         }
 
-        _.each(roots, function append_recursive(idea) {
-          var rendered_idea_view = new IdeaFamilyView({
-            model: idea,
+        that.synthesisIdeaRoots.reset(roots);
+        var synthesisIdeaRootsView = new Marionette.CollectionView({
+          collection: that.synthesisIdeaRoots,
+          childView: IdeaFamilyView,
+          childViewOptions: {
+            view_data: view_data,
             innerViewClass: IdeaInSynthesisView,
             innerViewClassInitializeParams: {
               synthesis: that.model,
               messageListView: that.messageListView,
               parentPanel: that
             }
-          }, view_data);
-          that.$('.synthesisPanel-ideas').append(rendered_idea_view.render().el);
+          }
         });
-        that.$('.body-synthesis').get(0).scrollTop = y;
+
+        ideasRegion.show(synthesisIdeaRootsView);
+        body.get(0).scrollTop = y;
         if (canEdit && !synthesis_is_published) {
           var titleField = new EditableField({
             model: that.model,
             modelProp: 'subject'
           });
-          titleField.renderTo(that.$('.synthesisPanel-title'));
+          that.getRegion("title").show(titleField);
 
           var introductionField = new CKEditorField({
             model: that.model,
@@ -196,7 +224,7 @@ var SynthesisPanel = AssemblPanel.extend({
             autosave: true,
             hideButton: true
           });
-          introductionField.renderTo(that.$('.synthesisPanel-introduction'));
+          that.getRegion("introduction").show(introductionField);
 
           var conclusionField = new CKEditorField({
             model: that.model,
@@ -206,9 +234,10 @@ var SynthesisPanel = AssemblPanel.extend({
             autosave: true,
             hideButton: true
           });
-          conclusionField.renderTo(that.$('.synthesisPanel-conclusion'));
+          that.getRegion("conclusion").show(conclusionField);
         }
         else {
+          // TODO: Use regions here.
           that.$('.synthesisPanel-title').html(that.model.get('subject'));
           that.$('.synthesisPanel-introduction').html(that.model.get('introduction'));
           that.$('.synthesisPanel-conclusion').html(that.model.get('conclusion'));
@@ -227,16 +256,14 @@ var SynthesisPanel = AssemblPanel.extend({
 
       }
 
-      var synthesisIdeasCollection = this.model.getIdeasCollection();
-      synthesisIdeasCollection.collectionManager = collectionManager;
       if (this.model.get('is_next_synthesis')) {
         collectionManager.getAllIdeaLinksCollectionPromise().then(function (ideaLinks) {
-            renderSynthesis(synthesisIdeasCollection, ideaLinks);
+            renderSynthesis(that.synthesisIdeas, ideaLinks);
         });
       } else {
         var synthesisIdeaLinksCollection = new ideaLink.Collection(that.model.get("idea_links"), {parse: true});
         synthesisIdeaLinksCollection.collectionManager = collectionManager;
-        renderSynthesis(synthesisIdeasCollection, synthesisIdeaLinksCollection);
+        renderSynthesis(this.synthesisIdeas, synthesisIdeaLinksCollection);
       }
 
       return this;

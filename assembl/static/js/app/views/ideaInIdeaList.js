@@ -196,32 +196,14 @@ var IdeaView = Backbone.View.extend({
   onCheckboxChange: function(ev) {
     var model = this.model;
     ev.stopPropagation();
-    if (true) {
-        // old way, still works
-        this.model.save({'inNextSynthesis': ev.currentTarget.checked}, {
-          success: function(model, resp) {},
-          error: function(model, resp) {
-            console.error('ERROR: onCheckboxChange', resp);
-          }
-        });
-    } else {
-        // new way, WIP
-        Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
-          // TODO: This is horribly inefficient.
-          // We should cache the collection somewhere, maybe in ideaList or Ctx.
-          var ideaCollection = synthesis.getIdeasCollection();
-          if (ev.currentTarget.checked) {
-            ideaCollection.add(model);
-          } else {
-            ideaCollection.remove(model);
-          }
-        });
-        this.model.set({inNextSynthesis: ev.currentTarget.checked}, {silent: true});
-    }
-
-    //Optimisation.  It would self render once the socket propagates,
-    //but this gives better responsiveness.
-    Assembl.commands.execute('synthesisPanel:render');
+    Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
+      var ideaCollection = synthesis.getIdeasCollection();
+      if (ev.currentTarget.checked) {
+        ideaCollection.add(model);
+      } else {
+        ideaCollection.remove(model);
+      }
+    });
   },
 
   /**

@@ -7,8 +7,9 @@ var Base = require('./base.js'),
 
 
 var SynthesisIdeaCollection = Idea.Collection.extend({
-  setSynthesis: function(synthesis) {
-    var id = synthesis.getNumericId();
+  initialize: function(models, options) {
+    var synthesis = options.synthesis,
+        id = synthesis.getNumericId();
     this.url = Ctx.getApiV2DiscussionUrl("/syntheses/" + id + "/ideas");
   },
   // Here I actually need double inheritance; cheating with function references.
@@ -54,10 +55,13 @@ var SynthesisModel = Base.Model.extend({
      
   },
   getIdeasCollection: function() {
-    var collection = new SynthesisIdeaCollection(this.get("ideas"), {parse: true});
-    collection.setSynthesis(this);
-    //collection.collectionManage = collectionManager;
-    return collection;
+    if (this.ideasCollection === undefined) {
+        // cache since it is the result of parsing.
+        this.ideasCollection = new SynthesisIdeaCollection(
+            this.get("ideas"), {parse: true, synthesis: this});
+        //this.ideasCollection.collectionManage = collectionManager;
+    }
+    return this.ideasCollection;
   }
 });
 
