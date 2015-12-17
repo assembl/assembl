@@ -58,7 +58,7 @@ class Discussion(DiscussionBoundBase):
     instigator = Column(UnicodeText)
     introduction = Column(UnicodeText)
     introductionDetails = Column(UnicodeText)
-    subscribe_to_notifications_on_signup = Column(Boolean, default=False)
+    subscribe_to_notifications_on_signup = Column(Boolean, default=True)
     web_analytics_piwik_id_site = Column(Integer, nullable=True, default=None)
     help_url = Column(URLString, nullable=True, default=None)
     preferred_locales = Column(String)
