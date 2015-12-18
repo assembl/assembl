@@ -50,7 +50,13 @@ var DocumentView = Marionette.ItemView.extend({
       debug: false,
       onEmbedFailed: function() {
         console.log("onEmbedFailed (assembl)");
-        this.addClass("hidden");
+        //this.addClass("hidden");
+        
+        //The current accepted failure case is to simply present the url as is.
+        var url = $(this).text().trim();
+        if (url){
+          $(this).empty().append("<a href="+url+">"+url+"</a>");
+        }
       },
       onError: function(externalUrl, embedProvider, textStatus, jqXHR) {
         if (jqXHR) {
