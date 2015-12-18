@@ -34,8 +34,11 @@ def add_idea_to_synthesis(request):
     link = SubGraphIdeaAssociation(idea=idea, sub_graph=graph_view)
     duplicate = link.find_duplicate(False)
     if duplicate:
+        link.delete()
         return duplicate.idea.generic_json()
     graph_view.db.add(link)
+    graph_view.db.expire(graph_view, ["idea_assocs"])
+    graph_view.send_to_changes()
     return Response(
         json.dumps(idea.generic_json()), 201, content_type='application/json',
         location=request.url + "/" + str(idea.id))
@@ -55,6 +58,8 @@ def remove_idea_from_synthesis(request):
     link.delete()
     if duplicate:
         duplicate.delete()
+        graph_view.db.expire(graph_view, ["idea_assocs"])
+        graph_view.send_to_changes()
         return {
             "@tombstone": idea.uri()
         }

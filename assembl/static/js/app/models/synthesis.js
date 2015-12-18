@@ -54,6 +54,13 @@ var SynthesisModel = Base.Model.extend({
      * */
      
   },
+  set: function(key, val, options) {
+    var ob = Object.getPrototypeOf(Object.getPrototypeOf(this)).set.apply(this, arguments);
+    if ((key == "ideas" || key.ideas !== undefined) && this.ideasCollection !== undefined) {
+        this.ideasCollection.reset(this.get("ideas"), {parse: true});
+    }
+    return ob;
+  },
   getIdeasCollection: function() {
     if (this.ideasCollection === undefined) {
         // cache since it is the result of parsing.
