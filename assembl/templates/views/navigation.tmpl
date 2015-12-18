@@ -16,8 +16,12 @@
     </a>
     <div class="second-level debate"></div>
   </li>
-  <li>
-    <a href="#" class="nav js_navigation" data-view="about"><i class="icon-home btn btn-sm"></i>&nbsp;&nbsp;{{ gettext('About') }}</a>
+  <li class='js_context_tab'>
+    {%if discussion.homepage_url %}
+      <a href="#" class="nav js_navigation" data-view="home"><i class="icon-home btn btn-sm"></i>&nbsp;&nbsp;{{ gettext('Home') }}</a>
+    {% else %}
+      <a href="#" class="nav js_navigation" data-view="about"><i class="icon-home btn btn-sm"></i>&nbsp;&nbsp;{{ gettext('About') }}</a>
+    {% endif %}
     <div class="second-level about"></div>
   </li>
   <li style="display:none" id="visualization_tab">

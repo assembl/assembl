@@ -61,6 +61,7 @@ class Discussion(DiscussionBoundBase):
     subscribe_to_notifications_on_signup = Column(Boolean, default=True)
     web_analytics_piwik_id_site = Column(Integer, nullable=True, default=None)
     help_url = Column(URLString, nullable=True, default=None)
+    homepage_url = Column(URLString, nullable=True, default=None)
     preferred_locales = Column(String)
     show_help_in_debate_section = Column(Boolean, default=True)
     preferences_id = Column(Integer, ForeignKey(Preferences.id))

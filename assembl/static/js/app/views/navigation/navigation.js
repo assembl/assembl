@@ -73,6 +73,7 @@ var NavigationView = AssemblPanel.extend({
 
     collectionManager.getDiscussionModelPromise()
     .then(function(discussion) {
+      that.discussion = discussion; // Will be used at a later time
       var navigationItemCollections = discussion.getVisualizations();
       if (navigationItemCollections.length > 0) {
         // just use the first one for now.
@@ -123,8 +124,16 @@ var NavigationView = AssemblPanel.extend({
     if (origin === undefined) {
       origin = '-';
     }
-    this._toggleMenuByName(itemName);
-    this._loadView(itemName, origin);
+    // Unique condition for homepage, do not toggle the menu and there is no view to load.
+    // Redirect to the discusison's homepage URL.
+    // The 'home' itemName will only be triggered if there is a discussion homepage URL.
+    if (itemName === 'home') {
+      window.location.href = this.discussion.get('homepage_url');
+    }
+    else {
+      this._toggleMenuByName(itemName);
+      this._loadView(itemName, origin);
+    }
   },
 
   _toggleMenuByName: function(itemName, options) {
