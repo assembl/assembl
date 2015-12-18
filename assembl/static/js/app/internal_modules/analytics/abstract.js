@@ -130,12 +130,24 @@ var moduleName = 'Analytics_Abstract',
 
 
       /**
+       * Event fired anytime the arrow beside an idea is clicked open in the table of ideas 
+       * assembl/static/js/app/views/ideaInIdeaList.js
+       */
+      NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS: {action: 'FINDING', category: 'TABLE_OF_IDEAS', eventName: 'NAVIGATE_TO_IDEA'},
+
+      /**
+       * Event fired anytime the arrow beside an idea is clicked closed in the table of ideas 
+       * assembl/static/js/app/views/ideaInIdeaList.js
+       */
+      NAVIGATION_TOGGLE_ROOT_IDEA_OPEN: {action: 'INTERACTING', category: 'TABLE_OF_IDEAS', eventName: 'TOGGLE_IDEA_OPEN'},
+
+      /**
        * Event fired anytime an idea is clicked under any table of ideas 
        * (ex: 'Discussion' section of navigation, Popups with a table of idea,
        * any table of idea in a panel group.)
        * assembl/static/js/app/views/ideaInIdeaList.js
        */
-      NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS: {action: 'FINDING', category: 'TABLE_OF_IDEAS', eventName: 'NAVIGATE_TO_IDEA'},
+      NAVIGATION_TOGGLE_ROOT_IDEA_CLOSE: {action: 'INTERACTING', category: 'TABLE_OF_IDEAS', eventName: 'TOGGLE_IDEA_CLOSE'},
 
       /**
        * Same as NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS, but fired when the number 

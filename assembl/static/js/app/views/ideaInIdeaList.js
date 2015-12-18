@@ -458,10 +458,12 @@ var IdeaView = Backbone.View.extend({
       ev.preventDefault();
       ev.stopPropagation();
     }
-
+    var analytics = Analytics.getInstance();
     if (this.$el.hasClass('is-open')) {
+      analytics.trackEvent(analytics.events.NAVIGATION_TOGGLE_ROOT_IDEA_CLOSE);
       this.close();
     } else {
+      analytics.trackEvent(analytics.events.NAVIGATION_TOGGLE_ROOT_IDEA_OPEN);
       this.open();
     }
     this.saveCollapsedState();
