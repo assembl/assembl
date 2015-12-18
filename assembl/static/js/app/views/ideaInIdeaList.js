@@ -55,6 +55,10 @@ var IdeaView = Backbone.View.extend({
     this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function(state, currentIdea) {
           that.onIsSelectedChange(currentIdea);
         });
+    // TODO: Detect a change in current synthesis
+    Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
+        that.listenTo(synthesis.getIdeasCollection(), 'add remove reset', that.render);
+    });
   },
 
   /**
