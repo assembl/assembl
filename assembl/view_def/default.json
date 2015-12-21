@@ -591,5 +591,18 @@
     "IdeaAttachment": {
         "@extends": "Attachment",
         "idObjectAttachedTo": "idea"
+    },
+    "Announce": {
+        "creation_date": true,
+        "modification_date": true,
+        "creator": true,
+        "last_updated_by": true,
+        "title": true,
+        "body": true
+    },
+    "IdeaAnnounce": {
+        "@extends": "Announce",
+        "idObjectAttachedTo": "idea",
+        "should_propagate_down": true
     }
 }

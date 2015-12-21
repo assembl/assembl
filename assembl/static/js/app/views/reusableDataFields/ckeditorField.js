@@ -1,10 +1,10 @@
 'use strict';
 
-var Marionette = require('../shims/marionette.js'),
-    _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
-    Assembl = require('../app.js'),
-    Ctx = require('../common/context.js');
+var Marionette = require('../../shims/marionette.js'),
+    _ = require('../../shims/underscore.js'),
+    $ = require('../../shims/jquery.js'),
+    Assembl = require('../../app.js'),
+    Ctx = require('../../common/context.js');
 
 var cKEditorField = Marionette.ItemView.extend({
   template: '#tmpl-ckeditorField',

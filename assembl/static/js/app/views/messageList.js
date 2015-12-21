@@ -14,6 +14,7 @@ var Backbone = require('../shims/backbone.js'),
     i18n = require('../utils/i18n.js'),
     PostQuery = require('./messageListPostQuery.js'),
     Permissions = require('../utils/permissions.js'),
+    Announces = require('./announces.js'),
     MessageSendView = require('./messageSend.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
@@ -831,23 +832,40 @@ var MessageList = AssemblPanel.extend({
     this._offsetStart = returnedOffsets.offsetStart;
     this._offsetEnd = returnedOffsets.offsetEnd;
 
-    return views_promise.then(function(views) {
+    var currentIdea = this.getGroupState().get('currentIdea'),
+        announcePromise = null,
+        announceMessageView;
+    if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
+      announcePromise = currentIdea.getApplicableAnnouncePromise();
+    }
+
+    return Promise.join(views_promise, announcePromise, function(views, announce) {
       if (that.debugPaging) {
         console.log("showMessages() showing requestedOffsets:", requestedOffsets, "returnedOffsets:", returnedOffsets, "messageIdsToShow", messageIdsToShow, "out of numMessages", numMessages, "root views", views);
       }
 
-      if (views.length === 0) {
+      if (views.length === 0) {  
         //TODO:  This is probably where https://app.asana.com/0/15264711598672/20633284646643 occurs
-        that.ui.messageList.html(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
-      } else {
+        that.ui.messageList.append(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
+      } 
 
+      if (announce && that._offsetStart <= 0) { //Only display the announce on the first page
+        that.ui.messageList.append('<div class="js_announce_region"></div>');
+        var announceRegion = new Marionette.Region({
+          el: that.$(".js_announce_region")
+        }); 
+        announceMessageView = new Announces.AnnounceMessageView({model: announce});
+        announceRegion.show(announceMessageView);
+      }
+
+      if (views.length > 0) {
         if (that.getContainingGroup().model.get('navigationState') !== "synthesis") {
           // dynamically add id to the first view of message to enable take tour
           $(views[0]).attr('id', 'tour_step_message');
           Assembl.vent.trigger("requestTour", "first_message");
         }
 
-        that.ui.messageList.html(views);
+        that.ui.messageList.append(views);
       }
 
       that.scrollToPreviousScrollTarget();

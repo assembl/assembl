@@ -3,13 +3,14 @@
 var Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
-    EditableField = require('./editableField.js'),
-    CKEditorField = require('./ckeditorField.js'),
+    EditableField = require('./reusableDataFields/editableField.js'),
+    CKEditorField = require('./reusableDataFields/ckeditorField.js'),
     Permissions = require('../utils/permissions.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     MessageSendView = require('./messageSend.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     SegmentList = require('./segmentList.js'),
+    Announces = require('./announces.js'),
     Widget = require('../models/widget.js'),
     AgentViews = require('./agent.js'),
     WidgetLinks = require('./widgetLinks.js'),
@@ -34,7 +35,8 @@ var IdeaPanel = AssemblPanel.extend({
     contributors: ".contributors",
     widgetsInteraction: ".ideaPanel-section-access-widgets",
     widgetsConfigurationInteraction: ".ideaPanel-section-conf-widgets",
-    widgetsCreationInteraction: ".ideaPanel-section-create-widgets"
+    widgetsCreationInteraction: ".ideaPanel-section-create-widgets",
+    announceRegion: "@ui.announce"
   },
   initialize: function(options) {
     Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
@@ -74,11 +76,13 @@ var IdeaPanel = AssemblPanel.extend({
     'definition': '.js_editDefinition',
     'longTitle': '.js_editLongTitle',
     'seeMoreOrLess': '.js_seeMoreOrLess',
+    'seeMore': '.js_seeMore',
     'seeLess': '.js_seeLess',
     'deleteIdea': '.js_ideaPanel-deleteBtn',
     'clearIdea': '.js_ideaPanel-clearBtn',
     'closeExtract': '.js_closeExtract',
-    'contributorsSection': '.ideaPanel-section-contributors'
+    'contributorsSection': '.ideaPanel-section-contributors',
+    'announce': '.ideaPanel-announce-region'
   },
   modelEvents: {
     //Do NOT listen to change here
@@ -95,7 +99,7 @@ var IdeaPanel = AssemblPanel.extend({
     'click @ui.closeExtract': 'onSegmentCloseButtonClick',
     'click @ui.clearIdea': 'onClearAllClick',
     'click @ui.deleteIdea': 'onDeleteButtonClick',
-    'click @ui.seeMoreOrLess': 'seeMoreContent',
+    'click @ui.seeMore': 'seeMoreContent',
     'click @ui.seeLess': 'seeLessContent',
     'click @ui.definition': 'editDefinition',
     'click @ui.longTitle': 'editTitle',
@@ -243,7 +247,9 @@ var IdeaPanel = AssemblPanel.extend({
 
       this.getExtractslist();
 
-      this.displayEditableFields();
+      this.renderShortTitle();
+
+      this.renderAnnounce();
 
       if (this.editingDefinition) {
         this.renderCKEditorDescription();
@@ -348,7 +354,7 @@ var IdeaPanel = AssemblPanel.extend({
 
   },
 
-  displayEditableFields: function() {
+  renderShortTitle: function() {
 
     var currentUser = Ctx.getCurrentUser(),
         canEdit = currentUser.can(Permissions.EDIT_IDEA) || false,
@@ -365,22 +371,6 @@ var IdeaPanel = AssemblPanel.extend({
       'focus': this.focusShortTitle
     });
     shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
-
-    var commentView = new MessageSendView({
-      'allow_setting_subject': false,
-      'reply_idea': this.model,
-      'body_help_message': i18n.gettext('Comment on this idea here...'),
-      'send_button_label': i18n.gettext('Send your comment'),
-      'subject_label': null,
-      'msg_in_progress_body': partialMessage['body'],
-      'msg_in_progress_ctx': modelId,
-      'mandatory_body_missing_msg': i18n.gettext('You need to type a comment first...'),
-      'mandatory_subject_missing_msg': null,
-      'enable_button': false
-
-      //TODO:  Pass the messageListView that is expected to refresh with the new comment
-    });
-    this.$('#ideaPanel-comment').html(commentView.render().el);
 
   },
 
@@ -757,47 +747,21 @@ var IdeaPanel = AssemblPanel.extend({
     this.deleteCurrentIdea();
   },
 
-  seeMoreOrLess: function(e) {
-    e.preventDefault();
-
-    var elm = $(e.target),
-        seeMore = this.$('.seeMore'),
-        seeLess = this.$('.seeLess'),
-        lessContent = this.$('.lesscontent'),
-        hideContent = this.$('.morecontent');
-
-    if (elm.hasClass('seeMore')) {
-      hideContent.removeClass('hidden');
-      seeMore.addClass('hidden');
-      seeLess.removeClass('hidden');
-      lessContent.addClass('hidden');
-    }
-
-    if (elm.hasClass('seeLess')) {
-      hideContent.addClass('hidden');
-      seeMore.removeClass('hidden');
-      seeLess.addClass('hidden');
-      lessContent.removeClass('hidden');
-    }
-  },
-
   ellipsis: function(sectionSelector, seemoreUi) {
     /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
      * Read More links for introduction preview
      */
-     
+     var that = this;
     $(sectionSelector).dotdotdot({
       after: seemoreUi,
       height: 170,
       callback: function(isTruncated, orgContent) {
 
         if (isTruncated) {
-
-          //seemoreUi.removeClass('hidden');
-
+          that.ui.seeMore.removeClass('hidden');
         }
         else {
-          //seemoreUi.hide();
+          that.ui.seeMore.addClass('hidden');
         }
       },
       watch: "window"
@@ -810,7 +774,7 @@ var IdeaPanel = AssemblPanel.extend({
     e.preventDefault();
 
     $(".ideaPanel-definition").trigger('destroy');
-
+    this.ui.seeMore.addClass('hidden');
     this.ui.seeLess.removeClass('hidden');
   },
 
@@ -834,6 +798,43 @@ var IdeaPanel = AssemblPanel.extend({
     if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
       this.editingTitle = true;
       this.render();
+    }
+  },
+
+  renderAnnounce:  function() {
+    var that = this,
+    collectionManager = new CollectionManager();
+
+    if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
+      this.ui.announce.removeClass('hidden');
+      collectionManager.getAllAnnounceCollectionPromise().then(
+          function(allAnnounceCollection) {
+            // Filters on only this idea's announce (should be only one...)
+            var AnnounceIdeaSubset = Backbone.Subset.extend({
+              beforeInitialize: function(models, options) {
+                this.idea = options.idea;
+                if (!this.idea) {
+                  throw new Error("AnnounceIdeaSubset mush have an idea")
+                }
+              },
+              sieve: function(announce) {
+                return announce.get('idObjectAttachedTo') == this.idea.id;
+              }
+            });
+
+            var announceIdeaSubsetCollection = new AnnounceIdeaSubset(
+              [],
+              {
+                idea: that.model,
+                parent: allAnnounceCollection
+              }
+            )
+            var editableAnnounceView = new Announces.AnnounceEditableCollectionView({
+              collection: announceIdeaSubsetCollection,
+              objectAttachedTo: that.model
+            });
+            that.getRegion('announceRegion').show(editableAnnounceView);
+          });
     }
   },
 

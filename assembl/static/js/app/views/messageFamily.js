@@ -146,7 +146,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
         this.$el.addClass('child');
       }
     } else {
-      this.$el.addClass('bx bx-default root');
+      this.$el.addClass('bx root');
     }
 
     this.el.setAttribute('data-message-level',  this.level);

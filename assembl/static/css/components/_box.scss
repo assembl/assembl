@@ -22,7 +22,7 @@
   padding: $spacingM;
   border-radius: $borderRadiusS;
   background: $white;
-  box-shadow: 1px 1px 4px rgba($black, (20/100));
+  box-shadow: 1px 1px 4px $theme_box_border_color;
   margin-bottom: $spacingL;
 
   .bx-close {
@@ -34,26 +34,26 @@
     height: 2em;
     font-size: 14px;
     line-height: 2em;
-    color: $black;
+    color: $theme_box_border_color;
     opacity: 0.4;
   }
 
   &.bx-default {
-    border: 1px solid $borderColor;
+    border: 1px solid $theme_box_border_color;
     box-shadow: none;
   }
 
 }
 
 .bx-empty {
-  border: 2px dashed lighten($black, 80%);
-  //background: lighten($black, 94%);
+  border: 2px dashed lighten($theme_box_border_color, 80%);
+  //background: lighten($theme_box_border_color, 94%);
   box-shadow: none;
-  color: lighten($black, 40%);
+  color: lighten($theme_box_border_color, 40%);
 
   .h-bx {
-    border-bottom-color: lighten($black, 83%);
-    color: lighten($black, 40%);
+    border-bottom-color: lighten($theme_box_border_color, 83%);
+    color: lighten($theme_box_border_color, 40%);
   }
 
   &:hover {
@@ -63,7 +63,7 @@
 
 .bx-alert-warning {
   background-color: $orange;
-  color: mix(#ffffff, $black, 15%);
+  color: mix(#ffffff, $theme_box_border_color, 15%);
 
   .h-bx {
     border-bottom-color: $orange1;

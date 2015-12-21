@@ -11,16 +11,6 @@
     margin: 0;
     position: relative;
     padding: 0 10px;
-    legend {
-      height: 1.8em;
-      padding: 0;
-      font-weight: bold;
-      span {
-        line-height: 1.8em;
-        display: block;
-        margin: 0 0.5em 0.5em 0;
-      }
-    }
   }
   .panel-section:first-child {
     background-color: $theme_idea_header_bg;
@@ -164,6 +154,7 @@
   @include box-sizing(border-box);
   display: inline-block;
   width: 100%;
+  min-height: 28px; //22px to match EdiableArea + 6px because of sizing border-box
   margin: 10px 0;
   cursor: text;
   background-color: white;

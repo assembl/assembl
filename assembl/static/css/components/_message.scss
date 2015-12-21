@@ -15,12 +15,16 @@ $previewNumLines: 4;
 
 // A message block
 // ================
-.message {
+
+
+
+
+.message, .announceMessage {
   position: relative;
   display: table;
   width: 100%;
   box-sizing: border-box;
-  padding: 7px$messagePaddingLR+3*$mesageSpacing 7px $messagePaddingLR; //To balance the spacing of the message family on the left
+  padding: $messagePaddingLR $messagePaddingLR+3*$mesageSpacing 7px $messagePaddingLR; //To balance the spacing of the message family on the left
   //margin: 0px $mesageSpacing 0px $mesageSpacing; //TODO: fix scroolbar margin
   min-height: $avatarSize;
   height: auto;
@@ -28,6 +32,37 @@ $previewNumLines: 4;
   //border-top: solid 1px $gray3;
   @include transition(background-color 0.4s);
 
+  &.announceMessage {
+    //.announceMessage Defined here instead of announce.scss so constants can be reused and look kept in sync with message
+    background-color: $white;
+    box-shadow: 0px 0px 2px 2px $theme_announce_box_border_color;
+    padding: 9.5px $messagePaddingLR+3*$mesageSpacing 9.5px $messagePaddingLR+3*$mesageSpacing; //To align with messages left and right, despite not being part of a messageFamily
+    & >* {
+      max-width: $messageBodyMaxWidth;
+    }
+    .announce_title {
+      font-size: 18px;
+      margin-bottom: $mesageSpacing;
+    }
+    .announce_body {
+      margin-bottom: $mesageSpacing;
+    }
+    .creator_info {
+      display: table;
+      .avatarContainer {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+      }
+      .author_info_container {
+        display: table-cell;
+        vertical-align: middle;
+        .message-date {
+          font-size: 11px;
+        }
+      }
+    }
+  }
   &.is-highlighted {
     background-color: $orange;
   }
@@ -580,6 +615,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
     display: none !important;
   }
 }
+
 /* ------------------- Start of message family section ---------------------- */
 // The arrow
 // ------------

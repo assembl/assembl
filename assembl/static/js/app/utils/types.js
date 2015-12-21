@@ -17,6 +17,8 @@ var Types = {
   DOCUMENT: 'Document',
   POST_ATTACHMENT: 'PostAttachment',
   IDEA_ATTACHMENT: 'IdeaAttachment',
+  ANNUNCE: 'Announce',
+  IDEA_ANNOUNCE: 'IdeaAnnounce',
   CONTENT_SOURCE: 'ContentSource',
   POST_SOURCE: 'PostSource',
   ABSTRACT_MAILBOX: 'AbstractMailbox',

@@ -230,3 +230,7 @@ from .attachment import (
     Document,
     Attachment
 )
+
+from .announce import (
+    IdeaAnnounce
+)

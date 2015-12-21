@@ -1,9 +1,9 @@
 'use strict';
 
-var Marionette = require('../shims/marionette.js'),
-    _ = require('../shims/underscore.js'),
-    Assembl = require('../app.js'),
-    Ctx = require('../common/context.js');
+var Marionette = require('../../shims/marionette.js'),
+    _ = require('../../shims/underscore.js'),
+    Assembl = require('../../app.js'),
+    Ctx = require('../../common/context.js');
 
 var EditableField = Marionette.ItemView.extend({
   template: _.template(""),

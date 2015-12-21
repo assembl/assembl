@@ -41,12 +41,21 @@
                  <%= idea.get('definition') %>
               </div>
             <% } %>
+            <% if(idea.get('definition').length){ %>
+                <div class="ideaPanel-seeMoreOrLess js_seeMoreOrLess mts">
+                  <a href="#" class="seeMore js_seeMore txt-gray">{{ gettext('See more') }}<i class="icon-arrowdown"></i></a>
+                </div>
+                <a href="#" class="seeLess js_seeLess txt-gray hidden">{{ gettext('See less') }}<i class="icon-arrowup"></i></a>
+            <% } %>
         <% } %>
 
-        <div class="ideaPanel-seeMore mts">
-          <a href="#" class="seeMoreOrLess js_seeMoreOrLess txt-gray">{{ gettext('See more') }}<i class="icon-arrowdown"></i></a>
-          <a href="#" class="seeLess js_seeLess hidden txt-gray">{{ gettext('See less') }}<i class="icon-arrowup"></i></a>
-        </div>
+        <% if (canEdit) { %>
+          <fieldset class="ideaPanel-section-announce">
+            <legend class="ideaPanel-legend legend">{{ gettext('Announce for this idea') }}</legend>
+            <div class="ideaPanel-announce-region hidden"></div>
+          </fieldset>
+        <% } %>
+
         <p class="text-muted">{% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}</p>
 
         {#<% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>

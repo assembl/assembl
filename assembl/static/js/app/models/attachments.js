@@ -123,7 +123,7 @@ var AttachmentModel = Base.Model.extend({
 });
 
 /**
- * @class PartnerOrganizationCollection
+ * @class AttachmentCollection
  */
 var AttachmentCollection = Base.Collection.extend({
   /**

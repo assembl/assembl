@@ -391,7 +391,7 @@ var IdeaList = AssemblPanel.extend({
     }
     
 
-    console.log("should_be_newer_than: ", should_be_newer_than);
+    //console.log("should_be_newer_than: ", should_be_newer_than);
 
     var idea_criterion_value = function(idea){
       return new Date(idea.get('creationDate'));

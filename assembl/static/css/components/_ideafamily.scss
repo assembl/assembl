@@ -1,7 +1,7 @@
 $marginLink: -30px;
 $marginLinkbis: 30px;
-$idea_in_synthesis_icon_hover: $th_gray3;
-$idea_in_synthesis_comment_hover: $th_purple5;
+$idea_in_synthesis_icon_hover: $theme_inactivelink_color;
+$idea_in_synthesis_comment_hover: $theme_activelink_color;
 
 .ideafamily-title {
     display: block;

@@ -3,93 +3,100 @@
 /*
   Variables
   Ranked from light -> dark
+  
+  NEVER refer to these color variables elsewhere in the CSS files
  */
-$th_white: #FFFFFF;
+$th_local_white: #FFFFFF;
+$th_local_black: #000000;
 
 //Purples
-$th_purple2: #f2ecf8; // almost white
-$th_purple: #B36FE0;
-$th_purple6: #9986AA;
-$th_purple3: #88698e;
-$th_purple5: #9013FE; // saturated purple
-$th_purple1: #513850; 
-$th_purple4: #432b42;
+$th_local_purple2: #f2ecf8; // almost white
+$th_local_purple: #B36FE0;
+$th_local_purple6: #9986AA;
+$th_local_purple3: #88698e;
+$th_local_purple5: #9013FE; // saturated purple
+$th_local_purple1: #513850; 
+$th_local_purple4: #432b42;
 
 //Grays <- Why in American English!? 
-$th_gray4: #F6F6F6; // white
-$th_gray7: #ecf0f1; // almost white (cyan)
-$th_gray2: #EEEEEE; // almost white
-$th_gray5: #CCCCCC;
-$th_gray3: #999999;
-$th_gray: #7F8C8D; // grey, slightly cyan
-$th_gray1: #888888; // like above, less cyan
-$th_gray6: #484848;
+$th_local_gray4: #F6F6F6; // white
+$th_local_gray7: #ecf0f1; // almost white (cyan)
+$th_local_gray2: #EEEEEE; // almost white
+$th_local_gray5: #CCCCCC;
+$th_local_gray3: #999999;
+$th_local_gray: #7F8C8D; // grey, slightly cyan
+$th_local_gray1: #888888; // like above, less cyan
+$th_local_gray6: #484848;
 
-$th_green1: #CCEFDB; // almost white 
-$th_green: #4ac780;
+$th_local_green1: #CCEFDB; // almost white 
+$th_local_green: #4ac780;
 
 
 //Global
-$theme_activelink_color: $th_purple;
-$theme_checkbox_color: $th_purple;
-$theme_form_field_active_border_color: $th_purple;
+$theme_activelink_color: $th_local_purple;
+$theme_inactivelink_color: $th_local_gray3;
+$theme_checkbox_color: $th_local_purple;
+$theme_form_field_active_border_color: $th_local_purple;
 
-$theme_person_name_color: $th_purple3;
+$theme_person_name_color: $th_local_purple3;
 
-$theme_btn_primary_text_color: $th_white;
-$theme_btn_primary_bg_color: $th_purple;
+$theme_btn_primary_text_color: $th_local_white;
+$theme_btn_primary_bg_color: $th_local_purple;
 
-$theme_btn_secondary_text_color: $th_purple;
-$theme_btn_secondary_bg_color: $th_white;
-$theme_btn_secondary_border_color: $th_purple;
+$theme_btn_secondary_text_color: $th_local_purple;
+$theme_btn_secondary_bg_color: $th_local_white;
+$theme_btn_secondary_border_color: $th_local_purple;
 
-$theme_btn_cancel_text_color: $th_gray;
-$theme_btn_default_text_color: $th_purple;
+$theme_btn_cancel_text_color: $th_local_gray;
+$theme_btn_default_text_color: $th_local_purple;
 
-$theme_popin_header_bg: $th_purple;
-$theme_popin_header_text_color: $th_white;
+$theme_popin_header_bg: $th_local_purple;
+$theme_popin_header_text_color: $th_local_white;
 
-$theme_header_panel: $th_purple4;
-$theme_header_separator: $th_purple2;
-$theme_header_panel_text_color: $th_white;
-$theme_header_panel_icon_color: $th_green;
+$theme_header_panel: $th_local_purple4;
+$theme_header_separator: $th_local_purple2;
+$theme_header_panel_text_color: $th_local_white;
+$theme_header_panel_icon_color: $th_local_green;
+
+$theme_announce_box_border_color: $th_local_purple;
+$theme_box_border_color: #aeaeae;
 
 //Header
-$theme_header_debate_title_color: $th_purple;
+$theme_header_debate_title_color: $th_local_purple;
 $theme_header_height: 40px;
-$theme_header_text_color: $th_gray6;
-$theme_header_bg_color: $th_white;
+$theme_header_text_color: $th_local_gray6;
+$theme_header_bg_color: $th_local_white;
 $theme_header_logo: '../default/img/logo.png';
 
 //Context
 $theme_context_bg: '../default/img/crowd2.jpg';
 $theme_context_page_header_height: 227px;
-$theme_context_title_color: $th_white;
+$theme_context_title_color: $th_local_white;
 
 //Navigation
-$theme_navigation_bg: $th_purple2;
-$theme_navigation_menu_bg: $th_purple4;
-$theme_navigation_menu_bg_active: $th_purple3;
-$theme_navigation_menu_separator: $th_purple2;
-$theme_navigation_icon_color: $th_green;
-$theme_navigation_icon_color_active: $th_green;
-$theme_navigation_text_color: $th_white;
-$theme_navigation_text_color_active: $th_white;
+$theme_navigation_bg: $th_local_purple2;
+$theme_navigation_menu_bg: $th_local_purple4;
+$theme_navigation_menu_bg_active: $th_local_purple3;
+$theme_navigation_menu_separator: $th_local_purple2;
+$theme_navigation_icon_color: $th_local_green;
+$theme_navigation_icon_color_active: $th_local_green;
+$theme_navigation_text_color: $th_local_white;
+$theme_navigation_text_color_active: $th_local_white;
 
 //Navigation + Synthesis panel
-$theme_navigation_or_idea_bg_active: $th_gray4;
+$theme_navigation_or_idea_bg_active: $th_local_gray4;
 
 //Panel groups
-//$theme_panel_group_header_bg_color: $th_gray1;
-$theme_panel_group_header_bg_color: $th_gray7;
+//$theme_panel_group_header_bg_color: $th_local_gray1;
+$theme_panel_group_header_bg_color: $th_local_gray7;
 $theme_panel_group_header_close_color: $theme_header_text_color;
 
 //extract
 $theme_extract_bg: $theme_navigation_bg;
 
 //idea panel
-$theme_idea_header_bg: $th_purple6;
-$theme_synthesis_header_bg: $th_green;
+$theme_idea_header_bg: $th_local_purple6;
+$theme_synthesis_header_bg: $th_local_green;
 
 
 /* Theme standard CSS definitions (mainly logos and images).

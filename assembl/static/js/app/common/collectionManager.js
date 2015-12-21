@@ -12,6 +12,7 @@ var Marionette = require('../shims/marionette.js'),
     Segment = require('../models/segment.js'),
     Synthesis = require('../models/synthesis.js'),
     Partners = require('../models/partners.js'),
+    Announce = require('../models/announce.js'),
     Agents = require('../models/agents.js'),
     NotificationSubscription = require('../models/notificationSubscription.js'),
     Storage = require('../objects/storage.js'),
@@ -96,7 +97,7 @@ var CollectionManager = Marionette.Object.extend({
   _allExtractsCollectionPromise: undefined,
 
   /**
-   * Collectin with a definition of the user's view
+   * Collection with a definition of the user's view
    * 
    * @type {GroupSpec}
    */
@@ -111,6 +112,12 @@ var CollectionManager = Marionette.Object.extend({
    */
   _allPartnerOrganizationCollection: undefined,
   _allPartnerOrganizationCollectionPromise: undefined,
+
+  /**
+   * Collection with idea announces for the messageList.
+   */
+  _allAnnounceCollectionPromise: undefined,
+  _allAnnounceCollectionPromise: undefined,
 
   /**
    * Collection from discussion notifications.
@@ -573,6 +580,22 @@ var CollectionManager = Marionette.Object.extend({
             });
 
     return this._allPartnerOrganizationCollectionPromise;
+  },
+
+  getAllAnnounceCollectionPromise: function() {
+    if (this._allAnnounceCollectionPromise) {
+      return this._allAnnounceCollectionPromise;
+    }
+
+    this._allAnnounceCollection = new Announce.Collection();
+    this._allAnnounceCollection.collectionManager = this;
+    this._allAnnounceCollectionPromise = Promise.resolve(this._allAnnounceCollection.fetch())
+        .thenReturn(this._allAnnounceCollection)
+            .catch(function(e) {
+              Raven.captureException(e);
+            });
+
+    return this._allAnnounceCollectionPromise;
   },
 
   getNotificationsDiscussionCollectionPromise: function() {

@@ -17,8 +17,8 @@ var ObjectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     AssemblPanel = require('./assemblPanel.js'),
     i18n = require('../utils/i18n.js'),
-    EditableField = require('./editableField.js'),
-    CKEditorField = require('./ckeditorField.js'),
+    EditableField = require('./reusableDataFields/editableField.js'),
+    CKEditorField = require('./reusableDataFields/ckeditorField.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Promise = require('bluebird');
 
